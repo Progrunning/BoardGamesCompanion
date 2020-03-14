@@ -17,6 +17,8 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  dio_http_cache: ^0.2.6
+  xml: 3.5.0
   flutter:
     sdk: flutter
 
@@ -25,6 +27,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
+  analyzer: ^0.39.4
   flutter_test:
     sdk: flutter
 
