@@ -1,0 +1,90 @@
+variables:
+  AppDirectoryName: board_games_companion
+  #  KeyPropertiesFileName: bgc_key.properties
+  #  GradleKeyPropertiesFileName: key.properties
+
+trigger:
+  batch: 'true'
+  branches:
+    include:
+      - develop
+
+stages:
+
+- stage: CI
+  # TODO Uncomment this condition
+  # condition: eq(variables['Build.SourceBranch'], 'refs/develop')
+  jobs:
+    - job: Build
+      pool:
+        vmImage: 'macOS-latest'
+
+      steps:
+      
+        - task: FlutterInstall@0
+          inputs:
+            channel: 'stable'
+            version: 'latest'
+
+        #- task: DownloadSecureFile@1
+        #  displayName: 'Downloading key.properties file'
+        #  inputs:
+        #    secureFile: '$(KeyPropertiesFileName)'
+
+        #- task: CopyFiles@2
+        #  displayName: 'Copying key.properties file into the android directory'
+        #  inputs:
+        #    SourceFolder: '$(Agent.TempDirectory)'
+        #    Contents: '$(KeyPropertiesFileName)'
+        #    TargetFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/'
+
+        #- task: DownloadSecureFile@1
+        #  displayName: 'Downloading keystore file'
+        #  inputs:
+        #    secureFile: '$(KeyStoreFileName)'
+
+        #- task: CopyFiles@2
+        #  displayName: 'Copying keystore file into the app directory'
+        #  inputs:
+        #    SourceFolder: '$(Agent.TempDirectory)'
+        #    Contents: '$(KeyStoreFileName)'
+        #    TargetFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app'
+
+
+        - task: FlutterBuild@0
+          inputs:
+            target: 'aab'
+            projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
+            buildNumber: '$(Build.BuildID)'
+            buildName: '$(app.version).$(Build.BuildID)'
+
+            
+        #- task: CmdLine@2
+        #  inputs:          
+        #    workingDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
+        #    script: |
+        #      # Changing permission on a flutter executable folder to rwxr-xr-x
+        #      chmod 755 $(FlutterExecPath)
+
+        #      $(FlutterExecPath) build appbundle --build-name=$(app.version).$(Build.BuildID) --build-number=$(Build.BuildID)
+
+        #- task: DeleteFiles@1
+        #  displayName: 'Deleting key.properties file'
+        #  condition: always()
+        #  inputs:
+        #   SourceFolder: '$(Build.SourcesDirectory)/android/'
+        #    Contents: '$(GradleKeyPropertiesFileName)'
+
+        #- task: DeleteFiles@1
+        #  displayName: 'Deleting keystore file'
+        #  condition: always()
+        #  inputs:
+        #    SourceFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app'
+        #    Contents: '$(KeyStoreFileName)'
+
+        #- task: PublishBuildArtifacts@1
+        #  displayName: 'Publishing aab artifacts'
+        #  inputs:
+        #    PathtoPublish: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab'
+        #   ArtifactName: 'drop'
+        #   publishLocation: 'Container'
