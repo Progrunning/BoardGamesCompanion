@@ -1,3 +1,5 @@
+import 'package:board_games_companion/common/routes.dart';
+import 'package:board_games_companion/pages/add_board_games.dart';
 import 'package:board_games_companion/pages/board_games.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +23,10 @@ class BoardGamesCompanionApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: BoardGamesPage(title: 'Flutter Demo Home Page'),
+      home: BoardGamesPage(title: 'Board Games Companion'),
+      routes: {
+        Routes.addBoardGames : (context) => AddBoardGames()
+      },
     );
   }
 }
