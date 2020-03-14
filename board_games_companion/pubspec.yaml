@@ -17,6 +17,8 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  dio_http_cache: ^0.2.6
+  xml: 3.5.0
   flutter:
     sdk: flutter
 

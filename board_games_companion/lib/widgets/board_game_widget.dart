@@ -11,24 +11,22 @@ class BoardGameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Dimensions.standardSpacing),
-      decoration: BoxDecoration(color: Colors.red),
+      // decoration: BoxDecoration(color: Colors.red),
       child: Card(
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Expanded(
+              // TODO MK Add a placeholder in case there's no image
+              // TODO MK Handle no internet situation
               child: Image.network(
-                'https://picsum.photos/250?image=9',
+                boardGame?.thumbnailUrl ?? 'https://picsum.photos/250?image=9',
               ),
             ),
             Expanded(
-              child:
-                  Stack(
-                    children: <Widget>[
-                      Text(boardGame?.name ?? '')
-                    ],
-                  )
-            ),
+                child: Stack(
+              children: <Widget>[Text(boardGame?.name ?? '')],
+            )),
           ],
         ),
       ),

@@ -24,9 +24,7 @@ class BoardGamesCompanionApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: BoardGamesPage(title: 'Board Games Companion'),
-      routes: {
-        Routes.addBoardGames : (context) => AddBoardGames()
-      },
+      routes: {Routes.addBoardGames: (context) => AddBoardGames()},
     );
   }
 }
