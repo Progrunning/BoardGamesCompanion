@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
+  analyzer: ^0.39.4
   flutter_test:
     sdk: flutter
 
