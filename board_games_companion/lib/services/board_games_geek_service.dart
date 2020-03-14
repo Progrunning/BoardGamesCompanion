@@ -13,16 +13,27 @@ class BoardGamesGeekService {
 
   BoardGamesGeekService._createInstance();
 
-  static const String _hotBoardGamesUrl =      
-      'https://www.boardgamegeek.com/xmlapi2/hot?type=boardgame';
-  static const int _numberOfDaysToCacheHotBoardGames = 1;
+  static const String _hotBoardGamesUrl =
+      'https://www.boardgamegeek.com/xmlapi2/hot';
+  static const int _numberOfDaysToCacheHotBoardGames = 2;
+  static const String _hotBoardGamesCachePrimaryKey = 'hotBoardGames';
+  static const String _hotBoardGamesCacheSubKey = 'boardgame';
 
   Future<List<BoardGame>> retrieveHot() async {
     final hotBoardGames = new List<BoardGame>();
 
-    final hotBoardGamesXml = await Dio().get(_hotBoardGamesUrl,
-        options: buildCacheOptions(
-            Duration(days: _numberOfDaysToCacheHotBoardGames)));
+    final retrievalOptions = buildCacheOptions(
+        Duration(days: _numberOfDaysToCacheHotBoardGames),
+        maxStale: Duration(days: _numberOfDaysToCacheHotBoardGames),
+        forceRefresh: false,
+        primaryKey: _hotBoardGamesCachePrimaryKey,
+        subKey: _hotBoardGamesCacheSubKey);
+
+    final hotBoardGamesXml = await Dio(BaseOptions(
+      contentType: 'application/xml',
+      responseType: ResponseType.plain
+    )).get(_hotBoardGamesUrl,
+        queryParameters: {"type": "boardgame"}, options: retrievalOptions);
 
     try {
       if (hotBoardGamesXml is Response && hotBoardGamesXml.data is String) {
@@ -30,19 +41,24 @@ class BoardGamesGeekService {
         final hotBoardGameItems =
             hotBoardGamesXmlDocument.findAllElements('item');
         for (var hotBoardGameItem in hotBoardGameItems) {
-          var newHotBoardGame = BoardGame();
+          var hotBoardGameName = hotBoardGameItem
+              .findElements('name')
+              .single
+              .attributes
+              .single
+              .value;
+
+          if (hotBoardGameName.isEmpty) {
+            continue;
+          }
+
+          var newHotBoardGame = BoardGame(hotBoardGameName);
           newHotBoardGame.id = hotBoardGameItem.getAttribute('id');
           newHotBoardGame.rank =
               int.tryParse(hotBoardGameItem.getAttribute('rank'));
 
           newHotBoardGame.thumbnailUrl = hotBoardGameItem
               .findElements('thumbnail')
-              .single
-              .attributes
-              .single
-              .value;
-          newHotBoardGame.name = hotBoardGameItem
-              .findElements('name')
               .single
               .attributes
               .single
