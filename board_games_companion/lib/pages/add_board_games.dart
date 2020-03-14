@@ -49,10 +49,10 @@ class _AddBoardGames extends State<AddBoardGames> {
                     ),
                     RaisedButton(
                       child: Text('Refresh'),
-                      onPressed: () => {
+                      onPressed: () {
                         setState(() {
                           _isRefreshing = true;
-                        })
+                        });
                       },
                     )
                   ],
