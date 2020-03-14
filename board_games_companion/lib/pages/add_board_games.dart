@@ -14,30 +14,30 @@ class _AddBoardGames extends State<AddBoardGames> {
   List<BoardGame> _hotBoardGames;
 
   @override
-  void initState() {
-    super.initState();
-
-    _retrieveHotBoardGames();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Board Games'),
-      ),
-      body: ListView.builder(
-          itemCount: _hotBoardGames?.length ?? 0,
-          itemBuilder: (BuildContext context, int index) {
-            return BoardGameWidget(
-              boardGame: _hotBoardGames[index],
-            );
-          }),
-    );
-  }
+        appBar: AppBar(
+          title: Text('Add Board Games'),
+        ),
+        body: FutureBuilder(
+          future: _boardGamesGeekService.retrieveHot(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data is List<BoardGame>) {
+                return ListView.builder(
+                    itemCount: (snapshot.data as List<BoardGame>).length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return BoardGameWidget(
+                        boardGame: snapshot.data[index],
+                      );
+                    });
+              }
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Oops, something went wrong'));
+            }
 
-  void _retrieveHotBoardGames() async {
-    _hotBoardGames = await _boardGamesGeekService.retrieveHot();
-    setState(() {});
+            return Center(child: CircularProgressIndicator());
+          },
+        ));
   }
 }
