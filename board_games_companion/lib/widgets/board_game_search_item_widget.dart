@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +25,15 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
       thumbnail = Image.network(widget.boardGame.thumbnailUrl);
       thumbnail.image.resolve(ImageConfiguration()).addListener(
               ImageStreamListener((ImageInfo image, bool synchronousCall) {
-            setState(() {
-              thumbnailState = ImageState.Loaded;
-            });
+            thumbnailState = ImageState.Loaded;
+            if (mounted) {
+              setState(() {});
+            }
           }, onError: ((dynamic asd, StackTrace stackTrace) {
-            setState(() {
-              thumbnailState = ImageState.Error;
-            });
+            thumbnailState = ImageState.Error;
+            if (mounted) {
+              setState(() {});
+            }
           })));
     }
   }
@@ -47,7 +50,10 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
         searchItemWidget = thumbnail;
         break;
       case ImageState.Error:
-        searchItemWidget = Center(child: Text(widget.boardGame.name));
+        searchItemWidget = Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing ),
+          child: Center(child: Text(widget.boardGame.name, textAlign: TextAlign.center)),
+        );
         break;
       default:
     }

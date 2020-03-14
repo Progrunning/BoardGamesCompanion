@@ -28,11 +28,10 @@ class BoardGamesGeekService {
         forceRefresh: false,
         primaryKey: _hotBoardGamesCachePrimaryKey,
         subKey: _hotBoardGamesCacheSubKey);
+    retrievalOptions.contentType = 'application/xml';
+    retrievalOptions.responseType = ResponseType.plain;
 
-    final hotBoardGamesXml = await Dio(BaseOptions(
-      contentType: 'application/xml',
-      responseType: ResponseType.plain
-    )).get(_hotBoardGamesUrl,
+    final hotBoardGamesXml = await Dio().get(_hotBoardGamesUrl,
         queryParameters: {"type": "boardgame"}, options: retrievalOptions);
 
     try {
@@ -57,12 +56,12 @@ class BoardGamesGeekService {
           newHotBoardGame.rank =
               int.tryParse(hotBoardGameItem.getAttribute('rank'));
 
-          newHotBoardGame.thumbnailUrl = hotBoardGameItem
-              .findElements('thumbnail')
-              .single
-              .attributes
-              .single
-              .value;
+            newHotBoardGame.thumbnailUrl = hotBoardGameItem
+                .findElements('thumbnail')
+                .single
+                .attributes
+                .single
+                .value;
           newHotBoardGame.yearPublished = int.tryParse(hotBoardGameItem
               .findElements('yearpublished')
               .single
