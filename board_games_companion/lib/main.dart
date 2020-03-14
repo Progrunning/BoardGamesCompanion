@@ -23,8 +23,11 @@ class BoardGamesCompanionApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: BoardGamesPage(title: 'Board Games Companion'),
-      routes: {Routes.addBoardGames: (context) => AddBoardGames()},
+      initialRoute: Routes.home,
+      routes: {
+        Routes.home: (context) => BoardGamesPage(title: 'Board Games Companion'),
+        Routes.addBoardGames: (context) => AddBoardGames()
+      },
     );
   }
 }

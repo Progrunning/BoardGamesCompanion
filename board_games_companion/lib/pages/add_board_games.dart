@@ -9,8 +9,7 @@ class AddBoardGames extends StatefulWidget {
 }
 
 class _AddBoardGames extends State<AddBoardGames> {
-  final BoardGamesGeekService _boardGamesGeekService =
-      new BoardGamesGeekService();
+  final BoardGamesGeekService _boardGamesGeekService = BoardGamesGeekService();
 
   List<BoardGame> _hotBoardGames;
 
@@ -39,8 +38,6 @@ class _AddBoardGames extends State<AddBoardGames> {
 
   void _retrieveHotBoardGames() async {
     _hotBoardGames = await _boardGamesGeekService.retrieveHot();
-    setState(() {
-      
-    });
+    setState(() {});
   }
 }

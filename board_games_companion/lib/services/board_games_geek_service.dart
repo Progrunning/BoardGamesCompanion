@@ -13,8 +13,8 @@ class BoardGamesGeekService {
 
   BoardGamesGeekService._createInstance();
 
-  static const String _hotBoardGamesUrl =
-      "https://www.boardgamegeek.com/xmlapi2/hot?type=boardgame";
+  static const String _hotBoardGamesUrl =      
+      'https://www.boardgamegeek.com/xmlapi2/hot?type=boardgame';
   static const int _numberOfDaysToCacheHotBoardGames = 1;
 
   Future<List<BoardGame>> retrieveHot() async {

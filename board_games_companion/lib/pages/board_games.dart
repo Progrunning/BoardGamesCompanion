@@ -36,7 +36,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
               child: Text(
                   'It looks empty here, try adding a new board game to your collection'))
           : ListView.builder(
-              itemCount: 2, // hasBoardGames ? _boardGames.length : 0,
+              itemCount: _boardGames?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 return BoardGameWidget();
               }),
