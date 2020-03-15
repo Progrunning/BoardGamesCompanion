@@ -47,9 +47,7 @@ stages:
             buildName: '$(app.version).$(Build.BuildID)'
 
 - stage: CD
-  # TODO Uncomment this after testing
-  # condition: eq(variables['Build.SourceBranch'], 'refs/release')
-  condition: eq(1,1)
+  condition: eq(variables['Build.SourceBranch'], 'refs/release')
   jobs:
   - job: ReleaseAndroid
     pool:
