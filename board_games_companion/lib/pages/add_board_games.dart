@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/widgets/board_game_search_item_widget.dart';
@@ -32,8 +33,14 @@ class _AddBoardGames extends State<AddBoardGames> {
                     crossAxisCount: _numberOfBoardGameColumns,
                     children: List.generate(
                         (snapshot.data as List<BoardGame>).length, (int index) {
-                      return BoardGameSearchItemWidget(
-                        boardGame: snapshot.data[index],
+                      return InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.boardGameDetails,
+                              arguments: snapshot.data[index]);
+                        },
+                        child: BoardGameSearchItemWidget(
+                          boardGame: snapshot.data[index],
+                        ),
                       );
                     }));
               }
@@ -43,10 +50,14 @@ class _AddBoardGames extends State<AddBoardGames> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Center(
-                      child: Text(
-                          'We couldn\'t retrieve any board games. Check your Internet connectivity and try again.'),
+                    Padding(
+                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                      child: Center(
+                        child: Text(
+                            'We couldn\'t retrieve any board games. Check your Internet connectivity and try again.'),
+                      ),
                     ),
+                    SizedBox(height: Dimensions.standardSpacing),
                     RaisedButton(
                       child: Text('Refresh'),
                       onPressed: () {
@@ -58,7 +69,6 @@ class _AddBoardGames extends State<AddBoardGames> {
                   ],
                 ),
               );
-
             } else if (snapshot.hasError && !_isRefreshing) {
               return Center(child: Text('Oops, something went wrong'));
             }

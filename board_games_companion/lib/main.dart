@@ -1,5 +1,6 @@
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
+import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/board_games.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,8 @@ class BoardGamesCompanionApp extends StatelessWidget {
       initialRoute: Routes.home,
       routes: {
         Routes.home: (context) => BoardGamesPage(title: 'Board Games Companion'),
-        Routes.addBoardGames: (context) => AddBoardGames()
+        Routes.addBoardGames: (context) => AddBoardGames(),
+        Routes.boardGameDetails: (context) => BoardGamesDetailsPage()
       },
     );
   }
