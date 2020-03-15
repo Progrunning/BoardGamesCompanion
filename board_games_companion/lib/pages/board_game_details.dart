@@ -62,6 +62,28 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         SizedBox(
                           height: Dimensions.standardSpacing,
                         ),
+                        SizedBox(
+                          height: 30,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: boardGameDetails.categories.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    left: Dimensions.standardSpacing),
+                                child: Chip(
+                                    padding: EdgeInsets.all(
+                                        Dimensions.standardSpacing),
+                                    label: Text(
+                                      boardGameDetails.categories[index].name,
+                                    )),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.standardSpacing,
+                        ),
                         Padding(
                           padding:
                               const EdgeInsets.all(Dimensions.standardSpacing),
@@ -116,6 +138,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
       return;
     }
 
+    // TODO MK This needs to go into a seprate widget as it's refreshing API call
     if (!(boardGameDetails.imageUrl?.isEmpty ?? true)) {
       heroImage = Image.network(boardGameDetails.imageUrl);
       heroImage.image.resolve(ImageConfiguration()).addListener(

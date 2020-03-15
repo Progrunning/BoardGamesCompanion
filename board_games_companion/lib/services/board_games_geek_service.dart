@@ -1,4 +1,5 @@
 import 'package:board_games_companion/models/board_game.dart';
+import 'package:board_games_companion/models/board_game_category.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio/dio.dart';
@@ -14,7 +15,11 @@ class BoardGamesGeekService {
 
   BoardGamesGeekService._createInstance();
 
-  static const String _boardGamesMainXmlElementName = 'item';
+  static const String _xmlItemElementName = 'item';
+  static const String _xmlIdAttributeName = 'id';
+  static const String _xmlTypeAttributeName = 'type';
+  static const String _xmlValueAttributeName = 'value';
+  static const String _xmlCategoryAttributeTypeName = 'boardgamecategory';
 
   static const String _baseBoardGamesUrl =
       'https://www.boardgamegeek.com/xmlapi2';
@@ -45,8 +50,8 @@ class BoardGamesGeekService {
     try {
       if (hotBoardGamesXml is Response && hotBoardGamesXml.data is String) {
         final hotBoardGamesXmlDocument = xml.parse(hotBoardGamesXml.data);
-        final hotBoardGameItems = hotBoardGamesXmlDocument
-            .findAllElements(_boardGamesMainXmlElementName);
+        final hotBoardGameItems =
+            hotBoardGamesXmlDocument.findAllElements(_xmlItemElementName);
         for (var hotBoardGameItem in hotBoardGameItems) {
           var hotBoardGameName = hotBoardGameItem
               .findElements('name')
@@ -60,7 +65,8 @@ class BoardGamesGeekService {
           }
 
           var newHotBoardGame = BoardGame(hotBoardGameName);
-          newHotBoardGame.id = hotBoardGameItem.getAttribute('id');
+          newHotBoardGame.id =
+              hotBoardGameItem.getAttribute(_xmlIdAttributeName);
           newHotBoardGame.rank =
               int.tryParse(hotBoardGameItem.getAttribute('rank'));
 
@@ -107,7 +113,7 @@ class BoardGamesGeekService {
           boardGameDetailsXml.data is String) {
         final boardGameDetailsXmlDocument = xml.parse(boardGameDetailsXml.data);
         final boardGameDetailsItem = boardGameDetailsXmlDocument
-            .findAllElements(_boardGamesMainXmlElementName)
+            .findAllElements(_xmlItemElementName)
             .single;
 
         if (boardGameDetailsItem == null) {
@@ -126,19 +132,42 @@ class BoardGamesGeekService {
           return null;
         }
 
-        var boardGameDetailDescription = boardGameDetailsItem
-            .findAllElements('description')
-            .first
-            .text;
-        
-        var boardGameDetailImageUrl = boardGameDetailsItem
-            .findAllElements('image')
-            .first
-            .text;
-
         var boardGameDetails = BoardGameDetails(boardGameDetailName);
-        boardGameDetails.description = boardGameDetailDescription;
-        boardGameDetails.imageUrl = boardGameDetailImageUrl;
+
+        boardGameDetails.description =
+            boardGameDetailsItem.findAllElements('description').first.text;
+
+        boardGameDetails.imageUrl =
+            boardGameDetailsItem.findAllElements('image').first.text;
+
+        var boardGameDetailCategories =
+            boardGameDetailsItem.findAllElements('link');
+        for (var boardGameDetailCategory in boardGameDetailCategories) {
+          if (boardGameDetailCategory.attributes.isEmpty) {
+            continue;
+          }
+
+          var hasCategoryAttribute =
+              boardGameDetailCategory.attributes.any((attr) {
+            return attr.name.local == _xmlTypeAttributeName &&
+                attr.value == _xmlCategoryAttributeTypeName;
+          });
+          if (!hasCategoryAttribute) {
+            continue;
+          }
+
+          var boardGameCategory = BoardGameCategory();
+          boardGameCategory.id =
+              boardGameDetailCategory.attributes.firstWhere((attr) {
+            return attr.name.local == _xmlIdAttributeName;
+          })?.value;
+          boardGameCategory.name =
+              boardGameDetailCategory.attributes.firstWhere((attr) {
+            return attr.name.local == _xmlValueAttributeName;
+          })?.value;
+
+          boardGameDetails.categories.add(boardGameCategory);
+        }
 
         return boardGameDetails;
       }
