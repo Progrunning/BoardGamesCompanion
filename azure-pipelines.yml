@@ -14,7 +14,7 @@ trigger:
 stages:
 
 - stage: CI
-  condition: eq(variables['Build.SourceBranch'], 'refs/develop')
+  condition: eq(variables['Build.SourceBranchName'], 'develop')
   jobs:
     - job: Build
       pool:
@@ -47,7 +47,7 @@ stages:
             buildName: '$(app.version).$(Build.BuildID)'
 
 - stage: CD
-  condition: eq(variables['Build.SourceBranch'], 'refs/release')
+  condition: eq(variables['Build.SourceBranchName'], 'release')
   jobs:
   - job: ReleaseAndroid
     pool:
