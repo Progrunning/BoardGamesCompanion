@@ -1,8 +1,9 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BoardGamesDetailsPage extends StatefulWidget {
@@ -13,8 +14,7 @@ class BoardGamesDetailsPage extends StatefulWidget {
 class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
   final BoardGamesGeekService _boardGamesGeekService = BoardGamesGeekService();
 
-  ImageState heroImageState = ImageState.None;
-  Image heroImage;
+  final double _minImageHeight = 300;
 
   bool _isRefreshing;
 
@@ -48,19 +48,37 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
 
                 final boardGameDetails = snapshot.data as BoardGameDetails;
                 if (boardGameDetails != null) {
-                  _handleHeroImageLoading(boardGameDetails);
-                  final heroImageWidget =
-                      _retrieveHeroImageWidget(boardGameDetails);
-
                   return SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        FittedBox(
-                          fit: BoxFit.fill,
-                          child: heroImageWidget,
+                        CachedNetworkImage(
+                          imageUrl: boardGameDetails.imageUrl,
+                          imageBuilder: (context, imageProvider) =>
+                              _wrapInShadowBox(Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitWidth)))),
+                          fit: BoxFit.fitWidth,
+                          placeholder: (context, url) => _wrapInShadowBox(
+                              Center(child: CircularProgressIndicator())),
+                          errorWidget: (context, url, error) =>
+                              _wrapInShadowBox(Padding(
+                                  padding: const EdgeInsets.all(
+                                      Dimensions.standardSpacing),
+                                  child: Container(
+                                    child: Center(
+                                        child: Text(
+                                      boardGameDetails?.name ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize:
+                                              Dimensions.extraLargeFontSize),
+                                    )),
+                                  ))),
                         ),
                         SizedBox(
-                          height: Dimensions.standardSpacing,
+                          height: Dimensions.doubleStandardSpacing,
                         ),
                         SizedBox(
                           height: 30,
@@ -133,50 +151,15 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
             }));
   }
 
-  void _handleHeroImageLoading(BoardGameDetails boardGameDetails) {
-    if (heroImage != null) {
-      return;
-    }
-
-    // TODO MK This needs to go into a seprate widget as it's refreshing API call
-    if (!(boardGameDetails.imageUrl?.isEmpty ?? true)) {
-      heroImage = Image.network(boardGameDetails.imageUrl);
-      heroImage.image.resolve(ImageConfiguration()).addListener(
-              ImageStreamListener((ImageInfo image, bool synchronousCall) {
-            heroImageState = ImageState.Loaded;
-            if (mounted) {
-              setState(() {});
-            }
-          }, onError: ((dynamic asd, StackTrace stackTrace) {
-            heroImageState = ImageState.Error;
-            if (mounted) {
-              setState(() {});
-            }
-          })));
-    }
-  }
-
-  Widget _retrieveHeroImageWidget(BoardGameDetails boardGameDetails) {
-    Widget heroImageWidget;
-    switch (heroImageState) {
-      case ImageState.None:
-      case ImageState.Loading:
-        heroImageWidget = Placeholder();
-        break;
-      case ImageState.Loaded:
-        heroImageWidget = heroImage;
-        break;
-      case ImageState.Error:
-        heroImageWidget = Padding(
-          padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Center(
-              child: Text(boardGameDetails?.name ?? '',
-                  textAlign: TextAlign.center)),
-        );
-        break;
-      default:
-    }
-
-    return heroImageWidget;
+  Widget _wrapInShadowBox(Widget content) {
+    return ConstrainedBox(
+        constraints: BoxConstraints(minHeight: _minImageHeight),
+        child: Container(
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              BoxShadow(
+                  color: Styles.defaultShadowColor,
+                  blurRadius: Styles.defaultShadowRadius)
+            ]),
+            child: content));
   }
 }

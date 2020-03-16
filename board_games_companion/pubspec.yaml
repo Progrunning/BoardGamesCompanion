@@ -18,6 +18,7 @@ environment:
 
 dependencies:
   dio_http_cache: ^0.2.6
+  cached_network_image: ^2.0.0
   xml: 3.5.0
   flutter:
     sdk: flutter
