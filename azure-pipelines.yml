@@ -29,7 +29,7 @@ stages:
             version: 'latest'
 
         - task: FlutterBuild@0
-          displayName: 'Build iOS'
+          displayName: 'Build Android'
           inputs:
             target: 'aab'
             debugMode: true
