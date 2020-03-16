@@ -38,6 +38,8 @@ stages:
             buildName: '$(app.version).$(Build.BuildID)'
 
         - task: FlutterBuild@0
+          # TODO Enable iOS build once it's working
+          condition: eq(1,2)
           displayName: 'Build iOS'
           inputs:
             target: 'ios'
