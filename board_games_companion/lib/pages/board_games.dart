@@ -1,5 +1,8 @@
 import 'package:board_games_companion/common/routes.dart';
-import 'package:board_games_companion/models/board_game.dart';
+import 'package:board_games_companion/common/hive_boxes.dart';
+import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/models/board_game_details.dart';
+import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/widgets/board_game_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -13,38 +16,61 @@ class BoardGamesPage extends StatefulWidget {
 }
 
 class _BoardGamesPageState extends State<BoardGamesPage> {
-  List<BoardGame> _boardGames;
+  BoardGamesService _boardGamesService = BoardGamesService();
 
   void _navigateToSearchBoardGamesPage() {
     Navigator.pushNamed(context, Routes.addBoardGames);
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final hasBoardGames = _boardGames?.isEmpty ?? false;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: hasBoardGames
-          ? Center(
-              child: Text(
-                  'It looks empty here, try adding a new board game to your collection'))
-          : ListView.builder(
-              itemCount: _boardGames?.length ?? 0,
-              itemBuilder: (BuildContext context, int index) {
-                return BoardGameWidget();
-              }),
+      body: FutureBuilder(
+        future: _boardGamesService.retrieveBoardGames(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var boardGames = (snapshot.data as List<BoardGameDetails>);
+            if (boardGames?.isEmpty ?? true) {
+              return Padding(
+                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                child: Center(
+                  child: Text(
+                      'It looks empty here, try adding a new board game to your collection'),
+                ),
+              );
+            }
+
+            return ListView.builder(
+                itemCount: boardGames.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return BoardGameWidget(
+                    boardGameDetails: boardGames[index],
+                  );
+                });
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Text(
+                    'Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'));
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToSearchBoardGamesPage,
         tooltip: 'Add a board game',
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _boardGamesService.closeBox(HiveBoxes.BoardGames);
+
+    super.dispose();
   }
 }

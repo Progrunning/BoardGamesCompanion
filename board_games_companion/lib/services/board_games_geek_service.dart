@@ -133,6 +133,7 @@ class BoardGamesGeekService {
         }
 
         var boardGameDetails = BoardGameDetails(boardGameDetailName);
+        boardGameDetails.id = id;
 
         boardGameDetails.description =
             boardGameDetailsItem.findAllElements('description').first.text;

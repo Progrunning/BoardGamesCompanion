@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
+import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +15,11 @@ class BoardGamesDetailsPage extends StatefulWidget {
 
 class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
   final BoardGamesGeekService _boardGamesGeekService = BoardGamesGeekService();
+  final BoardGamesService _boardGamesService = BoardGamesService();
 
   final double _minImageHeight = 300;
 
+  BoardGameDetails _boardGameDetails;
   bool _isRefreshing;
 
   @override
@@ -46,13 +49,13 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
             if (snapshot.connectionState == ConnectionState.done) {
               _isRefreshing = false;
 
-              final boardGameDetails = snapshot.data as BoardGameDetails;
-              if (boardGameDetails != null) {
+              _boardGameDetails = snapshot.data as BoardGameDetails;
+              if (_boardGameDetails != null) {
                 return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
                       CachedNetworkImage(
-                        imageUrl: boardGameDetails.imageUrl,
+                        imageUrl: _boardGameDetails.imageUrl,
                         imageBuilder: (context, imageProvider) =>
                             _wrapInShadowBox(Container(
                                 decoration: BoxDecoration(
@@ -69,7 +72,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                                 child: Container(
                                   child: Center(
                                       child: Text(
-                                    boardGameDetails?.name ?? '',
+                                    _boardGameDetails?.name ?? '',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize:
@@ -84,7 +87,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         height: 30,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: boardGameDetails.categories.length,
+                          itemCount: _boardGameDetails.categories.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.only(
@@ -93,7 +96,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                                   padding: EdgeInsets.all(
                                       Dimensions.standardSpacing),
                                   label: Text(
-                                    boardGameDetails.categories[index].name,
+                                    _boardGameDetails.categories[index].name,
                                   )),
                             );
                           },
@@ -106,7 +109,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         padding:
                             const EdgeInsets.all(Dimensions.standardSpacing),
                         child: Text(
-                          boardGameDetails.description
+                          _boardGameDetails.description
                               .replaceAll('&#10;&#10;', "\n\n"),
                           textAlign: TextAlign.justify,
                           style: TextStyle(fontSize: Dimensions.mediumFontSize),
@@ -148,9 +151,8 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
             return Center(child: CircularProgressIndicator());
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-
-          // TODO MK Save board game to users collection
+        onPressed: () async {
+          await _boardGamesService.addOrUpdateBoardGame(_boardGameDetails);
           Navigator.popUntil(context, (dynamic route) {
             if (route is MaterialPageRoute &&
                 route.settings.name == Routes.home) {

@@ -1,13 +1,25 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/routes.dart';
+import 'package:board_games_companion/models/board_game_category.dart';
+import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/board_games.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(BoardGameDetailsAdapter());
+  Hive.registerAdapter(BoardGameCategoryAdapter());
+
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   runZoned(() {
