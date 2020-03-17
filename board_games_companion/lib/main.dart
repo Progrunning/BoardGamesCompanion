@@ -1,10 +1,19 @@
+import 'dart:async';
+
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/board_games.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(BoardGamesCompanionApp());
+void main() {
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runZoned(() {
+    runApp(BoardGamesCompanionApp());
+  }, onError: Crashlytics.instance.recordError);
+}
 
 class BoardGamesCompanionApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -26,7 +35,8 @@ class BoardGamesCompanionApp extends StatelessWidget {
       ),
       initialRoute: Routes.home,
       routes: {
-        Routes.home: (context) => BoardGamesPage(title: 'Board Games Companion'),
+        Routes.home: (context) =>
+            BoardGamesPage(title: 'Board Games Companion'),
         Routes.addBoardGames: (context) => AddBoardGames(),
         Routes.boardGameDetails: (context) => BoardGamesDetailsPage()
       },

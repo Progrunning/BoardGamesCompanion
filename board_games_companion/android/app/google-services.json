@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "718227562022",
+    "firebase_url": "https://board-games-companion.firebaseio.com",
+    "project_id": "board-games-companion",
+    "storage_bucket": "board-games-companion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718227562022:android:c6b624f05d8fd7689390e7",
+        "android_client_info": {
+          "package_name": "com.progrunning.boardgamescompanion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718227562022-i4r8n8h3qercm8abcpt62n2augf3rarl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC_66GoMfjWxfL2flPRJH2PuEuTXkAZAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718227562022-i4r8n8h3qercm8abcpt62n2augf3rarl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
