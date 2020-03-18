@@ -66,19 +66,20 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         placeholder: (context, url) => _wrapInShadowBox(
                             Center(child: CircularProgressIndicator())),
                         errorWidget: (context, url, error) => _wrapInShadowBox(
-                            Padding(
-                                padding: const EdgeInsets.all(
-                                    Dimensions.standardSpacing),
-                                child: Container(
-                                  child: Center(
-                                      child: Text(
-                                    _boardGameDetails?.name ?? '',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize:
-                                            Dimensions.extraLargeFontSize),
-                                  )),
-                                ))),
+                          Padding(
+                            padding: const EdgeInsets.all(
+                                Dimensions.standardSpacing),
+                            child: Container(
+                              child: Center(
+                                  child: Text(
+                                _boardGameDetails?.name ?? '',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Dimensions.extraLargeFontSize),
+                              )),
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: Dimensions.doubleStandardSpacing,
@@ -153,14 +154,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _boardGamesService.addOrUpdateBoardGame(_boardGameDetails);
-          Navigator.popUntil(context, (dynamic route) {
-            if (route is MaterialPageRoute &&
-                route.settings.name == Routes.home) {
-              return true;
-            }
-
-            return false;
-          });
+          Navigator.popUntil(context, ModalRoute.withName(Routes.home));
         },
         tooltip: 'Add a board game',
         child: Icon(Icons.add),
