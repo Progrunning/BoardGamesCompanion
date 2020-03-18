@@ -7,4 +7,6 @@ class Styles {
   static const Color defaultShadowColor = Colors.blueGrey;
 
   static const int opacity70Percent = 180;
+  static const int opacity80Percent = 205;
+  static const int opacity90Percent = 230;
 }

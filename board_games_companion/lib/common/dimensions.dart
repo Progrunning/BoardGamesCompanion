@@ -1,4 +1,5 @@
 class Dimensions {
+  static const double quarterStandardSpacing = standardSpacing / 4;
   static const double halfStandardSpacing = standardSpacing / 2;
   static const double standardSpacing = 8;
   static const double doubleStandardSpacing = standardSpacing * 2;
@@ -11,5 +12,9 @@ class Dimensions {
   static const double mediumFontSize = 16;
   static const double largeFontSize = 18;
   static const double extraLargeFontSize = 20;
+  static const double doubleExtraLargeFontSize = 26;
+
+  static const double boardGameItemCollectionImageWidth = 150;
+  static const double boardGameItemCollectionImageHeight = 150;
 
 }

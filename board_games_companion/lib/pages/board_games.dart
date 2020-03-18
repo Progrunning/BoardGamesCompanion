@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/strings.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/widgets/board_game_widget.dart';
@@ -43,7 +44,10 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
               );
             }
 
+            boardGames.sort((a, b) => a.name?.compareTo(b.name));
+
             return ListView.builder(
+                padding: EdgeInsets.all(Dimensions.standardSpacing),
                 itemCount: boardGames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return BoardGameWidget(
@@ -53,7 +57,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
           } else if (snapshot.hasError) {
             return Center(
                 child: Text(
-                    'Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'));
+                    ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'));
           }
 
           return Center(child: CircularProgressIndicator());
@@ -61,7 +65,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToSearchBoardGamesPage,
-        tooltip: 'Add a board game',
+        tooltip: Strings.AddBoardGameTooltip,
         child: Icon(Icons.add),
       ),
     );

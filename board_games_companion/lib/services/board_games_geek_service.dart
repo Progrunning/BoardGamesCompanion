@@ -106,7 +106,7 @@ class BoardGamesGeekService {
     retrievalOptions.responseType = ResponseType.plain;
 
     final boardGameDetailsXml = await Dio().get(_boardGamesDetailsUrl,
-        queryParameters: {"id": id}, options: retrievalOptions);
+        queryParameters: {"id": id, "stats": "1"}, options: retrievalOptions);
 
     try {
       if (boardGameDetailsXml is Response &&
@@ -120,7 +120,7 @@ class BoardGamesGeekService {
           return null;
         }
 
-        var boardGameDetailName = boardGameDetailsItem
+        final boardGameDetailName = boardGameDetailsItem
             .findAllElements('name')
             .first
             .attributes
@@ -132,7 +132,7 @@ class BoardGamesGeekService {
           return null;
         }
 
-        var boardGameDetails = BoardGameDetails(boardGameDetailName);
+        final boardGameDetails = BoardGameDetails(boardGameDetailName);
         boardGameDetails.id = id;
 
         boardGameDetails.description =
@@ -141,23 +141,24 @@ class BoardGamesGeekService {
         boardGameDetails.imageUrl =
             boardGameDetailsItem.findAllElements('image').first.text;
 
-        var boardGameDetailCategories =
+        final boardGameDetailCategories =
             boardGameDetailsItem.findAllElements('link');
-        for (var boardGameDetailCategory in boardGameDetailCategories) {
+        for (final boardGameDetailCategory in boardGameDetailCategories) {
           if (boardGameDetailCategory.attributes.isEmpty) {
             continue;
           }
 
-          var hasCategoryAttribute =
+          final hasCategoryAttribute =
               boardGameDetailCategory.attributes.any((attr) {
             return attr.name.local == _xmlTypeAttributeName &&
                 attr.value == _xmlCategoryAttributeTypeName;
           });
+
           if (!hasCategoryAttribute) {
             continue;
           }
 
-          var boardGameCategory = BoardGameCategory();
+          final boardGameCategory = BoardGameCategory();
           boardGameCategory.id =
               boardGameDetailCategory.attributes.firstWhere((attr) {
             return attr.name.local == _xmlIdAttributeName;
@@ -169,6 +170,28 @@ class BoardGamesGeekService {
 
           boardGameDetails.categories.add(boardGameCategory);
         }
+
+        final boardGameDetailStatistics =
+            boardGameDetailsItem.findAllElements('statistics').first;
+
+        final boardGameDetailsRatings =
+            boardGameDetailStatistics?.findAllElements('ratings')?.first;
+
+        boardGameDetails.rating = double.tryParse(boardGameDetailsRatings
+                ?.findAllElements('average')
+                ?.first
+                ?.attributes
+                ?.single
+                ?.value) ??
+            0;
+
+        boardGameDetails.votes = int.tryParse(boardGameDetailsRatings
+                ?.findAllElements('usersrated')
+                ?.first
+                ?.attributes
+                ?.single
+                ?.value) ??
+            0;
 
         return boardGameDetails;
       }

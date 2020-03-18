@@ -16,4 +16,8 @@ class BoardGameDetails extends BaseBoardGame {
 
   @HiveField(7)
   List<BoardGameCategory> categories = List<BoardGameCategory>();
+  @HiveField(8)
+  double rating;
+  @HiveField(9)
+  int votes;
 }

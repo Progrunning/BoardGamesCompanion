@@ -22,12 +22,16 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
         imageBuilder: (context, imageProvider) => _wrapInShadowBox(Padding(
           padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
           child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: imageProvider, fit: BoxFit.fitHeight))),
+            decoration: BoxDecoration(
+              image:
+                  DecorationImage(image: imageProvider, fit: BoxFit.fitHeight),
+            ),
+          ),
         )),
         fit: BoxFit.fitWidth,
-        placeholder: (context, url) => _wrapInShadowBox(Placeholder()),
+        placeholder: (context, url) => _wrapInShadowBox(
+          Center(child: CircularProgressIndicator()),
+        ),
         errorWidget: (context, url, error) => _wrapInShadowBox(Padding(
             padding: const EdgeInsets.all(Dimensions.standardSpacing),
             child: Container(
@@ -51,8 +55,9 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
               color: Theme.of(context)
                   .accentColor
                   .withAlpha(Styles.opacity70Percent),
-              borderRadius:
-                  BorderRadius.all(Radius.circular(Styles.defaultCornerRadius)),
+              borderRadius: BorderRadius.all(
+                Radius.circular(Styles.defaultCornerRadius),
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),

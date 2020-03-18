@@ -29,6 +29,16 @@ class BoardGamesService {
     await boardGamesBox.put(boardGameDetails.id, boardGameDetails);
   }
 
+  Future<void> removeBoardGame(String boardGameDetailsId) async {
+    if (boardGameDetailsId?.isEmpty ?? true) {
+      return;
+    }
+
+    var boardGamesBox =
+        await Hive.openBox<BoardGameDetails>(HiveBoxes.BoardGames);
+    await boardGamesBox.delete(boardGameDetailsId);
+  }
+
   void closeBox(String boxName) {
     if (boxName?.isEmpty ?? true) {
       return;

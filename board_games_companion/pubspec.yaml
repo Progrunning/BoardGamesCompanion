@@ -23,6 +23,7 @@ dependencies:
   hive: ^1.4.1+1  
   hive_flutter: ^0.3.0+2
   path_provider: ^1.6.5
+  polygon_clipper: ^1.0.2
   xml: 3.5.0
   flutter:
     sdk: flutter
