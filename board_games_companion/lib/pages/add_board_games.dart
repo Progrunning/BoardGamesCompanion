@@ -41,9 +41,10 @@ class _AddBoardGames extends State<AddBoardGames> {
 
               if (snapshot.data is List<BoardGame>) {
                 return GridView.count(
-                    crossAxisCount: _numberOfBoardGameColumns,
-                    children: List.generate(
-                        (snapshot.data as List<BoardGame>).length, (int index) {
+                  crossAxisCount: _numberOfBoardGameColumns,
+                  children: List.generate(
+                    (snapshot.data as List<BoardGame>).length,
+                    (int index) {
                       return InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, Routes.boardGameDetails,
@@ -53,7 +54,9 @@ class _AddBoardGames extends State<AddBoardGames> {
                           boardGame: snapshot.data[index],
                         ),
                       );
-                    }));
+                    },
+                  ),
+                );
               }
 
               return Padding(

@@ -21,15 +21,19 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
       children: <Widget>[
         CachedNetworkImage(
           imageUrl: widget.boardGame.thumbnailUrl,
-          imageBuilder: (context, imageProvider) => ShadowBox(Padding(
+          imageBuilder: (context, imageProvider) => Padding(
             padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
             child: Container(
               decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: imageProvider, fit: BoxFit.fitHeight),
+                borderRadius: BorderRadius.all(
+                    Radius.circular(Styles.boardGameTileImageCircularRadius)),
+                boxShadow: [
+                  BoxShadow(blurRadius: Styles.boardGameTileImageShadowBlur)
+                ],
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
-          )),
+          ),
           fit: BoxFit.fitWidth,
           placeholder: (context, url) => ShadowBox(
             Center(child: CircularProgressIndicator()),
