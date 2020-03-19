@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/widgets/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/star_rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                               Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                      image: imageProvider, fit: BoxFit.fill),
+                                      image: imageProvider, fit: BoxFit.cover),
                                 ),
                               ),
                             ),
@@ -97,10 +98,10 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                             child: Align(
                               alignment: Alignment.topRight,
                               child: SizedBox(
-                                height: 100,
-                                width: 100,
+                                height: Dimensions.boardGameDetailsHexagonSize,
+                                width: Dimensions.boardGameDetailsHexagonSize,
                                 child: ClipPolygon(
-                                  sides: 6,
+                                  sides: Dimensions.edgeNumberOfHexagon,
                                   child: Container(
                                     color: Theme.of(context)
                                         .accentColor
@@ -112,7 +113,8 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                                                 .BoardGameRatingNumberOfDecimalPlaces),
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: Dimensions.doubleExtraLargeFontSize),
+                                            fontSize: Dimensions
+                                                .doubleExtraLargeFontSize),
                                       ),
                                     ),
                                   ),
@@ -209,13 +211,8 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
 
   Widget _wrapInShadowBox(Widget content) {
     return ConstrainedBox(
-        constraints: BoxConstraints(minHeight: _minImageHeight),
-        child: Container(
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                  color: Styles.defaultShadowColor,
-                  blurRadius: Styles.defaultShadowRadius)
-            ]),
-            child: content));
+      constraints: BoxConstraints(minHeight: _minImageHeight),
+      child: ShadowBox(content),
+    );
   }
 }

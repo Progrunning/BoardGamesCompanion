@@ -1,3 +1,3 @@
 class Constants {
-  static const BoardGameRatingNumberOfDecimalPlaces = 2;
+  static const BoardGameRatingNumberOfDecimalPlaces = 1;
 }

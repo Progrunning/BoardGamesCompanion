@@ -1,10 +1,12 @@
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/widgets/star_rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:polygon_clipper/polygon_clipper.dart';
 
 class BoardGameWidget extends StatefulWidget {
   final BoardGameDetails boardGameDetails;
@@ -24,10 +26,11 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
       key: Key(widget.boardGameDetails.id),
       background: Container(
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: Dimensions.standardSpacing),
+        padding: EdgeInsets.only(right: Dimensions.doubleStandardSpacing),
         color: Colors.red,
         child: Icon(
           Icons.delete,
+          size: Dimensions.boardGameRemoveIconSize,
           color: Colors.white,
         ),
       ),
@@ -58,26 +61,59 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
             SizedBox(
               height: Dimensions.boardGameItemCollectionImageHeight,
               width: Dimensions.boardGameItemCollectionImageWidth,
-              child: CachedNetworkImage(
-                imageUrl: widget.boardGameDetails.imageUrl,
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image:
-                        DecorationImage(image: imageProvider, fit: BoxFit.fill),
-                  ),
-                ),
-                fit: BoxFit.fitWidth,
-                placeholder: (context, url) =>
-                    Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => Container(
-                  child: Center(
-                    child: Text(
-                      widget.boardGameDetails?.name ?? '',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+              child: Stack(
+                children: <Widget>[
+                  CachedNetworkImage(
+                    imageUrl: widget.boardGameDetails.imageUrl,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Container(
+                      child: Center(
+                        child: Text(
+                          widget.boardGameDetails?.name ?? '',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: Dimensions.extraLargeFontSize),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.all(Dimensions.halfStandardSpacing),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: SizedBox(
+                        height: Dimensions.boardGameHexagonSize,
+                        width: Dimensions.boardGameHexagonSize,
+                        child: ClipPolygon(
+                          sides: Dimensions.edgeNumberOfHexagon,
+                          child: Container(
+                            color: Theme.of(context)
+                                .accentColor
+                                .withAlpha(Styles.opacity90Percent),
+                            child: Center(
+                              child: Text(
+                                (widget.boardGameDetails.rating ?? 0)
+                                    .toStringAsFixed(Constants
+                                        .BoardGameRatingNumberOfDecimalPlaces),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Dimensions.smallFontSize),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -102,8 +138,7 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
                       height: Dimensions.halfStandardSpacing,
                     ),
                     Text(
-                      '${(widget.boardGameDetails.rating ?? 0).toStringAsFixed(
-                          Constants.BoardGameRatingNumberOfDecimalPlaces)} / ${widget.boardGameDetails.votes ?? 0}',
+                      '${(widget.boardGameDetails.rating ?? 0).toStringAsFixed(Constants.BoardGameRatingNumberOfDecimalPlaces)} / ${widget.boardGameDetails.votes ?? 0}',
                       style: TextStyle(fontSize: Dimensions.smallFontSize),
                     ),
                   ],
