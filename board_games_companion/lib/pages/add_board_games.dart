@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/board_game.dart';
@@ -14,7 +15,15 @@ class _AddBoardGames extends State<AddBoardGames> {
   final BoardGamesGeekService _boardGamesGeekService = BoardGamesGeekService();
   final int _numberOfBoardGameColumns = 3;
 
+  AsyncMemoizer _memoizer;
   bool _isRefreshing;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _memoizer = AsyncMemoizer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +32,9 @@ class _AddBoardGames extends State<AddBoardGames> {
           title: Text('Add Board Games'),
         ),
         body: FutureBuilder(
-          future: _boardGamesGeekService.retrieveHot(),
+          future: _memoizer.runOnce(() async {
+            return _boardGamesGeekService.retrieveHot();
+          }),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               _isRefreshing = false;
