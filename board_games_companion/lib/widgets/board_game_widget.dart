@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
@@ -63,23 +64,27 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
               width: Dimensions.boardGameItemCollectionImageWidth,
               child: Stack(
                 children: <Widget>[
-                  CachedNetworkImage(
-                    imageUrl: widget.boardGameDetails.imageUrl,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.cover),
+                  Hero(
+                    tag:
+                        "${AnimationTags.boardGameImageHeroTag}${widget.boardGameDetails.id}",
+                    child: CachedNetworkImage(
+                      imageUrl: widget.boardGameDetails.imageUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
                       ),
-                    ),
-                    placeholder: (context, url) =>
-                        Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => Container(
-                      child: Center(
-                        child: Text(
-                          widget.boardGameDetails?.name ?? '',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: Dimensions.extraLargeFontSize),
+                      placeholder: (context, url) =>
+                          Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Container(
+                        child: Center(
+                          child: Text(
+                            widget.boardGameDetails?.name ?? '',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: Dimensions.extraLargeFontSize),
+                          ),
                         ),
                       ),
                     ),

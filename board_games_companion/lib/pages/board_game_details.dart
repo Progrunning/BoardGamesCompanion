@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/widgets/board_game_image.dart';
 import 'package:board_games_companion/widgets/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/star_rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -60,37 +61,9 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                     children: <Widget>[
                       Stack(
                         children: <Widget>[
-                          CachedNetworkImage(
-                            imageUrl: _boardGameDetails.imageUrl,
-                            imageBuilder: (context, imageProvider) =>
-                                _wrapInShadowBox(
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: imageProvider, fit: BoxFit.cover),
-                                ),
-                              ),
-                            ),
-                            fit: BoxFit.fitWidth,
-                            placeholder: (context, url) => _wrapInShadowBox(
-                                Center(child: CircularProgressIndicator())),
-                            errorWidget: (context, url, error) =>
-                                _wrapInShadowBox(
-                              Padding(
-                                padding: const EdgeInsets.all(
-                                    Dimensions.standardSpacing),
-                                child: Container(
-                                  child: Center(
-                                      child: Text(
-                                    _boardGameDetails?.name ?? '',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize:
-                                            Dimensions.extraLargeFontSize),
-                                  )),
-                                ),
-                              ),
-                            ),
+                          BoardGameImage(
+                            boardGameDetails: _boardGameDetails,
+                            minImageHeight: _minImageHeight,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(
@@ -206,13 +179,6 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
         tooltip: 'Add a board game',
         child: Icon(Icons.add),
       ),
-    );
-  }
-
-  Widget _wrapInShadowBox(Widget content) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: _minImageHeight),
-      child: ShadowBox(content),
     );
   }
 }
