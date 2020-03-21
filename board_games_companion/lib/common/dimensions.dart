@@ -6,7 +6,7 @@ class Dimensions {
 
   static const double boardGameDetailsImageHeight = 80;
 
-  static const double verySmallFontSize = 10;
+  static const double extraSmallFontSize = 10;
   static const double smallFontSize = 12;
   static const double standardFontSize = 14;
   static const double mediumFontSize = 16;

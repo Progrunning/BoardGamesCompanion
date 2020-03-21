@@ -91,7 +91,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
             child: Stack(
               children: <Widget>[
                 Icon(
-                  Icons.turned_in,
+                  Icons.bookmark,
                   size: 42,
                   color: Theme.of(context)
                       .accentColor
