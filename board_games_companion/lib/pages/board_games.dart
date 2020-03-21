@@ -1,5 +1,4 @@
 import 'package:async/async.dart';
-import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/common/dimensions.dart';

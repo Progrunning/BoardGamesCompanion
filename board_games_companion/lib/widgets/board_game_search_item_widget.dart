@@ -85,6 +85,32 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
               ),
             ),
           ),
+          Positioned(
+            top: -2, // TODO MK Find out why there's a need for negative value
+            right: Dimensions.halfStandardSpacing,
+            child: Stack(
+              children: <Widget>[
+                Icon(
+                  Icons.turned_in,
+                  size: 42,
+                  color: Theme.of(context)
+                      .accentColor
+                      .withAlpha(Styles.opacity70Percent),
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: Text(
+                      '#${widget.boardGame.rank?.toString()}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Dimensions.smallFontSize,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

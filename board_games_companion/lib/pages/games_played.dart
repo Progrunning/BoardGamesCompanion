@@ -1,9 +1,10 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
-import 'package:board_games_companion/widgets/board_game_image.dart';
+import 'package:board_games_companion/widgets/board_game_image_widget.dart';
 import 'package:board_games_companion/widgets/calendar_card.dart';
+import 'package:board_games_companion/widgets/players_widget.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -35,23 +36,35 @@ class _GamesPlayedState extends State<GamesPlayed> {
             height: Dimensions.standardSpacing,
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(Dimensions.standardSpacing),
-              child: ListView.separated(
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      width: Dimensions.standardSpacing,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: <Widget>[
-                        CalendarCard(),
-                      ],
-                    );
-                  }),
+            child: CarouselSlider(
+              height: double.infinity,
+              items: [1, 2, 3].map((item) {
+                return Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[CalendarCard()],
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.standardSpacing),
+                        child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                width: Dimensions.standardSpacing,
+                              );
+                            },
+                            itemBuilder: (context, index) {
+                              return Player();
+                            }),
+                      ),
+                    )
+                  ],
+                );
+              }).toList(),
             ),
           ),
         ],

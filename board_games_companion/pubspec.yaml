@@ -24,6 +24,7 @@ dependencies:
   hive_flutter: ^0.3.0+2
   path_provider: ^1.6.5
   polygon_clipper: ^1.0.2
+  carousel_slider: ^1.4.1
   async: ^2.4.0
   xml: 3.5.0
   flutter:

@@ -6,10 +6,8 @@ import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
-import 'package:board_games_companion/widgets/board_game_image.dart';
-import 'package:board_games_companion/widgets/shadow_box_widget.dart';
+import 'package:board_games_companion/widgets/board_game_image_widget.dart';
 import 'package:board_games_companion/widgets/star_rating_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
 

@@ -6,7 +6,6 @@ import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/board_games.dart';
-import 'package:board_games_companion/pages/games_played.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
