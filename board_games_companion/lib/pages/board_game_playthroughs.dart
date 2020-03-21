@@ -14,27 +14,29 @@ class BoardGamePlaythroughs extends StatefulWidget {
 
 class _BoardGamePlaythroughsState extends State<BoardGamePlaythroughs> {
   static const int _playthroughsPageIndex = 0;
-  static const int _startNewPlaythroughPageIndex = 1;
 
-  int _selectedIndex = _playthroughsPageIndex;
+  int _selectedPageIndex = _playthroughsPageIndex;
+  PageController _pageController =
+      PageController(initialPage: _playthroughsPageIndex);
 
   @override
   Widget build(BuildContext context) {
-    Widget _selectedTabbedPage;
-    switch (_selectedIndex) {
-      case _playthroughsPageIndex:
-        _selectedTabbedPage = Playthrough(widget.boardGameDetails);
-        break;
-      case _startNewPlaythroughPageIndex:
-        _selectedTabbedPage = StartNewPlaythrough();
-        break;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Playthroughs'),
       ),
-      body: _selectedTabbedPage,
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (pageIndex) {
+          setState(() {
+            _selectedPageIndex = pageIndex;
+          });
+        },
+        children: <Widget>[
+          Playthrough(widget.boardGameDetails),
+          StartNewPlaythrough(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -47,14 +49,16 @@ class _BoardGamePlaythroughsState extends State<BoardGamePlaythroughs> {
           ),
         ],
         onTap: _onItemTapped,
-        currentIndex: _selectedIndex,
+        currentIndex: _selectedPageIndex,
       ),
     );
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    this._pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
   }
 }
