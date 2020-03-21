@@ -4,7 +4,8 @@ import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/strings.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
-import 'package:board_games_companion/pages/games_played.dart';
+import 'package:board_games_companion/pages/board_game_playthroughs.dart';
+import 'package:board_games_companion/pages/playthroughs.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/widgets/board_game_widget.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
         transitionDuration: Duration(milliseconds: 500),
         pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) {
-          return GamesPlayed(boardGameDetails);
+          return BoardGamePlaythroughs(boardGameDetails);
         },
       ),
     );
