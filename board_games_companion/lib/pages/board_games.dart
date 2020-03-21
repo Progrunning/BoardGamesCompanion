@@ -55,55 +55,55 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: FutureBuilder(
-          future: _memoizer.runOnce(() async {
-            return _boardGamesService.retrieveBoardGames();
-          }),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              var boardGames = (snapshot.data as List<BoardGameDetails>);
-              if (boardGames?.isEmpty ?? true) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.all(Dimensions.doubleStandardSpacing),
-                  child: Center(
-                    child: Text(
-                        'It looks empty here, try adding a new board game to your collection'),
-                  ),
-                );
-              }
-
-              boardGames.sort((a, b) => a.name?.compareTo(b.name));
-
-              return ListView.builder(
-                padding: EdgeInsets.all(Dimensions.standardSpacing),
-                itemCount: boardGames.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return InkWell(
-                    onTap: () {
-                      _navigateToGamesPlayedPage(boardGames[index]);
-                    },
-                    child: BoardGameWidget(
-                      boardGameDetails: boardGames[index],
-                    ),
-                  );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Center(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: FutureBuilder(
+        future: _memoizer.runOnce(() async {
+          return _boardGamesService.retrieveBoardGames();
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var boardGames = (snapshot.data as List<BoardGameDetails>);
+            if (boardGames?.isEmpty ?? true) {
+              return Padding(
+                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                child: Center(
                   child: Text(
-                      ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'));
+                      'It looks empty here, try adding a new board game to your collection'),
+                ),
+              );
             }
 
-            return Center(child: CircularProgressIndicator());
-          },
-        ),
-        floatingActionButton: AddBoardGameButton(
-          onPressed: _navigateToSearchBoardGamesPage,
-        ));
+            boardGames.sort((a, b) => a.name?.compareTo(b.name));
+
+            return ListView.builder(
+              padding: EdgeInsets.all(Dimensions.standardSpacing),
+              itemCount: boardGames.length,
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () {
+                    _navigateToGamesPlayedPage(boardGames[index]);
+                  },
+                  child: BoardGameWidget(
+                    boardGameDetails: boardGames[index],
+                  ),
+                );
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Text(
+                    ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'));
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+      floatingActionButton: AddBoardGameButton(
+        onPressed: _navigateToSearchBoardGamesPage,
+      ),
+    );
   }
 
   @override
