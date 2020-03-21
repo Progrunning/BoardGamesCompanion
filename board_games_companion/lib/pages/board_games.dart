@@ -24,12 +24,15 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
 
   AsyncMemoizer _memoizer;
 
-  void _navigateToSearchBoardGamesPage() {
-    Navigator.pushNamed(context, Routes.addBoardGames);
+  Future<void> _navigateToSearchBoardGamesPage() async {
+    await Navigator.pushNamed(context, Routes.addBoardGames);
+    // MK Ensure the list refreshes by creating a new memoizer
+    _memoizer = new AsyncMemoizer();
   }
 
-  void _navigateToGamesPlayedPage(BoardGameDetails boardGameDetails) {
-    Navigator.push(
+  Future<void> _navigateToGamesPlayedPage(
+      BoardGameDetails boardGameDetails) async {
+    await Navigator.push(
       context,
       PageRouteBuilder(
         transitionDuration: Duration(milliseconds: 500),
