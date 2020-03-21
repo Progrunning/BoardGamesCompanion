@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
@@ -21,8 +22,30 @@ class BoardGamesPage extends StatefulWidget {
 class _BoardGamesPageState extends State<BoardGamesPage> {
   BoardGamesService _boardGamesService = BoardGamesService();
 
+  AsyncMemoizer _memoizer;
+
   void _navigateToSearchBoardGamesPage() {
     Navigator.pushNamed(context, Routes.addBoardGames);
+  }
+
+  void _navigateToGamesPlayedPage(BoardGameDetails boardGameDetails) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return GamesPlayed(boardGameDetails);
+        },
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _memoizer = AsyncMemoizer();
   }
 
   @override
@@ -32,7 +55,9 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
         title: Text(widget.title),
       ),
       body: FutureBuilder(
-        future: _boardGamesService.retrieveBoardGames(),
+        future: _memoizer.runOnce(() async {
+          return _boardGamesService.retrieveBoardGames();
+        }),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var boardGames = (snapshot.data as List<BoardGameDetails>);
@@ -54,17 +79,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(milliseconds: 500),
-                        pageBuilder: (BuildContext context,
-                            Animation<double> animation,
-                            Animation<double> secondaryAnimation) {
-                          return GamesPlayed(boardGames[index]);
-                        },
-                      ),
-                    );
+                    _navigateToGamesPlayedPage(boardGames[index]);
                   },
                   child: BoardGameWidget(
                     boardGameDetails: boardGames[index],
