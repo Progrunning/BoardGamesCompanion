@@ -8,13 +8,11 @@ class BoardGameImage extends StatelessWidget {
   const BoardGameImage({
     Key key,
     @required BoardGameDetails boardGameDetails,
-    @required double minImageHeight,
   })  : _boardGameDetails = boardGameDetails,
-        _minImageHeight = minImageHeight,
         super(key: key);
 
   final BoardGameDetails _boardGameDetails;
-  final double _minImageHeight;
+  final double _minImageHeight = 300;
 
   @override
   Widget build(BuildContext context) {

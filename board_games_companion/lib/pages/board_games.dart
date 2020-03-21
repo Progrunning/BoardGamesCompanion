@@ -26,7 +26,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
 
   Future<void> _navigateToSearchBoardGamesPage() async {
     await Navigator.pushNamed(context, Routes.addBoardGames);
-    // MK Ensure the list refreshes by creating a new memoizer
+    // MK Ensure that the board games collection list refreshes
     _memoizer = new AsyncMemoizer();
   }
 

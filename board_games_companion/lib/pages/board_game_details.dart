@@ -22,8 +22,6 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
   final BoardGamesGeekService _boardGamesGeekService = BoardGamesGeekService();
   final BoardGamesService _boardGamesService = BoardGamesService();
 
-  final double _minImageHeight = 300;
-
   BoardGameDetails _boardGameDetails;
   bool _isRefreshing;
 
@@ -63,7 +61,6 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         children: <Widget>[
                           BoardGameImage(
                             boardGameDetails: _boardGameDetails,
-                            minImageHeight: _minImageHeight,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(
