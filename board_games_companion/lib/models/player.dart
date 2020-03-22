@@ -10,5 +10,7 @@ class Player {
   @HiveField(1)
   String name;
   @HiveField(2)
+  String imageUri;
+  @HiveField(3)
   bool isDeleted;
 }

@@ -19,18 +19,21 @@ class PlayerAdapter extends TypeAdapter<Player> {
     return Player()
       ..id = fields[0] as String
       ..name = fields[1] as String
-      ..isDeleted = fields[2] as bool;
+      ..imageUri = fields[2] as String
+      ..isDeleted = fields[3] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Player obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
+      ..write(obj.imageUri)
+      ..writeByte(3)
       ..write(obj.isDeleted);
   }
 }

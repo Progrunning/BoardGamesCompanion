@@ -57,8 +57,9 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
           );
         } else if (snapshot.hasError) {
           return Center(
-              child: Text(
-                  ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'));
+            child: Text(
+                ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'),
+          );
         }
 
         return Center(child: CircularProgressIndicator());
