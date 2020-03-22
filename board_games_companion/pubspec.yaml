@@ -26,6 +26,7 @@ dependencies:
   polygon_clipper: ^1.0.2
   carousel_slider: ^1.4.1
   async: ^2.4.0
+  uuid: ^2.0.4
   xml: 3.5.0
   flutter:
     sdk: flutter

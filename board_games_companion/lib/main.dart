@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/board_game_category.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
+import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/create_edit_player.dart';
@@ -20,6 +21,7 @@ void main() async {
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(BoardGameDetailsAdapter());
   Hive.registerAdapter(BoardGameCategoryAdapter());
+  Hive.registerAdapter(PlayerAdapter());
 
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 

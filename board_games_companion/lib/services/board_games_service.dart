@@ -2,7 +2,9 @@ import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:hive/hive.dart';
 
-class BoardGamesService {
+import 'hide_base_service.dart';
+
+class BoardGamesService extends BaseHiveService {
   static final BoardGamesService _instance =
       new BoardGamesService._createInstance();
 
@@ -37,13 +39,5 @@ class BoardGamesService {
     var boardGamesBox =
         await Hive.openBox<BoardGameDetails>(HiveBoxes.BoardGames);
     await boardGamesBox.delete(boardGameDetailsId);
-  }
-
-  void closeBox(String boxName) {
-    if (boxName?.isEmpty ?? true) {
-      return;
-    }
-
-    Hive.box(boxName).close();
   }
 }
