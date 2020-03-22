@@ -1,5 +1,7 @@
 import 'package:board_games_companion/common/routes.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/pages/board_games.dart';
+import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 
@@ -20,13 +22,38 @@ class _HomePageState extends State<HomePage> {
 
   int _currentTabPageIndex = _boardGamesPageIndex;
 
+  BoardGamesPage _boardGamesPage;
+  PlayersPage _playersPage;
+  Widget _addBoardGameButton;
+  Widget _addPlayerButton;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _boardGamesPage = BoardGamesPage();
+    _playersPage = PlayersPage();
+
+    _addBoardGameButton = IconAndTextButton(
+      title: 'Add Game',
+      icon: Icons.add,
+      onPressed: _navigateToAddBoardGamesPage,
+    );
+    _addPlayerButton = IconAndTextButton(
+      title: 'Add Player',
+      icon: Icons.add,
+      onPressed: _navigateToAddPlayerPage,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         controller: _pageController,
         children: <Widget>[
-          BoardGamesPage(),
+          _boardGamesPage,
+          _playersPage,
         ],
         onPageChanged: (pageIndex) {
           setState(() {
@@ -34,11 +61,9 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
-      floatingActionButton: IconAndTextButton(
-        title: 'Add Game',
-        icon: Icons.add,
-        onPressed: _navigateToSearchBoardGamesPage,
-      ),
+      floatingActionButton: _currentTabPageIndex == _boardGamesPageIndex
+          ? _addBoardGameButton
+          : _addPlayerButton,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -62,9 +87,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _navigateToSearchBoardGamesPage() async {
+  Future<void> _navigateToAddBoardGamesPage() async {
     await Navigator.pushNamed(context, Routes.addBoardGames);
     // MK Ensure that the board games collection list refreshes
-    // _memoizer = new AsyncMemoizer();
+    _boardGamesPage = BoardGamesPage();
+  }
+
+  Future<void> _navigateToAddPlayerPage() async {
+    await Navigator.pushNamed(context, Routes.addPlayers);
+    // MK Ensure that players list refreshes
+    _playersPage = PlayersPage();
   }
 }

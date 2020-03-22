@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/board_game_category.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
+import 'package:board_games_companion/pages/add_players.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/home.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -51,7 +52,7 @@ class BoardGamesCompanionApp extends StatelessWidget {
             HomePage(),
         Routes.addBoardGames: (context) => AddBoardGamesPage(),
         Routes.boardGameDetails: (context) => BoardGamesDetailsPage(),
-        // Routes.gamesPlayed: (context) => GamesPlayed()
+        Routes.addPlayers: (context) => AddPlayersPage()
       },
     );
   }
