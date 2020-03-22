@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/routes.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/pages/board_games.dart';
 import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/widgets/icon_and_text_button.dart';
@@ -14,7 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const int _boardGamesPageIndex = 0;
-  static const int _playersPageIndex = 1;
 
   final PageController _pageController = PageController(
     initialPage: _boardGamesPageIndex,
@@ -94,7 +92,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _navigateToAddPlayerPage() async {
-    await Navigator.pushNamed(context, Routes.addPlayers);
+    await Navigator.pushNamed(context, Routes.createEditPlayer);
     // MK Ensure that players list refreshes
     _playersPage = PlayersPage();
   }

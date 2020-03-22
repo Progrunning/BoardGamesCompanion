@@ -7,9 +7,7 @@ import 'package:board_games_companion/widgets/board_game_widget.dart';
 import 'package:flutter/material.dart';
 
 class BoardGamesPage extends StatefulWidget {
-  BoardGamesPage({Key key}) : super(key: key) {
-    const a = 10;
-  }
+  BoardGamesPage({Key key}) : super(key: key);
 
   @override
   _BoardGamesPageState createState() => _BoardGamesPageState();

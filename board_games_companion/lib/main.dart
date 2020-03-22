@@ -4,8 +4,8 @@ import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/board_game_category.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
-import 'package:board_games_companion/pages/add_players.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
+import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/pages/home.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -48,11 +48,10 @@ class BoardGamesCompanionApp extends StatelessWidget {
       ),
       initialRoute: Routes.home,
       routes: {
-        Routes.home: (context) =>
-            HomePage(),
+        Routes.home: (context) => HomePage(),
         Routes.addBoardGames: (context) => AddBoardGamesPage(),
         Routes.boardGameDetails: (context) => BoardGamesDetailsPage(),
-        Routes.addPlayers: (context) => AddPlayersPage()
+        Routes.createEditPlayer: (context) => CreateEditPlayerPage(),
       },
     );
   }

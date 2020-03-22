@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/widgets/player_grid_item.dart';
 import 'package:board_games_companion/widgets/ripple_effect.dart';
