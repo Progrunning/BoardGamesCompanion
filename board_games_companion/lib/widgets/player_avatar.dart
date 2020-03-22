@@ -8,14 +8,14 @@ class PlayerAvatar extends StatelessWidget {
     Key key,
     this.medal,
     this.place,
-    this.avatarHeight = Dimensions.defaultPlayerAvatarHeight,
-    this.avatarWidth = Dimensions.defaultPlayerAvatarWidth,
+    // this.avatarHeight = Dimensions.defaultPlayerAvatarHeight,
+    // this.avatarWidth = Dimensions.defaultPlayerAvatarWidth,
   }) : super(key: key);
 
   final MedalEnum medal;
   final int place;
-  final double avatarWidth;
-  final double avatarHeight;
+  // final double avatarWidth;
+  // final double avatarHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +37,6 @@ class PlayerAvatar extends StatelessWidget {
       );
     }
 
-    return SizedBox(
-      height: avatarHeight,
-      width: avatarWidth,
-      child: Stack(children: stackChildren),
-    );
+    return Stack(children: stackChildren);
   }
 }
