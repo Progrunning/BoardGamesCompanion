@@ -7,17 +7,20 @@ class IconAndTextButton extends StatelessWidget {
 
   final IconData icon;
   final String title;
+  final Color color;
 
   const IconAndTextButton(
-      {this.icon, this.title, @required this.onPressed, Key key})
+      {this.icon, this.title, this.color, @required this.onPressed, Key key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var fillColor = color ?? Theme.of(context).accentColor;
+    var splashColor = fillColor.withAlpha(Styles.opacity70Percent);
+
     return RawMaterialButton(
-      fillColor: Theme.of(context).accentColor,
-      splashColor:
-          Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
+      fillColor: fillColor,
+      splashColor: splashColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: Dimensions.doubleStandardSpacing,

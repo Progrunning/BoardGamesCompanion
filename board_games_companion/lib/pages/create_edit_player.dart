@@ -1,4 +1,6 @@
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 
 class CreateEditPlayerPage extends StatelessWidget {
@@ -16,6 +18,15 @@ class CreateEditPlayerPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isEditMode ? player.name : 'New Player'),
+      ),
+      floatingActionButton: Opacity(
+        opacity: _isEditMode ? Styles.opaqueOpacity : Styles.transparentOpacity,
+        child: IconAndTextButton(
+          title: 'Delete ',
+          icon: Icons.delete,
+          color: Colors.redAccent,
+          onPressed: () {},
+        ),
       ),
     );
   }
