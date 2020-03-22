@@ -18,101 +18,107 @@ class BoardGameSearchItemWidget extends StatefulWidget {
 class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, Routes.boardGameDetails,
-            arguments: widget.boardGame);
-      },
-      child: Stack(
-        children: <Widget>[
-          CachedNetworkImage(
-            imageUrl: widget.boardGame.thumbnailUrl,
-            imageBuilder: (context, imageProvider) => Padding(
-              padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(Styles.boardGameTileImageCircularRadius)),
-                  boxShadow: [
-                    BoxShadow(blurRadius: Styles.boardGameTileImageShadowBlur)
-                  ],
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                ),
-              ),
-            ),
-            fit: BoxFit.fitWidth,
-            placeholder: (context, url) => ShadowBox(
-              Center(child: CircularProgressIndicator()),
-            ),
-            errorWidget: (context, url, error) => ShadowBox(Padding(
-                padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                child: Container(
-                  child: Center(
-                      child: Text(
-                    widget.boardGame?.name ?? '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
-                  )),
-                ))),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                bottom: Dimensions.standardSpacing,
-                left: Dimensions.standardSpacing,
-                right: Dimensions.standardSpacing),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .accentColor
-                      .withAlpha(Styles.opacity70Percent),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(Styles.defaultCornerRadius),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-                  child: Text(
-                    widget.boardGame.name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Dimensions.smallFontSize),
-                  ),
-                ),
+    return Stack(
+      children: <Widget>[
+        CachedNetworkImage(
+          imageUrl: widget.boardGame.thumbnailUrl,
+          imageBuilder: (context, imageProvider) => Padding(
+            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(Styles.boardGameTileImageCircularRadius)),
+                boxShadow: [
+                  BoxShadow(blurRadius: Styles.boardGameTileImageShadowBlur)
+                ],
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
           ),
-          Positioned(
-            top: -2, // TODO MK Find out why there's a need for negative value
-            right: Dimensions.halfStandardSpacing,
-            child: Stack(
-              children: <Widget>[
-                Icon(
-                  Icons.bookmark,
-                  size: 42,
-                  color: Theme.of(context)
-                      .accentColor
-                      .withAlpha(Styles.opacity70Percent),
-                ),
-                Positioned.fill(
-                  child: Center(
+          fit: BoxFit.fitWidth,
+          placeholder: (context, url) => ShadowBox(
+            Center(child: CircularProgressIndicator()),
+          ),
+          errorWidget: (context, url, error) => ShadowBox(Padding(
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+              child: Container(
+                child: Center(
                     child: Text(
-                      '#${widget.boardGame.rank?.toString()}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Dimensions.smallFontSize,
-                      ),
+                  widget.boardGame?.name ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                )),
+              ))),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+              bottom: Dimensions.standardSpacing,
+              left: Dimensions.standardSpacing,
+              right: Dimensions.standardSpacing),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .accentColor
+                    .withAlpha(Styles.opacity70Percent),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(Styles.defaultCornerRadius),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+                child: Text(
+                  widget.boardGame.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white, fontSize: Dimensions.smallFontSize),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: -2, // TODO MK Find out why there's a need for negative value
+          right: Dimensions.halfStandardSpacing,
+          child: Stack(
+            children: <Widget>[
+              Icon(
+                Icons.bookmark,
+                size: 42,
+                color: Theme.of(context)
+                    .accentColor
+                    .withAlpha(Styles.opacity70Percent),
+              ),
+              Positioned.fill(
+                child: Center(
+                  child: Text(
+                    '#${widget.boardGame.rank?.toString()}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: Dimensions.smallFontSize,
                     ),
                   ),
                 ),
-              ],
+              ),
+            ],
+          ),
+        ),
+        Positioned.fill(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              splashColor: Theme.of(context)
+                  .accentColor
+                  .withAlpha(Styles.opacity70Percent),
+              onTap: () {
+                Navigator.pushNamed(context, Routes.boardGameDetails,
+                    arguments: widget.boardGame);
+              },
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }
