@@ -2,10 +2,14 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 
-class AddBoardGameButton extends StatelessWidget {
+class IconAndTextButton extends StatelessWidget {
   final GestureTapCallback onPressed;
 
-  const AddBoardGameButton({@required this.onPressed, Key key})
+  final IconData icon;
+  final String title;
+
+  const IconAndTextButton(
+      {this.icon, this.title, @required this.onPressed, Key key})
       : super(key: key);
 
   @override
@@ -23,14 +27,14 @@ class AddBoardGameButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(
-              Icons.add,
+              icon,
               color: Colors.white,
             ),
             Divider(
               indent: Dimensions.halfStandardSpacing,
             ),
             Text(
-              'Add Game',
+              title,
               style: TextStyle(color: Colors.white),
             ),
           ],

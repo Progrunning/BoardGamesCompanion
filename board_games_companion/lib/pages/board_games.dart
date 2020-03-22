@@ -2,13 +2,11 @@ import 'package:async/async.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/strings.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/pages/board_game_playthroughs.dart';
-import 'package:board_games_companion/pages/playthroughs.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
-import 'package:board_games_companion/widgets/add_board_game_widget.dart';
 import 'package:board_games_companion/widgets/board_game_widget.dart';
+import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 
 class BoardGamesPage extends StatefulWidget {
@@ -100,7 +98,9 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
           return Center(child: CircularProgressIndicator());
         },
       ),
-      floatingActionButton: AddBoardGameButton(
+      floatingActionButton: IconAndTextButton(
+        title: 'Add Game',
+        icon: Icons.add,
         onPressed: _navigateToSearchBoardGamesPage,
       ),
     );

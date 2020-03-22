@@ -23,5 +23,8 @@ class Dimensions {
   static const double boardGameHexagonSize = 40;
   
   static const int edgeNumberOfHexagon = 6;
-    
+  
+  static const double defaultPlayerAvatarWidth = 80;
+  static const double defaultPlayerAvatarHeight = 110;
+  
 }

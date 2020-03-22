@@ -1,41 +1,27 @@
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/widgets/player_avatar.dart';
 import 'package:flutter/material.dart';
 
-class Player extends StatelessWidget {
-  const Player({
-    Key key,
-  }) : super(key: key);
+class PlayerScore extends StatelessWidget {
+  final MedalEnum medal;
 
-  final double _avatarWidth = 80;
-  final double _avatarHeight = 110;
+  const PlayerScore({
+    Key key,
+    @required this.medal,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: SizedBox(
-        height: _avatarHeight,
+        height: Dimensions.defaultPlayerAvatarHeight,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Image.network(
-                  'https://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
-                  height: _avatarHeight,
-                  width: _avatarWidth,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  right: Dimensions.halfStandardSpacing,
-                  bottom: Dimensions.halfStandardSpacing,
-                  child: Icon(
-                    Icons.star,
-                    size: 28,
-                    color: Colors.yellow,
-                  ),
-                )
-              ],
+            PlayerAvatar(
+              medal: medal,
             ),
             Expanded(
               child: Padding(
@@ -77,9 +63,7 @@ class Player extends StatelessWidget {
                         child: Text(
                           '34',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 56
-                          ),
+                              fontWeight: FontWeight.bold, fontSize: 56),
                         ),
                       ),
                     ),

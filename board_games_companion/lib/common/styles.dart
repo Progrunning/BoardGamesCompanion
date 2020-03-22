@@ -7,11 +7,12 @@ class Styles {
   static const double boardGameTileImageCircularRadius = 10;
   static const double boardGameTileImageShadowBlur = 1.5;
 
-  
-
   static const Color defaultShadowColor = Colors.blueGrey;
 
   static const int opacity70Percent = 180;
   static const int opacity80Percent = 205;
   static const int opacity90Percent = 230;
+
+  static const double transparentOpacity = 0.0;
+  static const double opaqueOpacity = 1.0;
 }

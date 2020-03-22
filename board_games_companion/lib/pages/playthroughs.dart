@@ -1,10 +1,11 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/widgets/board_game_image_widget.dart';
 import 'package:board_games_companion/widgets/calendar_card.dart';
 import 'package:board_games_companion/widgets/game_detail_item_widget.dart';
-import 'package:board_games_companion/widgets/players_widget.dart';
+import 'package:board_games_companion/widgets/player_score_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -19,6 +20,8 @@ class Playthrough extends StatefulWidget {
 }
 
 class _PlaythroughState extends State<Playthrough> {
+  static const double _minBoardGameImageHeight = 240;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,6 +32,7 @@ class _PlaythroughState extends State<Playthrough> {
               "${AnimationTags.boardGameImageHeroTag}${widget.boardGameDetails?.id}",
           child: BoardGameImage(
             boardGameDetails: widget.boardGameDetails,
+            minImageHeight: _minBoardGameImageHeight,
           ),
         ),
         SizedBox(
@@ -90,7 +94,9 @@ class _PlaythroughState extends State<Playthrough> {
                             );
                           },
                           itemBuilder: (context, index) {
-                            return Player();
+                            return PlayerScore(
+                              medal: MedalEnum.Bronze,
+                            );
                           }),
                     )
                   ],

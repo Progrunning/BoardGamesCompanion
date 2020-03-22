@@ -5,14 +5,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BoardGameImage extends StatelessWidget {
-  const BoardGameImage({
-    Key key,
-    @required BoardGameDetails boardGameDetails,
-  })  : _boardGameDetails = boardGameDetails,
+  final double minImageHeight;
+
+  const BoardGameImage(
+      {Key key,
+      @required BoardGameDetails boardGameDetails,
+      this.minImageHeight = 300})
+      : _boardGameDetails = boardGameDetails,
         super(key: key);
 
   final BoardGameDetails _boardGameDetails;
-  final double _minImageHeight = 300;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class BoardGameImage extends StatelessWidget {
 
   Widget _wrapInShadowBox(Widget content) {
     return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: _minImageHeight),
+      constraints: BoxConstraints(minHeight: minImageHeight),
       child: ShadowBox(content),
     );
   }
