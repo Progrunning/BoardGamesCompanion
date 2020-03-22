@@ -10,16 +10,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class Playthrough extends StatefulWidget {
+class PlaythroughsPage extends StatefulWidget {
   final BoardGameDetails boardGameDetails;
 
-  Playthrough(this.boardGameDetails);
+  PlaythroughsPage(this.boardGameDetails);
 
   @override
-  _PlaythroughState createState() => _PlaythroughState();
+  _PlaythroughsPageState createState() => _PlaythroughsPageState();
 }
 
-class _PlaythroughState extends State<Playthrough> {
+class _PlaythroughsPageState extends State<PlaythroughsPage> {
   static const double _minBoardGameImageHeight = 240;
 
   @override

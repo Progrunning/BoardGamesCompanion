@@ -5,12 +5,12 @@ import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/widgets/board_game_search_item_widget.dart';
 import 'package:flutter/material.dart';
 
-class AddBoardGames extends StatefulWidget {
+class AddBoardGamesPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _AddBoardGames();
+  State<StatefulWidget> createState() => _AddBoardGamesPageState();
 }
 
-class _AddBoardGames extends State<AddBoardGames> {
+class _AddBoardGamesPageState extends State<AddBoardGamesPage> {
   final BoardGamesGeekService _boardGamesGeekService = BoardGamesGeekService();
   final int _numberOfBoardGameColumns = 3;
 

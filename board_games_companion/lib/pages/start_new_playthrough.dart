@@ -2,16 +2,18 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/widgets/player_grid_item.dart';
+import 'package:board_games_companion/widgets/ripple_effect.dart';
 import 'package:flutter/material.dart';
 
-class StartNewPlaythrough extends StatefulWidget {
-  StartNewPlaythrough({Key key}) : super(key: key);
+class StartNewPlaythroughPage extends StatefulWidget {
+  StartNewPlaythroughPage({Key key}) : super(key: key);
 
   @override
-  _StartNewPlaythroughState createState() => _StartNewPlaythroughState();
+  _StartNewPlaythroughPageState createState() =>
+      _StartNewPlaythroughPageState();
 }
 
-class _StartNewPlaythroughState extends State<StartNewPlaythrough> {
+class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
   final int _numberOfPlayerColumns = 2;
 
   @override
@@ -36,16 +38,9 @@ class _StartNewPlaythroughState extends State<StartNewPlaythrough> {
                   ),
                 ),
                 Positioned.fill(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Theme.of(context)
-                          .accentColor
-                          .withAlpha(Styles.opacity70Percent),
-                      onTap: () {},
-                    ),
-                  ),
-                ),
+                    child: StackRippleEffect(
+                  onTap: () {},
+                )),
               ],
             );
           },

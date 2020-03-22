@@ -21,7 +21,7 @@ class IconAndTextButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: Dimensions.doubleStandardSpacing,
-          vertical: Dimensions.halfStandardSpacing,
+          vertical: Dimensions.standardSpacing,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

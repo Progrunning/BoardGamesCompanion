@@ -5,16 +5,16 @@ import 'package:board_games_companion/pages/start_new_playthrough.dart';
 import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 
-class BoardGamePlaythroughs extends StatefulWidget {
+class BoardGamePlaythroughsPage extends StatefulWidget {
   final BoardGameDetails boardGameDetails;
 
-  BoardGamePlaythroughs(this.boardGameDetails, {Key key}) : super(key: key);
+  BoardGamePlaythroughsPage(this.boardGameDetails, {Key key}) : super(key: key);
 
   @override
-  _BoardGamePlaythroughsState createState() => _BoardGamePlaythroughsState();
+  _BoardGamePlaythroughsPageState createState() => _BoardGamePlaythroughsPageState();
 }
 
-class _BoardGamePlaythroughsState extends State<BoardGamePlaythroughs> {
+class _BoardGamePlaythroughsPageState extends State<BoardGamePlaythroughsPage> {
   static const int _playthroughsPageIndex = 0;
   static const int _startNewGamePageIndex = 1;
 
@@ -45,8 +45,8 @@ class _BoardGamePlaythroughsState extends State<BoardGamePlaythroughs> {
           });
         },
         children: <Widget>[
-          Playthrough(widget.boardGameDetails),
-          StartNewPlaythrough(),
+          PlaythroughsPage(widget.boardGameDetails),
+          StartNewPlaythroughPage(),
         ],
       ),
       floatingActionButton: Opacity(

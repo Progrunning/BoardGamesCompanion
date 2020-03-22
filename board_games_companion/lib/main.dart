@@ -5,7 +5,7 @@ import 'package:board_games_companion/models/board_game_category.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/pages/add_board_games.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
-import 'package:board_games_companion/pages/board_games.dart';
+import 'package:board_games_companion/pages/home.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -48,8 +48,8 @@ class BoardGamesCompanionApp extends StatelessWidget {
       initialRoute: Routes.home,
       routes: {
         Routes.home: (context) =>
-            BoardGamesPage(title: 'Board Games Companion'),
-        Routes.addBoardGames: (context) => AddBoardGames(),
+            HomePage(),
+        Routes.addBoardGames: (context) => AddBoardGamesPage(),
         Routes.boardGameDetails: (context) => BoardGamesDetailsPage(),
         // Routes.gamesPlayed: (context) => GamesPlayed()
       },
