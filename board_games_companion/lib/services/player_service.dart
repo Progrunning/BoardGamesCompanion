@@ -1,10 +1,9 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/services/hide_base_service.dart';
-import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
-class PlayerService extends BaseHiveService {
+class PlayerService extends BaseHiveService<Player> {
   static final PlayerService _instance = new PlayerService._createInstance();
 
   factory PlayerService() {
@@ -16,12 +15,14 @@ class PlayerService extends BaseHiveService {
   final _uuid = Uuid();
 
   Future<List<Player>> retrievePlayers() async {
-    var boardGamesBox = await Hive.openBox<Player>(HiveBoxes.Players);
+    if (!await ensureBoxOpen(HiveBoxes.Players)) {
+      return List<Player>();
+    }
 
-    return boardGamesBox
-        .toMap()
+    return storageBox
+        ?.toMap()
         ?.values
-        ?.where((player) => player.isDeleted ?? false)
+        ?.where((player) => !(player.isDeleted ?? false))
         ?.toList();
   }
 
@@ -34,8 +35,11 @@ class PlayerService extends BaseHiveService {
       player.id = _uuid.v4();
     }
 
-    var boardGamesBox = await Hive.openBox<Player>(HiveBoxes.Players);
-    await boardGamesBox.put(player.id, player);
+    if (!await ensureBoxOpen(HiveBoxes.Players)) {
+      return false;
+    }
+
+    await storageBox.put(player.id, player);
 
     return true;
   }
@@ -45,15 +49,18 @@ class PlayerService extends BaseHiveService {
       return false;
     }
 
-    var playersBox = await Hive.openBox<Player>(HiveBoxes.Players);
-    var playerToDelete = playersBox.get(playerId);
+    if (!await ensureBoxOpen(HiveBoxes.Players)) {
+      return false;
+    }
+
+    var playerToDelete = storageBox.get(playerId);
     if (playerToDelete == null || (playerToDelete.isDeleted ?? false)) {
       return false;
     }
 
     playerToDelete.isDeleted = true;
 
-    await playersBox.put(playerId, playerToDelete);
+    await storageBox.put(playerId, playerToDelete);
 
     return true;
   }

@@ -13,7 +13,9 @@ class PlayerGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        PlayerAvatar(),
+        PlayerAvatar(
+          imageUri: player?.imageUri,
+        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(

@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 import 'hide_base_service.dart';
 
-class BoardGamesService extends BaseHiveService {
+class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   static final BoardGamesService _instance =
       new BoardGamesService._createInstance();
 
@@ -15,10 +15,11 @@ class BoardGamesService extends BaseHiveService {
   BoardGamesService._createInstance();
 
   Future<List<BoardGameDetails>> retrieveBoardGames() async {
-    var boardGamesBox =
-        await Hive.openBox<BoardGameDetails>(HiveBoxes.BoardGames);
+    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+      return List<BoardGameDetails>();
+    }
 
-    return boardGamesBox.toMap()?.values?.toList();
+    return storageBox?.toMap()?.values?.toList();
   }
 
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
@@ -26,9 +27,11 @@ class BoardGamesService extends BaseHiveService {
       return;
     }
 
-    var boardGamesBox =
-        await Hive.openBox<BoardGameDetails>(HiveBoxes.BoardGames);
-    await boardGamesBox.put(boardGameDetails.id, boardGameDetails);
+    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+      return;
+    }
+
+    await storageBox?.put(boardGameDetails.id, boardGameDetails);
   }
 
   Future<void> removeBoardGame(String boardGameDetailsId) async {
@@ -36,8 +39,10 @@ class BoardGamesService extends BaseHiveService {
       return;
     }
 
-    var boardGamesBox =
-        await Hive.openBox<BoardGameDetails>(HiveBoxes.BoardGames);
-    await boardGamesBox.delete(boardGameDetailsId);
+    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+      return;
+    }
+
+    await storageBox?.delete(boardGameDetailsId);
   }
 }

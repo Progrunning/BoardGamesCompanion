@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/widgets/medal_widget.dart';
@@ -8,20 +10,30 @@ class PlayerAvatar extends StatelessWidget {
     Key key,
     this.medal,
     this.place,
+    this.imageUri,
   }) : super(key: key);
 
+  final String imageUri;
   final MedalEnum medal;
   final int place;
 
   @override
   Widget build(BuildContext context) {
     final _hasMedal = medal != null;
-    List<Widget> stackChildren = [
-      Image.network(
-        'https://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
+    Image avatarImage;
+    if (imageUri?.isEmpty ?? true) {
+      avatarImage = Image(
+        image: AssetImage('assets/default_avatar.png'),
         fit: BoxFit.cover,
-      ),
-    ];
+      );
+    } else {
+      avatarImage = Image.file(
+        File(imageUri),
+        fit: BoxFit.cover,
+      );
+    }
+
+    List<Widget> stackChildren = [avatarImage];
 
     if (_hasMedal) {
       stackChildren.add(

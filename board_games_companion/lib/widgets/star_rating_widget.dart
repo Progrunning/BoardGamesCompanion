@@ -6,8 +6,12 @@ class StarRating extends StatelessWidget {
   final Color color;
   final double size;
 
-  StarRating(
-      {this.starCount = 10, this.rating = .0, this.color = Colors.yellow, this.size = 15});
+  StarRating({
+    this.starCount = 10,
+    this.rating = .0,
+    this.color = Colors.yellow,
+    this.size = 15,
+  });
 
   Widget buildStar(BuildContext context, int index) {
     Icon icon;

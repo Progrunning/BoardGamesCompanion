@@ -26,6 +26,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We would like to access your photo library to set player avatars.</string>
+	<key>NSCameraUsageDescription </key>
+	<string>We would like to access your photo library to take pictures of players to set their avatars.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

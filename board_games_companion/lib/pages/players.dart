@@ -25,7 +25,6 @@ class _PlayersPageState extends State<PlayersPage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var players = (snapshot.data as List<Player>);
-          players = players?.where((player) => !(player.isDeleted ?? false))?.toList();
           if (players?.isEmpty ?? true) {
             return Padding(
               padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),

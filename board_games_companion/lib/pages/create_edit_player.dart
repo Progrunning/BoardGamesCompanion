@@ -6,6 +6,7 @@ import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/player_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateEditPlayerPage extends StatefulWidget {
   const CreateEditPlayerPage({
@@ -25,10 +26,13 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
-    _player = ModalRoute.of(context).settings.arguments;
-    final _isEditMode = _player?.name?.isNotEmpty ?? false;
+    if (_player == null) {
+      _player = ModalRoute.of(context).settings.arguments ?? Player();
+    }
 
-    _nameController.text = _player?.name ?? '';
+    final _isEditMode = _player.name?.isNotEmpty ?? false;
+
+    _nameController.text = _player.name ?? '';
 
     List<Widget> _floatingActionButtons = [
       CreateOrUpdatePlayer(
@@ -66,13 +70,54 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Center(
-                child: SizedBox(
-                  height: 220,
-                  width: 190,
-                  child: PlayerAvatar(),
+              Stack(children: <Widget>[
+                Center(
+                  child: SizedBox(
+                    height: 220,
+                    width: 190,
+                    child: PlayerAvatar(
+                      imageUri: _player?.imageUri,
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: Dimensions.halfStandardSpacing,
+                  right: Dimensions.halfStandardSpacing,
+                  child: Row(
+                    children: <Widget>[
+                      InkWell(
+                        child: Icon(
+                          Icons.filter,
+                          size: 40,
+                        ),
+                        onTap: () async {
+                          final avatarImage = await ImagePicker.pickImage(
+                              source: ImageSource.gallery);
+                          setState(() {
+                            _player.imageUri = avatarImage.path;
+                          });
+                        },
+                      ),
+                      Divider(
+                        indent: Dimensions.halfStandardSpacing,
+                      ),
+                      InkWell(
+                        child: Icon(
+                          Icons.camera,
+                          size: 40,
+                        ),
+                        onTap: () async {
+                          final avatarImage = await ImagePicker.pickImage(
+                              source: ImageSource.camera);
+                          setState(() {
+                            _player.imageUri = avatarImage.path;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ]),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Name',
