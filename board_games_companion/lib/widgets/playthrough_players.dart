@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 class PlaythroughPlayers extends StatefulWidget {
   const PlaythroughPlayers({
     Key key,
-    @required int numberOfPlayerColumns,
     @required this.playthroughPlayers,
-  })  : _numberOfPlayerColumns = numberOfPlayerColumns,
-        super(key: key);
+  }) : super(key: key);
 
-  final int _numberOfPlayerColumns;
+  final int _numberOfPlayerColumns = 2;
   final List<PlaythroughPlayer> playthroughPlayers;
 
   @override
@@ -39,9 +37,11 @@ class _PlaythroughPlayersState extends State<PlaythroughPlayers> {
               Positioned.fill(
                 child: StackRippleEffect(
                   onTap: () {
+                    final selectedPlaythroughPlayer =
+                        widget.playthroughPlayers[index];
                     setState(() {
-                      widget.playthroughPlayers[index].isChecked =
-                          !widget.playthroughPlayers[index].isChecked;
+                      selectedPlaythroughPlayer.isChecked =
+                          !selectedPlaythroughPlayer.isChecked;
                     });
                   },
                 ),

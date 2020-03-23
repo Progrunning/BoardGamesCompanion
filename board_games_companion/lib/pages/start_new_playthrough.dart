@@ -17,7 +17,6 @@ class StartNewPlaythroughPage extends StatefulWidget {
 
 class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
   final PlayerService _playerService = PlayerService();
-  final int _numberOfPlayerColumns = 2;
 
   AsyncMemoizer _memoizer;
 
@@ -46,8 +45,8 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
                 Dimensions.standardSpacing,
               ),
               child: PlaythroughPlayers(
-                  numberOfPlayerColumns: _numberOfPlayerColumns,
-                  playthroughPlayers: playthroughPlayers),
+                playthroughPlayers: playthroughPlayers,
+              ),
             );
           }
 
