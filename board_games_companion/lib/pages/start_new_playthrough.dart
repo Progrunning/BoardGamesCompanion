@@ -2,9 +2,9 @@ import 'package:async/async.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/models/playthrough_player.dart';
 import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/widgets/player_grid_item.dart';
-import 'package:board_games_companion/widgets/ripple_effect.dart';
+import 'package:board_games_companion/widgets/playthrough_players.dart';
 import 'package:flutter/material.dart';
 
 class StartNewPlaythroughPage extends StatefulWidget {
@@ -38,35 +38,16 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
         if (snapshot.connectionState == ConnectionState.done) {
           final players = snapshot.data as List<Player>;
           if (players != null) {
+            final playthroughPlayers = players.map((p) {
+              return PlaythroughPlayer(p);
+            }).toList();
             return Padding(
               padding: const EdgeInsets.all(
                 Dimensions.standardSpacing,
               ),
-              child: GridView.count(
-                crossAxisCount: _numberOfPlayerColumns,
-                children: List.generate(
-                  (snapshot.data as List<Player>).length,
-                  (int index) {
-                    return Stack(
-                      children: <Widget>[
-                        PlayerGridItem(snapshot.data[index]),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Checkbox(
-                            value: false,
-                            onChanged: (checked) {},
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: StackRippleEffect(
-                            onTap: () {},
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
+              child: PlaythroughPlayers(
+                  numberOfPlayerColumns: _numberOfPlayerColumns,
+                  playthroughPlayers: playthroughPlayers),
             );
           }
 
