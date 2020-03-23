@@ -36,7 +36,8 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
       }),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data is List<Player>) {
+          final players = snapshot.data as List<Player>;
+          if (players != null) {
             return Padding(
               padding: const EdgeInsets.all(
                 Dimensions.standardSpacing,
@@ -57,9 +58,10 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
                           ),
                         ),
                         Positioned.fill(
-                            child: StackRippleEffect(
-                          onTap: () {},
-                        )),
+                          child: StackRippleEffect(
+                            onTap: () {},
+                          ),
+                        ),
                       ],
                     );
                   },
@@ -67,6 +69,7 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
               ),
             );
           }
+
           return Padding(
             padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
             child: Column(
@@ -75,7 +78,8 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
                 Padding(
                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
                   child: Center(
-                    child: Text('It looks empty here, try adding a new players'),
+                    child:
+                        Text('It looks empty here, try adding a new players'),
                   ),
                 ),
               ],

@@ -18,7 +18,11 @@ class PlayerService extends BaseHiveService {
   Future<List<Player>> retrievePlayers() async {
     var boardGamesBox = await Hive.openBox<Player>(HiveBoxes.Players);
 
-    return boardGamesBox.toMap()?.values?.toList();
+    return boardGamesBox
+        .toMap()
+        ?.values
+        ?.where((player) => player.isDeleted ?? false)
+        ?.toList();
   }
 
   Future<bool> addOrUpdatePlayer(Player player) async {
