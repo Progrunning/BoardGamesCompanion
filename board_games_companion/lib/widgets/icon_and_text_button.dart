@@ -1,46 +1,72 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
+import 'package:board_games_companion/utilities/widget_utilities.dart';
 import 'package:flutter/material.dart';
 
 class IconAndTextButton extends StatelessWidget {
+  static const double rippleEffectOpacityFactor = 0.7;
+
   final GestureTapCallback onPressed;
 
   final IconData icon;
   final String title;
-  final Color color;
+  final Color backgroundColor;
+  final Color rippleEffectColor;
 
-  const IconAndTextButton(
-      {this.icon, this.title, this.color, @required this.onPressed, Key key})
-      : super(key: key);
+  final double horizontalPadding;
+  final double verticalPadding;
+
+  const IconAndTextButton({
+    this.icon,
+    this.title,
+    this.backgroundColor,
+    this.rippleEffectColor,
+    this.horizontalPadding,
+    this.verticalPadding,
+    @required this.onPressed,
+    Key key,
+  }) : super(key: key);
+
+  Widget _buildDivider() => title?.isNotEmpty ?? false
+      ? Divider(
+          indent: Dimensions.halfStandardSpacing,
+        )
+      : null;
+
+  Widget _buildText() => title?.isNotEmpty ?? false
+      ? Text(
+          title,
+          style: TextStyle(color: Colors.white),
+        )
+      : null;
 
   @override
   Widget build(BuildContext context) {
-    var fillColor = color ?? Theme.of(context).accentColor;
-    var splashColor = fillColor.withAlpha(Styles.opacity70Percent);
+    var fillColor = backgroundColor ?? Theme.of(context).accentColor;
+    var splashColor = rippleEffectColor ??
+        fillColor
+            .withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt());
+
+    final List<Widget> buttonElements = [
+      Icon(
+        icon,
+        color: Colors.white,
+      ),
+    ];
+
+    addIfNonNull(_buildDivider(), buttonElements);
+    addIfNonNull(_buildText(), buttonElements);
 
     return RawMaterialButton(
       fillColor: fillColor,
       splashColor: splashColor,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.doubleStandardSpacing,
-          vertical: Dimensions.standardSpacing,
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontalPadding ?? Dimensions.doubleStandardSpacing,
+          vertical: verticalPadding ?? Dimensions.standardSpacing,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              icon,
-              color: Colors.white,
-            ),
-            Divider(
-              indent: Dimensions.halfStandardSpacing,
-            ),
-            Text(
-              title,
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
+          children: buttonElements,
         ),
       ),
       onPressed: onPressed,

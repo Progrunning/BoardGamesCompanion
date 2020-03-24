@@ -20,16 +20,20 @@ class PlayerAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _hasMedal = medal != null;
-    Image avatarImage;
+    Widget avatarImage;
     if (imageUri?.isEmpty ?? true) {
-      avatarImage = Image(
-        image: AssetImage('assets/default_avatar.png'),
-        fit: BoxFit.cover,
+      avatarImage = Positioned.fill(
+        child: Image(
+          image: AssetImage('assets/default_avatar.png'),
+          fit: BoxFit.cover,
+        ),
       );
     } else {
-      avatarImage = Image.file(
-        File(imageUri),
-        fit: BoxFit.cover,
+      avatarImage = Positioned.fill(
+        child: Image.file(
+          File(imageUri),
+          fit: BoxFit.cover,
+        ),
       );
     }
 

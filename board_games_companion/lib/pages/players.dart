@@ -3,6 +3,7 @@ import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/widgets/debug_box.dart';
 import 'package:board_games_companion/widgets/player_grid_item.dart';
 import 'package:board_games_companion/widgets/ripple_effect.dart';
 import 'package:flutter/material.dart';
@@ -45,24 +46,6 @@ class _PlayersPageState extends State<PlayersPage> {
                   return Stack(
                     children: <Widget>[
                       PlayerGridItem(players[index]),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(
-                            Dimensions.halfStandardSpacing,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                          ),
-                        ),
-                      ),
-                      Positioned.fill(child: StackRippleEffect(
-                        onTap: () async {
-                          await Navigator.pushNamed(
-                              context, Routes.createEditPlayer,
-                              arguments: players[index]);
-                        },
-                      )),
                     ],
                   );
                 },
