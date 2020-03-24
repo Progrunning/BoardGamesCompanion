@@ -1,8 +1,10 @@
 import 'package:async/async.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
+import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/widgets/custom_icon_button.dart';
 import 'package:board_games_companion/widgets/player_grid_item.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +26,20 @@ class _PlayersPageState extends State<PlayersPage> {
 
     _memoizer = AsyncMemoizer();
   }
+
+  Widget _buildTopRightCornerAction(Player player) => Align(
+        alignment: Alignment.topRight,
+        child: CustomIconButton(
+          Icon(
+            Icons.edit,
+            size: Dimensions.defaultButtonIconSize,
+            color: Colors.white,
+          ),
+          onTap: () async {
+            await _navigateToCreateOrEditPlayer(context, player);
+          },
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +67,15 @@ class _PlayersPageState extends State<PlayersPage> {
               children: List.generate(
                 players.length,
                 (int index) {
-                  return PlayerGridItem(players[index]);
+                  final player = players[index];
+                  return PlayerGridItem(
+                    player,
+                    topRightCornerActionWidget:
+                        _buildTopRightCornerAction(player),
+                    onTap: () async {
+                      _navigateToCreateOrEditPlayer(context, player);
+                    },
+                  );
                 },
               ),
             ),
@@ -66,6 +90,12 @@ class _PlayersPageState extends State<PlayersPage> {
         return Center(child: CircularProgressIndicator());
       },
     );
+  }
+
+  Future _navigateToCreateOrEditPlayer(
+      BuildContext context, Player player) async {
+    await Navigator.pushNamed(context, Routes.createEditPlayer,
+        arguments: player);
   }
 
   @override

@@ -9,7 +9,7 @@ class PlaythroughPlayers extends StatefulWidget {
     @required this.playthroughPlayers,
   }) : super(key: key);
 
-  final int _numberOfPlayerColumns = 2;
+  final int _numberOfPlayerColumns = 3;
   final List<PlaythroughPlayer> playthroughPlayers;
 
   @override
