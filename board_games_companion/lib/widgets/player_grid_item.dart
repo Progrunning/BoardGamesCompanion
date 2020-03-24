@@ -3,7 +3,6 @@ import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/widgets/custom_icon_button.dart';
-import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/player_avatar.dart';
 import 'package:board_games_companion/widgets/ripple_effect.dart';
 import 'package:flutter/material.dart';

@@ -1,11 +1,8 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/widgets/debug_box.dart';
 import 'package:board_games_companion/widgets/player_grid_item.dart';
-import 'package:board_games_companion/widgets/ripple_effect.dart';
 import 'package:flutter/material.dart';
 
 class PlayersPage extends StatefulWidget {

@@ -1,6 +1,5 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
-import 'package:hive/hive.dart';
 
 import 'hide_base_service.dart';
 
