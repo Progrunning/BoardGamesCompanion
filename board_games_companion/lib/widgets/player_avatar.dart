@@ -37,7 +37,7 @@ class PlayerAvatar extends StatelessWidget {
       );
     }
 
-    List<Widget> stackChildren = [avatarImage];
+    List<Widget> stackChildren = [avatarImage, Container(decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),)];
 
     if (_hasMedal) {
       stackChildren.add(

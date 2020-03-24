@@ -27,4 +27,6 @@ class Dimensions {
   static const double defaultPlayerAvatarWidth = 80;
   static const double defaultPlayerAvatarHeight = 110;
   
+  static const double defaultButtonIconSize = 20;
+  
 }

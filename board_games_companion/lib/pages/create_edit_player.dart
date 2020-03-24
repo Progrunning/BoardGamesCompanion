@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/common/routes.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/widgets/create_edit_player.dart';
@@ -73,45 +74,63 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Stack(children: <Widget>[
-                Hero(
-                  tag: '${AnimationTags.playerImageHeroTag}${_player?.id}',
-                  child: Center(
-                    child: SizedBox(
-                      height: 220,
-                      width: 190,
-                      child: PlayerAvatar(
-                        imageUri: _player?.imageUri,
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context).accentColor,
+                        blurRadius: Styles.defaultShadowRadius,
+                        offset: Styles.defaultShadowOffset,
+                      ),
+                    ],
+                  ),
+                  child: SizedBox(
+                    height: 220,
+                    width: 190,
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(Styles.defaultCornerRadius),
+                      child: Stack(
+                        children: <Widget>[
+                          Hero(
+                            tag:
+                                '${AnimationTags.playerImageHeroTag}${_player?.id}',
+                            child: PlayerAvatar(
+                              imageUri: _player?.imageUri,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: Dimensions.halfStandardSpacing,
+                            right: Dimensions.halfStandardSpacing,
+                            child: Row(
+                              children: <Widget>[
+                                CustomIconButton(
+                                  Icon(
+                                    Icons.filter,
+                                    color: Colors.white,
+                                  ),
+                                  onTap: _handleImagePicking,
+                                ),
+                                Divider(
+                                  indent: Dimensions.halfStandardSpacing,
+                                ),
+                                CustomIconButton(
+                                  Icon(
+                                    Icons.camera,
+                                    color: Colors.white,
+                                  ),
+                                  onTap: _handleTakingPicture,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: Dimensions.halfStandardSpacing,
-                  right: Dimensions.halfStandardSpacing,
-                  child: Row(
-                    children: <Widget>[
-                      CustomIconButton(
-                        Icon(
-                          Icons.filter,
-                          color: Colors.white,
-                        ),
-                        onTap: _handleImagePicking,
-                      ),
-                      Divider(
-                        indent: Dimensions.halfStandardSpacing,
-                      ),
-                      CustomIconButton(
-                        Icon(
-                          Icons.camera,
-                          color: Colors.white,
-                        ),
-                        onTap: _handleTakingPicture,
-                      ),
-                    ],
-                  ),
-                )
-              ]),
+              ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Name',

@@ -50,6 +50,7 @@ class IconAndTextButton extends StatelessWidget {
       Icon(
         icon,
         color: Colors.white,
+        size: Dimensions.defaultButtonIconSize,
       ),
     ];
 

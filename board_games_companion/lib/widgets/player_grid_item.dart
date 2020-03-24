@@ -26,68 +26,68 @@ class PlayerGridItem extends StatelessWidget {
               offset: Styles.defaultShadowOffset,
             ),
           ],
-          borderRadius: BorderRadius.all(
-            const Radius.circular(Styles.defaultCornerRadius),
-          ),
         ),
-        child: Stack(
-          children: <Widget>[
-            Hero(
-              tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
-              child: PlayerAvatar(
-                imageUri: player?.imageUri,
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: Dimensions.halfStandardSpacing,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+          child: Stack(
+            children: <Widget>[
+              Hero(
+                tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
+                child: PlayerAvatar(
+                  imageUri: player?.imageUri,
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      const Radius.circular(Styles.defaultCornerRadius),
-                    ),
-                    color: Theme.of(context)
-                        .accentColor
-                        .withAlpha(Styles.opacity70Percent),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: Dimensions.halfStandardSpacing,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(
-                      Dimensions.halfStandardSpacing,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        const Radius.circular(Styles.defaultCornerRadius),
+                      ),
+                      color: Theme.of(context)
+                          .accentColor
+                          .withAlpha(Styles.opacity70Percent),
                     ),
-                    child: Text(
-                      player?.name ?? 'No Name?',
-                      style: TextStyle(
-                        color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                        Dimensions.halfStandardSpacing,
+                      ),
+                      child: Text(
+                        player?.name ?? 'No Name?',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: CustomIconButton(
-                Icon(
-                  Icons.edit,
-                  size: 20,
-                  color: Colors.white,
+              Align(
+                alignment: Alignment.topRight,
+                child: CustomIconButton(
+                  Icon(
+                    Icons.edit,
+                    size: Dimensions.defaultButtonIconSize,
+                    color: Colors.white,
+                  ),
+                  onTap: () async {
+                    await _navigateToCreateOrEditPlayer(context);
+                  },
                 ),
-                onTap: () async {
-                  await _navigateToCreateOrEditPlayer(context);
-                },
               ),
-            ),
-            Positioned.fill(
-              child: StackRippleEffect(
-                onTap: () async {
-                  await _navigateToCreateOrEditPlayer(context);
-                },
+              Positioned.fill(
+                child: StackRippleEffect(
+                  onTap: () async {
+                    await _navigateToCreateOrEditPlayer(context);
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
