@@ -14,60 +14,77 @@ class PlayerGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        PlayerAvatar(
-          imageUri: player?.imageUri,
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              bottom: Dimensions.halfStandardSpacing,
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).accentColor,
+              blurRadius: Styles.defaultShadowRadius,
+              offset: Styles.defaultShadowOffset,
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  const Radius.circular(Styles.defaultCornerRadius),
-                ),
-                color: Theme.of(context)
-                    .accentColor
-                    .withAlpha(Styles.opacity70Percent),
-              ),
+          ],
+          borderRadius: BorderRadius.all(
+            const Radius.circular(Styles.defaultCornerRadius),
+          ),
+        ),
+        child: Stack(
+          children: <Widget>[
+            PlayerAvatar(
+              imageUri: player?.imageUri,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.all(
-                  Dimensions.halfStandardSpacing,
+                padding: const EdgeInsets.only(
+                  bottom: Dimensions.halfStandardSpacing,
                 ),
-                child: Text(
-                  player?.name ?? 'No Name?',
-                  style: TextStyle(
-                    color: Colors.white,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      const Radius.circular(Styles.defaultCornerRadius),
+                    ),
+                    color: Theme.of(context)
+                        .accentColor
+                        .withAlpha(Styles.opacity70Percent),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(
+                      Dimensions.halfStandardSpacing,
+                    ),
+                    child: Text(
+                      player?.name ?? 'No Name?',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: CustomIconButton(
-            Icon(
-              Icons.edit,
-              color: Colors.white,
+            Align(
+              alignment: Alignment.topRight,
+              child: CustomIconButton(
+                Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+                onTap: () async {
+                  await _navigateToCreateOrEditPlayer(context);
+                },
+              ),
             ),
-            onTap: () async {
-              await _navigateToCreateOrEditPlayer(context);
-            },
-          ),
+            Positioned.fill(
+              child: StackRippleEffect(
+                onTap: () async {
+                  await _navigateToCreateOrEditPlayer(context);
+                },
+              ),
+            ),
+          ],
         ),
-        Positioned.fill(
-          child: StackRippleEffect(
-            onTap: () async {
-              await _navigateToCreateOrEditPlayer(context);
-            },
-          ),
-        ),
-      ],
+      ),
     );
   }
 

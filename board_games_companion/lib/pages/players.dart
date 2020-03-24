@@ -14,7 +14,7 @@ class PlayersPage extends StatefulWidget {
 
 class _PlayersPageState extends State<PlayersPage> {
   final PlayerService _playerService = PlayerService();
-  final int _numberOfPlayerColumns = 2;
+  final int _numberOfPlayerColumns = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,7 @@ class _PlayersPageState extends State<PlayersPage> {
               children: List.generate(
                 players.length,
                 (int index) {
-                  return Stack(
-                    children: <Widget>[
-                      PlayerGridItem(players[index]),
-                    ],
-                  );
+                  return PlayerGridItem(players[index]);
                 },
               ),
             ),
