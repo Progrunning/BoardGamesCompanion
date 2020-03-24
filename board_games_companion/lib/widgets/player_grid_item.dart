@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/styles.dart';
@@ -31,8 +32,11 @@ class PlayerGridItem extends StatelessWidget {
         ),
         child: Stack(
           children: <Widget>[
-            PlayerAvatar(
-              imageUri: player?.imageUri,
+            Hero(
+              tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
+              child: PlayerAvatar(
+                imageUri: player?.imageUri,
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -68,6 +72,7 @@ class PlayerGridItem extends StatelessWidget {
               child: CustomIconButton(
                 Icon(
                   Icons.edit,
+                  size: 20,
                   color: Colors.white,
                 ),
                 onTap: () async {

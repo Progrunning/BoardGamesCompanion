@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/common/routes.dart';
@@ -73,12 +74,15 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Stack(children: <Widget>[
-                Center(
-                  child: SizedBox(
-                    height: 220,
-                    width: 190,
-                    child: PlayerAvatar(
-                      imageUri: _player?.imageUri,
+                Hero(
+                  tag: '${AnimationTags.playerImageHeroTag}${_player?.id}',
+                  child: Center(
+                    child: SizedBox(
+                      height: 220,
+                      width: 190,
+                      child: PlayerAvatar(
+                        imageUri: _player?.imageUri,
+                      ),
                     ),
                   ),
                 ),

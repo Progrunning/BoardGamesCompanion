@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/player.dart';
@@ -15,11 +16,21 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   final PlayerService _playerService = PlayerService();
   final int _numberOfPlayerColumns = 3;
+  AsyncMemoizer _memoizer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _memoizer = AsyncMemoizer();
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _playerService.retrievePlayers(),
+      future: _memoizer.runOnce(() async {
+        return await _playerService.retrievePlayers();
+      }),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var players = (snapshot.data as List<Player>);
