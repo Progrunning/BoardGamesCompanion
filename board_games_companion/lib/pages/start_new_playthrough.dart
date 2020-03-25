@@ -18,6 +18,7 @@ class StartNewPlaythroughPage extends StatefulWidget {
 
 class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
   AsyncMemoizer _memoizer;
+  PlayerService _playerService;
 
   @override
   void initState() {
@@ -28,7 +29,7 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _playerService = Provider.of<PlayerService>(context);
+    _playerService = Provider.of<PlayerService>(context);
     return FutureBuilder(
       future: _memoizer.runOnce(() async {
         return _playerService.retrievePlayers();
