@@ -4,14 +4,6 @@ import 'package:board_games_companion/services/hide_base_service.dart';
 import 'package:uuid/uuid.dart';
 
 class PlayerService extends BaseHiveService<Player> {
-  static final PlayerService _instance = new PlayerService._createInstance();
-
-  factory PlayerService() {
-    return _instance;
-  }
-
-  PlayerService._createInstance();
-
   final _uuid = Uuid();
 
   Future<List<Player>> retrievePlayers() async {

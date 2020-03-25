@@ -7,6 +7,7 @@ import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/widgets/custom_icon_button.dart';
 import 'package:board_games_companion/widgets/player_grid_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlayersPage extends StatefulWidget {
   PlayersPage({Key key}) : super(key: key);
@@ -16,9 +17,9 @@ class PlayersPage extends StatefulWidget {
 }
 
 class _PlayersPageState extends State<PlayersPage> {
-  final PlayerService _playerService = PlayerService();
   final int _numberOfPlayerColumns = 3;
   AsyncMemoizer _memoizer;
+  PlayerService _playerService;
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _PlayersPageState extends State<PlayersPage> {
 
   @override
   Widget build(BuildContext context) {
+    _playerService = Provider.of<PlayerService>(context);
     return FutureBuilder(
       future: _memoizer.runOnce(() async {
         return await _playerService.retrievePlayers();

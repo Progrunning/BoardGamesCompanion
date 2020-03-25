@@ -10,6 +10,7 @@ import 'package:board_games_companion/widgets/star_rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
+import 'package:provider/provider.dart';
 
 class BoardGameWidget extends StatefulWidget {
   final BoardGameDetails boardGameDetails;
@@ -21,10 +22,10 @@ class BoardGameWidget extends StatefulWidget {
 }
 
 class _BoardGameWidgetState extends State<BoardGameWidget> {
-  final BoardGamesService _boardGamesService = BoardGamesService();
-
   @override
   Widget build(BuildContext context) {
+    final _boardGamesService = Provider.of<BoardGamesService>(context);
+
     return Dismissible(
       key: Key(widget.boardGameDetails.id),
       background: Container(

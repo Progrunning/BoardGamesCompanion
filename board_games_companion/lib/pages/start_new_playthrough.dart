@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/playthrough_player.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/widgets/playthrough_players.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StartNewPlaythroughPage extends StatefulWidget {
   StartNewPlaythroughPage({Key key}) : super(key: key);
@@ -16,8 +17,6 @@ class StartNewPlaythroughPage extends StatefulWidget {
 }
 
 class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
-  final PlayerService _playerService = PlayerService();
-
   AsyncMemoizer _memoizer;
 
   @override
@@ -29,6 +28,7 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _playerService = Provider.of<PlayerService>(context);
     return FutureBuilder(
       future: _memoizer.runOnce(() async {
         return _playerService.retrievePlayers();

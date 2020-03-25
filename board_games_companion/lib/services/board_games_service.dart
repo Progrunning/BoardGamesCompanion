@@ -4,15 +4,6 @@ import 'package:board_games_companion/models/board_game_details.dart';
 import 'hide_base_service.dart';
 
 class BoardGamesService extends BaseHiveService<BoardGameDetails> {
-  static final BoardGamesService _instance =
-      new BoardGamesService._createInstance();
-
-  factory BoardGamesService() {
-    return _instance;
-  }
-
-  BoardGamesService._createInstance();
-
   Future<List<BoardGameDetails>> retrieveBoardGames() async {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
       return List<BoardGameDetails>();

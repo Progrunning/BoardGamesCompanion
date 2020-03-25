@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> {
     await Navigator.pushNamed(context, Routes.addBoardGames);
     // MK Ensure that the board games collection list refreshes
     _boardGamesPage = BoardGamesPage();
+    setState(() {});
   }
 
   Future<void> _navigateToAddPlayerPage() async {

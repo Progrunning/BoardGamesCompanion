@@ -5,6 +5,7 @@ import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/widgets/board_game_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BoardGamesPage extends StatefulWidget {
   BoardGamesPage({Key key}) : super(key: key);
@@ -14,9 +15,8 @@ class BoardGamesPage extends StatefulWidget {
 }
 
 class _BoardGamesPageState extends State<BoardGamesPage> {
-  BoardGamesService _boardGamesService = BoardGamesService();
-
   AsyncMemoizer _memoizer;
+  BoardGamesService _boardGamesService;
 
   @override
   void initState() {
@@ -27,6 +27,8 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
 
   @override
   Widget build(BuildContext context) {
+    _boardGamesService = Provider.of<BoardGamesService>(context);
+
     return FutureBuilder(
       future: _memoizer.runOnce(() async {
         return _boardGamesService.retrieveBoardGames();
@@ -69,7 +71,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
 
   @override
   void dispose() {
-    _boardGamesService.closeBox(HiveBoxes.BoardGames);
+    _boardGamesService?.closeBox(HiveBoxes.BoardGames);
 
     super.dispose();
   }

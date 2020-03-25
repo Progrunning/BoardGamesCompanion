@@ -6,15 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:xml/xml.dart' as xml;
 
 class BoardGamesGeekService {
-  static final BoardGamesGeekService _instance =
-      new BoardGamesGeekService._createInstance();
-
-  factory BoardGamesGeekService() {
-    return _instance;
-  }
-
-  BoardGamesGeekService._createInstance();
-
   static const String _xmlItemElementName = 'item';
   static const String _xmlIdAttributeName = 'id';
   static const String _xmlTypeAttributeName = 'type';

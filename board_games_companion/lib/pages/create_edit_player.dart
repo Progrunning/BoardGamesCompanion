@@ -11,6 +11,7 @@ import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/player_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class CreateEditPlayerPage extends StatefulWidget {
   const CreateEditPlayerPage({
@@ -22,14 +23,15 @@ class CreateEditPlayerPage extends StatefulWidget {
 }
 
 class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
-  final PlayerService _playerService = PlayerService();
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
 
   Player _player;
+  PlayerService _playerService;
 
   @override
   Widget build(BuildContext context) {
+    _playerService = Provider.of<PlayerService>(context);
     if (_player == null) {
       _player = ModalRoute.of(context).settings.arguments ?? Player();
     }
