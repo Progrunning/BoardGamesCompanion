@@ -7,6 +7,7 @@ import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/stores/home_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -44,6 +45,9 @@ class App extends StatelessWidget {
         ),
         Provider<PlayerService>(
           create: (context) => PlayerService(),
+        ),
+        ChangeNotifierProvider<HomeStore>(
+          create: (context) => HomeStore(),
         ),
         ProxyProvider<BoardGamesService, BoardGamesStore>(
           update: (context, boardGamesService, previousBoardGamesStore) =>
