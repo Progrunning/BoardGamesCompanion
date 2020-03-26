@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_game_image_widget.dart';
 import 'package:board_games_companion/widgets/star_rating_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +19,14 @@ class BoardGamesDetailsPage extends StatefulWidget {
 }
 
 class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
-
   BoardGameDetails _boardGameDetails;
   bool _isRefreshing;
 
   @override
   Widget build(BuildContext context) {
     final _boardGamesGeekService = Provider.of<BoardGamesGeekService>(context);
-    final _boardGamesService = Provider.of<BoardGamesService>(context);
+    final _boardGamesStore = Provider.of<BoardGamesStore>(context);
+
     final BoardGame boardGameArgument =
         ModalRoute.of(context).settings.arguments;
 
@@ -101,10 +102,10 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         color: Theme.of(context).accentColor,
                         size: 30,
                       ),
-                      // TODO MK In case there's no categories this spacing shouldn't be applied
-                      SizedBox(
-                        height: Dimensions.standardSpacing,
-                      ),
+                      if (_boardGameDetails.categories.isNotEmpty)
+                        SizedBox(
+                          height: Dimensions.standardSpacing,
+                        ),
                       Wrap(
                         direction: Axis.horizontal,
                         spacing: Dimensions.standardSpacing,
@@ -169,7 +170,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await _boardGamesService.addOrUpdateBoardGame(_boardGameDetails);
+          await _boardGamesStore.addOrUpdateBoardGame(_boardGameDetails);
           Navigator.popUntil(context, ModalRoute.withName(Routes.home));
         },
         tooltip: 'Add a board game',

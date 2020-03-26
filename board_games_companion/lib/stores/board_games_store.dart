@@ -39,7 +39,13 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    _boardGames.add(boardGameDetails);
+    final existingBoardGameDetails = _boardGames.firstWhere(
+        (boardGame) => boardGame.id == boardGameDetails.id,
+        orElse: () => null);
+
+    if (existingBoardGameDetails == null) {
+      _boardGames.add(boardGameDetails);
+    }
 
     notifyListeners();
   }
