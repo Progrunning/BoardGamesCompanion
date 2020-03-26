@@ -22,8 +22,8 @@ class BoardGamesStore with ChangeNotifier {
 
     try {
       _boardGames = await _boardGamesService.retrieveBoardGames();
-    } catch (e) {
-      Crashlytics.instance.recordError(e, StackTrace.current);
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
       _loadDataState = LoadDataState.Error;
     }
 
@@ -34,11 +34,11 @@ class BoardGamesStore with ChangeNotifier {
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
     try {
       await _boardGamesService.addOrUpdateBoardGame(boardGameDetails);
-    } catch (e) {
-      Crashlytics.instance.recordError(e, StackTrace.current);
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
       return;
     }
-    
+
     _boardGames.add(boardGameDetails);
 
     notifyListeners();
@@ -47,8 +47,8 @@ class BoardGamesStore with ChangeNotifier {
   Future<void> removeBoardGame(String boardGameDetailsId) async {
     try {
       await _boardGamesService.removeBoardGame(boardGameDetailsId);
-    } catch (e) {
-      Crashlytics.instance.recordError(e, StackTrace.current);
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
       return;
     }
 
