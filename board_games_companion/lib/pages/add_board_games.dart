@@ -32,9 +32,11 @@ class _AddBoardGamesPageState extends State<AddBoardGamesPage> {
           title: Text('Add Board Games'),
         ),
         body: FutureBuilder(
-          future: _memoizer.runOnce(() async {
-            return _boardGamesGeekService.retrieveHot();
-          }),
+          future: _memoizer.runOnce(
+            () async {
+              return _boardGamesGeekService.retrieveHot();
+            },
+          ),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               _isRefreshing = false;

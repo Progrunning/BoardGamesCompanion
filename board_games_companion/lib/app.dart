@@ -25,7 +25,6 @@ class BoardGamesCompanionApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      initialRoute: Routes.home,
       routes: {
         Routes.home: (context) => HomePage(),
         Routes.addBoardGames: (context) => AddBoardGamesPage(),

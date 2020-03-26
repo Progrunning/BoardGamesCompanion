@@ -42,7 +42,7 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
               return PlaythroughPlayer(p);
             }).toList();
             return Padding(
-              padding: const EdgeInsets.all(
+              padding: const EdgeInsets.all( 
                 Dimensions.standardSpacing,
               ),
               child: PlaythroughPlayers(

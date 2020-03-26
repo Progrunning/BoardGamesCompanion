@@ -3,13 +3,13 @@ import 'package:board_games_companion/pages/board_games.dart';
 import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
+import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   final PageController _pageController = PageController();
-  final _playersPage = PlayersPage();
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +25,21 @@ class HomePage extends StatelessWidget {
     );
 
     return Consumer<HomeStore>(
-      builder: (context, homeStore, child) {
+      builder: (_, homeStore, __) {
         return Scaffold(
           body: PageView(
             controller: _pageController,
             children: <Widget>[
               Consumer<BoardGamesStore>(
-                builder: (context, boardGamesStore, child) {
+                builder: (_, boardGamesStore, __) {
                   return BoardGamesPage(boardGamesStore);
                 },
               ),
-              _playersPage,
+              Consumer<PlayersStore>(
+                builder: (_, playersStore, __) {
+                  return PlayersPage(playersStore);
+                },
+              ),
             ],
             onPageChanged: (pageIndex) {
               homeStore.updateSelectedPageIndex(pageIndex);
