@@ -1,12 +1,13 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/base_board_game.dart';
 import 'package:board_games_companion/models/board_game_category.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 part 'board_game_details.g.dart';
 
 @HiveType(typeId: HiveBoxes.BoardGamesDetailsTypeId)
-class BoardGameDetails extends BaseBoardGame {
+class BoardGameDetails extends BaseBoardGame with ChangeNotifier {
   BoardGameDetails([String name]) : super(name);
 
   @HiveField(5)

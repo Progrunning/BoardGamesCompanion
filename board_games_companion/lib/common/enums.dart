@@ -3,3 +3,10 @@ enum MedalEnum {
   Silver,
   Bronze,
 }
+
+enum LoadDataState {
+  None,
+  Loading,
+  Loaded,
+  Error
+}

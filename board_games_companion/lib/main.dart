@@ -49,9 +49,15 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),
         ),
-        ProxyProvider<BoardGamesService, BoardGamesStore>(
-          update: (context, boardGamesService, previousBoardGamesStore) =>
-              BoardGamesStore(boardGamesService),
+        ChangeNotifierProvider<BoardGamesStore>(
+          create: (context) {
+            return BoardGamesStore(
+              Provider.of<BoardGamesService>(
+                context,
+                listen: false,
+              ),
+            );
+          },
         ),
       ],
       child: BoardGamesCompanionApp(),

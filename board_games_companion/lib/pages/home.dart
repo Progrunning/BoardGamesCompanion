@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/pages/board_games.dart';
 import 'package:board_games_companion/pages/players.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   final PageController _pageController = PageController();
-  final _boardGamesPage = BoardGamesPage();
   final _playersPage = PlayersPage();
 
   @override
@@ -30,7 +30,11 @@ class HomePage extends StatelessWidget {
           body: PageView(
             controller: _pageController,
             children: <Widget>[
-              _boardGamesPage,
+              Consumer<BoardGamesStore>(
+                builder: (context, boardGamesStore, child) {
+                  return BoardGamesPage(boardGamesStore);
+                },
+              ),
               _playersPage,
             ],
             onPageChanged: (pageIndex) {

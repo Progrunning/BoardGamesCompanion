@@ -5,6 +5,7 @@ import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game_details.dart';
 import 'package:board_games_companion/pages/board_game_playthroughs.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/ripple_effect.dart';
 import 'package:board_games_companion/widgets/star_rating_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,22 +13,16 @@ import 'package:flutter/material.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
 import 'package:provider/provider.dart';
 
-class BoardGameWidget extends StatefulWidget {
-  final BoardGameDetails boardGameDetails;
+class BoardGameWidget extends StatelessWidget {
+  BoardGameWidget({Key key}) : super(key: key);
 
-  BoardGameWidget(this.boardGameDetails, {Key key}) : super(key: key);
-
-  @override
-  _BoardGameWidgetState createState() => _BoardGameWidgetState();
-}
-
-class _BoardGameWidgetState extends State<BoardGameWidget> {
   @override
   Widget build(BuildContext context) {
-    final _boardGamesService = Provider.of<BoardGamesService>(context);
+    final _boardGamesStore = Provider.of<BoardGamesStore>(context);
+    final _boardGameDetails = Provider.of<BoardGameDetails>(context);
 
     return Dismissible(
-      key: Key(widget.boardGameDetails.id),
+      key: Key(_boardGameDetails.id),
       background: Container(
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: Dimensions.doubleStandardSpacing),
@@ -39,19 +34,17 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
         ),
       ),
       onDismissed: (direction) async {
-        await _boardGamesService.removeBoardGame(widget.boardGameDetails.id);
+        await _boardGamesStore.removeBoardGame(_boardGameDetails.id);
 
         Scaffold.of(context).showSnackBar(
           SnackBar(
             duration: Duration(seconds: 10),
             content: Text(
-                "${widget.boardGameDetails.name} has been removed from your collection"),
+                "${_boardGameDetails.name} has been removed from your collection"),
             action: SnackBarAction(
               label: "Undo",
               onPressed: () async {
-                // TODO MK Handle refresh of the board game collection
-                await _boardGamesService
-                    .addOrUpdateBoardGame(widget.boardGameDetails);
+                await _boardGamesStore.addOrUpdateBoardGame(_boardGameDetails);
               },
             ),
           ),
@@ -71,9 +64,9 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
                     children: <Widget>[
                       Hero(
                         tag:
-                            "${AnimationTags.boardGameImageHeroTag}${widget.boardGameDetails.id}",
+                            "${AnimationTags.boardGameImageHeroTag}${_boardGameDetails.id}",
                         child: CachedNetworkImage(
-                          imageUrl: widget.boardGameDetails.imageUrl,
+                          imageUrl: _boardGameDetails.imageUrl,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
@@ -85,7 +78,7 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
                           errorWidget: (context, url, error) => Container(
                             child: Center(
                               child: Text(
-                                widget.boardGameDetails?.name ?? '',
+                                _boardGameDetails?.name ?? '',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: Dimensions.extraLargeFontSize),
@@ -110,7 +103,7 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
                                     .withAlpha(Styles.opacity90Percent),
                                 child: Center(
                                   child: Text(
-                                    (widget.boardGameDetails.rating ?? 0)
+                                    (_boardGameDetails.rating ?? 0)
                                         .toStringAsFixed(Constants
                                             .BoardGameRatingNumberOfDecimalPlaces),
                                     style: TextStyle(
@@ -134,21 +127,21 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
-                          widget.boardGameDetails?.name ?? '',
+                          _boardGameDetails?.name ?? '',
                           style: TextStyle(fontSize: Dimensions.largeFontSize),
                         ),
                         SizedBox(
                           height: Dimensions.halfStandardSpacing,
                         ),
                         StarRating(
-                          rating: widget.boardGameDetails.rating ?? 0,
+                          rating: _boardGameDetails.rating ?? 0,
                           color: Theme.of(context).accentColor,
                         ),
                         SizedBox(
                           height: Dimensions.halfStandardSpacing,
                         ),
                         Text(
-                          '${(widget.boardGameDetails.rating ?? 0).toStringAsFixed(Constants.BoardGameRatingNumberOfDecimalPlaces)} / ${widget.boardGameDetails.votes ?? 0}',
+                          '${(_boardGameDetails.rating ?? 0).toStringAsFixed(Constants.BoardGameRatingNumberOfDecimalPlaces)} / ${_boardGameDetails.votes ?? 0}',
                           style: TextStyle(fontSize: Dimensions.smallFontSize),
                         ),
                       ],
@@ -160,7 +153,7 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
             Positioned.fill(
               child: StackRippleEffect(
                 onTap: () async {
-                  await _navigateToGamesPlayedPage(widget.boardGameDetails);
+                  await _navigateToGamesPlayedPage(context, _boardGameDetails);
                 },
               ),
             )
@@ -171,7 +164,9 @@ class _BoardGameWidgetState extends State<BoardGameWidget> {
   }
 
   Future<void> _navigateToGamesPlayedPage(
-      BoardGameDetails boardGameDetails) async {
+    BuildContext context,
+    BoardGameDetails boardGameDetails,
+  ) async {
     await Navigator.push(
       context,
       PageRouteBuilder(
