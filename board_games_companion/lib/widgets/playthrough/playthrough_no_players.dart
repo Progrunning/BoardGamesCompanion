@@ -20,7 +20,7 @@ class PlaythroughNoPlayers extends StatelessWidget {
             child: Center(
               child: Column(
                 children: <Widget>[
-                  Text('It looks empty here, try adding a new player'),
+                  Text('To start a new game, you need to create players first'),
                   Divider(
                     height: Dimensions.halfStandardSpacing,
                   ),

@@ -3,6 +3,7 @@ import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/playthroughs.dart';
 import 'package:board_games_companion/pages/start_new_playthrough.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
+import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _store =
         Provider.of<BoardGamePlaythroughsStore>(context, listen: false);
-    final _pageController = PageController(initialPage: _playthroughsPageIndex);
+    final _pageController = PageController(initialPage: _store.boardGamePlaythroughPageIndex);
     return Scaffold(
       appBar: AppBar(
         title: Text('Playthroughs'),
@@ -31,13 +32,16 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
           StartNewPlaythroughPage(),
         ],
       ),
-      floatingActionButton: Consumer<BoardGamePlaythroughsStore>(
-        builder: (_, store, __) {
+      floatingActionButton: Consumer2<BoardGamePlaythroughsStore, PlayersStore>(
+        builder: (_, boardGamePlaythroughStore, _playersStore, __) {
+          final _showStartNewGameButton =
+              boardGamePlaythroughStore.boardGamePlaythroughPageIndex !=
+                      _playthroughsPageIndex &&
+                  (_playersStore.players?.isNotEmpty ?? false);
           return Opacity(
-            opacity:
-                store.boardGamePlaythroughPageIndex == _playthroughsPageIndex
-                    ? Styles.transparentOpacity
-                    : Styles.opaqueOpacity,
+            opacity: _showStartNewGameButton
+                ? Styles.opaqueOpacity
+                : Styles.transparentOpacity,
             child: IconAndTextButton(
               title: 'Start New Game',
               icon: Icons.play_arrow,

@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_image_widget.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/playthrough_item_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -53,9 +54,14 @@ class PlaythroughsPage extends StatelessWidget {
                   );
                 }
 
-                return Center(
-                  child: Text(
-                    'Looks empty here',
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Dimensions.doubleStandardSpacing,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'It looks like you haven\'t played this game yet',
+                    ),
                   ),
                 );
               } else if (store.loadDataState == LoadDataState.Error) {
@@ -65,7 +71,7 @@ class PlaythroughsPage extends StatelessWidget {
                 );
               }
 
-              return Center(child: CircularProgressIndicator());
+              return LoadingIndicator();
             },
           ),
         ),
