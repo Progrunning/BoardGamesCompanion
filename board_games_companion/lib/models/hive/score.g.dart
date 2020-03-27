@@ -8,7 +8,7 @@ part of 'score.dart';
 
 class ScoreAdapter extends TypeAdapter<Score> {
   @override
-  final typeId = 3;
+  final typeId = 4;
 
   @override
   Score read(BinaryReader reader) {

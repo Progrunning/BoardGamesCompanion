@@ -1,6 +1,6 @@
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/widgets/icon_and_text_button.dart';
+import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 
 class CreateOrUpdatePlayer extends StatelessWidget {

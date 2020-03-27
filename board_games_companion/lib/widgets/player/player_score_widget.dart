@@ -1,6 +1,6 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
-import 'package:board_games_companion/widgets/player_avatar.dart';
+import 'package:board_games_companion/widgets/player/player_avatar.dart';
 import 'package:flutter/material.dart';
 
 class PlayerScore extends StatelessWidget {

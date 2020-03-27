@@ -19,6 +19,10 @@ class PlayersStore with ChangeNotifier {
   Player get playerToCreateOrEdit => _playerToCreateOrEdit;
 
   Future<void> loadPlayers() async {
+    if (_players != null) {
+      return;
+    }
+
     _loadDataState = LoadDataState.Loading;
     notifyListeners();
 

@@ -1,48 +1,32 @@
-import 'package:async/async.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/hive/player.dart';
+import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/playthrough_player.dart';
-import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/widgets/playthrough_players.dart';
+import 'package:board_games_companion/stores/players_store.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
+import 'package:board_games_companion/widgets/playthrough/playthrough_players.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class StartNewPlaythroughPage extends StatefulWidget {
+class StartNewPlaythroughPage extends StatelessWidget {
   StartNewPlaythroughPage({Key key}) : super(key: key);
 
   @override
-  _StartNewPlaythroughPageState createState() =>
-      _StartNewPlaythroughPageState();
-}
-
-class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
-  AsyncMemoizer _memoizer;
-  PlayerService _playerService;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _memoizer = AsyncMemoizer();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _playerService = Provider.of<PlayerService>(context);
-    return FutureBuilder(
-      future: _memoizer.runOnce(() async {
-        return _playerService.retrievePlayers();
-      }),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final players = snapshot.data as List<Player>;
-          if (players != null) {
-            final playthroughPlayers = players.map((p) {
+    final playersStore = Provider.of<PlayersStore>(
+      context,
+      listen: false,
+    );
+    playersStore.loadPlayers();
+
+    return Consumer<PlayersStore>(
+      builder: (_, playersStore, __) {
+        if (playersStore.loadDataState == LoadDataState.Loaded) {
+          if (playersStore.players?.length != 0) {
+            final playthroughPlayers = playersStore.players.map((p) {
               return PlaythroughPlayer(p);
             }).toList();
             return Padding(
-              padding: const EdgeInsets.all( 
+              padding: const EdgeInsets.all(
                 Dimensions.standardSpacing,
               ),
               child: PlaythroughPlayers(
@@ -59,25 +43,35 @@ class _StartNewPlaythroughPageState extends State<StartNewPlaythroughPage> {
                 Padding(
                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
                   child: Center(
-                    child:
-                        Text('It looks empty here, try adding a new players'),
+                    child: Column(
+                      children: <Widget>[
+                        Text('It looks empty here, try adding a new player'),
+                        Divider(
+                          height: Dimensions.halfStandardSpacing,
+                        ),
+                        RaisedButton(
+                          color: Theme.of(context).accentColor,
+                          textColor: Colors.white,
+                          child: Text('Add Player'),
+                          onPressed: () async {
+                            await NavigatorHelper.navigateToCreatePlayerPage(
+                              context,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           );
-        } else if (snapshot.hasError) {
+        } else if (playersStore.loadDataState == LoadDataState.Error) {
           return Center(child: Text('Oops, something went wrong'));
         }
 
         return Center(child: CircularProgressIndicator());
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _playerService.closeBox(HiveBoxes.Players);
-    super.dispose();
   }
 }

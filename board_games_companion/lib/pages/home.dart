@@ -1,11 +1,11 @@
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/pages/board_games.dart';
-import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/widgets/icon_and_text_button.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
+import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -79,18 +79,6 @@ class HomePage extends StatelessWidget {
   }
 
   Future<void> _navigateToAddPlayerPage(BuildContext context) async {
-    await Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 500),
-        pageBuilder: (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-          final playerStore = Provider.of<PlayersStore>(context, listen: false,);
-          playerStore.setPlayerToCreateOrEdit();
-
-          return CreateEditPlayerPage(playerStore);
-        },
-      ),
-    );
+    await NavigatorHelper.navigateToCreatePlayerPage(context);
   }
 }

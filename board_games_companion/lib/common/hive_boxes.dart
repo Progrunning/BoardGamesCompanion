@@ -8,5 +8,5 @@ class HiveBoxes {
   static const BoardGamesCategoryTypeId = 1;
   static const PlayersTypeId = 2;
   static const PlaythroughTypeId = 3;
-  static const ScoreTypeId = 3;
+  static const ScoreTypeId = 4;
 }

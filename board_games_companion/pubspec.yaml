@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   dio_http_cache: ^0.2.6
@@ -30,6 +30,7 @@ dependencies:
   image_picker: ^0.6.3+4
   xml: 3.5.0
   provider: ^4.0.4
+  animations: ^1.0.0+5
   flutter:
     sdk: flutter
 

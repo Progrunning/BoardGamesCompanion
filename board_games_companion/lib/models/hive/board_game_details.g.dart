@@ -19,15 +19,20 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
     return BoardGameDetails()
       ..imageUrl = fields[5] as String
       ..description = fields[6] as String
-      ..categories = (fields[7] as List)?.cast<dynamic>()
+      ..categories = (fields[7] as List)?.cast<BoardGameCategory>()
       ..rating = fields[8] as double
-      ..votes = fields[9] as int;
+      ..votes = fields[9] as int
+      ..id = fields[0] as String
+      ..rank = fields[1] as int
+      ..name = fields[2] as String
+      ..thumbnailUrl = fields[3] as String
+      ..yearPublished = fields[4] as int;
   }
 
   @override
   void write(BinaryWriter writer, BoardGameDetails obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(10)
       ..writeByte(5)
       ..write(obj.imageUrl)
       ..writeByte(6)
@@ -37,6 +42,16 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..writeByte(8)
       ..write(obj.rating)
       ..writeByte(9)
-      ..write(obj.votes);
+      ..write(obj.votes)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.rank)
+      ..writeByte(2)
+      ..write(obj.name)
+      ..writeByte(3)
+      ..write(obj.thumbnailUrl)
+      ..writeByte(4)
+      ..write(obj.yearPublished);
   }
 }

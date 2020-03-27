@@ -3,8 +3,9 @@ import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/widgets/custom_icon_button.dart';
-import 'package:board_games_companion/widgets/player_grid_item.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
+import 'package:board_games_companion/widgets/common/custom_icon_button.dart';
+import 'package:board_games_companion/widgets/player/player_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -89,18 +90,22 @@ class _PlayersPageState extends State<PlayersPage> {
 
   Future _navigateToCreateOrEditPlayer(
       BuildContext context, Player player) async {
-    await Navigator.push(
+    await NavigatorHelper.navigateToCreatePlayerPage(
       context,
-      PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 500),
-        pageBuilder: (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-          final playerStore = Provider.of<PlayersStore>(context);
-          playerStore.setPlayerToCreateOrEdit(player: player);
-
-          return CreateEditPlayerPage(playerStore);
-        },
-      ),
+      player: player,
     );
+    // await Navigator.push(
+    //   context,
+    //   PageRouteBuilder(
+    //     transitionDuration: Duration(milliseconds: 500),
+    //     pageBuilder: (BuildContext context, Animation<double> animation,
+    //         Animation<double> secondaryAnimation) {
+    //       final playerStore = Provider.of<PlayersStore>(context);
+    //       playerStore.setPlayerToCreateOrEdit(player: player);
+
+    //       return CreateEditPlayerPage(playerStore);
+    //     },
+    //   ),
+    // );
   }
 }

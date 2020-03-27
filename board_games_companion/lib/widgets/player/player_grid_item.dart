@@ -2,8 +2,8 @@ import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/widgets/player_avatar.dart';
-import 'package:board_games_companion/widgets/ripple_effect.dart';
+import 'package:board_games_companion/widgets/common/ripple_effect.dart';
+import 'package:board_games_companion/widgets/player/player_avatar.dart';
 import 'package:flutter/material.dart';
 
 class PlayerGridItem extends StatelessWidget {

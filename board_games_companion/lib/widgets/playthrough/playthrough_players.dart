@@ -1,6 +1,6 @@
 import 'package:board_games_companion/models/playthrough_player.dart';
-import 'package:board_games_companion/widgets/player_grid_item.dart';
-import 'package:board_games_companion/widgets/ripple_effect.dart';
+import 'package:board_games_companion/widgets/common/ripple_effect.dart';
+import 'package:board_games_companion/widgets/player/player_grid_item.dart';
 import 'package:flutter/material.dart';
 
 class PlaythroughPlayers extends StatefulWidget {

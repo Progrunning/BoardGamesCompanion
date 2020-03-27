@@ -1,8 +1,8 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
+import 'package:board_games_companion/widgets/painters/divider_painter.dart';
 import 'package:flutter/material.dart';
 
-import 'painters/divider_painter.dart';
 
 class CalendarCard extends StatelessWidget {
   const CalendarCard({
