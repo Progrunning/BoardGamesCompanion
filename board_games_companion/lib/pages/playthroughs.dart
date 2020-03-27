@@ -2,36 +2,36 @@ import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_image_widget.dart';
-import 'package:board_games_companion/widgets/board_games/game_detail_item_widget.dart';
-import 'package:board_games_companion/widgets/player/player_score_widget.dart';
-import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
+import 'package:board_games_companion/widgets/playthrough/playthrough_item_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
-class PlaythroughsPage extends StatefulWidget {
+class PlaythroughsPage extends StatelessWidget {
   final BoardGameDetails boardGameDetails;
 
   PlaythroughsPage(this.boardGameDetails);
 
-  @override
-  _PlaythroughsPageState createState() => _PlaythroughsPageState();
-}
-
-class _PlaythroughsPageState extends State<PlaythroughsPage> {
   static const double _minBoardGameImageHeight = 240;
 
   @override
   Widget build(BuildContext context) {
+    final _store = Provider.of<PlaythroughsStore>(
+      context,
+      listen: false,
+    );
+    _store.loadPlaythroughs(boardGameDetails);
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Hero(
-          tag:
-              "${AnimationTags.boardGameImageHeroTag}${widget.boardGameDetails?.id}",
+          tag: "${AnimationTags.boardGameImageHeroTag}${boardGameDetails?.id}",
           child: BoardGameImage(
-            boardGameDetails: widget.boardGameDetails,
+            boardGameDetails: boardGameDetails,
             minImageHeight: _minBoardGameImageHeight,
           ),
         ),
@@ -39,70 +39,34 @@ class _PlaythroughsPageState extends State<PlaythroughsPage> {
           height: Dimensions.standardSpacing,
         ),
         Expanded(
-          child: CarouselSlider(
-            viewportFraction: 1.0,
-            height: double.infinity,
-            items: [1, 2, 3].map((item) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.standardSpacing,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        CalendarCard(),
-                        SizedBox(
-                          height: Dimensions.standardSpacing,
-                        ),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                GameDetailItem('443', 'day(s) ago'),
-                                Divider(
-                                  height: Dimensions.standardSpacing,
-                                ),
-                                GameDetailItem('10th', 'game'),
-                                Divider(
-                                  height: Dimensions.standardSpacing,
-                                ),
-                                GameDetailItem('1987', 'highscore'),
-                                Divider(
-                                  height: Dimensions.standardSpacing,
-                                ),
-                                GameDetailItem('120min', 'duration'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: Dimensions.standardSpacing,
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                          itemCount: 4,
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              height: Dimensions.standardSpacing,
-                            );
-                          },
-                          itemBuilder: (context, index) {
-                            return PlayerScore(
-                              medal: MedalEnum.Bronze,
-                            );
-                          }),
-                    )
-                  ],
-                ),
-              );
-            }).toList(),
+          child: Consumer<PlaythroughsStore>(
+            builder: (_, store, __) {
+              if (store.loadDataState == LoadDataState.Loaded) {
+                final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
+                if (hasPlaythroughs) {
+                  return CarouselSlider(
+                    viewportFraction: 1.0,
+                    height: double.infinity,
+                    items: store.playthroughs.map((playthough) {
+                      return PlaythroughItem();
+                    }).toList(),
+                  );
+                }
+
+                return Center(
+                  child: Text(
+                    'Looks empty here',
+                  ),
+                );
+              } else if (store.loadDataState == LoadDataState.Error) {
+                return Center(
+                  child: Text(
+                      ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'),
+                );
+              }
+
+              return Center(child: CircularProgressIndicator());
+            },
           ),
         ),
       ],

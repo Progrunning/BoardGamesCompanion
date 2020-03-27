@@ -2,11 +2,11 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GameDetailItem extends StatelessWidget {
+class PlaythroughItemDetail extends StatelessWidget {
   final String subtitle;
   final String title;
 
-  GameDetailItem(this.title, this.subtitle);
+  PlaythroughItemDetail(this.title, this.subtitle);
 
   @override
   Widget build(BuildContext context) {
