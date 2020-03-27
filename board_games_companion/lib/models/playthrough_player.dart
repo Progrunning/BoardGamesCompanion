@@ -1,4 +1,4 @@
-import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 
 class PlaythroughPlayer {
   PlaythroughPlayer(this.player);

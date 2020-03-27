@@ -1,6 +1,6 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
-import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/widgets/custom_icon_button.dart';

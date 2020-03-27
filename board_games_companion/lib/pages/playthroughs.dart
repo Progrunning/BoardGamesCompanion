@@ -1,7 +1,7 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
-import 'package:board_games_companion/models/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/board_game_image_widget.dart';
 import 'package:board_games_companion/widgets/calendar_card.dart';
 import 'package:board_games_companion/widgets/game_detail_item_widget.dart';

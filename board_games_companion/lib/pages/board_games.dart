@@ -1,6 +1,6 @@
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_game_widget.dart';
 import 'package:flutter/material.dart';

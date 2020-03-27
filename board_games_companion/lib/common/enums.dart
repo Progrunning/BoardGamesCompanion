@@ -8,5 +8,11 @@ enum LoadDataState {
   None,
   Loading,
   Loaded,
-  Error
+  Error,
+}
+
+enum PlaythroughStatus {
+  Started,
+  Paused,
+  Finished,
 }

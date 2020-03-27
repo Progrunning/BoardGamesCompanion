@@ -1,6 +1,6 @@
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';

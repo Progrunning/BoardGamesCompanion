@@ -1,5 +1,5 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/shadow_box_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

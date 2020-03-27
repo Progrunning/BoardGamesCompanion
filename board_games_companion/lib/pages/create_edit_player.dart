@@ -1,7 +1,7 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
-import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/widgets/create_edit_player.dart';
 import 'package:board_games_companion/widgets/custom_icon_button.dart';

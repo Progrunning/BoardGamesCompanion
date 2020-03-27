@@ -1,5 +1,5 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/services/hide_base_service.dart';
 import 'package:uuid/uuid.dart';
 

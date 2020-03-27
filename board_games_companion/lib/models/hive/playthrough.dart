@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:hive/hive.dart';
 
@@ -13,4 +14,11 @@ class Playthrough {
   List<String> playerIds;
   @HiveField(3)
   List<String> scoreIds;
+
+  @HiveField(4)
+  DateTime startDate;
+  @HiveField(5)
+  DateTime endDate;
+  @HiveField(6)
+  PlaythroughStatus status;
 }

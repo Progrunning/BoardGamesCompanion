@@ -1,4 +1,4 @@
-import 'package:board_games_companion/models/base_board_game.dart';
+import 'hive/base_board_game.dart';
 
 class BoardGame extends BaseBoardGame {
   BoardGame(String name) : super(name);

@@ -1,7 +1,7 @@
 import 'package:async/async.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/playthrough_player.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/widgets/playthrough_players.dart';

@@ -1,6 +1,6 @@
 import 'package:board_games_companion/models/board_game.dart';
-import 'package:board_games_companion/models/board_game_category.dart';
-import 'package:board_games_companion/models/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_category.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio/dio.dart';
 import 'package:xml/xml.dart' as xml;
