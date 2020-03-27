@@ -1,41 +1,27 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/player.dart';
-import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/widgets/create_edit_player.dart';
 import 'package:board_games_companion/widgets/custom_icon_button.dart';
-import 'package:board_games_companion/widgets/icon_and_text_button.dart';
+import 'package:board_games_companion/widgets/player/delete_player_widget.dart';
 import 'package:board_games_companion/widgets/player_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class CreateEditPlayerPage extends StatefulWidget {
-  const CreateEditPlayerPage({
-    Key key,
-  }) : super(key: key);
+class CreateEditPlayerPage extends StatelessWidget {
+  final PlayersStore _playersStore;
 
-  @override
-  _CreateEditPlayerPageState createState() => _CreateEditPlayerPageState();
-}
+  CreateEditPlayerPage(this._playersStore);
 
-class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
 
-  Player _player;
-  PlayerService _playerService;
-
   @override
   Widget build(BuildContext context) {
-    _playerService = Provider.of<PlayerService>(context);
-    if (_player == null) {
-      _player = ModalRoute.of(context).settings.arguments ?? Player();
-    }
-
+    final Player _player = _playersStore.playerToCreateOrEdit;
     final _isEditMode = _player.name?.isNotEmpty ?? false;
 
     _nameController.text = _player.name ?? '';
@@ -46,7 +32,7 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
           formKey: _formKey,
           player: _player,
           nameController: _nameController,
-          playerService: _playerService),
+          playersStore: _playersStore),
     ];
 
     if (_isEditMode) {
@@ -57,184 +43,131 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
           ),
           DeletePlayer(
             player: _player,
-            playerService: _playerService,
+            playersStore: _playersStore,
           ),
         ],
       );
     }
 
-    final _hasName = _nameController.text?.isNotEmpty ?? false;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_hasName ? _nameController.text : 'New Player'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(Dimensions.standardSpacing),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).accentColor,
-                        blurRadius: Styles.defaultShadowRadius,
-                        offset: Styles.defaultShadowOffset,
-                      ),
-                    ],
-                  ),
-                  child: SizedBox(
-                    height: 220,
-                    width: 190,
-                    child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(Styles.defaultCornerRadius),
-                      child: Stack(
-                        children: <Widget>[
-                          Hero(
-                            tag:
-                                '${AnimationTags.playerImageHeroTag}${_player?.id}',
-                            child: PlayerAvatar(
-                              imageUri: _player?.imageUri,
+    return ChangeNotifierProvider.value(
+      value: _player,
+      child: Consumer<Player>(
+        builder: (_, player, __) {
+          final _hasName = _nameController.text?.isNotEmpty ?? false;
+          
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(_hasName ? player.name : 'New Player'),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).accentColor,
+                              blurRadius: Styles.defaultShadowRadius,
+                              offset: Styles.defaultShadowOffset,
                             ),
-                          ),
-                          Positioned(
-                            bottom: Dimensions.halfStandardSpacing,
-                            right: Dimensions.halfStandardSpacing,
-                            child: Row(
+                          ],
+                        ),
+                        child: SizedBox(
+                          height: 220,
+                          width: 190,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                Styles.defaultCornerRadius),
+                            child: Stack(
                               children: <Widget>[
-                                CustomIconButton(
-                                  Icon(
-                                    Icons.filter,
-                                    color: Colors.white,
+                                Hero(
+                                  tag:
+                                      '${AnimationTags.playerImageHeroTag}${player?.id}',
+                                  child: PlayerAvatar(
+                                    imageUri: player?.imageUri,
                                   ),
-                                  onTap: _handleImagePicking,
                                 ),
-                                Divider(
-                                  indent: Dimensions.halfStandardSpacing,
-                                ),
-                                CustomIconButton(
-                                  Icon(
-                                    Icons.camera,
-                                    color: Colors.white,
+                                Positioned(
+                                  bottom: Dimensions.halfStandardSpacing,
+                                  right: Dimensions.halfStandardSpacing,
+                                  child: Row(
+                                    children: <Widget>[
+                                      CustomIconButton(
+                                        Icon(
+                                          Icons.filter,
+                                          color: Colors.white,
+                                        ),
+                                        onTap: () =>
+                                            _handleImagePicking(player),
+                                      ),
+                                      Divider(
+                                        indent: Dimensions.halfStandardSpacing,
+                                      ),
+                                      CustomIconButton(
+                                        Icon(
+                                          Icons.camera,
+                                          color: Colors.white,
+                                        ),
+                                        onTap: () =>
+                                            _handleTakingPicture(player),
+                                      ),
+                                    ],
                                   ),
-                                  onTap: _handleTakingPicture,
-                                ),
+                                )
                               ],
                             ),
-                          )
-                        ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Player needs to have a name';
+                        }
+
+                        return null;
+                      },
+                      controller: _nameController,
+                    )
+                  ],
                 ),
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Player needs to have a name';
-                  }
-
-                  return null;
-                },
-                controller: _nameController,
-              )
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: _floatingActionButtons,
+            ),
+            floatingActionButton: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: _floatingActionButtons,
+            ),
+          );
+        },
       ),
     );
   }
 
-  Future _handleTakingPicture() async {
+  Future _handleTakingPicture(Player player) async {
     final avatarImage = await ImagePicker.pickImage(source: ImageSource.camera);
     if (avatarImage?.path?.isEmpty ?? true) {
       return;
     }
-    setState(() {
-      _player.imageUri = avatarImage.path;
-    });
+
+    player.imageUri = avatarImage.path;
   }
 
-  Future _handleImagePicking() async {
+  Future _handleImagePicking(Player player) async {
     final avatarImage =
         await ImagePicker.pickImage(source: ImageSource.gallery);
     if (avatarImage?.path?.isEmpty ?? true) {
       return;
     }
 
-    setState(() {
-      _player.imageUri = avatarImage.path;
-    });
-  }
-
-  @override
-  void dispose() {
-    _playerService.closeBox(HiveBoxes.Players);
-    super.dispose();
-  }
-}
-
-class DeletePlayer extends StatelessWidget {
-  const DeletePlayer({
-    Key key,
-    @required Player player,
-    @required PlayerService playerService,
-  })  : _player = player,
-        _playerService = playerService,
-        super(key: key);
-
-  final Player _player;
-  final PlayerService _playerService;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconAndTextButton(
-      title: 'Delete',
-      icon: Icons.delete,
-      backgroundColor: Colors.redAccent,
-      onPressed: () async {
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Are you sure you want to delete ${_player?.name}?'),
-              elevation: 2,
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                FlatButton(
-                  child: Text('Delete'),
-                  color: Colors.red,
-                  onPressed: () async {
-                    var deletionSucceeded =
-                        await _playerService.deletePlayer(_player.id);
-                    if (deletionSucceeded) {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(Routes.home));
-                    }
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
+    player.imageUri = avatarImage.path;
   }
 }

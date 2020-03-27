@@ -1,5 +1,6 @@
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/pages/board_games.dart';
+import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
@@ -78,6 +79,18 @@ class HomePage extends StatelessWidget {
   }
 
   Future<void> _navigateToAddPlayerPage(BuildContext context) async {
-    await Navigator.pushNamed(context, Routes.createEditPlayer);
+    await Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          final playerStore = Provider.of<PlayersStore>(context, listen: false,);
+          playerStore.setPlayerToCreateOrEdit();
+
+          return CreateEditPlayerPage(playerStore);
+        },
+      ),
+    );
   }
 }

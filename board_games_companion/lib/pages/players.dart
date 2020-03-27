@@ -1,11 +1,12 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
-import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/player.dart';
+import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/widgets/custom_icon_button.dart';
 import 'package:board_games_companion/widgets/player_grid_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlayersPage extends StatefulWidget {
   final PlayersStore _playersStore;
@@ -68,7 +69,7 @@ class _PlayersPageState extends State<PlayersPage> {
                   topRightCornerActionWidget:
                       _buildTopRightCornerAction(player),
                   onTap: () async {
-                    _navigateToCreateOrEditPlayer(context, player);
+                    await _navigateToCreateOrEditPlayer(context, player);
                   },
                 );
               },
@@ -88,7 +89,18 @@ class _PlayersPageState extends State<PlayersPage> {
 
   Future _navigateToCreateOrEditPlayer(
       BuildContext context, Player player) async {
-    await Navigator.pushNamed(context, Routes.createEditPlayer,
-        arguments: player);
+    await Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          final playerStore = Provider.of<PlayersStore>(context);
+          playerStore.setPlayerToCreateOrEdit(player: player);
+
+          return CreateEditPlayerPage(playerStore);
+        },
+      ),
+    );
   }
 }

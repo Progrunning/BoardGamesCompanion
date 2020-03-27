@@ -1,5 +1,5 @@
 import 'package:board_games_companion/models/player.dart';
-import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/widgets/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 
@@ -10,19 +10,19 @@ class CreateOrUpdatePlayer extends StatelessWidget {
     @required GlobalKey<FormState> formKey,
     @required Player player,
     @required TextEditingController nameController,
-    @required PlayerService playerService,
+    @required PlayersStore playersStore,
   })  : _isEditMode = isEditMode,
         _formKey = formKey,
         _player = player,
         _nameController = nameController,
-        _playerService = playerService,
+        _playersStore = playersStore,
         super(key: key);
 
   final bool _isEditMode;
   final GlobalKey<FormState> _formKey;
   final Player _player;
   final TextEditingController _nameController;
-  final PlayerService _playerService;
+  final PlayersStore _playersStore;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +31,12 @@ class CreateOrUpdatePlayer extends StatelessWidget {
       icon: Icons.create,
       onPressed: () async {
         if (_formKey.currentState.validate()) {
-          final playerToAddOrUpdate = _player ?? Player();
-          playerToAddOrUpdate.name = _nameController.text;
+          _player.name = _nameController.text;
 
           final addingOrUpdatingSucceeded =
-              await _playerService.addOrUpdatePlayer(playerToAddOrUpdate);
+              await _playersStore.addOrUpdatePlayer(_player);
           _handlePlayerUpdateResult(
-              context, playerToAddOrUpdate, addingOrUpdatingSucceeded);
+              context, _player, addingOrUpdatingSucceeded);
         }
       },
     );
@@ -52,7 +51,9 @@ class CreateOrUpdatePlayer extends StatelessWidget {
               'Player ${playerToAddOrUpdate.name} has been updated successfully'),
           action: SnackBarAction(
             label: "Ok",
-            onPressed: () async {},
+            onPressed: () async {
+              Navigator.of(context).pop();
+            },
           ),
         ),
       );

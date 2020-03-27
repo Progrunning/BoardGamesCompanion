@@ -18,9 +18,9 @@ class PlayerAdapter extends TypeAdapter<Player> {
     };
     return Player()
       ..id = fields[0] as String
-      ..name = fields[1] as String
-      ..imageUri = fields[2] as String
-      ..isDeleted = fields[3] as bool;
+      .._name = fields[1] as String
+      .._imageUri = fields[2] as String
+      .._isDeleted = fields[3] as bool;
   }
 
   @override
@@ -30,10 +30,10 @@ class PlayerAdapter extends TypeAdapter<Player> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name)
+      ..write(obj._name)
       ..writeByte(2)
-      ..write(obj.imageUri)
+      ..write(obj._imageUri)
       ..writeByte(3)
-      ..write(obj.isDeleted);
+      ..write(obj._isDeleted);
   }
 }

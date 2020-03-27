@@ -10,11 +10,13 @@ class PlayersStore with ChangeNotifier {
 
   LoadDataState _loadDataState = LoadDataState.None;
   List<Player> _players;
+  Player _playerToCreateOrEdit;
 
   PlayersStore(this._playerService);
 
   LoadDataState get loadDataState => _loadDataState;
   List<Player> get players => _players;
+  Player get playerToCreateOrEdit => _playerToCreateOrEdit;
 
   Future<void> loadPlayers() async {
     _loadDataState = LoadDataState.Loading;
@@ -29,6 +31,48 @@ class PlayersStore with ChangeNotifier {
 
     _loadDataState = LoadDataState.Loaded;
     notifyListeners();
+  }
+
+  Future<bool> addOrUpdatePlayer(Player player) async {
+    try {
+      final existingPlayer = _players.firstWhere(
+        (p) => p.id == player.id,
+        orElse: () => null,
+      );
+
+      final isCreatingNewPlayer = existingPlayer == null;
+      final addOrUpdateSucceeded =
+          await _playerService.addOrUpdatePlayer(player);
+      if (addOrUpdateSucceeded && isCreatingNewPlayer) {
+        _players.add(player);
+        notifyListeners();
+      }
+
+      return addOrUpdateSucceeded;
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
+
+  Future<bool> deletePlayer(String playerId) async {
+    try {
+      final deleteSucceeded = await _playerService.deletePlayer(playerId);
+      if (deleteSucceeded) {
+        _players.removeWhere((p) => p.id == playerId);
+        notifyListeners();
+      }
+      return deleteSucceeded;
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
+
+  void setPlayerToCreateOrEdit({Player player}) {
+    _playerToCreateOrEdit = player ?? Player();
   }
 
   @override
