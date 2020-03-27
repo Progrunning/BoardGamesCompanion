@@ -23,13 +23,14 @@ class PlaythroughAdapter extends TypeAdapter<Playthrough> {
       ..scoreIds = (fields[3] as List)?.cast<String>()
       ..startDate = fields[4] as DateTime
       ..endDate = fields[5] as DateTime
-      ..status = fields[6] as PlaythroughStatus;
+      ..status = fields[6] as PlaythroughStatus
+      ..isDeleted = fields[7] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Playthrough obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -43,6 +44,8 @@ class PlaythroughAdapter extends TypeAdapter<Playthrough> {
       ..writeByte(5)
       ..write(obj.endDate)
       ..writeByte(6)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(7)
+      ..write(obj.isDeleted);
   }
 }

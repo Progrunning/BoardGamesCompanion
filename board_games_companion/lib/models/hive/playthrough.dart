@@ -21,4 +21,6 @@ class Playthrough {
   DateTime endDate;
   @HiveField(6)
   PlaythroughStatus status;
+  @HiveField(7)
+  bool isDeleted;
 }

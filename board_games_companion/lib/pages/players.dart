@@ -1,13 +1,11 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/custom_icon_button.dart';
 import 'package:board_games_companion/widgets/player/player_grid_item.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PlayersPage extends StatefulWidget {
   final PlayersStore _playersStore;
