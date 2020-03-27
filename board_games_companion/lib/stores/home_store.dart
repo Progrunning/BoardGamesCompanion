@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
 class HomeStore with ChangeNotifier {
-  int boardGamesPageIndex = 0;
+  int _boardGamesPageIndex = 0;
+  int get boardGamesPageIndex => _boardGamesPageIndex;
 
-  void updateSelectedPageIndex(int selectedPageIndex) {
-    boardGamesPageIndex = selectedPageIndex;
-    notifyListeners();
+  set boardGamesPageIndex(int selectedPageIndex) {
+    if (_boardGamesPageIndex != selectedPageIndex) {
+      _boardGamesPageIndex = selectedPageIndex;
+      notifyListeners();
+    }
   }
 }

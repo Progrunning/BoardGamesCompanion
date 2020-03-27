@@ -9,6 +9,7 @@ import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
+import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
@@ -88,6 +89,9 @@ class App extends StatelessWidget {
               ),
             );
           },
+        ),
+        ChangeNotifierProvider<BoardGamePlaythroughsStore>(
+          create: (context) => BoardGamePlaythroughsStore(),
         ),
       ],
       child: BoardGamesCompanionApp(),

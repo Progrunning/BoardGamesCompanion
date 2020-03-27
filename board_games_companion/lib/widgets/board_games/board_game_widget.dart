@@ -152,7 +152,7 @@ class BoardGameWidget extends StatelessWidget {
             Positioned.fill(
               child: StackRippleEffect(
                 onTap: () async {
-                  await _navigateToGamesPlayedPage(context, _boardGameDetails);
+                  await _navigateToGamePlaythroughsPage(context, _boardGameDetails);
                 },
               ),
             )
@@ -162,7 +162,7 @@ class BoardGameWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _navigateToGamesPlayedPage(
+  Future<void> _navigateToGamePlaythroughsPage(
     BuildContext context,
     BoardGameDetails boardGameDetails,
   ) async {

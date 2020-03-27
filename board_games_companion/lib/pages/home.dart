@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               ),
             ],
             onPageChanged: (pageIndex) {
-              homeStore.updateSelectedPageIndex(pageIndex);
+              homeStore.boardGamesPageIndex = pageIndex;
             },
           ),
           floatingActionButton: homeStore.boardGamesPageIndex == 0
