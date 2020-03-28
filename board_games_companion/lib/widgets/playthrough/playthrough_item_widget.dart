@@ -10,9 +10,11 @@ import 'package:provider/provider.dart';
 
 class PlaythroughItem extends StatelessWidget {
   final Playthrough _playthrough;
+  final int _playthroughNumber;
 
   const PlaythroughItem(
-    this._playthrough, {
+    this._playthrough,
+    this._playthroughNumber, {
     Key key,
   }) : super(key: key);
 
@@ -64,11 +66,16 @@ class PlaythroughItem extends StatelessWidget {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  PlaythroughItemDetail('443', 'day(s) ago'),
+                                  PlaythroughItemDetail(
+                                      store.startDate
+                                          .difference(DateTime.now().toUtc())
+                                          .inDays
+                                          .toString(),
+                                      'day(s) ago'),
                                   Divider(
                                     height: Dimensions.standardSpacing,
                                   ),
-                                  PlaythroughItemDetail('10th', 'game'),
+                                  PlaythroughItemDetail(_playthroughNumber?.toString(), 'game'),
                                   Divider(
                                     height: Dimensions.standardSpacing,
                                   ),

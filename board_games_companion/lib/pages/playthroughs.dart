@@ -50,9 +50,16 @@ class PlaythroughsPage extends StatelessWidget {
                     viewportFraction: .9,
                     enableInfiniteScroll: false,
                     height: double.infinity,
-                    items: store.playthroughs.map((playthough) {
-                      return PlaythroughItem(playthough);
-                    }).toList(),
+                    items: store.playthroughs
+                        .asMap()
+                        .map((index, playthough) {
+                          return MapEntry(
+                            index,
+                            PlaythroughItem(playthough, ++index),
+                          );
+                        })
+                        .values
+                        .toList(),
                   );
                 }
 
