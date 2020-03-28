@@ -3,7 +3,7 @@ import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/services/hide_base_service.dart';
 
 class PlayerService extends BaseHiveService<Player> {
-    Future<List<Player>> retrievePlayers() async {
+  Future<List<Player>> retrievePlayers([List<String> playerIds]) async {
     if (!await ensureBoxOpen(HiveBoxes.Players)) {
       return List<Player>();
     }
@@ -11,7 +11,9 @@ class PlayerService extends BaseHiveService<Player> {
     return storageBox
         ?.toMap()
         ?.values
-        ?.where((player) => !(player.isDeleted ?? false))
+        ?.where((player) =>
+            !(player.isDeleted ?? false) ||
+            (playerIds?.contains(player.id) ?? false))
         ?.toList();
   }
 

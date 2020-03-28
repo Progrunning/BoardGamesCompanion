@@ -13,13 +13,13 @@ class PlaythroughItemDetail extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(
-          title,
+          title ?? '',
           style: TextStyle(
             fontSize: Dimensions.largeFontSize,
           ),
         ),
         Text(
-          subtitle,
+          subtitle ?? '',
           style: TextStyle(
             fontSize: Dimensions.extraSmallFontSize,
             color: Colors.grey,

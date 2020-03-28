@@ -7,11 +7,17 @@ part 'score.g.dart';
 class Score {
   @HiveField(0)
   String id;
+  
   @HiveField(1)
-  String playerId;
+  String playthroughId;
   @HiveField(2)
+  String playerId;
+  @HiveField(3)
   String boardGameId;
 
-  @HiveField(3)
+  @HiveField(4)
   String value;
+
+  @HiveField(5)
+  String isDeleted;
 }

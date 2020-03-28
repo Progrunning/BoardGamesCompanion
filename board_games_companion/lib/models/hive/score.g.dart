@@ -18,22 +18,28 @@ class ScoreAdapter extends TypeAdapter<Score> {
     };
     return Score()
       ..id = fields[0] as String
-      ..playerId = fields[1] as String
-      ..boardGameId = fields[2] as String
-      ..value = fields[3] as String;
+      ..playthroughId = fields[1] as String
+      ..playerId = fields[2] as String
+      ..boardGameId = fields[3] as String
+      ..value = fields[4] as String
+      ..isDeleted = fields[5] as String;
   }
 
   @override
   void write(BinaryWriter writer, Score obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.playerId)
+      ..write(obj.playthroughId)
       ..writeByte(2)
-      ..write(obj.boardGameId)
+      ..write(obj.playerId)
       ..writeByte(3)
-      ..write(obj.value);
+      ..write(obj.boardGameId)
+      ..writeByte(4)
+      ..write(obj.value)
+      ..writeByte(5)
+      ..write(obj.isDeleted);
   }
 }

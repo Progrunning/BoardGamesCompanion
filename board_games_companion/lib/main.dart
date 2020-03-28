@@ -10,6 +10,7 @@ import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
+import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
@@ -60,12 +61,15 @@ class App extends StatelessWidget {
         Provider<PlaythroughService>(
           create: (context) => PlaythroughService(),
         ),
+        Provider<ScoreService>(
+          create: (context) => ScoreService(),
+        ),
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),
         ),
         ChangeNotifierProvider<BoardGamesStore>(
           create: (context) {
-            return BoardGamesStore(
+            return BoardGamesStore( 
               Provider.of<BoardGamesService>(
                 context,
                 listen: false,

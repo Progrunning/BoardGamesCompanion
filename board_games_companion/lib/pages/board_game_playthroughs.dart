@@ -23,8 +23,10 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final boardGamePlaythoughsStore =
-        Provider.of<BoardGamePlaythroughsStore>(context, listen: false);
+    final boardGamePlaythoughsStore = Provider.of<BoardGamePlaythroughsStore>(
+      context,
+      listen: false,
+    );
     final pageController = PageController(
         initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex);
     return Scaffold(

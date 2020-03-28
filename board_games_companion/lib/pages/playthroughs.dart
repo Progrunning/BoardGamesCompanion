@@ -46,6 +46,8 @@ class PlaythroughsPage extends StatelessWidget {
               if (store.loadDataState == LoadDataState.Loaded) {
                 final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
                 if (hasPlaythroughs) {
+                  store.playthroughs
+                      .sort((a, b) => b.startDate?.compareTo(a.startDate));
                   return CarouselSlider(
                     viewportFraction: .9,
                     enableInfiniteScroll: false,
@@ -55,7 +57,8 @@ class PlaythroughsPage extends StatelessWidget {
                         .map((index, playthough) {
                           return MapEntry(
                             index,
-                            PlaythroughItem(playthough, ++index),
+                            PlaythroughItem(
+                                playthough, store.playthroughs.length - index),
                           );
                         })
                         .values
