@@ -6,6 +6,7 @@ import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
+import 'package:board_games_companion/extensions/page_controller_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,11 +63,7 @@ class HomePage extends StatelessWidget {
             ],
             currentIndex: homeStore.boardGamesPageIndex,
             onTap: (pageIndex) {
-              _pageController.animateToPage(
-                pageIndex,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
+              _pageController.animateToTab(pageIndex);
             },
           ),
         );

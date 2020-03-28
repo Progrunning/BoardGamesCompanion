@@ -13,27 +13,27 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class PlaythroughsPage extends StatelessWidget {
-  final BoardGameDetails boardGameDetails;
+  final BoardGameDetails _boardGameDetails;
 
-  PlaythroughsPage(this.boardGameDetails);
+  PlaythroughsPage(this._boardGameDetails);
 
   static const double _minBoardGameImageHeight = 240;
 
   @override
   Widget build(BuildContext context) {
-    final _store = Provider.of<PlaythroughsStore>(
+    final playthroughsStore = Provider.of<PlaythroughsStore>(
       context,
       listen: false,
     );
-    _store.loadPlaythroughs(boardGameDetails);
+    playthroughsStore.loadPlaythroughs(_boardGameDetails);
 
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Hero(
-          tag: "${AnimationTags.boardGameImageHeroTag}${boardGameDetails?.id}",
+          tag: "${AnimationTags.boardGameImageHeroTag}${_boardGameDetails?.id}",
           child: BoardGameImage(
-            boardGameDetails: boardGameDetails,
+            boardGameDetails: _boardGameDetails,
             minImageHeight: _minBoardGameImageHeight,
           ),
         ),
@@ -47,10 +47,11 @@ class PlaythroughsPage extends StatelessWidget {
                 final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
                 if (hasPlaythroughs) {
                   return CarouselSlider(
-                    viewportFraction: 1.0,
+                    viewportFraction: .9,
+                    enableInfiniteScroll: false,
                     height: double.infinity,
                     items: store.playthroughs.map((playthough) {
-                      return PlaythroughItem();
+                      return PlaythroughItem(playthough);
                     }).toList(),
                   );
                 }

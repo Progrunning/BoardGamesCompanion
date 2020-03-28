@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:board_games_companion/app.dart';
+import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/player.dart';
@@ -31,6 +32,7 @@ void main() async {
   Hive.registerAdapter(BoardGameCategoryAdapter());
   Hive.registerAdapter(PlayerAdapter());
   Hive.registerAdapter(PlaythroughAdapter());
+  Hive.registerAdapter(PlaythroughStatusAdapter());
   Hive.registerAdapter(ScoreAdapter());
 
   FlutterError.onError = Crashlytics.instance.recordFlutterError;

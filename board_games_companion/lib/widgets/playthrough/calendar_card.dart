@@ -1,11 +1,15 @@
+import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/widgets/painters/divider_painter.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 
 class CalendarCard extends StatelessWidget {
-  const CalendarCard({
+  final DateTime _date;
+
+  const CalendarCard(
+    this._date, {
     Key key,
   }) : super(key: key);
 
@@ -18,8 +22,11 @@ class CalendarCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
-            Radius.circular(Styles.boardGameTileImageCircularRadius)),
-        boxShadow: [BoxShadow(blurRadius: 0.5)],
+          Radius.circular(Styles.boardGameTileImageCircularRadius),
+        ),
+        boxShadow: [
+          BoxShadow(blurRadius: 0.5),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -38,7 +45,7 @@ class CalendarCard extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                'Mar',
+                DateFormat(Constants.ShortMonthDateFormat).format(_date),
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -51,7 +58,7 @@ class CalendarCard extends StatelessWidget {
                 vertical: Dimensions.halfStandardSpacing),
             child: Center(
               child: Text(
-                '19',
+                _date.day.toString(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Dimensions.doubleExtraLargeFontSize),
@@ -70,7 +77,7 @@ class CalendarCard extends StatelessWidget {
             ),
           ),
           Text(
-            'Fri',
+            DateFormat(Constants.ShortWeekDayDateFormat).format(_date),
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),

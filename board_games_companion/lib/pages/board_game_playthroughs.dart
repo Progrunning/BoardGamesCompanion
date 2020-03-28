@@ -126,15 +126,18 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
     final newPlaythrough = await playthroughsStore.createPlaythrough(
         _boardGameDetails.id, selectedPlaythoughPlayers);
     if (newPlaythrough == null) {
-      SnackBar(
-        content: GenericErrorMessage(),
-        action: SnackBarAction(
-          label: 'Ok',
-          onPressed: () {
-            _scaffoldKey.currentState.hideCurrentSnackBar();
-          },
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: GenericErrorMessage(),
+          action: SnackBarAction(
+            label: 'Ok',
+            onPressed: () {
+              _scaffoldKey.currentState.hideCurrentSnackBar();
+            },
+          ),
         ),
       );
+      return;
     }
 
     pageController.animateToTab(_playthroughsPageIndex);

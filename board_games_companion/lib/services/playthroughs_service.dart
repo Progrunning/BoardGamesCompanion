@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/playthrough_player.dart';
@@ -45,6 +46,8 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     newPlaythrough.id = uuid.v4();
     newPlaythrough.boardGameId = boardGameId;
     newPlaythrough.playerIds = playthoughPlayerIds;
+    newPlaythrough.startDate = DateTime.now().toUtc();
+    newPlaythrough.status = PlaythroughStatus.Started;
 
     try {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
