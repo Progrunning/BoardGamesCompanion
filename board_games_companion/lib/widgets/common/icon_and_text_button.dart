@@ -58,6 +58,7 @@ class IconAndTextButton extends StatelessWidget {
     addIfNonNull(_buildText(), buttonElements);
 
     return RawMaterialButton(
+      constraints: BoxConstraints(),
       fillColor: fillColor,
       splashColor: splashColor,
       child: Padding(

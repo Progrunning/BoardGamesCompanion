@@ -6,6 +6,7 @@ import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
+import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/player/player_score_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
@@ -119,19 +120,48 @@ class PlaythroughItem extends StatelessWidget {
                           width: Dimensions.standardSpacing,
                         ),
                         Expanded(
-                          child: ListView.separated(
-                            itemCount: store.playerScore?.length ?? 0,
-                            separatorBuilder: (context, index) {
-                              return SizedBox(
-                                height: Dimensions.standardSpacing,
-                              );
-                            },
-                            itemBuilder: (context, index) {
-                              return PlayerScore(
-                                store.playerScore[index],
-                                medal: MedalEnum.Bronze,
-                              );
-                            },
+                          child: Stack(
+                            children: <Widget>[
+                              ListView.separated(
+                                itemCount: store.playerScore?.length ?? 0,
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    height: Dimensions.standardSpacing,
+                                  );
+                                },
+                                itemBuilder: (context, index) {
+                                  return PlayerScore(
+                                    store.playerScore[index],
+                                  );
+                                },
+                              ),
+                              Positioned(
+                                bottom: Dimensions.halfStandardSpacing,
+                                right: Dimensions.halfStandardSpacing,
+                                child: Row(
+                                  children: <Widget>[
+                                    IconAndTextButton(
+                                      icon: Icons.stop,
+                                      backgroundColor: Colors.red,
+                                      horizontalPadding:
+                                          Dimensions.standardSpacing,
+                                      verticalPadding:
+                                          Dimensions.standardSpacing,
+                                      onPressed: () => {},
+                                    ),
+                                    IconAndTextButton(
+                                      icon: Icons.pause,
+                                      backgroundColor: Colors.orange,
+                                      horizontalPadding:
+                                          Dimensions.standardSpacing,
+                                      verticalPadding:
+                                          Dimensions.standardSpacing,
+                                      onPressed: () => {},
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
                         )
                       ],

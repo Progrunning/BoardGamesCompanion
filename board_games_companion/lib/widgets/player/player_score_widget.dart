@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
@@ -9,13 +8,11 @@ import 'package:board_games_companion/models/player_score.dart'
     as player_score_model;
 
 class PlayerScore extends StatelessWidget {
-  final MedalEnum medal;
   final player_score_model.PlayerScore _playerScore;
 
   const PlayerScore(
     this._playerScore, {
     Key key,
-    @required this.medal,
   }) : super(key: key);
 
   @override
@@ -37,7 +34,7 @@ class PlayerScore extends StatelessWidget {
                     child: ShadowBox(
                       child: PlayerAvatar(
                         imageUri: store.player.imageUri,
-                        medal: medal,
+                        medal: store.medal,
                       ),
                       shadowOffset: Styles.defaultShadowOffset,
                       shadowColor: Theme.of(context).accentColor,

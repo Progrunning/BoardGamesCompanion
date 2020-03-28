@@ -49,16 +49,14 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
               boardGamePlaythroughStore.boardGamePlaythroughPageIndex !=
                       _playthroughsPageIndex &&
                   (playersStore.players?.isNotEmpty ?? false);
-          return Opacity(
-            opacity: _showStartNewGameButton
-                ? Styles.opaqueOpacity
-                : Styles.transparentOpacity,
-            child: IconAndTextButton(
-              title: 'Start New Game',
-              icon: Icons.play_arrow,
-              onPressed: () => _onStartNewGame(context, pageController),
-            ),
-          );
+          // TODO MK Move floating button to the tabbed page, instead of keeping it in the parent
+          return _showStartNewGameButton
+              ? IconAndTextButton(
+                  title: 'Start New Game',
+                  icon: Icons.play_arrow,
+                  onPressed: () => _onStartNewGame(context, pageController),
+                )
+              : Container();
         },
       ),
       bottomNavigationBar: Consumer<BoardGamePlaythroughsStore>(
