@@ -12,8 +12,8 @@ class PlayerService extends BaseHiveService<Player> {
         ?.toMap()
         ?.values
         ?.where((player) =>
-            !(player.isDeleted ?? false) ||
-            (playerIds?.contains(player.id) ?? false))
+            !(player.isDeleted ?? false) &&
+            (playerIds?.contains(player.id) ?? true))
         ?.toList();
   }
 

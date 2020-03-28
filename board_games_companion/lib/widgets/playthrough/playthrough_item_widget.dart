@@ -105,7 +105,10 @@ class PlaythroughItem extends StatelessWidget {
                                     Divider(
                                       height: Dimensions.standardSpacing,
                                     ),
-                                    PlaythroughItemDetail(store.durationInSeconds.toPlaythroughDuration(), 'duration'),
+                                    PlaythroughItemDetail(
+                                        store.durationInSeconds
+                                            .toPlaythroughDuration(),
+                                        'duration'),
                                   ],
                                 ),
                               ),
@@ -117,17 +120,19 @@ class PlaythroughItem extends StatelessWidget {
                         ),
                         Expanded(
                           child: ListView.separated(
-                              itemCount: 4,
-                              separatorBuilder: (context, index) {
-                                return SizedBox(
-                                  height: Dimensions.standardSpacing,
-                                );
-                              },
-                              itemBuilder: (context, index) {
-                                return PlayerScore(
-                                  medal: MedalEnum.Bronze,
-                                );
-                              }),
+                            itemCount: store.playerScore?.length ?? 0,
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: Dimensions.standardSpacing,
+                              );
+                            },
+                            itemBuilder: (context, index) {
+                              return PlayerScore(
+                                store.playerScore[index],
+                                medal: MedalEnum.Bronze,
+                              );
+                            },
+                          ),
                         )
                       ],
                     );

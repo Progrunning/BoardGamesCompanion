@@ -3,10 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ShadowBox extends StatelessWidget {
-  final Widget content;
+  final Widget child;
   final Color backgroundColor;
+  final Offset shadowOffset;
+  final Color shadowColor;
 
-  ShadowBox(this.content, [this.backgroundColor = Colors.white]);
+  ShadowBox({
+    @required this.child,
+    this.backgroundColor = Colors.white,
+    this.shadowColor = Styles.defaultShadowColor,
+    this.shadowOffset = Offset.zero,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +22,11 @@ class ShadowBox extends StatelessWidget {
           color: backgroundColor,
           boxShadow: [
             BoxShadow(
-                color: Styles.defaultShadowColor,
+                color: shadowColor,
+                offset: shadowOffset,
                 blurRadius: Styles.defaultShadowRadius),
           ],
         ),
-        child: content);
+        child: child);
   }
 }

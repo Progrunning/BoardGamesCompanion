@@ -38,18 +38,24 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
           ),
           fit: BoxFit.fitWidth,
           placeholder: (context, url) => ShadowBox(
-            Center(child: CircularProgressIndicator()),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
-          errorWidget: (context, url, error) => ShadowBox(Padding(
+          errorWidget: (context, url, error) => ShadowBox(
+            child: Padding(
               padding: const EdgeInsets.all(Dimensions.standardSpacing),
               child: Container(
                 child: Center(
-                    child: Text(
-                  widget.boardGame?.name ?? '',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
-                )),
-              ))),
+                  child: Text(
+                    widget.boardGame?.name ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(

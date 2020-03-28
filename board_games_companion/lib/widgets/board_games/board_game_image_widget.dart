@@ -49,7 +49,9 @@ class BoardGameImage extends StatelessWidget {
   Widget _wrapInShadowBox(Widget content) {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minImageHeight),
-      child: ShadowBox(content),
+      child: ShadowBox(
+        child: content,
+      ),
     );
   }
 }

@@ -4,10 +4,11 @@ import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class PlaythroughStore with ChangeNotifier {
   static const String unknownHighscoreValue = '-';
@@ -35,6 +36,9 @@ class PlaythroughStore with ChangeNotifier {
 
   List<Player> _players;
   List<Player> get players => _players;
+
+  List<PlayerScore> _playerScores;
+  List<PlayerScore> get playerScore => _playerScores;
 
   PlaythroughStore(this._playerService, this._scoreService);
 
@@ -67,6 +71,14 @@ class PlaythroughStore with ChangeNotifier {
       }
 
       _players = await _playerService.retrievePlayers(_playthrough.playerIds);
+
+      _playerScores = _players.map((p) {
+        final score = _scores.firstWhere(
+          (s) => s.playerId == p.id,
+          orElse: () => null,
+        );
+        return PlayerScore(p, score);
+      }).toList();
 
       _loadDataState = LoadDataState.Loaded;
     } catch (e, stack) {

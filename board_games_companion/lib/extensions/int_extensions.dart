@@ -30,8 +30,8 @@ extension IntExtensions on int {
       return '';
     }
 
-    final hours = (this / Constants.NumberOfSecondsInHour).round();
-    final minutes = (this / Constants.NumberOfSecondsInMinute).round();
+    final hours = (this / Constants.NumberOfSecondsInHour).floor();
+    final minutes = (this / Constants.NumberOfSecondsInMinute).floor();
 
     if (hours > 0) {
       return '${hours}h ${minutes - hours * Constants.NumberOfMinutesInHour}min';
