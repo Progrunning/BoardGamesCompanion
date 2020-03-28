@@ -21,7 +21,5 @@ enum PlaythroughStatus {
   @HiveField(0)
   Started,
   @HiveField(1)
-  Paused,
-  @HiveField(2)
   Finished,
 }

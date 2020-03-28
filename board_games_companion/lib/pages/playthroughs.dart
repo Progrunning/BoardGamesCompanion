@@ -58,7 +58,10 @@ class PlaythroughsPage extends StatelessWidget {
                           return MapEntry(
                             index,
                             PlaythroughItem(
-                                playthough, store.playthroughs.length - index),
+                              playthough,
+                              store.playthroughs.length - index,
+                              key: ValueKey(playthough.id),
+                            ),
                           );
                         })
                         .values

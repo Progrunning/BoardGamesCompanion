@@ -33,6 +33,9 @@ extension IntExtensions on int {
     final hours = (this / Constants.NumberOfSecondsInHour).floor();
     final minutes = (this / Constants.NumberOfSecondsInMinute).floor();
 
+    if (hours == 0) {
+      return '${minutes}m ${this - minutes * Constants.NumberOfSecondsInMinute}s';
+    }
     if (hours > 0) {
       return '${hours}h ${minutes - hours * Constants.NumberOfMinutesInHour}min';
     }

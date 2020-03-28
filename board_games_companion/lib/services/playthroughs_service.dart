@@ -58,4 +58,39 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
 
     return null;
   }
+
+  Future<bool> updatePlaythrough(Playthrough playthrough) async {
+    if ((playthrough?.id?.isEmpty ?? true) ||
+        !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+      return false;
+    }
+
+    try {
+      await storageBox.put(playthrough.id, playthrough);
+      return true;
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
+
+  Future<bool> deletePlaythrough(String playthroughId) async {
+    if ((playthroughId?.isEmpty ?? true) ||
+        !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+      return false;
+    }
+
+    var playthroughToDelete = storageBox.get(playthroughId);
+    if (playthroughToDelete == null ||
+        (playthroughToDelete.isDeleted ?? false)) {
+      return false;
+    }
+
+    playthroughToDelete.isDeleted = true;
+
+    await storageBox.put(playthroughId, playthroughToDelete);
+
+    return true;
+  }
 }

@@ -16,8 +16,6 @@ class PlaythroughStatusAdapter extends TypeAdapter<PlaythroughStatus> {
       case 0:
         return PlaythroughStatus.Started;
       case 1:
-        return PlaythroughStatus.Paused;
-      case 2:
         return PlaythroughStatus.Finished;
       default:
         return null;
@@ -30,11 +28,8 @@ class PlaythroughStatusAdapter extends TypeAdapter<PlaythroughStatus> {
       case PlaythroughStatus.Started:
         writer.writeByte(0);
         break;
-      case PlaythroughStatus.Paused:
-        writer.writeByte(1);
-        break;
       case PlaythroughStatus.Finished:
-        writer.writeByte(2);
+        writer.writeByte(1);
         break;
     }
   }

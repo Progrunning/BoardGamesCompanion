@@ -57,6 +57,23 @@ class PlaythroughsStore with ChangeNotifier {
     return newPlaythrough;
   }
 
+  Future<bool> deletePlaythrough(String playthroughId) async {
+    try {
+      final deleteSucceeded =
+          await _playthroughService.deletePlaythrough(playthroughId);
+      if (deleteSucceeded) {
+        _playthroughs.removeWhere((p) => p.id == playthroughId);
+        notifyListeners();
+      }
+      
+      return deleteSucceeded;
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
+
   @override
   void dispose() {
     _playthroughService.closeBox(HiveBoxes.Playthroughs);
