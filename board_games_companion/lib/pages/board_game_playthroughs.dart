@@ -85,5 +85,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
     store.boardGamePlaythroughPageIndex = pageIndex;
   }
 
-  void _onStartNewGame() {}
+  void _onStartNewGame() {
+    
+  }
 }

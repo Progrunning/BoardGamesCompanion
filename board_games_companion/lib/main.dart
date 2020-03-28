@@ -14,6 +14,7 @@ import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/start_playthrough_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -92,6 +93,14 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<BoardGamePlaythroughsStore>(
           create: (context) => BoardGamePlaythroughsStore(),
+        ),
+        ChangeNotifierProvider<StartPlaythroughStore>(
+          create: (context) => StartPlaythroughStore(
+            Provider.of<PlayersStore>(
+              context,
+              listen: false,
+            ),
+          ),
         ),
       ],
       child: BoardGamesCompanionApp(),
