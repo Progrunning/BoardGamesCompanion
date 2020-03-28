@@ -24,6 +24,9 @@ class PlaythroughStore with ChangeNotifier {
   int _daysSinceStart;
   int get daysSinceStart => _daysSinceStart;
 
+  int _durationInSeconds;
+  int get durationInSeconds => _durationInSeconds;
+
   List<Score> _scores;
   List<Score> get scores => _scores;
 
@@ -43,10 +46,12 @@ class PlaythroughStore with ChangeNotifier {
       return;
     }
 
+    final nowUtc = DateTime.now().toUtc();
     _playthrough = playthrough;
-    _daysSinceStart =
-        _playthrough.startDate.difference(DateTime.now().toUtc()).inDays;
-        
+    _daysSinceStart = nowUtc.difference(_playthrough.startDate).inDays;
+    final playthroughEndDate = _playthrough.endDate ?? nowUtc;
+    _durationInSeconds =
+        playthroughEndDate.difference(_playthrough.startDate).inSeconds;
 
     try {
       _scores = await _scoreService.retrieveScores(_playthrough.id);

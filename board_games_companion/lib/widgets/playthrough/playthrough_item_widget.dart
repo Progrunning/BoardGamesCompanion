@@ -105,7 +105,7 @@ class PlaythroughItem extends StatelessWidget {
                                     Divider(
                                       height: Dimensions.standardSpacing,
                                     ),
-                                    PlaythroughItemDetail('120min', 'duration'),
+                                    PlaythroughItemDetail(store.durationInSeconds.toPlaythroughDuration(), 'duration'),
                                   ],
                                 ),
                               ),

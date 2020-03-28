@@ -1,3 +1,5 @@
+import 'package:board_games_companion/common/constants.dart';
+
 extension IntExtensions on int {
   String toOrdinalAbbreviations() {
     if (this == null) {
@@ -21,5 +23,20 @@ extension IntExtensions on int {
             return "th";
         }
     }
+  }
+
+  String toPlaythroughDuration() {
+    if (this == null) {
+      return '';
+    }
+
+    final hours = (this / Constants.NumberOfSecondsInHour).round();
+    final minutes = (this / Constants.NumberOfSecondsInMinute).round();
+
+    if (hours > 0) {
+      return '${hours}h ${minutes - hours * Constants.NumberOfMinutesInHour}min';
+    }
+
+    return '${minutes}min';
   }
 }
