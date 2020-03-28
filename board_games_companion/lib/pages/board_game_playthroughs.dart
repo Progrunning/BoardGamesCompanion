@@ -4,40 +4,49 @@ import 'package:board_games_companion/pages/playthroughs.dart';
 import 'package:board_games_companion/pages/start_new_playthrough.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/start_playthrough_store.dart';
+import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
+import 'package:board_games_companion/extensions/page_controller_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BoardGamePlaythroughsPage extends StatelessWidget {
-  final BoardGameDetails boardGameDetails;
+  final BoardGameDetails _boardGameDetails;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  BoardGamePlaythroughsPage(this.boardGameDetails, {Key key}) : super(key: key);
+  BoardGamePlaythroughsPage(this._boardGameDetails, {Key key})
+      : super(key: key);
 
   static const int _playthroughsPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final _store =
+    final boardGamePlaythoughsStore =
         Provider.of<BoardGamePlaythroughsStore>(context, listen: false);
-    final _pageController = PageController(initialPage: _store.boardGamePlaythroughPageIndex);
+    final pageController = PageController(
+        initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex);
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Playthroughs'),
       ),
       body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) => _onTabPageChanged(index, _store),
+        controller: pageController,
+        onPageChanged: (index) =>
+            _onTabPageChanged(index, boardGamePlaythoughsStore),
         children: <Widget>[
-          PlaythroughsPage(boardGameDetails),
+          PlaythroughsPage(_boardGameDetails),
           StartNewPlaythroughPage(),
         ],
       ),
       floatingActionButton: Consumer2<BoardGamePlaythroughsStore, PlayersStore>(
-        builder: (_, boardGamePlaythroughStore, _playersStore, __) {
+        builder: (_, boardGamePlaythroughStore, playersStore, __) {
           final _showStartNewGameButton =
               boardGamePlaythroughStore.boardGamePlaythroughPageIndex !=
                       _playthroughsPageIndex &&
-                  (_playersStore.players?.isNotEmpty ?? false);
+                  (playersStore.players?.isNotEmpty ?? false);
           return Opacity(
             opacity: _showStartNewGameButton
                 ? Styles.opaqueOpacity
@@ -45,7 +54,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
             child: IconAndTextButton(
               title: 'Start New Game',
               icon: Icons.play_arrow,
-              onPressed: _onStartNewGame,
+              onPressed: () => _onStartNewGame(context, pageController),
             ),
           );
         },
@@ -64,7 +73,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
               ),
             ],
             onTap: (index) {
-              _onTabChanged(index, _pageController);
+              _onTabChanged(index, pageController);
             },
             currentIndex: store.boardGamePlaythroughPageIndex,
           );
@@ -74,18 +83,60 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
   }
 
   void _onTabChanged(int index, PageController pageController) {
-    pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
+    pageController.animateToTab(index);
+  }
+
+  void _onTabPageChanged(
+      int pageIndex, BoardGamePlaythroughsStore boardGamePlaythroughsStore) {
+    boardGamePlaythroughsStore.boardGamePlaythroughPageIndex = pageIndex;
+  }
+
+  Future<void> _onStartNewGame(
+      BuildContext context, PageController pageController) async {
+    final startPlaythroughStore = Provider.of<StartPlaythroughStore>(
+      context,
+      listen: false,
     );
-  }
 
-  void _onTabPageChanged(int pageIndex, BoardGamePlaythroughsStore store) {
-    store.boardGamePlaythroughPageIndex = pageIndex;
-  }
+    final selectedPlaythoughPlayers = startPlaythroughStore.playthroughPlayers
+        ?.where((pp) => pp.isChecked)
+        ?.toList();
 
-  void _onStartNewGame() {
-    
+    if (selectedPlaythoughPlayers?.isEmpty ?? true) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content:
+              Text('You need to select at least one player to start a game'),
+          action: SnackBarAction(
+            label: 'Ok',
+            onPressed: () {
+              _scaffoldKey.currentState.hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+      return;
+    }
+
+    final playthroughsStore = Provider.of<PlaythroughsStore>(
+      context,
+      listen: false,
+    );
+
+    final newPlaythrough = await playthroughsStore.createPlaythrough(
+        _boardGameDetails.id, selectedPlaythoughPlayers);
+    if (newPlaythrough == null) {
+      SnackBar(
+        content: GenericErrorMessage(),
+        action: SnackBarAction(
+          label: 'Ok',
+          onPressed: () {
+            _scaffoldKey.currentState.hideCurrentSnackBar();
+          },
+        ),
+      );
+    }
+
+    pageController.animateToTab(_playthroughsPageIndex);
   }
 }

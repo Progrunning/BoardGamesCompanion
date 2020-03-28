@@ -1,6 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 class BaseHiveService<T> {
+  @protected
+  final uuid = Uuid();
+
   Box<T> storageBox;
 
   void closeBox(String boxName) {

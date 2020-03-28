@@ -1,12 +1,9 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/services/hide_base_service.dart';
-import 'package:uuid/uuid.dart';
 
 class PlayerService extends BaseHiveService<Player> {
-  final _uuid = Uuid();
-
-  Future<List<Player>> retrievePlayers() async {
+    Future<List<Player>> retrievePlayers() async {
     if (!await ensureBoxOpen(HiveBoxes.Players)) {
       return List<Player>();
     }
@@ -24,7 +21,7 @@ class PlayerService extends BaseHiveService<Player> {
     }
 
     if (player.id?.isEmpty ?? true) {
-      player.id = _uuid.v4();
+      player.id = uuid.v4();
     }
 
     if (!await ensureBoxOpen(HiveBoxes.Players)) {

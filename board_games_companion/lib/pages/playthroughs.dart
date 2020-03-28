@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_image_widget.dart';
+import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/playthrough_item_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -66,8 +67,7 @@ class PlaythroughsPage extends StatelessWidget {
                 );
               } else if (store.loadDataState == LoadDataState.Error) {
                 return Center(
-                  child: Text(
-                      ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'),
+                  child: GenericErrorMessage(),
                 );
               }
 

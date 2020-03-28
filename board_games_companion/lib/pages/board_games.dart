@@ -3,6 +3,7 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_widget.dart';
+import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,8 +54,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
       );
     } else if (widget._boardGamesStore.loadDataState == LoadDataState.Error) {
       return Center(
-        child: Text(
-            ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'),
+        child: GenericErrorMessage(),
       );
     }
 

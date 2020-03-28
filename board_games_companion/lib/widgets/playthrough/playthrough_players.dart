@@ -27,12 +27,14 @@ class PlaythroughPlayers extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: ChangeNotifierProvider.value(
                   value: playthroughPlayers[index],
-                  child: Consumer<PlaythroughPlayer>(builder: (_, store, __) {
-                    return Checkbox(
-                      value: playthroughPlayers[index].isChecked,
-                      onChanged: (checked) {},
-                    );
-                  }),
+                  child: Consumer<PlaythroughPlayer>(
+                    builder: (_, store, __) {
+                      return Checkbox(
+                        value: playthroughPlayers[index].isChecked,
+                        onChanged: (checked) {},
+                      );
+                    },
+                  ),
                 ),
               ),
               Positioned.fill(

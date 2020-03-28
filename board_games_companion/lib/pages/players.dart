@@ -4,6 +4,8 @@ import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/custom_icon_button.dart';
+import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/player/player_grid_item.dart';
 import 'package:flutter/material.dart';
 
@@ -78,12 +80,11 @@ class _PlayersPageState extends State<PlayersPage> {
       );
     } else if (widget._playersStore.loadDataState == LoadDataState.Error) {
       return Center(
-        child: Text(
-            ' Oops, we ran into issue with retrieving your data. Please contact support at feedback@progrunning.net'),
+        child: GenericErrorMessage(),
       );
     }
 
-    return Center(child: CircularProgressIndicator());
+    return LoadingIndicator();
   }
 
   Future _navigateToCreateOrEditPlayer(
@@ -92,18 +93,5 @@ class _PlayersPageState extends State<PlayersPage> {
       context,
       player: player,
     );
-    // await Navigator.push(
-    //   context,
-    //   PageRouteBuilder(
-    //     transitionDuration: Duration(milliseconds: 500),
-    //     pageBuilder: (BuildContext context, Animation<double> animation,
-    //         Animation<double> secondaryAnimation) {
-    //       final playerStore = Provider.of<PlayersStore>(context);
-    //       playerStore.setPlayerToCreateOrEdit(player: player);
-
-    //       return CreateEditPlayerPage(playerStore);
-    //     },
-    //   ),
-    // );
   }
 }

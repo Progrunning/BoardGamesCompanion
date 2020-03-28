@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/playthrough_player.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,6 +44,17 @@ class PlaythroughsStore with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<Playthrough> createPlaythrough(
+      String boardGameId, List<PlaythroughPlayer> playthoughPlayers) async {
+    final newPlaythrough = await _playthroughService.createPlaythrough(
+        boardGameId, playthoughPlayers);
+
+    _playthroughs.add(newPlaythrough);
+    notifyListeners();
+
+    return newPlaythrough;
   }
 
   @override

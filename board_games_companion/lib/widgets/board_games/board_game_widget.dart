@@ -39,9 +39,9 @@ class BoardGameWidget extends StatelessWidget {
           SnackBar(
             duration: Duration(seconds: 10),
             content: Text(
-                "${_boardGameDetails.name} has been removed from your collection"),
+                '${_boardGameDetails.name} has been removed from your collection'),
             action: SnackBarAction(
-              label: "Undo",
+              label: 'Undo',
               onPressed: () async {
                 await _boardGamesStore.addOrUpdateBoardGame(_boardGameDetails);
               },
