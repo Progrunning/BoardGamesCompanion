@@ -26,31 +26,39 @@ class HomePage extends StatelessWidget {
       onPressed: () => _navigateToAddPlayerPage(context),
     );
 
-    return Consumer<HomeStore>(
-      builder: (_, homeStore, __) {
-        return Scaffold(
-          body: PageView(
-            controller: _pageController,
-            children: <Widget>[
-              Consumer<BoardGamesStore>(
-                builder: (_, boardGamesStore, __) {
-                  return BoardGamesPage(boardGamesStore);
-                },
-              ),
-              Consumer<PlayersStore>(
-                builder: (_, playersStore, __) {
-                  return PlayersPage(playersStore);
-                },
-              ),
-            ],
-            onPageChanged: (pageIndex) {
-              homeStore.boardGamesPageIndex = pageIndex;
+    return Scaffold(
+      body: PageView(
+        controller: _pageController,
+        children: <Widget>[
+          Consumer<BoardGamesStore>(
+            builder: (_, boardGamesStore, __) {
+              return BoardGamesPage(boardGamesStore);
             },
           ),
-          floatingActionButton: homeStore.boardGamesPageIndex == 0
+          Consumer<PlayersStore>(
+            builder: (_, playersStore, __) {
+              return PlayersPage(playersStore);
+            },
+          ),
+        ],
+        onPageChanged: (pageIndex) {
+          final homeStore = Provider.of<HomeStore>(
+            context,
+            listen: false,
+          );
+          homeStore.boardGamesPageIndex = pageIndex;
+        },
+      ),
+      floatingActionButton: Consumer<HomeStore>(
+        builder: (_, homeStore, __) {
+          return homeStore.boardGamesPageIndex == 0
               ? _addBoardGameButton
-              : _addPlayerButton,
-          bottomNavigationBar: BottomNavigationBar(
+              : _addPlayerButton;
+        },
+      ),
+      bottomNavigationBar: Consumer<HomeStore>(
+        builder: (_, homeStore, __) {
+          return BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.games),
@@ -65,9 +73,9 @@ class HomePage extends StatelessWidget {
             onTap: (pageIndex) {
               _pageController.animateToTab(pageIndex);
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

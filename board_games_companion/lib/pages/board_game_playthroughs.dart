@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/playthroughs.dart';
 import 'package:board_games_companion/pages/start_new_playthrough.dart';
