@@ -5,6 +5,7 @@ import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/stores/playthrough_duration_store.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
@@ -73,21 +74,31 @@ class PlaythroughItem extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 PlaythroughItemDetail(
-                                    store.daysSinceStart?.toString(),
-                                    'day(s) ago'),
+                                  store.daysSinceStart?.toString(),
+                                  'day(s) ago',
+                                ),
                                 Divider(
                                   height: Dimensions.standardSpacing,
                                 ),
                                 PlaythroughItemDetail(
-                                    '$_playthroughNumber${_playthroughNumber.toOrdinalAbbreviations()}',
-                                    'game'),
+                                  '$_playthroughNumber${_playthroughNumber.toOrdinalAbbreviations()}',
+                                  'game',
+                                ),
                                 Divider(
                                   height: Dimensions.standardSpacing,
                                 ),
-                                PlaythroughItemDetail(
-                                    store.durationInSeconds
-                                        .toPlaythroughDuration(),
-                                    'duration'),
+                                ChangeNotifierProvider(
+                                  create: (_) =>
+                                      PlaythroughDurationStore(_playthrough),
+                                  child: Consumer<PlaythroughDurationStore>(
+                                      builder: (_, store, __) {
+                                    return PlaythroughItemDetail(
+                                      store.durationInSeconds
+                                          .toPlaythroughDuration(),
+                                      'duration',
+                                    );
+                                  }),
+                                ),
                               ],
                             ),
                           ),
@@ -110,8 +121,8 @@ class PlaythroughItem extends StatelessWidget {
                               backgroundColor: Colors.red,
                               horizontalPadding: Dimensions.standardSpacing,
                               verticalPadding: Dimensions.standardSpacing,
-                              onPressed: () => _deletePlaythrough(
-                                  context, store),
+                              onPressed: () =>
+                                  _deletePlaythrough(context, store),
                             ),
                         ],
                       ),
@@ -182,8 +193,9 @@ class PlaythroughItem extends StatelessWidget {
       listen: false,
     );
 
-    final deleteSucceeded = await playthroughsStore.deletePlaythrough(playthroughStore.playthrough.id);
-    if(deleteSucceeded) {
+    final deleteSucceeded = await playthroughsStore
+        .deletePlaythrough(playthroughStore.playthrough.id);
+    if (deleteSucceeded) {
       playthroughStore.dispose();
     }
   }
