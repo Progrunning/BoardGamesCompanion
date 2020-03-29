@@ -15,8 +15,10 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
   final BoardGameDetails _boardGameDetails;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  BoardGamePlaythroughsPage(this._boardGameDetails, {Key key})
-      : super(key: key);
+  BoardGamePlaythroughsPage(
+    this._boardGameDetails, {
+    Key key,
+  }) : super(key: key);
 
   static const int _playthroughsPageIndex = 0;
 

@@ -30,12 +30,9 @@ class PlaythroughsPage extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        Hero(
-          tag: "${AnimationTags.boardGameImageHeroTag}${_boardGameDetails?.id}",
-          child: BoardGameImage(
-            _boardGameDetails,
-            minImageHeight: _minBoardGameImageHeight,
-          ),
+        BoardGameImage(
+          _boardGameDetails,
+          minImageHeight: _minBoardGameImageHeight,
         ),
         SizedBox(
           height: Dimensions.standardSpacing,

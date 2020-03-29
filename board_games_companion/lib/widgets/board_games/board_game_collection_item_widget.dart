@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/board_game_playthroughs.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/utilities/navigator_transitions.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_icon_button_widget.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_panel_widget.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_image_widget.dart';
@@ -84,15 +85,11 @@ Future<void> _navigateToGamePlaythroughsPage(
   BuildContext context,
   BoardGameDetails boardGameDetails,
 ) async {
-  await Navigator.push(
+  Navigator.push(
     context,
-    PageRouteBuilder(
-      transitionDuration: Duration(milliseconds: 500),
-      pageBuilder: (BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
-        return BoardGamePlaythroughsPage(boardGameDetails);
-      },
-    ),
+    NavigatorTransitions.fadeThrough((_, __, ___) {
+      return BoardGamePlaythroughsPage(boardGameDetails);
+    }),
   );
 }
 
