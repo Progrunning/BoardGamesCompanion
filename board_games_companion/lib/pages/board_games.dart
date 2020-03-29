@@ -49,7 +49,9 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
               value: widget._boardGamesStore.boardGames[index],
               child: Consumer<BoardGameDetails>(
                 builder: (_, store, __) {
-                  return BoardGameCollectionItemWidget();
+                  return BoardGameCollectionItemWidget(
+                    key: ValueKey(store.id),
+                  );
                 },
               ),
             );

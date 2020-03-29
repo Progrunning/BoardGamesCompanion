@@ -1,4 +1,5 @@
-import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/widgets/common/text/item_property_title_widget.dart';
+import 'package:board_games_companion/widgets/common/text/item_property_value_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,19 +13,8 @@ class PlaythroughItemDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(
-          title ?? '',
-          style: TextStyle(
-            fontSize: Dimensions.largeFontSize,
-          ),
-        ),
-        Text(
-          subtitle ?? '',
-          style: TextStyle(
-            fontSize: Dimensions.extraSmallFontSize,
-            color: Colors.grey,
-          ),
-        ),
+        ItemPropertyValue(title),
+        ItemPropertyTitle(subtitle),
       ],
     );
   }

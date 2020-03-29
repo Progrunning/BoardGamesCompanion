@@ -87,7 +87,7 @@ class PlayerScore extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               );
             },

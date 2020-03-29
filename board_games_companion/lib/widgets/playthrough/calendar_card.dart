@@ -1,9 +1,8 @@
-import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/widgets/painters/divider_painter.dart';
+import 'package:board_games_companion/extensions/date_time_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class CalendarCard extends StatelessWidget {
   final DateTime _date;
@@ -45,7 +44,7 @@ class CalendarCard extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                DateFormat(Constants.ShortMonthDateFormat).format(_date),
+                _date.toShortMonth('?'),
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -58,7 +57,7 @@ class CalendarCard extends StatelessWidget {
                 vertical: Dimensions.halfStandardSpacing),
             child: Center(
               child: Text(
-                _date.day.toString(),
+                _date?.day?.toString() ?? '?',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Dimensions.doubleExtraLargeFontSize),
@@ -77,7 +76,7 @@ class CalendarCard extends StatelessWidget {
             ),
           ),
           Text(
-            DateFormat(Constants.ShortWeekDayDateFormat).format(_date),
+            _date.toShortWeek('?'),
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),

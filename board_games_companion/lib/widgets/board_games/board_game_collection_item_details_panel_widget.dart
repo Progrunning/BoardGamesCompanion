@@ -1,16 +1,18 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_last_played_widget.dart';
 import 'package:flutter/material.dart';
 
 class BoardGameCollectionItemDetailsPanel extends StatelessWidget {
   const BoardGameCollectionItemDetailsPanel({
     Key key,
-    @required this.boardGameDetails,
+    @required boardGameDetails,
     @required double infoIconSize,
   })  : _infoIconSize = infoIconSize,
+        _boardGameDetails = boardGameDetails,
         super(key: key);
 
-  final BoardGameDetails boardGameDetails;
+  final BoardGameDetails _boardGameDetails;
   final double _infoIconSize;
 
   @override
@@ -31,18 +33,24 @@ class BoardGameCollectionItemDetailsPanel extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    '${boardGameDetails?.name ?? ''} (${boardGameDetails.yearPublished})',
-                    style: TextStyle(fontSize: Dimensions.largeFontSize),
+                    '${_boardGameDetails?.name ?? ''} (${_boardGameDetails.yearPublished})',
+                    style: TextStyle(
+                      fontSize: Dimensions.largeFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                // MK Imitate info icon
+                // MK Imitate info icon, so that title wraps correctly around the icon
                 SizedBox(
                   width: _infoIconSize + 2 * Dimensions.halfStandardSpacing,
                 ),
               ],
             ),
             SizedBox(
-              height: Dimensions.halfStandardSpacing,
+              height: Dimensions.standardSpacing,
+            ),
+            BoardGameCollectionItemDetailsLastPlayed(
+              boardGameDetails: _boardGameDetails,
             ),
           ],
         ),
