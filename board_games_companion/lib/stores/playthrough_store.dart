@@ -72,6 +72,7 @@ class PlaythroughStore with ChangeNotifier {
   }
 
   Future<void> stopPlaythrough() async {
+    // TODO MK This needs to update the playthrough numbers in the summary view (board collection games list)
     final oldStatus = playthrough.status;
 
     playthrough.status = PlaythroughStatus.Finished;

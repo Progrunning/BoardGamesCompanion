@@ -25,9 +25,9 @@ extension IntExtensions on int {
     }
   }
 
-  String toPlaythroughDuration() {
+  String toPlaythroughDuration([String fallbackValue]) {
     if (this == null) {
-      return '';
+      return fallbackValue ?? '';
     }
 
     final hours = (this / Constants.NumberOfSecondsInHour).floor();
@@ -38,6 +38,21 @@ extension IntExtensions on int {
     }
     if (hours > 0) {
       return '${hours}h ${minutes - hours * Constants.NumberOfMinutesInHour}min';
+    }
+
+    return '${minutes}min';
+  }
+  
+  String toAverageDuration([String fallbackValue]) {
+    if (this == null) {
+      return fallbackValue ?? '';
+    }
+
+    final hours = (this / Constants.NumberOfSecondsInHour).floor();
+    final minutes = (this / Constants.NumberOfSecondsInMinute).floor();
+
+    if (hours > 0) {
+      return '$hours.${(minutes / Constants.NumberOfMinutesInHour).floor()}h';
     }
 
     return '${minutes}min';

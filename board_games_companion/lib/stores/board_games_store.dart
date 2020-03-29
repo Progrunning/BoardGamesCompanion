@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
@@ -9,6 +11,7 @@ import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/extensions/scores_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -90,13 +93,13 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-// MK Retrieve players
+    // MK Retrieve players
     final players =
         (await _playerService.retrievePlayers()) ?? Iterable<Player>.empty();
     final Map<String, Player> playersById = Map.fromIterable(players,
         key: (p) => (p as Player).id, value: (p) => p as Player);
 
-// MK Retrieve playthroughs
+    // MK Retrieve playthroughs
     final Map<String, BoardGameDetails> boardGameDetailsMapById =
         Map.fromIterable(_boardGames,
             key: (bg) => (bg as BoardGameDetails).id,
@@ -113,53 +116,82 @@ class BoardGamesStore with ChangeNotifier {
         continue;
       }
 
-// MK Retrieve scores
+      // MK Retrieve scores
       final playthroughIds = boardGamePlaythroughs.map((p) => p.id);
       final playthroughsScores =
           (await _scoreService.retrieveScores(playthroughIds)) ??
               Iterable<Score>.empty();
       final Map<String, List<Score>> playthroughScoresByPlaythroughId =
           groupBy(playthroughsScores, (s) => s.playthroughId);
+      final Map<String, List<Score>> playthroughScoresByBoardGameId =
+          groupBy(playthroughsScores, (s) => s.boardGameId);
 
       final details = boardGameDetailsMapById[boardGameId];
       final playthroughs =
           boardGamePlaythroughsGroupedByBoardGameId[boardGameId];
 
       final finishedPlaythroughs = playthroughs
-          ?.where((p) => p.status == PlaythroughStatus.Finished)
+          ?.where((p) =>
+              p.status == PlaythroughStatus.Finished && p.endDate != null)
           ?.toList();
       finishedPlaythroughs?.sort((a, b) => b.endDate?.compareTo(a.endDate));
 
-      if (finishedPlaythroughs?.isNotEmpty ?? false) {
-        final lastPlaythrough = finishedPlaythroughs.first;
-        details.lastPlayed = lastPlaythrough.startDate;
+      _updateLastPlayedAndWinner(
+        finishedPlaythroughs,
+        details,
+        playthroughScoresByPlaythroughId,
+        playersById,
+      );
 
-        if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
-          return;
-        }
-
-        final lastPlaythroughScores =
-            playthroughScoresByPlaythroughId[lastPlaythrough.id]
-                ?.where((s) =>
-                    (s.value?.isNotEmpty ?? false) &&
-                    num.tryParse(s.value) != null)
-                ?.toList();
-        lastPlaythroughScores?.sort(
-            (a, b) => num.tryParse(a.value).compareTo(num.tryParse(b.value)));
-        if (lastPlaythroughScores?.isEmpty ?? true) {
-          return;
-        }
-
-        final bestScore = lastPlaythroughScores.first;
-        if (!playersById.containsKey(bestScore.playerId)) {
-          return;
-        }
-
-        details.lastWinner = PlayerScore(
-          playersById[bestScore.playerId],
-          bestScore,
-        );
+      details.numberOfGamesPlayed = finishedPlaythroughs?.length;
+      if (playthroughScoresByBoardGameId?.containsKey(details.id) ?? false) {
+        details.highscore = playthroughScoresByBoardGameId[details.id]
+            .onlyScoresWithValue()
+            .map((s) => num.tryParse(s.value))
+            .reduce(max)
+            .toString();
       }
+      details.averagePlaytimeInSeconds = (finishedPlaythroughs
+                  ?.map((p) => p.endDate.difference(p.startDate))
+                  ?.reduce((a, b) => a + b)
+                  ?.inSeconds ??
+              0 / finishedPlaythroughs?.length ??
+              1)
+          .floor();
+    }
+  }
+
+  void _updateLastPlayedAndWinner(
+      List<Playthrough> finishedPlaythroughs,
+      BoardGameDetails details,
+      Map<String, List<Score>> playthroughScoresByPlaythroughId,
+      Map<String, Player> playersById) {
+    if (finishedPlaythroughs?.isNotEmpty ?? false) {
+      final lastPlaythrough = finishedPlaythroughs.first;
+      details.lastPlayed = lastPlaythrough.startDate;
+
+      if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
+        return;
+      }
+
+      final lastPlaythroughScores =
+          playthroughScoresByPlaythroughId[lastPlaythrough.id]
+              .onlyScoresWithValue();
+      lastPlaythroughScores?.sort(
+          (a, b) => num.tryParse(a.value).compareTo(num.tryParse(b.value)));
+      if (lastPlaythroughScores?.isEmpty ?? true) {
+        return;
+      }
+
+      final lastPlaythroughBestScore = lastPlaythroughScores.first;
+      if (!playersById.containsKey(lastPlaythroughBestScore.playerId)) {
+        return;
+      }
+
+      details.lastWinner = PlayerScore(
+        playersById[lastPlaythroughBestScore.playerId],
+        lastPlaythroughBestScore,
+      );
     }
   }
 

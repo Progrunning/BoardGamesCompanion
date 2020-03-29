@@ -74,4 +74,31 @@ class BoardGameDetails extends BaseBoardGame {
       notifyListeners();
     }
   }
+
+  int _numberOfGamesPlayed;
+  int get numberOfGamesPlayed => _numberOfGamesPlayed;
+  set numberOfGamesPlayed(int value) {
+    if (_numberOfGamesPlayed != value) {
+      _numberOfGamesPlayed = value;
+      notifyListeners();
+    }
+  }
+
+  int _averagePlaytimeInSeconds;
+  int get averagePlaytimeInSeconds => _averagePlaytimeInSeconds;
+  set averagePlaytimeInSeconds(int value) {
+    if (_averagePlaytimeInSeconds != value) {
+      _averagePlaytimeInSeconds = value;
+      notifyListeners();
+    }
+  }
+
+  String _highscore;
+  String get highscore => _highscore;
+  set highscore(String value) {
+    if (_highscore != value) {
+      _highscore = value;
+      notifyListeners();
+    }
+  }
 }

@@ -30,7 +30,7 @@ class BoardGameCollectionItemDetailsLastPlayed extends StatelessWidget {
               boardGameDetails.lastPlayed,
             ),
             SizedBox(
-              width: Dimensions.halfStandardSpacing,
+              width: Dimensions.standardSpacing,
             ),
             Expanded(
               child: ItemPropertyValue(
