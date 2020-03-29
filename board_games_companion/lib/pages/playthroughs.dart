@@ -33,7 +33,7 @@ class PlaythroughsPage extends StatelessWidget {
         Hero(
           tag: "${AnimationTags.boardGameImageHeroTag}${_boardGameDetails?.id}",
           child: BoardGameImage(
-            boardGameDetails: _boardGameDetails,
+            _boardGameDetails,
             minImageHeight: _minBoardGameImageHeight,
           ),
         ),

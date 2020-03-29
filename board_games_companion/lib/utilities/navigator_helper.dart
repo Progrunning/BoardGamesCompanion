@@ -1,5 +1,4 @@
 import 'package:board_games_companion/models/hive/base_board_game.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/create_edit_player.dart';

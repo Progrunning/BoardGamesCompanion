@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
