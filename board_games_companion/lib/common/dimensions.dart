@@ -16,17 +16,18 @@ class Dimensions {
 
   static const double boardGameItemCollectionImageWidth = 150;
   static const double boardGameItemCollectionImageHeight = 150;
-  
+
   static const double boardGameRemoveIconSize = 40;
-  
+
   static const double boardGameDetailsHexagonSize = 80;
   static const double boardGameHexagonSize = 40;
-  
+
   static const int edgeNumberOfHexagon = 6;
-  
+
   static const double defaultPlayerAvatarWidth = 80;
   static const double defaultPlayerAvatarHeight = 110;
-  
+
   static const double defaultButtonIconSize = 20;
   
+  static const double floatingActionButtonBottomSpacing = 72;
 }

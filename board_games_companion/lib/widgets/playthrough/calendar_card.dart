@@ -44,7 +44,7 @@ class CalendarCard extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                _date.toShortMonth('?'),
+                _date.toShortMonth('-'),
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -57,7 +57,7 @@ class CalendarCard extends StatelessWidget {
                 vertical: Dimensions.halfStandardSpacing),
             child: Center(
               child: Text(
-                _date?.day?.toString() ?? '?',
+                _date?.day?.toString() ?? '-',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Dimensions.doubleExtraLargeFontSize),
@@ -76,7 +76,7 @@ class CalendarCard extends StatelessWidget {
             ),
           ),
           Text(
-            _date.toShortWeek('?'),
+            _date.toShortWeek('-'),
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),

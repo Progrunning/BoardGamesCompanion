@@ -42,7 +42,12 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
 
       return SafeArea(
         child: ListView.builder(
-          padding: EdgeInsets.all(Dimensions.standardSpacing),
+          padding: EdgeInsets.only(
+            left: Dimensions.standardSpacing,
+            top: Dimensions.standardSpacing,
+            right: Dimensions.standardSpacing,
+            bottom: Dimensions.floatingActionButtonBottomSpacing,
+          ),
           itemCount: widget._boardGamesStore.boardGames.length,
           itemBuilder: (BuildContext context, int index) {
             return ChangeNotifierProvider<BoardGameDetails>.value(

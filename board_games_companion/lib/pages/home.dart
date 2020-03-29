@@ -56,6 +56,7 @@ class HomePage extends StatelessWidget {
               : _addPlayerButton;
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: Consumer<HomeStore>(
         builder: (_, homeStore, __) {
           return BottomNavigationBar(

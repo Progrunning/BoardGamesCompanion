@@ -52,9 +52,9 @@ extension IntExtensions on int {
     final minutes = (this / Constants.NumberOfSecondsInMinute).floor();
 
     if (hours > 0) {
-      return '$hours.${(minutes / Constants.NumberOfMinutesInHour).floor()}h';
+      return '~$hours.${(minutes / Constants.NumberOfMinutesInHour).floor()}h';
     }
 
-    return '${minutes}min';
+    return '~${minutes}min';
   }
 }

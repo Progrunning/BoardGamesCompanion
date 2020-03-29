@@ -19,21 +19,21 @@ class BoardGameCollectionItemDetailsStatistics extends StatelessWidget {
       children: <Widget>[
         BoardGameCollectionItemDetailsStatisticsItem(
           boardGameDetails: boardGameDetails,
-          value: (boardGameDetails.numberOfGamesPlayed ?? 0).toString(),
+          value: boardGameDetails.numberOfGamesPlayed?.toString() ?? '-',
           icon: Icons.insert_chart,
           iconColor: Theme.of(context).accentColor,
           subtitle: 'Played games',
         ),
         BoardGameCollectionItemDetailsStatisticsItem(
           boardGameDetails: boardGameDetails,
-          value: (boardGameDetails.highscore ?? 0).toString(),
+          value: boardGameDetails.highscore?.toString() ?? '-',
           icon: Icons.show_chart,
           iconColor: Colors.red,
           subtitle: 'Highscore',
         ),
         BoardGameCollectionItemDetailsStatisticsItem(
           boardGameDetails: boardGameDetails,
-          value: '~${boardGameDetails.averagePlaytimeInSeconds.toAverageDuration('-')}',
+          value: '${boardGameDetails.averagePlaytimeInSeconds.toAverageDuration('-')}',
           icon: Icons.hourglass_empty,
           iconColor: Colors.blue,
           subtitle: 'Ave. playtime',
