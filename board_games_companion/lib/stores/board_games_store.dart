@@ -45,6 +45,15 @@ class BoardGamesStore with ChangeNotifier {
 
     if (existingBoardGameDetails == null) {
       _boardGames.add(boardGameDetails);
+    } else {
+      existingBoardGameDetails.imageUrl = boardGameDetails.imageUrl;
+      existingBoardGameDetails.name = boardGameDetails.name;
+      existingBoardGameDetails.rank = boardGameDetails.rank;
+      existingBoardGameDetails.rating = boardGameDetails.rating;
+      existingBoardGameDetails.votes = boardGameDetails.votes;
+      existingBoardGameDetails.yearPublished = boardGameDetails.yearPublished;
+      existingBoardGameDetails.categories = boardGameDetails.categories;
+      existingBoardGameDetails.description = boardGameDetails.description;
     }
 
     notifyListeners();

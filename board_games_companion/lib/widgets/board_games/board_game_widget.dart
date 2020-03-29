@@ -79,7 +79,7 @@ class BoardGameWidget extends StatelessWidget {
                           errorWidget: (context, url, error) => Container(
                             child: Center(
                               child: Text(
-                                '${_boardGameDetails?.name ?? ''} (${_boardGameDetails.yearPublished})',
+                                _boardGameDetails.name ?? '',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: Dimensions.extraLargeFontSize),
@@ -136,7 +136,7 @@ class BoardGameWidget extends StatelessWidget {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                _boardGameDetails?.name ?? '',
+                                '${_boardGameDetails?.name ?? ''} (${_boardGameDetails.yearPublished})',
                                 style: TextStyle(
                                     fontSize: Dimensions.largeFontSize),
                               ),
