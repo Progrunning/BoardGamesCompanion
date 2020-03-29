@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_last_played_widget.dart';
+import 'package:board_games_companion/widgets/board_games/collection_item/board_game_collection_item_details_last_winner_widget.dart';
 import 'package:flutter/material.dart';
 
 class BoardGameCollectionItemDetailsPanel extends StatelessWidget {
@@ -50,6 +51,12 @@ class BoardGameCollectionItemDetailsPanel extends StatelessWidget {
               height: Dimensions.standardSpacing,
             ),
             BoardGameCollectionItemDetailsLastPlayed(
+              boardGameDetails: _boardGameDetails,
+            ),
+            SizedBox(
+              height: Dimensions.standardSpacing,
+            ),
+            BoardGameCollectionItemDetailsLastWinner(
               boardGameDetails: _boardGameDetails,
             ),
           ],

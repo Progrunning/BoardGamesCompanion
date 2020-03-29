@@ -33,8 +33,8 @@ class PlayerScore extends StatelessWidget {
                     width: 100,
                     child: ShadowBox(
                       child: PlayerAvatar(
-                        imageUri: store.player.imageUri,
-                        medal: store.medal,
+                        imageUri: store?.player?.imageUri,
+                        medal: store?.medal,
                       ),
                       shadowOffset: Styles.defaultShadowOffset,
                       shadowColor: Theme.of(context).accentColor,
@@ -60,7 +60,7 @@ class PlayerScore extends StatelessWidget {
                                 indent: Dimensions.halfStandardSpacing,
                               ),
                               Text(
-                                store.player.name,
+                                store?.player?.name ?? '',
                                 style: TextStyle(
                                   fontSize: Dimensions.largeFontSize,
                                   fontWeight: FontWeight.bold,
@@ -78,7 +78,7 @@ class PlayerScore extends StatelessWidget {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                store.score?.value ?? '',
+                                store?.score?.value ?? '',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 56),
                               ),
