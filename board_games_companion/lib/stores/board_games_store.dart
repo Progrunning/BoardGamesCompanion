@@ -1,17 +1,29 @@
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/models/hive/player.dart';
+import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/services/playthroughs_service.dart';
+import 'package:board_games_companion/services/score_service.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 class BoardGamesStore with ChangeNotifier {
   final BoardGamesService _boardGamesService;
+  final PlaythroughService _playthroughService;
+  final ScoreService _scoreService;
+  final PlayerService _playerService;
 
   List<BoardGameDetails> _boardGames;
   LoadDataState _loadDataState = LoadDataState.None;
 
-  BoardGamesStore(this._boardGamesService);
+  BoardGamesStore(this._boardGamesService, this._playthroughService,
+      this._scoreService, this._playerService);
 
   LoadDataState get loadDataState => _loadDataState;
   List<BoardGameDetails> get boardGames => _boardGames;
@@ -22,6 +34,7 @@ class BoardGamesStore with ChangeNotifier {
 
     try {
       _boardGames = await _boardGamesService.retrieveBoardGames();
+      await _loadBoardGamesLatestData();
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
       _loadDataState = LoadDataState.Error;
@@ -72,9 +85,90 @@ class BoardGamesStore with ChangeNotifier {
     notifyListeners();
   }
 
+  Future _loadBoardGamesLatestData() async {
+    if (_boardGames?.isEmpty ?? true) {
+      return;
+    }
+
+// MK Retrieve players
+    final players =
+        (await _playerService.retrievePlayers()) ?? Iterable<Player>.empty();
+    final Map<String, Player> playersById = Map.fromIterable(players,
+        key: (p) => (p as Player).id, value: (p) => p as Player);
+
+// MK Retrieve playthroughs
+    final Map<String, BoardGameDetails> boardGameDetailsMapById =
+        Map.fromIterable(_boardGames,
+            key: (bg) => (bg as BoardGameDetails).id,
+            value: (bg) => bg as BoardGameDetails);
+    final boardGamePlaythroughs = (await _playthroughService
+            .retrievePlaythroughs(boardGameDetailsMapById.keys)) ??
+        Iterable<Playthrough>.empty();
+
+    final Map<String, List<Playthrough>>
+        boardGamePlaythroughsGroupedByBoardGameId =
+        groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
+    for (var boardGameId in boardGameDetailsMapById.keys) {
+      if (!boardGamePlaythroughsGroupedByBoardGameId.containsKey(boardGameId)) {
+        continue;
+      }
+
+// MK Retrieve scores
+      final playthroughIds = boardGamePlaythroughs.map((p) => p.id);
+      final playthroughsScores =
+          (await _scoreService.retrieveScores(playthroughIds)) ??
+              Iterable<Score>.empty();
+      final Map<String, List<Score>> playthroughScoresByPlaythroughId =
+          groupBy(playthroughsScores, (s) => s.playthroughId);
+
+      final details = boardGameDetailsMapById[boardGameId];
+      final playthroughs =
+          boardGamePlaythroughsGroupedByBoardGameId[boardGameId];
+
+      final finishedPlaythroughs = playthroughs
+          ?.where((p) => p.status == PlaythroughStatus.Finished)
+          ?.toList();
+      finishedPlaythroughs?.sort((a, b) => b.endDate?.compareTo(a.endDate));
+
+      if (finishedPlaythroughs?.isNotEmpty ?? false) {
+        final lastPlaythrough = finishedPlaythroughs.first;
+        details.lastPlayed = lastPlaythrough.startDate;
+
+        if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
+          return;
+        }
+
+        final lastPlaythroughScores =
+            playthroughScoresByPlaythroughId[lastPlaythrough.id]
+                ?.where((s) =>
+                    (s.value?.isNotEmpty ?? false) &&
+                    num.tryParse(s.value) != null)
+                ?.toList();
+        lastPlaythroughScores?.sort(
+            (a, b) => num.tryParse(a.value).compareTo(num.tryParse(b.value)));
+        if (lastPlaythroughScores?.isEmpty ?? true) {
+          return;
+        }
+
+        final bestScore = lastPlaythroughScores.first;
+        if (!playersById.containsKey(bestScore.playerId)) {
+          return;
+        }
+
+        details.lastWinner = PlayerScore(
+          playersById[bestScore.playerId],
+          bestScore,
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
     _boardGamesService.closeBox(HiveBoxes.BoardGames);
+    _playthroughService.closeBox(HiveBoxes.Playthroughs);
+    _scoreService.closeBox(HiveBoxes.Scores);
+    _playerService.closeBox(HiveBoxes.Players);
 
     super.dispose();
   }

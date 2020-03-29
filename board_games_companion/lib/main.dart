@@ -69,8 +69,20 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<BoardGamesStore>(
           create: (context) {
-            return BoardGamesStore( 
+            return BoardGamesStore(
               Provider.of<BoardGamesService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlaythroughService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<ScoreService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlayerService>(
                 context,
                 listen: false,
               ),

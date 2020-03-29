@@ -35,8 +35,8 @@ class PlaythroughsStore with ChangeNotifier {
     notifyListeners();
 
     try {
-      _playthroughs =
-          await _playthroughService.retrievePlaythroughs(_selectedBoardGame.id);
+      _playthroughs = await _playthroughService
+          .retrievePlaythroughs([_selectedBoardGame.id]);
       _loadDataState = LoadDataState.Loaded;
     } catch (e, stack) {
       _loadDataState = LoadDataState.Error;
@@ -65,7 +65,7 @@ class PlaythroughsStore with ChangeNotifier {
         _playthroughs.removeWhere((p) => p.id == playthroughId);
         notifyListeners();
       }
-      
+
       return deleteSucceeded;
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);

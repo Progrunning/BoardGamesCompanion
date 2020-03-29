@@ -50,9 +50,8 @@ class PlaythroughStore with ChangeNotifier {
     _playthrough = playthrough;
     _daysSinceStart = nowUtc.difference(_playthrough.startDate).inDays;
 
-
     try {
-      _scores = await _scoreService.retrieveScores(_playthrough.id);
+      _scores = await _scoreService.retrieveScores([_playthrough.id]);
       _players = await _playerService.retrievePlayers(_playthrough.playerIds);
 
       _playerScores = _players.map((p) {

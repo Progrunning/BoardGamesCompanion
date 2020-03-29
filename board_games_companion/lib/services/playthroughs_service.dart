@@ -6,8 +6,8 @@ import 'package:board_games_companion/services/hide_base_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class PlaythroughService extends BaseHiveService<Playthrough> {
-  Future<List<Playthrough>> retrievePlaythroughs(String boardGameId) async {
-    if (boardGameId?.isEmpty ?? true) {
+  Future<List<Playthrough>> retrievePlaythroughs(Iterable<String> boardGameIds) async {
+    if (boardGameIds?.isEmpty ?? true) {
       return List<Playthrough>();
     }
 
@@ -20,7 +20,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
         ?.values
         ?.where((playthrough) =>
             !(playthrough.isDeleted ?? false) &&
-            playthrough.boardGameId == boardGameId)
+            boardGameIds.contains(playthrough.boardGameId))
         ?.toList();
   }
 

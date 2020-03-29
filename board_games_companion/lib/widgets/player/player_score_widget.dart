@@ -42,7 +42,9 @@ class PlayerScore extends StatelessWidget {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.standardSpacing,
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
