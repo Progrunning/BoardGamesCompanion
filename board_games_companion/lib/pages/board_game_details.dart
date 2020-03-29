@@ -2,7 +2,6 @@ import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/styles.dart';
-import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
@@ -12,54 +11,50 @@ import 'package:flutter/material.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
 import 'package:provider/provider.dart';
 
-class BoardGamesDetailsPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _BoardGamesDetailsPage();
-}
+class BoardGamesDetailsPage extends StatelessWidget {
+  final String _boardGameId;
+  final String _boardGameName;
 
-class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
-  BoardGameDetails _boardGameDetails;
-  bool _isRefreshing;
+  BoardGamesDetailsPage(this._boardGameId, this._boardGameName);
 
   @override
   Widget build(BuildContext context) {
+    bool _isRefreshing;
     final _boardGamesGeekService = Provider.of<BoardGamesGeekService>(context);
     final _boardGamesStore = Provider.of<BoardGamesStore>(context);
 
-    final BoardGame boardGameArgument =
-        ModalRoute.of(context).settings.arguments;
-
-    if (boardGameArgument?.name?.isEmpty ?? true) {
+    if (_boardGameId?.isEmpty ?? true) {
       return Scaffold(
         appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
           child: Center(
-              child: Text(
-                  'Oops, something went wrong. Sorry, we couldn\'t show the details of selected board game')),
+            child: Text(
+                'Oops, something went wrong. Sorry, we couldn\'t show the details of selected board game'),
+          ),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(boardGameArgument?.name ?? ''),
+        title: Text(_boardGameName ?? ''),
       ),
       body: FutureBuilder(
-          future: _boardGamesGeekService.retrieveDetails(boardGameArgument?.id),
+          future: _boardGamesGeekService.retrieveDetails(_boardGameId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               _isRefreshing = false;
 
-              _boardGameDetails = snapshot.data as BoardGameDetails;
-              if (_boardGameDetails != null) {
+              final boardGameDetails = snapshot.data as BoardGameDetails;
+              if (boardGameDetails != null) {
                 return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
                       Stack(
                         children: <Widget>[
                           BoardGameImage(
-                            boardGameDetails: _boardGameDetails,
+                            boardGameDetails: boardGameDetails,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(
@@ -77,7 +72,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                                         .withAlpha(Styles.opacity90Percent),
                                     child: Center(
                                       child: Text(
-                                        (_boardGameDetails.rating ?? 0)
+                                        (boardGameDetails.rating ?? 0)
                                             .toStringAsFixed(Constants
                                                 .BoardGameRatingNumberOfDecimalPlaces),
                                         style: TextStyle(
@@ -97,11 +92,11 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         height: Dimensions.standardSpacing,
                       ),
                       StarRating(
-                        rating: _boardGameDetails.rating ?? 0,
+                        rating: boardGameDetails.rating ?? 0,
                         color: Theme.of(context).accentColor,
                         size: 30,
                       ),
-                      if (_boardGameDetails.categories.isNotEmpty)
+                      if (boardGameDetails.categories.isNotEmpty)
                         SizedBox(
                           height: Dimensions.standardSpacing,
                         ),
@@ -109,7 +104,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         direction: Axis.horizontal,
                         spacing: Dimensions.standardSpacing,
                         alignment: WrapAlignment.spaceEvenly,
-                        children: _boardGameDetails.categories
+                        children: boardGameDetails.categories
                             .map<Widget>((category) {
                           return Chip(
                             padding: EdgeInsets.all(Dimensions.standardSpacing),
@@ -126,7 +121,7 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                         padding:
                             const EdgeInsets.all(Dimensions.standardSpacing),
                         child: Text(
-                          _boardGameDetails.description
+                          boardGameDetails.description
                               .replaceAll('&#10;&#10;', "\n\n"),
                           textAlign: TextAlign.justify,
                           style: TextStyle(fontSize: Dimensions.mediumFontSize),
@@ -153,9 +148,8 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
                     RaisedButton(
                       child: Text('Refresh'),
                       onPressed: () {
-                        setState(() {
-                          _isRefreshing = true;
-                        });
+                        // TODO MK Use provider to handle state of this page
+                        _isRefreshing = true;
                       },
                     )
                   ],
@@ -169,7 +163,8 @@ class _BoardGamesDetailsPage extends State<BoardGamesDetailsPage> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await _boardGamesStore.addOrUpdateBoardGame(_boardGameDetails);
+          // TOOD MK Fix it
+          // await _boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
           Navigator.popUntil(context, ModalRoute.withName(Routes.home));
         },
         tooltip: 'Add a board game',

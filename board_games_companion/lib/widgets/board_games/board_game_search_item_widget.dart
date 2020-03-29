@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -113,8 +114,10 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
         ),
         Positioned.fill(child: StackRippleEffect(
           onTap: () {
-            Navigator.pushNamed(context, Routes.boardGameDetails,
-                arguments: widget.boardGame);
+            NavigatorHelper.navigateToBoardGameDetails(
+              context,
+              widget.boardGame,
+            );
           },
         ))
       ],

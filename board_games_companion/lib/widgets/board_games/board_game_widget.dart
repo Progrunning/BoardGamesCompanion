@@ -5,7 +5,7 @@ import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/board_game_playthroughs.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/widgets/board_games/star_rating_widget.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 
 class BoardGameWidget extends StatelessWidget {
   BoardGameWidget({Key key}) : super(key: key);
+
+  static const double _infoIconSize = 32;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class BoardGameWidget extends StatelessWidget {
                           errorWidget: (context, url, error) => Container(
                             child: Center(
                               child: Text(
-                                _boardGameDetails?.name ?? '',
+                                '${_boardGameDetails?.name ?? ''} (${_boardGameDetails.yearPublished})',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: Dimensions.extraLargeFontSize),
@@ -120,28 +122,34 @@ class BoardGameWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Dimensions.halfStandardSpacing,
+                      horizontal: Dimensions.standardSpacing,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        Text(
-                          _boardGameDetails?.name ?? '',
-                          style: TextStyle(fontSize: Dimensions.largeFontSize),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                _boardGameDetails?.name ?? '',
+                                style: TextStyle(
+                                    fontSize: Dimensions.largeFontSize),
+                              ),
+                            ),
+                            // MK Imitate info icon
+                            SizedBox(
+                              width: _infoIconSize +
+                                  2 * Dimensions.halfStandardSpacing,
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: Dimensions.halfStandardSpacing,
-                        ),
-                        StarRating(
-                          rating: _boardGameDetails.rating ?? 0,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        SizedBox(
-                          height: Dimensions.halfStandardSpacing,
-                        ),
-                        Text(
-                          '${(_boardGameDetails.rating ?? 0).toStringAsFixed(Constants.BoardGameRatingNumberOfDecimalPlaces)} / ${_boardGameDetails.votes ?? 0}',
-                          style: TextStyle(fontSize: Dimensions.smallFontSize),
                         ),
                       ],
                     ),
@@ -152,29 +160,59 @@ class BoardGameWidget extends StatelessWidget {
             Positioned.fill(
               child: StackRippleEffect(
                 onTap: () async {
-                  await _navigateToGamePlaythroughsPage(context, _boardGameDetails);
+                  await _navigateToGamePlaythroughsPage(
+                      context, _boardGameDetails);
                 },
               ),
-            )
+            ),
+            Positioned(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(
+                    Dimensions.halfStandardSpacing,
+                  ),
+                  child: InkWell(
+                    child: Icon(
+                      Icons.info,
+                      size: _infoIconSize,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onTap: () => _navigateToBoardGameDetails(
+                      context,
+                      _boardGameDetails,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  Future<void> _navigateToGamePlaythroughsPage(
-    BuildContext context,
-    BoardGameDetails boardGameDetails,
-  ) async {
-    await Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 500),
-        pageBuilder: (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-          return BoardGamePlaythroughsPage(boardGameDetails);
-        },
-      ),
-    );
-  }
+Future<void> _navigateToGamePlaythroughsPage(
+  BuildContext context,
+  BoardGameDetails boardGameDetails,
+) async {
+  await Navigator.push(
+    context,
+    PageRouteBuilder(
+      transitionDuration: Duration(milliseconds: 500),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return BoardGamePlaythroughsPage(boardGameDetails);
+      },
+    ),
+  );
+}
+
+void _navigateToBoardGameDetails(
+    BuildContext context, BoardGameDetails boardGameDetails) {
+  NavigatorHelper.navigateToBoardGameDetails(
+    context,
+    boardGameDetails,
+  );
 }

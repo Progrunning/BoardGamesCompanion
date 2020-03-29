@@ -47,7 +47,11 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
           itemBuilder: (BuildContext context, int index) {
             return ChangeNotifierProvider<BoardGameDetails>.value(
               value: widget._boardGamesStore.boardGames[index],
-              child: BoardGameWidget(),
+              child: Consumer<BoardGameDetails>(
+                builder: (_, store, __) {
+                  return BoardGameWidget();
+                },
+              ),
             );
           },
         ),

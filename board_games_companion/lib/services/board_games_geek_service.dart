@@ -132,6 +132,13 @@ class BoardGamesGeekService {
         boardGameDetails.imageUrl =
             boardGameDetailsItem.findAllElements('image').first.text;
 
+        boardGameDetails.yearPublished = int.tryParse(boardGameDetailsItem
+            .findAllElements('yearpublished')
+            .first
+            .attributes
+            .first
+            .value);
+
         final boardGameDetailCategories =
             boardGameDetailsItem.findAllElements('link');
         for (final boardGameDetailCategory in boardGameDetailCategories) {
