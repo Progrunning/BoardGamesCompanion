@@ -12,13 +12,12 @@ class StartPlaythroughStore with ChangeNotifier {
 
   Future<void> loadPlaythroughPlayers() async {
     await _playersStore.loadPlayers();
-    if (_playersStore.players?.isEmpty ?? true) {
-      return;
-    }
 
-    _playthroughPlayers = _playersStore.players.map(
-      (p) => PlaythroughPlayer(p),
-    ).toList();
+    _playthroughPlayers = _playersStore?.players
+        ?.map(
+          (p) => PlaythroughPlayer(p),
+        )
+        ?.toList();
 
     notifyListeners();
   }

@@ -41,7 +41,11 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
             _onTabPageChanged(index, boardGamePlaythoughsStore),
         children: <Widget>[
           PlaythroughsPage(_boardGameDetails),
-          StartNewPlaythroughPage(),
+          Consumer<PlayersStore>(
+            builder: (_, __, ___) {
+              return StartNewPlaythroughPage();
+            },
+          ),
         ],
       ),
       floatingActionButton: Consumer2<BoardGamePlaythroughsStore, PlayersStore>(

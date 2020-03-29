@@ -26,7 +26,11 @@ class _AddBoardGamesPageState extends State<AddBoardGamesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _boardGamesGeekService = Provider.of<BoardGamesGeekService>(context);
+    final _boardGamesGeekService = Provider.of<BoardGamesGeekService>(
+      context,
+      listen: false,
+    );
+    
     return Scaffold(
         appBar: AppBar(
           title: Text('Add Board Games'),
