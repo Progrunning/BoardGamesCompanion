@@ -57,6 +57,25 @@ class PlaythroughsStore with ChangeNotifier {
     return newPlaythrough;
   }
 
+  Future<bool> updatePlaythrough(Playthrough playthrough) async {
+    if (playthrough?.id?.isEmpty ?? true) {
+      return false;
+    }
+
+    try {
+      final updateSuceeded =
+          await _playthroughService.updatePlaythrough(playthrough);
+      if (updateSuceeded) {
+        notifyListeners();
+        return true;
+      }
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
+
   Future<bool> deletePlaythrough(String playthroughId) async {
     try {
       final deleteSucceeded =

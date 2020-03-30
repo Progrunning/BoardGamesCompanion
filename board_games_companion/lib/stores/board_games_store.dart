@@ -37,7 +37,7 @@ class BoardGamesStore with ChangeNotifier {
 
     try {
       _boardGames = await _boardGamesService.retrieveBoardGames();
-      await _loadBoardGamesLatestData();
+      await loadBoardGamesLatestData();
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
       _loadDataState = LoadDataState.Error;
@@ -88,7 +88,7 @@ class BoardGamesStore with ChangeNotifier {
     notifyListeners();
   }
 
-  Future _loadBoardGamesLatestData() async {
+  Future<void> loadBoardGamesLatestData() async {
     if (_boardGames?.isEmpty ?? true) {
       return;
     }
@@ -112,7 +112,14 @@ class BoardGamesStore with ChangeNotifier {
         boardGamePlaythroughsGroupedByBoardGameId =
         groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
     for (var boardGameId in boardGameDetailsMapById.keys) {
+      final details = boardGameDetailsMapById[boardGameId];
+
       if (!boardGamePlaythroughsGroupedByBoardGameId.containsKey(boardGameId)) {
+        details.lastPlayed = null;
+        details.lastWinner = null;
+        details.numberOfGamesPlayed = null;
+        details.highscore = null;
+        details.averagePlaytimeInSeconds = null;
         continue;
       }
 
@@ -126,7 +133,6 @@ class BoardGamesStore with ChangeNotifier {
       final Map<String, List<Score>> playthroughScoresByBoardGameId =
           groupBy(playthroughsScores, (s) => s.boardGameId);
 
-      final details = boardGameDetailsMapById[boardGameId];
       final playthroughs =
           boardGamePlaythroughsGroupedByBoardGameId[boardGameId];
 
@@ -143,22 +149,28 @@ class BoardGamesStore with ChangeNotifier {
         playersById,
       );
 
-      details.numberOfGamesPlayed = finishedPlaythroughs?.length;
-      if (playthroughScoresByBoardGameId?.containsKey(details.id) ?? false) {
-        details.highscore = playthroughScoresByBoardGameId[details.id]
-            .onlyScoresWithValue()
-            .map((s) => num.tryParse(s.value))
-            .reduce(max)
-            .toString();
+      if (finishedPlaythroughs?.isNotEmpty ?? false) {
+        details.numberOfGamesPlayed = finishedPlaythroughs?.length;
+        if (playthroughScoresByBoardGameId?.containsKey(details.id) ?? false) {
+          details.highscore = playthroughScoresByBoardGameId[details.id]
+              .onlyScoresWithValue()
+              .map((s) => num.tryParse(s.value))
+              .reduce(max)
+              .toString();
+        }
+
+        details.averagePlaytimeInSeconds = ((finishedPlaythroughs
+                            ?.map((p) => p.endDate.difference(p.startDate))
+                            ?.reduce((a, b) => a + b)
+                            ?.inSeconds ??
+                        0) /
+                    finishedPlaythroughs?.length ??
+                1)
+            .floor();
       }
-      details.averagePlaytimeInSeconds = (finishedPlaythroughs
-                  ?.map((p) => p.endDate.difference(p.startDate))
-                  ?.reduce((a, b) => a + b)
-                  ?.inSeconds ??
-              0 / finishedPlaythroughs?.length ??
-              1)
-          .floor();
     }
+
+    notifyListeners();
   }
 
   void _updateLastPlayedAndWinner(

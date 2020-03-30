@@ -67,28 +67,6 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),
         ),
-        ChangeNotifierProvider<BoardGamesStore>(
-          create: (context) {
-            return BoardGamesStore(
-              Provider.of<BoardGamesService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<PlaythroughService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<ScoreService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<PlayerService>(
-                context,
-                listen: false,
-              ),
-            );
-          },
-        ),
         ChangeNotifierProvider<PlayersStore>(
           create: (context) {
             return PlayersStore(
@@ -120,6 +98,33 @@ class App extends StatelessWidget {
             ),
           ),
         ),
+        ChangeNotifierProxyProvider<PlaythroughsStore, BoardGamesStore>(
+            create: (context) {
+          return BoardGamesStore(
+            Provider.of<BoardGamesService>(
+              context,
+              listen: false,
+            ),
+            Provider.of<PlaythroughService>(
+              context,
+              listen: false,
+            ),
+            Provider.of<ScoreService>(
+              context,
+              listen: false,
+            ),
+            Provider.of<PlayerService>(
+              context,
+              listen: false,
+            ),
+          );
+        }, update: (_, playthroughStore, boardGamesStore) {
+          if (playthroughStore.loadDataState == LoadDataState.Loaded) {
+            boardGamesStore.loadBoardGamesLatestData();
+          }
+
+          return boardGamesStore;
+        }),
       ],
       child: BoardGamesCompanionApp(),
     );

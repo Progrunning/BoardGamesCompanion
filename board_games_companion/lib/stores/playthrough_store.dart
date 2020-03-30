@@ -4,8 +4,8 @@ import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,9 +14,10 @@ class PlaythroughStore with ChangeNotifier {
 
   final PlayerService _playerService;
   final ScoreService _scoreService;
-  final PlaythroughService _playthroughService;
+  final PlaythroughsStore _playthroughStore;
 
   LoadDataState _loadDataState;
+
 
   LoadDataState get loadDataState => _loadDataState;
 
@@ -36,7 +37,10 @@ class PlaythroughStore with ChangeNotifier {
   List<PlayerScore> get playerScore => _playerScores;
 
   PlaythroughStore(
-      this._playerService, this._scoreService, this._playthroughService);
+    this._playerService,
+    this._scoreService,
+    this._playthroughStore,
+  );
 
   Future<void> loadPlaythrough(Playthrough playthrough) async {
     _loadDataState = LoadDataState.Loading;
@@ -72,14 +76,13 @@ class PlaythroughStore with ChangeNotifier {
   }
 
   Future<bool> stopPlaythrough() async {
-    // TODO MK This needs to update the playthrough numbers in the summary view (board collection games list)
     final oldStatus = playthrough.status;
 
     playthrough.status = PlaythroughStatus.Finished;
     playthrough.endDate = DateTime.now().toUtc();
 
     final updateSucceeded =
-        await _playthroughService.updatePlaythrough(playthrough);
+        await _playthroughStore.updatePlaythrough(playthrough);
     if (!updateSucceeded) {
       playthrough.status = oldStatus;
       playthrough.endDate = null;

@@ -3,7 +3,6 @@ import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/stores/playthrough_duration_store.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
@@ -172,12 +171,12 @@ class PlaythroughItem extends StatelessWidget {
       context,
       listen: false,
     );
-    final playthroughService = Provider.of<PlaythroughService>(
+    final playthroughsStore = Provider.of<PlaythroughsStore>(
       context,
       listen: false,
     );
     final playthroughStore =
-        PlaythroughStore(playerService, scoreService, playthroughService);
+        PlaythroughStore(playerService, scoreService, playthroughsStore);
     playthroughStore.loadPlaythrough(_playthrough);
     return playthroughStore;
   }
