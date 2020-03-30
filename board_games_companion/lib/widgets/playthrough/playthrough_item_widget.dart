@@ -188,15 +188,40 @@ class PlaythroughItem extends StatelessWidget {
 
   Future<void> _deletePlaythrough(
       BuildContext context, PlaythroughStore playthroughStore) async {
-    final playthroughsStore = Provider.of<PlaythroughsStore>(
-      context,
-      listen: false,
-    );
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Are you sure you want to delete this game?'),
+          elevation: 2,
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Delete'),
+              color: Colors.red,
+              onPressed: () async {
+                final playthroughsStore = Provider.of<PlaythroughsStore>(
+                  context,
+                  listen: false,
+                );
 
-    final deleteSucceeded = await playthroughsStore
-        .deletePlaythrough(playthroughStore.playthrough.id);
-    if (deleteSucceeded) {
-      playthroughStore.dispose();
-    }
+                final deleteSucceeded = await playthroughsStore
+                    .deletePlaythrough(playthroughStore.playthrough.id);
+                if (deleteSucceeded) {
+                  playthroughStore.dispose();
+                }
+
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

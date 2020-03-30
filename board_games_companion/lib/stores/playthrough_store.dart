@@ -71,7 +71,7 @@ class PlaythroughStore with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> stopPlaythrough() async {
+  Future<bool> stopPlaythrough() async {
     // TODO MK This needs to update the playthrough numbers in the summary view (board collection games list)
     final oldStatus = playthrough.status;
 
@@ -83,9 +83,11 @@ class PlaythroughStore with ChangeNotifier {
     if (!updateSucceeded) {
       playthrough.status = oldStatus;
       playthrough.endDate = null;
-      return;
+      return false;
     }
 
     notifyListeners();
+
+    return true;
   }
 }

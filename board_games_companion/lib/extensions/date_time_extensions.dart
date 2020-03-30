@@ -21,11 +21,11 @@ extension DateTimeExtensions on DateTime {
   String toDaysAgo() {
     final daysAgoText = 'day(s) ago';
     if (this == null) {
-      return '? $daysAgoText';
+      return '- $daysAgoText';
     }
 
     final nowUtc = DateTime.now().toUtc();
-    final daysAgo = this.difference(nowUtc).inDays;
+    final daysAgo = nowUtc.difference(this).inDays;
 
     return '$daysAgo $daysAgoText';
   }
