@@ -1,7 +1,7 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/common/text/item_property_title_widget.dart';
-import 'package:board_games_companion/widgets/player/player_score_widget.dart';
+import 'package:board_games_companion/widgets/player/scores/player_score_widget.dart';
 import 'package:flutter/material.dart';
 
 class BoardGameCollectionItemDetailsLastWinner extends StatelessWidget {

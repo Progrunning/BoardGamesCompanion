@@ -10,7 +10,7 @@ import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
-import 'package:board_games_companion/widgets/player/player_score_widget.dart';
+import 'package:board_games_companion/widgets/player/scores/player_score_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
 import 'package:board_games_companion/widgets/playthrough/playthrough_item_detail_widget.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
