@@ -31,6 +31,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
     final pageController = PageController(
         initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Playthroughs'),

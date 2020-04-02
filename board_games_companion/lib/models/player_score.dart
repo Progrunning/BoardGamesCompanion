@@ -21,8 +21,8 @@ class PlayerScore with ChangeNotifier {
     this._score,
   );
 
-  void updatePlayerScore(String score, int place) {
-    if ((score?.isEmpty ?? true) || place == null) {
+  void updatePlayerScore(String score, [int place]) {
+    if ((score?.isEmpty ?? true)) {
       return;
     }
 

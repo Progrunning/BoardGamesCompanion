@@ -76,14 +76,14 @@ class PlaythroughItem extends StatelessWidget {
                                   store.daysSinceStart?.toString(),
                                   'day(s) ago',
                                 ),
-                                Divider(
+                                SizedBox(
                                   height: Dimensions.standardSpacing,
                                 ),
                                 PlaythroughItemDetail(
                                   '$_playthroughNumber${_playthroughNumber.toOrdinalAbbreviations()}',
                                   'game',
                                 ),
-                                Divider(
+                                SizedBox(
                                   height: Dimensions.standardSpacing,
                                 ),
                                 ChangeNotifierProvider(
@@ -139,6 +139,7 @@ class PlaythroughItem extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return PlayerScore(
                               store.playerScore[index],
+                              readonly: false,
                             );
                           },
                         ),
