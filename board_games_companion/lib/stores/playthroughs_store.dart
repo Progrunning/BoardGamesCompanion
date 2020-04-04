@@ -11,39 +11,30 @@ class PlaythroughsStore with ChangeNotifier {
   final PlaythroughService _playthroughService;
 
   BoardGameDetails _selectedBoardGame;
-  LoadDataState _loadDataState;
   List<Playthrough> _playthroughs;
 
   PlaythroughsStore(this._playthroughService);
 
   BoardGameDetails get selectedBoardGame => _selectedBoardGame;
 
-  LoadDataState get loadDataState => _loadDataState;
-
   List<Playthrough> get playthroughs => _playthroughs;
 
-  Future<void> loadPlaythroughs(BoardGameDetails boardGameDetails) async {
+  Future<List<Playthrough>> loadPlaythroughs(
+      BoardGameDetails boardGameDetails) async {
     if (boardGameDetails?.id?.isEmpty ?? true) {
-      _loadDataState = LoadDataState.Error;
-      notifyListeners();
-
-      return;
+      return Iterable<Playthrough>.empty();
     }
 
     _selectedBoardGame = boardGameDetails;
-    _loadDataState = LoadDataState.Loading;
-    notifyListeners();
 
     try {
       _playthroughs = await _playthroughService
           .retrievePlaythroughs([_selectedBoardGame.id]);
-      _loadDataState = LoadDataState.Loaded;
     } catch (e, stack) {
-      _loadDataState = LoadDataState.Error;
       Crashlytics.instance.recordError(e, stack);
     }
 
-    notifyListeners();
+    return _playthroughs ?? Iterable<Playthrough>.empty();
   }
 
   Future<Playthrough> createPlaythrough(

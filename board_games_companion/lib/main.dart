@@ -126,11 +126,8 @@ class App extends StatelessWidget {
 
           boardGamesStore.loadBoardGames();
           return boardGamesStore;
-        }, update: (_, playthroughStore, boardGamesStore) {
-          if (playthroughStore.loadDataState == LoadDataState.Loaded) {
-            boardGamesStore.loadBoardGamesLatestData();
-          }
-
+        }, update: (_, playthroughsStore, boardGamesStore) {
+          boardGamesStore.loadBoardGamesLatestData();
           return boardGamesStore;
         }),
       ],

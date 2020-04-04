@@ -30,6 +30,12 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
     );
     final pageController = PageController(
         initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex);
+
+    final playthroughsStore = Provider.of<PlaythroughsStore>(
+      context,
+      listen: false,
+    );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
@@ -41,7 +47,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
         onPageChanged: (index) =>
             _onTabPageChanged(index, boardGamePlaythoughsStore),
         children: <Widget>[
-          PlaythroughsPage(_boardGameDetails),
+          PlaythroughsPage(_boardGameDetails, playthroughsStore),
           Consumer<PlayersStore>(
             builder: (_, __, ___) {
               return StartNewPlaythroughPage();
