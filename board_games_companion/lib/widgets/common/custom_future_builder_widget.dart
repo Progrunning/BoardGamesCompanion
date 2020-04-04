@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier>
     extends StatelessWidget {
   final Future<TFuture> _future;
-  final Widget Function(BuildContext context, TStore) _success;
+  final Widget Function(BuildContext context, TStore store) _success;
 
   ConsumerFutureBuilder({
     @required future,

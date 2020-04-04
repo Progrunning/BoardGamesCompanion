@@ -10,15 +10,15 @@ class StartPlaythroughStore with ChangeNotifier {
   List<PlaythroughPlayer> _playthroughPlayers;
   List<PlaythroughPlayer> get playthroughPlayers => _playthroughPlayers;
 
-  Future<void> loadPlaythroughPlayers() async {
-    await _playersStore.loadPlayers();
+  Future<List<PlaythroughPlayer>> loadPlaythroughPlayers() async {
+    final players = await _playersStore.loadPlayers();
 
-    _playthroughPlayers = _playersStore?.players
+    _playthroughPlayers = players
         ?.map(
           (p) => PlaythroughPlayer(p),
         )
         ?.toList();
 
-    notifyListeners();
+    return _playthroughPlayers ?? Iterable<PlaythroughPlayer>.empty();
   }
 }

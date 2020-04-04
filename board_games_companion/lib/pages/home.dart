@@ -3,7 +3,6 @@ import 'package:board_games_companion/pages/board_games.dart';
 import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
-import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/extensions/page_controller_extensions.dart';
@@ -35,11 +34,7 @@ class HomePage extends StatelessWidget {
               return BoardGamesPage(boardGamesStore);
             },
           ),
-          Consumer<PlayersStore>(
-            builder: (_, playersStore, __) {
-              return PlayersPage(playersStore);
-            },
-          ),
+          PlayersPage(),
         ],
         onPageChanged: (pageIndex) {
           final homeStore = Provider.of<HomeStore>(

@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
