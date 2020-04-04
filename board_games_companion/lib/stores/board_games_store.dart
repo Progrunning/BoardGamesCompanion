@@ -194,6 +194,9 @@ class BoardGamesStore with ChangeNotifier {
       lastPlaythroughScores?.sort(
           (a, b) => num.tryParse(b.value).compareTo(num.tryParse(a.value)));
       if (lastPlaythroughScores?.isEmpty ?? true) {
+        if (details.lastWinner != null) {
+          details.lastWinner = null;
+        }
         return;
       }
 

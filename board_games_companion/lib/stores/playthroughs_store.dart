@@ -21,7 +21,7 @@ class PlaythroughsStore with ChangeNotifier {
   Future<List<Playthrough>> loadPlaythroughs(
       BoardGameDetails boardGameDetails) async {
     if (boardGameDetails?.id?.isEmpty ?? true) {
-      return Iterable<Playthrough>.empty();
+      return List<Playthrough>();
     }
 
     _selectedBoardGame = boardGameDetails;
@@ -33,7 +33,7 @@ class PlaythroughsStore with ChangeNotifier {
       Crashlytics.instance.recordError(e, stack);
     }
 
-    return _playthroughs ?? Iterable<Playthrough>.empty();
+    return _playthroughs ?? List<Playthrough>();
   }
 
   Future<Playthrough> createPlaythrough(

@@ -17,7 +17,7 @@ class PlayersStore with ChangeNotifier {
 
   Future<List<Player>> loadPlayers() async {
     if (_players != null) {
-      return Iterable<Player>.empty();
+      return _players;
     }
 
     try {
@@ -26,7 +26,7 @@ class PlayersStore with ChangeNotifier {
       Crashlytics.instance.recordError(e, stack);
     }
 
-    return _players ?? Iterable<Player>.empty();
+    return _players ?? List<Player>();
   }
 
   Future<bool> addOrUpdatePlayer(Player player) async {

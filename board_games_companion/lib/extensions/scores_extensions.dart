@@ -6,6 +6,6 @@ extension ScoresExtesions on List<Score> {
             ?.where((s) =>
                 (s.value?.isNotEmpty ?? false) && num.tryParse(s.value) != null)
             ?.toList() ??
-        Iterable<Score>.empty();
+        List<Score>();
   }
 }

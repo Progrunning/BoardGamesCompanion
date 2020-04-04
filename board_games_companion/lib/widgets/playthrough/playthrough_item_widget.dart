@@ -211,11 +211,8 @@ class PlaythroughItem extends StatelessWidget {
                   listen: false,
                 );
 
-                final deleteSucceeded = await playthroughsStore
+                await playthroughsStore
                     .deletePlaythrough(playthroughStore.playthrough.id);
-                if (deleteSucceeded) {
-                  playthroughStore.dispose();
-                }
 
                 Navigator.of(context).pop();
               },

@@ -19,6 +19,6 @@ class StartPlaythroughStore with ChangeNotifier {
         )
         ?.toList();
 
-    return _playthroughPlayers ?? Iterable<PlaythroughPlayer>.empty();
+    return _playthroughPlayers ?? List<PlaythroughPlayer>();
   }
 }
