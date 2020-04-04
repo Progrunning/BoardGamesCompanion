@@ -105,7 +105,7 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<PlaythroughsStore, BoardGamesStore>(
             create: (context) {
-          return BoardGamesStore(
+          final boardGamesStore = BoardGamesStore(
             Provider.of<BoardGamesService>(
               context,
               listen: false,
@@ -123,6 +123,9 @@ class App extends StatelessWidget {
               listen: false,
             ),
           );
+
+          boardGamesStore.loadBoardGames();
+          return boardGamesStore;
         }, update: (_, playthroughStore, boardGamesStore) {
           if (playthroughStore.loadDataState == LoadDataState.Loaded) {
             boardGamesStore.loadBoardGamesLatestData();

@@ -7,27 +7,18 @@ import 'package:board_games_companion/widgets/common/generic_error_message_widge
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BoardGamesPage extends StatefulWidget {
+class BoardGamesPage extends StatelessWidget {
   final BoardGamesStore _boardGamesStore;
 
-  BoardGamesPage(this._boardGamesStore, {Key key}) : super(key: key);
-
-  @override
-  _BoardGamesPageState createState() => _BoardGamesPageState();
-}
-
-class _BoardGamesPageState extends State<BoardGamesPage> {
-  @override
-  void initState() {
-    super.initState();
-
-    widget._boardGamesStore.loadBoardGames();
-  }
+  BoardGamesPage(
+    this._boardGamesStore, {
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (widget._boardGamesStore.loadDataState == LoadDataState.Loaded) {
-      if (widget._boardGamesStore.boardGames?.isEmpty ?? true) {
+    if (_boardGamesStore.loadDataState == LoadDataState.Loaded) {
+      if (_boardGamesStore.boardGames?.isEmpty ?? true) {
         return Padding(
           padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
           child: Center(
@@ -37,8 +28,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
         );
       }
 
-      widget._boardGamesStore.boardGames
-          .sort((a, b) => a.name?.compareTo(b.name));
+      _boardGamesStore.boardGames.sort((a, b) => a.name?.compareTo(b.name));
 
       return SafeArea(
         child: ListView.builder(
@@ -48,10 +38,10 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
             right: Dimensions.standardSpacing,
             bottom: Dimensions.floatingActionButtonBottomSpacing,
           ),
-          itemCount: widget._boardGamesStore.boardGames.length,
+          itemCount: _boardGamesStore.boardGames.length,
           itemBuilder: (BuildContext context, int index) {
             return ChangeNotifierProvider<BoardGameDetails>.value(
-              value: widget._boardGamesStore.boardGames[index],
+              value: _boardGamesStore.boardGames[index],
               child: Consumer<BoardGameDetails>(
                 builder: (_, store, __) {
                   return BoardGameCollectionItemWidget(
@@ -63,7 +53,7 @@ class _BoardGamesPageState extends State<BoardGamesPage> {
           },
         ),
       );
-    } else if (widget._boardGamesStore.loadDataState == LoadDataState.Error) {
+    } else if (_boardGamesStore.loadDataState == LoadDataState.Error) {
       return Center(
         child: GenericErrorMessage(),
       );

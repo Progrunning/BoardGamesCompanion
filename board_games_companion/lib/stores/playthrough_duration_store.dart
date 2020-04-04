@@ -42,7 +42,7 @@ class PlaythroughDurationStore with ChangeNotifier {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 }
