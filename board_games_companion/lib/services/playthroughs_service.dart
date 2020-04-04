@@ -1,12 +1,19 @@
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/playthrough_player.dart';
 import 'package:board_games_companion/services/hide_base_service.dart';
+import 'package:board_games_companion/services/score_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class PlaythroughService extends BaseHiveService<Playthrough> {
-  Future<List<Playthrough>> retrievePlaythroughs(Iterable<String> boardGameIds) async {
+  final ScoreService scoreService;
+
+  PlaythroughService(this.scoreService);
+
+  Future<List<Playthrough>> retrievePlaythroughs(
+      Iterable<String> boardGameIds) async {
     if (boardGameIds?.isEmpty ?? true) {
       return List<Playthrough>();
     }
@@ -31,13 +38,13 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return null;
     }
 
-    final playthoughPlayerIds = playthoughPlayers
+    final playthroughPlayerIds = playthoughPlayers
         .map(
           (p) => p.player?.id,
         )
         .toList();
 
-    if (playthoughPlayerIds.isEmpty ||
+    if (playthroughPlayerIds.isEmpty ||
         !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return null;
     }
@@ -45,12 +52,27 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     final newPlaythrough = Playthrough();
     newPlaythrough.id = uuid.v4();
     newPlaythrough.boardGameId = boardGameId;
-    newPlaythrough.playerIds = playthoughPlayerIds;
+    newPlaythrough.playerIds = playthroughPlayerIds;
     newPlaythrough.startDate = DateTime.now().toUtc();
     newPlaythrough.status = PlaythroughStatus.Started;
+    newPlaythrough.scoreIds = List<String>();
 
     try {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
+
+      for (var playthroughPlayerId in playthroughPlayerIds) {
+        final playerScore = Score();
+        playerScore.boardGameId = boardGameId;
+        playerScore.playerId = playthroughPlayerId;
+        playerScore.playthroughId = newPlaythrough.id;
+        if (!await scoreService.addOrUpdateScore(playerScore)) {
+          Crashlytics.instance.log(
+              'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId');
+        } else {
+          newPlaythrough.scoreIds.add(playerScore.id);
+        }
+      }
+
       return newPlaythrough;
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);

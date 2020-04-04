@@ -58,11 +58,16 @@ class App extends StatelessWidget {
         Provider<PlayerService>(
           create: (context) => PlayerService(),
         ),
-        Provider<PlaythroughService>(
-          create: (context) => PlaythroughService(),
-        ),
         Provider<ScoreService>(
           create: (context) => ScoreService(),
+        ),
+        Provider<PlaythroughService>(
+          create: (context) => PlaythroughService(
+            Provider.of<ScoreService>(
+              context,
+              listen: false,
+            ),
+          ),
         ),
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),

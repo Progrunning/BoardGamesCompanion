@@ -51,7 +51,7 @@ class PlaythroughItem extends StatelessWidget {
           padding: const EdgeInsets.all(
             Dimensions.standardSpacing,
           ),
-          child: ChangeNotifierProvider(
+          child: ChangeNotifierProvider<PlaythroughStore>(
             create: (context) => _createAndLoadPlatythroughStore(context),
             child: Consumer<PlaythroughStore>(
               builder: (_, store, __) {
@@ -90,13 +90,14 @@ class PlaythroughItem extends StatelessWidget {
                                   create: (_) =>
                                       PlaythroughDurationStore(_playthrough),
                                   child: Consumer<PlaythroughDurationStore>(
-                                      builder: (_, store, __) {
-                                    return PlaythroughItemDetail(
-                                      store.durationInSeconds
-                                          .toPlaythroughDuration(),
-                                      'duration',
-                                    );
-                                  }),
+                                    builder: (_, store, __) {
+                                      return PlaythroughItemDetail(
+                                        store.durationInSeconds
+                                            .toPlaythroughDuration(),
+                                        'duration',
+                                      );
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
@@ -130,7 +131,7 @@ class PlaythroughItem extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.separated(
-                          itemCount: store.playerScore?.length ?? 0,
+                          itemCount: store.playerScores?.length ?? 0,
                           separatorBuilder: (context, index) {
                             return SizedBox(
                               height: Dimensions.standardSpacing,
@@ -138,7 +139,7 @@ class PlaythroughItem extends StatelessWidget {
                           },
                           itemBuilder: (context, index) {
                             return PlayerScore(
-                              store.playerScore[index],
+                              store.playerScores[index],
                               readonly: false,
                             );
                           },

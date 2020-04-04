@@ -18,7 +18,6 @@ class PlaythroughStore with ChangeNotifier {
 
   LoadDataState _loadDataState;
 
-
   LoadDataState get loadDataState => _loadDataState;
 
   Playthrough _playthrough;
@@ -34,7 +33,7 @@ class PlaythroughStore with ChangeNotifier {
   List<Player> get players => _players;
 
   List<PlayerScore> _playerScores;
-  List<PlayerScore> get playerScore => _playerScores;
+  List<PlayerScore> get playerScores => _playerScores;
 
   PlaythroughStore(
     this._playerService,
@@ -63,7 +62,12 @@ class PlaythroughStore with ChangeNotifier {
           (s) => s.playerId == p.id,
           orElse: () => null,
         );
-        return PlayerScore(p, score);
+        
+        return PlayerScore(
+          p,
+          score,
+          _scoreService,
+        );
       }).toList();
 
       _loadDataState = LoadDataState.Loaded;

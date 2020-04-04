@@ -1,10 +1,14 @@
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/services/score_service.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 class PlayerScore with ChangeNotifier {
   final Player _player;
+  final ScoreService _scoreService;
+
   Player get player => _player;
 
   final Score _score;
@@ -19,11 +23,12 @@ class PlayerScore with ChangeNotifier {
   PlayerScore(
     this._player,
     this._score,
+    this._scoreService,
   );
 
-  void updatePlayerScore(String score, [int place]) {
+  Future<bool> updatePlayerScore(String score, [int place]) async {
     if ((score?.isEmpty ?? true)) {
-      return;
+      return false;
     }
 
     _score.value = score;
@@ -44,6 +49,14 @@ class PlayerScore with ChangeNotifier {
         break;
     }
 
-    notifyListeners();
+    try {
+      await _scoreService.addOrUpdateScore(_score);
+      notifyListeners();
+      return true;
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
   }
 }

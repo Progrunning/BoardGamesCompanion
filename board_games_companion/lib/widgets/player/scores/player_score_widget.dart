@@ -1,8 +1,11 @@
+import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
+import 'package:board_games_companion/stores/playthrough_store.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
+import 'package:board_games_companion/widgets/player/scores/player_score_edit_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:board_games_companion/models/player_score.dart'
@@ -29,22 +32,31 @@ class PlayerScore extends StatelessWidget {
           value: _playerScore,
           child: Consumer<player_score_model.PlayerScore>(
             builder: (_, store, __) {
+              Widget playerAvatar = SizedBox(
+                height: 100,
+                width: 100,
+                child: ShadowBox(
+                  child: PlayerAvatar(
+                    imageUri: store?.player?.imageUri,
+                    medal: store?.medal,
+                  ),
+                  shadowOffset: Styles.defaultShadowOffset,
+                  shadowColor: Theme.of(context).accentColor,
+                ),
+              );
+              if ((store?.player?.id?.isNotEmpty ?? false) &&
+                  (store.score?.id?.isNotEmpty ?? false)) {
+                playerAvatar = Hero(
+                    tag:
+                        '${AnimationTags.playerImageHeroTag}${store?.player?.id}${store?.score?.id}',
+                    child: playerAvatar);
+              }
+
               return Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: ShadowBox(
-                      child: PlayerAvatar(
-                        imageUri: store?.player?.imageUri,
-                        medal: store?.medal,
-                      ),
-                      shadowOffset: Styles.defaultShadowOffset,
-                      shadowColor: Theme.of(context).accentColor,
-                    ),
-                  ),
+                  playerAvatar,
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -76,18 +88,8 @@ class PlayerScore extends StatelessWidget {
                             ],
                           ),
                           if (editMode)
-                            Material(
-                              child: TextFormField(
-                                initialValue: store.score?.value,
-                                autofocus: true,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  labelText: 'Score',
-                                ),
-                                onFieldSubmitted: (value) {
-                                  store.updatePlayerScore(value);
-                                },
-                              ),
+                            PlayerScoreEdit(
+                              playerScore: store,
                             ),
                           if (!editMode)
                             Text(
@@ -96,27 +98,32 @@ class PlayerScore extends StatelessWidget {
                                 color: Colors.grey,
                               ),
                             ),
-                          if (!readonly)
+                          if (!editMode)
                             Expanded(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  Text(
-                                    store?.score?.value ?? '-',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 56),
+                                  Expanded(
+                                    child: Text(
+                                      store?.score?.value ?? '-',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 32),
+                                    ),
                                   ),
-                                  IconAndTextButton(
-                                    icon: Icons.edit,
-                                    horizontalPadding:
-                                        Dimensions.standardSpacing,
-                                    verticalPadding: Dimensions.standardSpacing,
-                                    onPressed: () =>
-                                        _showCreateOrEditScoreDialog(
-                                            context, store),
+                                  SizedBox(
+                                    width: Dimensions.standardSpacing,
                                   ),
+                                  if (!readonly)
+                                    IconAndTextButton(
+                                      icon: Icons.edit,
+                                      horizontalPadding:
+                                          Dimensions.standardSpacing,
+                                      onPressed: () =>
+                                          _showCreateOrEditScoreDialog(
+                                              context, store),
+                                    ),
                                 ],
                               ),
                             ),
@@ -135,13 +142,20 @@ class PlayerScore extends StatelessWidget {
 
   Future<void> _showCreateOrEditScoreDialog(
       BuildContext context, player_score_model.PlayerScore playerScore) async {
+    final playthroughStore = Provider.of<PlaythroughStore>(
+      context,
+      listen: false,
+    );
+
     await showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (_) {
-        return SafeArea(
-          child: AlertDialog(
-            title: Text('${playerScore.player.name}\'s score'),
-            content: PlayerScore(
+        return AlertDialog(
+          title: Text('${playerScore.player.name}\'s score'),
+          content: ChangeNotifierProvider.value(
+            value: playthroughStore,
+            child: PlayerScore(
               playerScore,
               editMode: true,
             ),

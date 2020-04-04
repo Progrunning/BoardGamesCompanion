@@ -14,7 +14,7 @@ class ItemPropertyValue extends StatelessWidget {
     return Text(
       value ?? '',
       style: TextStyle(
-        fontSize: Dimensions.largeFontSize,
+        fontSize: Dimensions.mediumFontSize,
       ),
     );
   }

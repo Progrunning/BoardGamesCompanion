@@ -152,11 +152,13 @@ class BoardGamesStore with ChangeNotifier {
       if (finishedPlaythroughs?.isNotEmpty ?? false) {
         details.numberOfGamesPlayed = finishedPlaythroughs?.length;
         if (playthroughScoresByBoardGameId?.containsKey(details.id) ?? false) {
-          details.highscore = playthroughScoresByBoardGameId[details.id]
-              .onlyScoresWithValue()
-              .map((s) => num.tryParse(s.value))
-              .reduce(max)
-              .toString();
+          final playerScoresWithValue =
+              playthroughScoresByBoardGameId[details.id]
+                  .onlyScoresWithValue()
+                  .map((s) => num.tryParse(s.value));
+          if (playerScoresWithValue?.isNotEmpty ?? false) {
+            details.highscore = playerScoresWithValue.reduce(max).toString();
+          }
         }
 
         details.averagePlaytimeInSeconds = ((finishedPlaythroughs
@@ -190,7 +192,7 @@ class BoardGamesStore with ChangeNotifier {
           playthroughScoresByPlaythroughId[lastPlaythrough.id]
               .onlyScoresWithValue();
       lastPlaythroughScores?.sort(
-          (a, b) => num.tryParse(a.value).compareTo(num.tryParse(b.value)));
+          (a, b) => num.tryParse(b.value).compareTo(num.tryParse(a.value)));
       if (lastPlaythroughScores?.isEmpty ?? true) {
         return;
       }
@@ -203,6 +205,7 @@ class BoardGamesStore with ChangeNotifier {
       details.lastWinner = PlayerScore(
         playersById[lastPlaythroughBestScore.playerId],
         lastPlaythroughBestScore,
+        _scoreService,
       );
     }
   }
