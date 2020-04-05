@@ -124,6 +124,7 @@ stages:
             fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(AppPackageName) --skip_upload_apk true
 
       - task: PublishBuildArtifacts@1
+        condition: always()
         displayName: 'Publishing aab artifacts'
         inputs:
           PathtoPublish: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab'
