@@ -7,13 +7,16 @@ class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier>
     extends StatelessWidget {
   final Future<TFuture> _future;
   final Widget Function(BuildContext context, TStore store) _success;
+  final Widget Function(BuildContext context) _loading;
 
   ConsumerFutureBuilder({
     @required future,
     @required success,
+    loading,
     Key key,
   })  : this._future = future,
         this._success = success,
+        this._loading = loading,
         super(key: key);
 
   @override
@@ -21,19 +24,26 @@ class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier>
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
+        print("${snapshot.connectionState} ${snapshot.hasData}");
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return GenericErrorMessage();
           }
 
           return Consumer<TStore>(
-            builder: (_, store, __) => _success(context, store),
+            builder: (_, store, __) {
+              return _success(context, store);
+            },
           );
         } else if (snapshot.hasError) {
           return GenericErrorMessage();
         }
 
-        return LoadingIndicator();
+        if (_loading != null) {
+          return _loading(context);
+        } else {
+          return LoadingIndicator();
+        }
       },
     );
   }
