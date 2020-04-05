@@ -31,4 +31,6 @@ class Dimensions {
   
   static const double floatingActionButtonBottomSpacing = 72;
   static const double haldfloatingActionButtonBottomSpacing = 36;
+  
+  static const double defaultBorderWidth = 1.5;
 }

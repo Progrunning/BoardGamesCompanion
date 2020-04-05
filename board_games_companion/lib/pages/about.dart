@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
+import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -13,6 +14,7 @@ class AboutPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: Dimensions.standardSpacing,
+            horizontal: Dimensions.halfStandardSpacing,
           ),
           child: Column(
             children: <Widget>[
@@ -25,19 +27,27 @@ class AboutPage extends StatelessWidget {
                   child: Text('AUTHOR'),
                 ),
               ),
-              Card(
-                color: AppTheme.defaultTextColor,
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(Styles.defaultCornerRadius),
-                    child: Image(
-                      image: AssetImage('assets/mikolaj_profile_picture.jpg'),
-                      fit: BoxFit.cover,
-                    ),
+              SizedBox(
+                height: Dimensions.halfStandardSpacing,
+              ),
+              PanelContainer(
+                borderRadius: Styles.defaultCornerRadius,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.standardSpacing,
                   ),
-                  title: Text('Mikolaj Kieres'),
-                  subtitle: Text('feedback@progrunning.net'),
+                  child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(Styles.defaultCornerRadius),
+                      child: Image(
+                        image: AssetImage('assets/mikolaj_profile_picture.jpg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text('Mikolaj Kieres'),
+                    subtitle: Text('feedback@progrunning.net'),
+                  ),
                 ),
               ),
               SizedBox(
@@ -52,21 +62,29 @@ class AboutPage extends StatelessWidget {
                   child: Text('DESIGN & ART'),
                 ),
               ),
-              Card(
-                color: AppTheme.defaultTextColor,
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(Styles.defaultCornerRadius),
-                    child: Image(
-                      image: AssetImage('assets/adamkiewiczart_logo.png'),
-                      fit: BoxFit.cover,
-                    ),
+              SizedBox(
+                height: Dimensions.halfStandardSpacing,
+              ),
+              PanelContainer(
+                borderRadius: Styles.defaultCornerRadius,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.standardSpacing,
                   ),
-                  title: Text('Alicja Adamkiewicz'),
-                  subtitle: Text('adamkiewiczart.com/'),
+                  child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(Styles.defaultCornerRadius),
+                      child: Image(
+                        image: AssetImage('assets/adamkiewiczart_logo.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    title: Text('Alicja Adamkiewicz'),
+                    subtitle: Text('adamkiewiczart.com/'),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),

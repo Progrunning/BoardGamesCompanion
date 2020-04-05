@@ -14,7 +14,7 @@ class CustomBottomNavigationBarItem extends BottomNavigationBarItem {
           ),
           activeIcon: Icon(
             icon,
-            color: AppTheme.selectedBottomTabIconColor,
+            color: AppTheme.accentColor,
           ),
         );
 }

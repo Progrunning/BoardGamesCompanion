@@ -29,11 +29,12 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
             padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
             child: Container(
               decoration: BoxDecoration(
+                border: Border.all(
+                  width: Dimensions.defaultBorderWidth,
+                  color: AppTheme.accentColor,
+                ),
                 borderRadius: BorderRadius.all(
                     Radius.circular(Styles.boardGameTileImageCircularRadius)),
-                boxShadow: [
-                  BoxShadow(blurRadius: Styles.boardGameTileImageShadowBlur)
-                ],
                 image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
@@ -81,7 +82,8 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
                   widget.boardGame.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: AppTheme.defaultTextColor, fontSize: Dimensions.smallFontSize),
+                      color: AppTheme.defaultTextColor,
+                      fontSize: Dimensions.smallFontSize),
                 ),
               ),
             ),
