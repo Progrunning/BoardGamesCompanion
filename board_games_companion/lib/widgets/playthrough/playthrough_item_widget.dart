@@ -16,6 +16,7 @@ import 'package:board_games_companion/widgets/playthrough/playthrough_item_detai
 import 'package:board_games_companion/extensions/int_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:board_games_companion/extensions/player_score_extensions.dart';
 
 class PlaythroughItem extends StatelessWidget {
   final Playthrough _playthrough;
@@ -56,6 +57,13 @@ class PlaythroughItem extends StatelessWidget {
             child: Consumer<PlaythroughStore>(
               builder: (_, store, __) {
                 if (store.loadDataState == LoadDataState.Loaded) {
+                  store.playerScores.sortByScore();
+                  store.playerScores
+                      .where((ps) => ps?.score?.value?.isNotEmpty ?? false)
+                      .toList()
+                      .asMap()
+                      .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
+
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.max,

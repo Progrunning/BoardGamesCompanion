@@ -26,28 +26,13 @@ class PlayerScore with ChangeNotifier {
     this._scoreService,
   );
 
-  Future<bool> updatePlayerScore(String score, [int place]) async {
+  Future<bool> updatePlayerScore(String score) async {
     if ((score?.isEmpty ?? true)) {
       return false;
     }
 
     _score.value = score;
-    _place = place;
-
-    switch (_place) {
-      case 1:
-        _medal = MedalEnum.Gold;
-        break;
-      case 2:
-        _medal = MedalEnum.Silver;
-        break;
-      case 3:
-        _medal = MedalEnum.Silver;
-        break;
-      default:
-        _medal = null;
-        break;
-    }
+  
 
     try {
       await _scoreService.addOrUpdateScore(_score);
@@ -58,5 +43,24 @@ class PlayerScore with ChangeNotifier {
     }
 
     return false;
+  }
+
+  void updatePlayerPlace(int place) async {
+    _place = place;
+
+    switch (_place) {
+      case 1:
+        _medal = MedalEnum.Gold;
+        break;
+      case 2:
+        _medal = MedalEnum.Silver;
+        break;
+      case 3:
+        _medal = MedalEnum.Bronze;
+        break;
+      default:
+        _medal = null;
+        break;
+    }
   }
 }

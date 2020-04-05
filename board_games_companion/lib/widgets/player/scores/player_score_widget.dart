@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
+import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
 import 'package:board_games_companion/widgets/player/scores/player_score_edit_widget.dart';
@@ -63,7 +64,18 @@ class PlayerScore extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      playerAvatar,
+                      Stack(
+                        children: <Widget>[
+                          playerAvatar,
+                          if ((store?.score?.value?.isNotEmpty ?? false) && store.place != null)
+                            Positioned(
+                              top:
+                                  -2, // TODO MK Find out why there's a need for negative value
+                              right: Dimensions.halfStandardSpacing,
+                              child: RankRibbon(store?.place),
+                            ),
+                        ],
+                      ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(

@@ -24,7 +24,7 @@ class Medal extends StatelessWidget {
 
     return Icon(
       Icons.star,
-      size: 28,
+      size: 32,
       color: _medalColor,
     );
   }

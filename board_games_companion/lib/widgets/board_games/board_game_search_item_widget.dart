@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
+import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
 import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -88,28 +89,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
         Positioned(
           top: -2, // TODO MK Find out why there's a need for negative value
           right: Dimensions.halfStandardSpacing,
-          child: Stack(
-            children: <Widget>[
-              Icon(
-                Icons.bookmark,
-                size: 42,
-                color: Theme.of(context)
-                    .accentColor
-                    .withAlpha(Styles.opacity70Percent),
-              ),
-              Positioned.fill(
-                child: Center(
-                  child: Text(
-                    '#${widget.boardGame.rank?.toString()}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: Dimensions.smallFontSize,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: RankRibbon(widget.boardGame.rank),
         ),
         Positioned.fill(child: StackRippleEffect(
           onTap: () {
