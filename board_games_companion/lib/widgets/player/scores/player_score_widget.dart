@@ -67,7 +67,8 @@ class PlayerScore extends StatelessWidget {
                       Stack(
                         children: <Widget>[
                           playerAvatar,
-                          if ((store?.score?.value?.isNotEmpty ?? false) && store.place != null)
+                          if ((store?.score?.value?.isNotEmpty ?? false) &&
+                              store.place != null)
                             Positioned(
                               top:
                                   -2, // TODO MK Find out why there's a need for negative value
@@ -109,7 +110,6 @@ class PlayerScore extends StatelessWidget {
                               if (editMode)
                                 PlayerScoreEdit(
                                   controller: playerScoreController,
-                                  playerScore: store,
                                   onSubmit: (value) async {
                                     await _updatePlayerScore(
                                         _playerScore, value, context);

@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/routes.dart';
+import 'package:board_games_companion/pages/about.dart';
 import 'package:board_games_companion/pages/board_games.dart';
 import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
@@ -35,6 +36,7 @@ class HomePage extends StatelessWidget {
             },
           ),
           PlayersPage(),
+          AboutPage(),
         ],
         onPageChanged: (pageIndex) {
           final homeStore = Provider.of<HomeStore>(
@@ -46,9 +48,14 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: Consumer<HomeStore>(
         builder: (_, homeStore, __) {
-          return homeStore.boardGamesPageIndex == 0
-              ? _addBoardGameButton
-              : _addPlayerButton;
+          switch (homeStore.boardGamesPageIndex) {
+            case 0:
+              return _addBoardGameButton;
+            case 1:
+              return _addPlayerButton;
+            default:
+              return Container();
+          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -58,11 +65,15 @@ class HomePage extends StatelessWidget {
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.games),
-                title: Text('Games Collection'),
+                title: Text('Games'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
                 title: Text('Players'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.info),
+                title: Text('About'),
               ),
             ],
             currentIndex: homeStore.boardGamesPageIndex,

@@ -14,7 +14,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconAndTextButton(
       onPressed: () => _addBoardGameToCollection(context),
-      title: 'Add to collection',
+      title: 'Add Game',
       icon: Icons.add,
     );
   }

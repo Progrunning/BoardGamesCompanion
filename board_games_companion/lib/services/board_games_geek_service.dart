@@ -23,6 +23,16 @@ class BoardGamesGeekService {
 
   static const int _numberOfDaysToCacheBoardGameDetails = 1;
 
+  final HttpClientAdapter _httpClientAdapter;
+  final Dio _dio = Dio();
+
+  BoardGamesGeekService(this._httpClientAdapter) {
+    _dio.httpClientAdapter = _httpClientAdapter;
+    _dio.interceptors.add(
+        DioCacheManager(CacheConfig(baseUrl: _baseBoardGamesUrl)).interceptor);
+    _dio.interceptors.add(LogInterceptor(responseBody: true));
+  }
+
   Future<List<BoardGame>> retrieveHot() async {
     final hotBoardGames = List<BoardGame>();
 
@@ -35,7 +45,7 @@ class BoardGamesGeekService {
     retrievalOptions.contentType = 'application/xml';
     retrievalOptions.responseType = ResponseType.plain;
 
-    final hotBoardGamesXml = await Dio().get(_hotBoardGamesUrl,
+    final hotBoardGamesXml = await _dio.get(_hotBoardGamesUrl,
         queryParameters: {"type": "boardgame"}, options: retrievalOptions);
 
     try {
@@ -96,7 +106,7 @@ class BoardGamesGeekService {
     retrievalOptions.contentType = 'application/xml';
     retrievalOptions.responseType = ResponseType.plain;
 
-    final boardGameDetailsXml = await Dio().get(_boardGamesDetailsUrl,
+    final boardGameDetailsXml = await _dio.get(_boardGamesDetailsUrl,
         queryParameters: {"id": id, "stats": "1"}, options: retrievalOptions);
 
     try {
