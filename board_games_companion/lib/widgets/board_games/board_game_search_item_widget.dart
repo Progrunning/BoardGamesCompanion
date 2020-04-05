@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
@@ -80,7 +81,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
                   widget.boardGame.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.white, fontSize: Dimensions.smallFontSize),
+                      color: AppTheme.defaultTextColor, fontSize: Dimensions.smallFontSize),
                 ),
               ),
             ),

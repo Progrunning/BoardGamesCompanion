@@ -4,6 +4,7 @@ import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
+import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,26 +32,28 @@ class BoardGamesPage extends StatelessWidget {
       _boardGamesStore.boardGames.sort((a, b) => a.name?.compareTo(b.name));
 
       return SafeArea(
-        child: ListView.builder(
-          padding: EdgeInsets.only(
-            left: Dimensions.standardSpacing,
-            top: Dimensions.standardSpacing,
-            right: Dimensions.standardSpacing,
-            bottom: Dimensions.floatingActionButtonBottomSpacing,
+        child: PageContainer(
+          child: ListView.builder(
+            padding: EdgeInsets.only(
+              left: Dimensions.standardSpacing,
+              top: Dimensions.standardSpacing,
+              right: Dimensions.standardSpacing,
+              bottom: Dimensions.floatingActionButtonBottomSpacing,
+            ),
+            itemCount: _boardGamesStore.boardGames.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ChangeNotifierProvider<BoardGameDetails>.value(
+                value: _boardGamesStore.boardGames[index],
+                child: Consumer<BoardGameDetails>(
+                  builder: (_, store, __) {
+                    return BoardGameCollectionItemWidget(
+                      key: ValueKey(store.id),
+                    );
+                  },
+                ),
+              );
+            },
           ),
-          itemCount: _boardGamesStore.boardGames.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ChangeNotifierProvider<BoardGameDetails>.value(
-              value: _boardGamesStore.boardGames[index],
-              child: Consumer<BoardGameDetails>(
-                builder: (_, store, __) {
-                  return BoardGameCollectionItemWidget(
-                    key: ValueKey(store.id),
-                  );
-                },
-              ),
-            );
-          },
         ),
       );
     } else if (_boardGamesStore.loadDataState == LoadDataState.Error) {

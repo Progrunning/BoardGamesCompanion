@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/animation_tags.dart';
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
@@ -203,7 +204,13 @@ class PlayerScore extends StatelessWidget {
       barrierDismissible: true,
       builder: (_) {
         return AlertDialog(
-          title: Text('${playerScore.player.name}\'s score'),
+          backgroundColor: AppTheme.primaryColor,
+          title: Text(
+            '${playerScore.player.name}\'s score',
+            style: TextStyle(
+              color: AppTheme.defaultTextColor,
+            ),
+          ),
           content: ChangeNotifierProvider.value(
             value: playthroughStore,
             child: PlayerScore(

@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/pages/about.dart';
 import 'package:board_games_companion/pages/board_games.dart';
@@ -5,8 +6,10 @@ import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
+import 'package:board_games_companion/widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/extensions/page_controller_extensions.dart';
+import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,24 +30,26 @@ class HomePage extends StatelessWidget {
     );
 
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        children: <Widget>[
-          Consumer<BoardGamesStore>(
-            builder: (_, boardGamesStore, __) {
-              return BoardGamesPage(boardGamesStore);
-            },
-          ),
-          PlayersPage(),
-          AboutPage(),
-        ],
-        onPageChanged: (pageIndex) {
-          final homeStore = Provider.of<HomeStore>(
-            context,
-            listen: false,
-          );
-          homeStore.boardGamesPageIndex = pageIndex;
-        },
+      body: PageContainer(
+        child: PageView(
+          controller: _pageController,
+          children: <Widget>[
+            Consumer<BoardGamesStore>(
+              builder: (_, boardGamesStore, __) {
+                return BoardGamesPage(boardGamesStore);
+              },
+            ),
+            PlayersPage(),
+            AboutPage(),
+          ],
+          onPageChanged: (pageIndex) {
+            final homeStore = Provider.of<HomeStore>(
+              context,
+              listen: false,
+            );
+            homeStore.boardGamesPageIndex = pageIndex;
+          },
+        ),
       ),
       floatingActionButton: Consumer<HomeStore>(
         builder: (_, homeStore, __) {
@@ -62,19 +67,11 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: Consumer<HomeStore>(
         builder: (_, homeStore, __) {
           return BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.games),
-                title: Text('Games'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                title: Text('Players'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.info),
-                title: Text('About'),
-              ),
+            backgroundColor: AppTheme.bottomTabBackgroundColor,
+            items: <BottomNavigationBarItem>[
+              CustomBottomNavigationBarItem('Games', Icons.games),
+              CustomBottomNavigationBarItem('Players', Icons.person),
+              CustomBottomNavigationBarItem('About', Icons.info),
             ],
             currentIndex: homeStore.boardGamesPageIndex,
             onTap: (pageIndex) {

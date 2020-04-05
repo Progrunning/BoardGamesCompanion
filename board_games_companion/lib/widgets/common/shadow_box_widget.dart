@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class ShadowBox extends StatelessWidget {
 
   ShadowBox({
     @required this.child,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = AppTheme.defaultTextColor,
     this.shadowColor = Styles.defaultShadowColor,
     this.shadowOffset = Offset.zero,
   });

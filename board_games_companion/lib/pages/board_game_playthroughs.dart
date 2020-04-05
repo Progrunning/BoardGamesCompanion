@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/playthroughs.dart';
 import 'package:board_games_companion/pages/start_new_playthrough.dart';
@@ -5,9 +6,11 @@ import 'package:board_games_companion/stores/board_game_playthroughs_store.dart'
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/start_playthrough_store.dart';
+import 'package:board_games_companion/widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/extensions/page_controller_extensions.dart';
+import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,18 +45,20 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Playthroughs'),
       ),
-      body: PageView(
-        controller: pageController,
-        onPageChanged: (index) =>
-            _onTabPageChanged(index, boardGamePlaythoughsStore),
-        children: <Widget>[
-          PlaythroughsPage(_boardGameDetails, playthroughsStore),
-          Consumer<PlayersStore>(
-            builder: (_, __, ___) {
-              return StartNewPlaythroughPage();
-            },
-          ),
-        ],
+      body: PageContainer(
+        child: PageView(
+          controller: pageController,
+          onPageChanged: (index) =>
+              _onTabPageChanged(index, boardGamePlaythoughsStore),
+          children: <Widget>[
+            PlaythroughsPage(_boardGameDetails, playthroughsStore),
+            Consumer<PlayersStore>(
+              builder: (_, __, ___) {
+                return StartNewPlaythroughPage();
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: Consumer2<BoardGamePlaythroughsStore, PlayersStore>(
         builder: (_, boardGamePlaythroughStore, playersStore, __) {
@@ -74,15 +79,10 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
       bottomNavigationBar: Consumer<BoardGamePlaythroughsStore>(
         builder: (_, store, __) {
           return BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history),
-                title: Text('History'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.play_arrow),
-                title: Text('New Game'),
-              ),
+            backgroundColor: AppTheme.bottomTabBackgroundColor,
+            items: <BottomNavigationBarItem>[
+              CustomBottomNavigationBarItem('History', Icons.history),
+              CustomBottomNavigationBarItem('New Game', Icons.play_arrow),
             ],
             onTap: (index) {
               _onTabChanged(index, pageController);

@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/widgets/painters/divider_painter.dart';
@@ -19,7 +20,7 @@ class CalendarCard extends StatelessWidget {
     return Container(
       width: _width,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.defaultTextColor,
         borderRadius: BorderRadius.all(
           Radius.circular(Styles.boardGameTileImageCircularRadius),
         ),
@@ -46,7 +47,7 @@ class CalendarCard extends StatelessWidget {
               child: Text(
                 _date.toShortMonth('-'),
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppTheme.defaultTextColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -59,6 +60,7 @@ class CalendarCard extends StatelessWidget {
               child: Text(
                 _date?.day?.toString() ?? '-',
                 style: TextStyle(
+                    color: AppTheme.inverterTextColor,
                     fontWeight: FontWeight.bold,
                     fontSize: Dimensions.doubleExtraLargeFontSize),
               ),
@@ -79,6 +81,7 @@ class CalendarCard extends StatelessWidget {
             _date.toShortWeek('-'),
             style: TextStyle(
               fontWeight: FontWeight.bold,
+              color: AppTheme.inverterTextColor,
             ),
           ),
         ],

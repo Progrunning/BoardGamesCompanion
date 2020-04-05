@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Styles {
   static const double defaultShadowRadius = 4;
-  static const double defaultCornerRadius = 5;
+  static const double  defaultCornerRadius = 5;
   static const Offset defaultShadowOffset =
       const Offset(defaultCornerRadius / 2, defaultCornerRadius / 2);
 

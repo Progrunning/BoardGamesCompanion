@@ -1,6 +1,5 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
@@ -10,6 +9,7 @@ import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
+import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
 import 'package:board_games_companion/widgets/player/scores/player_score_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
 import 'package:board_games_companion/widgets/playthrough/playthrough_item_detail_widget.dart';
@@ -34,20 +34,7 @@ class PlaythroughItem extends StatelessWidget {
       padding: const EdgeInsets.all(
         Dimensions.standardSpacing,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(
-            Styles.defaultCornerRadius,
-          )),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).accentColor,
-              offset: Styles.defaultShadowOffset,
-              blurRadius: Styles.defaultShadowRadius,
-            )
-          ],
-        ),
+      child: PanelContainer(
         child: Padding(
           padding: const EdgeInsets.all(
             Dimensions.standardSpacing,

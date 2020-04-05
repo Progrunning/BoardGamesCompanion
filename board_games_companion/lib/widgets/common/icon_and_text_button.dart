@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/utilities/widget_utilities.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,10 @@ class IconAndTextButton extends StatelessWidget {
   Widget _buildText() => title?.isNotEmpty ?? false
       ? Text(
           title,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: AppTheme.defaultTextColor,
+            fontWeight: FontWeight.bold,
+          ),
         )
       : null;
 
@@ -49,7 +53,7 @@ class IconAndTextButton extends StatelessWidget {
     final List<Widget> buttonElements = [
       Icon(
         icon,
-        color: Colors.white,
+        color: AppTheme.defaultTextColor,
         size: Dimensions.defaultButtonIconSize,
       ),
     ];

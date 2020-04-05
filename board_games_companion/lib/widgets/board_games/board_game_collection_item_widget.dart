@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/board_game_playthroughs.dart';
@@ -9,6 +10,7 @@ import 'package:board_games_companion/widgets/board_games/board_game_collection_
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_panel_widget.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_image_widget.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_rating_widget.dart';
+import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
 import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,50 +34,62 @@ class BoardGameCollectionItemWidget extends StatelessWidget {
         child: Icon(
           Icons.delete,
           size: Dimensions.boardGameRemoveIconSize,
-          color: Colors.white,
+          color: AppTheme.defaultTextColor,
         ),
       ),
       onDismissed: (direction) => _handleRemoveBoardGameFromCollection(
           context, boardGamesStore, boardGameDetails),
-      child: Card(
-        child: Stack(
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: Dimensions.boardGameItemCollectionImageHeight,
-                  width: Dimensions.boardGameItemCollectionImageWidth,
-                  child: Stack(
+      child: Column(
+        children: <Widget>[
+          PanelContainer(
+            child: Padding(
+              padding: const EdgeInsets.all(
+                Dimensions.standardSpacing,
+              ),
+              child: Stack(
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      BoardGameCollectionItemImage(
-                        boardGameDetails: boardGameDetails,
+                      SizedBox(
+                        height: Dimensions.boardGameItemCollectionImageHeight,
+                        width: Dimensions.boardGameItemCollectionImageWidth,
+                        child: Stack(
+                          children: <Widget>[
+                            BoardGameCollectionItemImage(
+                              boardGameDetails: boardGameDetails,
+                            ),
+                            BoardGameCollectionItemRating(
+                              boardGameDetails: boardGameDetails,
+                            ),
+                          ],
+                        ),
                       ),
-                      BoardGameCollectionItemRating(
+                      BoardGameCollectionItemDetailsPanel(
                         boardGameDetails: boardGameDetails,
+                        infoIconSize: _infoIconSize,
                       ),
                     ],
                   ),
-                ),
-                BoardGameCollectionItemDetailsPanel(
-                  boardGameDetails: boardGameDetails,
-                  infoIconSize: _infoIconSize,
-                ),
-              ],
-            ),
-            Positioned.fill(
-              child: StackRippleEffect(
-                onTap: () =>
-                    _navigateToGamePlaythroughsPage(context, boardGameDetails),
+                  Positioned.fill(
+                    child: StackRippleEffect(
+                      onTap: () => _navigateToGamePlaythroughsPage(
+                          context, boardGameDetails),
+                    ),
+                  ),
+                  BoardGameCollectionItemDetailsIconButton(
+                    boardGameDetails: boardGameDetails,
+                    infoIconSize: _infoIconSize,
+                  ),
+                ],
               ),
             ),
-            BoardGameCollectionItemDetailsIconButton(
-              boardGameDetails: boardGameDetails,
-              infoIconSize: _infoIconSize,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: Dimensions.standardSpacing,
+          ),
+        ],
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
@@ -33,7 +34,9 @@ class BoardGameCollectionItemRating extends StatelessWidget {
                   (boardGameDetails.rating ?? 0).toStringAsFixed(
                       Constants.BoardGameRatingNumberOfDecimalPlaces),
                   style: TextStyle(
-                      color: Colors.white, fontSize: Dimensions.smallFontSize),
+                    color: AppTheme.defaultTextColor,
+                    fontSize: Dimensions.standardFontSize,
+                  ),
                 ),
               ),
             ),

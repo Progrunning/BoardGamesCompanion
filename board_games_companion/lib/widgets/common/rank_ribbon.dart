@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,7 @@ class RankRibbon extends StatelessWidget {
             child: Text(
               '#${_rank.toString()}',
               style: TextStyle(
-                color: Colors.white,
+                color: AppTheme.defaultTextColor,
                 fontSize: Dimensions.smallFontSize,
               ),
             ),

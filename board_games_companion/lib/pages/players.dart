@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
@@ -22,7 +23,7 @@ class PlayersPage extends StatelessWidget {
           Icon(
             Icons.edit,
             size: Dimensions.defaultButtonIconSize,
-            color: Colors.white,
+            color: AppTheme.defaultTextColor,
           ),
           onTap: () async {
             await _navigateToCreateOrEditPlayer(context, player);
