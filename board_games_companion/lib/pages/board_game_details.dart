@@ -114,7 +114,12 @@ class BoardGamesDetailsPage extends StatelessWidget {
                       height: Dimensions.standardSpacing,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                      padding: const EdgeInsets.only(
+                        right: Dimensions.standardSpacing,
+                        top: Dimensions.standardSpacing,
+                        left: Dimensions.standardSpacing,
+                        bottom: Dimensions.haldfloatingActionButtonBottomSpacing,
+                      ),
                       child: Text(
                         store.boardGameDetails.description
                             .replaceAll('&#10;&#10;', "\n\n"),

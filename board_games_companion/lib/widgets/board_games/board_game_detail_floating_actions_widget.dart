@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,10 +12,10 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
+    return IconAndTextButton(
       onPressed: () => _addBoardGameToCollection(context),
-      tooltip: 'Add a board game',
-      child: Icon(Icons.add),
+      title: 'Add to collection',
+      icon: Icons.add,
     );
   }
 }
