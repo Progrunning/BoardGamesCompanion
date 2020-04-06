@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -25,13 +24,18 @@ class PanelContainer extends StatelessWidget {
           colors: [
             AppTheme.startDefaultPageElementBackgroundColorGradient,
             AppTheme.endDefaultPageElementBackgroundColorGradient,
+            // AppTheme.startDefaultPageBackgroundColorGradient,
+            // AppTheme.endDefaultPageBackgroundColorGradient
           ],
           tileMode: TileMode.clamp,
         ),
-        border: Border.all(
-          color: AppTheme.theme.accentColor,
-          width: Dimensions.defaultBorderWidth,
-        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.shadowColor,
+            blurRadius: Styles.defaultShadowRadius,
+            offset: Styles.defaultShadowOffset,
+          ),
+        ],
         borderRadius: BorderRadius.circular(
           _borderRadius,
         ),
