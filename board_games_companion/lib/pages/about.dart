@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
