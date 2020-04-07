@@ -24,10 +24,10 @@ class DetailsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO MK Work out why there's no ripple effect
     return Material(
-      color: Colors.yellow,
+      color: Colors.transparent,
       child: InkWell(
+        splashColor: AppTheme.accentColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: Dimensions.standardSpacing,

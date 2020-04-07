@@ -74,35 +74,38 @@ class AboutPage extends StatelessWidget {
               ),
             ),
           ),
-          InkWell(
-            splashColor: AppTheme.accentColor,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Dimensions.doubleStandardSpacing,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Privacy Policy',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              splashColor: AppTheme.accentColor,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: Dimensions.doubleStandardSpacing,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Privacy Policy',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              onTap: () async {
+                await LauncherHelper.launchUri(
+                  context,
+                  privactyPolicyUrl,
+                );
+              },
             ),
-            onTap: () async {
-              await LauncherHelper.launchUri(
-                context,
-                privactyPolicyUrl,
-              );
-            },
           ),
         ],
       ),
