@@ -20,12 +20,8 @@ class ShadowBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          color: backgroundColor,
           boxShadow: [
-            BoxShadow(
-                color: shadowColor,
-                offset: shadowOffset,
-                blurRadius: Styles.defaultShadowRadius),
+            AppTheme.defaultBoxShadow,
           ],
         ),
         child: child);

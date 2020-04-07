@@ -20,8 +20,9 @@ class RankRibbon extends StatelessWidget {
         Icon(
           Icons.bookmark,
           size: 42,
-          color:
-              Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
+          color: Theme.of(context)
+              .accentColor
+              .withAlpha(Styles.opacity70Percent),
         ),
         Positioned.fill(
           child: Center(

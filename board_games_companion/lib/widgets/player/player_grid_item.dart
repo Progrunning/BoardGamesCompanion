@@ -26,11 +26,7 @@ class PlayerGridItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).accentColor,
-              blurRadius: Styles.defaultShadowRadius,
-              offset: Styles.defaultShadowOffset,
-            ),
+            AppTheme.defaultBoxShadow,
           ],
         ),
         child: ClipRRect(

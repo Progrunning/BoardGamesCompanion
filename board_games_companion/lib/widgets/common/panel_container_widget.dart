@@ -30,11 +30,7 @@ class PanelContainer extends StatelessWidget {
           tileMode: TileMode.clamp,
         ),
         boxShadow: [
-          BoxShadow(
-            color: AppTheme.shadowColor,
-            blurRadius: Styles.defaultShadowRadius,
-            offset: Styles.defaultShadowOffset,
-          ),
+          AppTheme.defaultBoxShadow
         ],
         borderRadius: BorderRadius.circular(
           _borderRadius,

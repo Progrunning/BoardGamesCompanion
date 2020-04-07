@@ -63,7 +63,9 @@ class CreateEditPlayerPage extends StatelessWidget {
             ),
             body: PageContainer(
               child: Padding(
-                padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                padding: const EdgeInsets.all(
+                  Dimensions.standardSpacing,
+                ),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -73,11 +75,7 @@ class CreateEditPlayerPage extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).accentColor,
-                                blurRadius: Styles.defaultShadowRadius,
-                                offset: Styles.defaultShadowOffset,
-                              ),
+                              AppTheme.defaultBoxShadow,
                             ],
                           ),
                           child: SizedBox(

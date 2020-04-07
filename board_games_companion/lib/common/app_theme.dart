@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -13,7 +14,7 @@ class AppTheme {
 
   static const Color defaultTextColor = Color(0xFFFFFFFF);
   static const Color inverterTextColor = Color(0xFF000000);
-  
+
   static const Color secondaryTextColor = Colors.grey;
 
   static const Color bottomTabBackgroundColor = primaryColorLight;
@@ -32,15 +33,21 @@ class AppTheme {
   static const TextStyle defaultBottomTabItemTextStyle = TextStyle(
     color: defaultTextColor,
   );
-  
+
   static const TextStyle titleTextStyle = TextStyle(
     fontSize: Dimensions.mediumFontSize,
     color: defaultTextColor,
   );
-  
+
   static const TextStyle subTitleTextStyle = TextStyle(
     fontSize: Dimensions.standardSpacing,
     color: secondaryTextColor,
+  );
+
+  static const BoxShadow defaultBoxShadow = BoxShadow(
+    color: AppTheme.shadowColor,
+    blurRadius: Styles.defaultShadowRadius,
+    offset: Styles.defaultShadowOffset,
   );
 
   static ThemeData get theme {
