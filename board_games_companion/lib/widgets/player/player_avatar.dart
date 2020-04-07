@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/widgets/playthrough/medal_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -51,6 +52,9 @@ class PlayerAvatar extends StatelessWidget {
       );
     }
 
-    return Stack(children: stackChildren);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+      child: Stack(children: stackChildren),
+    );
   }
 }

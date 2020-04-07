@@ -16,7 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BoardGameCollectionItemWidget extends StatelessWidget {
-  BoardGameCollectionItemWidget({Key key}) : super(key: key);
+  BoardGameCollectionItemWidget({
+    Key key,
+  }) : super(key: key);
 
   static const double _infoIconSize = 32;
 
