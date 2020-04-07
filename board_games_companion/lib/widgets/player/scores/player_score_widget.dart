@@ -205,12 +205,6 @@ class PlayerScore extends StatelessWidget {
       builder: (_) {
         return AlertDialog(
           backgroundColor: AppTheme.primaryColor,
-          title: Text(
-            '${playerScore.player.name}\'s score',
-            style: TextStyle(
-              color: AppTheme.defaultTextColor,
-            ),
-          ),
           content: ChangeNotifierProvider.value(
             value: playthroughStore,
             child: PlayerScore(

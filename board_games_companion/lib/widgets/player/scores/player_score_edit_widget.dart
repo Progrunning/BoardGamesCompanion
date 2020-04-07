@@ -1,3 +1,5 @@
+import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class PlayerScoreEdit extends StatelessWidget {
@@ -20,6 +22,10 @@ class PlayerScoreEdit extends StatelessWidget {
         controller: _controller,
         autofocus: true,
         keyboardType: TextInputType.number,
+        style: TextStyle(
+          fontSize: Dimensions.extraLargeFontSize,
+          color: AppTheme.accentColor,
+        ),
         decoration: InputDecoration(
           labelText: 'Score',
           fillColor: Colors.red,
