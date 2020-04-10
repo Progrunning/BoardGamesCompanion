@@ -2,7 +2,6 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/utilities/launcher_helper.dart';
-import 'package:board_games_companion/widgets/common/debug_box.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:flutter/material.dart';
 

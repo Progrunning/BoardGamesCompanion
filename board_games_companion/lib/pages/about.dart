@@ -61,7 +61,7 @@ class AboutPage extends StatelessWidget {
                     ),
                     SectionText(
                       text:
-                          'The board game data shown in the app has been taken from the publicly available BoardGameGeek\'s XML API.',
+                          'The board games data shown in the app is a courtesy of the publicly available BoardGameGeek\'s XML API.',
                     ),
                     SectionText(
                       text: 'See below links for more details:',
