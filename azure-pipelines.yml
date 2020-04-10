@@ -30,6 +30,8 @@ stages:
 
         - task: FlutterBuild@0
           displayName: 'Build Android'
+          # TODO Enable iOS build once it's working
+          condition: eq(1,2)
           inputs:
             target: 'aab'
             debugMode: true
