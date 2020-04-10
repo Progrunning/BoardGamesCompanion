@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:board_games_companion/widgets/about/detail_item_widget.dart';
+import 'package:board_games_companion/widgets/about/section_text_widget.dart';
 import 'package:board_games_companion/widgets/about/section_title_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class AboutPage extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     SizedBox(
                       height: Dimensions.standardFontSize,
@@ -33,7 +35,7 @@ class AboutPage extends StatelessWidget {
                       title: 'AUTHOR',
                     ),
                     SizedBox(
-                      height: Dimensions.halfStandardSpacing,
+                      height: Dimensions.standardSpacing,
                     ),
                     DetailsItem(
                       title: 'Mikolaj Kieres',
@@ -55,7 +57,7 @@ class AboutPage extends StatelessWidget {
                       title: 'DESIGN & ART',
                     ),
                     SizedBox(
-                      height: Dimensions.halfStandardSpacing,
+                      height: Dimensions.standardSpacing,
                     ),
                     DetailsItem(
                       title: 'Alicja Adamkiewicz',
@@ -64,11 +66,38 @@ class AboutPage extends StatelessWidget {
                       iconUri: 'assets/adamkiewiczart_logo.png',
                     ),
                     SizedBox(
-                      height: Dimensions.halfStandardSpacing,
+                      height: Dimensions.standardSpacing,
                     ),
                     Divider(
                       color: AppTheme.accentColor,
                     ),
+                    SectionTitle(
+                      title: 'CONTENT & DATA',
+                    ),
+                    SectionText(
+                      text:
+                          'All the board game data shown in the app has been taken from the publicly available BoardGameGeek XML API.',
+                    ),
+                    SectionText(
+                      text: 'See below links for more details:',
+                    ),
+                    SizedBox(
+                      height: Dimensions.standardSpacing,
+                    ),
+                    DetailsItem(
+                        title: 'BoardGameGeek',
+                        subtitle: 'boardgamegeek.com',
+                        uri: 'https://boardgamegeek.com'),
+                    DetailsItem(
+                        title: 'XML API2',
+                        subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
+                        uri:
+                            'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
+                    DetailsItem(
+                        title: 'Terms of Service',
+                        subtitle: 'boardgamegeek.com/terms',
+                        uri:
+                            'https://www.boardgamegeek.com/terms'),
                   ],
                 ),
               ),

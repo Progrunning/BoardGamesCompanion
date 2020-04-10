@@ -17,7 +17,7 @@ class DetailsItem extends StatelessWidget {
   const DetailsItem({
     @required this.title,
     @required this.subtitle,
-    @required this.iconUri,
+    this.iconUri,
     this.onTap,
     this.uri,
     Key key,
@@ -31,7 +31,6 @@ class DetailsItem extends StatelessWidget {
         splashColor: AppTheme.accentColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: Dimensions.standardSpacing,
             horizontal: Dimensions.standardSpacing,
           ),
           child: Container(
@@ -39,21 +38,23 @@ class DetailsItem extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                ShadowBox(
-                  child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(Styles.defaultCornerRadius),
-                    child: Image(
-                      height: _size,
-                      width: _size,
-                      image: AssetImage(iconUri),
-                      fit: BoxFit.cover,
+                if (iconUri?.isNotEmpty ?? false)
+                  ShadowBox(
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(Styles.defaultCornerRadius),
+                      child: Image(
+                        height: _size,
+                        width: _size,
+                        image: AssetImage(iconUri),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: Dimensions.standardSpacing,
-                ),
+                if (iconUri?.isNotEmpty ?? false)
+                  SizedBox(
+                    width: Dimensions.standardSpacing,
+                  ),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -61,14 +62,14 @@ class DetailsItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         title,
-                        style: AppTheme.titleTextStyle,
+                        style: AppTheme.theme.textTheme.display2,
                       ),
                       SizedBox(
                         height: Dimensions.halfStandardSpacing,
                       ),
                       Text(
                         subtitle,
-                        style: Theme.of(context).textTheme.subhead,
+                        style: AppTheme.theme.textTheme.subhead,
                       ),
                     ],
                   ),

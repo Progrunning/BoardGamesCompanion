@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,10 @@ class SectionTitle extends StatelessWidget {
         padding: const EdgeInsets.only(
           left: Dimensions.standardSpacing,
         ),
-        child: Text(title),
+        child: Text(
+          title,
+          style: AppTheme.theme.textTheme.display3,
+        ),
       ),
     );
   }
