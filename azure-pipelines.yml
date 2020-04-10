@@ -44,13 +44,14 @@ stages:
           inputs:
             certSecureFile: 'Progrunning_Distribution_Cert.p12'
             certPwd: '$(iOSProgrunningDistributionCert)'
-            keychain: 'default'
-            keychainPassword: 'Test'
+            keychain: 'temp'
+            deleteCert: true
 
         - task: InstallAppleProvisioningProfile@1
           inputs:
             provisioningProfileLocation: 'secureFiles'
             provProfileSecureFile: 'Board_Games_Companion_Distribution.mobileprovision'
+            removeProfile: true
 
         - task: FlutterBuild@0
           displayName: 'Build iOS'
