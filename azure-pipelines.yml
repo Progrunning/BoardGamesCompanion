@@ -42,8 +42,8 @@ stages:
 
         - task: InstallAppleCertificate@2
           inputs:
-            certSecureFile: 'Progrunning_Dev_Cert.p12'
-            certPwd: '$(ProgrunningDevCertPassword)'
+            certSecureFile: 'Progrunning_Distribution_Cert.p12'
+            certPwd: '$(iOSProgrunningDistributionCert)'
             keychain: 'temp'
 
         - task: InstallAppleProvisioningProfile@1
