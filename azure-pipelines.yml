@@ -40,6 +40,12 @@ stages:
             buildNumber: '$(Build.BuildID)'
             buildName: '$(app.version).$(Build.BuildID)'
 
+        - task: InstallAppleCertificate@2
+          inputs:
+            certSecureFile: 'Progrunning_Dev_Cert.p12'
+            certPwd: '$(ProgrunningDevCertPassword)'
+            keychain: 'temp'
+
         - task: FlutterBuild@0
           displayName: 'Build iOS'
           inputs:
