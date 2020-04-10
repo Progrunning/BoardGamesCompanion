@@ -4,7 +4,6 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
-import 'package:board_games_companion/widgets/common/debug_box.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
