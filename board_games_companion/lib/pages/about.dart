@@ -34,9 +34,6 @@ class AboutPage extends StatelessWidget {
                     SectionTitle(
                       title: 'AUTHOR',
                     ),
-                    SizedBox(
-                      height: Dimensions.standardSpacing,
-                    ),
                     DetailsItem(
                       title: 'Mikolaj Kieres',
                       subtitle: feedbackEmailAddress,
@@ -44,29 +41,17 @@ class AboutPage extends StatelessWidget {
                           'mailto:$feedbackEmailAddress?subject=BGC%20Feedback',
                       iconUri: 'assets/mikolaj_profile_picture.jpg',
                     ),
-                    SizedBox(
-                      height: Dimensions.standardSpacing,
-                    ),
                     Divider(
                       color: AppTheme.accentColor,
                     ),
-                    SizedBox(
-                      height: Dimensions.standardSpacing,
-                    ),
                     SectionTitle(
                       title: 'DESIGN & ART',
-                    ),
-                    SizedBox(
-                      height: Dimensions.standardSpacing,
                     ),
                     DetailsItem(
                       title: 'Alicja Adamkiewicz',
                       subtitle: 'adamkiewiczart.com',
                       uri: 'http://adamkiewiczart.com',
                       iconUri: 'assets/adamkiewiczart_logo.png',
-                    ),
-                    SizedBox(
-                      height: Dimensions.standardSpacing,
                     ),
                     Divider(
                       color: AppTheme.accentColor,
@@ -76,28 +61,97 @@ class AboutPage extends StatelessWidget {
                     ),
                     SectionText(
                       text:
-                          'All the board game data shown in the app has been taken from the publicly available BoardGameGeek XML API.',
+                          'The board game data shown in the app has been taken from the publicly available BoardGameGeek\'s XML API.',
                     ),
                     SectionText(
                       text: 'See below links for more details:',
                     ),
-                    SizedBox(
-                      height: Dimensions.standardSpacing,
-                    ),
                     DetailsItem(
-                        title: 'BoardGameGeek',
+                        title: 'BGG',
                         subtitle: 'boardgamegeek.com',
                         uri: 'https://boardgamegeek.com'),
                     DetailsItem(
-                        title: 'XML API2',
+                        title: 'XML API',
                         subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
                         uri:
                             'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
                     DetailsItem(
                         title: 'Terms of Service',
                         subtitle: 'boardgamegeek.com/terms',
-                        uri:
-                            'https://www.boardgamegeek.com/terms'),
+                        uri: 'https://www.boardgamegeek.com/terms'),
+                    Divider(
+                      color: AppTheme.accentColor,
+                    ),
+                    SectionTitle(
+                      title: 'PLUGINS & LIBRARIES',
+                    ),
+                    SectionText(
+                      text:
+                          'The below is a list of the plugins and libraries that helped in building this app:',
+                    ),
+                    DetailsItem(
+                        title: 'Logging',
+                        subtitle: 'Handles in app logs',
+                        uri: 'https://pub.dev/packages/logging'),
+                    DetailsItem(
+                        title: 'Dio Http Cache',
+                        subtitle: 'SQLite like cache of http responses',
+                        uri: 'https://pub.dev/packages/dio_http_cache'),
+                    DetailsItem(
+                        title: 'Dio Http2 Adapter',
+                        subtitle:
+                            'Provides the ability to create custom http adapters',
+                        uri: 'https://pub.dev/packages/dio_http2_adapter'),
+                    DetailsItem(
+                        title: 'Cached Network Image',
+                        subtitle: 'Caching network images',
+                        uri: 'https://pub.dev/packages/cached_network_image'),
+                    DetailsItem(
+                        title: 'Firebase Crashlytics',
+                        subtitle: 'Captures app crash analytics',
+                        uri: 'https://pub.dev/packages/firebase_crashlytics'),
+                    DetailsItem(
+                        title: 'Hive',
+                        subtitle: 'NoSQL Database',
+                        uri: 'https://pub.dev/packages/hive'),
+                    DetailsItem(
+                        title: 'Path Provider',
+                        subtitle: 'Helps with filesystem paths',
+                        uri: 'https://pub.dev/packages/path_provider'),
+                    DetailsItem(
+                        title: 'Polygon Clipper',
+                        subtitle: 'Draws polygon shapes',
+                        uri: 'https://pub.dev/packages/polygon_clipper'),
+                    DetailsItem(
+                        title: 'Carousel Slider',
+                        subtitle: 'Helps with carousels',
+                        uri: 'https://pub.dev/packages/carousel_slider'),
+                    DetailsItem(
+                        title: 'Image Picker',
+                        subtitle:
+                            'Picking images and taking photos with camera',
+                        uri: 'https://pub.dev/packages/image_picker'),
+                    DetailsItem(
+                        title: 'Image Picker',
+                        subtitle:
+                            'Picking images and taking photos with camera',
+                        uri: 'https://pub.dev/packages/image_picker'),
+                    DetailsItem(
+                        title: 'XML',
+                        subtitle: 'Parsing XML API responses',
+                        uri: 'https://pub.dev/packages/xml'),
+                    DetailsItem(
+                        title: 'Provider',
+                        subtitle: 'DI & state management',
+                        uri: 'https://pub.dev/packages/provider'),
+                    DetailsItem(
+                        title: 'Animations',
+                        subtitle: 'Navigation animations',
+                        uri: 'https://pub.dev/packages/animations'),
+                    DetailsItem(
+                        title: 'Url Launcher',
+                        subtitle: 'Launching Uri\'s',
+                        uri: 'https://pub.dev/packages/url_launcher'),
                   ],
                 ),
               ),
