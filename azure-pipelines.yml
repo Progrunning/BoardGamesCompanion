@@ -45,6 +45,7 @@ stages:
             certSecureFile: 'Progrunning_Distribution_Cert.p12'
             certPwd: '$(iOSProgrunningDistributionCert)'
             keychain: 'default'
+            keychainPassword: 'Test'
 
         - task: InstallAppleProvisioningProfile@1
           inputs:
