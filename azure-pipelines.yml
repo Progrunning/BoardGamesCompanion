@@ -46,6 +46,11 @@ stages:
             certPwd: '$(ProgrunningDevCertPassword)'
             keychain: 'temp'
 
+        - task: InstallAppleProvisioningProfile@1
+          inputs:
+            provisioningProfileLocation: 'secureFiles'
+            provProfileSecureFile: 'Progrunning_Dev_Profile.mobileprovision'
+
         - task: FlutterBuild@0
           displayName: 'Build iOS'
           inputs:
