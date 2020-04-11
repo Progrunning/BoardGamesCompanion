@@ -14,10 +14,10 @@ trigger:
 stages:
 
 - stage: CI
-  # condition: eq(variables['Build.SourceBranchName'], 'develop')
-  condition: eq(1,1)
+  condition: eq(variables['Build.SourceBranchName'], 'develop')
   jobs:
     - job: Build
+      timeoutInMinutes: 12
       pool:
         vmImage: 'macOS-latest'
 
@@ -31,8 +31,6 @@ stages:
 
         - task: FlutterBuild@0
           displayName: 'Build Android'
-          # TODO Enable iOS build once it's working
-          condition: eq(1,2)
           inputs:
             target: 'aab'
             debugMode: true
@@ -40,32 +38,21 @@ stages:
             buildNumber: '$(Build.BuildID)'
             buildName: '$(app.version).$(Build.BuildID)'
 
-        - task: InstallAppleCertificate@2
-          inputs:
-            certSecureFile: 'Progrunning_Distribution_Cert.p12'
-            certPwd: '$(iOSProgrunningDistributionCert)'
-            keychain: 'temp'
-            deleteCert: true
-
-        - task: InstallAppleProvisioningProfile@1
-          inputs:
-            provisioningProfileLocation: 'secureFiles'
-            provProfileSecureFile: 'Board_Games_Companion_Distribution.mobileprovision'
-            removeProfile: true
-
         - task: FlutterBuild@0
           displayName: 'Build iOS'
           inputs:
             target: 'ios'
-            debugMode: true
+            iosCodesign: false
             projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
             buildNumber: '$(Build.BuildID)'
             buildName: '$(app.version).$(Build.BuildID)'
+
 
 - stage: CD
   condition: eq(variables['Build.SourceBranchName'], 'release')
   jobs:
   - job: ReleaseAndroid
+    timeoutInMinutes: 10
     pool:
       vmImage: 'macOS-latest'
 
@@ -142,5 +129,71 @@ stages:
         displayName: 'Publishing aab artifacts'
         inputs:
           PathtoPublish: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+
+  - job: ReleaseiOS
+    timeoutInMinutes: 15
+    pool:
+      vmImage: 'macOS-latest'
+
+    steps:
+
+      - task: FlutterInstall@0
+        inputs:
+          channel: 'stable'
+          version: 'latest'
+
+      - task: InstallAppleCertificate@2
+        inputs:
+          certSecureFile: 'Progrunning_Distribution_Cert.p12'
+          certPwd: '$(iOSProgrunningDistributionCert)'
+          keychain: 'temp'
+          deleteCert: true
+
+      - task: InstallAppleProvisioningProfile@1
+        inputs:
+          provisioningProfileLocation: 'secureFiles'
+          provProfileSecureFile: 'Board_Games_Companion_Distribution.mobileprovision'
+          removeProfile: true
+
+      - task: FlutterBuild@0
+        displayName: 'Build iOS'
+        inputs:
+          target: 'ios'
+          iosCodesign: false
+          projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
+          buildNumber: '$(Build.BuildID)'
+          buildName: '$(app.version).$(Build.BuildID)'
+
+      - task: Xcode@5
+        inputs:
+          actions: 'build'
+          configuration: 'Release'
+          sdk: 'iphoneos'
+          xcWorkspacePath: '**/ios/Runner.xcworkspace'
+          scheme: 'Runner'
+          packageApp: true
+          signingOption: 'manual'
+          signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+          provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+          exportPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/'
+
+      - task: AppStoreRelease@1
+        inputs:
+          serviceEndpoint: 'Apple App Store'
+          appIdentifier: '$(AppPackageName)'
+          appType: 'iOS'
+          ipaPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/*.ipa'
+          releaseTrack: 'TestFlight'
+          shouldSkipWaitingForProcessing: true
+          shouldSkipSubmission: true
+          installFastlane: false
+
+      - task: PublishBuildArtifacts@1
+        condition: always()
+        displayName: 'Publishing aab artifacts'
+        inputs:
+          PathtoPublish: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/Runner.ipa'
           ArtifactName: 'drop'
           publishLocation: 'Container'
