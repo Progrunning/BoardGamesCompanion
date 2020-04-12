@@ -1,6 +1,6 @@
 import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/pages/add_board_games.dart';
 import 'package:board_games_companion/pages/home.dart';
+import 'package:board_games_companion/pages/search_board_games.dart';
 import 'package:flutter/material.dart';
 
 import 'common/routes.dart';
@@ -15,7 +15,7 @@ class BoardGamesCompanionApp extends StatelessWidget {
       theme: AppTheme.theme,
       routes: {
         Routes.home: (context) => HomePage(),
-        Routes.addBoardGames: (context) => AddBoardGamesPage(),
+        Routes.addBoardGames: (context) => SearchBoardGamesPage(),
       },
     );
   }
