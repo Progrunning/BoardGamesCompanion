@@ -14,6 +14,7 @@ import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
+import 'package:board_games_companion/stores/hot_board_games_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/start_playthrough_store.dart';
@@ -87,6 +88,14 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),
         ),
+        ChangeNotifierProvider<HotBoardGamesStore>(
+          create: (context) => HotBoardGamesStore(
+            Provider.of<BoardGamesGeekService>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
         ChangeNotifierProvider<PlayersStore>(
           create: (context) {
             return PlayersStore(
@@ -119,32 +128,34 @@ class App extends StatelessWidget {
           ),
         ),
         ChangeNotifierProxyProvider<PlaythroughsStore, BoardGamesStore>(
-            create: (context) {
-          final boardGamesStore = BoardGamesStore(
-            Provider.of<BoardGamesService>(
-              context,
-              listen: false,
-            ),
-            Provider.of<PlaythroughService>(
-              context,
-              listen: false,
-            ),
-            Provider.of<ScoreService>(
-              context,
-              listen: false,
-            ),
-            Provider.of<PlayerService>(
-              context,
-              listen: false,
-            ),
-          );
+          create: (context) {
+            final boardGamesStore = BoardGamesStore(
+              Provider.of<BoardGamesService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlaythroughService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<ScoreService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlayerService>(
+                context,
+                listen: false,
+              ),
+            );
 
-          boardGamesStore.loadBoardGames();
-          return boardGamesStore;
-        }, update: (_, playthroughsStore, boardGamesStore) {
-          boardGamesStore.loadBoardGamesLatestData();
-          return boardGamesStore;
-        }),
+            boardGamesStore.loadBoardGames();
+            return boardGamesStore;
+          },
+          update: (_, playthroughsStore, boardGamesStore) {
+            boardGamesStore.loadBoardGamesLatestData();
+            return boardGamesStore;
+          },
+        ),
       ],
       child: BoardGamesCompanionApp(),
     );
