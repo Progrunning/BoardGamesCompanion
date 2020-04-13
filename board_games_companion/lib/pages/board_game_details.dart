@@ -28,6 +28,8 @@ class BoardGamesDetailsPage extends StatelessWidget {
     this._boardGameName,
   );
 
+ //title: Text(_boardGameName ?? ''),
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<BoardGameDetailsStore>.value(

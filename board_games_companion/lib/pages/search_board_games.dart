@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:board_games_companion/widgets/saerch_board_games/hot_board_games_header_widget.dart';
 import 'package:board_games_companion/widgets/saerch_board_games/hot_board_games_results_widget.dart';
 import 'package:board_games_companion/widgets/saerch_board_games/search_board_games_results_widget.dart';
@@ -19,8 +20,7 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryColorLight,
-      body: SafeArea(
+      body: PageContainer(
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
