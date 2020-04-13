@@ -5,16 +5,16 @@ extension XmlElementExtensions on XmlElement {
     return this?.findAllElements(elementName)?.first ?? null;
   }
 
-  String firstOrDefaultElementsAttribute(String elementName) {
-    if (elementName?.isNotEmpty ?? true) {
+  String firstOrDefaultElementsAttribute(String elementName, String attributeName) {
+    if (elementName?.isEmpty ?? true) {
       return null;
     }
 
-    return this?.findElements(elementName)?.single?.attributes?.single?.value;
+    return this?.findElements(elementName)?.single?.firstOrDefaultAttributeValue(attributeName);
   }
 
   String firstOrDefaultAttributeValue(String attributeName) {
-    if (attributeName?.isNotEmpty ?? true) {
+    if (attributeName?.isEmpty ?? true) {
       return null;
     }
 

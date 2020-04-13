@@ -40,7 +40,7 @@ class AppTheme {
   );
 
   static const TextStyle subTitleTextStyle = TextStyle(
-    fontSize: Dimensions.standardSpacing,
+    fontSize: Dimensions.standardFontSize,
     color: secondaryTextColor,
   );
 

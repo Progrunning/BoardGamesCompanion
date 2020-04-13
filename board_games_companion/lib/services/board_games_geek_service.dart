@@ -178,10 +178,8 @@ class BoardGamesGeekService {
         final boardGameCategory = BoardGameCategory();
         boardGameCategory.id = boardGameDetailCategory
             .firstOrDefaultAttributeValue(_xmlIdAttributeName);
-        boardGameCategory.name =
-            boardGameDetailCategory.attributes.firstWhere((attr) {
-          return attr.name.local == _xmlValueAttributeName;
-        })?.value;
+        boardGameCategory.name = boardGameDetailCategory
+            .firstOrDefaultAttributeValue(_xmlValueAttributeName);
 
         boardGameDetails.categories.add(boardGameCategory);
       }
@@ -240,9 +238,9 @@ class BoardGamesGeekService {
       final boardGameId =
           searchResult.firstOrDefaultAttributeValue(_xmlIdAttributeName);
       final boardGameName =
-          searchResult.firstOrDefaultElementsAttribute('name');
+          searchResult.firstOrDefaultElementsAttribute('name', _xmlValueAttributeName);
       final boardGameYearPublished =
-          searchResult.firstOrDefaultElementsAttribute('yearpublished');
+          searchResult. firstOrDefaultElementsAttribute('yearpublished', _xmlValueAttributeName);
 
       final boardGame = BoardGame(boardGameName);
       boardGame.id = boardGameId;

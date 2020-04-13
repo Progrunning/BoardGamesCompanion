@@ -1,7 +1,13 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/cupertino.dart';
 
-class SearchBoardGamesInstructions extends SliverPersistentHeaderDelegate {
+class SearchBoardGamesState extends SliverPersistentHeaderDelegate {
+  Widget child;
+
+  SearchBoardGamesState({
+    @required this.child,
+  });
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -11,8 +17,7 @@ class SearchBoardGamesInstructions extends SliverPersistentHeaderDelegate {
           Dimensions.doubleStandardSpacing,
         ),
         child: Center(
-          child: Text(
-              'To search for board games, please type a board game title in the above field.'),
+          child: child,
         ),
       ),
     );

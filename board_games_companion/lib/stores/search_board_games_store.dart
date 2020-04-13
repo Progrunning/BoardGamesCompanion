@@ -13,13 +13,19 @@ class SearchBoardGamesStore with ChangeNotifier {
   List<BoardGame> get searchResults => _searchResults;
 
   String get searchPhrase => _searchPhrase;
+  set searchPhrase(String value) {
+    if (_searchPhrase != value) {
+      _searchPhrase = value;
+      notifyListeners();
+    }
+  }
 
   SearchBoardGamesStore(this._boardGameGeekService);
 
   Future<List<BoardGame>> search(String searchPhrase) async {
     _searchPhrase = searchPhrase;
 
-    if (_searchPhrase?.isNotEmpty ?? true) {
+    if (_searchPhrase?.isEmpty ?? true) {
       _searchResults.clear();
       return List<BoardGame>();
     }
