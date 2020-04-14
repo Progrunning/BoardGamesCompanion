@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/styles.dart';
+import 'package:board_games_companion/widgets/common/rippler_effect.dart';
 import 'package:flutter/material.dart';
 
 class StackRippleEffect extends StatelessWidget {
@@ -11,13 +11,8 @@ class StackRippleEffect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        splashColor:
-            Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
-        onTap: onTap,
-      ),
+    return RippleEffect(
+      onTap: onTap,
     );
   }
 }

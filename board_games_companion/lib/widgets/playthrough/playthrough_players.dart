@@ -1,5 +1,5 @@
 import 'package:board_games_companion/models/playthrough_player.dart';
-import 'package:board_games_companion/widgets/common/ripple_effect.dart';
+import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
 import 'package:board_games_companion/widgets/player/player_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

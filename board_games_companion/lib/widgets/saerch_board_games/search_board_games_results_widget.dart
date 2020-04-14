@@ -2,8 +2,10 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
+import 'package:board_games_companion/widgets/common/rippler_effect.dart';
 import 'package:board_games_companion/widgets/saerch_board_games/search_board_games_instructions_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,30 +30,38 @@ class SaerchBoardGamesResults extends StatelessWidget {
                 List.generate(
                   searchResults.length,
                   (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        top: Dimensions.halfStandardSpacing,
-                        left: Dimensions.standardSpacing,
-                        right: Dimensions.standardSpacing,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Text(
-                            searchResults[index].name,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTheme.titleTextStyle,
-                          ),
-                          if (searchResults[index].yearPublished != null)
+                    return RippleEffect(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimensions.halfStandardSpacing,
+                          left: Dimensions.standardSpacing,
+                          right: Dimensions.standardSpacing,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
                             Text(
-                              searchResults[index].yearPublished.toString(),
-                              style: AppTheme.subTitleTextStyle,
+                              searchResults[index].name,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTheme.titleTextStyle,
                             ),
-                          SizedBox(
-                            height: Dimensions.halfStandardSpacing,
-                          ),
-                        ],
+                            if (searchResults[index].yearPublished != null)
+                              Text(
+                                searchResults[index].yearPublished.toString(),
+                                style: AppTheme.subTitleTextStyle,
+                              ),
+                            SizedBox(
+                              height: Dimensions.halfStandardSpacing,
+                            ),
+                          ],
+                        ),
                       ),
+                      onTap: () async {
+                        await NavigatorHelper.navigateToBoardGameDetails(
+                          context,
+                          searchResults[index],
+                        );
+                      },
                     );
                   },
                 ),

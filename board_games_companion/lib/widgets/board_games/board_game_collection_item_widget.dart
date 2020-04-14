@@ -11,7 +11,7 @@ import 'package:board_games_companion/widgets/board_games/board_game_collection_
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_image_widget.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_rating_widget.dart';
 import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
-import 'package:board_games_companion/widgets/common/ripple_effect.dart';
+import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

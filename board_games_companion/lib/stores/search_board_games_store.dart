@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
@@ -12,28 +13,36 @@ class SearchBoardGamesStore with ChangeNotifier {
 
   List<BoardGame> get searchResults => _searchResults;
 
+  AsyncMemoizer<List<BoardGame>> _searchResultsMemoizer =
+      new AsyncMemoizer<List<BoardGame>>();
+
   SearchBoardGamesStore(
     this._boardGameGeekService,
     this._searchBarBoardGamesStore,
   );
 
   Future<List<BoardGame>> search() async {
-    if (_searchBarBoardGamesStore.searchPhrase?.isEmpty ?? true) {
-      _searchResults.clear();
-      return List<BoardGame>();
-    }
+    return _searchResultsMemoizer.runOnce(
+      () async {
+        if (_searchBarBoardGamesStore.searchPhrase?.isEmpty ?? true) {
+          _searchResults.clear();
+          return List<BoardGame>();
+        }
 
-    try {
-      _searchResults = await _boardGameGeekService
-          .search(_searchBarBoardGamesStore.searchPhrase);
-    } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
-    }
+        try {
+          _searchResults = await _boardGameGeekService
+              .search(_searchBarBoardGamesStore.searchPhrase);
+        } catch (e, stack) {
+          Crashlytics.instance.recordError(e, stack);
+        }
 
-    return _searchResults ?? List<BoardGame>();
+        return _searchResults ?? List<BoardGame>();
+      },
+    );
   }
 
   void updateSearchResults() {
+    _searchResultsMemoizer = new AsyncMemoizer<List<BoardGame>>();
     notifyListeners();
   }
 }
