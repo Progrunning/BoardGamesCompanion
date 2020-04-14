@@ -17,6 +17,7 @@ import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/hot_board_games_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:board_games_companion/stores/start_playthrough_store.dart';
 import 'package:board_games_companion/utilities/custom_http_client_adapter.dart';
@@ -97,9 +98,16 @@ class App extends StatelessWidget {
             ),
           ),
         ),
+        ChangeNotifierProvider<SearchBarBoardGamesStore>(
+          create: (context) => SearchBarBoardGamesStore(),
+        ),
         ChangeNotifierProvider<SearchBoardGamesStore>(
           create: (context) => SearchBoardGamesStore(
             Provider.of<BoardGamesGeekService>(
+              context,
+              listen: false,
+            ),
+            Provider.of<SearchBarBoardGamesStore>(
               context,
               listen: false,
             ),

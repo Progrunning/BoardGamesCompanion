@@ -17,7 +17,7 @@ class SaerchBoardGamesResults extends StatelessWidget {
   Widget build(BuildContext context) {
     final searchBoardGamesStore = Provider.of<SearchBoardGamesStore>(context);
     return FutureBuilder(
-      future: searchBoardGamesStore.search(searchBoardGamesStore.searchPhrase),
+      future: searchBoardGamesStore.search(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final searchResults = snapshot.data as List<BoardGame>;
