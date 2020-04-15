@@ -14,7 +14,10 @@ class HotBoardGamesHeader extends SliverPersistentHeaderDelegate {
         ),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Text('Hot Board Games'),
+          child: Text(
+            'Hot Board Games',
+            style: AppTheme.titleTextStyle,
+          ),
         ),
       ),
     );

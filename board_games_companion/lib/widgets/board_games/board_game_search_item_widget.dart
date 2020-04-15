@@ -26,12 +26,20 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
         CachedNetworkImage(
           imageUrl: widget.boardGame.thumbnailUrl,
           imageBuilder: (context, imageProvider) => Padding(
-            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+            padding: const EdgeInsets.only(
+              right: Dimensions.halfStandardSpacing,
+              bottom: Dimensions.halfStandardSpacing,
+            ),
             child: Container(
               decoration: BoxDecoration(
-                boxShadow: [AppTheme.defaultBoxShadow],
+                boxShadow: [
+                  AppTheme.defaultBoxShadow,
+                ],
                 borderRadius: BorderRadius.all(
-                    Radius.circular(Styles.boardGameTileImageCircularRadius)),
+                  Radius.circular(
+                    Styles.boardGameTileImageCircularRadius,
+                  ),
+                ),
                 image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
@@ -61,7 +69,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
         Padding(
           padding: const EdgeInsets.only(
               bottom: Dimensions.standardSpacing,
-              left: Dimensions.standardSpacing,
+              left: Dimensions.halfStandardSpacing,
               right: Dimensions.standardSpacing),
           child: Align(
             alignment: Alignment.bottomCenter,
@@ -88,18 +96,20 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
           ),
         ),
         Positioned(
-          top: -1.5, // TODO MK Find out why there's a need for negative value
+          top: -Dimensions.halfStandardSpacing - 1,
           right: Dimensions.halfStandardSpacing,
           child: RankRibbon(widget.boardGame.rank),
         ),
-        Positioned.fill(child: StackRippleEffect(
-          onTap: () async {
-            await NavigatorHelper.navigateToBoardGameDetails(
-              context,
-              widget.boardGame,
-            );
-          },
-        ))
+        Positioned.fill(
+          child: StackRippleEffect(
+            onTap: () async {
+              await NavigatorHelper.navigateToBoardGameDetails(
+                context,
+                widget.boardGame,
+              );
+            },
+          ),
+        )
       ],
     );
   }

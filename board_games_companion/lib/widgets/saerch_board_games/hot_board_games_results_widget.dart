@@ -22,15 +22,22 @@ class HotBoardGamesResults extends StatelessWidget {
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data is List<BoardGame>) {
-            return SliverGrid.extent(
-              maxCrossAxisExtent: 150,
-              children: List.generate(
-                (snapshot.data as List<BoardGame>).length,
-                (int index) {
-                  return BoardGameSearchItemWidget(
-                    boardGame: snapshot.data[index],
-                  );
-                },
+            return SliverPadding(
+              padding: EdgeInsets.all(
+                Dimensions.standardSpacing,
+              ),
+              sliver: SliverGrid.extent(
+                crossAxisSpacing: Dimensions.standardSpacing,
+                mainAxisSpacing: Dimensions.standardSpacing,
+                maxCrossAxisExtent: 150,
+                children: List.generate(
+                  (snapshot.data as List<BoardGame>).length,
+                  (int index) {
+                    return BoardGameSearchItemWidget(
+                      boardGame: snapshot.data[index],
+                    );
+                  },
+                ),
               ),
             );
           }
@@ -38,14 +45,12 @@ class HotBoardGamesResults extends StatelessWidget {
           return SliverFillRemaining(
             child: Center(
               child: Padding(
-                padding:
-                    const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Padding(
-                      padding:
-                          const EdgeInsets.all(Dimensions.standardSpacing),
+                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
                       child: Center(
                         child: Text(
                             'We couldn\'t retrieve any board games. Check your Internet connectivity and try again.'),

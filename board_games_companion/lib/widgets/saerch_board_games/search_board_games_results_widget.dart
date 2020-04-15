@@ -1,5 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
@@ -24,46 +27,67 @@ class SaerchBoardGamesResults extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           final searchResults = snapshot.data as List<BoardGame>;
           if (searchResults?.isNotEmpty ?? false) {
-            return SliverFixedExtentList(
-              itemExtent: 50,
-              delegate: SliverChildListDelegate(
-                List.generate(
-                  searchResults.length,
-                  (index) {
-                    return RippleEffect(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: Dimensions.halfStandardSpacing,
-                          left: Dimensions.standardSpacing,
-                          right: Dimensions.standardSpacing,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Text(
-                              searchResults[index].name,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTheme.titleTextStyle,
-                            ),
-                            if (searchResults[index].yearPublished != null)
-                              Text(
-                                searchResults[index].yearPublished.toString(),
-                                style: AppTheme.subTitleTextStyle,
-                              ),
-                            SizedBox(
-                              height: Dimensions.halfStandardSpacing,
-                            ),
+            return SliverPadding(
+              padding: EdgeInsets.all(
+                Dimensions.standardSpacing,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (_, index) {
+                    final int itemIndex = index ~/ 2;
+                    if (index.isEven) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          borderRadius: BorderRadius.circular(
+                            Styles.defaultCornerRadius,
+                          ),
+                          boxShadow: [
+                            AppTheme.defaultBoxShadow,
                           ],
                         ),
-                      ),
-                      onTap: () async {
-                        await NavigatorHelper.navigateToBoardGameDetails(
-                          context,
-                          searchResults[index],
-                        );
-                      },
+                        child: RippleEffect(
+                          child: Padding(
+                            padding: const EdgeInsets.all(
+                              Dimensions.standardSpacing,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text(
+                                  searchResults[itemIndex].name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTheme.titleTextStyle,
+                                ),
+                                if (searchResults[itemIndex].yearPublished !=
+                                    null)
+                                  Text(
+                                    searchResults[itemIndex]
+                                        .yearPublished
+                                        .toString(),
+                                    style: AppTheme.subTitleTextStyle,
+                                  ),
+                                SizedBox(
+                                  height: Dimensions.halfStandardSpacing,
+                                ),
+                              ],
+                            ),
+                          ),
+                          onTap: () async {
+                            await NavigatorHelper.navigateToBoardGameDetails(
+                              context,
+                              searchResults[itemIndex],
+                            );
+                          },
+                        ),
+                      );
+                    }
+
+                    return Divider(
+                      height: Dimensions.standardSpacing,
                     );
                   },
+                  childCount: math.max(0, searchResults.length * 2 - 1),
                 ),
               ),
             );
