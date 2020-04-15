@@ -1,3 +1,5 @@
+import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -5,10 +7,16 @@ class AppTheme {
   static const Color primaryColor = const Color(0xFF41175B);
   static const Color accentColor = Colors.orange;
 
+  static const Color secondaryColor = const Color(0xFF010055);
+  static const Color secondaryLightColor = const Color(0xFF2747A5);
+
+  static const Color shadowColor = const Color(0xFF000000);
+
   static const Color defaultTextColor = Color(0xFFFFFFFF);
   static const Color inverterTextColor = Color(0xFF000000);
 
-  
+  static const Color secondaryTextColor = Colors.grey;
+
   static const Color bottomTabBackgroundColor = primaryColorLight;
   static const Color selectedBottomTabIconColor = defaultTextColor;
   static const Color deselectedBottomTabIconColor = Color(0x46FFFFFF);
@@ -18,12 +26,28 @@ class AppTheme {
       primaryColorLight;
 
   static const Color startDefaultPageElementBackgroundColorGradient =
-      const Color(0xFF2747A5);
+      secondaryLightColor;
   static const Color endDefaultPageElementBackgroundColorGradient =
-      const Color(0xFF010055);
+      secondaryColor;
 
   static const TextStyle defaultBottomTabItemTextStyle = TextStyle(
     color: defaultTextColor,
+  );
+
+  static const TextStyle titleTextStyle = TextStyle(
+    fontSize: Dimensions.mediumFontSize,
+    color: defaultTextColor,
+  );
+
+  static const TextStyle subTitleTextStyle = TextStyle(
+    fontSize: Dimensions.standardSpacing,
+    color: secondaryTextColor,
+  );
+
+  static const BoxShadow defaultBoxShadow = BoxShadow(
+    color: AppTheme.shadowColor,
+    blurRadius: Styles.defaultShadowRadius,
+    offset: Styles.defaultShadowOffset,
   );
 
   static ThemeData get theme {
@@ -49,23 +73,24 @@ class AppTheme {
           color: defaultTextColor,
         ),
         display1: originalDisplay1.copyWith(
-          fontSize: 14.0,
+          fontSize: Dimensions.standardFontSize,
           color: defaultTextColor,
         ),
         display2: originalDisplay2.copyWith(
-          fontSize: 16.0,
+          fontSize: Dimensions.mediumFontSize,
           color: defaultTextColor,
         ),
         display3: originalDisplay3.copyWith(
-          fontSize: 20.0,
+          fontSize: Dimensions.largeFontSize,
           color: defaultTextColor,
         ),
         display4: originalDisplay4.copyWith(
-          fontSize: 28.0,
+          fontSize: Dimensions.extraLargeFontSize,
           color: defaultTextColor,
         ),
         subhead: originalSubhead.copyWith(
-          color: defaultTextColor,
+          fontSize: Dimensions.standardFontSize,
+          color: secondaryTextColor,
         ),
       ),
       inputDecorationTheme: originalInputDecorationTheme.copyWith(

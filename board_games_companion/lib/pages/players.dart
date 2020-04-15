@@ -54,7 +54,9 @@ class PlayersPage extends StatelessWidget {
 
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            padding: const EdgeInsets.all(
+              Dimensions.standardSpacing,
+            ),
             child: GridView.count(
               crossAxisCount: _numberOfPlayerColumns,
               children: List.generate(

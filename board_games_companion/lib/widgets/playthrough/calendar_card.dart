@@ -25,7 +25,7 @@ class CalendarCard extends StatelessWidget {
           Radius.circular(Styles.boardGameTileImageCircularRadius),
         ),
         boxShadow: [
-          BoxShadow(blurRadius: 0.5),
+          AppTheme.defaultBoxShadow,
         ],
       ),
       child: Column(

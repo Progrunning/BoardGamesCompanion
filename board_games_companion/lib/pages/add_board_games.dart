@@ -48,15 +48,20 @@ class _AddBoardGamesPageState extends State<AddBoardGamesPage> {
                 _isRefreshing = false;
 
                 if (snapshot.data is List<BoardGame>) {
-                  return GridView.count(
-                    crossAxisCount: _numberOfBoardGameColumns,
-                    children: List.generate(
-                      (snapshot.data as List<BoardGame>).length,
-                      (int index) {
-                        return BoardGameSearchItemWidget(
-                          boardGame: snapshot.data[index],
-                        );
-                      },
+                  return Padding(
+                    padding: const EdgeInsets.all(
+                      Dimensions.standardSpacing,
+                    ),
+                    child: GridView.count(
+                      crossAxisCount: _numberOfBoardGameColumns,
+                      children: List.generate(
+                        (snapshot.data as List<BoardGame>).length,
+                        (int index) {
+                          return BoardGameSearchItemWidget(
+                            boardGame: snapshot.data[index],
+                          );
+                        },
+                      ),
                     ),
                   );
                 }

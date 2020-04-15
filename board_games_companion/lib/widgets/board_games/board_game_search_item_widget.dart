@@ -29,10 +29,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
             padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                  width: Dimensions.defaultBorderWidth,
-                  color: AppTheme.accentColor,
-                ),
+                boxShadow: [AppTheme.defaultBoxShadow],
                 borderRadius: BorderRadius.all(
                     Radius.circular(Styles.boardGameTileImageCircularRadius)),
                 image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
@@ -40,7 +37,8 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
             ),
           ),
           fit: BoxFit.fitWidth,
-          placeholder: (context, url) => ShadowBox(
+          placeholder: (context, url) => Container(
+            color: AppTheme.primaryColor,
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -90,7 +88,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameSearchItemWidget> {
           ),
         ),
         Positioned(
-          top: -2, // TODO MK Find out why there's a need for negative value
+          top: -1.5, // TODO MK Find out why there's a need for negative value
           right: Dimensions.halfStandardSpacing,
           child: RankRibbon(widget.boardGame.rank),
         ),

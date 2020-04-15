@@ -41,17 +41,13 @@ class PlayerScore extends StatelessWidget {
               value: _playerScore,
               child: Consumer<player_score_model.PlayerScore>(
                 builder: (_, store, __) {
-                  Widget playerAvatar = SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: ShadowBox(
-                      child: PlayerAvatar(
-                        imageUri: store?.player?.imageUri,
-                        medal: store?.medal,
-                      ),
-                      shadowOffset: Styles.defaultShadowOffset,
-                      shadowColor: Theme.of(context).accentColor,
+                  Widget playerAvatar = ShadowBox(
+                    child: PlayerAvatar(
+                      imageUri: store?.player?.imageUri,
+                      medal: store?.medal,
                     ),
+                    shadowOffset: Styles.defaultShadowOffset,
+                    shadowColor: Theme.of(context).accentColor,
                   );
                   if ((store?.player?.id?.isNotEmpty ?? false) &&
                       (store.score?.id?.isNotEmpty ?? false)) {
@@ -65,18 +61,21 @@ class PlayerScore extends StatelessWidget {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          playerAvatar,
-                          if ((store?.score?.value?.isNotEmpty ?? false) &&
-                              store.place != null)
-                            Positioned(
-                              top:
-                                  -2, // TODO MK Find out why there's a need for negative value
-                              right: Dimensions.halfStandardSpacing,
-                              child: RankRibbon(store?.place),
-                            ),
-                        ],
+                      SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Stack(
+                          children: <Widget>[
+                            playerAvatar,
+                            if ((store?.score?.value?.isNotEmpty ?? false) &&
+                                store.place != null)
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: RankRibbon(store?.place),
+                              ),
+                          ],
+                        ),
                       ),
                       Expanded(
                         child: Padding(
@@ -205,12 +204,6 @@ class PlayerScore extends StatelessWidget {
       builder: (_) {
         return AlertDialog(
           backgroundColor: AppTheme.primaryColor,
-          title: Text(
-            '${playerScore.player.name}\'s score',
-            style: TextStyle(
-              color: AppTheme.defaultTextColor,
-            ),
-          ),
           content: ChangeNotifierProvider.value(
             value: playthroughStore,
             child: PlayerScore(

@@ -16,7 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BoardGameCollectionItemWidget extends StatelessWidget {
-  BoardGameCollectionItemWidget({Key key}) : super(key: key);
+  BoardGameCollectionItemWidget({
+    Key key,
+  }) : super(key: key);
 
   static const double _infoIconSize = 32;
 
@@ -29,7 +31,9 @@ class BoardGameCollectionItemWidget extends StatelessWidget {
       key: Key(boardGameDetails.id),
       background: Container(
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: Dimensions.doubleStandardSpacing),
+        padding: EdgeInsets.only(
+          right: Dimensions.doubleStandardSpacing,
+        ),
         color: Colors.red,
         child: Icon(
           Icons.delete,
@@ -87,7 +91,7 @@ class BoardGameCollectionItemWidget extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Dimensions.standardSpacing,
+            height: Dimensions.doubleStandardSpacing,
           ),
         ],
       ),
