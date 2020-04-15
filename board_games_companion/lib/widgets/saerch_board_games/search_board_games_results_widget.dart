@@ -96,7 +96,7 @@ class SaerchBoardGamesResults extends StatelessWidget {
           return SliverPersistentHeader(
             delegate: SearchBoardGamesState(
               child: Text(
-                  'To search for board games, please type a board game title in the above field.'),
+                  'To search for board games, please type a board game title in the above search bar.'),
             ),
           );
         } else if (snapshot.hasError) {
