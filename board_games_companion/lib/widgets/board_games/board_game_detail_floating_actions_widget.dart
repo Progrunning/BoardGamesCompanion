@@ -7,8 +7,12 @@ import 'package:provider/provider.dart';
 
 class BoardGameDetailFloatingActions extends StatelessWidget {
   const BoardGameDetailFloatingActions({
+    @required boardGameDetailsStore,
     Key key,
-  }) : super(key: key);
+  })  : _boardGameDetailsStore = boardGameDetailsStore,
+        super(key: key);
+
+  final BoardGameDetailsStore _boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +22,14 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
       icon: Icons.add,
     );
   }
-}
 
-Future<void> _addBoardGameToCollection(
-  BuildContext context,
-) async {
-  final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
-  final boardGameDetailsStore =
-      Provider.of<BoardGameDetailsStore>(context, listen: false);
-  await boardGamesStore
-      .addOrUpdateBoardGame(boardGameDetailsStore.boardGameDetails);
-  Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+  Future<void> _addBoardGameToCollection(
+    BuildContext context,
+  ) async {
+    final boardGamesStore =
+        Provider.of<BoardGamesStore>(context, listen: false);
+    await boardGamesStore
+        .addOrUpdateBoardGame(_boardGameDetailsStore.boardGameDetails);
+    Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+  }
 }

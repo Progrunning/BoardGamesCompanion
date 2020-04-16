@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
+import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,8 +64,7 @@ class BoardGamesDetailsBody extends StatelessWidget {
                           store.boardGameDetails.description
                               .replaceAll('&#10;&#10;', "\n\n"),
                           textAlign: TextAlign.justify,
-                          style:
-                              TextStyle(fontSize: Dimensions.mediumFontSize),
+                          style: TextStyle(fontSize: Dimensions.mediumFontSize),
                         )
                       ],
                     ),
@@ -75,7 +75,28 @@ class BoardGamesDetailsBody extends StatelessWidget {
           );
         } else if (snapshot.hasError) {
           return SliverFillRemaining(
-            child: GenericErrorMessage(),
+            child: Padding(
+              padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                    child: Center(
+                      child: Text(
+                          'We couldn\'t retrieve any board games. Check your Internet connectivity and try again.'),
+                    ),
+                  ),
+                  SizedBox(height: Dimensions.standardSpacing),
+                  IconAndTextButton(
+                    title: 'Refresh',
+                    icon: Icons.refresh,
+                    onPressed: () => _refreshBoardGameDetails(
+                        _boardGameId, _boardGameDetailsStore),
+                  )
+                ],
+              ),
+            ),
           );
         }
 

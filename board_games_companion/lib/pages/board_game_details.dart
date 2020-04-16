@@ -35,55 +35,9 @@ class BoardGamesDetailsPage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: BoardGameDetailFloatingActions(),
+      floatingActionButton: BoardGameDetailFloatingActions(
+        boardGameDetailsStore: _boardGameDetailsStore,
+      ),
     );
   }
 }
-
-// child: Scaffold(
-//   appBar: AppBar(
-//     title: Text(_boardGameName ?? ''),
-//   ),
-//   body: PageContainer(
-//     child: ConsumerFutureBuilder<BoardGameDetails, BoardGameDetailsStore>(
-//       future: _loadBoardGameDetailsMemoizer.runOnce(() =>
-//           _boardGameDetailsStore.loadBoardGameDetails(_boardGameId)),
-//       loading: (_) {
-//         return Center(
-//           child: LoadingIndicator(),
-//         );
-//       },
-//       success: (_, store) {
-//         if (store.boardGameDetails != null) {
-//           return SingleChildScrollView(
-//             child:
-//             ),
-//           );
-//         }
-
-//         return Padding(
-//           padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: <Widget>[
-//               Padding(
-//                 padding: const EdgeInsets.all(Dimensions.standardSpacing),
-//                 child: Center(
-//                   child: Text(
-//                       'We couldn\'t retrieve any board games. Check your Internet connectivity and try again.'),
-//                 ),
-//               ),
-//               SizedBox(height: Dimensions.standardSpacing),
-//               RaisedButton(
-//                 child: Text('Refresh'),
-//                 onPressed: () =>
-//                     _refreshBoardGameDetails(_boardGameId, store),
-//               )
-//             ],
-//           ),
-//         );
-//       },
-//     ),
-//   ),
-//   floatingActionButton: BoardGameDetailFloatingActions(),
-// ),
