@@ -3,7 +3,7 @@ import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_image_widget.dart';
-import 'package:board_games_companion/widgets/common/custom_future_builder_widget.dart';
+import 'package:board_games_companion/widgets/common/cunsumer_future_builder_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/playthrough_item_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';

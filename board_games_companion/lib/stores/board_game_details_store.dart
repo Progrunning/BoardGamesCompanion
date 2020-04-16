@@ -22,6 +22,8 @@ class BoardGameDetailsStore with ChangeNotifier {
       Crashlytics.instance.recordError(e, stack);
     }
 
+    notifyListeners();
+
     return _boardGameDetails;
   }
 }

@@ -25,7 +25,7 @@ class SearchBoardGamesStore with ChangeNotifier {
     return _searchResultsMemoizer.runOnce(
       () async {
         if (_searchBarBoardGamesStore.searchPhrase?.isEmpty ?? true) {
-          _searchResults.clear();
+          _searchResults?.clear();
           return List<BoardGame>();
         }
 

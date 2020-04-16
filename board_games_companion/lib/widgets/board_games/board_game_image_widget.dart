@@ -20,6 +20,10 @@ class BoardGameImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (_boardGameDetails == null) {
+      return LoadingIndicator();
+    }
+
     return Hero(
       tag: "${AnimationTags.boardGameImageHeroTag}${_boardGameDetails.id}",
       child: CachedNetworkImage(
