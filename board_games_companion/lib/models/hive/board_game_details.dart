@@ -4,6 +4,7 @@ import 'package:board_games_companion/models/hive/board_game_artist.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_publisher.dart';
+import 'package:board_games_companion/models/hive/board_game_rank.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:hive/hive.dart';
 
@@ -128,12 +129,27 @@ class BoardGameDetails extends BaseBoardGame {
 
   @HiveField(16)
   List<BoardGamePublisher> publishers = List<BoardGamePublisher>();
-  
+
   @HiveField(17)
   List<BoardGameArtist> artists = List<BoardGameArtist>();
-  
+
   @HiveField(18)
   List<BoardGameDesigner> desingers = List<BoardGameDesigner>();
+  
+
+  int _commentsNumber;
+  @HiveField(19)
+  int get commentsNumber => _commentsNumber;
+  @HiveField(19)
+  set commentsNumber(int value) {
+    if (_commentsNumber != value) {
+      _commentsNumber = value;
+      notifyListeners();
+    }
+  }
+
+  @HiveField(20)
+  List<BoardGameRank> ranks = List<BoardGameRank>();
 
   DateTime _lastPlayed;
   DateTime get lastPlayed => _lastPlayed;
@@ -180,8 +196,8 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
-  String get playtingFormatted  {
-    if(_minPlaytime == _maxPlaytime) {
+  String get playtingFormatted {
+    if (_minPlaytime == _maxPlaytime) {
       return '$minPlaytime';
     }
 

@@ -13,4 +13,5 @@ class HiveBoxes {
   static const BoardGamesPublisherTypeId = 6;
   static const BoardGamesArtistTypeId = 7;
   static const BoardGamesDesignerTypeId = 8;
+  static const BoardGamesrankTypeId = 9;
 }

@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_credits_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_first_row_info_panels_widget.dart';
+import 'package:board_games_companion/widgets/board_games/details/board_game_details_numbers_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_second_row_info_panels_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_section_header_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
@@ -48,6 +49,15 @@ class BoardGamesDetailsBody extends StatelessWidget {
                     delegate: SliverChildListDelegate.fixed(
                       <Widget>[
                         BoardGameDetailsSectionHeader(
+                          title: 'Numbers',
+                        ),
+                        BoardGameDetailsNumbers(
+                          boardGameDetails: _boardGameDetailsStore.boardGameDetails,
+                        ),
+                        SizedBox(
+                          height: _spacingBetweenSecions,
+                        ),
+                        BoardGameDetailsSectionHeader(
                           title: 'General',
                         ),
                         BoardGameDetailsFirstRowInfoPanels(
@@ -65,7 +75,8 @@ class BoardGamesDetailsBody extends StatelessWidget {
                           height: _spacingBetweenSecions,
                         ),
                         BoardGameDetailsCredits(
-                          boardGameDetails: _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails:
+                              _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: _spacingBetweenSecions,

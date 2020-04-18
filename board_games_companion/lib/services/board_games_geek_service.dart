@@ -5,6 +5,7 @@ import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/extensions/xml_element_extensions.dart';
 import 'package:board_games_companion/models/hive/board_game_publisher.dart';
+import 'package:board_games_companion/models/hive/board_game_rank.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -24,12 +25,17 @@ class BoardGamesGeekService {
   static const String _xmlLinkElementName = 'link';
   static const String _xmlStatisticsElementName = 'statistics';
   static const String _xmlRatingsElementName = 'ratings';
+  static const String _xmlRanksElementName = 'ranks';
+  static const String _xmlRankElementName = 'rank';
   static const String _xmlAverageElementName = 'average';
   static const String _xmlUsersRatedElementName = 'usersrated';
+  static const String _xmlNumCommentsElementName = 'numcomments';
   static const String _xmlAverageWeightElementName = 'averageweight';
   static const String _xmlIdAttributeName = 'id';
   static const String _xmlTypeAttributeName = 'type';
   static const String _xmlValueAttributeName = 'value';
+  static const String _xmlNameAttributeName = 'name';
+  static const String _xmlFriendlyNameAttributeName = 'friendlyname';
   static const String _xmlCategoryAttributeTypeName = 'boardgamecategory';
   static const String _xmlDesignerAttributeTypeName = 'boardgamedesigner';
   static const String _xmlArtistAttributeTypeName = 'boardgameartist';
@@ -201,7 +207,7 @@ class BoardGamesGeekService {
           '');
 
       final boardGameLinks =
-          boardGameDetailsItem.findAllElements(_xmlLinkElementName);
+          boardGameDetailsItem.findElements(_xmlLinkElementName);
       _extractBoardGameLinks(boardGameLinks, boardGameDetails);
 
       final boardGameDetailStatistics =
@@ -222,11 +228,19 @@ class BoardGamesGeekService {
               '') ??
           0;
 
+      boardGameDetails.commentsNumber = int.tryParse(boardGameDetailsRatings
+                  ?.firstOrDefault(_xmlNumCommentsElementName)
+                  ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+              '') ??
+          0;
+
       boardGameDetails.avgWeight = num.tryParse(boardGameDetailsRatings
                   ?.firstOrDefault(_xmlAverageWeightElementName)
                   ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
               '') ??
           0;
+
+      _extractBoardGameRanks(boardGameDetailsRatings, boardGameDetails);
 
       return boardGameDetails;
     } catch (e, stack) {
@@ -286,8 +300,10 @@ class BoardGamesGeekService {
     return null;
   }
 
-  void _extractBoardGameLinks(Iterable<xml.XmlElement> boardGameLinks,
-      BoardGameDetails boardGameDetails) {
+  void _extractBoardGameLinks(
+    Iterable<xml.XmlElement> boardGameLinks,
+    BoardGameDetails boardGameDetails,
+  ) {
     for (final boardGameLink in boardGameLinks) {
       if (boardGameLink.attributes?.isEmpty ?? true) {
         continue;
@@ -333,6 +349,32 @@ class BoardGamesGeekService {
           break;
         default:
       }
+    }
+  }
+
+  void _extractBoardGameRanks(
+    xml.XmlElement boardGameDetailsRatings,
+    BoardGameDetails boardGameDetails,
+  ) {
+    final boardGameDetailsRanks = boardGameDetailsRatings
+        .firstOrDefault(_xmlRanksElementName)
+        ?.findElements(_xmlRankElementName);
+
+    for (final boardGameRank in boardGameDetailsRanks) {
+      final rank = BoardGameRank();
+      rank.type =
+          boardGameRank.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
+      rank.id = boardGameRank.firstOrDefaultAttributeValue(_xmlIdAttributeName);
+      rank.name =
+          boardGameRank.firstOrDefaultAttributeValue(_xmlNameAttributeName);
+      rank.friendlyName = boardGameRank
+          .firstOrDefaultAttributeValue(_xmlFriendlyNameAttributeName);
+      rank.rank = num.tryParse(boardGameRank
+                  .firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+              '') ??
+          0;
+
+      boardGameDetails.ranks.add(rank);
     }
   }
 }

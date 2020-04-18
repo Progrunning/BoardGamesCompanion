@@ -21,6 +21,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..publishers = (fields[16] as List)?.cast<BoardGamePublisher>()
       ..artists = (fields[17] as List)?.cast<BoardGameArtist>()
       ..desingers = (fields[18] as List)?.cast<BoardGameDesigner>()
+      ..ranks = (fields[20] as List)?.cast<BoardGameRank>()
       ..imageUrl = fields[5] as String
       ..description = fields[6] as String
       ..rating = fields[8] as double
@@ -31,6 +32,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..maxPlaytime = fields[13] as int
       ..minAge = fields[14] as int
       ..avgWeight = fields[15] as num
+      ..commentsNumber = fields[19] as int
       ..id = fields[0] as String
       ..name = fields[1] as String
       ..thumbnailUrl = fields[2] as String
@@ -41,7 +43,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
   @override
   void write(BinaryWriter writer, BoardGameDetails obj) {
     writer
-      ..writeByte(19)
+      ..writeByte(21)
       ..writeByte(7)
       ..write(obj.categories)
       ..writeByte(16)
@@ -50,6 +52,8 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..write(obj.artists)
       ..writeByte(18)
       ..write(obj.desingers)
+      ..writeByte(20)
+      ..write(obj.ranks)
       ..writeByte(5)
       ..write(obj.imageUrl)
       ..writeByte(6)
@@ -70,6 +74,8 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..write(obj.minAge)
       ..writeByte(15)
       ..write(obj.avgWeight)
+      ..writeByte(19)
+      ..write(obj.commentsNumber)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
