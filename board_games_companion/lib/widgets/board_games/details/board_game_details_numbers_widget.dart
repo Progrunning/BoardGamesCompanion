@@ -32,10 +32,6 @@ class BoardGameDetailsNumbers extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 BoardGameDetailsNumbersItem(
-                  title: 'Published',
-                  number: _boardGameDetails?.yearPublished,
-                ),
-                BoardGameDetailsNumbersItem(
                   title: 'Rank',
                   number: (_boardGameDetails?.ranks?.isNotEmpty ?? false)
                       ? _boardGameDetails?.ranks?.first?.rank
@@ -44,10 +40,16 @@ class BoardGameDetailsNumbers extends StatelessWidget {
                 BoardGameDetailsNumbersItem(
                   title: 'Ratings',
                   number: _boardGameDetails?.votes,
+                  format: true,
                 ),
                 BoardGameDetailsNumbersItem(
                   title: 'Comments',
                   number: _boardGameDetails?.commentsNumber,
+                  format: true,
+                ),
+                BoardGameDetailsNumbersItem(
+                  title: 'Published',
+                  number: _boardGameDetails?.yearPublished,
                 ),
               ],
             ),
