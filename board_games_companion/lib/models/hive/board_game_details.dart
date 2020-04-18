@@ -167,4 +167,12 @@ class BoardGameDetails extends BaseBoardGame {
       notifyListeners();
     }
   }
+
+  String get playtingFormatted  {
+    if(_minPlaytime == _maxPlaytime) {
+      return '$minPlaytime';
+    }
+
+    return '$minPlaytime - $maxPlaytime';
+  }
 }

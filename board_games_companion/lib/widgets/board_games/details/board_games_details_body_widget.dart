@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_first_row_info_panels_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_second_row_info_panels_widget.dart';
+import 'package:board_games_companion/widgets/board_games/details/board_game_details_section_header_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
@@ -43,17 +44,25 @@ class BoardGamesDetailsBody extends StatelessWidget {
                   sliver: SliverList(
                     delegate: SliverChildListDelegate.fixed(
                       <Widget>[
+                        BoardGameDetailsSectionHeader(
+                          title: 'General',
+                        ),
                         BoardGameDetailsFirstRowInfoPanels(
-                          boardGameDetails: _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails:
+                              _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: Dimensions.standardSpacing,
                         ),
                         BoardGameDetailsSecondRowInfoPanels(
-                          boardGameDetails: _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails:
+                              _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: Dimensions.standardSpacing,
+                        ),
+                        BoardGameDetailsSectionHeader(
+                          title: 'Categories',
                         ),
                         Wrap(
                           direction: Axis.horizontal,
@@ -73,6 +82,9 @@ class BoardGamesDetailsBody extends StatelessWidget {
                         ),
                         SizedBox(
                           height: Dimensions.standardSpacing,
+                        ),
+                        BoardGameDetailsSectionHeader(
+                          title: 'Description',
                         ),
                         Text(
                           store.boardGameDetails.description

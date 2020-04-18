@@ -30,8 +30,7 @@ class BoardGameDetailsFirstRowInfoPanels extends StatelessWidget {
           ),
           Flexible(
             child: BoardGameDetailsInfoPanel(
-              title:
-                  '${_boardGameDetails.minPlaytime} - ${_boardGameDetails.maxPlaytime} Min',
+              title: '${_boardGameDetails.playtingFormatted} Min',
               subtitle: 'Playing Time',
             ),
           ),
