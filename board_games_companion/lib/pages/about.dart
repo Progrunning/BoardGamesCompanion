@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:board_games_companion/widgets/about/detail_item_widget.dart';
@@ -11,7 +12,6 @@ class AboutPage extends StatelessWidget {
 
   static const String privactyPolicyUrl =
       'https://progrunning.net/board-games-companion-privacy-policy/';
-  static const String feedbackEmailAddress = 'feedback@progrunning.net';
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,9 @@ class AboutPage extends StatelessWidget {
                     ),
                     DetailsItem(
                       title: 'Mikolaj Kieres',
-                      subtitle: feedbackEmailAddress,
+                      subtitle: Constants.FeedbackEmailAddress,
                       uri:
-                          'mailto:$feedbackEmailAddress?subject=BGC%20Feedback',
+                          'mailto:${Constants.FeedbackEmailAddress}?subject=BGC%20Feedback',
                       iconUri: 'assets/mikolaj_profile_picture.jpg',
                     ),
                     Divider(

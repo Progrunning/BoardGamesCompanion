@@ -2,11 +2,15 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/cupertino.dart';
 
 class SearchBoardGamesState extends SliverPersistentHeaderDelegate {
-  Widget child;
+  static const double defaultHeight = 100;
 
-  SearchBoardGamesState({
+  const SearchBoardGamesState({
     @required this.child,
+    this.height = defaultHeight,
   });
+
+  final Widget child;
+  final double height;
 
   @override
   Widget build(
@@ -24,10 +28,10 @@ class SearchBoardGamesState extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 100;
+  double get maxExtent => height;
 
   @override
-  double get minExtent => 100;
+  double get minExtent => height;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {

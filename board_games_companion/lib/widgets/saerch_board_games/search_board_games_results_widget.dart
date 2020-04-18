@@ -4,11 +4,13 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
+import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/common/rippler_effect.dart';
+import 'package:board_games_companion/widgets/saerch_board_games/search_board_game_no_results_widget.dart';
 import 'package:board_games_companion/widgets/saerch_board_games/search_board_games_instructions_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,10 @@ class SaerchBoardGamesResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchBoardGamesStore = Provider.of<SearchBoardGamesStore>(context);
+    final searchBarBoardGamesStore = Provider.of<SearchBarBoardGamesStore>(
+      context,
+      listen: false,
+    );
     return FutureBuilder(
       future: searchBoardGamesStore.search(),
       builder: (_, snapshot) {
@@ -93,10 +99,18 @@ class SaerchBoardGamesResults extends StatelessWidget {
             );
           }
 
+          if (searchBarBoardGamesStore.searchPhrase?.isNotEmpty ?? false) {
+            return SearchBoardGamesNoResults(
+              searchBarBoardGamesStore: searchBarBoardGamesStore,
+              searchBoardGamesStore: searchBoardGamesStore,
+            );
+          }
+
           return SliverPersistentHeader(
             delegate: SearchBoardGamesState(
               child: Text(
-                  'To search for board games, please type a board game title in the above search bar.'),
+                'To search for board games, please type a board game title in the above search bar.',
+              ),
             ),
           );
         } else if (snapshot.hasError) {

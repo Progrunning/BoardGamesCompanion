@@ -7,4 +7,6 @@ class Constants {
   static const NumberOfSecondsInHour = 3600;
   static const NumberOfSecondsInMinute = 60;
   static const NumberOfMinutesInHour = 60;
+  
+  static const FeedbackEmailAddress = 'feedback@progrunning.net';
 }
