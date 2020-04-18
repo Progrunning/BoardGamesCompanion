@@ -1,10 +1,14 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
+import 'package:board_games_companion/widgets/common/debug_box.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
+import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'board_game_details_info_panel_widget.dart';
 
 class BoardGamesDetailsBody extends StatelessWidget {
   const BoardGamesDetailsBody({
@@ -41,6 +45,56 @@ class BoardGamesDetailsBody extends StatelessWidget {
                   sliver: SliverList(
                     delegate: SliverChildListDelegate.fixed(
                       <Widget>[
+                        IntrinsicHeight(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Flexible(
+                                child: BoardGameDetailsInfoPanel(
+                                  title: '1-4 Players',
+                                ),
+                              ),
+                              SizedBox(
+                                width: Dimensions.standardSpacing,
+                              ),
+                              Flexible(
+                                child: BoardGameDetailsInfoPanel(
+                                  title: '60 - 120 Min',
+                                  subtitle: 'Playing Time',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.standardSpacing,
+                        ),
+                        IntrinsicHeight(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Flexible(
+                                child: BoardGameDetailsInfoPanel(
+                                  title: 'Age: 14+',
+                                ),
+                              ),
+                              SizedBox(
+                                width: Dimensions.standardSpacing,
+                              ),
+                              Flexible(
+                                child: BoardGameDetailsInfoPanel(
+                                  title: 'Weight: 3.92 / 5',
+                                  subtitle: 'Complexity Rating',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.standardSpacing,
+                        ),
                         Wrap(
                           direction: Axis.horizontal,
                           spacing: Dimensions.standardSpacing,
