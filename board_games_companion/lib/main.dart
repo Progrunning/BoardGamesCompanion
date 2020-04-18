@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:board_games_companion/app.dart';
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
+import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_publisher.dart';
+import 'package:board_games_companion/models/hive/board_game_artist.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
@@ -28,6 +31,8 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
 
+import 'models/hive/board_game_designer.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -40,6 +45,9 @@ void main() async {
   Hive.registerAdapter(PlaythroughAdapter());
   Hive.registerAdapter(PlaythroughStatusAdapter());
   Hive.registerAdapter(ScoreAdapter());
+  Hive.registerAdapter(BoardGameDesignerAdapter());
+  Hive.registerAdapter(BoardGamePublisherAdapter());
+  Hive.registerAdapter(BoardGameArtistAdapter());
 
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 

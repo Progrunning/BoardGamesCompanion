@@ -1,7 +1,10 @@
 import 'package:board_games_companion/models/board_game.dart';
+import 'package:board_games_companion/models/hive/board_game_artist.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
+import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/extensions/xml_element_extensions.dart';
+import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -28,6 +31,9 @@ class BoardGamesGeekService {
   static const String _xmlTypeAttributeName = 'type';
   static const String _xmlValueAttributeName = 'value';
   static const String _xmlCategoryAttributeTypeName = 'boardgamecategory';
+  static const String _xmlDesignerAttributeTypeName = 'boardgamedesigner';
+  static const String _xmlArtistAttributeTypeName = 'boardgameartist';
+  static const String _xmlPublisherAttributeTypeName = 'boardgamepublisher';
 
   static const String _baseBoardGamesUrl =
       'https://www.boardgamegeek.com/xmlapi2';
@@ -162,36 +168,41 @@ class BoardGamesGeekService {
           boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
 
       boardGameDetails.minPlayers = int.tryParse(boardGameDetailsItem
-          .firstOrDefault(_xmlMinPlayersElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+              .firstOrDefault(_xmlMinPlayersElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          '');
 
       boardGameDetails.maxPlayers = int.tryParse(boardGameDetailsItem
-          .firstOrDefault(_xmlMaxPlayersElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+              .firstOrDefault(_xmlMaxPlayersElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          '');
 
       boardGameDetails.minPlaytime = int.tryParse(boardGameDetailsItem
-          .firstOrDefault(_xmlMinPlaytimeElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
-      
+              .firstOrDefault(_xmlMinPlaytimeElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          '');
+
       boardGameDetails.maxPlaytime = int.tryParse(boardGameDetailsItem
-          .firstOrDefault(_xmlMaxPlaytimeElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+              .firstOrDefault(_xmlMaxPlaytimeElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          '');
 
       boardGameDetails.minAge = int.tryParse(boardGameDetailsItem
-          .firstOrDefault(_xmlMinAgeElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
-
+              .firstOrDefault(_xmlMinAgeElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          '');
 
       boardGameDetails.imageUrl =
           boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
 
       boardGameDetails.yearPublished = int.tryParse(boardGameDetailsItem
-          .firstOrDefault(_xmlYearPublishedElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+              .firstOrDefault(_xmlYearPublishedElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          '');
 
       final boardGameLinks =
           boardGameDetailsItem.findAllElements(_xmlLinkElementName);
-      _extractBoardGameCategories(boardGameLinks, boardGameDetails);
+      _extractBoardGameLinks(boardGameLinks, boardGameDetails);
 
       final boardGameDetailStatistics =
           boardGameDetailsItem.firstOrDefault(_xmlStatisticsElementName);
@@ -200,18 +211,21 @@ class BoardGamesGeekService {
           boardGameDetailStatistics.firstOrDefault(_xmlRatingsElementName);
 
       boardGameDetails.rating = double.tryParse(boardGameDetailsRatings
-              ?.firstOrDefault(_xmlAverageElementName)
-              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '') ??
+                  ?.firstOrDefault(_xmlAverageElementName)
+                  ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+              '') ??
           0;
 
       boardGameDetails.votes = int.tryParse(boardGameDetailsRatings
-              ?.firstOrDefault(_xmlUsersRatedElementName)
-              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '') ??
+                  ?.firstOrDefault(_xmlUsersRatedElementName)
+                  ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+              '') ??
           0;
 
       boardGameDetails.avgWeight = num.tryParse(boardGameDetailsRatings
-              ?.firstOrDefault(_xmlAverageWeightElementName)
-              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '') ??
+                  ?.firstOrDefault(_xmlAverageWeightElementName)
+                  ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+              '') ??
           0;
 
       return boardGameDetails;
@@ -272,29 +286,53 @@ class BoardGamesGeekService {
     return null;
   }
 
-  void _extractBoardGameCategories(Iterable<xml.XmlElement> boardGameLinks,
+  void _extractBoardGameLinks(Iterable<xml.XmlElement> boardGameLinks,
       BoardGameDetails boardGameDetails) {
     for (final boardGameLink in boardGameLinks) {
       if (boardGameLink.attributes?.isEmpty ?? true) {
         continue;
       }
 
-      final hasCategoryAttribute = boardGameLink.attributes.any((attr) {
-        return attr.name.local == _xmlTypeAttributeName &&
-            attr.value == _xmlCategoryAttributeTypeName;
-      });
+      final type =
+          boardGameLink.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
+      final id =
+          boardGameLink.firstOrDefaultAttributeValue(_xmlIdAttributeName);
+      final value =
+          boardGameLink.firstOrDefaultAttributeValue(_xmlValueAttributeName);
 
-      if (!hasCategoryAttribute) {
+      if ((type?.isEmpty ?? true) ||
+          (id?.isEmpty ?? true) ||
+          (value?.isEmpty ?? true)) {
         continue;
       }
 
-      final boardGameCategory = BoardGameCategory();
-      boardGameCategory.id =
-          boardGameLink.firstOrDefaultAttributeValue(_xmlIdAttributeName);
-      boardGameCategory.name =
-          boardGameLink.firstOrDefaultAttributeValue(_xmlValueAttributeName);
-
-      boardGameDetails.categories.add(boardGameCategory);
+      switch (type) {
+        case _xmlCategoryAttributeTypeName:
+          final boardGameCategory = BoardGameCategory();
+          boardGameCategory.id = id;
+          boardGameCategory.name = value;
+          boardGameDetails.categories.add(boardGameCategory);
+          break;
+        case _xmlDesignerAttributeTypeName:
+          final boardGameDesigner = BoardGameDesigner();
+          boardGameDesigner.id = id;
+          boardGameDesigner.name = value;
+          boardGameDetails.desingers.add(boardGameDesigner);
+          break;
+        case _xmlPublisherAttributeTypeName:
+          final boardGamePublisher = BoardGamePublisher();
+          boardGamePublisher.id = id;
+          boardGamePublisher.name = value;
+          boardGameDetails.publishers.add(boardGamePublisher);
+          break;
+        case _xmlArtistAttributeTypeName:
+          final boardGameArtist = BoardGameArtist();
+          boardGameArtist.id = id;
+          boardGameArtist.name = value;
+          boardGameDetails.artists.add(boardGameArtist);
+          break;
+        default:
+      }
     }
   }
 }

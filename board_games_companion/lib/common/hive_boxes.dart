@@ -10,4 +10,7 @@ class HiveBoxes {
   static const PlaythroughTypeId = 3;
   static const ScoreTypeId = 4;
   static const PlaythroughStatusTypeId = 5;
+  static const BoardGamesPublisherTypeId = 6;
+  static const BoardGamesArtistTypeId = 7;
+  static const BoardGamesDesignerTypeId = 8;
 }

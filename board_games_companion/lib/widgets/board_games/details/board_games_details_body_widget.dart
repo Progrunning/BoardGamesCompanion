@@ -1,5 +1,6 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
+import 'package:board_games_companion/widgets/board_games/details/board_game_details_credits_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_first_row_info_panels_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_second_row_info_panels_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_section_header_widget.dart';
@@ -20,6 +21,8 @@ class BoardGamesDetailsBody extends StatelessWidget {
 
   final String _boardGameId;
   final BoardGameDetailsStore _boardGameDetailsStore;
+
+  static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +55,20 @@ class BoardGamesDetailsBody extends StatelessWidget {
                               _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
-                          height: Dimensions.standardSpacing,
+                          height: _spacingBetweenSecions,
                         ),
                         BoardGameDetailsSecondRowInfoPanels(
                           boardGameDetails:
                               _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
-                          height: Dimensions.standardSpacing,
+                          height: _spacingBetweenSecions,
+                        ),
+                        BoardGameDetailsCredits(
+                          boardGameDetails: _boardGameDetailsStore.boardGameDetails,
+                        ),
+                        SizedBox(
+                          height: _spacingBetweenSecions,
                         ),
                         BoardGameDetailsSectionHeader(
                           title: 'Categories',
@@ -81,7 +90,7 @@ class BoardGamesDetailsBody extends StatelessWidget {
                           }).toList(),
                         ),
                         SizedBox(
-                          height: Dimensions.standardSpacing,
+                          height: _spacingBetweenSecions,
                         ),
                         BoardGameDetailsSectionHeader(
                           title: 'Description',

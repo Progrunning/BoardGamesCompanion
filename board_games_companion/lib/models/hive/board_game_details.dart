@@ -1,6 +1,9 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/base_board_game.dart';
+import 'package:board_games_companion/models/hive/board_game_artist.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
+import 'package:board_games_companion/models/hive/board_game_designer.dart';
+import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:hive/hive.dart';
 
@@ -122,6 +125,15 @@ class BoardGameDetails extends BaseBoardGame {
       notifyListeners();
     }
   }
+
+  @HiveField(16)
+  List<BoardGamePublisher> publishers = List<BoardGamePublisher>();
+  
+  @HiveField(17)
+  List<BoardGameArtist> artists = List<BoardGameArtist>();
+  
+  @HiveField(18)
+  List<BoardGameDesigner> desingers = List<BoardGameDesigner>();
 
   DateTime _lastPlayed;
   DateTime get lastPlayed => _lastPlayed;
