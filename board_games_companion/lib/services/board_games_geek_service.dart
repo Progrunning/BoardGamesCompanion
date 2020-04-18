@@ -9,6 +9,15 @@ import 'package:xml/xml.dart' as xml;
 
 class BoardGamesGeekService {
   static const String _xmlItemElementName = 'item';
+  static const String _xmlNameElementName = 'name';
+  static const String _xmlDescriptionElementName = 'description';
+  static const String _xmlYearPublishedElementName = 'yearpublished';
+  static const String _xmlImageElementName = 'image';
+  static const String _xmlLinkElementName = 'link';
+  static const String _xmlStatisticsElementName = 'statistics';
+  static const String _xmlRatingsElementName = 'ratings';
+  static const String _xmlAverageElementName = 'average';
+  static const String _xmlUsersRatedElementName = 'usersrated';
   static const String _xmlIdAttributeName = 'id';
   static const String _xmlTypeAttributeName = 'type';
   static const String _xmlValueAttributeName = 'value';
@@ -131,12 +140,10 @@ class BoardGamesGeekService {
       }
 
       final boardGameDetailName = boardGameDetailsItem
-          .findAllElements('name')
-          .first
-          .attributes
-          .firstWhere((attr) {
-        return attr.name.local == 'value';
-      }).value;
+          .firstOrDefault(_xmlNameElementName)
+          ?.firstOrDefaultAttributeWhere((attr) {
+        return attr.name.local == _xmlValueAttributeName;
+      })?.value;
 
       if (boardGameDetailName?.isEmpty ?? true) {
         return null;
@@ -146,64 +153,33 @@ class BoardGamesGeekService {
       boardGameDetails.id = id;
 
       boardGameDetails.description =
-          boardGameDetailsItem.findAllElements('description').first.text;
+          boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
 
       boardGameDetails.imageUrl =
-          boardGameDetailsItem.findAllElements('image').first.text;
+          boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
 
       boardGameDetails.yearPublished = int.tryParse(boardGameDetailsItem
-          .findAllElements('yearpublished')
-          .first
-          .attributes
-          .first
-          .value);
+          .firstOrDefault(_xmlYearPublishedElementName)
+          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName));
 
-      final boardGameDetailCategories =
-          boardGameDetailsItem.findAllElements('link');
-      for (final boardGameDetailCategory in boardGameDetailCategories) {
-        if (boardGameDetailCategory.attributes.isEmpty) {
-          continue;
-        }
-
-        final hasCategoryAttribute =
-            boardGameDetailCategory.attributes.any((attr) {
-          return attr.name.local == _xmlTypeAttributeName &&
-              attr.value == _xmlCategoryAttributeTypeName;
-        });
-
-        if (!hasCategoryAttribute) {
-          continue;
-        }
-
-        final boardGameCategory = BoardGameCategory();
-        boardGameCategory.id = boardGameDetailCategory
-            .firstOrDefaultAttributeValue(_xmlIdAttributeName);
-        boardGameCategory.name = boardGameDetailCategory
-            .firstOrDefaultAttributeValue(_xmlValueAttributeName);
-
-        boardGameDetails.categories.add(boardGameCategory);
-      }
+      final boardGameLinks =
+          boardGameDetailsItem.findAllElements(_xmlLinkElementName);
+      _extractBoardGameCategories(boardGameLinks, boardGameDetails);
 
       final boardGameDetailStatistics =
-          boardGameDetailsItem.firstOrDefault('statistics');
+          boardGameDetailsItem.firstOrDefault(_xmlStatisticsElementName);
 
       final boardGameDetailsRatings =
-          boardGameDetailStatistics.firstOrDefault('ratings');
+          boardGameDetailStatistics.firstOrDefault(_xmlRatingsElementName);
 
       boardGameDetails.rating = double.tryParse(boardGameDetailsRatings
-              ?.findAllElements('average')
-              ?.first
-              ?.attributes
-              ?.single
-              ?.value) ??
+              ?.firstOrDefault(_xmlAverageElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName)) ??
           0;
 
       boardGameDetails.votes = int.tryParse(boardGameDetailsRatings
-              ?.findAllElements('usersrated')
-              ?.first
-              ?.attributes
-              ?.single
-              ?.value) ??
+              ?.firstOrDefault(_xmlUsersRatedElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName)) ??
           0;
 
       return boardGameDetails;
@@ -237,10 +213,11 @@ class BoardGamesGeekService {
     for (var searchResult in searchResultItems) {
       final boardGameId =
           searchResult.firstOrDefaultAttributeValue(_xmlIdAttributeName);
-      final boardGameName =
-          searchResult.firstOrDefaultElementsAttribute('name', _xmlValueAttributeName);
+      final boardGameName = searchResult.firstOrDefaultElementsAttribute(
+          'name', _xmlValueAttributeName);
       final boardGameYearPublished =
-          searchResult. firstOrDefaultElementsAttribute('yearpublished', _xmlValueAttributeName);
+          searchResult.firstOrDefaultElementsAttribute(
+              'yearpublished', _xmlValueAttributeName);
 
       final boardGame = BoardGame(boardGameName);
       boardGame.id = boardGameId;
@@ -261,5 +238,31 @@ class BoardGamesGeekService {
     }
 
     return null;
+  }
+
+  void _extractBoardGameCategories(Iterable<xml.XmlElement> boardGameLinks,
+      BoardGameDetails boardGameDetails) {
+    for (final boardGameLink in boardGameLinks) {
+      if (boardGameLink.attributes?.isEmpty ?? true) {
+        continue;
+      }
+
+      final hasCategoryAttribute = boardGameLink.attributes.any((attr) {
+        return attr.name.local == _xmlTypeAttributeName &&
+            attr.value == _xmlCategoryAttributeTypeName;
+      });
+
+      if (!hasCategoryAttribute) {
+        continue;
+      }
+
+      final boardGameCategory = BoardGameCategory();
+      boardGameCategory.id =
+          boardGameLink.firstOrDefaultAttributeValue(_xmlIdAttributeName);
+      boardGameCategory.name =
+          boardGameLink.firstOrDefaultAttributeValue(_xmlValueAttributeName);
+
+      boardGameDetails.categories.add(boardGameCategory);
+    }
   }
 }
