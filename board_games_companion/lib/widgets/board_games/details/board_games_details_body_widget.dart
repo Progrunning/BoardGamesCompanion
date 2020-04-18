@@ -74,6 +74,9 @@ class BoardGamesDetailsBody extends StatelessWidget {
                         SizedBox(
                           height: _spacingBetweenSecions,
                         ),
+                        BoardGameDetailsSectionHeader(
+                          title: 'Credits',
+                        ),
                         BoardGameDetailsCredits(
                           boardGameDetails:
                               _boardGameDetailsStore.boardGameDetails,

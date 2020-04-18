@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:board_games_companion/models/hive/board_game_artist.dart';
+import 'package:board_games_companion/models/hive/board_game_rank.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
@@ -48,6 +49,7 @@ void main() async {
   Hive.registerAdapter(BoardGameDesignerAdapter());
   Hive.registerAdapter(BoardGamePublisherAdapter());
   Hive.registerAdapter(BoardGameArtistAdapter());
+  Hive.registerAdapter(BoardGameRankAdapter());
 
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
