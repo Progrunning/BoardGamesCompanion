@@ -2,7 +2,12 @@ import 'package:xml/xml.dart';
 
 extension XmlElementExtensions on XmlElement {
   XmlElement firstOrDefault(String elementName) {
-    return this?.findElements(elementName)?.first ?? null;
+    final element = this?.findElements(elementName);
+    if (element?.isEmpty ?? true) {
+      return null;
+    }
+
+    return element.first;
   }
 
   String firstOrDefaultElementsAttribute(

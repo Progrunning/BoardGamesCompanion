@@ -22,6 +22,12 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..description = fields[6] as String
       ..rating = fields[8] as double
       ..votes = fields[9] as int
+      ..minPlayers = fields[10] as int
+      ..minPlaytime = fields[11] as int
+      ..maxPlayers = fields[12] as int
+      ..maxPlaytime = fields[13] as int
+      ..minAge = fields[14] as int
+      ..avgWeight = fields[15] as num
       ..id = fields[0] as String
       ..name = fields[1] as String
       ..thumbnailUrl = fields[2] as String
@@ -32,7 +38,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
   @override
   void write(BinaryWriter writer, BoardGameDetails obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(16)
       ..writeByte(7)
       ..write(obj.categories)
       ..writeByte(5)
@@ -43,6 +49,18 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..write(obj.rating)
       ..writeByte(9)
       ..write(obj.votes)
+      ..writeByte(10)
+      ..write(obj.minPlayers)
+      ..writeByte(11)
+      ..write(obj.minPlaytime)
+      ..writeByte(12)
+      ..write(obj.maxPlayers)
+      ..writeByte(13)
+      ..write(obj.maxPlaytime)
+      ..writeByte(14)
+      ..write(obj.minAge)
+      ..writeByte(15)
+      ..write(obj.avgWeight)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)

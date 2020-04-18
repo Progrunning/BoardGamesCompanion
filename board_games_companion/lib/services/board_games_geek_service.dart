@@ -11,6 +11,11 @@ class BoardGamesGeekService {
   static const String _xmlItemElementName = 'item';
   static const String _xmlNameElementName = 'name';
   static const String _xmlDescriptionElementName = 'description';
+  static const String _xmlMinPlayersElementName = 'minplayers';
+  static const String _xmlMaxPlayersElementName = 'maxplayers';
+  static const String _xmlMinPlaytimeElementName = 'minplaytime';
+  static const String _xmlMaxPlaytimeElementName = 'maxplaytime';
+  static const String _xmlMinAgeElementName = 'minage';
   static const String _xmlYearPublishedElementName = 'yearpublished';
   static const String _xmlImageElementName = 'image';
   static const String _xmlLinkElementName = 'link';
@@ -18,6 +23,7 @@ class BoardGamesGeekService {
   static const String _xmlRatingsElementName = 'ratings';
   static const String _xmlAverageElementName = 'average';
   static const String _xmlUsersRatedElementName = 'usersrated';
+  static const String _xmlAverageWeightElementName = 'averageweight';
   static const String _xmlIdAttributeName = 'id';
   static const String _xmlTypeAttributeName = 'type';
   static const String _xmlValueAttributeName = 'value';
@@ -155,12 +161,33 @@ class BoardGamesGeekService {
       boardGameDetails.description =
           boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
 
+      boardGameDetails.minPlayers = int.tryParse(boardGameDetailsItem
+          .firstOrDefault(_xmlMinPlayersElementName)
+          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+
+      boardGameDetails.maxPlayers = int.tryParse(boardGameDetailsItem
+          .firstOrDefault(_xmlMaxPlayersElementName)
+          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+
+      boardGameDetails.minPlaytime = int.tryParse(boardGameDetailsItem
+          .firstOrDefault(_xmlMinPlaytimeElementName)
+          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+      
+      boardGameDetails.maxPlaytime = int.tryParse(boardGameDetailsItem
+          .firstOrDefault(_xmlMaxPlaytimeElementName)
+          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+
+      boardGameDetails.minAge = int.tryParse(boardGameDetailsItem
+          .firstOrDefault(_xmlMinAgeElementName)
+          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+
+
       boardGameDetails.imageUrl =
           boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
 
       boardGameDetails.yearPublished = int.tryParse(boardGameDetailsItem
           .firstOrDefault(_xmlYearPublishedElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName));
+          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
 
       final boardGameLinks =
           boardGameDetailsItem.findAllElements(_xmlLinkElementName);
@@ -174,12 +201,17 @@ class BoardGamesGeekService {
 
       boardGameDetails.rating = double.tryParse(boardGameDetailsRatings
               ?.firstOrDefault(_xmlAverageElementName)
-              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName)) ??
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '') ??
           0;
 
       boardGameDetails.votes = int.tryParse(boardGameDetailsRatings
               ?.firstOrDefault(_xmlUsersRatedElementName)
-              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName)) ??
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '') ??
+          0;
+
+      boardGameDetails.avgWeight = num.tryParse(boardGameDetailsRatings
+              ?.firstOrDefault(_xmlAverageWeightElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '') ??
           0;
 
       return boardGameDetails;

@@ -1,7 +1,6 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
@@ -46,8 +45,6 @@ class PlayerScore extends StatelessWidget {
                       imageUri: store?.player?.imageUri,
                       medal: store?.medal,
                     ),
-                    shadowOffset: Styles.defaultShadowOffset,
-                    shadowColor: Theme.of(context).accentColor,
                   );
                   if ((store?.player?.id?.isNotEmpty ?? false) &&
                       (store.score?.id?.isNotEmpty ?? false)) {

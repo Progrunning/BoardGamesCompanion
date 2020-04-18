@@ -57,6 +57,72 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  int _minPlayers;
+  @HiveField(10)
+  int get minPlayers => _minPlayers;
+  @HiveField(10)
+  set minPlayers(int value) {
+    if (_minPlayers != value) {
+      _minPlayers = value;
+      notifyListeners();
+    }
+  }
+
+  int _minPlaytime;
+  @HiveField(11)
+  int get minPlaytime => _minPlaytime;
+  @HiveField(11)
+  set minPlaytime(int value) {
+    if (_minPlaytime != value) {
+      _minPlaytime = value;
+      notifyListeners();
+    }
+  }
+
+  int _maxPlayers;
+  @HiveField(12)
+  int get maxPlayers => _maxPlayers;
+  @HiveField(12)
+  set maxPlayers(int value) {
+    if (_maxPlayers != value) {
+      _maxPlayers = value;
+      notifyListeners();
+    }
+  }
+
+  int _maxPlaytime;
+  @HiveField(13)
+  int get maxPlaytime => _maxPlaytime;
+  @HiveField(13)
+  set maxPlaytime(int value) {
+    if (_maxPlaytime != value) {
+      _maxPlaytime = value;
+      notifyListeners();
+    }
+  }
+
+  int _minAge;
+  @HiveField(14)
+  int get minAge => _minAge;
+  @HiveField(14)
+  set minAge(int value) {
+    if (_minAge != value) {
+      _minAge = value;
+      notifyListeners();
+    }
+  }
+
+  num _avgWeight;
+  @HiveField(15)
+  num get avgWeight => _avgWeight;
+  @HiveField(15)
+  set avgWeight(num value) {
+    if (_avgWeight != value) {
+      _avgWeight = value;
+      notifyListeners();
+    }
+  }
+
   DateTime _lastPlayed;
   DateTime get lastPlayed => _lastPlayed;
   set lastPlayed(DateTime value) {
