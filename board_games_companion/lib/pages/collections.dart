@@ -3,15 +3,16 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_widget.dart';
+import 'package:board_games_companion/widgets/board_games/collection_empty_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BoardGamesPage extends StatelessWidget {
+class CollectionsPage extends StatelessWidget {
   final BoardGamesStore _boardGamesStore;
 
-  BoardGamesPage(
+  CollectionsPage(
     this._boardGamesStore, {
     Key key,
   }) : super(key: key);
@@ -20,13 +21,7 @@ class BoardGamesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (_boardGamesStore.loadDataState == LoadDataState.Loaded) {
       if (_boardGamesStore.boardGames?.isEmpty ?? true) {
-        return Padding(
-          padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
-          child: Center(
-            child: Text(
-                'It looks empty here, try adding a new board game to your collection'),
-          ),
-        );
+        return CollectionEmpty();
       }
 
       _boardGamesStore.boardGames.sort((a, b) => a.name?.compareTo(b.name));

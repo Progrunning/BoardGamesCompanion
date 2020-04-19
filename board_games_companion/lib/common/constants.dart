@@ -9,4 +9,5 @@ class Constants {
   static const NumberOfMinutesInHour = 60;
   
   static const FeedbackEmailAddress = 'feedback@progrunning.net';
+  static const BoardGameGeekBaseApiUrl = 'https://www.boardgamegeek.com/';
 }

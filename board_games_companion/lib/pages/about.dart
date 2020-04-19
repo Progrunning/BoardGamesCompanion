@@ -69,7 +69,7 @@ class AboutPage extends StatelessWidget {
                     DetailsItem(
                         title: 'BGG',
                         subtitle: 'boardgamegeek.com',
-                        uri: 'https://boardgamegeek.com'),
+                        uri: Constants.BoardGameGeekBaseApiUrl),
                     DetailsItem(
                         title: 'XML API',
                         subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',

@@ -3,7 +3,6 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_image_widget.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_rating_hexagon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

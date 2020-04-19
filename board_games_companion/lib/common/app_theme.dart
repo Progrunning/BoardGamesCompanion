@@ -50,6 +50,25 @@ class AppTheme {
     offset: Styles.defaultShadowOffset,
   );
 
+  static const InputDecoration defaultTextFieldInputDecoration =
+      InputDecoration(
+    focusColor: AppTheme.accentColor,
+    hintStyle: TextStyle(
+      color: AppTheme.defaultTextColor,
+    ),
+    
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: AppTheme.primaryColor,
+      ),
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: AppTheme.accentColor,
+      ),
+    ),
+  );
+
   static ThemeData get theme {
     final originalTextTheme = ThemeData.light().textTheme;
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;

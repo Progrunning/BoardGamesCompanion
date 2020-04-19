@@ -25,25 +25,11 @@ class SearchBarBoardGames extends StatelessWidget {
           return TextField(
             controller: _searchController,
             textAlignVertical: TextAlignVertical.center,
-            decoration: InputDecoration(
+            decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
               hintText: 'Search...',
-              focusColor: AppTheme.accentColor,
-              hintStyle: TextStyle(
-                color: AppTheme.defaultTextColor,
-              ),
               suffixIcon: retrieveSearchBarSuffixIcon(
                 store,
                 searchBoardGamesStore,
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppTheme.primaryColor,
-                ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppTheme.accentColor,
-                ),
               ),
             ),
             onChanged: (searchPhrase) {
