@@ -135,7 +135,6 @@ class BoardGameDetails extends BaseBoardGame {
 
   @HiveField(18)
   List<BoardGameDesigner> desingers = List<BoardGameDesigner>();
-  
 
   int _commentsNumber;
   @HiveField(19)
@@ -202,5 +201,13 @@ class BoardGameDetails extends BaseBoardGame {
     }
 
     return '$minPlaytime - $maxPlaytime';
+  }
+
+  String get rankFormatted {
+    if (ranks?.isNotEmpty ?? false) {
+      final overallRank = ranks?.first?.rank;
+      return overallRank?.toString() ?? 'Not Ranked';
+    }
+    return null;
   }
 }

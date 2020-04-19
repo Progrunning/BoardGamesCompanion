@@ -5,15 +5,15 @@ class BoardGameDetailsNumbersItem extends StatelessWidget {
   BoardGameDetailsNumbersItem({
     Key key,
     @required String title,
-    @required num number,
+    @required String detail,
     bool format = false,
   })  : _title = title,
-        _number = number,
+        _detail = detail,
         _format = format,
         super(key: key);
 
   final String _title;
-  final num _number;
+  final String _detail;
   final bool _format;
 
   @override
@@ -25,7 +25,7 @@ class BoardGameDetailsNumbersItem extends StatelessWidget {
             text: '$_title: ',
           ),
           TextSpan(
-            text: _formatNumber(_number, _format),
+            text: _formatNumber(),
             style: AppTheme.titleTextStyle.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -35,9 +35,18 @@ class BoardGameDetailsNumbersItem extends StatelessWidget {
     );
   }
 
-  _formatNumber(num number, bool format) {
-    if (_number == null || !format || number < 1000) {
-      return number?.toString() ?? '';
+  String _formatNumber() {
+    if (_detail?.isEmpty ?? true) {
+      return '';
+    }
+
+    final number = num.tryParse(_detail);
+    if (number == null) {
+      return _detail;
+    }
+
+    if (!_format || number < 1000) {
+      return number.toString();
     }
 
     final numberOfThousands = number / 1000;

@@ -372,7 +372,7 @@ class BoardGamesGeekService {
       rank.rank = num.tryParse(boardGameRank
                   .firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
               '') ??
-          0;
+          null;
 
       boardGameDetails.ranks.add(rank);
     }

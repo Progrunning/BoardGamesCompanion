@@ -33,23 +33,21 @@ class BoardGameDetailsNumbers extends StatelessWidget {
               children: <Widget>[
                 BoardGameDetailsNumbersItem(
                   title: 'Rank',
-                  number: (_boardGameDetails?.ranks?.isNotEmpty ?? false)
-                      ? _boardGameDetails?.ranks?.first?.rank
-                      : null,
+                  detail: _boardGameDetails?.rankFormatted,
                 ),
                 BoardGameDetailsNumbersItem(
                   title: 'Ratings',
-                  number: _boardGameDetails?.votes,
+                  detail: '${_boardGameDetails?.votes}',
                   format: true,
                 ),
                 BoardGameDetailsNumbersItem(
                   title: 'Comments',
-                  number: _boardGameDetails?.commentsNumber,
+                  detail: '${_boardGameDetails?.commentsNumber}',
                   format: true,
                 ),
                 BoardGameDetailsNumbersItem(
                   title: 'Published',
-                  number: _boardGameDetails?.yearPublished,
+                  detail: '${_boardGameDetails?.yearPublished}',
                 ),
               ],
             ),
