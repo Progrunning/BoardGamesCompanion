@@ -16,10 +16,12 @@ extension XmlElementExtensions on XmlElement {
       return null;
     }
 
-    return this
-        ?.findElements(elementName)
-        ?.single
-        ?.firstOrDefaultAttributeValue(attributeName);
+    final elements = this?.findElements(elementName);
+    if(elements?.isEmpty ?? true) {
+      return null;
+    }
+
+    return elements.single?.firstOrDefaultAttributeValue(attributeName);
   }
 
   XmlAttribute firstOrDefaultAttributeWhere(bool test(XmlAttribute element)) {

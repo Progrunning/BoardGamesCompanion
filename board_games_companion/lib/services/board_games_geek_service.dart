@@ -274,14 +274,14 @@ class BoardGamesGeekService {
       final boardGameId =
           searchResult.firstOrDefaultAttributeValue(_xmlIdAttributeName);
       final boardGameName = searchResult.firstOrDefaultElementsAttribute(
-          'name', _xmlValueAttributeName);
+          _xmlNameElementName, _xmlValueAttributeName);
       final boardGameYearPublished =
           searchResult.firstOrDefaultElementsAttribute(
-              'yearpublished', _xmlValueAttributeName);
+              _xmlYearPublishedElementName, _xmlValueAttributeName);
 
       final boardGame = BoardGame(boardGameName);
       boardGame.id = boardGameId;
-      boardGame.yearPublished = int.tryParse(boardGameYearPublished);
+      boardGame.yearPublished = int.tryParse(boardGameYearPublished ?? '');
       boardGames.add(boardGame);
     }
 
