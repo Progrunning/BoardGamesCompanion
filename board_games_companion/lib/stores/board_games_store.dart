@@ -222,4 +222,21 @@ class BoardGamesStore with ChangeNotifier {
 
     super.dispose();
   }
+
+  Future<void> syncCollection(String username) async {
+    _loadDataState = LoadDataState.Loading;
+    notifyListeners();
+
+    try {
+      final syncResult = await _boardGamesService.syncCollection(username);
+      if (syncResult.isSuccess) {
+        _boardGames = syncResult.data;
+      }
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    _loadDataState = LoadDataState.Loaded;
+    notifyListeners();
+  }
 }

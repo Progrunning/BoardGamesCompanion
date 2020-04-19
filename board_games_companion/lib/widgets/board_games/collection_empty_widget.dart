@@ -1,15 +1,21 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class CollectionEmpty extends StatelessWidget {
-  const CollectionEmpty({
+  CollectionEmpty({
+    @required boardGamesStore,
     Key key,
-  }) : super(key: key);
+  })  : _boardGamesStore = boardGamesStore,
+        super(key: key);
+
+  final BoardGamesStore _boardGamesStore;
+  final _syncController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +80,13 @@ class CollectionEmpty extends StatelessWidget {
                 horizontal: Dimensions.doubleStandardSpacing * 2,
               ),
               child: TextField(
+                controller: _syncController,
                 decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
                   hintText: 'Enter your BGG user\'s name',
                 ),
+                onSubmitted: (username) async {
+                  await _boardGamesStore.syncCollection(username);
+                },
               ),
             ),
             SizedBox(
@@ -86,7 +96,9 @@ class CollectionEmpty extends StatelessWidget {
               child: IconAndTextButton(
                 title: 'Sync',
                 icon: Icons.sync,
-                onPressed: () {},
+                onPressed: () async {
+                  await _boardGamesStore.syncCollection(_syncController.text);
+                },
               ),
             ),
             SizedBox(

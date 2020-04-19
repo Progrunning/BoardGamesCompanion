@@ -23,6 +23,7 @@ class BoardGamesGeekService {
   static const String _xmlMinAgeElementName = 'minage';
   static const String _xmlYearPublishedElementName = 'yearpublished';
   static const String _xmlImageElementName = 'image';
+  static const String _xmlThumbnailElementName = 'thumbnail';
   static const String _xmlLinkElementName = 'link';
   static const String _xmlStatisticsElementName = 'statistics';
   static const String _xmlRatingsElementName = 'ratings';
@@ -36,11 +37,13 @@ class BoardGamesGeekService {
   static const String _xmlTypeAttributeName = 'type';
   static const String _xmlValueAttributeName = 'value';
   static const String _xmlNameAttributeName = 'name';
+  static const String _xmlRankAttributeName = 'rank';
   static const String _xmlFriendlyNameAttributeName = 'friendlyname';
   static const String _xmlCategoryAttributeTypeName = 'boardgamecategory';
   static const String _xmlDesignerAttributeTypeName = 'boardgamedesigner';
   static const String _xmlArtistAttributeTypeName = 'boardgameartist';
   static const String _xmlPublisherAttributeTypeName = 'boardgamepublisher';
+  static const String _xmlObjectIdAttributeTypeName = 'objectid';
 
   static const String _baseBoardGamesUrl =
       'https://www.boardgamegeek.com/xmlapi2';
@@ -53,10 +56,6 @@ class BoardGamesGeekService {
   static const String _boardGameQueryParamterType = 'type';
   static const String _boardGameQueryParamterUsername = 'username';
   static const String _boardGameQueryParamterOwn = 'own';
-  static const String _boardGameQueryParamterWant = 'want';
-  static const String _boardGameQueryParamterWantToBuy = 'wanttobuy';
-  static const String _boardGameQueryParamterWantToPlay = 'wanttoplay';
-  static const String _boardGameQueryParamterWishlist = 'wishlist';
   static const String _boardGameQueryParamterQuery = 'query';
   static const String _boardGameType = 'boardgame';
 
@@ -99,12 +98,8 @@ class BoardGamesGeekService {
       final hotBoardGameItems =
           hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName);
       for (var hotBoardGameItem in hotBoardGameItems) {
-        var hotBoardGameName = hotBoardGameItem
-            .findElements('name')
-            .single
-            .attributes
-            .single
-            .value;
+        var hotBoardGameName = hotBoardGameItem.firstOrDefaultElementsAttribute(
+            _xmlNameElementName, _xmlValueAttributeName);
 
         if (hotBoardGameName.isEmpty) {
           continue;
@@ -112,21 +107,16 @@ class BoardGamesGeekService {
 
         var newHotBoardGame = BoardGame(hotBoardGameName);
         newHotBoardGame.id = hotBoardGameItem.getAttribute(_xmlIdAttributeName);
-        newHotBoardGame.rank =
-            int.tryParse(hotBoardGameItem.getAttribute('rank'));
+        newHotBoardGame.rank = int.tryParse(
+            hotBoardGameItem.getAttribute(_xmlRankAttributeName) ?? '');
 
-        newHotBoardGame.thumbnailUrl = hotBoardGameItem
-            .findElements('thumbnail')
-            .single
-            .attributes
-            .single
-            .value;
-        newHotBoardGame.yearPublished = int.tryParse(hotBoardGameItem
-            .findElements('yearpublished')
-            .single
-            .attributes
-            .single
-            .value);
+        newHotBoardGame.thumbnailUrl =
+            hotBoardGameItem.firstOrDefaultElementsAttribute(
+                _xmlThumbnailElementName, _xmlValueAttributeName);
+        newHotBoardGame.yearPublished = int.tryParse(
+            hotBoardGameItem.firstOrDefaultElementsAttribute(
+                    _xmlYearPublishedElementName, _xmlValueAttributeName) ??
+                '');
 
         hotBoardGames.add(newHotBoardGame);
       }
@@ -298,8 +288,8 @@ class BoardGamesGeekService {
     return boardGames;
   }
 
-  Future<List<BoardGameDetails>> syncCollection(String userName) async {
-    if (userName?.isEmpty ?? true) {
+  Future<List<BoardGameDetails>> syncCollection(String username) async {
+    if (username?.isEmpty ?? true) {
       return List<BoardGameDetails>();
     }
 
@@ -313,7 +303,7 @@ class BoardGamesGeekService {
     final collectionResultsXml = await dioWithRetry.get(
       _collectionBoardGamesUrl,
       queryParameters: {
-        _boardGameQueryParamterUsername: userName,
+        _boardGameQueryParamterUsername: username,
         _boardGameQueryParamterOwn: 1,
       },
     );
@@ -323,8 +313,29 @@ class BoardGamesGeekService {
     if (xmlDocument == null) {
       return boardGames;
     }
+    final collectionItems = xmlDocument?.findAllElements(_xmlItemElementName);
+    for (var collectionItem in collectionItems) {
+      final boardGame = BoardGameDetails();
+      boardGame.id = collectionItem
+          .firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
 
-    return List<BoardGameDetails>();
+      if (boardGame.id?.isEmpty ?? true) {
+        continue;
+      }
+
+      boardGame.name = collectionItem.firstOrDefault(_xmlNameElementName)?.text;
+      boardGame.yearPublished = int.tryParse(
+          collectionItem.firstOrDefault(_xmlYearPublishedElementName)?.text ??
+              '');
+      boardGame.imageUrl =
+          collectionItem.firstOrDefault(_xmlImageElementName)?.text;
+      boardGame.thumbnailUrl =
+          collectionItem.firstOrDefault(_xmlThumbnailElementName)?.text;
+
+      boardGames.add(boardGame);
+    }
+
+    return boardGames;
   }
 
   xml.XmlDocument _retrieveXmlDocument(Response<dynamic> httpResponse) {

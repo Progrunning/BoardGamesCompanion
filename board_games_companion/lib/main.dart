@@ -81,7 +81,12 @@ class App extends StatelessWidget {
           ),
         ),
         Provider<BoardGamesService>(
-          create: (context) => BoardGamesService(),
+          create: (context) => BoardGamesService(
+            Provider.of<BoardGamesGeekService>(
+              context,
+              listen: false,
+            ),
+          ),
         ),
         Provider<PlayerService>(
           create: (context) => PlayerService(),

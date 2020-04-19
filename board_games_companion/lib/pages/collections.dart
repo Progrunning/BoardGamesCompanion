@@ -1,7 +1,6 @@
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_widget.dart';
 import 'package:board_games_companion/widgets/board_games/collection_empty_widget.dart';
@@ -20,12 +19,11 @@ class CollectionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final bgg = Provider.of<BoardGamesGeekService>(context, listen: false);
-    // bgg.syncCollection('Ale_lipa');
-
     if (_boardGamesStore.loadDataState == LoadDataState.Loaded) {
       if (_boardGamesStore.boardGames?.isEmpty ?? true) {
-        return CollectionEmpty();
+        return CollectionEmpty(
+          boardGamesStore: _boardGamesStore,
+        );
       }
 
       _boardGamesStore.boardGames.sort((a, b) => a.name?.compareTo(b.name));
@@ -61,6 +59,8 @@ class CollectionsPage extends StatelessWidget {
       );
     }
 
-    return Center(child: CircularProgressIndicator());
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }

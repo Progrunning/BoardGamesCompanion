@@ -13,12 +13,13 @@ class RetryInterceptor extends Interceptor {
 
   final Dio dio;
   int retryNumber;
+  int retriesCount = 0;
 
   @override
   Future onResponse(Response response) async {
-    if (response.statusCode == _retryStatusCode && retryNumber > 0) {
-      retryNumber--;
-      await Future.delayed(_retryInterval);
+    if (response.statusCode == _retryStatusCode && retriesCount < retryNumber) {
+      await Future.delayed(_retryInterval * retriesCount);
+      retriesCount++;
       return await this.dio.request(
             response.request.path,
             cancelToken: response.request.cancelToken,
