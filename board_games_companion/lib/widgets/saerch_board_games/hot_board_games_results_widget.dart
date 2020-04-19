@@ -29,7 +29,7 @@ class HotBoardGamesResults extends StatelessWidget {
               sliver: SliverGrid.extent(
                 crossAxisSpacing: Dimensions.standardSpacing,
                 mainAxisSpacing: Dimensions.standardSpacing,
-                maxCrossAxisExtent: 150,
+                maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
                 children: List.generate(
                   (snapshot.data as List<BoardGame>).length,
                   (int index) {
