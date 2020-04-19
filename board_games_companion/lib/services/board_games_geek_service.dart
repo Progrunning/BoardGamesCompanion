@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/extensions/xml_element_extensions.dart';
 import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:board_games_companion/models/hive/board_game_rank.dart';
+import 'package:board_games_companion/utilities/bgg_retry_interceptor.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -46,8 +47,17 @@ class BoardGamesGeekService {
   static const String _hotBoardGamesUrl = '$_baseBoardGamesUrl/hot';
   static const String _boardGamesDetailsUrl = '$_baseBoardGamesUrl/thing';
   static const String _searchBoardGamesUrl = '$_baseBoardGamesUrl/search';
+  static const String _collectionBoardGamesUrl =
+      '$_baseBoardGamesUrl/collection';
 
   static const String _boardGameQueryParamterType = 'type';
+  static const String _boardGameQueryParamterUsername = 'username';
+  static const String _boardGameQueryParamterOwn = 'own';
+  static const String _boardGameQueryParamterWant = 'want';
+  static const String _boardGameQueryParamterWantToBuy = 'wanttobuy';
+  static const String _boardGameQueryParamterWantToPlay = 'wanttoplay';
+  static const String _boardGameQueryParamterWishlist = 'wishlist';
+  static const String _boardGameQueryParamterQuery = 'query';
   static const String _boardGameType = 'boardgame';
 
   static const int _numberOfDaysToCacheHotBoardGames = 1;
@@ -259,7 +269,7 @@ class BoardGamesGeekService {
       _searchBoardGamesUrl,
       queryParameters: {
         _boardGameQueryParamterType: _boardGameType,
-        "query": searchPhrase,
+        _boardGameQueryParamterQuery: searchPhrase,
       },
     );
 
@@ -286,6 +296,35 @@ class BoardGamesGeekService {
     }
 
     return boardGames;
+  }
+
+  Future<List<BoardGameDetails>> syncCollection(String userName) async {
+    if (userName?.isEmpty ?? true) {
+      return List<BoardGameDetails>();
+    }
+
+    final dioWithRetry = _dio
+      ..interceptors.add(
+        RetryInterceptor(
+          dio: _dio,
+        ),
+      );
+
+    final collectionResultsXml = await dioWithRetry.get(
+      _collectionBoardGamesUrl,
+      queryParameters: {
+        _boardGameQueryParamterUsername: userName,
+        _boardGameQueryParamterOwn: 1,
+      },
+    );
+
+    final boardGames = List<BoardGameDetails>();
+    final xmlDocument = _retrieveXmlDocument(collectionResultsXml);
+    if (xmlDocument == null) {
+      return boardGames;
+    }
+
+    return List<BoardGameDetails>();
   }
 
   xml.XmlDocument _retrieveXmlDocument(Response<dynamic> httpResponse) {
