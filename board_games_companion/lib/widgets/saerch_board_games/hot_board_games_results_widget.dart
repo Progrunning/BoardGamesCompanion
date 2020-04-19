@@ -1,7 +1,7 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/stores/hot_board_games_store.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_search_item_widget.dart';
+import 'package:board_games_companion/widgets/board_games/board_game_collection_item_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
@@ -33,7 +33,7 @@ class HotBoardGamesResults extends StatelessWidget {
                 children: List.generate(
                   (snapshot.data as List<BoardGame>).length,
                   (int index) {
-                    return BoardGameSearchItemWidget(
+                    return BoardGameCollectionItem(
                       boardGame: snapshot.data[index],
                     );
                   },

@@ -1,134 +1,117 @@
-import 'dart:async';
-
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/pages/board_game_playthroughs.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/utilities/navigator_transitions.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_icon_button_widget.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_panel_widget.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_collection_item_image_widget.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_collection_item_rating_widget.dart';
-import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
+import 'package:board_games_companion/common/styles.dart';
+import 'package:board_games_companion/models/hive/base_board_game.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
+import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
+import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class BoardGameCollectionItemWidget extends StatelessWidget {
-  BoardGameCollectionItemWidget({
-    Key key,
-  }) : super(key: key);
+class BoardGameCollectionItem extends StatefulWidget {
+  final BaseBoardGame boardGame;
 
-  static const double _infoIconSize = 32;
+  BoardGameCollectionItem({Key key, this.boardGame}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final boardGamesStore = Provider.of<BoardGamesStore>(context);
-    final boardGameDetails = Provider.of<BoardGameDetails>(context);
+  State<StatefulWidget> createState() => _BoardGameSearchItemWidget();
+}
 
-    return Dismissible(
-      key: Key(boardGameDetails.id),
-      background: Container(
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(
-          right: Dimensions.doubleStandardSpacing,
-        ),
-        color: Colors.red,
-        child: Icon(
-          Icons.delete,
-          size: Dimensions.boardGameRemoveIconSize,
-          color: AppTheme.defaultTextColor,
-        ),
-      ),
-      onDismissed: (direction) => _handleRemoveBoardGameFromCollection(
-          context, boardGamesStore, boardGameDetails),
-      child: Column(
-        children: <Widget>[
-          PanelContainer(
-            child: Padding(
-              padding: const EdgeInsets.all(
-                Dimensions.standardSpacing,
-              ),
-              child: Stack(
-                children: <Widget>[
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: Dimensions.boardGameItemCollectionImageHeight,
-                        width: Dimensions.boardGameItemCollectionImageWidth,
-                        child: Stack(
-                          children: <Widget>[
-                            BoardGameCollectionItemImage(
-                              boardGameDetails: boardGameDetails,
-                            ),
-                            BoardGameCollectionItemRating(
-                              boardGameDetails: boardGameDetails,
-                            ),
-                          ],
-                        ),
-                      ),
-                      BoardGameCollectionItemDetailsPanel(
-                        boardGameDetails: boardGameDetails,
-                        infoIconSize: _infoIconSize,
-                      ),
-                    ],
-                  ),
-                  Positioned.fill(
-                    child: StackRippleEffect(
-                      onTap: () => _navigateToGamePlaythroughsPage(
-                          context, boardGameDetails),
-                    ),
-                  ),
-                  BoardGameCollectionItemDetailsIconButton(
-                    boardGameDetails: boardGameDetails,
-                    infoIconSize: _infoIconSize,
-                  ),
+class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        CachedNetworkImage(
+          imageUrl: widget.boardGame.thumbnailUrl,
+          imageBuilder: (context, imageProvider) => Padding(
+            padding: const EdgeInsets.only(
+              right: Dimensions.halfStandardSpacing,
+              bottom: Dimensions.halfStandardSpacing,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  AppTheme.defaultBoxShadow,
                 ],
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    Styles.boardGameTileImageCircularRadius,
+                  ),
+                ),
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
           ),
-          SizedBox(
-            height: Dimensions.doubleStandardSpacing,
+          fit: BoxFit.fitWidth,
+          placeholder: (context, url) => Container(
+            color: AppTheme.primaryColor,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
-        ],
-      ),
+          errorWidget: (context, url, error) => ShadowBox(
+            child: Padding(
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+              child: Container(
+                child: Center(
+                  child: Text(
+                    widget.boardGame?.name ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+              bottom: Dimensions.standardSpacing,
+              left: Dimensions.halfStandardSpacing,
+              right: Dimensions.standardSpacing),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .accentColor
+                    .withAlpha(Styles.opacity70Percent),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(Styles.defaultCornerRadius),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+                child: Text(
+                  widget.boardGame.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: AppTheme.defaultTextColor,
+                      fontSize: Dimensions.smallFontSize),
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (widget.boardGame.rank != null)
+          Positioned(
+            top: -Dimensions.halfStandardSpacing - 1,
+            right: Dimensions.halfStandardSpacing,
+            child: RankRibbon(widget.boardGame.rank),
+          ),
+        Positioned.fill(
+          child: StackRippleEffect(
+            onTap: () async {
+              await NavigatorHelper.navigateToBoardGameDetails(
+                context,
+                widget.boardGame,
+              );
+            },
+          ),
+        )
+      ],
     );
   }
-}
-
-Future<void> _navigateToGamePlaythroughsPage(
-  BuildContext context,
-  BoardGameDetails boardGameDetails,
-) async {
-  Navigator.push(
-    context,
-    NavigatorTransitions.fadeThrough((_, __, ___) {
-      return BoardGamePlaythroughsPage(boardGameDetails);
-    }),
-  );
-}
-
-Future<void> _handleRemoveBoardGameFromCollection(
-  BuildContext context,
-  BoardGamesStore boardGamesStore,
-  BoardGameDetails boardGameDetails,
-) async {
-  await boardGamesStore.removeBoardGame(boardGameDetails.id);
-
-  Scaffold.of(context).showSnackBar(
-    SnackBar(
-      duration: Duration(seconds: 10),
-      content: Text(
-          '${boardGameDetails.name} has been removed from your collection'),
-      action: SnackBarAction(
-        label: 'Undo',
-        onPressed: () async {
-          await boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
-        },
-      ),
-    ),
-  );
 }
