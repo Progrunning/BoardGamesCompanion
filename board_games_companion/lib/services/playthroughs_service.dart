@@ -115,4 +115,28 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
 
     return true;
   }
+
+  Future<bool> deleteAllPlaythrough() async {
+    // TODO TEST THIS
+    if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+      return false;
+    }
+
+    var playthroughs = storageBox.values;
+    if (playthroughs?.isEmpty ?? true) {
+      return false;
+    }
+
+    for (var playthrough in playthroughs) {
+      playthrough.isDeleted = true;
+    }
+
+    await storageBox.putAll(Map.fromIterable(
+      playthroughs,
+      key: (p) => p.id,
+      value: (p) => p,
+    ));
+
+    return true;
+  }
 }

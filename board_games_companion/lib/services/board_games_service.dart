@@ -42,6 +42,14 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     await storageBox?.delete(boardGameDetailsId);
   }
 
+  Future<void> removeAllBoardGames() async {
+    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+      return;
+    }
+
+    await storageBox?.clear();
+  }
+
   Future<CollectionSyncResult> syncCollection(String username) async {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
       return CollectionSyncResult();

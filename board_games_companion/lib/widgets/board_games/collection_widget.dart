@@ -23,6 +23,7 @@ class Collection extends StatelessWidget {
             SliverAppBar(
               titleSpacing: Dimensions.standardSpacing,
               title: TextField(
+                // TODO IMPLEMET
                 // controller: _searchController,
                 textAlignVertical: TextAlignVertical.center,
                 decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
@@ -39,7 +40,11 @@ class Collection extends StatelessWidget {
                   // searchBoardGamesStore.updateSearchResults();
                 },
               ),
-              actions: <Widget>[Icon(Icons.filter_list)],
+              actions: <Widget>[
+                Icon(
+                  Icons.filter_list,
+                )
+              ],
             ),
             SliverToBoxAdapter(
               child: Padding(

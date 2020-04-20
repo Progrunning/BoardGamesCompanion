@@ -29,8 +29,8 @@ class CollectionsPage extends StatelessWidget {
           userStore: userStore,
         );
       }
-
-      _boardGamesStore.boardGames.sort((a, b) => a.name?.compareTo(b.name));
+      
+      _boardGamesStore.boardGames.sort((a, b) => b.lastModified?.compareTo(a.lastModified));
 
       return Collection(
         boardGamesStore: _boardGamesStore,

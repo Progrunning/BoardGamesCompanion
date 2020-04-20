@@ -89,6 +89,20 @@ class BoardGamesStore with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> removeAllBoardGames() async {
+    try {
+      await _boardGamesService.removeAllBoardGames();
+      await _playthroughService.deleteAllPlaythrough();
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+      return;
+    }
+
+    _boardGames.clear();
+
+    notifyListeners();
+  }
+
   Future<void> loadBoardGamesLatestData() async {
     if (_boardGames?.isEmpty ?? true) {
       return;
