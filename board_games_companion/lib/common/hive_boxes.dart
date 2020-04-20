@@ -1,6 +1,7 @@
 class HiveBoxes {
   static const BoardGames = 'boardGames';
   static const Players = 'players';
+  static const User = 'user';
   static const Playthroughs = 'playthroughs';
   static const Scores = 'scores';
 
@@ -14,4 +15,5 @@ class HiveBoxes {
   static const BoardGamesArtistTypeId = 7;
   static const BoardGamesDesignerTypeId = 8;
   static const BoardGamesrankTypeId = 9;
+  static const UserTypeId = 10;
 }

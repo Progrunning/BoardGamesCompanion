@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:board_games_companion/common/enums.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
+import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
@@ -175,6 +176,27 @@ class BoardGamesStore with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<CollectionSyncResult> syncCollection(String username) async {
+    _loadDataState = LoadDataState.Loading;
+    notifyListeners();
+
+    var syncResult = CollectionSyncResult();
+
+    try {
+      syncResult = await _boardGamesService.syncCollection(username);
+      if (syncResult.isSuccess) {
+        _boardGames = syncResult.data;
+      }
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    _loadDataState = LoadDataState.Loaded;
+    notifyListeners();
+
+    return syncResult;
+  }
+
   void _updateLastPlayedAndWinner(
       List<Playthrough> finishedPlaythroughs,
       BoardGameDetails details,
@@ -221,22 +243,5 @@ class BoardGamesStore with ChangeNotifier {
     _playerService.closeBox(HiveBoxes.Players);
 
     super.dispose();
-  }
-
-  Future<void> syncCollection(String username) async {
-    _loadDataState = LoadDataState.Loading;
-    notifyListeners();
-
-    try {
-      final syncResult = await _boardGamesService.syncCollection(username);
-      if (syncResult.isSuccess) {
-        _boardGames = syncResult.data;
-      }
-    } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
-    }
-
-    _loadDataState = LoadDataState.Loaded;
-    notifyListeners();
   }
 }

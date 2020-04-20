@@ -33,6 +33,7 @@ class BoardGamesGeekService {
   static const String _xmlUsersRatedElementName = 'usersrated';
   static const String _xmlNumCommentsElementName = 'numcomments';
   static const String _xmlAverageWeightElementName = 'averageweight';
+  static const String _xmlStatusElementName = 'status';
   static const String _xmlIdAttributeName = 'id';
   static const String _xmlTypeAttributeName = 'type';
   static const String _xmlValueAttributeName = 'value';
@@ -44,6 +45,7 @@ class BoardGamesGeekService {
   static const String _xmlArtistAttributeTypeName = 'boardgameartist';
   static const String _xmlPublisherAttributeTypeName = 'boardgamepublisher';
   static const String _xmlObjectIdAttributeTypeName = 'objectid';
+  static const String _xmlLastModifiedAttributeTypeName = 'lastmodified';
 
   static const String _baseBoardGamesUrl =
       'https://www.boardgamegeek.com/xmlapi2';
@@ -331,6 +333,11 @@ class BoardGamesGeekService {
           collectionItem.firstOrDefault(_xmlImageElementName)?.text;
       boardGame.thumbnailUrl =
           collectionItem.firstOrDefault(_xmlThumbnailElementName)?.text;
+      final lastModifiedString = collectionItem.firstOrDefaultElementsAttribute(
+          _xmlStatusElementName, _xmlLastModifiedAttributeTypeName);
+      if (lastModifiedString?.isNotEmpty ?? false) {
+        boardGame.lastModified = DateTime.tryParse(lastModifiedString);
+      }
 
       boardGames.add(boardGame);
     }

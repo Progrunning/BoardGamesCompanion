@@ -10,4 +10,6 @@ class Constants {
   
   static const FeedbackEmailAddress = 'feedback@progrunning.net';
   static const BoardGameGeekBaseApiUrl = 'https://www.boardgamegeek.com/';
+  
+  static const BoardGameGeekLastModifiedDateTimeFormat = 'yyyy-mm-dd HH:MM:ss';
 }

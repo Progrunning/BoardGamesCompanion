@@ -150,6 +150,17 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(20)
   List<BoardGameRank> ranks = List<BoardGameRank>();
 
+  DateTime _lastModified;
+  @HiveField(21)
+  DateTime get lastModified => _lastModified;
+  @HiveField(21)
+  set lastModified(DateTime value) {
+    if (_lastModified != value) {
+      _lastModified = value;
+      notifyListeners();
+    }
+  }
+
   DateTime _lastPlayed;
   DateTime get lastPlayed => _lastPlayed;
   set lastPlayed(DateTime value) {

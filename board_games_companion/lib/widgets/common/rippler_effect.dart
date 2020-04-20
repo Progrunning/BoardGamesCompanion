@@ -6,7 +6,7 @@ class RippleEffect extends StatelessWidget {
   final Widget child;
 
   const RippleEffect({
-    @required this.onTap,
+    this.onTap,
     this.child,
     Key key,
   }) : super(key: key);

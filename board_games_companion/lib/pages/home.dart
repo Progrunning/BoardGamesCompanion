@@ -1,8 +1,8 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/routes.dart';
-import 'package:board_games_companion/pages/about.dart';
 import 'package:board_games_companion/pages/collections.dart';
 import 'package:board_games_companion/pages/players.dart';
+import 'package:board_games_companion/pages/settings.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
@@ -40,7 +40,8 @@ class HomePage extends StatelessWidget {
               },
             ),
             PlayersPage(),
-            AboutPage(),
+            SettingsPage(),
+            // AboutPage(),
           ],
           onPageChanged: (pageIndex) {
             final homeStore = Provider.of<HomeStore>(
@@ -71,7 +72,7 @@ class HomePage extends StatelessWidget {
             items: <BottomNavigationBarItem>[
               CustomBottomNavigationBarItem('Collection', Icons.grid_on),
               CustomBottomNavigationBarItem('Players', Icons.group),
-              CustomBottomNavigationBarItem('About', Icons.info),
+              CustomBottomNavigationBarItem('Settings', Icons.settings),
             ],
             currentIndex: homeStore.boardGamesPageIndex,
             onTap: (pageIndex) {

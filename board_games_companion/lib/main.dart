@@ -10,11 +10,13 @@ import 'package:board_games_companion/models/hive/board_game_rank.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/models/hive/user.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/services/user_service.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
@@ -24,6 +26,7 @@ import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:board_games_companion/stores/start_playthrough_store.dart';
+import 'package:board_games_companion/stores/user_store.dart';
 import 'package:board_games_companion/utilities/custom_http_client_adapter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +53,7 @@ void main() async {
   Hive.registerAdapter(BoardGamePublisherAdapter());
   Hive.registerAdapter(BoardGameArtistAdapter());
   Hive.registerAdapter(BoardGameRankAdapter());
+  Hive.registerAdapter(UserAdapter());
 
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
@@ -94,6 +98,9 @@ class App extends StatelessWidget {
         Provider<ScoreService>(
           create: (context) => ScoreService(),
         ),
+        Provider<UserService>(
+          create: (context) => UserService(),
+        ),
         Provider<PlaythroughService>(
           create: (context) => PlaythroughService(
             Provider.of<ScoreService>(
@@ -104,6 +111,18 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),
+        ),
+        ChangeNotifierProvider<UserStore>(
+          create: (context) {
+            final userStore = UserStore(
+              Provider.of<UserService>(
+                context,
+                listen: false,
+              ),
+            );
+            userStore.loadUser();
+            return userStore;
+          },
         ),
         ChangeNotifierProvider<HotBoardGamesStore>(
           create: (context) => HotBoardGamesStore(

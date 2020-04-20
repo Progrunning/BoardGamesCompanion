@@ -9,7 +9,7 @@ class DetailsItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final String iconUri;
-  final CallbackAction onTap;
+  final Function onTap;
   final String uri;
 
   static const double _size = 60;
@@ -80,6 +80,14 @@ class DetailsItem extends StatelessWidget {
           ),
         ),
         onTap: () async {
+          if (onTap != null) {
+            onTap();
+          }
+          
+          if (uri?.isEmpty ?? true) {
+            return;
+          }
+
           await LauncherHelper.launchUri(
             context,
             uri,

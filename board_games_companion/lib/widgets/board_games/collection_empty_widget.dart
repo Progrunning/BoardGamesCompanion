@@ -1,7 +1,9 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/models/hive/user.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/stores/user_store.dart';
 import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/gestures.dart';
@@ -10,11 +12,14 @@ import 'package:flutter/material.dart';
 class CollectionEmpty extends StatelessWidget {
   CollectionEmpty({
     @required boardGamesStore,
+    @required userStore,
     Key key,
   })  : _boardGamesStore = boardGamesStore,
+        _userStore = userStore,
         super(key: key);
 
   final BoardGamesStore _boardGamesStore;
+  final UserStore _userStore;
   final _syncController = TextEditingController();
 
   @override
@@ -85,7 +90,7 @@ class CollectionEmpty extends StatelessWidget {
                   hintText: 'Enter your BGG user\'s name',
                 ),
                 onSubmitted: (username) async {
-                  await _boardGamesStore.syncCollection(username);
+                  await _syncCollection(context);
                 },
               ),
             ),
@@ -97,7 +102,7 @@ class CollectionEmpty extends StatelessWidget {
                 title: 'Sync',
                 icon: Icons.sync,
                 onPressed: () async {
-                  await _boardGamesStore.syncCollection(_syncController.text);
+                  await _syncCollection(context);
                 },
               ),
             ),
@@ -118,5 +123,15 @@ class CollectionEmpty extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future _syncCollection(BuildContext context) async {
+    final username = _syncController.text;
+    final syncResult = await _boardGamesStore.syncCollection(username);
+    if (syncResult?.isSuccess ?? false) {
+      final user = User();
+      user.name = username;
+      await _userStore?.addOrUpdateUser(user);
+    }
   }
 }
