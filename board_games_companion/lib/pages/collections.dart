@@ -29,8 +29,11 @@ class CollectionsPage extends StatelessWidget {
           userStore: userStore,
         );
       }
-      
-      _boardGamesStore.boardGames.sort((a, b) => b.lastModified?.compareTo(a.lastModified));
+
+      _boardGamesStore.boardGames
+          .sort((a, b) => b.lastModified?.compareTo(a.lastModified));
+
+// TODO MK handle no search results scenario
 
       return Collection(
         boardGamesStore: _boardGamesStore,
