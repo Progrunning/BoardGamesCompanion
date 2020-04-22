@@ -41,7 +41,6 @@ class HomePage extends StatelessWidget {
             ),
             PlayersPage(),
             SettingsPage(),
-            // AboutPage(),
           ],
           onPageChanged: (pageIndex) {
             final homeStore = Provider.of<HomeStore>(

@@ -23,21 +23,30 @@ class BoardGamesStore with ChangeNotifier {
   final ScoreService _scoreService;
   final PlayerService _playerService;
 
+  String _searchPhrase;
+  List<BoardGameDetails> _allBoardGames;
   List<BoardGameDetails> _boardGames;
   LoadDataState _loadDataState = LoadDataState.None;
 
-  BoardGamesStore(this._boardGamesService, this._playthroughService,
-      this._scoreService, this._playerService);
+  BoardGamesStore(
+    this._boardGamesService,
+    this._playthroughService,
+    this._scoreService,
+    this._playerService,
+  );
 
   LoadDataState get loadDataState => _loadDataState;
   List<BoardGameDetails> get boardGames => _boardGames;
+  bool get hasBoardGames => _allBoardGames?.isNotEmpty ?? false;
+  String get searchPhrase => _searchPhrase;
 
   Future<void> loadBoardGames() async {
     _loadDataState = LoadDataState.Loading;
     notifyListeners();
 
     try {
-      _boardGames = await _boardGamesService.retrieveBoardGames();
+      _allBoardGames =
+          _boardGames = await _boardGamesService.retrieveBoardGames();
       await loadBoardGamesLatestData();
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
@@ -56,11 +65,12 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    final existingBoardGameDetails = _boardGames.firstWhere(
+    final existingBoardGameDetails = _allBoardGames.firstWhere(
         (boardGame) => boardGame.id == boardGameDetails.id,
         orElse: () => null);
 
     if (existingBoardGameDetails == null) {
+      _allBoardGames.add(boardGameDetails);
       _boardGames.add(boardGameDetails);
     } else {
       existingBoardGameDetails.imageUrl = boardGameDetails.imageUrl;
@@ -84,6 +94,8 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
+    _allBoardGames
+        .removeWhere((boardGame) => boardGame.id == boardGameDetailsId);
     _boardGames.removeWhere((boardGame) => boardGame.id == boardGameDetailsId);
 
     notifyListeners();
@@ -99,12 +111,13 @@ class BoardGamesStore with ChangeNotifier {
     }
 
     _boardGames.clear();
+    _allBoardGames.clear();
 
     notifyListeners();
   }
 
   Future<void> loadBoardGamesLatestData() async {
-    if (_boardGames?.isEmpty ?? true) {
+    if (_allBoardGames?.isEmpty ?? true) {
       return;
     }
 
@@ -116,7 +129,7 @@ class BoardGamesStore with ChangeNotifier {
 
     // MK Retrieve playthroughs
     final Map<String, BoardGameDetails> boardGameDetailsMapById =
-        Map.fromIterable(_boardGames,
+        Map.fromIterable(_allBoardGames,
             key: (bg) => (bg as BoardGameDetails).id,
             value: (bg) => bg as BoardGameDetails);
     final boardGamePlaythroughs = (await _playthroughService
@@ -199,7 +212,7 @@ class BoardGamesStore with ChangeNotifier {
     try {
       syncResult = await _boardGamesService.syncCollection(username);
       if (syncResult.isSuccess) {
-        _boardGames = syncResult.data;
+        _allBoardGames = _boardGames = syncResult.data;
       }
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
@@ -209,6 +222,29 @@ class BoardGamesStore with ChangeNotifier {
     notifyListeners();
 
     return syncResult;
+  }
+
+  void updateSearchResults(String searchPhrase) {
+    if (searchPhrase?.isEmpty == true && _searchPhrase?.isEmpty == true) {
+      return;
+    }
+
+    _searchPhrase = searchPhrase;
+
+    if (searchPhrase?.isEmpty ?? true) {
+      _boardGames = _allBoardGames;
+      notifyListeners();
+    }
+
+    final searchPhraseLowerCase = searchPhrase.toLowerCase();
+
+    _boardGames = _allBoardGames
+        .where((boardGameDetails) => boardGameDetails.name
+            ?.toLowerCase()
+            ?.contains(searchPhraseLowerCase))
+        .toList();
+
+    notifyListeners();
   }
 
   void _updateLastPlayedAndWinner(

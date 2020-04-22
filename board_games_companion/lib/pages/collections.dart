@@ -23,7 +23,7 @@ class CollectionsPage extends StatelessWidget {
     );
 
     if (_boardGamesStore.loadDataState == LoadDataState.Loaded) {
-      if (_boardGamesStore.boardGames?.isEmpty ?? true) {
+      if (!_boardGamesStore.hasBoardGames) {
         return CollectionEmpty(
           boardGamesStore: _boardGamesStore,
           userStore: userStore,

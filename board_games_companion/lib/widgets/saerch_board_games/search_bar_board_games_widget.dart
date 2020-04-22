@@ -44,7 +44,7 @@ class SearchBarBoardGames extends StatelessWidget {
     );
   }
 
-  retrieveSearchBarSuffixIcon(
+  Widget retrieveSearchBarSuffixIcon(
     SearchBarBoardGamesStore searchBarBoardGamesStore,
     SearchBoardGamesStore searchBoardGamesStore,
   ) {

@@ -1,7 +1,7 @@
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_widget.dart';
+import 'package:board_games_companion/widgets/board_games/collection_search_bar_widget.dart';
 import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -20,31 +20,8 @@ class Collection extends StatelessWidget {
       child: PageContainer(
         child: CustomScrollView(
           slivers: <Widget>[
-            SliverAppBar(
-              titleSpacing: Dimensions.standardSpacing,
-              title: TextField(
-                // TODO IMPLEMET
-                // controller: _searchController,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
-                  hintText: 'Search...',
-                  // suffixIcon: retrieveSearchBarSuffixIcon(
-                  //   store,
-                  //   searchBoardGamesStore,
-                  // ),
-                ),
-                onChanged: (searchPhrase) {
-                  // store.searchPhrase = searchPhrase;
-                },
-                onSubmitted: (searchPhrase) {
-                  // searchBoardGamesStore.updateSearchResults();
-                },
-              ),
-              actions: <Widget>[
-                Icon(
-                  Icons.filter_list,
-                )
-              ],
+            CollectionSearchBar(
+              boardGamesStore: _boardGamesStore,
             ),
             SliverToBoxAdapter(
               child: Padding(
