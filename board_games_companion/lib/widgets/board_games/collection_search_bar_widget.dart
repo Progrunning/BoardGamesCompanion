@@ -48,8 +48,18 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
         },
       ),
       actions: <Widget>[
-        Icon(
-          Icons.filter_list,
+        IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (_) {
+                return Container(
+                  height: MediaQuery.of(Scaffold.of(context).context).size.height * 0.65,
+                );
+              },
+            );
+          },
         )
       ],
     );

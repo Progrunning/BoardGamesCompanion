@@ -27,17 +27,6 @@ class Collection extends StatelessWidget {
             CollectionSearchBar(
               boardGamesStore: _boardGamesStore,
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(
-                  Dimensions.standardSpacing,
-                ),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('sort by'),
-                ),
-              ),
-            ),
             if (hasNoSearchResults)
               CollectionEmptySearchResult(
                 boardGamesStore: _boardGamesStore,
