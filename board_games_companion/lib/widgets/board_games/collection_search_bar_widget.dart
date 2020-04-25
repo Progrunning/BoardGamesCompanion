@@ -30,6 +30,10 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget._boardGamesStore.searchPhrase?.isEmpty ?? true) {
+      _searchController.text = '';
+    }
+
     return SliverAppBar(
       titleSpacing: Dimensions.standardSpacing,
       title: TextField(
