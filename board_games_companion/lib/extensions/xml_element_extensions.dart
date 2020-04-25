@@ -17,7 +17,7 @@ extension XmlElementExtensions on XmlElement {
     }
 
     final elements = this?.findElements(elementName);
-    if(elements?.isEmpty ?? true) {
+    if (elements?.isEmpty ?? true) {
       return null;
     }
 
@@ -25,7 +25,14 @@ extension XmlElementExtensions on XmlElement {
   }
 
   XmlAttribute firstOrDefaultAttributeWhere(bool test(XmlAttribute element)) {
-    return this.attributes?.firstWhere(test, orElse: null);
+    if (this.attributes?.isEmpty ?? true) {
+      return null;
+    }
+
+    return this.attributes?.firstWhere(
+          test,
+          orElse: () => null,
+        );
   }
 
   String firstOrDefaultAttributeValue(String attributeName) {
@@ -33,8 +40,10 @@ extension XmlElementExtensions on XmlElement {
       return null;
     }
 
-    return this?.attributes?.firstWhere((attr) {
-      return attr.name.local == attributeName;
-    })?.value;
+    return this.firstOrDefaultAttributeWhere(
+      (attr) {
+        return attr.name.local == attributeName;
+      },
+    )?.value;
   }
 }

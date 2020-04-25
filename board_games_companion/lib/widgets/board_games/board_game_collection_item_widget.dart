@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/base_board_game.dart';
@@ -95,7 +96,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
             ),
           ),
         ),
-        if (widget.boardGame.rank != null)
+        if (widget.boardGame.rank != null && widget.boardGame.rank < Constants.Top100)
           Positioned(
             top: -Dimensions.halfStandardSpacing - 1,
             right: Dimensions.halfStandardSpacing,

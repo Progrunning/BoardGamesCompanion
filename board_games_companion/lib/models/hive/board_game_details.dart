@@ -215,10 +215,13 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   String get rankFormatted {
-    if (ranks?.isNotEmpty ?? false) {
+    if (rank != null) {
+      return rank.toString();
+    } else if (ranks?.isNotEmpty ?? false) {
       final overallRank = ranks?.first?.rank;
       return overallRank?.toString() ?? 'Not Ranked';
     }
+
     return null;
   }
 }
