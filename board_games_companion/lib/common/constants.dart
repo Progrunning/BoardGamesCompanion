@@ -9,6 +9,7 @@ class Constants {
   static const NumberOfMinutesInHour = 60;
   
   static const Top100 = 100;
+  static const double BoardGameDetailsImageHeight = 300;
   
   static const FeedbackEmailAddress = 'feedback@progrunning.net';
   static const BoardGameGeekBaseApiUrl = 'https://www.boardgamegeek.com/';

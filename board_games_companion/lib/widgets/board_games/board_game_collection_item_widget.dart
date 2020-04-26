@@ -1,9 +1,9 @@
+import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/base_board_game.dart';
-import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
@@ -12,8 +12,13 @@ import 'package:flutter/material.dart';
 
 class BoardGameCollectionItem extends StatefulWidget {
   final BaseBoardGame boardGame;
+  final Future<void> Function() onTap;
 
-  BoardGameCollectionItem({Key key, this.boardGame}) : super(key: key);
+  BoardGameCollectionItem({
+    Key key,
+    this.boardGame,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _BoardGameSearchItemWidget();
@@ -24,43 +29,47 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        CachedNetworkImage(
-          imageUrl: widget.boardGame.thumbnailUrl,
-          imageBuilder: (context, imageProvider) => Padding(
-            padding: const EdgeInsets.only(
-              right: Dimensions.halfStandardSpacing,
-              bottom: Dimensions.halfStandardSpacing,
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  AppTheme.defaultBoxShadow,
-                ],
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    Styles.boardGameTileImageCircularRadius,
+        Hero(
+          tag: "${AnimationTags.boardGameImageHeroTag}${widget.boardGame.id}",
+          child: CachedNetworkImage(
+            imageUrl: widget.boardGame.thumbnailUrl,
+            imageBuilder: (context, imageProvider) => Padding(
+              padding: const EdgeInsets.only(
+                right: Dimensions.halfStandardSpacing,
+                bottom: Dimensions.halfStandardSpacing,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    AppTheme.defaultBoxShadow,
+                  ],
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      Styles.boardGameTileImageCircularRadius,
+                    ),
                   ),
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
-                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
-          ),
-          fit: BoxFit.fitWidth,
-          placeholder: (context, url) => Container(
-            color: AppTheme.primaryColor,
-            child: Center(
-              child: CircularProgressIndicator(),
+            fit: BoxFit.fitWidth,
+            placeholder: (context, url) => Container(
+              color: AppTheme.primaryColor,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
-          ),
-          errorWidget: (context, url, error) => ShadowBox(
-            child: Padding(
-              padding: const EdgeInsets.all(Dimensions.standardSpacing),
-              child: Container(
-                child: Center(
-                  child: Text(
-                    widget.boardGame?.name ?? '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+            errorWidget: (context, url, error) => ShadowBox(
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      widget.boardGame?.name ?? '',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                    ),
                   ),
                 ),
               ),
@@ -96,7 +105,8 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
             ),
           ),
         ),
-        if (widget.boardGame.rank != null && widget.boardGame.rank < Constants.Top100)
+        if (widget.boardGame.rank != null &&
+            widget.boardGame.rank < Constants.Top100)
           Positioned(
             top: -Dimensions.halfStandardSpacing - 1,
             right: Dimensions.halfStandardSpacing,
@@ -105,10 +115,11 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
         Positioned.fill(
           child: StackRippleEffect(
             onTap: () async {
-              await NavigatorHelper.navigateToBoardGameDetails(
-                context,
-                widget.boardGame,
-              );
+              if (widget.onTap == null) {
+                return;
+              }
+
+              await widget.onTap();
             },
           ),
         )

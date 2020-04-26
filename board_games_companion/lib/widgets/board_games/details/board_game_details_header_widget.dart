@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
@@ -18,14 +19,12 @@ class BoardGamesDetailsHeader extends StatelessWidget {
   final String _boardGameName;
   final BoardGameDetailsStore _boardGameDetailsStore;
 
-  static const double _headerHeight = 300;
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       floating: false,
       pinned: true,
-      expandedHeight: _headerHeight,
+      expandedHeight: Constants.BoardGameDetailsImageHeight,
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         centerTitle: true,
@@ -52,9 +51,10 @@ class BoardGamesDetailsHeader extends StatelessWidget {
           value: _boardGameDetailsStore,
           child: Consumer<BoardGameDetailsStore>(
             builder: (_, store, __) {
+              // TODO Add shadow to the image
               return BoardGameImage(
                 _boardGameDetailsStore.boardGameDetails,
-                minImageHeight: _headerHeight,
+                minImageHeight: Constants.BoardGameDetailsImageHeight,
               );
             },
           ),

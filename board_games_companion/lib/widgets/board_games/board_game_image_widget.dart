@@ -31,7 +31,10 @@ class BoardGameImage extends StatelessWidget {
         imageBuilder: (context, imageProvider) => _wrapInShadowBox(
           Container(
             decoration: BoxDecoration(
-              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

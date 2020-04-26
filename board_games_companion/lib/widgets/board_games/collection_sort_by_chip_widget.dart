@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/sort_by.dart';

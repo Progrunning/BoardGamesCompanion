@@ -1,11 +1,13 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/pages/paythrough_statistcs_page.dart';
 import 'package:board_games_companion/pages/playthroughs.dart';
 import 'package:board_games_companion/pages/start_new_playthrough.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/start_playthrough_store.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
@@ -43,21 +45,40 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Playthroughs'),
-      ),
-      body: PageContainer(
-        child: PageView(
-          controller: pageController,
-          onPageChanged: (index) =>
-              _onTabPageChanged(index, boardGamePlaythoughsStore),
-          children: <Widget>[
-            PlaythroughsPage(_boardGameDetails, playthroughsStore),
-            Consumer<PlayersStore>(
-              builder: (_, __, ___) {
-                return StartNewPlaythroughPage();
-              },
+        title: Text(_boardGameDetails.name ?? ''),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.info,
+              color: AppTheme.accentColor,
             ),
-          ],
+            onPressed: () async {
+              await _navigateToBoardGameDetails(context, _boardGameDetails);
+            },
+          )
+        ],
+      ),
+      body: SafeArea(
+        child: PageContainer(
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (index) =>
+                _onTabPageChanged(index, boardGamePlaythoughsStore),
+            children: <Widget>[
+              PlaythroughStatistcsPage(
+                boardGameDetails: _boardGameDetails,
+              ),
+              PlaythroughsPage(
+                _boardGameDetails,
+                playthroughsStore,
+              ),
+              Consumer<PlayersStore>(
+                builder: (_, __, ___) {
+                  return StartNewPlaythroughPage();
+                },
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: Consumer2<BoardGamePlaythroughsStore, PlayersStore>(
@@ -81,6 +102,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
           return BottomNavigationBar(
             backgroundColor: AppTheme.bottomTabBackgroundColor,
             items: <BottomNavigationBarItem>[
+              CustomBottomNavigationBarItem('Stats', Icons.multiline_chart),
               CustomBottomNavigationBarItem('History', Icons.history),
               CustomBottomNavigationBarItem('New Game', Icons.play_arrow),
             ],
@@ -103,8 +125,20 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
     boardGamePlaythroughsStore.boardGamePlaythroughPageIndex = pageIndex;
   }
 
+  Future<void> _navigateToBoardGameDetails(
+    BuildContext context,
+    BoardGameDetails boardGameDetails,
+  ) async {
+    await NavigatorHelper.navigateToBoardGameDetails(
+      context,
+      boardGameDetails,
+    );
+  }
+
   Future<void> _onStartNewGame(
-      BuildContext context, PageController pageController) async {
+    BuildContext context,
+    PageController pageController,
+  ) async {
     final startPlaythroughStore = Provider.of<StartPlaythroughStore>(
       context,
       listen: false,
