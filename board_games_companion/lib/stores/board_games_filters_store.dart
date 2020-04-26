@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/services/board_games_filters_service.dart';
@@ -47,6 +48,15 @@ class BoardGamesFiltersStore with ChangeNotifier {
   }
 
   Future<void> updateSelection(SortBy sortBy) async {
+    // MK If already selected, update ordering order
+    if (sortBy.selected) {
+      if (sortBy.orderBy == OrderBy.Ascending) {
+        sortBy.orderBy = OrderBy.Descending;
+      } else {
+        sortBy.orderBy = OrderBy.Ascending;
+      }
+    }
+
     _sortBy.forEach((sb) => sb.selected = false);
     sortBy.selected = true;
 

@@ -286,7 +286,7 @@ class BoardGamesStore with ChangeNotifier {
           case SortByOption.LastUpdated:
             return a.lastModified.safeCompareTo(b.lastModified);
           case SortByOption.Rank:
-            return a.rank.safeCompareTo(b.rank ?? 0);
+            return a.rank.safeCompareTo(b.rank);
           case SortByOption.NumberOfPlayers:
             if (selectedSortBy.orderBy == OrderBy.Descending) {
               return b.maxPlayers.safeCompareTo(a.maxPlayers);

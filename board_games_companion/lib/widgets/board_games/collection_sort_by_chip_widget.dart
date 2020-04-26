@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/sort_by.dart';
@@ -49,9 +50,11 @@ class SortByChip extends StatelessWidget {
       ),
       selectedColor: AppTheme.accentColor,
       selectedShadowColor: AppTheme.shadowColor,
-      backgroundColor: AppTheme.primaryColorLight,
+      backgroundColor: AppTheme.primaryColor.withAlpha(
+        Styles.opacity80Percent,
+      ),
       avatar: avatarIcon,
-      elevation: 20,
+      elevation: 5,
       onSelected: (isSelected) {
         _boardGamesFiltersStore?.updateSelection(_sortBy);
       },
