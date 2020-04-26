@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/widgets/board_games/collection_filter_panel_widget.dart';
 import 'package:flutter/material.dart';
 
 class CollectionSearchBar extends StatefulWidget {
@@ -49,29 +51,32 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
       ),
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (_) {
-                return Container(
-                  height: MediaQuery.of(Scaffold.of(context).context).size.height * 0.65,
-                );
-              },
-            );
+          icon: Icon(
+            Icons.filter_list,
+            color: AppTheme.accentColor,
+          ),
+          onPressed: () async {
+            await _createBottomSheetFilterPanel(context);
           },
         )
       ],
     );
   }
 
-  @override
-  void dispose() {
-    _searchController.removeListener(_handleSearchChanged);
-    _searchController.dispose();
-    _debounce.cancel();
-
-    super.dispose();
+  Future<void> _createBottomSheetFilterPanel(BuildContext context) async {
+    await showModalBottomSheet(
+      backgroundColor: AppTheme.primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(Styles.defaultBottomSheetCornerRadius),
+          topRight: Radius.circular(Styles.defaultBottomSheetCornerRadius),
+        ),
+      ),
+      context: context,
+      builder: (_) {
+        return CollectionFilterPanel();
+      },
+    );
   }
 
   void _handleSearchChanged() {
@@ -102,5 +107,14 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
       Icons.search,
       color: AppTheme.accentColor,
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_handleSearchChanged);
+    _searchController?.dispose();
+    _debounce?.cancel();
+
+    super.dispose();
   }
 }

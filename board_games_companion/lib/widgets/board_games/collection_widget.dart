@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/board_games/collection_empty_search_result.dart';
 import 'package:board_games_companion/widgets/board_games/collection_grid_widget.dart';

@@ -42,7 +42,7 @@ extension IntExtensions on int {
 
     return '${minutes}min';
   }
-  
+
   String toAverageDuration([String fallbackValue]) {
     if (this == null) {
       return fallbackValue ?? '';
@@ -56,5 +56,21 @@ extension IntExtensions on int {
     }
 
     return '~${minutes}min';
+  }
+
+  int safeCompareTo(int intToCompare) {
+    if (this == null && intToCompare == null) {
+      return Constants.LeaveAsIs;
+    }
+
+    if (this != null && intToCompare == null) {
+      return Constants.MoveAbove;
+    }
+
+    if (this == null && intToCompare != null) {
+      return Constants.MoveBelow;
+    }
+
+    return this.compareTo(intToCompare);
   }
 }

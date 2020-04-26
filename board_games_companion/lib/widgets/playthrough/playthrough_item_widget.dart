@@ -1,5 +1,6 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/enums.dart';
+import 'package:board_games_companion/common/enums/playthrough_status.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/score_service.dart';

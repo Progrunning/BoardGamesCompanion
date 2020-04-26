@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/enums.dart';
 import 'package:flutter/material.dart';
 
 class Medal extends StatelessWidget {

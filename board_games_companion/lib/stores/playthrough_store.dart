@@ -1,4 +1,5 @@
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/enums.dart';
+import 'package:board_games_companion/common/enums/playthrough_status.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';

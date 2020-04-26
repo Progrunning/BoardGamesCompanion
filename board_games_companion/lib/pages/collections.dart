@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/enums.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:board_games_companion/widgets/board_games/collection_empty_widget.dart';
@@ -29,9 +29,6 @@ class CollectionsPage extends StatelessWidget {
           userStore: userStore,
         );
       }
-
-      _boardGamesStore.boardGames
-          .sort((a, b) => b.lastModified?.compareTo(a.lastModified));
 
       return Collection(
         boardGamesStore: _boardGamesStore,

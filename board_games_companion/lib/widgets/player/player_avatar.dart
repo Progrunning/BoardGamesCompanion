@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/enums.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 

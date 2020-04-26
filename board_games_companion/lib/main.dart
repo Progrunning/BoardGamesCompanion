@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:board_games_companion/app.dart';
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/order_by.dart';
+import 'package:board_games_companion/common/enums/playthrough_status.dart';
+import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
@@ -11,6 +13,8 @@ import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/hive/user.dart';
+import 'package:board_games_companion/models/sort_by.dart';
+import 'package:board_games_companion/services/board_games_filters_service.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
@@ -18,6 +22,7 @@ import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/services/user_service.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
+import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/hot_board_games_store.dart';
@@ -54,6 +59,9 @@ void main() async {
   Hive.registerAdapter(BoardGameArtistAdapter());
   Hive.registerAdapter(BoardGameRankAdapter());
   Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(SortByAdapter());
+  Hive.registerAdapter(SortByOptionAdapter());
+  Hive.registerAdapter(OrderByAdapter());
 
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
@@ -108,6 +116,9 @@ class App extends StatelessWidget {
               listen: false,
             ),
           ),
+        ),
+        Provider<BoardGamesFiltersService>(
+          create: (context) => BoardGamesFiltersService(),
         ),
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),
@@ -170,6 +181,14 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<BoardGamePlaythroughsStore>(
           create: (context) => BoardGamePlaythroughsStore(),
         ),
+        ChangeNotifierProvider<BoardGamesFiltersStore>(
+          create: (context) => BoardGamesFiltersStore(
+            Provider.of<BoardGamesFiltersService>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
         ChangeNotifierProvider<StartPlaythroughStore>(
           create: (context) => StartPlaythroughStore(
             Provider.of<PlayersStore>(
@@ -178,7 +197,7 @@ class App extends StatelessWidget {
             ),
           ),
         ),
-        ChangeNotifierProxyProvider<PlaythroughsStore, BoardGamesStore>(
+        ChangeNotifierProxyProvider<BoardGamesFiltersStore, BoardGamesStore>(
           create: (context) {
             final boardGamesStore = BoardGamesStore(
               Provider.of<BoardGamesService>(
@@ -197,13 +216,19 @@ class App extends StatelessWidget {
                 context,
                 listen: false,
               ),
+              Provider.of<BoardGamesFiltersStore>(
+                context,
+                listen: false,
+              ),
             );
 
             boardGamesStore.loadBoardGames();
             return boardGamesStore;
           },
-          update: (_, playthroughsStore, boardGamesStore) {
-            boardGamesStore.loadBoardGamesLatestData();
+          update: (_, filtersStore, boardGamesStore) {
+            // TODO Move this logic to a different spot
+            // boardGamesStore.loadBoardGamesLatestData();
+            boardGamesStore.applyFilters();
             return boardGamesStore;
           },
         ),

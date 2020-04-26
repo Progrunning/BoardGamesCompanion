@@ -5,6 +5,7 @@ class Styles {
   static const double  defaultCornerRadius = 5;
   static const Offset defaultShadowOffset =
       const Offset(defaultCornerRadius / 2, defaultCornerRadius / 2);
+  static const double  defaultBottomSheetCornerRadius = defaultCornerRadius * 6;
 
   static const double boardGameTileImageCircularRadius = 15;
   static const double boardGameTileImageShadowBlur = 1.5;

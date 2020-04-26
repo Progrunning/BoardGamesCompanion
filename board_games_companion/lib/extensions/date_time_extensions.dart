@@ -29,4 +29,20 @@ extension DateTimeExtensions on DateTime {
 
     return '$daysAgo $daysAgoText';
   }
+
+  int safeCompareTo(DateTime dateTimeToCompare) {
+    if (this == null && dateTimeToCompare == null) {
+      return Constants.LeaveAsIs;
+    }
+
+    if (this != null && dateTimeToCompare == null) {
+      return Constants.MoveAbove;
+    }
+
+    if (this == null && dateTimeToCompare != null) {
+      return Constants.MoveBelow;
+    }
+
+    return this.compareTo(dateTimeToCompare);
+  }
 }

@@ -14,4 +14,8 @@ class Constants {
   static const BoardGameGeekBaseApiUrl = 'https://www.boardgamegeek.com/';
   
   static const BoardGameGeekLastModifiedDateTimeFormat = 'yyyy-mm-dd HH:MM:ss';
+  
+  static const LeaveAsIs = 0;
+  static const MoveBelow = -1;
+  static const MoveAbove = 1;
 }

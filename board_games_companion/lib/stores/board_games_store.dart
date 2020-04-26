@@ -1,6 +1,9 @@
 import 'dart:math';
 
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/enums.dart';
+import 'package:board_games_companion/common/enums/order_by.dart';
+import 'package:board_games_companion/common/enums/playthrough_status.dart';
+import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
@@ -13,6 +16,11 @@ import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/extensions/scores_extensions.dart';
+import 'package:board_games_companion/stores/board_games_filters_store.dart';
+import 'package:board_games_companion/extensions/date_time_extensions.dart';
+import 'package:board_games_companion/extensions/int_extensions.dart';
+import 'package:board_games_companion/extensions/double_extensions.dart';
+import 'package:board_games_companion/extensions/string_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +30,7 @@ class BoardGamesStore with ChangeNotifier {
   final PlaythroughService _playthroughService;
   final ScoreService _scoreService;
   final PlayerService _playerService;
+  final BoardGamesFiltersStore _boardGamesFiltersStore;
 
   String _searchPhrase;
   List<BoardGameDetails> _allBoardGames;
@@ -33,6 +42,7 @@ class BoardGamesStore with ChangeNotifier {
     this._playthroughService,
     this._scoreService,
     this._playerService,
+    this._boardGamesFiltersStore,
   );
 
   LoadDataState get loadDataState => _loadDataState;
@@ -47,7 +57,10 @@ class BoardGamesStore with ChangeNotifier {
     try {
       _allBoardGames =
           _boardGames = await _boardGamesService.retrieveBoardGames();
-      await loadBoardGamesLatestData();
+      await _boardGamesFiltersStore.loadSortByPreferences();
+
+      // TODO Update this store logic after moving pages and screens around
+      // await loadBoardGamesLatestData();
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
       _loadDataState = LoadDataState.Error;
@@ -243,6 +256,56 @@ class BoardGamesStore with ChangeNotifier {
             ?.toLowerCase()
             ?.contains(searchPhraseLowerCase))
         .toList();
+
+    notifyListeners();
+  }
+
+  void applyFilters() {
+    if (boardGames?.isEmpty ?? true) {
+      return;
+    }
+
+    final selectedSortBy = _boardGamesFiltersStore.sortBy.firstWhere(
+      (sb) => sb.selected,
+      orElse: () => null,
+    );
+
+    if (selectedSortBy != null) {
+      boardGames.sort((a, b) {
+        if (selectedSortBy.orderBy == OrderBy.Descending) {
+          final buffer = a;
+          a = b;
+          b = buffer;
+        }
+
+        switch (selectedSortBy.sortByOption) {
+          case SortByOption.Name:
+            return a.name.safeCompareTo(b.name);
+          case SortByOption.YearPublished:
+            return a.yearPublished.safeCompareTo(b.yearPublished);
+          case SortByOption.LastUpdated:
+            return a.lastModified.safeCompareTo(b.lastModified);
+          case SortByOption.Rank:
+            return a.rank.safeCompareTo(b.rank ?? 0);
+          case SortByOption.NumberOfPlayers:
+            if (selectedSortBy.orderBy == OrderBy.Descending) {
+              return b.maxPlayers.safeCompareTo(a.maxPlayers);
+            }
+
+            return a.minPlayers.safeCompareTo(b.maxPlayers);
+          case SortByOption.Playtime:
+            if (selectedSortBy.orderBy == OrderBy.Descending) {
+              return b.maxPlaytime.safeCompareTo(a.maxPlaytime);
+            }
+
+            return a.minPlaytime.safeCompareTo(b.minPlaytime);
+          case SortByOption.Rating:
+            return a.rating.safeCompareTo(b.rating);
+          default:
+            return a.lastModified.safeCompareTo(b.lastModified);
+        }
+      });
+    }
 
     notifyListeners();
   }

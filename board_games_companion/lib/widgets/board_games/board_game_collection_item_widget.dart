@@ -86,7 +86,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
               child: Padding(
                 padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
                 child: Text(
-                  widget.boardGame.name,
+                  widget.boardGame.name ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: AppTheme.defaultTextColor,

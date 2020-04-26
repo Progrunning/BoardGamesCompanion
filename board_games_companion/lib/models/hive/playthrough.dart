@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums.dart';
+import 'package:board_games_companion/common/enums/playthrough_status.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:hive/hive.dart';
 

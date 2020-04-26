@@ -52,7 +52,8 @@ class BoardGamesDetailsBody extends StatelessWidget {
                           title: 'Numbers',
                         ),
                         BoardGameDetailsNumbers(
-                          boardGameDetails: _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails:
+                              _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: _spacingBetweenSecions,
@@ -95,8 +96,9 @@ class BoardGamesDetailsBody extends StatelessWidget {
                               .boardGameDetails.categories
                               .map<Widget>((category) {
                             return Chip(
-                              padding:
-                                  EdgeInsets.all(Dimensions.standardSpacing),
+                              padding: EdgeInsets.all(
+                                Dimensions.standardSpacing,
+                              ),
                               label: Text(
                                 category.name,
                               ),

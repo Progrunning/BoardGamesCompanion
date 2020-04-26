@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'enums.dart';
+part of 'playthrough_status.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
