@@ -18,6 +18,8 @@ class Dimensions {
   static const double boardGameItemCollectionImageHeight = 150;
 
   static const double boardGameRemoveIconSize = 40;
+  
+  static const double boardGameDetailsWebIconSize = 40;
 
   static const double boardGameDetailsHexagonSize = 80;
   static const double boardGameHexagonSize = 40;
