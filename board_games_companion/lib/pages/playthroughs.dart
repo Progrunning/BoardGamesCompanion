@@ -17,17 +17,11 @@ class PlaythroughsPage extends StatelessWidget {
     this._playthroughsStore,
   );
 
-  static const double _minBoardGameImageHeight = 240;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        // BoardGameImage(
-        //   _boardGameDetails,
-        //   minImageHeight: _minBoardGameImageHeight,
-        // ),
         SizedBox(
           height: Dimensions.standardSpacing,
         ),
