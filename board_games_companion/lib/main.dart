@@ -27,6 +27,7 @@ import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/hot_board_games_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
+import 'package:board_games_companion/stores/playthrough_statistics_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
@@ -226,10 +227,34 @@ class App extends StatelessWidget {
             return boardGamesStore;
           },
           update: (_, filtersStore, boardGamesStore) {
-            // TODO Move this logic to a different spot
-            // boardGamesStore.loadBoardGamesLatestData();
             boardGamesStore.applyFilters();
             return boardGamesStore;
+          },
+        ),
+        ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
+            PlaythroughStatisticsStore>(
+          create: (context) {
+            final boardGamesStore = PlaythroughStatisticsStore(
+              Provider.of<PlayerService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<ScoreService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlaythroughService>(
+                context,
+                listen: false,
+              ),
+            );
+
+            return boardGamesStore;
+          },
+          update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
+            playthroughStatisticsStore
+                .loadBoardGamesStatistics(boardGameStore.boardGames);
+            return playthroughStatisticsStore;
           },
         ),
       ],

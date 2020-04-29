@@ -1,5 +1,5 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/models/board_game_statistics.dart';
 import 'package:board_games_companion/widgets/common/text/item_property_title_widget.dart';
 import 'package:board_games_companion/widgets/common/text/item_property_value_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 
 class BoardGameCollectionItemDetailsLastPlayed extends StatelessWidget {
   const BoardGameCollectionItemDetailsLastPlayed({
-    @required this.boardGameDetails,
+    @required this.boardGameStatistics,
     Key key,
   }) : super(key: key);
 
-  final BoardGameDetails boardGameDetails;
+  final BoardGameStatistics boardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +27,14 @@ class BoardGameCollectionItemDetailsLastPlayed extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             CalendarCard(
-              boardGameDetails.lastPlayed,
+              boardGameStatistics?.lastPlayed,
             ),
             SizedBox(
               width: Dimensions.standardSpacing,
             ),
             Expanded(
               child: ItemPropertyValue(
-                boardGameDetails.lastPlayed.toDaysAgo(),
+                boardGameStatistics?.lastPlayed?.toDaysAgo(),
               ),
             ),
           ],

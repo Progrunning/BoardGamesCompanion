@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/stores/playthrough_statistics_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_collection_item_details_last_played_widget.dart';
 import 'package:board_games_companion/widgets/board_games/collection_item/board_game_collection_item_details_last_winner_widget.dart';
 import 'package:board_games_companion/widgets/board_games/collection_item/board_game_collection_item_details_statistics_widget.dart';
@@ -16,41 +17,48 @@ class PlaythroughStatisticsDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final boardGameDetails = Provider.of<BoardGameDetails>(context);
+    final playthroughStatisticsStore =
+        Provider.of<PlaythroughStatisticsStore>(context);
 
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.standardSpacing,
-          ),
-          child: Stack(
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.max,
+    return Consumer<BoardGameDetails>(
+      builder: (_, boardGameDetails, __) {
+        final boardGameStatistics = playthroughStatisticsStore
+            .boardGamesStatistics[boardGameDetails.id];
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.standardSpacing,
+              ),
+              child: Stack(
                 children: <Widget>[
-                  BoardGameCollectionItemDetailsLastWinner(
-                    boardGameDetails: boardGameDetails,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      BoardGameCollectionItemDetailsLastWinner(
+                        boardGameStatistics: boardGameStatistics,
+                      ),
+                      SizedBox(
+                        height: Dimensions.standardSpacing,
+                      ),
+                      BoardGameCollectionItemDetailsLastPlayed(
+                        boardGameStatistics: boardGameStatistics,
+                      ),
+                      SizedBox(
+                        height: Dimensions.doubleStandardSpacing,
+                      ),
+                      BoardGameCollectionItemDetailsStatistics(
+                        boardGameStatistics: boardGameStatistics,
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: Dimensions.standardSpacing,
-                  ),
-                  BoardGameCollectionItemDetailsLastPlayed(
-                    boardGameDetails: boardGameDetails,
-                  ),
-                  SizedBox(
-                    height: Dimensions.doubleStandardSpacing,
-                  ),
-                  BoardGameCollectionItemDetailsStatistics(
-                    boardGameDetails: boardGameDetails,
-                  )
                 ],
               ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

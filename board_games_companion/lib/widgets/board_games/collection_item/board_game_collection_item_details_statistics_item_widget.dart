@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/common/text/item_property_title_widget.dart';
 import 'package:board_games_companion/widgets/common/text/item_property_value_widget.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/rendering.dart';
 class BoardGameCollectionItemDetailsStatisticsItem extends StatelessWidget {
   const BoardGameCollectionItemDetailsStatisticsItem({
     Key key,
-    @required this.boardGameDetails,
     @required this.icon,
     @required this.value,
     @required this.subtitle,
@@ -19,7 +17,6 @@ class BoardGameCollectionItemDetailsStatisticsItem extends StatelessWidget {
   final Color iconColor;
   final String value;
   final String subtitle;
-  final BoardGameDetails boardGameDetails;
 
   @override
   Widget build(BuildContext context) {

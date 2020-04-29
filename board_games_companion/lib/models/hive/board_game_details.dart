@@ -5,7 +5,6 @@ import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:board_games_companion/models/hive/board_game_rank.dart';
-import 'package:board_games_companion/models/player_score.dart';
 import 'package:hive/hive.dart';
 
 part 'board_game_details.g.dart';
@@ -161,52 +160,7 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
-  DateTime _lastPlayed;
-  DateTime get lastPlayed => _lastPlayed;
-  set lastPlayed(DateTime value) {
-    if (_lastPlayed != value) {
-      _lastPlayed = value;
-      notifyListeners();
-    }
-  }
-
-  PlayerScore _lastWinner;
-  PlayerScore get lastWinner => _lastWinner;
-  set lastWinner(PlayerScore value) {
-    if (_lastWinner != value) {
-      _lastWinner = value;
-      notifyListeners();
-    }
-  }
-
-  int _numberOfGamesPlayed;
-  int get numberOfGamesPlayed => _numberOfGamesPlayed;
-  set numberOfGamesPlayed(int value) {
-    if (_numberOfGamesPlayed != value) {
-      _numberOfGamesPlayed = value;
-      notifyListeners();
-    }
-  }
-
-  int _averagePlaytimeInSeconds;
-  int get averagePlaytimeInSeconds => _averagePlaytimeInSeconds;
-  set averagePlaytimeInSeconds(int value) {
-    if (_averagePlaytimeInSeconds != value) {
-      _averagePlaytimeInSeconds = value;
-      notifyListeners();
-    }
-  }
-
-  String _highscore;
-  String get highscore => _highscore;
-  set highscore(String value) {
-    if (_highscore != value) {
-      _highscore = value;
-      notifyListeners();
-    }
-  }
-
-  String get playtingFormatted {
+  String get playtimeFormatted {
     if (_minPlaytime == _maxPlaytime) {
       return '$minPlaytime';
     }
