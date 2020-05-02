@@ -43,6 +43,11 @@ class AppTheme {
     fontSize: Dimensions.standardFontSize,
     color: secondaryTextColor,
   );
+  
+  static const TextStyle sectionHeaderTextStyle = TextStyle(
+    fontSize: Dimensions.extraSmallFontSize,
+    color: secondaryTextColor,
+  );
 
   static const BoxShadow defaultBoxShadow = BoxShadow(
     color: AppTheme.shadowColor,

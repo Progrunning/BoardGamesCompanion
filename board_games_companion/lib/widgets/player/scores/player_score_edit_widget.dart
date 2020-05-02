@@ -28,6 +28,7 @@ class PlayerScoreEdit extends StatelessWidget {
         ),
         decoration: InputDecoration(
           labelText: 'Score',
+          labelStyle: AppTheme.sectionHeaderTextStyle,
           fillColor: Colors.red,
         ),
         onFieldSubmitted: (value) async {

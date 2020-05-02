@@ -1,12 +1,14 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/playthrough_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
+import 'package:board_games_companion/widgets/player/player_avatar_subtitle_widget.dart';
 import 'package:board_games_companion/widgets/player/scores/player_score_edit_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,128 +36,101 @@ class PlayerScore extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          child: SizedBox(
-            height: Dimensions.defaultPlayerAvatarHeight,
-            child: ChangeNotifierProvider.value(
-              value: _playerScore,
-              child: Consumer<player_score_model.PlayerScore>(
-                builder: (_, store, __) {
-                  Widget playerAvatar = ShadowBox(
-                    child: PlayerAvatar(
-                      imageUri: store?.player?.imageUri,
-                      medal: store?.medal,
-                    ),
-                  );
-                  if ((store?.player?.id?.isNotEmpty ?? false) &&
-                      (store.score?.id?.isNotEmpty ?? false)) {
-                    playerAvatar = Hero(
-                        tag:
-                            '${AnimationTags.playerImageHeroTag}${store?.player?.id}${store?.score?.id}',
-                        child: playerAvatar);
-                  }
+          child: ChangeNotifierProvider.value(
+            value: _playerScore,
+            child: Consumer<player_score_model.PlayerScore>(
+              builder: (_, store, __) {
+                Widget playerAvatar = ShadowBox(
+                  child: PlayerAvatar(
+                    imageUri: store?.player?.imageUri,
+                    medal: store?.medal,
+                  ),
+                );
+                if ((store?.player?.id?.isNotEmpty ?? false) &&
+                    (store.score?.id?.isNotEmpty ?? false)) {
+                  playerAvatar = Hero(
+                      tag:
+                          '${AnimationTags.playerImageHeroTag}${store?.player?.id}${store?.score?.id}',
+                      child: playerAvatar);
+                }
 
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 100,
-                        width: 100,
-                        child: Stack(
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: Dimensions.defaultPlayerAvatarHeight,
+                      width: Dimensions.defaultPlayerAvatarHeight,
+                      child: Stack(
+                        children: <Widget>[
+                          playerAvatar,
+                          PlayerAvatarSubtitle(
+                            player: store?.player,
+                          ),
+                          if ((store?.score?.value?.isNotEmpty ?? false) &&
+                              store.place != null)
+                            Positioned(
+                              top: -Styles.defaultShadowRadius - 1,
+                              right: 0,
+                              child: RankRibbon(store?.place),
+                            ),
+                        ],
+                      ),
+                    ),
+                    if (editMode)
+                      PlayerScoreEdit(
+                        controller: playerScoreController,
+                        onSubmit: (value) async {
+                          await _updatePlayerScore(
+                              _playerScore, value, context);
+                        },
+                      ),
+                    if (!editMode)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimensions.standardSpacing,
+                        ),
+                        child: Text(
+                          'Score',
+                          style: AppTheme.sectionHeaderTextStyle,
+                        ),
+                      ),
+                    if (!editMode)
+                      IntrinsicHeight(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            playerAvatar,
-                            if ((store?.score?.value?.isNotEmpty ?? false) &&
-                                store.place != null)
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: RankRibbon(store?.place),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                store?.score?.value ?? '-',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 32,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: Dimensions.standardSpacing,
+                            ),
+                            if (!readonly)
+                              Align(
+                                alignment: Alignment.center,
+                                child: IconAndTextButton(
+                                  icon: Icons.edit,
+                                  horizontalPadding: Dimensions.standardSpacing,
+                                  onPressed: () => _showCreateOrEditScoreDialog(
+                                      context, store),
+                                ),
                               ),
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.standardSpacing,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Text(
-                                    'Name',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Dimensions.halfStandardSpacing,
-                                  ),
-                                  Text(
-                                    store?.player?.name ?? '-',
-                                    style: TextStyle(
-                                      fontSize: Dimensions.largeFontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              if (editMode)
-                                PlayerScoreEdit(
-                                  controller: playerScoreController,
-                                  onSubmit: (value) async {
-                                    await _updatePlayerScore(
-                                        _playerScore, value, context);
-                                  },
-                                ),
-                              if (!editMode)
-                                Text(
-                                  'Score',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              if (!editMode)
-                                Expanded(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Text(
-                                          store?.score?.value ?? '-',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 32),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: Dimensions.standardSpacing,
-                                      ),
-                                      if (!readonly)
-                                        IconAndTextButton(
-                                          icon: Icons.edit,
-                                          horizontalPadding:
-                                              Dimensions.standardSpacing,
-                                          onPressed: () =>
-                                              _showCreateOrEditScoreDialog(
-                                                  context, store),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -165,7 +140,7 @@ class PlayerScore extends StatelessWidget {
           ),
         if (editMode)
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconAndTextButton(
                 icon: Icons.cancel,
@@ -180,7 +155,10 @@ class PlayerScore extends StatelessWidget {
                 icon: Icons.save,
                 title: 'Save',
                 onPressed: () => _updatePlayerScore(
-                    _playerScore, playerScoreController.value.text, context),
+                  _playerScore,
+                  playerScoreController.value.text,
+                  context,
+                ),
               ),
             ],
           )
@@ -223,6 +201,7 @@ class PlayerScore extends StatelessWidget {
       context,
       listen: false,
     );
+    // TODO MK Fix this exception
     final playthroughStore = Provider.of<PlaythroughStore>(
       context,
       listen: false,

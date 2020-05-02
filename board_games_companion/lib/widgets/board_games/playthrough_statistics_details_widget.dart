@@ -50,7 +50,7 @@ class PlaythroughStatisticsDetails extends StatelessWidget {
                       ),
                       BoardGameCollectionItemDetailsStatistics(
                         boardGameStatistics: boardGameStatistics,
-                      )
+                      ),
                     ],
                   ),
                 ],

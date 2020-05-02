@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class ItemPropertyTitle extends StatelessWidget {
@@ -13,10 +13,7 @@ class ItemPropertyTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title ?? '',
-      style: TextStyle(
-        fontSize: Dimensions.extraSmallFontSize,
-        color: Colors.grey,
-      ),
+      style: AppTheme.sectionHeaderTextStyle,
     );
   }
 }

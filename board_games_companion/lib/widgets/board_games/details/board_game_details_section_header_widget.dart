@@ -18,7 +18,7 @@ class BoardGameDetailsSectionHeader extends StatelessWidget {
       children: <Widget>[
         Text(
           _title,
-          style: AppTheme.subTitleTextStyle,
+          style: AppTheme.sectionHeaderTextStyle,
         ),
         SizedBox(
           height: Dimensions.halfStandardSpacing,

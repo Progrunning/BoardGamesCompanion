@@ -1,10 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/widgets/common/cunsumer_future_builder_widget.dart';
 import 'package:board_games_companion/widgets/playthrough/playthrough_item_widget.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -16,6 +17,8 @@ class PlaythroughsPage extends StatelessWidget {
     this._boardGameDetails,
     this._playthroughsStore,
   );
+
+  static const double _maxPlaythroughItemHeight = 360;
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +36,24 @@ class PlaythroughsPage extends StatelessWidget {
               if (hasPlaythroughs) {
                 store.playthroughs
                     .sort((a, b) => b.startDate?.compareTo(a.startDate));
-                return CarouselSlider(
-                  viewportFraction: .9,
-                  enableInfiniteScroll: false,
-                  height: double.infinity,
-                  items: store.playthroughs
-                      .asMap()
-                      .map((index, playthough) {
-                        return MapEntry(
-                          index,
-                          PlaythroughItem(
-                            playthough,
-                            store.playthroughs.length - index,
-                            key: ValueKey(playthough.id),
-                          ),
-                        );
-                      })
-                      .values
-                      .toList(),
+                return ListView.separated(
+                  itemBuilder: (_, index) {
+                    return SizedBox(
+                      height: math.max(_maxPlaythroughItemHeight,
+                          MediaQuery.of(context).size.height / 2),
+                      child: PlaythroughItem(
+                        store.playthroughs[index],
+                        store.playthroughs.length - index,
+                        key: ValueKey(store.playthroughs[index].id),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (_, index) {
+                    return SizedBox(
+                      height: 0,
+                    );
+                  },
+                  itemCount: store.playthroughs.length,
                 );
               }
 

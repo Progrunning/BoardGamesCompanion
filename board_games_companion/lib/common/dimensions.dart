@@ -27,7 +27,7 @@ class Dimensions {
   static const int edgeNumberOfHexagon = 6;
 
   static const double defaultPlayerAvatarWidth = 80;
-  static const double defaultPlayerAvatarHeight = 110;
+  static const double defaultPlayerAvatarHeight = 150;
 
   static const double defaultButtonIconSize = 20;
   

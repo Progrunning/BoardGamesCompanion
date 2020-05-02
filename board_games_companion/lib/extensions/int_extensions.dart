@@ -52,7 +52,10 @@ extension IntExtensions on int {
     final minutes = (this / Constants.NumberOfSecondsInMinute).floor();
 
     if (hours > 0) {
-      return '~$hours.${(minutes / Constants.NumberOfMinutesInHour * 100).floor()}h';
+      final hoursWithMinutesFraction = hours +
+          Constants.NumberOfMinutesInHour /
+              (minutes % Constants.NumberOfMinutesInHour);
+      return '~${hoursWithMinutesFraction.toStringAsFixed(1)}h';
     }
 
     return '~${minutes}min';

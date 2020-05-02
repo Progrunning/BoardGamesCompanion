@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
+import 'package:board_games_companion/widgets/player/player_avatar_subtitle_widget.dart';
 import 'package:flutter/material.dart';
 
 class PlayerGridItem extends StatelessWidget {
@@ -35,34 +36,8 @@ class PlayerGridItem extends StatelessWidget {
                   imageUri: player?.imageUri,
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: Dimensions.halfStandardSpacing,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        const Radius.circular(Styles.defaultCornerRadius),
-                      ),
-                      color: Theme.of(context)
-                          .accentColor
-                          .withAlpha(Styles.opacity70Percent),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(
-                        Dimensions.halfStandardSpacing,
-                      ),
-                      child: Text(
-                        player?.name ?? 'No Name?',
-                        style: TextStyle(
-                          color: AppTheme.defaultTextColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              PlayerAvatarSubtitle(
+                player: player,
               ),
               if (topRightCornerActionWidget != null)
                 topRightCornerActionWidget,

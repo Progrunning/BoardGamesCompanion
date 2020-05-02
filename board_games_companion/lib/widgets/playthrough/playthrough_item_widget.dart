@@ -127,6 +127,7 @@ class PlaythroughItem extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
                           itemCount: store.playerScores?.length ?? 0,
                           separatorBuilder: (context, index) {
                             return SizedBox(
