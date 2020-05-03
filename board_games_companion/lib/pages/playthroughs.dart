@@ -18,7 +18,7 @@ class PlaythroughsPage extends StatelessWidget {
     this._playthroughsStore,
   );
 
-  static const double _maxPlaythroughItemHeight = 360;
+  static const double _maxPlaythroughItemHeight = 300;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class PlaythroughsPage extends StatelessWidget {
                   itemBuilder: (_, index) {
                     return SizedBox(
                       height: math.max(_maxPlaythroughItemHeight,
-                          MediaQuery.of(context).size.height / 2),
+                          MediaQuery.of(context).size.height / 3),
                       child: PlaythroughItem(
                         store.playthroughs[index],
                         store.playthroughs.length - index,
@@ -50,7 +50,7 @@ class PlaythroughsPage extends StatelessWidget {
                   },
                   separatorBuilder: (_, index) {
                     return SizedBox(
-                      height: 0,
+                      height: Dimensions.doubleStandardSpacing,
                     );
                   },
                   itemCount: store.playthroughs.length,

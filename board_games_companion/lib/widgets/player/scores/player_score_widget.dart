@@ -17,6 +17,7 @@ import 'package:board_games_companion/models/player_score.dart'
 
 class PlayerScore extends StatelessWidget {
   final player_score_model.PlayerScore _playerScore;
+  final PlaythroughStore playthroughStore;
   final bool readonly;
   final bool editMode;
 
@@ -24,6 +25,7 @@ class PlayerScore extends StatelessWidget {
     this._playerScore, {
     this.readonly = true,
     this.editMode = false,
+    this.playthroughStore,
     Key key,
   }) : super(key: key);
 
@@ -82,7 +84,9 @@ class PlayerScore extends StatelessWidget {
                         controller: playerScoreController,
                         onSubmit: (value) async {
                           await _updatePlayerScore(
-                              _playerScore, value, context);
+                            value,
+                            context,
+                          );
                         },
                       ),
                     if (!editMode)
@@ -155,7 +159,6 @@ class PlayerScore extends StatelessWidget {
                 icon: Icons.save,
                 title: 'Save',
                 onPressed: () => _updatePlayerScore(
-                  _playerScore,
                   playerScoreController.value.text,
                   context,
                 ),
@@ -168,11 +171,10 @@ class PlayerScore extends StatelessWidget {
 
   Future<void> _showCreateOrEditScoreDialog(
       BuildContext context, player_score_model.PlayerScore playerScore) async {
-    final playthroughStore = Provider.of<PlaythroughStore>(
-      context,
-      listen: false,
-    );
-
+    if (playthroughStore == null) {
+      return;
+    }
+    
     await showDialog(
       context: context,
       barrierDismissible: true,
@@ -184,6 +186,7 @@ class PlayerScore extends StatelessWidget {
             child: PlayerScore(
               playerScore,
               editMode: true,
+              playthroughStore: playthroughStore,
             ),
           ),
         );
@@ -191,18 +194,16 @@ class PlayerScore extends StatelessWidget {
     );
   }
 
-  Future<void> _updatePlayerScore(player_score_model.PlayerScore store,
-      String value, BuildContext context) async {
-    if (!await store.updatePlayerScore(value)) {
+  Future<void> _updatePlayerScore(
+    String value,
+    BuildContext context,
+  ) async {
+    if (playthroughStore == null ||
+        !await _playerScore.updatePlayerScore(value)) {
       return;
     }
 
     final playthroughsStore = Provider.of<PlaythroughsStore>(
-      context,
-      listen: false,
-    );
-    // TODO MK Fix this exception
-    final playthroughStore = Provider.of<PlaythroughStore>(
       context,
       listen: false,
     );

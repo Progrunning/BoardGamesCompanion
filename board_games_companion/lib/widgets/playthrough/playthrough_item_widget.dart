@@ -32,8 +32,8 @@ class PlaythroughItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(
-        Dimensions.standardSpacing,
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.standardSpacing,
       ),
       child: PanelContainer(
         child: Padding(
@@ -98,48 +98,59 @@ class PlaythroughItem extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: Dimensions.standardSpacing,
-                          ),
-                          if (store.playthrough.status ==
-                              PlaythroughStatus.Started)
-                            IconAndTextButton(
-                              icon: Icons.stop,
-                              backgroundColor: Colors.blue,
-                              horizontalPadding: Dimensions.standardSpacing,
-                              verticalPadding: Dimensions.standardSpacing,
-                              onPressed: () => _stopPlaythrough(store),
-                            ),
-                          if (store.playthrough.status ==
-                              PlaythroughStatus.Finished)
-                            IconAndTextButton(
-                              icon: Icons.delete,
-                              backgroundColor: Colors.red,
-                              horizontalPadding: Dimensions.standardSpacing,
-                              verticalPadding: Dimensions.standardSpacing,
-                              onPressed: () =>
-                                  _deletePlaythrough(context, store),
-                            ),
                         ],
                       ),
                       SizedBox(
                         width: Dimensions.standardSpacing,
                       ),
                       Expanded(
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: store.playerScores?.length ?? 0,
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              height: Dimensions.standardSpacing,
-                            );
-                          },
-                          itemBuilder: (context, index) {
-                            return PlayerScore(
-                              store.playerScores[index],
-                              readonly: false,
-                            );
-                          },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Expanded(
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: store.playerScores?.length ?? 0,
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    width: Dimensions.doubleStandardSpacing,
+                                  );
+                                },
+                                itemBuilder: (context, index) {
+                                  return PlayerScore(
+                                    store.playerScores[index],
+                                    readonly: false,
+                                    playthroughStore: store,
+                                  );
+                                },
+                              ),
+                            ),
+                            if (store.playthrough.status ==
+                                PlaythroughStatus.Started)
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: IconAndTextButton(
+                                  icon: Icons.stop,
+                                  backgroundColor: Colors.blue,
+                                  horizontalPadding: Dimensions.standardSpacing,
+                                  verticalPadding: Dimensions.standardSpacing,
+                                  onPressed: () => _stopPlaythrough(store),
+                                ),
+                              ),
+                            if (store.playthrough.status ==
+                                PlaythroughStatus.Finished)
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: IconAndTextButton(
+                                  icon: Icons.delete,
+                                  backgroundColor: Colors.red,
+                                  horizontalPadding: Dimensions.standardSpacing,
+                                  verticalPadding: Dimensions.standardSpacing,
+                                  onPressed: () =>
+                                      _deletePlaythrough(context, store),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     ],
