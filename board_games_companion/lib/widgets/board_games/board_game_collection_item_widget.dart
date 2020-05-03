@@ -4,10 +4,7 @@ import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/hive/base_board_game.dart';
-import 'package:board_games_companion/widgets/common/page_container_widget.dart';
-import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
 import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
-import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -60,10 +57,9 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
                 child: CircularProgressIndicator(),
               ),
             ),
+            // TODO Add shadow to the error state
             errorWidget: (context, url, error) => ClipRRect(
-              borderRadius: BorderRadius.circular(
-                Styles.defaultCornerRadius,
-              ),
+              borderRadius: AppTheme.defaultBoxRadius,
               child: Container(
                 decoration: BoxDecoration(
                   color: AppTheme.primaryColor,
@@ -91,7 +87,9 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
                     .accentColor
                     .withAlpha(Styles.opacity70Percent),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(Styles.defaultCornerRadius),
+                  Radius.circular(
+                    Styles.defaultCornerRadius,
+                  ),
                 ),
               ),
               child: Padding(

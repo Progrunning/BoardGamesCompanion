@@ -47,8 +47,8 @@ class BoardGamesStore with ChangeNotifier {
     notifyListeners();
 
     try {
-      _allBoardGames =
-          _boardGames = await _boardGamesService.retrieveBoardGames();
+      _allBoardGames = await _boardGamesService.retrieveBoardGames();
+      _boardGames = List.of(_allBoardGames);
       await _boardGamesFiltersStore.loadSortByPreferences();
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
@@ -127,7 +127,8 @@ class BoardGamesStore with ChangeNotifier {
     try {
       syncResult = await _boardGamesService.syncCollection(username);
       if (syncResult.isSuccess) {
-        _allBoardGames = _boardGames = syncResult.data;
+        _allBoardGames = syncResult.data;
+        _boardGames = List.of(_allBoardGames);
       }
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
@@ -147,17 +148,17 @@ class BoardGamesStore with ChangeNotifier {
     _searchPhrase = searchPhrase;
 
     if (searchPhrase?.isEmpty ?? true) {
-      _boardGames = _allBoardGames;
+      _boardGames = List.of(_allBoardGames);
       notifyListeners();
     }
 
     final searchPhraseLowerCase = searchPhrase.toLowerCase();
 
-    _boardGames = _allBoardGames
+    _boardGames = List.of(_allBoardGames
         .where((boardGameDetails) => boardGameDetails.name
             ?.toLowerCase()
             ?.contains(searchPhraseLowerCase))
-        .toList();
+        .toList());
 
     notifyListeners();
   }
