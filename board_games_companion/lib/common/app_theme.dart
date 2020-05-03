@@ -43,7 +43,7 @@ class AppTheme {
     fontSize: Dimensions.standardFontSize,
     color: secondaryTextColor,
   );
-  
+
   static const TextStyle sectionHeaderTextStyle = TextStyle(
     fontSize: Dimensions.extraSmallFontSize,
     color: secondaryTextColor,
@@ -55,13 +55,18 @@ class AppTheme {
     offset: Styles.defaultShadowOffset,
   );
 
+  static const BorderRadius defaultBoxRadius = BorderRadius.all(
+    Radius.circular(
+      Styles.boardGameTileImageCircularRadius,
+    ),
+  );
+
   static const InputDecoration defaultTextFieldInputDecoration =
       InputDecoration(
     focusColor: AppTheme.accentColor,
     hintStyle: TextStyle(
       color: AppTheme.defaultTextColor,
     ),
-    
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         color: AppTheme.primaryColor,

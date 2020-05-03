@@ -39,7 +39,7 @@ class UserDetails extends StatelessWidget {
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   IconAndTextButton(
                     title: 'Remove',
@@ -49,19 +49,14 @@ class UserDetails extends StatelessWidget {
                       await _handleBggUserRemoval(context);
                     },
                   ),
-                  Spacer(),
-                  IconAndTextButton(
-                    title: 'Change',
-                    icon: Icons.edit,
-                    backgroundColor: Colors.blue,
-                  ),
                   SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
-                  IconAndTextButton(
-                    title: 'Sync',
-                    icon: Icons.sync,
-                  ),
+                  // TODO MK Create functionality to re-sync / update users collection
+                  // IconAndTextButton(
+                  //   title: 'Sync',
+                  //   icon: Icons.sync,
+                  // ),
                 ],
               ),
             ),

@@ -21,8 +21,8 @@ class PlayerAvatar extends StatelessWidget {
     Widget avatarImage;
     if (imageUri?.isEmpty ?? true) {
       avatarImage = Positioned.fill(
-        child: Image(
-          image: AssetImage('assets/default_avatar.png'),
+        child: Image.asset(
+          'assets/default_avatar.png',
           fit: BoxFit.cover,
         ),
       );

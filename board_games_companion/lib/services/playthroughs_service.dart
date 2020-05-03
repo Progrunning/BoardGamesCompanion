@@ -117,7 +117,6 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deleteAllPlaythrough() async {
-    // TODO TEST THIS
     if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return false;
     }
