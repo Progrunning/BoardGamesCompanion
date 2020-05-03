@@ -127,7 +127,7 @@ class BoardGamesStore with ChangeNotifier {
     try {
       syncResult = await _boardGamesService.syncCollection(username);
       if (syncResult.isSuccess) {
-        _allBoardGames = syncResult.data;
+        _allBoardGames = await _boardGamesService.retrieveBoardGames();
         _boardGames = List.of(_allBoardGames);
       }
     } catch (e, stack) {

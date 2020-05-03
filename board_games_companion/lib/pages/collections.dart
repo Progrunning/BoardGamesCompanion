@@ -17,17 +17,9 @@ class CollectionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserStore>(
-      context,
-      listen: false,
-    );
-
     if (_boardGamesStore.loadDataState == LoadDataState.Loaded) {
       if (!_boardGamesStore.hasBoardGames) {
-        return CollectionEmpty(
-          boardGamesStore: _boardGamesStore,
-          userStore: userStore,
-        );
+        return CollectionEmpty();
       }
 
       return Collection(

@@ -1,16 +1,19 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/mixins/sync_collection.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 
 import 'package:board_games_companion/widgets/about/detail_item_widget.dart';
 import 'package:board_games_companion/widgets/about/section_title_widget.dart';
+import 'package:board_games_companion/widgets/common/bgg_community_member_text_widget.dart';
+import 'package:board_games_companion/widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class UserDetails extends StatelessWidget {
+class UserDetails extends StatelessWidget with SyncCollection {
   const UserDetails({
     Key key,
   }) : super(key: key);
@@ -20,8 +23,42 @@ class UserDetails extends StatelessWidget {
     return Consumer<UserStore>(
       builder: (_, userStore, __) {
         if (userStore.user?.name?.isEmpty ?? true) {
-          return Container();
+          final syncController = TextEditingController();
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.standardSpacing,
+            ),
+            child: Column(
+              children: <Widget>[
+                BggCommunityMemberText(),
+                BggCommunityMemberUserNameTextField(
+                  controller: syncController,
+                  onSubmit: () async {},
+                ),
+                SizedBox(
+                  height: Dimensions.standardSpacing,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconAndTextButton(
+                    title: 'Sync',
+                    icon: Icons.sync,
+                    onPressed: () async {
+                      await syncCollection(
+                        context,
+                        syncController.text,
+                      );
+                    },
+                  ),
+                ),
+                Divider(
+                  color: AppTheme.accentColor,
+                ),
+              ],
+            ),
+          );
         }
+
         return Column(
           children: <Widget>[
             SectionTitle(
@@ -101,6 +138,7 @@ class UserDetails extends StatelessWidget {
 
                 await userStore.removeUser(userStore.user);
                 await boardGameStore.removeAllBoardGames();
+                
                 Navigator.of(context).pop();
               },
             ),

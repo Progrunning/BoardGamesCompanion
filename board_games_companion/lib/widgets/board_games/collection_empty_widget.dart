@@ -1,25 +1,15 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/hive/user.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/user_store.dart';
-import 'package:board_games_companion/utilities/launcher_helper.dart';
+import 'package:board_games_companion/mixins/sync_collection.dart';
+import 'package:board_games_companion/widgets/common/bgg_community_member_text_widget.dart';
+import 'package:board_games_companion/widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class CollectionEmpty extends StatelessWidget {
+class CollectionEmpty extends StatelessWidget with SyncCollection {
   CollectionEmpty({
-    @required boardGamesStore,
-    @required userStore,
     Key key,
-  })  : _boardGamesStore = boardGamesStore,
-        _userStore = userStore,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGamesStore _boardGamesStore;
-  final UserStore _userStore;
   final _syncController = TextEditingController();
 
   @override
@@ -45,52 +35,18 @@ class CollectionEmpty extends StatelessWidget {
             SizedBox(
               height: Dimensions.standardSpacing,
             ),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'If you\'re a member of the ',
-                  ),
-                  TextSpan(
-                    text: 'BoardGameGeek',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async {
-                        await LauncherHelper.launchUri(
-                          context,
-                          '${Constants.BoardGameGeekBaseApiUrl}',
-                        );
-                      },
-                  ),
-                  TextSpan(
-                    text: ' community, then please enter your ',
-                  ),
-                  TextSpan(
-                    text: 'user\'s name',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                        ' in the below box and hit the sync button to retrieve your collection.',
-                  ),
-                ],
-              ),
-            ),
+            BggCommunityMemberText(),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.doubleStandardSpacing * 2,
               ),
-              child: TextField(
+              child: BggCommunityMemberUserNameTextField(
                 controller: _syncController,
-                decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
-                  hintText: 'Enter your BGG user\'s name',
-                ),
-                onSubmitted: (username) async {
-                  await _syncCollection(context);
+                onSubmit: () async {
+                  await syncCollection(
+                    context,
+                    _syncController.text,
+                  );
                 },
               ),
             ),
@@ -102,7 +58,10 @@ class CollectionEmpty extends StatelessWidget {
                 title: 'Sync',
                 icon: Icons.sync,
                 onPressed: () async {
-                  await _syncCollection(context);
+                  await syncCollection(
+                    context,
+                    _syncController.text,
+                  );
                 },
               ),
             ),
@@ -123,15 +82,5 @@ class CollectionEmpty extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future _syncCollection(BuildContext context) async {
-    final username = _syncController.text;
-    final syncResult = await _boardGamesStore.syncCollection(username);
-    if (syncResult?.isSuccess ?? false) {
-      final user = User();
-      user.name = username;
-      await _userStore?.addOrUpdateUser(user);
-    }
   }
 }
