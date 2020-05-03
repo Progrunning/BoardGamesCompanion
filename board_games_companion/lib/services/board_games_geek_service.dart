@@ -209,6 +209,9 @@ class BoardGamesGeekService {
 
       boardGameDetails.imageUrl =
           boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
+      
+      boardGameDetails.thumbnailUrl =
+          boardGameDetailsItem.firstOrDefault(_xmlThumbnailElementName)?.text;
 
       boardGameDetails.yearPublished = int.tryParse(boardGameDetailsItem
               .firstOrDefault(_xmlYearPublishedElementName)
