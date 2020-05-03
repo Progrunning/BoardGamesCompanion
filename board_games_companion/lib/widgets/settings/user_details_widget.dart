@@ -46,7 +46,10 @@ class UserDetails extends StatelessWidget {
                     icon: Icons.remove_circle_outline,
                     backgroundColor: Colors.red,
                     onPressed: () async {
-                      await _handleBggUserRemoval(context);
+                      await _handleBggUserRemoval(
+                        context,
+                        userStore,
+                      );
                     },
                   ),
                   SizedBox(
@@ -69,7 +72,10 @@ class UserDetails extends StatelessWidget {
     );
   }
 
-  Future<void> _handleBggUserRemoval(BuildContext context) async {
+  Future<void> _handleBggUserRemoval(
+    BuildContext context,
+    UserStore userStore,
+  ) async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -93,6 +99,7 @@ class UserDetails extends StatelessWidget {
                   listen: false,
                 );
 
+                await userStore.removeUser(userStore.user);
                 await boardGameStore.removeAllBoardGames();
                 Navigator.of(context).pop();
               },

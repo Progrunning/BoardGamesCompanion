@@ -28,4 +28,18 @@ class UserService extends BaseHiveService<User> {
 
     return true;
   }
+
+  Future<bool> removeUser(User user) async {
+    if (user?.name?.isEmpty ?? true) {
+      return false;
+    }
+
+    if (!await ensureBoxOpen(HiveBoxes.User)) {
+      return false;
+    }
+
+    await storageBox.delete(user.name);
+
+    return true;
+  }
 }

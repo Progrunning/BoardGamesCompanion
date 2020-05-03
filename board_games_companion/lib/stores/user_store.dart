@@ -38,4 +38,19 @@ class UserStore with ChangeNotifier {
 
     return false;
   }
+
+  Future<bool> removeUser(User user) async {
+    try {
+      if (await _userService.removeUser(user)) {
+        _user = null;
+        notifyListeners();
+      }
+
+      return true;
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
 }
