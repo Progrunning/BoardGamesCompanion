@@ -1,4 +1,5 @@
 import 'package:board_games_companion/models/board_game.dart';
+import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/board_game_artist.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_designer.dart';
@@ -15,6 +16,8 @@ import 'package:xml/xml.dart' as xml;
 class BoardGamesGeekService {
   static const String _xmlItemElementName = 'item';
   static const String _xmlNameElementName = 'name';
+  static const String _xmlErrorsElementName = 'errors';
+  static const String _xmlErrorElementName = 'error';
   static const String _xmlDescriptionElementName = 'description';
   static const String _xmlMinPlayersElementName = 'minplayers';
   static const String _xmlMaxPlayersElementName = 'maxplayers';
@@ -209,7 +212,7 @@ class BoardGamesGeekService {
 
       boardGameDetails.imageUrl =
           boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
-      
+
       boardGameDetails.thumbnailUrl =
           boardGameDetailsItem.firstOrDefault(_xmlThumbnailElementName)?.text;
 
@@ -296,9 +299,9 @@ class BoardGamesGeekService {
     return boardGames;
   }
 
-  Future<List<BoardGameDetails>> syncCollection(String username) async {
+  Future<CollectionSyncResult> syncCollection(String username) async {
     if (username?.isEmpty ?? true) {
-      return List<BoardGameDetails>();
+      return CollectionSyncResult();
     }
 
     final dioWithRetry = _dio
@@ -320,8 +323,13 @@ class BoardGamesGeekService {
     final boardGames = List<BoardGameDetails>();
     final xmlDocument = _retrieveXmlDocument(collectionResultsXml);
     if (xmlDocument == null) {
-      return boardGames;
+      return CollectionSyncResult();
     }
+
+    if (_hasErrors(xmlDocument)) {
+      return CollectionSyncResult();
+    }
+
     final collectionItems = xmlDocument?.findAllElements(_xmlItemElementName);
     for (var collectionItem in collectionItems) {
       final boardGame = BoardGameDetails();
@@ -351,7 +359,9 @@ class BoardGamesGeekService {
       boardGames.add(boardGame);
     }
 
-    return boardGames;
+    return CollectionSyncResult()
+      ..isSuccess = true
+      ..data = boardGames;
   }
 
   xml.XmlDocument _retrieveXmlDocument(Response<dynamic> httpResponse) {
@@ -487,5 +497,16 @@ class BoardGamesGeekService {
         '');
 
     _extractBoardGameRanks(boardGameDetailsRating, boardGameDetails);
+  }
+
+  bool _hasErrors(xml.XmlDocument xmlDocument) {
+    final errorElements = xmlDocument?.findAllElements(_xmlErrorElementName);
+    if (errorElements?.isEmpty ?? true) {
+      return false;
+    }
+
+    for (var errorElement in errorElements) {}
+
+    return true;
   }
 }

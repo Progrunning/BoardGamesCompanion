@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/user.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
@@ -5,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 mixin SyncCollection {
-  Future<void> syncCollection(BuildContext context, String username) async {
+  Future<CollectionSyncResult> syncCollection(
+    BuildContext context,
+    String username,
+  ) async {
     if (username?.isEmpty ?? true) {
-      return;
+      return CollectionSyncResult();
     }
 
     final boardGamesStore = Provider.of<BoardGamesStore>(
@@ -24,6 +28,21 @@ mixin SyncCollection {
       final user = User();
       user.name = username;
       await userStore?.addOrUpdateUser(user);
+    } else {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Sorry, we ran into an issue when syncing your user, please try again.'),
+          action: SnackBarAction(
+            label: 'Ok',
+            onPressed: () {
+              Scaffold.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
     }
+
+    return syncResult;
   }
 }

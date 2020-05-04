@@ -53,15 +53,11 @@ class UserDetails extends StatelessWidget with SyncCollection {
                             title: 'Sync',
                             icon: Icons.sync,
                             onPressed: () async {
-                              try {
-                                userStore.isSyncing = true;
-                                await syncCollection(
-                                  context,
-                                  syncController.text,
-                                );
-                              } finally {
-                                userStore.isSyncing = false;
-                              }
+                              await _syncCollection(
+                                userStore,
+                                context,
+                                syncController,
+                              );
                             },
                           ),
                         ),
@@ -122,6 +118,22 @@ class UserDetails extends StatelessWidget with SyncCollection {
         );
       },
     );
+  }
+
+  Future _syncCollection(
+    UserStore userStore,
+    BuildContext context,
+    TextEditingController syncController,
+  ) async {
+    try {
+      userStore.isSyncing = true;
+      await syncCollection(
+        context,
+        syncController.text,
+      );
+    } finally {
+      userStore.isSyncing = false;
+    }
   }
 
   Future<void> _handleBggUserRemoval(

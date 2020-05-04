@@ -55,14 +55,15 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return CollectionSyncResult();
     }
 
-    final syncedBoardGames =
+    final collectionSyncResult =
         await _boardGameGeekService.syncCollection(username);
-    for (var syncedBoardGame in syncedBoardGames) {
-      await storageBox?.put(syncedBoardGame.id, syncedBoardGame);
+    if (collectionSyncResult.isSuccess &&
+        (collectionSyncResult.data?.isNotEmpty ?? false)) {
+      for (var syncedBoardGame in collectionSyncResult.data) {
+        await storageBox?.put(syncedBoardGame.id, syncedBoardGame);
+      }
     }
 
-    return CollectionSyncResult()
-      ..isSuccess = true
-      ..data = syncedBoardGames;
+    return collectionSyncResult;
   }
 }
