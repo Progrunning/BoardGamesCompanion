@@ -4,7 +4,6 @@ import 'package:board_games_companion/widgets/settings/user_details_widget.dart'
 import 'package:board_games_companion/widgets/settings/version_number_widget.dart';
 import 'package:flutter/material.dart';
 
-
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key key}) : super(key: key);
 

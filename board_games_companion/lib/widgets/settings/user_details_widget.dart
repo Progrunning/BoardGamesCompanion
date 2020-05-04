@@ -10,6 +10,7 @@ import 'package:board_games_companion/widgets/about/section_title_widget.dart';
 import 'package:board_games_companion/widgets/common/bgg_community_member_text_widget.dart';
 import 'package:board_games_companion/widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +21,11 @@ class UserDetails extends StatelessWidget with SyncCollection {
 
   @override
   Widget build(BuildContext context) {
+    final syncController = TextEditingController();
+
     return Consumer<UserStore>(
       builder: (_, userStore, __) {
         if (userStore.user?.name?.isEmpty ?? true) {
-          final syncController = TextEditingController();
           return Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: Dimensions.standardSpacing,
@@ -38,18 +40,31 @@ class UserDetails extends StatelessWidget with SyncCollection {
                 SizedBox(
                   height: Dimensions.standardSpacing,
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconAndTextButton(
-                    title: 'Sync',
-                    icon: Icons.sync,
-                    onPressed: () async {
-                      await syncCollection(
-                        context,
-                        syncController.text,
-                      );
-                    },
-                  ),
+                Container(
+                  height: 40,
+                  child: userStore?.isSyncing ?? false
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: CircularProgressIndicator(),
+                        )
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: IconAndTextButton(
+                            title: 'Sync',
+                            icon: Icons.sync,
+                            onPressed: () async {
+                              try {
+                                userStore.isSyncing = true;
+                                await syncCollection(
+                                  context,
+                                  syncController.text,
+                                );
+                              } finally {
+                                userStore.isSyncing = false;
+                              }
+                            },
+                          ),
+                        ),
                 ),
                 Divider(
                   color: AppTheme.accentColor,
@@ -138,7 +153,7 @@ class UserDetails extends StatelessWidget with SyncCollection {
 
                 await userStore.removeUser(userStore.user);
                 await boardGameStore.removeAllBoardGames();
-                
+
                 Navigator.of(context).pop();
               },
             ),

@@ -1,11 +1,9 @@
 import 'package:board_games_companion/common/enums/enums.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/user_store.dart';
 import 'package:board_games_companion/widgets/board_games/collection_empty_widget.dart';
 import 'package:board_games_companion/widgets/board_games/collection_widget.dart';
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CollectionsPage extends StatelessWidget {
   final BoardGamesStore _boardGamesStore;
