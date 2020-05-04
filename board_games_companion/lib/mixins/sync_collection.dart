@@ -29,6 +29,7 @@ mixin SyncCollection {
       user.name = username;
       await userStore?.addOrUpdateUser(user);
     } else {
+      // TODO MK Fix up this call, as it fails for collection empty beacuse the parent is being re-drawn (consider GlobalKye?)
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text(
