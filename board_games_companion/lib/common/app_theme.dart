@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static const Color primaryColorLight = const Color(0xFF5B217F);
@@ -80,7 +81,7 @@ class AppTheme {
   );
 
   static ThemeData get theme {
-    final originalTextTheme = ThemeData.light().textTheme;
+    final originalTextTheme = GoogleFonts.latoTextTheme();
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
     final originalBody1 = originalTextTheme.body1;
     final originalDisplay1 = originalTextTheme.display1;

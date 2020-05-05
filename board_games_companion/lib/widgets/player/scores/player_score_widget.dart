@@ -66,9 +66,10 @@ class PlayerScore extends StatelessWidget {
                       child: Stack(
                         children: <Widget>[
                           playerAvatar,
-                          PlayerAvatarSubtitle(
-                            player: store?.player,
-                          ),
+                          if (store?.player?.name?.isNotEmpty ?? false)
+                            PlayerAvatarSubtitle(
+                              player: store?.player,
+                            ),
                           if ((store?.score?.value?.isNotEmpty ?? false) &&
                               store.place != null)
                             Positioned(
@@ -174,7 +175,7 @@ class PlayerScore extends StatelessWidget {
     if (playthroughStore == null) {
       return;
     }
-    
+
     await showDialog(
       context: context,
       barrierDismissible: true,

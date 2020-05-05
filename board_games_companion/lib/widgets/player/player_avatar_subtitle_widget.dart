@@ -34,7 +34,7 @@ class PlayerAvatarSubtitle extends StatelessWidget {
               Dimensions.halfStandardSpacing,
             ),
             child: Text(
-              player?.name ?? 'No Name?',
+              player?.name ?? '',
               style: TextStyle(
                 color: AppTheme.defaultTextColor,
               ),
