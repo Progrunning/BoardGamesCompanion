@@ -16,7 +16,6 @@ import 'package:xml/xml.dart' as xml;
 class BoardGamesGeekService {
   static const String _xmlItemElementName = 'item';
   static const String _xmlNameElementName = 'name';
-  static const String _xmlErrorsElementName = 'errors';
   static const String _xmlErrorElementName = 'error';
   static const String _xmlDescriptionElementName = 'description';
   static const String _xmlMinPlayersElementName = 'minplayers';
@@ -504,8 +503,8 @@ class BoardGamesGeekService {
     if (errorElements?.isEmpty ?? true) {
       return false;
     }
-
-    for (var errorElement in errorElements) {}
+    
+    // for (var errorElement in errorElements) {}
 
     return true;
   }

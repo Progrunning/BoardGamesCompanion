@@ -10,7 +10,6 @@ import 'package:board_games_companion/widgets/about/section_title_widget.dart';
 import 'package:board_games_companion/widgets/common/bgg_community_member_text_widget.dart';
 import 'package:board_games_companion/widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -5,6 +5,7 @@ import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/pages/settings.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
+import 'package:board_games_companion/stores/user_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:board_games_companion/widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
@@ -16,7 +17,8 @@ import 'package:provider/provider.dart';
 class HomePage extends StatelessWidget {
   final PageController _pageController = PageController();
 
-  static final GlobalKey<ScaffoldState> homePageGlobalKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> homePageGlobalKey =
+      GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +39,12 @@ class HomePage extends StatelessWidget {
         child: PageView(
           controller: _pageController,
           children: <Widget>[
-            Consumer<BoardGamesStore>(
-              builder: (_, boardGamesStore, __) {
-                return CollectionsPage(boardGamesStore);
+            Consumer2<BoardGamesStore, UserStore>(
+              builder: (_, boardGamesStore, userStore, __) {
+                return CollectionsPage(
+                  boardGamesStore,
+                  userStore,
+                );
               },
             ),
             PlayersPage(),
