@@ -1,5 +1,6 @@
 import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/user.dart';
+import 'package:board_games_companion/pages/home.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +30,14 @@ mixin SyncCollection {
       user.name = username;
       await userStore?.addOrUpdateUser(user);
     } else {
-      // TODO MK Fix up this call, as it fails for collection empty beacuse the parent is being re-drawn (consider GlobalKye?)
-      Scaffold.of(context).showSnackBar(
+      HomePage.homePageGlobalKey.currentState.showSnackBar(
         SnackBar(
           content: Text(
               'Sorry, we ran into an issue when syncing your user, please try again.'),
           action: SnackBarAction(
             label: 'Ok',
             onPressed: () {
-              Scaffold.of(context).hideCurrentSnackBar();
+              HomePage.homePageGlobalKey.currentState.hideCurrentSnackBar();
             },
           ),
         ),

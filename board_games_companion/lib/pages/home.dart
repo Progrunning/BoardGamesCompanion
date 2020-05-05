@@ -16,6 +16,8 @@ import 'package:provider/provider.dart';
 class HomePage extends StatelessWidget {
   final PageController _pageController = PageController();
 
+  static final GlobalKey<ScaffoldState> homePageGlobalKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final _addBoardGameButton = IconAndTextButton(
@@ -30,6 +32,7 @@ class HomePage extends StatelessWidget {
     );
 
     return Scaffold(
+      key: homePageGlobalKey,
       body: PageContainer(
         child: PageView(
           controller: _pageController,
