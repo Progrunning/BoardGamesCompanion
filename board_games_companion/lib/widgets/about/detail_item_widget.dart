@@ -63,14 +63,14 @@ class DetailsItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         title,
-                        style: AppTheme.theme.textTheme.display2,
+                        style: AppTheme.theme.textTheme.headline3,
                       ),
                       SizedBox(
                         height: Dimensions.halfStandardSpacing,
                       ),
                       Text(
                         subtitle,
-                        style: AppTheme.theme.textTheme.subhead,
+                        style: AppTheme.theme.textTheme.subtitle1,
                       ),
                     ],
                   ),

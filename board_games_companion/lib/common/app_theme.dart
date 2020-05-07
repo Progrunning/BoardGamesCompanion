@@ -80,15 +80,18 @@ class AppTheme {
     ),
   );
 
+  // MK Material fonts https://miro.medium.com/max/1400/1*Jlt_w6Bs7KAae42rYkFlwg.png
   static ThemeData get theme {
     final originalTextTheme = GoogleFonts.latoTextTheme();
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
-    final originalBody1 = originalTextTheme.body1;
-    final originalDisplay1 = originalTextTheme.display1;
-    final originalDisplay2 = originalTextTheme.display2;
-    final originalDisplay3 = originalTextTheme.display3;
-    final originalDisplay4 = originalTextTheme.display4;
-    final originalSubhead = originalTextTheme.subhead;
+    final originalBodyText1 = originalTextTheme.bodyText1;
+    final originalBodyText2 = originalTextTheme.bodyText2;
+    final originalHeadline4 = originalTextTheme.headline4;
+    final originalHeadline3 = originalTextTheme.headline3;
+    final originalHeadline2 = originalTextTheme.headline2;
+    final originalHeadline1 = originalTextTheme.headline1;
+    final originalSubtitle1 = originalTextTheme.subtitle1;
+    final originalSubtitle2 = originalTextTheme.subtitle2;
 
     return new ThemeData.light().copyWith(
       primaryColor: primaryColor,
@@ -98,28 +101,38 @@ class AppTheme {
       textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
       textTheme: originalTextTheme.copyWith(
-        body1: originalBody1.copyWith(
+        bodyText1: originalBodyText1.copyWith(
           decorationColor: Colors.transparent,
           color: defaultTextColor,
+          fontSize: Dimensions.mediumFontSize,
         ),
-        display1: originalDisplay1.copyWith(
+        bodyText2: originalBodyText2.copyWith(
+          decorationColor: Colors.transparent,
+          color: defaultTextColor,
+          fontSize: Dimensions.standardFontSize,
+        ),
+        headline4: originalHeadline4.copyWith(
           fontSize: Dimensions.standardFontSize,
           color: defaultTextColor,
         ),
-        display2: originalDisplay2.copyWith(
+        headline3: originalHeadline3.copyWith(
           fontSize: Dimensions.mediumFontSize,
           color: defaultTextColor,
         ),
-        display3: originalDisplay3.copyWith(
+        headline2: originalHeadline2.copyWith(
           fontSize: Dimensions.largeFontSize,
           color: defaultTextColor,
         ),
-        display4: originalDisplay4.copyWith(
+        headline1: originalHeadline1.copyWith(
           fontSize: Dimensions.extraLargeFontSize,
           color: defaultTextColor,
         ),
-        subhead: originalSubhead.copyWith(
-          fontSize: Dimensions.standardFontSize,
+        subtitle1: originalSubtitle1.copyWith(
+          fontSize: Dimensions.smallFontSize,
+          color: secondaryTextColor,
+        ),
+        subtitle2: originalSubtitle2.copyWith(
+          fontSize: Dimensions.extraLargeFontSize,
           color: secondaryTextColor,
         ),
       ),

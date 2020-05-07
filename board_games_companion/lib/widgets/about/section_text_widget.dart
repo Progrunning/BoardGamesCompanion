@@ -18,7 +18,7 @@ class SectionText extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: AppTheme.theme.textTheme.display1,
+        style: AppTheme.theme.textTheme.headline4,
         textAlign: TextAlign.justify,
       ),
     );
