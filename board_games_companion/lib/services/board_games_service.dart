@@ -15,7 +15,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return List<BoardGameDetails>();
     }
 
-    return storageBox?.toMap()?.values?.toList();
+    return storageBox.values?.toList();
   }
 
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
@@ -27,7 +27,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    await storageBox?.put(boardGameDetails.id, boardGameDetails);
+    await storageBox.put(boardGameDetails.id, boardGameDetails);
   }
 
   Future<void> removeBoardGame(String boardGameDetailsId) async {
@@ -39,7 +39,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    await storageBox?.delete(boardGameDetailsId);
+    await storageBox.delete(boardGameDetailsId);
   }
 
   Future<void> removeAllBoardGames() async {
@@ -47,7 +47,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    await storageBox?.clear();
+    await storageBox.clear();
   }
 
   Future<CollectionSyncResult> syncCollection(String username) async {
@@ -57,10 +57,29 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
 
     final collectionSyncResult =
         await _boardGameGeekService.syncCollection(username);
-    if (collectionSyncResult.isSuccess &&
-        (collectionSyncResult.data?.isNotEmpty ?? false)) {
-      for (var syncedBoardGame in collectionSyncResult.data) {
-        await storageBox?.put(syncedBoardGame.id, syncedBoardGame);
+    if (collectionSyncResult.isSuccess) {
+      if (collectionSyncResult.data?.isEmpty ?? true) {
+        storageBox.clear();
+      } else {
+        final syncedCollectionMap = Map.fromIterable(
+          collectionSyncResult.data,
+          key: (boardGameDetails) => boardGameDetails.id,
+          value: (boardGameDetails) => boardGameDetails,
+        );
+        final boardGamesToRemove = storageBox.values
+            ?.where(
+                (boardGameDetails) => !syncedCollectionMap.containsKey(boardGameDetails.id))
+            ?.toList();
+
+        // Remove
+        for (var boardGameToRemove in boardGamesToRemove) {
+          await storageBox?.delete(boardGameToRemove.id);
+        }
+
+        // Add & Update
+        for (var syncedBoardGame in collectionSyncResult.data) {
+          await storageBox?.put(syncedBoardGame.id, syncedBoardGame);
+        }
       }
     }
 

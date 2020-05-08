@@ -52,10 +52,9 @@ class UserDetails extends StatelessWidget with SyncCollection {
                             title: 'Sync',
                             icon: Icons.sync,
                             onPressed: () async {
-                              await _syncCollection(
-                                userStore,
+                              await syncCollection(
                                 context,
-                                syncController,
+                                syncController.text,
                               );
                             },
                           ),
@@ -102,11 +101,16 @@ class UserDetails extends StatelessWidget with SyncCollection {
                   SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
-                  // TODO MK Create functionality to re-sync / update users collection
-                  // IconAndTextButton(
-                  //   title: 'Sync',
-                  //   icon: Icons.sync,
-                  // ),
+                  IconAndTextButton(
+                    title: 'Sync',
+                    icon: Icons.sync,
+                    onPressed: () async {
+                      await syncCollection(
+                        context,
+                        userStore.user.name,
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -117,22 +121,6 @@ class UserDetails extends StatelessWidget with SyncCollection {
         );
       },
     );
-  }
-
-  Future _syncCollection(
-    UserStore userStore,
-    BuildContext context,
-    TextEditingController syncController,
-  ) async {
-    try {
-      userStore.isSyncing = true;
-      await syncCollection(
-        context,
-        syncController.text,
-      );
-    } finally {
-      userStore.isSyncing = false;
-    }
   }
 
   Future<void> _handleBggUserRemoval(

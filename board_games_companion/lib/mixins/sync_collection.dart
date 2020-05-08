@@ -11,39 +11,70 @@ mixin SyncCollection {
     BuildContext context,
     String username,
   ) async {
-    if (username?.isEmpty ?? true) {
-      return CollectionSyncResult();
-    }
-
-    final boardGamesStore = Provider.of<BoardGamesStore>(
-      context,
-      listen: false,
-    );
     final userStore = Provider.of<UserStore>(
       context,
       listen: false,
     );
 
-    final syncResult = await boardGamesStore.syncCollection(username);
-    if (syncResult?.isSuccess ?? false) {
-      final user = User();
-      user.name = username;
-      await userStore?.addOrUpdateUser(user);
-    } else {
-      HomePage.homePageGlobalKey.currentState.showSnackBar(
-        SnackBar(
-          content: Text(
-              'Sorry, we ran into an issue when syncing your user, please try again.'),
-          action: SnackBarAction(
-            label: 'Ok',
-            onPressed: () {
-              HomePage.homePageGlobalKey.currentState.hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
-    }
+    try {
+      userStore.isSyncing = true;
 
-    return syncResult;
+      if (username?.isEmpty ?? true) {
+        return CollectionSyncResult();
+      }
+
+      final boardGamesStore = Provider.of<BoardGamesStore>(
+        context,
+        listen: false,
+      );
+
+      final syncResult = await boardGamesStore.syncCollection(username);
+      if (syncResult?.isSuccess ?? false) {
+        final user = User();
+        user.name = username;
+        await userStore?.addOrUpdateUser(user);
+
+        _showSuccessSnackBar();
+      } else {
+        _showFailureSnackBar();
+      }
+
+      return syncResult;
+    } finally {
+      userStore.isSyncing = false;
+    }
   }
+}
+
+void _showSuccessSnackBar() {
+  HomePage.homePageGlobalKey.currentState.showSnackBar(
+    SnackBar(
+      content: Text(
+        'Your collection is now in sync with BGG!',
+      ),
+      action: SnackBarAction(
+        label: 'Ok',
+        onPressed: () {
+          HomePage.homePageGlobalKey.currentState.hideCurrentSnackBar();
+        },
+      ),
+    ),
+  );
+}
+
+void _showFailureSnackBar() {
+  HomePage.homePageGlobalKey.currentState.showSnackBar(
+    SnackBar(
+      content: Text(
+        'Sorry, we\'ve run into some problems with syncing your collection with BGG, please try again or contact support.',
+      ),
+      duration: Duration(seconds: 10),
+      action: SnackBarAction(
+        label: 'Ok',
+        onPressed: () {
+          HomePage.homePageGlobalKey.currentState.hideCurrentSnackBar();
+        },
+      ),
+    ),
+  );
 }
