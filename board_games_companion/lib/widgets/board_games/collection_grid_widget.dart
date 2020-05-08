@@ -17,8 +17,11 @@ class CollectionGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: EdgeInsets.all(
-        Dimensions.standardSpacing,
+      padding: EdgeInsets.only(
+        left: Dimensions.standardSpacing,
+        top: Dimensions.standardSpacing,
+        right: Dimensions.standardSpacing,
+        bottom: Dimensions.floatingActionButtonBottomSpacing,
       ),
       sliver: SliverGrid.extent(
         crossAxisSpacing: Dimensions.standardSpacing,
