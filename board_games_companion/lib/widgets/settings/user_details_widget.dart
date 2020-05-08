@@ -143,8 +143,18 @@ class UserDetails extends StatelessWidget with SyncCollection {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(
-              'Are you sure you want to remove your BGG user connection? This will delete your entire board games collection, including the history of gameplays'),
+          title: Column(
+            children: <Widget>[
+              Text('Are you sure you want to remove your BGG user connection?'),
+              SizedBox(
+                height: Dimensions.standardSpacing,
+              ),
+              Text(
+                'This will delete your entire board games collection, including the history of gameplays',
+                style: AppTheme.subTitleTextStyle,
+              ),
+            ],
+          ),
           elevation: 2,
           actions: <Widget>[
             FlatButton(
