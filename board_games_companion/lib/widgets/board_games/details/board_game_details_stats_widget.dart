@@ -6,8 +6,8 @@ import 'package:board_games_companion/widgets/board_games/board_game_rating_hexa
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_numbers_item_widget.dart';
 import 'package:flutter/material.dart';
 
-class BoardGameDetailsNumbers extends StatelessWidget {
-  const BoardGameDetailsNumbers({
+class BoardGameDetailsStats extends StatelessWidget {
+  const BoardGameDetailsStats({
     Key key,
     @required BoardGameDetails boardGameDetails,
   })  : _boardGameDetails = boardGameDetails,

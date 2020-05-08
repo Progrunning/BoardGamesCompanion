@@ -49,9 +49,9 @@ class BoardGamesDetailsBody extends StatelessWidget {
                     delegate: SliverChildListDelegate.fixed(
                       <Widget>[
                         BoardGameDetailsSectionHeader(
-                          title: 'Numbers',
+                          title: 'Stats',
                         ),
-                        BoardGameDetailsNumbers(
+                        BoardGameDetailsStats(
                           boardGameDetails:
                               _boardGameDetailsStore.boardGameDetails,
                         ),

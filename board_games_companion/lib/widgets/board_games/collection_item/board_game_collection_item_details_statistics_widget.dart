@@ -31,7 +31,7 @@ class BoardGameCollectionItemDetailsStatistics extends StatelessWidget {
         ),
         BoardGameCollectionItemDetailsStatisticsItem(
           value:
-              '${boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-')}',
+              '${boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-'}',
           icon: Icons.hourglass_empty,
           iconColor: Colors.blue,
           subtitle: 'Ave. playtime',
