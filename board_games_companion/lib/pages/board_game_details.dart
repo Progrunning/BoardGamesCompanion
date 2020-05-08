@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_detail_floating_actions_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_header_widget.dart';
@@ -27,9 +28,14 @@ class BoardGamesDetailsPage extends StatelessWidget {
                 boardGameDetailsStore: _boardGameDetailsStore,
                 boardGameName: _boardGameName,
               ),
-              BoardGamesDetailsBody(
-                boardGameId: _boardGameId,
-                boardGameDetailsStore: _boardGameDetailsStore,
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: Dimensions.halfFloatingActionButtonBottomSpacing,
+                ),
+                sliver: BoardGamesDetailsBody(
+                  boardGameId: _boardGameId,
+                  boardGameDetailsStore: _boardGameDetailsStore,
+                ),
               ),
             ],
           ),
@@ -38,6 +44,7 @@ class BoardGamesDetailsPage extends StatelessWidget {
       floatingActionButton: BoardGameDetailFloatingActions(
         boardGameDetailsStore: _boardGameDetailsStore,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

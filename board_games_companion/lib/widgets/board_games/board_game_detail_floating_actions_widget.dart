@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/routes.dart';
+import 'package:board_games_companion/stores/board_game_details_in_collection_store.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
@@ -16,20 +16,74 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconAndTextButton(
-      onPressed: () => _addBoardGameToCollection(context),
-      title: 'Add Game',
-      icon: Icons.add,
+    final boardGamesStore = Provider.of<BoardGamesStore>(
+      context,
+      listen: false,
+    );
+
+    return ChangeNotifierProvider.value(
+      value: _boardGameDetailsStore,
+      child: ChangeNotifierProxyProvider<BoardGameDetailsStore,
+          BoardGameDetailsInCollectionStore>(
+        create: (_) {
+          return BoardGameDetailsInCollectionStore(
+            boardGamesStore,
+            _boardGameDetailsStore?.boardGameDetails,
+          );
+        },
+        update: (_, boardGameDetailsStore, boardGameDetailsInCollectionStore) {
+          boardGameDetailsInCollectionStore.updateIsInCollectionStatus(
+              boardGameDetailsStore.boardGameDetails);
+          return boardGameDetailsInCollectionStore;
+        },
+        child: Consumer<BoardGameDetailsInCollectionStore>(
+          builder: (_, boardGameDetailsInCollectionStore, __) {
+            if (boardGameDetailsInCollectionStore.isInCollection) {
+              return IconAndTextButton(
+                onPressed: () => _removeBoardGameFromCollection(
+                  boardGameDetailsInCollectionStore,
+                  boardGamesStore,
+                  context,
+                ),
+                title: 'Remove from Collection',
+                icon: Icons.remove_circle,
+                backgroundColor: Colors.red,
+              );
+            } else {
+              return IconAndTextButton(
+                onPressed: () => _addBoardGameToCollection(
+                  boardGameDetailsInCollectionStore,
+                  boardGamesStore,
+                  context,
+                ),
+                title: 'Add to Collection',
+                icon: Icons.add,
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 
   Future<void> _addBoardGameToCollection(
+    BoardGameDetailsInCollectionStore boardGameDetailsInCollectionStore,
+    BoardGamesStore boardGamesStore,
     BuildContext context,
   ) async {
-    final boardGamesStore =
-        Provider.of<BoardGamesStore>(context, listen: false);
     await boardGamesStore
         .addOrUpdateBoardGame(_boardGameDetailsStore.boardGameDetails);
-    Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+    boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
+  }
+
+  Future<void> _removeBoardGameFromCollection(
+    BoardGameDetailsInCollectionStore boardGameDetailsInCollectionStore,
+    BoardGamesStore boardGamesStore,
+    BuildContext context,
+  ) async {
+    await boardGamesStore.removeBoardGame(
+      _boardGameDetailsStore.boardGameDetails.id,
+    );
+    boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
   }
 }
