@@ -40,12 +40,14 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
           builder: (_, boardGameDetailsInCollectionStore, __) {
             if (boardGameDetailsInCollectionStore.isInCollection) {
               return IconAndTextButton(
+                // TODO When navigated from the playthroughs, and going back after removing from collection user should be taken to the home page
                 onPressed: () => _removeBoardGameFromCollection(
                   boardGameDetailsInCollectionStore,
                   boardGamesStore,
                   context,
                 ),
-                title: 'Remove from Collection',
+                // TODO Add confirmation when removing from collection
+                title: 'Remove',
                 icon: Icons.remove_circle,
                 backgroundColor: Colors.red,
               );
