@@ -9,6 +9,7 @@ import 'package:board_games_companion/widgets/common/generic_error_message_widge
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:provider/provider.dart';
 
 class BoardGamesDetailsBody extends StatelessWidget {
@@ -27,6 +28,7 @@ class BoardGamesDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final htmlUnescape = new HtmlUnescape();
     return FutureBuilder(
       future: _boardGameDetailsStore.loadBoardGameDetails(_boardGameId),
       builder: (_, snapshot) {
@@ -112,8 +114,8 @@ class BoardGamesDetailsBody extends StatelessWidget {
                           title: 'Description',
                         ),
                         Text(
-                          store.boardGameDetails.description
-                              .replaceAll('&#10;&#10;', "\n\n"),
+                          htmlUnescape
+                              .convert(store.boardGameDetails.description),
                           textAlign: TextAlign.justify,
                           style: TextStyle(fontSize: Dimensions.mediumFontSize),
                         )

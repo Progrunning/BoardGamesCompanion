@@ -36,7 +36,9 @@ class BoardGamesDetailsHeader extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+            padding: const EdgeInsets.all(
+              Dimensions.halfStandardSpacing,
+            ),
             child: Text(
               _boardGameName ?? '',
               textAlign: TextAlign.center,
