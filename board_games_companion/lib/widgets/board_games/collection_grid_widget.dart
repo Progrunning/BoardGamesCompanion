@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/pages/board_game_playthroughs.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
@@ -44,6 +45,7 @@ class CollectionGrid extends StatelessWidget {
                   ),
                 );
               },
+              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
             );
           },
         ),

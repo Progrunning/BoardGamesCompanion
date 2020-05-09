@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 
 class BoardGameImage extends StatelessWidget {
   final double minImageHeight;
+  final String heroTag;
 
   const BoardGameImage(
     BoardGameDetails boardGameDetails, {
     Key key,
     this.minImageHeight = 300,
+    this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
   })  : _boardGameDetails = boardGameDetails,
         super(key: key);
 
@@ -25,7 +27,7 @@ class BoardGameImage extends StatelessWidget {
     }
 
     return Hero(
-      tag: "${AnimationTags.boardGameImageHeroTag}${_boardGameDetails.id}",
+      tag: "$heroTag${_boardGameDetails.id}",
       child: CachedNetworkImage(
         imageUrl: _boardGameDetails.imageUrl,
         imageBuilder: (context, imageProvider) => _wrapInShadowBox(

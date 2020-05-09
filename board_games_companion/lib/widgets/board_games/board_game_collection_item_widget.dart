@@ -12,11 +12,13 @@ import 'package:flutter/material.dart';
 class BoardGameCollectionItem extends StatefulWidget {
   final BaseBoardGame boardGame;
   final Future<void> Function() onTap;
+  final String heroTag;
 
   BoardGameCollectionItem({
     Key key,
     this.boardGame,
     this.onTap,
+    this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
     return Stack(
       children: <Widget>[
         Hero(
-          tag: "${AnimationTags.boardGameImageHeroTag}${widget.boardGame.id}",
+          tag: "${widget.heroTag}${widget.boardGame.id}",
           child: CachedNetworkImage(
             imageUrl: widget.boardGame.thumbnailUrl ?? '',
             imageBuilder: (context, imageProvider) => Padding(

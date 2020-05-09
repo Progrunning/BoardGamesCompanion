@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:flutter/material.dart';
@@ -22,22 +23,27 @@ class SearchBarBoardGames extends StatelessWidget {
       titleSpacing: 0,
       title: Consumer<SearchBarBoardGamesStore>(
         builder: (_, store, __) {
-          return TextField(
-            controller: _searchController,
-            textAlignVertical: TextAlignVertical.center,
-            decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
-              hintText: 'Search...',
-              suffixIcon: retrieveSearchBarSuffixIcon(
-                store,
-                searchBoardGamesStore,
-              ),
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.standardSpacing,
             ),
-            onChanged: (searchPhrase) {
-              store.searchPhrase = searchPhrase;
-            },
-            onSubmitted: (searchPhrase) {
-              searchBoardGamesStore.updateSearchResults();
-            },
+            child: TextField(
+              controller: _searchController,
+              textAlignVertical: TextAlignVertical.center,
+              decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
+                hintText: 'Search...',
+                suffixIcon: retrieveSearchBarSuffixIcon(
+                  store,
+                  searchBoardGamesStore,
+                ),
+              ),
+              onChanged: (searchPhrase) {
+                store.searchPhrase = searchPhrase;
+              },
+              onSubmitted: (searchPhrase) {
+                searchBoardGamesStore.updateSearchResults();
+              },
+            ),
           );
         },
       ),

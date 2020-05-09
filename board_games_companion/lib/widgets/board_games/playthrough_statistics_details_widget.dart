@@ -62,26 +62,3 @@ class PlaythroughStatisticsDetails extends StatelessWidget {
     );
   }
 }
-
-// TODO Work out where this should be called from
-Future<void> _handleRemoveBoardGameFromCollection(
-  BuildContext context,
-  BoardGamesStore boardGamesStore,
-  BoardGameDetails boardGameDetails,
-) async {
-  await boardGamesStore.removeBoardGame(boardGameDetails.id);
-
-  Scaffold.of(context).showSnackBar(
-    SnackBar(
-      duration: Duration(seconds: 10),
-      content: Text(
-          '${boardGameDetails.name} has been removed from your collection'),
-      action: SnackBarAction(
-        label: 'Undo',
-        onPressed: () async {
-          await boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
-        },
-      ),
-    ),
-  );
-}

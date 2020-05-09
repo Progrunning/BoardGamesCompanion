@@ -19,4 +19,7 @@ class Constants {
   static const LeaveAsIs = 0;
   static const MoveBelow = 1;
   static const MoveAbove = -1;
+
+
+  static const PlayersTabIndex = 2;
 }

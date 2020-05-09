@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
@@ -29,6 +30,7 @@ class PlaythroughStatistcsPage extends StatelessWidget {
             background: BoardGameImage(
               _boardGameDetails,
               minImageHeight: Constants.BoardGameDetailsImageHeight,
+              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
             ),
           ),
         ),

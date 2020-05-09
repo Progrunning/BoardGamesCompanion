@@ -1,7 +1,8 @@
 import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/routes.dart';
+import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/pages/collections.dart';
 import 'package:board_games_companion/pages/players.dart';
+import 'package:board_games_companion/pages/search_board_games.dart';
 import 'package:board_games_companion/pages/settings.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
@@ -22,13 +23,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _addBoardGameButton = IconAndTextButton(
-      title: 'Add Game',
-      icon: Icons.add,
-      onPressed: () => _navigateToAddBoardGamesPage(context),
-    );
     final _addPlayerButton = IconAndTextButton(
-      title: 'Add Player',
       icon: Icons.add,
       onPressed: () => _navigateToAddPlayerPage(context),
     );
@@ -47,6 +42,7 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
+            SearchBoardGamesPage(),
             PlayersPage(),
             SettingsPage(),
           ],
@@ -62,22 +58,22 @@ class HomePage extends StatelessWidget {
       floatingActionButton: Consumer<HomeStore>(
         builder: (_, homeStore, __) {
           switch (homeStore.boardGamesPageIndex) {
-            case 0:
-              return _addBoardGameButton;
-            case 1:
+            case Constants.PlayersTabIndex:
               return _addPlayerButton;
             default:
               return Container();
           }
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: Consumer<HomeStore>(
         builder: (_, homeStore, __) {
           return BottomNavigationBar(
             backgroundColor: AppTheme.bottomTabBackgroundColor,
+            type: BottomNavigationBarType.fixed,
             items: <BottomNavigationBarItem>[
               CustomBottomNavigationBarItem('Collection', Icons.grid_on),
+              CustomBottomNavigationBarItem('Search', Icons.search),
               CustomBottomNavigationBarItem('Players', Icons.group),
               CustomBottomNavigationBarItem('Settings', Icons.settings),
             ],
@@ -89,10 +85,6 @@ class HomePage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Future<void> _navigateToAddBoardGamesPage(BuildContext context) async {
-    await Navigator.pushNamed(context, Routes.addBoardGames);
   }
 
   Future<void> _navigateToAddPlayerPage(BuildContext context) async {

@@ -69,13 +69,16 @@ class PlaythroughPlayers extends StatelessWidget {
           ),
         ),
         if (playthroughPlayers.isNotEmpty)
-          Positioned(
-            bottom: Dimensions.standardSpacing,
-            right: Dimensions.standardSpacing,
-            child: IconAndTextButton(
-              title: 'Start New Game',
-              icon: Icons.play_arrow,
-              onPressed: () => _onStartNewGame(context),
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: Dimensions.standardSpacing,
+            ),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: IconAndTextButton(
+                icon: Icons.play_arrow,
+                onPressed: () => _onStartNewGame(context),
+              ),
             ),
           ),
       ],

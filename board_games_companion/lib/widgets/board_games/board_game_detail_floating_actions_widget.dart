@@ -42,13 +42,11 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
               return IconAndTextButton(
                 // TODO When navigated from the playthroughs, and going back after removing from collection user should be taken to the home page
                 onPressed: () => _removeBoardGameFromCollection(
+                  context,
                   boardGameDetailsInCollectionStore,
                   boardGamesStore,
-                  context,
                 ),
-                // TODO Add confirmation when removing from collection
-                title: 'Remove',
-                icon: Icons.remove_circle,
+                icon: Icons.remove_circle_outline,
                 backgroundColor: Colors.red,
               );
             } else {
@@ -58,7 +56,6 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
                   boardGamesStore,
                   context,
                 ),
-                title: 'Add to Collection',
                 icon: Icons.add,
               );
             }
@@ -76,16 +73,46 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     await boardGamesStore
         .addOrUpdateBoardGame(_boardGameDetailsStore.boardGameDetails);
     boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
+
+    Scaffold.of(context).hideCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+            '${_boardGameDetailsStore.boardGameDetails.name} has been added to your collection'),
+        action: SnackBarAction(
+          label: 'Ok',
+          onPressed: () async {
+            Scaffold.of(context).hideCurrentSnackBar();
+          },
+        ),
+      ),
+    );
   }
 
   Future<void> _removeBoardGameFromCollection(
+    BuildContext context,
     BoardGameDetailsInCollectionStore boardGameDetailsInCollectionStore,
     BoardGamesStore boardGamesStore,
-    BuildContext context,
   ) async {
-    await boardGamesStore.removeBoardGame(
-      _boardGameDetailsStore.boardGameDetails.id,
-    );
+    await boardGamesStore
+        .removeBoardGame(_boardGameDetailsStore.boardGameDetails.id);
     boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
+
+    Scaffold.of(context).hideCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 10),
+        content: Text(
+            '${_boardGameDetailsStore.boardGameDetails.name} has been removed from your collection'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () async {
+            await boardGamesStore
+                .addOrUpdateBoardGame(_boardGameDetailsStore.boardGameDetails);
+            boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
+          },
+        ),
+      ),
+    );
   }
 }
