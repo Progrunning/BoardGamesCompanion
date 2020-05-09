@@ -62,11 +62,16 @@ class AppTheme {
     ),
   );
 
+  static const TextStyle defaultTextFieldStyle = TextStyle(
+    fontSize: Dimensions.standardFontSize,
+  );
+
   static const InputDecoration defaultTextFieldInputDecoration =
       InputDecoration(
     focusColor: AppTheme.accentColor,
     hintStyle: TextStyle(
-      color: AppTheme.defaultTextColor,
+      color: secondaryTextColor,
+      fontSize: Dimensions.standardFontSize,
     ),
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(

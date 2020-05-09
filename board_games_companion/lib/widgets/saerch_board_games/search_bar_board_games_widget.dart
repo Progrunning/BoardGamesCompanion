@@ -29,6 +29,7 @@ class SearchBarBoardGames extends StatelessWidget {
             ),
             child: TextField(
               controller: _searchController,
+              style: AppTheme.defaultTextFieldStyle,
               textAlignVertical: TextAlignVertical.center,
               decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
                 hintText: 'Search...',

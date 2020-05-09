@@ -72,11 +72,11 @@ class CollectionEmpty extends StatelessWidget with SyncCollection {
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                    'Otherwise, just use the button on the bottom to search for games and then add them to your collection.'),
+                    'Otherwise, use the bottom navigation search option, where you can check out currently TOP 50 hot board games and look up any title.'),
               ),
             ),
             SizedBox(
-              height: Dimensions.floatingActionButtonBottomSpacing,
+              height: Dimensions.standardSpacing,
             ),
           ],
         ),

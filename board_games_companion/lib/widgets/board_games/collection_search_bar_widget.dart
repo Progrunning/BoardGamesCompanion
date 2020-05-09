@@ -41,6 +41,7 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
       title: TextField(
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
+        style: AppTheme.defaultTextFieldStyle,
         decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
           hintText: 'Search...',
           suffixIcon: _retrieveSearchBarSuffixIcon(),
