@@ -101,7 +101,7 @@ class PlaythroughItem extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        width: Dimensions.standardSpacing,
+                        width: Dimensions.doubleStandardSpacing,
                       ),
                       Expanded(
                         child: Column(
