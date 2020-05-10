@@ -36,8 +36,17 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
               boardGameDetailsStore.boardGameDetails);
           return boardGameDetailsInCollectionStore;
         },
-        child: Consumer<BoardGameDetailsInCollectionStore>(
-          builder: (_, boardGameDetailsInCollectionStore, __) {
+        child:
+            Consumer2<BoardGameDetailsInCollectionStore, BoardGameDetailsStore>(
+          builder: (
+            _,
+            boardGameDetailsInCollectionStore,
+            boardGameDetailsStore,
+            __,
+          ) {
+            if(boardGameDetailsStore.boardGameDetails == null) {
+              return Container();
+            }
             if (boardGameDetailsInCollectionStore.isInCollection) {
               return IconAndTextButton(
                 // TODO When navigated from the playthroughs, and going back after removing from collection user should be taken to the home page
