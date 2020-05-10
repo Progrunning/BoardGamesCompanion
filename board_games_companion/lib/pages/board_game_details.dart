@@ -34,6 +34,7 @@ class BoardGamesDetailsPage extends StatelessWidget {
                 ),
                 sliver: BoardGamesDetailsBody(
                   boardGameId: _boardGameId,
+                  boardGameName: _boardGameName,
                   boardGameDetailsStore: _boardGameDetailsStore,
                 ),
               ),

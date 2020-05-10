@@ -15,13 +15,16 @@ import 'package:provider/provider.dart';
 class BoardGamesDetailsBody extends StatelessWidget {
   const BoardGamesDetailsBody({
     @required boardGameId,
+    @required boardGameName,
     @required boardGameDetailsStore,
     Key key,
   })  : _boardGameId = boardGameId,
+        _boardGameName = boardGameName,
         _boardGameDetailsStore = boardGameDetailsStore,
         super(key: key);
 
   final String _boardGameId;
+  final String _boardGameName;
   final BoardGameDetailsStore _boardGameDetailsStore;
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
@@ -35,7 +38,17 @@ class BoardGamesDetailsBody extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return SliverFillRemaining(
-              child: GenericErrorMessage(),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(
+                    Dimensions.doubleStandardSpacing,
+                  ),
+                  child: Text(
+                    'Sorry, we couldn\'t retrieve $_boardGameName\'s details. Check your Internet connectivity and try again. If the problem persists, please contact support at feedback@progrunning.net',
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+              ),
             );
           }
 

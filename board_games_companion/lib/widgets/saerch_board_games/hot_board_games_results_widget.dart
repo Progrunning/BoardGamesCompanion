@@ -22,7 +22,8 @@ class HotBoardGamesResults extends StatelessWidget {
       future: hotBoardGamesStore.load(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data is List<BoardGame>) {
+          if (snapshot.data is List<BoardGame> &&
+              (snapshot.data as List<BoardGame>).isNotEmpty) {
             return SliverPadding(
               padding: EdgeInsets.all(
                 Dimensions.standardSpacing,
@@ -53,7 +54,9 @@ class HotBoardGamesResults extends StatelessWidget {
           return SliverFillRemaining(
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                padding: const EdgeInsets.all(
+                  Dimensions.doubleStandardSpacing,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

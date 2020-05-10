@@ -23,7 +23,7 @@ class BoardGameImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_boardGameDetails == null) {
-      return LoadingIndicator();
+      return Container();
     }
 
     return Hero(
@@ -41,7 +41,7 @@ class BoardGameImage extends StatelessWidget {
           ),
         ),
         fit: BoxFit.fitWidth,
-        placeholder: (context, url) => _wrapInShadowBox(LoadingIndicator()),
+        placeholder: (context, url) => LoadingIndicator(),
         errorWidget: (context, url, error) => _wrapInShadowBox(
           Padding(
             padding: const EdgeInsets.all(Dimensions.standardSpacing),
