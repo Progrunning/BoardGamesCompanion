@@ -68,7 +68,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
                   image: DecorationImage(
                     alignment: Alignment.center,
                     image: AssetImage(
-                      'assets/icons/logo.jpg',
+                      'assets/icons/logo.png',
                     ),
                   ),
                 ),

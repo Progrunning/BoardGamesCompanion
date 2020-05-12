@@ -5,7 +5,6 @@ import 'package:board_games_companion/widgets/board_games/details/board_game_det
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_second_row_info_panels_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_section_header_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_stats_widget.dart';
-import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
