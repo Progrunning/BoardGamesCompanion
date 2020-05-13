@@ -33,7 +33,8 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
         },
         update: (_, boardGameDetailsStore, boardGameDetailsInCollectionStore) {
           boardGameDetailsInCollectionStore.updateIsInCollectionStatus(
-              boardGameDetailsStore.boardGameDetails);
+            boardGameDetailsStore.boardGameDetails,
+          );
           return boardGameDetailsInCollectionStore;
         },
         child:
@@ -44,12 +45,11 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
             boardGameDetailsStore,
             __,
           ) {
-            if(boardGameDetailsStore.boardGameDetails == null) {
+            if (boardGameDetailsStore.boardGameDetails == null) {
               return Container();
             }
             if (boardGameDetailsInCollectionStore.isInCollection) {
               return IconAndTextButton(
-                // TODO When navigated from the playthroughs, and going back after removing from collection user should be taken to the home page
                 onPressed: () => _removeBoardGameFromCollection(
                   context,
                   boardGameDetailsInCollectionStore,
