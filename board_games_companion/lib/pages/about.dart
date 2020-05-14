@@ -36,9 +36,6 @@ class AboutPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        SizedBox(
-                          height: Dimensions.standardFontSize,
-                        ),
                         SectionTitle(
                           title: 'AUTHOR',
                         ),
@@ -98,6 +95,10 @@ class AboutPage extends StatelessWidget {
                           text:
                               'The below is a list of the plugins and libraries that helped in building this app:',
                         ),
+                        DetailsItem(
+                            title: 'Lato Font',
+                            subtitle: 'Powered by Google Fonts',
+                            uri: 'https://pub.dev/packages/google_fonts'),
                         DetailsItem(
                             title: 'Logging',
                             subtitle: 'Handles in app logs',
@@ -163,6 +164,34 @@ class AboutPage extends StatelessWidget {
                             title: 'Url Launcher',
                             subtitle: 'Launching Uri\'s',
                             uri: 'https://pub.dev/packages/url_launcher'),
+                        Divider(
+                          color: AppTheme.accentColor,
+                        ),
+                        SectionTitle(
+                          title: 'LICENSES',
+                        ),
+                        Stack(
+                          children: <Widget>[
+                            DetailsItem(
+                              title:
+                                  'Board Game Companion\'s licenses',
+                              subtitle: 'App\'s components licenses',
+                              onTap: () {
+                                showLicensePage(context: context);
+                              },
+                            ),
+                            Positioned.fill(
+                              right: Dimensions.standardSpacing,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Icon(
+                                  Icons.navigate_next,
+                                  color: AppTheme.accentColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
