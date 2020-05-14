@@ -8,20 +8,18 @@ import 'package:flutter/material.dart';
 class SearchBoardGamesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: PageContainer(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SearchBarBoardGames(),
-              SaerchBoardGamesResults(),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: HotBoardGamesHeader(),
-              ),
-              HotBoardGamesResults(),
-            ],
-          ),
+    return SafeArea(
+      child: PageContainer(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SearchBarBoardGames(),
+            SaerchBoardGamesResults(),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: HotBoardGamesHeader(),
+            ),
+            HotBoardGamesResults(),
+          ],
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/stores/board_game_details_in_collection_store.dart';
@@ -8,6 +9,7 @@ import 'package:board_games_companion/widgets/board_games/details/board_game_det
 import 'package:board_games_companion/widgets/board_games/details/board_games_details_body_widget.dart';
 import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BoardGamesDetailsPage extends StatelessWidget {
@@ -23,6 +25,10 @@ class BoardGamesDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: AppTheme.primaryColor,
+    ));
+
     return WillPopScope(
       onWillPop: () async {
         return _handleOnWillPop(context);
