@@ -145,6 +145,7 @@ class CreateEditPlayerPage extends StatelessWidget {
                 ),
               ),
             ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
             floatingActionButton: Row(
               mainAxisSize: MainAxisSize.min,
               children: _floatingActionButtons,

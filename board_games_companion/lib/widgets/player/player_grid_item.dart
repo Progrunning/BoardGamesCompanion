@@ -7,6 +7,7 @@ import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
 import 'package:board_games_companion/widgets/player/player_avatar_subtitle_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlayerGridItem extends StatelessWidget {
   final Player player;
@@ -27,25 +28,32 @@ class PlayerGridItem extends StatelessWidget {
       child: ShadowBox(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
-          child: Stack(
-            children: <Widget>[
-              Hero(
-                tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
-                child: PlayerAvatar(
-                  imageUri: player?.imageUri,
-                ),
-              ),
-              PlayerAvatarSubtitle(
-                player: player,
-              ),
-              if (topRightCornerActionWidget != null)
-                topRightCornerActionWidget,
-              Positioned.fill(
-                child: StackRippleEffect(
-                  onTap: onTap,
-                ),
-              ),
-            ],
+          child: ChangeNotifierProvider.value(
+            value: player,
+            child: Consumer<Player>(
+              builder: (_, Player value, __) {
+                return Stack(
+                  children: <Widget>[
+                    Hero(
+                      tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
+                      child: PlayerAvatar(
+                        imageUri: player?.imageUri,
+                      ),
+                    ),
+                    PlayerAvatarSubtitle(
+                      player: player,
+                    ),
+                    if (topRightCornerActionWidget != null)
+                      topRightCornerActionWidget,
+                    Positioned.fill(
+                      child: StackRippleEffect(
+                        onTap: onTap,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
