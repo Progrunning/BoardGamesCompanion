@@ -11,7 +11,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Board Games Companion</string>
+	<string>BGC</string>
+	<key>CFBundleDisplayName</key>
+	<string>Board&#x2007;Games&#x2007;Companion</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
