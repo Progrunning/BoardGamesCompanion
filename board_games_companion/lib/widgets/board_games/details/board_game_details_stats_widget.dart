@@ -23,7 +23,7 @@ class BoardGameDetailsStats extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           BoardGameRatingHexagon(
-            boardGameDetails: _boardGameDetails,
+            rating: _boardGameDetails?.rating,
           ),
           SizedBox(
             width: Dimensions.standardSpacing,

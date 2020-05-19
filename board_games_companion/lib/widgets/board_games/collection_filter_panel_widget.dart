@@ -5,6 +5,8 @@ import 'package:board_games_companion/widgets/board_games/collection_sort_by_chi
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'board_game_rating_hexagon_widget.dart';
+
 class CollectionFilterPanel extends StatelessWidget {
   const CollectionFilterPanel({
     Key key,
@@ -40,6 +42,83 @@ class CollectionFilterPanel extends StatelessWidget {
                           boardGamesFiltersStore: store,
                         );
                       },
+                    ),
+                  ),
+                  SizedBox(
+                    height: Dimensions.doubleStandardSpacing,
+                  ),
+                  Text(
+                    'Filter by',
+                    style: AppTheme.titleTextStyle,
+                  ),
+                  SizedBox(
+                    height: Dimensions.standardSpacing,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Rating',
+                      style: AppTheme.sectionHeaderTextStyle,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 32,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            color: Colors.red,
+                            child: Center(
+                              child: Text('Any'),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            color: Colors.red,
+                            child: Center(
+                              child: BoardGameRatingHexagon(
+                                width: 32,
+                                height: 32,
+                                rating: 6.5,
+                                fontSize: Dimensions.smallFontSize,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: BoardGameRatingHexagon(
+                              width: 32,
+                              height: 32,
+                              rating: 7.5,
+                              fontSize: Dimensions.smallFontSize,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: BoardGameRatingHexagon(
+                              width: 32,
+                              height: 32,
+                              rating: 8.0,
+                              fontSize: Dimensions.smallFontSize,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: BoardGameRatingHexagon(
+                              width: 32,
+                              height: 32,
+                              rating: 8.5,
+                              fontSize: Dimensions.smallFontSize,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
