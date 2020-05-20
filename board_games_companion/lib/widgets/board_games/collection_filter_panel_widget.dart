@@ -1,5 +1,6 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/widgets/board_games/collection_sort_by_chip_widget.dart';
 import 'package:flutter/material.dart';
@@ -62,29 +63,44 @@ class CollectionFilterPanel extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 32,
+                    height: Dimensions.standardSpacing,
+                  ),
+                  Container(
+                    height: 32 + Dimensions.doubleStandardSpacing,
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryColor.withAlpha(
+                        Styles.opacity80Percent,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        Styles.defaultCornerRadius,
+                      ),
+                      boxShadow: [AppTheme.defaultBoxShadow],
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Expanded(
                           child: Container(
-                            color: Colors.red,
+                            decoration: BoxDecoration(
+                              color: AppTheme.accentColor,
+                              borderRadius: BorderRadius.circular(
+                                Styles.defaultCornerRadius,
+                              ),
+                              boxShadow: [AppTheme.defaultBoxShadow],
+                            ),
                             child: Center(
                               child: Text('Any'),
                             ),
                           ),
                         ),
                         Expanded(
-                          child: Container(
-                            color: Colors.red,
-                            child: Center(
-                              child: BoardGameRatingHexagon(
-                                width: 32,
-                                height: 32,
-                                rating: 6.5,
-                                fontSize: Dimensions.smallFontSize,
-                              ),
+                          child: Center(
+                            child: BoardGameRatingHexagon(
+                              width: 32,
+                              height: 32,
+                              rating: 6.5,
+                              fontSize: Dimensions.smallFontSize,
                             ),
                           ),
                         ),
