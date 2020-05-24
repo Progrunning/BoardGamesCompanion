@@ -100,6 +100,9 @@ class AppTheme {
     final originalSubtitle2 = originalTextTheme.subtitle2;
 
     return new ThemeData.light().copyWith(
+      chipTheme: ThemeData.light().chipTheme.copyWith(
+            elevation: Dimensions.defaultElevation,
+          ),
       primaryColor: primaryColor,
       primaryColorLight: primaryColorLight,
       accentColor: accentColor,

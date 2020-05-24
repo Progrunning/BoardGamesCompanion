@@ -18,7 +18,6 @@ class ColletionFilterRatingValueContainerWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           Styles.defaultCornerRadius,
         ),
-        boxShadow: [AppTheme.defaultBoxShadow],
       ),
       child: child,
     );

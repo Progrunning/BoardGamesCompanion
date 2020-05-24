@@ -173,6 +173,12 @@ class BoardGamesStore with ChangeNotifier {
       orElse: () => null,
     );
 
+    _boardGames = _allBoardGames
+        .where((boardGame) =>
+            _boardGamesFiltersStore.filterByRating == null ||
+            boardGame.rating >= _boardGamesFiltersStore.filterByRating)
+        .toList();
+
     if (selectedSortBy != null) {
       boardGames.sort((a, b) {
         if (selectedSortBy.orderBy == OrderBy.Descending) {
@@ -197,24 +203,14 @@ class BoardGamesStore with ChangeNotifier {
 
             return a.minPlayers.safeCompareTo(b.maxPlayers);
           case SortByOption.Playtime:
-            if (selectedSortBy.orderBy == OrderBy.Descending) {
-              return b.maxPlaytime.safeCompareTo(a.maxPlaytime);
-            }
-
-            return a.minPlaytime.safeCompareTo(b.minPlaytime);
+            return a.maxPlaytime.safeCompareTo(b.maxPlaytime);
           case SortByOption.Rating:
-            return a.rating.safeCompareTo(b.rating);
+            return b.rating.safeCompareTo(a.rating);
           default:
             return a.lastModified.safeCompareTo(b.lastModified);
         }
       });
     }
-
-    _boardGames = _allBoardGames
-        .where((boardGame) =>
-            _boardGamesFiltersStore.filterByRating == null ||
-            boardGame.rating >= _boardGamesFiltersStore.filterByRating)
-        .toList();
 
     notifyListeners();
   }

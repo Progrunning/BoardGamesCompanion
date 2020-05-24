@@ -48,12 +48,11 @@ class SortByChip extends StatelessWidget {
         ),
       ),
       selectedColor: AppTheme.accentColor,
-      selectedShadowColor: AppTheme.shadowColor,
+      shadowColor: AppTheme.shadowColor,
       backgroundColor: AppTheme.primaryColor.withAlpha(
         Styles.opacity80Percent,
       ),
       avatar: avatarIcon,
-      elevation: 5,
       onSelected: (isSelected) {
         _boardGamesFiltersStore?.updateSortBySelection(_sortBy);
       },

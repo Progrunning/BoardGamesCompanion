@@ -45,7 +45,16 @@ class CollectionFilterPanelFilters extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               Styles.defaultCornerRadius,
             ),
-            boxShadow: [AppTheme.defaultBoxShadow],
+            boxShadow: [
+              // TODO MK These numbers were based on the color comparison with the sort by chips and their shadow generated from the SDK
+              BoxShadow(
+                color: AppTheme.shadowColor.withAlpha(
+                  Styles.opacity30Percent,
+                ),
+                blurRadius: 2,
+                offset: const Offset(1.5, 1.5),
+              ),
+            ],
           ),
           child: Container(
             color: AppTheme.primaryColor.withAlpha(
