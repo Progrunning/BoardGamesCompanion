@@ -49,7 +49,7 @@ class BoardGamesStore with ChangeNotifier {
     try {
       _allBoardGames = await _boardGamesService.retrieveBoardGames();
       _boardGames = List.of(_allBoardGames);
-      await _boardGamesFiltersStore.loadSortByPreferences();
+      await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
       Crashlytics.instance.recordError(e, stack);
       _loadDataState = LoadDataState.Error;
@@ -209,6 +209,12 @@ class BoardGamesStore with ChangeNotifier {
         }
       });
     }
+
+    _boardGames = _allBoardGames
+        .where((boardGame) =>
+            _boardGamesFiltersStore.filterByRating == null ||
+            boardGame.rating >= _boardGamesFiltersStore.filterByRating)
+        .toList();
 
     notifyListeners();
   }

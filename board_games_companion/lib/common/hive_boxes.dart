@@ -5,6 +5,7 @@ class HiveBoxes {
   static const Playthroughs = 'playthroughs';
   static const Scores = 'scores';
   static const SortBy = 'sortBy';
+  static const CollectionFilters = 'collectionFilters';
 
   static const BoardGamesDetailsTypeId = 0;
   static const BoardGamesCategoryTypeId = 1;
@@ -20,4 +21,5 @@ class HiveBoxes {
   static const SortByTypeId = 11;
   static const SortByOptionTypeId = 12;
   static const OrderByTypeId = 13;
+  static const CollectionFiltersId = 14;
 }

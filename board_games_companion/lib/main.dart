@@ -3,6 +3,7 @@ import 'package:board_games_companion/app.dart';
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/playthrough_status.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
+import 'package:board_games_companion/models/collection_filters.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
@@ -65,6 +66,7 @@ void main() async {
   Hive.registerAdapter(SortByAdapter());
   Hive.registerAdapter(SortByOptionAdapter());
   Hive.registerAdapter(OrderByAdapter());
+  Hive.registerAdapter(CollectionFiltersAdapter());
 
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 

@@ -55,7 +55,7 @@ class SortByChip extends StatelessWidget {
       avatar: avatarIcon,
       elevation: 5,
       onSelected: (isSelected) {
-        _boardGamesFiltersStore?.updateSelection(_sortBy);
+        _boardGamesFiltersStore?.updateSortBySelection(_sortBy);
       },
     );
   }

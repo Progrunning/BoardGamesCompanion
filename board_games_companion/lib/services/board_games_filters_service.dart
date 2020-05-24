@@ -1,12 +1,12 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/sort_by.dart';
+import 'package:board_games_companion/models/collection_filters.dart';
 import 'package:board_games_companion/services/hide_base_service.dart';
 
-class BoardGamesFiltersService extends BaseHiveService<SortBy> {
-  static const String _selectedSortPreferenceKey = "sortBy";
+class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
+  static const String _collectionFiltersPreferenceKey = "collectionFilters";
 
-  Future<SortBy> retrieveSelectedSortByPreference() async {
-    if (!await ensureBoxOpen(HiveBoxes.SortBy)) {
+  Future<CollectionFilters> retrieveCollectionFiltersPreferences() async {
+    if (!await ensureBoxOpen(HiveBoxes.CollectionFilters)) {
       return null;
     }
 
@@ -14,19 +14,19 @@ class BoardGamesFiltersService extends BaseHiveService<SortBy> {
       return null;
     }
 
-    return storageBox.get(_selectedSortPreferenceKey);
+    return storageBox.get(_collectionFiltersPreferenceKey);
   }
 
-  Future<bool> addOrUpdateUser(SortBy sortBy) async {
-    if (sortBy?.name?.isEmpty ?? true) {
+  Future<bool> addOrUpdateUser(CollectionFilters collectionFilters) async {
+    if (collectionFilters == null) {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.SortBy)) {
+    if (!await ensureBoxOpen(HiveBoxes.CollectionFilters)) {
       return false;
     }
 
-    await storageBox.put(_selectedSortPreferenceKey, sortBy);
+    await storageBox.put(_collectionFiltersPreferenceKey, collectionFilters);
 
     return true;
   }

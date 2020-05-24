@@ -1,5 +1,7 @@
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
+import 'package:board_games_companion/common/hive_boxes.dart';
+import 'package:board_games_companion/models/collection_filters.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/services/board_games_filters_service.dart';
 import 'package:flutter/foundation.dart';
@@ -18,37 +20,44 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
   final BoardGamesFiltersService _boardGamesFiltersService;
 
+  CollectionFilters _collectionFilters;
+
   List<SortBy> get sortBy => _sortBy;
+  double get filterByRating => _collectionFilters?.filterByRating;
 
   BoardGamesFiltersStore(this._boardGamesFiltersService);
 
-  Future<void> loadSortByPreferences() async {
-    final selectedSortByPreference =
-        await _boardGamesFiltersService.retrieveSelectedSortByPreference();
-    if (selectedSortByPreference == null) {
+  Future<void> loadFilterPreferences() async {
+    _collectionFilters =
+        await _boardGamesFiltersService.retrieveCollectionFiltersPreferences();
+    if (_collectionFilters == null) {
       notifyListeners();
       return;
     }
 
+    _updateSortBy();
+
+    notifyListeners();
+  }
+
+  void _updateSortBy() {
     _sortBy.forEach((sb) {
       sb.selected = false;
     });
 
     final selectedSortBy = _sortBy.firstWhere(
-        (sb) => sb.name == selectedSortByPreference.name, orElse: () {
+        (sb) => sb.name == _collectionFilters?.sortBy?.name, orElse: () {
       return null;
     });
 
     if (selectedSortBy != null) {
-      selectedSortBy.orderBy = selectedSortByPreference.orderBy;
-      selectedSortBy.selected = selectedSortByPreference.selected;
+      selectedSortBy.orderBy = _collectionFilters.sortBy.orderBy;
+      selectedSortBy.selected = _collectionFilters.sortBy.selected;
     }
-
-    notifyListeners();
   }
 
-  Future<void> updateSelection(SortBy sortBy) async {
-    // MK If already selected, update ordering order
+  Future<void> updateSortBySelection(SortBy sortBy) async {
+    // MK If already selected, update ordering direction
     if (sortBy.selected) {
       if (sortBy.orderBy == OrderBy.Ascending) {
         sortBy.orderBy = OrderBy.Descending;
@@ -60,8 +69,33 @@ class BoardGamesFiltersStore with ChangeNotifier {
     _sortBy.forEach((sb) => sb.selected = false);
     sortBy.selected = true;
 
-    await _boardGamesFiltersService.addOrUpdateUser(sortBy);
+    if (_collectionFilters == null) {
+      _collectionFilters = CollectionFilters();
+    }
+
+    _collectionFilters.sortBy = sortBy;
+
+    await _boardGamesFiltersService.addOrUpdateUser(_collectionFilters);
 
     notifyListeners();
+  }
+
+  Future<void> updateFilterByRating(double filterByRating) async {
+    if (_collectionFilters == null) {
+      _collectionFilters = CollectionFilters();
+    }
+
+    _collectionFilters.filterByRating = filterByRating;
+
+    await _boardGamesFiltersService.addOrUpdateUser(_collectionFilters);
+
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _boardGamesFiltersService.closeBox(HiveBoxes.CollectionFilters);
+
+    super.dispose();
   }
 }
