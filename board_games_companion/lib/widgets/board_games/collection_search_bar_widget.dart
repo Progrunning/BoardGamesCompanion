@@ -4,8 +4,9 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/widgets/board_games/collection_filter_panel_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'filters/collection_filter_panel_widget.dart';
 
 class CollectionSearchBar extends StatefulWidget {
   CollectionSearchBar({

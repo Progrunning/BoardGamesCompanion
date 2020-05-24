@@ -15,6 +15,7 @@ class Styles {
   static const int opacity70Percent = 180;
   static const int opacity80Percent = 205;
   static const int opacity90Percent = 230;
+  static const int opacity100Percent = 255;
 
   static const double transparentOpacity = 0.0;
   static const double opaqueOpacity = 1.0;
