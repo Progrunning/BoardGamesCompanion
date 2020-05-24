@@ -1,4 +1,6 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_credits_widget.dart';
 import 'package:board_games_companion/widgets/board_games/details/board_game_details_first_row_info_panels_widget.dart';
@@ -113,8 +115,14 @@ class BoardGamesDetailsBody extends StatelessWidget {
                               padding: EdgeInsets.all(
                                 Dimensions.standardSpacing,
                               ),
+                              backgroundColor: AppTheme.primaryColor.withAlpha(
+                                Styles.opacity80Percent,
+                              ),
                               label: Text(
                                 category.name,
+                                style: TextStyle(
+                                  color: AppTheme.defaultTextColor,
+                                ),
                               ),
                             );
                           }).toList(),
