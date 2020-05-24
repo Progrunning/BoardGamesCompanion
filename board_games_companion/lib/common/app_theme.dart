@@ -106,6 +106,7 @@ class AppTheme {
       buttonColor: accentColor,
       textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
+      canvasColor: AppTheme.primaryColorLight,
       textTheme: originalTextTheme.copyWith(
         bodyText1: originalBodyText1.copyWith(
           decorationColor: Colors.transparent,

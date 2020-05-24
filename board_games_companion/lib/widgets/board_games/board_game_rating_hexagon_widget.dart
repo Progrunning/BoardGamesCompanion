@@ -12,12 +12,14 @@ class BoardGameRatingHexagon extends StatelessWidget {
       double width = Dimensions.boardGameDetailsHexagonSize,
       double height = Dimensions.boardGameDetailsHexagonSize,
       double fontSize = Dimensions.doubleExtraLargeFontSize,
+      Color fontColor = AppTheme.defaultTextColor,
       Color hexColor = AppTheme.accentColor,
       int hexColorOpacity = Styles.opacity90Percent})
       : _rating = rating,
         _width = width,
         _height = height,
         _fontSize = fontSize,
+        _fontColor = fontColor,
         _hexColor = hexColor,
         _hexColorOpacity = hexColorOpacity,
         super(key: key);
@@ -26,6 +28,7 @@ class BoardGameRatingHexagon extends StatelessWidget {
   final double _width;
   final double _height;
   final double _fontSize;
+  final Color _fontColor;
   final Color _hexColor;
   final int _hexColorOpacity;
 
@@ -43,7 +46,7 @@ class BoardGameRatingHexagon extends StatelessWidget {
               (_rating ?? 0).toStringAsFixed(
                   Constants.BoardGameRatingNumberOfDecimalPlaces),
               style: TextStyle(
-                color: AppTheme.defaultTextColor,
+                color: _fontColor,
                 fontSize: _fontSize,
               ),
             ),

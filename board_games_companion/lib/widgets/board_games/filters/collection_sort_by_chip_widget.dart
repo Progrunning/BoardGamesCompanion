@@ -38,7 +38,7 @@ class SortByChip extends StatelessWidget {
         style: TextStyle(
           color: (_sortBy?.selected ?? false)
               ? AppTheme.defaultTextColor
-              : AppTheme.inverterTextColor,
+              : AppTheme.secondaryTextColor,
         ),
       ),
       selected: _sortBy?.selected ?? false,

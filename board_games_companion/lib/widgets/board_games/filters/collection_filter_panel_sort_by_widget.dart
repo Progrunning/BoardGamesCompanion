@@ -38,20 +38,6 @@ class CollectionFilterPanelSortBy extends StatelessWidget {
         SizedBox(
           height: Dimensions.doubleStandardSpacing,
         ),
-        Text(
-          'Filter by',
-          style: AppTheme.titleTextStyle,
-        ),
-        SizedBox(
-          height: Dimensions.standardSpacing,
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Rating',
-            style: AppTheme.sectionHeaderTextStyle,
-          ),
-        ),
       ],
     );
   }

@@ -30,9 +30,6 @@ class CollectionFilterPanel extends StatelessWidget {
                   CollectionFilterPanelSortBy(
                     boardGamesFiltersStore: store,
                   ),
-                  SizedBox(
-                    height: Dimensions.standardSpacing,
-                  ),
                   CollectionFilterPanelFilters(
                     boardGamesFiltersStore: store,
                   ),

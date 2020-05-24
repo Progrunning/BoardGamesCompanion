@@ -18,43 +18,67 @@ class CollectionFilterPanelFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: Dimensions.collectionFilterHexagonSize +
-          Dimensions.doubleStandardSpacing,
-      decoration: BoxDecoration(
-        color: AppTheme.primaryColor.withAlpha(
-          Styles.opacity80Percent,
+    return Column(
+      children: <Widget>[
+        Text(
+          'Filter by',
+          style: AppTheme.titleTextStyle,
         ),
-        borderRadius: BorderRadius.circular(
-          Styles.defaultCornerRadius,
+        SizedBox(
+          height: Dimensions.standardSpacing,
         ),
-        boxShadow: [AppTheme.defaultBoxShadow],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          CollectionFilterRatingAnyValueWidget(
-            boardGamesFiltersStore: _boardGamesFiltersStore,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Rating',
+            style: AppTheme.sectionHeaderTextStyle,
           ),
-          CollectionFilterRatingValueWidget(
-            rating: 6.5,
-            boardGamesFiltersStore: _boardGamesFiltersStore,
+        ),
+        SizedBox(
+          height: Dimensions.standardSpacing,
+        ),
+        Container(
+          height: Dimensions.collectionFilterHexagonSize +
+              Dimensions.doubleStandardSpacing,
+          decoration: BoxDecoration(
+            color: AppTheme.primaryColor,
+            borderRadius: BorderRadius.circular(
+              Styles.defaultCornerRadius,
+            ),
+            boxShadow: [AppTheme.defaultBoxShadow],
           ),
-          CollectionFilterRatingValueWidget(
-            rating: 7.5,
-            boardGamesFiltersStore: _boardGamesFiltersStore,
+          child: Container(
+            color: AppTheme.primaryColor.withAlpha(
+              Styles.opacity80Percent,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CollectionFilterRatingAnyValueWidget(
+                  boardGamesFiltersStore: _boardGamesFiltersStore,
+                ),
+                CollectionFilterRatingValueWidget(
+                  rating: 6.5,
+                  boardGamesFiltersStore: _boardGamesFiltersStore,
+                ),
+                CollectionFilterRatingValueWidget(
+                  rating: 7.5,
+                  boardGamesFiltersStore: _boardGamesFiltersStore,
+                ),
+                CollectionFilterRatingValueWidget(
+                  rating: 8.0,
+                  boardGamesFiltersStore: _boardGamesFiltersStore,
+                ),
+                CollectionFilterRatingValueWidget(
+                  rating: 8.5,
+                  boardGamesFiltersStore: _boardGamesFiltersStore,
+                ),
+              ],
+            ),
           ),
-          CollectionFilterRatingValueWidget(
-            rating: 8.0,
-            boardGamesFiltersStore: _boardGamesFiltersStore,
-          ),
-          CollectionFilterRatingValueWidget(
-            rating: 8.5,
-            boardGamesFiltersStore: _boardGamesFiltersStore,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
