@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:flutter/material.dart';
 
@@ -14,11 +15,19 @@ class CollectionFilterRatingAnyValueWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSelected = _boardGamesFiltersStore?.filterByRating == null;
     final anyRating = Center(
-      child: Text('Any'),
+      child: Text(
+        'Any',
+        style: TextStyle(
+          color: isSelected
+              ? AppTheme.defaultTextColor
+              : AppTheme.secondaryTextColor,
+        ),
+      ),
     );
 
-    if (_boardGamesFiltersStore?.filterByRating == null) {
+    if (isSelected) {
       return Expanded(
         child: ColletionFilterRatingValueContainerWidget(
           child: anyRating,

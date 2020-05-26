@@ -37,53 +37,46 @@ class CollectionFilterPanelFilters extends StatelessWidget {
         SizedBox(
           height: Dimensions.standardSpacing,
         ),
-        Container(
+        SizedBox(
           height: Dimensions.collectionFilterHexagonSize +
               Dimensions.doubleStandardSpacing,
-          decoration: BoxDecoration(
-            color: AppTheme.primaryColor,
-            borderRadius: BorderRadius.circular(
-              Styles.defaultCornerRadius,
-            ),
-            boxShadow: [
-              // TODO MK These numbers were based on the color comparison with the sort by chips and their shadow generated from the SDK
-              BoxShadow(
-                color: AppTheme.shadowColor.withAlpha(
-                  Styles.opacity30Percent,
-                ),
-                blurRadius: 2,
-                offset: const Offset(1.5, 1.5),
+          child: Material(
+            shadowColor: AppTheme.shadowColor,
+            elevation: Dimensions.defaultElevation,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                Styles.defaultCornerRadius,
               ),
-            ],
-          ),
-          child: Container(
-            color: AppTheme.primaryColor.withAlpha(
-              Styles.opacity80Percent,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                CollectionFilterRatingAnyValueWidget(
-                  boardGamesFiltersStore: _boardGamesFiltersStore,
-                ),
-                CollectionFilterRatingValueWidget(
-                  rating: 6.5,
-                  boardGamesFiltersStore: _boardGamesFiltersStore,
-                ),
-                CollectionFilterRatingValueWidget(
-                  rating: 7.5,
-                  boardGamesFiltersStore: _boardGamesFiltersStore,
-                ),
-                CollectionFilterRatingValueWidget(
-                  rating: 8.0,
-                  boardGamesFiltersStore: _boardGamesFiltersStore,
-                ),
-                CollectionFilterRatingValueWidget(
-                  rating: 8.5,
-                  boardGamesFiltersStore: _boardGamesFiltersStore,
-                ),
-              ],
+            child: Container(
+              color: AppTheme.primaryColor.withAlpha(
+                Styles.opacity80Percent,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  CollectionFilterRatingAnyValueWidget(
+                    boardGamesFiltersStore: _boardGamesFiltersStore,
+                  ),
+                  CollectionFilterRatingValueWidget(
+                    rating: 6.5,
+                    boardGamesFiltersStore: _boardGamesFiltersStore,
+                  ),
+                  CollectionFilterRatingValueWidget(
+                    rating: 7.5,
+                    boardGamesFiltersStore: _boardGamesFiltersStore,
+                  ),
+                  CollectionFilterRatingValueWidget(
+                    rating: 8.0,
+                    boardGamesFiltersStore: _boardGamesFiltersStore,
+                  ),
+                  CollectionFilterRatingValueWidget(
+                    rating: 8.5,
+                    boardGamesFiltersStore: _boardGamesFiltersStore,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
