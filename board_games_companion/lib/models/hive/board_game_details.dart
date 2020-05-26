@@ -7,6 +7,8 @@ import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:board_games_companion/models/hive/board_game_rank.dart';
 import 'package:hive/hive.dart';
 
+import 'board_game_expansion.dart';
+
 part 'board_game_details.g.dart';
 
 @HiveType(typeId: HiveBoxes.BoardGamesDetailsTypeId)
@@ -159,6 +161,9 @@ class BoardGameDetails extends BaseBoardGame {
       notifyListeners();
     }
   }
+
+  @HiveField(22)
+  List<BoardGamesExpansion> expansions = List<BoardGamesExpansion>();
 
   String get playtimeFormatted {
     if (_minPlaytime == _maxPlaytime) {

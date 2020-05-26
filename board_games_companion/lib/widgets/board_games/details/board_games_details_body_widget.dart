@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:provider/provider.dart';
 
+import 'board_game_details_expansions_widget.dart';
+
 class BoardGamesDetailsBody extends StatelessWidget {
   const BoardGamesDetailsBody({
     @required boardGameId,
@@ -127,6 +129,11 @@ class BoardGamesDetailsBody extends StatelessWidget {
                             );
                           }).toList(),
                         ),
+                        if (store.boardGameDetails.expansions.length > 0)
+                          BoardGameDetailsExpansions(
+                            boardGameDetailsStore: store,
+                            spacingBetweenSecions: _spacingBetweenSecions,
+                          ),
                         SizedBox(
                           height: _spacingBetweenSecions,
                         ),

@@ -7,6 +7,7 @@ import 'package:board_games_companion/models/collection_filters.dart';
 import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:board_games_companion/models/hive/board_game_artist.dart';
 import 'package:board_games_companion/models/hive/board_game_rank.dart';
@@ -61,6 +62,7 @@ void main() async {
   Hive.registerAdapter(BoardGameDesignerAdapter());
   Hive.registerAdapter(BoardGamePublisherAdapter());
   Hive.registerAdapter(BoardGameArtistAdapter());
+  Hive.registerAdapter(BoardGamesExpansionAdapter());
   Hive.registerAdapter(BoardGameRankAdapter());
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(SortByAdapter());

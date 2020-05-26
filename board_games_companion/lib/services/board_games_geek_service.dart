@@ -5,6 +5,7 @@ import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_designer.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/extensions/xml_element_extensions.dart';
+import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:board_games_companion/models/hive/board_game_publisher.dart';
 import 'package:board_games_companion/models/hive/board_game_rank.dart';
 import 'package:board_games_companion/utilities/bgg_retry_interceptor.dart';
@@ -48,6 +49,7 @@ class BoardGamesGeekService {
   static const String _xmlDesignerAttributeTypeName = 'boardgamedesigner';
   static const String _xmlArtistAttributeTypeName = 'boardgameartist';
   static const String _xmlPublisherAttributeTypeName = 'boardgamepublisher';
+  static const String _xmlExpansionAttributeTypeName = 'boardgameexpansion';
   static const String _xmlObjectIdAttributeTypeName = 'objectid';
   static const String _xmlLastModifiedAttributeTypeName = 'lastmodified';
 
@@ -421,6 +423,12 @@ class BoardGamesGeekService {
           boardGameArtist.id = id;
           boardGameArtist.name = value;
           boardGameDetails.artists.add(boardGameArtist);
+          break;
+        case _xmlExpansionAttributeTypeName:
+          final boardGameArtist = BoardGamesExpansion();
+          boardGameArtist.id = id;
+          boardGameArtist.name = value;
+          boardGameDetails.expansions.add(boardGameArtist);
           break;
         default:
       }
