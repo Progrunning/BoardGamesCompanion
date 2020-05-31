@@ -114,7 +114,8 @@ stages:
         displayName: 'Publishing aab artifacts'
         inputs:
           targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab'
-          artifact: 'drop'
+          artifact: 'drop-droid'
+          publishLocation: pipeline
       
 - stage: CdPublishAndroid
   dependsOn: CdBuildAndroid
@@ -205,8 +206,8 @@ stages:
         displayName: 'Publishing aab artifacts'
         inputs:
           targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/Runner.ipa'
-          artifact: 'drop'
-          publishLocation: 'pipeline'
+          artifact: 'drop-ios'
+          publishLocation: pipeline
 
 - stage: CdPublishiOS
   dependsOn: CdBuildiOS
