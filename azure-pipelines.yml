@@ -131,7 +131,7 @@ stages:
       - task: DownloadPipelineArtifact@2
         inputs:
           buildType: 'current'
-          artifactName: 'drop'
+          artifactName: 'drop-droid'
           itemPattern: '*.aab'
           targetPath: '$(Pipeline.Workspace)'
 
@@ -224,7 +224,7 @@ stages:
         displayName: 'Download ipa'
         inputs:
           buildType: 'current'
-          artifactName: 'drop'
+          artifactName: 'drop-ios'
           itemPattern: '*.ipa'
           targetPath: '$(Pipeline.Workspace)'
 
