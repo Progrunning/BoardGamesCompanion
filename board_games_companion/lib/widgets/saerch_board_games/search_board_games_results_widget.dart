@@ -80,9 +80,11 @@ class SaerchBoardGamesResults extends StatelessWidget {
                             ),
                           ),
                           onTap: () async {
+                            final boardGame = searchResults[itemIndex];
                             await NavigatorHelper.navigateToBoardGameDetails(
                               context,
-                              searchResults[itemIndex],
+                              boardGame?.id,
+                              boardGame?.name,
                             );
                           },
                         ),

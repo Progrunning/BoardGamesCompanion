@@ -1,6 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/stores/board_game_details_in_collection_store.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
@@ -17,11 +16,15 @@ class BoardGamesDetailsPage extends StatelessWidget {
   final String _boardGameName;
   final BoardGameDetailsStore _boardGameDetailsStore;
 
-  BoardGamesDetailsPage(
-    this._boardGameDetailsStore,
-    this._boardGameId,
-    this._boardGameName,
-  );
+  const BoardGamesDetailsPage({
+    Key key,
+    @required boardGameDetailsStore,
+    @required boardGameId,
+    @required boardGameName,
+  })  : _boardGameDetailsStore = boardGameDetailsStore,
+        _boardGameId = boardGameId,
+        _boardGameName = boardGameName,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +77,11 @@ class BoardGamesDetailsPage extends StatelessWidget {
       _boardGameDetailsStore?.boardGameDetails,
     );
 
-    if (!boardGameDetailsInCollectionStore.isInCollection) {
-      Navigator.popUntil(context, ModalRoute.withName(Routes.home));
-      return false;
-    }
+    // TODO MK Fix this
+    // if (!boardGameDetailsInCollectionStore.isInCollection) {
+    //   Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+    //   return false;
+    // }
 
     return true;
   }

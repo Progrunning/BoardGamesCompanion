@@ -111,7 +111,8 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
   ) async {
     await NavigatorHelper.navigateToBoardGameDetails(
       context,
-      boardGameDetails,
+      boardGameDetails?.id,
+      boardGameDetails?.name,
     );
   }
 }

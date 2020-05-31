@@ -36,12 +36,14 @@ class HotBoardGamesResults extends StatelessWidget {
                 children: List.generate(
                   (snapshot.data as List<BoardGame>).length,
                   (int index) {
+                    final BoardGame boardGame = snapshot.data[index];
                     return BoardGameCollectionItem(
-                      boardGame: snapshot.data[index],
+                      boardGame: boardGame,
                       onTap: () async {
                         await NavigatorHelper.navigateToBoardGameDetails(
                           context,
-                          snapshot.data[index],
+                          boardGame?.id,
+                          boardGame?.name,
                         );
                       },
                     );

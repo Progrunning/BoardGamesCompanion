@@ -1,8 +1,7 @@
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
-import 'package:board_games_companion/utilities/navigator_transitions.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:flutter/material.dart';
 
 import 'board_game_details_section_header_widget.dart';
@@ -62,17 +61,10 @@ class BoardGameDetailsExpansions extends StatelessWidget {
                 ),
               ),
               onTap: () async {
-                await Navigator.push(
+                await NavigatorHelper.navigateToBoardGameDetails(
                   context,
-                  NavigatorTransitions.fadeThrough(
-                    (_, __, ___) {
-                      return BoardGamesDetailsPage(
-                        _boardGameDetailsStore,
-                        expansion.id,
-                        expansion.name,
-                      );
-                    },
-                  ),
+                  expansion.id,
+                  expansion.name,
                 );
               },
             ),

@@ -1,4 +1,3 @@
-import 'package:board_games_companion/models/hive/base_board_game.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/create_edit_player.dart';
@@ -32,7 +31,8 @@ class NavigatorHelper {
 
   static Future<T> navigateToBoardGameDetails<T extends Object>(
     BuildContext context,
-    BaseBoardGame boardGame,
+    String boardGameId,
+    String boardGameName,
   ) async {
     return await Navigator.push(
       context,
@@ -45,9 +45,9 @@ class NavigatorHelper {
           final _boardGameDetailsStore =
               BoardGameDetailsStore(_boardGamesGeekService);
           return BoardGamesDetailsPage(
-            _boardGameDetailsStore,
-            boardGame?.id,
-            boardGame?.name,
+            boardGameId: boardGameId,
+            boardGameName: boardGameName,
+            boardGameDetailsStore: _boardGameDetailsStore,
           );
         },
       ),

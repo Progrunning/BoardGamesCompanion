@@ -17,10 +17,10 @@ import 'board_game_details_expansions_widget.dart';
 
 class BoardGamesDetailsBody extends StatelessWidget {
   const BoardGamesDetailsBody({
+    Key key,
     @required boardGameId,
     @required boardGameName,
     @required boardGameDetailsStore,
-    Key key,
   })  : _boardGameId = boardGameId,
         _boardGameName = boardGameName,
         _boardGameDetailsStore = boardGameDetailsStore,
