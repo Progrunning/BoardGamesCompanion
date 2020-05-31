@@ -13,17 +13,22 @@ class BoardGameDetailsSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Text(
-          _title,
-          style: AppTheme.sectionHeaderTextStyle,
-        ),
-        SizedBox(
-          height: Dimensions.halfStandardSpacing,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.standardSpacing,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            _title,
+            style: AppTheme.sectionHeaderTextStyle,
+          ),
+          SizedBox(
+            height: Dimensions.halfStandardSpacing,
+          ),
+        ],
+      ),
     );
   }
 }

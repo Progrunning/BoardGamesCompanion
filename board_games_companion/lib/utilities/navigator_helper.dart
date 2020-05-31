@@ -33,6 +33,7 @@ class NavigatorHelper {
     BuildContext context,
     String boardGameId,
     String boardGameName,
+    Type navigatingFromType,
   ) async {
     return await Navigator.push(
       context,
@@ -48,6 +49,7 @@ class NavigatorHelper {
             boardGameId: boardGameId,
             boardGameName: boardGameName,
             boardGameDetailsStore: _boardGameDetailsStore,
+            navigatingFromType: navigatingFromType,
           );
         },
       ),

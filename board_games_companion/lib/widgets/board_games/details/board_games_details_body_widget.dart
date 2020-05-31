@@ -60,8 +60,8 @@ class BoardGamesDetailsBody extends StatelessWidget {
             child: Consumer<BoardGameDetailsStore>(
               builder: (_, store, __) {
                 return SliverPadding(
-                  padding: EdgeInsets.all(
-                    Dimensions.standardSpacing,
+                  padding: EdgeInsets.symmetric(
+                    vertical: Dimensions.standardSpacing,
                   ),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate.fixed(
@@ -106,30 +106,37 @@ class BoardGamesDetailsBody extends StatelessWidget {
                         BoardGameDetailsSectionHeader(
                           title: 'Categories',
                         ),
-                        Wrap(
-                          direction: Axis.horizontal,
-                          spacing: Dimensions.standardSpacing,
-                          alignment: WrapAlignment.spaceEvenly,
-                          children: _boardGameDetailsStore
-                              .boardGameDetails.categories
-                              .map<Widget>((category) {
-                            return Chip(
-                              padding: EdgeInsets.all(
-                                Dimensions.standardSpacing,
-                              ),
-                              backgroundColor: AppTheme.primaryColor.withAlpha(
-                                Styles.opacity80Percent,
-                              ),
-                              label: Text(
-                                category.name,
-                                style: TextStyle(
-                                  color: AppTheme.defaultTextColor,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.standardSpacing,
+                          ),
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            spacing: Dimensions.standardSpacing,
+                            alignment: WrapAlignment.spaceEvenly,
+                            children: _boardGameDetailsStore
+                                .boardGameDetails.categories
+                                .map<Widget>((category) {
+                              return Chip(
+                                padding: EdgeInsets.all(
+                                  Dimensions.standardSpacing,
                                 ),
-                              ),
-                            );
-                          }).toList(),
+                                backgroundColor:
+                                    AppTheme.primaryColor.withAlpha(
+                                  Styles.opacity80Percent,
+                                ),
+                                label: Text(
+                                  category.name,
+                                  style: TextStyle(
+                                    color: AppTheme.defaultTextColor,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                        if (store.boardGameDetails.expansions.length > 0)
+                        if (!store.boardGameDetails.isExpansion &&
+                            store.boardGameDetails.expansions.length > 0)
                           BoardGameDetailsExpansions(
                             boardGameDetailsStore: store,
                             spacingBetweenSecions: _spacingBetweenSecions,
@@ -140,11 +147,17 @@ class BoardGamesDetailsBody extends StatelessWidget {
                         BoardGameDetailsSectionHeader(
                           title: 'Description',
                         ),
-                        Text(
-                          htmlUnescape
-                              .convert(store.boardGameDetails.description),
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: Dimensions.mediumFontSize),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.standardSpacing,
+                          ),
+                          child: Text(
+                            htmlUnescape
+                                .convert(store.boardGameDetails.description),
+                            textAlign: TextAlign.justify,
+                            style:
+                                TextStyle(fontSize: Dimensions.mediumFontSize),
+                          ),
                         )
                       ],
                     ),

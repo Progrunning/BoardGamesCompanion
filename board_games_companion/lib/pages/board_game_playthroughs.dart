@@ -69,7 +69,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
                 builder: (_, __, ___) {
                   return StartNewPlaythroughPage(
                     boardGameDetails: _boardGameDetails,
-                    pageController: pageController
+                    pageController: pageController,
                   );
                 },
               ),
@@ -113,6 +113,7 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
       context,
       boardGameDetails?.id,
       boardGameDetails?.name,
+      BoardGamePlaythroughsPage,
     );
   }
 }

@@ -165,6 +165,17 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(22)
   List<BoardGamesExpansion> expansions = List<BoardGamesExpansion>();
 
+  bool _isExpansion;
+  @HiveField(23)
+  bool get isExpansion => _isExpansion;
+  @HiveField(23)
+  set isExpansion(bool value) {
+    if (_isExpansion != value) {
+      _isExpansion = value;
+      notifyListeners();
+    }
+  }
+
   String get playtimeFormatted {
     if (_minPlaytime == _maxPlaytime) {
       return '$minPlaytime';

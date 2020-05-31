@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/models/board_game.dart';
+import 'package:board_games_companion/pages/search_board_games.dart';
 import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
 import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:board_games_companion/utilities/navigator_helper.dart';
@@ -85,6 +86,7 @@ class SaerchBoardGamesResults extends StatelessWidget {
                               context,
                               boardGame?.id,
                               boardGame?.name,
+                              SearchBoardGamesPage
                             );
                           },
                         ),

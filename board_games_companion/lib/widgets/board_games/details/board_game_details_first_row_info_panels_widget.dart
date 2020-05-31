@@ -14,27 +14,32 @@ class BoardGameDetailsFirstRowInfoPanels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Flexible(
-            child: BoardGameDetailsInfoPanel(
-              title:
-                  '${_boardGameDetails.minPlayers} - ${_boardGameDetails.maxPlayers} Players',
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.standardSpacing,
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Flexible(
+              child: BoardGameDetailsInfoPanel(
+                title:
+                    '${_boardGameDetails.minPlayers} - ${_boardGameDetails.maxPlayers} Players',
+              ),
             ),
-          ),
-          SizedBox(
-            width: Dimensions.standardSpacing,
-          ),
-          Flexible(
-            child: BoardGameDetailsInfoPanel(
-              title: '${_boardGameDetails.playtimeFormatted} Min',
-              subtitle: 'Playing Time',
+            SizedBox(
+              width: Dimensions.standardSpacing,
             ),
-          ),
-        ],
+            Flexible(
+              child: BoardGameDetailsInfoPanel(
+                title: '${_boardGameDetails.playtimeFormatted} Min',
+                subtitle: 'Playing Time',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

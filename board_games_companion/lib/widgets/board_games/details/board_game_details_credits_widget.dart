@@ -16,31 +16,36 @@ class BoardGameDetailsCredits extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        BoardGameDetailsCreditsItem(
-          title: 'Designer:',
-          detail: _boardGameDetails?.desingers?.map((d) => d.name)?.join(', '),
-        ),
-        SizedBox(
-          height: _spacingBetweenCredits,
-        ),
-        BoardGameDetailsCreditsItem(
-          title: 'Artist:',
-          detail: _boardGameDetails?.artists?.map((d) => d.name)?.join(', '),
-        ),
-        SizedBox(
-          height: _spacingBetweenCredits,
-        ),
-        Container(
-          child: BoardGameDetailsCreditsItem(
-            title: 'Publisher:',
-            detail:
-                _boardGameDetails?.publishers?.map((d) => d.name)?.join(', '),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.standardSpacing,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          BoardGameDetailsCreditsItem(
+            title: 'Designer:',
+            detail: _boardGameDetails?.desingers?.map((d) => d.name)?.join(', '),
           ),
-        ),
-      ],
+          SizedBox(
+            height: _spacingBetweenCredits,
+          ),
+          BoardGameDetailsCreditsItem(
+            title: 'Artist:',
+            detail: _boardGameDetails?.artists?.map((d) => d.name)?.join(', '),
+          ),
+          SizedBox(
+            height: _spacingBetweenCredits,
+          ),
+          Container(
+            child: BoardGameDetailsCreditsItem(
+              title: 'Publisher:',
+              detail:
+                  _boardGameDetails?.publishers?.map((d) => d.name)?.join(', '),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

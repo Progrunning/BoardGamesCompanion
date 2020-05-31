@@ -68,6 +68,7 @@ class BoardGamesGeekService {
   static const String _boardGameQueryParamterStats = 'stats';
   static const String _boardGameQueryParamterId = 'id';
   static const String _boardGameType = 'boardgame';
+  static const String _boardGameExpansionType = 'boardgameexpansion';
 
   static const int _numberOfDaysToCacheHotBoardGames = 1;
   static const String _hotBoardGamesCachePrimaryKey = 'hotBoardGames';
@@ -182,6 +183,10 @@ class BoardGamesGeekService {
 
       final boardGameDetails = BoardGameDetails(boardGameDetailName);
       boardGameDetails.id = id;
+
+      final boardGameType = boardGameDetailsItem
+          .firstOrDefaultAttributeValue(_xmlTypeAttributeName);
+      boardGameDetails.isExpansion = boardGameType == _boardGameExpansionType;
 
       boardGameDetails.description =
           boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
@@ -511,7 +516,7 @@ class BoardGamesGeekService {
     if (errorElements?.isEmpty ?? true) {
       return false;
     }
-    
+
     // for (var errorElement in errorElements) {}
 
     return true;

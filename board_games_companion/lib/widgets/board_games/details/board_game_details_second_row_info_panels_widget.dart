@@ -14,26 +14,32 @@ class BoardGameDetailsSecondRowInfoPanels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Flexible(
-            child: BoardGameDetailsInfoPanel(
-              title: 'Age: ${_boardGameDetails.minAge}+',
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.standardSpacing,
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Flexible(
+              child: BoardGameDetailsInfoPanel(
+                title: 'Age: ${_boardGameDetails.minAge}+',
+              ),
             ),
-          ),
-          SizedBox(
-            width: Dimensions.standardSpacing,
-          ),
-          Flexible(
-            child: BoardGameDetailsInfoPanel(
-              title: 'Weight: ${_boardGameDetails.avgWeight?.toStringAsFixed(2)} / 5',
-              subtitle: 'Complexity Rating',
+            SizedBox(
+              width: Dimensions.standardSpacing,
             ),
-          ),
-        ],
+            Flexible(
+              child: BoardGameDetailsInfoPanel(
+                title:
+                    'Weight: ${_boardGameDetails.avgWeight?.toStringAsFixed(2)} / 5',
+                subtitle: 'Complexity Rating',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
