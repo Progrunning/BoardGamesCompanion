@@ -10,6 +10,7 @@ trigger:
     include:
       - develop
       - release
+      - azure-pipelines
 
 stages:
 
@@ -47,11 +48,11 @@ stages:
             buildNumber: '$(Build.BuildID)'
             buildName: '$(app.version).$(Build.BuildID)'
 
-
-- stage: CD
+- stage: CdBuildAndroid
   condition: eq(variables['Build.SourceBranchName'], 'release')
   jobs:
-  - job: ReleaseAndroid
+
+  - job: BuildAndroid
     timeoutInMinutes: 10
     pool:
       vmImage: 'macOS-latest'
@@ -87,7 +88,6 @@ stages:
           Contents: '$(KeyStoreFileName)'
           TargetFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app'
 
-
       - task: FlutterBuild@0
         inputs:
           target: 'aab'
@@ -109,6 +109,31 @@ stages:
           SourceFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app'
           Contents: '$(KeyStoreFileName)'
 
+      - task: PublishPipelineArtifact@1
+        condition: always()
+        displayName: 'Publishing aab artifacts'
+        inputs:
+          targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab'
+          artifact: 'drop'
+      
+- stage: CdPublishAndroid
+  dependsOn: CdBuildAndroid
+  condition: succeeded('CdBuildAndroid')
+  jobs:
+  - job: PublishAndroid
+    timeoutInMinutes: 3
+    pool:
+      vmImage: 'macOS-latest'
+
+    steps:
+
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: 'current'
+          artifactName: 'drop'
+          itemPattern: '*.aab'
+          targetPath: '$(Pipeline.Workspace)'
+
       - task: DownloadSecureFile@1
         displayName: 'Download Google Play Console JSON key auth file'
         name: serviceAccAuthJson
@@ -116,24 +141,19 @@ stages:
           secureFile: 'Google_Play_Store_Dev_Ops_Service_Acc_Auth.json'
 
       - task: Bash@3
-        displayName: 'Fastlane - Release aab to Beta'
+        displayName: 'Fastlane - publish aab to Beta'
         inputs:
-          workingDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release'
+          workingDirectory: '$(Pipeline.Workspace)'
           targetType: 'inline'
           script: |
           
             fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(AppPackageName) --skip_upload_apk true
 
-      - task: PublishBuildArtifacts@1
-        condition: always()
-        displayName: 'Publishing aab artifacts'
-        inputs:
-          PathtoPublish: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
-
-  - job: ReleaseiOS
-    timeoutInMinutes: 15
+- stage: CdBuildiOS
+  condition: eq(variables['Build.SourceBranchName'], 'release')
+  jobs:
+  - job: BuildiOS
+    timeoutInMinutes: 12
     pool:
       vmImage: 'macOS-latest'
 
@@ -179,21 +199,42 @@ stages:
           provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
           exportPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/'
 
+
+      - task: PublishPipelineArtifact@1
+        condition: always()
+        displayName: 'Publishing aab artifacts'
+        inputs:
+          targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/Runner.ipa'
+          artifact: 'drop'
+          publishLocation: 'pipeline'
+
+- stage: CdPublishiOS
+  dependsOn: CdBuildiOS
+  condition: succeeded('CdBuildiOS')
+  jobs:
+  - job: PublishiOS
+    timeoutInMinutes: 3
+    pool:
+      vmImage: 'macOS-latest'
+
+    steps:
+
+      - task: DownloadPipelineArtifact@2
+        displayName: 'Download ipa'
+        inputs:
+          buildType: 'current'
+          artifactName: 'drop'
+          itemPattern: '*.ipa'
+          targetPath: '$(Pipeline.Workspace)'
+
       - task: AppStoreRelease@1
+        displayName: 'Publish to TestFlight'
         inputs:
           serviceEndpoint: 'Apple App Store'
           appIdentifier: '$(AppPackageName)'
           appType: 'iOS'
-          ipaPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/*.ipa'
+          ipaPath: '$(Pipeline.Workspace)/*.ipa'
           releaseTrack: 'TestFlight'
           shouldSkipWaitingForProcessing: true
           shouldSkipSubmission: true
           installFastlane: false
-
-      - task: PublishBuildArtifacts@1
-        condition: always()
-        displayName: 'Publishing aab artifacts'
-        inputs:
-          PathtoPublish: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/Runner.ipa'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
