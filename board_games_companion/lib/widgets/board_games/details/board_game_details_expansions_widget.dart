@@ -34,49 +34,56 @@ class BoardGameDetailsExpansions extends StatelessWidget {
             _boardGameDetailsStore.boardGameDetails.expansions.length, (index) {
           final expansion =
               _boardGameDetailsStore.boardGameDetails.expansions[index];
-          return Material(
-            color: Colors.transparent,
-            child: ClipRect(
+
+          Widget expansionItemWidget = InkWell(
+            splashColor: AppTheme.accentColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Dimensions.doubleStandardSpacing,
+                horizontal: Dimensions.standardSpacing,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      expansion.name,
+                      style: AppTheme.theme.textTheme.headline3,
+                    ),
+                  ),
+                  Icon(
+                    Icons.navigate_next,
+                    color: AppTheme.accentColor,
+                  ),
+                ],
+              ),
+            ),
+            onTap: () async {
+              await NavigatorHelper.navigateToBoardGameDetails(
+                context,
+                expansion.id,
+                expansion.name,
+                BoardGamesDetailsPage,
+              );
+            },
+          );
+
+          if (expansion.isInCollection ?? false) {
+            expansionItemWidget = ClipRect(
               child: CustomPaint(
                 foregroundPainter: ExpanionsBannerPainter(
                   location: BannerLocation.topStart,
                   color: AppTheme.accentColor,
                   message: 'own',
                 ),
-                child: InkWell(
-                  splashColor: AppTheme.accentColor,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.doubleStandardSpacing,
-                      horizontal: Dimensions.standardSpacing,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            expansion.name,
-                            style: AppTheme.theme.textTheme.headline3,
-                          ),
-                        ),
-                        Icon(
-                          Icons.navigate_next,
-                          color: AppTheme.accentColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () async {
-                    await NavigatorHelper.navigateToBoardGameDetails(
-                      context,
-                      expansion.id,
-                      expansion.name,
-                      BoardGamesDetailsPage,
-                    );
-                  },
-                ),
+                child: expansionItemWidget,
               ),
-            ),
+            );
+          }
+
+          return Material(
+            color: Colors.transparent,
+            child: expansionItemWidget,
           );
         })
       ],

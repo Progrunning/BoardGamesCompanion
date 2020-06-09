@@ -3,19 +3,34 @@ import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
+import 'board_games_store.dart';
+
 class BoardGameDetailsStore with ChangeNotifier {
   final BoardGamesGeekService _boardGameGeekService;
+  final BoardGamesStore _boardGamesStore;
 
   BoardGameDetails _boardGameDetails;
   BoardGameDetails get boardGameDetails => _boardGameDetails;
 
-  BoardGameDetailsStore(this._boardGameGeekService);
+  BoardGameDetailsStore(this._boardGameGeekService, this._boardGamesStore);
 
   Future<BoardGameDetails> loadBoardGameDetails(String boardGameId) async {
     try {
       final boardGameDetails =
           await _boardGameGeekService.retrieveDetails(boardGameId);
       if (boardGameDetails != null) {
+        for (var boardGameExpansion in boardGameDetails.expansions) {
+          final boardGameExpansionDetails =
+              _boardGamesStore.boardGames.firstWhere(
+            (boardGame) => boardGame.id == boardGameExpansion.id,
+            orElse: () => null,
+          );
+
+          if (boardGameExpansionDetails != null) {
+            boardGameExpansion.isInCollection = true;
+          }
+        }
+
         _boardGameDetails = boardGameDetails;
       }
     } catch (e, stack) {

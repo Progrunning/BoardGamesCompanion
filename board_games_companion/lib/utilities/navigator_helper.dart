@@ -3,6 +3,7 @@ import 'package:board_games_companion/pages/board_game_details.dart';
 import 'package:board_games_companion/pages/create_edit_player.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/utilities/navigator_transitions.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +44,12 @@ class NavigatorHelper {
             context,
             listen: false,
           );
+          final _boardGamesStore = Provider.of<BoardGamesStore>(
+            context,
+            listen: false,
+          );
           final _boardGameDetailsStore =
-              BoardGameDetailsStore(_boardGamesGeekService);
+              BoardGameDetailsStore(_boardGamesGeekService, _boardGamesStore);
           return BoardGamesDetailsPage(
             boardGameId: boardGameId,
             boardGameName: boardGameName,

@@ -1,5 +1,4 @@
 import 'package:board_games_companion/common/animation_tags.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
@@ -29,7 +28,7 @@ class BoardGameImage extends StatelessWidget {
     return Hero(
       tag: "$heroTag${_boardGameDetails.id}",
       child: CachedNetworkImage(
-        imageUrl: _boardGameDetails.imageUrl,
+        imageUrl: _boardGameDetails?.imageUrl ?? '',
         imageBuilder: (context, imageProvider) => _wrapInShadowBox(
           Container(
             decoration: BoxDecoration(
@@ -42,20 +41,15 @@ class BoardGameImage extends StatelessWidget {
         ),
         fit: BoxFit.fitWidth,
         placeholder: (context, url) => LoadingIndicator(),
-        errorWidget: (context, url, error) => _wrapInShadowBox(
-          Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-            child: Container(
-              child: Center(
-                child: Text(
-                  _boardGameDetails?.name ?? '',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
-                ),
-              ),
+        errorWidget: (context, url, error) {
+          return ConstrainedBox(
+            constraints: BoxConstraints(minHeight: minImageHeight),
+            child: Image.asset(
+              'assets/icons/logo.png',
+              fit: BoxFit.cover,
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
