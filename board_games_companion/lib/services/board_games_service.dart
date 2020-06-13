@@ -30,6 +30,18 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     await storageBox.put(boardGameDetails.id, boardGameDetails);
   }
 
+  Future<bool> isInCollection(BoardGameDetails boardGameDetails) async {
+    if (boardGameDetails?.id?.isEmpty ?? true) {
+      return false;
+    }
+
+    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+      return false;
+    }
+
+    return storageBox.containsKey(boardGameDetails.id);
+  }
+
   Future<void> removeBoardGame(String boardGameDetailsId) async {
     if (boardGameDetailsId?.isEmpty ?? true) {
       return;
@@ -67,8 +79,8 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
           value: (boardGameDetails) => boardGameDetails,
         );
         final boardGamesToRemove = storageBox.values
-            ?.where(
-                (boardGameDetails) => !syncedCollectionMap.containsKey(boardGameDetails.id))
+            ?.where((boardGameDetails) =>
+                !syncedCollectionMap.containsKey(boardGameDetails.id))
             ?.toList();
 
         // Remove

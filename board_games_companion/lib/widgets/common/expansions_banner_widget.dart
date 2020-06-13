@@ -5,7 +5,7 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
 const double _kOffset =
-    25.0; // distance to bottom of banner, at a 45 degree angle inwards
+    22.0; // distance to bottom of banner, at a 45 degree angle inwards
 const double _kHeight = 10.0; // height of banner
 const double _kBottomOffset =
     _kOffset + 0.707 * _kHeight; // offset plus sqrt(2)/2 * banner height

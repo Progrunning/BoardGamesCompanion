@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
@@ -38,7 +39,11 @@ class BoardGamesStore with ChangeNotifier {
   );
 
   LoadDataState get loadDataState => _loadDataState;
+  // MK Board games currently shown in the collection (i.e. with applied filters)
+  // TODO consider ranaming
   List<BoardGameDetails> get boardGames => _boardGames;
+  // MK All board games in collection
+  List<BoardGameDetails> get allboardGames => _allBoardGames;
   bool get hasBoardGames => _allBoardGames?.isNotEmpty ?? false;
   String get searchPhrase => _searchPhrase;
 
@@ -83,9 +88,64 @@ class BoardGamesStore with ChangeNotifier {
       existingBoardGameDetails.yearPublished = boardGameDetails.yearPublished;
       existingBoardGameDetails.categories = boardGameDetails.categories;
       existingBoardGameDetails.description = boardGameDetails.description;
+      existingBoardGameDetails.minPlayers = boardGameDetails.minPlayers;
+      existingBoardGameDetails.maxPlayers = boardGameDetails.maxPlayers;
+      existingBoardGameDetails.minPlaytime = boardGameDetails.minPlaytime;
+      existingBoardGameDetails.maxPlaytime = boardGameDetails.maxPlaytime;
+      existingBoardGameDetails.minAge = boardGameDetails.minAge;
+      existingBoardGameDetails.avgWeight = boardGameDetails.avgWeight;
+      existingBoardGameDetails.publishers = boardGameDetails.publishers;
+      existingBoardGameDetails.artists = boardGameDetails.artists;
+      existingBoardGameDetails.desingers = boardGameDetails.desingers;
+      existingBoardGameDetails.commentsNumber = boardGameDetails.commentsNumber;
+      existingBoardGameDetails.ranks = boardGameDetails.ranks;
+      existingBoardGameDetails.lastModified = boardGameDetails.lastModified;
+      existingBoardGameDetails.isExpansion = boardGameDetails.isExpansion;
+      _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
     }
 
+    _updateExpansionCollectionStatus(boardGameDetails, true);
+
     notifyListeners();
+  }
+
+  void _updateBoardGameExpansions(
+    BoardGameDetails existingBoardGameDetails,
+    BoardGameDetails boardGameDetails,
+  ) {
+    if ((boardGameDetails?.expansions?.isEmpty ?? true) ||
+        (existingBoardGameDetails?.expansions?.isEmpty ?? true)) {
+      existingBoardGameDetails.expansions = boardGameDetails.expansions;
+    }
+
+    Map<String, BoardGamesExpansion> expansionsInCollection = Map.fromIterable(
+      existingBoardGameDetails.expansions
+          .where((expansion) => expansion.isInCollection),
+      key: (expansion) => expansion.id,
+      value: (expansion) => expansion,
+    );
+
+    for (var updatedExpansion in boardGameDetails.expansions) {
+      updatedExpansion.isInCollection =
+          expansionsInCollection.containsKey(updatedExpansion.id);
+    }
+
+    existingBoardGameDetails.expansions = boardGameDetails.expansions;
+  }
+
+  Future<void> updateDetails(BoardGameDetails boardGameDetails) async {
+    try {
+      final isInCollection =
+          await _boardGamesService.isInCollection(boardGameDetails);
+      if (!isInCollection) {
+        return;
+      }
+
+      await addOrUpdateBoardGame(boardGameDetails);
+    } catch (e, stack) {
+      Crashlytics.instance.recordError(e, stack);
+      return;
+    }
   }
 
   Future<void> removeBoardGame(String boardGameDetailsId) async {
@@ -96,9 +156,19 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    _allBoardGames
-        .removeWhere((boardGame) => boardGame.id == boardGameDetailsId);
-    _boardGames.removeWhere((boardGame) => boardGame.id == boardGameDetailsId);
+    final boardGameToRemove = _allBoardGames.firstWhere(
+      (boardGame) => boardGame.id == boardGameDetailsId,
+      orElse: () => null,
+    );
+
+    if (boardGameToRemove == null) {
+      return;
+    }
+
+    _updateExpansionCollectionStatus(boardGameToRemove, false);
+
+    _allBoardGames.remove(boardGameToRemove);
+    _boardGames.remove(boardGameToRemove);
 
     notifyListeners();
   }
@@ -213,6 +283,26 @@ class BoardGamesStore with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void _updateExpansionCollectionStatus(
+    BoardGameDetails boardGameToRemove,
+    bool inCollection,
+  ) {
+    if (!boardGameToRemove.isExpansion) {
+      return;
+    }
+
+    final boardGameExpansion = _allBoardGames
+        .map<List<BoardGamesExpansion>>((boardGame) => boardGame.expansions)
+        .expand((expansions) => expansions)
+        .toList()
+        .firstWhere((expansion) => expansion.id == boardGameToRemove.id,
+            orElse: () => null);
+
+    if (boardGameExpansion != null) {
+      boardGameExpansion.isInCollection = inCollection;
+    }
   }
 
   @override

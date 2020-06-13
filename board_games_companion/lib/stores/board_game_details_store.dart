@@ -21,7 +21,7 @@ class BoardGameDetailsStore with ChangeNotifier {
       if (boardGameDetails != null) {
         for (var boardGameExpansion in boardGameDetails.expansions) {
           final boardGameExpansionDetails =
-              _boardGamesStore.boardGames.firstWhere(
+              _boardGamesStore.allboardGames.firstWhere(
             (boardGame) => boardGame.id == boardGameExpansion.id,
             orElse: () => null,
           );
@@ -30,6 +30,8 @@ class BoardGameDetailsStore with ChangeNotifier {
             boardGameExpansion.isInCollection = true;
           }
         }
+
+        _boardGamesStore.updateDetails(boardGameDetails);
 
         _boardGameDetails = boardGameDetails;
       }
