@@ -214,7 +214,7 @@ stages:
   condition: succeeded('CdBuildiOS')
   jobs:
   - job: PublishiOS
-    timeoutInMinutes: 3
+    timeoutInMinutes: 5
     pool:
       vmImage: 'macOS-latest'
 
