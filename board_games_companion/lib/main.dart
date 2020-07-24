@@ -1,111 +1,275 @@
+import 'dart:async';
+import 'package:board_games_companion/app.dart';
+import 'package:board_games_companion/common/enums/order_by.dart';
+import 'package:board_games_companion/common/enums/playthrough_status.dart';
+import 'package:board_games_companion/common/enums/sort_by_option.dart';
+import 'package:board_games_companion/models/collection_filters.dart';
+import 'package:board_games_companion/models/hive/board_game_category.dart';
+import 'package:board_games_companion/models/hive/board_game_designer.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/models/hive/board_game_expansion.dart';
+import 'package:board_games_companion/models/hive/board_game_publisher.dart';
+import 'package:board_games_companion/models/hive/board_game_artist.dart';
+import 'package:board_games_companion/models/hive/board_game_rank.dart';
+import 'package:board_games_companion/models/hive/player.dart';
+import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/models/hive/user.dart';
+import 'package:board_games_companion/models/sort_by.dart';
+import 'package:board_games_companion/services/board_games_filters_service.dart';
+import 'package:board_games_companion/services/board_games_geek_service.dart';
+import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/services/playthroughs_service.dart';
+import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/services/user_service.dart';
+import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
+import 'package:board_games_companion/stores/board_games_filters_store.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/stores/home_store.dart';
+import 'package:board_games_companion/stores/hot_board_games_store.dart';
+import 'package:board_games_companion/stores/players_store.dart';
+import 'package:board_games_companion/stores/playthrough_statistics_store.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/search_bar_board_games_store.dart';
+import 'package:board_games_companion/stores/search_board_games_store.dart';
+import 'package:board_games_companion/stores/start_playthrough_store.dart';
+import 'package:board_games_companion/stores/user_store.dart';
+import 'package:board_games_companion/utilities/custom_http_client_adapter.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+import 'models/hive/board_game_designer.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.green,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(BoardGameDetailsAdapter());
+  Hive.registerAdapter(BoardGameCategoryAdapter());
+  Hive.registerAdapter(PlayerAdapter());
+  Hive.registerAdapter(PlaythroughAdapter());
+  Hive.registerAdapter(PlaythroughStatusAdapter());
+  Hive.registerAdapter(ScoreAdapter());
+  Hive.registerAdapter(BoardGameDesignerAdapter());
+  Hive.registerAdapter(BoardGamePublisherAdapter());
+  Hive.registerAdapter(BoardGameArtistAdapter());
+  Hive.registerAdapter(BoardGamesExpansionAdapter());
+  Hive.registerAdapter(BoardGameRankAdapter());
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(SortByAdapter());
+  Hive.registerAdapter(SortByOptionAdapter());
+  Hive.registerAdapter(OrderByAdapter());
+  Hive.registerAdapter(CollectionFiltersAdapter());
+
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
+
+  runZoned(() {
+    runApp(App());
+  }, onError: Crashlytics.instance.recordError);
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+    return MultiProvider(
+      providers: [
+        Provider<CustomHttpClientAdapter>(
+          create: (context) => CustomHttpClientAdapter(),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        Provider<BoardGamesGeekService>(
+          create: (context) => BoardGamesGeekService(
+            Provider.of<CustomHttpClientAdapter>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        Provider<BoardGamesService>(
+          create: (context) => BoardGamesService(
+            Provider.of<BoardGamesGeekService>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        Provider<PlayerService>(
+          create: (context) => PlayerService(),
+        ),
+        Provider<ScoreService>(
+          create: (context) => ScoreService(),
+        ),
+        Provider<UserService>(
+          create: (context) => UserService(),
+        ),
+        Provider<PlaythroughService>(
+          create: (context) => PlaythroughService(
+            Provider.of<ScoreService>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        Provider<BoardGamesFiltersService>(
+          create: (context) => BoardGamesFiltersService(),
+        ),
+        ChangeNotifierProvider<HomeStore>(
+          create: (context) => HomeStore(),
+        ),
+        ChangeNotifierProvider<UserStore>(
+          create: (context) {
+            final userStore = UserStore(
+              Provider.of<UserService>(
+                context,
+                listen: false,
+              ),
+            );
+            userStore.loadUser();
+            return userStore;
+          },
+        ),
+        ChangeNotifierProvider<HotBoardGamesStore>(
+          create: (context) => HotBoardGamesStore(
+            Provider.of<BoardGamesGeekService>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<SearchBarBoardGamesStore>(
+          create: (context) => SearchBarBoardGamesStore(),
+        ),
+        ChangeNotifierProvider<SearchBoardGamesStore>(
+          create: (context) => SearchBoardGamesStore(
+            Provider.of<BoardGamesGeekService>(
+              context,
+              listen: false,
+            ),
+            Provider.of<SearchBarBoardGamesStore>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<PlayersStore>(
+          create: (context) {
+            return PlayersStore(
+              Provider.of<PlayerService>(
+                context,
+                listen: false,
+              ),
+            );
+          },
+        ),
+        ChangeNotifierProvider<PlaythroughsStore>(
+          create: (context) {
+            return PlaythroughsStore(
+              Provider.of<PlaythroughService>(
+                context,
+                listen: false,
+              ),
+            );
+          },
+        ),
+        ChangeNotifierProvider<BoardGamePlaythroughsStore>(
+          create: (context) => BoardGamePlaythroughsStore(),
+        ),
+        ChangeNotifierProvider<BoardGamesFiltersStore>(
+          create: (context) => BoardGamesFiltersStore(
+            Provider.of<BoardGamesFiltersService>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<StartPlaythroughStore>(
+          create: (context) => StartPlaythroughStore(
+            Provider.of<PlayersStore>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProxyProvider<BoardGamesFiltersStore, BoardGamesStore>(
+          create: (context) {
+            final boardGamesStore = BoardGamesStore(
+              Provider.of<BoardGamesService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlaythroughService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<ScoreService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlayerService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<BoardGamesFiltersStore>(
+                context,
+                listen: false,
+              ),
+            );
+
+            boardGamesStore.loadBoardGames();
+            return boardGamesStore;
+          },
+          update: (_, filtersStore, boardGamesStore) {
+            boardGamesStore.applyFilters();
+            return boardGamesStore;
+          },
+        ),
+        ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
+            PlaythroughStatisticsStore>(
+          create: (context) {
+            final boardGamesStore = PlaythroughStatisticsStore(
+              Provider.of<PlayerService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<ScoreService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<PlaythroughService>(
+                context,
+                listen: false,
+              ),
+            );
+
+            return boardGamesStore;
+          },
+          update: (_, boardGameStore, playthroughsStore,
+              playthroughStatisticsStore) {
+            playthroughStatisticsStore
+                .loadBoardGamesStatistics(boardGameStore.boardGames);
+            return playthroughStatisticsStore;
+          },
+        ),
+      ],
+      child: BoardGamesCompanionApp(),
     );
   }
 }
