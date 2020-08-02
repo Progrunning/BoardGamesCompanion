@@ -46,6 +46,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
 
 import 'models/hive/board_game_designer.dart';
+import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -119,6 +120,9 @@ class App extends StatelessWidget {
         ),
         Provider<UserService>(
           create: (context) => UserService(),
+        ),
+        Provider<AuthService>(
+          create: (context) => AuthService(),
         ),
         Provider<PlaythroughService>(
           create: (context) => PlaythroughService(
