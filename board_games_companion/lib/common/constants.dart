@@ -20,6 +20,8 @@ class Constants {
   static const MoveBelow = 1;
   static const MoveAbove = -1;
 
-
   static const PlayersTabIndex = 2;
+
+  static const double PlayersAvatarHeight = 220;
+  static const double PlayersAvatarWidth = 190;
 }

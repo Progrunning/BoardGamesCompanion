@@ -59,10 +59,7 @@ class UserDetails extends StatelessWidget with SyncCollection {
                             },
                           ),
                         ),
-                ),
-                Divider(
-                  color: AppTheme.accentColor,
-                ),
+                ),                
               ],
             ),
           );

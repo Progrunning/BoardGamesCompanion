@@ -122,7 +122,12 @@ class App extends StatelessWidget {
           create: (context) => UserService(),
         ),
         Provider<AuthService>(
-          create: (context) => AuthService(),
+          create: (context) => AuthService(
+            Provider.of<CustomHttpClientAdapter>(
+              context,
+              listen: false,
+            ),
+          ),
         ),
         Provider<PlaythroughService>(
           create: (context) => PlaythroughService(
