@@ -47,6 +47,7 @@ import 'package:provider/provider.dart';
 
 import 'models/hive/board_game_designer.dart';
 import 'services/auth_service.dart';
+import 'services/secure_storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,6 +97,9 @@ class App extends StatelessWidget {
         Provider<CustomHttpClientAdapter>(
           create: (context) => CustomHttpClientAdapter(),
         ),
+        Provider<SecureStorageService>(
+          create: (context) => SecureStorageService(),
+        ),
         Provider<BoardGamesGeekService>(
           create: (context) => BoardGamesGeekService(
             Provider.of<CustomHttpClientAdapter>(
@@ -123,7 +127,7 @@ class App extends StatelessWidget {
         ),
         Provider<AuthService>(
           create: (context) => AuthService(
-            Provider.of<CustomHttpClientAdapter>(
+            Provider.of<SecureStorageService>(
               context,
               listen: false,
             ),
