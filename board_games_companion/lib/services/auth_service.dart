@@ -15,6 +15,8 @@ class AuthService {
   static String _refreshTokenSecureStorageKey = 'refrehsToken';
   static String _redirectUrl = 'boardgamescompanion://auth';
   static String _authProfileName = 'B2C_1_sign_up_and_in';
+  static List _scopes = ['openid', 'offline_access', 'profile', 'email'];
+  static List _promptValues = ['login'];
 
   final FlutterAppAuth _appAuth = FlutterAppAuth();
 
@@ -43,8 +45,8 @@ class AuthService {
           _redirectUrl,
           serviceConfiguration:
               AuthorizationServiceConfiguration(_authorizeUrl, _tokenUrl),
-          promptValues: ['login'],
-          scopes: ['openid', 'offline_access', 'profile', 'email'],
+          promptValues: _promptValues,
+          scopes: _scopes,
         ),
       );
 
