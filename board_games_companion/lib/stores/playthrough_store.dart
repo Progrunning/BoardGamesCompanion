@@ -74,7 +74,7 @@ class PlaythroughStore with ChangeNotifier {
       _loadDataState = LoadDataState.Loaded;
     } catch (e, stack) {
       _loadDataState = LoadDataState.Error;
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     notifyListeners();

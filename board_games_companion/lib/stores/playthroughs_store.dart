@@ -30,7 +30,7 @@ class PlaythroughsStore with ChangeNotifier {
       _playthroughs = await _playthroughService
           .retrievePlaythroughs([_selectedBoardGame.id]);
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return _playthroughs ?? List<Playthrough>();
@@ -60,7 +60,7 @@ class PlaythroughsStore with ChangeNotifier {
         return true;
       }
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;
@@ -77,7 +77,7 @@ class PlaythroughsStore with ChangeNotifier {
 
       return deleteSucceeded;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;

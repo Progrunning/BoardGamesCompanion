@@ -39,7 +39,7 @@ class PlayerScore with ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;

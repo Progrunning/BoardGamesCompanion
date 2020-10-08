@@ -23,7 +23,7 @@ class PlayersStore with ChangeNotifier {
     try {
       _players = await _playerService.retrievePlayers();
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return _players ?? List<Player>();
@@ -46,7 +46,7 @@ class PlayersStore with ChangeNotifier {
 
       return addOrUpdateSucceeded;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;
@@ -61,7 +61,7 @@ class PlayersStore with ChangeNotifier {
       }
       return deleteSucceeded;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;

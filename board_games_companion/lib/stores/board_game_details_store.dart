@@ -36,7 +36,7 @@ class BoardGameDetailsStore with ChangeNotifier {
         _boardGameDetails = boardGameDetails;
       }
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     notifyListeners();
