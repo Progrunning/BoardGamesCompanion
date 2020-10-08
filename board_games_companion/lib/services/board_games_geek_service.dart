@@ -132,7 +132,7 @@ class BoardGamesGeekService {
         hotBoardGames.add(newHotBoardGame);
       }
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return hotBoardGames;
@@ -261,7 +261,7 @@ class BoardGamesGeekService {
 
       return boardGameDetails;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return null;
@@ -376,7 +376,7 @@ class BoardGamesGeekService {
         return xml.parse(httpResponse.data);
       }
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return null;
@@ -445,7 +445,7 @@ class BoardGamesGeekService {
     BoardGameDetails boardGameDetails,
   ) {
     if (boardGameDetailsRatings == null || boardGameDetails == null) {
-      Crashlytics.instance
+      FirebaseCrashlytics.instance
           .log('Faild to extract board game detail rank information');
       return;
     }

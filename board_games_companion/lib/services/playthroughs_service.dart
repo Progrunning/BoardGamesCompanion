@@ -66,7 +66,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
         playerScore.playerId = playthroughPlayerId;
         playerScore.playthroughId = newPlaythrough.id;
         if (!await scoreService.addOrUpdateScore(playerScore)) {
-          Crashlytics.instance.log(
+          FirebaseCrashlytics.instance.log(
               'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId');
         } else {
           newPlaythrough.scoreIds.add(playerScore.id);
@@ -75,7 +75,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
 
       return newPlaythrough;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return null;
@@ -91,7 +91,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       await storageBox.put(playthrough.id, playthrough);
       return true;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;

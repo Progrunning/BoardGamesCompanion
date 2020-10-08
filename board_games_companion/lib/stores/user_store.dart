@@ -28,7 +28,7 @@ class UserStore with ChangeNotifier {
         notifyListeners();
       }
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
   }
 
@@ -42,7 +42,7 @@ class UserStore with ChangeNotifier {
 
       return true;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;
@@ -57,7 +57,7 @@ class UserStore with ChangeNotifier {
 
       return true;
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     return false;

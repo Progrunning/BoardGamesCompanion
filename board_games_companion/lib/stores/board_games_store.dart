@@ -56,7 +56,7 @@ class BoardGamesStore with ChangeNotifier {
       _boardGames = List.of(_allBoardGames);
       await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
       _loadDataState = LoadDataState.Error;
     }
 
@@ -68,7 +68,7 @@ class BoardGamesStore with ChangeNotifier {
     try {
       await _boardGamesService.addOrUpdateBoardGame(boardGameDetails);
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
 
@@ -143,7 +143,7 @@ class BoardGamesStore with ChangeNotifier {
 
       await addOrUpdateBoardGame(boardGameDetails);
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
   }
@@ -152,7 +152,7 @@ class BoardGamesStore with ChangeNotifier {
     try {
       await _boardGamesService.removeBoardGame(boardGameDetailsId);
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
 
@@ -178,7 +178,7 @@ class BoardGamesStore with ChangeNotifier {
       await _boardGamesService.removeAllBoardGames();
       await _playthroughService.deleteAllPlaythrough();
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
 
@@ -201,7 +201,7 @@ class BoardGamesStore with ChangeNotifier {
         _boardGames = List.of(_allBoardGames);
       }
     } catch (e, stack) {
-      Crashlytics.instance.recordError(e, stack);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     _loadDataState = LoadDataState.Loaded;

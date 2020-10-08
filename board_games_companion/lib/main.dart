@@ -36,6 +36,7 @@ import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:board_games_companion/stores/start_playthrough_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:board_games_companion/utilities/custom_http_client_adapter.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,9 @@ void main() async {
   Hive.registerAdapter(OrderByAdapter());
   Hive.registerAdapter(CollectionFiltersAdapter());
 
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  await Firebase.initializeApp();
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
@@ -84,7 +87,7 @@ void main() async {
 
   runZoned(() {
     runApp(App());
-  }, onError: Crashlytics.instance.recordError);
+  }, onError: FirebaseCrashlytics.instance.recordError);
 }
 
 class App extends StatelessWidget {

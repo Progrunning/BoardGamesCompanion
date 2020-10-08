@@ -33,7 +33,7 @@ class SearchBoardGamesStore with ChangeNotifier {
           _searchResults = await _boardGameGeekService
               .search(_searchBarBoardGamesStore.searchPhrase);
         } catch (e, stack) {
-          Crashlytics.instance.recordError(e, stack);
+          FirebaseCrashlytics.instance.recordError(e, stack);
         }
 
         return _searchResults ?? List<BoardGame>();
