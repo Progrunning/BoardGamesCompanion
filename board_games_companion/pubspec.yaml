@@ -34,7 +34,7 @@ dependencies:
   provider: ^4.0.4
   animations: ^1.1.2
   intl: ^0.16.1
-  collection: ^1.14.11
+  collection: any # ^1.14.11
   url_launcher: ^5.4.2
   package_info: ^0.4.0+16
   google_fonts: ^1.0.0
@@ -48,15 +48,17 @@ dependencies:
 
 dev_dependencies:
   analyzer: ^0.40.4
-  hive_generator: ^0.8.1
+  hive_generator: 0.7.3
   build_runner: ^1.8.0
   flutter_launcher_icons: "^0.7.3"
   flutter_test:
     sdk: flutter
 
 # TODO Workaround for pub get issues. Follow https://github.com/hivedb/hive/issues/268 to see what's the actual fix
-# dependency_overrides:
-#  dartx: ^0.3.0
+dependency_overrides:
+  path: ^1.6.4
+  dartx: ^0.4.0
+  collection: any
 
 
 # For information on the generic Dart part of this file, see the
