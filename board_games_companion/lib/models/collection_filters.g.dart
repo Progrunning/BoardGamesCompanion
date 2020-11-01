@@ -8,13 +8,13 @@ part of 'collection_filters.dart';
 
 class CollectionFiltersAdapter extends TypeAdapter<CollectionFilters> {
   @override
-  final typeId = 14;
+  final int typeId = 14;
 
   @override
   CollectionFilters read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CollectionFilters()
       ..sortBy = fields[0] as SortBy
@@ -30,4 +30,14 @@ class CollectionFiltersAdapter extends TypeAdapter<CollectionFilters> {
       ..writeByte(1)
       ..write(obj.filterByRating);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CollectionFiltersAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

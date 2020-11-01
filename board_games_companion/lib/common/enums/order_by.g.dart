@@ -8,7 +8,7 @@ part of 'order_by.dart';
 
 class OrderByAdapter extends TypeAdapter<OrderBy> {
   @override
-  final typeId = 13;
+  final int typeId = 13;
 
   @override
   OrderBy read(BinaryReader reader) {
@@ -33,4 +33,14 @@ class OrderByAdapter extends TypeAdapter<OrderBy> {
         break;
     }
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OrderByAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

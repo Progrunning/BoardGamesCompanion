@@ -8,13 +8,13 @@ part of 'playthrough.dart';
 
 class PlaythroughAdapter extends TypeAdapter<Playthrough> {
   @override
-  final typeId = 3;
+  final int typeId = 3;
 
   @override
   Playthrough read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Playthrough()
       ..id = fields[0] as String
@@ -48,4 +48,14 @@ class PlaythroughAdapter extends TypeAdapter<Playthrough> {
       ..writeByte(7)
       ..write(obj.isDeleted);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlaythroughAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

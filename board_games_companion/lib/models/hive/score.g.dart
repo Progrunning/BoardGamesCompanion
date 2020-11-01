@@ -8,13 +8,13 @@ part of 'score.dart';
 
 class ScoreAdapter extends TypeAdapter<Score> {
   @override
-  final typeId = 4;
+  final int typeId = 4;
 
   @override
   Score read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Score()
       ..id = fields[0] as String
@@ -42,4 +42,14 @@ class ScoreAdapter extends TypeAdapter<Score> {
       ..writeByte(5)
       ..write(obj.isDeleted);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScoreAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

@@ -8,13 +8,13 @@ part of 'board_game_designer.dart';
 
 class BoardGameDesignerAdapter extends TypeAdapter<BoardGameDesigner> {
   @override
-  final typeId = 8;
+  final int typeId = 8;
 
   @override
   BoardGameDesigner read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BoardGameDesigner()
       ..id = fields[0] as String
@@ -30,4 +30,14 @@ class BoardGameDesignerAdapter extends TypeAdapter<BoardGameDesigner> {
       ..writeByte(1)
       ..write(obj.name);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BoardGameDesignerAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

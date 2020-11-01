@@ -8,7 +8,7 @@ part of 'sort_by_option.dart';
 
 class SortByOptionAdapter extends TypeAdapter<SortByOption> {
   @override
-  final typeId = 12;
+  final int typeId = 12;
 
   @override
   SortByOption read(BinaryReader reader) {
@@ -58,4 +58,14 @@ class SortByOptionAdapter extends TypeAdapter<SortByOption> {
         break;
     }
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SortByOptionAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
