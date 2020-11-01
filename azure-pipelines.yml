@@ -201,12 +201,16 @@ stages:
           provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
           exportPath: '$(Agent.BuildDirectory)/output/iphoneos/Release'
 
+      - task: CopyFiles@2
+        inputs:
+          Contents: '**/*.ipa'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
       - task: PublishPipelineArtifact@1
         condition: always()
         displayName: 'Publishing ipa artifacts'
         inputs:
-          targetPath: '$(Agent.BuildDirectory)/output/iphoneos/Release/Runner.ipa'
+          targetPath: '$(Build.ArtifactStagingDirectory)/*.ipa'
           artifact: 'drop-ios'
           publishLocation: pipeline
 
