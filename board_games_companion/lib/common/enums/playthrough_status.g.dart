@@ -8,7 +8,7 @@ part of 'playthrough_status.dart';
 
 class PlaythroughStatusAdapter extends TypeAdapter<PlaythroughStatus> {
   @override
-  final typeId = 5;
+  final int typeId = 5;
 
   @override
   PlaythroughStatus read(BinaryReader reader) {
@@ -33,4 +33,14 @@ class PlaythroughStatusAdapter extends TypeAdapter<PlaythroughStatus> {
         break;
     }
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlaythroughStatusAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

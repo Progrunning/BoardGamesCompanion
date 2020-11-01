@@ -8,13 +8,13 @@ part of 'player.dart';
 
 class PlayerAdapter extends TypeAdapter<Player> {
   @override
-  final typeId = 2;
+  final int typeId = 2;
 
   @override
   Player read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Player()
       ..id = fields[0] as String
@@ -36,4 +36,14 @@ class PlayerAdapter extends TypeAdapter<Player> {
       ..writeByte(3)
       ..write(obj._isDeleted);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlayerAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

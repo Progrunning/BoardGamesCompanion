@@ -8,13 +8,13 @@ part of 'board_game_rank.dart';
 
 class BoardGameRankAdapter extends TypeAdapter<BoardGameRank> {
   @override
-  final typeId = 9;
+  final int typeId = 9;
 
   @override
   BoardGameRank read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BoardGameRank()
       ..id = fields[0] as String
@@ -39,4 +39,14 @@ class BoardGameRankAdapter extends TypeAdapter<BoardGameRank> {
       ..writeByte(4)
       ..write(obj.rank);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BoardGameRankAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

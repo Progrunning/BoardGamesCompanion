@@ -8,13 +8,13 @@ part of 'board_game_details.dart';
 
 class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
   @override
-  final typeId = 0;
+  final int typeId = 0;
 
   @override
   BoardGameDetails read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BoardGameDetails()
       ..categories = (fields[7] as List)?.cast<BoardGameCategory>()
@@ -96,4 +96,14 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..writeByte(4)
       ..write(obj.yearPublished);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BoardGameDetailsAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
