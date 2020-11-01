@@ -53,7 +53,7 @@ stages:
   jobs:
 
   - job: BuildAndroid
-    timeoutInMinutes: 10
+    timeoutInMinutes: 12
     pool:
       vmImage: 'macOS-latest'
 
@@ -154,7 +154,7 @@ stages:
   condition: eq(variables['Build.SourceBranchName'], 'release')
   jobs:
   - job: BuildiOS
-    timeoutInMinutes: 12
+    timeoutInMinutes: 15
     pool:
       vmImage: 'macOS-latest'
 
@@ -195,17 +195,22 @@ stages:
           xcWorkspacePath: '**/ios/Runner.xcworkspace'
           scheme: 'Runner'
           packageApp: true
+          exportMethod: app-store
           signingOption: 'manual'
           signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
           provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
-          exportPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/'
+          exportPath: '$(Agent.BuildDirectory)/output/iphoneos/Release'
 
+      - task: CopyFiles@2
+        inputs:
+          Contents: '**/*.ipa'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
       - task: PublishPipelineArtifact@1
         condition: always()
-        displayName: 'Publishing aab artifacts'
+        displayName: 'Publishing ipa artifacts'
         inputs:
-          targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/Runner.ipa'
+          targetPath: '$(Build.ArtifactStagingDirectory)/*.ipa'
           artifact: 'drop-ios'
           publishLocation: pipeline
 
