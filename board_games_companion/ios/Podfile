@@ -43,3 +43,9 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
   end
 end
+
+# Add the pod for Firebase Crashlytics
+pod 'Firebase/Crashlytics'
+
+# Recommended: Add the Firebase pod for Google Analytics
+pod 'Firebase/Analytics'
