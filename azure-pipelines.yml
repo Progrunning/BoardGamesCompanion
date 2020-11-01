@@ -205,7 +205,7 @@ stages:
         condition: always()
         displayName: 'Publishing aab artifacts'
         inputs:
-          targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/Runner.ipa'
+          targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/*.ipa'
           artifact: 'drop-ios'
           publishLocation: pipeline
 
