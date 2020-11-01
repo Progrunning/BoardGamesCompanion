@@ -154,7 +154,7 @@ stages:
   condition: eq(variables['Build.SourceBranchName'], 'release')
   jobs:
   - job: BuildiOS
-    timeoutInMinutes: 12
+    timeoutInMinutes: 15
     pool:
       vmImage: 'macOS-latest'
 
