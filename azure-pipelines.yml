@@ -195,17 +195,18 @@ stages:
           xcWorkspacePath: '**/ios/Runner.xcworkspace'
           scheme: 'Runner'
           packageApp: true
+          exportMethod: app-store
           signingOption: 'manual'
           signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
           provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
-          exportPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/'
+          exportPath: '$(Agent.BuildDirectory)/output/iphoneos/Release'
 
 
       - task: PublishPipelineArtifact@1
         condition: always()
-        displayName: 'Publishing aab artifacts'
+        displayName: 'Publishing ipa artifacts'
         inputs:
-          targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/ios/*.ipa'
+          targetPath: '$(Agent.BuildDirectory)/output/iphoneos/Release/Runner.ipa'
           artifact: 'drop-ios'
           publishLocation: pipeline
 
