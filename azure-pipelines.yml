@@ -203,6 +203,7 @@ stages:
 
       - task: CopyFiles@2
         inputs:
+          SourceFolder: '$(Agent.BuildDirectory)/output'
           Contents: '**/*.ipa'
           TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
