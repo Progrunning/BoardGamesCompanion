@@ -203,15 +203,15 @@ stages:
 
       - task: CopyFiles@2
         inputs:
-          SourceFolder: '$(Agent.BuildDirectory)/output'
+          SourceFolder: '$(Agent.BuildDirectory)/output/iphoneos/Release'
           Contents: '**/*.ipa'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/output/'
 
       - task: PublishPipelineArtifact@1
         condition: always()
         displayName: 'Publishing ipa artifacts'
         inputs:
-          targetPath: '$(Build.ArtifactStagingDirectory)/**/*.ipa'
+          targetPath: '$(Build.ArtifactStagingDirectory)/output/*.ipa'
           artifact: 'drop-ios'
           publishLocation: pipeline
 
