@@ -211,7 +211,7 @@ stages:
         condition: always()
         displayName: 'Publishing ipa artifacts'
         inputs:
-          targetPath: '$(Build.ArtifactStagingDirectory)/output/*.ipa'
+          targetPath: '$(Build.ArtifactStagingDirectory)/output/BGC.ipa'
           artifact: 'drop-ios'
           publishLocation: pipeline
 
