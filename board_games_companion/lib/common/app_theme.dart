@@ -103,13 +103,15 @@ class AppTheme {
       chipTheme: ThemeData.light().chipTheme.copyWith(
             elevation: Dimensions.defaultElevation,
           ),
+      cardColor: primaryColorLight, // LicensePage after loading
+      scaffoldBackgroundColor: primaryColorLight, // LicensePage when loading
       primaryColor: primaryColor,
       primaryColorLight: primaryColorLight,
       accentColor: accentColor,
       buttonColor: accentColor,
       textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
-      canvasColor: AppTheme.primaryColorLight,
+      canvasColor: primaryColorLight,
       textTheme: originalTextTheme.copyWith(
         bodyText1: originalBodyText1.copyWith(
           decorationColor: Colors.transparent,

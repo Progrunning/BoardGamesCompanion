@@ -54,8 +54,8 @@ class AboutPage extends StatelessWidget {
                         ),
                         DetailsItem(
                           title: 'Alicja Adamkiewicz',
-                          subtitle: 'adamkiewiczart.com',
-                          uri: 'http://adamkiewiczart.com',
+                          subtitle: 'instagram.com/adamkiewicz_art',
+                          uri: 'https://www.instagram.com/adamkiewicz_art',
                           iconUri: 'assets/adamkiewiczart_logo.png',
                         ),
                         Divider(
@@ -173,11 +173,12 @@ class AboutPage extends StatelessWidget {
                         Stack(
                           children: <Widget>[
                             DetailsItem(
-                              title:
-                                  'Board Game Companion\'s licenses',
+                              title: 'Board Game Companion\'s licenses',
                               subtitle: 'App\'s components licenses',
                               onTap: () {
-                                showLicensePage(context: context);
+                                showLicensePage(
+                                  context: context,
+                                );
                               },
                             ),
                             Positioned.fill(
