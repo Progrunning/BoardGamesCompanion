@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:flutter/material.dart';
 
+import 'collection_filter_number_of_players_slider_widget.dart';
 import 'collection_filter_rating_value_widget.dart';
 import 'collection_filter_rating_any_value_widget.dart';
 
@@ -79,6 +80,19 @@ class CollectionFilterPanelFilters extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        SizedBox(
+          height: Dimensions.standardSpacing,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Number of players',
+            style: AppTheme.sectionHeaderTextStyle,
+          ),
+        ),
+        CollectionFilterNumberOfPlayersSliderWidget(
+          boardGamesFiltersStore: _boardGamesFiltersStore,
         ),
       ],
     );
