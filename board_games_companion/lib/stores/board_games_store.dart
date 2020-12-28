@@ -39,7 +39,7 @@ class BoardGamesStore with ChangeNotifier {
   );
 
   LoadDataState get loadDataState => _loadDataState;
-  // MK Board games currently shown in the collection (i.e. with applied filters)
+  // MK Board games currently shown in the collection with applied filters
   // TODO consider ranaming
   List<BoardGameDetails> get boardGames => _boardGames;
   // MK All board games in collection
@@ -245,8 +245,11 @@ class BoardGamesStore with ChangeNotifier {
 
     _boardGames = _allBoardGames
         .where((boardGame) =>
-            _boardGamesFiltersStore.filterByRating == null ||
-            boardGame.rating >= _boardGamesFiltersStore.filterByRating)
+            (_boardGamesFiltersStore.filterByRating == null ||
+                boardGame.rating >= _boardGamesFiltersStore.filterByRating) &&
+            boardGame.maxPlayers >=
+                _boardGamesFiltersStore.maxNumberOfPlayers &&
+            boardGame.minPlayers <= _boardGamesFiltersStore.maxNumberOfPlayers)
         .toList();
 
     if (selectedSortBy != null) {

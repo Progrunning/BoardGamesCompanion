@@ -98,6 +98,8 @@ class AppTheme {
     final originalHeadline1 = originalTextTheme.headline1;
     final originalSubtitle1 = originalTextTheme.subtitle1;
     final originalSubtitle2 = originalTextTheme.subtitle2;
+    final originalBottomNavigationBarTheme =
+        ThemeData.light().bottomNavigationBarTheme;
 
     return new ThemeData.light().copyWith(
       chipTheme: ThemeData.light().chipTheme.copyWith(
@@ -150,6 +152,12 @@ class AppTheme {
       ),
       inputDecorationTheme: originalInputDecorationTheme.copyWith(
         labelStyle: TextStyle(
+          color: defaultTextColor,
+        ),
+      ),
+      bottomNavigationBarTheme: originalBottomNavigationBarTheme.copyWith(
+        unselectedLabelStyle: TextStyle(color: defaultTextColor),
+        selectedLabelStyle: TextStyle(
           color: defaultTextColor,
         ),
       ),

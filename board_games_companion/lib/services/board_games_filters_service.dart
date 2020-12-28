@@ -17,7 +17,8 @@ class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
     return storageBox.get(_collectionFiltersPreferenceKey);
   }
 
-  Future<bool> addOrUpdateUser(CollectionFilters collectionFilters) async {
+  Future<bool> addOrUpdateCollectionFilters(
+      CollectionFilters collectionFilters) async {
     if (collectionFilters == null) {
       return false;
     }

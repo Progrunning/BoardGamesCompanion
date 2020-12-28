@@ -24,6 +24,8 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
   List<SortBy> get sortBy => _sortBy;
   double get filterByRating => _collectionFilters?.filterByRating;
+  int get minNumberOfPlayers => _collectionFilters?.minNumberOfPlayers;
+  int get maxNumberOfPlayers => _collectionFilters?.maxNumberOfPlayers;
 
   BoardGamesFiltersStore(this._boardGamesFiltersService);
 
@@ -75,7 +77,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     _collectionFilters.sortBy = sortBy;
 
-    await _boardGamesFiltersService.addOrUpdateUser(_collectionFilters);
+    await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
 
     notifyListeners();
   }
@@ -87,7 +89,20 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     _collectionFilters.filterByRating = filterByRating;
 
-    await _boardGamesFiltersService.addOrUpdateUser(_collectionFilters);
+    await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
+
+    notifyListeners();
+  }
+
+  Future<void> updateNumberOfPlayers(int min, int max) async {
+    if (_collectionFilters == null) {
+      _collectionFilters = CollectionFilters();
+    }
+
+    _collectionFilters.minNumberOfPlayers = min;
+    _collectionFilters.maxNumberOfPlayers = max;
+
+    await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
 
     notifyListeners();
   }

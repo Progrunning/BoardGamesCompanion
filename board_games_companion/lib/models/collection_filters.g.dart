@@ -18,17 +18,23 @@ class CollectionFiltersAdapter extends TypeAdapter<CollectionFilters> {
     };
     return CollectionFilters()
       ..sortBy = fields[0] as SortBy
-      ..filterByRating = fields[1] as double;
+      ..filterByRating = fields[1] as double
+      ..minNumberOfPlayers = fields[2] as int
+      ..maxNumberOfPlayers = fields[3] as int;
   }
 
   @override
   void write(BinaryWriter writer, CollectionFilters obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.sortBy)
       ..writeByte(1)
-      ..write(obj.filterByRating);
+      ..write(obj.filterByRating)
+      ..writeByte(2)
+      ..write(obj.minNumberOfPlayers)
+      ..writeByte(3)
+      ..write(obj.maxNumberOfPlayers);
   }
 
   @override
