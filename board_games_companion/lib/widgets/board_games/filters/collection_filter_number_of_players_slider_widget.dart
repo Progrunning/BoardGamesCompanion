@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:flutter/material.dart';
@@ -28,20 +29,46 @@ class CollectionFilterNumberOfPlayersSliderWidget extends StatelessWidget {
         .map((boardGameDetails) => boardGameDetails.maxPlayers)
         ?.reduce(max);
 
-    return Slider(
-      value: _boardGamesFiltersStore.maxNumberOfPlayers.toDouble(),
-      divisions: maxNumberOfPlayers - 1,
-      min: minNumberOfPlayers.toDouble(),
-      max: maxNumberOfPlayers.toDouble(),
-      label: _boardGamesFiltersStore.maxNumberOfPlayers.toString(),
-      onChanged: (value) {
-        print('$value');
-        _boardGamesFiltersStore.updateNumberOfPlayers(
-          1,
-          value.round(),
-        );
-      },
-      activeColor: AppTheme.accentColor,
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text(
+          '$minNumberOfPlayers',
+          style: TextStyle(
+            fontSize: Dimensions.smallFontSize,
+          ),
+        ),
+        Expanded(
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              trackShape: RoundedRectSliderTrackShape(),
+              overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
+              tickMarkShape: RoundSliderTickMarkShape(),
+              valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+              showValueIndicator: ShowValueIndicator.always,
+            ),
+            child: Slider(
+              value: _boardGamesFiltersStore.numberOfPlayers.toDouble(),
+              divisions: maxNumberOfPlayers - 1,
+              min: minNumberOfPlayers.toDouble(),
+              max: maxNumberOfPlayers.toDouble(),
+              label: _boardGamesFiltersStore.numberOfPlayers.toString(),
+              onChanged: (value) {
+                _boardGamesFiltersStore.updateNumberOfPlayers(
+                  value.round(),
+                );
+              },
+              activeColor: AppTheme.accentColor,
+            ),
+          ),
+        ),
+        Text(
+          '$maxNumberOfPlayers',
+          style: TextStyle(
+            fontSize: Dimensions.smallFontSize,
+          ),
+        ),
+      ],
     );
   }
 }

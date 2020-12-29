@@ -14,8 +14,5 @@ class CollectionFilters {
   double filterByRating;
   
   @HiveField(2)
-  int minNumberOfPlayers;
-  
-  @HiveField(3)
-  int maxNumberOfPlayers;
+  int numberOfPlayers;
 }
