@@ -124,7 +124,7 @@ class CollectionFilterNumberOfPlayersSliderWidget extends StatelessWidget {
           onTap: () {
             _boardGamesFiltersStore.updateNumberOfPlayers(
               _boardGamesFiltersStore.numberOfPlayers ?? minNumberOfPlayers,
-              _boardGamesFiltersStore.numberOfPlayers == null ? true : false,
+              _boardGamesFiltersStore.numberOfPlayers == null,
             );
           },
         )
