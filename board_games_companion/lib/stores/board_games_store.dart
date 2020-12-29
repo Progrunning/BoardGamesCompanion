@@ -247,9 +247,11 @@ class BoardGamesStore with ChangeNotifier {
         .where((boardGame) =>
             (_boardGamesFiltersStore.filterByRating == null ||
                 boardGame.rating >= _boardGamesFiltersStore.filterByRating) &&
-            boardGame.maxPlayers >=
-                _boardGamesFiltersStore.numberOfPlayers &&
-            boardGame.minPlayers <= _boardGamesFiltersStore.numberOfPlayers)
+            (_boardGamesFiltersStore.numberOfPlayers == null ||
+                (boardGame.maxPlayers >=
+                        _boardGamesFiltersStore.numberOfPlayers &&
+                    boardGame.minPlayers <=
+                        _boardGamesFiltersStore.numberOfPlayers)))
         .toList();
 
     if (selectedSortBy != null) {

@@ -76,7 +76,8 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     _collectionFilters.sortBy = sortBy;
 
-    await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
+    await _boardGamesFiltersService
+        .addOrUpdateCollectionFilters(_collectionFilters);
 
     notifyListeners();
   }
@@ -88,19 +89,23 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     _collectionFilters.filterByRating = filterByRating;
 
-    await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
+    await _boardGamesFiltersService
+        .addOrUpdateCollectionFilters(_collectionFilters);
 
     notifyListeners();
   }
 
-  Future<void> updateNumberOfPlayers(int numberOfPlayers) async {
+  Future<void> updateNumberOfPlayers(
+      int numberOfPlayers, bool filterByNumberOfPlayers) async {
     if (_collectionFilters == null) {
       _collectionFilters = CollectionFilters();
     }
 
-    _collectionFilters.numberOfPlayers = numberOfPlayers;
+    _collectionFilters.numberOfPlayers =
+        filterByNumberOfPlayers ? numberOfPlayers : null;
 
-    await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
+    await _boardGamesFiltersService
+        .addOrUpdateCollectionFilters(_collectionFilters);
 
     notifyListeners();
   }

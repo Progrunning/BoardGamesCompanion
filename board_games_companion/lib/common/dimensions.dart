@@ -31,6 +31,7 @@ class Dimensions {
   static const double defaultPlayerAvatarHeight = 150;
 
   static const double defaultButtonIconSize = 20;
+  static const double defaultCheckboxSize = 24;
   
   static const double floatingActionButtonBottomSpacing = 72;
   static const double halfFloatingActionButtonBottomSpacing = floatingActionButtonBottomSpacing / 2;
@@ -38,4 +39,5 @@ class Dimensions {
   static const double defaultBorderWidth = 1.5;
   
   static const double defaultElevation = 3;
+  
 }
