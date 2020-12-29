@@ -104,7 +104,7 @@ class CollectionFilterNumberOfPlayersSliderWidget extends StatelessWidget {
                     value: _boardGamesFiltersStore.numberOfPlayers != null,
                     onChanged: (value) {
                       _boardGamesFiltersStore.updateNumberOfPlayers(
-                        _boardGamesFiltersStore.numberOfPlayers ?? 1,
+                        _boardGamesFiltersStore.numberOfPlayers ?? minNumberOfPlayers,
                         value,
                       );
                     },
@@ -123,7 +123,7 @@ class CollectionFilterNumberOfPlayersSliderWidget extends StatelessWidget {
           ),
           onTap: () {
             _boardGamesFiltersStore.updateNumberOfPlayers(
-              _boardGamesFiltersStore.numberOfPlayers ?? 1,
+              _boardGamesFiltersStore.numberOfPlayers ?? minNumberOfPlayers,
               _boardGamesFiltersStore.numberOfPlayers == null ? true : false,
             );
           },
