@@ -82,7 +82,7 @@ class CollectionFilterPanelFilters extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Dimensions.standardSpacing,
+          height: Dimensions.doubleStandardSpacing,
         ),
         Align(
           alignment: Alignment.centerLeft,
@@ -90,7 +90,7 @@ class CollectionFilterPanelFilters extends StatelessWidget {
             'Number of players',
             style: AppTheme.sectionHeaderTextStyle,
           ),
-        ),
+        ),        
         CollectionFilterNumberOfPlayersSliderWidget(
           boardGamesFiltersStore: _boardGamesFiltersStore,
         ),
