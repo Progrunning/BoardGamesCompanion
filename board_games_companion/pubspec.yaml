@@ -29,7 +29,7 @@ dependencies:
   polygon_clipper: ^1.0.2
   async: ^2.4.0
   uuid: ^2.0.4
-  image_picker: ^0.6.6+1
+  image_picker: ^0.6.7+1
   xml: ^3.6.1
   provider: ^4.0.4
   animations: ^1.1.2
