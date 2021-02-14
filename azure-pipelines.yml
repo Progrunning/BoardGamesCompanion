@@ -240,8 +240,7 @@ stages:
           serviceEndpoint: 'Apple App Store'
           appIdentifier: '$(AppPackageName)'
           appType: 'iOS'
-          ipaPath: '$(Pipeline.Workspace)/*.ipa'
           releaseTrack: 'TestFlight'
+          ipaPath: '$(Pipeline.Workspace)/*.ipa'
           shouldSkipWaitingForProcessing: true
           shouldSkipSubmission: true
-          installFastlane: false
