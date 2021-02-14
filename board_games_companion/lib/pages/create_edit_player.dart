@@ -9,9 +9,13 @@ import 'package:board_games_companion/widgets/common/page_container_widget.dart'
 import 'package:board_games_companion/widgets/player/create_edit_player.dart';
 import 'package:board_games_companion/widgets/player/delete_player_widget.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
+import 'dart:io';
 
 class CreateEditPlayerPage extends StatelessWidget {
   final PlayersStore _playersStore;
@@ -20,6 +24,8 @@ class CreateEditPlayerPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _imagePicker = ImagePicker();
+  final fileExtensionRegiex = RegExp(r'\.[0-9a-z]+$', caseSensitive: false);
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +151,8 @@ class CreateEditPlayerPage extends StatelessWidget {
                 ),
               ),
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
             floatingActionButton: Row(
               mainAxisSize: MainAxisSize.min,
               children: _floatingActionButtons,
@@ -157,21 +164,49 @@ class CreateEditPlayerPage extends StatelessWidget {
   }
 
   Future _handleTakingPicture(Player player) async {
-    final avatarImage = await ImagePicker.pickImage(source: ImageSource.camera);
-    if (avatarImage?.path?.isEmpty ?? true) {
-      return;
-    }
-
-    player.imageUri = avatarImage.path;
+    await _handlePickingAndSavingAvatar(player, ImageSource.camera);
   }
 
   Future _handleImagePicking(Player player) async {
-    final avatarImage =
-        await ImagePicker.pickImage(source: ImageSource.gallery);
+    await _handlePickingAndSavingAvatar(player, ImageSource.gallery);
+  }
+
+  Future _handlePickingAndSavingAvatar(
+      Player player, ImageSource imageSource) async {
+    final avatarImage = await _imagePicker.getImage(source: imageSource);
     if (avatarImage?.path?.isEmpty ?? true) {
       return;
     }
 
-    player.imageUri = avatarImage.path;
+    var savedAvatarImage = await _saveAvatarImage(avatarImage);
+    if (savedAvatarImage == null) {
+      return;
+    }
+
+    player.imageUri = savedAvatarImage.path;
+  }
+
+  Future<File> _saveAvatarImage(PickedFile avatarImage) async {
+    try {
+      final documentsDirectory = await getApplicationDocumentsDirectory();
+      final avatarImageContent = await avatarImage.readAsBytes();
+      final avatarImageName = Uuid().v4();
+      var avatarImageNameFileExtension = '.jpg';
+      if (fileExtensionRegiex.hasMatch(avatarImage.path)) {
+        avatarImageNameFileExtension =
+            fileExtensionRegiex.firstMatch(avatarImage.path).group(0);
+      }
+
+      final avatarImageToSave = File(
+          '${documentsDirectory.path}/$avatarImageName$avatarImageNameFileExtension');
+      final savedAvatarImage =
+          await avatarImageToSave.writeAsBytes(avatarImageContent);
+
+      return savedAvatarImage;
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+
+    return null;
   }
 }
