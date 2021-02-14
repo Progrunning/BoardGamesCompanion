@@ -1,6 +1,6 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/user.dart';
-import 'package:board_games_companion/services/hide_base_service.dart';
+import 'package:board_games_companion/services/hive_base_service.dart';
 
 class UserService extends BaseHiveService<User> {
   Future<User> retrieveUser() async {

@@ -3,7 +3,7 @@ import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 
-import 'hide_base_service.dart';
+import 'hive_base_service.dart';
 
 class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   final BoardGamesGeekService _boardGameGeekService;
