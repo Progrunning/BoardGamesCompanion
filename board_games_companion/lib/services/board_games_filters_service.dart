@@ -1,6 +1,6 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/collection_filters.dart';
-import 'package:board_games_companion/services/hide_base_service.dart';
+import 'package:board_games_companion/services/hive_base_service.dart';
 
 class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
   static const String _collectionFiltersPreferenceKey = "collectionFilters";
