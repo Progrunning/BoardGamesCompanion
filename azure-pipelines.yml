@@ -237,10 +237,13 @@ stages:
       - task: AppStoreRelease@1
         displayName: 'Publish to TestFlight'
         inputs:
-          serviceEndpoint: 'Apple App Store'
+          authType: 'ApiKey'
+          apiKeyId: '$(AppStoreConnectApiKeyId)'
+          apiKeyIssuerId: '69a6de91-779b-47e3-e053-5b8c7c11a4d1'
           appIdentifier: '$(AppPackageName)'
           appType: 'iOS'
           releaseTrack: 'TestFlight'
           ipaPath: '$(Pipeline.Workspace)/*.ipa'
           shouldSkipWaitingForProcessing: true
           shouldSkipSubmission: true
+          installFastlane: false
