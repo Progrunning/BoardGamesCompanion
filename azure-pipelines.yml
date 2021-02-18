@@ -253,3 +253,4 @@ stages:
           ipaPath: '$(Pipeline.Workspace)/*.ipa'
           shouldSkipWaitingForProcessing: true
           shouldSkipSubmission: true
+          fastlaneArguments: '--verbose'
