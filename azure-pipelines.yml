@@ -246,7 +246,7 @@ stages:
           authType: 'ApiKey'
           apiKeyId: '$(AppStoreConnectApiKeyId)'
           apiKeyIssuerId: '69a6de91-779b-47e3-e053-5b8c7c11a4d1'
-          apitoken: 'App_Store_Connect_Api_Key.p8'
+          apitoken: '$(AppStoreConnectApiKeyContentBase64)'
           appIdentifier: '$(AppPackageName)'
           appType: 'iOS'
           releaseTrack: 'TestFlight'
