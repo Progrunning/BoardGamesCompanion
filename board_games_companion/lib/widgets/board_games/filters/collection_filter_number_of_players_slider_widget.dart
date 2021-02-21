@@ -3,7 +3,6 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/styles.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/widgets/common/debug_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';

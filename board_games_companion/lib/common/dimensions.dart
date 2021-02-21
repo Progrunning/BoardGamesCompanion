@@ -38,6 +38,5 @@ class Dimensions {
   
   static const double defaultBorderWidth = 1.5;
   
-  static const double defaultElevation = 3;
-  
+  static const double defaultElevation = 3; 
 }

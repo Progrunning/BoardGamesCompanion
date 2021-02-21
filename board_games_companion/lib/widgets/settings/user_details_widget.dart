@@ -143,7 +143,7 @@ class UserDetails extends StatelessWidget with SyncCollection {
               ),
             ],
           ),
-          elevation: 2,
+          elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
               child: Text('Cancel'),

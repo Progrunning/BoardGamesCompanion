@@ -19,6 +19,7 @@ import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/services/board_games_filters_service.dart';
 import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/services/file_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
@@ -114,8 +115,16 @@ class App extends StatelessWidget {
             ),
           ),
         ),
+        Provider<FileService>(
+          create: (context) => FileService(),
+        ),
         Provider<PlayerService>(
-          create: (context) => PlayerService(),
+          create: (context) => PlayerService(
+            Provider.of<FileService>(
+              context,
+              listen: false,
+            ),
+          ),
         ),
         Provider<ScoreService>(
           create: (context) => ScoreService(),

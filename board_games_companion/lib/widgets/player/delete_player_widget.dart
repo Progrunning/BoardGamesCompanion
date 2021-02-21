@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/routes.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
@@ -28,7 +29,7 @@ class DeletePlayer extends StatelessWidget {
           builder: (context) {
             return AlertDialog(
               title: Text('Are you sure you want to delete ${_player?.name}?'),
-              elevation: 2,
+              elevation: Dimensions.defaultElevation,
               actions: <Widget>[
                 FlatButton(
                   child: Text('Cancel'),

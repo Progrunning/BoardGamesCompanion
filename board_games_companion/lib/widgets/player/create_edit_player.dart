@@ -31,7 +31,7 @@ class CreateOrUpdatePlayer extends StatelessWidget {
       icon: Icons.create,
       onPressed: () async {
         if (_formKey.currentState.validate()) {
-          _player.name = _nameController.text;
+          _player.name = _nameController.text;          
 
           final addingOrUpdatingSucceeded =
               await _playersStore.addOrUpdatePlayer(_player);

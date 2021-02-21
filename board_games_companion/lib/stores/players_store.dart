@@ -9,11 +9,15 @@ class PlayersStore with ChangeNotifier {
 
   List<Player> _players;
   Player _playerToCreateOrEdit;
+  String _currentPlayerAvatarImageUri;
+  String _currentPlayerName;
 
   PlayersStore(this._playerService);
 
   List<Player> get players => _players;
   Player get playerToCreateOrEdit => _playerToCreateOrEdit;
+  String get currentPlayerAvatarImageUri => _currentPlayerAvatarImageUri;
+  String get currentPlayerName => _currentPlayerName;
 
   Future<List<Player>> loadPlayers() async {
     if (_players != null) {
@@ -37,11 +41,16 @@ class PlayersStore with ChangeNotifier {
       );
 
       final isCreatingNewPlayer = existingPlayer == null;
-      final addOrUpdateSucceeded =
-          await _playerService.addOrUpdatePlayer(player);
-      if (addOrUpdateSucceeded && isCreatingNewPlayer) {
-        _players.add(player);
-        notifyListeners();
+      final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(
+          player, _currentPlayerAvatarImageUri);
+      if (addOrUpdateSucceeded) {
+        _currentPlayerAvatarImageUri = player.imageUri;
+        _currentPlayerName = player.name;
+
+        if (isCreatingNewPlayer) {
+          _players.add(player);
+          notifyListeners();
+        }
       }
 
       return addOrUpdateSucceeded;
@@ -69,6 +78,8 @@ class PlayersStore with ChangeNotifier {
 
   void setPlayerToCreateOrEdit({Player player}) {
     _playerToCreateOrEdit = player ?? Player();
+    _currentPlayerAvatarImageUri = _playerToCreateOrEdit.imageUri;
+    _currentPlayerName = _playerToCreateOrEdit.name;
   }
 
   @override
