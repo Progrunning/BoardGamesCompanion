@@ -202,7 +202,7 @@ class PlaythroughItem extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: Text('Are you sure you want to delete this game?'),
-          elevation: 2,
+          elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
               child: Text('Cancel'),

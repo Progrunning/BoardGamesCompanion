@@ -21,7 +21,7 @@ class NavigatorHelper {
           final playerStore = Provider.of<PlayersStore>(
             context,
             listen: false,
-          );
+          );          
           playerStore.setPlayerToCreateOrEdit(player: player);
 
           return CreateEditPlayerPage(playerStore);

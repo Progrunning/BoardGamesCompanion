@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'player.g.dart';
 
@@ -19,6 +20,8 @@ class Player with ChangeNotifier {
   String get name => _name;
   String get imageUri => _imageUri;
   bool get isDeleted => _isDeleted;
+
+  PickedFile avatarFileToSave;
 
   set name(String value) {
     if (_name != value) {
