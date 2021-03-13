@@ -31,17 +31,17 @@ class PlayerGridItem extends StatelessWidget {
           child: ChangeNotifierProvider.value(
             value: player,
             child: Consumer<Player>(
-              builder: (_, Player value, __) {
+              builder: (_, Player providerPlayer, __) {
                 return Stack(
                   children: <Widget>[
                     Hero(
-                      tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
+                      tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}',
                       child: PlayerAvatar(
-                        imageUri: player?.imageUri,
+                        imageUri: providerPlayer?.imageUri,
                       ),
                     ),
                     PlayerAvatarSubtitle(
-                      player: player,
+                      player: providerPlayer,
                     ),
                     if (topRightCornerActionWidget != null)
                       topRightCornerActionWidget,
