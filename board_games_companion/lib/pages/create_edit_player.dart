@@ -24,8 +24,11 @@ class CreateEditPlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO MK Think about creating a new object for player operations based on the store one to avoid updating store before hitting Update
-    final Player _player = _playersStore.playerToCreateOrEdit;
+    final _player = new Player();
+    _player.id = _playersStore.playerToCreateOrEdit.id;
+    _player.name = _playersStore.playerToCreateOrEdit.name;
+    _player.imageUri = _playersStore.playerToCreateOrEdit.imageUri;
+
     final bool _isEditMode = _player.name?.isNotEmpty ?? false;
 
     _nameController.text = _player.name ?? '';
@@ -64,7 +67,10 @@ class CreateEditPlayerPage extends StatelessWidget {
 
           return WillPopScope(
             onWillPop: () async {
-              return await _handleOnWillPop(context);
+              return await _handleOnWillPop(
+                context,
+                player,
+              );
             },
             child: Scaffold(
               appBar: AppBar(
@@ -139,7 +145,7 @@ class CreateEditPlayerPage extends StatelessWidget {
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: 'Name',
-                          ),                          
+                          ),
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Player needs to have a name';
@@ -185,11 +191,9 @@ class CreateEditPlayerPage extends StatelessWidget {
     player.imageUri = player.avatarFileToSave.path;
   }
 
-  Future<bool> _handleOnWillPop(BuildContext context) async {
-    if (_playersStore.playerToCreateOrEdit.imageUri !=
-            _playersStore.currentPlayerAvatarImageUri ||
-        _playersStore.playerToCreateOrEdit.name !=
-            _playersStore.currentPlayerName) {
+  Future<bool> _handleOnWillPop(BuildContext context, Player player) async {
+    if (_playersStore.playerToCreateOrEdit.imageUri != player.imageUri ||
+        _playersStore.playerToCreateOrEdit.name != player.name) {
       await showDialog(
           context: context,
           builder: (context) {
