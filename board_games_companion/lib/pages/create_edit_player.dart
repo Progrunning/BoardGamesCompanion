@@ -29,9 +29,8 @@ class CreateEditPlayerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _player = new Player();
     _player.id = _playersStore.playerToCreateOrEdit.id;
-    _player.name = _playersStore.playerToCreateOrEdit.name;
-    _player.imageUri = _playersStore.playerToCreateOrEdit.imageUri ??
-        Constants.DefaultAvatartAssetsPath;
+    _player.name = _playersStore.playerToCreateOrEdit.name;    
+    _player.imageUri = _playersStore.playerToCreateOrEdit.imageUri;
 
     final bool _isEditMode = _player.name?.isNotEmpty ?? false;
 
