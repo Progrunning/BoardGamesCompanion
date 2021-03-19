@@ -1,14 +1,16 @@
 import 'dart:io';
 
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/services/file_service.dart';
-import 'package:board_games_companion/services/hive_base_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
+import '../common/constants.dart';
+import '../common/hive_boxes.dart';
+import '../models/hive/player.dart';
+import 'file_service.dart';
+import 'hive_base_service.dart';
+
 class PlayerService extends BaseHiveService<Player> {
-  final _fileExtensionRegiex = RegExp(r'\.[0-9a-z]+$', caseSensitive: false);
+  final _fileExtensionRegex = RegExp(r'\.[0-9a-z]+$', caseSensitive: false);
 
   final FileService fileService;
 
@@ -38,8 +40,9 @@ class PlayerService extends BaseHiveService<Player> {
       player.id = uuid.v4();
     }
 
-    if (currentAvatarUri != player.imageUri ||
-        !await fileService.fileExists(player.imageUri)) {
+    if (player.imageUri != Constants.DefaultAvatartAssetsPath &&
+        (currentAvatarUri != player.imageUri ||
+            !await fileService.fileExists(player.imageUri))) {
       var savedAvatarImage = await saveAvatar(player.avatarFileToSave);
       if (savedAvatarImage == null) {
         return false;
@@ -80,9 +83,9 @@ class PlayerService extends BaseHiveService<Player> {
   Future<File> saveAvatar(PickedFile avatarImage) async {
     final avatarImageName = Uuid().v4();
     var avatarImageNameFileExtension = '.jpg';
-    if (_fileExtensionRegiex.hasMatch(avatarImage.path)) {
+    if (_fileExtensionRegex.hasMatch(avatarImage.path)) {
       avatarImageNameFileExtension =
-          _fileExtensionRegiex.firstMatch(avatarImage.path).group(0);
+          _fileExtensionRegex.firstMatch(avatarImage.path).group(0);
     }
 
     final fileName = '$avatarImageName$avatarImageNameFileExtension';

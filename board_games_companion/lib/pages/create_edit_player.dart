@@ -1,17 +1,20 @@
-import 'package:board_games_companion/common/animation_tags.dart';
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/widgets/common/custom_icon_button.dart';
-import 'package:board_games_companion/widgets/common/page_container_widget.dart';
-import 'package:board_games_companion/widgets/player/create_edit_player.dart';
-import 'package:board_games_companion/widgets/player/delete_player_widget.dart';
-import 'package:board_games_companion/widgets/player/player_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../common/animation_tags.dart';
+import '../common/app_theme.dart';
+import '../common/constants.dart';
+import '../common/dimensions.dart';
+import '../common/styles.dart';
+import '../models/hive/player.dart';
+import '../stores/players_store.dart';
+import '../widgets/common/custom_icon_button.dart';
+import '../widgets/common/page_container_widget.dart';
+import '../widgets/player/create_edit_player.dart';
+import '../widgets/player/delete_player_widget.dart';
+import '../widgets/player/player_avatar.dart';
+
 
 class CreateEditPlayerPage extends StatelessWidget {
   final PlayersStore _playersStore;
@@ -27,7 +30,8 @@ class CreateEditPlayerPage extends StatelessWidget {
     final _player = new Player();
     _player.id = _playersStore.playerToCreateOrEdit.id;
     _player.name = _playersStore.playerToCreateOrEdit.name;
-    _player.imageUri = _playersStore.playerToCreateOrEdit.imageUri;
+    _player.imageUri = _playersStore.playerToCreateOrEdit.imageUri ??
+        Constants.DefaultAvatartAssetsPath;
 
     final bool _isEditMode = _player.name?.isNotEmpty ?? false;
 
