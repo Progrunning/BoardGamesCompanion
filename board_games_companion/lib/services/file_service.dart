@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 class FileService {
   Future<File> saveToDocumentsDirectory(String fileName, PickedFile pickedFile,
@@ -57,5 +57,9 @@ class FileService {
     }
 
     return false;
+  }
+
+  Future<Directory> getApplicationDocumentsDirectory() async {
+    return await path_provider.getApplicationDocumentsDirectory();
   }
 }

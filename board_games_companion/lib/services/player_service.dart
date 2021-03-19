@@ -21,13 +21,23 @@ class PlayerService extends BaseHiveService<Player> {
       return List<Player>();
     }
 
-    return storageBox
+    var players = storageBox
         ?.toMap()
         ?.values
         ?.where((player) =>
             !(player.isDeleted ?? false) &&
             (playerIds?.contains(player.id) ?? true))
         ?.toList();
+
+  // TODO MK Think how this will affect existing users?
+    final applicationDocumentsDirectory =
+        await fileService.getApplicationDocumentsDirectory();
+
+    players.forEach((player) {
+      player.imageUri = '${applicationDocumentsDirectory.path}/${player.imageUri}';
+    });
+
+    return players;
   }
 
   Future<bool> addOrUpdatePlayer(Player player, String currentAvatarUri) async {

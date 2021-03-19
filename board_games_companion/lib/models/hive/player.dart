@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
@@ -18,7 +19,8 @@ class Player with ChangeNotifier {
   bool _isDeleted;
 
   String get name => _name;
-  String get imageUri => _imageUri;
+  // TODO MK Need to introduce imageName to hold the name of the file and get the Documents path at runtime
+  String get imageUri => _imageUri ?? Constants.DefaultAvatartAssetsPath;
   bool get isDeleted => _isDeleted;
 
   PickedFile avatarFileToSave;
