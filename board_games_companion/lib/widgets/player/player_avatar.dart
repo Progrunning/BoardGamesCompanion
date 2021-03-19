@@ -1,8 +1,10 @@
 import 'dart:io';
 
-import 'package:board_games_companion/common/enums/enums.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/constants.dart';
+import '../../common/enums/enums.dart';
+import '../../common/styles.dart';
 
 class PlayerAvatar extends StatelessWidget {
   const PlayerAvatar({
@@ -19,10 +21,11 @@ class PlayerAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget avatarImage;
-    if (imageUri?.isEmpty ?? true) {
+    if ((imageUri?.isEmpty ?? true) ||
+        imageUri == Constants.DefaultAvatartAssetsPath) {
       avatarImage = Positioned.fill(
         child: Image.asset(
-          'assets/default_avatar.png',
+          Constants.DefaultAvatartAssetsPath,
           fit: BoxFit.cover,
         ),
       );
