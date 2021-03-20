@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid.dart' show Uuid;
 
-import '../common/constants.dart';
-import '../common/hive_boxes.dart';
+import '../common/hive_boxes.dart' show HiveBoxes;
 import '../models/hive/player.dart';
 import 'file_service.dart';
 import 'hive_base_service.dart';
@@ -29,18 +27,17 @@ class PlayerService extends BaseHiveService<Player> {
             (playerIds?.contains(player.id) ?? true))
         ?.toList();
 
-  // TODO MK Think how this will affect existing users?
-    final applicationDocumentsDirectory =
-        await fileService.getApplicationDocumentsDirectory();
-
-    players.forEach((player) {
-      player.imageUri = '${applicationDocumentsDirectory.path}/${player.imageUri}';
+    players.forEach((player) async {
+      if (player.avatarFileName?.isNotEmpty ?? false) {
+        player.avatarImageUri =
+            await fileService.createDocumentsFilePath(player.avatarFileName);
+      }
     });
 
     return players;
-  }
+  } 
 
-  Future<bool> addOrUpdatePlayer(Player player, String currentAvatarUri) async {
+  Future<bool> addOrUpdatePlayer(Player player) async {
     if ((player?.name?.isEmpty ?? true) ||
         !await ensureBoxOpen(HiveBoxes.Players)) {
       return false;
@@ -50,18 +47,18 @@ class PlayerService extends BaseHiveService<Player> {
       player.id = uuid.v4();
     }
 
-    if (player.imageUri != Constants.DefaultAvatartAssetsPath &&
-        (currentAvatarUri != player.imageUri ||
-            !await fileService.fileExists(player.imageUri))) {
-      var savedAvatarImage = await saveAvatar(player.avatarFileToSave);
+    if (player.avatarFileToSave != null) {
+      var savedAvatarImage = await saveAvatar(player);
       if (savedAvatarImage == null) {
         return false;
       }
     }
 
-    if ((currentAvatarUri?.isEmpty ?? false) &&
-        player.imageUri != currentAvatarUri) {
-      await deleteAvatar(currentAvatarUri);
+    final existingPlayer = storageBox.get(player.id);
+
+    if ((existingPlayer?.avatarFileName?.isEmpty ?? false) &&
+        player.avatarFileName != existingPlayer?.avatarFileName) {
+      await deleteAvatar(existingPlayer?.avatarFileName);
     }
 
     await storageBox.put(player.id, player);
@@ -90,20 +87,25 @@ class PlayerService extends BaseHiveService<Player> {
     return true;
   }
 
-  Future<File> saveAvatar(PickedFile avatarImage) async {
-    final avatarImageName = Uuid().v4();
-    var avatarImageNameFileExtension = '.jpg';
-    if (_fileExtensionRegex.hasMatch(avatarImage.path)) {
-      avatarImageNameFileExtension =
-          _fileExtensionRegex.firstMatch(avatarImage.path).group(0);
+  Future<File> saveAvatar(Player player) async {
+    if (player?.avatarFileToSave == null) {
+      return null;
     }
 
-    final fileName = '$avatarImageName$avatarImageNameFileExtension';
+    final avatarImageName = Uuid().v4();
+    var avatarImageNameFileExtension = '.jpg';
+    if (_fileExtensionRegex.hasMatch(player.avatarFileToSave.path)) {
+      avatarImageNameFileExtension =
+          _fileExtensionRegex.firstMatch(player.avatarFileToSave.path).group(0);
+    }
 
-    return await fileService.saveToDocumentsDirectory(fileName, avatarImage);
+    player.avatarFileName = '$avatarImageName$avatarImageNameFileExtension';
+
+    return await fileService.saveToDocumentsDirectory(
+        player.avatarFileName, player.avatarFileToSave);
   }
 
-  Future<bool> deleteAvatar(String avatarUri) async {
-    return await fileService.deleteFile(avatarUri);
+  Future<bool> deleteAvatar(String avatarFileName) async {
+    return await fileService.deleteFileFromDocumentsDirectory(avatarFileName);
   }
 }

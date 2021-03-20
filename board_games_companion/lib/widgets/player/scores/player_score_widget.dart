@@ -44,7 +44,7 @@ class PlayerScore extends StatelessWidget {
               builder: (_, store, __) {
                 Widget playerAvatar = ShadowBox(
                   child: PlayerAvatar(
-                    imageUri: store?.player?.imageUri,
+                    imageUri: store?.player?.avatarImageUri,
                     medal: store?.medal,
                   ),
                 );

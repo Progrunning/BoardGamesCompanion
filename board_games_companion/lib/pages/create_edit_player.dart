@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../common/animation_tags.dart';
 import '../common/app_theme.dart';
-import '../common/constants.dart';
 import '../common/dimensions.dart';
 import '../common/styles.dart';
 import '../models/hive/player.dart';
@@ -15,37 +14,35 @@ import '../widgets/player/create_edit_player.dart';
 import '../widgets/player/delete_player_widget.dart';
 import '../widgets/player/player_avatar.dart';
 
-
-class CreateEditPlayerPage extends StatelessWidget {
+class CreateEditPlayerPage extends StatefulWidget {
   final PlayersStore _playersStore;
 
-  CreateEditPlayerPage(this._playersStore);
+  CreateEditPlayerPage(
+    this._playersStore, {
+    Key key,
+  }) : super(key: key);
 
+  @override
+  _CreateEditPlayerPageState createState() => _CreateEditPlayerPageState();
+}
+
+class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _imagePicker = ImagePicker();
 
+  Player _player;
+  bool _isEditMode;
+
   @override
   Widget build(BuildContext context) {
-    final _player = new Player();
-    _player.id = _playersStore.playerToCreateOrEdit.id;
-    _player.name = _playersStore.playerToCreateOrEdit.name;    
-    _player.imageUri = _playersStore.playerToCreateOrEdit.imageUri;
-
-    final bool _isEditMode = _player.name?.isNotEmpty ?? false;
-
-    _nameController.text = _player.name ?? '';
-    _nameController.addListener(() {
-      _player.name = _nameController.text;
-    });
-
     List<Widget> _floatingActionButtons = [
       CreateOrUpdatePlayer(
           isEditMode: _isEditMode,
           formKey: _formKey,
           player: _player,
           nameController: _nameController,
-          playersStore: _playersStore),
+          playersStore: widget._playersStore),
     ];
 
     if (_isEditMode) {
@@ -56,7 +53,7 @@ class CreateEditPlayerPage extends StatelessWidget {
           ),
           DeletePlayer(
             player: _player,
-            playersStore: _playersStore,
+            playersStore: widget._playersStore,
           ),
         ],
       );
@@ -108,7 +105,7 @@ class CreateEditPlayerPage extends StatelessWidget {
                                       tag:
                                           '${AnimationTags.playerImageHeroTag}${player?.id}',
                                       child: PlayerAvatar(
-                                        imageUri: player?.imageUri,
+                                        imageUri: player?.avatarImageUri,
                                       ),
                                     ),
                                     Positioned(
@@ -176,6 +173,26 @@ class CreateEditPlayerPage extends StatelessWidget {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    _player = new Player();
+    _player.id = widget._playersStore.playerToCreateOrEdit.id;
+    _player.name = widget._playersStore.playerToCreateOrEdit.name;
+    _player.avatarFileName =
+        widget._playersStore.playerToCreateOrEdit.avatarFileName;
+    _player.avatarImageUri =
+        widget._playersStore.playerToCreateOrEdit.avatarImageUri;
+
+    _isEditMode = _player.name?.isNotEmpty ?? false;
+
+    _nameController.text = _player.name ?? '';
+    _nameController.addListener(() {
+      _player.name = _nameController.text;
+    });
+  }
+
   Future _handleTakingPicture(Player player) async {
     await _handlePickingAndSavingAvatar(player, ImageSource.camera);
   }
@@ -191,12 +208,14 @@ class CreateEditPlayerPage extends StatelessWidget {
       return;
     }
 
-    player.imageUri = player.avatarFileToSave.path;
+    // MK Temporarily assign direct path to the file, until user saves the changes for the player and saves the image into the Documents storage.
+    player.avatarImageUri = player.avatarFileToSave.path;
   }
 
   Future<bool> _handleOnWillPop(BuildContext context, Player player) async {
-    if (_playersStore.playerToCreateOrEdit.imageUri != player.imageUri ||
-        _playersStore.playerToCreateOrEdit.name != player.name) {
+    if (widget._playersStore.playerToCreateOrEdit.avatarImageUri !=
+            player.avatarImageUri ||
+        widget._playersStore.playerToCreateOrEdit.name != player.name) {
       await showDialog(
           context: context,
           builder: (context) {
@@ -215,10 +234,11 @@ class CreateEditPlayerPage extends StatelessWidget {
                   child: Text('Navigate away'),
                   color: Colors.red,
                   onPressed: () async {
-                    _playersStore.playerToCreateOrEdit.imageUri =
-                        _playersStore.currentPlayerAvatarImageUri;
-                    _playersStore.playerToCreateOrEdit.name =
-                        _playersStore.currentPlayerName;
+                    widget._playersStore.playerToCreateOrEdit.avatarImageUri =
+                        widget
+                            ._playersStore.playerToCreateOrEdit.avatarImageUri;
+                    widget._playersStore.playerToCreateOrEdit.name =
+                        widget._playersStore.playerToCreateOrEdit.name;
                     // MK Pop the dialog
                     Navigator.of(context).pop();
                     // MK Go back

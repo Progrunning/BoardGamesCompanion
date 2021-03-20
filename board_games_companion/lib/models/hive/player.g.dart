@@ -20,13 +20,14 @@ class PlayerAdapter extends TypeAdapter<Player> {
       ..id = fields[0] as String
       .._name = fields[1] as String
       .._imageUri = fields[2] as String
-      .._isDeleted = fields[3] as bool;
+      .._isDeleted = fields[3] as bool
+      .._avatarFileName = fields[4] as String;
   }
 
   @override
   void write(BinaryWriter writer, Player obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -34,7 +35,9 @@ class PlayerAdapter extends TypeAdapter<Player> {
       ..writeByte(2)
       ..write(obj._imageUri)
       ..writeByte(3)
-      ..write(obj._isDeleted);
+      ..write(obj._isDeleted)
+      ..writeByte(4)
+      ..write(obj._avatarFileName);
   }
 
   @override
