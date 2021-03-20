@@ -1,8 +1,9 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/services/player_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+
+import '../common/hive_boxes.dart';
+import '../models/hive/player.dart';
+import '../services/player_service.dart';
 
 class PlayersStore with ChangeNotifier {
   final PlayerService _playerService;
@@ -14,8 +15,6 @@ class PlayersStore with ChangeNotifier {
 
   List<Player> get players => _players;
   Player get playerToCreateOrEdit => _playerToCreateOrEdit;
-  String get currentPlayerAvatarImageUri => _playerToCreateOrEdit.imageUri;
-  String get currentPlayerName => _playerToCreateOrEdit.name;
 
   Future<List<Player>> loadPlayers() async {
     if (_players != null) {
@@ -39,10 +38,11 @@ class PlayersStore with ChangeNotifier {
       );
 
       final isCreatingNewPlayer = existingPlayer == null;
-      final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(
-          player, currentPlayerAvatarImageUri);
+      final addOrUpdateSucceeded =
+          await _playerService.addOrUpdatePlayer(player);
       if (addOrUpdateSucceeded) {
-        _playerToCreateOrEdit.imageUri = player.imageUri;
+        _playerToCreateOrEdit.avatarFileName = player.avatarFileName;
+        _playerToCreateOrEdit.avatarImageUri = player.avatarImageUri;
         _playerToCreateOrEdit.name = player.name;
 
         if (isCreatingNewPlayer) {

@@ -37,7 +37,7 @@ class PlayerGridItem extends StatelessWidget {
                     Hero(
                       tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}',
                       child: PlayerAvatar(
-                        imageUri: providerPlayer?.imageUri,
+                        imageUri: providerPlayer?.avatarImageUri,
                       ),
                     ),
                     PlayerAvatarSubtitle(

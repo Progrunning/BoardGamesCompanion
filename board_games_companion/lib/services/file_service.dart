@@ -9,8 +9,7 @@ class FileService {
       {bool overrideExistingFile = false}) async {
     try {
       final fileContent = await pickedFile.readAsBytes();
-      final documentsDirectory = await getApplicationDocumentsDirectory();
-      final avatarImageToSave = File('${documentsDirectory.path}/$fileName');
+      File avatarImageToSave = await _retrieveDocumentsFile(fileName);
       if (!overrideExistingFile && await avatarImageToSave.exists()) {
         throw new FileSystemException(
             'Can\'t save file $fileName because it already exists');
@@ -27,13 +26,13 @@ class FileService {
     return null;
   }
 
-  Future<bool> deleteFile(String fileUri) async {
-    if (fileUri?.isEmpty ?? true) {
+  Future<bool> deleteFileFromDocumentsDirectory(String fileName) async {
+    if (fileName?.isEmpty ?? true) {
       return false;
     }
 
     try {
-      final fileToDelete = File(fileUri);
+      final fileToDelete = await _retrieveDocumentsFile(fileName);
       await fileToDelete.delete();
 
       return true;
@@ -47,7 +46,7 @@ class FileService {
   Future<bool> fileExists(String fileUri) async {
     try {
       if (fileUri?.isEmpty ?? true) {
-        throw new ArgumentError();
+        throw ArgumentError();
       }
 
       final existingFile = File(fileUri);
@@ -59,7 +58,14 @@ class FileService {
     return false;
   }
 
-  Future<Directory> getApplicationDocumentsDirectory() async {
-    return await path_provider.getApplicationDocumentsDirectory();
+  Future<String> createDocumentsFilePath(String fileName) async {
+    final documentsDirectory =
+        await path_provider.getApplicationDocumentsDirectory();
+    return '${documentsDirectory.path}/$fileName';
+  }
+
+  Future<File> _retrieveDocumentsFile(String fileName) async {
+    final documentsFilePath = await createDocumentsFilePath(fileName);
+    return File(documentsFilePath);
   }
 }

@@ -14,13 +14,18 @@ class Player with ChangeNotifier {
   @HiveField(1)
   String _name;
   @HiveField(2)
+  @Deprecated('Use avatarImageUri instead. The path to the image should be created at runtime, based on the avatarFileName and the path to the Documents folder.')
   String _imageUri;
   @HiveField(3)
   bool _isDeleted;
+  @HiveField(4)
+  String _avatarFileName;
+  
+  String _avatarImageUri;
 
   String get name => _name;
-  // TODO MK Need to introduce imageName to hold the name of the file and get the Documents path at runtime
-  String get imageUri => _imageUri ?? Constants.DefaultAvatartAssetsPath;
+  String get avatarImageUri => _avatarImageUri ?? _imageUri ?? Constants.DefaultAvatartAssetsPath;
+  String get avatarFileName => _avatarFileName;
   bool get isDeleted => _isDeleted;
 
   PickedFile avatarFileToSave;
@@ -32,10 +37,16 @@ class Player with ChangeNotifier {
     }
   }
 
-  set imageUri(String value) {
-    if (_imageUri != value) {
-      _imageUri = value;
+  set avatarImageUri(String value) {
+    if (_avatarImageUri != value) {
+      _avatarImageUri = value;
       notifyListeners();
+    }
+  }
+  
+  set avatarFileName(String value) {
+    if (_avatarFileName != value) {
+      _avatarFileName = value;
     }
   }
 
