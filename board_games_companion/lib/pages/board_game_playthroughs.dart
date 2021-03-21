@@ -28,8 +28,8 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
       listen: false,
     );
     final pageController = PageController(
-        initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex);
-
+      initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex,
+    );
     final playthroughsStore = Provider.of<PlaythroughsStore>(
       context,
       listen: false,
