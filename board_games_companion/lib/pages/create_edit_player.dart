@@ -193,6 +193,12 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
     });
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
   Future _handleTakingPicture(Player player) async {
     await _handlePickingAndSavingAvatar(player, ImageSource.camera);
   }
