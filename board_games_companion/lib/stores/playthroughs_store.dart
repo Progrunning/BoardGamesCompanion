@@ -1,18 +1,24 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/models/playthrough_player.dart';
-import 'package:board_games_companion/services/playthroughs_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../common/hive_boxes.dart';
+import '../models/hive/board_game_details.dart';
+import '../models/hive/playthrough.dart';
+import '../models/playthrough_player.dart';
+import '../services/playthroughs_service.dart';
+
 class PlaythroughsStore with ChangeNotifier {
   final PlaythroughService _playthroughService;
+  final FirebaseAnalytics _analytics;
 
   BoardGameDetails _selectedBoardGame;
   List<Playthrough> _playthroughs;
 
-  PlaythroughsStore(this._playthroughService);
+  PlaythroughsStore(
+    this._playthroughService,
+    this._analytics,
+  );
 
   BoardGameDetails get selectedBoardGame => _selectedBoardGame;
 
@@ -37,12 +43,24 @@ class PlaythroughsStore with ChangeNotifier {
   }
 
   Future<Playthrough> createPlaythrough(
-      String boardGameId, List<PlaythroughPlayer> playthoughPlayers) async {
+    String boardGameId,
+    List<PlaythroughPlayer> playthoughPlayers,
+  ) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
-        boardGameId, playthoughPlayers);
+      boardGameId,
+      playthoughPlayers,
+    );
 
     _playthroughs.add(newPlaythrough);
     notifyListeners();
+
+    await _analytics.logEvent(
+      name: 'create_playthrough',
+      parameters: {
+        'board_game_id': boardGameId,
+        'number_of_players': playthoughPlayers.length,
+      },
+    );
 
     return newPlaythrough;
   }

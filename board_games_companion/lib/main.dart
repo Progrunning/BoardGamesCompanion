@@ -37,13 +37,14 @@ import 'package:board_games_companion/stores/search_board_games_store.dart';
 import 'package:board_games_companion/stores/start_playthrough_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:board_games_companion/utilities/custom_http_client_adapter.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
 
@@ -87,10 +88,16 @@ void main() async {
 }
 
 class App extends StatelessWidget {
+  static FirebaseAnalytics _analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver _observer =
+      FirebaseAnalyticsObserver(analytics: _analytics);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<FirebaseAnalytics>.value(value: _analytics),
+        Provider<FirebaseAnalyticsObserver>.value(value: _observer),
         Provider<CustomHttpClientAdapter>(
           create: (context) => CustomHttpClientAdapter(),
         ),
@@ -148,6 +155,10 @@ class App extends StatelessWidget {
                 context,
                 listen: false,
               ),
+              Provider.of<FirebaseAnalytics>(
+                context,
+                listen: false,
+              ),
             );
             userStore.loadUser();
             return userStore;
@@ -190,6 +201,10 @@ class App extends StatelessWidget {
           create: (context) {
             return PlaythroughsStore(
               Provider.of<PlaythroughService>(
+                context,
+                listen: false,
+              ),
+              Provider.of<FirebaseAnalytics>(
                 context,
                 listen: false,
               ),
@@ -276,7 +291,7 @@ class App extends StatelessWidget {
           },
         ),
       ],
-      child: BoardGamesCompanionApp(),
+      child: BoardGamesCompanionApp(_observer),
     );
   }
 }

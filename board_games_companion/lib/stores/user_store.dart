@@ -1,12 +1,16 @@
-import 'package:board_games_companion/models/hive/user.dart';
-import 'package:board_games_companion/services/user_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
+import '../models/hive/user.dart';
+import '../services/user_service.dart';
+
 class UserStore with ChangeNotifier {
   final UserService _userService;
+  final FirebaseAnalytics _analytics;
 
   User _user;
+
   User get user => _user;
 
   bool _isSyncing;
@@ -18,13 +22,17 @@ class UserStore with ChangeNotifier {
     }
   }
 
-  UserStore(this._userService);
+  UserStore(
+    this._userService,
+    this._analytics,
+  );
 
   Future<void> loadUser() async {
     try {
       final user = await _userService.retrieveUser();
       if (user != null) {
         _user = user;
+        await _analytics.setUserId(_user.name);
         notifyListeners();
       }
     } catch (e, stack) {

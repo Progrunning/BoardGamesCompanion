@@ -120,7 +120,7 @@ class BoardGamesStore with ChangeNotifier {
 
     Map<String, BoardGamesExpansion> expansionsInCollection = Map.fromIterable(
       existingBoardGameDetails.expansions
-          .where((expansion) => expansion.isInCollection),
+          .where((expansion) => expansion.isInCollection ?? false),
       key: (expansion) => expansion.id,
       value: (expansion) => expansion,
     );

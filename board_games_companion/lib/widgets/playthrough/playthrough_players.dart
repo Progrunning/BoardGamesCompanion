@@ -1,15 +1,16 @@
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/playthrough_player.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
-import 'package:board_games_companion/stores/start_playthrough_store.dart';
-import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
-import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
-import 'package:board_games_companion/widgets/player/player_grid_item.dart';
-import 'package:board_games_companion/extensions/page_controller_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../common/dimensions.dart';
+import '../../models/hive/board_game_details.dart';
+import '../../models/playthrough_player.dart';
+import '../../stores/playthroughs_store.dart';
+import '../../stores/start_playthrough_store.dart';
+import '../common/generic_error_message_widget.dart';
+import '../common/icon_and_text_button.dart';
+import '../common/stack_ripple_effect.dart';
+import '../player/player_grid_item.dart';
+import '../../extensions/page_controller_extensions.dart';
 
 class PlaythroughPlayers extends StatelessWidget {
   const PlaythroughPlayers({
@@ -111,6 +112,7 @@ class PlaythroughPlayers extends StatelessWidget {
           ),
         ),
       );
+
       return;
     }
 
@@ -120,7 +122,10 @@ class PlaythroughPlayers extends StatelessWidget {
     );
 
     final newPlaythrough = await playthroughsStore.createPlaythrough(
-        boardGameDetails.id, selectedPlaythoughPlayers);
+      boardGameDetails.id,
+      selectedPlaythoughPlayers,
+    );
+    
     if (newPlaythrough == null) {
       scaffold.showSnackBar(
         SnackBar(
