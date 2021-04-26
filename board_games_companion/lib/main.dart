@@ -89,7 +89,7 @@ void main() async {
 
 class App extends StatelessWidget {
   static FirebaseAnalytics _analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver _observer =
+  static FirebaseAnalyticsObserver _analyticsObserver =
       FirebaseAnalyticsObserver(analytics: _analytics);
 
   @override
@@ -97,7 +97,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<FirebaseAnalytics>.value(value: _analytics),
-        Provider<FirebaseAnalyticsObserver>.value(value: _observer),
+        Provider<FirebaseAnalyticsObserver>.value(value: _analyticsObserver),
         Provider<CustomHttpClientAdapter>(
           create: (context) => CustomHttpClientAdapter(),
         ),
@@ -291,7 +291,7 @@ class App extends StatelessWidget {
           },
         ),
       ],
-      child: BoardGamesCompanionApp(_observer),
+      child: BoardGamesCompanionApp(_analyticsObserver),
     );
   }
 }

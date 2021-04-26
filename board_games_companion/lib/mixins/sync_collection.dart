@@ -1,6 +1,6 @@
 import 'package:board_games_companion/models/collection_sync_result.dart';
 import 'package:board_games_companion/models/hive/user.dart';
-import 'package:board_games_companion/pages/home.dart';
+import 'package:board_games_companion/pages/home_page.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:flutter/material.dart';
