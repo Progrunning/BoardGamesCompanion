@@ -2,7 +2,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 import 'common/app_theme.dart';
-import 'pages/home.dart';
+import 'pages/home_page.dart';
 import 'common/routes.dart';
 
 class BoardGamesCompanionApp extends StatelessWidget {

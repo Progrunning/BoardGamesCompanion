@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/analytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,10 +56,10 @@ class PlaythroughsStore with ChangeNotifier {
     notifyListeners();
 
     await _analytics.logEvent(
-      name: 'create_playthrough',
+      name: Analytics.CreatePlaythrough,
       parameters: {
-        'board_game_id': boardGameId,
-        'number_of_players': playthoughPlayers.length,
+        Analytics.BoardGameIdParameter: boardGameId,
+        Analytics.NumberOfPlayersParameter: playthoughPlayers.length,
       },
     );
 

@@ -1,12 +1,15 @@
 import 'dart:async';
 
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'filters/collection_filter_panel_widget.dart';
+import '../../common/analytics.dart';
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../common/styles.dart';
+import '../../stores/board_games_store.dart';
 
 class CollectionSearchBar extends StatefulWidget {
   CollectionSearchBar({
@@ -23,11 +26,18 @@ class CollectionSearchBar extends StatefulWidget {
 
 class _CollectionSearchBarState extends State<CollectionSearchBar> {
   final _searchController = TextEditingController();
+
   Timer _debounce;
+  FirebaseAnalytics _analytics;
 
   @override
   void initState() {
     super.initState();
+    _analytics = Provider.of<FirebaseAnalytics>(
+      context,
+      listen: false,
+    );
+
     _searchController.addListener(_handleSearchChanged);
   }
 
@@ -58,6 +68,10 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
             color: AppTheme.accentColor,
           ),
           onPressed: () async {
+            await _analytics.logEvent(
+              name: Analytics.FilterCollection,
+            );
+
             await _createBottomSheetFilterPanel(context);
           },
         )
