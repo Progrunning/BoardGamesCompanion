@@ -1,10 +1,14 @@
-import 'package:board_games_companion/common/animation_tags.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/pages/board_game_playthroughs.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/utilities/navigator_transitions.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_collection_item_widget.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../common/analytics.dart';
+import '../../common/animation_tags.dart';
+import '../../common/dimensions.dart';
+import '../../pages/board_game_playthroughs.dart';
+import '../../stores/board_games_store.dart';
+import '../../utilities/navigator_transitions.dart';
+import 'board_game_collection_item_widget.dart';
 
 class CollectionGrid extends StatelessWidget {
   const CollectionGrid({
@@ -17,6 +21,11 @@ class CollectionGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _analytics = Provider.of<FirebaseAnalytics>(
+      context,
+      listen: false,
+    );
+
     return SliverPadding(
       padding: EdgeInsets.all(
         Dimensions.standardSpacing,
@@ -28,9 +37,19 @@ class CollectionGrid extends StatelessWidget {
         children: List.generate(
           _boardGamesStore.boardGames.length,
           (int index) {
+            final boardGameDetails = _boardGamesStore.boardGames[index];
+
             return BoardGameCollectionItem(
-              boardGame: _boardGamesStore.boardGames[index],
+              boardGame: boardGameDetails,
               onTap: () async {
+                await _analytics.logEvent(
+                  name: Analytics.ViewGameStats,
+                  parameters: {
+                    Analytics.BoardGameIdParameter: boardGameDetails.id,
+                    Analytics.BoardGameNameParameter: boardGameDetails.name,
+                  },
+                );
+
                 await Navigator.push(
                   context,
                   NavigatorTransitions.fadeThrough(
