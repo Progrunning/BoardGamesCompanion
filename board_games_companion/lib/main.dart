@@ -185,6 +185,10 @@ class App extends StatelessWidget {
               context,
               listen: false,
             ),
+            Provider.of<FirebaseAnalytics>(
+                context,
+                listen: false,
+              ),
           ),
         ),
         ChangeNotifierProvider<PlayersStore>(
