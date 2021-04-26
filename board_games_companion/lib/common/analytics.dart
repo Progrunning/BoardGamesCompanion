@@ -4,6 +4,7 @@ class Analytics {
   static const String SortCollection = "sort_collection";
   static const String ViewGameStats = "view_game_stats";
   static const String ViewGameDetails = "view_game_details";
+  static const String ViewHotBoardGame = "view_hot_board_game";
   static const String SearchBoardGames = "search_board_games";
 
   static const String BoardGameIdParameter = "board_game_id";
