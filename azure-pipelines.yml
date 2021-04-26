@@ -28,7 +28,8 @@ stages:
           displayName: 'Install Flutter'
           inputs:
             channel: 'stable'
-            version: 'latest'
+            version: 'custom'
+            customVersion: '1.22.3'
 
         - task: FlutterBuild@0
           displayName: 'Build Android'
@@ -62,7 +63,8 @@ stages:
       - task: FlutterInstall@0
         inputs:
           channel: 'stable'
-          version: 'latest'
+          version: 'custom'
+          customVersion: '1.22.3'
 
       - task: DownloadSecureFile@1
         displayName: 'Downloading key.properties file'
@@ -163,7 +165,8 @@ stages:
       - task: FlutterInstall@0
         inputs:
           channel: 'stable'
-          version: 'latest'
+          version: 'custom'
+          customVersion: '1.22.3'
 
       - task: InstallAppleCertificate@2
         inputs:
