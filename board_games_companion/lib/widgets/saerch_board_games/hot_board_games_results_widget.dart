@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/analytics.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/board_game.dart';
 import 'package:board_games_companion/pages/search_board_games.dart';
@@ -7,6 +8,7 @@ import 'package:board_games_companion/widgets/board_games/board_game_collection_
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,12 +17,16 @@ class HotBoardGamesResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hotBoardGamesStore = Provider.of<HotBoardGamesStore>(
+    final _hotBoardGamesStore = Provider.of<HotBoardGamesStore>(
       context,
+    );
+    final _analytics = Provider.of<FirebaseAnalytics>(
+      context,
+      listen: false,
     );
 
     return FutureBuilder(
-      future: hotBoardGamesStore.load(),
+      future: _hotBoardGamesStore.load(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data is List<BoardGame> &&
@@ -41,6 +47,14 @@ class HotBoardGamesResults extends StatelessWidget {
                     return BoardGameCollectionItem(
                       boardGame: boardGame,
                       onTap: () async {
+                        await _analytics.logEvent(
+                          name: Analytics.ViewHotBoardGame,
+                          parameters: {
+                            Analytics.BoardGameIdParameter: boardGame.id,
+                            Analytics.BoardGameNameParameter: boardGame.name,
+                          },
+                        );
+
                         await NavigatorHelper.navigateToBoardGameDetails(
                           context,
                           boardGame?.id,
@@ -78,7 +92,7 @@ class HotBoardGamesResults extends StatelessWidget {
                       icon: Icons.refresh,
                       title: 'Refresh',
                       onPressed: () async {
-                        await hotBoardGamesStore.refresh();
+                        await _hotBoardGamesStore.refresh();
                       },
                     ),
                   ],
