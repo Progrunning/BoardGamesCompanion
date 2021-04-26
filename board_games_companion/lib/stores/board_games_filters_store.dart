@@ -1,10 +1,13 @@
-import 'package:board_games_companion/common/enums/order_by.dart';
-import 'package:board_games_companion/common/enums/sort_by_option.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/collection_filters.dart';
-import 'package:board_games_companion/models/sort_by.dart';
-import 'package:board_games_companion/services/board_games_filters_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
+
+import '../common/analytics.dart';
+import '../common/enums/order_by.dart';
+import '../common/enums/sort_by_option.dart';
+import '../common/hive_boxes.dart';
+import '../models/collection_filters.dart';
+import '../models/sort_by.dart';
+import '../services/board_games_filters_service.dart';
 
 class BoardGamesFiltersStore with ChangeNotifier {
   List<SortBy> _sortBy = [
@@ -19,6 +22,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
   ];
 
   final BoardGamesFiltersService _boardGamesFiltersService;
+  final FirebaseAnalytics _analytics;
 
   CollectionFilters _collectionFilters;
 
@@ -26,7 +30,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
   double get filterByRating => _collectionFilters?.filterByRating;
   int get numberOfPlayers => _collectionFilters?.numberOfPlayers;
 
-  BoardGamesFiltersStore(this._boardGamesFiltersService);
+  BoardGamesFiltersStore(this._boardGamesFiltersService, this._analytics);
 
   Future<void> loadFilterPreferences() async {
     _collectionFilters =
@@ -74,6 +78,14 @@ class BoardGamesFiltersStore with ChangeNotifier {
       _collectionFilters = CollectionFilters();
     }
 
+    await _analytics.logEvent(
+      name: Analytics.SortCollection,
+      parameters: {
+        Analytics.SortByParameter: sortBy.name,
+        Analytics.OrderByParameter: sortBy.orderBy
+      },
+    );
+
     _collectionFilters.sortBy = sortBy;
 
     await _boardGamesFiltersService
@@ -89,6 +101,14 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     _collectionFilters.filterByRating = filterByRating;
 
+    await _analytics.logEvent(
+      name: Analytics.FilterCollection,
+      parameters: {
+        Analytics.FilterByParameter: 'rating',
+        Analytics.FilterByValueParameter: filterByRating,
+      },
+    );
+
     await _boardGamesFiltersService
         .addOrUpdateCollectionFilters(_collectionFilters);
 
@@ -103,6 +123,14 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     _collectionFilters.numberOfPlayers =
         filterByNumberOfPlayers ? numberOfPlayers : null;
+
+    await _analytics.logEvent(
+      name: Analytics.FilterCollection,
+      parameters: {
+        Analytics.FilterByParameter: 'number_of_players',
+        Analytics.FilterByValueParameter: filterByRating,
+      },
+    );
 
     await _boardGamesFiltersService
         .addOrUpdateCollectionFilters(_collectionFilters);
