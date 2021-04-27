@@ -23,4 +23,6 @@ class Constants {
   static const PlayersTabIndex = 2;
   
   static const DefaultAvatartAssetsPath = 'assets/default_avatar.png';
+
+  static const String FilterByAny = 'any';
 }

@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/constants.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -82,7 +83,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
       name: Analytics.SortCollection,
       parameters: {
         Analytics.SortByParameter: sortBy.name,
-        Analytics.OrderByParameter: sortBy.orderBy
+        Analytics.OrderByParameter: sortBy.orderBy.toString()
       },
     );
 
@@ -105,7 +106,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
       name: Analytics.FilterCollection,
       parameters: {
         Analytics.FilterByParameter: 'rating',
-        Analytics.FilterByValueParameter: filterByRating,
+        Analytics.FilterByValueParameter: filterByRating ?? Constants.FilterByAny
       },
     );
 
@@ -128,7 +129,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
       name: Analytics.FilterCollection,
       parameters: {
         Analytics.FilterByParameter: 'number_of_players',
-        Analytics.FilterByValueParameter: filterByRating,
+        Analytics.FilterByValueParameter: filterByRating ?? Constants.FilterByAny,
       },
     );
 
