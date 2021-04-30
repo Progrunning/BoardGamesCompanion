@@ -19,7 +19,7 @@ class RateAndReviewButton extends StatelessWidget {
             title: 'Rate & Review',
             subtitle: 'Store listing',
             onTap: () async {
-              InAppReview.instance.openStoreListing(
+              await InAppReview.instance.openStoreListing(
                 appStoreId: Constants.AppleAppId,
               );
             },
