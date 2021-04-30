@@ -25,4 +25,6 @@ class Constants {
   static const DefaultAvatartAssetsPath = 'assets/default_avatar.png';
 
   static const String FilterByAny = 'any';
+
+  static const String AppleAppId = '1506458832';
 }

@@ -1,12 +1,13 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/utilities/launcher_helper.dart';
-import 'package:board_games_companion/widgets/about/detail_item_widget.dart';
-import 'package:board_games_companion/widgets/about/section_text_widget.dart';
-import 'package:board_games_companion/widgets/about/section_title_widget.dart';
-import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../common/app_theme.dart';
+import '../common/constants.dart';
+import '../common/dimensions.dart';
+import '../utilities/launcher_helper.dart';
+import '../widgets/about/detail_item_widget.dart';
+import '../widgets/about/section_text_widget.dart';
+import '../widgets/about/section_title_widget.dart';
+import '../widgets/common/page_container_widget.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({

@@ -1,16 +1,14 @@
+import 'package:board_games_companion/common/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../pages/about_page.dart';
-import '../../utilities/navigator_transitions.dart';
 import '../about/detail_item_widget.dart';
 import '../common/rippler_effect.dart';
 
-class AboutPageDetails extends StatelessWidget {
-  const AboutPageDetails({
-    Key key,
-  }) : super(key: key);
+class RateAndReviewButton extends StatelessWidget {
+  const RateAndReviewButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +16,11 @@ class AboutPageDetails extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           DetailsItem(
-            title: 'About',
-            subtitle: 'App information',
+            title: 'Rate & Review',
+            subtitle: 'Store listing',
             onTap: () async {
-              await Navigator.push(
-                context,
-                NavigatorTransitions.fadeThrough(
-                  (_, __, ___) {
-                    return AboutPage();
-                  },
-                ),
+              InAppReview.instance.openStoreListing(
+                appStoreId: Constants.AppleAppId,
               );
             },
           ),
@@ -36,7 +29,7 @@ class AboutPageDetails extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerRight,
               child: Icon(
-                Icons.navigate_next,
+                Icons.star,
                 color: AppTheme.accentColor,
               ),
             ),
