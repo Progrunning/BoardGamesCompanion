@@ -1,9 +1,9 @@
-import 'package:board_games_companion/common/app_theme.dart';
+import '../common/app_theme.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/pages/collections.dart';
 import 'package:board_games_companion/pages/players.dart';
 import 'package:board_games_companion/pages/search_board_games.dart';
-import 'package:board_games_companion/pages/settings.dart';
+import 'package:board_games_companion/pages/settings_page.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/home_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
