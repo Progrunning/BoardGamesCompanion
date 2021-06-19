@@ -106,7 +106,8 @@ class BoardGamesFiltersStore with ChangeNotifier {
       name: Analytics.FilterCollection,
       parameters: {
         Analytics.FilterByParameter: 'rating',
-        Analytics.FilterByValueParameter: filterByRating ?? Constants.FilterByAny
+        Analytics.FilterByValueParameter:
+            filterByRating ?? Constants.FilterByAny
       },
     );
 
@@ -116,20 +117,19 @@ class BoardGamesFiltersStore with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateNumberOfPlayers(
-      int numberOfPlayers, bool filterByNumberOfPlayers) async {
+  Future<void> updateNumberOfPlayers(int numberOfPlayers) async {
     if (_collectionFilters == null) {
       _collectionFilters = CollectionFilters();
     }
 
-    _collectionFilters.numberOfPlayers =
-        filterByNumberOfPlayers ? numberOfPlayers : null;
+    _collectionFilters.numberOfPlayers = numberOfPlayers;
 
     await _analytics.logEvent(
       name: Analytics.FilterCollection,
       parameters: {
         Analytics.FilterByParameter: 'number_of_players',
-        Analytics.FilterByValueParameter: filterByRating ?? Constants.FilterByAny,
+        Analytics.FilterByValueParameter:
+            filterByRating ?? Constants.FilterByAny,
       },
     );
 

@@ -39,7 +39,7 @@ class CollectionFilterNumberOfPlayersSliderWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              '$minNumberOfPlayers',
+              'Any',
               style: TextStyle(
                 fontSize: Dimensions.smallFontSize,
               ),
@@ -62,19 +62,18 @@ class CollectionFilterNumberOfPlayersSliderWidget extends StatelessWidget {
                 ),
                 child: Slider(
                   value:
-                      _boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 1,
+                      _boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 0,
                   divisions: maxNumberOfPlayers - 1,
-                  min: minNumberOfPlayers.toDouble(),
+                  min: minNumberOfPlayers.toDouble() - 1,
                   max: maxNumberOfPlayers.toDouble(),
-                  label: _boardGamesFiltersStore.numberOfPlayers?.toString(),
-                  onChanged: _boardGamesFiltersStore.numberOfPlayers != null
-                      ? (value) {
-                          _boardGamesFiltersStore.updateNumberOfPlayers(
-                            value.round(),
-                            true,
-                          );
-                        }
-                      : null,
+                  label: (_boardGamesFiltersStore.numberOfPlayers ?? 0) > 0
+                      ? _boardGamesFiltersStore.numberOfPlayers?.toString()
+                      : 'Any',
+                  onChanged: (value) {
+                    _boardGamesFiltersStore.updateNumberOfPlayers(
+                      value != 0 ? value.round() : null,
+                    );
+                  },
                   activeColor: AppTheme.accentColor,
                 ),
               ),
@@ -87,46 +86,6 @@ class CollectionFilterNumberOfPlayersSliderWidget extends StatelessWidget {
             ),
           ],
         ),
-        InkWell(
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: Dimensions.halfStandardSpacing,
-              right: Dimensions.standardSpacing,
-              bottom: Dimensions.standardSpacing,
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: Dimensions.defaultCheckboxSize,
-                  width: Dimensions.defaultCheckboxSize,
-                  child: Checkbox(
-                    value: _boardGamesFiltersStore.numberOfPlayers != null,
-                    onChanged: (value) {
-                      _boardGamesFiltersStore.updateNumberOfPlayers(
-                        _boardGamesFiltersStore.numberOfPlayers ?? minNumberOfPlayers,
-                        value,
-                      );
-                    },
-                    activeColor: AppTheme.accentColor,
-                  ),
-                ),
-                SizedBox(
-                  width: Dimensions.standardSpacing,
-                ),
-                Text(
-                  'Filter by number of players?',
-                  style: TextStyle(fontSize: Dimensions.smallFontSize),
-                ),
-              ],
-            ),
-          ),
-          onTap: () {
-            _boardGamesFiltersStore.updateNumberOfPlayers(
-              _boardGamesFiltersStore.numberOfPlayers ?? minNumberOfPlayers,
-              _boardGamesFiltersStore.numberOfPlayers == null,
-            );
-          },
-        )
       ],
     );
   }
