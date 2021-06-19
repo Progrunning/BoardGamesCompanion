@@ -1,15 +1,16 @@
 import 'dart:async';
 
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'filters/collection_filter_panel_widget.dart';
 import '../../common/analytics.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
+import '../../services/analytics_service.dart';
+import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_store.dart';
+import 'filters/collection_filter_panel_widget.dart';
 
 class CollectionSearchBar extends StatefulWidget {
   CollectionSearchBar({
@@ -28,12 +29,17 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
   final _searchController = TextEditingController();
 
   Timer _debounce;
-  FirebaseAnalytics _analytics;
+  AnalyticsService _analyticsService;
+  RateAndReviewService _rateAndReviewService;
 
   @override
   void initState() {
     super.initState();
-    _analytics = Provider.of<FirebaseAnalytics>(
+    _analyticsService = Provider.of<AnalyticsService>(
+      context,
+      listen: false,
+    );
+    _rateAndReviewService = Provider.of<RateAndReviewService>(
       context,
       listen: false,
     );
@@ -57,7 +63,7 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
           hintText: 'Search...',
           suffixIcon: _retrieveSearchBarSuffixIcon(),
         ),
-        onSubmitted: (searchPhrase) {
+        onSubmitted: (searchPhrase) async {
           FocusScope.of(context).unfocus();
         },
       ),
@@ -68,11 +74,12 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
             color: AppTheme.accentColor,
           ),
           onPressed: () async {
-            await _analytics.logEvent(
+            await _createBottomSheetFilterPanel(context);
+
+            await _analyticsService.logEvent(
               name: Analytics.FilterCollection,
             );
-
-            await _createBottomSheetFilterPanel(context);
+            await _rateAndReviewService.increaseNumberOfSignificantActions();
           },
         )
       ],
@@ -99,8 +106,10 @@ class _CollectionSearchBarState extends State<CollectionSearchBar> {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(
       const Duration(milliseconds: 500),
-      () {
+      () async {
         widget._boardGamesStore.updateSearchResults(_searchController.text);
+
+        await _rateAndReviewService.increaseNumberOfSignificantActions();
       },
     );
   }
