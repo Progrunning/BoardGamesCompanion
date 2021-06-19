@@ -3,7 +3,8 @@ import 'package:board_games_companion/common/hive_boxes.dart';
 import 'hive_base_service.dart';
 
 class PreferencesService extends BaseHiveService<dynamic> {
-  static const String _firstTimeLaunchDateKey = "firstTimeLaunchDate";
+  static const String _firstTimeAppLaunchDateKey = "firstTimeLaunchDate";
+  static const String _appLaunchDateKey = "applaunchDate";
   static const String _numberOfSignificantActionsKey =
       "numberOfSignificantActions";
   static const String _rateAndReviewDialogSeenKey = "rateAndReviewDialogSeen";
@@ -12,15 +13,25 @@ class PreferencesService extends BaseHiveService<dynamic> {
     await ensureBoxOpen(HiveBoxes.Preferences);
   }
 
-  Future<void> setFirstTimeLaunchDate() async {
+  Future<void> setAppLaunchDate() async {
+    final DateTime nowUtc = DateTime.now().toUtc();
     if (await _isFirstTimeAppLaunch()) {
-      await _setValue(_firstTimeLaunchDateKey, DateTime.now().toUtc());
+      await _setValue(_firstTimeAppLaunchDateKey, nowUtc);
     }
+
+    await _setValue(_appLaunchDateKey, nowUtc);
   }
 
   Future<DateTime> getFirstTimeLaunchDate() async {
     return await _getValue(
-      _firstTimeLaunchDateKey,
+      _firstTimeAppLaunchDateKey,
+      defaultValue: null,
+    );
+  }
+
+  Future<DateTime> getAppLaunchDate() async {
+    return await _getValue(
+      _appLaunchDateKey,
       defaultValue: null,
     );
   }
@@ -62,7 +73,7 @@ class PreferencesService extends BaseHiveService<dynamic> {
 
   Future<bool> _isFirstTimeAppLaunch() async {
     final DateTime firstTimeLaunchDate = await _getValue(
-      _firstTimeLaunchDateKey,
+      _firstTimeAppLaunchDateKey,
       defaultValue: null,
     );
 

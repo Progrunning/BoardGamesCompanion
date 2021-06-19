@@ -181,7 +181,7 @@ class App extends StatelessWidget {
                 listen: false,
               ),
             );
-            _preferencesService.setFirstTimeLaunchDate();
+            _preferencesService.setAppLaunchDate();
             userStore.loadUser();
             return userStore;
           },
