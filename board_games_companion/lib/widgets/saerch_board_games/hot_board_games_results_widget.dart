@@ -1,16 +1,17 @@
-import 'package:board_games_companion/common/analytics.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/board_game.dart';
-import 'package:board_games_companion/pages/search_board_games.dart';
-import 'package:board_games_companion/stores/hot_board_games_store.dart';
-import 'package:board_games_companion/utilities/navigator_helper.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_collection_item_widget.dart';
-import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../common/analytics.dart';
+import '../../common/dimensions.dart';
+import '../../models/board_game.dart';
+import '../../pages/search_board_games.dart';
+import '../../services/analytics_service.dart';
+import '../../stores/hot_board_games_store.dart';
+import '../../utilities/navigator_helper.dart';
+import '../board_games/board_game_collection_item_widget.dart';
+import '../common/generic_error_message_widget.dart';
+import '../common/icon_and_text_button.dart';
+import '../common/loading_indicator_widget.dart';
 
 class HotBoardGamesResults extends StatelessWidget {
   const HotBoardGamesResults({Key key}) : super(key: key);
@@ -20,7 +21,7 @@ class HotBoardGamesResults extends StatelessWidget {
     final _hotBoardGamesStore = Provider.of<HotBoardGamesStore>(
       context,
     );
-    final _analytics = Provider.of<FirebaseAnalytics>(
+    final _analytics = Provider.of<AnalyticsService>(
       context,
       listen: false,
     );

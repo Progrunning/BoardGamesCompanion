@@ -22,6 +22,7 @@ import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/file_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
+import 'package:board_games_companion/services/rate_and_review_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/services/user_service.dart';
 import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
@@ -49,6 +50,10 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
 
 import 'models/hive/board_game_designer.dart';
+import 'services/analytics_service.dart';
+import 'services/preferences_service.dart';
+
+PreferencesService _preferencesService = PreferencesService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +78,8 @@ void main() async {
   Hive.registerAdapter(OrderByAdapter());
   Hive.registerAdapter(CollectionFiltersAdapter());
 
+  await _preferencesService.initialize();
+
   await Firebase.initializeApp();
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -88,16 +95,30 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  static FirebaseAnalytics _analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver _analyticsObserver =
+  static final FirebaseAnalytics _analytics = FirebaseAnalytics();
+  static final FirebaseAnalyticsObserver _analyticsObserver =
       FirebaseAnalyticsObserver(analytics: _analytics);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<FirebaseAnalytics>.value(value: _analytics),
         Provider<FirebaseAnalyticsObserver>.value(value: _analyticsObserver),
+        Provider<PreferencesService>.value(value: _preferencesService),
+        Provider<RateAndReviewService>(
+          create: (context) => RateAndReviewService(_preferencesService),
+        ),
+        Provider<AnalyticsService>(
+          create: (context) {
+            return AnalyticsService(
+              _analytics,
+              Provider.of<RateAndReviewService>(
+                context,
+                listen: false,
+              ),
+            );
+          },
+        ),
         Provider<CustomHttpClientAdapter>(
           create: (context) => CustomHttpClientAdapter(),
         ),
@@ -155,11 +176,12 @@ class App extends StatelessWidget {
                 context,
                 listen: false,
               ),
-              Provider.of<FirebaseAnalytics>(
+              Provider.of<AnalyticsService>(
                 context,
                 listen: false,
               ),
             );
+            _preferencesService.setFirstTimeLaunchDate();
             userStore.loadUser();
             return userStore;
           },
@@ -185,10 +207,10 @@ class App extends StatelessWidget {
               context,
               listen: false,
             ),
-            Provider.of<FirebaseAnalytics>(
-                context,
-                listen: false,
-              ),
+            Provider.of<AnalyticsService>(
+              context,
+              listen: false,
+            ),
           ),
         ),
         ChangeNotifierProvider<PlayersStore>(
@@ -208,7 +230,7 @@ class App extends StatelessWidget {
                 context,
                 listen: false,
               ),
-              Provider.of<FirebaseAnalytics>(
+              Provider.of<AnalyticsService>(
                 context,
                 listen: false,
               ),
@@ -224,10 +246,10 @@ class App extends StatelessWidget {
               context,
               listen: false,
             ),
-            Provider.of<FirebaseAnalytics>(
-                context,
-                listen: false,
-              ),
+            Provider.of<AnalyticsService>(
+              context,
+              listen: false,
+            ),
           ),
         ),
         ChangeNotifierProvider<StartPlaythroughStore>(

@@ -1,13 +1,13 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import '../models/hive/user.dart';
+import '../services/analytics_service.dart';
 import '../services/user_service.dart';
 
 class UserStore with ChangeNotifier {
   final UserService _userService;
-  final FirebaseAnalytics _analytics;
+  final AnalyticsService _analyticsService;
 
   User _user;
 
@@ -24,7 +24,7 @@ class UserStore with ChangeNotifier {
 
   UserStore(
     this._userService,
-    this._analytics,
+    this._analyticsService,
   );
 
   Future<void> loadUser() async {
@@ -32,7 +32,7 @@ class UserStore with ChangeNotifier {
       final user = await _userService.retrieveUser();
       if (user != null) {
         _user = user;
-        await _analytics.setUserId(_user.name);
+        await _analyticsService.setUserId(_user.name);
         notifyListeners();
       }
     } catch (e, stack) {

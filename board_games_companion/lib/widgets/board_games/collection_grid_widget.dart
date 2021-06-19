@@ -1,4 +1,3 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +5,7 @@ import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
 import '../../common/dimensions.dart';
 import '../../pages/board_game_playthroughs.dart';
+import '../../services/analytics_service.dart';
 import '../../stores/board_games_store.dart';
 import '../../utilities/navigator_transitions.dart';
 import 'board_game_collection_item_widget.dart';
@@ -21,7 +21,7 @@ class CollectionGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _analytics = Provider.of<FirebaseAnalytics>(
+    final _analytics = Provider.of<AnalyticsService>(
       context,
       listen: false,
     );

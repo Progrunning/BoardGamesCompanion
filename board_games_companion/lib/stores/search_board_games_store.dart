@@ -1,17 +1,17 @@
 import 'package:async/async.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../common/analytics.dart';
 import '../models/board_game.dart';
+import '../services/analytics_service.dart';
 import '../services/board_games_geek_service.dart';
 import 'search_bar_board_games_store.dart';
 
 class SearchBoardGamesStore with ChangeNotifier {
   final BoardGamesGeekService _boardGameGeekService;
   final SearchBarBoardGamesStore _searchBarBoardGamesStore;
-  final FirebaseAnalytics _analytics;
+  final AnalyticsService _analyticsService;
 
   List<BoardGame> _searchResults;
 
@@ -23,7 +23,7 @@ class SearchBoardGamesStore with ChangeNotifier {
   SearchBoardGamesStore(
     this._boardGameGeekService,
     this._searchBarBoardGamesStore,
-    this._analytics,
+    this._analyticsService,
   );
 
   Future<List<BoardGame>> search() async {
@@ -35,7 +35,7 @@ class SearchBoardGamesStore with ChangeNotifier {
         }
 
         try {
-          await _analytics.logEvent(
+          await _analyticsService.logEvent(
             name: Analytics.SearchBoardGames,
             parameters: {
               Analytics.SearchBoardGamesPhraseParameter:

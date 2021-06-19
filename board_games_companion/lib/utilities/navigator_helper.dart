@@ -1,15 +1,16 @@
-import 'package:board_games_companion/common/analytics.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/pages/board_game_details.dart';
-import 'package:board_games_companion/pages/create_edit_player.dart';
-import 'package:board_games_companion/services/board_games_geek_service.dart';
-import 'package:board_games_companion/stores/board_game_details_store.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/utilities/navigator_transitions.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../common/analytics.dart';
+import '../models/hive/player.dart';
+import '../pages/board_game_details.dart';
+import '../pages/create_edit_player.dart';
+import '../services/analytics_service.dart';
+import '../services/board_games_geek_service.dart';
+import '../stores/board_game_details_store.dart';
+import '../stores/board_games_store.dart';
+import '../stores/players_store.dart';
+import 'navigator_transitions.dart';
 
 class NavigatorHelper {
   static Future<T> navigateToCreatePlayerPage<T extends Object>(
@@ -38,7 +39,7 @@ class NavigatorHelper {
     String boardGameName,
     Type navigatingFromType,
   ) async {
-    final _analytics = Provider.of<FirebaseAnalytics>(
+    final _analytics = Provider.of<AnalyticsService>(
       context,
       listen: false,
     );

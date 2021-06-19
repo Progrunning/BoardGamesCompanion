@@ -1,24 +1,24 @@
-import 'package:board_games_companion/common/analytics.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../common/analytics.dart';
 import '../common/hive_boxes.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/playthrough.dart';
 import '../models/playthrough_player.dart';
+import '../services/analytics_service.dart';
 import '../services/playthroughs_service.dart';
 
 class PlaythroughsStore with ChangeNotifier {
   final PlaythroughService _playthroughService;
-  final FirebaseAnalytics _analytics;
+  final AnalyticsService _analyticsService;
 
   BoardGameDetails _selectedBoardGame;
   List<Playthrough> _playthroughs;
 
   PlaythroughsStore(
     this._playthroughService,
-    this._analytics,
+    this._analyticsService,
   );
 
   BoardGameDetails get selectedBoardGame => _selectedBoardGame;
@@ -55,7 +55,7 @@ class PlaythroughsStore with ChangeNotifier {
     _playthroughs.add(newPlaythrough);
     notifyListeners();
 
-    await _analytics.logEvent(
+    await _analyticsService.logEvent(
       name: Analytics.CreatePlaythrough,
       parameters: {
         Analytics.BoardGameIdParameter: boardGameId,
