@@ -5,6 +5,7 @@ import 'hive_base_service.dart';
 class PreferencesService extends BaseHiveService<dynamic> {
   static const String _firstTimeAppLaunchDateKey = "firstTimeLaunchDate";
   static const String _appLaunchDateKey = "applaunchDate";
+  static const String _remindMeLaterDateKey = "remindMeLater";
   static const String _numberOfSignificantActionsKey =
       "numberOfSignificantActions";
   static const String _rateAndReviewDialogSeenKey = "rateAndReviewDialogSeen";
@@ -22,6 +23,10 @@ class PreferencesService extends BaseHiveService<dynamic> {
     await _setValue(_appLaunchDateKey, nowUtc);
   }
 
+  Future<void> setRemindMeLaterDate(DateTime remindMeLaterDate) async {
+    await _setValue(_remindMeLaterDateKey, remindMeLaterDate);
+  }
+
   Future<DateTime> getFirstTimeLaunchDate() async {
     return await _getValue(
       _firstTimeAppLaunchDateKey,
@@ -32,6 +37,13 @@ class PreferencesService extends BaseHiveService<dynamic> {
   Future<DateTime> getAppLaunchDate() async {
     return await _getValue(
       _appLaunchDateKey,
+      defaultValue: null,
+    );
+  }
+
+  Future<DateTime> getRemindMeLaterDate() async {
+    return await _getValue(
+      _remindMeLaterDateKey,
       defaultValue: null,
     );
   }

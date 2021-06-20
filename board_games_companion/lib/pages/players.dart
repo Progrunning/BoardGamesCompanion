@@ -9,35 +9,29 @@ import 'package:board_games_companion/widgets/player/player_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlayersPage extends StatelessWidget {
-  PlayersPage({
-    Key key,
-  }) : super(key: key);
-
-  final int _numberOfPlayerColumns = 3;
-
-  Widget _buildTopRightCornerAction(BuildContext context, Player player) =>
-      Align(
-        alignment: Alignment.topRight,
-        child: CustomIconButton(
-          Icon(
-            Icons.edit,
-            size: Dimensions.defaultButtonIconSize,
-            color: AppTheme.defaultTextColor,
-          ),
-          onTap: () async {
-            await _navigateToCreateOrEditPlayer(context, player);
-          },
-        ),
-      );
+class PlayersPage extends StatefulWidget {
+  const PlayersPage({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final playerStore = Provider.of<PlayersStore>(
+  _PlayersPageState createState() => _PlayersPageState();
+}
+
+class _PlayersPageState extends State<PlayersPage> {
+  final int _numberOfPlayerColumns = 3;
+
+  PlayersStore playerStore;
+
+  @override
+  void initState() {
+    super.initState();
+
+    playerStore = Provider.of<PlayersStore>(
       context,
       listen: false,
     );
+  }
 
+  Widget build(BuildContext context) {
     return ConsumerFutureBuilder<List<Player>, PlayersStore>(
       future: playerStore.loadPlayers(),
       success: (context, PlayersStore store) {
@@ -87,4 +81,20 @@ class PlayersPage extends StatelessWidget {
       player: player,
     );
   }
+
+  // TODO MK Refactor - don't use methods to create UI elements
+  Widget _buildTopRightCornerAction(BuildContext context, Player player) =>
+      Align(
+        alignment: Alignment.topRight,
+        child: CustomIconButton(
+          Icon(
+            Icons.edit,
+            size: Dimensions.defaultButtonIconSize,
+            color: AppTheme.defaultTextColor,
+          ),
+          onTap: () async {
+            await _navigateToCreateOrEditPlayer(context, player);
+          },
+        ),
+      );
 }

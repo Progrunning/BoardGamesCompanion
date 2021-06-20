@@ -13,6 +13,7 @@ import '../widgets/common/page_container_widget.dart';
 import '../widgets/player/create_edit_player.dart';
 import '../widgets/player/delete_player_widget.dart';
 import '../widgets/player/player_avatar.dart';
+import 'base_page_state.dart';
 
 class CreateEditPlayerPage extends StatefulWidget {
   final PlayersStore _playersStore;
@@ -26,13 +27,33 @@ class CreateEditPlayerPage extends StatefulWidget {
   _CreateEditPlayerPageState createState() => _CreateEditPlayerPageState();
 }
 
-class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
+class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _imagePicker = ImagePicker();
 
   Player _player;
   bool _isEditMode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _player = new Player();
+    _player.id = widget._playersStore.playerToCreateOrEdit.id;
+    _player.name = widget._playersStore.playerToCreateOrEdit.name;
+    _player.avatarFileName =
+        widget._playersStore.playerToCreateOrEdit.avatarFileName;
+    _player.avatarImageUri =
+        widget._playersStore.playerToCreateOrEdit.avatarImageUri;
+
+    _isEditMode = _player.name?.isNotEmpty ?? false;
+
+    _nameController.text = _player.name ?? '';
+    _nameController.addListener(() {
+      _player.name = _nameController.text;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,26 +192,6 @@ class _CreateEditPlayerPageState extends State<CreateEditPlayerPage> {
         },
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _player = new Player();
-    _player.id = widget._playersStore.playerToCreateOrEdit.id;
-    _player.name = widget._playersStore.playerToCreateOrEdit.name;
-    _player.avatarFileName =
-        widget._playersStore.playerToCreateOrEdit.avatarFileName;
-    _player.avatarImageUri =
-        widget._playersStore.playerToCreateOrEdit.avatarImageUri;
-
-    _isEditMode = _player.name?.isNotEmpty ?? false;
-
-    _nameController.text = _player.name ?? '';
-    _nameController.addListener(() {
-      _player.name = _nameController.text;
-    });
   }
 
   @override

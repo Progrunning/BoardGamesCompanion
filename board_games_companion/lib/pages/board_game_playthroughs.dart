@@ -1,44 +1,62 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/pages/paythrough_statistcs_page.dart';
-import 'package:board_games_companion/pages/playthroughs.dart';
-import 'package:board_games_companion/pages/start_new_playthrough.dart';
-import 'package:board_games_companion/stores/board_game_playthroughs_store.dart';
-import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
-import 'package:board_games_companion/utilities/navigator_helper.dart';
-import 'package:board_games_companion/widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
-import 'package:board_games_companion/extensions/page_controller_extensions.dart';
-import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BoardGamePlaythroughsPage extends StatelessWidget {
-  final BoardGameDetails _boardGameDetails;
+import '../common/app_theme.dart';
+import '../extensions/page_controller_extensions.dart';
+import '../models/hive/board_game_details.dart';
+import '../stores/board_game_playthroughs_store.dart';
+import '../stores/players_store.dart';
+import '../stores/playthroughs_store.dart';
+import '../utilities/navigator_helper.dart';
+import '../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
+import '../widgets/common/page_container_widget.dart';
+import 'base_page_state.dart';
+import 'paythrough_statistcs_page.dart';
+import 'playthroughs.dart';
+import 'start_new_playthrough.dart';
+
+class BoardGamePlaythroughsPage extends StatefulWidget {
+  final BoardGameDetails boardGameDetails;
 
   BoardGamePlaythroughsPage(
-    this._boardGameDetails, {
+    this.boardGameDetails, {
     Key key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final boardGamePlaythoughsStore = Provider.of<BoardGamePlaythroughsStore>(
+  _BoardGamePlaythroughsPageState createState() =>
+      _BoardGamePlaythroughsPageState();
+}
+
+class _BoardGamePlaythroughsPageState
+    extends BasePageState<BoardGamePlaythroughsPage> {
+  BoardGamePlaythroughsStore boardGamePlaythoughsStore;
+  PageController pageController;
+  PlaythroughsStore playthroughsStore;
+
+  @override
+  void initState() {
+    super.initState();
+
+    boardGamePlaythoughsStore = Provider.of<BoardGamePlaythroughsStore>(
       context,
       listen: false,
     );
-    final pageController = PageController(
+    pageController = PageController(
       initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex,
     );
-    final playthroughsStore = Provider.of<PlaythroughsStore>(
+    playthroughsStore = Provider.of<PlaythroughsStore>(
       context,
       listen: false,
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(_boardGameDetails.name ?? ''),
+        title: Text(widget.boardGameDetails.name ?? ''),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -46,7 +64,8 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
               color: AppTheme.accentColor,
             ),
             onPressed: () async {
-              await _navigateToBoardGameDetails(context, _boardGameDetails);
+              await _navigateToBoardGameDetails(
+                  context, widget.boardGameDetails);
             },
           )
         ],
@@ -59,17 +78,17 @@ class BoardGamePlaythroughsPage extends StatelessWidget {
                 _onTabPageChanged(index, boardGamePlaythoughsStore),
             children: <Widget>[
               PlaythroughStatistcsPage(
-                boardGameDetails: _boardGameDetails,
+                boardGameDetails: widget.boardGameDetails,
               ),
               PlaythroughsPage(
-                _boardGameDetails,
+                widget.boardGameDetails,
                 playthroughsStore,
               ),
               Consumer<PlayersStore>(
                 builder: (_, __, ___) {
                   return StartNewPlaythroughPage(
-                    boardGameDetails: _boardGameDetails,
-                    pageController: pageController,
+                    widget.boardGameDetails,
+                    pageController,
                   );
                 },
               ),

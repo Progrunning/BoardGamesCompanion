@@ -7,15 +7,21 @@ import 'package:board_games_companion/widgets/board_games/playthrough_statistics
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PlaythroughStatistcsPage extends StatelessWidget {
+class PlaythroughStatistcsPage extends StatefulWidget {
+  final BoardGameDetails boardGameDetails;
+
   const PlaythroughStatistcsPage({
-    @required boardGameDetails,
+    @required this.boardGameDetails,
     Key key,
-  })  : _boardGameDetails = boardGameDetails,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGameDetails _boardGameDetails;
+  @override
+  _PlaythroughStatistcsPageState createState() =>
+      _PlaythroughStatistcsPageState();
+}
 
+class _PlaythroughStatistcsPageState
+    extends State<PlaythroughStatistcsPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -28,7 +34,7 @@ class PlaythroughStatistcsPage extends StatelessWidget {
             collapseMode: CollapseMode.parallax,
             centerTitle: true,
             background: BoardGameImage(
-              _boardGameDetails,
+              widget.boardGameDetails,
               minImageHeight: Constants.BoardGameDetailsImageHeight,
               heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
             ),
@@ -37,7 +43,7 @@ class PlaythroughStatistcsPage extends StatelessWidget {
         SliverPadding(
           sliver: SliverToBoxAdapter(
             child: ChangeNotifierProvider.value(
-              value: _boardGameDetails,
+              value: widget.boardGameDetails,
               child: PlaythroughStatisticsDetails(),
             ),
           ),
