@@ -8,12 +8,16 @@ import '../widgets/about/detail_item_widget.dart';
 import '../widgets/about/section_text_widget.dart';
 import '../widgets/about/section_title_widget.dart';
 import '../widgets/common/page_container_widget.dart';
+import 'base_page_state.dart';
 
-class AboutPage extends StatelessWidget {
-  const AboutPage({
-    Key key,
-  }) : super(key: key);
+class AboutPage extends StatefulWidget {
+  AboutPage({Key key}) : super(key: key);
 
+  @override
+  _AboutPageState createState() => _AboutPageState();
+}
+
+class _AboutPageState extends BasePageState<AboutPage> {
   static const String privactyPolicyUrl =
       'https://progrunning.net/board-games-companion-privacy-policy/';
 

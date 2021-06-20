@@ -98,6 +98,8 @@ class App extends StatelessWidget {
   static final FirebaseAnalytics _analytics = FirebaseAnalytics();
   static final FirebaseAnalyticsObserver _analyticsObserver =
       FirebaseAnalyticsObserver(analytics: _analytics);
+  static final RateAndReviewService _rateAndReviewService =
+      RateAndReviewService(_preferencesService);
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +107,7 @@ class App extends StatelessWidget {
       providers: [
         Provider<FirebaseAnalyticsObserver>.value(value: _analyticsObserver),
         Provider<PreferencesService>.value(value: _preferencesService),
-        Provider<RateAndReviewService>(
-          create: (context) => RateAndReviewService(_preferencesService),
-        ),
+        Provider<RateAndReviewService>.value(value: _rateAndReviewService),
         Provider<AnalyticsService>(
           create: (context) {
             return AnalyticsService(

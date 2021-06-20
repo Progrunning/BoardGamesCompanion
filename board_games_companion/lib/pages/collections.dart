@@ -1,33 +1,39 @@
-import 'package:board_games_companion/common/enums/enums.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/user_store.dart';
-import 'package:board_games_companion/widgets/board_games/collection_empty_widget.dart';
-import 'package:board_games_companion/widgets/board_games/collection_widget.dart';
-import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:flutter/material.dart';
 
-class CollectionsPage extends StatelessWidget {
-  final BoardGamesStore _boardGamesStore;
-  final UserStore _userStore;
+import '../common/enums/enums.dart';
+import '../stores/board_games_store.dart';
+import '../stores/user_store.dart';
+import '../widgets/board_games/collection_empty_widget.dart';
+import '../widgets/board_games/collection_widget.dart';
+import '../widgets/common/generic_error_message_widget.dart';
 
-  CollectionsPage(
-    this._boardGamesStore,
-    this._userStore, {
+class CollectionsPage extends StatefulWidget {
+  final BoardGamesStore boardGamesStore;
+  final UserStore userStore;
+
+  const CollectionsPage(
+    this.boardGamesStore,
+    this.userStore, {
     Key key,
   }) : super(key: key);
 
   @override
+  _CollectionsPageState createState() => _CollectionsPageState();
+}
+
+class _CollectionsPageState extends State<CollectionsPage> {
+  @override
   Widget build(BuildContext context) {
-    if (_boardGamesStore.loadDataState == LoadDataState.Loaded) {
-      if (!_boardGamesStore.hasBoardGames &&
-          (_userStore.user?.name?.isEmpty ?? true)) {
+    if (widget.boardGamesStore.loadDataState == LoadDataState.Loaded) {
+      if (!widget.boardGamesStore.hasBoardGames &&
+          (widget.userStore.user?.name?.isEmpty ?? true)) {
         return CollectionEmpty();
       }
 
       return Collection(
-        boardGamesStore: _boardGamesStore,
+        boardGamesStore: widget.boardGamesStore,
       );
-    } else if (_boardGamesStore.loadDataState == LoadDataState.Error) {
+    } else if (widget.boardGamesStore.loadDataState == LoadDataState.Error) {
       return Center(
         child: GenericErrorMessage(),
       );

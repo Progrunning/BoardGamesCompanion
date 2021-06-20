@@ -1,23 +1,30 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
-import 'package:board_games_companion/widgets/common/cunsumer_future_builder_widget.dart';
-import 'package:board_games_companion/widgets/playthrough/playthrough_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class PlaythroughsPage extends StatelessWidget {
-  final BoardGameDetails _boardGameDetails;
-  final PlaythroughsStore _playthroughsStore;
+import '../common/dimensions.dart';
+import '../models/hive/board_game_details.dart';
+import '../models/hive/playthrough.dart';
+import '../stores/playthroughs_store.dart';
+import '../widgets/common/cunsumer_future_builder_widget.dart';
+import '../widgets/playthrough/playthrough_item_widget.dart';
 
-  PlaythroughsPage(
-    this._boardGameDetails,
-    this._playthroughsStore,
-  );
+class PlaythroughsPage extends StatefulWidget {
+  final BoardGameDetails boardGameDetails;
+  final PlaythroughsStore playthroughsStore;
 
+  const PlaythroughsPage(
+    this.boardGameDetails,
+    this.playthroughsStore, {
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _PlaythroughsPageState createState() => _PlaythroughsPageState();
+}
+
+class _PlaythroughsPageState extends State<PlaythroughsPage> {
   static const double _maxPlaythroughItemHeight = 300;
 
   @override
@@ -30,7 +37,8 @@ class PlaythroughsPage extends StatelessWidget {
         ),
         Expanded(
           child: ConsumerFutureBuilder<List<Playthrough>, PlaythroughsStore>(
-            future: _playthroughsStore.loadPlaythroughs(_boardGameDetails),
+            future: widget.playthroughsStore
+                .loadPlaythroughs(widget.boardGameDetails),
             success: (_, PlaythroughsStore store) {
               final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
               if (hasPlaythroughs) {

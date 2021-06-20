@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../common/dimensions.dart';
-import '../widgets/settings/rate_and_review_button.dart';
 import '../widgets/settings/about_page_details_widget.dart';
+import '../widgets/settings/rate_and_review_button.dart';
 import '../widgets/settings/user_details_widget.dart';
 import '../widgets/settings/version_number_widget.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key key}) : super(key: key);
 
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

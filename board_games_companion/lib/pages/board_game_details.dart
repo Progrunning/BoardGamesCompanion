@@ -1,24 +1,25 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/routes.dart';
-import 'package:board_games_companion/stores/board_game_details_in_collection_store.dart';
-import 'package:board_games_companion/stores/board_game_details_store.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_detail_floating_actions_widget.dart';
-import 'package:board_games_companion/widgets/board_games/details/board_game_details_header_widget.dart';
-import 'package:board_games_companion/widgets/board_games/details/board_games_details_body_widget.dart';
-import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../common/app_theme.dart';
+import '../common/dimensions.dart';
+import '../common/routes.dart';
+import '../stores/board_game_details_in_collection_store.dart';
+import '../stores/board_game_details_store.dart';
+import '../stores/board_games_store.dart';
+import '../widgets/board_games/board_game_detail_floating_actions_widget.dart';
+import '../widgets/board_games/details/board_game_details_header_widget.dart';
+import '../widgets/board_games/details/board_games_details_body_widget.dart';
+import '../widgets/common/page_container_widget.dart';
+import 'base_page_state.dart';
 import 'board_game_playthroughs.dart';
 
-class BoardGamesDetailsPage extends StatelessWidget {
-  final String _boardGameId;
-  final String _boardGameName;
-  final BoardGameDetailsStore _boardGameDetailsStore;
-  final Type _navigatingFromType;
+class BoardGamesDetailsPage extends StatefulWidget {
+  final String boardGameId;
+  final String boardGameName;
+  final BoardGameDetailsStore boardGameDetailsStore;
+  final Type navigatingFromType;
 
   const BoardGamesDetailsPage({
     Key key,
@@ -26,12 +27,17 @@ class BoardGamesDetailsPage extends StatelessWidget {
     @required boardGameId,
     @required boardGameName,
     @required navigatingFromType,
-  })  : _boardGameDetailsStore = boardGameDetailsStore,
-        _boardGameId = boardGameId,
-        _boardGameName = boardGameName,
-        _navigatingFromType = navigatingFromType,
+  })  : boardGameDetailsStore = boardGameDetailsStore,
+        boardGameId = boardGameId,
+        boardGameName = boardGameName,
+        navigatingFromType = navigatingFromType,
         super(key: key);
 
+  @override
+  _BoardGamesDetailsPageState createState() => _BoardGamesDetailsPageState();
+}
+
+class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -48,17 +54,17 @@ class BoardGamesDetailsPage extends StatelessWidget {
             child: CustomScrollView(
               slivers: <Widget>[
                 BoardGamesDetailsHeader(
-                  boardGameDetailsStore: _boardGameDetailsStore,
-                  boardGameName: _boardGameName,
+                  boardGameDetailsStore: widget.boardGameDetailsStore,
+                  boardGameName: widget.boardGameName,
                 ),
                 SliverPadding(
                   padding: EdgeInsets.only(
                     bottom: Dimensions.halfFloatingActionButtonBottomSpacing,
                   ),
                   sliver: BoardGamesDetailsBody(
-                    boardGameId: _boardGameId,
-                    boardGameName: _boardGameName,
-                    boardGameDetailsStore: _boardGameDetailsStore,
+                    boardGameId: widget.boardGameId,
+                    boardGameName: widget.boardGameName,
+                    boardGameDetailsStore: widget.boardGameDetailsStore,
                   ),
                 ),
               ],
@@ -66,7 +72,7 @@ class BoardGamesDetailsPage extends StatelessWidget {
           ),
         ),
         floatingActionButton: BoardGameDetailFloatingActions(
-          boardGameDetailsStore: _boardGameDetailsStore,
+          boardGameDetailsStore: widget.boardGameDetailsStore,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
@@ -80,11 +86,11 @@ class BoardGamesDetailsPage extends StatelessWidget {
     );
     final boardGameDetailsInCollectionStore = BoardGameDetailsInCollectionStore(
       boardGamesStore,
-      _boardGameDetailsStore?.boardGameDetails,
+      widget.boardGameDetailsStore?.boardGameDetails,
     );
 
     if (!boardGameDetailsInCollectionStore.isInCollection &&
-        _navigatingFromType == BoardGamePlaythroughsPage) {
+        widget.navigatingFromType == BoardGamePlaythroughsPage) {
       Navigator.popUntil(context, ModalRoute.withName(Routes.home));
       return false;
     }

@@ -1,25 +1,33 @@
-import '../common/app_theme.dart';
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/pages/collections.dart';
-import 'package:board_games_companion/pages/players.dart';
-import 'package:board_games_companion/pages/search_board_games.dart';
-import 'package:board_games_companion/pages/settings_page.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/home_store.dart';
-import 'package:board_games_companion/stores/user_store.dart';
-import 'package:board_games_companion/utilities/navigator_helper.dart';
-import 'package:board_games_companion/widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
-import 'package:board_games_companion/extensions/page_controller_extensions.dart';
-import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
-  final PageController _pageController = PageController();
+import '../common/app_theme.dart';
+import '../common/constants.dart';
+import '../extensions/page_controller_extensions.dart';
+import '../stores/board_games_store.dart';
+import '../stores/home_store.dart';
+import '../stores/user_store.dart';
+import '../utilities/navigator_helper.dart';
+import '../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
+import '../widgets/common/icon_and_text_button.dart';
+import '../widgets/common/page_container_widget.dart';
+import 'base_page_state.dart';
+import 'collections.dart';
+import 'players.dart';
+import 'search_board_games.dart';
+import 'settings_page.dart';
 
+class HomePage extends StatefulWidget {
   static final GlobalKey<ScaffoldState> homePageGlobalKey =
       GlobalKey<ScaffoldState>();
+  HomePage({Key key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends BasePageState<HomePage> {
+  final PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +37,10 @@ class HomePage extends StatelessWidget {
     );
 
     return Scaffold(
-      key: homePageGlobalKey,
+      key: HomePage.homePageGlobalKey,
       body: PageContainer(
         child: PageView(
-          controller: _pageController,
+          controller: pageController,
           children: <Widget>[
             Consumer2<BoardGamesStore, UserStore>(
               builder: (_, boardGamesStore, userStore, __) {
@@ -79,7 +87,7 @@ class HomePage extends StatelessWidget {
             ],
             currentIndex: homeStore.boardGamesPageIndex,
             onTap: (pageIndex) {
-              _pageController.animateToTab(pageIndex);
+              pageController.animateToTab(pageIndex);
             },
           );
         },
