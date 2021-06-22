@@ -92,6 +92,7 @@ class AppTheme {
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
     final originalBodyText1 = originalTextTheme.bodyText1;
     final originalBodyText2 = originalTextTheme.bodyText2;
+    final originalHeadline5 = originalTextTheme.headline5;
     final originalHeadline4 = originalTextTheme.headline4;
     final originalHeadline3 = originalTextTheme.headline3;
     final originalHeadline2 = originalTextTheme.headline2;
@@ -124,6 +125,9 @@ class AppTheme {
           decorationColor: Colors.transparent,
           color: defaultTextColor,
           fontSize: Dimensions.standardFontSize,
+        ),
+        headline5: originalHeadline5.copyWith(
+          color: defaultTextColor,
         ),
         headline4: originalHeadline4.copyWith(
           fontSize: Dimensions.standardFontSize,

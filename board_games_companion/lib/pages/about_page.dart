@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 import '../common/app_theme.dart';
 import '../common/constants.dart';
 import '../common/dimensions.dart';
+import '../common/strings.dart';
 import '../utilities/launcher_helper.dart';
 import '../widgets/about/detail_item_widget.dart';
 import '../widgets/about/section_text_widget.dart';
@@ -175,29 +177,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                         SectionTitle(
                           title: 'LICENSES',
                         ),
-                        Stack(
-                          children: <Widget>[
-                            DetailsItem(
-                              title: 'Board Game Companion\'s licenses',
-                              subtitle: 'App\'s components licenses',
-                              onTap: () {
-                                showLicensePage(
-                                  context: context,
-                                );
-                              },
-                            ),
-                            Positioned.fill(
-                              right: Dimensions.standardSpacing,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Icon(
-                                  Icons.navigate_next,
-                                  color: AppTheme.accentColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        _LicensePageDetailsItem(),
                       ],
                     ),
                   ),
@@ -240,6 +220,65 @@ class _AboutPageState extends BasePageState<AboutPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _LicensePageDetailsItem extends StatelessWidget {
+  const _LicensePageDetailsItem({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: PackageInfo.fromPlatform(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData &&
+            snapshot.data is PackageInfo) {
+          return Stack(
+            children: <Widget>[
+              DetailsItem(
+                title: 'Board Game Companion\'s licenses',
+                subtitle: 'App\'s components licenses',
+                onTap: () {
+                  showLicensePage(
+                    context: context,
+                    applicationName: Strings.AppTitle,
+                    applicationIcon: Padding(
+                      padding: const EdgeInsets.all(
+                        Dimensions.doubleStandardSpacing,
+                      ),
+                      child: Image.asset(
+                        'assets/icons/logo_transparent.png',
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
+                    applicationVersion: (snapshot.data as PackageInfo).version,
+                  );
+                },
+              ),
+              Positioned.fill(
+                right: Dimensions.standardSpacing,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(
+                    Icons.navigate_next,
+                    color: AppTheme.accentColor,
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 }
