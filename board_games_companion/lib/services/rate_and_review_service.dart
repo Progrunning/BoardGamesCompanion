@@ -51,10 +51,6 @@ class RateAndReviewService {
   }
 
   Future<void> increaseNumberOfSignificantActions() async {
-    if (!await InAppReview.instance.isAvailable()) {
-      return;
-    }
-
     int numberOfLoggedEvents =
         await _preferencesService.getNumberOfSignificantActions();
     if (numberOfLoggedEvents < _requiredNumberOfEventsLogged) {
@@ -68,6 +64,10 @@ class RateAndReviewService {
 
   Future<void> requestReview() async {
     showRateAndReviewDialog = false;
+
+    if (!await InAppReview.instance.isAvailable()) {
+      return;
+    }
 
     InAppReview.instance.requestReview();
     await _preferencesService.setRateAndReviewDialogSeen();
