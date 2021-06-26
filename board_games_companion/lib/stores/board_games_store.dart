@@ -3,6 +3,7 @@ import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/collection_sync_result.dart';
+import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 
@@ -27,7 +28,7 @@ class BoardGamesStore with ChangeNotifier {
 
   String _searchPhrase;
   List<BoardGameDetails> _allBoardGames;
-  List<BoardGameDetails> _boardGames;
+  List<BoardGameDetails> _filteredBoardGames;
   LoadDataState _loadDataState = LoadDataState.None;
 
   BoardGamesStore(
@@ -41,11 +42,23 @@ class BoardGamesStore with ChangeNotifier {
   LoadDataState get loadDataState => _loadDataState;
   // MK Board games currently shown in the collection with applied filters
   // TODO consider ranaming
-  List<BoardGameDetails> get boardGames => _boardGames;
+  List<BoardGameDetails> get filteredBoardGames => _filteredBoardGames;
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
   bool get hasBoardGames => _allBoardGames?.isNotEmpty ?? false;
   String get searchPhrase => _searchPhrase;
+
+  List<BoardGameCategory> get filteredBoardGamesCategories {
+    final allBoardGameCategories = filteredBoardGames
+        .map((boardGame) => boardGame.categories)
+        .expand((categories) => categories)
+        .toList();
+    final uniqueBoardGameCategories =
+        allBoardGameCategories.map((category) => category.id).toSet();
+    allBoardGameCategories.retainWhere(
+        (category) => uniqueBoardGameCategories.remove(category.id));
+    return allBoardGameCategories;
+  }
 
   Future<void> loadBoardGames() async {
     _loadDataState = LoadDataState.Loading;
@@ -53,7 +66,7 @@ class BoardGamesStore with ChangeNotifier {
 
     try {
       _allBoardGames = await _boardGamesService.retrieveBoardGames();
-      _boardGames = List.of(_allBoardGames);
+      _filteredBoardGames = List.of(_allBoardGames);
       await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
@@ -78,7 +91,7 @@ class BoardGamesStore with ChangeNotifier {
 
     if (existingBoardGameDetails == null) {
       _allBoardGames.add(boardGameDetails);
-      _boardGames.add(boardGameDetails);
+      _filteredBoardGames.add(boardGameDetails);
     } else {
       existingBoardGameDetails.imageUrl = boardGameDetails.imageUrl;
       existingBoardGameDetails.name = boardGameDetails.name;
@@ -168,7 +181,7 @@ class BoardGamesStore with ChangeNotifier {
     _updateExpansionCollectionStatus(boardGameToRemove, false);
 
     _allBoardGames.remove(boardGameToRemove);
-    _boardGames.remove(boardGameToRemove);
+    _filteredBoardGames.remove(boardGameToRemove);
 
     notifyListeners();
   }
@@ -182,7 +195,7 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    _boardGames.clear();
+    _filteredBoardGames.clear();
     _allBoardGames.clear();
 
     notifyListeners();
@@ -198,7 +211,7 @@ class BoardGamesStore with ChangeNotifier {
       syncResult = await _boardGamesService.syncCollection(username);
       if (syncResult.isSuccess) {
         _allBoardGames = await _boardGamesService.retrieveBoardGames();
-        _boardGames = List.of(_allBoardGames);
+        _filteredBoardGames = List.of(_allBoardGames);
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
@@ -218,13 +231,13 @@ class BoardGamesStore with ChangeNotifier {
     _searchPhrase = searchPhrase;
 
     if (searchPhrase?.isEmpty ?? true) {
-      _boardGames = List.of(_allBoardGames);
+      _filteredBoardGames = List.of(_allBoardGames);
       notifyListeners();
     }
 
     final searchPhraseLowerCase = searchPhrase.toLowerCase();
 
-    _boardGames = List.of(_allBoardGames
+    _filteredBoardGames = List.of(_allBoardGames
         .where((boardGameDetails) => boardGameDetails.name
             ?.toLowerCase()
             ?.contains(searchPhraseLowerCase))
@@ -234,7 +247,7 @@ class BoardGamesStore with ChangeNotifier {
   }
 
   void applyFilters() {
-    if (boardGames?.isEmpty ?? true) {
+    if (filteredBoardGames?.isEmpty ?? true) {
       return;
     }
 
@@ -243,7 +256,7 @@ class BoardGamesStore with ChangeNotifier {
       orElse: () => null,
     );
 
-    _boardGames = _allBoardGames
+    _filteredBoardGames = _allBoardGames
         .where((boardGame) =>
             (_boardGamesFiltersStore.filterByRating == null ||
                 boardGame.rating >= _boardGamesFiltersStore.filterByRating) &&
@@ -255,7 +268,7 @@ class BoardGamesStore with ChangeNotifier {
         .toList();
 
     if (selectedSortBy != null) {
-      boardGames.sort((a, b) {
+      filteredBoardGames.sort((a, b) {
         if (selectedSortBy.orderBy == OrderBy.Descending) {
           final buffer = a;
           a = b;

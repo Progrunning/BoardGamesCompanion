@@ -316,7 +316,7 @@ class App extends StatelessWidget {
           update: (_, boardGameStore, playthroughsStore,
               playthroughStatisticsStore) {
             playthroughStatisticsStore
-                .loadBoardGamesStatistics(boardGameStore.boardGames);
+                .loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
             return playthroughStatisticsStore;
           },
         ),

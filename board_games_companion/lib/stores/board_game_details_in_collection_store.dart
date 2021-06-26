@@ -13,12 +13,12 @@ class BoardGameDetailsInCollectionStore extends ChangeNotifier {
   );
 
   bool get isInCollection {
-    if ((_boardGamesStore?.boardGames?.isEmpty ?? true) ||
+    if ((_boardGamesStore?.filteredBoardGames?.isEmpty ?? true) ||
         _boardGameDetails == null) {
       return false;
     }
 
-    final boardGameInCollection = _boardGamesStore.boardGames.firstWhere(
+    final boardGameInCollection = _boardGamesStore.filteredBoardGames.firstWhere(
       (boardGameDetails) => boardGameDetails.id == _boardGameDetails.id,
       orElse: () => null,
     );
