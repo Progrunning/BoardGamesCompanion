@@ -1,13 +1,13 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/hive/base_board_game.dart';
-import 'package:board_games_companion/models/hive/board_game_artist.dart';
-import 'package:board_games_companion/models/hive/board_game_category.dart';
-import 'package:board_games_companion/models/hive/board_game_designer.dart';
-import 'package:board_games_companion/models/hive/board_game_publisher.dart';
-import 'package:board_games_companion/models/hive/board_game_rank.dart';
 import 'package:hive/hive.dart';
 
+import '../../common/hive_boxes.dart';
+import 'base_board_game.dart';
+import 'board_game_artist.dart';
+import 'board_game_category.dart';
+import 'board_game_designer.dart';
 import 'board_game_expansion.dart';
+import 'board_game_publisher.dart';
+import 'board_game_rank.dart';
 
 part 'board_game_details.g.dart';
 
@@ -164,6 +164,11 @@ class BoardGameDetails extends BaseBoardGame {
 
   @HiveField(22)
   List<BoardGamesExpansion> expansions = List<BoardGamesExpansion>();
+
+  // TODO CO TO KURWA JEST? CZEMU TO SIE JEBIE KIEDY JEST BRANE?
+  int get expansionsOwned {
+    return expansions.where((expansion) => expansion.isInCollection).length;
+  }
 
   bool _isExpansion;
   @HiveField(23)
