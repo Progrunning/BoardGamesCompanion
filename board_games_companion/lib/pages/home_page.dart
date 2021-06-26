@@ -12,7 +12,7 @@ import '../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.d
 import '../widgets/common/icon_and_text_button.dart';
 import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
-import 'collections.dart';
+import 'collections/collections_page.dart';
 import 'players.dart';
 import 'search_board_games.dart';
 import 'settings_page.dart';
