@@ -246,35 +246,6 @@ class _Filters extends StatelessWidget {
           boardGamesFiltersStore: boardGamesFiltersStore,
           boardGamesStore: boardGamesStore,
         ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Categories',
-            style: AppTheme.sectionHeaderTextStyle,
-          ),
-        ),
-        Wrap(
-          direction: Axis.horizontal,
-          spacing: Dimensions.standardSpacing,
-          // alignment: WrapAlignment.spaceEvenly,
-          children: boardGamesStore.filteredBoardGamesCategories
-              .map<Widget>((category) {
-            return Chip(
-              padding: EdgeInsets.all(
-                Dimensions.standardSpacing,
-              ),
-              backgroundColor: AppTheme.primaryColor.withAlpha(
-                Styles.opacity80Percent,
-              ),
-              label: Text(
-                category.name,
-                style: TextStyle(
-                  color: AppTheme.defaultTextColor,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
       ],
     );
   }
