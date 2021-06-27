@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../common/analytics.dart';
 import '../models/hive/player.dart';
-import '../pages/board_game_details.dart';
+import '../pages/board_game_details/board_game_details_page.dart';
 import '../pages/create_edit_player.dart';
 import '../services/analytics_service.dart';
 import '../services/board_games_geek_service.dart';

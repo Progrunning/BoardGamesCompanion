@@ -165,9 +165,11 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(22)
   List<BoardGamesExpansion> expansions = List<BoardGamesExpansion>();
 
-  // TODO CO TO KURWA JEST? CZEMU TO SIE JEBIE KIEDY JEST BRANE?
   int get expansionsOwned {
-    return expansions.where((expansion) => expansion.isInCollection).length;
+    return expansions
+            ?.where((expansion) => expansion?.isInCollection ?? false)
+            ?.length ??
+        0;
   }
 
   bool _isExpansion;

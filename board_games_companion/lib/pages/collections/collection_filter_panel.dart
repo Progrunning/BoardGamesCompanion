@@ -10,7 +10,7 @@ import '../../common/styles.dart';
 import '../../models/sort_by.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
-import '../../widgets/board_games/board_game_rating_hexagon_widget.dart';
+import '../../widgets/board_games/board_game_rating_hexagon.dart';
 
 class CollectionFilterPanel extends StatefulWidget {
   CollectionFilterPanel({Key key}) : super(key: key);
