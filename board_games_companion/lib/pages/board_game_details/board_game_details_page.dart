@@ -183,6 +183,7 @@ class _Body extends StatelessWidget {
   final BoardGameDetailsStore _boardGameDetailsStore;
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
+  static const _halfSpacingBetweenSecions = Dimensions.standardSpacing;
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +253,7 @@ class _Body extends StatelessWidget {
                           boardGameDetailsStore: _boardGameDetailsStore,
                         ),
                         SizedBox(
-                          height: _spacingBetweenSecions,
+                          height: _halfSpacingBetweenSecions,
                         ),
                         _BodySectionHeader(
                           title: 'Credits',
@@ -262,7 +263,7 @@ class _Body extends StatelessWidget {
                               _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
-                          height: _spacingBetweenSecions,
+                          height: _halfSpacingBetweenSecions,
                         ),
                         _BodySectionHeader(
                           title: 'Categories',
@@ -385,105 +386,101 @@ class _Links extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.standardSpacing,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _Link(
+            title: 'Overview',
+            icon: Icons.info,
+            boardGameDetailsStore: _boardGameDetailsStore,
+            onPressed: () async {
+              await LauncherHelper.launchUri(
+                context,
+                _boardGameDetailsStore.boardGameDetails.bggOverviewUrl,
+              );
+            }),
+        SizedBox(
+          width: Dimensions.doubleStandardSpacing,
+        ),
+        _Link(
+          title: 'Videos',
+          icon: Icons.videocam,
+          boardGameDetailsStore: _boardGameDetailsStore,
+          onPressed: () async {
+            await LauncherHelper.launchUri(
+              context,
+              _boardGameDetailsStore.boardGameDetails.bggHotVideosUrl,
+            );
+          },
+        ),
+        SizedBox(
+          width: Dimensions.doubleStandardSpacing,
+        ),
+        _Link(
+          title: 'Forum',
+          icon: Icons.forum,
+          boardGameDetailsStore: _boardGameDetailsStore,
+          onPressed: () async {
+            await LauncherHelper.launchUri(
+              context,
+              _boardGameDetailsStore.boardGameDetails.bggHotForumUrl,
+            );
+          },
+        ),
+        // TODO Wait for Board Game Oracle to respond to add it in or not
+        // SizedBox(
+        //   width: Dimensions.doubleStandardSpacing,
+        // ),
+        // _Link(
+        //   title: 'Prices',
+        //   icon: Icons.attach_money_sharp,
+        //   boardGameDetailsStore: _boardGameDetailsStore,
+        //   onPressed: () async {
+        //     await LauncherHelper.launchUri(
+        //       context,
+        //       _boardGameDetailsStore.boardGameDetails.boardGameOraclePriceUrl,
+        //     );
+        //   },
+        // ),
+      ],
+    );
+  }
+}
+
+class _Link extends StatelessWidget {
+  const _Link({
+    @required this.title,
+    @required this.icon,
+    @required this.boardGameDetailsStore,
+    @required this.onPressed,
+    Key key,
+  }) : super(key: key);
+
+  final BoardGameDetailsStore boardGameDetailsStore;
+  final String title;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                iconSize: Dimensions.boardGameDetailsWebIconSize,
-                icon: Icon(
-                  Icons.info,
-                  color: AppTheme.accentColor,
-                ),
-                onPressed: () async {
-                  await LauncherHelper.launchUri(
-                    context,
-                    'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
-                  );
-                },
+              Icon(
+                icon,
+                color: AppTheme.accentColor,
+                size: Dimensions.boardGameDetailsLinkIconSize,
               ),
-              Text('Overview'),
+              Text(title),
             ],
           ),
-          SizedBox(
-            width: Dimensions.doubleStandardSpacing,
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                iconSize: Dimensions.boardGameDetailsWebIconSize,
-                icon: Icon(
-                  Icons.videocam,
-                  color: AppTheme.accentColor,
-                ),
-                onPressed: () async {
-                  await LauncherHelper.launchUri(
-                    context,
-                    'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
-                  );
-                },
-              ),
-              Text('Videos'),
-            ],
-          ),
-          SizedBox(
-            width: Dimensions.doubleStandardSpacing,
-          ),
-          Material(
-            color: Colors.transparent,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  iconSize: Dimensions.boardGameDetailsWebIconSize,
-                  icon: Icon(
-                    Icons.forum,
-                    color: AppTheme.accentColor,
-                  ),
-                  onPressed: () async {
-                    await LauncherHelper.launchUri(
-                      context,
-                      'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
-                    );
-                  },
-                ),
-                Text('Forum'),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: Dimensions.doubleStandardSpacing,
-          ),
-          Material(
-            color: Colors.transparent,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  iconSize: Dimensions.boardGameDetailsWebIconSize,
-                  icon: Icon(
-                    Icons.attach_money_sharp,
-                    color: AppTheme.accentColor,
-                  ),
-                  onPressed: () async {
-                    await LauncherHelper.launchUri(
-                      context,
-                      'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
-                    );
-                  },
-                ),
-                Text('Prices'),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

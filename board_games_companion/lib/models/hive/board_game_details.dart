@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 
+import '../../common/constants.dart';
 import '../../common/hive_boxes.dart';
 import 'base_board_game.dart';
 import 'board_game_artist.dart';
@@ -14,6 +15,8 @@ part 'board_game_details.g.dart';
 @HiveType(typeId: HiveBoxes.BoardGamesDetailsTypeId)
 class BoardGameDetails extends BaseBoardGame {
   BoardGameDetails([String name]) : super(name);
+
+  final RegExp onlyLettersOrNumbersRegex = RegExp(r'[a-zA-Z0-9]+');
 
   String _imageUrl;
   @HiveField(5)
@@ -200,5 +203,30 @@ class BoardGameDetails extends BaseBoardGame {
     }
 
     return null;
+  }
+
+  String get bggOverviewUrl => '$_baseBggBoardGameUrl/$id/$_urlEncodeName';
+
+  String get bggHotVideosUrl => '$bggOverviewUrl/videos/all?sort=hot';
+
+  String get bggHotForumUrl => '$bggOverviewUrl/forums/0?sort=hot';
+
+  String get boardGameOraclePriceUrl =>
+      '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_urlEncodeName';
+
+  String get _baseBggBoardGameUrl =>
+      '${Constants.BoardGameGeekBaseUrl}boardgame';
+
+  String get _urlEncodeName {
+    final List<String> spaceSeparatedNameParts = name.split(' ');
+    return spaceSeparatedNameParts
+        .map((part) {
+          final String trimmedAndLoweredPart = part.trim().toLowerCase();
+          final String regexMatch =
+              onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
+          return regexMatch;
+        })
+        .where((part) => part != null)
+        .join('-');
   }
 }
