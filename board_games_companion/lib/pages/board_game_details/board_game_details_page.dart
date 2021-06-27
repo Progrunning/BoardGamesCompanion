@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -386,6 +388,10 @@ class _Links extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isPricingInCountrySupported =
+        Constants.BoardGameOracleSupportedCultureNames.contains(
+            Platform.localeName.replaceFirst('_', '-'));
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -417,7 +423,7 @@ class _Links extends StatelessWidget {
           width: Dimensions.doubleStandardSpacing,
         ),
         _Link(
-          title: 'Forum',
+          title: 'Forums',
           icon: Icons.forum,
           boardGameDetailsStore: _boardGameDetailsStore,
           onPressed: () async {
@@ -427,21 +433,38 @@ class _Links extends StatelessWidget {
             );
           },
         ),
-        // TODO Wait for Board Game Oracle to respond to add it in or not
-        // SizedBox(
-        //   width: Dimensions.doubleStandardSpacing,
-        // ),
-        // _Link(
-        //   title: 'Prices',
-        //   icon: Icons.attach_money_sharp,
-        //   boardGameDetailsStore: _boardGameDetailsStore,
-        //   onPressed: () async {
-        //     await LauncherHelper.launchUri(
-        //       context,
-        //       _boardGameDetailsStore.boardGameDetails.boardGameOraclePriceUrl,
-        //     );
-        //   },
-        // ),
+        SizedBox(
+          width: Dimensions.doubleStandardSpacing,
+        ),
+        Stack(
+          children: [
+            isPricingInCountrySupported
+                ? SizedBox.shrink()
+                : Positioned(
+                    top: Dimensions.standardSpacing,
+                    right: Dimensions.standardSpacing,
+                    child: Image.asset(
+                      'assets/flags/${Constants.UsaCountryCode.toLowerCase()}.png',
+                      width: 16,
+                      height: 12,
+                    ),
+                  ),
+            _Link(
+              title: isPricingInCountrySupported
+                  ? 'Prices'
+                  : '${Constants.UsaCountryCode} Prices',
+              icon: Icons.attach_money,
+              boardGameDetailsStore: _boardGameDetailsStore,
+              onPressed: () async {
+                await LauncherHelper.launchUri(
+                  context,
+                  _boardGameDetailsStore
+                      .boardGameDetails.boardGameOraclePriceUrl,
+                );
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -463,6 +486,7 @@ class _Link extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // var a = Localizations.localeOf(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -477,7 +501,12 @@ class _Link extends StatelessWidget {
                 color: AppTheme.accentColor,
                 size: Dimensions.boardGameDetailsLinkIconSize,
               ),
-              Text(title),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: Dimensions.smallFontSize,
+                ),
+              ),
             ],
           ),
         ),

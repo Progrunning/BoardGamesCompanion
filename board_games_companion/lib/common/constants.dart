@@ -18,6 +18,18 @@ class Constants {
   static const BoardGameGeekLastModifiedDateTimeFormat = 'yyyy-mm-dd HH:MM:ss';
 
   static const BoardGameOracleBaseUrl = 'https://www.boardgameoracle.com/';
+  static const BoardGameOracleUsaCultureName = 'en-US';
+  static const BoardGameOracleNewZealandCultureName = 'en-NZ';
+  static const BoardGameOracleAustraliaCultureName = 'en-AU';
+  static const BoardGameOracleCanadaCultureName = 'en-CA';
+  static const Set<String> BoardGameOracleSupportedCultureNames = {
+    BoardGameOracleUsaCultureName,
+    BoardGameOracleNewZealandCultureName,
+    BoardGameOracleAustraliaCultureName,
+    BoardGameOracleCanadaCultureName
+  };
+
+  static const UsaCountryCode = 'US';
 
   static const LeaveAsIs = 0;
   static const MoveBelow = 1;
