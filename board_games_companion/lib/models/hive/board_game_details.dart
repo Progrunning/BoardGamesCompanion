@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hive/hive.dart';
 
 import '../../common/constants.dart';
@@ -211,8 +213,16 @@ class BoardGameDetails extends BaseBoardGame {
 
   String get bggHotForumUrl => '$bggOverviewUrl/forums/0?sort=hot';
 
-  String get boardGameOraclePriceUrl =>
-      '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_urlEncodeName';
+  String get boardGameOraclePriceUrl {
+    final String currentCulture = Platform.localeName.replaceFirst('_', '-');
+    if (!Constants.BoardGameOracleSupportedCultureNames.contains(
+            currentCulture) ||
+        currentCulture == Constants.BoardGameOracleUsaCultureName) {
+      return '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_urlEncodeName';
+    }
+
+    return '${Constants.BoardGameOracleBaseUrl}$currentCulture/boardgame/price/$_urlEncodeName';
+  }
 
   String get _baseBggBoardGameUrl =>
       '${Constants.BoardGameGeekBaseUrl}boardgame';
