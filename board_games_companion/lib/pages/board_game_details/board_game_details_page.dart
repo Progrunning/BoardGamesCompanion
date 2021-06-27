@@ -231,16 +231,25 @@ class _Body extends StatelessWidget {
                         _BodySectionHeader(
                           title: 'General',
                         ),
-                        _FirstRowInfoPanels(
+                        _FirstRowGeneralInfoPanels(
                           boardGameDetails:
                               _boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: _spacingBetweenSecions,
                         ),
-                        _SecondRowInfoPanels(
+                        _SecondRowGeneralInfoPanels(
                           boardGameDetails:
                               _boardGameDetailsStore.boardGameDetails,
+                        ),
+                        SizedBox(
+                          height: _spacingBetweenSecions,
+                        ),
+                        _BodySectionHeader(
+                          title: 'Links',
+                        ),
+                        _Links(
+                          boardGameDetailsStore: _boardGameDetailsStore,
                         ),
                         SizedBox(
                           height: _spacingBetweenSecions,
@@ -362,6 +371,121 @@ class _Body extends StatelessWidget {
     BoardGameDetailsStore boardGameDetailsStore,
   ) async {
     await boardGameDetailsStore.loadBoardGameDetails(boardGameDetailsId);
+  }
+}
+
+class _Links extends StatelessWidget {
+  const _Links({
+    Key key,
+    @required BoardGameDetailsStore boardGameDetailsStore,
+  })  : _boardGameDetailsStore = boardGameDetailsStore,
+        super(key: key);
+
+  final BoardGameDetailsStore _boardGameDetailsStore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.standardSpacing,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                iconSize: Dimensions.boardGameDetailsWebIconSize,
+                icon: Icon(
+                  Icons.info,
+                  color: AppTheme.accentColor,
+                ),
+                onPressed: () async {
+                  await LauncherHelper.launchUri(
+                    context,
+                    'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
+                  );
+                },
+              ),
+              Text('Overview'),
+            ],
+          ),
+          SizedBox(
+            width: Dimensions.doubleStandardSpacing,
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                iconSize: Dimensions.boardGameDetailsWebIconSize,
+                icon: Icon(
+                  Icons.videocam,
+                  color: AppTheme.accentColor,
+                ),
+                onPressed: () async {
+                  await LauncherHelper.launchUri(
+                    context,
+                    'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
+                  );
+                },
+              ),
+              Text('Videos'),
+            ],
+          ),
+          SizedBox(
+            width: Dimensions.doubleStandardSpacing,
+          ),
+          Material(
+            color: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  iconSize: Dimensions.boardGameDetailsWebIconSize,
+                  icon: Icon(
+                    Icons.forum,
+                    color: AppTheme.accentColor,
+                  ),
+                  onPressed: () async {
+                    await LauncherHelper.launchUri(
+                      context,
+                      'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
+                    );
+                  },
+                ),
+                Text('Forum'),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: Dimensions.doubleStandardSpacing,
+          ),
+          Material(
+            color: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  iconSize: Dimensions.boardGameDetailsWebIconSize,
+                  icon: Icon(
+                    Icons.attach_money_sharp,
+                    color: AppTheme.accentColor,
+                  ),
+                  onPressed: () async {
+                    await LauncherHelper.launchUri(
+                      context,
+                      'https://boardgamegeek.com/boardgame/${_boardGameDetailsStore.boardGameDetails.id}',
+                    );
+                  },
+                ),
+                Text('Prices'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -526,28 +650,15 @@ class _Stats extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          IconButton(
-            iconSize: Dimensions.boardGameDetailsWebIconSize,
-            icon: Icon(
-              Icons.language,
-              color: AppTheme.accentColor,
-            ),
-            onPressed: () async {
-              await LauncherHelper.launchUri(
-                context,
-                'https://boardgamegeek.com/boardgame/${_boardGameDetails.id}',
-              );
-            },
-          ),
+          )
         ],
       ),
     );
   }
 }
 
-class _FirstRowInfoPanels extends StatelessWidget {
-  const _FirstRowInfoPanels({
+class _FirstRowGeneralInfoPanels extends StatelessWidget {
+  const _FirstRowGeneralInfoPanels({
     @required boardGameDetails,
     Key key,
   })  : _boardGameDetails = boardGameDetails,
@@ -588,8 +699,8 @@ class _FirstRowInfoPanels extends StatelessWidget {
   }
 }
 
-class _SecondRowInfoPanels extends StatelessWidget {
-  const _SecondRowInfoPanels({
+class _SecondRowGeneralInfoPanels extends StatelessWidget {
+  const _SecondRowGeneralInfoPanels({
     @required boardGameDetails,
     Key key,
   })  : _boardGameDetails = boardGameDetails,
