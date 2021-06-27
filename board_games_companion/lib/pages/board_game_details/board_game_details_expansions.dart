@@ -1,4 +1,6 @@
+import 'package:board_games_companion/services/preferences_service.dart';
 import 'package:board_games_companion/stores/board_game_details_store.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,47 +43,25 @@ class _BoardGameDetailsExpansionsState
             data: AppTheme.theme.copyWith(
               unselectedWidgetColor: AppTheme.accentColor,
             ),
-            child: ExpansionTile(
-              title: Text(
-                'Expansions (${widget.boardGameDetailsStore.boardGameDetails.expansions.length})',
-                style: TextStyle(
-                  fontSize: Dimensions.standardFontSize,
-                ),
-              ),
-              subtitle: Text(
-                widget.boardGameDetailsStore.boardGameDetails.expansionsOwned ==
-                        0
-                    ? 'You don\'t own any expansions'
-                    : 'You own ${widget.boardGameDetailsStore.boardGameDetails.expansionsOwned} expansion(s)',
-                style: TextStyle(
-                  color: AppTheme.defaultTextColor,
-                  fontSize: Dimensions.smallFontSize,
-                ),
-              ),
-              tilePadding: EdgeInsets.symmetric(
-                horizontal: Dimensions.standardSpacing,
-              ),
-              children: [
-                ...List.generate(
-                  widget
-                      .boardGameDetailsStore.boardGameDetails.expansions.length,
-                  (index) {
-                    final expansion = widget.boardGameDetailsStore
-                        .boardGameDetails.expansions[index];
+            child: Consumer<PreferencesService>(
+              builder: (_, preferencesService, __) {
+                return FutureBuilder(
+                  future: preferencesService.getExpansionsPanelExpandedState(),
+                  builder: (_, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        return _Expansions(
+                          boardGameDetailsStore: widget.boardGameDetailsStore,
+                          preferencesService: preferencesService,
+                          initiallyExpanded: snapshot.data as bool,
+                        );
+                      }
+                    }
 
-                    return ChangeNotifierProvider<BoardGamesExpansion>.value(
-                      value: expansion,
-                      child: Consumer<BoardGamesExpansion>(
-                        builder: (_, store, __) {
-                          return _ExpansionListItem(
-                            boardGamesExpansion: expansion,
-                          );
-                        },
-                      ),
-                    );
+                    return Center(child: LoadingIndicator());
                   },
-                ),
-              ],
+                );
+              },
             ),
           ),
         ),
@@ -90,8 +70,69 @@ class _BoardGameDetailsExpansionsState
   }
 }
 
-class _ExpansionListItem extends StatelessWidget {
-  const _ExpansionListItem({
+class _Expansions extends StatelessWidget {
+  const _Expansions({
+    Key key,
+    @required this.boardGameDetailsStore,
+    @required this.preferencesService,
+    @required this.initiallyExpanded,
+  }) : super(key: key);
+
+  final BoardGameDetailsStore boardGameDetailsStore;
+  final PreferencesService preferencesService;
+  final bool initiallyExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      title: Text(
+        'Expansions (${boardGameDetailsStore.boardGameDetails.expansions.length})',
+        style: TextStyle(
+          fontSize: Dimensions.standardFontSize,
+        ),
+      ),
+      subtitle: Text(
+        boardGameDetailsStore.boardGameDetails.expansionsOwned == 0
+            ? 'You don\'t own any expansions'
+            : 'You own ${boardGameDetailsStore.boardGameDetails.expansionsOwned} expansion(s)',
+        style: TextStyle(
+          color: AppTheme.defaultTextColor,
+          fontSize: Dimensions.smallFontSize,
+        ),
+      ),
+      tilePadding: EdgeInsets.symmetric(
+        horizontal: Dimensions.standardSpacing,
+      ),
+      initiallyExpanded: initiallyExpanded,
+      onExpansionChanged: (bool isExpanded) async {
+        await preferencesService.setExpansionsPanelExpandedState(isExpanded);
+      },
+      children: [
+        ...List.generate(
+          boardGameDetailsStore.boardGameDetails.expansions.length,
+          (index) {
+            final expansion =
+                boardGameDetailsStore.boardGameDetails.expansions[index];
+
+            return ChangeNotifierProvider<BoardGamesExpansion>.value(
+              value: expansion,
+              child: Consumer<BoardGamesExpansion>(
+                builder: (_, store, __) {
+                  return _Expansion(
+                    boardGamesExpansion: expansion,
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _Expansion extends StatelessWidget {
+  const _Expansion({
     Key key,
     @required BoardGamesExpansion boardGamesExpansion,
   })  : _boardGameExpansion = boardGamesExpansion,

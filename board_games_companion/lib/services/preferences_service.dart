@@ -9,6 +9,8 @@ class PreferencesService extends BaseHiveService<dynamic> {
   static const String _numberOfSignificantActionsKey =
       "numberOfSignificantActions";
   static const String _rateAndReviewDialogSeenKey = "rateAndReviewDialogSeen";
+  static const String _expansionsPanelExpandedStateKey =
+      "expansionsPanelExpandedState";
 
   Future<void> initialize() async {
     await ensureBoxOpen(HiveBoxes.Preferences);
@@ -75,6 +77,20 @@ class PreferencesService extends BaseHiveService<dynamic> {
     await _setValue(
       _numberOfSignificantActionsKey,
       numberOfSignificantActions,
+    );
+  }
+
+  Future<void> setExpansionsPanelExpandedState(bool isExpanded) async {
+    await _setValue(
+      _expansionsPanelExpandedStateKey,
+      isExpanded,
+    );
+  }
+
+  Future<bool> getExpansionsPanelExpandedState() async {
+    return await _getValue(
+      _expansionsPanelExpandedStateKey,
+      defaultValue: false,
     );
   }
 
