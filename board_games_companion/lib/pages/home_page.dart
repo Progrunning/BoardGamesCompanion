@@ -15,7 +15,7 @@ import 'base_page_state.dart';
 import 'collections/collections_page.dart';
 import 'players.dart';
 import 'search_board_games.dart';
-import 'settings_page.dart';
+import 'settings/settings_page.dart';
 
 class HomePage extends StatefulWidget {
   static final GlobalKey<ScaffoldState> homePageGlobalKey =

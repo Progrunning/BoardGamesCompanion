@@ -1,20 +1,61 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/mixins/sync_collection.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/user_store.dart';
-
-import 'package:board_games_companion/widgets/about/detail_item_widget.dart';
-import 'package:board_games_companion/widgets/about/section_title_widget.dart';
-import 'package:board_games_companion/widgets/common/bgg_community_member_text_widget.dart';
-import 'package:board_games_companion/widgets/common/bgg_community_member_user_name_text_field_widget.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
+import 'package:board_games_companion/utilities/navigator_transitions.dart';
+import 'package:board_games_companion/widgets/common/rippler_effect.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
-class UserDetails extends StatelessWidget with SyncCollection {
-  const UserDetails({
+import '../../common/app_theme.dart';
+import '../../common/constants.dart';
+import '../../common/dimensions.dart';
+import '../../mixins/sync_collection.dart';
+import '../../stores/board_games_store.dart';
+import '../../stores/user_store.dart';
+import '../../widgets/about/detail_item_widget.dart';
+import '../../widgets/about/section_title_widget.dart';
+import '../../widgets/common/bgg_community_member_text_widget.dart';
+import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
+import '../../widgets/common/icon_and_text_button.dart';
+import '../about_page.dart';
+
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key key}) : super(key: key);
+
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(
+                    height: Dimensions.standardFontSize,
+                  ),
+                  _UserDetailsPanel(),
+                  _RateAndReviewTile(),
+                  _AboutPageTile()
+                ],
+              ),
+            ),
+          ),
+          _VersionNumber(),
+        ],
+      ),
+    );
+  }
+}
+
+class _UserDetailsPanel extends StatelessWidget with SyncCollection {
+  const _UserDetailsPanel({
     Key key,
   }) : super(key: key);
 
@@ -168,6 +209,112 @@ class UserDetails extends StatelessWidget with SyncCollection {
             ),
           ],
         );
+      },
+    );
+  }
+}
+
+class _RateAndReviewTile extends StatelessWidget {
+  const _RateAndReviewTile({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RippleEffect(
+      child: Stack(
+        children: <Widget>[
+          DetailsItem(
+            title: 'Rate & Review',
+            subtitle: 'Store listing',
+            onTap: () async {
+              await InAppReview.instance.openStoreListing(
+                appStoreId: Constants.AppleAppId,
+              );
+            },
+          ),
+          Positioned.fill(
+            right: Dimensions.standardSpacing,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.star,
+                color: AppTheme.accentColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AboutPageTile extends StatelessWidget {
+  const _AboutPageTile({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RippleEffect(
+      child: Stack(
+        children: <Widget>[
+          DetailsItem(
+            title: 'About',
+            subtitle: 'App information',
+            onTap: () async {
+              await Navigator.push(
+                context,
+                NavigatorTransitions.fadeThrough(
+                  (_, __, ___) {
+                    return AboutPage();
+                  },
+                ),
+              );
+            },
+          ),
+          Positioned.fill(
+            right: Dimensions.standardSpacing,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.navigate_next,
+                color: AppTheme.accentColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VersionNumber extends StatelessWidget {
+  const _VersionNumber({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: PackageInfo.fromPlatform(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData &&
+            snapshot.data is PackageInfo) {
+          return Padding(
+            padding: const EdgeInsets.all(
+              Dimensions.halfStandardSpacing,
+            ),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                'v${(snapshot.data as PackageInfo).version}',
+                style: AppTheme.subTitleTextStyle,
+              ),
+            ),
+          );
+        }
+
+        return Container();
       },
     );
   }
