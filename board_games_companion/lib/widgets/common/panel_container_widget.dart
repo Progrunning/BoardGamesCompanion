@@ -1,6 +1,7 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/app_theme.dart';
+import '../../common/styles.dart';
 
 class PanelContainer extends StatelessWidget {
   final Widget _child;
@@ -18,16 +19,13 @@ class PanelContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: LinearGradient(          
           begin: Alignment(0.5, 0),
-          end: Alignment(0.5, 1),
+          end: Alignment(0.5, 1),          
           colors: [
             AppTheme.startDefaultPageElementBackgroundColorGradient,
             AppTheme.endDefaultPageElementBackgroundColorGradient,
-            // AppTheme.startDefaultPageBackgroundColorGradient,
-            // AppTheme.endDefaultPageBackgroundColorGradient
           ],
-          tileMode: TileMode.clamp,
         ),
         boxShadow: [
           AppTheme.defaultBoxShadow
