@@ -71,6 +71,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
               horizontal: Dimensions.standardSpacing,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 BggCommunityMemberText(),
                 BggCommunityMemberUserNameTextField(
