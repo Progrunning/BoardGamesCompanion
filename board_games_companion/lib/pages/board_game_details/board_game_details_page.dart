@@ -486,11 +486,13 @@ class _Link extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var a = Localizations.localeOf(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onPressed,
+        onTap: () async {
+          onPressed?.call();
+          await boardGameDetailsStore.captureLinkAnalytics(title);
+        },
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
           child: Column(
