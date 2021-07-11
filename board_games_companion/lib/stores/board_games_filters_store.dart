@@ -31,7 +31,10 @@ class BoardGamesFiltersStore with ChangeNotifier {
   double get filterByRating => _collectionFilters?.filterByRating;
   int get numberOfPlayers => _collectionFilters?.numberOfPlayers;
 
-  BoardGamesFiltersStore(this._boardGamesFiltersService, this._analyticsService);
+  BoardGamesFiltersStore(
+    this._boardGamesFiltersService,
+    this._analyticsService,
+  );
 
   Future<void> loadFilterPreferences() async {
     _collectionFilters =
@@ -117,13 +120,17 @@ class BoardGamesFiltersStore with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateNumberOfPlayers(int numberOfPlayers) async {
+  Future<void> changeNumberOfPlayers(int numberOfPlayers) async {
     if (_collectionFilters == null) {
       _collectionFilters = CollectionFilters();
     }
 
     _collectionFilters.numberOfPlayers = numberOfPlayers;
 
+    notifyListeners();
+  }
+
+  Future<void> updateNumberOfPlayers(int numberOfPlayers) async {
     await _analyticsService.logEvent(
       name: Analytics.FilterCollection,
       parameters: {
@@ -135,8 +142,6 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     await _boardGamesFiltersService
         .addOrUpdateCollectionFilters(_collectionFilters);
-
-    notifyListeners();
   }
 
   @override

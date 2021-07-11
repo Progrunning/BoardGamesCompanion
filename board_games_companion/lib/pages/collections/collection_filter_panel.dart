@@ -305,9 +305,11 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final minNumberOfPlayers = boardGamesStore.allboardGames
+        .where((boardGameDetails) => boardGameDetails.minPlayers != null)
         .map((boardGameDetails) => boardGameDetails.minPlayers)
         ?.reduce(min);
     final maxNumberOfPlayers = boardGamesStore.allboardGames
+        .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
         .map((boardGameDetails) => boardGameDetails.maxPlayers)
         ?.reduce(max);
 
@@ -351,6 +353,11 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                       ? boardGamesFiltersStore.numberOfPlayers?.toString()
                       : 'Any',
                   onChanged: (value) {
+                    boardGamesFiltersStore.changeNumberOfPlayers(
+                      value != 0 ? value.round() : null,
+                    );
+                  },
+                  onChangeEnd: (value) {
                     boardGamesFiltersStore.updateNumberOfPlayers(
                       value != 0 ? value.round() : null,
                     );
