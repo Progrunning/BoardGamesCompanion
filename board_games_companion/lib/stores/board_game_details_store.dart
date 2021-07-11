@@ -1,18 +1,25 @@
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
+import '../common/analytics.dart';
+import '../models/hive/board_game_details.dart';
+import '../services/board_games_geek_service.dart';
 import 'board_games_store.dart';
 
 class BoardGameDetailsStore with ChangeNotifier {
   final BoardGamesGeekService _boardGameGeekService;
   final BoardGamesStore _boardGamesStore;
+  final _analyticsService;
 
   BoardGameDetails _boardGameDetails;
+
   BoardGameDetails get boardGameDetails => _boardGameDetails;
 
-  BoardGameDetailsStore(this._boardGameGeekService, this._boardGamesStore);
+  BoardGameDetailsStore(
+    this._boardGameGeekService,
+    this._boardGamesStore,
+    this._analyticsService,
+  );
 
   Future<BoardGameDetails> loadBoardGameDetails(String boardGameId) async {
     try {
@@ -42,5 +49,14 @@ class BoardGameDetailsStore with ChangeNotifier {
     notifyListeners();
 
     return _boardGameDetails;
+  }
+
+  Future<void> captureLinkAnalytics(String linkName) async {
+    await _analyticsService.logEvent(
+      name: Analytics.BoardGameDetailsLinks,
+      parameters: {
+        Analytics.BoardGameDetailsLinksName: linkName,
+      },
+    );
   }
 }
