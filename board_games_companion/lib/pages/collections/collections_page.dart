@@ -80,17 +80,11 @@ class _Collection extends StatelessWidget {
       child: PageContainer(
         child: CustomScrollView(
           slivers: <Widget>[
-            _SearchBar(
-              boardGamesStore: _boardGamesStore,
-            ),
+            _SearchBar(boardGamesStore: _boardGamesStore),
             if (hasNoSearchResults)
-              _EmptySearchResult(
-                boardGamesStore: _boardGamesStore,
-              ),
-            if (!hasNoSearchResults)
-              _Grid(
-                boardGamesStore: _boardGamesStore,
-              ),
+              _EmptySearchResult(boardGamesStore: _boardGamesStore)
+            else
+              _Grid(boardGamesStore: _boardGamesStore),
           ],
         ),
       ),

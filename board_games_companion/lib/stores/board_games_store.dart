@@ -247,25 +247,23 @@ class BoardGamesStore with ChangeNotifier {
   }
 
   void applyFilters() {
-    if (filteredBoardGames?.isEmpty ?? true) {
-      return;
-    }
-
     final selectedSortBy = _boardGamesFiltersStore.sortBy.firstWhere(
       (sb) => sb.selected,
       orElse: () => null,
     );
 
     _filteredBoardGames = _allBoardGames
-        .where((boardGame) =>
+        ?.where((boardGame) =>
             (_boardGamesFiltersStore.filterByRating == null ||
                 boardGame.rating >= _boardGamesFiltersStore.filterByRating) &&
             (_boardGamesFiltersStore.numberOfPlayers == null ||
-                (boardGame.maxPlayers >=
-                        _boardGamesFiltersStore.numberOfPlayers &&
-                    boardGame.minPlayers <=
-                        _boardGamesFiltersStore.numberOfPlayers)))
-        .toList();
+                (boardGame.maxPlayers != null &&
+                    boardGame.minPlayers != null &&
+                    (boardGame.maxPlayers >=
+                            _boardGamesFiltersStore.numberOfPlayers &&
+                        boardGame.minPlayers <=
+                            _boardGamesFiltersStore.numberOfPlayers))))
+        ?.toList();
 
     if (selectedSortBy != null) {
       filteredBoardGames.sort((a, b) {
