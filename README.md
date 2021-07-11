@@ -7,3 +7,9 @@ The app integrates with the Board Game Geek API, which provides the ability to:
 - Browse through the database of virtually all of the board games out there
 - Syncing down your collection of board games
 - Viewing the current TOP 50 hot board games
+
+<p>
+  <img src="https://progrunning.net/content/images/2020/05/BGC-Search-and-Hot-Games.jpg" width="250" />
+  <img src="https://progrunning.net/content/images/2020/05/BGC-Board-Game-Details.jpg" width="250" /> 
+  <img src="https://progrunning.net/content/images/2020/05/BGC-Collection.jpg" width="250" />
+</p>
