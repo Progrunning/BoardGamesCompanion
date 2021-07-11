@@ -1,23 +1,23 @@
-import 'package:board_games_companion/common/enums/enums.dart';
-import 'package:board_games_companion/common/enums/order_by.dart';
-import 'package:board_games_companion/common/enums/sort_by_option.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/collection_sync_result.dart';
-import 'package:board_games_companion/models/hive/board_game_category.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/hive/board_game_expansion.dart';
-
-import 'package:board_games_companion/services/board_games_service.dart';
-import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/services/playthroughs_service.dart';
-import 'package:board_games_companion/services/score_service.dart';
-import 'package:board_games_companion/stores/board_games_filters_store.dart';
-import 'package:board_games_companion/extensions/date_time_extensions.dart';
-import 'package:board_games_companion/extensions/int_extensions.dart';
-import 'package:board_games_companion/extensions/double_extensions.dart';
-import 'package:board_games_companion/extensions/string_extensions.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+
+import '../common/enums/enums.dart';
+import '../common/enums/order_by.dart';
+import '../common/enums/sort_by_option.dart';
+import '../common/hive_boxes.dart';
+import '../extensions/date_time_extensions.dart';
+import '../extensions/double_extensions.dart';
+import '../extensions/int_extensions.dart';
+import '../extensions/string_extensions.dart';
+import '../models/collection_sync_result.dart';
+import '../models/hive/board_game_category.dart';
+import '../models/hive/board_game_details.dart';
+import '../models/hive/board_game_expansion.dart';
+import '../services/board_games_service.dart';
+import '../services/player_service.dart';
+import '../services/playthroughs_service.dart';
+import '../services/score_service.dart';
+import 'board_games_filters_store.dart';
 
 class BoardGamesStore with ChangeNotifier {
   final BoardGamesService _boardGamesService;
@@ -266,7 +266,7 @@ class BoardGamesStore with ChangeNotifier {
         ?.toList();
 
     if (selectedSortBy != null) {
-      filteredBoardGames.sort((a, b) {
+      filteredBoardGames?.sort((a, b) {
         if (selectedSortBy.orderBy == OrderBy.Descending) {
           final buffer = a;
           a = b;

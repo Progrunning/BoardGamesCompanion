@@ -64,8 +64,11 @@ class NavigatorHelper {
             context,
             listen: false,
           );
-          final _boardGameDetailsStore =
-              BoardGameDetailsStore(_boardGamesGeekService, _boardGamesStore);
+          final _boardGameDetailsStore = BoardGameDetailsStore(
+            _boardGamesGeekService,
+            _boardGamesStore,
+            _analytics,
+          );
           return BoardGamesDetailsPage(
             boardGameId: boardGameId,
             boardGameName: boardGameName,
