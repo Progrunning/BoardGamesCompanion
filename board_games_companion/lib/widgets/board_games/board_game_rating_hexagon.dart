@@ -11,7 +11,7 @@ class BoardGameRatingHexagon extends StatelessWidget {
       @required double rating,
       double width = Dimensions.boardGameDetailsHexagonSize,
       double height = Dimensions.boardGameDetailsHexagonSize,
-      double fontSize = Dimensions.doubleExtraLargeFontSize,
+      double fontSize = Dimensions.boardGameDetailsHexagonFontSize,
       Color fontColor = AppTheme.defaultTextColor,
       Color hexColor = AppTheme.accentColor,
       int hexColorOpacity = Styles.opacity90Percent})
