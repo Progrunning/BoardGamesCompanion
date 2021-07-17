@@ -83,13 +83,11 @@ class PlaythroughItem extends StatelessWidget {
                                   height: Dimensions.standardSpacing,
                                 ),
                                 ChangeNotifierProvider(
-                                  create: (_) =>
-                                      PlaythroughDurationStore(_playthrough),
+                                  create: (_) => PlaythroughDurationStore(_playthrough),
                                   child: Consumer<PlaythroughDurationStore>(
                                     builder: (_, store, __) {
                                       return PlaythroughItemDetail(
-                                        store.durationInSeconds
-                                            .toPlaythroughDuration(),
+                                        store.durationInSeconds.toPlaythroughDuration(),
                                         'duration',
                                       );
                                     },
@@ -125,8 +123,7 @@ class PlaythroughItem extends StatelessWidget {
                                 },
                               ),
                             ),
-                            if (store.playthrough.status ==
-                                PlaythroughStatus.Started)
+                            if (store.playthrough.status == PlaythroughStatus.Started)
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: IconAndTextButton(
@@ -137,8 +134,7 @@ class PlaythroughItem extends StatelessWidget {
                                   onPressed: () => _stopPlaythrough(store),
                                 ),
                               ),
-                            if (store.playthrough.status ==
-                                PlaythroughStatus.Finished)
+                            if (store.playthrough.status == PlaythroughStatus.Finished)
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: IconAndTextButton(
@@ -146,8 +142,7 @@ class PlaythroughItem extends StatelessWidget {
                                   backgroundColor: Colors.red,
                                   horizontalPadding: Dimensions.standardSpacing,
                                   verticalPadding: Dimensions.standardSpacing,
-                                  onPressed: () =>
-                                      _deletePlaythrough(context, store),
+                                  onPressed: () => _deletePlaythrough(context, store),
                                 ),
                               ),
                           ],
@@ -185,8 +180,7 @@ class PlaythroughItem extends StatelessWidget {
       context,
       listen: false,
     );
-    final playthroughStore =
-        PlaythroughStore(playerService, scoreService, playthroughsStore);
+    final playthroughStore = PlaythroughStore(playerService, scoreService, playthroughsStore);
     playthroughStore.loadPlaythrough(_playthrough);
     return playthroughStore;
   }
@@ -195,23 +189,22 @@ class PlaythroughItem extends StatelessWidget {
     await store.stopPlaythrough();
   }
 
-  Future<void> _deletePlaythrough(
-      BuildContext context, PlaythroughStore playthroughStore) async {
-    await showDialog(
+  Future<void> _deletePlaythrough(BuildContext context, PlaythroughStore playthroughStore) async {
+    await showDialog<AlertDialog>(
       context: context,
-      builder: (context) {
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Are you sure you want to delete this game?'),
+          title: const Text('Are you sure you want to delete this game?'),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('Delete'),
+              child: const Text('Delete'),
               color: Colors.red,
               onPressed: () async {
                 final playthroughsStore = Provider.of<PlaythroughsStore>(
@@ -219,8 +212,7 @@ class PlaythroughItem extends StatelessWidget {
                   listen: false,
                 );
 
-                await playthroughsStore
-                    .deletePlaythrough(playthroughStore.playthrough.id);
+                await playthroughsStore.deletePlaythrough(playthroughStore.playthrough.id);
 
                 Navigator.of(context).pop();
               },

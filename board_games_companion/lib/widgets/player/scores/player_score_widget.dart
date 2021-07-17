@@ -83,7 +83,7 @@ class PlayerScore extends StatelessWidget {
                     if (editMode)
                       PlayerScoreEdit(
                         controller: playerScoreController,
-                        onSubmit: (value) async {
+                        onSubmit: (String value) async {
                           await _updatePlayerScore(
                             value,
                             context,
@@ -176,7 +176,7 @@ class PlayerScore extends StatelessWidget {
       return;
     }
 
-    await showDialog(
+    await showDialog<AlertDialog>(
       context: context,
       barrierDismissible: true,
       builder: (_) {

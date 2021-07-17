@@ -67,20 +67,18 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return CollectionSyncResult();
     }
 
-    final collectionSyncResult =
-        await _boardGameGeekService.syncCollection(username);
+    final collectionSyncResult = await _boardGameGeekService.syncCollection(username);
     if (collectionSyncResult.isSuccess) {
       if (collectionSyncResult.data?.isEmpty ?? true) {
         storageBox.clear();
       } else {
-        final syncedCollectionMap = Map.fromIterable(
-          collectionSyncResult.data,
-          key: (boardGameDetails) => boardGameDetails.id,
-          value: (boardGameDetails) => boardGameDetails,
-        );
+        final syncedCollectionMap = <String, BoardGameDetails>{
+          for (BoardGameDetails boardGameDetails in collectionSyncResult.data)
+            boardGameDetails.id: boardGameDetails
+        };
+        
         final boardGamesToRemove = storageBox.values
-            ?.where((boardGameDetails) =>
-                !syncedCollectionMap.containsKey(boardGameDetails.id))
+            ?.where((boardGameDetails) => !syncedCollectionMap.containsKey(boardGameDetails.id))
             ?.toList();
 
         // Remove

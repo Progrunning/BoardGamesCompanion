@@ -2,13 +2,12 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class PageContainer extends StatelessWidget {
-  final Widget _child;
-
   const PageContainer({
-    @required child,
+    @required this.child,
     Key key,
-  })  : _child = child,
-        super(key: key);
+  }) : super(key: key);
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class PageContainer extends StatelessWidget {
           tileMode: TileMode.clamp,
         ),
       ),
-      child: _child,
+      child: child,
     );
   }
 }

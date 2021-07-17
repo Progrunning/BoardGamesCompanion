@@ -18,6 +18,7 @@ class Score {
   @HiveField(4)
   String value;
 
+  // TODO MK What is this used for?
   @HiveField(5)
   String isDeleted;
 }

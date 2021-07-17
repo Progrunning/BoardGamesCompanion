@@ -49,7 +49,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
-  analyzer: ^0.40.4
+  analyzer: ^0.41.2
   hive_generator: 0.8.1
   build_runner: ^1.8.0
   flutter_launcher_icons: "^0.7.3"

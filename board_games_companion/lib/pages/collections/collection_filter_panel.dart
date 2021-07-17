@@ -105,25 +105,23 @@ class _SortBy extends StatelessWidget {
 
 class _SortByChip extends StatelessWidget {
   const _SortByChip({
-    @required sortBy,
-    @required boardGamesFiltersStore,
+    @required this.sortBy,
+    @required this.boardGamesFiltersStore,
     Key key,
-  })  : _sortBy = sortBy,
-        _boardGamesFiltersStore = boardGamesFiltersStore,
-        super(key: key);
+  }) : super(key: key);
 
-  final SortBy _sortBy;
-  final BoardGamesFiltersStore _boardGamesFiltersStore;
+  final SortBy sortBy;
+  final BoardGamesFiltersStore boardGamesFiltersStore;
 
   @override
   Widget build(BuildContext context) {
     Widget avatarIcon = Container();
-    switch (_sortBy?.orderBy) {
+    switch (sortBy?.orderBy) {
       case OrderBy.Ascending:
-        avatarIcon = Icon(Icons.arrow_drop_up);
+        avatarIcon = const Icon(Icons.arrow_drop_up);
         break;
       case OrderBy.Descending:
-        avatarIcon = Icon(Icons.arrow_drop_down);
+        avatarIcon = const Icon(Icons.arrow_drop_down);
         break;
     }
 
@@ -132,14 +130,13 @@ class _SortByChip extends StatelessWidget {
         color: AppTheme.defaultTextColor,
       ),
       label: Text(
-        _sortBy?.name ?? '',
+        sortBy?.name ?? '',
         style: TextStyle(
-          color: (_sortBy?.selected ?? false)
-              ? AppTheme.defaultTextColor
-              : AppTheme.secondaryTextColor,
+          color:
+              (sortBy?.selected ?? false) ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
         ),
       ),
-      selected: _sortBy?.selected ?? false,
+      selected: sortBy?.selected ?? false,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           Styles.defaultCornerRadius,
@@ -152,7 +149,7 @@ class _SortByChip extends StatelessWidget {
       ),
       avatar: avatarIcon,
       onSelected: (isSelected) {
-        _boardGamesFiltersStore?.updateSortBySelection(_sortBy);
+        boardGamesFiltersStore?.updateSortBySelection(sortBy);
       },
     );
   }
@@ -190,8 +187,7 @@ class _Filters extends StatelessWidget {
           height: Dimensions.standardSpacing,
         ),
         SizedBox(
-          height: Dimensions.collectionFilterHexagonSize +
-              Dimensions.doubleStandardSpacing,
+          height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
           child: Material(
             shadowColor: AppTheme.shadowColor,
             elevation: Dimensions.defaultElevation,
@@ -267,9 +263,7 @@ class _FilterRatingAnyValue extends StatelessWidget {
       child: Text(
         'Any',
         style: TextStyle(
-          color: isSelected
-              ? AppTheme.defaultTextColor
-              : AppTheme.secondaryTextColor,
+          color: isSelected ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
         ),
       ),
     );
@@ -344,8 +338,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                   showValueIndicator: ShowValueIndicator.always,
                 ),
                 child: Slider(
-                  value:
-                      boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 0,
+                  value: boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 0,
                   divisions: maxNumberOfPlayers - 1,
                   min: minNumberOfPlayers.toDouble() - 1,
                   max: maxNumberOfPlayers.toDouble(),

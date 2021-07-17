@@ -16,19 +16,19 @@ class RetryInterceptor extends Interceptor {
   int retriesCount = 0;
 
   @override
-  Future onResponse(Response response) async {
+  Future<dynamic> onResponse(Response<dynamic> response) async {
     if (response.statusCode == _retryStatusCode && retriesCount < retryNumber) {
-      await Future.delayed(_retryInterval * retriesCount);
+      await Future<dynamic>.delayed(_retryInterval * retriesCount);
       retriesCount++;
-      return await this.dio.request(
-            response.request.path,
-            cancelToken: response.request.cancelToken,
-            data: response.request.data,
-            onReceiveProgress: response.request.onReceiveProgress,
-            onSendProgress: response.request.onSendProgress,
-            queryParameters: response.request.queryParameters,
-            options: response.request,
-          );
+      return dio.request<dynamic>(
+        response.request.path,
+        cancelToken: response.request.cancelToken,
+        data: response.request.data,
+        onReceiveProgress: response.request.onReceiveProgress,
+        onSendProgress: response.request.onSendProgress,
+        queryParameters: response.request.queryParameters,
+        options: response.request,
+      );
     }
 
     return super.onResponse(response);
