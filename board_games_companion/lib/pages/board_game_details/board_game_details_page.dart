@@ -647,8 +647,10 @@ class _Stats extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          BoardGameRatingHexagon(
-            rating: _boardGameDetails?.rating,
+          Center(
+            child: BoardGameRatingHexagon(
+              rating: _boardGameDetails?.rating,
+            ),
           ),
           SizedBox(
             width: Dimensions.standardSpacing,
@@ -662,25 +664,127 @@ class _Stats extends StatelessWidget {
                   title: 'Rank',
                   detail: _boardGameDetails?.rankFormatted,
                 ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Ratings',
                   detail: '${_boardGameDetails?.votes}',
                   format: true,
                 ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Comments',
                   detail: '${_boardGameDetails?.commentsNumber}',
                   format: true,
                 ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Published',
                   detail: '${_boardGameDetails?.yearPublished}',
                 ),
               ],
             ),
-          )
+          ),
+          const _CollectionFlags(),
         ],
       ),
+    );
+  }
+}
+
+class _CollectionFlags extends StatelessWidget {
+  const _CollectionFlags({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ToggleButtons(
+          splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
+          fillColor: Colors.transparent,
+          selectedColor: Colors.white,
+          selectedBorderColor: Colors.transparent,
+          borderColor: Colors.transparent,
+          isSelected: [false, true],
+          children: [
+            _CollectionFlag(
+              icon: Icons.sports_esports,
+              title: 'Played',
+              isSelected: false,
+            ),            
+            _CollectionFlag(
+              icon: Icons.card_giftcard,
+              title: 'Wishlist',
+              isSelected: false,
+            ),
+          ],
+          onPressed: (int index) {},
+        ),
+        ToggleButtons(
+          splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
+          fillColor: Colors.transparent,
+          selectedColor: Colors.white,
+          selectedBorderColor: Colors.transparent,
+          borderColor: Colors.transparent,
+          isSelected: [false],
+          children: [
+            _CollectionFlag(
+              icon: Icons.grid_on,
+              title: 'Collection',
+              isSelected: true,
+            ),
+          ],
+          onPressed: (int index) {},
+        ),
+      ],
+    );
+  }
+}
+
+class _CollectionFlag extends StatelessWidget {
+  const _CollectionFlag({
+    @required this.icon,
+    @required this.title,
+    @required this.isSelected,
+    Key key,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String title;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.standardSpacing,
+            vertical: Dimensions.halfStandardSpacing
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: isSelected
+                    ? AppTheme.accentColor
+                    : AppTheme.deselectedBottomTabIconColor,
+              ),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: Dimensions.smallFontSize,
+                  color: isSelected
+                      ? AppTheme.defaultTextColor
+                      : AppTheme.secondaryTextColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
