@@ -10,16 +10,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BoardGameCollectionItem extends StatefulWidget {
-  final BaseBoardGame boardGame;
-  final Future<void> Function() onTap;
-  final String heroTag;
-
-  BoardGameCollectionItem({
+  const BoardGameCollectionItem({
     Key key,
     this.boardGame,
     this.onTap,
     this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
   }) : super(key: key);
+
+  final BaseBoardGame boardGame;
+  final Future<void> Function() onTap;
+  final String heroTag;
 
   @override
   State<StatefulWidget> createState() => _BoardGameSearchItemWidget();
@@ -31,7 +31,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
     return Stack(
       children: <Widget>[
         Hero(
-          tag: "${widget.heroTag}${widget.boardGame.id}",
+          tag: '${widget.heroTag}${widget.boardGame.id}',
           child: CachedNetworkImage(
             imageUrl: widget.boardGame.thumbnailUrl ?? '',
             imageBuilder: (context, imageProvider) => Padding(
@@ -41,7 +41,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  boxShadow: [
+                  boxShadow: const <BoxShadow>[
                     AppTheme.defaultBoxShadow,
                   ],
                   borderRadius: AppTheme.defaultBoxRadius,
@@ -55,7 +55,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
             fit: BoxFit.fitWidth,
             placeholder: (context, url) => Container(
               color: AppTheme.primaryColor,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             ),
@@ -63,7 +63,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
             errorWidget: (context, url, error) => ClipRRect(
               borderRadius: AppTheme.defaultBoxRadius,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppTheme.primaryColor,
                   image: DecorationImage(
                     alignment: Alignment.center,
@@ -85,10 +85,8 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
             alignment: Alignment.bottomCenter,
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .accentColor
-                    .withAlpha(Styles.opacity70Percent),
-                borderRadius: BorderRadius.all(
+                color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
+                borderRadius: const BorderRadius.all(
                   Radius.circular(
                     Styles.defaultCornerRadius,
                   ),
@@ -99,16 +97,14 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
                 child: Text(
                   widget.boardGame.name ?? '',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: AppTheme.defaultTextColor,
-                      fontSize: Dimensions.smallFontSize),
+                  style: const TextStyle(
+                      color: AppTheme.defaultTextColor, fontSize: Dimensions.smallFontSize),
                 ),
               ),
             ),
           ),
         ),
-        if (widget.boardGame.rank != null &&
-            widget.boardGame.rank < Constants.Top100)
+        if (widget.boardGame.rank != null && widget.boardGame.rank < Constants.Top100)
           Positioned(
             top: -Dimensions.halfStandardSpacing - 1,
             right: Dimensions.halfStandardSpacing,
