@@ -3,18 +3,16 @@ import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:flutter/cupertino.dart';
 
 class BoardGameDetailsInCollectionStore extends ChangeNotifier {
-  final BoardGamesStore _boardGamesStore;
-  
-  BoardGameDetails _boardGameDetails;
-
   BoardGameDetailsInCollectionStore(
     this._boardGamesStore,
     this._boardGameDetails,
   );
 
+  final BoardGamesStore _boardGamesStore;
+  BoardGameDetails _boardGameDetails;
+
   bool get isInCollection {
-    if ((_boardGamesStore?.filteredBoardGames?.isEmpty ?? true) ||
-        _boardGameDetails == null) {
+    if ((_boardGamesStore?.filteredBoardGames?.isEmpty ?? true) || _boardGameDetails == null) {
       return false;
     }
 
