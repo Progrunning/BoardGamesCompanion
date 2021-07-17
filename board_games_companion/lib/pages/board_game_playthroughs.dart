@@ -16,20 +16,18 @@ import 'playthroughs.dart';
 import 'start_new_playthrough.dart';
 
 class BoardGamePlaythroughsPage extends StatefulWidget {
-  final BoardGameDetails boardGameDetails;
-
-  BoardGamePlaythroughsPage(
+  const BoardGamePlaythroughsPage(
     this.boardGameDetails, {
     Key key,
   }) : super(key: key);
 
+  final BoardGameDetails boardGameDetails;
+
   @override
-  _BoardGamePlaythroughsPageState createState() =>
-      _BoardGamePlaythroughsPageState();
+  _BoardGamePlaythroughsPageState createState() => _BoardGamePlaythroughsPageState();
 }
 
-class _BoardGamePlaythroughsPageState
-    extends BasePageState<BoardGamePlaythroughsPage> {
+class _BoardGamePlaythroughsPageState extends BasePageState<BoardGamePlaythroughsPage> {
   BoardGamePlaythroughsStore boardGamePlaythoughsStore;
   PageController pageController;
   PlaythroughsStore playthroughsStore;
@@ -59,13 +57,12 @@ class _BoardGamePlaythroughsPageState
         title: Text(widget.boardGameDetails.name ?? ''),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.info,
               color: AppTheme.accentColor,
             ),
             onPressed: () async {
-              await _navigateToBoardGameDetails(
-                  context, widget.boardGameDetails);
+              await _navigateToBoardGameDetails(context, widget.boardGameDetails);
             },
           )
         ],
@@ -74,8 +71,7 @@ class _BoardGamePlaythroughsPageState
         child: PageContainer(
           child: PageView(
             controller: pageController,
-            onPageChanged: (index) =>
-                _onTabPageChanged(index, boardGamePlaythoughsStore),
+            onPageChanged: (index) => _onTabPageChanged(index, boardGamePlaythoughsStore),
             children: <Widget>[
               PlaythroughStatistcsPage(
                 boardGameDetails: widget.boardGameDetails,
@@ -119,8 +115,7 @@ class _BoardGamePlaythroughsPageState
     pageController.animateToTab(index);
   }
 
-  void _onTabPageChanged(
-      int pageIndex, BoardGamePlaythroughsStore boardGamePlaythroughsStore) {
+  void _onTabPageChanged(int pageIndex, BoardGamePlaythroughsStore boardGamePlaythroughsStore) {
     boardGamePlaythroughsStore.boardGamePlaythroughPageIndex = pageIndex;
   }
 
