@@ -6,9 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BoardGameImage extends StatelessWidget {
-  final double minImageHeight;
-  final String heroTag;
-
   const BoardGameImage(
     BoardGameDetails boardGameDetails, {
     Key key,
@@ -16,6 +13,9 @@ class BoardGameImage extends StatelessWidget {
     this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
   })  : _boardGameDetails = boardGameDetails,
         super(key: key);
+
+  final double minImageHeight;
+  final String heroTag;
 
   final BoardGameDetails _boardGameDetails;
 
@@ -26,7 +26,7 @@ class BoardGameImage extends StatelessWidget {
     }
 
     return Hero(
-      tag: "$heroTag${_boardGameDetails.id}",
+      tag: '$heroTag${_boardGameDetails.id}',
       child: CachedNetworkImage(
         imageUrl: _boardGameDetails?.imageUrl ?? '',
         imageBuilder: (context, imageProvider) => _wrapInShadowBox(
