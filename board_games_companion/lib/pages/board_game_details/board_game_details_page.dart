@@ -27,11 +27,6 @@ import '../board_game_playthroughs.dart';
 import 'board_game_details_expansions.dart';
 
 class BoardGamesDetailsPage extends StatefulWidget {
-  final String boardGameId;
-  final String boardGameName;
-  final BoardGameDetailsStore boardGameDetailsStore;
-  final Type navigatingFromType;
-
   const BoardGamesDetailsPage({
     Key key,
     @required this.boardGameDetailsStore,
@@ -40,6 +35,11 @@ class BoardGamesDetailsPage extends StatefulWidget {
     @required this.navigatingFromType,
   }) : super(key: key);
 
+  final String boardGameId;
+  final String boardGameName;
+  final BoardGameDetailsStore boardGameDetailsStore;
+  final Type navigatingFromType;
+
   @override
   _BoardGamesDetailsPageState createState() => _BoardGamesDetailsPageState();
 }
@@ -47,7 +47,7 @@ class BoardGamesDetailsPage extends StatefulWidget {
 class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: AppTheme.primaryColor,
     ));
 
@@ -65,7 +65,7 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
                   boardGameName: widget.boardGameName,
                 ),
                 SliverPadding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     bottom: Dimensions.halfFloatingActionButtonBottomSpacing,
                   ),
                   sliver: _Body(
@@ -130,7 +130,7 @@ class _Header extends StatelessWidget {
         title: Container(
           decoration: BoxDecoration(
             color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(Styles.defaultCornerRadius),
             ),
           ),
@@ -142,8 +142,10 @@ class _Header extends StatelessWidget {
               _boardGameName ?? '',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style:
-                  TextStyle(color: AppTheme.defaultTextColor, fontSize: Dimensions.largeFontSize),
+              style: const TextStyle(
+                color: AppTheme.defaultTextColor,
+                fontSize: Dimensions.largeFontSize,
+              ),
             ),
           ),
         ),
@@ -181,7 +183,7 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final htmlUnescape = new HtmlUnescape();
+    final htmlUnescape = HtmlUnescape();
     return FutureBuilder(
       future: boardGameDetailsStore.loadBoardGameDetails(boardGameId),
       builder: (_, snapshot) {
@@ -194,7 +196,8 @@ class _Body extends StatelessWidget {
                     Dimensions.doubleStandardSpacing,
                   ),
                   child: Text(
-                    'Sorry, we couldn\'t retrieve $boardGameName\'s details. Check your Internet connectivity and try again. If the problem persists, please contact support at feedback@progrunning.net',
+                    '''
+Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connectivity and try again. If the problem persists, please contact support at feedback@progrunning.net''',
                     textAlign: TextAlign.justify,
                   ),
                 ),
@@ -207,55 +210,55 @@ class _Body extends StatelessWidget {
             child: Consumer<BoardGameDetailsStore>(
               builder: (_, store, __) {
                 return SliverPadding(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     vertical: Dimensions.standardSpacing,
                   ),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate.fixed(
                       <Widget>[
-                        _BodySectionHeader(
+                        const _BodySectionHeader(
                           title: 'Stats',
                         ),
                         _Stats(
                           boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: _spacingBetweenSecions,
                         ),
-                        _BodySectionHeader(
+                        const _BodySectionHeader(
                           title: 'General',
                         ),
                         _FirstRowGeneralInfoPanels(
                           boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: _spacingBetweenSecions,
                         ),
                         _SecondRowGeneralInfoPanels(
                           boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: _spacingBetweenSecions,
                         ),
-                        _BodySectionHeader(
+                        const _BodySectionHeader(
                           title: 'Links',
                         ),
                         _Links(
                           boardGameDetailsStore: boardGameDetailsStore,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: _halfSpacingBetweenSecions,
                         ),
-                        _BodySectionHeader(
+                        const _BodySectionHeader(
                           title: 'Credits',
                         ),
                         _Credits(
                           boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: _halfSpacingBetweenSecions,
                         ),
-                        _BodySectionHeader(
+                        const _BodySectionHeader(
                           title: 'Categories',
                         ),
                         Padding(
@@ -269,7 +272,7 @@ class _Body extends StatelessWidget {
                             children: boardGameDetailsStore.boardGameDetails.categories
                                 .map<Widget>((category) {
                               return Chip(
-                                padding: EdgeInsets.all(
+                                padding: const EdgeInsets.all(
                                   Dimensions.standardSpacing,
                                 ),
                                 backgroundColor: AppTheme.primaryColor.withAlpha(
@@ -277,7 +280,7 @@ class _Body extends StatelessWidget {
                                 ),
                                 label: Text(
                                   category.name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: AppTheme.defaultTextColor,
                                   ),
                                 ),
@@ -286,15 +289,15 @@ class _Body extends StatelessWidget {
                           ),
                         ),
                         if (!store.boardGameDetails.isExpansion &&
-                            store.boardGameDetails.expansions.length > 0)
+                            store.boardGameDetails.expansions.isNotEmpty)
                           BoardGameDetailsExpansions(
                             boardGameDetailsStore: store,
                             spacingBetweenSecions: _spacingBetweenSecions,
                           ),
-                        SizedBox(
+                        const SizedBox(
                           height: _spacingBetweenSecions,
                         ),
-                        _BodySectionHeader(
+                        const _BodySectionHeader(
                           title: 'Description',
                         ),
                         Padding(
@@ -304,7 +307,7 @@ class _Body extends StatelessWidget {
                           child: Text(
                             htmlUnescape.convert(store.boardGameDetails.description),
                             textAlign: TextAlign.justify,
-                            style: TextStyle(fontSize: Dimensions.mediumFontSize),
+                            style: const TextStyle(fontSize: Dimensions.mediumFontSize),
                           ),
                         )
                       ],
@@ -321,15 +324,16 @@ class _Body extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                  const Padding(
+                    padding: EdgeInsets.all(Dimensions.standardSpacing),
                     child: Center(
                       child: Text(
-                        'We couldn\'t retrieve any board games. Check your Internet connectivity and try again.',
+                        '''
+We couldn't retrieve any board games. Check your Internet connectivity and try again.''',
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: Dimensions.standardSpacing,
                   ),
                   IconAndTextButton(
@@ -346,7 +350,7 @@ class _Body extends StatelessWidget {
           );
         }
 
-        return SliverFillRemaining(
+        return const SliverFillRemaining(
           child: LoadingIndicator(),
         );
       },
@@ -389,7 +393,7 @@ class _Links extends StatelessWidget {
                 _boardGameDetailsStore.boardGameDetails.bggOverviewUrl,
               );
             }),
-        SizedBox(
+        const SizedBox(
           width: Dimensions.doubleStandardSpacing,
         ),
         _Link(
@@ -403,7 +407,7 @@ class _Links extends StatelessWidget {
             );
           },
         ),
-        SizedBox(
+        const SizedBox(
           width: Dimensions.doubleStandardSpacing,
         ),
         _Link(
@@ -417,22 +421,23 @@ class _Links extends StatelessWidget {
             );
           },
         ),
-        SizedBox(
+        const SizedBox(
           width: Dimensions.doubleStandardSpacing,
         ),
         Stack(
           children: [
-            isPricingInCountrySupported
-                ? SizedBox.shrink()
-                : Positioned(
-                    top: Dimensions.standardSpacing,
-                    right: Dimensions.standardSpacing,
-                    child: Image.asset(
-                      'assets/flags/${Constants.UsaCountryCode.toLowerCase()}.png',
-                      width: 16,
-                      height: 12,
-                    ),
-                  ),
+            if (isPricingInCountrySupported)
+              const SizedBox.shrink()
+            else
+              Positioned(
+                top: Dimensions.standardSpacing,
+                right: Dimensions.standardSpacing,
+                child: Image.asset(
+                  'assets/flags/${Constants.UsaCountryCode.toLowerCase()}.png',
+                  width: 16,
+                  height: 12,
+                ),
+              ),
             _Link(
               title: isPricingInCountrySupported ? 'Prices' : '${Constants.UsaCountryCode} Prices',
               icon: Icons.attach_money,
@@ -486,7 +491,7 @@ class _Link extends StatelessWidget {
               ),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: Dimensions.smallFontSize,
                 ),
               ),
@@ -519,7 +524,7 @@ class _BodySectionHeader extends StatelessWidget {
             title,
             style: AppTheme.sectionHeaderTextStyle,
           ),
-          SizedBox(
+          const SizedBox(
             height: Dimensions.halfStandardSpacing,
           ),
         ],
@@ -551,21 +556,19 @@ class _Credits extends StatelessWidget {
             title: 'Designer:',
             detail: boardGameDetails?.desingers?.map((d) => d.name)?.join(', '),
           ),
-          SizedBox(
+          const SizedBox(
             height: _spacingBetweenCredits,
           ),
           _CreditsItem(
             title: 'Artist:',
             detail: boardGameDetails?.artists?.map((d) => d.name)?.join(', '),
           ),
-          SizedBox(
+          const SizedBox(
             height: _spacingBetweenCredits,
           ),
-          Container(
-            child: _CreditsItem(
-              title: 'Publisher:',
-              detail: boardGameDetails?.publishers?.map((d) => d.name)?.join(', '),
-            ),
+          _CreditsItem(
+            title: 'Publisher:',
+            detail: boardGameDetails?.publishers?.map((d) => d.name)?.join(', '),
           ),
         ],
       ),
@@ -594,7 +597,7 @@ class _CreditsItem extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextSpan(
+          const TextSpan(
             text: ' ',
           ),
           TextSpan(
@@ -627,7 +630,7 @@ class _Stats extends StatelessWidget {
               rating: _boardGameDetails?.rating,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: Dimensions.standardSpacing,
           ),
           Expanded(
@@ -683,12 +686,12 @@ class _CollectionFlags extends StatelessWidget {
           borderColor: Colors.transparent,
           isSelected: [false, true],
           children: [
-            _CollectionFlag(
+            const _CollectionFlag(
               icon: Icons.sports_esports,
               title: 'Played',
               isSelected: false,
             ),
-            _CollectionFlag(
+            const _CollectionFlag(
               icon: Icons.card_giftcard,
               title: 'Wishlist',
               isSelected: false,
@@ -704,7 +707,7 @@ class _CollectionFlags extends StatelessWidget {
           borderColor: Colors.transparent,
           isSelected: [false],
           children: [
-            _CollectionFlag(
+            const _CollectionFlag(
               icon: Icons.grid_on,
               title: 'Collection',
               isSelected: true,
@@ -782,7 +785,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
                 title: '${boardGameDetails.minPlayers} - ${boardGameDetails.maxPlayers} Players',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: Dimensions.standardSpacing,
             ),
             Flexible(
@@ -822,7 +825,7 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
                 title: 'Age: ${boardGameDetails.minAge}+',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: Dimensions.standardSpacing,
             ),
             Flexible(
@@ -883,7 +886,7 @@ class _InfoPanel extends StatelessWidget {
 }
 
 class _DetailsNumbersItem extends StatelessWidget {
-  _DetailsNumbersItem({
+  const _DetailsNumbersItem({
     Key key,
     @required String title,
     @required String detail,
