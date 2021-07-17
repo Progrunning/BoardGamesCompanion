@@ -25,14 +25,14 @@ import '../board_game_playthroughs.dart';
 import 'collection_filter_panel.dart';
 
 class CollectionsPage extends StatefulWidget {
-  final BoardGamesStore boardGamesStore;
-  final UserStore userStore;
-
   const CollectionsPage(
     this.boardGamesStore,
     this.userStore, {
     Key key,
   }) : super(key: key);
+
+  final BoardGamesStore boardGamesStore;
+  final UserStore userStore;
 
   @override
   _CollectionsPageState createState() => _CollectionsPageState();
@@ -50,12 +50,12 @@ class _CollectionsPageState extends State<CollectionsPage> {
         boardGamesStore: widget.boardGamesStore,
       );
     } else if (widget.boardGamesStore.loadDataState == LoadDataState.Error) {
-      return Center(
+      return const Center(
         child: GenericErrorMessage(),
       );
     }
 
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(),
     );
   }
@@ -95,8 +95,7 @@ class _SearchBar extends StatefulWidget {
   const _SearchBar({
     @required this.boardGamesStore,
     Key key,
-  })  : 
-        super(key: key);
+  }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
 
@@ -148,7 +147,7 @@ class _SearchBarState extends State<_SearchBar> {
       ),
       actions: <Widget>[
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.filter_list,
             color: AppTheme.accentColor,
           ),
@@ -168,7 +167,7 @@ class _SearchBarState extends State<_SearchBar> {
   Future<void> _createBottomSheetFilterPanel(BuildContext context) async {
     await showModalBottomSheet<Widget>(
       backgroundColor: AppTheme.primaryColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Styles.defaultBottomSheetCornerRadius),
           topRight: Radius.circular(Styles.defaultBottomSheetCornerRadius),
@@ -182,7 +181,10 @@ class _SearchBarState extends State<_SearchBar> {
   }
 
   void _handleSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce?.isActive ?? false) {
+      _debounce.cancel();
+    }
+
     _debounce = Timer(
       const Duration(milliseconds: 500),
       () async {
@@ -196,7 +198,7 @@ class _SearchBarState extends State<_SearchBar> {
   Widget _retrieveSearchBarSuffixIcon() {
     if (widget.boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
       return IconButton(
-        icon: Icon(
+        icon: const Icon(
           Icons.clear,
         ),
         color: AppTheme.accentColor,
@@ -207,7 +209,7 @@ class _SearchBarState extends State<_SearchBar> {
       );
     }
 
-    return Icon(
+    return const Icon(
       Icons.search,
       color: AppTheme.accentColor,
     );
@@ -240,7 +242,7 @@ class _Grid extends StatelessWidget {
     );
 
     return SliverPadding(
-      padding: EdgeInsets.all(
+      padding: const EdgeInsets.all(
         Dimensions.standardSpacing,
       ),
       sliver: SliverGrid.extent(
@@ -302,18 +304,18 @@ class _Empty extends StatelessWidget with SyncCollection {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(
+            const Expanded(
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  'It looks like you don\'t have any games in your collection yet.',
+                  '''It looks like you don't have any games in your collection yet.''',
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: Dimensions.standardSpacing,
             ),
-            BggCommunityMemberText(),
+            const BggCommunityMemberText(),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.doubleStandardSpacing * 2,
@@ -328,7 +330,7 @@ class _Empty extends StatelessWidget with SyncCollection {
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: Dimensions.standardSpacing,
             ),
             Center(
@@ -343,17 +345,17 @@ class _Empty extends StatelessWidget with SyncCollection {
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: Dimensions.standardSpacing,
             ),
-            Expanded(
+            const Expanded(
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
                     'Otherwise, use the bottom navigation search option, where you can check out currently TOP 50 hot board games and look up any title.'),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: Dimensions.standardSpacing,
             ),
           ],
@@ -385,13 +387,13 @@ class _EmptySearchResult extends StatelessWidget {
             Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text:
-                        'It looks like you don\'t have any board games in your collection that match the search phrase ',
+                        '''It looks like you don't have any board games in your collection that match the search phrase ''',
                   ),
                   TextSpan(
-                    text: '${_boardGamesStore.searchPhrase}',
-                    style: TextStyle(
+                    text: _boardGamesStore.searchPhrase,
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -399,7 +401,7 @@ class _EmptySearchResult extends StatelessWidget {
               ),
               textAlign: TextAlign.justify,
             ),
-            SizedBox(
+            const SizedBox(
               height: Dimensions.standardSpacing,
             ),
             Center(
