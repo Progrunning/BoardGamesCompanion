@@ -52,7 +52,7 @@ class NavigatorHelper {
       },
     );
 
-    return await Navigator.push(
+    return Navigator.push(
       context,
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
