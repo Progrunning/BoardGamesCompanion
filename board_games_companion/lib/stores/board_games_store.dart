@@ -43,6 +43,12 @@ class BoardGamesStore with ChangeNotifier {
   // MK Board games currently shown in the collection with applied filters
   // TODO consider ranaming
   List<BoardGameDetails> get filteredBoardGames => _filteredBoardGames;
+  List<BoardGameDetails> get filteredBoardGamesInCollection =>
+      _filteredBoardGames?.where((boardGame) => boardGame.isInCollection)?.toList() ?? [];
+  List<BoardGameDetails> get filteredBoardGamesOnWishlist =>
+      _filteredBoardGames?.where((boardGame) => boardGame.isOnWishlist)?.toList() ?? [];
+  List<BoardGameDetails> get filteredBoardGamesPlayed =>
+      _filteredBoardGames?.where((boardGame) => boardGame.isPlayed)?.toList() ?? [];
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
   bool get hasBoardGames => _allBoardGames?.isNotEmpty ?? false;
