@@ -20,6 +20,14 @@ import '../services/score_service.dart';
 import 'board_games_filters_store.dart';
 
 class BoardGamesStore with ChangeNotifier {
+  BoardGamesStore(
+    this._boardGamesService,
+    this._playthroughService,
+    this._scoreService,
+    this._playerService,
+    this._boardGamesFiltersStore,
+  );
+
   final BoardGamesService _boardGamesService;
   final PlaythroughService _playthroughService;
   final ScoreService _scoreService;
@@ -30,14 +38,6 @@ class BoardGamesStore with ChangeNotifier {
   List<BoardGameDetails> _allBoardGames;
   List<BoardGameDetails> _filteredBoardGames;
   LoadDataState _loadDataState = LoadDataState.None;
-
-  BoardGamesStore(
-    this._boardGamesService,
-    this._playthroughService,
-    this._scoreService,
-    this._playerService,
-    this._boardGamesFiltersStore,
-  );
 
   LoadDataState get loadDataState => _loadDataState;
   // MK Board games currently shown in the collection with applied filters
@@ -83,9 +83,7 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    final existingBoardGameDetails = _allBoardGames
-        .firstWhere((boardGame) => boardGame.id == boardGameDetails.id, orElse: () => null);
-
+    final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
     if (existingBoardGameDetails == null) {
       _allBoardGames.add(boardGameDetails);
       _filteredBoardGames.add(boardGameDetails);
@@ -111,6 +109,9 @@ class BoardGamesStore with ChangeNotifier {
       existingBoardGameDetails.ranks = boardGameDetails.ranks;
       existingBoardGameDetails.lastModified = boardGameDetails.lastModified;
       existingBoardGameDetails.isExpansion = boardGameDetails.isExpansion;
+      existingBoardGameDetails.isPlayed = boardGameDetails.isPlayed;
+      existingBoardGameDetails.isOnWishlist = boardGameDetails.isOnWishlist;
+      existingBoardGameDetails.isInCollection = boardGameDetails.isInCollection;
       _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
     }
 
@@ -143,16 +144,18 @@ class BoardGamesStore with ChangeNotifier {
 
   Future<void> updateDetails(BoardGameDetails boardGameDetails) async {
     try {
-      final isInCollection = await _boardGamesService.isInCollection(boardGameDetails);
-      if (!isInCollection) {
-        return;
-      }
-
       await addOrUpdateBoardGame(boardGameDetails);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
+  }
+
+  BoardGameDetails retrieveBoardGame(String boardGameId) {
+    return allboardGames?.firstWhere(
+      (BoardGameDetails boardGameDetails) => boardGameDetails.id == boardGameId,
+      orElse: () => null,
+    );
   }
 
   Future<void> removeBoardGame(String boardGameDetailsId) async {

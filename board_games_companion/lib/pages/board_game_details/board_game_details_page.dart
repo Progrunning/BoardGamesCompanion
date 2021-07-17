@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:board_games_companion/common/enums/collection_flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -217,9 +218,10 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
                       <Widget>[
                         const _BodySectionHeader(
                           title: 'Stats',
+                          secondaryTitle: 'Add to',
                         ),
                         _Stats(
-                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
+                          boardGameDetailsStore: boardGameDetailsStore,
                         ),
                         const SizedBox(
                           height: _spacingBetweenSecions,
@@ -505,10 +507,12 @@ class _Link extends StatelessWidget {
 class _BodySectionHeader extends StatelessWidget {
   const _BodySectionHeader({
     @required this.title,
+    this.secondaryTitle,
     Key key,
   }) : super(key: key);
 
   final String title;
+  final String secondaryTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -519,9 +523,26 @@ class _BodySectionHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
-            title,
-            style: AppTheme.sectionHeaderTextStyle,
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppTheme.sectionHeaderTextStyle,
+              ),
+              if (secondaryTitle?.isEmpty ?? true)
+                const SizedBox.shrink()
+              else ...[
+                const Expanded(
+                  child: SizedBox.shrink(),
+                ),
+                Text(
+                  secondaryTitle,
+                  style: AppTheme.sectionHeaderTextStyle,
+                ),
+              ]
+            ],
           ),
           const SizedBox(
             height: Dimensions.halfStandardSpacing,
@@ -611,10 +632,10 @@ class _CreditsItem extends StatelessWidget {
 class _Stats extends StatelessWidget {
   const _Stats({
     Key key,
-    @required this.boardGameDetails,
+    @required this.boardGameDetailsStore,
   }) : super(key: key);
 
-  final BoardGameDetails boardGameDetails;
+  final BoardGameDetailsStore boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {
@@ -625,7 +646,7 @@ class _Stats extends StatelessWidget {
         children: <Widget>[
           Center(
             child: BoardGameRatingHexagon(
-              rating: boardGameDetails?.rating,
+              rating: boardGameDetailsStore.boardGameDetails?.rating,
             ),
           ),
           const SizedBox(
@@ -638,29 +659,31 @@ class _Stats extends StatelessWidget {
               children: <Widget>[
                 _DetailsNumbersItem(
                   title: 'Rank',
-                  detail: boardGameDetails?.rankFormatted,
+                  detail: boardGameDetailsStore.boardGameDetails?.rankFormatted,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Ratings',
-                  detail: '${boardGameDetails?.votes}',
+                  detail: '${boardGameDetailsStore.boardGameDetails?.votes}',
                   format: true,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Comments',
-                  detail: '${boardGameDetails?.commentsNumber}',
+                  detail: '${boardGameDetailsStore.boardGameDetails?.commentsNumber}',
                   format: true,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Published',
-                  detail: '${boardGameDetails?.yearPublished}',
+                  detail: '${boardGameDetailsStore.boardGameDetails?.yearPublished}',
                 ),
               ],
             ),
           ),
-          _CollectionFlags(boardGameDetails: boardGameDetails),
+          _CollectionFlags(
+            boardGameDetailsStore: boardGameDetailsStore,
+          ),
         ],
       ),
     );
@@ -669,16 +692,16 @@ class _Stats extends StatelessWidget {
 
 class _CollectionFlags extends StatelessWidget {
   const _CollectionFlags({
-    @required this.boardGameDetails,
+    @required this.boardGameDetailsStore,
     Key key,
   }) : super(key: key);
 
-  final BoardGameDetails boardGameDetails;
+  final BoardGameDetailsStore boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: boardGameDetails,
+      value: boardGameDetailsStore.boardGameDetails,
       child: Consumer<BoardGameDetails>(
         builder: (_, BoardGameDetails boardGameDetailsProvider, __) {
           return Column(
@@ -688,6 +711,7 @@ class _CollectionFlags extends StatelessWidget {
                 fillColor: Colors.transparent,
                 selectedColor: Colors.white,
                 selectedBorderColor: Colors.transparent,
+                disabledBorderColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 isSelected: [
                   boardGameDetailsProvider.isPlayed,
@@ -705,17 +729,12 @@ class _CollectionFlags extends StatelessWidget {
                     isSelected: boardGameDetailsProvider.isOnWishlist,
                   ),
                 ],
-                onPressed: (int index) {
-                  if (boardGameDetailsProvider.isInCollection) {
-                    return;
-                  }
-
-                  if (index == 0) {
-                    boardGameDetailsProvider.isPlayed = !boardGameDetails.isPlayed;
-                  } else {
-                    boardGameDetailsProvider.isOnWishlist = !boardGameDetails.isOnWishlist;
-                  }
-                },
+                onPressed: boardGameDetailsProvider.isInCollection
+                    ? null
+                    : (int index) async {
+                        await boardGameDetailsStore.toggleCollectionFlag(
+                            index == 0 ? CollectionFlag.Played : CollectionFlag.Wishlist);
+                      },
               ),
               ToggleButtons(
                 splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
@@ -731,12 +750,8 @@ class _CollectionFlags extends StatelessWidget {
                     isSelected: boardGameDetailsProvider.isInCollection,
                   ),
                 ],
-                onPressed: (int index) {
-                  boardGameDetailsProvider.isInCollection = !boardGameDetails.isInCollection;
-                  if (boardGameDetailsProvider.isInCollection) {
-                    boardGameDetailsProvider.isOnWishlist = false;
-                    boardGameDetailsProvider.isPlayed = false;
-                  }
+                onPressed: (int index) async {
+                  await boardGameDetailsStore.toggleCollectionFlag(CollectionFlag.Colleciton);
                 },
               ),
             ],

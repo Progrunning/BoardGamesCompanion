@@ -6,13 +6,13 @@ import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'hive_base_service.dart';
 
 class BoardGamesService extends BaseHiveService<BoardGameDetails> {
-  final BoardGamesGeekService _boardGameGeekService;
-
   BoardGamesService(this._boardGameGeekService);
+
+  final BoardGamesGeekService _boardGameGeekService;
 
   Future<List<BoardGameDetails>> retrieveBoardGames() async {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
-      return List<BoardGameDetails>();
+      return <BoardGameDetails>[];
     }
 
     return storageBox.values?.toList();
@@ -76,18 +76,18 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
           for (BoardGameDetails boardGameDetails in collectionSyncResult.data)
             boardGameDetails.id: boardGameDetails
         };
-        
+
         final boardGamesToRemove = storageBox.values
             ?.where((boardGameDetails) => !syncedCollectionMap.containsKey(boardGameDetails.id))
             ?.toList();
 
         // Remove
-        for (var boardGameToRemove in boardGamesToRemove) {
+        for (final boardGameToRemove in boardGamesToRemove) {
           await storageBox?.delete(boardGameToRemove.id);
         }
 
         // Add & Update
-        for (var syncedBoardGame in collectionSyncResult.data) {
+        for (final syncedBoardGame in collectionSyncResult.data) {
           await storageBox?.put(syncedBoardGame.id, syncedBoardGame);
         }
       }
