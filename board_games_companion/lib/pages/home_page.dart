@@ -14,7 +14,7 @@ import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
 import 'collections/collections_page.dart';
 import 'players.dart';
-import 'search_board_games.dart';
+import 'search_board_games/search_board_games_page.dart';
 import 'settings/settings_page.dart';
 
 class HomePage extends StatefulWidget {
