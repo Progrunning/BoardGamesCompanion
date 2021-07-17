@@ -46,7 +46,7 @@ class NavigatorHelper {
 
     _analytics.logEvent(
       name: Analytics.ViewGameDetails,
-      parameters: {
+      parameters: <String, String>{
         Analytics.BoardGameIdParameter: boardGameId,
         Analytics.BoardGameNameParameter: boardGameName,
       },

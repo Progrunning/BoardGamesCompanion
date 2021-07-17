@@ -7,12 +7,11 @@ import 'package:provider/provider.dart';
 
 class BoardGameDetailFloatingActions extends StatelessWidget {
   const BoardGameDetailFloatingActions({
-    @required boardGameDetailsStore,
+    @required this.boardGameDetailsStore,
     Key key,
-  })  : _boardGameDetailsStore = boardGameDetailsStore,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGameDetailsStore _boardGameDetailsStore;
+  final BoardGameDetailsStore boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +21,12 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     );
 
     return ChangeNotifierProvider.value(
-      value: _boardGameDetailsStore,
-      child: ChangeNotifierProxyProvider<BoardGameDetailsStore,
-          BoardGameDetailsInCollectionStore>(
+      value: boardGameDetailsStore,
+      child: ChangeNotifierProxyProvider<BoardGameDetailsStore, BoardGameDetailsInCollectionStore>(
         create: (_) {
           return BoardGameDetailsInCollectionStore(
             boardGamesStore,
-            _boardGameDetailsStore?.boardGameDetails,
+            boardGameDetailsStore?.boardGameDetails,
           );
         },
         update: (_, boardGameDetailsStore, boardGameDetailsInCollectionStore) {
@@ -37,8 +35,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
           );
           return boardGameDetailsInCollectionStore;
         },
-        child:
-            Consumer2<BoardGameDetailsInCollectionStore, BoardGameDetailsStore>(
+        child: Consumer2<BoardGameDetailsInCollectionStore, BoardGameDetailsStore>(
           builder: (
             _,
             boardGameDetailsInCollectionStore,
@@ -79,15 +76,14 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     BoardGamesStore boardGamesStore,
     BuildContext context,
   ) async {
-    await boardGamesStore
-        .addOrUpdateBoardGame(_boardGameDetailsStore.boardGameDetails);
+    await boardGamesStore.addOrUpdateBoardGame(boardGameDetailsStore.boardGameDetails);
     boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
 
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(
       SnackBar(
         content: Text(
-            '${_boardGameDetailsStore.boardGameDetails.name} has been added to your collection'),
+            '${boardGameDetailsStore.boardGameDetails.name} has been added to your collection'),
         action: SnackBarAction(
           label: 'Ok',
           onPressed: () async {
@@ -103,8 +99,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     BoardGameDetailsInCollectionStore boardGameDetailsInCollectionStore,
     BoardGamesStore boardGamesStore,
   ) async {
-    await boardGamesStore
-        .removeBoardGame(_boardGameDetailsStore.boardGameDetails.id);
+    await boardGamesStore.removeBoardGame(boardGameDetailsStore.boardGameDetails.id);
     boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
 
     Scaffold.of(context).hideCurrentSnackBar();
@@ -112,12 +107,11 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
       SnackBar(
         duration: Duration(seconds: 10),
         content: Text(
-            '${_boardGameDetailsStore.boardGameDetails.name} has been removed from your collection'),
+            '${boardGameDetailsStore.boardGameDetails.name} has been removed from your collection'),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () async {
-            await boardGamesStore
-                .addOrUpdateBoardGame(_boardGameDetailsStore.boardGameDetails);
+            await boardGamesStore.addOrUpdateBoardGame(boardGameDetailsStore.boardGameDetails);
             boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
           },
         ),

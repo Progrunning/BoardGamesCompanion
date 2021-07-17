@@ -8,38 +8,35 @@ import 'file_service.dart';
 import 'hive_base_service.dart';
 
 class PlayerService extends BaseHiveService<Player> {
-  final _fileExtensionRegex = RegExp(r'\.[0-9a-z]+$', caseSensitive: false);
+  PlayerService(this.fileService);
+
+  final RegExp _fileExtensionRegex = RegExp(r'\.[0-9a-z]+$', caseSensitive: false);
 
   final FileService fileService;
 
-  PlayerService(this.fileService);
-
   Future<List<Player>> retrievePlayers([List<String> playerIds]) async {
     if (!await ensureBoxOpen(HiveBoxes.Players)) {
-      return List<Player>();
+      return <Player>[];
     }
 
-    var players = storageBox
+    final List<Player> players = storageBox
         ?.toMap()
         ?.values
-        ?.where((player) =>
-            !(player.isDeleted ?? false) &&
-            (playerIds?.contains(player.id) ?? true))
+        ?.where((Player player) =>
+            !(player.isDeleted ?? false) && (playerIds?.contains(player.id) ?? true))
         ?.toList();
 
-    players.forEach((player) async {
+    players.forEach((Player player) async {
       if (player.avatarFileName?.isNotEmpty ?? false) {
-        player.avatarImageUri =
-            await fileService.createDocumentsFilePath(player.avatarFileName);
+        player.avatarImageUri = await fileService.createDocumentsFilePath(player.avatarFileName);
       }
     });
 
     return players;
-  } 
+  }
 
   Future<bool> addOrUpdatePlayer(Player player) async {
-    if ((player?.name?.isEmpty ?? true) ||
-        !await ensureBoxOpen(HiveBoxes.Players)) {
+    if ((player?.name?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Players)) {
       return false;
     }
 

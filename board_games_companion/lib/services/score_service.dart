@@ -24,17 +24,14 @@ class ScoreService extends BaseHiveService<Score> {
   }
 
   Future<List<Score>> retrieveScores(Iterable<String> playthroughIds) async {
-    if ((playthroughIds?.isEmpty ?? true) ||
-        !await ensureBoxOpen(HiveBoxes.Scores)) {
-      return List<Score>();
+    if ((playthroughIds?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Scores)) {
+      return <Score>[];
     }
 
     return storageBox
         ?.toMap()
         ?.values
-        ?.where((score) =>
-            !(score.isDeleted ?? false) &&
-            playthroughIds.contains(score.playthroughId))
+        ?.where((score) => playthroughIds.contains(score.playthroughId))
         ?.toList();
   }
 }

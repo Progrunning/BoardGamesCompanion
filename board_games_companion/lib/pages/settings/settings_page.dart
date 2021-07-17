@@ -118,8 +118,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
             DetailsItem(
               title: '${userStore?.user?.name}',
               subtitle: 'BGG profile page',
-              uri:
-                  '${Constants.BoardGameGeekBaseApiUrl}user/${userStore?.user?.name}',
+              uri: '${Constants.BoardGameGeekBaseApiUrl}user/${userStore?.user?.name}',
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -169,17 +168,17 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
     BuildContext context,
     UserStore userStore,
   ) async {
-    await showDialog(
+    await showDialog<AlertDialog>(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Column(
             children: <Widget>[
-              Text('Are you sure you want to remove your BGG user connection?'),
-              SizedBox(
+              const Text('Are you sure you want to remove your BGG user connection?'),
+              const SizedBox(
                 height: Dimensions.standardSpacing,
               ),
-              Text(
+              const Text(
                 'This will delete your entire board games collection, including the history of gameplays',
                 style: AppTheme.subTitleTextStyle,
               ),
@@ -262,7 +261,7 @@ class _AboutPageTile extends StatelessWidget {
             title: 'About',
             subtitle: 'App information',
             onTap: () async {
-              await Navigator.push(
+              await Navigator.push<AboutPage>(
                 context,
                 NavigatorTransitions.fadeThrough(
                   (_, __, ___) {
@@ -272,7 +271,7 @@ class _AboutPageTile extends StatelessWidget {
               );
             },
           ),
-          Positioned.fill(
+          const Positioned.fill(
             right: Dimensions.standardSpacing,
             child: Align(
               alignment: Alignment.centerRight,
