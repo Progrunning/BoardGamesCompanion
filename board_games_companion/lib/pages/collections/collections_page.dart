@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -82,8 +83,23 @@ class _Collection extends StatelessWidget {
             _SearchBar(boardGamesStore: _boardGamesStore),
             if (hasNoSearchResults)
               _EmptySearchResult(boardGamesStore: _boardGamesStore)
-            else
-              _Grid(boardGamesStore: _boardGamesStore),
+            else ...[
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _GridHeader('Collection', Icons.grid_on),
+              ),
+              _Grid(boardGames: _boardGamesStore.filteredBoardGamesInCollection),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _GridHeader('Played', Icons.sports_esports),
+              ),
+              _Grid(boardGames: _boardGamesStore.filteredBoardGamesPlayed),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _GridHeader('Wishlist', Icons.card_giftcard),
+              ),
+              _Grid(boardGames: _boardGamesStore.filteredBoardGamesOnWishlist),
+            ]
           ],
         ),
       ),
@@ -132,6 +148,7 @@ class _SearchBarState extends State<_SearchBar> {
     }
 
     return SliverAppBar(
+      floating: true,
       titleSpacing: Dimensions.standardSpacing,
       title: TextField(
         controller: _searchController,
@@ -228,11 +245,10 @@ class _SearchBarState extends State<_SearchBar> {
 class _Grid extends StatelessWidget {
   const _Grid({
     Key key,
-    @required BoardGamesStore boardGamesStore,
-  })  : _boardGamesStore = boardGamesStore,
-        super(key: key);
+    @required this.boardGames,
+  }) : super(key: key);
 
-  final BoardGamesStore _boardGamesStore;
+  final List<BoardGameDetails> boardGames;
 
   @override
   Widget build(BuildContext context) {
@@ -250,18 +266,18 @@ class _Grid extends StatelessWidget {
         mainAxisSpacing: Dimensions.standardSpacing,
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
         children: List.generate(
-          _boardGamesStore.filteredBoardGames.length,
+          boardGames.length,
           (int index) {
-            final boardGameDetails = _boardGamesStore.filteredBoardGames[index];
+            final boardGame = boardGames[index];
 
             return BoardGameCollectionItem(
-              boardGame: boardGameDetails,
+              boardGame: boardGame,
               onTap: () async {
                 await _analytics.logEvent(
                   name: Analytics.ViewGameStats,
                   parameters: <String, String>{
-                    Analytics.BoardGameIdParameter: boardGameDetails.id,
-                    Analytics.BoardGameNameParameter: boardGameDetails.name,
+                    Analytics.BoardGameIdParameter: boardGame.id,
+                    Analytics.BoardGameNameParameter: boardGame.name,
                   },
                 );
 
@@ -270,7 +286,7 @@ class _Grid extends StatelessWidget {
                   NavigatorTransitions.fadeThrough(
                     (_, __, ___) {
                       return BoardGamePlaythroughsPage(
-                        _boardGamesStore.filteredBoardGames[index],
+                        boardGames[index],
                       );
                     },
                   ),
@@ -417,5 +433,51 @@ class _EmptySearchResult extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _GridHeader extends SliverPersistentHeaderDelegate {
+  _GridHeader(this.title, this.icon);
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: AppTheme.primaryColor,
+      padding: const EdgeInsets.all(
+        Dimensions.standardSpacing,
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: AppTheme.accentColor,
+            ),
+            const SizedBox(
+              width: Dimensions.standardSpacing,
+            ),
+            Text(
+              title,
+              style: AppTheme.titleTextStyle,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
