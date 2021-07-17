@@ -488,16 +488,14 @@ class _HotBoardGamesHeader extends SliverPersistentHeaderDelegate {
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: AppTheme.primaryColor,
-      child: const Padding(
-        padding: EdgeInsets.all(
-          Dimensions.standardSpacing,
-        ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Hot Board Games',
-            style: AppTheme.titleTextStyle,
-          ),
+      padding: const EdgeInsets.all(
+        Dimensions.standardSpacing,
+      ),
+      child: const Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Hot Board Games',
+          style: AppTheme.titleTextStyle,
         ),
       ),
     );
