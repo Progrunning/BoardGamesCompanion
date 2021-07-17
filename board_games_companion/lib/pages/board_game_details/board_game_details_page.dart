@@ -15,7 +15,6 @@ import '../../stores/board_game_details_in_collection_store.dart';
 import '../../stores/board_game_details_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
-import '../../widgets/board_games/board_game_detail_floating_actions_widget.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
@@ -78,10 +77,10 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
             ),
           ),
         ),
-        floatingActionButton: BoardGameDetailFloatingActions(
-          boardGameDetailsStore: widget.boardGameDetailsStore,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        // floatingActionButton: BoardGameDetailFloatingActions(
+        //   boardGameDetailsStore: widget.boardGameDetailsStore,
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }
@@ -612,11 +611,10 @@ class _CreditsItem extends StatelessWidget {
 class _Stats extends StatelessWidget {
   const _Stats({
     Key key,
-    @required BoardGameDetails boardGameDetails,
-  })  : _boardGameDetails = boardGameDetails,
-        super(key: key);
+    @required this.boardGameDetails,
+  }) : super(key: key);
 
-  final BoardGameDetails _boardGameDetails;
+  final BoardGameDetails boardGameDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -627,7 +625,7 @@ class _Stats extends StatelessWidget {
         children: <Widget>[
           Center(
             child: BoardGameRatingHexagon(
-              rating: _boardGameDetails?.rating,
+              rating: boardGameDetails?.rating,
             ),
           ),
           const SizedBox(
@@ -640,29 +638,29 @@ class _Stats extends StatelessWidget {
               children: <Widget>[
                 _DetailsNumbersItem(
                   title: 'Rank',
-                  detail: _boardGameDetails?.rankFormatted,
+                  detail: boardGameDetails?.rankFormatted,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Ratings',
-                  detail: '${_boardGameDetails?.votes}',
+                  detail: '${boardGameDetails?.votes}',
                   format: true,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Comments',
-                  detail: '${_boardGameDetails?.commentsNumber}',
+                  detail: '${boardGameDetails?.commentsNumber}',
                   format: true,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Published',
-                  detail: '${_boardGameDetails?.yearPublished}',
+                  detail: '${boardGameDetails?.yearPublished}',
                 ),
               ],
             ),
           ),
-          const _CollectionFlags(),
+          _CollectionFlags(boardGameDetails: boardGameDetails),
         ],
       ),
     );
@@ -671,51 +669,80 @@ class _Stats extends StatelessWidget {
 
 class _CollectionFlags extends StatelessWidget {
   const _CollectionFlags({
+    @required this.boardGameDetails,
     Key key,
   }) : super(key: key);
 
+  final BoardGameDetails boardGameDetails;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ToggleButtons(
-          splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
-          fillColor: Colors.transparent,
-          selectedColor: Colors.white,
-          selectedBorderColor: Colors.transparent,
-          borderColor: Colors.transparent,
-          isSelected: [false, true],
-          children: [
-            const _CollectionFlag(
-              icon: Icons.sports_esports,
-              title: 'Played',
-              isSelected: false,
-            ),
-            const _CollectionFlag(
-              icon: Icons.card_giftcard,
-              title: 'Wishlist',
-              isSelected: false,
-            ),
-          ],
-          onPressed: (int index) {},
-        ),
-        ToggleButtons(
-          splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
-          fillColor: Colors.transparent,
-          selectedColor: Colors.white,
-          selectedBorderColor: Colors.transparent,
-          borderColor: Colors.transparent,
-          isSelected: [false],
-          children: [
-            const _CollectionFlag(
-              icon: Icons.grid_on,
-              title: 'Collection',
-              isSelected: true,
-            ),
-          ],
-          onPressed: (int index) {},
-        ),
-      ],
+    return ChangeNotifierProvider.value(
+      value: boardGameDetails,
+      child: Consumer<BoardGameDetails>(
+        builder: (_, BoardGameDetails boardGameDetailsProvider, __) {
+          return Column(
+            children: [
+              ToggleButtons(
+                splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
+                fillColor: Colors.transparent,
+                selectedColor: Colors.white,
+                selectedBorderColor: Colors.transparent,
+                borderColor: Colors.transparent,
+                isSelected: [
+                  boardGameDetailsProvider.isPlayed,
+                  boardGameDetailsProvider.isOnWishlist
+                ],
+                children: <Widget>[
+                  _CollectionFlag(
+                    icon: Icons.sports_esports,
+                    title: 'Played',
+                    isSelected: boardGameDetailsProvider.isPlayed,
+                  ),
+                  _CollectionFlag(
+                    icon: Icons.card_giftcard,
+                    title: 'Wishlist',
+                    isSelected: boardGameDetailsProvider.isOnWishlist,
+                  ),
+                ],
+                onPressed: (int index) {
+                  if (boardGameDetailsProvider.isInCollection) {
+                    return;
+                  }
+
+                  if (index == 0) {
+                    boardGameDetailsProvider.isPlayed = !boardGameDetails.isPlayed;
+                  } else {
+                    boardGameDetailsProvider.isOnWishlist = !boardGameDetails.isOnWishlist;
+                  }
+                },
+              ),
+              ToggleButtons(
+                splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
+                fillColor: Colors.transparent,
+                selectedColor: Colors.white,
+                selectedBorderColor: Colors.transparent,
+                borderColor: Colors.transparent,
+                isSelected: [boardGameDetailsProvider.isInCollection],
+                children: <Widget>[
+                  _CollectionFlag(
+                    icon: Icons.grid_on,
+                    title: 'Collection',
+                    isSelected: boardGameDetailsProvider.isInCollection,
+                  ),
+                ],
+                onPressed: (int index) {
+                  boardGameDetailsProvider.isInCollection = !boardGameDetails.isInCollection;
+                  if (boardGameDetailsProvider.isInCollection) {
+                    boardGameDetailsProvider.isOnWishlist = false;
+                    boardGameDetailsProvider.isPlayed = false;
+                  }
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
