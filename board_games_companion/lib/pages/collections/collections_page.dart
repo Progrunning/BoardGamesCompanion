@@ -42,8 +42,7 @@ class _CollectionsPageState extends State<CollectionsPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.boardGamesStore.loadDataState == LoadDataState.Loaded) {
-      if (!widget.boardGamesStore.hasBoardGames &&
-          (widget.userStore.user?.name?.isEmpty ?? true)) {
+      if (!widget.boardGamesStore.hasBoardGames && (widget.userStore.user?.name?.isEmpty ?? true)) {
         return _Empty();
       }
 
@@ -94,12 +93,12 @@ class _Collection extends StatelessWidget {
 
 class _SearchBar extends StatefulWidget {
   const _SearchBar({
-    @required boardGamesStore,
+    @required this.boardGamesStore,
     Key key,
-  })  : _boardGamesStore = boardGamesStore,
+  })  : 
         super(key: key);
 
-  final BoardGamesStore _boardGamesStore;
+  final BoardGamesStore boardGamesStore;
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -129,7 +128,7 @@ class _SearchBarState extends State<_SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget._boardGamesStore.searchPhrase?.isEmpty ?? true) {
+    if (widget.boardGamesStore.searchPhrase?.isEmpty ?? true) {
       _searchController.text = '';
     }
 
@@ -167,7 +166,7 @@ class _SearchBarState extends State<_SearchBar> {
   }
 
   Future<void> _createBottomSheetFilterPanel(BuildContext context) async {
-    await showModalBottomSheet(
+    await showModalBottomSheet<Widget>(
       backgroundColor: AppTheme.primaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -187,7 +186,7 @@ class _SearchBarState extends State<_SearchBar> {
     _debounce = Timer(
       const Duration(milliseconds: 500),
       () async {
-        widget._boardGamesStore.updateSearchResults(_searchController.text);
+        widget.boardGamesStore.updateSearchResults(_searchController.text);
 
         await _rateAndReviewService.increaseNumberOfSignificantActions();
       },
@@ -195,7 +194,7 @@ class _SearchBarState extends State<_SearchBar> {
   }
 
   Widget _retrieveSearchBarSuffixIcon() {
-    if (widget._boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
+    if (widget.boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
       return IconButton(
         icon: Icon(
           Icons.clear,
@@ -203,7 +202,7 @@ class _SearchBarState extends State<_SearchBar> {
         color: AppTheme.accentColor,
         onPressed: () {
           _searchController.text = '';
-          widget._boardGamesStore.updateSearchResults('');
+          widget.boardGamesStore.updateSearchResults('');
         },
       );
     }
@@ -258,13 +257,13 @@ class _Grid extends StatelessWidget {
               onTap: () async {
                 await _analytics.logEvent(
                   name: Analytics.ViewGameStats,
-                  parameters: {
+                  parameters: <String, String>{
                     Analytics.BoardGameIdParameter: boardGameDetails.id,
                     Analytics.BoardGameNameParameter: boardGameDetails.name,
                   },
                 );
 
-                await Navigator.push(
+                await Navigator.push<BoardGamePlaythroughsPage>(
                   context,
                   NavigatorTransitions.fadeThrough(
                     (_, __, ___) {

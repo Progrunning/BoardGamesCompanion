@@ -25,8 +25,7 @@ class PlaythroughsStore with ChangeNotifier {
 
   List<Playthrough> get playthroughs => _playthroughs;
 
-  Future<List<Playthrough>> loadPlaythroughs(
-      BoardGameDetails boardGameDetails) async {
+  Future<List<Playthrough>> loadPlaythroughs(BoardGameDetails boardGameDetails) async {
     if (boardGameDetails?.id?.isEmpty ?? true) {
       return List<Playthrough>();
     }
@@ -34,8 +33,7 @@ class PlaythroughsStore with ChangeNotifier {
     _selectedBoardGame = boardGameDetails;
 
     try {
-      _playthroughs = await _playthroughService
-          .retrievePlaythroughs([_selectedBoardGame.id]);
+      _playthroughs = await _playthroughService.retrievePlaythroughs([_selectedBoardGame.id]);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -57,7 +55,7 @@ class PlaythroughsStore with ChangeNotifier {
 
     await _analyticsService.logEvent(
       name: Analytics.CreatePlaythrough,
-      parameters: {
+      parameters: <String, dynamic>{
         Analytics.BoardGameIdParameter: boardGameId,
         Analytics.NumberOfPlayersParameter: playthoughPlayers.length,
       },
@@ -72,8 +70,7 @@ class PlaythroughsStore with ChangeNotifier {
     }
 
     try {
-      final updateSuceeded =
-          await _playthroughService.updatePlaythrough(playthrough);
+      final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough);
       if (updateSuceeded) {
         notifyListeners();
         return true;
@@ -87,8 +84,7 @@ class PlaythroughsStore with ChangeNotifier {
 
   Future<bool> deletePlaythrough(String playthroughId) async {
     try {
-      final deleteSucceeded =
-          await _playthroughService.deletePlaythrough(playthroughId);
+      final deleteSucceeded = await _playthroughService.deletePlaythrough(playthroughId);
       if (deleteSucceeded) {
         _playthroughs.removeWhere((p) => p.id == playthroughId);
         notifyListeners();

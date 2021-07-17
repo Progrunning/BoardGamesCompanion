@@ -13,7 +13,7 @@ class BaseHiveService<T> {
       return;
     }
 
-    Hive.box(boxName).close();
+    Hive.box<T>(boxName).close();
   }
 
   Future<bool> ensureBoxOpen(String boxName) async {

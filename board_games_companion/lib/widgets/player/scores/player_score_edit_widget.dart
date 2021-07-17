@@ -3,23 +3,21 @@ import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
 class PlayerScoreEdit extends StatelessWidget {
-  final TextEditingController _controller;
-  final void Function(String) _onSubmit;
-
   const PlayerScoreEdit({
-    @required controller,
-    @required onSubmit,
+    @required this.controller,
+    @required this.onSubmit,
     Key key,
-  })  : _controller = controller,
-        _onSubmit = onSubmit,
-        super(key: key);
+  }) : super(key: key);
+
+  final TextEditingController controller;
+  final void Function(String) onSubmit;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: TextFormField(
-        controller: _controller,
+        controller: controller,
         autofocus: true,
         keyboardType: TextInputType.number,
         style: TextStyle(
@@ -32,7 +30,7 @@ class PlayerScoreEdit extends StatelessWidget {
           fillColor: Colors.red,
         ),
         onFieldSubmitted: (value) async {
-          _onSubmit(value);
+          onSubmit(value);
         },
       ),
     );

@@ -24,28 +24,28 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       }
 
       // MK Wait for all of the animations to finish before showing the dialog
-      await Future.delayed(Duration(seconds: 1));
+      await Future<dynamic>.delayed(const Duration(seconds: 1));
 
       await _showRateAndReviewDialog(context);
     });
   }
 
   Future<void> _showRateAndReviewDialog(BuildContext context) async {
-    await showDialog(
+    await showDialog<AlertDialog>(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${Strings.RateAndReview}'),
+          title: const Text(Strings.RateAndReview),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                   'We apologise that we\'re interupting you but we would really appreciate your support.\n'),
-              Text(
+              const Text(
                   'If you\'re enjoying ${Strings.AppTitle} app, would you mind taking a moment to rate it? It shouldn\'t take more than a minute.\n'),
-              Text('Thank you.'),
+              const Text('Thank you.'),
             ],
           ),
           elevation: Dimensions.defaultElevation,
