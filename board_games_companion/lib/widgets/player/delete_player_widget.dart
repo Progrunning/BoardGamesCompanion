@@ -24,7 +24,7 @@ class DeletePlayer extends StatelessWidget {
       icon: Icons.delete,
       backgroundColor: Colors.redAccent,
       onPressed: () async {
-        await showDialog(
+        await showDialog<AlertDialog>(
           context: context,
           builder: (context) {
             return AlertDialog(

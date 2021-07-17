@@ -223,7 +223,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
     if (widget._playersStore.playerToCreateOrEdit.avatarImageUri !=
             player.avatarImageUri ||
         widget._playersStore.playerToCreateOrEdit.name != player.name) {
-      await showDialog(
+      await showDialog<AlertDialog>(
           context: context,
           builder: (context) {
             return AlertDialog(

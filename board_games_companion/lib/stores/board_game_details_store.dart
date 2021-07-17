@@ -3,32 +3,31 @@ import 'package:flutter/foundation.dart';
 
 import '../common/analytics.dart';
 import '../models/hive/board_game_details.dart';
+import '../services/analytics_service.dart';
 import '../services/board_games_geek_service.dart';
 import 'board_games_store.dart';
 
 class BoardGameDetailsStore with ChangeNotifier {
-  final BoardGamesGeekService _boardGameGeekService;
-  final BoardGamesStore _boardGamesStore;
-  final _analyticsService;
-
-  BoardGameDetails _boardGameDetails;
-
-  BoardGameDetails get boardGameDetails => _boardGameDetails;
-
   BoardGameDetailsStore(
     this._boardGameGeekService,
     this._boardGamesStore,
     this._analyticsService,
   );
 
+  final BoardGamesGeekService _boardGameGeekService;
+  final BoardGamesStore _boardGamesStore;
+  final AnalyticsService _analyticsService;
+
+  BoardGameDetails _boardGameDetails;
+
+  BoardGameDetails get boardGameDetails => _boardGameDetails;
+
   Future<BoardGameDetails> loadBoardGameDetails(String boardGameId) async {
     try {
-      final boardGameDetails =
-          await _boardGameGeekService.retrieveDetails(boardGameId);
+      final boardGameDetails = await _boardGameGeekService.retrieveDetails(boardGameId);
       if (boardGameDetails != null) {
-        for (var boardGameExpansion in boardGameDetails.expansions) {
-          final boardGameExpansionDetails =
-              _boardGamesStore.allboardGames.firstWhere(
+        for (final boardGameExpansion in boardGameDetails.expansions) {
+          final boardGameExpansionDetails = _boardGamesStore.allboardGames.firstWhere(
             (boardGame) => boardGame.id == boardGameExpansion.id,
             orElse: () => null,
           );
@@ -54,7 +53,7 @@ class BoardGameDetailsStore with ChangeNotifier {
   Future<void> captureLinkAnalytics(String linkName) async {
     await _analyticsService.logEvent(
       name: Analytics.BoardGameDetailsLinks,
-      parameters: {
+      parameters: <String, String>{
         Analytics.BoardGameDetailsLinksName: linkName,
       },
     );

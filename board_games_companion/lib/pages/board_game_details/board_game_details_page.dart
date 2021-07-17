@@ -34,15 +34,11 @@ class BoardGamesDetailsPage extends StatefulWidget {
 
   const BoardGamesDetailsPage({
     Key key,
-    @required boardGameDetailsStore,
-    @required boardGameId,
-    @required boardGameName,
-    @required navigatingFromType,
-  })  : boardGameDetailsStore = boardGameDetailsStore,
-        boardGameId = boardGameId,
-        boardGameName = boardGameName,
-        navigatingFromType = navigatingFromType,
-        super(key: key);
+    @required this.boardGameDetailsStore,
+    @required this.boardGameId,
+    @required this.boardGameName,
+    @required this.navigatingFromType,
+  }) : super(key: key);
 
   @override
   _BoardGamesDetailsPageState createState() => _BoardGamesDetailsPageState();
@@ -146,9 +142,8 @@ class _Header extends StatelessWidget {
               _boardGameName ?? '',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: AppTheme.defaultTextColor,
-                  fontSize: Dimensions.largeFontSize),
+              style:
+                  TextStyle(color: AppTheme.defaultTextColor, fontSize: Dimensions.largeFontSize),
             ),
           ),
         ),
@@ -172,17 +167,14 @@ class _Header extends StatelessWidget {
 class _Body extends StatelessWidget {
   const _Body({
     Key key,
-    @required boardGameId,
-    @required boardGameName,
-    @required boardGameDetailsStore,
-  })  : _boardGameId = boardGameId,
-        _boardGameName = boardGameName,
-        _boardGameDetailsStore = boardGameDetailsStore,
-        super(key: key);
+    @required this.boardGameId,
+    @required this.boardGameName,
+    @required this.boardGameDetailsStore,
+  }) : super(key: key);
 
-  final String _boardGameId;
-  final String _boardGameName;
-  final BoardGameDetailsStore _boardGameDetailsStore;
+  final String boardGameId;
+  final String boardGameName;
+  final BoardGameDetailsStore boardGameDetailsStore;
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
   static const _halfSpacingBetweenSecions = Dimensions.standardSpacing;
@@ -191,7 +183,7 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final htmlUnescape = new HtmlUnescape();
     return FutureBuilder(
-      future: _boardGameDetailsStore.loadBoardGameDetails(_boardGameId),
+      future: boardGameDetailsStore.loadBoardGameDetails(boardGameId),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
@@ -202,7 +194,7 @@ class _Body extends StatelessWidget {
                     Dimensions.doubleStandardSpacing,
                   ),
                   child: Text(
-                    'Sorry, we couldn\'t retrieve $_boardGameName\'s details. Check your Internet connectivity and try again. If the problem persists, please contact support at feedback@progrunning.net',
+                    'Sorry, we couldn\'t retrieve $boardGameName\'s details. Check your Internet connectivity and try again. If the problem persists, please contact support at feedback@progrunning.net',
                     textAlign: TextAlign.justify,
                   ),
                 ),
@@ -211,7 +203,7 @@ class _Body extends StatelessWidget {
           }
 
           return ChangeNotifierProvider<BoardGameDetailsStore>.value(
-            value: _boardGameDetailsStore,
+            value: boardGameDetailsStore,
             child: Consumer<BoardGameDetailsStore>(
               builder: (_, store, __) {
                 return SliverPadding(
@@ -225,8 +217,7 @@ class _Body extends StatelessWidget {
                           title: 'Stats',
                         ),
                         _Stats(
-                          boardGameDetails:
-                              _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: _spacingBetweenSecions,
@@ -235,15 +226,13 @@ class _Body extends StatelessWidget {
                           title: 'General',
                         ),
                         _FirstRowGeneralInfoPanels(
-                          boardGameDetails:
-                              _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: _spacingBetweenSecions,
                         ),
                         _SecondRowGeneralInfoPanels(
-                          boardGameDetails:
-                              _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: _spacingBetweenSecions,
@@ -252,7 +241,7 @@ class _Body extends StatelessWidget {
                           title: 'Links',
                         ),
                         _Links(
-                          boardGameDetailsStore: _boardGameDetailsStore,
+                          boardGameDetailsStore: boardGameDetailsStore,
                         ),
                         SizedBox(
                           height: _halfSpacingBetweenSecions,
@@ -261,8 +250,7 @@ class _Body extends StatelessWidget {
                           title: 'Credits',
                         ),
                         _Credits(
-                          boardGameDetails:
-                              _boardGameDetailsStore.boardGameDetails,
+                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
                         SizedBox(
                           height: _halfSpacingBetweenSecions,
@@ -278,15 +266,13 @@ class _Body extends StatelessWidget {
                             direction: Axis.horizontal,
                             spacing: Dimensions.standardSpacing,
                             alignment: WrapAlignment.spaceEvenly,
-                            children: _boardGameDetailsStore
-                                .boardGameDetails.categories
+                            children: boardGameDetailsStore.boardGameDetails.categories
                                 .map<Widget>((category) {
                               return Chip(
                                 padding: EdgeInsets.all(
                                   Dimensions.standardSpacing,
                                 ),
-                                backgroundColor:
-                                    AppTheme.primaryColor.withAlpha(
+                                backgroundColor: AppTheme.primaryColor.withAlpha(
                                   Styles.opacity80Percent,
                                 ),
                                 label: Text(
@@ -316,11 +302,9 @@ class _Body extends StatelessWidget {
                             horizontal: Dimensions.standardSpacing,
                           ),
                           child: Text(
-                            htmlUnescape
-                                .convert(store.boardGameDetails.description),
+                            htmlUnescape.convert(store.boardGameDetails.description),
                             textAlign: TextAlign.justify,
-                            style:
-                                TextStyle(fontSize: Dimensions.mediumFontSize),
+                            style: TextStyle(fontSize: Dimensions.mediumFontSize),
                           ),
                         )
                       ],
@@ -352,8 +336,8 @@ class _Body extends StatelessWidget {
                     title: 'Refresh',
                     icon: Icons.refresh,
                     onPressed: () => _refreshBoardGameDetails(
-                      _boardGameId,
-                      _boardGameDetailsStore,
+                      boardGameId,
+                      boardGameDetailsStore,
                     ),
                   )
                 ],
@@ -450,16 +434,13 @@ class _Links extends StatelessWidget {
                     ),
                   ),
             _Link(
-              title: isPricingInCountrySupported
-                  ? 'Prices'
-                  : '${Constants.UsaCountryCode} Prices',
+              title: isPricingInCountrySupported ? 'Prices' : '${Constants.UsaCountryCode} Prices',
               icon: Icons.attach_money,
               boardGameDetailsStore: _boardGameDetailsStore,
               onPressed: () async {
                 await LauncherHelper.launchUri(
                   context,
-                  _boardGameDetailsStore
-                      .boardGameDetails.boardGameOraclePriceUrl,
+                  _boardGameDetailsStore.boardGameDetails.boardGameOraclePriceUrl,
                 );
               },
             ),
@@ -519,12 +500,11 @@ class _Link extends StatelessWidget {
 
 class _BodySectionHeader extends StatelessWidget {
   const _BodySectionHeader({
-    @required title,
+    @required this.title,
     Key key,
-  })  : _title = title,
-        super(key: key);
+  }) : super(key: key);
 
-  final String _title;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -536,7 +516,7 @@ class _BodySectionHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(
-            _title,
+            title,
             style: AppTheme.sectionHeaderTextStyle,
           ),
           SizedBox(
@@ -550,12 +530,11 @@ class _BodySectionHeader extends StatelessWidget {
 
 class _Credits extends StatelessWidget {
   const _Credits({
-    @required boardGameDetails,
+    @required this.boardGameDetails,
     Key key,
-  })  : _boardGameDetails = boardGameDetails,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGameDetails _boardGameDetails;
+  final BoardGameDetails boardGameDetails;
 
   static const _spacingBetweenCredits = Dimensions.standardSpacing;
 
@@ -570,15 +549,14 @@ class _Credits extends StatelessWidget {
         children: <Widget>[
           _CreditsItem(
             title: 'Designer:',
-            detail:
-                _boardGameDetails?.desingers?.map((d) => d.name)?.join(', '),
+            detail: boardGameDetails?.desingers?.map((d) => d.name)?.join(', '),
           ),
           SizedBox(
             height: _spacingBetweenCredits,
           ),
           _CreditsItem(
             title: 'Artist:',
-            detail: _boardGameDetails?.artists?.map((d) => d.name)?.join(', '),
+            detail: boardGameDetails?.artists?.map((d) => d.name)?.join(', '),
           ),
           SizedBox(
             height: _spacingBetweenCredits,
@@ -586,8 +564,7 @@ class _Credits extends StatelessWidget {
           Container(
             child: _CreditsItem(
               title: 'Publisher:',
-              detail:
-                  _boardGameDetails?.publishers?.map((d) => d.name)?.join(', '),
+              detail: boardGameDetails?.publishers?.map((d) => d.name)?.join(', '),
             ),
           ),
         ],
@@ -598,15 +575,13 @@ class _Credits extends StatelessWidget {
 
 class _CreditsItem extends StatelessWidget {
   const _CreditsItem({
-    @required title,
-    @required detail,
+    @required this.title,
+    @required this.detail,
     Key key,
-  })  : _title = title,
-        _detail = detail,
-        super(key: key);
+  }) : super(key: key);
 
-  final String _title;
-  final String _detail;
+  final String title;
+  final String detail;
 
   @override
   Widget build(BuildContext context) {
@@ -614,7 +589,7 @@ class _CreditsItem extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(
-            text: _title ?? '',
+            text: title ?? '',
             style: AppTheme.titleTextStyle.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -623,7 +598,7 @@ class _CreditsItem extends StatelessWidget {
             text: ' ',
           ),
           TextSpan(
-            text: _detail ?? '',
+            text: detail ?? '',
           ),
         ],
       ),
@@ -712,7 +687,7 @@ class _CollectionFlags extends StatelessWidget {
               icon: Icons.sports_esports,
               title: 'Played',
               isSelected: false,
-            ),            
+            ),
             _CollectionFlag(
               icon: Icons.card_giftcard,
               title: 'Wishlist',
@@ -760,25 +735,19 @@ class _CollectionFlag extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.standardSpacing,
-            vertical: Dimensions.halfStandardSpacing
-          ),
+              horizontal: Dimensions.standardSpacing, vertical: Dimensions.halfStandardSpacing),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 icon,
-                color: isSelected
-                    ? AppTheme.accentColor
-                    : AppTheme.deselectedBottomTabIconColor,
+                color: isSelected ? AppTheme.accentColor : AppTheme.deselectedBottomTabIconColor,
               ),
               Text(
                 title,
                 style: TextStyle(
                   fontSize: Dimensions.smallFontSize,
-                  color: isSelected
-                      ? AppTheme.defaultTextColor
-                      : AppTheme.secondaryTextColor,
+                  color: isSelected ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
                 ),
               ),
             ],
@@ -791,12 +760,11 @@ class _CollectionFlag extends StatelessWidget {
 
 class _FirstRowGeneralInfoPanels extends StatelessWidget {
   const _FirstRowGeneralInfoPanels({
-    @required boardGameDetails,
+    @required this.boardGameDetails,
     Key key,
-  })  : _boardGameDetails = boardGameDetails,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGameDetails _boardGameDetails;
+  final BoardGameDetails boardGameDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -811,8 +779,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
           children: <Widget>[
             Flexible(
               child: _InfoPanel(
-                title:
-                    '${_boardGameDetails.minPlayers} - ${_boardGameDetails.maxPlayers} Players',
+                title: '${boardGameDetails.minPlayers} - ${boardGameDetails.maxPlayers} Players',
               ),
             ),
             SizedBox(
@@ -820,7 +787,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
             ),
             Flexible(
               child: _InfoPanel(
-                title: '${_boardGameDetails.playtimeFormatted} Min',
+                title: '${boardGameDetails.playtimeFormatted} Min',
                 subtitle: 'Playing Time',
               ),
             ),
@@ -833,12 +800,11 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
 
 class _SecondRowGeneralInfoPanels extends StatelessWidget {
   const _SecondRowGeneralInfoPanels({
-    @required boardGameDetails,
+    @required this.boardGameDetails,
     Key key,
-  })  : _boardGameDetails = boardGameDetails,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGameDetails _boardGameDetails;
+  final BoardGameDetails boardGameDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -853,7 +819,7 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
           children: <Widget>[
             Flexible(
               child: _InfoPanel(
-                title: 'Age: ${_boardGameDetails.minAge}+',
+                title: 'Age: ${boardGameDetails.minAge}+',
               ),
             ),
             SizedBox(
@@ -861,8 +827,7 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
             ),
             Flexible(
               child: _InfoPanel(
-                title:
-                    'Weight: ${_boardGameDetails.avgWeight?.toStringAsFixed(2)} / 5',
+                title: 'Weight: ${boardGameDetails.avgWeight?.toStringAsFixed(2)} / 5',
                 subtitle: 'Complexity Rating',
               ),
             ),
@@ -875,15 +840,13 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
 
 class _InfoPanel extends StatelessWidget {
   const _InfoPanel({
-    @required title,
-    subtitle,
+    @required this.title,
+    this.subtitle,
     Key key,
-  })  : _title = title,
-        _subtitle = subtitle,
-        super(key: key);
+  }) : super(key: key);
 
-  final String _title;
-  final String _subtitle;
+  final String title;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -900,13 +863,13 @@ class _InfoPanel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  _title ?? '',
+                  title ?? '',
                   textAlign: TextAlign.center,
                   style: AppTheme.titleTextStyle,
                 ),
-                if (_subtitle?.isNotEmpty ?? false)
+                if (subtitle?.isNotEmpty ?? false)
                   Text(
-                    _subtitle,
+                    subtitle,
                     textAlign: TextAlign.center,
                     style: AppTheme.subTitleTextStyle,
                   ),

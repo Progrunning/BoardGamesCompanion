@@ -19,10 +19,8 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
   final ScoreService _scoreService;
   final PlaythroughService _playthroughService;
 
-  Map<String, BoardGameStatistics> _boardGamesStatistics =
-      Map<String, BoardGameStatistics>();
-  Map<String, BoardGameStatistics> get boardGamesStatistics =>
-      _boardGamesStatistics;
+  Map<String, BoardGameStatistics> _boardGamesStatistics = Map<String, BoardGameStatistics>();
+  Map<String, BoardGameStatistics> get boardGamesStatistics => _boardGamesStatistics;
 
   PlaythroughStatisticsStore(
     this._playerService,
@@ -38,24 +36,21 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
     }
 
     // MK Retrieve players
-    final players =
-        (await _playerService.retrievePlayers()) ?? Iterable<Player>.empty();
-    final Map<String, Player> playersById = Map.fromIterable(players,
-        key: (p) => (p as Player).id, value: (p) => p as Player);
-
+    final players = (await _playerService.retrievePlayers()) ?? <Player>[];
+    final playersById = <String, Player>{for (Player player in players) player.id: player};
+    
     // MK Retrieve playthroughs
-    final Map<String, BoardGameDetails> boardGameDetailsMapById =
-        Map.fromIterable(allBoardGames,
-            key: (bg) => (bg as BoardGameDetails).id,
-            value: (bg) => bg as BoardGameDetails);
-    final boardGamePlaythroughs = (await _playthroughService
-            .retrievePlaythroughs(boardGameDetailsMapById.keys)) ??
-        Iterable<Playthrough>.empty();
+    final boardGameDetailsMapById = <String, BoardGameDetails>{
+      for (BoardGameDetails boardGameDetails in allBoardGames) boardGameDetails.id: boardGameDetails
+    };
 
-    final Map<String, List<Playthrough>>
-        boardGamePlaythroughsGroupedByBoardGameId =
+    final boardGamePlaythroughs =
+        (await _playthroughService.retrievePlaythroughs(boardGameDetailsMapById.keys)) ??
+            <Playthrough>[];
+
+    final Map<String, List<Playthrough>> boardGamePlaythroughsGroupedByBoardGameId =
         groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
-    for (var boardGameId in boardGameDetailsMapById.keys) {
+    for (final boardGameId in boardGameDetailsMapById.keys) {
       var boardGameStatistics = _boardGamesStatistics[boardGameId];
       if (boardGameStatistics == null) {
         boardGameStatistics = _boardGamesStatistics[boardGameId] = BoardGameStatistics();
@@ -73,19 +68,16 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
       // MK Retrieve scores
       final playthroughIds = boardGamePlaythroughs.map((p) => p.id);
       final playthroughsScores =
-          (await _scoreService.retrieveScores(playthroughIds)) ??
-              Iterable<Score>.empty();
+          (await _scoreService.retrieveScores(playthroughIds)) ?? Iterable<Score>.empty();
       final Map<String, List<Score>> playthroughScoresByPlaythroughId =
           groupBy(playthroughsScores, (s) => s.playthroughId);
       final Map<String, List<Score>> playthroughScoresByBoardGameId =
           groupBy(playthroughsScores, (s) => s.boardGameId);
 
-      final playthroughs =
-          boardGamePlaythroughsGroupedByBoardGameId[boardGameId];
+      final playthroughs = boardGamePlaythroughsGroupedByBoardGameId[boardGameId];
 
       final finishedPlaythroughs = playthroughs
-          ?.where((p) =>
-              p.status == PlaythroughStatus.Finished && p.endDate != null)
+          ?.where((p) => p.status == PlaythroughStatus.Finished && p.endDate != null)
           ?.toList();
       finishedPlaythroughs?.sort((a, b) => b.endDate?.compareTo(a.endDate));
 
@@ -99,13 +91,11 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
       if (finishedPlaythroughs?.isNotEmpty ?? false) {
         boardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs?.length;
         if (playthroughScoresByBoardGameId?.containsKey(boardGameId) ?? false) {
-          final playerScoresWithValue =
-              playthroughScoresByBoardGameId[boardGameId]
-                  .onlyScoresWithValue()
-                  .map((s) => num.tryParse(s.value));
+          final playerScoresWithValue = playthroughScoresByBoardGameId[boardGameId]
+              .onlyScoresWithValue()
+              .map((s) => num.tryParse(s.value));
           if (playerScoresWithValue?.isNotEmpty ?? false) {
-            boardGameStatistics.highscore =
-                playerScoresWithValue.reduce(max).toString();
+            boardGameStatistics.highscore = playerScoresWithValue.reduce(max).toString();
           }
         }
 
@@ -137,10 +127,8 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
       }
 
       final lastPlaythroughScores =
-          playthroughScoresByPlaythroughId[lastPlaythrough.id]
-              .onlyScoresWithValue();
-      lastPlaythroughScores?.sort(
-          (a, b) => num.tryParse(b.value).compareTo(num.tryParse(a.value)));
+          playthroughScoresByPlaythroughId[lastPlaythrough.id].onlyScoresWithValue();
+      lastPlaythroughScores?.sort((a, b) => num.tryParse(b.value).compareTo(num.tryParse(a.value)));
       if (lastPlaythroughScores?.isEmpty ?? true) {
         if (boardGameStatistics.lastWinner != null) {
           boardGameStatistics.lastWinner = null;

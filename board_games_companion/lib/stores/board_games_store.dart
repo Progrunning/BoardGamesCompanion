@@ -53,10 +53,8 @@ class BoardGamesStore with ChangeNotifier {
         .map((boardGame) => boardGame.categories)
         .expand((categories) => categories)
         .toList();
-    final uniqueBoardGameCategories =
-        allBoardGameCategories.map((category) => category.id).toSet();
-    allBoardGameCategories.retainWhere(
-        (category) => uniqueBoardGameCategories.remove(category.id));
+    final uniqueBoardGameCategories = allBoardGameCategories.map((category) => category.id).toSet();
+    allBoardGameCategories.retainWhere((category) => uniqueBoardGameCategories.remove(category.id));
     return allBoardGameCategories;
   }
 
@@ -85,9 +83,8 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    final existingBoardGameDetails = _allBoardGames.firstWhere(
-        (boardGame) => boardGame.id == boardGameDetails.id,
-        orElse: () => null);
+    final existingBoardGameDetails = _allBoardGames
+        .firstWhere((boardGame) => boardGame.id == boardGameDetails.id, orElse: () => null);
 
     if (existingBoardGameDetails == null) {
       _allBoardGames.add(boardGameDetails);
@@ -131,16 +128,14 @@ class BoardGamesStore with ChangeNotifier {
       existingBoardGameDetails.expansions = boardGameDetails.expansions;
     }
 
-    Map<String, BoardGamesExpansion> expansionsInCollection = Map.fromIterable(
-      existingBoardGameDetails.expansions
-          .where((expansion) => expansion.isInCollection ?? false),
-      key: (expansion) => expansion.id,
-      value: (expansion) => expansion,
-    );
+    final expansionsInCollection = <String, BoardGamesExpansion>{
+      for (BoardGamesExpansion expansion in existingBoardGameDetails.expansions
+          .where((expansion) => expansion.isInCollection ?? false))
+        expansion.id: expansion
+    };
 
-    for (var updatedExpansion in boardGameDetails.expansions) {
-      updatedExpansion.isInCollection =
-          expansionsInCollection.containsKey(updatedExpansion.id);
+    for (final updatedExpansion in boardGameDetails.expansions) {
+      updatedExpansion.isInCollection = expansionsInCollection.containsKey(updatedExpansion.id);
     }
 
     existingBoardGameDetails.expansions = boardGameDetails.expansions;
@@ -148,8 +143,7 @@ class BoardGamesStore with ChangeNotifier {
 
   Future<void> updateDetails(BoardGameDetails boardGameDetails) async {
     try {
-      final isInCollection =
-          await _boardGamesService.isInCollection(boardGameDetails);
+      final isInCollection = await _boardGamesService.isInCollection(boardGameDetails);
       if (!isInCollection) {
         return;
       }
@@ -238,9 +232,8 @@ class BoardGamesStore with ChangeNotifier {
     final searchPhraseLowerCase = searchPhrase.toLowerCase();
 
     _filteredBoardGames = List.of(_allBoardGames
-        .where((boardGameDetails) => boardGameDetails.name
-            ?.toLowerCase()
-            ?.contains(searchPhraseLowerCase))
+        .where((boardGameDetails) =>
+            boardGameDetails.name?.toLowerCase()?.contains(searchPhraseLowerCase))
         .toList());
 
     notifyListeners();
@@ -259,10 +252,8 @@ class BoardGamesStore with ChangeNotifier {
             (_boardGamesFiltersStore.numberOfPlayers == null ||
                 (boardGame.maxPlayers != null &&
                     boardGame.minPlayers != null &&
-                    (boardGame.maxPlayers >=
-                            _boardGamesFiltersStore.numberOfPlayers &&
-                        boardGame.minPlayers <=
-                            _boardGamesFiltersStore.numberOfPlayers))))
+                    (boardGame.maxPlayers >= _boardGamesFiltersStore.numberOfPlayers &&
+                        boardGame.minPlayers <= _boardGamesFiltersStore.numberOfPlayers))))
         ?.toList();
 
     if (selectedSortBy != null) {
@@ -313,8 +304,7 @@ class BoardGamesStore with ChangeNotifier {
         .map<List<BoardGamesExpansion>>((boardGame) => boardGame.expansions)
         .expand((expansions) => expansions)
         .toList()
-        .firstWhere((expansion) => expansion.id == boardGameToRemove.id,
-            orElse: () => null);
+        .firstWhere((expansion) => expansion.id == boardGameToRemove.id, orElse: () => null);
 
     if (boardGameExpansion != null) {
       boardGameExpansion.isInCollection = inCollection;

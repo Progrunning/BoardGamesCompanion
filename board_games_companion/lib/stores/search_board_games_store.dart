@@ -17,8 +17,7 @@ class SearchBoardGamesStore with ChangeNotifier {
 
   List<BoardGame> get searchResults => _searchResults;
 
-  AsyncMemoizer<List<BoardGame>> _searchResultsMemoizer =
-      new AsyncMemoizer<List<BoardGame>>();
+  AsyncMemoizer<List<BoardGame>> _searchResultsMemoizer = new AsyncMemoizer<List<BoardGame>>();
 
   SearchBoardGamesStore(
     this._boardGameGeekService,
@@ -31,25 +30,24 @@ class SearchBoardGamesStore with ChangeNotifier {
       () async {
         if (_searchBarBoardGamesStore.searchPhrase?.isEmpty ?? true) {
           _searchResults?.clear();
-          return List<BoardGame>();
+          return <BoardGame>[];
         }
 
         try {
           await _analyticsService.logEvent(
             name: Analytics.SearchBoardGames,
-            parameters: {
-              Analytics.SearchBoardGamesPhraseParameter:
-                  _searchBarBoardGamesStore.searchPhrase,
+            parameters: <String, String>{
+              Analytics.SearchBoardGamesPhraseParameter: _searchBarBoardGamesStore.searchPhrase,
             },
           );
 
-          _searchResults = await _boardGameGeekService
-              .search(_searchBarBoardGamesStore.searchPhrase);
+          _searchResults =
+              await _boardGameGeekService.search(_searchBarBoardGamesStore.searchPhrase);
         } catch (e, stack) {
           FirebaseCrashlytics.instance.recordError(e, stack);
         }
 
-        return _searchResults ?? List<BoardGame>();
+        return _searchResults ?? <BoardGame>[];
       },
     );
   }

@@ -30,8 +30,7 @@ class HotBoardGamesResults extends StatelessWidget {
       future: _hotBoardGamesStore.load(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data is List<BoardGame> &&
-              (snapshot.data as List<BoardGame>).isNotEmpty) {
+          if (snapshot.data is List<BoardGame> && (snapshot.data as List<BoardGame>).isNotEmpty) {
             return SliverPadding(
               padding: EdgeInsets.all(
                 Dimensions.standardSpacing,
@@ -39,18 +38,17 @@ class HotBoardGamesResults extends StatelessWidget {
               sliver: SliverGrid.extent(
                 crossAxisSpacing: Dimensions.standardSpacing,
                 mainAxisSpacing: Dimensions.standardSpacing,
-                maxCrossAxisExtent:
-                    Dimensions.boardGameItemCollectionImageWidth,
-                children: List.generate(
+                maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
+                children: List<BoardGameCollectionItem>.generate(
                   (snapshot.data as List<BoardGame>).length,
                   (int index) {
-                    final BoardGame boardGame = snapshot.data[index];
+                    final BoardGame boardGame = snapshot.data[index] as BoardGame;
                     return BoardGameCollectionItem(
                       boardGame: boardGame,
                       onTap: () async {
                         await _analytics.logEvent(
                           name: Analytics.ViewHotBoardGame,
-                          parameters: {
+                          parameters: <String, String>{
                             Analytics.BoardGameIdParameter: boardGame.id,
                             Analytics.BoardGameNameParameter: boardGame.name,
                           },
