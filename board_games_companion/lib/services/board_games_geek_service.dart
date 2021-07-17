@@ -140,8 +140,8 @@ class BoardGamesGeekService {
     }
 
     final retrievalOptions = buildCacheOptions(
-      Duration(days: _numberOfDaysToCacheBoardGameDetails),
-      maxStale: Duration(days: _numberOfDaysToCacheBoardGameDetails),
+      const Duration(days: _numberOfDaysToCacheBoardGameDetails),
+      maxStale: const Duration(days: _numberOfDaysToCacheBoardGameDetails),
       forceRefresh: false,
     );
     retrievalOptions.contentType = 'application/xml';
@@ -442,7 +442,7 @@ class BoardGamesGeekService {
           num.tryParse(boardGameRank.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
 
       if (rank.name == 'boardgame') {
-        boardGameDetails.rank = rank.rank.toInt();
+        boardGameDetails.rank = rank.rank?.toInt();
       }
 
       boardGameDetails.ranks.add(rank);
