@@ -43,7 +43,7 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   @HiveField(7)
-  List<BoardGameCategory> categories = List<BoardGameCategory>();
+  List<BoardGameCategory> categories = <BoardGameCategory>[];
 
   double _rating;
   @HiveField(8)
@@ -134,13 +134,13 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   @HiveField(16)
-  List<BoardGamePublisher> publishers = List<BoardGamePublisher>();
+  List<BoardGamePublisher> publishers = <BoardGamePublisher>[];
 
   @HiveField(17)
-  List<BoardGameArtist> artists = List<BoardGameArtist>();
+  List<BoardGameArtist> artists = <BoardGameArtist>[];
 
   @HiveField(18)
-  List<BoardGameDesigner> desingers = List<BoardGameDesigner>();
+  List<BoardGameDesigner> desingers = <BoardGameDesigner>[];
 
   int _commentsNumber;
   @HiveField(19)
@@ -154,7 +154,7 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   @HiveField(20)
-  List<BoardGameRank> ranks = List<BoardGameRank>();
+  List<BoardGameRank> ranks = <BoardGameRank>[];
 
   DateTime _lastModified;
   @HiveField(21)
@@ -168,7 +168,7 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   @HiveField(22)
-  List<BoardGamesExpansion> expansions = List<BoardGamesExpansion>();
+  List<BoardGamesExpansion> expansions = <BoardGamesExpansion>[];
 
   int get expansionsOwned {
     return expansions
