@@ -171,10 +171,7 @@ class BoardGameDetails extends BaseBoardGame {
   List<BoardGamesExpansion> expansions = <BoardGamesExpansion>[];
 
   int get expansionsOwned {
-    return expansions
-            ?.where((expansion) => expansion?.isInCollection ?? false)
-            ?.length ??
-        0;
+    return expansions?.where((expansion) => expansion?.isInCollection ?? false)?.length ?? 0;
   }
 
   bool _isExpansion;
@@ -184,6 +181,39 @@ class BoardGameDetails extends BaseBoardGame {
   set isExpansion(bool value) {
     if (_isExpansion != value) {
       _isExpansion = value;
+      notifyListeners();
+    }
+  }
+
+  bool _isInCollection;
+  @HiveField(24)
+  bool get isInCollection => _isInCollection ?? false;
+  @HiveField(24)
+  set isInCollection(bool value) {
+    if (_isInCollection != value) {
+      _isInCollection = value;
+      notifyListeners();
+    }
+  }
+
+  bool _isOnWishlist;
+  @HiveField(25)
+  bool get isOnWishlist => _isOnWishlist ?? false;
+  @HiveField(25)
+  set isOnWishlist(bool value) {
+    if (_isOnWishlist != value) {
+      _isOnWishlist = value;
+      notifyListeners();
+    }
+  }
+
+  bool _isPlayed;
+  @HiveField(26)
+  bool get isPlayed => _isPlayed ?? false;
+  @HiveField(26)
+  set isPlayed(bool value) {
+    if (_isPlayed != value) {
+      _isPlayed = value;
       notifyListeners();
     }
   }
@@ -215,8 +245,7 @@ class BoardGameDetails extends BaseBoardGame {
 
   String get boardGameOraclePriceUrl {
     final String currentCulture = Platform.localeName.replaceFirst('_', '-');
-    if (!Constants.BoardGameOracleSupportedCultureNames.contains(
-            currentCulture) ||
+    if (!Constants.BoardGameOracleSupportedCultureNames.contains(currentCulture) ||
         currentCulture == Constants.BoardGameOracleUsaCultureName) {
       return '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_urlEncodeName';
     }
@@ -224,16 +253,14 @@ class BoardGameDetails extends BaseBoardGame {
     return '${Constants.BoardGameOracleBaseUrl}$currentCulture/boardgame/price/$_urlEncodeName';
   }
 
-  String get _baseBggBoardGameUrl =>
-      '${Constants.BoardGameGeekBaseUrl}boardgame';
+  String get _baseBggBoardGameUrl => '${Constants.BoardGameGeekBaseUrl}boardgame';
 
   String get _urlEncodeName {
     final List<String> spaceSeparatedNameParts = name.split(' ');
     return spaceSeparatedNameParts
         .map((part) {
           final String trimmedAndLoweredPart = part.trim().toLowerCase();
-          final String regexMatch =
-              onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
+          final String regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
           return regexMatch;
         })
         .where((part) => part != null)
