@@ -5,7 +5,7 @@ class Strings {
   static const RateAndReview = 'Rate & Review';  
   static const Rate = 'Rate';  
   static const AskMeLater = 'Ask me later';  
-  static const DontAskAgain = 'Don\'t ask again';  
+  static const DontAskAgain = "Don't ask again";  
   
   static const Cancel = 'Cancel';  
 }

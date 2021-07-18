@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const Color primaryColorLight = const Color(0xFF5B217F);
-  static const Color primaryColor = const Color(0xFF2D103F);
+  static const Color primaryColorLight = Color(0xFF5B217F);
+  static const Color primaryColor = Color(0xFF2D103F);
 
-  static const Color accentColor = const Color(0xFFFF9800);
+  static const Color accentColor = Color(0xFFFF9800);
 
-  static const Color secondaryColor = const Color(0xFF010055);
-  static const Color secondaryLightColor = const Color(0xFF2747A5);
+  static const Color secondaryColor = Color(0xFF010055);
+  static const Color secondaryLightColor = Color(0xFF2747A5);
 
-  static const Color shadowColor = const Color(0xFF000000);
+  static const Color shadowColor = Color(0xFF000000);
 
   static const Color defaultTextColor = Color(0xFFFFFFFF);
   static const Color inverterTextColor = Color(0xFF000000);
@@ -24,13 +24,10 @@ class AppTheme {
   static const Color deselectedBottomTabIconColor = Color(0x46FFFFFF);
 
   static const Color endDefaultPageBackgroundColorGradient = primaryColor;
-  static const Color startDefaultPageBackgroundColorGradient =
-      primaryColorLight;
+  static const Color startDefaultPageBackgroundColorGradient = primaryColorLight;
 
-  static const Color startDefaultPageElementBackgroundColorGradient =
-      secondaryLightColor;
-  static const Color endDefaultPageElementBackgroundColorGradient =
-      secondaryColor;
+  static const Color startDefaultPageElementBackgroundColorGradient = secondaryLightColor;
+  static const Color endDefaultPageElementBackgroundColorGradient = secondaryColor;
 
   static const TextStyle defaultBottomTabItemTextStyle = TextStyle(
     color: defaultTextColor,
@@ -67,8 +64,7 @@ class AppTheme {
     fontSize: Dimensions.standardFontSize,
   );
 
-  static const InputDecoration defaultTextFieldInputDecoration =
-      InputDecoration(
+  static const InputDecoration defaultTextFieldInputDecoration = InputDecoration(
     focusColor: AppTheme.accentColor,
     hintStyle: TextStyle(
       color: secondaryTextColor,
@@ -99,10 +95,9 @@ class AppTheme {
     final originalHeadline1 = originalTextTheme.headline1;
     final originalSubtitle1 = originalTextTheme.subtitle1;
     final originalSubtitle2 = originalTextTheme.subtitle2;
-    final originalBottomNavigationBarTheme =
-        ThemeData.light().bottomNavigationBarTheme;
+    final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
 
-    return new ThemeData.light().copyWith(
+    return ThemeData.light().copyWith(
       chipTheme: ThemeData.light().chipTheme.copyWith(
             elevation: Dimensions.defaultElevation,
           ),
@@ -155,13 +150,13 @@ class AppTheme {
         ),
       ),
       inputDecorationTheme: originalInputDecorationTheme.copyWith(
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: defaultTextColor,
         ),
       ),
       bottomNavigationBarTheme: originalBottomNavigationBarTheme.copyWith(
-        unselectedLabelStyle: TextStyle(color: defaultTextColor),
-        selectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(color: defaultTextColor),
+        selectedLabelStyle: const TextStyle(
           color: defaultTextColor,
         ),
       ),
