@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/enums/collection_flag.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,13 @@ import 'start_new_playthrough.dart';
 
 class BoardGamePlaythroughsPage extends StatefulWidget {
   const BoardGamePlaythroughsPage(
-    this.boardGameDetails, {
+    this.boardGameDetails,
+    this.collectionFlag, {
     Key key,
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;
+  final CollectionFlag collectionFlag;
 
   @override
   _BoardGamePlaythroughsPageState createState() => _BoardGamePlaythroughsPageState();
@@ -75,6 +78,7 @@ class _BoardGamePlaythroughsPageState extends BasePageState<BoardGamePlaythrough
             children: <Widget>[
               PlaythroughStatistcsPage(
                 boardGameDetails: widget.boardGameDetails,
+                collectionFlag: widget.collectionFlag,
               ),
               PlaythroughsPage(
                 widget.boardGameDetails,

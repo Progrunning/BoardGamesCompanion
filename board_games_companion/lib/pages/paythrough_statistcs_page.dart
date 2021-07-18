@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
+import 'package:board_games_companion/common/enums/collection_flag.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_image.dart';
 import 'package:board_games_companion/widgets/board_games/playthrough_statistics_details_widget.dart';
@@ -8,20 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PlaythroughStatistcsPage extends StatefulWidget {
-  final BoardGameDetails boardGameDetails;
-
   const PlaythroughStatistcsPage({
     @required this.boardGameDetails,
+    @required this.collectionFlag,
     Key key,
   }) : super(key: key);
 
+  final BoardGameDetails boardGameDetails;
+  final CollectionFlag collectionFlag;
+
   @override
-  _PlaythroughStatistcsPageState createState() =>
-      _PlaythroughStatistcsPageState();
+  _PlaythroughStatistcsPageState createState() => _PlaythroughStatistcsPageState();
 }
 
-class _PlaythroughStatistcsPageState
-    extends State<PlaythroughStatistcsPage> {
+class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -36,7 +37,7 @@ class _PlaythroughStatistcsPageState
             background: BoardGameImage(
               widget.boardGameDetails,
               minImageHeight: Constants.BoardGameDetailsImageHeight,
-              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
+              heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionFlag}',
             ),
           ),
         ),
@@ -47,7 +48,7 @@ class _PlaythroughStatistcsPageState
               child: PlaythroughStatisticsDetails(),
             ),
           ),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: Dimensions.standardSpacing,
           ),
         )
