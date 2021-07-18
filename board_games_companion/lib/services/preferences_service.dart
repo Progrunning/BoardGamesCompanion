@@ -1,16 +1,16 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
+import 'package:flutter/material.dart';
 
+import '../common/hive_boxes.dart';
 import 'hive_base_service.dart';
 
 class PreferencesService extends BaseHiveService<dynamic> {
-  static const String _firstTimeAppLaunchDateKey = "firstTimeLaunchDate";
-  static const String _appLaunchDateKey = "applaunchDate";
-  static const String _remindMeLaterDateKey = "remindMeLater";
-  static const String _numberOfSignificantActionsKey =
-      "numberOfSignificantActions";
-  static const String _rateAndReviewDialogSeenKey = "rateAndReviewDialogSeen";
-  static const String _expansionsPanelExpandedStateKey =
-      "expansionsPanelExpandedState";
+  static const String _firstTimeAppLaunchDateKey = 'firstTimeLaunchDate';
+  static const String _appLaunchDateKey = 'applaunchDate';
+  static const String _remindMeLaterDateKey = 'remindMeLater';
+  static const String _numberOfSignificantActionsKey = 'numberOfSignificantActions';
+  static const String _rateAndReviewDialogSeenKey = 'rateAndReviewDialogSeen';
+  static const String _expansionsPanelExpandedStateKey = 'expansionsPanelExpandedState';
+  static const String _migratedToMultipleCollectionsKey = 'migratedToMultipleCollections';
 
   Future<void> initialize() async {
     await ensureBoxOpen(HiveBoxes.Preferences);
@@ -71,9 +71,22 @@ class PreferencesService extends BaseHiveService<dynamic> {
     );
   }
 
-  Future<void> setNumberOfSignificantActions(
-    int numberOfSignificantActions,
-  ) async {
+  Future<bool> getMigratedToMultipleCollections() async {
+    return await _getValue(
+      _migratedToMultipleCollectionsKey,
+      defaultValue: false,
+    );
+  }
+
+  Future<void> setMigratedToMultipleCollections(
+      {@required bool migratedToMultipleCollections}) async {
+    await _setValue(
+      _migratedToMultipleCollectionsKey,
+      migratedToMultipleCollections,
+    );
+  }
+
+  Future<void> setNumberOfSignificantActions(int numberOfSignificantActions) async {
     await _setValue(
       _numberOfSignificantActionsKey,
       numberOfSignificantActions,
