@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Styles {
-
-static const double _maxOpacityDecimal = 255;
-static const double _hundredPercent = 100;
+  static const double _maxOpacityDecimal = 255;
+  static const double _hundredPercent = 100;
 
   static const double defaultShadowRadius = 4;
-  static const double  defaultCornerRadius = 5;
+  static const double defaultCornerRadius = 5;
   static const Offset defaultShadowOffset =
-      const Offset(defaultCornerRadius / 2, defaultCornerRadius / 2);
-  static const double  defaultBottomSheetCornerRadius = defaultCornerRadius * 6;
+      Offset(defaultCornerRadius / 2, defaultCornerRadius / 2);
+  static const double defaultBottomSheetCornerRadius = defaultCornerRadius * 6;
 
   static const double boardGameTileImageCircularRadius = 15;
   static const double boardGameTileImageShadowBlur = 1.5;

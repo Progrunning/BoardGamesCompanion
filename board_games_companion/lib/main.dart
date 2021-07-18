@@ -58,8 +58,7 @@ PreferencesService _preferencesService = PreferencesService();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final appDocumentDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
+  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(BoardGameDetailsAdapter());
   Hive.registerAdapter(BoardGameCategoryAdapter());
@@ -136,6 +135,7 @@ class App extends StatelessWidget {
               context,
               listen: false,
             ),
+            _preferencesService,
           ),
         ),
         Provider<FileService>(
@@ -313,10 +313,8 @@ class App extends StatelessWidget {
 
             return boardGamesStore;
           },
-          update: (_, boardGameStore, playthroughsStore,
-              playthroughStatisticsStore) {
-            playthroughStatisticsStore
-                .loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
+          update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
+            playthroughStatisticsStore.loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
             return playthroughStatisticsStore;
           },
         ),
