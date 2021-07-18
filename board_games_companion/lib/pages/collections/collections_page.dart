@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/common/enums/collection_flag.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -88,17 +89,26 @@ class _Collection extends StatelessWidget {
                 pinned: true,
                 delegate: _GridHeader('Collection', Icons.grid_on),
               ),
-              _Grid(boardGames: _boardGamesStore.filteredBoardGamesInCollection),
+              _Grid(
+                boardGames: _boardGamesStore.filteredBoardGamesInCollection,
+                collectionFlag: CollectionFlag.Colleciton,
+              ),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _GridHeader('Played', Icons.sports_esports),
               ),
-              _Grid(boardGames: _boardGamesStore.filteredBoardGamesPlayed),
+              _Grid(
+                boardGames: _boardGamesStore.filteredBoardGamesPlayed,
+                collectionFlag: CollectionFlag.Played,
+              ),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _GridHeader('Wishlist', Icons.card_giftcard),
               ),
-              _Grid(boardGames: _boardGamesStore.filteredBoardGamesOnWishlist),
+              _Grid(
+                boardGames: _boardGamesStore.filteredBoardGamesOnWishlist,
+                collectionFlag: CollectionFlag.Wishlist,
+              ),
             ]
           ],
         ),
@@ -246,9 +256,11 @@ class _Grid extends StatelessWidget {
   const _Grid({
     Key key,
     @required this.boardGames,
+    @required this.collectionFlag,
   }) : super(key: key);
 
   final List<BoardGameDetails> boardGames;
+  final CollectionFlag collectionFlag;
 
   @override
   Widget build(BuildContext context) {
@@ -287,12 +299,13 @@ class _Grid extends StatelessWidget {
                     (_, __, ___) {
                       return BoardGamePlaythroughsPage(
                         boardGames[index],
+                        collectionFlag,
                       );
                     },
                   ),
                 );
               },
-              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
+              heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_$collectionFlag',
             );
           },
         ),
