@@ -10,8 +10,7 @@ extension XmlElementExtensions on XmlElement {
     return element.first;
   }
 
-  String firstOrDefaultElementsAttribute(
-      String elementName, String attributeName) {
+  String firstOrDefaultElementsAttribute(String elementName, String attributeName) {
     if (elementName?.isEmpty ?? true) {
       return null;
     }
@@ -24,15 +23,15 @@ extension XmlElementExtensions on XmlElement {
     return elements.single?.firstOrDefaultAttributeValue(attributeName);
   }
 
-  XmlAttribute firstOrDefaultAttributeWhere(bool test(XmlAttribute element)) {
-    if (this.attributes?.isEmpty ?? true) {
+  XmlAttribute firstOrDefaultAttributeWhere(bool Function(XmlAttribute element) test) {
+    if (attributes?.isEmpty ?? true) {
       return null;
     }
 
-    return this.attributes?.firstWhere(
-          test,
-          orElse: () => null,
-        );
+    return attributes?.firstWhere(
+      test,
+      orElse: () => null,
+    );
   }
 
   String firstOrDefaultAttributeValue(String attributeName) {
@@ -40,7 +39,7 @@ extension XmlElementExtensions on XmlElement {
       return null;
     }
 
-    return this.firstOrDefaultAttributeWhere(
+    return firstOrDefaultAttributeWhere(
       (attr) {
         return attr.name.local == attributeName;
       },

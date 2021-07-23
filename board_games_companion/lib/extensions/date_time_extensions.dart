@@ -19,7 +19,7 @@ extension DateTimeExtensions on DateTime {
   }
 
   String toDaysAgo() {
-    final daysAgoText = 'day(s) ago';
+    const String daysAgoText = 'day(s) ago';
     if (this == null) {
       return '- $daysAgoText';
     }
@@ -43,6 +43,6 @@ extension DateTimeExtensions on DateTime {
       return Constants.MoveBelow;
     }
 
-    return this.compareTo(dateTimeToCompare);
+    return compareTo(dateTimeToCompare);
   }
 }

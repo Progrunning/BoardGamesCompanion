@@ -6,6 +6,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 class PlayerScore with ChangeNotifier {
+  PlayerScore(
+    this._player,
+    this._score,
+    this._scoreService,
+  );
+
   final Player _player;
   final ScoreService _scoreService;
 
@@ -20,19 +26,12 @@ class PlayerScore with ChangeNotifier {
   MedalEnum _medal;
   MedalEnum get medal => _medal;
 
-  PlayerScore(
-    this._player,
-    this._score,
-    this._scoreService,
-  );
-
   Future<bool> updatePlayerScore(String score) async {
-    if ((score?.isEmpty ?? true)) {
+    if (score?.isEmpty ?? true) {
       return false;
     }
 
     _score.value = score;
-  
 
     try {
       await _scoreService.addOrUpdateScore(_score);
@@ -45,7 +44,7 @@ class PlayerScore with ChangeNotifier {
     return false;
   }
 
-  void updatePlayerPlace(int place) async {
+  Future<void> updatePlayerPlace(int place) async {
     _place = place;
 
     switch (_place) {

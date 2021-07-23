@@ -16,10 +16,6 @@ import 'package:board_games_companion/models/player_score.dart'
     as player_score_model;
 
 class PlayerScore extends StatelessWidget {
-  final player_score_model.PlayerScore _playerScore;
-  final PlaythroughStore playthroughStore;
-  final bool readonly;
-  final bool editMode;
 
   const PlayerScore(
     this._playerScore, {
@@ -29,6 +25,11 @@ class PlayerScore extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  final player_score_model.PlayerScore _playerScore;
+  final PlaythroughStore playthroughStore;
+  final bool readonly;
+  final bool editMode;
+
   @override
   Widget build(BuildContext context) {
     final playerScoreController = TextEditingController();
@@ -37,106 +38,104 @@ class PlayerScore extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          child: ChangeNotifierProvider.value(
-            value: _playerScore,
-            child: Consumer<player_score_model.PlayerScore>(
-              builder: (_, store, __) {
-                Widget playerAvatar = ShadowBox(
-                  child: PlayerAvatar(
-                    imageUri: store?.player?.avatarImageUri,
-                    medal: store?.medal,
-                  ),
-                );
-                if ((store?.player?.id?.isNotEmpty ?? false) &&
-                    (store.score?.id?.isNotEmpty ?? false)) {
-                  playerAvatar = Hero(
-                      tag:
-                          '${AnimationTags.playerImageHeroTag}${store?.player?.id}${store?.score?.id}',
-                      child: playerAvatar);
-                }
+        ChangeNotifierProvider.value(
+          value: _playerScore,
+          child: Consumer<player_score_model.PlayerScore>(
+            builder: (_, store, __) {
+              Widget playerAvatar = ShadowBox(
+                child: PlayerAvatar(
+                  imageUri: store?.player?.avatarImageUri,
+                  medal: store?.medal,
+                ),
+              );
+              if ((store?.player?.id?.isNotEmpty ?? false) &&
+                  (store.score?.id?.isNotEmpty ?? false)) {
+                playerAvatar = Hero(
+                    tag:
+                        '${AnimationTags.playerImageHeroTag}${store?.player?.id}${store?.score?.id}',
+                    child: playerAvatar);
+              }
 
-                return Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: Dimensions.defaultPlayerAvatarHeight,
-                      width: Dimensions.defaultPlayerAvatarHeight,
-                      child: Stack(
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: Dimensions.defaultPlayerAvatarHeight,
+                    width: Dimensions.defaultPlayerAvatarHeight,
+                    child: Stack(
+                      children: <Widget>[
+                        playerAvatar,
+                        if (store?.player?.name?.isNotEmpty ?? false)
+                          PlayerAvatarSubtitle(
+                            player: store?.player,
+                          ),
+                        if ((store?.score?.value?.isNotEmpty ?? false) &&
+                            store.place != null)
+                          Positioned(
+                            top: -Styles.defaultShadowRadius - 1,
+                            right: 0,
+                            child: RankRibbon(store?.place),
+                          ),
+                      ],
+                    ),
+                  ),
+                  if (editMode)
+                    PlayerScoreEdit(
+                      controller: playerScoreController,
+                      onSubmit: (String value) async {
+                        await _updatePlayerScore(
+                          value,
+                          context,
+                        );
+                      },
+                    ),
+                  if (!editMode)
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        top: Dimensions.standardSpacing,
+                      ),
+                      child: Text(
+                        'Score',
+                        style: AppTheme.sectionHeaderTextStyle,
+                      ),
+                    ),
+                  if (!editMode)
+                    IntrinsicHeight(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          playerAvatar,
-                          if (store?.player?.name?.isNotEmpty ?? false)
-                            PlayerAvatarSubtitle(
-                              player: store?.player,
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              store?.score?.value ?? '-',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32,
+                              ),
                             ),
-                          if ((store?.score?.value?.isNotEmpty ?? false) &&
-                              store.place != null)
-                            Positioned(
-                              top: -Styles.defaultShadowRadius - 1,
-                              right: 0,
-                              child: RankRibbon(store?.place),
+                          ),
+                          const SizedBox(
+                            width: Dimensions.standardSpacing,
+                          ),
+                          if (!readonly)
+                            Align(
+                              alignment: Alignment.center,
+                              child: IconAndTextButton(
+                                icon: Icons.edit,
+                                horizontalPadding: Dimensions.standardSpacing,
+                                onPressed: () => _showCreateOrEditScoreDialog(
+                                    context, store),
+                              ),
                             ),
                         ],
                       ),
                     ),
-                    if (editMode)
-                      PlayerScoreEdit(
-                        controller: playerScoreController,
-                        onSubmit: (String value) async {
-                          await _updatePlayerScore(
-                            value,
-                            context,
-                          );
-                        },
-                      ),
-                    if (!editMode)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: Dimensions.standardSpacing,
-                        ),
-                        child: Text(
-                          'Score',
-                          style: AppTheme.sectionHeaderTextStyle,
-                        ),
-                      ),
-                    if (!editMode)
-                      IntrinsicHeight(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                store?.score?.value ?? '-',
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 32,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: Dimensions.standardSpacing,
-                            ),
-                            if (!readonly)
-                              Align(
-                                alignment: Alignment.center,
-                                child: IconAndTextButton(
-                                  icon: Icons.edit,
-                                  horizontalPadding: Dimensions.standardSpacing,
-                                  onPressed: () => _showCreateOrEditScoreDialog(
-                                      context, store),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
+                ],
+              );
+            },
           ),
         ),
         if (editMode)
@@ -153,7 +152,7 @@ class PlayerScore extends StatelessWidget {
                 backgroundColor: Colors.red,
                 onPressed: () => Navigator.pop(context),
               ),
-              SizedBox(
+              const SizedBox(
                 width: Dimensions.standardSpacing,
               ),
               IconAndTextButton(
