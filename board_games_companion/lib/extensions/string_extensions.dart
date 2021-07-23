@@ -14,6 +14,6 @@ extension StringExtensions on String {
       return Constants.MoveBelow;
     }
 
-    return this.compareTo(stringToCompare);
+    return compareTo(stringToCompare);
   }
 }
