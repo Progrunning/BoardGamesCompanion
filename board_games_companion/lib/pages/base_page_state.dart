@@ -40,18 +40,18 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                  'We apologise that we\'re interupting you but we would really appreciate your support.\n'),
-              const Text(
-                  'If you\'re enjoying ${Strings.AppTitle} app, would you mind taking a moment to rate it? It shouldn\'t take more than a minute.\n'),
-              const Text('Thank you.'),
+            children: const <Widget>[
+              Text(
+                  "We apologise that we're interupting you but we would really appreciate your support.\n"),
+              Text(
+                  "If you're enjoying ${Strings.AppTitle} app, would you mind taking a moment to rate it? It shouldn\'t take more than a minute.\n"),
+              Text('Thank you.'),
             ],
           ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
-              child: Text('${Strings.AskMeLater}'),
+              child: const Text(Strings.AskMeLater),
               onPressed: () async {
                 Navigator.of(context).pop();
 
@@ -59,7 +59,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               },
             ),
             FlatButton(
-              child: Text('${Strings.DontAskAgain}'),
+              child: const Text(Strings.DontAskAgain),
               onPressed: () async {
                 Navigator.of(context).pop();
 
@@ -67,7 +67,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               },
             ),
             FlatButton(
-              child: Text('${Strings.Rate}'),
+              child: const Text(Strings.Rate),
               color: AppTheme.primaryColorLight,
               onPressed: () async {
                 Navigator.of(context).pop();
