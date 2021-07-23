@@ -10,17 +10,17 @@ extension IntExtensions on int {
       case 11:
       case 12:
       case 13:
-        return "th";
+        return 'th';
       default:
         switch (this % 10) {
           case 1:
-            return "st";
+            return 'st';
           case 2:
-            return "nd";
+            return 'nd';
           case 3:
-            return "rd";
+            return 'rd';
           default:
-            return "th";
+            return 'th';
         }
     }
   }
@@ -74,6 +74,6 @@ extension IntExtensions on int {
       return Constants.MoveBelow;
     }
 
-    return this.compareTo(intToCompare);
+    return compareTo(intToCompare);
   }
 }
