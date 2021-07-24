@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/common/enums/collection_flag.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,9 +7,12 @@ import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
+import '../../common/enums/collection_flag.dart';
 import '../../common/enums/enums.dart';
+import '../../common/enums/games_tab.dart';
 import '../../common/styles.dart';
 import '../../mixins/sync_collection.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_store.dart';
@@ -215,15 +216,26 @@ class _AppBarState extends State<_AppBar> {
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(74),
         child: TabBar(
-          onTap: (_) {
-            setState(() {});
+          onTap: (int index) {
+            widget.boardGamesStore.selectedTab = index.toGamesTab();
           },
           controller: widget.topTabController,
           tabs: <Widget>[
-            _TopTab('Collection', Icons.grid_on, isSelected: widget.topTabController.index == 0),
-            _TopTab('Played', Icons.sports_esports, isSelected: widget.topTabController.index == 1),
-            _TopTab('Wishlist', Icons.card_giftcard,
-                isSelected: widget.topTabController.index == 2),
+            _TopTab(
+              'Collection',
+              Icons.grid_on,
+              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Colleciton,
+            ),
+            _TopTab(
+              'Played',
+              Icons.sports_esports,
+              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Played,
+            ),
+            _TopTab(
+              'Wishlist',
+              Icons.card_giftcard,
+              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Wishlist,
+            ),
           ],
           indicatorColor: AppTheme.accentColor,
         ),
