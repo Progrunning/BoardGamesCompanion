@@ -786,7 +786,7 @@ class _CollectionFlag extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? AppTheme.accentColor : AppTheme.deselectedBottomTabIconColor,
+                color: isSelected ? AppTheme.accentColor : AppTheme.deselectedTabIconColor,
               ),
               Text(
                 title,

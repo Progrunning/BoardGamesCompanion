@@ -12,14 +12,14 @@ import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 
-class CollectionFilterPanel extends StatefulWidget {
-  const CollectionFilterPanel({Key key}) : super(key: key);
+class GamesFilterPanel extends StatefulWidget {
+  const GamesFilterPanel({Key key}) : super(key: key);
 
   @override
-  _CollectionFilterPanelState createState() => _CollectionFilterPanelState();
+  _GamesFilterPanelState createState() => _GamesFilterPanelState();
 }
 
-class _CollectionFilterPanelState extends State<CollectionFilterPanel> {
+class _GamesFilterPanelState extends State<GamesFilterPanel> {
   BoardGamesStore boardGamesStore;
 
   @override
