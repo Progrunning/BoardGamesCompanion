@@ -12,14 +12,13 @@ import '../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.d
 import '../widgets/common/icon_and_text_button.dart';
 import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
-import 'collections/collections_page.dart';
+import 'games/games_page.dart';
 import 'players.dart';
 import 'search_board_games/search_board_games_page.dart';
 import 'settings/settings_page.dart';
 
 class HomePage extends StatefulWidget {
-  static final GlobalKey<ScaffoldState> homePageGlobalKey =
-      GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> homePageGlobalKey = GlobalKey<ScaffoldState>();
   HomePage({Key key}) : super(key: key);
 
   @override
@@ -44,15 +43,15 @@ class _HomePageState extends BasePageState<HomePage> {
           children: <Widget>[
             Consumer2<BoardGamesStore, UserStore>(
               builder: (_, boardGamesStore, userStore, __) {
-                return CollectionsPage(
+                return GamesPage(
                   boardGamesStore,
                   userStore,
                 );
               },
             ),
-            SearchBoardGamesPage(),
-            PlayersPage(),
-            SettingsPage(),
+            const SearchBoardGamesPage(),
+            const PlayersPage(),
+            const SettingsPage(),
           ],
           onPageChanged: (pageIndex) {
             final homeStore = Provider.of<HomeStore>(
