@@ -1,14 +1,16 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+
 class SectionText extends StatelessWidget {
-  final String text;
 
   const SectionText({
     @required this.text,
     Key key,
   }) : super(key: key);
+  
+  final String text;
 
   @override
   Widget build(BuildContext context) {
