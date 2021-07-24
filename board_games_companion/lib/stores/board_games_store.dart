@@ -1,3 +1,5 @@
+import 'package:board_games_companion/common/enums/games_tab.dart';
+import 'package:board_games_companion/common/enums/games_tab.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -38,6 +40,7 @@ class BoardGamesStore with ChangeNotifier {
   List<BoardGameDetails> _allBoardGames;
   List<BoardGameDetails> _filteredBoardGames;
   LoadDataState _loadDataState = LoadDataState.None;
+  GamesTab _selectedTab = GamesTab.Colleciton;
 
   LoadDataState get loadDataState => _loadDataState;
   // MK Board games currently shown in the collection with applied filters
@@ -328,5 +331,13 @@ class BoardGamesStore with ChangeNotifier {
     _playerService.closeBox(HiveBoxes.Players);
 
     super.dispose();
+  }
+
+  GamesTab get selectedTab => _selectedTab;
+  set selectedTab(GamesTab value) {
+    if (_selectedTab != value) {
+      _selectedTab = value;
+      notifyListeners();
+    }
   }
 }
