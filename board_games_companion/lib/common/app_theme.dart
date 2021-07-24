@@ -21,8 +21,8 @@ class AppTheme {
   static const Color secondaryTextColor = Colors.grey;
 
   static const Color bottomTabBackgroundColor = primaryColorLight;
-  static const Color selectedBottomTabIconColor = defaultTextColor;
-  static const Color deselectedBottomTabIconColor = Color(0x46FFFFFF);
+  static const Color selectedTabIconColor = accentColor;
+  static const Color deselectedTabIconColor = Color(0x46FFFFFF);
 
   static const Color endDefaultPageBackgroundColorGradient = primaryColor;
   static const Color startDefaultPageBackgroundColorGradient = primaryColorLight;
