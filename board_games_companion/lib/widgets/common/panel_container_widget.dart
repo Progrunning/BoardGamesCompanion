@@ -4,7 +4,6 @@ import '../../common/app_theme.dart';
 import '../../common/styles.dart';
 
 class PanelContainer extends StatelessWidget {
-
   const PanelContainer({
     @required this.child,
     this.borderRadius = Styles.defaultCornerRadius * 3,
@@ -18,7 +17,7 @@ class PanelContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment(0.5, 0),
           end: Alignment(0.5, 1),
           colors: [
@@ -26,7 +25,7 @@ class PanelContainer extends StatelessWidget {
             AppTheme.endDefaultPageElementBackgroundColorGradient,
           ],
         ),
-        boxShadow: [AppTheme.defaultBoxShadow],
+        boxShadow: const [AppTheme.defaultBoxShadow],
         borderRadius: BorderRadius.circular(
           borderRadius,
         ),

@@ -21,7 +21,7 @@ class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier> extends Stat
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
-        print("${snapshot.connectionState} ${snapshot.hasData}");
+        print('${snapshot.connectionState} ${snapshot.hasData}');
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return const GenericErrorMessage();

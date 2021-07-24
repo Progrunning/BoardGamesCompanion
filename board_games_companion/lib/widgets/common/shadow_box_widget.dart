@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ShadowBox extends StatelessWidget {
-  final Widget child;
-
-  ShadowBox({
+  const ShadowBox({
     @required this.child,
   });
+  
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
