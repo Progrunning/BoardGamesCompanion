@@ -13,34 +13,33 @@ class BggCommunityMemberText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-            text: 'If you\'re a member of the ',
+          const TextSpan(
+            text: "If you're a member of the ",
           ),
           TextSpan(
             text: 'BoardGameGeek',
-            style: TextStyle(
+            style: const TextStyle(
               decoration: TextDecoration.underline,
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
                 await LauncherHelper.launchUri(
                   context,
-                  '${Constants.BoardGameGeekBaseApiUrl}',
+                  Constants.BoardGameGeekBaseApiUrl,
                 );
               },
           ),
-          TextSpan(
+          const TextSpan(
             text: ' community, then please enter your ',
           ),
-          TextSpan(
-            text: 'user\'s name',
+          const TextSpan(
+            text: "user's name",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextSpan(
-            text:
-                ' in the below box and hit the sync button to retrieve your collection.',
+          const TextSpan(
+            text: ' in the below box and hit the sync button to retrieve your collection.',
           ),
         ],
       ),

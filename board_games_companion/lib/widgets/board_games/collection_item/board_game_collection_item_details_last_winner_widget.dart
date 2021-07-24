@@ -17,8 +17,8 @@ class BoardGameCollectionItemDetailsLastWinner extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        ItemPropertyTitle('Last winner'),
-        SizedBox(
+        const ItemPropertyTitle('Last winner'),
+        const SizedBox(
           height: Dimensions.halfStandardSpacing,
         ),
         PlayerScore(

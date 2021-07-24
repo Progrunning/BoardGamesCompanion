@@ -1,14 +1,15 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
-class SectionTitle extends StatelessWidget {
-  final String title;
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
 
+class SectionTitle extends StatelessWidget {
   const SectionTitle({
     @required this.title,
     Key key,
   }) : super(key: key);
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {

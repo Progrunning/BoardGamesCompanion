@@ -6,13 +6,6 @@ import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:flutter/material.dart';
 
 class DetailsItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String iconUri;
-  final Function onTap;
-  final String uri;
-
-  static const double _size = 60;
 
   const DetailsItem({
     @required this.title,
@@ -22,6 +15,14 @@ class DetailsItem extends StatelessWidget {
     this.uri,
     Key key,
   }) : super(key: key);
+  
+  final String title;
+  final String subtitle;
+  final String iconUri;
+  final Function onTap;
+  final String uri;
+
+  static const double _size = 60;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class DetailsItem extends StatelessWidget {
                     ),
                   ),
                 if (iconUri?.isNotEmpty ?? false)
-                  SizedBox(
+                  const SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
                 Expanded(
@@ -65,7 +66,7 @@ class DetailsItem extends StatelessWidget {
                         title,
                         style: AppTheme.theme.textTheme.headline3,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: Dimensions.halfStandardSpacing,
                       ),
                       Text(

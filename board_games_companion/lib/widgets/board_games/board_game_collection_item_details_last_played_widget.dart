@@ -19,8 +19,8 @@ class BoardGameCollectionItemDetailsLastPlayed extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        ItemPropertyTitle('Last played'),
-        SizedBox(
+        const ItemPropertyTitle('Last played'),
+        const SizedBox(
           height: Dimensions.halfStandardSpacing,
         ),
         Row(
@@ -29,7 +29,7 @@ class BoardGameCollectionItemDetailsLastPlayed extends StatelessWidget {
             CalendarCard(
               boardGameStatistics?.lastPlayed,
             ),
-            SizedBox(
+            const SizedBox(
               width: Dimensions.standardSpacing,
             ),
             Expanded(
