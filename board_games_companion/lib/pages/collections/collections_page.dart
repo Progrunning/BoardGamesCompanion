@@ -40,7 +40,18 @@ class CollectionsPage extends StatefulWidget {
   _CollectionsPageState createState() => _CollectionsPageState();
 }
 
-class _CollectionsPageState extends State<CollectionsPage> {
+class _CollectionsPageState extends State<CollectionsPage> with SingleTickerProviderStateMixin {
+  TabController _topTabController;
+
+  @override
+  void initState() {
+    _topTabController = TabController(
+      length: 3,
+      vsync: this,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.boardGamesStore.loadDataState == LoadDataState.Loaded) {
@@ -50,6 +61,7 @@ class _CollectionsPageState extends State<CollectionsPage> {
 
       return _Collection(
         boardGamesStore: widget.boardGamesStore,
+        topTabController: _topTabController,
       );
     } else if (widget.boardGamesStore.loadDataState == LoadDataState.Error) {
       return const Center(
@@ -61,52 +73,50 @@ class _CollectionsPageState extends State<CollectionsPage> {
       child: CircularProgressIndicator(),
     );
   }
+
+  @override
+  void dispose() {
+    _topTabController.dispose();
+    super.dispose();
+  }
 }
 
 class _Collection extends StatelessWidget {
   const _Collection({
+    @required this.boardGamesStore,
+    @required this.topTabController,
     Key key,
-    @required BoardGamesStore boardGamesStore,
-  })  : _boardGamesStore = boardGamesStore,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGamesStore _boardGamesStore;
+  final BoardGamesStore boardGamesStore;
+  final TabController topTabController;
 
   @override
   Widget build(BuildContext context) {
-    final hasNoSearchResults = _boardGamesStore.filteredBoardGames.isEmpty &&
-        (_boardGamesStore.searchPhrase?.isNotEmpty ?? false);
+    final hasNoSearchResults = boardGamesStore.filteredBoardGames.isEmpty &&
+        (boardGamesStore.searchPhrase?.isNotEmpty ?? false);
 
     return SafeArea(
       child: PageContainer(
         child: CustomScrollView(
           slivers: <Widget>[
-            _SearchBar(boardGamesStore: _boardGamesStore),
+            _AppBar(
+              boardGamesStore: boardGamesStore,
+              topTabController: topTabController,
+            ),
             if (hasNoSearchResults)
-              _EmptySearchResult(boardGamesStore: _boardGamesStore)
+              _EmptySearchResult(boardGamesStore: boardGamesStore)
             else ...[
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _GridHeader('Collection', Icons.grid_on),
-              ),
               _Grid(
-                boardGames: _boardGamesStore.filteredBoardGamesInCollection,
+                boardGames: boardGamesStore.filteredBoardGamesInCollection,
                 collectionFlag: CollectionFlag.Colleciton,
               ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _GridHeader('Played', Icons.sports_esports),
-              ),
               _Grid(
-                boardGames: _boardGamesStore.filteredBoardGamesPlayed,
+                boardGames: boardGamesStore.filteredBoardGamesPlayed,
                 collectionFlag: CollectionFlag.Played,
               ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _GridHeader('Wishlist', Icons.card_giftcard),
-              ),
               _Grid(
-                boardGames: _boardGamesStore.filteredBoardGamesOnWishlist,
+                boardGames: boardGamesStore.filteredBoardGamesOnWishlist,
                 collectionFlag: CollectionFlag.Wishlist,
               ),
             ]
@@ -117,19 +127,21 @@ class _Collection extends StatelessWidget {
   }
 }
 
-class _SearchBar extends StatefulWidget {
-  const _SearchBar({
+class _AppBar extends StatefulWidget {
+  const _AppBar({
     @required this.boardGamesStore,
+    @required this.topTabController,
     Key key,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
+  final TabController topTabController;
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  _AppBarState createState() => _AppBarState();
 }
 
-class _SearchBarState extends State<_SearchBar> {
+class _AppBarState extends State<_AppBar> {
   final _searchController = TextEditingController();
 
   Timer _debounce;
@@ -167,6 +179,9 @@ class _SearchBarState extends State<_SearchBar> {
         decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
           hintText: 'Search...',
           suffixIcon: _retrieveSearchBarSuffixIcon(),
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.primaryColorLight),
+          ),
         ),
         onSubmitted: (searchPhrase) async {
           FocusScope.of(context).unfocus();
@@ -179,7 +194,7 @@ class _SearchBarState extends State<_SearchBar> {
             color: AppTheme.accentColor,
           ),
           onPressed: () async {
-            await _createBottomSheetFilterPanel(context);
+            await _openFiltersPanel(context);
 
             await _analyticsService.logEvent(
               name: Analytics.FilterCollection,
@@ -188,10 +203,22 @@ class _SearchBarState extends State<_SearchBar> {
           },
         )
       ],
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(74),
+        child: TabBar(
+          controller: widget.topTabController,
+          tabs: const <Widget>[
+            _TopTab('Collection', Icons.grid_on),
+            _TopTab('Played', Icons.sports_esports),
+            _TopTab('Wishlist', Icons.card_giftcard),
+          ],
+          indicatorColor: AppTheme.accentColor,
+        ),
+      ),
     );
   }
 
-  Future<void> _createBottomSheetFilterPanel(BuildContext context) async {
+  Future<void> _openFiltersPanel(BuildContext context) async {
     await showModalBottomSheet<Widget>(
       backgroundColor: AppTheme.primaryColor,
       shape: const RoundedRectangleBorder(
@@ -202,9 +229,12 @@ class _SearchBarState extends State<_SearchBar> {
       ),
       context: context,
       builder: (_) {
-        return CollectionFilterPanel();
+        return const CollectionFilterPanel();
       },
     );
+
+    // TODO MK After updating to Flutter 2.x see https://stackoverflow.com/questions/44991968/how-can-i-dismiss-the-on-screen-keyboard/56946311#56946311 for solution
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 
   void _handleSearchChanged() {
@@ -449,48 +479,36 @@ class _EmptySearchResult extends StatelessWidget {
   }
 }
 
-class _GridHeader extends SliverPersistentHeaderDelegate {
-  _GridHeader(this.title, this.icon);
+class _TopTab extends StatelessWidget {
+  const _TopTab(
+    this.title,
+    this.icon, {
+    Key key,
+  }) : super(key: key);
 
   final String title;
   final IconData icon;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: AppTheme.primaryColor,
-      padding: const EdgeInsets.all(
-        Dimensions.standardSpacing,
-      ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: AppTheme.accentColor,
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Tab(
+          icon: Icon(
+            icon,
+            color: AppTheme.accentColor,
+          ),
+          iconMargin: const EdgeInsets.only(
+            bottom: Dimensions.halfStandardSpacing,
+          ),
+          child: Text(
+            title,
+            style: AppTheme.titleTextStyle.copyWith(
+              fontSize: Dimensions.standardFontSize,
             ),
-            const SizedBox(
-              width: Dimensions.standardSpacing,
-            ),
-            Text(
-              title,
-              style: AppTheme.titleTextStyle,
-            ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
-  }
-
-  @override
-  double get maxExtent => 50;
-
-  @override
-  double get minExtent => 50;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }
