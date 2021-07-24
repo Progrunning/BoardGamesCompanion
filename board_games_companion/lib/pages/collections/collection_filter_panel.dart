@@ -13,7 +13,7 @@ import '../../stores/board_games_store.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 
 class CollectionFilterPanel extends StatefulWidget {
-  CollectionFilterPanel({Key key}) : super(key: key);
+  const CollectionFilterPanel({Key key}) : super(key: key);
 
   @override
   _CollectionFilterPanelState createState() => _CollectionFilterPanelState();
@@ -36,27 +36,24 @@ class _CollectionFilterPanelState extends State<CollectionFilterPanel> {
   Widget build(BuildContext context) {
     return Consumer<BoardGamesFiltersStore>(
       builder: (_, boardGamesFiltersStore, __) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.65,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: Dimensions.standardSpacing,
-                top: Dimensions.doubleStandardSpacing,
-                right: Dimensions.standardSpacing,
-                bottom: Dimensions.standardSpacing,
-              ),
-              child: Column(
-                children: <Widget>[
-                  _SortBy(
-                    boardGamesFiltersStore: boardGamesFiltersStore,
-                  ),
-                  _Filters(
-                    boardGamesFiltersStore: boardGamesFiltersStore,
-                    boardGamesStore: boardGamesStore,
-                  ),
-                ],
-              ),
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: Dimensions.standardSpacing,
+              top: Dimensions.doubleStandardSpacing,
+              right: Dimensions.standardSpacing,
+              bottom: Dimensions.standardSpacing,
+            ),
+            child: Column(
+              children: <Widget>[
+                _SortBy(
+                  boardGamesFiltersStore: boardGamesFiltersStore,
+                ),
+                _Filters(
+                  boardGamesFiltersStore: boardGamesFiltersStore,
+                  boardGamesStore: boardGamesStore,
+                ),
+              ],
             ),
           ),
         );
@@ -79,7 +76,7 @@ class _SortBy extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(
+        const Text(
           'Sort by',
           style: AppTheme.titleTextStyle,
         ),
@@ -95,7 +92,7 @@ class _SortBy extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: Dimensions.doubleStandardSpacing,
         ),
       ],
@@ -126,7 +123,7 @@ class _SortByChip extends StatelessWidget {
     }
 
     return ChoiceChip(
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         color: AppTheme.defaultTextColor,
       ),
       label: Text(
@@ -169,21 +166,21 @@ class _Filters extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(
+        const Text(
           'Filter by',
           style: AppTheme.titleTextStyle,
         ),
-        SizedBox(
+        const SizedBox(
           height: Dimensions.standardSpacing,
-        ),
-        Align(
+        ),        
+        const Align(
           alignment: Alignment.centerLeft,
           child: Text(
             'Rating',
             style: AppTheme.sectionHeaderTextStyle,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: Dimensions.standardSpacing,
         ),
         SizedBox(
@@ -228,10 +225,10 @@ class _Filters extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: Dimensions.doubleStandardSpacing * 2,
         ),
-        Align(
+        const Align(
           alignment: Alignment.centerLeft,
           child: Text(
             'Number of players',
@@ -315,7 +312,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text(
+            const Text(
               'Any',
               style: TextStyle(
                 fontSize: Dimensions.smallFontSize,
@@ -325,14 +322,14 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   trackHeight: 8,
-                  trackShape: RoundedRectSliderTrackShape(),
+                  trackShape: const RoundedRectSliderTrackShape(),
                   inactiveTrackColor: AppTheme.primaryColorLight.withAlpha(
                     Styles.opacity30Percent,
                   ),
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 24.0),
-                  tickMarkShape: RoundSliderTickMarkShape(),
-                  valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                  valueIndicatorTextStyle: TextStyle(
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 24.0),
+                  tickMarkShape: const RoundSliderTickMarkShape(),
+                  valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+                  valueIndicatorTextStyle: const TextStyle(
                     fontSize: Dimensions.smallFontSize,
                   ),
                   showValueIndicator: ShowValueIndicator.always,
@@ -361,7 +358,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
             ),
             Text(
               '$maxNumberOfPlayers',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: Dimensions.smallFontSize,
               ),
             ),

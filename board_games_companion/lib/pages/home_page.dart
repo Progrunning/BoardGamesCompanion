@@ -80,7 +80,7 @@ class _HomePageState extends BasePageState<HomePage> {
             backgroundColor: AppTheme.bottomTabBackgroundColor,
             type: BottomNavigationBarType.fixed,
             items: <BottomNavigationBarItem>[
-              CustomBottomNavigationBarItem('Collection', Icons.grid_on),
+              CustomBottomNavigationBarItem('Games', Icons.video_library),
               CustomBottomNavigationBarItem('Search', Icons.search),
               CustomBottomNavigationBarItem('Players', Icons.group),
               CustomBottomNavigationBarItem('Settings', Icons.settings),
