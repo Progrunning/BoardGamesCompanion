@@ -4,13 +4,10 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
-const double _kOffset =
-    22.0; // distance to bottom of banner, at a 45 degree angle inwards
+const double _kOffset = 22.0; // distance to bottom of banner, at a 45 degree angle inwards
 const double _kHeight = 10.0; // height of banner
-const double _kBottomOffset =
-    _kOffset + 0.707 * _kHeight; // offset plus sqrt(2)/2 * banner height
-const Rect _kRect =
-    Rect.fromLTWH(-_kOffset, _kOffset - _kHeight, _kOffset * 2.0, _kHeight);
+const double _kBottomOffset = _kOffset + 0.707 * _kHeight; // offset plus sqrt(2)/2 * banner height
+const Rect _kRect = Rect.fromLTWH(-_kOffset, _kOffset - _kHeight, _kOffset * 2.0, _kHeight);
 
 /// Paints a [Banner].
 class ExpanionsBannerPainter extends CustomPainter {
@@ -63,7 +60,10 @@ class ExpanionsBannerPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (!_prepared) _prepare();
+    if (!_prepared) {
+      _prepare();
+    }
+
     canvas
       ..translate(_translationX(size.width), _translationY(size.height))
       ..rotate(_rotation)
@@ -72,9 +72,7 @@ class ExpanionsBannerPainter extends CustomPainter {
     const double width = _kOffset * 2.0;
     _textPainter.layout(minWidth: width, maxWidth: width);
     _textPainter.paint(
-        canvas,
-        _kRect.topLeft +
-            Offset(0.0, (_kRect.height - _textPainter.height) / 2.0));
+        canvas, _kRect.topLeft + Offset(0.0, (_kRect.height - _textPainter.height) / 2.0));
   }
 
   @override
