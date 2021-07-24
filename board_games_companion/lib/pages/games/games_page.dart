@@ -24,10 +24,10 @@ import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../board_game_playthroughs.dart';
-import 'collection_filter_panel.dart';
+import 'games_filter_panel.dart';
 
-class CollectionsPage extends StatefulWidget {
-  const CollectionsPage(
+class GamesPage extends StatefulWidget {
+  const GamesPage(
     this.boardGamesStore,
     this.userStore, {
     Key key,
@@ -37,10 +37,10 @@ class CollectionsPage extends StatefulWidget {
   final UserStore userStore;
 
   @override
-  _CollectionsPageState createState() => _CollectionsPageState();
+  _GamesPageState createState() => _GamesPageState();
 }
 
-class _CollectionsPageState extends State<CollectionsPage> with SingleTickerProviderStateMixin {
+class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMixin {
   TabController _topTabController;
 
   @override
@@ -104,22 +104,31 @@ class _Collection extends StatelessWidget {
               boardGamesStore: boardGamesStore,
               topTabController: topTabController,
             ),
-            if (hasNoSearchResults)
-              _EmptySearchResult(boardGamesStore: boardGamesStore)
-            else ...[
-              _Grid(
-                boardGames: boardGamesStore.filteredBoardGamesInCollection,
-                collectionFlag: CollectionFlag.Colleciton,
-              ),
-              _Grid(
-                boardGames: boardGamesStore.filteredBoardGamesPlayed,
-                collectionFlag: CollectionFlag.Played,
-              ),
-              _Grid(
-                boardGames: boardGamesStore.filteredBoardGamesOnWishlist,
-                collectionFlag: CollectionFlag.Wishlist,
-              ),
-            ]
+            Builder(
+              builder: (_) {
+                if (hasNoSearchResults) return _EmptySearchResult(boardGamesStore: boardGamesStore);
+
+                final List<BoardGameDetails> boardGames = [];
+                CollectionFlag collectionFlag;
+                if (topTabController.index == 0) {
+                  boardGames.addAll(boardGamesStore.filteredBoardGamesInCollection);
+                  collectionFlag = CollectionFlag.Colleciton;
+                }
+                if (topTabController.index == 1) {
+                  boardGames.addAll(boardGamesStore.filteredBoardGamesPlayed);
+                  collectionFlag = CollectionFlag.Played;
+                }
+                if (topTabController.index == 1) {
+                  boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
+                  collectionFlag = CollectionFlag.Wishlist;
+                }
+
+                return _Grid(
+                  boardGames: boardGames,
+                  collectionFlag: collectionFlag,
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -177,7 +186,7 @@ class _AppBarState extends State<_AppBar> {
         textAlignVertical: TextAlignVertical.center,
         style: AppTheme.defaultTextFieldStyle,
         decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
-          hintText: 'Search...',
+          hintText: 'Search for a game...',
           suffixIcon: _retrieveSearchBarSuffixIcon(),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: AppTheme.primaryColorLight),
@@ -206,11 +215,15 @@ class _AppBarState extends State<_AppBar> {
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(74),
         child: TabBar(
+          onTap: (_) {
+            setState(() {});
+          },
           controller: widget.topTabController,
-          tabs: const <Widget>[
-            _TopTab('Collection', Icons.grid_on),
-            _TopTab('Played', Icons.sports_esports),
-            _TopTab('Wishlist', Icons.card_giftcard),
+          tabs: <Widget>[
+            _TopTab('Collection', Icons.grid_on, isSelected: widget.topTabController.index == 0),
+            _TopTab('Played', Icons.sports_esports, isSelected: widget.topTabController.index == 1),
+            _TopTab('Wishlist', Icons.card_giftcard,
+                isSelected: widget.topTabController.index == 2),
           ],
           indicatorColor: AppTheme.accentColor,
         ),
@@ -229,7 +242,7 @@ class _AppBarState extends State<_AppBar> {
       ),
       context: context,
       builder: (_) {
-        return const CollectionFilterPanel();
+        return const GamesFilterPanel();
       },
     );
 
@@ -483,11 +496,13 @@ class _TopTab extends StatelessWidget {
   const _TopTab(
     this.title,
     this.icon, {
+    this.isSelected = true,
     Key key,
   }) : super(key: key);
 
   final String title;
   final IconData icon;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -496,7 +511,7 @@ class _TopTab extends StatelessWidget {
         Tab(
           icon: Icon(
             icon,
-            color: AppTheme.accentColor,
+            color: isSelected ? AppTheme.selectedTabIconColor : AppTheme.deselectedTabIconColor,
           ),
           iconMargin: const EdgeInsets.only(
             bottom: Dimensions.halfStandardSpacing,
@@ -505,6 +520,7 @@ class _TopTab extends StatelessWidget {
             title,
             style: AppTheme.titleTextStyle.copyWith(
               fontSize: Dimensions.standardFontSize,
+              color: isSelected ? AppTheme.defaultTextColor : AppTheme.deselectedTabIconColor,
             ),
           ),
         ),
