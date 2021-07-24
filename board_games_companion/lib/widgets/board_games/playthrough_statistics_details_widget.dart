@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PlaythroughStatisticsDetails extends StatelessWidget {
-  PlaythroughStatisticsDetails({
+  const PlaythroughStatisticsDetails({
     Key key,
   }) : super(key: key);
 
@@ -36,13 +36,13 @@ class PlaythroughStatisticsDetails extends StatelessWidget {
                       BoardGameCollectionItemDetailsLastWinner(
                         boardGameStatistics: boardGameStatistics,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: Dimensions.standardSpacing,
                       ),
                       BoardGameCollectionItemDetailsLastPlayed(
                         boardGameStatistics: boardGameStatistics,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: Dimensions.doubleStandardSpacing,
                       ),
                       BoardGameCollectionItemDetailsStatistics(

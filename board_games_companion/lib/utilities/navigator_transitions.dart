@@ -7,14 +7,12 @@ class NavigatorTransitions {
   static Route<T> fadeThrough<T>(RoutePageBuilder page,
       [int duration = defaultDurationInMilliseconds]) {
     return PageRouteBuilder<T>(
-      transitionDuration: Duration(milliseconds: defaultDurationInMilliseconds),
+      transitionDuration: const Duration(milliseconds: defaultDurationInMilliseconds),
       pageBuilder: (context, animation, secondaryAnimation) =>
           page(context, animation, secondaryAnimation),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeThroughTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            child: child);
+            animation: animation, secondaryAnimation: secondaryAnimation, child: child);
       },
     );
   }
@@ -22,7 +20,7 @@ class NavigatorTransitions {
   static Route<T> fadeScale<T>(RoutePageBuilder page,
       [int duration = defaultDurationInMilliseconds]) {
     return PageRouteBuilder<T>(
-      transitionDuration: Duration(milliseconds: defaultDurationInMilliseconds),
+      transitionDuration: const Duration(milliseconds: defaultDurationInMilliseconds),
       pageBuilder: (context, animation, secondaryAnimation) =>
           page(context, animation, secondaryAnimation),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -35,7 +33,7 @@ class NavigatorTransitions {
       [SharedAxisTransitionType type = SharedAxisTransitionType.scaled,
       int duration = defaultDurationInMilliseconds]) {
     return PageRouteBuilder<T>(
-      transitionDuration: Duration(milliseconds: defaultDurationInMilliseconds),
+      transitionDuration: const Duration(milliseconds: defaultDurationInMilliseconds),
       pageBuilder: (context, animation, secondaryAnimation) =>
           page(context, animation, secondaryAnimation),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {

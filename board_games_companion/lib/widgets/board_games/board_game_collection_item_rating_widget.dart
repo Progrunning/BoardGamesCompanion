@@ -33,7 +33,7 @@ class BoardGameCollectionItemRating extends StatelessWidget {
                 child: Text(
                   (boardGameDetails.rating ?? 0).toStringAsFixed(
                       Constants.BoardGameRatingNumberOfDecimalPlaces),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppTheme.defaultTextColor,
                     fontSize: Dimensions.standardFontSize,
                   ),

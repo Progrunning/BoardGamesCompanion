@@ -105,7 +105,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(
       SnackBar(
-        duration: Duration(seconds: 10),
+        duration: const Duration(seconds: 10),
         content: Text(
             '${boardGameDetailsStore.boardGameDetails.name} has been removed from your collection'),
         action: SnackBarAction(
