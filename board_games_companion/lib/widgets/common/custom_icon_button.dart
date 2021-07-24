@@ -1,16 +1,18 @@
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/dimensions.dart';
+import '../../common/styles.dart';
+
 class CustomIconButton extends StatelessWidget {
-  final Icon icon;
-  final GestureTapCallback onTap;
 
   const CustomIconButton(
     this.icon, {
     @required this.onTap,
     Key key,
   }) : super(key: key);
+
+  final Icon icon;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class CustomIconButton extends StatelessWidget {
           Dimensions.halfStandardSpacing,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(Styles.defaultCornerRadius),
           ),
           child: Container(

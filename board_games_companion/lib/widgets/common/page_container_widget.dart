@@ -1,5 +1,6 @@
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/app_theme.dart';
 
 class PageContainer extends StatelessWidget {
   const PageContainer({
@@ -12,7 +13,7 @@ class PageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.5, 0),
           end: Alignment(0.5, 1),
