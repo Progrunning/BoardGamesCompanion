@@ -30,8 +30,7 @@ class BoardGameCollectionItemDetailsStatistics extends StatelessWidget {
           subtitle: 'Highscore',
         ),
         BoardGameCollectionItemDetailsStatisticsItem(
-          value:
-              '${boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-'}',
+          value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
           icon: Icons.hourglass_empty,
           iconColor: Colors.blue,
           subtitle: 'Ave. playtime',

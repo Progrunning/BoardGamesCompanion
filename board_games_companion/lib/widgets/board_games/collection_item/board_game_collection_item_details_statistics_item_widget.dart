@@ -30,7 +30,7 @@ class BoardGameCollectionItemDetailsStatisticsItem extends StatelessWidget {
               icon,
               color: iconColor ?? IconTheme.of(context).color,
             ),
-            SizedBox(
+            const SizedBox(
               width: Dimensions.halfStandardSpacing,
             ),
             ItemPropertyValue(value ?? ''),
