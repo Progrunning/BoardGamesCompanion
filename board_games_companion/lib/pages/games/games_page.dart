@@ -107,26 +107,26 @@ class _Collection extends StatelessWidget {
             ),
             Builder(
               builder: (_) {
-                if (hasNoSearchResults) return _EmptySearchResult(boardGamesStore: boardGamesStore);
+                if (hasNoSearchResults) {
+                  return _EmptySearchResult(boardGamesStore: boardGamesStore);
+                }
 
                 final List<BoardGameDetails> boardGames = [];
-                CollectionFlag collectionFlag;
-                if (topTabController.index == 0) {
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesInCollection);
-                  collectionFlag = CollectionFlag.Colleciton;
-                }
-                if (topTabController.index == 1) {
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesPlayed);
-                  collectionFlag = CollectionFlag.Played;
-                }
-                if (topTabController.index == 1) {
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
-                  collectionFlag = CollectionFlag.Wishlist;
+                switch (boardGamesStore.selectedTab) {
+                  case GamesTab.Colleciton:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesInCollection);
+                    break;
+                  case GamesTab.Played:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesPlayed);
+                    break;
+                  case GamesTab.Wishlist:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
+                    break;
                 }
 
                 return _Grid(
                   boardGames: boardGames,
-                  collectionFlag: collectionFlag,
+                  collectionFlag: boardGamesStore.selectedTab.toCollectionFlag(),
                 );
               },
             ),
