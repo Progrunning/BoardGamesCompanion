@@ -1,9 +1,21 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/utilities/widget_utilities.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../utilities/widget_utilities.dart';
+
 class IconAndTextButton extends StatelessWidget {
+  const IconAndTextButton({
+    this.icon,
+    this.title,
+    this.backgroundColor,
+    this.rippleEffectColor,
+    this.horizontalPadding,
+    this.verticalPadding,
+    @required this.onPressed,
+    Key key,
+  }) : super(key: key);
+
   static const double rippleEffectOpacityFactor = 0.7;
 
   final GestureTapCallback onPressed;
@@ -16,19 +28,8 @@ class IconAndTextButton extends StatelessWidget {
   final double horizontalPadding;
   final double verticalPadding;
 
-  const IconAndTextButton({
-    this.icon,
-    this.title,
-    this.backgroundColor,
-    this.rippleEffectColor,
-    this.horizontalPadding,
-    this.verticalPadding,
-    @required this.onPressed,
-    Key key,
-  }) : super(key: key);
-
   Widget _buildDivider() => title?.isNotEmpty ?? false
-      ? Divider(
+      ? const Divider(
           indent: Dimensions.halfStandardSpacing,
         )
       : null;
@@ -36,7 +37,7 @@ class IconAndTextButton extends StatelessWidget {
   Widget _buildText() => title?.isNotEmpty ?? false
       ? Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppTheme.defaultTextColor,
             fontWeight: FontWeight.bold,
           ),
@@ -45,10 +46,9 @@ class IconAndTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fillColor = backgroundColor ?? Theme.of(context).accentColor;
-    var splashColor = rippleEffectColor ??
-        fillColor
-            .withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt());
+    final fillColor = backgroundColor ?? Theme.of(context).accentColor;
+    final splashColor = rippleEffectColor ??
+        fillColor.withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt());
 
     final List<Widget> buttonElements = [
       Icon(
@@ -62,7 +62,7 @@ class IconAndTextButton extends StatelessWidget {
     addIfNonNull(_buildText(), buttonElements);
 
     return RawMaterialButton(
-      constraints: BoxConstraints(),
+      constraints: const BoxConstraints(),
       fillColor: fillColor,
       splashColor: splashColor,
       child: Padding(

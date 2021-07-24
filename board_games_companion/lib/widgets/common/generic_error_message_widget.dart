@@ -5,7 +5,7 @@ class GenericErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
         'Oops, we ran into an issue. Please contact support at feedback@progrunning.net');
   }
 }
