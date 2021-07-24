@@ -237,8 +237,8 @@ class BoardGamesStore with ChangeNotifier {
     _searchPhrase = searchPhrase;
 
     if (searchPhrase?.isEmpty ?? true) {
-      _filteredBoardGames = List.of(_allBoardGames);
-      notifyListeners();
+      applyFilters();
+      return;
     }
 
     final searchPhraseLowerCase = searchPhrase.toLowerCase();
