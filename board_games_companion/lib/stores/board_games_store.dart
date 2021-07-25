@@ -53,7 +53,10 @@ class BoardGamesStore with ChangeNotifier {
       _filteredBoardGames?.where((boardGame) => boardGame.isPlayed)?.toList() ?? [];
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
-  bool get hasBoardGames => _allBoardGames?.isNotEmpty ?? false;
+  bool get hasBoardGames =>
+      _allBoardGames?.any((boardGame) =>
+          boardGame.isInCollection || boardGame.isOnWishlist || boardGame.isPlayed) ??
+      false;
   String get searchPhrase => _searchPhrase;
 
   List<BoardGameCategory> get filteredBoardGamesCategories {
