@@ -49,6 +49,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     _topTabController = TabController(
       length: 3,
       vsync: this,
+      initialIndex: widget.boardGamesStore.selectedTab.index,
     );
     super.initState();
   }
@@ -434,7 +435,7 @@ class _Empty extends StatelessWidget with SyncCollection {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
-                  ),                  
+                  ),
                   TextSpan(
                     text:
                         ' tab to check out current TOP 50 hot board games or look up any title.\n',
@@ -572,34 +573,11 @@ class _EmptyCollection extends StatelessWidget {
                     ),
                   ),
                   const TextSpan(
-                    text:
-                        ' collection yet.\n\nTo add a game to a collection, first find a game by using the ',
-                  ),
-                  const TextSpan(
-                    text: 'Search',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const TextSpan(
-                    text:
-                        " bottom tab or tap on the below button to go to that screen. On the details screen of a game, tap on the desired collection's icon - this will automatically add the game to the specific collection.",
+                    text: ' collection yet.',
                   ),
                 ],
               ),
               textAlign: TextAlign.justify,
-            ),
-            const SizedBox(
-              height: Dimensions.standardSpacing,
-            ),
-            Center(
-              child: IconAndTextButton(
-                title: 'Find games',
-                icon: Icons.search,
-                onPressed: () {
-                  // TODO
-                },
-              ),
             ),
           ],
         ),

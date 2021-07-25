@@ -21,9 +21,6 @@ class BggCommunityMemberText extends StatelessWidget {
           const TextSpan(
             text: "If you're a member of the ",
           ),
-          const TextSpan(
-            text: "If you're a member of the ",
-          ),
           TextSpan(
             text: 'BoardGameGeek',
             style: const TextStyle(
@@ -38,16 +35,16 @@ class BggCommunityMemberText extends StatelessWidget {
               },
           ),
           const TextSpan(
-            text: ' community, then please enter your ',
+            text: ' community, then you can enter your ',
           ),
           const TextSpan(
-            text: "user's name",
+            text: 'user name',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
           const TextSpan(
-            text: ' in the below box and hit the sync button to retrieve your collection.',
+            text: ' in the below field, to sync down your collection.',
           ),
         ],
       ),
