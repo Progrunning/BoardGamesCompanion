@@ -36,7 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
+                children: const <Widget>[
                   SizedBox(
                     height: Dimensions.standardFontSize,
                   ),
@@ -47,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-          _VersionNumber(),
+          const _VersionNumber(),
         ],
       ),
     );
@@ -73,18 +73,18 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                BggCommunityMemberText(),
+                const BggCommunityMemberText(),
                 BggCommunityMemberUserNameTextField(
                   controller: syncController,
                   onSubmit: () async {},
                 ),
-                SizedBox(
+                const SizedBox(
                   height: Dimensions.standardSpacing,
                 ),
                 Container(
                   height: 40,
                   child: userStore?.isSyncing ?? false
-                      ? Align(
+                      ? const Align(
                           alignment: Alignment.centerRight,
                           child: CircularProgressIndicator(),
                         )
@@ -102,7 +102,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                           ),
                         ),
                 ),
-                Divider(
+                const Divider(
                   color: AppTheme.accentColor,
                 ),
               ],
@@ -112,11 +112,11 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
 
         return Column(
           children: <Widget>[
-            SectionTitle(
+            const SectionTitle(
               title: 'USER',
             ),
             DetailsItem(
-              title: '${userStore?.user?.name}',
+              title: userStore?.user?.name ?? '',
               subtitle: 'BGG profile page',
               uri: '${Constants.BoardGameGeekBaseApiUrl}user/${userStore?.user?.name}',
             ),
@@ -139,7 +139,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                       );
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
                   IconAndTextButton(
@@ -155,7 +155,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               color: AppTheme.accentColor,
             ),
           ],
@@ -173,12 +173,12 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
       builder: (context) {
         return AlertDialog(
           title: Column(
-            children: <Widget>[
-              const Text('Are you sure you want to remove your BGG user connection?'),
-              const SizedBox(
+            children: const <Widget>[
+              Text('Are you sure you want to remove your BGG user connection?'),
+              SizedBox(
                 height: Dimensions.standardSpacing,
               ),
-              const Text(
+              Text(
                 'This will delete your entire board games collection, including the history of gameplays',
                 style: AppTheme.subTitleTextStyle,
               ),
@@ -187,13 +187,13 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text('Remove'),
+              child: const Text('Remove'),
               color: Colors.red,
               onPressed: () async {
                 final boardGameStore = Provider.of<BoardGamesStore>(
@@ -231,7 +231,7 @@ class _RateAndReviewTile extends StatelessWidget {
               );
             },
           ),
-          Positioned.fill(
+          const Positioned.fill(
             right: Dimensions.standardSpacing,
             child: Align(
               alignment: Alignment.centerRight,
@@ -265,7 +265,7 @@ class _AboutPageTile extends StatelessWidget {
                 context,
                 NavigatorTransitions.fadeThrough(
                   (_, __, ___) {
-                    return AboutPage();
+                    return const AboutPage();
                   },
                 ),
               );

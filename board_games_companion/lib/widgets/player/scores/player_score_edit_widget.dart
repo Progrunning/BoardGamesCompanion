@@ -20,11 +20,11 @@ class PlayerScoreEdit extends StatelessWidget {
         controller: controller,
         autofocus: true,
         keyboardType: TextInputType.number,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: Dimensions.extraLargeFontSize,
           color: AppTheme.accentColor,
         ),
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           labelText: 'Score',
           labelStyle: AppTheme.sectionHeaderTextStyle,
           fillColor: Colors.red,

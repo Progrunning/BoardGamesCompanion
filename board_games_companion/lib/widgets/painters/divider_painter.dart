@@ -5,7 +5,11 @@ class DividerPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..color = Colors.black;
-    canvas.drawLine(Offset(0, 0), Offset(size.width, 0), paint);
+    canvas.drawLine(
+      const Offset(0, 0),
+      Offset(size.width, 0),
+      paint,
+    );
   }
 
   @override

@@ -15,18 +15,18 @@ import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 
 class PlaythroughStatisticsStore extends ChangeNotifier {
-  final PlayerService _playerService;
-  final ScoreService _scoreService;
-  final PlaythroughService _playthroughService;
-
-  Map<String, BoardGameStatistics> _boardGamesStatistics = Map<String, BoardGameStatistics>();
-  Map<String, BoardGameStatistics> get boardGamesStatistics => _boardGamesStatistics;
-
   PlaythroughStatisticsStore(
     this._playerService,
     this._scoreService,
     this._playthroughService,
   );
+
+  final PlayerService _playerService;
+  final ScoreService _scoreService;
+  final PlaythroughService _playthroughService;
+
+  final Map<String, BoardGameStatistics> _boardGamesStatistics = {};
+  Map<String, BoardGameStatistics> get boardGamesStatistics => _boardGamesStatistics;
 
   Future<void> loadBoardGamesStatistics(
     List<BoardGameDetails> allBoardGames,
@@ -38,7 +38,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
     // MK Retrieve players
     final players = (await _playerService.retrievePlayers()) ?? <Player>[];
     final playersById = <String, Player>{for (Player player in players) player.id: player};
-    
+
     // MK Retrieve playthroughs
     final boardGameDetailsMapById = <String, BoardGameDetails>{
       for (BoardGameDetails boardGameDetails in allBoardGames) boardGameDetails.id: boardGameDetails
@@ -67,8 +67,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
       // MK Retrieve scores
       final playthroughIds = boardGamePlaythroughs.map((p) => p.id);
-      final playthroughsScores =
-          (await _scoreService.retrieveScores(playthroughIds)) ?? Iterable<Score>.empty();
+      final playthroughsScores = (await _scoreService.retrieveScores(playthroughIds)) ?? [];
       final Map<String, List<Score>> playthroughScoresByPlaythroughId =
           groupBy(playthroughsScores, (s) => s.playthroughId);
       final Map<String, List<Score>> playthroughScoresByBoardGameId =

@@ -11,6 +11,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 class PlaythroughStore with ChangeNotifier {
+  PlaythroughStore(
+    this._playerService,
+    this._scoreService,
+    this._playthroughStore,
+  );
+
   static const String unknownHighscoreValue = '-';
 
   final PlayerService _playerService;
@@ -36,12 +42,6 @@ class PlaythroughStore with ChangeNotifier {
   List<PlayerScore> _playerScores;
   List<PlayerScore> get playerScores => _playerScores;
 
-  PlaythroughStore(
-    this._playerService,
-    this._scoreService,
-    this._playthroughStore,
-  );
-
   Future<void> loadPlaythrough(Playthrough playthrough) async {
     _loadDataState = LoadDataState.Loading;
 
@@ -63,7 +63,7 @@ class PlaythroughStore with ChangeNotifier {
           (s) => s.playerId == p.id,
           orElse: () => null,
         );
-        
+
         return PlayerScore(
           p,
           score,
@@ -86,8 +86,7 @@ class PlaythroughStore with ChangeNotifier {
     playthrough.status = PlaythroughStatus.Finished;
     playthrough.endDate = DateTime.now().toUtc();
 
-    final updateSucceeded =
-        await _playthroughStore.updatePlaythrough(playthrough);
+    final updateSucceeded = await _playthroughStore.updatePlaythrough(playthrough);
     if (!updateSucceeded) {
       playthrough.status = oldStatus;
       playthrough.endDate = null;

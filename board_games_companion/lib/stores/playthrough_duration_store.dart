@@ -6,25 +6,24 @@ import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:flutter/foundation.dart';
 
 class PlaythroughDurationStore with ChangeNotifier {
-  static const _eveyrSecondTimerTick = const Duration(seconds: 1);
-  static const _eveyrMinuteTimerTick = const Duration(minutes: 1);
-
-  final Playthrough _playthrough;
-  Timer _timer;
-
   PlaythroughDurationStore(this._playthrough) {
     _calculateDuration();
     notifyListeners();
 
     if (_playthrough.status != PlaythroughStatus.Finished) {
-      final tickTimerInterval =
-          durationInSeconds > Constants.NumberOfSecondsInHour
-              ? _eveyrMinuteTimerTick
-              : _eveyrSecondTimerTick;
+      final tickTimerInterval = durationInSeconds > Constants.NumberOfSecondsInHour
+          ? _eveyrMinuteTimerTick
+          : _eveyrSecondTimerTick;
       _timer = Timer.periodic(tickTimerInterval, _handleTick);
     }
   }
 
+  static const _eveyrSecondTimerTick = Duration(seconds: 1);
+  static const _eveyrMinuteTimerTick = Duration(minutes: 1);
+
+  final Playthrough _playthrough;
+  
+  Timer _timer;
   int _durationInSeconds;
   int get durationInSeconds => _durationInSeconds;
 
@@ -36,8 +35,7 @@ class PlaythroughDurationStore with ChangeNotifier {
   void _calculateDuration() {
     final nowUtc = DateTime.now().toUtc();
     final playthroughEndDate = _playthrough.endDate ?? nowUtc;
-    _durationInSeconds =
-        playthroughEndDate.difference(_playthrough.startDate).inSeconds;
+    _durationInSeconds = playthroughEndDate.difference(_playthrough.startDate).inSeconds;
   }
 
   @override

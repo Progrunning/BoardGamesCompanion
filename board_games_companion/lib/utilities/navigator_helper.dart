@@ -17,7 +17,7 @@ class NavigatorHelper {
     BuildContext context, {
     Player player,
   }) async {
-    return await Navigator.push(
+    return Navigator.push(
       context,
       NavigatorTransitions.fadeThrough(
         (_, __, ___) {

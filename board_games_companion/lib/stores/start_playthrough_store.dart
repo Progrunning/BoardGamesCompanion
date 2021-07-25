@@ -3,9 +3,9 @@ import 'package:board_games_companion/stores/players_store.dart';
 import 'package:flutter/cupertino.dart';
 
 class StartPlaythroughStore with ChangeNotifier {
-  final PlayersStore _playersStore;
-
   StartPlaythroughStore(this._playersStore);
+  
+  final PlayersStore _playersStore;
 
   List<PlaythroughPlayer> _playthroughPlayers;
   List<PlaythroughPlayer> get playthroughPlayers => _playthroughPlayers;
@@ -19,6 +19,6 @@ class StartPlaythroughStore with ChangeNotifier {
         )
         ?.toList();
 
-    return _playthroughPlayers ?? List<PlaythroughPlayer>();
+    return _playthroughPlayers ?? <PlaythroughPlayer>[];
   }
 }

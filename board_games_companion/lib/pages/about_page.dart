@@ -13,7 +13,7 @@ import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
 
 class AboutPage extends StatefulWidget {
-  AboutPage({Key key}) : super(key: key);
+  const AboutPage({Key key}) : super(key: key);
 
   @override
   _AboutPageState createState() => _AboutPageState();
@@ -27,7 +27,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About'),
+        title: const Text('About'),
       ),
       body: SafeArea(
         child: PageContainer(
@@ -42,15 +42,14 @@ class _AboutPageState extends BasePageState<AboutPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
+                      children: const <Widget>[
                         SectionTitle(
                           title: 'AUTHOR',
                         ),
                         DetailsItem(
                           title: 'Mikolaj Kieres',
                           subtitle: Constants.FeedbackEmailAddress,
-                          uri:
-                              'mailto:${Constants.FeedbackEmailAddress}?subject=BGC%20Feedback',
+                          uri: 'mailto:${Constants.FeedbackEmailAddress}?subject=BGC%20Feedback',
                           iconUri: 'assets/mikolaj_profile_picture.jpg',
                         ),
                         Divider(
@@ -73,7 +72,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                         ),
                         SectionText(
                           text:
-                              'The board games data shown in the app is a courtesy of the publicly available BoardGameGeek\'s XML API.',
+                              "The board games data shown in the app is a courtesy of the publicly available BoardGameGeek's XML API.",
                         ),
                         SectionText(
                           text: 'See below links for more details:',
@@ -84,10 +83,8 @@ class _AboutPageState extends BasePageState<AboutPage> {
                             uri: Constants.BoardGameGeekBaseApiUrl),
                         DetailsItem(
                             title: 'XML API',
-                            subtitle:
-                                'boardgamegeek.com/wiki/page/BGG_XML_API2',
-                            uri:
-                                'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
+                            subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
+                            uri: 'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
                         DetailsItem(
                             title: 'Terms of Service',
                             subtitle: 'boardgamegeek.com/terms',
@@ -116,19 +113,16 @@ class _AboutPageState extends BasePageState<AboutPage> {
                             uri: 'https://pub.dev/packages/dio_http_cache'),
                         DetailsItem(
                             title: 'Dio Http2 Adapter',
-                            subtitle:
-                                'Provides the ability to create custom http adapters',
+                            subtitle: 'Provides the ability to create custom http adapters',
                             uri: 'https://pub.dev/packages/dio_http2_adapter'),
                         DetailsItem(
                             title: 'Cached Network Image',
                             subtitle: 'Caching network images',
-                            uri:
-                                'https://pub.dev/packages/cached_network_image'),
+                            uri: 'https://pub.dev/packages/cached_network_image'),
                         DetailsItem(
                             title: 'Firebase Crashlytics',
                             subtitle: 'Captures app crash analytics',
-                            uri:
-                                'https://pub.dev/packages/firebase_crashlytics'),
+                            uri: 'https://pub.dev/packages/firebase_crashlytics'),
                         DetailsItem(
                             title: 'Hive',
                             subtitle: 'NoSQL Database',
@@ -147,13 +141,11 @@ class _AboutPageState extends BasePageState<AboutPage> {
                             uri: 'https://pub.dev/packages/carousel_slider'),
                         DetailsItem(
                             title: 'Image Picker',
-                            subtitle:
-                                'Picking images and taking photos with camera',
+                            subtitle: 'Picking images and taking photos with camera',
                             uri: 'https://pub.dev/packages/image_picker'),
                         DetailsItem(
                             title: 'Image Picker',
-                            subtitle:
-                                'Picking images and taking photos with camera',
+                            subtitle: 'Picking images and taking photos with camera',
                             uri: 'https://pub.dev/packages/image_picker'),
                         DetailsItem(
                             title: 'XML',
@@ -169,7 +161,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                             uri: 'https://pub.dev/packages/animations'),
                         DetailsItem(
                             title: 'Url Launcher',
-                            subtitle: 'Launching Uri\'s',
+                            subtitle: "Launching Uri's",
                             uri: 'https://pub.dev/packages/url_launcher'),
                         Divider(
                           color: AppTheme.accentColor,
@@ -193,7 +185,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
+                      children: const <Widget>[
                         Expanded(
                           child: Align(
                             alignment: Alignment.center,
@@ -240,8 +232,8 @@ class _LicensePageDetailsItem extends StatelessWidget {
           return Stack(
             children: <Widget>[
               DetailsItem(
-                title: 'Board Game Companion\'s licenses',
-                subtitle: 'App\'s components licenses',
+                title: "Board Game Companion's licenses",
+                subtitle: "App's components licenses",
                 onTap: () {
                   showLicensePage(
                     context: context,
@@ -261,7 +253,7 @@ class _LicensePageDetailsItem extends StatelessWidget {
                   );
                 },
               ),
-              Positioned.fill(
+              const Positioned.fill(
                 right: Dimensions.standardSpacing,
                 child: Align(
                   alignment: Alignment.centerRight,
@@ -275,7 +267,7 @@ class _LicensePageDetailsItem extends StatelessWidget {
           );
         }
 
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },

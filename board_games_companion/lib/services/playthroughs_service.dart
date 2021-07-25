@@ -14,11 +14,11 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
 
   Future<List<Playthrough>> retrievePlaythroughs(Iterable<String> boardGameIds) async {
     if (boardGameIds?.isEmpty ?? true) {
-      return List<Playthrough>();
+      return <Playthrough>[];
     }
 
     if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
-      return List<Playthrough>();
+      return <Playthrough>[];
     }
 
     return storageBox
@@ -97,7 +97,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    var playthroughToDelete = storageBox.get(playthroughId);
+    final playthroughToDelete = storageBox.get(playthroughId);
     if (playthroughToDelete == null || (playthroughToDelete.isDeleted ?? false)) {
       return false;
     }

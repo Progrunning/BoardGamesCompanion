@@ -19,7 +19,7 @@ class BggCommunityMemberUserNameTextField extends StatelessWidget {
       controller: _controller,
       style: AppTheme.defaultTextFieldStyle,
       decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
-        hintText: 'Enter your BGG user\'s name',
+        hintText: "Enter your BGG user's name",
       ),
       onSubmitted: (username) {
         _onSubmit();

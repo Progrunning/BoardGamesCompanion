@@ -9,6 +9,12 @@ import '../services/board_games_geek_service.dart';
 import 'search_bar_board_games_store.dart';
 
 class SearchBoardGamesStore with ChangeNotifier {
+  SearchBoardGamesStore(
+    this._boardGameGeekService,
+    this._searchBarBoardGamesStore,
+    this._analyticsService,
+  );
+
   final BoardGamesGeekService _boardGameGeekService;
   final SearchBarBoardGamesStore _searchBarBoardGamesStore;
   final AnalyticsService _analyticsService;
@@ -17,13 +23,7 @@ class SearchBoardGamesStore with ChangeNotifier {
 
   List<BoardGame> get searchResults => _searchResults;
 
-  AsyncMemoizer<List<BoardGame>> _searchResultsMemoizer = new AsyncMemoizer<List<BoardGame>>();
-
-  SearchBoardGamesStore(
-    this._boardGameGeekService,
-    this._searchBarBoardGamesStore,
-    this._analyticsService,
-  );
+  AsyncMemoizer<List<BoardGame>> _searchResultsMemoizer = AsyncMemoizer<List<BoardGame>>();
 
   Future<List<BoardGame>> search() async {
     return _searchResultsMemoizer.runOnce(
@@ -53,7 +53,7 @@ class SearchBoardGamesStore with ChangeNotifier {
   }
 
   void updateSearchResults() {
-    _searchResultsMemoizer = new AsyncMemoizer<List<BoardGame>>();
+    _searchResultsMemoizer = AsyncMemoizer<List<BoardGame>>();
     notifyListeners();
   }
 }
