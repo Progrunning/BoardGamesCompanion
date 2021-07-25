@@ -117,8 +117,14 @@ class _Collection extends StatelessWidget {
                     break;
                 }
 
-                if ((boardGamesStore.searchPhrase?.isNotEmpty ?? false) && boardGames.isEmpty) {
-                  return _EmptySearchResult(boardGamesStore: boardGamesStore);
+                if (boardGames.isEmpty) {
+                  if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
+                    return _EmptySearchResult(boardGamesStore: boardGamesStore);
+                  }
+
+                  return _EmptyCollection(
+                    boardGamesStore: boardGamesStore,
+                  );
                 }
 
                 return _Grid(
@@ -386,35 +392,75 @@ class _Empty extends StatelessWidget with SyncCollection {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const Expanded(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  '''It looks like you don't have any games in your collection yet.''',
+              child: SizedBox.shrink(),
+            ),
+            const Center(
+              child: Text(
+                'Your games collection is empty',
+                style: TextStyle(
+                  fontSize: Dimensions.extraLargeFontSize,
                 ),
               ),
             ),
             const SizedBox(
-              height: Dimensions.standardSpacing,
+              height: Dimensions.doubleStandardSpacing,
+            ),
+            const Icon(
+              Icons.sentiment_dissatisfied_sharp,
+              size: 80,
+              color: AppTheme.primaryColor,
+            ),
+            const SizedBox(
+              height: Dimensions.doubleStandardSpacing,
+            ),
+            const Text.rich(
+              TextSpan(
+                children: <InlineSpan>[
+                  TextSpan(
+                    text: 'Nothing to worry about though! ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        'Follow the below instructions to fill up this screen with board games.\n\n',
+                  ),
+                  TextSpan(
+                    text: 'Use the bottom ',
+                  ),
+                  TextSpan(
+                    text: 'Search',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),                  
+                  TextSpan(
+                    text:
+                        ' tab to check out current TOP 50 hot board games or look up any title.\n',
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontSize: Dimensions.mediumFontSize,
+              ),
             ),
             const BggCommunityMemberText(),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.doubleStandardSpacing * 2,
-              ),
-              child: BggCommunityMemberUserNameTextField(
-                controller: _syncController,
-                onSubmit: () async {
-                  await syncCollection(
-                    context,
-                    _syncController.text,
-                  );
-                },
-              ),
+            BggCommunityMemberUserNameTextField(
+              controller: _syncController,
+              onSubmit: () async {
+                await syncCollection(
+                  context,
+                  _syncController.text,
+                );
+              },
             ),
             const SizedBox(
               height: Dimensions.standardSpacing,
             ),
-            Center(
+            Align(
+              alignment: Alignment.centerRight,
               child: IconAndTextButton(
                 title: 'Sync',
                 icon: Icons.sync,
@@ -429,13 +475,7 @@ class _Empty extends StatelessWidget with SyncCollection {
             const SizedBox(
               height: Dimensions.standardSpacing,
             ),
-            const Expanded(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                    'Otherwise, use the bottom navigation search option, where you can check out currently TOP 50 hot board games and look up any title.'),
-              ),
-            ),
+            const Expanded(child: SizedBox.shrink()),
             const SizedBox(
               height: Dimensions.standardSpacing,
             ),
@@ -491,6 +531,73 @@ class _EmptySearchResult extends StatelessWidget {
                 icon: Icons.clear,
                 onPressed: () {
                   _boardGamesStore.updateSearchResults('');
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyCollection extends StatelessWidget {
+  const _EmptyCollection({
+    Key key,
+    @required this.boardGamesStore,
+  }) : super(key: key);
+
+  final BoardGamesStore boardGamesStore;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.doubleStandardSpacing,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text.rich(
+              TextSpan(
+                children: [
+                  const TextSpan(
+                    text: "It looks like you don't have any board games in your ",
+                  ),
+                  TextSpan(
+                    text: boardGamesStore.selectedTab.toCollectionFlag().toHumandReadableText(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const TextSpan(
+                    text:
+                        ' collection yet.\n\nTo add a game to a collection, first find a game by using the ',
+                  ),
+                  const TextSpan(
+                    text: 'Search',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const TextSpan(
+                    text:
+                        " bottom tab or tap on the below button to go to that screen. On the details screen of a game, tap on the desired collection's icon - this will automatically add the game to the specific collection.",
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.justify,
+            ),
+            const SizedBox(
+              height: Dimensions.standardSpacing,
+            ),
+            Center(
+              child: IconAndTextButton(
+                title: 'Find games',
+                icon: Icons.search,
+                onPressed: () {
+                  // TODO
                 },
               ),
             ),
