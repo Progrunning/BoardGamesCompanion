@@ -11,7 +11,12 @@ import '../services/analytics_service.dart';
 import '../services/board_games_filters_service.dart';
 
 class BoardGamesFiltersStore with ChangeNotifier {
-  List<SortBy> _sortBy = [
+  BoardGamesFiltersStore(
+    this._boardGamesFiltersService,
+    this._analyticsService,
+  );
+
+  final List<SortBy> _sortBy = [
     SortBy()..sortByOption = SortByOption.Name,
     SortBy()..sortByOption = SortByOption.YearPublished,
     SortBy()
@@ -30,11 +35,6 @@ class BoardGamesFiltersStore with ChangeNotifier {
   List<SortBy> get sortBy => _sortBy;
   double get filterByRating => _collectionFilters?.filterByRating;
   int get numberOfPlayers => _collectionFilters?.numberOfPlayers;
-
-  BoardGamesFiltersStore(
-    this._boardGamesFiltersService,
-    this._analyticsService,
-  );
 
   Future<void> loadFilterPreferences() async {
     _collectionFilters = await _boardGamesFiltersService.retrieveCollectionFiltersPreferences();

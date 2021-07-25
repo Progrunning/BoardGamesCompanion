@@ -279,7 +279,7 @@ class BoardGamesGeekService {
     }
 
     final searchResultItems = xmlDocument?.findAllElements(_xmlItemElementName);
-    for (var searchResult in searchResultItems) {
+    for (final searchResult in searchResultItems) {
       final boardGameId = searchResult.firstOrDefaultAttributeValue(_xmlIdAttributeName);
       final boardGameName =
           searchResult.firstOrDefaultElementsAttribute(_xmlNameElementName, _xmlValueAttributeName);
@@ -327,7 +327,7 @@ class BoardGamesGeekService {
     }
 
     final collectionItems = xmlDocument?.findAllElements(_xmlItemElementName);
-    for (var collectionItem in collectionItems) {
+    for (final collectionItem in collectionItems) {
       final boardGame = BoardGameDetails();
       boardGame.id = collectionItem.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
 

@@ -12,7 +12,7 @@ class LauncherHelper {
     } else {
       Scaffold.of(context).showSnackBar(
         SnackBar(
-          content: Text('Sorry, we couldn\'t open the $uri'),
+          content: Text("Sorry, we couldn't open the $uri"),
           action: SnackBarAction(
             label: 'Ok',
             onPressed: () {

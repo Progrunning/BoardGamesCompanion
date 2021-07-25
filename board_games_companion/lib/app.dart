@@ -22,7 +22,7 @@ class BoardGamesCompanionApp extends StatelessWidget {
         _analyticsObserver,
       ],
       routes: {
-        Routes.home: (context) => HomePage(),
+        Routes.home: (context) => const HomePage(),
       },
     );
   }

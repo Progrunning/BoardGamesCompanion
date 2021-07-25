@@ -1,17 +1,18 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RankRibbon extends StatelessWidget {
-  final num _rank;
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../common/styles.dart';
 
+class RankRibbon extends StatelessWidget {
   const RankRibbon(
     num rank, {
     Key key,
   })  : _rank = rank,
         super(key: key);
+
+  final num _rank;
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +21,13 @@ class RankRibbon extends StatelessWidget {
         Icon(
           Icons.bookmark,
           size: 42,
-          color: Theme.of(context)
-              .accentColor
-              .withAlpha(Styles.opacity70Percent),
+          color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
         ),
         Positioned.fill(
           child: Center(
             child: Text(
               '#${_rank.toString()}',
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppTheme.defaultTextColor,
                 fontSize: Dimensions.smallFontSize,
               ),

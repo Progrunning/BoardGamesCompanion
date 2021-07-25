@@ -16,12 +16,12 @@ import '../widgets/player/player_avatar.dart';
 import 'base_page_state.dart';
 
 class CreateEditPlayerPage extends StatefulWidget {
-  final PlayersStore _playersStore;
-
-  CreateEditPlayerPage(
+  const CreateEditPlayerPage(
     this._playersStore, {
     Key key,
   }) : super(key: key);
+
+  final PlayersStore _playersStore;
 
   @override
   _CreateEditPlayerPageState createState() => _CreateEditPlayerPageState();
@@ -39,13 +39,11 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
   void initState() {
     super.initState();
 
-    _player = new Player();
+    _player = Player();
     _player.id = widget._playersStore.playerToCreateOrEdit.id;
     _player.name = widget._playersStore.playerToCreateOrEdit.name;
-    _player.avatarFileName =
-        widget._playersStore.playerToCreateOrEdit.avatarFileName;
-    _player.avatarImageUri =
-        widget._playersStore.playerToCreateOrEdit.avatarImageUri;
+    _player.avatarFileName = widget._playersStore.playerToCreateOrEdit.avatarFileName;
+    _player.avatarImageUri = widget._playersStore.playerToCreateOrEdit.avatarImageUri;
 
     _isEditMode = _player.name?.isNotEmpty ?? false;
 
@@ -57,7 +55,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _floatingActionButtons = [
+    final List<Widget> _floatingActionButtons = [
       CreateOrUpdatePlayer(
           isEditMode: _isEditMode,
           formKey: _formKey,
@@ -69,7 +67,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
     if (_isEditMode) {
       _floatingActionButtons.addAll(
         [
-          Divider(
+          const Divider(
             indent: Dimensions.standardSpacing,
           ),
           DeletePlayer(
@@ -88,7 +86,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
 
           return WillPopScope(
             onWillPop: () async {
-              return await _handleOnWillPop(
+              return _handleOnWillPop(
                 context,
                 player,
               );
@@ -109,7 +107,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
                       children: <Widget>[
                         Center(
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               boxShadow: [
                                 AppTheme.defaultBoxShadow,
                               ],
@@ -118,13 +116,11 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
                               height: 220,
                               width: 190,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    Styles.defaultCornerRadius),
+                                borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
                                 child: Stack(
                                   children: <Widget>[
                                     Hero(
-                                      tag:
-                                          '${AnimationTags.playerImageHeroTag}${player?.id}',
+                                      tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
                                       child: PlayerAvatar(
                                         imageUri: player?.avatarImageUri,
                                       ),
@@ -135,24 +131,21 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
                                       child: Row(
                                         children: <Widget>[
                                           CustomIconButton(
-                                            Icon(
+                                            const Icon(
                                               Icons.filter,
                                               color: AppTheme.defaultTextColor,
                                             ),
-                                            onTap: () =>
-                                                _handleImagePicking(player),
+                                            onTap: () => _handleImagePicking(player),
                                           ),
-                                          Divider(
-                                            indent:
-                                                Dimensions.halfStandardSpacing,
+                                          const Divider(
+                                            indent: Dimensions.halfStandardSpacing,
                                           ),
                                           CustomIconButton(
-                                            Icon(
+                                            const Icon(
                                               Icons.camera,
                                               color: AppTheme.defaultTextColor,
                                             ),
-                                            onTap: () =>
-                                                _handleTakingPicture(player),
+                                            onTap: () => _handleTakingPicture(player),
                                           ),
                                         ],
                                       ),
@@ -164,7 +157,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
                           ),
                         ),
                         TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Name',
                           ),
                           validator: (value) {
@@ -181,8 +174,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
                   ),
                 ),
               ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
               floatingActionButton: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: _floatingActionButtons,
@@ -208,8 +200,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
     await _handlePickingAndSavingAvatar(player, ImageSource.gallery);
   }
 
-  Future _handlePickingAndSavingAvatar(
-      Player player, ImageSource imageSource) async {
+  Future _handlePickingAndSavingAvatar(Player player, ImageSource imageSource) async {
     player.avatarFileToSave = await _imagePicker.getImage(source: imageSource);
     if (player.avatarFileToSave?.path?.isEmpty ?? true) {
       return;
@@ -220,30 +211,28 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
   }
 
   Future<bool> _handleOnWillPop(BuildContext context, Player player) async {
-    if (widget._playersStore.playerToCreateOrEdit.avatarImageUri !=
-            player.avatarImageUri ||
+    if (widget._playersStore.playerToCreateOrEdit.avatarImageUri != player.avatarImageUri ||
         widget._playersStore.playerToCreateOrEdit.name != player.name) {
       await showDialog<AlertDialog>(
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text(
-                  'You didn\'t save your changes. Are you sure you want to navigate away?'),
+              title: const Text(
+                  "You didn't save your changes. Are you sure you want to navigate away?"),
               elevation: Dimensions.defaultElevation,
               actions: <Widget>[
                 FlatButton(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 FlatButton(
-                  child: Text('Navigate away'),
+                  child: const Text('Navigate away'),
                   color: Colors.red,
                   onPressed: () async {
                     widget._playersStore.playerToCreateOrEdit.avatarImageUri =
-                        widget
-                            ._playersStore.playerToCreateOrEdit.avatarImageUri;
+                        widget._playersStore.playerToCreateOrEdit.avatarImageUri;
                     widget._playersStore.playerToCreateOrEdit.name =
                         widget._playersStore.playerToCreateOrEdit.name;
                     // MK Pop the dialog

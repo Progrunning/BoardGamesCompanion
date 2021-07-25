@@ -32,20 +32,18 @@ class DeletePlayer extends StatelessWidget {
               elevation: Dimensions.defaultElevation,
               actions: <Widget>[
                 FlatButton(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 FlatButton(
-                  child: Text('Delete'),
+                  child: const Text('Delete'),
                   color: Colors.red,
                   onPressed: () async {
-                    var deletionSucceeded =
-                        await _playersStore.deletePlayer(_player.id);
+                    final bool deletionSucceeded = await _playersStore.deletePlayer(_player.id);
                     if (deletionSucceeded) {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(Routes.home));
+                      Navigator.popUntil(context, ModalRoute.withName(Routes.home));
                     }
                   },
                 ),

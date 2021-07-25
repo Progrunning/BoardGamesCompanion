@@ -1,9 +1,8 @@
-import 'package:board_games_companion/common/enums/games_tab.dart';
-import 'package:board_games_companion/common/enums/games_tab.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 import '../common/enums/enums.dart';
+import '../common/enums/games_tab.dart';
 import '../common/enums/order_by.dart';
 import '../common/enums/sort_by_option.dart';
 import '../common/hive_boxes.dart';

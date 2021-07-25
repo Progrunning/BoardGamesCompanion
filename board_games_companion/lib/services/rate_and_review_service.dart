@@ -6,32 +6,27 @@ import 'package:in_app_review/in_app_review.dart';
 import 'preferences_service.dart';
 
 class RateAndReviewService {
-  final PreferencesService _preferencesService;
-  static const Duration _requiredAppUsedForDuration = const Duration(days: 14);
-  static const Duration _remindMeLaterDuration = const Duration(days: 7);
-  static const Duration _requiredAppLaunchedForDuration =
-      const Duration(seconds: 30);
-  static const int _requiredNumberOfEventsLogged = 300;
-
   RateAndReviewService(this._preferencesService);
+
+  final PreferencesService _preferencesService;
+  static const Duration _requiredAppUsedForDuration = Duration(days: 14);
+  static const Duration _remindMeLaterDuration = Duration(days: 7);
+  static const Duration _requiredAppLaunchedForDuration = Duration(seconds: 30);
+  static const int _requiredNumberOfEventsLogged = 300;
 
   bool showRateAndReviewDialog = false;
 
   Future<void> _updateShowRateAndReviewDialogFlag() async {
     try {
-      bool rateAndReviewDialogSeen =
-          await _preferencesService.getRateAndReviewDialogSeen();
+      final bool rateAndReviewDialogSeen = await _preferencesService.getRateAndReviewDialogSeen();
       if (rateAndReviewDialogSeen) {
         return false;
       }
 
       final DateTime nowUtc = DateTime.now().toUtc();
-      final DateTime firstTimeLaunchDate =
-          await _preferencesService.getFirstTimeLaunchDate();
-      final DateTime appLaunchDate =
-          await _preferencesService.getAppLaunchDate();
-      final DateTime remindMeLaterDate =
-          await _preferencesService.getRemindMeLaterDate();
+      final DateTime firstTimeLaunchDate = await _preferencesService.getFirstTimeLaunchDate();
+      final DateTime appLaunchDate = await _preferencesService.getAppLaunchDate();
+      final DateTime remindMeLaterDate = await _preferencesService.getRemindMeLaterDate();
       if (firstTimeLaunchDate == null || appLaunchDate == null) {
         return false;
       }
@@ -39,20 +34,18 @@ class RateAndReviewService {
       final int numberOfSignificantActions =
           await _preferencesService.getNumberOfSignificantActions();
 
-      showRateAndReviewDialog = firstTimeLaunchDate
-              .add(_requiredAppUsedForDuration)
-              .isBefore(nowUtc) &&
-          appLaunchDate.add(_requiredAppLaunchedForDuration).isBefore(nowUtc) &&
-          (remindMeLaterDate == null || remindMeLaterDate.isBefore(nowUtc)) &&
-          numberOfSignificantActions >= _requiredNumberOfEventsLogged;
+      showRateAndReviewDialog =
+          firstTimeLaunchDate.add(_requiredAppUsedForDuration).isBefore(nowUtc) &&
+              appLaunchDate.add(_requiredAppLaunchedForDuration).isBefore(nowUtc) &&
+              (remindMeLaterDate == null || remindMeLaterDate.isBefore(nowUtc)) &&
+              numberOfSignificantActions >= _requiredNumberOfEventsLogged;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
   }
 
   Future<void> increaseNumberOfSignificantActions() async {
-    int numberOfLoggedEvents =
-        await _preferencesService.getNumberOfSignificantActions();
+    int numberOfLoggedEvents = await _preferencesService.getNumberOfSignificantActions();
     if (numberOfLoggedEvents < _requiredNumberOfEventsLogged) {
       await _preferencesService.setNumberOfSignificantActions(
         numberOfLoggedEvents += 1,
@@ -75,8 +68,8 @@ class RateAndReviewService {
 
   Future<void> askMeLater() async {
     showRateAndReviewDialog = false;
-    await _preferencesService.setRemindMeLaterDate(
-        DateTime.now().toUtc().add(_remindMeLaterDuration));
+    await _preferencesService
+        .setRemindMeLaterDate(DateTime.now().toUtc().add(_remindMeLaterDuration));
   }
 
   Future<void> dontAskAgain() async {

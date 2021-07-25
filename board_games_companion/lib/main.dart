@@ -89,11 +89,13 @@ void main() async {
   });
 
   runZoned(() {
-    runApp(App());
+    runApp(const App());
   }, onError: FirebaseCrashlytics.instance.recordError);
 }
 
 class App extends StatelessWidget {
+  const App({Key key}) : super(key: key);
+
   static final FirebaseAnalytics _analytics = FirebaseAnalytics();
   static final FirebaseAnalyticsObserver _analyticsObserver =
       FirebaseAnalyticsObserver(analytics: _analytics);

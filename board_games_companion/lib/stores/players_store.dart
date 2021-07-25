@@ -6,12 +6,12 @@ import '../models/hive/player.dart';
 import '../services/player_service.dart';
 
 class PlayersStore with ChangeNotifier {
+  PlayersStore(this._playerService);
+
   final PlayerService _playerService;
 
   List<Player> _players;
   Player _playerToCreateOrEdit;
-
-  PlayersStore(this._playerService);
 
   List<Player> get players => _players;
   Player get playerToCreateOrEdit => _playerToCreateOrEdit;
@@ -27,7 +27,7 @@ class PlayersStore with ChangeNotifier {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
-    return _players ?? List<Player>();
+    return _players ?? <Player>[];
   }
 
   Future<bool> addOrUpdatePlayer(Player player) async {
@@ -38,8 +38,7 @@ class PlayersStore with ChangeNotifier {
       );
 
       final isCreatingNewPlayer = existingPlayer == null;
-      final addOrUpdateSucceeded =
-          await _playerService.addOrUpdatePlayer(player);
+      final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(player);
       if (addOrUpdateSucceeded) {
         _playerToCreateOrEdit.avatarFileName = player.avatarFileName;
         _playerToCreateOrEdit.avatarImageUri = player.avatarImageUri;
