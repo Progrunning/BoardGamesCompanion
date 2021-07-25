@@ -1,20 +1,28 @@
-import 'package:board_games_companion/models/board_game.dart';
-import 'package:board_games_companion/models/collection_sync_result.dart';
-import 'package:board_games_companion/models/hive/board_game_artist.dart';
-import 'package:board_games_companion/models/hive/board_game_category.dart';
-import 'package:board_games_companion/models/hive/board_game_designer.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/extensions/xml_element_extensions.dart';
-import 'package:board_games_companion/models/hive/board_game_expansion.dart';
-import 'package:board_games_companion/models/hive/board_game_publisher.dart';
-import 'package:board_games_companion/models/hive/board_game_rank.dart';
-import 'package:board_games_companion/utilities/bgg_retry_interceptor.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:xml/xml.dart' as xml;
 
+import '../extensions/xml_element_extensions.dart';
+import '../models/board_game.dart';
+import '../models/collection_sync_result.dart';
+import '../models/hive/board_game_artist.dart';
+import '../models/hive/board_game_category.dart';
+import '../models/hive/board_game_designer.dart';
+import '../models/hive/board_game_details.dart';
+import '../models/hive/board_game_expansion.dart';
+import '../models/hive/board_game_publisher.dart';
+import '../models/hive/board_game_rank.dart';
+import '../utilities/bgg_retry_interceptor.dart';
+
 class BoardGamesGeekService {
+  BoardGamesGeekService(this._httpClientAdapter) {
+    _dio.httpClientAdapter = _httpClientAdapter;
+    _dio.interceptors
+        .add(DioCacheManager(CacheConfig(baseUrl: _baseBoardGamesUrl)).interceptor as Interceptor);
+    _dio.interceptors.add(LogInterceptor(responseBody: true));
+  }
+
   static const String _xmlItemElementName = 'item';
   static const String _xmlNameElementName = 'name';
   static const String _xmlErrorElementName = 'error';
@@ -76,13 +84,6 @@ class BoardGamesGeekService {
 
   final HttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
-
-  BoardGamesGeekService(this._httpClientAdapter) {
-    _dio.httpClientAdapter = _httpClientAdapter;
-    _dio.interceptors
-        .add(DioCacheManager(CacheConfig(baseUrl: _baseBoardGamesUrl)).interceptor as Interceptor);
-    _dio.interceptors.add(LogInterceptor(responseBody: true));
-  }
 
   Future<List<BoardGame>> retrieveHot() async {
     final hotBoardGames = <BoardGame>[];
@@ -347,6 +348,9 @@ class BoardGamesGeekService {
       }
 
       _extractBoardGameCollectionItemStas(collectionItem, boardGame);
+
+      // TODO Additionally mark every board game that was sync'd with a flag 'syncd from BGG' to make sure sync won't affect any existing board games in different collections
+      boardGame.isInCollection = true;
 
       boardGames.add(boardGame);
     }
