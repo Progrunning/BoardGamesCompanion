@@ -94,9 +94,6 @@ class _Collection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasNoSearchResults = boardGamesStore.filteredBoardGames.isEmpty &&
-        (boardGamesStore.searchPhrase?.isNotEmpty ?? false);
-
     return SafeArea(
       child: PageContainer(
         child: CustomScrollView(
@@ -107,10 +104,6 @@ class _Collection extends StatelessWidget {
             ),
             Builder(
               builder: (_) {
-                if (hasNoSearchResults) {
-                  return _EmptySearchResult(boardGamesStore: boardGamesStore);
-                }
-
                 final List<BoardGameDetails> boardGames = [];
                 switch (boardGamesStore.selectedTab) {
                   case GamesTab.Colleciton:
@@ -122,6 +115,10 @@ class _Collection extends StatelessWidget {
                   case GamesTab.Wishlist:
                     boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
                     break;
+                }
+
+                if ((boardGamesStore.searchPhrase?.isNotEmpty ?? false) && boardGames.isEmpty) {
+                  return _EmptySearchResult(boardGamesStore: boardGamesStore);
                 }
 
                 return _Grid(
