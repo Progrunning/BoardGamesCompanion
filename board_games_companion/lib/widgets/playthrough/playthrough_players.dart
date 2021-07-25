@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/dimensions.dart';
+import '../../extensions/page_controller_extensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/playthroughs_store.dart';
@@ -10,7 +11,6 @@ import '../common/generic_error_message_widget.dart';
 import '../common/icon_and_text_button.dart';
 import '../common/stack_ripple_effect.dart';
 import '../player/player_grid_item.dart';
-import '../../extensions/page_controller_extensions.dart';
 
 class PlaythroughPlayers extends StatelessWidget {
   const PlaythroughPlayers({
@@ -32,7 +32,7 @@ class PlaythroughPlayers extends StatelessWidget {
     return Stack(
       children: <Widget>[
         GridView.count(
-          padding: EdgeInsets.all(
+          padding: const EdgeInsets.all(
             Dimensions.standardSpacing,
           ),
           crossAxisCount: _numberOfPlayerColumns,
@@ -103,7 +103,7 @@ class PlaythroughPlayers extends StatelessWidget {
       scaffold.showSnackBar(
         SnackBar(
           content:
-              Text('You need to select at least one player to start a game'),
+              const Text('You need to select at least one player to start a game'),
           action: SnackBarAction(
             label: 'Ok',
             onPressed: () {
@@ -129,7 +129,7 @@ class PlaythroughPlayers extends StatelessWidget {
     if (newPlaythrough == null) {
       scaffold.showSnackBar(
         SnackBar(
-          content: GenericErrorMessage(),
+          content: const GenericErrorMessage(),
           action: SnackBarAction(
             label: 'Ok',
             onPressed: () {

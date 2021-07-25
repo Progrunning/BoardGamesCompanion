@@ -1,25 +1,25 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
-import 'package:board_games_companion/widgets/painters/divider_painter.dart';
-import 'package:board_games_companion/extensions/date_time_extensions.dart';
 import 'package:flutter/material.dart';
 
-class CalendarCard extends StatelessWidget {
-  final DateTime _date;
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../common/styles.dart';
+import '../../extensions/date_time_extensions.dart';
+import '../painters/divider_painter.dart';
 
+class CalendarCard extends StatelessWidget {
   const CalendarCard(
     this._date, {
     Key key,
   }) : super(key: key);
 
+  final DateTime _date;
   final double _width = 64;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: _width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppTheme.defaultTextColor,
         borderRadius: BorderRadius.all(
           Radius.circular(Styles.boardGameTileImageCircularRadius),
@@ -34,19 +34,15 @@ class CalendarCard extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).accentColor,
-              borderRadius: BorderRadius.only(
-                  topLeft:
-                      Radius.circular(Styles.boardGameTileImageCircularRadius),
-                  topRight:
-                      Radius.circular(Styles.boardGameTileImageCircularRadius)),
-              boxShadow: [
-                BoxShadow(blurRadius: Styles.boardGameTileImageShadowBlur)
-              ],
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(Styles.boardGameTileImageCircularRadius),
+                  topRight: Radius.circular(Styles.boardGameTileImageCircularRadius)),
+              boxShadow: const [BoxShadow(blurRadius: Styles.boardGameTileImageShadowBlur)],
             ),
             child: Center(
               child: Text(
                 _date.toShortMonth('-'),
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppTheme.defaultTextColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -54,12 +50,11 @@ class CalendarCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: Dimensions.halfStandardSpacing),
+            padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
             child: Center(
               child: Text(
                 _date?.day?.toString() ?? '-',
-                style: TextStyle(
+                style: const TextStyle(
                     color: AppTheme.inverterTextColor,
                     fontWeight: FontWeight.bold,
                     fontSize: Dimensions.doubleExtraLargeFontSize),
@@ -73,13 +68,13 @@ class CalendarCard extends StatelessWidget {
               bottom: Dimensions.halfStandardSpacing,
             ),
             child: CustomPaint(
-              size: Size.fromHeight(1),
+              size: const Size.fromHeight(1),
               painter: DividerPainter(),
             ),
           ),
           Text(
             _date.toShortWeek('-'),
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: AppTheme.inverterTextColor,
             ),

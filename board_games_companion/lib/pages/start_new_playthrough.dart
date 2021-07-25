@@ -9,14 +9,15 @@ import '../widgets/playthrough/playthrough_no_players.dart';
 import '../widgets/playthrough/playthrough_players.dart';
 
 class StartNewPlaythroughPage extends StatefulWidget {
-  final BoardGameDetails boardGameDetails;
-  final PageController pageController;
 
   const StartNewPlaythroughPage(
     this.boardGameDetails,
     this.pageController, {
     Key key,
   }) : super(key: key);
+  
+  final BoardGameDetails boardGameDetails;
+  final PageController pageController;
 
   @override
   _StartNewPlaythroughPageState createState() =>
@@ -50,7 +51,7 @@ class _StartNewPlaythroughPageState
               pageController: widget.pageController);
         }
 
-        return PlaythroughNoPlayers();
+        return const PlaythroughNoPlayers();
       },
     );
   }

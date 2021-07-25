@@ -1,14 +1,14 @@
-import 'package:board_games_companion/services/preferences_service.dart';
-import 'package:board_games_companion/stores/board_game_details_store.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_expansion.dart';
+import '../../services/preferences_service.dart';
+import '../../stores/board_game_details_store.dart';
 import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/expansions_banner_widget.dart';
+import '../../widgets/common/loading_indicator_widget.dart';
 import 'board_game_details_page.dart';
 
 class BoardGameDetailsExpansions extends StatefulWidget {
@@ -22,12 +22,10 @@ class BoardGameDetailsExpansions extends StatefulWidget {
   final double spacingBetweenSecions;
 
   @override
-  _BoardGameDetailsExpansionsState createState() =>
-      _BoardGameDetailsExpansionsState();
+  _BoardGameDetailsExpansionsState createState() => _BoardGameDetailsExpansionsState();
 }
 
-class _BoardGameDetailsExpansionsState
-    extends State<BoardGameDetailsExpansions> {
+class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> {
   bool isExpanded = false;
 
   @override
@@ -58,7 +56,7 @@ class _BoardGameDetailsExpansionsState
                       }
                     }
 
-                    return Center(child: LoadingIndicator());
+                    return const Center(child: LoadingIndicator());
                   },
                 );
               },
@@ -87,20 +85,20 @@ class _Expansions extends StatelessWidget {
     return ExpansionTile(
       title: Text(
         'Expansions (${boardGameDetailsStore.boardGameDetails.expansions.length})',
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: Dimensions.standardFontSize,
         ),
       ),
       subtitle: Text(
         boardGameDetailsStore.boardGameDetails.expansionsOwned == 0
-            ? 'You don\'t own any expansions'
+            ? "You don't own any expansions"
             : 'You own ${boardGameDetailsStore.boardGameDetails.expansionsOwned} expansion(s)',
-        style: TextStyle(
+        style: const TextStyle(
           color: AppTheme.defaultTextColor,
           fontSize: Dimensions.smallFontSize,
         ),
       ),
-      tilePadding: EdgeInsets.symmetric(
+      tilePadding: const EdgeInsets.symmetric(
         horizontal: Dimensions.standardSpacing,
       ),
       initiallyExpanded: initiallyExpanded,
@@ -111,8 +109,7 @@ class _Expansions extends StatelessWidget {
         ...List.generate(
           boardGameDetailsStore.boardGameDetails.expansions.length,
           (index) {
-            final expansion =
-                boardGameDetailsStore.boardGameDetails.expansions[index];
+            final expansion = boardGameDetailsStore.boardGameDetails.expansions[index];
 
             return ChangeNotifierProvider<BoardGamesExpansion>.value(
               value: expansion,
@@ -158,7 +155,7 @@ class _Expansion extends StatelessWidget {
                 style: AppTheme.theme.textTheme.headline3,
               ),
             ),
-            Icon(
+            const Icon(
               Icons.navigate_next,
               color: AppTheme.accentColor,
             ),

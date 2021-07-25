@@ -3,10 +3,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class AnalyticsService {
+  AnalyticsService(this._firebaseAnalytics, this._rateAndReviewService);
+
   final FirebaseAnalytics _firebaseAnalytics;
   final RateAndReviewService _rateAndReviewService;
-
-  AnalyticsService(this._firebaseAnalytics, this._rateAndReviewService);
 
   Future<void> logEvent({
     @required String name,

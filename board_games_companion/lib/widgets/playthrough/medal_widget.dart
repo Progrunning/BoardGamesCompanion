@@ -1,10 +1,11 @@
-import 'package:board_games_companion/common/enums/enums.dart';
 import 'package:flutter/material.dart';
 
-class Medal extends StatelessWidget {
-  final MedalEnum medal;
+import '../../common/enums/enums.dart';
 
+class Medal extends StatelessWidget {
   const Medal(this.medal, {Key key}) : super(key: key);
+
+  final MedalEnum medal;
 
   @override
   Widget build(BuildContext context) {

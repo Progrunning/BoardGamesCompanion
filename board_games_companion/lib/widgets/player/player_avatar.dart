@@ -38,7 +38,7 @@ class PlayerAvatar extends StatelessWidget {
       );
     }
 
-    List<Widget> stackChildren = [
+    final List<Widget> stackChildren = [
       avatarImage,
     ];
 

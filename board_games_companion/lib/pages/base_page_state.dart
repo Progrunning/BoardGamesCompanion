@@ -44,7 +44,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               Text(
                   "We apologise that we're interupting you but we would really appreciate your support.\n"),
               Text(
-                  "If you're enjoying ${Strings.AppTitle} app, would you mind taking a moment to rate it? It shouldn\'t take more than a minute.\n"),
+                  "If you're enjoying ${Strings.AppTitle} app, would you mind taking a moment to rate it? It shouldn't take more than a minute.\n"),
               Text('Thank you.'),
             ],
           ),

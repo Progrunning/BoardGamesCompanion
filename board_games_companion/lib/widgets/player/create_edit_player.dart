@@ -50,7 +50,7 @@ class CreateOrUpdatePlayer extends StatelessWidget {
           content: Text(
               'Player ${playerToAddOrUpdate.name} has been updated successfully'),
           action: SnackBarAction(
-            label: "Ok",
+            label: 'Ok',
             onPressed: () async {
               Navigator.of(context).pop();
             },

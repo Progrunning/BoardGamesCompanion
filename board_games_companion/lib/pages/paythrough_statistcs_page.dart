@@ -45,7 +45,7 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
           sliver: SliverToBoxAdapter(
             child: ChangeNotifierProvider.value(
               value: widget.boardGameDetails,
-              child: PlaythroughStatisticsDetails(),
+              child: const PlaythroughStatisticsDetails(),
             ),
           ),
           padding: const EdgeInsets.symmetric(

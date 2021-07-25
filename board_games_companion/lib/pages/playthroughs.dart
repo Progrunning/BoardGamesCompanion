@@ -32,7 +32,7 @@ class _PlaythroughsPageState extends State<PlaythroughsPage> {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           height: Dimensions.standardSpacing,
         ),
         Expanded(
@@ -57,7 +57,7 @@ class _PlaythroughsPageState extends State<PlaythroughsPage> {
                     );
                   },
                   separatorBuilder: (_, index) {
-                    return SizedBox(
+                    return const SizedBox(
                       height: Dimensions.doubleStandardSpacing,
                     );
                   },
@@ -65,13 +65,13 @@ class _PlaythroughsPageState extends State<PlaythroughsPage> {
                 );
               }
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(
+              return const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: Dimensions.doubleStandardSpacing,
                 ),
                 child: Center(
                   child: Text(
-                    'It looks like you haven\'t played this game yet',
+                    "It looks like you haven't played this game yet",
                   ),
                 ),
               );
