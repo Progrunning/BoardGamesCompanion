@@ -31,13 +31,14 @@ class _PlayersPageState extends State<PlayersPage> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return ConsumerFutureBuilder<List<Player>, PlayersStore>(
       future: playerStore.loadPlayers(),
       success: (context, PlayersStore store) {
         if (store.players?.isEmpty ?? true) {
-          return Padding(
-            padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+          return const Padding(
+            padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
             child: Center(
               child: Text('It looks empty here, try adding a new player'),
             ),
@@ -59,8 +60,7 @@ class _PlayersPageState extends State<PlayersPage> {
                   final player = store.players[index];
                   return PlayerGridItem(
                     player,
-                    topRightCornerActionWidget:
-                        _buildTopRightCornerAction(context, player),
+                    topRightCornerActionWidget: _buildTopRightCornerAction(context, player),
                     onTap: () async {
                       await _navigateToCreateOrEditPlayer(context, player);
                     },
@@ -74,8 +74,7 @@ class _PlayersPageState extends State<PlayersPage> {
     );
   }
 
-  Future<void> _navigateToCreateOrEditPlayer(
-      BuildContext context, Player player) async {
+  Future<void> _navigateToCreateOrEditPlayer(BuildContext context, Player player) async {
     await NavigatorHelper.navigateToCreatePlayerPage(
       context,
       player: player,
@@ -83,11 +82,10 @@ class _PlayersPageState extends State<PlayersPage> {
   }
 
   // TODO MK Refactor - don't use methods to create UI elements
-  Widget _buildTopRightCornerAction(BuildContext context, Player player) =>
-      Align(
+  Widget _buildTopRightCornerAction(BuildContext context, Player player) => Align(
         alignment: Alignment.topRight,
         child: CustomIconButton(
-          Icon(
+          const Icon(
             Icons.edit,
             size: Dimensions.defaultButtonIconSize,
             color: AppTheme.defaultTextColor,

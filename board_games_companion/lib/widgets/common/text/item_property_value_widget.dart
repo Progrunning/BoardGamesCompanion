@@ -1,19 +1,20 @@
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
-class ItemPropertyValue extends StatelessWidget {
-  final String value;
+import '../../../common/dimensions.dart';
 
+class ItemPropertyValue extends StatelessWidget {
   const ItemPropertyValue(
     this.value, {
     Key key,
   }) : super(key: key);
 
+  final String value;
+
   @override
   Widget build(BuildContext context) {
     return Text(
       value ?? '',
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: Dimensions.mediumFontSize,
       ),
     );

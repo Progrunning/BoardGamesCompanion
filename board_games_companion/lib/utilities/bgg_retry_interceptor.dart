@@ -2,14 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 class RetryInterceptor extends Interceptor {
-  static const int _retryStatusCode = 202;
-  static const int _retryNumber = 5;
-  static const Duration _retryInterval = const Duration(milliseconds: 500);
-
   RetryInterceptor({
     @required this.dio,
     this.retryNumber = _retryNumber,
   });
+
+  static const int _retryStatusCode = 202;
+  static const int _retryNumber = 5;
+  static const Duration _retryInterval = Duration(milliseconds: 500);
 
   final Dio dio;
   int retryNumber;
@@ -32,10 +32,5 @@ class RetryInterceptor extends Interceptor {
     }
 
     return super.onResponse(response);
-  }
-
-  @override
-  onError(DioError err) async {
-    return super.onError(err);
   }
 }

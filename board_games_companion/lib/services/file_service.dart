@@ -9,14 +9,12 @@ class FileService {
       {bool overrideExistingFile = false}) async {
     try {
       final fileContent = await pickedFile.readAsBytes();
-      File avatarImageToSave = await _retrieveDocumentsFile(fileName);
+      final avatarImageToSave = await _retrieveDocumentsFile(fileName);
       if (!overrideExistingFile && await avatarImageToSave.exists()) {
-        throw new FileSystemException(
-            'Can\'t save file $fileName because it already exists');
+        throw FileSystemException("Can't save file $fileName because it already exists");
       }
 
-      final savedAvatarImage =
-          await avatarImageToSave.writeAsBytes(fileContent);
+      final savedAvatarImage = await avatarImageToSave.writeAsBytes(fileContent);
 
       return savedAvatarImage;
     } catch (e, stack) {
@@ -59,8 +57,7 @@ class FileService {
   }
 
   Future<String> createDocumentsFilePath(String fileName) async {
-    final documentsDirectory =
-        await path_provider.getApplicationDocumentsDirectory();
+    final documentsDirectory = await path_provider.getApplicationDocumentsDirectory();
     return '${documentsDirectory.path}/$fileName';
   }
 

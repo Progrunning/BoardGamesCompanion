@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier> extends StatelessWidget {
 
-  ConsumerFutureBuilder({
+  const ConsumerFutureBuilder({
     @required this.future,
     @required this.success,
     this.loading,

@@ -40,7 +40,7 @@ class BoardGameImage extends StatelessWidget {
           ),
         ),
         fit: BoxFit.fitWidth,
-        placeholder: (context, url) => LoadingIndicator(),
+        placeholder: (context, url) => const LoadingIndicator(),
         errorWidget: (context, url, error) {
           return ConstrainedBox(
             constraints: BoxConstraints(minHeight: minImageHeight),

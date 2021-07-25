@@ -139,7 +139,7 @@ class PlayerScore extends StatelessWidget {
           ),
         ),
         if (editMode)
-          SizedBox(
+          const SizedBox(
             height: Dimensions.standardSpacing,
           ),
         if (editMode)

@@ -22,12 +22,10 @@ class PlayerAvatarSubtitle extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              const Radius.circular(Styles.defaultCornerRadius),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(Styles.defaultCornerRadius),
             ),
-            color: Theme.of(context)
-                .accentColor
-                .withAlpha(Styles.opacity70Percent),
+            color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
           ),
           child: Padding(
             padding: const EdgeInsets.all(
@@ -35,7 +33,7 @@ class PlayerAvatarSubtitle extends StatelessWidget {
             ),
             child: Text(
               player?.name ?? '',
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppTheme.defaultTextColor,
               ),
             ),

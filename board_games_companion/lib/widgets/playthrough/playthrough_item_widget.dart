@@ -1,33 +1,34 @@
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums/enums.dart';
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/services/score_service.dart';
-import 'package:board_games_companion/stores/playthrough_duration_store.dart';
-import 'package:board_games_companion/stores/playthrough_store.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
-import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
-import 'package:board_games_companion/widgets/common/panel_container_widget.dart';
-import 'package:board_games_companion/widgets/player/scores/player_score_widget.dart';
-import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
-import 'package:board_games_companion/widgets/playthrough/playthrough_item_detail_widget.dart';
-import 'package:board_games_companion/extensions/int_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:board_games_companion/extensions/player_score_extensions.dart';
+
+import '../../common/dimensions.dart';
+import '../../common/enums/enums.dart';
+import '../../common/enums/playthrough_status.dart';
+import '../../extensions/int_extensions.dart';
+import '../../extensions/player_score_extensions.dart';
+import '../../models/hive/playthrough.dart';
+import '../../services/player_service.dart';
+import '../../services/score_service.dart';
+import '../../stores/playthrough_duration_store.dart';
+import '../../stores/playthrough_store.dart';
+import '../../stores/playthroughs_store.dart';
+import '../common/generic_error_message_widget.dart';
+import '../common/icon_and_text_button.dart';
+import '../common/loading_indicator_widget.dart';
+import '../common/panel_container_widget.dart';
+import '../player/scores/player_score_widget.dart';
+import 'calendar_card.dart';
+import 'playthrough_item_detail_widget.dart';
 
 class PlaythroughItem extends StatelessWidget {
-  final Playthrough _playthrough;
-  final int _playthroughNumber;
-
   const PlaythroughItem(
     this._playthrough,
     this._playthroughNumber, {
     Key key,
   }) : super(key: key);
+
+  final Playthrough _playthrough;
+  final int _playthroughNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,7 @@ class PlaythroughItem extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           CalendarCard(store.playthrough.startDate),
-                          SizedBox(
+                          const SizedBox(
                             height: Dimensions.standardSpacing,
                           ),
                           Expanded(
@@ -72,14 +73,14 @@ class PlaythroughItem extends StatelessWidget {
                                   store.daysSinceStart?.toString(),
                                   'day(s) ago',
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: Dimensions.standardSpacing,
                                 ),
                                 PlaythroughItemDetail(
                                   '$_playthroughNumber${_playthroughNumber.toOrdinalAbbreviations()}',
                                   'game',
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: Dimensions.standardSpacing,
                                 ),
                                 ChangeNotifierProvider(
@@ -98,7 +99,7 @@ class PlaythroughItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: Dimensions.doubleStandardSpacing,
                       ),
                       Expanded(
@@ -110,7 +111,7 @@ class PlaythroughItem extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: store.playerScores?.length ?? 0,
                                 separatorBuilder: (context, index) {
-                                  return SizedBox(
+                                  return const SizedBox(
                                     width: Dimensions.doubleStandardSpacing,
                                   );
                                 },
@@ -151,12 +152,12 @@ class PlaythroughItem extends StatelessWidget {
                     ],
                   );
                 } else if (store.loadDataState == LoadDataState.Error) {
-                  return Center(
+                  return const Center(
                     child: GenericErrorMessage(),
                   );
                 }
 
-                return Center(
+                return const Center(
                   child: LoadingIndicator(),
                 );
               },
