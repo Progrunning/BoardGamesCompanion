@@ -73,10 +73,11 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
       return CollectionSyncResult();
     }
-
+    
     final collectionSyncResult = await _boardGameGeekService.syncCollection(username);
     if (collectionSyncResult.isSuccess) {
       if (collectionSyncResult.data?.isEmpty ?? true) {
+        // TODO Check what's going on here? Would that mean that if there were some games in different collections before sync they would be deleted?
         storageBox.clear();
       } else {
         final syncedCollectionMap = <String, BoardGameDetails>{
