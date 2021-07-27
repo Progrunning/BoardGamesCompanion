@@ -218,6 +218,19 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  // MK Flag to indicate that the board game got synced from BGG
+  //    This is important when removing BGG's user account (only these games will be removed)
+  bool _isBggSynced;
+  @HiveField(27)
+  bool get isBggSynced => _isBggSynced ?? false;
+  @HiveField(27)
+  set isBggSynced(bool value) {
+    if (_isBggSynced != value) {
+      _isBggSynced = value;
+      notifyListeners();
+    }
+  }
+
   String get playtimeFormatted {
     if (_minPlaytime == _maxPlaytime) {
       return '$minPlaytime';

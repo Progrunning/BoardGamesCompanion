@@ -11,14 +11,14 @@ import '../widgets/common/cunsumer_future_builder_widget.dart';
 import '../widgets/playthrough/playthrough_item_widget.dart';
 
 class PlaythroughsPage extends StatefulWidget {
-  final BoardGameDetails boardGameDetails;
-  final PlaythroughsStore playthroughsStore;
-
   const PlaythroughsPage(
     this.boardGameDetails,
     this.playthroughsStore, {
     Key key,
   }) : super(key: key);
+
+  final BoardGameDetails boardGameDetails;
+  final PlaythroughsStore playthroughsStore;
 
   @override
   _PlaythroughsPageState createState() => _PlaythroughsPageState();
@@ -37,18 +37,16 @@ class _PlaythroughsPageState extends State<PlaythroughsPage> {
         ),
         Expanded(
           child: ConsumerFutureBuilder<List<Playthrough>, PlaythroughsStore>(
-            future: widget.playthroughsStore
-                .loadPlaythroughs(widget.boardGameDetails),
+            future: widget.playthroughsStore.loadPlaythroughs(widget.boardGameDetails),
             success: (_, PlaythroughsStore store) {
               final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
               if (hasPlaythroughs) {
-                store.playthroughs
-                    .sort((a, b) => b.startDate?.compareTo(a.startDate));
+                store.playthroughs.sort((a, b) => b.startDate?.compareTo(a.startDate));
                 return ListView.separated(
                   itemBuilder: (_, index) {
                     return SizedBox(
-                      height: math.max(_maxPlaythroughItemHeight,
-                          MediaQuery.of(context).size.height / 3),
+                      height: math.max(
+                          _maxPlaythroughItemHeight, MediaQuery.of(context).size.height / 3),
                       child: PlaythroughItem(
                         store.playthroughs[index],
                         store.playthroughs.length - index,
