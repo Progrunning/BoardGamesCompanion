@@ -36,9 +36,10 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..commentsNumber = fields[19] as int
       ..lastModified = fields[21] as DateTime
       ..isExpansion = fields[23] as bool
-      ..isInCollection = fields[24] as bool
+      ..isOwned = fields[24] as bool
       ..isOnWishlist = fields[25] as bool
-      ..isPlayed = fields[26] as bool
+      ..isFriends = fields[26] as bool
+      ..isBggSynced = fields[27] as bool
       ..id = fields[0] as String
       ..name = fields[1] as String
       ..thumbnailUrl = fields[2] as String
@@ -49,7 +50,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
   @override
   void write(BinaryWriter writer, BoardGameDetails obj) {
     writer
-      ..writeByte(27)
+      ..writeByte(28)
       ..writeByte(7)
       ..write(obj.categories)
       ..writeByte(16)
@@ -89,11 +90,13 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..writeByte(23)
       ..write(obj.isExpansion)
       ..writeByte(24)
-      ..write(obj.isInCollection)
+      ..write(obj.isOwned)
       ..writeByte(25)
       ..write(obj.isOnWishlist)
       ..writeByte(26)
-      ..write(obj.isPlayed)
+      ..write(obj.isFriends)
+      ..writeByte(27)
+      ..write(obj.isBggSynced)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)

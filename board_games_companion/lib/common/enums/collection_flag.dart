@@ -1,6 +1,6 @@
 enum CollectionFlag {
-  Colleciton,
-  Played,
+  Owned,
+  Friends,
   Wishlist,
 }
 
@@ -13,9 +13,9 @@ extension ToString on CollectionFlag {
 extension ToInt on CollectionFlag {
   int toInt() {
     switch (this) {
-      case CollectionFlag.Colleciton:
+      case CollectionFlag.Owned:
         return 1;
-      case CollectionFlag.Played:
+      case CollectionFlag.Friends:
         return 2;
       case CollectionFlag.Wishlist:
         return 3;

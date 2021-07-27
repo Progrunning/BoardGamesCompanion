@@ -39,23 +39,21 @@ class BoardGamesStore with ChangeNotifier {
   List<BoardGameDetails> _allBoardGames;
   List<BoardGameDetails> _filteredBoardGames;
   LoadDataState _loadDataState = LoadDataState.None;
-  GamesTab _selectedTab = GamesTab.Colleciton;
+  GamesTab _selectedTab = GamesTab.Owned;
 
   LoadDataState get loadDataState => _loadDataState;
-  // MK Board games currently shown in the collection with applied filters
-  // TODO consider ranaming
   List<BoardGameDetails> get filteredBoardGames => _filteredBoardGames;
-  List<BoardGameDetails> get filteredBoardGamesInCollection =>
-      _filteredBoardGames?.where((boardGame) => boardGame.isInCollection)?.toList() ?? [];
+  List<BoardGameDetails> get filteredBoardGamesOwned =>
+      _filteredBoardGames?.where((boardGame) => boardGame.isOwned)?.toList() ?? [];
   List<BoardGameDetails> get filteredBoardGamesOnWishlist =>
       _filteredBoardGames?.where((boardGame) => boardGame.isOnWishlist)?.toList() ?? [];
-  List<BoardGameDetails> get filteredBoardGamesPlayed =>
-      _filteredBoardGames?.where((boardGame) => boardGame.isPlayed)?.toList() ?? [];
+  List<BoardGameDetails> get filteredBoardGamesFriends =>
+      _filteredBoardGames?.where((boardGame) => boardGame.isFriends)?.toList() ?? [];
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
   bool get hasBoardGames =>
       _allBoardGames?.any((boardGame) =>
-          boardGame.isInCollection || boardGame.isOnWishlist || boardGame.isPlayed) ??
+          boardGame.isOwned || boardGame.isOnWishlist || boardGame.isFriends) ??
       false;
   String get searchPhrase => _searchPhrase;
 
@@ -120,9 +118,9 @@ class BoardGamesStore with ChangeNotifier {
       existingBoardGameDetails.ranks = boardGameDetails.ranks;
       existingBoardGameDetails.lastModified = boardGameDetails.lastModified;
       existingBoardGameDetails.isExpansion = boardGameDetails.isExpansion;
-      existingBoardGameDetails.isPlayed = boardGameDetails.isPlayed;
+      existingBoardGameDetails.isFriends = boardGameDetails.isFriends;
       existingBoardGameDetails.isOnWishlist = boardGameDetails.isOnWishlist;
-      existingBoardGameDetails.isInCollection = boardGameDetails.isInCollection;
+      existingBoardGameDetails.isOwned = boardGameDetails.isOwned;
       _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
     }
 

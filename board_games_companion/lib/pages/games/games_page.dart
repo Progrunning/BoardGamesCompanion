@@ -107,11 +107,11 @@ class _Collection extends StatelessWidget {
               builder: (_) {
                 final List<BoardGameDetails> boardGames = [];
                 switch (boardGamesStore.selectedTab) {
-                  case GamesTab.Colleciton:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesInCollection);
+                  case GamesTab.Owned:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
                     break;
-                  case GamesTab.Played:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesPlayed);
+                  case GamesTab.Friends:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
                     break;
                   case GamesTab.Wishlist:
                     boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
@@ -226,14 +226,14 @@ class _AppBarState extends State<_AppBar> {
           controller: widget.topTabController,
           tabs: <Widget>[
             _TopTab(
-              'Collection',
+              'Owned',
               Icons.grid_on,
-              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Colleciton,
+              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Owned,
             ),
             _TopTab(
-              'Played',
-              Icons.sports_esports,
-              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Played,
+              'Friends',
+              Icons.group,
+              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Friends,
             ),
             _TopTab(
               'Wishlist',
