@@ -202,7 +202,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 );
 
                 await userStore.removeUser(userStore.user);
-                await boardGameStore.removeAllBoardGames();
+                await boardGameStore.removeAllBggBoardGames();
 
                 Navigator.of(context).pop();
               },

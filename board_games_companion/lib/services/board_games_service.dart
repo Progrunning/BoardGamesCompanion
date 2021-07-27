@@ -61,6 +61,18 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     await storageBox.delete(boardGameDetailsId);
   }
 
+  Future<void> removeBoardGames(List<String> boardGameDetailsIds) async {
+    if (boardGameDetailsIds?.isEmpty ?? true) {
+      return;
+    }
+
+    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+      return;
+    }
+
+    await storageBox.deleteAll(boardGameDetailsIds);
+  }
+
   Future<void> removeAllBoardGames() async {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
       return;
@@ -73,12 +85,11 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
       return CollectionSyncResult();
     }
-    
+
     final collectionSyncResult = await _boardGameGeekService.syncCollection(username);
     if (collectionSyncResult.isSuccess) {
       if (collectionSyncResult.data?.isEmpty ?? true) {
-        // TODO Check what's going on here? Would that mean that if there were some games in different collections before sync they would be deleted?
-        storageBox.clear();
+        return collectionSyncResult;
       } else {
         final syncedCollectionMap = <String, BoardGameDetails>{
           for (BoardGameDetails boardGameDetails in collectionSyncResult.data)
@@ -86,7 +97,9 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
         };
 
         final boardGamesToRemove = storageBox.values
-            ?.where((boardGameDetails) => !syncedCollectionMap.containsKey(boardGameDetails.id))
+            ?.where((boardGameDetails) =>
+                boardGameDetails.isBggSynced &&
+                !syncedCollectionMap.containsKey(boardGameDetails.id))
             ?.toList();
 
         // Remove

@@ -8,9 +8,9 @@ import 'package:board_games_companion/services/score_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class PlaythroughService extends BaseHiveService<Playthrough> {
-  final ScoreService scoreService;
-
   PlaythroughService(this.scoreService);
+  
+  final ScoreService scoreService;
 
   Future<List<Playthrough>> retrievePlaythroughs(Iterable<String> boardGameIds) async {
     if (boardGameIds?.isEmpty ?? true) {
@@ -109,6 +109,32 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     return true;
   }
 
+  Future<bool> deletePlaythroughsForGames(List<String> boardGameIds) async {
+    if ((boardGameIds?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+      return false;
+    }
+
+    final playthroughsToDelete = storageBox.values
+        .where((playthrough) => boardGameIds.contains(playthrough.boardGameId))
+        .toList();
+    if (playthroughsToDelete?.isEmpty ?? true) {
+      return false;
+    }
+
+    for (final playthroughToDelete in playthroughsToDelete) {
+      playthroughToDelete.isDeleted = true;
+    }
+
+    final Map<String, Playthrough> mappedPlaythroughs = {
+      for (final playthroughToDelete in playthroughsToDelete)
+        playthroughToDelete.id: playthroughToDelete
+    };
+
+    await storageBox.putAll(mappedPlaythroughs);
+
+    return true;
+  }
+
   Future<bool> deleteAllPlaythrough() async {
     if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return false;
@@ -121,7 +147,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
 
     for (final playthrough in playthroughs) {
       playthrough.isDeleted = true;
-    }    
+    }
 
     await storageBox.putAll(<String, Playthrough>{
       for (Playthrough playthrough in playthroughs) playthrough.id: playthrough

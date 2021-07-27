@@ -26,11 +26,11 @@ class PlayerService extends BaseHiveService<Player> {
             !(player.isDeleted ?? false) && (playerIds?.contains(player.id) ?? true))
         ?.toList();
 
-    players.forEach((Player player) async {
+    for (final Player player in players) {
       if (player.avatarFileName?.isNotEmpty ?? false) {
         player.avatarImageUri = await fileService.createDocumentsFilePath(player.avatarFileName);
       }
-    });
+    }
 
     return players;
   }

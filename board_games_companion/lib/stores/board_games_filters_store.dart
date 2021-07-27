@@ -49,9 +49,9 @@ class BoardGamesFiltersStore with ChangeNotifier {
   }
 
   void _updateSortBy() {
-    _sortBy.forEach((sb) {
+    for (final sb in _sortBy) {
       sb.selected = false;
-    });
+    }
 
     final selectedSortBy =
         _sortBy.firstWhere((sb) => sb.name == _collectionFilters?.sortBy?.name, orElse: () {
@@ -74,7 +74,9 @@ class BoardGamesFiltersStore with ChangeNotifier {
       }
     }
 
-    _sortBy.forEach((sb) => sb.selected = false);
+    for (final sb in _sortBy) {
+      sb.selected = false;
+    }
     sortBy.selected = true;
 
     if (_collectionFilters == null) {

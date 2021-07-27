@@ -55,7 +55,7 @@ import 'services/preferences_service.dart';
 
 PreferencesService _preferencesService = PreferencesService();
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();

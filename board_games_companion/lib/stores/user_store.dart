@@ -6,6 +6,11 @@ import '../services/analytics_service.dart';
 import '../services/user_service.dart';
 
 class UserStore with ChangeNotifier {
+  UserStore(
+    this._userService,
+    this._analyticsService,
+  );
+
   final UserService _userService;
   final AnalyticsService _analyticsService;
 
@@ -21,11 +26,6 @@ class UserStore with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  UserStore(
-    this._userService,
-    this._analyticsService,
-  );
 
   Future<void> loadUser() async {
     try {
