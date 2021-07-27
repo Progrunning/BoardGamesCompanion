@@ -13,7 +13,7 @@ class CalendarCard extends StatelessWidget {
   }) : super(key: key);
 
   final DateTime _date;
-  final double _width = 64;
+  double get _width => 64;
 
   @override
   Widget build(BuildContext context) {

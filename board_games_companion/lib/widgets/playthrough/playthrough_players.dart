@@ -20,7 +20,7 @@ class PlaythroughPlayers extends StatelessWidget {
     @required this.pageController,
   }) : super(key: key);
 
-  final int _numberOfPlayerColumns = 3;
+  int get _numberOfPlayerColumns => 3;
   final List<PlaythroughPlayer> playthroughPlayers;
   final BoardGameDetails boardGameDetails;
   final PageController pageController;
@@ -59,8 +59,7 @@ class PlaythroughPlayers extends StatelessWidget {
                   Positioned.fill(
                     child: StackRippleEffect(
                       onTap: () {
-                        playthroughPlayers[index].isChecked =
-                            !playthroughPlayers[index].isChecked;
+                        playthroughPlayers[index].isChecked = !playthroughPlayers[index].isChecked;
                       },
                     ),
                   ),
@@ -94,16 +93,14 @@ class PlaythroughPlayers extends StatelessWidget {
       listen: false,
     );
 
-    final selectedPlaythoughPlayers = startPlaythroughStore.playthroughPlayers
-        ?.where((pp) => pp.isChecked)
-        ?.toList();
+    final selectedPlaythoughPlayers =
+        startPlaythroughStore.playthroughPlayers?.where((pp) => pp.isChecked)?.toList();
 
     final scaffold = Scaffold.of(context);
     if (selectedPlaythoughPlayers?.isEmpty ?? true) {
       scaffold.showSnackBar(
         SnackBar(
-          content:
-              const Text('You need to select at least one player to start a game'),
+          content: const Text('You need to select at least one player to start a game'),
           action: SnackBarAction(
             label: 'Ok',
             onPressed: () {
@@ -125,7 +122,7 @@ class PlaythroughPlayers extends StatelessWidget {
       boardGameDetails.id,
       selectedPlaythoughPlayers,
     );
-    
+
     if (newPlaythrough == null) {
       scaffold.showSnackBar(
         SnackBar(
