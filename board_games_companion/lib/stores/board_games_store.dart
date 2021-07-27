@@ -194,19 +194,23 @@ class BoardGamesStore with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeAllBoardGames() async {
+  Future<void> removeAllBggBoardGames() async {
     try {
-      await _boardGamesService.removeAllBoardGames();
-      await _playthroughService.deleteAllPlaythrough();
+      final bggSyncedBoardGames = _allBoardGames
+          .where((boardGame) => boardGame.isBggSynced)
+          .map((boardGame) => boardGame.id)
+          .toList();
+      await _boardGamesService.removeBoardGames(bggSyncedBoardGames);
+      await _playthroughService.deletePlaythroughsForGames(bggSyncedBoardGames);
+
+      _filteredBoardGames.removeWhere((boardGame) => boardGame.isBggSynced);
+      _allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced);
+
+      notifyListeners();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
-
-    _filteredBoardGames.clear();
-    _allBoardGames.clear();
-
-    notifyListeners();
   }
 
   Future<CollectionSyncResult> syncCollection(String username) async {

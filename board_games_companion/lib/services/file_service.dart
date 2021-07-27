@@ -10,7 +10,7 @@ class FileService {
     try {
       final fileContent = await pickedFile.readAsBytes();
       final avatarImageToSave = await _retrieveDocumentsFile(fileName);
-      if (!overrideExistingFile && await avatarImageToSave.exists()) {
+      if (!overrideExistingFile && avatarImageToSave.existsSync()) {
         throw FileSystemException("Can't save file $fileName because it already exists");
       }
 
@@ -48,7 +48,7 @@ class FileService {
       }
 
       final existingFile = File(fileUri);
-      return await existingFile.exists();
+      return existingFile.existsSync();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
