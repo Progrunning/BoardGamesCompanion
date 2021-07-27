@@ -351,7 +351,7 @@ class BoardGamesGeekService {
 
       // TODO Additionally mark every board game that was sync'd with a flag 'syncd from BGG' to make sure sync won't affect any existing board games in different collections
       boardGame.isBggSynced = true;
-      boardGame.isInCollection = true;
+      boardGame.isOwned = true;
 
       boardGames.add(boardGame);
     }

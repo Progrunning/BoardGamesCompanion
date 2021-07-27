@@ -119,8 +119,8 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
 
   Future<void> _migrateToMultipleCollections(List<BoardGameDetails> boardGames) async {
     for (final boardGame in boardGames.where((boardGame) =>
-        !boardGame.isInCollection && !boardGame.isOnWishlist && !boardGame.isPlayed)) {
-      boardGame.isInCollection = true;
+        !boardGame.isOwned && !boardGame.isOnWishlist && !boardGame.isFriends)) {
+      boardGame.isOwned = true;
       await addOrUpdateBoardGame(boardGame);
     }
 

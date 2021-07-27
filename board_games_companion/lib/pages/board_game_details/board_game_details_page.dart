@@ -218,9 +218,9 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
                       <Widget>[
                         const _BodySectionHeader(
                           title: 'Stats',
-                          secondaryTitle: 'Add to',
+                          secondaryTitle: 'Collection',
                         ),
-                        _Stats(
+                        _StatsAndCollections(
                           boardGameDetailsStore: boardGameDetailsStore,
                         ),
                         const SizedBox(
@@ -629,8 +629,8 @@ class _CreditsItem extends StatelessWidget {
   }
 }
 
-class _Stats extends StatelessWidget {
-  const _Stats({
+class _StatsAndCollections extends StatelessWidget {
+  const _StatsAndCollections({
     Key key,
     @required this.boardGameDetailsStore,
   }) : super(key: key);
@@ -714,14 +714,14 @@ class _CollectionFlags extends StatelessWidget {
                 disabledBorderColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 isSelected: [
-                  boardGameDetailsProvider.isPlayed,
+                  boardGameDetailsProvider.isFriends,
                   boardGameDetailsProvider.isOnWishlist
                 ],
                 children: <Widget>[
                   _CollectionFlag(
-                    icon: Icons.sports_esports,
-                    title: 'Played',
-                    isSelected: boardGameDetailsProvider.isPlayed,
+                    icon: Icons.group,
+                    title: 'Friends',
+                    isSelected: boardGameDetailsProvider.isFriends,
                   ),
                   _CollectionFlag(
                     icon: Icons.card_giftcard,
@@ -729,12 +729,10 @@ class _CollectionFlags extends StatelessWidget {
                     isSelected: boardGameDetailsProvider.isOnWishlist,
                   ),
                 ],
-                onPressed: boardGameDetailsProvider.isInCollection
-                    ? null
-                    : (int index) async {
-                        await boardGameDetailsStore.toggleCollectionFlag(
-                            index == 0 ? CollectionFlag.Played : CollectionFlag.Wishlist);
-                      },
+                onPressed: (int index) async {
+                  await boardGameDetailsStore.toggleCollectionFlag(
+                      index == 0 ? CollectionFlag.Friends : CollectionFlag.Wishlist);
+                },
               ),
               ToggleButtons(
                 splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
@@ -742,16 +740,16 @@ class _CollectionFlags extends StatelessWidget {
                 selectedColor: Colors.white,
                 selectedBorderColor: Colors.transparent,
                 borderColor: Colors.transparent,
-                isSelected: [boardGameDetailsProvider.isInCollection],
+                isSelected: [boardGameDetailsProvider.isOwned],
                 children: <Widget>[
                   _CollectionFlag(
                     icon: Icons.grid_on,
-                    title: 'Collection',
-                    isSelected: boardGameDetailsProvider.isInCollection,
+                    title: 'Owned',
+                    isSelected: boardGameDetailsProvider.isOwned,
                   ),
                 ],
                 onPressed: (int index) async {
-                  await boardGameDetailsStore.toggleCollectionFlag(CollectionFlag.Colleciton);
+                  await boardGameDetailsStore.toggleCollectionFlag(CollectionFlag.Owned);
                 },
               ),
             ],

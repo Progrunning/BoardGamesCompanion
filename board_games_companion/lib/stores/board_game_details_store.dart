@@ -44,9 +44,9 @@ class BoardGameDetailsStore with ChangeNotifier {
 
       final existingBoardGameDetails = _boardGamesStore.retrieveBoardGame(boardGameId);
       if (existingBoardGameDetails != null) {
-        boardGameDetails.isPlayed = existingBoardGameDetails.isPlayed;
+        boardGameDetails.isFriends = existingBoardGameDetails.isFriends;
         boardGameDetails.isOnWishlist = existingBoardGameDetails.isOnWishlist;
-        boardGameDetails.isInCollection = existingBoardGameDetails.isInCollection;
+        boardGameDetails.isOwned = existingBoardGameDetails.isOwned;
       }
 
       await _boardGamesStore.updateDetails(boardGameDetails);
@@ -72,17 +72,23 @@ class BoardGameDetailsStore with ChangeNotifier {
 
   Future<void> toggleCollectionFlag(CollectionFlag collectionFlag) async {
     switch (collectionFlag) {
-      case CollectionFlag.Colleciton:
-        _boardGameDetails.isInCollection = !_boardGameDetails.isInCollection;
-        if (_boardGameDetails.isInCollection) {
+      case CollectionFlag.Owned:
+        _boardGameDetails.isOwned = !_boardGameDetails.isOwned;
+        if (_boardGameDetails.isOwned) {
           _boardGameDetails.isOnWishlist = false;
-          _boardGameDetails.isPlayed = false;
+          _boardGameDetails.isFriends = false;
         }
         break;
-      case CollectionFlag.Played:
-        _boardGameDetails.isPlayed = !_boardGameDetails.isPlayed;
+      case CollectionFlag.Friends:
+        if (_boardGameDetails.isOwned) {
+          _boardGameDetails.isOwned = false;
+        }
+        _boardGameDetails.isFriends = !_boardGameDetails.isFriends;
         break;
       case CollectionFlag.Wishlist:
+        if (_boardGameDetails.isOwned) {
+          _boardGameDetails.isOwned = false;
+        }
         _boardGameDetails.isOnWishlist = !_boardGameDetails.isOnWishlist;
         break;
     }
