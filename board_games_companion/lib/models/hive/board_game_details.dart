@@ -185,13 +185,13 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
-  bool _isInCollection;
+  bool _isOwned;
   @HiveField(24)
-  bool get isInCollection => _isInCollection ?? false;
+  bool get isOwned => _isOwned ?? false;
   @HiveField(24)
-  set isInCollection(bool value) {
-    if (_isInCollection != value) {
-      _isInCollection = value;
+  set isOwned(bool value) {
+    if (_isOwned != value) {
+      _isOwned = value;
       notifyListeners();
     }
   }
@@ -207,13 +207,13 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
-  bool _isPlayed;
+  bool _isFriends;
   @HiveField(26)
-  bool get isPlayed => _isPlayed ?? false;
+  bool get isFriends => _isFriends ?? false;
   @HiveField(26)
-  set isPlayed(bool value) {
-    if (_isPlayed != value) {
-      _isPlayed = value;
+  set isFriends(bool value) {
+    if (_isFriends != value) {
+      _isFriends = value;
       notifyListeners();
     }
   }
