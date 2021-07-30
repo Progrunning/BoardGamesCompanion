@@ -19,7 +19,7 @@ class HotBoardGamesStore with ChangeNotifier {
     }
 
     try {
-      _hotBoardGames = await _boardGameGeekService.retrieveHot();
+      _hotBoardGames = await _boardGameGeekService.getHot();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

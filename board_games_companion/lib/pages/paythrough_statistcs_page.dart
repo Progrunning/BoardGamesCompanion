@@ -1,7 +1,7 @@
 import 'package:board_games_companion/common/animation_tags.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums/collection_flag.dart';
+import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/board_games/board_game_image.dart';
 import 'package:board_games_companion/widgets/board_games/playthrough_statistics_details_widget.dart';
@@ -11,12 +11,12 @@ import 'package:provider/provider.dart';
 class PlaythroughStatistcsPage extends StatefulWidget {
   const PlaythroughStatistcsPage({
     @required this.boardGameDetails,
-    @required this.collectionFlag,
+    @required this.collectionType,
     Key key,
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;
-  final CollectionFlag collectionFlag;
+  final CollectionType collectionType;
 
   @override
   _PlaythroughStatistcsPageState createState() => _PlaythroughStatistcsPageState();
@@ -37,7 +37,7 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
             background: BoardGameImage(
               widget.boardGameDetails,
               minImageHeight: Constants.BoardGameDetailsImageHeight,
-              heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionFlag}',
+              heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionType}',
             ),
           ),
         ),

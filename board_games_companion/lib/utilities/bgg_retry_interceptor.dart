@@ -4,11 +4,10 @@ import 'package:meta/meta.dart';
 class RetryInterceptor extends Interceptor {
   RetryInterceptor({
     @required this.dio,
-    this.retryNumber = _retryNumber,
+    this.retryNumber = 5,
   });
 
   static const int _retryStatusCode = 202;
-  static const int _retryNumber = 5;
   static const Duration _retryInterval = Duration(milliseconds: 500);
 
   final Dio dio;

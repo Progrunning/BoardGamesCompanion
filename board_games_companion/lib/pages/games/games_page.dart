@@ -7,7 +7,7 @@ import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/collection_flag.dart';
+import '../../common/enums/collection_type.dart';
 import '../../common/enums/enums.dart';
 import '../../common/enums/games_tab.dart';
 import '../../common/styles.dart';
@@ -319,7 +319,7 @@ class _Grid extends StatelessWidget {
   }) : super(key: key);
 
   final List<BoardGameDetails> boardGames;
-  final CollectionFlag collectionFlag;
+  final CollectionType collectionFlag;
 
   @override
   Widget build(BuildContext context) {
