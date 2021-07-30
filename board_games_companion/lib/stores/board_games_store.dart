@@ -52,8 +52,8 @@ class BoardGamesStore with ChangeNotifier {
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
   bool get hasBoardGames =>
-      _allBoardGames?.any((boardGame) =>
-          boardGame.isOwned || boardGame.isOnWishlist || boardGame.isFriends) ??
+      _allBoardGames?.any(
+          (boardGame) => boardGame.isOwned || boardGame.isOnWishlist || boardGame.isFriends) ??
       false;
   String get searchPhrase => _searchPhrase;
 
@@ -228,7 +228,7 @@ class BoardGamesStore with ChangeNotifier {
     }
 
     _loadDataState = LoadDataState.Loaded;
-    notifyListeners();
+    applyFilters();
 
     return syncResult;
   }

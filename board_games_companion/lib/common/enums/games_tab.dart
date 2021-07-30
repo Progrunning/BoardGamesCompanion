@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums/collection_flag.dart';
+import 'package:board_games_companion/common/enums/collection_type.dart';
 
 enum GamesTab {
   Owned,
@@ -22,19 +22,19 @@ extension ToGamesTab on int {
   }
 }
 
-extension ToCollectionFlag on GamesTab {
-  CollectionFlag toCollectionFlag() {
+extension ToCollectionType on GamesTab {
+  CollectionType toCollectionFlag() {
     switch (this) {
       case GamesTab.Owned:
-        return CollectionFlag.Owned;
+        return CollectionType.Owned;
       case GamesTab.Friends:
-        return CollectionFlag.Friends;
+        return CollectionType.Friends;
         break;
       case GamesTab.Wishlist:
-        return CollectionFlag.Wishlist;
+        return CollectionType.Wishlist;
         break;
     }
 
-    return CollectionFlag.Owned;
+    return CollectionType.Owned;
   }
 }

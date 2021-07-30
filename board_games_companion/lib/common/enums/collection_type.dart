@@ -1,23 +1,23 @@
-enum CollectionFlag {
+enum CollectionType {
   Owned,
   Friends,
   Wishlist,
 }
 
-extension ToString on CollectionFlag {
+extension ToString on CollectionType {
   String toHumandReadableText() {
     return toString().split('.').last;
   }
 }
 
-extension ToInt on CollectionFlag {
+extension ToInt on CollectionType {
   int toInt() {
     switch (this) {
-      case CollectionFlag.Owned:
+      case CollectionType.Owned:
         return 1;
-      case CollectionFlag.Friends:
+      case CollectionType.Friends:
         return 2;
-      case CollectionFlag.Wishlist:
+      case CollectionType.Wishlist:
         return 3;
         break;
       default:
