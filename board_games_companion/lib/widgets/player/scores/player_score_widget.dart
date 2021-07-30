@@ -1,19 +1,21 @@
-import 'package:board_games_companion/common/animation_tags.dart';
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
-import 'package:board_games_companion/stores/playthrough_store.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
-import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
-import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
-import 'package:board_games_companion/widgets/player/player_avatar.dart';
-import 'package:board_games_companion/widgets/player/player_avatar_subtitle_widget.dart';
-import 'package:board_games_companion/widgets/player/scores/player_score_edit_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:board_games_companion/models/player_score.dart'
     as player_score_model;
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../common/animation_tags.dart';
+import '../../../common/app_theme.dart';
+import '../../../common/dimensions.dart';
+import '../../../common/styles.dart';
+import '../../../stores/playthrough_store.dart';
+import '../../../stores/playthroughs_store.dart';
+import '../../common/default_icon.dart';
+import '../../common/icon_and_text_button.dart';
+import '../../common/rank_ribbon.dart';
+import '../../common/shadow_box_widget.dart';
+import '../player_avatar.dart';
+import '../player_avatar_subtitle_widget.dart';
+import 'player_score_edit_widget.dart';
 
 class PlayerScore extends StatelessWidget {
 
@@ -124,7 +126,7 @@ class PlayerScore extends StatelessWidget {
                             Align(
                               alignment: Alignment.center,
                               child: IconAndTextButton(
-                                icon: Icons.edit,
+                                icon: const DefaultIcon(Icons.edit),
                                 horizontalPadding: Dimensions.standardSpacing,
                                 onPressed: () => _showCreateOrEditScoreDialog(
                                     context, store),
@@ -147,7 +149,7 @@ class PlayerScore extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconAndTextButton(
-                icon: Icons.cancel,
+                icon: const DefaultIcon(Icons.cancel),                
                 title: 'Cancel',
                 backgroundColor: Colors.red,
                 onPressed: () => Navigator.pop(context),
@@ -156,7 +158,7 @@ class PlayerScore extends StatelessWidget {
                 width: Dimensions.standardSpacing,
               ),
               IconAndTextButton(
-                icon: Icons.save,
+                icon: const DefaultIcon(Icons.save),                
                 title: 'Save',
                 onPressed: () => _updatePlayerScore(
                   playerScoreController.value.text,

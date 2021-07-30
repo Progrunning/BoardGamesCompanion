@@ -1,7 +1,9 @@
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/hive/player.dart';
+import '../../stores/players_store.dart';
+import '../common/default_icon.dart';
+import '../common/icon_and_text_button.dart';
 
 class CreateOrUpdatePlayer extends StatelessWidget {
   const CreateOrUpdatePlayer({
@@ -28,7 +30,7 @@ class CreateOrUpdatePlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconAndTextButton(
       title: _isEditMode ? 'Update' : 'Create',
-      icon: Icons.create,
+      icon: const DefaultIcon(Icons.create),
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           _player.name = _nameController.text;          

@@ -1,9 +1,11 @@
-import 'package:board_games_companion/stores/board_game_details_in_collection_store.dart';
-import 'package:board_games_companion/stores/board_game_details_store.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../stores/board_game_details_in_collection_store.dart';
+import '../../stores/board_game_details_store.dart';
+import '../../stores/board_games_store.dart';
+import '../common/default_icon.dart';
+import '../common/icon_and_text_button.dart';
 
 class BoardGameDetailFloatingActions extends StatelessWidget {
   const BoardGameDetailFloatingActions({
@@ -52,7 +54,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
                   boardGameDetailsInCollectionStore,
                   boardGamesStore,
                 ),
-                icon: Icons.remove_circle_outline,
+                icon: const DefaultIcon(Icons.remove_circle_outline),
                 backgroundColor: Colors.red,
               );
             } else {
@@ -62,7 +64,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
                   boardGamesStore,
                   context,
                 ),
-                icon: Icons.add,
+                icon: const DefaultIcon(Icons.add),
               );
             }
           },

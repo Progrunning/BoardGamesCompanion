@@ -9,6 +9,7 @@ import '../stores/home_store.dart';
 import '../stores/user_store.dart';
 import '../utilities/navigator_helper.dart';
 import '../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
+import '../widgets/common/default_icon.dart';
 import '../widgets/common/icon_and_text_button.dart';
 import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
@@ -32,7 +33,9 @@ class _HomePageState extends BasePageState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final _addPlayerButton = IconAndTextButton(
-      icon: Icons.add,
+      icon: const DefaultIcon(
+        Icons.add,
+      ),
       onPressed: () => _navigateToAddPlayerPage(context),
     );
 

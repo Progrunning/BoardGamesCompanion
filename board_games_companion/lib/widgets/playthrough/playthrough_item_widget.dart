@@ -12,6 +12,7 @@ import '../../services/score_service.dart';
 import '../../stores/playthrough_duration_store.dart';
 import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
+import '../common/default_icon.dart';
 import '../common/generic_error_message_widget.dart';
 import '../common/icon_and_text_button.dart';
 import '../common/loading_indicator_widget.dart';
@@ -128,7 +129,7 @@ class PlaythroughItem extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: IconAndTextButton(
-                                  icon: Icons.stop,
+                                  icon: const DefaultIcon(Icons.stop),                                  
                                   backgroundColor: Colors.blue,
                                   horizontalPadding: Dimensions.standardSpacing,
                                   verticalPadding: Dimensions.standardSpacing,
@@ -139,7 +140,7 @@ class PlaythroughItem extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: IconAndTextButton(
-                                  icon: Icons.delete,
+                                  icon: const DefaultIcon(Icons.delete),                                  
                                   backgroundColor: Colors.red,
                                   horizontalPadding: Dimensions.standardSpacing,
                                   verticalPadding: Dimensions.standardSpacing,

@@ -1,5 +1,3 @@
-import 'package:board_games_companion/utilities/navigator_transitions.dart';
-import 'package:board_games_companion/widgets/common/rippler_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
@@ -11,11 +9,15 @@ import '../../common/dimensions.dart';
 import '../../mixins/sync_collection.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
+import '../../utilities/navigator_transitions.dart';
 import '../../widgets/about/detail_item_widget.dart';
 import '../../widgets/about/section_title_widget.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
+import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/rippler_effect.dart';
+import '../../widgets/common/sync_collection_button.dart';
 import '../about_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -90,16 +92,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                         )
                       : Align(
                           alignment: Alignment.centerRight,
-                          child: IconAndTextButton(
-                            title: 'Sync',
-                            icon: Icons.sync,
-                            onPressed: () async {
-                              await syncCollection(
-                                context,
-                                syncController.text,
-                              );
-                            },
-                          ),
+                          child: SyncButton(usernameCallback: () => syncController.text),
                         ),
                 ),
                 const Divider(
@@ -130,7 +123,9 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 children: <Widget>[
                   IconAndTextButton(
                     title: 'Remove',
-                    icon: Icons.remove_circle_outline,
+                    icon: const DefaultIcon(
+                      Icons.remove_circle_outline,
+                    ),
                     backgroundColor: Colors.red,
                     onPressed: () async {
                       await _handleBggUserRemoval(
@@ -142,16 +137,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                   const SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
-                  IconAndTextButton(
-                    title: 'Sync',
-                    icon: Icons.sync,
-                    onPressed: () async {
-                      await syncCollection(
-                        context,
-                        userStore.user.name,
-                      );
-                    },
-                  ),
+                  SyncButton(usernameCallback: () => userStore.user.name),
                 ],
               ),
             ),

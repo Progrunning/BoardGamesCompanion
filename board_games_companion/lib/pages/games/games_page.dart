@@ -21,9 +21,11 @@ import '../../utilities/navigator_transitions.dart';
 import '../../widgets/board_games/board_game_collection_item_widget.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
+import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/sync_collection_button.dart';
 import '../board_game_playthroughs.dart';
 import 'games_filter_panel.dart';
 
@@ -462,16 +464,7 @@ class _Empty extends StatelessWidget with SyncCollection {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: IconAndTextButton(
-                title: 'Sync',
-                icon: Icons.sync,
-                onPressed: () async {
-                  await syncCollection(
-                    context,
-                    _syncController.text,
-                  );
-                },
-              ),
+              child: SyncButton(usernameCallback: () => _syncController.text),
             ),
             const SizedBox(
               height: Dimensions.standardSpacing,
@@ -529,7 +522,7 @@ class _EmptySearchResult extends StatelessWidget {
             Center(
               child: IconAndTextButton(
                 title: 'Clear search',
-                icon: Icons.clear,
+                icon: const DefaultIcon(Icons.clear),
                 onPressed: () {
                   _boardGamesStore.updateSearchResults('');
                 },
@@ -560,24 +553,78 @@ class _EmptyCollection extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text.rich(
-              TextSpan(
-                children: [
-                  const TextSpan(
-                    text: "It looks like you don't have any board games in your ",
-                  ),
-                  TextSpan(
-                    text: boardGamesStore.selectedTab.toCollectionFlag().toHumandReadableText(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+            Consumer<UserStore>(
+              builder: (_, userStore, __) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: "It looks like you don't have any board games in your ",
+                          ),
+                          TextSpan(
+                            text: boardGamesStore.selectedTab
+                                .toCollectionFlag()
+                                .toHumandReadableText(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const TextSpan(
+                            text: ' collection yet.',
+                          ),
+                          if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
+                              (userStore.user?.name?.isNotEmpty ?? false)) ...[
+                            const TextSpan(
+                              text: "\n\nIf you want to see board games from BGG's  ",
+                            ),
+                            const TextSpan(
+                              text: 'Wishlist ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'or ',
+                            ),
+                            const TextSpan(
+                              text: 'Want to Buy ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'collection, then tap the below  ',
+                            ),
+                            const TextSpan(
+                              text: 'Sync ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const TextSpan(text: 'button.'),
+                          ]
+                        ],
+                      ),
+                      textAlign: TextAlign.justify,
                     ),
-                  ),
-                  const TextSpan(
-                    text: ' collection yet.',
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.justify,
+                    if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
+                        (userStore.user?.name?.isNotEmpty ?? false)) ...[
+                      const SizedBox(
+                        height: Dimensions.doubleStandardSpacing,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: SyncButton(
+                          usernameCallback: () => userStore.user.name,
+                        ),
+                      ),
+                    ]
+                  ],
+                );
+              },
             ),
           ],
         ),

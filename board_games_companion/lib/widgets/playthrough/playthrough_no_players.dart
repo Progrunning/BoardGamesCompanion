@@ -1,7 +1,9 @@
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/utilities/navigator_helper.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/dimensions.dart';
+import '../../utilities/navigator_helper.dart';
+import '../common/default_icon.dart';
+import '../common/icon_and_text_button.dart';
 
 class PlaythroughNoPlayers extends StatelessWidget {
   const PlaythroughNoPlayers({
@@ -26,7 +28,7 @@ class PlaythroughNoPlayers extends StatelessWidget {
                   ),
                   IconAndTextButton(
                     title: 'Add Player',
-                    icon: Icons.add,
+                    icon: const DefaultIcon(Icons.add),                    
                     onPressed: () async {
                       await NavigatorHelper.navigateToCreatePlayerPage(
                         context,

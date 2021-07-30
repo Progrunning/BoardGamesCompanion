@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../utilities/widget_utilities.dart';
 
 class IconAndTextButton extends StatelessWidget {
   const IconAndTextButton({
@@ -20,7 +19,7 @@ class IconAndTextButton extends StatelessWidget {
 
   final GestureTapCallback onPressed;
 
-  final IconData icon;
+  final Widget icon;
   final String title;
   final Color backgroundColor;
   final Color rippleEffectColor;
@@ -28,38 +27,11 @@ class IconAndTextButton extends StatelessWidget {
   final double horizontalPadding;
   final double verticalPadding;
 
-  Widget _buildDivider() => title?.isNotEmpty ?? false
-      ? const Divider(
-          indent: Dimensions.halfStandardSpacing,
-        )
-      : null;
-
-  Widget _buildText() => title?.isNotEmpty ?? false
-      ? Text(
-          title,
-          style: const TextStyle(
-            color: AppTheme.defaultTextColor,
-            fontWeight: FontWeight.bold,
-          ),
-        )
-      : null;
-
   @override
   Widget build(BuildContext context) {
     final fillColor = backgroundColor ?? Theme.of(context).accentColor;
     final splashColor = rippleEffectColor ??
         fillColor.withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt());
-
-    final List<Widget> buttonElements = [
-      Icon(
-        icon,
-        color: AppTheme.defaultTextColor,
-        size: Dimensions.defaultButtonIconSize,
-      ),
-    ];
-
-    addIfNonNull(_buildDivider(), buttonElements);
-    addIfNonNull(_buildText(), buttonElements);
 
     return RawMaterialButton(
       constraints: const BoxConstraints(),
@@ -72,7 +44,21 @@ class IconAndTextButton extends StatelessWidget {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: buttonElements,
+          children: [
+            icon,
+            if (title?.isNotEmpty ?? false)
+              Text(
+                title,
+                style: const TextStyle(
+                  color: AppTheme.defaultTextColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            if (title?.isNotEmpty ?? false)
+              const Divider(
+                indent: Dimensions.halfStandardSpacing,
+              ),
+          ],
         ),
       ),
       onPressed: onPressed,
