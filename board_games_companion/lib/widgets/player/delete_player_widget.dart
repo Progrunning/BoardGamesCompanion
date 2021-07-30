@@ -1,9 +1,11 @@
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/routes.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/widgets/common/icon_and_text_button.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/dimensions.dart';
+import '../../common/routes.dart';
+import '../../models/hive/player.dart';
+import '../../stores/players_store.dart';
+import '../common/default_icon.dart';
+import '../common/icon_and_text_button.dart';
 
 class DeletePlayer extends StatelessWidget {
   const DeletePlayer({
@@ -21,7 +23,7 @@ class DeletePlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconAndTextButton(
       title: 'Delete',
-      icon: Icons.delete,
+      icon: const DefaultIcon(Icons.delete),
       backgroundColor: Colors.redAccent,
       onPressed: () async {
         await showDialog<AlertDialog>(

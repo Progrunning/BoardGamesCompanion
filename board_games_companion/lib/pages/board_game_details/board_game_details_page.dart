@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -9,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../common/enums/collection_type.dart';
 import '../../common/routes.dart';
 import '../../common/styles.dart';
 import '../../models/hive/board_game_details.dart';
@@ -18,6 +18,7 @@ import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
@@ -339,7 +340,9 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                   ),
                   IconAndTextButton(
                     title: 'Refresh',
-                    icon: Icons.refresh,
+                    icon: const DefaultIcon(
+                      Icons.refresh,
+                    ),
                     onPressed: () => _refreshBoardGameDetails(
                       boardGameId,
                       boardGameDetailsStore,
