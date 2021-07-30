@@ -17,6 +17,7 @@ import '../../stores/search_board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../utilities/navigator_helper.dart';
 import '../../widgets/board_games/board_game_collection_item_widget.dart';
+import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
@@ -353,7 +354,9 @@ class _NoResults extends StatelessWidget {
             Center(
               child: IconAndTextButton(
                 title: 'Retry',
-                icon: Icons.refresh,
+                icon: const DefaultIcon(
+                  Icons.refresh,
+                ),
                 onPressed: () {
                   searchBoardGamesStore.updateSearchResults();
                 },
@@ -451,7 +454,9 @@ class _HotBoardGamesState extends State<_HotBoardGames> {
                       height: Dimensions.standardSpacing,
                     ),
                     IconAndTextButton(
-                      icon: Icons.refresh,
+                      icon: const DefaultIcon(
+                        Icons.add,
+                      ),
                       title: 'Refresh',
                       onPressed: () async {
                         await _hotBoardGamesStore.refresh();
