@@ -7,6 +7,7 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/playthroughs_store.dart';
 import '../../stores/start_playthrough_store.dart';
+import '../common/default_icon.dart';
 import '../common/generic_error_message_widget.dart';
 import '../common/icon_and_text_button.dart';
 import '../common/stack_ripple_effect.dart';
@@ -76,7 +77,7 @@ class PlaythroughPlayers extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: IconAndTextButton(
-                icon: Icons.play_arrow,
+                icon: const DefaultIcon(Icons.play_arrow),                
                 onPressed: () => _onStartNewGame(context),
               ),
             ),
