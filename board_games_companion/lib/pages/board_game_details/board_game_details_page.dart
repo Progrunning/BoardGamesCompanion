@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:board_games_companion/common/enums/collection_flag.dart';
+import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -730,8 +730,9 @@ class _CollectionFlags extends StatelessWidget {
                   ),
                 ],
                 onPressed: (int index) async {
-                  await boardGameDetailsStore.toggleCollectionFlag(
-                      index == 0 ? CollectionFlag.Friends : CollectionFlag.Wishlist);
+                  await boardGameDetailsStore.toggleCollection(
+                    index == 0 ? CollectionType.Friends : CollectionType.Wishlist,
+                  );
                 },
               ),
               ToggleButtons(
@@ -749,7 +750,7 @@ class _CollectionFlags extends StatelessWidget {
                   ),
                 ],
                 onPressed: (int index) async {
-                  await boardGameDetailsStore.toggleCollectionFlag(CollectionFlag.Owned);
+                  await boardGameDetailsStore.toggleCollection(CollectionType.Owned);
                 },
               ),
             ],

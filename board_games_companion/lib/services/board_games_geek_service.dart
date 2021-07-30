@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -70,6 +71,8 @@ class BoardGamesGeekService {
   static const String _boardGameQueryParamterType = 'type';
   static const String _boardGameQueryParamterUsername = 'username';
   static const String _boardGameQueryParamterOwn = 'own';
+  static const String _boardGameQueryParamterWishlist = 'wishlist';
+  static const String _boardGameQueryParamterWantToBuy = 'wanttobuy';
   static const String _boardGameQueryParamterQuery = 'query';
   static const String _boardGameQueryParamterStats = 'stats';
   static const String _boardGameQueryParamterId = 'id';
@@ -85,7 +88,7 @@ class BoardGamesGeekService {
   final HttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
 
-  Future<List<BoardGame>> retrieveHot() async {
+  Future<List<BoardGame>> getHot() async {
     final hotBoardGames = <BoardGame>[];
 
     final retrievalOptions = buildCacheOptions(
@@ -135,7 +138,7 @@ class BoardGamesGeekService {
     return hotBoardGames;
   }
 
-  Future<BoardGameDetails> retrieveDetails(String id) async {
+  Future<BoardGameDetails> getDetails(String id) async {
     if (id?.isEmpty ?? true) {
       return null;
     }
@@ -301,6 +304,44 @@ class BoardGamesGeekService {
       return CollectionSyncResult();
     }
 
+    final ownGameSyncResult = await _syncCollection(
+      username,
+      CollectionType.Owned,
+      <String, dynamic>{_boardGameQueryParamterOwn: 1},
+    );
+    final wishlistGameSyncResult = await _syncCollection(
+      username,
+      CollectionType.Wishlist,
+      <String, dynamic>{_boardGameQueryParamterWishlist: 1},
+    );
+    final wantToBuyGameSyncResult = await _syncCollection(
+      username,
+      CollectionType.Wishlist,
+      <String, dynamic>{_boardGameQueryParamterWantToBuy: 1},
+    );
+
+    return CollectionSyncResult()
+      ..isSuccess = ownGameSyncResult.isSuccess &&
+          wishlistGameSyncResult.isSuccess &&
+          wantToBuyGameSyncResult.isSuccess
+      ..data = [
+        ...ownGameSyncResult.data,
+        ...wishlistGameSyncResult.data,
+        ...wantToBuyGameSyncResult.data
+      ];
+  }
+
+  Future<CollectionSyncResult> _syncCollection(
+    String username,
+    CollectionType collectionType,
+    Map<String, dynamic> additionalQueryParameters,
+  ) async {
+    final queryParamters = <String, dynamic>{
+      _boardGameQueryParamterUsername: username,
+      _boardGameQueryParamterStats: 1,
+    };
+    queryParamters.addAll(additionalQueryParameters);
+
     final dioWithRetry = _dio
       ..interceptors.add(
         RetryInterceptor(
@@ -310,11 +351,7 @@ class BoardGamesGeekService {
 
     final collectionResultsXml = await dioWithRetry.get<String>(
       _collectionBoardGamesUrl,
-      queryParameters: <String, dynamic>{
-        _boardGameQueryParamterUsername: username,
-        _boardGameQueryParamterOwn: 1,
-        _boardGameQueryParamterStats: 1,
-      },
+      queryParameters: queryParamters,
     );
 
     final boardGames = <BoardGameDetails>[];
@@ -349,9 +386,18 @@ class BoardGamesGeekService {
 
       _extractBoardGameCollectionItemStas(collectionItem, boardGame);
 
-      // TODO Additionally mark every board game that was sync'd with a flag 'syncd from BGG' to make sure sync won't affect any existing board games in different collections
       boardGame.isBggSynced = true;
-      boardGame.isOwned = true;
+
+      switch (collectionType) {
+        case CollectionType.Owned:
+          boardGame.isOwned = true;
+          break;
+        case CollectionType.Friends:
+          break;
+        case CollectionType.Wishlist:
+          boardGame.isOnWishlist = true;
+          break;
+      }
 
       boardGames.add(boardGame);
     }

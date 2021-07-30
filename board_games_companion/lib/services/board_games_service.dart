@@ -87,39 +87,48 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     }
 
     final collectionSyncResult = await _boardGameGeekService.syncCollection(username);
-    if (collectionSyncResult.isSuccess) {
-      if (collectionSyncResult.data?.isEmpty ?? true) {
-        return collectionSyncResult;
-      } else {
-        final syncedCollectionMap = <String, BoardGameDetails>{
-          for (BoardGameDetails boardGameDetails in collectionSyncResult.data)
-            boardGameDetails.id: boardGameDetails
-        };
+    if (!collectionSyncResult.isSuccess || (collectionSyncResult.data?.isEmpty ?? true)) {
+      return collectionSyncResult;
+    }
 
-        final boardGamesToRemove = storageBox.values
-            ?.where((boardGameDetails) =>
-                boardGameDetails.isBggSynced &&
-                !syncedCollectionMap.containsKey(boardGameDetails.id))
-            ?.toList();
+    final syncedCollectionMap = <String, BoardGameDetails>{
+      for (BoardGameDetails boardGameDetails in collectionSyncResult.data)
+        boardGameDetails.id: boardGameDetails
+    };
 
-        // Remove
-        for (final boardGameToRemove in boardGamesToRemove) {
-          await storageBox?.delete(boardGameToRemove.id);
-        }
+    final existingCollectionMap = <String, BoardGameDetails>{
+      for (BoardGameDetails boardGameDetails in storageBox.values)
+        boardGameDetails.id: boardGameDetails
+    };
 
-        // Add & Update
-        for (final syncedBoardGame in collectionSyncResult.data) {
-          await storageBox?.put(syncedBoardGame.id, syncedBoardGame);
-        }
+    final boardGamesToRemove = storageBox.values
+        ?.where((boardGameDetails) =>
+            boardGameDetails.isBggSynced && !syncedCollectionMap.containsKey(boardGameDetails.id))
+        ?.toList();
+
+    // Remove
+    for (final boardGameToRemove in boardGamesToRemove) {
+      await storageBox.delete(boardGameToRemove.id);
+    }
+
+    // Add & Update
+    for (final syncedBoardGame in collectionSyncResult.data) {
+      // Take local collection settings over the BGG
+      if (existingCollectionMap.containsKey(syncedBoardGame.id)) {
+        final existingBoardGame = existingCollectionMap[syncedBoardGame.id];
+        syncedBoardGame.isOnWishlist = existingBoardGame.isOnWishlist;
+        syncedBoardGame.isOwned = existingBoardGame.isOwned;
+        syncedBoardGame.isFriends = existingBoardGame.isFriends;
       }
+      await storageBox.put(syncedBoardGame.id, syncedBoardGame);
     }
 
     return collectionSyncResult;
   }
 
   Future<void> _migrateToMultipleCollections(List<BoardGameDetails> boardGames) async {
-    for (final boardGame in boardGames.where((boardGame) =>
-        !boardGame.isOwned && !boardGame.isOnWishlist && !boardGame.isFriends)) {
+    for (final boardGame in boardGames.where(
+        (boardGame) => !boardGame.isOwned && !boardGame.isOnWishlist && !boardGame.isFriends)) {
       boardGame.isOwned = true;
       await addOrUpdateBoardGame(boardGame);
     }

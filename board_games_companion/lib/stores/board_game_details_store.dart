@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums/collection_flag.dart';
+import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -27,7 +27,7 @@ class BoardGameDetailsStore with ChangeNotifier {
     try {
       // TODO MK Think about retrieving the data from Hive and updating with the HTTP call
       //         Alternatively set cache expiration (~a week?) and then retrieve data to update
-      final boardGameDetails = await _boardGameGeekService.retrieveDetails(boardGameId);
+      final boardGameDetails = await _boardGameGeekService.getDetails(boardGameId);
       if (boardGameDetails == null) {
         return _boardGameDetails;
       }
@@ -70,22 +70,22 @@ class BoardGameDetailsStore with ChangeNotifier {
     );
   }
 
-  Future<void> toggleCollectionFlag(CollectionFlag collectionFlag) async {
-    switch (collectionFlag) {
-      case CollectionFlag.Owned:
+  Future<void> toggleCollection(CollectionType collectionType) async {
+    switch (collectionType) {
+      case CollectionType.Owned:
         _boardGameDetails.isOwned = !_boardGameDetails.isOwned;
         if (_boardGameDetails.isOwned) {
           _boardGameDetails.isOnWishlist = false;
           _boardGameDetails.isFriends = false;
         }
         break;
-      case CollectionFlag.Friends:
+      case CollectionType.Friends:
         if (_boardGameDetails.isOwned) {
           _boardGameDetails.isOwned = false;
         }
         _boardGameDetails.isFriends = !_boardGameDetails.isFriends;
         break;
-      case CollectionFlag.Wishlist:
+      case CollectionType.Wishlist:
         if (_boardGameDetails.isOwned) {
           _boardGameDetails.isOwned = false;
         }
