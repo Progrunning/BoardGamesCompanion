@@ -1,3 +1,9 @@
+# Pipelines
+
+[![CI](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/Board%20Games%20Companion?repoName=Progrunning%2FBoardGamesCompanion&branchName=develop)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/latest?definitionId=19&repoName=Progrunning%2FBoardGamesCompanion&branchName=develop)
+
+[![CD](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/Board%20Games%20Companion?repoName=Progrunning%2FBoardGamesCompanion&branchName=release)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/latest?definitionId=19&repoName=Progrunning%2FBoardGamesCompanion&branchName=release)
+
 # Overview
 
 Board Games Companion is an [iOS](https://apps.apple.com/us/app/board-games-companion/id1506458832?ls=1) and [Android](https://play.google.com/store/apps/details?id=com.progrunning.boardgamescompanion) app dedicated to board games enthusiasts. It helps them in managing their board games collection and tracking scores of the game plays.
