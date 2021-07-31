@@ -212,9 +212,6 @@ class BoardGamesStore with ChangeNotifier {
   }
 
   Future<CollectionSyncResult> syncCollection(String username) async {
-    _loadDataState = LoadDataState.Loading;
-    notifyListeners();
-
     var syncResult = CollectionSyncResult();
 
     try {
