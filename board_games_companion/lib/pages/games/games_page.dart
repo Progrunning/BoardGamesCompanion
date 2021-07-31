@@ -186,6 +186,7 @@ class _AppBarState extends State<_AppBar> {
     }
 
     return SliverAppBar(
+      pinned: true,
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
       title: TextField(
@@ -221,7 +222,7 @@ class _AppBarState extends State<_AppBar> {
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(74),
-        child: TabBar(
+        child: TabBar(          
           onTap: (int index) {
             widget.boardGamesStore.selectedTab = index.toGamesTab();
           },
