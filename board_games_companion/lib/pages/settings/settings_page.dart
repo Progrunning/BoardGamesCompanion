@@ -83,17 +83,9 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 const SizedBox(
                   height: Dimensions.standardSpacing,
                 ),
-                Container(
-                  height: 40,
-                  child: userStore?.isSyncing ?? false
-                      ? const Align(
-                          alignment: Alignment.centerRight,
-                          child: CircularProgressIndicator(),
-                        )
-                      : Align(
-                          alignment: Alignment.centerRight,
-                          child: SyncButton(usernameCallback: () => syncController.text),
-                        ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SyncButton(usernameCallback: () => syncController.text),
                 ),
                 const Divider(
                   color: AppTheme.accentColor,
