@@ -219,7 +219,7 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
                       <Widget>[
                         const _BodySectionHeader(
                           title: 'Stats',
-                          secondaryTitle: 'Collection',
+                          secondaryTitle: 'Collections',
                         ),
                         _StatsAndCollections(
                           boardGameDetailsStore: boardGameDetailsStore,
