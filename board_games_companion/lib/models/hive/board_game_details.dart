@@ -18,7 +18,23 @@ part 'board_game_details.g.dart';
 class BoardGameDetails extends BaseBoardGame {
   BoardGameDetails([String name]) : super(name);
 
-  final RegExp onlyLettersOrNumbersRegex = RegExp(r'[a-zA-Z0-9]+');
+  final RegExp onlyLettersOrNumbersRegex = RegExp(r'[a-zA-Z0-9\-]+');
+  final Set<String> bggNotUsedUrlEncodedNameParts = {
+    'the',
+    'of',
+    'for',
+    'a',
+    'with',
+    'on',
+    'at',
+    'by',
+    'to',
+    'from',
+    'into',
+    'but',
+    'off',
+    'up',
+  };
 
   String _imageUrl;
   @HiveField(5)
@@ -250,7 +266,7 @@ class BoardGameDetails extends BaseBoardGame {
     return null;
   }
 
-  String get bggOverviewUrl => '$_baseBggBoardGameUrl/$id/$_urlEncodeName';
+  String get bggOverviewUrl => '$_baseBggBoardGameUrl/$id/$_bggUrlEncodedName';
 
   String get bggHotVideosUrl => '$bggOverviewUrl/videos/all?sort=hot';
 
@@ -260,23 +276,32 @@ class BoardGameDetails extends BaseBoardGame {
     final String currentCulture = Platform.localeName.replaceFirst('_', '-');
     if (!Constants.BoardGameOracleSupportedCultureNames.contains(currentCulture) ||
         currentCulture == Constants.BoardGameOracleUsaCultureName) {
-      return '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_urlEncodeName';
+      return '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_boardGameOracleUrlEncodedName';
     }
 
-    return '${Constants.BoardGameOracleBaseUrl}$currentCulture/boardgame/price/$_urlEncodeName';
+    return '${Constants.BoardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
   }
 
   String get _baseBggBoardGameUrl => '${Constants.BoardGameGeekBaseUrl}boardgame';
 
-  String get _urlEncodeName {
-    final List<String> spaceSeparatedNameParts = name.split(' ');
-    return spaceSeparatedNameParts
-        .map((part) {
-          final String trimmedAndLoweredPart = part.trim().toLowerCase();
-          final String regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
-          return regexMatch;
-        })
-        .where((part) => part != null)
-        .join('-');
+  String get _bggUrlEncodedName {
+    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
+    return spaceSeparatedNameParts.where((part) {
+      final String trimmedAndLoweredPart = part.trim();
+      return !bggNotUsedUrlEncodedNameParts.contains(trimmedAndLoweredPart);
+    }).map((part) {
+      final String trimmedAndLoweredPart = part.trim();
+      final String regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
+      return regexMatch;
+    }).join('-');
+  }
+
+  String get _boardGameOracleUrlEncodedName {
+    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
+    return spaceSeparatedNameParts.map((part) {
+      final String trimmedAndLoweredPart = part.trim();
+      final String regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
+      return regexMatch;
+    }).join('-');
   }
 }
