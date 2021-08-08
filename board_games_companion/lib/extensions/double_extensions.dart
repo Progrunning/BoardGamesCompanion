@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/constants.dart';
+import '../common/constants.dart';
 
 extension DoubleExtensions on double {
   int safeCompareTo(double doubleToCompare) {

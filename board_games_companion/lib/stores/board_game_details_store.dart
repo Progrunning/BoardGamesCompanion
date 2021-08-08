@@ -1,8 +1,8 @@
-import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 import '../common/analytics.dart';
+import '../common/enums/collection_type.dart';
 import '../models/hive/board_game_details.dart';
 import '../services/analytics_service.dart';
 import '../services/board_games_geek_service.dart';

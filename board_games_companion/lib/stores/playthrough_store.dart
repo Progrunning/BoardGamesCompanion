@@ -1,14 +1,15 @@
-import 'package:board_games_companion/common/enums/enums.dart';
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/models/hive/score.dart';
-import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/services/score_service.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+
+import '../common/enums/enums.dart';
+import '../common/enums/playthrough_status.dart';
+import '../models/hive/player.dart';
+import '../models/hive/playthrough.dart';
+import '../models/hive/score.dart';
+import '../models/player_score.dart';
+import '../services/player_service.dart';
+import '../services/score_service.dart';
+import 'playthroughs_store.dart';
 
 class PlaythroughStore with ChangeNotifier {
   PlaythroughStore(

@@ -1,5 +1,6 @@
-import 'package:board_games_companion/widgets/common/rippler_effect.dart';
 import 'package:flutter/material.dart';
+
+import 'rippler_effect.dart';
 
 class StackRippleEffect extends StatelessWidget {
   const StackRippleEffect({

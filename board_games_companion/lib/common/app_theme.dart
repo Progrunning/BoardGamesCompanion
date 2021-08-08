@@ -1,7 +1,8 @@
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'dimensions.dart';
+import 'styles.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class AppTheme {

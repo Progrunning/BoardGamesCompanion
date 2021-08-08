@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums/collection_type.dart';
+import 'collection_type.dart';
 
 enum GamesTab {
   Owned,

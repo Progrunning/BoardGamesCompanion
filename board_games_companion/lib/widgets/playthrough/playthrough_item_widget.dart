@@ -17,9 +17,10 @@ import '../common/generic_error_message_widget.dart';
 import '../common/icon_and_text_button.dart';
 import '../common/loading_indicator_widget.dart';
 import '../common/panel_container_widget.dart';
+import '../common/text/item_property_title_widget.dart';
+import '../common/text/item_property_value_widget.dart';
 import '../player/scores/player_score_widget.dart';
 import 'calendar_card.dart';
-import 'playthrough_item_detail_widget.dart';
 
 class PlaythroughItem extends StatelessWidget {
   const PlaythroughItem(
@@ -70,14 +71,14 @@ class PlaythroughItem extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                PlaythroughItemDetail(
+                                _ItemDetail(
                                   store.daysSinceStart?.toString(),
                                   'day(s) ago',
                                 ),
                                 const SizedBox(
                                   height: Dimensions.standardSpacing,
                                 ),
-                                PlaythroughItemDetail(
+                                _ItemDetail(
                                   '$_playthroughNumber${_playthroughNumber.toOrdinalAbbreviations()}',
                                   'game',
                                 ),
@@ -88,7 +89,7 @@ class PlaythroughItem extends StatelessWidget {
                                   create: (_) => PlaythroughDurationStore(_playthrough),
                                   child: Consumer<PlaythroughDurationStore>(
                                     builder: (_, store, __) {
-                                      return PlaythroughItemDetail(
+                                      return _ItemDetail(
                                         store.durationInSeconds.toPlaythroughDuration(),
                                         'duration',
                                       );
@@ -129,7 +130,7 @@ class PlaythroughItem extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: IconAndTextButton(
-                                  icon: const DefaultIcon(Icons.stop),                                  
+                                  icon: const DefaultIcon(Icons.stop),
                                   backgroundColor: Colors.blue,
                                   horizontalPadding: Dimensions.standardSpacing,
                                   verticalPadding: Dimensions.standardSpacing,
@@ -140,7 +141,7 @@ class PlaythroughItem extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: IconAndTextButton(
-                                  icon: const DefaultIcon(Icons.delete),                                  
+                                  icon: const DefaultIcon(Icons.delete),
                                   backgroundColor: Colors.red,
                                   horizontalPadding: Dimensions.standardSpacing,
                                   verticalPadding: Dimensions.standardSpacing,
@@ -222,6 +223,27 @@ class PlaythroughItem extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _ItemDetail extends StatelessWidget {
+  const _ItemDetail(
+    this.title,
+    this.subtitle, {
+    Key key,
+  }) : super(key: key);
+
+  final String subtitle;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        ItemPropertyValue(title),
+        ItemPropertyTitle(subtitle),
+      ],
     );
   }
 }

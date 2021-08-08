@@ -1,5 +1,4 @@
-import 'package:board_games_companion/models/player_score.dart'
-    as player_score_model;
+import 'package:board_games_companion/models/player_score.dart' as player_score_model;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,12 +12,11 @@ import '../../common/default_icon.dart';
 import '../../common/icon_and_text_button.dart';
 import '../../common/rank_ribbon.dart';
 import '../../common/shadow_box_widget.dart';
-import '../player_avatar.dart';
 import '../player_avatar_subtitle_widget.dart';
+import '../player_image.dart';
 import 'player_score_edit_widget.dart';
 
 class PlayerScore extends StatelessWidget {
-
   const PlayerScore(
     this._playerScore, {
     this.readonly = true,
@@ -45,7 +43,7 @@ class PlayerScore extends StatelessWidget {
           child: Consumer<player_score_model.PlayerScore>(
             builder: (_, store, __) {
               Widget playerAvatar = ShadowBox(
-                child: PlayerAvatar(
+                child: PlayerImage(
                   imageUri: store?.player?.avatarImageUri,
                   medal: store?.medal,
                 ),
@@ -53,9 +51,9 @@ class PlayerScore extends StatelessWidget {
               if ((store?.player?.id?.isNotEmpty ?? false) &&
                   (store.score?.id?.isNotEmpty ?? false)) {
                 playerAvatar = Hero(
-                    tag:
-                        '${AnimationTags.playerImageHeroTag}${store?.player?.id}${store?.score?.id}',
-                    child: playerAvatar);
+                  tag: '${AnimationTags.playerImageHeroTag}${store?.player?.id}${store?.score?.id}',
+                  child: playerAvatar,
+                );
               }
 
               return Column(
@@ -63,8 +61,8 @@ class PlayerScore extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(
-                    height: Dimensions.defaultPlayerAvatarHeight,
-                    width: Dimensions.defaultPlayerAvatarHeight,
+                    height: Dimensions.defaultPlayerAvatarSize,
+                    width: Dimensions.defaultPlayerAvatarSize,
                     child: Stack(
                       children: <Widget>[
                         playerAvatar,
@@ -72,8 +70,7 @@ class PlayerScore extends StatelessWidget {
                           PlayerAvatarSubtitle(
                             player: store?.player,
                           ),
-                        if ((store?.score?.value?.isNotEmpty ?? false) &&
-                            store.place != null)
+                        if ((store?.score?.value?.isNotEmpty ?? false) && store.place != null)
                           Positioned(
                             top: -Styles.defaultShadowRadius - 1,
                             right: 0,
@@ -128,8 +125,7 @@ class PlayerScore extends StatelessWidget {
                               child: IconAndTextButton(
                                 icon: const DefaultIcon(Icons.edit),
                                 horizontalPadding: Dimensions.standardSpacing,
-                                onPressed: () => _showCreateOrEditScoreDialog(
-                                    context, store),
+                                onPressed: () => _showCreateOrEditScoreDialog(context, store),
                               ),
                             ),
                         ],
@@ -149,7 +145,7 @@ class PlayerScore extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconAndTextButton(
-                icon: const DefaultIcon(Icons.cancel),                
+                icon: const DefaultIcon(Icons.cancel),
                 title: 'Cancel',
                 backgroundColor: Colors.red,
                 onPressed: () => Navigator.pop(context),
@@ -158,7 +154,7 @@ class PlayerScore extends StatelessWidget {
                 width: Dimensions.standardSpacing,
               ),
               IconAndTextButton(
-                icon: const DefaultIcon(Icons.save),                
+                icon: const DefaultIcon(Icons.save),
                 title: 'Save',
                 onPressed: () => _updatePlayerScore(
                   playerScoreController.value.text,
@@ -200,8 +196,7 @@ class PlayerScore extends StatelessWidget {
     String value,
     BuildContext context,
   ) async {
-    if (playthroughStore == null ||
-        !await _playerScore.updatePlayerScore(value)) {
+    if (playthroughStore == null || !await _playerScore.updatePlayerScore(value)) {
       return;
     }
 

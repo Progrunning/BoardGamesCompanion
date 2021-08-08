@@ -1,13 +1,14 @@
-import 'package:board_games_companion/common/animation_tags.dart';
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
-import 'package:board_games_companion/models/hive/base_board_game.dart';
-import 'package:board_games_companion/widgets/common/rank_ribbon.dart';
-import 'package:board_games_companion/widgets/common/stack_ripple_effect.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/animation_tags.dart';
+import '../../common/app_theme.dart';
+import '../../common/constants.dart';
+import '../../common/dimensions.dart';
+import '../../common/styles.dart';
+import '../../models/hive/base_board_game.dart';
+import '../common/rank_ribbon.dart';
+import '../common/stack_ripple_effect.dart';
 
 class BoardGameCollectionItem extends StatefulWidget {
   const BoardGameCollectionItem({

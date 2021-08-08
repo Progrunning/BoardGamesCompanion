@@ -1,5 +1,5 @@
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/result.dart';
+import 'hive/board_game_details.dart';
+import 'result.dart';
 
 class CollectionSyncResult extends Result<List<BoardGameDetails>> {
   

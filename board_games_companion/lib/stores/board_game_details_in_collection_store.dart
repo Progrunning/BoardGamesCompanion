@@ -1,6 +1,7 @@
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../models/hive/board_game_details.dart';
+import 'board_games_store.dart';
 
 class BoardGameDetailsInCollectionStore extends ChangeNotifier {
   BoardGameDetailsInCollectionStore(

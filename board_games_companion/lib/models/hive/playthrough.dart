@@ -1,6 +1,7 @@
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:hive/hive.dart';
+
+import '../../common/enums/playthrough_status.dart';
+import '../../common/hive_boxes.dart';
 
 part 'playthrough.g.dart';
 
