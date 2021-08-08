@@ -24,7 +24,7 @@ import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/shadow_box_widget.dart';
 import '../base_page_state.dart';
-import '../board_game_playthroughs.dart';
+import '../playthroughs/playthroughs_page.dart';
 import 'board_game_details_expansions.dart';
 
 class BoardGamesDetailsPage extends StatefulWidget {
@@ -98,7 +98,7 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
     );
 
     if (!boardGameDetailsInCollectionStore.isInCollection &&
-        widget.navigatingFromType == BoardGamePlaythroughsPage) {
+        widget.navigatingFromType == PlaythroughsPage) {
       Navigator.popUntil(context, ModalRoute.withName(Routes.home));
       return false;
     }
