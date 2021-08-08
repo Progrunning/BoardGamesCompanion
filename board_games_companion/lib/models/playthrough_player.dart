@@ -1,5 +1,6 @@
-import 'package:board_games_companion/models/hive/player.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'hive/player.dart';
 
 class PlaythroughPlayer with ChangeNotifier {
   PlaythroughPlayer(this.player);

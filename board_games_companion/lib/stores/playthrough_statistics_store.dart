@@ -1,18 +1,19 @@
 import 'dart:math';
 
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-import 'package:board_games_companion/models/board_game_statistics.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/models/hive/score.dart';
-import 'package:board_games_companion/extensions/scores_extensions.dart';
-import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/services/playthroughs_service.dart';
-import 'package:board_games_companion/services/score_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
+
+import '../common/enums/playthrough_status.dart';
+import '../extensions/scores_extensions.dart';
+import '../models/board_game_statistics.dart';
+import '../models/hive/board_game_details.dart';
+import '../models/hive/player.dart';
+import '../models/hive/playthrough.dart';
+import '../models/hive/score.dart';
+import '../models/player_score.dart';
+import '../services/player_service.dart';
+import '../services/playthroughs_service.dart';
+import '../services/score_service.dart';
 
 class PlaythroughStatisticsStore extends ChangeNotifier {
   PlaythroughStatisticsStore(

@@ -1,9 +1,10 @@
-import 'package:board_games_companion/common/enums/enums.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/models/hive/score.dart';
-import 'package:board_games_companion/services/score_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+
+import '../common/enums/enums.dart';
+import '../services/score_service.dart';
+import 'hive/player.dart';
+import 'hive/score.dart';
 
 class PlayerScore with ChangeNotifier {
   PlayerScore(

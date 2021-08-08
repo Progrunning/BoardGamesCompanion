@@ -11,7 +11,7 @@ import '../common/default_icon.dart';
 import '../common/generic_error_message_widget.dart';
 import '../common/icon_and_text_button.dart';
 import '../common/stack_ripple_effect.dart';
-import '../player/player_grid_item.dart';
+import '../player/player_avatar.dart';
 
 class PlaythroughPlayers extends StatelessWidget {
   const PlaythroughPlayers({
@@ -42,7 +42,7 @@ class PlaythroughPlayers extends StatelessWidget {
             (int index) {
               return Stack(
                 children: <Widget>[
-                  PlayerGridItem(playthroughPlayers[index].player),
+                  PlayerAvatar(playthroughPlayers[index].player),
                   Align(
                     alignment: Alignment.topRight,
                     child: ChangeNotifierProvider.value(

@@ -1,4 +1,4 @@
-import 'package:board_games_companion/models/player_score.dart';
+import 'player_score.dart';
 
 class BoardGameStatistics {
   DateTime _lastPlayed;

@@ -1,6 +1,6 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/hive/score.dart';
-import 'package:board_games_companion/services/hive_base_service.dart';
+import '../common/hive_boxes.dart';
+import '../models/hive/score.dart';
+import 'hive_base_service.dart';
 
 class ScoreService extends BaseHiveService<Score> {
   Future<bool> addOrUpdateScore(Score score) async {

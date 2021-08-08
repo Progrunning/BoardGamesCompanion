@@ -1,6 +1,7 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
+
+import '../../../common/app_theme.dart';
+import '../../../common/dimensions.dart';
 
 class PlayerScoreEdit extends StatelessWidget {
   const PlayerScoreEdit({

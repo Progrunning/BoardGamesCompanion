@@ -1,7 +1,8 @@
-import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'generic_error_message_widget.dart';
+import 'loading_indicator_widget.dart';
 
 class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier> extends StatelessWidget {
 
