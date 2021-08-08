@@ -1,5 +1,6 @@
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../common/app_theme.dart';
 
 class CustomBottomNavigationBarItem extends BottomNavigationBarItem {
   CustomBottomNavigationBarItem(String title, IconData icon)

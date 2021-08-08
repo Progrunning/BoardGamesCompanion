@@ -12,7 +12,7 @@ import '../widgets/common/custom_icon_button.dart';
 import '../widgets/common/page_container_widget.dart';
 import '../widgets/player/create_edit_player.dart';
 import '../widgets/player/delete_player_widget.dart';
-import '../widgets/player/player_avatar.dart';
+import '../widgets/player/player_image.dart';
 import 'base_page_state.dart';
 
 class CreateEditPlayerPage extends StatefulWidget {
@@ -121,7 +121,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
                                   children: <Widget>[
                                     Hero(
                                       tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
-                                      child: PlayerAvatar(
+                                      child: PlayerImage(
                                         imageUri: player?.avatarImageUri,
                                       ),
                                     ),

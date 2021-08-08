@@ -1,7 +1,8 @@
-import 'package:board_games_companion/common/enums/order_by.dart';
-import 'package:board_games_companion/common/enums/sort_by_option.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:hive/hive.dart';
+
+import '../common/enums/order_by.dart';
+import '../common/enums/sort_by_option.dart';
+import '../common/hive_boxes.dart';
 
 part 'sort_by.g.dart';
 

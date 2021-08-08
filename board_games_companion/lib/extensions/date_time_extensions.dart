@@ -1,5 +1,6 @@
-import 'package:board_games_companion/common/constants.dart';
 import 'package:intl/intl.dart';
+
+import '../common/constants.dart';
 
 extension DateTimeExtensions on DateTime {
   String toShortMonth([String fallbackValue]) {
@@ -19,13 +20,22 @@ extension DateTimeExtensions on DateTime {
   }
 
   String toDaysAgo() {
-    const String daysAgoText = 'day(s) ago';
+    const String daysAgoText = 'days ago';
     if (this == null) {
       return '- $daysAgoText';
     }
 
     final nowUtc = DateTime.now().toUtc();
     final daysAgo = nowUtc.difference(this).inDays;
+    if (daysAgo == 0) {
+      return 'today';
+    }
+    if (daysAgo == 1) {
+      return 'yesterday';
+    }
+    if (daysAgo == 2) {
+      return 'day before yesterday';
+    }
 
     return '$daysAgo $daysAgoText';
   }

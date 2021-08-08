@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
+
 import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
 class CustomHttpClientAdapter extends HttpClientAdapter {

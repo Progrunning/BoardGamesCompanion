@@ -1,6 +1,6 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:hive/hive.dart';
 
+import '../common/hive_boxes.dart';
 import 'sort_by.dart';
 
 part 'collection_filters.g.dart';

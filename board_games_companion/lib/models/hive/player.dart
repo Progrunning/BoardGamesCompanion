@@ -1,8 +1,9 @@
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../common/constants.dart';
+import '../../common/hive_boxes.dart';
 
 part 'player.g.dart';
 

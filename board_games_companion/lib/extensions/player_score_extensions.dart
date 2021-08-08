@@ -1,4 +1,4 @@
-import 'package:board_games_companion/models/player_score.dart';
+import '../models/player_score.dart';
 
 extension PlayerScoreExtensions on List<PlayerScore> {
   static const moveDownTheList = 1;

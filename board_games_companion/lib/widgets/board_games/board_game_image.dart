@@ -1,9 +1,10 @@
-import 'package:board_games_companion/common/animation_tags.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
-import 'package:board_games_companion/widgets/common/shadow_box_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/animation_tags.dart';
+import '../../models/hive/board_game_details.dart';
+import '../common/loading_indicator_widget.dart';
+import '../common/shadow_box_widget.dart';
 
 class BoardGameImage extends StatelessWidget {
   const BoardGameImage(

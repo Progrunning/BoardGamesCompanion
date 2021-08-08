@@ -1,9 +1,10 @@
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:polygon_clipper/polygon_clipper.dart';
+
+import '../../common/app_theme.dart';
+import '../../common/constants.dart';
+import '../../common/dimensions.dart';
+import '../../common/styles.dart';
 
 class BoardGameRatingHexagon extends StatelessWidget {
   const BoardGameRatingHexagon(

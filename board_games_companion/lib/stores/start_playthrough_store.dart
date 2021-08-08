@@ -1,6 +1,7 @@
-import 'package:board_games_companion/models/playthrough_player.dart';
-import 'package:board_games_companion/stores/players_store.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../models/playthrough_player.dart';
+import 'players_store.dart';
 
 class StartPlaythroughStore with ChangeNotifier {
   StartPlaythroughStore(this._playersStore);

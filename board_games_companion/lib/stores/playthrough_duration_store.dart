@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:flutter/foundation.dart';
+
+import '../common/constants.dart';
+import '../common/enums/playthrough_status.dart';
+import '../models/hive/playthrough.dart';
 
 class PlaythroughDurationStore with ChangeNotifier {
   PlaythroughDurationStore(this._playthrough) {

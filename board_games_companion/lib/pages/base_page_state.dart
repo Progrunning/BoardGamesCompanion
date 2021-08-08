@@ -1,7 +1,7 @@
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../common/app_theme.dart';
 import '../common/dimensions.dart';
 import '../common/strings.dart';
 import '../services/rate_and_review_service.dart';

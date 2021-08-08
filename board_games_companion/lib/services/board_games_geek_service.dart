@@ -1,9 +1,9 @@
-import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:xml/xml.dart' as xml;
 
+import '../common/enums/collection_type.dart';
 import '../extensions/xml_element_extensions.dart';
 import '../models/board_game.dart';
 import '../models/collection_sync_result.dart';
