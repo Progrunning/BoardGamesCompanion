@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/pages/playthroughs/playthroughs_statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +25,7 @@ import '../../widgets/playthrough/playthrough_item_widget.dart';
 import '../../widgets/playthrough/playthrough_no_players.dart';
 import '../../widgets/playthrough/playthrough_players.dart';
 import '../base_page_state.dart';
+import 'playthroughs_statistics.dart';
 
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage(

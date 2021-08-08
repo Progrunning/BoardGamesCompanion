@@ -1,6 +1,7 @@
-import 'package:board_games_companion/services/rate_and_review_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+
+import 'rate_and_review_service.dart';
 
 class AnalyticsService {
   AnalyticsService(this._firebaseAnalytics, this._rateAndReviewService);

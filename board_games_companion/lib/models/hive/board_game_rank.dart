@@ -1,5 +1,6 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:hive/hive.dart';
+
+import '../../common/hive_boxes.dart';
 
 part 'board_game_rank.g.dart';
 

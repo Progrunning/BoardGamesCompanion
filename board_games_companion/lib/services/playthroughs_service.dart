@@ -1,11 +1,12 @@
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/models/hive/score.dart';
-import 'package:board_games_companion/models/playthrough_player.dart';
-import 'package:board_games_companion/services/hive_base_service.dart';
-import 'package:board_games_companion/services/score_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
+import '../common/enums/playthrough_status.dart';
+import '../common/hive_boxes.dart';
+import '../models/hive/playthrough.dart';
+import '../models/hive/score.dart';
+import '../models/playthrough_player.dart';
+import 'hive_base_service.dart';
+import 'score_service.dart';
 
 class PlaythroughService extends BaseHiveService<Playthrough> {
   PlaythroughService(this.scoreService);

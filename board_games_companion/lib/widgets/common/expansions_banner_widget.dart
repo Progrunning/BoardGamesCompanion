@@ -1,8 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
 
 const double _kOffset = 22.0; // distance to bottom of banner, at a 45 degree angle inwards
 const double _kHeight = 10.0; // height of banner

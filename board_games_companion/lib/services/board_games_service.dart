@@ -1,10 +1,9 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
-import 'package:board_games_companion/models/collection_sync_result.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/services/board_games_geek_service.dart';
-import 'package:board_games_companion/services/preferences_service.dart';
-
+import '../common/hive_boxes.dart';
+import '../models/collection_sync_result.dart';
+import '../models/hive/board_game_details.dart';
+import 'board_games_geek_service.dart';
 import 'hive_base_service.dart';
+import 'preferences_service.dart';
 
 class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   BoardGamesService(this._boardGameGeekService, this._preferenceService);

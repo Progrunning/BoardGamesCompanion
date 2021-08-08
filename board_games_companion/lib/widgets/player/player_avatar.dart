@@ -1,50 +1,59 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../common/constants.dart';
-import '../../common/enums/enums.dart';
+import '../../common/animation_tags.dart';
 import '../../common/styles.dart';
+import '../../models/hive/player.dart';
+import '../common/shadow_box_widget.dart';
+import '../common/stack_ripple_effect.dart';
+import 'player_avatar_subtitle_widget.dart';
+import 'player_image.dart';
 
 class PlayerAvatar extends StatelessWidget {
-  const PlayerAvatar({
+  const PlayerAvatar(
+    this.player, {
+    this.topRightCornerActionWidget,
+    this.onTap,
     Key key,
-    this.medal,
-    this.place,
-    this.imageUri,
   }) : super(key: key);
 
-  final String imageUri;
-  final MedalEnum medal;
-  final int place;
+  final Player player;
+  final Widget topRightCornerActionWidget;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    Widget avatarImage;
-    if ((imageUri?.isEmpty ?? true) ||
-        imageUri == Constants.DefaultAvatartAssetsPath) {
-      avatarImage = Positioned.fill(
-        child: Image.asset(
-          Constants.DefaultAvatartAssetsPath,
-          fit: BoxFit.cover,
+    return ShadowBox(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+        child: ChangeNotifierProvider.value(
+          value: player,
+          child: Consumer<Player>(
+            builder: (_, Player providerPlayer, __) {
+              return Stack(
+                children: <Widget>[
+                  Hero(
+                    tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}',
+                    child: PlayerImage(
+                      imageUri: providerPlayer?.avatarImageUri,
+                    ),
+                  ),
+                  if (providerPlayer?.name?.isNotEmpty ?? false)
+                    PlayerAvatarSubtitle(
+                      player: providerPlayer,
+                    ),
+                  if (topRightCornerActionWidget != null) topRightCornerActionWidget,
+                  Positioned.fill(
+                    child: StackRippleEffect(
+                      onTap: onTap,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
-      );
-    } else {
-      avatarImage = Positioned.fill(
-        child: Image.file(
-          File(imageUri),
-          fit: BoxFit.cover,
-        ),
-      );
-    }
-
-    final List<Widget> stackChildren = [
-      avatarImage,
-    ];
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
-      child: Stack(children: stackChildren),
+      ),
     );
   }
 }
