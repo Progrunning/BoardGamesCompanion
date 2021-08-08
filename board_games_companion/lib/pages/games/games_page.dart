@@ -26,7 +26,7 @@ import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/sync_collection_button.dart';
-import '../board_game_playthroughs.dart';
+import '../playthroughs/playthroughs_page.dart';
 import 'games_filter_panel.dart';
 
 class GamesPage extends StatefulWidget {
@@ -355,11 +355,11 @@ class _Grid extends StatelessWidget {
                   },
                 );
 
-                await Navigator.push<BoardGamePlaythroughsPage>(
+                await Navigator.push<PlaythroughsPage>(
                   context,
                   NavigatorTransitions.fadeThrough(
                     (_, __, ___) {
-                      return BoardGamePlaythroughsPage(
+                      return PlaythroughsPage(
                         boardGames[index],
                         collectionFlag,
                       );
