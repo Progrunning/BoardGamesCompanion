@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/widgets/board_games/playthrough_statistics_details_widget.dart';
+import 'package:board_games_companion/pages/playthroughs/playthroughs_statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -184,7 +184,7 @@ class _StatistcsState extends State<_Statistcs> {
           sliver: SliverToBoxAdapter(
             child: ChangeNotifierProvider.value(
               value: widget.boardGameDetails,
-              child: const PlaythroughStatisticsDetails(),
+              child: const PlaythroughsStatistics(),
             ),
           ),
           padding: const EdgeInsets.symmetric(
