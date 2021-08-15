@@ -409,7 +409,7 @@ class BoardGamesGeekService {
 
   xml.XmlDocument _retrieveXmlDocument(Response<String> httpResponse) {
     try {
-      return xml.parse(httpResponse.data);
+      return xml.XmlDocument.parse(httpResponse.data);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

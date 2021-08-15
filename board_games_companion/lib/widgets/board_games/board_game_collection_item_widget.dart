@@ -107,7 +107,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
         ),
         if (widget.boardGame.rank != null && widget.boardGame.rank < Constants.Top100)
           Positioned(
-            top: -Dimensions.halfStandardSpacing - 1,
+            top: -Dimensions.ribbonIconSvgInternalPadding,
             right: Dimensions.halfStandardSpacing,
             child: RankRibbon(widget.boardGame.rank),
           ),
