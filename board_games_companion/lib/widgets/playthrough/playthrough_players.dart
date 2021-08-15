@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +43,10 @@ class PlaythroughPlayers extends StatelessWidget {
             (int index) {
               return Stack(
                 children: <Widget>[
-                  PlayerAvatar(playthroughPlayers[index].player),
+                  Padding(
+                    padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+                    child: PlayerAvatar(playthroughPlayers[index].player),
+                  ),
                   Align(
                     alignment: Alignment.topRight,
                     child: ChangeNotifierProvider.value(
@@ -50,6 +54,8 @@ class PlaythroughPlayers extends StatelessWidget {
                       child: Consumer<PlaythroughPlayer>(
                         builder: (_, store, __) {
                           return Checkbox(
+                            checkColor: AppTheme.accentColor,
+                            activeColor: AppTheme.primaryColor.withOpacity(0.7),
                             value: playthroughPlayers[index].isChecked,
                             onChanged: (checked) {},
                           );
@@ -77,7 +83,7 @@ class PlaythroughPlayers extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: IconAndTextButton(
-                icon: const DefaultIcon(Icons.play_arrow),                
+                icon: const DefaultIcon(Icons.play_arrow),
                 onPressed: () => _onStartNewGame(context),
               ),
             ),
