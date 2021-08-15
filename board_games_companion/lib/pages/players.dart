@@ -59,12 +59,15 @@ class _PlayersPageState extends State<PlayersPage> {
                 store.players.length,
                 (int index) {
                   final player = store.players[index];
-                  return PlayerAvatar(
-                    player,
-                    topRightCornerActionWidget: _buildTopRightCornerAction(context, player),
-                    onTap: () async {
-                      await _navigateToCreateOrEditPlayer(context, player);
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+                    child: PlayerAvatar(
+                      player,
+                      topRightCornerActionWidget: _buildTopRightCornerAction(context, player),
+                      onTap: () async {
+                        await _navigateToCreateOrEditPlayer(context, player);
+                      },
+                    ),
                   );
                 },
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -18,9 +19,10 @@ class RankRibbon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Icon(
-          Icons.bookmark,
-          size: 42,
+        SvgPicture.asset(
+          'assets/icons/rank_ribbon.svg',
+          height: 34,
+          width: 26,
           color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
         ),
         Positioned.fill(

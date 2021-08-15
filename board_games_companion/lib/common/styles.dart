@@ -4,7 +4,7 @@ class Styles {
   static const double _maxOpacityDecimal = 255;
   static const double _hundredPercent = 100;
 
-  static const double defaultShadowRadius = 4;
+  static const double defaultShadowRadius = defaultCornerRadius;
   static const double defaultCornerRadius = 5;
   static const Offset defaultShadowOffset =
       Offset(defaultCornerRadius / 2, defaultCornerRadius / 2);
