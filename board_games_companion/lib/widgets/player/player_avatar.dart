@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
 import '../../models/hive/player.dart';
-import '../common/shadow_box_widget.dart';
+import '../common/shadow_box.dart';
 import '../common/stack_ripple_effect.dart';
 import 'player_avatar_subtitle_widget.dart';
 import 'player_image.dart';

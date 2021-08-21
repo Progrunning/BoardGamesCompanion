@@ -4,10 +4,9 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../utilities/launcher_helper.dart';
-import '../common/shadow_box_widget.dart';
+import '../common/shadow_box.dart';
 
 class DetailsItem extends StatelessWidget {
-
   const DetailsItem({
     @required this.title,
     @required this.subtitle,
@@ -16,7 +15,7 @@ class DetailsItem extends StatelessWidget {
     this.uri,
     Key key,
   }) : super(key: key);
-  
+
   final String title;
   final String subtitle;
   final String iconUri;
@@ -36,7 +35,7 @@ class DetailsItem extends StatelessWidget {
             vertical: Dimensions.standardSpacing,
             horizontal: Dimensions.standardSpacing,
           ),
-          child: Container(
+          child: SizedBox(
             height: (iconUri?.isNotEmpty ?? false) ? _size : null,
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -44,8 +43,7 @@ class DetailsItem extends StatelessWidget {
                 if (iconUri?.isNotEmpty ?? false)
                   ShadowBox(
                     child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(Styles.defaultCornerRadius),
+                      borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
                       child: Image(
                         height: _size,
                         width: _size,
@@ -85,7 +83,7 @@ class DetailsItem extends StatelessWidget {
           if (onTap != null) {
             onTap();
           }
-          
+
           if (uri?.isEmpty ?? true) {
             return;
           }
