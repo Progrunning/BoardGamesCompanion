@@ -197,7 +197,11 @@ class _SearchResultsState extends State<_SearchResults> {
                           onTap: () async {
                             final boardGame = searchResults[itemIndex];
                             await NavigatorHelper.navigateToBoardGameDetails(
-                                context, boardGame?.id, boardGame?.name, SearchBoardGamesPage);
+                              context,
+                              boardGame?.id,
+                              boardGame?.name,
+                              SearchBoardGamesPage,
+                            );
                           },
                         ),
                       );
