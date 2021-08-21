@@ -10,8 +10,8 @@ import '../../models/hive/base_board_game.dart';
 import '../common/rank_ribbon.dart';
 import '../common/stack_ripple_effect.dart';
 
-class BoardGameCollectionItem extends StatefulWidget {
-  const BoardGameCollectionItem({
+class BoardGameTile extends StatefulWidget {
+  const BoardGameTile({
     Key key,
     this.boardGame,
     this.onTap,
@@ -26,7 +26,7 @@ class BoardGameCollectionItem extends StatefulWidget {
   State<StatefulWidget> createState() => _BoardGameSearchItemWidget();
 }
 
-class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
+class _BoardGameSearchItemWidget extends State<BoardGameTile> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -107,8 +107,8 @@ class _BoardGameSearchItemWidget extends State<BoardGameCollectionItem> {
         ),
         if (widget.boardGame.rank != null && widget.boardGame.rank < Constants.Top100)
           Positioned(
-            top: -Dimensions.ribbonIconSvgInternalPadding,
-            right: Dimensions.halfStandardSpacing,
+            top: 0,
+            right: 12,
             child: RankRibbon(widget.boardGame.rank),
           ),
         Positioned.fill(
