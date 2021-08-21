@@ -89,7 +89,7 @@ class PlayerScore extends StatelessWidget {
                             ),
                           if ((store?.score?.value?.isNotEmpty ?? false) && store.place != null)
                             Positioned(
-                              top: -Dimensions.ribbonIconSvgInternalPadding,
+                              top: 0,
                               right: 0,
                               child: RankRibbon(store?.place),
                             ),

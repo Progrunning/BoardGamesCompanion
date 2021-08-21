@@ -16,7 +16,7 @@ import '../../stores/search_bar_board_games_store.dart';
 import '../../stores/search_board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../utilities/navigator_helper.dart';
-import '../../widgets/board_games/board_game_collection_item_widget.dart';
+import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
@@ -405,11 +405,11 @@ class _HotBoardGamesState extends State<_HotBoardGames> {
                 crossAxisSpacing: Dimensions.standardSpacing,
                 mainAxisSpacing: Dimensions.standardSpacing,
                 maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
-                children: List<BoardGameCollectionItem>.generate(
+                children: List<BoardGameTile>.generate(
                   (snapshot.data as List<BoardGame>).length,
                   (int index) {
                     final BoardGame boardGame = snapshot.data[index] as BoardGame;
-                    return BoardGameCollectionItem(
+                    return BoardGameTile(
                       boardGame: boardGame,
                       onTap: () async {
                         await _analytics.logEvent(

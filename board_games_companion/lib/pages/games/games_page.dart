@@ -18,7 +18,7 @@ import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
 import '../../utilities/navigator_transitions.dart';
-import '../../widgets/board_games/board_game_collection_item_widget.dart';
+import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
@@ -344,7 +344,7 @@ class _Grid extends StatelessWidget {
           (int index) {
             final boardGame = boardGames[index];
 
-            return BoardGameCollectionItem(
+            return BoardGameTile(
               boardGame: boardGame,
               onTap: () async {
                 await _analytics.logEvent(
