@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -231,7 +232,12 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               backgroundColor: AppTheme.accentColor,
               horizontalPadding: Dimensions.standardSpacing,
               verticalPadding: Dimensions.standardSpacing,
-              onPressed: () {},
+              onPressed: () async {
+                await NavigatorHelper.navigateToEditPlaythrough(
+                  context,
+                  _playthroughStore.playthrough,                  
+                );
+              },
             ),
           ],
         ),

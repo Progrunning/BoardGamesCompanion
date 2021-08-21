@@ -1,3 +1,5 @@
+import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,6 +76,34 @@ class NavigatorHelper {
             boardGameName: boardGameName,
             boardGameDetailsStore: _boardGameDetailsStore,
             navigatingFromType: navigatingFromType,
+          );
+        },
+      ),
+    );
+  }
+
+  static Future<T> navigateToEditPlaythrough<T extends Object>(
+    BuildContext context,
+    Playthrough playthrough,
+  ) async {
+    final _analytics = Provider.of<AnalyticsService>(
+      context,
+      listen: false,
+    );
+
+    _analytics.logEvent(
+      name: Analytics.EditPlaythrough,
+      parameters: <String, String>{
+        Analytics.BoardGameIdParameter: playthrough.boardGameId,
+      },
+    );
+
+    return Navigator.push(
+      context,
+      NavigatorTransitions.fadeScale(
+        (_, __, ___) {
+          return EditPlaythoughPage(
+            playthrough: playthrough,
           );
         },
       ),

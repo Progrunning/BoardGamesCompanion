@@ -222,7 +222,7 @@ class _AppBarState extends State<_AppBar> {
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(74),
-        child: TabBar(          
+        child: TabBar(
           onTap: (int index) {
             widget.boardGamesStore.selectedTab = index.toGamesTab();
           },
@@ -386,95 +386,91 @@ class _Empty extends StatelessWidget with SyncCollection {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(
-          Dimensions.doubleStandardSpacing,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const Expanded(
-              child: SizedBox.shrink(),
-            ),
-            const Center(
-              child: Text(
-                'Your games collection is empty',
-                style: TextStyle(
-                  fontSize: Dimensions.extraLargeFontSize,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(
+            Dimensions.doubleStandardSpacing,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const SizedBox(
+                height: 60,
+              ),
+              const Center(
+                child: Text(
+                  'Your games collection is empty',
+                  style: TextStyle(
+                    fontSize: Dimensions.extraLargeFontSize,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: Dimensions.doubleStandardSpacing,
-            ),
-            const Icon(
-              Icons.sentiment_dissatisfied_sharp,
-              size: 80,
-              color: AppTheme.primaryColor,
-            ),
-            const SizedBox(
-              height: Dimensions.doubleStandardSpacing,
-            ),
-            const Text.rich(
-              TextSpan(
-                children: <InlineSpan>[
-                  TextSpan(
-                    text: 'Nothing to worry about though! ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                        'Follow the below instructions to fill up this screen with board games.\n\n',
-                  ),
-                  TextSpan(
-                    text: 'Use the bottom ',
-                  ),
-                  TextSpan(
-                    text: 'Search',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                        ' tab to check out current TOP 50 hot board games or look up any title.\n',
-                  ),
-                ],
+              const SizedBox(
+                height: Dimensions.doubleStandardSpacing,
               ),
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                fontSize: Dimensions.mediumFontSize,
+              const Icon(
+                Icons.sentiment_dissatisfied_sharp,
+                size: 80,
+                color: AppTheme.primaryColor,
               ),
-            ),
-            const BggCommunityMemberText(),
-            BggCommunityMemberUserNameTextField(
-              controller: _syncController,
-              onSubmit: () async {
-                await syncCollection(
-                  context,
-                  _syncController.text,
-                );
-              },
-            ),
-            const SizedBox(
-              height: Dimensions.standardSpacing,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: SyncButton(usernameCallback: () => _syncController.text),
-            ),
-            const SizedBox(
-              height: Dimensions.standardSpacing,
-            ),
-            const Expanded(child: SizedBox.shrink()),
-            const SizedBox(
-              height: Dimensions.standardSpacing,
-            ),
-          ],
+              const SizedBox(
+                height: Dimensions.doubleStandardSpacing,
+              ),
+              const Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: 'Nothing to worry about though! ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          'Follow the below instructions to fill up this screen with board games.\n\n',
+                    ),
+                    TextSpan(
+                      text: 'Use the bottom ',
+                    ),
+                    TextSpan(
+                      text: 'Search',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          ' tab to check out current TOP 50 hot board games or look up any title.\n',
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  fontSize: Dimensions.mediumFontSize,
+                ),
+              ),
+              const BggCommunityMemberText(),
+              BggCommunityMemberUserNameTextField(
+                controller: _syncController,
+                onSubmit: () async {
+                  await syncCollection(
+                    context,
+                    _syncController.text,
+                  );
+                },
+              ),
+              const SizedBox(
+                height: Dimensions.standardSpacing,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: SyncButton(usernameCallback: () => _syncController.text),
+              ),
+              const SizedBox(
+                height: Dimensions.standardSpacing,
+              ),
+            ],
+          ),
         ),
       ),
     );
