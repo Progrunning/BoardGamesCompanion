@@ -12,7 +12,10 @@ class NavigatorTransitions {
           page(context, animation, secondaryAnimation),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeThroughTransition(
-            animation: animation, secondaryAnimation: secondaryAnimation, child: child);
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+          child: child,
+        );
       },
     );
   }
@@ -24,7 +27,10 @@ class NavigatorTransitions {
       pageBuilder: (context, animation, secondaryAnimation) =>
           page(context, animation, secondaryAnimation),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeScaleTransition(animation: animation, child: child);
+        return FadeScaleTransition(
+          animation: animation,
+          child: child,
+        );
       },
     );
   }

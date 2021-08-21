@@ -7,6 +7,7 @@ class Analytics {
   static const String ViewHotBoardGame = 'view_hot_board_game';
   static const String SearchBoardGames = 'search_board_games';
   static const String BoardGameDetailsLinks = 'board_game_details_links';
+  static const String EditPlaythrough = 'edit_playthough';
 
   static const String BoardGameIdParameter = 'board_game_id';
   static const String BoardGameNameParameter = 'board_game_name';
