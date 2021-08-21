@@ -10,7 +10,7 @@ import '../../../stores/playthroughs_store.dart';
 import '../../common/default_icon.dart';
 import '../../common/icon_and_text_button.dart';
 import '../../common/rank_ribbon.dart';
-import '../../common/shadow_box_widget.dart';
+import '../../common/shadow_box.dart';
 import '../player_avatar_subtitle_widget.dart';
 import '../player_image.dart';
 import 'player_score_edit_widget.dart';

@@ -6,9 +6,9 @@ import '../common/constants.dart';
 import '../common/dimensions.dart';
 import '../common/strings.dart';
 import '../utilities/launcher_helper.dart';
-import '../widgets/about/detail_item_widget.dart';
-import '../widgets/about/section_text_widget.dart';
-import '../widgets/about/section_title_widget.dart';
+import '../widgets/about/detail_item.dart';
+import '../widgets/about/section_text.dart';
+import '../widgets/about/section_title.dart';
 import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
 
