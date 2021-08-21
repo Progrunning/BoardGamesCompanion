@@ -22,7 +22,7 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
-import '../../widgets/common/shadow_box_widget.dart';
+import '../../widgets/common/shadow_box.dart';
 import '../base_page_state.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'board_game_details_expansions.dart';
