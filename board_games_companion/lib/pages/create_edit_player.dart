@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -217,12 +218,12 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text(
-                  "You didn't save your changes. Are you sure you want to navigate away?"),
+              title: const Text("You didn't save your changes."),
+              content: const Text('Are you sure you want to navigate away?'),
               elevation: Dimensions.defaultElevation,
               actions: <Widget>[
                 FlatButton(
-                  child: const Text('Cancel'),
+                  child: const Text(Strings.Cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

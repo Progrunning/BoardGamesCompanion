@@ -7,8 +7,8 @@ class IconAndTextButton extends StatelessWidget {
   const IconAndTextButton({
     this.icon,
     this.title,
-    this.backgroundColor,
-    this.rippleEffectColor,
+    this.color,
+    this.splashColor,
     this.horizontalPadding,
     this.verticalPadding,
     @required this.onPressed,
@@ -21,22 +21,21 @@ class IconAndTextButton extends StatelessWidget {
 
   final Widget icon;
   final String title;
-  final Color backgroundColor;
-  final Color rippleEffectColor;
+  final Color color;
+  final Color splashColor;
 
   final double horizontalPadding;
   final double verticalPadding;
 
   @override
   Widget build(BuildContext context) {
-    final fillColor = backgroundColor ?? Theme.of(context).accentColor;
-    final splashColor = rippleEffectColor ??
-        fillColor.withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt());
+    final fillColor = color ?? Theme.of(context).accentColor;
 
     return RawMaterialButton(
       constraints: const BoxConstraints(),
       fillColor: fillColor,
-      splashColor: splashColor,
+      splashColor: splashColor ??
+          fillColor.withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt()),
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: horizontalPadding ?? Dimensions.doubleStandardSpacing,
@@ -46,7 +45,10 @@ class IconAndTextButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-            if (title?.isNotEmpty ?? false)
+            if (title?.isNotEmpty ?? false) ...[
+              const SizedBox(
+                width: Dimensions.halfStandardSpacing,
+              ),
               Text(
                 title,
                 style: const TextStyle(
@@ -54,10 +56,7 @@ class IconAndTextButton extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            if (title?.isNotEmpty ?? false)
-              const Divider(
-                indent: Dimensions.halfStandardSpacing,
-              ),
+            ]
           ],
         ),
       ),

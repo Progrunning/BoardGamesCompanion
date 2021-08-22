@@ -96,13 +96,26 @@ class AppTheme {
     final originalBodyText2 = originalTextTheme.bodyText2;
     final originalHeadline5 = originalTextTheme.headline5;
     final originalHeadline4 = originalTextTheme.headline4;
-    final originalHeadline3 = originalTextTheme.headline3;
     final originalHeadline2 = originalTextTheme.headline2;
     final originalHeadline1 = originalTextTheme.headline1;
-    final originalSubtitle1 = originalTextTheme.subtitle1;
     final originalSubtitle2 = originalTextTheme.subtitle2;
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
     final originaltimePickerTheme = ThemeData.light().timePickerTheme;
+    final originaltimeDialogTheme = ThemeData.light().dialogTheme;
+
+    final subtitle1TextStyle = originalTextTheme.subtitle1.copyWith(
+      fontSize: Dimensions.smallFontSize,
+      color: secondaryTextColor,
+    );
+
+    final headline6TextStyle = originalTextTheme.headline6.copyWith(
+      color: defaultTextColor,
+    );
+
+    final headline3TextStyle = originalTextTheme.headline3.copyWith(
+      fontSize: Dimensions.mediumFontSize,
+      color: defaultTextColor,
+    );
 
     return ThemeData.light().copyWith(
       chipTheme: ThemeData.light().chipTheme.copyWith(
@@ -117,7 +130,14 @@ class AppTheme {
       textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
       highlightColor: accentColor,
-      dialogBackgroundColor: primaryColor,
+      dialogBackgroundColor: primaryColorLight,
+      dialogTheme: originaltimeDialogTheme.copyWith(
+        backgroundColor: primaryColorLight,
+        titleTextStyle: headline3TextStyle,
+        contentTextStyle: subtitle1TextStyle.copyWith(
+          color: defaultTextColor,
+        ),
+      ),
       colorScheme: originalColorScheme.copyWith(
         primary: primaryColor,
         onPrimary: defaultTextColor,
@@ -129,12 +149,12 @@ class AppTheme {
         onBackground: defaultTextColor,
       ),
       timePickerTheme: originaltimePickerTheme.copyWith(
-        backgroundColor: AppTheme.primaryColor,
-        dialBackgroundColor: AppTheme.accentColor,
-        dialTextColor: AppTheme.inverterTextColor,
-        dialHandColor: AppTheme.white,
+        backgroundColor: primaryColorLight,
+        dialBackgroundColor: accentColor,
+        dialTextColor: inverterTextColor,
+        dialHandColor: white,
         helpTextStyle: const TextStyle(
-          color: AppTheme.defaultTextColor,
+          color: defaultTextColor,
         ),
       ),
       canvasColor: primaryColorLight,
@@ -154,6 +174,7 @@ class AppTheme {
           color: defaultTextColor,
           fontSize: Dimensions.standardFontSize,
         ),
+        headline6: headline6TextStyle,
         headline5: originalHeadline5.copyWith(
           color: defaultTextColor,
         ),
@@ -161,10 +182,7 @@ class AppTheme {
           fontSize: Dimensions.standardFontSize,
           color: defaultTextColor,
         ),
-        headline3: originalHeadline3.copyWith(
-          fontSize: Dimensions.mediumFontSize,
-          color: defaultTextColor,
-        ),
+        headline3: headline3TextStyle,
         headline2: originalHeadline2.copyWith(
           fontSize: Dimensions.largeFontSize,
           color: defaultTextColor,
@@ -173,10 +191,7 @@ class AppTheme {
           fontSize: Dimensions.extraLargeFontSize,
           color: defaultTextColor,
         ),
-        subtitle1: originalSubtitle1.copyWith(
-          fontSize: Dimensions.smallFontSize,
-          color: secondaryTextColor,
-        ),
+        subtitle1: subtitle1TextStyle,
         subtitle2: originalSubtitle2.copyWith(
           fontSize: Dimensions.extraLargeFontSize,
           color: secondaryTextColor,
