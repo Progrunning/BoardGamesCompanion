@@ -74,25 +74,27 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         );
       },
     );
-    if (newStartDate != null) {
-      final TimeOfDay newStartTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(now),
-        helpText: 'Pick a playthough time',
-        builder: (_, Widget child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: Theme.of(context).colorScheme.copyWith(
-                    primary: AppTheme.white, // hour/minute & AM/PM selected color
-                    surface: AppTheme.primaryColorLight, // AM/PM border
-                    onSurface:
-                        AppTheme.white.withOpacity(0.2), // hour/minute & AM/PM unselected color
-                  ),
-            ),
-            child: child,
-          );
-        },
-      );
+    if (newStartDate == null) {
+      return;
     }
+
+    final TimeOfDay newStartTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(now),
+      helpText: 'Pick a playthough time',
+      builder: (_, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: AppTheme.white, // hour/minute & AM/PM selected color
+                  surface: AppTheme.primaryColorLight, // AM/PM border
+                  onSurface:
+                      AppTheme.white.withOpacity(0.2), // hour/minute & AM/PM unselected color
+                ),
+          ),
+          child: child,
+        );
+      },
+    );
   }
 }
