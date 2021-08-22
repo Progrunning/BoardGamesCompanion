@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -476,31 +477,28 @@ class _Link extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () async {
-          onPressed?.call();
-          await boardGameDetailsStore.captureLinkAnalytics(title);
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                color: AppTheme.accentColor,
-                size: Dimensions.boardGameDetailsLinkIconSize,
+    return RippleEffect(
+      onTap: () async {
+        onPressed?.call();
+        await boardGameDetailsStore.captureLinkAnalytics(title);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(Dimensions.standardSpacing),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: AppTheme.accentColor,
+              size: Dimensions.boardGameDetailsLinkIconSize,
+            ),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: Dimensions.smallFontSize,
               ),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: Dimensions.smallFontSize,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
