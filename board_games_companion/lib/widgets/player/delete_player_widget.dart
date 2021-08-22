@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/dimensions.dart';
 import '../../common/routes.dart';
+import '../../common/strings.dart';
 import '../../models/hive/player.dart';
 import '../../stores/players_store.dart';
 import '../common/default_icon.dart';
@@ -24,7 +25,7 @@ class DeletePlayer extends StatelessWidget {
     return IconAndTextButton(
       title: 'Delete',
       icon: const DefaultIcon(Icons.delete),
-      backgroundColor: Colors.redAccent,
+      color: Colors.redAccent,
       onPressed: () async {
         await showDialog<AlertDialog>(
           context: context,
@@ -34,7 +35,7 @@ class DeletePlayer extends StatelessWidget {
               elevation: Dimensions.defaultElevation,
               actions: <Widget>[
                 FlatButton(
-                  child: const Text('Cancel'),
+                  child: const Text(Strings.Cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
