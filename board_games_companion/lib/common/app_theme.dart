@@ -102,6 +102,7 @@ class AppTheme {
     final originalSubtitle1 = originalTextTheme.subtitle1;
     final originalSubtitle2 = originalTextTheme.subtitle2;
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
+    final originaltimePickerTheme = ThemeData.light().timePickerTheme;
 
     return ThemeData.light().copyWith(
       chipTheme: ThemeData.light().chipTheme.copyWith(
@@ -115,6 +116,8 @@ class AppTheme {
       buttonColor: accentColor,
       textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
+      highlightColor: accentColor,
+      dialogBackgroundColor: primaryColor,
       colorScheme: originalColorScheme.copyWith(
         primary: primaryColor,
         onPrimary: defaultTextColor,
@@ -124,6 +127,15 @@ class AppTheme {
         onSurface: defaultTextColor,
         background: primaryColorLight,
         onBackground: defaultTextColor,
+      ),
+      timePickerTheme: originaltimePickerTheme.copyWith(
+        backgroundColor: AppTheme.primaryColor,
+        dialBackgroundColor: AppTheme.accentColor,
+        dialTextColor: AppTheme.inverterTextColor,
+        dialHandColor: AppTheme.white,
+        helpTextStyle: const TextStyle(
+          color: AppTheme.defaultTextColor,
+        ),
       ),
       canvasColor: primaryColorLight,
       textButtonTheme: TextButtonThemeData(

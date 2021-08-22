@@ -22,7 +22,7 @@ import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
-import '../../widgets/common/rippler_effect.dart';
+import '../../widgets/common/ripple_effect.dart';
 
 class SearchBoardGamesPage extends StatefulWidget {
   const SearchBoardGamesPage({Key key}) : super(key: key);

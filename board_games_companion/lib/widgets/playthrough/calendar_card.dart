@@ -4,7 +4,7 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
-import '../common/rippler_effect.dart';
+import '../common/ripple_effect.dart';
 import '../painters/divider_painter.dart';
 
 class CalendarCard extends StatelessWidget {

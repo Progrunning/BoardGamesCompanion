@@ -67,7 +67,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  onSurface: AppTheme.inverterTextColor,
+                  primary: AppTheme.accentColor,
                 ),
           ),
           child: child,
@@ -82,9 +82,11 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         builder: (_, Widget child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              primaryColorLight: Colors.black,
               colorScheme: Theme.of(context).colorScheme.copyWith(
-                    primary: AppTheme.accentColor,
+                    primary: AppTheme.white, // hour/minute & AM/PM selected color
+                    surface: AppTheme.primaryColorLight, // AM/PM border
+                    onSurface:
+                        AppTheme.white.withOpacity(0.2), // hour/minute & AM/PM unselected color
                   ),
             ),
             child: child,
