@@ -55,7 +55,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
                   boardGamesStore,
                 ),
                 icon: const DefaultIcon(Icons.remove_circle_outline),
-                backgroundColor: Colors.red,
+                color: Colors.red,
               );
             } else {
               return IconAndTextButton(

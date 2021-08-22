@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../common/animation_tags.dart';
 import '../../../common/app_theme.dart';
 import '../../../common/dimensions.dart';
+import '../../../common/strings.dart';
 import '../../../models/player_score.dart' as player_score_model;
 import '../../../stores/playthrough_store.dart';
 import '../../../stores/playthroughs_store.dart';
@@ -163,8 +164,8 @@ class PlayerScore extends StatelessWidget {
               children: <Widget>[
                 IconAndTextButton(
                   icon: const DefaultIcon(Icons.cancel),
-                  title: 'Cancel',
-                  backgroundColor: Colors.red,
+                  title: Strings.Cancel,
+                  color: Colors.red,
                   onPressed: () => Navigator.pop(context),
                 ),
                 const SizedBox(

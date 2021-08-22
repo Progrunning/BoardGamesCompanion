@@ -1,13 +1,13 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/utilities/navigator_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/enums.dart';
 import '../../common/enums/playthrough_status.dart';
+import '../../common/strings.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/player_score_extensions.dart';
 import '../../models/hive/board_game_details.dart';
@@ -17,6 +17,7 @@ import '../../services/score_service.dart';
 import '../../stores/playthrough_duration_store.dart';
 import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
+import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
@@ -214,7 +215,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
             if (_playthroughStore.playthrough.status == PlaythroughStatus.Started)
               IconAndTextButton(
                 icon: const DefaultIcon(Icons.stop),
-                backgroundColor: Colors.blue,
+                color: Colors.blue,
                 horizontalPadding: Dimensions.standardSpacing,
                 verticalPadding: Dimensions.standardSpacing,
                 onPressed: () => _stopPlaythrough(_playthroughStore),
@@ -222,14 +223,14 @@ class _PlaythroughPlayersStats extends StatelessWidget {
             if (_playthroughStore.playthrough.status == PlaythroughStatus.Finished)
               IconAndTextButton(
                 icon: const DefaultIcon(Icons.delete),
-                backgroundColor: Colors.red,
+                color: Colors.red,
                 horizontalPadding: Dimensions.standardSpacing,
                 verticalPadding: Dimensions.standardSpacing,
                 onPressed: () => _deletePlaythrough(context, _playthroughStore),
               ),
             IconAndTextButton(
               icon: const DefaultIcon(Icons.edit),
-              backgroundColor: AppTheme.accentColor,
+              color: AppTheme.accentColor,
               horizontalPadding: Dimensions.standardSpacing,
               verticalPadding: Dimensions.standardSpacing,
               onPressed: () async {
@@ -258,7 +259,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
-              child: const Text('Cancel'),
+              child: const Text(Strings.Cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
