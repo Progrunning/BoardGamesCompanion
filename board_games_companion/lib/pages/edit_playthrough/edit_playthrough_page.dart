@@ -1,7 +1,7 @@
+import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/widgets/common/text/item_property_title_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/playthrough.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -19,16 +19,12 @@ class EditPlaythoughPage extends StatefulWidget {
 }
 
 class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
-  CalendarController calendarController;
-  final CalendarFormat _calendarFormat = CalendarFormat.month;
-
   static const int _daysInYear = 365;
   static const int _daysInTenYears = _daysInYear * 10;
 
   @override
   void initState() {
     super.initState();
-    calendarController = CalendarController();
   }
 
   @override
@@ -41,51 +37,60 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              InkWell(
-                child: CalendarCard(widget.playthrough.startDate),
-                onTap: () async {
-                  await showDialog<void>(
-                    context: context,
-                    builder: (_) {
-                      return SimpleDialog(
-                        title: const Text(
-                          'Pick a playthrough date',
-                          style: TextStyle(color: AppTheme.defaultTextColor),
-                        ),
-                        backgroundColor: AppTheme.primaryColorLight,
-                        children: <Widget>[
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.5,
-                            width: MediaQuery.of(context).size.height * 0.8,
-                            child: Column(
-                              children: [
-                                TableCalendar(
-                                  calendarController: calendarController,
-                                  startDay:
-                                      DateTime.now().add(const Duration(days: -_daysInTenYears)),
-                                  endDay: DateTime.now(),
-                                  initialSelectedDay: widget.playthrough.startDate,
-                                  initialCalendarFormat: _calendarFormat,
-                                  startingDayOfWeek: StartingDayOfWeek.monday,
-                                  calendarStyle: const CalendarStyle(
-                                    // weekdayStyle: TextStyle(color: Colors.black),
-                                    selectedColor: AppTheme.accentColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+              const ItemPropertyTitle('Start time'),
+              const SizedBox(
+                height: Dimensions.halfStandardSpacing,
+              ),
+              CalendarCard(
+                widget.playthrough.startDate,
+                onTap: _pickStartDateTime,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _pickStartDateTime() async {
+    final DateTime now = DateTime.now();
+    final DateTime newStartDate = await showDatePicker(
+      context: context,
+      initialDate: widget.playthrough.startDate,
+      firstDate: now.add(const Duration(days: -_daysInTenYears)),
+      lastDate: now,
+      currentDate: now,
+      helpText: 'Pick a playthrough date',
+      builder: (_, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  onSurface: AppTheme.inverterTextColor,
+                ),
+          ),
+          child: child,
+        );
+      },
+    );
+    if (newStartDate != null) {
+      final TimeOfDay newStartTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(now),
+        helpText: 'Pick a playthough time',
+        builder: (_, Widget child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              primaryColorLight: Colors.black,
+              colorScheme: Theme.of(context).colorScheme.copyWith(
+                    primary: AppTheme.accentColor,
+                  ),
+            ),
+            child: child,
+          );
+        },
+      );
+    }
   }
 }
