@@ -6,6 +6,9 @@ import 'styles.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class AppTheme {
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
 
@@ -14,10 +17,10 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFF010055);
   static const Color secondaryLightColor = Color(0xFF2747A5);
 
-  static const Color shadowColor = Color(0xFF000000);
+  static const Color shadowColor = black;
 
-  static const Color defaultTextColor = Color(0xFFFFFFFF);
-  static const Color inverterTextColor = Color(0xFF000000);
+  static const Color defaultTextColor = white;
+  static const Color inverterTextColor = black;
 
   static const Color secondaryTextColor = Colors.grey;
 
@@ -87,6 +90,7 @@ class AppTheme {
   // MK Material fonts https://miro.medium.com/max/1400/1*Jlt_w6Bs7KAae42rYkFlwg.png
   static ThemeData get theme {
     final originalTextTheme = GoogleFonts.latoTextTheme();
+    const originalColorScheme = ColorScheme.light();
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
     final originalBodyText1 = originalTextTheme.bodyText1;
     final originalBodyText2 = originalTextTheme.bodyText2;
@@ -111,7 +115,22 @@ class AppTheme {
       buttonColor: accentColor,
       textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
+      colorScheme: originalColorScheme.copyWith(
+        primary: primaryColor,
+        onPrimary: defaultTextColor,
+        secondary: secondaryColor,
+        onSecondary: defaultTextColor,
+        surface: primaryColorLight,
+        onSurface: defaultTextColor,
+        background: primaryColorLight,
+        onBackground: defaultTextColor,
+      ),
       canvasColor: primaryColorLight,
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          primary: accentColor,
+        ),
+      ),
       textTheme: originalTextTheme.copyWith(
         bodyText1: originalBodyText1.copyWith(
           decorationColor: Colors.transparent,
