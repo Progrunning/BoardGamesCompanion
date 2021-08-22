@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
@@ -118,7 +119,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                     icon: const DefaultIcon(
                       Icons.remove_circle_outline,
                     ),
-                    backgroundColor: Colors.red,
+                    color: Colors.red,
                     onPressed: () async {
                       await _handleBggUserRemoval(
                         context,
@@ -153,19 +154,15 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
           title: Column(
             children: const <Widget>[
               Text('Are you sure you want to remove your BGG user connection?'),
-              SizedBox(
-                height: Dimensions.standardSpacing,
-              ),
-              Text(
-                'This will delete your entire board games collection, including the history of gameplays',
-                style: AppTheme.subTitleTextStyle,
-              ),
             ],
+          ),
+          content: const Text(
+            'This will delete your entire board games collection, including the history of gameplays',
           ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
-              child: const Text('Cancel'),
+              child: const Text(Strings.Cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
