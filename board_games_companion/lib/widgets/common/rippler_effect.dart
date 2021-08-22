@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 
+import '../../common/app_theme.dart';
 import '../../common/styles.dart';
 
 class RippleEffect extends StatelessWidget {
   const RippleEffect({
-    this.onTap,
-    this.child,
+    @required this.onTap,
+    @required this.child,
+    this.backgroundColor = Colors.transparent,
+    this.splashColor,
+    this.borderRadius,
     Key key,
   }) : super(key: key);
 
-  final GestureTapCallback onTap;
+  final VoidCallback onTap;
   final Widget child;
+  final Color backgroundColor;
+  final Color splashColor;
+  final BorderRadius borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: backgroundColor,
+      borderRadius: borderRadius,
       child: InkWell(
-        splashColor: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
+        splashColor: splashColor ?? AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+        borderRadius: borderRadius,
         onTap: onTap,
         child: child,
       ),
