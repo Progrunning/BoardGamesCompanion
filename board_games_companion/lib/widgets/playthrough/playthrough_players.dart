@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,6 @@ import '../../stores/start_playthrough_store.dart';
 import '../common/default_icon.dart';
 import '../common/generic_error_message_widget.dart';
 import '../common/icon_and_text_button.dart';
-import '../common/stack_ripple_effect.dart';
 import '../player/player_avatar.dart';
 
 class PlaythroughPlayers extends StatelessWidget {
@@ -64,7 +64,7 @@ class PlaythroughPlayers extends StatelessWidget {
                     ),
                   ),
                   Positioned.fill(
-                    child: StackRippleEffect(
+                    child: RippleEffect(
                       onTap: () {
                         playthroughPlayers[index].isChecked = !playthroughPlayers[index].isChecked;
                       },

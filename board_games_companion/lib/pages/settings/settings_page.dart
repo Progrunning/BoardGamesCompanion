@@ -16,7 +16,7 @@ import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
-import '../../widgets/common/rippler_effect.dart';
+import '../../widgets/common/ripple_effect.dart';
 import '../../widgets/common/sync_collection_button.dart';
 import '../about_page.dart';
 
@@ -199,17 +199,12 @@ class _RateAndReviewTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return RippleEffect(
       child: Stack(
-        children: <Widget>[
+        children: const <Widget>[
           DetailsItem(
             title: 'Rate & Review',
             subtitle: 'Store listing',
-            onTap: () async {
-              await InAppReview.instance.openStoreListing(
-                appStoreId: Constants.AppleAppId,
-              );
-            },
           ),
-          const Positioned.fill(
+          Positioned.fill(
             right: Dimensions.standardSpacing,
             child: Align(
               alignment: Alignment.centerRight,
@@ -221,6 +216,11 @@ class _RateAndReviewTile extends StatelessWidget {
           ),
         ],
       ),
+      onTap: () async {
+        await InAppReview.instance.openStoreListing(
+          appStoreId: Constants.AppleAppId,
+        );
+      },
     );
   }
 }
@@ -234,22 +234,12 @@ class _AboutPageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return RippleEffect(
       child: Stack(
-        children: <Widget>[
+        children: const <Widget>[
           DetailsItem(
             title: 'About',
             subtitle: 'App information',
-            onTap: () async {
-              await Navigator.push<AboutPage>(
-                context,
-                NavigatorTransitions.fadeThrough(
-                  (_, __, ___) {
-                    return const AboutPage();
-                  },
-                ),
-              );
-            },
           ),
-          const Positioned.fill(
+          Positioned.fill(
             right: Dimensions.standardSpacing,
             child: Align(
               alignment: Alignment.centerRight,
@@ -261,6 +251,16 @@ class _AboutPageTile extends StatelessWidget {
           ),
         ],
       ),
+      onTap: () async {
+        await Navigator.push<AboutPage>(
+          context,
+          NavigatorTransitions.fadeThrough(
+            (_, __, ___) {
+              return const AboutPage();
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -8,7 +8,7 @@ import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../models/hive/base_board_game.dart';
 import '../common/rank_ribbon.dart';
-import '../common/stack_ripple_effect.dart';
+import '../common/ripple_effect.dart';
 
 class BoardGameTile extends StatefulWidget {
   const BoardGameTile({
@@ -112,7 +112,10 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             child: RankRibbon(widget.boardGame.rank),
           ),
         Positioned.fill(
-          child: StackRippleEffect(
+          child: RippleEffect(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(Styles.defaultCornerRadius),
+            ),
             onTap: () async {
               if (widget.onTap == null) {
                 return;
