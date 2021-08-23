@@ -26,12 +26,14 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
   static const int _daysInTenYears = _daysInYear * 10;
 
   DateTime _startDateTime;
+  DateTime _endDateTime;
 
   @override
   void initState() {
     super.initState();
 
     _startDateTime = widget.playthrough.startDate;
+    _endDateTime = widget.playthrough.endDate;
   }
 
   @override
@@ -50,13 +52,15 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const ItemPropertyTitle('Start time'),
+                const ItemPropertyTitle('Start time & duration'),
                 const SizedBox(
                   height: Dimensions.halfStandardSpacing,
                 ),
-                CalendarCard(
-                  _startDateTime,
-                  onTap: _pickStartDateTime,
+                _Duration(
+                  startDateTime: _startDateTime,
+                  endDateTime: _endDateTime,
+                  onPickStartDateTime: _pickStartDateTime,
+                  onDurationChanged: _updatePlaythroughDuration,
                 ),
                 const Expanded(
                   child: SizedBox.shrink(),
@@ -130,10 +134,14 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         newStartDate.add(Duration(hours: newStartTime.hour, minutes: newStartTime.minute));
   }
 
+  void _updatePlaythroughDuration(Duration playthroughDuration) {
+    _endDateTime = _startDateTime.add(playthroughDuration);
+  }
+
   Future<void> _save() async {}
 
   Future<bool> _handleOnWillPop(BuildContext context, Playthrough playthrough) async {
-    if (_startDateTime != playthrough.startDate) {
+    if (_startDateTime != playthrough.startDate || _endDateTime != playthrough.endDate) {
       await showDialog<AlertDialog>(
         context: context,
         builder: (context) {
@@ -176,6 +184,218 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
     }
 
     return true;
+  }
+}
+
+class _Duration extends StatefulWidget {
+  const _Duration({
+    @required this.startDateTime,
+    @required this.endDateTime,
+    @required this.onPickStartDateTime,
+    @required this.onDurationChanged,
+    Key key,
+  }) : super(key: key);
+
+  final DateTime startDateTime;
+  final DateTime endDateTime;
+  final VoidCallback onPickStartDateTime;
+  final Function(Duration) onDurationChanged;
+
+  @override
+  _DurationState createState() => _DurationState();
+}
+
+class _DurationState extends State<_Duration> {
+  int playthroughDurationInSeconds;
+  int hoursPlayed;
+  int minutesPlyed;
+
+  @override
+  void initState() {
+    super.initState();
+    final Duration playthroughDuration =
+        (widget.endDateTime ?? DateTime.now()).difference(widget.startDateTime);
+    playthroughDurationInSeconds = playthroughDuration.inSeconds;
+    hoursPlayed = playthroughDuration.inHours;
+    minutesPlyed = playthroughDuration.inMinutes - hoursPlayed * Duration.minutesPerHour;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Center(
+          child: CalendarCard(
+            widget.startDateTime,
+            onTap: widget.onPickStartDateTime,
+          ),
+        ),
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Hours',
+                style: AppTheme.theme.textTheme.bodyText2,
+              ),
+              _DurationTextField(
+                value: hoursPlayed,
+                onDurationChanged: (int duration) {
+                  widget.onDurationChanged(
+                    Duration(
+                      seconds: playthroughDurationInSeconds +
+                          (duration - hoursPlayed).abs() * Duration.secondsPerHour,
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: Dimensions.doubleStandardSpacing,
+              ),
+              Text(
+                'Minutes',
+                style: AppTheme.theme.textTheme.bodyText2,
+              ),
+              _DurationTextField(
+                value: minutesPlyed,
+                minValue: 1,
+                maxValue: 59,
+                step: 10,
+                onDurationChanged: (int duration) {
+                  widget.onDurationChanged(
+                    Duration(
+                      seconds: playthroughDurationInSeconds +
+                          (duration - minutesPlyed).abs() * Duration.secondsPerMinute,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _DurationTextField extends StatefulWidget {
+  const _DurationTextField({
+    @required this.value,
+    @required this.onDurationChanged,
+    this.minValue = 0,
+    this.maxValue,
+    this.step = 1,
+    Key key,
+  }) : super(key: key);
+
+  final int value;
+  final Function(int) onDurationChanged;
+  final int minValue;
+  final int maxValue;
+  final int step;
+
+  @override
+  _DurationTextFieldState createState() => _DurationTextFieldState();
+}
+
+class _DurationTextFieldState extends State<_DurationTextField> {
+  TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController(text: widget.value.toString());
+    controller.addListener(() {
+      final int newDuration = int.tryParse(controller.text);
+      if (newDuration != null) {
+        widget.onDurationChanged(newDuration);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.remove),
+          color: AppTheme.accentColor,
+          onPressed: () {
+            final int duration = int.tryParse(controller.value.text);
+            if (duration == null) {
+              return;
+            }
+
+            if ((duration - widget.step) < widget.minValue) {
+              if (duration > widget.minValue) {
+                setState(() {
+                  controller.text = widget.minValue.toString();
+                });
+              }
+
+              return;
+            }
+
+            setState(() {
+              controller.text = (duration - widget.step).toString();
+            });
+          },
+        ),
+        const SizedBox(
+          width: Dimensions.standardSpacing,
+        ),
+        SizedBox(
+          width: 60,
+          child: TextFormField(
+            enableInteractiveSelection: false,
+            controller: controller,
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            style: AppTheme.theme.textTheme.subtitle1.copyWith(
+              color: AppTheme.defaultTextColor,
+              fontSize: Dimensions.largeFontSize,
+            ),
+            decoration: const InputDecoration(),
+          ),
+        ),
+        const SizedBox(
+          width: Dimensions.standardSpacing,
+        ),
+        IconButton(
+          icon: const Icon(Icons.add),
+          color: AppTheme.accentColor,
+          onPressed: () {
+            final int duration = int.tryParse(controller.value.text);
+            if (duration == null) {
+              return;
+            }
+
+            if (widget.maxValue != null && (duration + widget.step) > widget.maxValue) {
+              if (duration < widget.maxValue) {
+                setState(() {
+                  controller.text = widget.maxValue.toString();
+                });
+              }
+
+              return;
+            }
+
+            setState(() {
+              controller.text = (duration + widget.step).toString();
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 
