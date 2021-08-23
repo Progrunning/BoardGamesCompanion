@@ -193,7 +193,7 @@ class _AppBarState extends State<_AppBar> {
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
         style: AppTheme.defaultTextFieldStyle,
-        decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
+        decoration: InputDecoration(
           hintText: 'Search for a game...',
           suffixIcon: _retrieveSearchBarSuffixIcon(),
           enabledBorder: const UnderlineInputBorder(
