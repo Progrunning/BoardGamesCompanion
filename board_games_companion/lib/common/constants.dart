@@ -4,10 +4,6 @@ class Constants {
   static const ShortMonthDateFormat = 'MMM';
   static const ShortWeekDayDateFormat = 'E';
 
-  static const NumberOfSecondsInHour = 3600;
-  static const NumberOfSecondsInMinute = 60;
-  static const NumberOfMinutesInHour = 60;
-
   static const Top100 = 100;
   static const double BoardGameDetailsImageHeight = 300;
 

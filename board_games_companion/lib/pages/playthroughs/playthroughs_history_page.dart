@@ -236,7 +236,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               onPressed: () async {
                 await NavigatorHelper.navigateToEditPlaythrough(
                   context,
-                  _playthroughStore.playthrough,                  
+                  _playthroughStore.playthrough,
                 );
               },
             ),
@@ -312,7 +312,10 @@ class _PlaythroughPlayerList extends StatelessWidget {
               width: Dimensions.smallPlayerAvatarSize,
               child: Stack(
                 children: [
-                  PlayerAvatar(_playthroughStore.playerScores[index].player),
+                  PlayerAvatar(
+                    _playthroughStore.playerScores[index].player,
+                    playerHeroIdSuffix: _playthroughStore.playthrough.id,
+                  ),
                   if (_playthroughStore.playerScores[index].place != null)
                     PositionedTileRankRibbon(
                       rank: _playthroughStore.playerScores[index].place,

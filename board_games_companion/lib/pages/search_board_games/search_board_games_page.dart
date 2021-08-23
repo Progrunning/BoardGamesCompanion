@@ -78,7 +78,7 @@ class _SearchBar extends StatelessWidget {
               controller: _searchController,
               style: AppTheme.defaultTextFieldStyle,
               textAlignVertical: TextAlignVertical.center,
-              decoration: AppTheme.defaultTextFieldInputDecoration.copyWith(
+              decoration: InputDecoration(
                 hintText: 'Search...',
                 suffixIcon: retrieveSearchBarSuffixIcon(
                   store,

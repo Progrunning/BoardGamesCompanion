@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../common/constants.dart';
 import '../common/enums/playthrough_status.dart';
 import '../models/hive/playthrough.dart';
 
@@ -12,7 +11,7 @@ class PlaythroughDurationStore with ChangeNotifier {
     notifyListeners();
 
     if (_playthrough.status != PlaythroughStatus.Finished) {
-      final tickTimerInterval = durationInSeconds > Constants.NumberOfSecondsInHour
+      final tickTimerInterval = durationInSeconds > Duration.secondsPerHour
           ? _eveyrMinuteTimerTick
           : _eveyrSecondTimerTick;
       _timer = Timer.periodic(tickTimerInterval, _handleTick);
@@ -23,7 +22,7 @@ class PlaythroughDurationStore with ChangeNotifier {
   static const _eveyrMinuteTimerTick = Duration(minutes: 1);
 
   final Playthrough _playthrough;
-  
+
   Timer _timer;
   int _durationInSeconds;
   int get durationInSeconds => _durationInSeconds;
