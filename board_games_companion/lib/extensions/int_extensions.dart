@@ -30,14 +30,14 @@ extension IntExtensions on int {
       return fallbackValue ?? '';
     }
 
-    final hours = (this / Constants.NumberOfSecondsInHour).floor();
-    final minutes = (this / Constants.NumberOfSecondsInMinute).floor();
+    final hours = (this / Duration.secondsPerHour).floor();
+    final minutes = (this / Duration.secondsPerMinute).floor();
 
     if (hours == 0) {
-      return '${minutes}m ${this - minutes * Constants.NumberOfSecondsInMinute}s';
+      return '${minutes}m ${this - minutes * Duration.secondsPerMinute}s';
     }
     if (hours > 0) {
-      return '${hours}h ${minutes - hours * Constants.NumberOfMinutesInHour}min';
+      return '${hours}h ${minutes - hours * Duration.minutesPerHour}min';
     }
 
     return '${minutes}min';
@@ -48,13 +48,13 @@ extension IntExtensions on int {
       return fallbackValue ?? '';
     }
 
-    final hours = (this / Constants.NumberOfSecondsInHour).floor();
-    final minutes = (this / Constants.NumberOfSecondsInMinute).floor();
+    final hours = (this / Duration.secondsPerHour).floor();
+    final minutes = (this / Duration.secondsPerMinute).floor();
 
     if (hours > 0) {
       final hoursWithMinutesFraction = hours +
-          Constants.NumberOfMinutesInHour /
-              (minutes % Constants.NumberOfMinutesInHour);
+          Duration.minutesPerHour /
+              (minutes % Duration.minutesPerHour);
       return '~${hoursWithMinutesFraction.toStringAsFixed(1)}h';
     }
 

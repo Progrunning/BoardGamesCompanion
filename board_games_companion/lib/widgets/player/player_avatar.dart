@@ -13,12 +13,14 @@ class PlayerAvatar extends StatelessWidget {
     this.player, {
     this.topRightCornerActionWidget,
     this.onTap,
+    this.playerHeroIdSuffix,
     Key key,
   }) : super(key: key);
 
   final Player player;
   final Widget topRightCornerActionWidget;
   final VoidCallback onTap;
+  final String playerHeroIdSuffix;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class PlayerAvatar extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Hero(
-                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}',
+                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
                   child: PlayerImage(
                     imageUri: providerPlayer?.avatarImageUri,
                   ),

@@ -67,24 +67,7 @@ class AppTheme {
 
   static const TextStyle defaultTextFieldStyle = TextStyle(
     fontSize: Dimensions.standardFontSize,
-  );
-
-  static const InputDecoration defaultTextFieldInputDecoration = InputDecoration(
-    focusColor: AppTheme.accentColor,
-    hintStyle: TextStyle(
-      color: secondaryTextColor,
-      fontSize: Dimensions.standardFontSize,
-    ),
-    enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: AppTheme.primaryColor,
-      ),
-    ),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: AppTheme.accentColor,
-      ),
-    ),
+    color: defaultTextColor,
   );
 
   // MK Material fonts https://miro.medium.com/max/1400/1*Jlt_w6Bs7KAae42rYkFlwg.png
@@ -118,9 +101,6 @@ class AppTheme {
     );
 
     return ThemeData.light().copyWith(
-      chipTheme: ThemeData.light().chipTheme.copyWith(
-            elevation: Dimensions.defaultElevation,
-          ),
       cardColor: primaryColorLight, // LicensePage after loading
       scaffoldBackgroundColor: primaryColorLight, // LicensePage when loading
       primaryColor: primaryColor,
@@ -197,17 +177,39 @@ class AppTheme {
           color: secondaryTextColor,
         ),
       ),
+
       inputDecorationTheme: originalInputDecorationTheme.copyWith(
-        labelStyle: const TextStyle(
-          color: defaultTextColor,
+        focusColor: accentColor,
+        hintStyle: const TextStyle(
+          color: secondaryTextColor,
+          fontSize: Dimensions.standardFontSize,
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: AppTheme.primaryColor,
+          ),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: AppTheme.accentColor,
+          ),
         ),
       ),
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: accentColor,
+        selectionColor: accentColor,
+        selectionHandleColor: accentColor,
+      ),
+      useTextSelectionTheme: true,
       bottomNavigationBarTheme: originalBottomNavigationBarTheme.copyWith(
         unselectedLabelStyle: const TextStyle(color: defaultTextColor),
         selectedLabelStyle: const TextStyle(
           color: defaultTextColor,
         ),
       ),
+      chipTheme: ThemeData.light().chipTheme.copyWith(
+            elevation: Dimensions.defaultElevation,
+          ),
     );
   }
 }
