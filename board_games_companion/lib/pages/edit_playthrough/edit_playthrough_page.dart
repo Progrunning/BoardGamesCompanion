@@ -71,6 +71,15 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   onPickStartDateTime: _pickStartDateTime,
                   onDurationChanged: _updatePlaythroughDuration,
                 ),
+                const SizedBox(
+                  height: Dimensions.standardSpacing,
+                ),
+                Divider(
+                  thickness: 1,
+                  color: AppTheme.accentColor.withOpacity(0.2),
+                ),
+                const ItemPropertyTitle('Scores'),
+                // MK TODO Add A list for players, in there an avatar + horizontal number picker 
                 const Expanded(
                   child: SizedBox.shrink(),
                 ),
@@ -115,32 +124,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
       return;
     }
 
-    final TimeOfDay newStartTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(now),
-      helpText: 'Pick a playthough time',
-      builder: (_, Widget child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppTheme.white, // hour/minute & AM/PM selected color
-                  surface: AppTheme.primaryColorLight, // AM/PM border
-                  onSurface:
-                      AppTheme.white.withOpacity(0.2), // hour/minute & AM/PM unselected color
-                ),
-          ),
-          child: child,
-        );
-      },
-    );
-
-    if (newStartTime == null) {
-      _startDateTime = newStartDate;
-      return;
-    }
-
-    _startDateTime =
-        newStartDate.add(Duration(hours: newStartTime.hour, minutes: newStartTime.minute));
+    _startDateTime = newStartDate;
   }
 
   void _updatePlaythroughDuration(Duration playthroughDuration) {
@@ -223,6 +207,7 @@ class _DurationState extends State<_Duration> {
   @override
   void initState() {
     super.initState();
+
     playthroughDuration = (widget.endDateTime ?? DateTime.now()).difference(widget.startDateTime);
     playthroughDurationInSeconds = playthroughDuration.inSeconds;
     hoursPlayed = playthroughDuration.inHours;
@@ -245,7 +230,7 @@ class _DurationState extends State<_Duration> {
             NumberPicker.integer(
               initialValue: hoursPlayed,
               minValue: 0,
-              maxValue: 200,
+              maxValue: 99,
               onChanged: (num value) => setState(() => hoursPlayed = value.toInt()),
               listViewWidth: 46,
             ),
@@ -253,13 +238,11 @@ class _DurationState extends State<_Duration> {
               'h',
               style: AppTheme.theme.textTheme.bodyText2,
             ),
-            const SizedBox(
-              width: Dimensions.halfStandardSpacing,
-            ),
+            const SizedBox(width: Dimensions.halfStandardSpacing),
             NumberPicker.integer(
               initialValue: minutesPlyed,
               minValue: 0,
-              maxValue: 59,
+              maxValue: Duration.minutesPerHour - 1,
               onChanged: (num value) => setState(() => minutesPlyed = value.toInt()),
               listViewWidth: 46,
             ),
@@ -271,126 +254,6 @@ class _DurationState extends State<_Duration> {
         )
       ],
     );
-  }
-}
-
-class _DurationTextField extends StatefulWidget {
-  const _DurationTextField({
-    @required this.value,
-    @required this.onDurationChanged,
-    this.minValue = 0,
-    this.maxValue,
-    this.step = 1,
-    Key key,
-  }) : super(key: key);
-
-  final int value;
-  final Function(int) onDurationChanged;
-  final int minValue;
-  final int maxValue;
-  final int step;
-
-  @override
-  _DurationTextFieldState createState() => _DurationTextFieldState();
-}
-
-class _DurationTextFieldState extends State<_DurationTextField> {
-  TextEditingController controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = TextEditingController(text: widget.value.toString());
-    controller.addListener(() {
-      final int newDuration = int.tryParse(controller.text);
-      if (newDuration != null) {
-        widget.onDurationChanged(newDuration);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
-          icon: const Icon(Icons.expand_less),
-          color: AppTheme.accentColor,
-          onPressed: () {
-            final int duration = int.tryParse(controller.value.text) ?? 0;
-
-            if (widget.maxValue != null && (duration + widget.step) > widget.maxValue) {
-              if (duration < widget.maxValue) {
-                setState(() {
-                  controller.text = widget.maxValue.toString();
-                });
-              }
-
-              return;
-            }
-
-            setState(() {
-              controller.text = (duration + widget.step).toString();
-            });
-          },
-        ),
-        SizedBox(
-          width: 40,
-          child: TextFormField(
-            enableInteractiveSelection: false,
-            controller: controller,
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            style: AppTheme.theme.textTheme.subtitle1.copyWith(
-              color: AppTheme.defaultTextColor,
-              fontSize: Dimensions.largeFontSize,
-            ),
-            decoration: const InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                  width: 0,
-                ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                  width: 0,
-                ),
-              ),
-            ),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.expand_more),
-          color: AppTheme.accentColor,
-          onPressed: () {
-            final int duration = int.tryParse(controller.value.text) ?? 0;
-
-            if ((duration - widget.step) < widget.minValue) {
-              if (duration > widget.minValue) {
-                setState(() {
-                  controller.text = widget.minValue.toString();
-                });
-              }
-
-              return;
-            }
-
-            setState(() {
-              controller.text = (duration - widget.step).toString();
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }
 
