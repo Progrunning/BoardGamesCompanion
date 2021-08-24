@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -52,7 +53,15 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const ItemPropertyTitle('Start time & duration'),
+                Row(
+                  children: const <Widget>[
+                    ItemPropertyTitle('Start time'),
+                    Expanded(
+                      child: SizedBox.shrink(),
+                    ),
+                    ItemPropertyTitle('Duration'),
+                  ],
+                ),
                 const SizedBox(
                   height: Dimensions.halfStandardSpacing,
                 ),
@@ -206,6 +215,7 @@ class _Duration extends StatefulWidget {
 }
 
 class _DurationState extends State<_Duration> {
+  Duration playthroughDuration;
   int playthroughDurationInSeconds;
   int hoursPlayed;
   int minutesPlyed;
@@ -213,8 +223,7 @@ class _DurationState extends State<_Duration> {
   @override
   void initState() {
     super.initState();
-    final Duration playthroughDuration =
-        (widget.endDateTime ?? DateTime.now()).difference(widget.startDateTime);
+    playthroughDuration = (widget.endDateTime ?? DateTime.now()).difference(widget.startDateTime);
     playthroughDurationInSeconds = playthroughDuration.inSeconds;
     hoursPlayed = playthroughDuration.inHours;
     minutesPlyed = playthroughDuration.inMinutes - hoursPlayed * Duration.minutesPerHour;
@@ -230,49 +239,35 @@ class _DurationState extends State<_Duration> {
             onTap: widget.onPickStartDateTime,
           ),
         ),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Hours',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-              _DurationTextField(
-                value: hoursPlayed,
-                onDurationChanged: (int duration) {
-                  widget.onDurationChanged(
-                    Duration(
-                      seconds: playthroughDurationInSeconds +
-                          (duration - hoursPlayed).abs() * Duration.secondsPerHour,
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: Dimensions.doubleStandardSpacing,
-              ),
-              Text(
-                'Minutes',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-              _DurationTextField(
-                value: minutesPlyed,
-                minValue: 1,
-                maxValue: 59,
-                step: 10,
-                onDurationChanged: (int duration) {
-                  widget.onDurationChanged(
-                    Duration(
-                      seconds: playthroughDurationInSeconds +
-                          (duration - minutesPlyed).abs() * Duration.secondsPerMinute,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+        const Expanded(child: SizedBox.shrink()),
+        Row(
+          children: <Widget>[
+            NumberPicker.integer(
+              initialValue: hoursPlayed,
+              minValue: 0,
+              maxValue: 200,
+              onChanged: (num value) => setState(() => hoursPlayed = value.toInt()),
+              listViewWidth: 46,
+            ),
+            Text(
+              'h',
+              style: AppTheme.theme.textTheme.bodyText2,
+            ),
+            const SizedBox(
+              width: Dimensions.halfStandardSpacing,
+            ),
+            NumberPicker.integer(
+              initialValue: minutesPlyed,
+              minValue: 0,
+              maxValue: 59,
+              onChanged: (num value) => setState(() => minutesPlyed = value.toInt()),
+              listViewWidth: 46,
+            ),
+            Text(
+              'min ',
+              style: AppTheme.theme.textTheme.bodyText2,
+            ),
+          ],
         )
       ],
     );
@@ -317,61 +312,13 @@ class _DurationTextFieldState extends State<_DurationTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
         IconButton(
-          icon: const Icon(Icons.remove),
+          icon: const Icon(Icons.expand_less),
           color: AppTheme.accentColor,
           onPressed: () {
-            final int duration = int.tryParse(controller.value.text);
-            if (duration == null) {
-              return;
-            }
-
-            if ((duration - widget.step) < widget.minValue) {
-              if (duration > widget.minValue) {
-                setState(() {
-                  controller.text = widget.minValue.toString();
-                });
-              }
-
-              return;
-            }
-
-            setState(() {
-              controller.text = (duration - widget.step).toString();
-            });
-          },
-        ),
-        const SizedBox(
-          width: Dimensions.standardSpacing,
-        ),
-        SizedBox(
-          width: 60,
-          child: TextFormField(
-            enableInteractiveSelection: false,
-            controller: controller,
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            style: AppTheme.theme.textTheme.subtitle1.copyWith(
-              color: AppTheme.defaultTextColor,
-              fontSize: Dimensions.largeFontSize,
-            ),
-            decoration: const InputDecoration(),
-          ),
-        ),
-        const SizedBox(
-          width: Dimensions.standardSpacing,
-        ),
-        IconButton(
-          icon: const Icon(Icons.add),
-          color: AppTheme.accentColor,
-          onPressed: () {
-            final int duration = int.tryParse(controller.value.text);
-            if (duration == null) {
-              return;
-            }
+            final int duration = int.tryParse(controller.value.text) ?? 0;
 
             if (widget.maxValue != null && (duration + widget.step) > widget.maxValue) {
               if (duration < widget.maxValue) {
@@ -385,6 +332,54 @@ class _DurationTextFieldState extends State<_DurationTextField> {
 
             setState(() {
               controller.text = (duration + widget.step).toString();
+            });
+          },
+        ),
+        SizedBox(
+          width: 40,
+          child: TextFormField(
+            enableInteractiveSelection: false,
+            controller: controller,
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            style: AppTheme.theme.textTheme.subtitle1.copyWith(
+              color: AppTheme.defaultTextColor,
+              fontSize: Dimensions.largeFontSize,
+            ),
+            decoration: const InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                  width: 0,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                  width: 0,
+                ),
+              ),
+            ),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.expand_more),
+          color: AppTheme.accentColor,
+          onPressed: () {
+            final int duration = int.tryParse(controller.value.text) ?? 0;
+
+            if ((duration - widget.step) < widget.minValue) {
+              if (duration > widget.minValue) {
+                setState(() {
+                  controller.text = widget.minValue.toString();
+                });
+              }
+
+              return;
+            }
+
+            setState(() {
+              controller.text = (duration - widget.step).toString();
             });
           },
         ),
