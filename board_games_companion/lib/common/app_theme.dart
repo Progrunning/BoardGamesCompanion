@@ -165,7 +165,7 @@ class AppTheme {
         headline3: headline3TextStyle,
         headline2: originalHeadline2.copyWith(
           fontSize: Dimensions.largeFontSize,
-          color: defaultTextColor,
+          color: inverterTextColor,
         ),
         headline1: originalHeadline1.copyWith(
           fontSize: Dimensions.extraLargeFontSize,
@@ -175,7 +175,7 @@ class AppTheme {
         subtitle2: originalSubtitle2.copyWith(
           fontSize: Dimensions.extraLargeFontSize,
           color: secondaryTextColor,
-        ),
+        ),        
       ),
 
       inputDecorationTheme: originalInputDecorationTheme.copyWith(
