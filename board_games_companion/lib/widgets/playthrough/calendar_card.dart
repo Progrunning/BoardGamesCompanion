@@ -23,7 +23,6 @@ class CalendarCard extends StatelessWidget {
     return Container(
       width: _width,
       decoration: const BoxDecoration(
-        // color: AppTheme.white,
         borderRadius: BorderRadius.all(
           Radius.circular(Styles.boardGameTileImageCircularRadius),
         ),
