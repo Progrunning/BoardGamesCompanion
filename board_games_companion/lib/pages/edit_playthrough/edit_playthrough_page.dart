@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/models/player_score.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +8,11 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/strings.dart';
 import '../../models/hive/playthrough.dart';
+import '../../models/player_score.dart';
 import '../../stores/playthrough_store.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
-import '../../widgets/common/tile_positioned_rank_ribbon.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 
@@ -226,10 +225,6 @@ class _PlayerScore extends StatelessWidget {
                 playerScore.player,
                 playerHeroIdSuffix: playthroughId,
               ),
-              if (playerScore.place != null)
-                PositionedTileRankRibbon(
-                  rank: playerScore.place,
-                ),
             ],
           ),
         ),
