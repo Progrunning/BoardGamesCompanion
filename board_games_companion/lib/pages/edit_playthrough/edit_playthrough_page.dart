@@ -1,22 +1,30 @@
+import 'dart:math' as math;
+
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/strings.dart';
 import '../../models/hive/playthrough.dart';
+import '../../stores/playthrough_store.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
+import '../../widgets/common/tile_positioned_rank_ribbon.dart';
+import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
-    @required this.playthrough,
+    @required this.playthroughStore,
     Key key,
   }) : super(key: key);
 
-  final Playthrough playthrough;
+  final PlaythroughStore playthroughStore;
+  Playthrough get playthrough => playthroughStore.playthrough;
 
   @override
   _EditPlaythoughPageState createState() => _EditPlaythoughPageState();
@@ -79,9 +87,24 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   color: AppTheme.accentColor.withOpacity(0.2),
                 ),
                 const ItemPropertyTitle('Scores'),
-                // MK TODO Add A list for players, in there an avatar + horizontal number picker 
-                const Expanded(
-                  child: SizedBox.shrink(),
+                const SizedBox(
+                  height: Dimensions.halfStandardSpacing,
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: widget.playthroughStore.playerScores?.length ?? 0,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        width: Dimensions.doubleStandardSpacing,
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      return _PlayerScore(
+                        playerScore: widget.playthroughStore.playerScores[index],
+                        playthroughId: widget.playthroughStore.playthrough.id,
+                      );
+                    },
+                  ),
                 ),
                 _ActionButtons(
                   onSave: _save,
@@ -180,6 +203,76 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
   }
 }
 
+class _PlayerScore extends StatelessWidget {
+  const _PlayerScore({
+    Key key,
+    @required this.playerScore,
+    @required this.playthroughId,
+  }) : super(key: key);
+
+  final PlayerScore playerScore;
+  final String playthroughId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        SizedBox(
+          height: Dimensions.smallPlayerAvatarSize,
+          width: Dimensions.smallPlayerAvatarSize,
+          child: Stack(
+            children: [
+              PlayerAvatar(
+                playerScore.player,
+                playerHeroIdSuffix: playthroughId,
+              ),
+              if (playerScore.place != null)
+                PositionedTileRankRibbon(
+                  rank: playerScore.place,
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: Dimensions.standardSpacing,
+        ),
+        Column(
+          children: <Widget>[
+            ChangeNotifierProvider<PlayerScore>.value(
+              value: playerScore,
+              child: Consumer<PlayerScore>(
+                builder: (_, PlayerScore playerScoreConsumer, __) {
+                  return NumberPicker.horizontal(
+                    listViewHeight: 46,
+                    initialValue: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                    minValue: 0,
+                    maxValue: 10000,
+                    onChanged: (num value) async {
+                      final String valueText = value.toString();
+                      if (playerScoreConsumer.score?.value == valueText) {
+                        return;
+                      }
+
+                      await playerScoreConsumer.updatePlayerScore(valueText);
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: Dimensions.halfStandardSpacing,
+            ),
+            Text(
+              'points',
+              style: AppTheme.theme.textTheme.bodyText2,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class _Duration extends StatefulWidget {
   const _Duration({
     @required this.startDateTime,
@@ -228,7 +321,7 @@ class _DurationState extends State<_Duration> {
         Row(
           children: <Widget>[
             NumberPicker.integer(
-              initialValue: hoursPlayed,
+              initialValue: math.min(hoursPlayed, 99),
               minValue: 0,
               maxValue: 99,
               onChanged: (num value) => setState(() => hoursPlayed = value.toInt()),
