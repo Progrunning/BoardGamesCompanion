@@ -1,5 +1,3 @@
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,11 +5,13 @@ import '../common/analytics.dart';
 import '../models/hive/player.dart';
 import '../pages/board_game_details/board_game_details_page.dart';
 import '../pages/create_edit_player.dart';
+import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../services/analytics_service.dart';
 import '../services/board_games_geek_service.dart';
 import '../stores/board_game_details_store.dart';
 import '../stores/board_games_store.dart';
 import '../stores/players_store.dart';
+import '../stores/playthrough_store.dart';
 import 'navigator_transitions.dart';
 
 class NavigatorHelper {
@@ -84,7 +84,7 @@ class NavigatorHelper {
 
   static Future<T> navigateToEditPlaythrough<T extends Object>(
     BuildContext context,
-    Playthrough playthrough,
+    PlaythroughStore playthroughStore,
   ) async {
     final _analytics = Provider.of<AnalyticsService>(
       context,
@@ -94,7 +94,7 @@ class NavigatorHelper {
     _analytics.logEvent(
       name: Analytics.EditPlaythrough,
       parameters: <String, String>{
-        Analytics.BoardGameIdParameter: playthrough.boardGameId,
+        Analytics.BoardGameIdParameter: playthroughStore.playthrough.boardGameId,
       },
     );
 
@@ -103,7 +103,7 @@ class NavigatorHelper {
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
           return EditPlaythoughPage(
-            playthrough: playthrough,
+            playthroughStore: playthroughStore,
           );
         },
       ),
