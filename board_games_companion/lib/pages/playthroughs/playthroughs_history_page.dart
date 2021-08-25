@@ -236,7 +236,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               onPressed: () async {
                 await NavigatorHelper.navigateToEditPlaythrough(
                   context,
-                  _playthroughStore.playthrough,
+                  _playthroughStore,
                 );
               },
             ),
