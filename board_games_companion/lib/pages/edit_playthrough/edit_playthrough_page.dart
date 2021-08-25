@@ -146,7 +146,9 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
       return;
     }
 
-    _startDateTime = newStartDate;
+    setState(() {
+      _startDateTime = newStartDate;
+    });
   }
 
   void _updatePlaythroughDuration(Duration playthroughDuration) {
