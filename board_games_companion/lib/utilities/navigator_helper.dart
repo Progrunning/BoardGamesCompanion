@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../common/analytics.dart';
+import '../injectable.dart';
 import '../models/hive/player.dart';
 import '../pages/board_game_details/board_game_details_page.dart';
 import '../pages/create_edit_player.dart';
@@ -41,10 +42,7 @@ class NavigatorHelper {
     String boardGameName,
     Type navigatingFromType,
   ) async {
-    final _analytics = Provider.of<AnalyticsService>(
-      context,
-      listen: false,
-    );
+    final _analytics = getIt<AnalyticsService>();
 
     _analytics.logEvent(
       name: Analytics.ViewGameDetails,
@@ -58,10 +56,7 @@ class NavigatorHelper {
       context,
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
-          final _boardGamesGeekService = Provider.of<BoardGamesGeekService>(
-            context,
-            listen: false,
-          );
+          final _boardGamesGeekService = getIt<BoardGamesGeekService>();
           final _boardGamesStore = Provider.of<BoardGamesStore>(
             context,
             listen: false,
@@ -86,11 +81,7 @@ class NavigatorHelper {
     BuildContext context,
     PlaythroughStore playthroughStore,
   ) async {
-    final _analytics = Provider.of<AnalyticsService>(
-      context,
-      listen: false,
-    );
-
+    final _analytics = getIt<AnalyticsService>();
     _analytics.logEvent(
       name: Analytics.EditPlaythrough,
       parameters: <String, String>{

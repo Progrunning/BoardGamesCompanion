@@ -25,7 +25,12 @@ import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
 
 class SearchBoardGamesPage extends StatefulWidget {
-  const SearchBoardGamesPage({Key key}) : super(key: key);
+  const SearchBoardGamesPage({
+    this.analyticsService,
+    Key key,
+  }) : super(key: key);
+
+  final AnalyticsService analyticsService;
 
   @override
   _SearchBoardGamesPageState createState() => _SearchBoardGamesPageState();
@@ -373,24 +378,13 @@ class _NoResults extends StatelessWidget {
   }
 }
 
-class _HotBoardGames extends StatefulWidget {
-  const _HotBoardGames({Key key}) : super(key: key);
+class _HotBoardGames extends StatelessWidget {
+  const _HotBoardGames({
+    Key key,
+    this.analyticsService,
+  }) : super(key: key);
 
-  @override
-  _HotBoardGamesState createState() => _HotBoardGamesState();
-}
-
-class _HotBoardGamesState extends State<_HotBoardGames> {
-  AnalyticsService _analytics;
-
-  @override
-  void initState() {
-    super.initState();
-    _analytics = Provider.of<AnalyticsService>(
-      context,
-      listen: false,
-    );
-  }
+  final AnalyticsService analyticsService;
 
   @override
   Widget build(BuildContext context) {
@@ -416,7 +410,7 @@ class _HotBoardGamesState extends State<_HotBoardGames> {
                     return BoardGameTile(
                       boardGame: boardGame,
                       onTap: () async {
-                        await _analytics.logEvent(
+                        await analyticsService.logEvent(
                           name: Analytics.ViewHotBoardGame,
                           parameters: <String, String>{
                             Analytics.BoardGameIdParameter: boardGame.id,

@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:injectable/injectable.dart';
 
 import '../common/enums/playthrough_status.dart';
 import '../common/hive_boxes.dart';
@@ -8,6 +9,7 @@ import '../models/playthrough_player.dart';
 import 'hive_base_service.dart';
 import 'score_service.dart';
 
+@singleton
 class PlaythroughService extends BaseHiveService<Playthrough> {
   PlaythroughService(this.scoreService);
   

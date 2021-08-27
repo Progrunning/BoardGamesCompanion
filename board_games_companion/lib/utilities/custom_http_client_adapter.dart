@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
+@injectable
 class CustomHttpClientAdapter extends HttpClientAdapter {
   final _adapter = DefaultHttpClientAdapter();
   final log = Logger(
@@ -16,8 +18,8 @@ class CustomHttpClientAdapter extends HttpClientAdapter {
   }
 
   @override
-  Future<ResponseBody> fetch(RequestOptions options,
-      Stream<List<int>> requestStream, Future cancelFuture) async {
+  Future<ResponseBody> fetch(
+      RequestOptions options, Stream<List<int>> requestStream, Future cancelFuture) async {
     log.d('[HTTP] Request ${options?.uri}...');
     final response = await _adapter.fetch(options, requestStream, cancelFuture);
     log.d('[HTTP] Response ${response?.statusCode}');

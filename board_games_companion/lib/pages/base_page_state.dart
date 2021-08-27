@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../common/app_theme.dart';
 import '../common/dimensions.dart';
 import '../common/strings.dart';
+import '../injectable.dart';
 import '../services/rate_and_review_service.dart';
 
 abstract class BasePageState<T extends StatefulWidget> extends State<T> {
@@ -13,10 +13,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   void initState() {
     super.initState();
 
-    rateAndReviewService = Provider.of<RateAndReviewService>(
-      context,
-      listen: false,
-    );
+    rateAndReviewService = getIt<RateAndReviewService>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!rateAndReviewService.showRateAndReviewDialog) {
