@@ -1,3 +1,5 @@
+import 'package:injectable/injectable.dart';
+
 import '../common/hive_boxes.dart';
 import '../models/collection_sync_result.dart';
 import '../models/hive/board_game_details.dart';
@@ -5,6 +7,7 @@ import 'board_games_geek_service.dart';
 import 'hive_base_service.dart';
 import 'preferences_service.dart';
 
+@singleton
 class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   BoardGamesService(this._boardGameGeekService, this._preferenceService);
 

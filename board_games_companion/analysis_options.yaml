@@ -40,8 +40,9 @@ analyzer:
     unnecessary_null_comparison: ignore
   exclude:
     - "bin/cache/**"
-    # Ignore protoc generated files
     - "dev/conductor/lib/proto/*"
+    - lib/**/*.g.dart
+    - lib/injectable.config.dart
 
 linter:
   rules:
@@ -110,7 +111,7 @@ linter:
     - empty_constructor_bodies
     - empty_statements
     - exhaustive_cases
-    - file_names    
+    - file_names
     - hash_and_equals
     - implementation_imports
     # - invariant_booleans # too many false positives: https://github.com/dart-lang/linter/issues/811

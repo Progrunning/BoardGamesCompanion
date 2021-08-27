@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 
 import '../common/hive_boxes.dart';
 import 'hive_base_service.dart';
 
+@singleton
 class PreferencesService extends BaseHiveService<dynamic> {
   static const String _firstTimeAppLaunchDateKey = 'firstTimeLaunchDate';
   static const String _appLaunchDateKey = 'applaunchDate';

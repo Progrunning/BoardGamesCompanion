@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../common/app_theme.dart';
 import '../common/constants.dart';
 import '../extensions/page_controller_extensions.dart';
+import '../services/analytics_service.dart';
+import '../services/rate_and_review_service.dart';
 import '../stores/board_games_store.dart';
 import '../stores/home_store.dart';
 import '../stores/user_store.dart';
@@ -19,7 +21,14 @@ import 'search_board_games/search_board_games_page.dart';
 import 'settings/settings_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({
+    @required this.analyticsService,
+    @required this.rateAndReviewService,
+    Key key,
+  }) : super(key: key);
+
+  final AnalyticsService analyticsService;
+  final RateAndReviewService rateAndReviewService;
 
   static final GlobalKey<ScaffoldState> homePageGlobalKey = GlobalKey<ScaffoldState>();
 
@@ -50,6 +59,8 @@ class _HomePageState extends BasePageState<HomePage> {
                 return GamesPage(
                   boardGamesStore,
                   userStore,
+                  widget.analyticsService,
+                  widget.rateAndReviewService,
                 );
               },
             ),

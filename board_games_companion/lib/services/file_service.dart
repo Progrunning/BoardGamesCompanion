@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
+@singleton
 class FileService {
   Future<File> saveToDocumentsDirectory(String fileName, PickedFile pickedFile,
       {bool overrideExistingFile = false}) async {

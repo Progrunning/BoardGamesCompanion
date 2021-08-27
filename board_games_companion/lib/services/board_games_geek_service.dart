@@ -1,6 +1,8 @@
+import 'package:board_games_companion/utilities/custom_http_client_adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:injectable/injectable.dart';
 import 'package:xml/xml.dart' as xml;
 
 import '../common/enums/collection_type.dart';
@@ -16,6 +18,7 @@ import '../models/hive/board_game_publisher.dart';
 import '../models/hive/board_game_rank.dart';
 import '../utilities/bgg_retry_interceptor.dart';
 
+@singleton
 class BoardGamesGeekService {
   BoardGamesGeekService(this._httpClientAdapter) {
     _dio.httpClientAdapter = _httpClientAdapter;
@@ -85,7 +88,7 @@ class BoardGamesGeekService {
 
   static const int _numberOfDaysToCacheBoardGameDetails = 1;
 
-  final HttpClientAdapter _httpClientAdapter;
+  final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
 
   Future<List<BoardGame>> getHot() async {
