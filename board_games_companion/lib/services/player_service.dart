@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart' show Uuid;
 
 import '../common/hive_boxes.dart' show HiveBoxes;
@@ -7,6 +8,7 @@ import '../models/hive/player.dart';
 import 'file_service.dart';
 import 'hive_base_service.dart';
 
+@singleton
 class PlayerService extends BaseHiveService<Player> {
   PlayerService(this.fileService);
 

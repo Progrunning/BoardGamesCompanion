@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:injectable/injectable.dart';
 
 import 'preferences_service.dart';
 
+@singleton
 class RateAndReviewService {
   RateAndReviewService(this._preferencesService);
 
