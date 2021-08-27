@@ -10,6 +10,7 @@ import '../../common/enums/playthrough_status.dart';
 import '../../common/strings.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/player_score_extensions.dart';
+import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/playthrough.dart';
 import '../../services/player_service.dart';
@@ -172,14 +173,9 @@ class _Playthrough extends StatelessWidget {
   }
 
   PlaythroughStore _createAndLoadPlatythroughStore(BuildContext context) {
-    final playerService = Provider.of<PlayerService>(
-      context,
-      listen: false,
-    );
-    final scoreService = Provider.of<ScoreService>(
-      context,
-      listen: false,
-    );
+    // TODO MK Fix dependencies to be injectable (if possible)
+    final playerService = getIt<PlayerService>();
+    final scoreService = getIt<ScoreService>();
     final playthroughsStore = Provider.of<PlaythroughsStore>(
       context,
       listen: false,

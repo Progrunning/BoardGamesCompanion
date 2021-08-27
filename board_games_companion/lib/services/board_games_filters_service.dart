@@ -1,7 +1,10 @@
+import 'package:injectable/injectable.dart';
+
 import '../common/hive_boxes.dart';
 import '../models/collection_filters.dart';
 import 'hive_base_service.dart';
 
+@singleton
 class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
   static const String _collectionFiltersPreferenceKey = 'collectionFilters';
 

@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +13,7 @@ import 'app.dart';
 import 'common/enums/order_by.dart';
 import 'common/enums/playthrough_status.dart';
 import 'common/enums/sort_by_option.dart';
+import 'injectable.dart';
 import 'models/collection_filters.dart';
 import 'models/hive/board_game_artist.dart';
 import 'models/hive/board_game_category.dart';
@@ -32,11 +31,9 @@ import 'services/analytics_service.dart';
 import 'services/board_games_filters_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/board_games_service.dart';
-import 'services/file_service.dart';
 import 'services/player_service.dart';
 import 'services/playthroughs_service.dart';
 import 'services/preferences_service.dart';
-import 'services/rate_and_review_service.dart';
 import 'services/score_service.dart';
 import 'services/user_service.dart';
 import 'stores/board_game_playthroughs_store.dart';
@@ -51,11 +48,9 @@ import 'stores/search_bar_board_games_store.dart';
 import 'stores/search_board_games_store.dart';
 import 'stores/start_playthrough_store.dart';
 import 'stores/user_store.dart';
-import 'utilities/custom_http_client_adapter.dart';
-
-PreferencesService _preferencesService = PreferencesService();
 
 Future<void> main() async {
+  configureDependencies();
   WidgetsFlutterBinding.ensureInitialized();
 
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
@@ -77,7 +72,8 @@ Future<void> main() async {
   Hive.registerAdapter(OrderByAdapter());
   Hive.registerAdapter(CollectionFiltersAdapter());
 
-  await _preferencesService.initialize();
+  final PreferencesService preferencesService = getIt<PreferencesService>();
+  await preferencesService.initialize();
 
   await Firebase.initializeApp();
 
@@ -89,153 +85,77 @@ Future<void> main() async {
   });
 
   runZoned(() {
-    runApp(const App());
+    runApp(App(
+      preferencesService: preferencesService,
+    ));
   }, onError: FirebaseCrashlytics.instance.recordError);
 }
 
 class App extends StatelessWidget {
-  const App({Key key}) : super(key: key);
+  const App({
+    @required this.preferencesService,
+    Key key,
+  }) : super(key: key);
 
-  static final FirebaseAnalytics _analytics = FirebaseAnalytics();
-  static final FirebaseAnalyticsObserver _analyticsObserver =
-      FirebaseAnalyticsObserver(analytics: _analytics);
-  static final RateAndReviewService _rateAndReviewService =
-      RateAndReviewService(_preferencesService);
+  final PreferencesService preferencesService;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<FirebaseAnalyticsObserver>.value(value: _analyticsObserver),
-        Provider<PreferencesService>.value(value: _preferencesService),
-        Provider<RateAndReviewService>.value(value: _rateAndReviewService),
-        Provider<AnalyticsService>(
-          create: (context) {
-            return AnalyticsService(
-              _analytics,
-              Provider.of<RateAndReviewService>(
-                context,
-                listen: false,
-              ),
-            );
-          },
-        ),
-        Provider<CustomHttpClientAdapter>(
-          create: (context) => CustomHttpClientAdapter(),
-        ),
-        Provider<BoardGamesGeekService>(
-          create: (context) => BoardGamesGeekService(
-            Provider.of<CustomHttpClientAdapter>(
-              context,
-              listen: false,
-            ),
-          ),
-        ),
-        Provider<BoardGamesService>(
-          create: (context) => BoardGamesService(
-            Provider.of<BoardGamesGeekService>(
-              context,
-              listen: false,
-            ),
-            _preferencesService,
-          ),
-        ),
-        Provider<FileService>(
-          create: (context) => FileService(),
-        ),
-        Provider<PlayerService>(
-          create: (context) => PlayerService(
-            Provider.of<FileService>(
-              context,
-              listen: false,
-            ),
-          ),
-        ),
-        Provider<ScoreService>(
-          create: (context) => ScoreService(),
-        ),
-        Provider<UserService>(
-          create: (context) => UserService(),
-        ),
-        Provider<PlaythroughService>(
-          create: (context) => PlaythroughService(
-            Provider.of<ScoreService>(
-              context,
-              listen: false,
-            ),
-          ),
-        ),
-        Provider<BoardGamesFiltersService>(
-          create: (context) => BoardGamesFiltersService(),
-        ),
         ChangeNotifierProvider<HomeStore>(
           create: (context) => HomeStore(),
         ),
         ChangeNotifierProvider<UserStore>(
           create: (context) {
+            final UserService userService = getIt<UserService>();
+            final AnalyticsService analyticsService = getIt<AnalyticsService>();
             final userStore = UserStore(
-              Provider.of<UserService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<AnalyticsService>(
-                context,
-                listen: false,
-              ),
+              userService,
+              analyticsService,
             );
-            _preferencesService.setAppLaunchDate();
+
+            preferencesService.setAppLaunchDate();
             userStore.loadUser();
             return userStore;
           },
         ),
         ChangeNotifierProvider<HotBoardGamesStore>(
-          create: (context) => HotBoardGamesStore(
-            Provider.of<BoardGamesGeekService>(
-              context,
-              listen: false,
-            ),
-          ),
+          create: (context) {
+            final BoardGamesGeekService boardGamesGeekService = getIt<BoardGamesGeekService>();
+            return HotBoardGamesStore(boardGamesGeekService);
+          },
         ),
         ChangeNotifierProvider<SearchBarBoardGamesStore>(
           create: (context) => SearchBarBoardGamesStore(),
         ),
         ChangeNotifierProvider<SearchBoardGamesStore>(
-          create: (context) => SearchBoardGamesStore(
-            Provider.of<BoardGamesGeekService>(
-              context,
-              listen: false,
-            ),
-            Provider.of<SearchBarBoardGamesStore>(
-              context,
-              listen: false,
-            ),
-            Provider.of<AnalyticsService>(
-              context,
-              listen: false,
-            ),
-          ),
-        ),
-        ChangeNotifierProvider<PlayersStore>(
           create: (context) {
-            return PlayersStore(
-              Provider.of<PlayerService>(
+            final BoardGamesGeekService boardGamesGeekService = getIt<BoardGamesGeekService>();
+            final AnalyticsService analyticsService = getIt<AnalyticsService>();
+            return SearchBoardGamesStore(
+              boardGamesGeekService,
+              Provider.of<SearchBarBoardGamesStore>(
                 context,
                 listen: false,
               ),
+              analyticsService,
             );
+          },
+        ),
+        ChangeNotifierProvider<PlayersStore>(
+          create: (context) {
+            final PlayerService playerService = getIt<PlayerService>();
+            return PlayersStore(playerService);
           },
         ),
         ChangeNotifierProvider<PlaythroughsStore>(
           create: (context) {
+            final PlaythroughService playthroughService = getIt<PlaythroughService>();
+            final AnalyticsService analyticsService = getIt<AnalyticsService>();
             return PlaythroughsStore(
-              Provider.of<PlaythroughService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<AnalyticsService>(
-                context,
-                listen: false,
-              ),
+              playthroughService,
+              analyticsService,
             );
           },
         ),
@@ -243,16 +163,12 @@ class App extends StatelessWidget {
           create: (context) => BoardGamePlaythroughsStore(),
         ),
         ChangeNotifierProvider<BoardGamesFiltersStore>(
-          create: (context) => BoardGamesFiltersStore(
-            Provider.of<BoardGamesFiltersService>(
-              context,
-              listen: false,
-            ),
-            Provider.of<AnalyticsService>(
-              context,
-              listen: false,
-            ),
-          ),
+          create: (context) {
+            final BoardGamesFiltersService boardGamesFiltersService =
+                getIt<BoardGamesFiltersService>();
+            final AnalyticsService analyticsService = getIt<AnalyticsService>();
+            return BoardGamesFiltersStore(boardGamesFiltersService, analyticsService);
+          },
         ),
         ChangeNotifierProvider<StartPlaythroughStore>(
           create: (context) => StartPlaythroughStore(
@@ -264,23 +180,15 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<BoardGamesFiltersStore, BoardGamesStore>(
           create: (context) {
+            final BoardGamesService boardGamesService = getIt<BoardGamesService>();
+            final PlaythroughService playthroughService = getIt<PlaythroughService>();
+            final ScoreService scoreService = getIt<ScoreService>();
+            final PlayerService playerService = getIt<PlayerService>();
             final boardGamesStore = BoardGamesStore(
-              Provider.of<BoardGamesService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<PlaythroughService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<ScoreService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<PlayerService>(
-                context,
-                listen: false,
-              ),
+              boardGamesService,
+              playthroughService,
+              scoreService,
+              playerService,
               Provider.of<BoardGamesFiltersStore>(
                 context,
                 listen: false,
@@ -298,19 +206,13 @@ class App extends StatelessWidget {
         ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
             PlaythroughStatisticsStore>(
           create: (context) {
+            final PlayerService playerService = getIt<PlayerService>();
+            final ScoreService scoreService = getIt<ScoreService>();
+            final PlaythroughService playthroughService = getIt<PlaythroughService>();
             final boardGamesStore = PlaythroughStatisticsStore(
-              Provider.of<PlayerService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<ScoreService>(
-                context,
-                listen: false,
-              ),
-              Provider.of<PlaythroughService>(
-                context,
-                listen: false,
-              ),
+              playerService,
+              scoreService,
+              playthroughService,
             );
 
             return boardGamesStore;
@@ -321,7 +223,7 @@ class App extends StatelessWidget {
           },
         ),
       ],
-      child: BoardGamesCompanionApp(_analyticsObserver),
+      child: const BoardGamesCompanionApp(),
     );
   }
 }

@@ -32,12 +32,16 @@ import 'games_filter_panel.dart';
 class GamesPage extends StatefulWidget {
   const GamesPage(
     this.boardGamesStore,
-    this.userStore, {
+    this.userStore,
+    this.analyticsService,
+    this.rateAndReviewService, {
     Key key,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
   final UserStore userStore;
+  final AnalyticsService analyticsService;
+  final RateAndReviewService rateAndReviewService;
 
   @override
   _GamesPageState createState() => _GamesPageState();
@@ -66,6 +70,8 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
       return _Collection(
         boardGamesStore: widget.boardGamesStore,
         topTabController: _topTabController,
+        analyticsService: widget.analyticsService,
+        rateAndReviewService: widget.rateAndReviewService,
       );
     } else if (widget.boardGamesStore.loadDataState == LoadDataState.Error) {
       return const Center(
@@ -89,11 +95,15 @@ class _Collection extends StatelessWidget {
   const _Collection({
     @required this.boardGamesStore,
     @required this.topTabController,
+    @required this.analyticsService,
+    @required this.rateAndReviewService,
     Key key,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
   final TabController topTabController;
+  final AnalyticsService analyticsService;
+  final RateAndReviewService rateAndReviewService;
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +114,8 @@ class _Collection extends StatelessWidget {
             _AppBar(
               boardGamesStore: boardGamesStore,
               topTabController: topTabController,
+              analyticsService: analyticsService,
+              rateAndReviewService: rateAndReviewService,
             ),
             Builder(
               builder: (_) {
@@ -133,6 +145,7 @@ class _Collection extends StatelessWidget {
                 return _Grid(
                   boardGames: boardGames,
                   collectionFlag: boardGamesStore.selectedTab.toCollectionFlag(),
+                  analyticsService: analyticsService,
                 );
               },
             ),
@@ -147,11 +160,15 @@ class _AppBar extends StatefulWidget {
   const _AppBar({
     @required this.boardGamesStore,
     @required this.topTabController,
+    @required this.analyticsService,
+    @required this.rateAndReviewService,
     Key key,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
   final TabController topTabController;
+  final AnalyticsService analyticsService;
+  final RateAndReviewService rateAndReviewService;
 
   @override
   _AppBarState createState() => _AppBarState();
@@ -161,20 +178,10 @@ class _AppBarState extends State<_AppBar> {
   final _searchController = TextEditingController();
 
   Timer _debounce;
-  AnalyticsService _analyticsService;
-  RateAndReviewService _rateAndReviewService;
 
   @override
   void initState() {
     super.initState();
-    _analyticsService = Provider.of<AnalyticsService>(
-      context,
-      listen: false,
-    );
-    _rateAndReviewService = Provider.of<RateAndReviewService>(
-      context,
-      listen: false,
-    );
 
     _searchController.addListener(_handleSearchChanged);
   }
@@ -213,10 +220,10 @@ class _AppBarState extends State<_AppBar> {
           onPressed: () async {
             await _openFiltersPanel(context);
 
-            await _analyticsService.logEvent(
+            await widget.analyticsService.logEvent(
               name: Analytics.FilterCollection,
             );
-            await _rateAndReviewService.increaseNumberOfSignificantActions();
+            await widget.rateAndReviewService.increaseNumberOfSignificantActions();
           },
         )
       ],
@@ -279,7 +286,7 @@ class _AppBarState extends State<_AppBar> {
       () async {
         widget.boardGamesStore.updateSearchResults(_searchController.text);
 
-        await _rateAndReviewService.increaseNumberOfSignificantActions();
+        await widget.rateAndReviewService.increaseNumberOfSignificantActions();
       },
     );
   }
@@ -319,18 +326,15 @@ class _Grid extends StatelessWidget {
     Key key,
     @required this.boardGames,
     @required this.collectionFlag,
+    @required this.analyticsService,
   }) : super(key: key);
 
   final List<BoardGameDetails> boardGames;
   final CollectionType collectionFlag;
+  final AnalyticsService analyticsService;
 
   @override
   Widget build(BuildContext context) {
-    final _analytics = Provider.of<AnalyticsService>(
-      context,
-      listen: false,
-    );
-
     return SliverPadding(
       padding: const EdgeInsets.all(
         Dimensions.standardSpacing,
@@ -347,7 +351,7 @@ class _Grid extends StatelessWidget {
             return BoardGameTile(
               boardGame: boardGame,
               onTap: () async {
-                await _analytics.logEvent(
+                await analyticsService.logEvent(
                   name: Analytics.ViewGameStats,
                   parameters: <String, String>{
                     Analytics.BoardGameIdParameter: boardGame.id,

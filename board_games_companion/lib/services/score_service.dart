@@ -1,7 +1,10 @@
+import 'package:injectable/injectable.dart';
+
 import '../common/hive_boxes.dart';
 import '../models/hive/score.dart';
 import 'hive_base_service.dart';
 
+@singleton
 class ScoreService extends BaseHiveService<Score> {
   Future<bool> addOrUpdateScore(Score score) async {
     if ((score?.playthroughId?.isEmpty ?? true) ||
