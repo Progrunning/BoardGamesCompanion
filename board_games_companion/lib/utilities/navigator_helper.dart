@@ -9,6 +9,7 @@ import '../pages/create_edit_player.dart';
 import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../services/analytics_service.dart';
 import '../services/board_games_geek_service.dart';
+import '../services/preferences_service.dart';
 import '../stores/board_game_details_store.dart';
 import '../stores/board_games_store.dart';
 import '../stores/players_store.dart';
@@ -57,6 +58,7 @@ class NavigatorHelper {
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
           final _boardGamesGeekService = getIt<BoardGamesGeekService>();
+          final _preferencesService = getIt<PreferencesService>();
           final _boardGamesStore = Provider.of<BoardGamesStore>(
             context,
             listen: false,
@@ -71,6 +73,7 @@ class NavigatorHelper {
             boardGameName: boardGameName,
             boardGameDetailsStore: _boardGameDetailsStore,
             navigatingFromType: navigatingFromType,
+            preferencesService: _preferencesService,
           );
         },
       ),
