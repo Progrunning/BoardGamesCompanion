@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -13,7 +14,6 @@ import '../extensions/string_extensions.dart';
 import '../models/collection_sync_result.dart';
 import '../models/hive/board_game_category.dart';
 import '../models/hive/board_game_details.dart';
-import '../models/hive/board_game_expansion.dart';
 import '../services/board_games_service.dart';
 import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
@@ -124,8 +124,6 @@ class BoardGamesStore with ChangeNotifier {
       _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
     }
 
-    _updateExpansionCollectionStatus(boardGameDetails, true);
-
     notifyListeners();
   }
 
@@ -133,22 +131,20 @@ class BoardGamesStore with ChangeNotifier {
     BoardGameDetails existingBoardGameDetails,
     BoardGameDetails boardGameDetails,
   ) {
-    if ((boardGameDetails?.expansions?.isEmpty ?? true) ||
-        (existingBoardGameDetails?.expansions?.isEmpty ?? true)) {
-      existingBoardGameDetails.expansions = boardGameDetails.expansions;
-    }
-
-    final expansionsInCollection = <String, BoardGamesExpansion>{
-      for (BoardGamesExpansion expansion in existingBoardGameDetails.expansions
-          .where((expansion) => expansion.isInCollection ?? false))
-        expansion.id: expansion
-    };
-
-    for (final updatedExpansion in boardGameDetails.expansions) {
-      updatedExpansion.isInCollection = expansionsInCollection.containsKey(updatedExpansion.id);
-    }
-
     existingBoardGameDetails.expansions = boardGameDetails.expansions;
+
+// MK If updating an expansion, update IsInCollection flag for the parent board game
+    if (boardGameDetails.isExpansion) {
+      final BoardGamesExpansion parentBoardGameExpansion = allboardGames
+          ?.expand((BoardGameDetails boardGameDetails) => boardGameDetails.expansions)
+          ?.firstWhere(
+            (BoardGamesExpansion boardGameExpansion) =>
+                boardGameExpansion.id == boardGameDetails.id,
+            orElse: () => null,
+          );
+
+      parentBoardGameExpansion.isInCollection = boardGameDetails.isOwned;
+    }
   }
 
   Future<void> updateDetails(BoardGameDetails boardGameDetails) async {
@@ -183,8 +179,6 @@ class BoardGamesStore with ChangeNotifier {
     if (boardGameToRemove == null) {
       return;
     }
-
-    _updateExpansionCollectionStatus(boardGameToRemove, false);
 
     _allBoardGames.remove(boardGameToRemove);
     _filteredBoardGames.remove(boardGameToRemove);
@@ -303,25 +297,6 @@ class BoardGamesStore with ChangeNotifier {
     }
 
     notifyListeners();
-  }
-
-  void _updateExpansionCollectionStatus(
-    BoardGameDetails boardGameToRemove,
-    bool inCollection,
-  ) {
-    if (!boardGameToRemove.isExpansion) {
-      return;
-    }
-
-    final boardGameExpansion = _allBoardGames
-        .map<List<BoardGamesExpansion>>((boardGame) => boardGame.expansions)
-        .expand((expansions) => expansions)
-        .toList()
-        .firstWhere((expansion) => expansion.id == boardGameToRemove.id, orElse: () => null);
-
-    if (boardGameExpansion != null) {
-      boardGameExpansion.isInCollection = inCollection;
-    }
   }
 
   @override

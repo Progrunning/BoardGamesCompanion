@@ -16,10 +16,12 @@ class BoardGameDetailsExpansions extends StatefulWidget {
     Key key,
     @required this.boardGameDetailsStore,
     @required this.spacingBetweenSecions,
+    @required this.preferencesService,
   }) : super(key: key);
 
   final BoardGameDetailsStore boardGameDetailsStore;
   final double spacingBetweenSecions;
+  final PreferencesService preferencesService;
 
   @override
   _BoardGameDetailsExpansionsState createState() => _BoardGameDetailsExpansionsState();
@@ -41,24 +43,20 @@ class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions>
             data: AppTheme.theme.copyWith(
               unselectedWidgetColor: AppTheme.accentColor,
             ),
-            child: Consumer<PreferencesService>(
-              builder: (_, preferencesService, __) {
-                return FutureBuilder(
-                  future: preferencesService.getExpansionsPanelExpandedState(),
-                  builder: (_, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        return _Expansions(
-                          boardGameDetailsStore: widget.boardGameDetailsStore,
-                          preferencesService: preferencesService,
-                          initiallyExpanded: snapshot.data as bool,
-                        );
-                      }
-                    }
+            child: FutureBuilder<bool>(
+              future: widget.preferencesService.getExpansionsPanelExpandedState(),
+              builder: (_, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return _Expansions(
+                      boardGameDetailsStore: widget.boardGameDetailsStore,
+                      preferencesService: widget.preferencesService,
+                      initiallyExpanded: snapshot.data as bool,
+                    );
+                  }
+                }
 
-                    return const Center(child: LoadingIndicator());
-                  },
-                );
+                return const Center(child: LoadingIndicator());
               },
             ),
           ),

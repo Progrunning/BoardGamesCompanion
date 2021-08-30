@@ -37,7 +37,9 @@ class BoardGameDetailsStore with ChangeNotifier {
           orElse: () => null,
         );
 
-        if (boardGameExpansionDetails != null) {
+        if (boardGameExpansionDetails != null &&
+            boardGameExpansionDetails.isExpansion &&
+            boardGameExpansionDetails.isOwned) {
           boardGameExpansion.isInCollection = true;
         }
       }
