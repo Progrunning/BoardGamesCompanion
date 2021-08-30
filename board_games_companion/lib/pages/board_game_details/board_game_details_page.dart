@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -13,6 +12,7 @@ import '../../common/enums/collection_type.dart';
 import '../../common/routes.dart';
 import '../../common/styles.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../services/preferences_service.dart';
 import '../../stores/board_game_details_in_collection_store.dart';
 import '../../stores/board_game_details_store.dart';
 import '../../stores/board_games_store.dart';
@@ -23,6 +23,7 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/ripple_effect.dart';
 import '../../widgets/common/shadow_box.dart';
 import '../base_page_state.dart';
 import '../playthroughs/playthroughs_page.dart';
@@ -35,12 +36,14 @@ class BoardGamesDetailsPage extends StatefulWidget {
     @required this.boardGameId,
     @required this.boardGameName,
     @required this.navigatingFromType,
+    @required this.preferencesService,
   }) : super(key: key);
 
   final String boardGameId;
   final String boardGameName;
   final BoardGameDetailsStore boardGameDetailsStore;
   final Type navigatingFromType;
+  final PreferencesService preferencesService;
 
   @override
   _BoardGamesDetailsPageState createState() => _BoardGamesDetailsPageState();
@@ -74,6 +77,7 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
                     boardGameId: widget.boardGameId,
                     boardGameName: widget.boardGameName,
                     boardGameDetailsStore: widget.boardGameDetailsStore,
+                    preferencesService: widget.preferencesService,
                   ),
                 ),
               ],
@@ -174,11 +178,13 @@ class _Body extends StatelessWidget {
     @required this.boardGameId,
     @required this.boardGameName,
     @required this.boardGameDetailsStore,
+    @required this.preferencesService,
   }) : super(key: key);
 
   final String boardGameId;
   final String boardGameName;
   final BoardGameDetailsStore boardGameDetailsStore;
+  final PreferencesService preferencesService;
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
   static const _halfSpacingBetweenSecions = Dimensions.standardSpacing;
@@ -296,6 +302,7 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
                           BoardGameDetailsExpansions(
                             boardGameDetailsStore: store,
                             spacingBetweenSecions: _spacingBetweenSecions,
+                            preferencesService: preferencesService,
                           ),
                         const SizedBox(
                           height: _spacingBetweenSecions,
