@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../common/dimensions.dart';
 import '../../extensions/page_controller_extensions.dart';
+import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/playthroughs_store.dart';
@@ -120,11 +121,7 @@ class PlaythroughPlayers extends StatelessWidget {
       return;
     }
 
-    final playthroughsStore = Provider.of<PlaythroughsStore>(
-      context,
-      listen: false,
-    );
-
+    final playthroughsStore = getIt<PlaythroughsStore>();
     final newPlaythrough = await playthroughsStore.createPlaythrough(
       boardGameDetails.id,
       selectedPlaythoughPlayers,

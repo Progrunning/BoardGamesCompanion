@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../common/app_theme.dart';
 import '../../common/enums/collection_type.dart';
 import '../../extensions/page_controller_extensions.dart';
+import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/board_game_playthroughs_store.dart';
@@ -50,10 +51,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
     pageController = PageController(
       initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex,
     );
-    playthroughsStore = Provider.of<PlaythroughsStore>(
-      context,
-      listen: false,
-    );
+    playthroughsStore = getIt<PlaythroughsStore>();
   }
 
   @override
