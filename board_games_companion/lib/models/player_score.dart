@@ -1,8 +1,6 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 import '../common/enums/enums.dart';
-import '../services/score_service.dart';
 import 'hive/player.dart';
 import 'hive/score.dart';
 
@@ -10,11 +8,9 @@ class PlayerScore with ChangeNotifier {
   PlayerScore(
     this._player,
     this._score,
-    this._scoreService,
   );
 
   final Player _player;
-  final ScoreService _scoreService;
 
   Player get player => _player;
 
@@ -34,15 +30,9 @@ class PlayerScore with ChangeNotifier {
 
     _score.value = score;
 
-    try {
-      await _scoreService.addOrUpdateScore(_score);
-      notifyListeners();
-      return true;
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-    }
+    notifyListeners();
 
-    return false;
+    return true;
   }
 
   Future<void> updatePlayerPlace(int place) async {

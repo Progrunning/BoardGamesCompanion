@@ -7,23 +7,21 @@ import 'package:provider/provider.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/strings.dart';
-import '../../models/hive/playthrough.dart';
 import '../../models/player_score.dart';
-import '../../stores/playthrough_store.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import 'edit_playthrouhg_view_model.dart';
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
-    @required this.playthroughStore,
+    @required this.viewModel,
     Key key,
   }) : super(key: key);
 
-  final PlaythroughStore playthroughStore;
-  Playthrough get playthrough => playthroughStore.playthrough;
+  final EditPlaythoughViewModel viewModel;
 
   @override
   _EditPlaythoughPageState createState() => _EditPlaythoughPageState();
@@ -33,22 +31,11 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
   static const int _daysInYear = 365;
   static const int _daysInTenYears = _daysInYear * 10;
 
-  DateTime _startDateTime;
-  DateTime _endDateTime;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _startDateTime = widget.playthrough.startDate;
-    _endDateTime = widget.playthrough.endDate;
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return _handleOnWillPop(context, widget.playthrough);
+        return _handleOnWillPop(context);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -73,8 +60,8 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   height: Dimensions.halfStandardSpacing,
                 ),
                 _Duration(
-                  startDateTime: _startDateTime,
-                  endDateTime: _endDateTime,
+                  startDateTime: widget.viewModel.playthrough.startDate,
+                  endDateTime: widget.viewModel.playthrough.endDate,
                   onPickStartDateTime: _pickStartDateTime,
                   onDurationChanged: _updatePlaythroughDuration,
                 ),
@@ -91,7 +78,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 ),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: widget.playthroughStore.playerScores?.length ?? 0,
+                    itemCount: widget.viewModel.playerScores?.length ?? 0,
                     separatorBuilder: (context, index) {
                       return const SizedBox(
                         width: Dimensions.doubleStandardSpacing,
@@ -99,19 +86,15 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                     },
                     itemBuilder: (context, index) {
                       return _PlayerScore(
-                        playerScore: widget.playthroughStore.playerScores[index],
-                        playthroughId: widget.playthroughStore.playthrough.id,
+                        playerScore: widget.viewModel.playerScores[index],
+                        playthroughId: widget.viewModel.playthrough.id,
                       );
                     },
                   ),
                 ),
                 _ActionButtons(
                   onSave: _save,
-                  onCancel: () async {
-                    if (await _handleOnWillPop(context, widget.playthrough)) {
-                      Navigator.pop(context);
-                    }
-                  },
+                  onCancel: () async => _cancel(context),
                 )
               ],
             ),
@@ -125,7 +108,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
     final DateTime now = DateTime.now();
     final DateTime newStartDate = await showDatePicker(
       context: context,
-      initialDate: widget.playthrough.startDate,
+      initialDate: widget.viewModel.playthrough.startDate,
       firstDate: now.add(const Duration(days: -_daysInTenYears)),
       lastDate: now,
       currentDate: now,
@@ -147,18 +130,28 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
     }
 
     setState(() {
-      _startDateTime = newStartDate;
+      widget.viewModel.playthrough.startDate = newStartDate;
     });
   }
 
   void _updatePlaythroughDuration(Duration playthroughDuration) {
-    _endDateTime = _startDateTime.add(playthroughDuration);
+    widget.viewModel.playthrough.endDate =
+        widget.viewModel.playthrough.startDate.add(playthroughDuration);
   }
 
-  Future<void> _save() async {}
+  Future<void> _save() async {
+    await widget.viewModel.saveChanges();
+    Navigator.pop(context);
+  }
 
-  Future<bool> _handleOnWillPop(BuildContext context, Playthrough playthrough) async {
-    if (_startDateTime != playthrough.startDate || _endDateTime != playthrough.endDate) {
+  Future<void> _cancel(BuildContext context) async {
+    if (await _handleOnWillPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+
+  Future<bool> _handleOnWillPop(BuildContext context) async {
+    if (widget.viewModel.isDirty()) {
       await showDialog<AlertDialog>(
         context: context,
         builder: (context) {

@@ -150,14 +150,7 @@ class App extends StatelessWidget {
           },
         ),
         ChangeNotifierProvider<PlaythroughsStore>(
-          create: (context) {
-            final PlaythroughService playthroughService = getIt<PlaythroughService>();
-            final AnalyticsService analyticsService = getIt<AnalyticsService>();
-            return PlaythroughsStore(
-              playthroughService,
-              analyticsService,
-            );
-          },
+          create: (context) => getIt<PlaythroughsStore>(),
         ),
         ChangeNotifierProvider<BoardGamePlaythroughsStore>(
           create: (context) => BoardGamePlaythroughsStore(),
