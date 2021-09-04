@@ -64,6 +64,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                 return ListView.separated(
                   itemBuilder: (_, index) {
                     return _Playthrough(
+                      widget.playthroughsStore,
                       store.playthroughs[index],
                       store.playthroughs.length - index,
                       key: ValueKey(store.playthroughs[index].id),
@@ -98,11 +99,13 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
 
 class _Playthrough extends StatelessWidget {
   const _Playthrough(
+    this._playthroughsStore,
     this._playthrough,
     this._playthroughNumber, {
     Key key,
   }) : super(key: key);
 
+  final PlaythroughsStore _playthroughsStore;
   final Playthrough _playthrough;
   final int _playthroughNumber;
 
@@ -140,6 +143,7 @@ class _Playthrough extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         _PlaythroughGameStats(
+                          playthroughsStore: _playthroughsStore,
                           playthroughStore: store,
                           playthroughNumber: _playthroughNumber,
                           playthrough: _playthrough,
@@ -149,6 +153,7 @@ class _Playthrough extends StatelessWidget {
                         ),
                         Expanded(
                           child: _PlaythroughPlayersStats(
+                            playthroughsStore: _playthroughsStore,
                             playthroughStore: store,
                           ),
                         ),
@@ -176,10 +181,7 @@ class _Playthrough extends StatelessWidget {
     // TODO MK Fix dependencies to be injectable (if possible)
     final playerService = getIt<PlayerService>();
     final scoreService = getIt<ScoreService>();
-    final playthroughsStore = Provider.of<PlaythroughsStore>(
-      context,
-      listen: false,
-    );
+    final playthroughsStore = getIt<PlaythroughsStore>();
     final playthroughStore = PlaythroughStore(playerService, scoreService, playthroughsStore);
     playthroughStore.loadPlaythrough(_playthrough);
     return playthroughStore;
@@ -189,11 +191,12 @@ class _Playthrough extends StatelessWidget {
 class _PlaythroughPlayersStats extends StatelessWidget {
   const _PlaythroughPlayersStats({
     Key key,
-    @required PlaythroughStore playthroughStore,
-  })  : _playthroughStore = playthroughStore,
-        super(key: key);
+    @required this.playthroughsStore,
+    @required this.playthroughStore,
+  }) : super(key: key);
 
-  final PlaythroughStore _playthroughStore;
+  final PlaythroughsStore playthroughsStore;
+  final PlaythroughStore playthroughStore;
 
   @override
   Widget build(BuildContext context) {
@@ -202,27 +205,27 @@ class _PlaythroughPlayersStats extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: _PlaythroughPlayerList(
-            playthroughStore: _playthroughStore,
+            playthroughStore: playthroughStore,
           ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (_playthroughStore.playthrough.status == PlaythroughStatus.Started)
+            if (playthroughStore.playthrough.status == PlaythroughStatus.Started)
               IconAndTextButton(
                 icon: const DefaultIcon(Icons.stop),
                 color: Colors.blue,
                 horizontalPadding: Dimensions.standardSpacing,
                 verticalPadding: Dimensions.standardSpacing,
-                onPressed: () => _stopPlaythrough(_playthroughStore),
+                onPressed: () => _stopPlaythrough(playthroughStore),
               ),
-            if (_playthroughStore.playthrough.status == PlaythroughStatus.Finished)
+            if (playthroughStore.playthrough.status == PlaythroughStatus.Finished)
               IconAndTextButton(
                 icon: const DefaultIcon(Icons.delete),
                 color: Colors.red,
                 horizontalPadding: Dimensions.standardSpacing,
                 verticalPadding: Dimensions.standardSpacing,
-                onPressed: () => _deletePlaythrough(context, _playthroughStore),
+                onPressed: () => _deletePlaythrough(context, playthroughStore),
               ),
             IconAndTextButton(
               icon: const DefaultIcon(Icons.edit),
@@ -232,7 +235,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               onPressed: () async {
                 await NavigatorHelper.navigateToEditPlaythrough(
                   context,
-                  _playthroughStore,
+                  playthroughStore,
                 );
               },
             ),
@@ -264,11 +267,6 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               child: const Text('Delete'),
               color: Colors.red,
               onPressed: () async {
-                final playthroughsStore = Provider.of<PlaythroughsStore>(
-                  context,
-                  listen: false,
-                );
-
                 await playthroughsStore.deletePlaythrough(playthroughStore.playthrough.id);
 
                 Navigator.of(context).pop();
@@ -340,17 +338,16 @@ class _PlaythroughPlayerList extends StatelessWidget {
 class _PlaythroughGameStats extends StatelessWidget {
   const _PlaythroughGameStats({
     Key key,
-    @required PlaythroughStore playthroughStore,
-    @required int playthroughNumber,
-    @required Playthrough playthrough,
-  })  : _playthroughStore = playthroughStore,
-        _playthroughNumber = playthroughNumber,
-        _playthrough = playthrough,
-        super(key: key);
+    @required this.playthroughsStore,
+    @required this.playthroughStore,
+    @required this.playthroughNumber,
+    @required this.playthrough,
+  }) : super(key: key);
 
-  final PlaythroughStore _playthroughStore;
-  final int _playthroughNumber;
-  final Playthrough _playthrough;
+  final PlaythroughsStore playthroughsStore;
+  final PlaythroughStore playthroughStore;
+  final int playthroughNumber;
+  final Playthrough playthrough;
 
   @override
   Widget build(BuildContext context) {
@@ -358,17 +355,17 @@ class _PlaythroughGameStats extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        CalendarCard(_playthroughStore.playthrough.startDate),
+        CalendarCard(playthroughStore.playthrough.startDate),
         _PlaythroughItemDetail(
-          _playthroughStore.daysSinceStart?.toString(),
+          playthroughStore.daysSinceStart?.toString(),
           'day(s) ago',
         ),
         _PlaythroughItemDetail(
-          '$_playthroughNumber${_playthroughNumber.toOrdinalAbbreviations()}',
+          '$playthroughNumber${playthroughNumber.toOrdinalAbbreviations()}',
           'game',
         ),
         ChangeNotifierProvider(
-          create: (_) => PlaythroughDurationStore(_playthrough),
+          create: (_) => PlaythroughDurationStore(playthrough),
           child: Consumer<PlaythroughDurationStore>(
             builder: (_, store, __) {
               return _PlaythroughItemDetail(

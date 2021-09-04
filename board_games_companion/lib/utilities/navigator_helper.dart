@@ -7,6 +7,7 @@ import '../models/hive/player.dart';
 import '../pages/board_game_details/board_game_details_page.dart';
 import '../pages/create_edit_player.dart';
 import '../pages/edit_playthrough/edit_playthrough_page.dart';
+import '../pages/edit_playthrough/edit_playthrouhg_view_model.dart';
 import '../services/analytics_service.dart';
 import '../services/board_games_geek_service.dart';
 import '../services/preferences_service.dart';
@@ -84,8 +85,9 @@ class NavigatorHelper {
     BuildContext context,
     PlaythroughStore playthroughStore,
   ) async {
-    final _analytics = getIt<AnalyticsService>();
-    _analytics.logEvent(
+    final analytics = getIt<AnalyticsService>();
+
+    analytics.logEvent(
       name: Analytics.EditPlaythrough,
       parameters: <String, String>{
         Analytics.BoardGameIdParameter: playthroughStore.playthrough.boardGameId,
@@ -97,7 +99,7 @@ class NavigatorHelper {
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
           return EditPlaythoughPage(
-            playthroughStore: playthroughStore,
+            viewModel: EditPlaythoughViewModel(playthroughStore),
           );
         },
       ),

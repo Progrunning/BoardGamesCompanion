@@ -15,14 +15,14 @@ class PlaythroughStore with ChangeNotifier {
   PlaythroughStore(
     this._playerService,
     this._scoreService,
-    this._playthroughStore,
+    this._playthroughsStore,
   );
 
   static const String unknownHighscoreValue = '-';
 
   final PlayerService _playerService;
   final ScoreService _scoreService;
-  final PlaythroughsStore _playthroughStore;
+  final PlaythroughsStore _playthroughsStore;
 
   LoadDataState _loadDataState;
 
@@ -68,7 +68,6 @@ class PlaythroughStore with ChangeNotifier {
         return PlayerScore(
           p,
           score,
-          _scoreService,
         );
       }).toList();
 
@@ -81,13 +80,24 @@ class PlaythroughStore with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updatePlaythrough(Playthrough playthrough, List<PlayerScore> playerScores) async {
+    await _playthroughsStore.updatePlaythrough(playthrough);
+    for (final PlayerScore playerScore in playerScores) {
+      await _scoreService.addOrUpdateScore(playerScore.score);
+    }
+
+    await loadPlaythrough(playthrough);
+
+    notifyListeners();
+  }
+
   Future<bool> stopPlaythrough() async {
     final oldStatus = playthrough.status;
 
     playthrough.status = PlaythroughStatus.Finished;
     playthrough.endDate = DateTime.now().toUtc();
 
-    final updateSucceeded = await _playthroughStore.updatePlaythrough(playthrough);
+    final updateSucceeded = await _playthroughsStore.updatePlaythrough(playthrough);
     if (!updateSucceeded) {
       playthrough.status = oldStatus;
       playthrough.endDate = null;
