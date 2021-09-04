@@ -144,7 +144,6 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
       boardGameStatistics.lastWinner = PlayerScore(
         playersById[lastPlaythroughBestScore.playerId],
         lastPlaythroughBestScore,
-        _scoreService,
       );
     }
   }

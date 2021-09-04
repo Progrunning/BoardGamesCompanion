@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:injectable/injectable.dart';
 
 import '../common/analytics.dart';
 import '../common/hive_boxes.dart';
@@ -9,6 +10,7 @@ import '../models/playthrough_player.dart';
 import '../services/analytics_service.dart';
 import '../services/playthroughs_service.dart';
 
+@singleton
 class PlaythroughsStore with ChangeNotifier {
   PlaythroughsStore(
     this._playthroughService,
@@ -72,6 +74,7 @@ class PlaythroughsStore with ChangeNotifier {
     try {
       final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough);
       if (updateSuceeded) {
+        await loadPlaythroughs(_selectedBoardGame);
         notifyListeners();
         return true;
       }

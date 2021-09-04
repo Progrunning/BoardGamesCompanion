@@ -14,13 +14,14 @@ import 'services/board_games_filters_service.dart' as _i4;
 import 'services/board_games_geek_service.dart' as _i14;
 import 'services/board_games_service.dart' as _i15;
 import 'services/file_service.dart' as _i5;
-import 'services/injectable_register_module.dart' as _i17;
+import 'services/injectable_register_module.dart' as _i18;
 import 'services/player_service.dart' as _i8;
 import 'services/playthroughs_service.dart' as _i16;
 import 'services/preferences_service.dart' as _i9;
 import 'services/rate_and_review_service.dart' as _i10;
 import 'services/score_service.dart' as _i11;
 import 'services/user_service.dart' as _i12;
+import 'stores/playthroughs_store.dart' as _i17;
 import 'utilities/custom_http_client_adapter.dart'
     as _i3; // ignore_for_file: unnecessary_lambdas
 
@@ -50,10 +51,12 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i14.BoardGamesGeekService>(), get<_i9.PreferencesService>()));
   gh.singleton<_i16.PlaythroughService>(
       _i16.PlaythroughService(get<_i11.ScoreService>()));
+  gh.singleton<_i17.PlaythroughsStore>(_i17.PlaythroughsStore(
+      get<_i16.PlaythroughService>(), get<_i13.AnalyticsService>()));
   return get;
 }
 
-class _$RegisterModule extends _i17.RegisterModule {
+class _$RegisterModule extends _i18.RegisterModule {
   @override
   _i6.FirebaseAnalytics get firebaseAnalytics => _i6.FirebaseAnalytics();
 }
