@@ -28,9 +28,6 @@ class EditPlaythoughPage extends StatefulWidget {
 }
 
 class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
-  static const int _daysInYear = 365;
-  static const int _daysInTenYears = _daysInYear * 10;
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -59,12 +56,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 const SizedBox(
                   height: Dimensions.halfStandardSpacing,
                 ),
-                _Duration(
-                  startDateTime: widget.viewModel.playthrough.startDate,
-                  endDateTime: widget.viewModel.playthrough.endDate,
-                  onPickStartDateTime: _pickStartDateTime,
-                  onDurationChanged: _updatePlaythroughDuration,
-                ),
+                _Duration(viewModel: widget.viewModel),
                 const SizedBox(
                   height: Dimensions.standardSpacing,
                 ),
@@ -102,41 +94,6 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         ),
       ),
     );
-  }
-
-  Future<void> _pickStartDateTime() async {
-    final DateTime now = DateTime.now();
-    final DateTime newStartDate = await showDatePicker(
-      context: context,
-      initialDate: widget.viewModel.playthrough.startDate,
-      firstDate: now.add(const Duration(days: -_daysInTenYears)),
-      lastDate: now,
-      currentDate: now,
-      helpText: 'Pick a playthrough date',
-      builder: (_, Widget child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppTheme.accentColor,
-                ),
-          ),
-          child: child,
-        );
-      },
-    );
-
-    if (newStartDate == null) {
-      return;
-    }
-
-    setState(() {
-      widget.viewModel.playthrough.startDate = newStartDate;
-    });
-  }
-
-  void _updatePlaythroughDuration(Duration playthroughDuration) {
-    widget.viewModel.playthrough.endDate =
-        widget.viewModel.playthrough.startDate.add(playthroughDuration);
   }
 
   Future<void> _save() async {
@@ -265,23 +222,21 @@ class _PlayerScore extends StatelessWidget {
 
 class _Duration extends StatefulWidget {
   const _Duration({
-    @required this.startDateTime,
-    @required this.endDateTime,
-    @required this.onPickStartDateTime,
-    @required this.onDurationChanged,
+    @required this.viewModel,
     Key key,
   }) : super(key: key);
 
-  final DateTime startDateTime;
-  final DateTime endDateTime;
-  final VoidCallback onPickStartDateTime;
-  final Function(Duration) onDurationChanged;
+  final EditPlaythoughViewModel viewModel;
 
   @override
   _DurationState createState() => _DurationState();
 }
 
 class _DurationState extends State<_Duration> {
+  static const int _daysInYear = 365;
+  static const int _daysInTenYears = _daysInYear * 10;
+
+  DateTime startDateTime;
   Duration playthroughDuration;
   int playthroughDurationInSeconds;
   int hoursPlayed;
@@ -291,7 +246,9 @@ class _DurationState extends State<_Duration> {
   void initState() {
     super.initState();
 
-    playthroughDuration = (widget.endDateTime ?? DateTime.now()).difference(widget.startDateTime);
+    startDateTime = widget.viewModel.playthrough.startDate;
+    playthroughDuration = (widget.viewModel.playthrough.endDate ?? DateTime.now())
+        .difference(widget.viewModel.playthrough.startDate);
     playthroughDurationInSeconds = playthroughDuration.inSeconds;
     hoursPlayed = playthroughDuration.inHours;
     minutesPlyed = playthroughDuration.inMinutes - hoursPlayed * Duration.minutesPerHour;
@@ -303,8 +260,8 @@ class _DurationState extends State<_Duration> {
       children: [
         Center(
           child: CalendarCard(
-            widget.startDateTime,
-            onTap: widget.onPickStartDateTime,
+            widget.viewModel.playthrough.startDate,
+            onTap: () async => _pickStartDateTime(),
           ),
         ),
         const Expanded(child: SizedBox.shrink()),
@@ -337,6 +294,36 @@ class _DurationState extends State<_Duration> {
         )
       ],
     );
+  }
+
+  Future<void> _pickStartDateTime() async {
+    final DateTime now = DateTime.now();
+    final DateTime newStartDate = await showDatePicker(
+      context: context,
+      initialDate: startDateTime,
+      firstDate: now.add(const Duration(days: -_daysInTenYears)),
+      lastDate: now,
+      currentDate: now,
+      helpText: 'Pick a playthrough date',
+      builder: (_, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: AppTheme.accentColor,
+                ),
+          ),
+          child: child,
+        );
+      },
+    );
+
+    if (newStartDate == null) {
+      return;
+    }
+
+    setState(() {
+      widget.viewModel.playthrough.startDate = startDateTime = newStartDate;
+    });
   }
 }
 
