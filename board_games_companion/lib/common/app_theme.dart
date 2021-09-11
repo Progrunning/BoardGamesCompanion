@@ -8,6 +8,8 @@ import 'styles.dart';
 class AppTheme {
   static const Color white = Colors.white;
   static const Color black = Colors.black;
+  static const Color blue = Colors.blue;
+  static const Color red = Colors.red;
 
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
@@ -175,7 +177,7 @@ class AppTheme {
         subtitle2: originalSubtitle2.copyWith(
           fontSize: Dimensions.extraLargeFontSize,
           color: secondaryTextColor,
-        ),        
+        ),
       ),
 
       inputDecorationTheme: originalInputDecorationTheme.copyWith(

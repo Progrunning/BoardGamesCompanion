@@ -36,7 +36,15 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
       },
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
           title: const Text('Edit Playthrough'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => _close(context),
+            ),
+          ],
         ),
         body: Form(
           child: Padding(
@@ -46,11 +54,11 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
               children: <Widget>[
                 Row(
                   children: const <Widget>[
-                    ItemPropertyTitle('Start time'),
+                    ItemPropertyTitle('Played on'),
                     Expanded(
                       child: SizedBox.shrink(),
                     ),
-                    ItemPropertyTitle('Duration'),
+                    ItemPropertyTitle('Duration')
                   ],
                 ),
                 const SizedBox(
@@ -85,8 +93,9 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   ),
                 ),
                 _ActionButtons(
-                  onSave: _save,
-                  onCancel: () async => _cancel(context),
+                  viewModel: widget.viewModel,
+                  onSave: () async => _save(),
+                  onStop: () async => _stopPlaythrough(),
                 )
               ],
             ),
@@ -101,7 +110,12 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
     Navigator.pop(context);
   }
 
-  Future<void> _cancel(BuildContext context) async {
+  Future<void> _stopPlaythrough() async {
+    await widget.viewModel.stopPlaythrough();
+    setState(() {});
+  }
+
+  Future<void> _close(BuildContext context) async {
     if (await _handleOnWillPop(context)) {
       Navigator.pop(context);
     }
@@ -242,16 +256,22 @@ class _DurationState extends State<_Duration> {
   int hoursPlayed;
   int minutesPlyed;
 
+  int minHours;
+  int maxHours;
+  int minMinutes;
+  int maxMinutes;
+
   @override
   void initState() {
     super.initState();
 
     startDateTime = widget.viewModel.playthrough.startDate;
-    playthroughDuration = (widget.viewModel.playthrough.endDate ?? DateTime.now())
-        .difference(widget.viewModel.playthrough.startDate);
+    playthroughDuration = widget.viewModel.playthoughDuration;
     playthroughDurationInSeconds = playthroughDuration.inSeconds;
     hoursPlayed = playthroughDuration.inHours;
     minutesPlyed = playthroughDuration.inMinutes - hoursPlayed * Duration.minutesPerHour;
+
+    _setHourseAndMinutesRange();
   }
 
   @override
@@ -269,9 +289,9 @@ class _DurationState extends State<_Duration> {
           children: <Widget>[
             NumberPicker.integer(
               initialValue: math.min(hoursPlayed, 99),
-              minValue: 0,
-              maxValue: 99,
-              onChanged: (num value) => setState(() => hoursPlayed = value.toInt()),
+              minValue: minHours,
+              maxValue: maxHours,
+              onChanged: (num value) => _updateDurationHours(value),
               listViewWidth: 46,
             ),
             Text(
@@ -281,9 +301,9 @@ class _DurationState extends State<_Duration> {
             const SizedBox(width: Dimensions.halfStandardSpacing),
             NumberPicker.integer(
               initialValue: minutesPlyed,
-              minValue: 0,
-              maxValue: Duration.minutesPerHour - 1,
-              onChanged: (num value) => setState(() => minutesPlyed = value.toInt()),
+              minValue: minMinutes,
+              maxValue: maxMinutes,
+              onChanged: (num value) => _updateDurationMinutes(value),
               listViewWidth: 46,
             ),
             Text(
@@ -294,6 +314,20 @@ class _DurationState extends State<_Duration> {
         )
       ],
     );
+  }
+
+  void _updateDurationHours(num value) {
+    setState(() {
+      hoursPlayed = value.toInt();
+      widget.viewModel.updateDuration(hoursPlayed, minutesPlyed);
+    });
+  }
+
+  void _updateDurationMinutes(num value) {
+    setState(() {
+      hoursPlayed = value.toInt();
+      widget.viewModel.updateDuration(hoursPlayed, minutesPlyed);
+    });
   }
 
   Future<void> _pickStartDateTime() async {
@@ -322,40 +356,67 @@ class _DurationState extends State<_Duration> {
     }
 
     setState(() {
+      final Duration playthroughDuration = widget.viewModel.playthoughDuration;
       widget.viewModel.playthrough.startDate = startDateTime = newStartDate;
+      widget.viewModel.playthrough.endDate = newStartDate.add(playthroughDuration);
     });
+  }
+
+  void _setHourseAndMinutesRange() {
+    if (widget.viewModel.playthoughEnded) {
+      minHours = 0;
+      maxHours = 99;
+      minMinutes = 0;
+      maxMinutes = Duration.minutesPerHour - 1;
+    } else {
+      minHours = hoursPlayed;
+      maxHours = hoursPlayed;
+      minMinutes = minutesPlyed;
+      maxMinutes = minutesPlyed;
+    }
   }
 }
 
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
+    this.viewModel,
     this.onSave,
-    this.onCancel,
+    this.onStop,
     Key key,
   }) : super(key: key);
 
+  final EditPlaythoughViewModel viewModel;
   final VoidCallback onSave;
-  final VoidCallback onCancel;
+  final VoidCallback onStop;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(Dimensions.standardSpacing),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.max,
         children: [
           IconAndTextButton(
-            title: Strings.Cancel,
-            icon: const DefaultIcon(
-              Icons.remove_circle_outline,
+            title: 'Delete',
+            icon: const DefaultIcon(Icons.delete),
+            color: AppTheme.red,
+            // onPressed: onSave,
+          ),
+          const Expanded(child: SizedBox.shrink()),
+          if (!viewModel.playthoughEnded) ...[
+            IconAndTextButton(
+              title: Strings.Stop,
+              icon: const DefaultIcon(
+                Icons.stop,
+              ),
+              color: AppTheme.blue,
+              splashColor: AppTheme.white,
+              onPressed: onStop,
             ),
-            color: Colors.red,
-            splashColor: AppTheme.white,
-            onPressed: onCancel,
-          ),
-          const SizedBox(
-            width: Dimensions.standardSpacing,
-          ),
+            const SizedBox(
+              width: Dimensions.standardSpacing,
+            ),
+          ],
           IconAndTextButton(
             title: 'Save',
             icon: const DefaultIcon(
