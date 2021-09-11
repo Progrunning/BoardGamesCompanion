@@ -8,4 +8,5 @@ class Strings {
   static const DontAskAgain = "Don't ask again";  
   
   static const Cancel = 'Cancel';  
+  static const Stop = 'Stop';  
 }
