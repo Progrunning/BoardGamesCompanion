@@ -138,6 +138,8 @@ class _Playthrough extends StatelessWidget {
                         .asMap()
                         .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
 
+                    debugPrint(store.playthrough.endDate?.toIso8601String() ?? '');
+
                     return Row(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +148,7 @@ class _Playthrough extends StatelessWidget {
                           playthroughsStore: _playthroughsStore,
                           playthroughStore: store,
                           playthroughNumber: _playthroughNumber,
-                          playthrough: _playthrough,
+                          playthrough: store.playthrough,
                         ),
                         const SizedBox(
                           width: Dimensions.doubleStandardSpacing,
@@ -211,14 +213,6 @@ class _PlaythroughPlayersStats extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (playthroughStore.playthrough.status == PlaythroughStatus.Started)
-              IconAndTextButton(
-                icon: const DefaultIcon(Icons.stop),
-                color: Colors.blue,
-                horizontalPadding: Dimensions.standardSpacing,
-                verticalPadding: Dimensions.standardSpacing,
-                onPressed: () => _stopPlaythrough(playthroughStore),
-              ),
             if (playthroughStore.playthrough.status == PlaythroughStatus.Finished)
               IconAndTextButton(
                 icon: const DefaultIcon(Icons.delete),
@@ -366,10 +360,11 @@ class _PlaythroughGameStats extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => PlaythroughDurationStore(playthrough),
-          child: Consumer<PlaythroughDurationStore>(
-            builder: (_, store, __) {
+          child: Consumer2<PlaythroughDurationStore, PlaythroughStore>(
+            builder: (_, durationStore, __, ___) {
+              // TODO MK The duration store most likely needs to be refactored as it's not being update currently after the duration being changed
               return _PlaythroughItemDetail(
-                store.durationInSeconds.toPlaythroughDuration(),
+                durationStore.durationInSeconds.toPlaythroughDuration(),
                 'duration',
               );
             },

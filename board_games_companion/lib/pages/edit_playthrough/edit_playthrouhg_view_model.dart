@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/enums/playthrough_status.dart';
 
 import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
@@ -46,6 +47,11 @@ class EditPlaythoughViewModel {
     return _playerScores;
   }
 
+  bool get playthoughEnded => playthrough.status == PlaythroughStatus.Finished;
+
+  Duration get playthoughDuration =>
+      (playthrough.endDate ?? DateTime.now()).difference(playthrough.startDate);
+
   bool isDirty() {
     bool playerScoresUpdated = false;
     final Map<String, Score> playerScoresMap = {
@@ -65,7 +71,16 @@ class EditPlaythoughViewModel {
         _playthroughStore.playthrough.endDate != playthrough.endDate;
   }
 
+  Future<void> stopPlaythrough() async {
+    await _playthroughStore.stopPlaythrough();
+  }
+
   Future<void> saveChanges() async {
     await _playthroughStore.updatePlaythrough(playthrough, playerScores);
+  }
+
+  void updateDuration(int hoursPlayed, int minutesPlyed) {
+    playthrough.endDate =
+        playthrough.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed));
   }
 }
