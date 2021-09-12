@@ -10,4 +10,5 @@ class Strings {
   static const Cancel = 'Cancel';
   static const Stop = 'Stop';
   static const Delete = 'Delete';
+  static const Edit = 'Edit';
 }
