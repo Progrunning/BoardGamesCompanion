@@ -31,7 +31,7 @@ class CalendarCard extends StatelessWidget {
         ],
       ),
       child: RippleEffect(
-        backgroundColor: AppTheme.white,
+        backgroundColor: AppTheme.whiteColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(Styles.boardGameTileImageCircularRadius),
         ),
@@ -63,7 +63,7 @@ class CalendarCard extends StatelessWidget {
                 child: Text(
                   _date?.day?.toString() ?? '-',
                   style: const TextStyle(
-                      color: AppTheme.inverterTextColor,
+                      color: AppTheme.invertedTextColor,
                       fontWeight: FontWeight.bold,
                       fontSize: Dimensions.doubleExtraLargeFontSize),
                 ),
@@ -84,7 +84,7 @@ class CalendarCard extends StatelessWidget {
               _date.toShortWeek('-'),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: AppTheme.inverterTextColor,
+                color: AppTheme.invertedTextColor,
               ),
             ),
           ],

@@ -99,7 +99,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
         return Column(
           children: <Widget>[
             const SectionTitle(
-              title: 'USER',
+              title: 'User',
             ),
             DetailsItem(
               title: userStore?.user?.name ?? '',
@@ -119,13 +119,8 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                     icon: const DefaultIcon(
                       Icons.remove_circle_outline,
                     ),
-                    color: Colors.red,
-                    onPressed: () async {
-                      await _handleBggUserRemoval(
-                        context,
-                        userStore,
-                      );
-                    },
+                    color: AppTheme.redColor,
+                    onPressed: () async => _showRemoveBggUserDialog(context, userStore),
                   ),
                   const SizedBox(
                     width: Dimensions.standardSpacing,
@@ -143,10 +138,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
     );
   }
 
-  Future<void> _handleBggUserRemoval(
-    BuildContext context,
-    UserStore userStore,
-  ) async {
+  Future<void> _showRemoveBggUserDialog(BuildContext context, UserStore userStore) async {
     await showDialog<AlertDialog>(
       context: context,
       builder: (context) {
@@ -157,19 +149,22 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
             ],
           ),
           content: const Text(
-            'This will delete your entire board games collection, including the history of gameplays',
+            "This will delete your sync'd board games collection, including the history of gameplays",
           ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             FlatButton(
-              child: const Text(Strings.Cancel),
+              child: const Text(
+                Strings.Cancel,
+                style: TextStyle(color: AppTheme.accentColor),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
               child: const Text('Remove'),
-              color: Colors.red,
+              color: AppTheme.redColor,
               onPressed: () async {
                 final boardGameStore = Provider.of<BoardGamesStore>(
                   context,
@@ -231,12 +226,13 @@ class _AboutPageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return RippleEffect(
       child: Stack(
-        children: const <Widget>[
+        children: <Widget>[
           DetailsItem(
             title: 'About',
             subtitle: 'App information',
+            onTap: () async => _navigateToAboutPage(context),
           ),
-          Positioned.fill(
+          const Positioned.fill(
             right: Dimensions.standardSpacing,
             child: Align(
               alignment: Alignment.centerRight,
@@ -248,16 +244,18 @@ class _AboutPageTile extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () async {
-        await Navigator.push<AboutPage>(
-          context,
-          NavigatorTransitions.fadeThrough(
-            (_, __, ___) {
-              return const AboutPage();
-            },
-          ),
-        );
-      },
+      onTap: () async {},
+    );
+  }
+
+  Future<void> _navigateToAboutPage(BuildContext context) async {
+    await Navigator.push<AboutPage>(
+      context,
+      NavigatorTransitions.fadeThrough(
+        (_, __, ___) {
+          return const AboutPage();
+        },
+      ),
     );
   }
 }

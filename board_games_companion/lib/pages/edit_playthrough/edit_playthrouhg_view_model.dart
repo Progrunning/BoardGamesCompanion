@@ -1,14 +1,15 @@
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-
+import '../../common/enums/playthrough_status.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../stores/playthrough_store.dart';
+import '../../stores/playthroughs_store.dart';
 
 class EditPlaythoughViewModel {
-  EditPlaythoughViewModel(this._playthroughStore);
+  EditPlaythoughViewModel(this._playthroughStore, this._playthroughsStore);
 
   final PlaythroughStore _playthroughStore;
+  final PlaythroughsStore _playthroughsStore;
 
   Playthrough _playthrough;
   Playthrough get playthrough {
@@ -73,6 +74,9 @@ class EditPlaythoughViewModel {
 
   Future<void> stopPlaythrough() async {
     await _playthroughStore.stopPlaythrough();
+
+    // Force refresh
+    _playthrough = null;
   }
 
   Future<void> saveChanges() async {
@@ -82,5 +86,9 @@ class EditPlaythoughViewModel {
   void updateDuration(int hoursPlayed, int minutesPlyed) {
     playthrough.endDate =
         playthrough.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed));
+  }
+
+  Future<void> deletePlaythrough() async {
+    await _playthroughsStore.deletePlaythrough(playthrough.id);
   }
 }
