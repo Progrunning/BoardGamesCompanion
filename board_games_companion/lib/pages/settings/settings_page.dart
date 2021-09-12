@@ -189,30 +189,28 @@ class _RateAndReviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RippleEffect(
-      child: Stack(
-        children: const <Widget>[
-          DetailsItem(
-            title: 'Rate & Review',
-            subtitle: 'Store listing',
-          ),
-          Positioned.fill(
-            right: Dimensions.standardSpacing,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.star,
-                color: AppTheme.accentColor,
-              ),
+    return Stack(
+      children: <Widget>[
+        DetailsItem(
+          title: 'Rate & Review',
+          subtitle: 'Store listing',
+          onTap: () async {
+            await InAppReview.instance.openStoreListing(
+              appStoreId: Constants.AppleAppId,
+            );
+          },
+        ),
+        const Positioned.fill(
+          right: Dimensions.standardSpacing,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.star,
+              color: AppTheme.accentColor,
             ),
           ),
-        ],
-      ),
-      onTap: () async {
-        await InAppReview.instance.openStoreListing(
-          appStoreId: Constants.AppleAppId,
-        );
-      },
+        ),
+      ],
     );
   }
 }
@@ -224,27 +222,24 @@ class _AboutPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RippleEffect(
-      child: Stack(
-        children: <Widget>[
-          DetailsItem(
-            title: 'About',
-            subtitle: 'App information',
-            onTap: () async => _navigateToAboutPage(context),
-          ),
-          const Positioned.fill(
-            right: Dimensions.standardSpacing,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.navigate_next,
-                color: AppTheme.accentColor,
-              ),
+    return Stack(
+      children: <Widget>[
+        DetailsItem(
+          title: 'About',
+          subtitle: 'App information',
+          onTap: () async => _navigateToAboutPage(context),
+        ),
+        const Positioned.fill(
+          right: Dimensions.standardSpacing,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.navigate_next,
+              color: AppTheme.accentColor,
             ),
           ),
-        ],
-      ),
-      onTap: () async {},
+        ),
+      ],
     );
   }
 
