@@ -50,9 +50,6 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        const SizedBox(
-          height: Dimensions.standardSpacing,
-        ),
         Expanded(
           child: ConsumerFutureBuilder<List<Playthrough>, PlaythroughsStore>(
             future: widget.playthroughsStore.loadPlaythroughs(widget.boardGameDetails),
@@ -61,6 +58,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
               if (hasPlaythroughs) {
                 store.playthroughs.sort((a, b) => b.startDate?.compareTo(a.startDate));
                 return ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {
                     return _Playthrough(
                       widget.playthroughsStore,
