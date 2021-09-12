@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/common/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -212,16 +213,11 @@ class _PlaythroughPlayersStats extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconAndTextButton(
+              title: Strings.Edit,
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,
-              horizontalPadding: Dimensions.standardSpacing,
-              verticalPadding: Dimensions.standardSpacing,
-              onPressed: () async {
-                await NavigatorHelper.navigateToEditPlaythrough(
-                  context,
-                  playthroughStore,
-                );
-              },
+              onPressed: () async =>
+                  NavigatorHelper.navigateToEditPlaythrough(context, playthroughStore),
             ),
           ],
         ),
