@@ -6,10 +6,10 @@ import 'styles.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class AppTheme {
-  static const Color white = Colors.white;
-  static const Color black = Colors.black;
-  static const Color blue = Colors.blue;
-  static const Color red = Colors.red;
+  static const Color whiteColor = Colors.white;
+  static const Color blackColor = Colors.black;
+  static const Color blueColor = Colors.blue;
+  static const Color redColor = Colors.red;
 
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
@@ -19,10 +19,10 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFF010055);
   static const Color secondaryLightColor = Color(0xFF2747A5);
 
-  static const Color shadowColor = black;
+  static const Color shadowColor = blackColor;
 
-  static const Color defaultTextColor = white;
-  static const Color inverterTextColor = black;
+  static const Color defaultTextColor = whiteColor;
+  static const Color invertedTextColor = blackColor;
 
   static const Color secondaryTextColor = Colors.grey;
 
@@ -79,8 +79,7 @@ class AppTheme {
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
     final originalBodyText1 = originalTextTheme.bodyText1;
     final originalBodyText2 = originalTextTheme.bodyText2;
-    final originalHeadline5 = originalTextTheme.headline5;
-    final originalHeadline4 = originalTextTheme.headline4;
+    final originalHeadline5 = originalTextTheme.headline5;    
     final originalHeadline2 = originalTextTheme.headline2;
     final originalHeadline1 = originalTextTheme.headline1;
     final originalSubtitle2 = originalTextTheme.subtitle2;
@@ -99,6 +98,12 @@ class AppTheme {
 
     final headline3TextStyle = originalTextTheme.headline3.copyWith(
       fontSize: Dimensions.mediumFontSize,
+      fontWeight: FontWeight.bold,
+      color: defaultTextColor,
+    );
+
+    final headline4TextStyle = originalTextTheme.headline4.copyWith(
+      fontSize: Dimensions.standardFontSize,
       color: defaultTextColor,
     );
 
@@ -116,7 +121,7 @@ class AppTheme {
       dialogTheme: originaltimeDialogTheme.copyWith(
         backgroundColor: primaryColorLight,
         titleTextStyle: headline3TextStyle,
-        contentTextStyle: subtitle1TextStyle.copyWith(
+        contentTextStyle: headline4TextStyle.copyWith(
           color: defaultTextColor,
         ),
       ),
@@ -133,8 +138,8 @@ class AppTheme {
       timePickerTheme: originaltimePickerTheme.copyWith(
         backgroundColor: primaryColorLight,
         dialBackgroundColor: accentColor,
-        dialTextColor: inverterTextColor,
-        dialHandColor: white,
+        dialTextColor: invertedTextColor,
+        dialHandColor: whiteColor,
         helpTextStyle: const TextStyle(
           color: defaultTextColor,
         ),
@@ -160,14 +165,12 @@ class AppTheme {
         headline5: originalHeadline5.copyWith(
           color: defaultTextColor,
         ),
-        headline4: originalHeadline4.copyWith(
-          fontSize: Dimensions.standardFontSize,
-          color: defaultTextColor,
-        ),
+        headline4: headline4TextStyle,
         headline3: headline3TextStyle,
         headline2: originalHeadline2.copyWith(
           fontSize: Dimensions.largeFontSize,
-          color: inverterTextColor,
+          fontWeight: FontWeight.bold,
+          color: defaultTextColor,
         ),
         headline1: originalHeadline1.copyWith(
           fontSize: Dimensions.extraLargeFontSize,

@@ -44,7 +44,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: const <Widget>[
                         SectionTitle(
-                          title: 'AUTHOR',
+                          title: 'Author',
                         ),
                         DetailsItem(
                           title: 'Mikolaj Kieres',
@@ -56,7 +56,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                           color: AppTheme.accentColor,
                         ),
                         SectionTitle(
-                          title: 'DESIGN & ART',
+                          title: 'Design & Art',
                         ),
                         DetailsItem(
                           title: 'Alicja Adamkiewicz',
@@ -68,7 +68,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                           color: AppTheme.accentColor,
                         ),
                         SectionTitle(
-                          title: 'CONTENT & DATA',
+                          title: 'Content & Data',
                         ),
                         SectionText(
                           text:
@@ -93,7 +93,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                           color: AppTheme.accentColor,
                         ),
                         SectionTitle(
-                          title: 'PLUGINS & LIBRARIES',
+                          title: 'Plugins & Libraries',
                         ),
                         SectionText(
                           text:
@@ -167,7 +167,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                           color: AppTheme.accentColor,
                         ),
                         SectionTitle(
-                          title: 'LICENSES',
+                          title: 'Licenses',
                         ),
                         _LicensePageDetailsItem(),
                       ],

@@ -19,7 +19,7 @@ class DetailsItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final String iconUri;
-  final Function onTap;
+  final VoidCallback onTap;
   final String uri;
 
   static const double _size = 60;
@@ -63,7 +63,9 @@ class DetailsItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         title,
-                        style: AppTheme.theme.textTheme.headline3,
+                        style: AppTheme.theme.textTheme.headline3.copyWith(
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                       const SizedBox(
                         height: Dimensions.halfStandardSpacing,
