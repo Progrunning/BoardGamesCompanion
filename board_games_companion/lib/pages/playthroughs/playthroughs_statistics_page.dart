@@ -115,9 +115,7 @@ class _Statistics extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _LastWinner(
-                    boardGameStatistics: boardGameStatistics,
-                  ),
+                  _LastWinner(boardGameStatistics: boardGameStatistics),
                   const SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
