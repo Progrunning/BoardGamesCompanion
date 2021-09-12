@@ -15,6 +15,7 @@ import '../stores/board_game_details_store.dart';
 import '../stores/board_games_store.dart';
 import '../stores/players_store.dart';
 import '../stores/playthrough_store.dart';
+import '../stores/playthroughs_store.dart';
 import 'navigator_transitions.dart';
 
 class NavigatorHelper {
@@ -86,6 +87,7 @@ class NavigatorHelper {
     PlaythroughStore playthroughStore,
   ) async {
     final analytics = getIt<AnalyticsService>();
+    final playthroughsStore = getIt<PlaythroughsStore>();
 
     analytics.logEvent(
       name: Analytics.EditPlaythrough,
@@ -99,7 +101,7 @@ class NavigatorHelper {
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
           return EditPlaythoughPage(
-            viewModel: EditPlaythoughViewModel(playthroughStore),
+            viewModel: EditPlaythoughViewModel(playthroughStore, playthroughsStore),
           );
         },
       ),
