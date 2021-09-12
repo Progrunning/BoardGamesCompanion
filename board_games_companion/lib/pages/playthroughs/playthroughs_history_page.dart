@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/enums.dart';
-import '../../common/enums/playthrough_status.dart';
-import '../../common/strings.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
@@ -213,14 +211,6 @@ class _PlaythroughPlayersStats extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (playthroughStore.playthrough.status == PlaythroughStatus.Finished)
-              IconAndTextButton(
-                icon: const DefaultIcon(Icons.delete),
-                color: Colors.red,
-                horizontalPadding: Dimensions.standardSpacing,
-                verticalPadding: Dimensions.standardSpacing,
-                onPressed: () => _deletePlaythrough(context, playthroughStore),
-              ),
             IconAndTextButton(
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,
@@ -236,39 +226,6 @@ class _PlaythroughPlayersStats extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-
-  Future<void> _stopPlaythrough(PlaythroughStore store) async {
-    await store.stopPlaythrough();
-  }
-
-  Future<void> _deletePlaythrough(BuildContext context, PlaythroughStore playthroughStore) async {
-    await showDialog<AlertDialog>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Are you sure you want to delete this game?'),
-          elevation: Dimensions.defaultElevation,
-          actions: <Widget>[
-            FlatButton(
-              child: const Text(Strings.Cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: const Text('Delete'),
-              color: Colors.red,
-              onPressed: () async {
-                await playthroughsStore.deletePlaythrough(playthroughStore.playthrough.id);
-
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

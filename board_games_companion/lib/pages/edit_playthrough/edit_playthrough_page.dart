@@ -96,6 +96,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   viewModel: widget.viewModel,
                   onSave: () async => _save(),
                   onStop: () async => _stopPlaythrough(),
+                  onDelete: () async => _showDeletePlaythroughDialog(context),
                 )
               ],
             ),
@@ -121,6 +122,41 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
     }
   }
 
+  Future<void> _showDeletePlaythroughDialog(BuildContext context) async {
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure you want to delete this playthrough?'),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            FlatButton(
+              child: const Text(
+                Strings.Cancel,
+                style: TextStyle(color: AppTheme.accentColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: const Text(Strings.Delete),
+              color: AppTheme.redColor,
+              onPressed: () async {
+                await widget.viewModel.deletePlaythrough();
+
+                // MK Close dialog
+                Navigator.of(context).pop();
+                // MK Close popup
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<bool> _handleOnWillPop(BuildContext context) async {
     if (widget.viewModel.isDirty()) {
       await showDialog<AlertDialog>(
@@ -139,7 +175,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 child: const Text(
                   Strings.Cancel,
                   style: TextStyle(
-                    color: AppTheme.defaultTextColor,
+                    color: AppTheme.accentColor,
                   ),
                 ),
                 onPressed: () {
@@ -249,6 +285,7 @@ class _Duration extends StatefulWidget {
 class _DurationState extends State<_Duration> {
   static const int _daysInYear = 365;
   static const int _daysInTenYears = _daysInYear * 10;
+  static const int _maxHours = 99;
 
   DateTime startDateTime;
   Duration playthroughDuration;
@@ -270,12 +307,11 @@ class _DurationState extends State<_Duration> {
     playthroughDurationInSeconds = playthroughDuration.inSeconds;
     hoursPlayed = playthroughDuration.inHours;
     minutesPlyed = playthroughDuration.inMinutes - hoursPlayed * Duration.minutesPerHour;
-
-    _setHourseAndMinutesRange();
   }
 
   @override
   Widget build(BuildContext context) {
+    _setHourseAndMinutesRange();
     return Row(
       children: [
         Center(
@@ -288,7 +324,7 @@ class _DurationState extends State<_Duration> {
         Row(
           children: <Widget>[
             NumberPicker.integer(
-              initialValue: math.min(hoursPlayed, 99),
+              initialValue: math.min(hoursPlayed, _maxHours),
               minValue: minHours,
               maxValue: maxHours,
               onChanged: (num value) => _updateDurationHours(value),
@@ -325,7 +361,7 @@ class _DurationState extends State<_Duration> {
 
   void _updateDurationMinutes(num value) {
     setState(() {
-      hoursPlayed = value.toInt();
+      minutesPlyed = value.toInt();
       widget.viewModel.updateDuration(hoursPlayed, minutesPlyed);
     });
   }
@@ -365,12 +401,12 @@ class _DurationState extends State<_Duration> {
   void _setHourseAndMinutesRange() {
     if (widget.viewModel.playthoughEnded) {
       minHours = 0;
-      maxHours = 99;
+      maxHours = _maxHours;
       minMinutes = 0;
       maxMinutes = Duration.minutesPerHour - 1;
     } else {
-      minHours = hoursPlayed;
-      maxHours = hoursPlayed;
+      minHours = math.min(hoursPlayed, _maxHours);
+      maxHours = math.min(hoursPlayed, _maxHours);
       minMinutes = minutesPlyed;
       maxMinutes = minutesPlyed;
     }
@@ -382,12 +418,14 @@ class _ActionButtons extends StatelessWidget {
     this.viewModel,
     this.onSave,
     this.onStop,
+    this.onDelete,
     Key key,
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
   final VoidCallback onSave;
   final VoidCallback onStop;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -399,8 +437,8 @@ class _ActionButtons extends StatelessWidget {
           IconAndTextButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
-            color: AppTheme.red,
-            // onPressed: onSave,
+            color: AppTheme.redColor,
+            onPressed: onDelete,
           ),
           const Expanded(child: SizedBox.shrink()),
           if (!viewModel.playthoughEnded) ...[
@@ -409,8 +447,8 @@ class _ActionButtons extends StatelessWidget {
               icon: const DefaultIcon(
                 Icons.stop,
               ),
-              color: AppTheme.blue,
-              splashColor: AppTheme.white,
+              color: AppTheme.blueColor,
+              splashColor: AppTheme.whiteColor,
               onPressed: onStop,
             ),
             const SizedBox(
