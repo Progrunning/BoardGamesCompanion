@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
@@ -7,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../common/strings.dart';
 import '../../mixins/sync_collection.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
@@ -17,7 +17,6 @@ import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
-import '../../widgets/common/ripple_effect.dart';
 import '../../widgets/common/sync_collection_button.dart';
 import '../about_page.dart';
 

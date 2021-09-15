@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/common/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/enums.dart';
+import '../../common/strings.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
@@ -14,10 +14,10 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/hive/playthrough.dart';
 import '../../services/player_service.dart';
 import '../../services/score_service.dart';
-import '../../stores/playthrough_duration_store.dart';
 import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
 import '../../utilities/navigator_helper.dart';
+import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
@@ -310,20 +310,47 @@ class _PlaythroughGameStats extends StatelessWidget {
           '$playthroughNumber${playthroughNumber.toOrdinalAbbreviations()}',
           'game',
         ),
-        ChangeNotifierProvider(
-          create: (_) => PlaythroughDurationStore(playthrough),
-          child: Consumer2<PlaythroughDurationStore, PlaythroughStore>(
-            builder: (_, durationStore, __, ___) {
-              // TODO MK The duration store most likely needs to be refactored as it's not being update currently after the duration being changed
-              return _PlaythroughItemDetail(
-                durationStore.durationInSeconds.toPlaythroughDuration(),
-                'duration',
-              );
-            },
-          ),
-        ),
+        _PlaythroughDuration(playthroughStore: playthroughStore),
       ],
     );
+  }
+}
+
+class _PlaythroughDuration extends StatefulWidget {
+  const _PlaythroughDuration({@required this.playthroughStore});
+
+  final PlaythroughStore playthroughStore;
+
+  @override
+  _PlaythroughDurationState createState() => _PlaythroughDurationState();
+}
+
+class _PlaythroughDurationState extends State<_PlaythroughDuration> {
+  final PeriodicBroadcastStream periodicBroadcastStream =
+      PeriodicBroadcastStream(const Duration(seconds: 1));
+
+  @override
+  void initState() {
+    periodicBroadcastStream.stream.listen(_updateDuration);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    periodicBroadcastStream.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _PlaythroughItemDetail(
+      widget.playthroughStore.duration.inSeconds.toPlaythroughDuration(),
+      'duration',
+    );
+  }
+
+  void _updateDuration(void _) {
+    setState(() {});
   }
 }
 
