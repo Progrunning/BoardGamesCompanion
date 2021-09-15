@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../common/animation_tags.dart';
 import '../common/app_theme.dart';
 import '../common/dimensions.dart';
+import '../common/strings.dart';
 import '../common/styles.dart';
 import '../models/hive/player.dart';
 import '../stores/players_store.dart';
