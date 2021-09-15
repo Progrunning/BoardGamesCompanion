@@ -1,4 +1,3 @@
-import 'package:board_games_companion/utilities/custom_http_client_adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -17,6 +16,7 @@ import '../models/hive/board_game_expansion.dart';
 import '../models/hive/board_game_publisher.dart';
 import '../models/hive/board_game_rank.dart';
 import '../utilities/bgg_retry_interceptor.dart';
+import '../utilities/custom_http_client_adapter.dart';
 
 @singleton
 class BoardGamesGeekService {

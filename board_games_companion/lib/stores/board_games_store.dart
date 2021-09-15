@@ -1,4 +1,3 @@
-import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,6 +13,7 @@ import '../extensions/string_extensions.dart';
 import '../models/collection_sync_result.dart';
 import '../models/hive/board_game_category.dart';
 import '../models/hive/board_game_details.dart';
+import '../models/hive/board_game_expansion.dart';
 import '../services/board_games_service.dart';
 import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
