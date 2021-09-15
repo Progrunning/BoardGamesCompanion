@@ -81,7 +81,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                     itemCount: widget.viewModel.playerScores?.length ?? 0,
                     separatorBuilder: (context, index) {
                       return const SizedBox(
-                        width: Dimensions.doubleStandardSpacing,
+                        height: Dimensions.doubleStandardSpacing,
                       );
                     },
                     itemBuilder: (context, index) {
