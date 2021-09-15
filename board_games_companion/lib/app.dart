@@ -1,4 +1,3 @@
-import 'package:board_games_companion/services/rate_and_review_service.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +6,7 @@ import 'common/routes.dart';
 import 'injectable.dart';
 import 'pages/home_page.dart';
 import 'services/analytics_service.dart';
+import 'services/rate_and_review_service.dart';
 
 class BoardGamesCompanionApp extends StatefulWidget {
   const BoardGamesCompanionApp({
