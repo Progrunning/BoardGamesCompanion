@@ -75,7 +75,7 @@ class EditPlaythoughViewModel {
   Future<void> stopPlaythrough() async {
     await _playthroughStore.stopPlaythrough();
 
-    // Force refresh
+    // Force refresh when next time getting the playthough
     _playthrough = null;
   }
 

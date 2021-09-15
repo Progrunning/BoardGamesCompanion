@@ -216,6 +216,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               color: AppTheme.accentColor,
               onPressed: () async =>
                   NavigatorHelper.navigateToEditPlaythrough(context, playthroughStore),
+              splashColor: AppTheme.whiteColor,
             ),
           ],
         ),
