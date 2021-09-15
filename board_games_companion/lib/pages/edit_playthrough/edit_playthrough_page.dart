@@ -321,32 +321,35 @@ class _DurationState extends State<_Duration> {
           ),
         ),
         const Expanded(child: SizedBox.shrink()),
-        Row(
-          children: <Widget>[
-            NumberPicker.integer(
-              initialValue: math.min(hoursPlayed, _maxHours),
-              minValue: minHours,
-              maxValue: maxHours,
-              onChanged: (num value) => _updateDurationHours(value),
-              listViewWidth: 46,
-            ),
-            Text(
-              'h',
-              style: AppTheme.theme.textTheme.bodyText2,
-            ),
-            const SizedBox(width: Dimensions.halfStandardSpacing),
-            NumberPicker.integer(
-              initialValue: minutesPlyed,
-              minValue: minMinutes,
-              maxValue: maxMinutes,
-              onChanged: (num value) => _updateDurationMinutes(value),
-              listViewWidth: 46,
-            ),
-            Text(
-              'min ',
-              style: AppTheme.theme.textTheme.bodyText2,
-            ),
-          ],
+        AbsorbPointer(
+          absorbing: !widget.viewModel.playthoughEnded,
+          child: Row(
+            children: <Widget>[
+              NumberPicker.integer(
+                initialValue: math.min(hoursPlayed, _maxHours),
+                minValue: minHours,
+                maxValue: maxHours,
+                onChanged: (num value) => _updateDurationHours(value),
+                listViewWidth: 46,
+              ),
+              Text(
+                'h',
+                style: AppTheme.theme.textTheme.bodyText2,
+              ),
+              const SizedBox(width: Dimensions.halfStandardSpacing),
+              NumberPicker.integer(
+                initialValue: minutesPlyed,
+                minValue: minMinutes,
+                maxValue: maxMinutes,
+                onChanged: (num value) => _updateDurationMinutes(value),
+                listViewWidth: 46,
+              ),
+              Text(
+                'min ',
+                style: AppTheme.theme.textTheme.bodyText2,
+              ),
+            ],
+          ),
         )
       ],
     );
@@ -399,17 +402,10 @@ class _DurationState extends State<_Duration> {
   }
 
   void _setHourseAndMinutesRange() {
-    if (widget.viewModel.playthoughEnded) {
-      minHours = 0;
-      maxHours = _maxHours;
-      minMinutes = 0;
-      maxMinutes = Duration.minutesPerHour - 1;
-    } else {
-      minHours = math.min(hoursPlayed, _maxHours);
-      maxHours = math.min(hoursPlayed, _maxHours);
-      minMinutes = minutesPlyed;
-      maxMinutes = minutesPlyed;
-    }
+    minHours = 0;
+    maxHours = _maxHours;
+    minMinutes = 0;
+    maxMinutes = Duration.minutesPerHour - 1;
   }
 }
 
