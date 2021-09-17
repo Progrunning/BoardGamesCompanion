@@ -364,8 +364,8 @@ class _Grid extends StatelessWidget {
                   NavigatorTransitions.fadeThrough(
                     (_, __, ___) {
                       return PlaythroughsPage(
-                        boardGames[index],
-                        collectionFlag,
+                        boardGameDetails: boardGames[index],
+                        collectionType: collectionFlag,
                       );
                     },
                   ),
