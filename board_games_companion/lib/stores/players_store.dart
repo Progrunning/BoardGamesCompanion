@@ -1,10 +1,12 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 
 import '../common/hive_boxes.dart';
 import '../models/hive/player.dart';
 import '../services/player_service.dart';
 
+@singleton
 class PlayersStore with ChangeNotifier {
   PlayersStore(this._playerService);
 
