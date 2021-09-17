@@ -1,13 +1,11 @@
-import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
-import 'package:board_games_companion/widgets/common/ripple_effect.dart';
-import 'package:board_games_companion/widgets/player/player_avatar.dart';
-import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../extensions/date_time_extensions.dart';
 import '../../extensions/page_controller_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
@@ -20,8 +18,13 @@ import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/ripple_effect.dart';
+import '../../widgets/common/text/item_property_value_widget.dart';
+import '../../widgets/player/player_avatar.dart';
+import '../../widgets/playthrough/calendar_card.dart';
 import '../base_page_state.dart';
 import 'playthroughs_history_page.dart';
 import 'playthroughs_statistics_page.dart';
@@ -182,6 +185,7 @@ class _NewPlaythroughState extends State<_NewPlaythrough> {
           );
         }
 
+        // TODO Think how to deal with a situation when there's no players yet
         return const _NoPlayers();
       },
     );
@@ -199,42 +203,96 @@ class _LogPlaythroughStepper extends StatefulWidget {
   final BoardGameDetails boardGameDetails;
 
   @override
-  __LogPlaythroughStepperState createState() => __LogPlaythroughStepperState();
+  _LogPlaythroughStepperState createState() => _LogPlaythroughStepperState();
 }
 
-class __LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
-  int _step = 0;
+class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
+  int _step = 2;
 
   @override
   Widget build(BuildContext context) {
-    return Stepper(
-      currentStep: _step,
-      steps: [
-        Step(
-          content: _PlaythroughTimeStep(),
-          title: const Text('Pick time'),
-        ),
-        Step(
-          content: _StepperPlayersStep(
-            playthroughPlayers: widget.startPlaythroughStore.playthroughPlayers,
-            boardGameDetails: widget.boardGameDetails,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Text(
+            'Log a game',
+            style: AppTheme.theme.textTheme.headline2,
           ),
-          title: const Text('Pick players'),
         ),
-        Step(
-          content: _StepperDateStep(),
-          title: const Text('Pick a date'),
+        SingleChildScrollView(
+          child: Theme(
+            data: AppTheme.theme.copyWith(
+              colorScheme: AppTheme.theme.colorScheme.copyWith(
+                primary: AppTheme.accentColor,
+              ),
+            ),
+            child: Stepper(
+              currentStep: _step,
+              steps: [
+                Step(
+                  title: const Text('When?'),
+                  content: _StepperTimeStep(
+                    onPlaythroughTimeChanged: (DateTime playthoughDate) {},
+                  ),
+                ),
+                Step(
+                  title: const Text('Who?'),
+                  content: _StepperPlayersStep(
+                    playthroughPlayers: widget.startPlaythroughStore.playthroughPlayers,
+                    boardGameDetails: widget.boardGameDetails,
+                  ),
+                ),
+                Step(
+                  title: const Text('How long?'),
+                  content: _StepperDurationStep(),
+                ),
+              ],
+              onStepCancel: () => _cancel(),
+              onStepContinue: () => _continue(),
+              onStepTapped: (int index) => _stepTapped(index),
+              controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                return _stepActionButtons(onStepContinue, onStepCancel);
+              },
+            ),
+          ),
         ),
       ],
-      onStepCancel: () {
-        _cancel();
-      },
-      onStepContinue: () {
-        _continue();
-      },
-      onStepTapped: (int index) {
-        _stepTapped(index);
-      },
+    );
+  }
+
+  Widget _stepActionButtons(VoidCallback onStepContinue, VoidCallback onStepCancel) {
+    Widget step;
+    if (_step == 0) {
+      step = Align(
+        alignment: Alignment.centerLeft,
+        child: ElevatedButton(
+          onPressed: () => onStepContinue(),
+          child: const Text('Next'),
+        ),
+      );
+    }
+
+    if (_step == 1 || _step == 2) {
+      step = Row(
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: () => onStepContinue(),
+            child: _step == 1 ? const Text('Next') : const Text('Done'),
+          ),
+          const SizedBox(width: Dimensions.doubleStandardSpacing),
+          TextButton(
+            onPressed: () => onStepCancel(),
+            child: const Text('Go Back'),
+          ),
+        ],
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: Dimensions.doubleStandardSpacing),
+      child: step,
     );
   }
 
@@ -245,7 +303,7 @@ class __LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   }
 
   void _continue() {
-    if (_step <= 1) {
+    if (_step <= 3) {
       setState(() {
         _step += 1;
       });
@@ -311,14 +369,102 @@ class __LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   }
 }
 
-class _StepperDateStep extends StatelessWidget {
-  const _StepperDateStep({
+class _StepperDurationStep extends StatefulWidget {
+  const _StepperDurationStep({
     Key key,
   }) : super(key: key);
 
   @override
+  _StepperDurationStepState createState() => _StepperDurationStepState();
+}
+
+class _StepperDurationStepState extends State<_StepperDurationStep> {
+  int hoursPlayed = 0;
+  int minutesPlyed = 30;
+  PlaythroughStartTime _playthroughStartTime = PlaythroughStartTime.now;
+
+  @override
   Widget build(BuildContext context) {
-    return CalendarCard(DateTime.now());
+    return Column(
+      children: [
+        Row(
+          children: [
+            Radio<PlaythroughStartTime>(
+              value: PlaythroughStartTime.now,
+              groupValue: _playthroughStartTime,
+              activeColor: AppTheme.accentColor,
+              onChanged: (PlaythroughStartTime value) {
+                setState(() {
+                  _playthroughStartTime = value;
+                });
+              },
+            ),
+            Text(
+              'Start the timer now!',
+              style: AppTheme.theme.textTheme.bodyText1,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Radio<PlaythroughStartTime>(
+              value: PlaythroughStartTime.inThePast,
+              groupValue: _playthroughStartTime,
+              activeColor: AppTheme.accentColor,
+              onChanged: (PlaythroughStartTime value) {
+                setState(() {
+                  _playthroughStartTime = value;
+                });
+              },
+            ),
+            Text(
+              'The game took us...',
+              style: AppTheme.theme.textTheme.bodyText1,
+            ),
+          ],
+        ),
+        if (_playthroughStartTime == PlaythroughStartTime.inThePast)
+          Row(
+            children: <Widget>[
+              NumberPicker.integer(
+                initialValue: hoursPlayed,
+                minValue: 0,
+                maxValue: 99,
+                onChanged: (num value) => _updateDurationHours(value),
+                listViewWidth: 46,
+              ),
+              Text(
+                'h',
+                style: AppTheme.theme.textTheme.bodyText2,
+              ),
+              const SizedBox(width: Dimensions.halfStandardSpacing),
+              NumberPicker.integer(
+                initialValue: minutesPlyed,
+                minValue: 0,
+                maxValue: 59,
+                onChanged: (num value) => _updateDurationMinutes(value),
+                listViewWidth: 46,
+              ),
+              Text(
+                'min ',
+                style: AppTheme.theme.textTheme.bodyText2,
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  void _updateDurationHours(num value) {
+    setState(() {
+      hoursPlayed = value.toInt();
+    });
+  }
+
+  void _updateDurationMinutes(num value) {
+    setState(() {
+      minutesPlyed = value.toInt();
+    });
   }
 }
 
@@ -336,7 +482,7 @@ class _StepperPlayersStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.blue,
-      height: 400,
+      height: 200,
       child: _Players(
         playthroughPlayers: playthroughPlayers,
         boardGameDetails: boardGameDetails,
@@ -345,45 +491,31 @@ class _StepperPlayersStep extends StatelessWidget {
   }
 }
 
-class _PlaythroughTimeStep extends StatefulWidget {
-  const _PlaythroughTimeStep({
+class _StepperTimeStep extends StatefulWidget {
+  const _StepperTimeStep({
+    @required this.onPlaythroughTimeChanged,
     Key key,
   }) : super(key: key);
 
+  final Function(DateTime) onPlaythroughTimeChanged;
+
   @override
-  __PlaythroughTimeStepState createState() => __PlaythroughTimeStepState();
+  _StepperTimeStepState createState() => _StepperTimeStepState();
 }
 
-class __PlaythroughTimeStepState extends State<_PlaythroughTimeStep> {
-  PlaythoughTime _playthroughTime = PlaythoughTime.now;
+class _StepperTimeStepState extends State<_StepperTimeStep> {
+  DateTime _playthroughDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: <Widget>[
-        ListTile(
-          title: const Text('Now'),
-          leading: Radio<PlaythoughTime>(
-            value: PlaythoughTime.now,
-            groupValue: _playthroughTime,
-            onChanged: (PlaythoughTime value) {
-              setState(() {
-                _playthroughTime = value;
-              });
-            },
-          ),
+        CalendarCard(_playthroughDate),
+        const SizedBox(
+          width: Dimensions.standardSpacing,
         ),
-        ListTile(
-          title: const Text('In the past'),
-          leading: Radio<PlaythoughTime>(
-            value: PlaythoughTime.inThePast,
-            groupValue: _playthroughTime,
-            onChanged: (PlaythoughTime value) {
-              setState(() {
-                _playthroughTime = value;
-              });
-            },
-          ),
+        ItemPropertyValue(
+          _playthroughDate.toDaysAgo(),
         ),
       ],
     );
@@ -488,7 +620,7 @@ class _NoPlayers extends StatelessWidget {
   }
 }
 
-enum PlaythoughTime {
+enum PlaythroughStartTime {
   now,
   inThePast,
 }
