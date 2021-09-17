@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -283,8 +284,6 @@ class _Duration extends StatefulWidget {
 }
 
 class _DurationState extends State<_Duration> {
-  static const int _daysInYear = 365;
-  static const int _daysInTenYears = _daysInYear * 10;
   static const int _maxHours = 99;
 
   DateTime startDateTime;
@@ -317,7 +316,7 @@ class _DurationState extends State<_Duration> {
         Center(
           child: CalendarCard(
             widget.viewModel.playthrough.startDate,
-            onTap: () async => _pickStartDateTime(),
+            onTap: () async => _pickStartDate(),
           ),
         ),
         const Expanded(child: SizedBox.shrink()),
@@ -369,12 +368,12 @@ class _DurationState extends State<_Duration> {
     });
   }
 
-  Future<void> _pickStartDateTime() async {
+  Future<void> _pickStartDate() async {
     final DateTime now = DateTime.now();
     final DateTime newStartDate = await showDatePicker(
       context: context,
       initialDate: startDateTime,
-      firstDate: now.add(const Duration(days: -_daysInTenYears)),
+      firstDate: now.add(const Duration(days: -Constants.DaysInTenYears)),
       lastDate: now,
       currentDate: now,
       helpText: 'Pick a playthrough date',
