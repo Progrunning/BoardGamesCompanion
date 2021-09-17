@@ -46,7 +46,6 @@ import 'stores/playthrough_statistics_store.dart';
 import 'stores/playthroughs_store.dart';
 import 'stores/search_bar_board_games_store.dart';
 import 'stores/search_board_games_store.dart';
-import 'stores/start_playthrough_store.dart';
 import 'stores/user_store.dart';
 
 Future<void> main() async {
@@ -144,10 +143,7 @@ class App extends StatelessWidget {
           },
         ),
         ChangeNotifierProvider<PlayersStore>(
-          create: (context) {
-            final PlayerService playerService = getIt<PlayerService>();
-            return PlayersStore(playerService);
-          },
+          create: (context) => getIt<PlayersStore>(),
         ),
         ChangeNotifierProvider<PlaythroughsStore>(
           create: (context) => getIt<PlaythroughsStore>(),
@@ -162,15 +158,7 @@ class App extends StatelessWidget {
             final AnalyticsService analyticsService = getIt<AnalyticsService>();
             return BoardGamesFiltersStore(boardGamesFiltersService, analyticsService);
           },
-        ),
-        ChangeNotifierProvider<StartPlaythroughStore>(
-          create: (context) => StartPlaythroughStore(
-            Provider.of<PlayersStore>(
-              context,
-              listen: false,
-            ),
-          ),
-        ),
+        ),        
         ChangeNotifierProxyProvider<BoardGamesFiltersStore, BoardGamesStore>(
           create: (context) {
             final BoardGamesService boardGamesService = getIt<BoardGamesService>();

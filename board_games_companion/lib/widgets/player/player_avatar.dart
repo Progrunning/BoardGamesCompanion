@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/styles.dart';
 import '../../models/hive/player.dart';
 import '../common/ripple_effect.dart';
 import '../common/shadow_box.dart';
@@ -45,6 +46,7 @@ class PlayerAvatar extends StatelessWidget {
                 Positioned.fill(
                   child: RippleEffect(
                     onTap: onTap,
+                    borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
                   ),
                 ),
               ],
