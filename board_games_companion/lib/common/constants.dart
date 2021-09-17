@@ -38,4 +38,7 @@ class Constants {
   static const String FilterByAny = 'any';
 
   static const String AppleAppId = '1506458832';
+
+  static const int DaysInYear = 365;
+  static const int DaysInTenYears = DaysInYear * 10;
 }
