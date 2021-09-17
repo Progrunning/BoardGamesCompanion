@@ -79,13 +79,12 @@ class AppTheme {
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
     final originalBodyText1 = originalTextTheme.bodyText1;
     final originalBodyText2 = originalTextTheme.bodyText2;
-    final originalHeadline5 = originalTextTheme.headline5;    
+    final originalHeadline5 = originalTextTheme.headline5;
     final originalHeadline2 = originalTextTheme.headline2;
     final originalHeadline1 = originalTextTheme.headline1;
     final originalSubtitle2 = originalTextTheme.subtitle2;
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
     final originaltimePickerTheme = ThemeData.light().timePickerTheme;
-    final originaltimeDialogTheme = ThemeData.light().dialogTheme;
 
     final subtitle1TextStyle = originalTextTheme.subtitle1.copyWith(
       fontSize: Dimensions.smallFontSize,
@@ -118,13 +117,13 @@ class AppTheme {
       backgroundColor: Colors.grey[800],
       highlightColor: accentColor,
       dialogBackgroundColor: primaryColorLight,
-      dialogTheme: originaltimeDialogTheme.copyWith(
-        backgroundColor: primaryColorLight,
-        titleTextStyle: headline3TextStyle,
-        contentTextStyle: headline4TextStyle.copyWith(
-          color: defaultTextColor,
-        ),
-      ),
+      dialogTheme: ThemeData.light().dialogTheme.copyWith(
+            backgroundColor: primaryColorLight,
+            titleTextStyle: headline3TextStyle,
+            contentTextStyle: headline4TextStyle.copyWith(
+              color: defaultTextColor,
+            ),
+          ),
       colorScheme: originalColorScheme.copyWith(
         primary: primaryColor,
         onPrimary: defaultTextColor,
@@ -145,6 +144,9 @@ class AppTheme {
         ),
       ),
       canvasColor: primaryColorLight,
+      buttonTheme: ThemeData.light().buttonTheme.copyWith(
+            buttonColor: accentColor,
+          ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           primary: accentColor,
