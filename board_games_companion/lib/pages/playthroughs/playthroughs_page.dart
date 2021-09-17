@@ -1,6 +1,7 @@
 import 'package:board_games_companion/widgets/common/generic_error_message_widget.dart';
 import 'package:board_games_companion/widgets/common/ripple_effect.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
+import 'package:board_games_companion/widgets/playthrough/calendar_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -109,7 +110,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
             items: <BottomNavigationBarItem>[
               CustomBottomNavigationBarItem('Stats', Icons.multiline_chart),
               CustomBottomNavigationBarItem('History', Icons.history),
-              CustomBottomNavigationBarItem('New Game', Icons.play_arrow),
+              CustomBottomNavigationBarItem('Log Game', Icons.casino),
             ],
             onTap: (index) async {
               await _onTabChanged(index, pageController);
@@ -175,22 +176,9 @@ class _NewPlaythroughState extends State<_NewPlaythrough> {
       future: startPlaythroughStore.loadPlaythroughPlayers(),
       success: (_, StartPlaythroughStore store) {
         if (store.playthroughPlayers?.isNotEmpty ?? false) {
-          return Stepper(
-            currentStep: 0,
-            steps: [
-              Step(
-                content: Container(
-                  color: Colors.blue,
-                  height: 400,
-                  child: _Players(
-                    playthroughPlayers: store.playthroughPlayers,
-                    boardGameDetails: widget.boardGameDetails,
-                    pageController: widget.pageController,
-                  ),
-                ),
-                title: const Text('Players'),
-              ),
-            ],
+          return _LogPlaythroughStepper(
+            startPlaythroughStore: store,
+            boardGameDetails: widget.boardGameDetails,
           );
         }
 
@@ -200,85 +188,79 @@ class _NewPlaythroughState extends State<_NewPlaythrough> {
   }
 }
 
-class _Players extends StatelessWidget {
-  const _Players({
-    Key key,
-    @required this.playthroughPlayers,
+class _LogPlaythroughStepper extends StatefulWidget {
+  const _LogPlaythroughStepper({
+    @required this.startPlaythroughStore,
     @required this.boardGameDetails,
-    @required this.pageController,
+    Key key,
   }) : super(key: key);
 
-  int get _numberOfPlayerColumns => 3;
-  final List<PlaythroughPlayer> playthroughPlayers;
+  final StartPlaythroughStore startPlaythroughStore;
   final BoardGameDetails boardGameDetails;
-  final PageController pageController;
 
-  static const int _playthroughsPageIndex = 1;
+  @override
+  __LogPlaythroughStepperState createState() => __LogPlaythroughStepperState();
+}
+
+class __LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
+  int _step = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        GridView.count(
-          padding: const EdgeInsets.all(
-            Dimensions.standardSpacing,
-          ),
-          crossAxisCount: _numberOfPlayerColumns,
-          children: List.generate(
-            playthroughPlayers.length,
-            (int index) {
-              return Stack(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-                    child: PlayerAvatar(playthroughPlayers[index].player),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: ChangeNotifierProvider.value(
-                      value: playthroughPlayers[index],
-                      child: Consumer<PlaythroughPlayer>(
-                        builder: (_, store, __) {
-                          return Checkbox(
-                            checkColor: AppTheme.accentColor,
-                            activeColor: AppTheme.primaryColor.withOpacity(0.7),
-                            value: playthroughPlayers[index].isChecked,
-                            onChanged: (checked) {},
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: RippleEffect(
-                      onTap: () {
-                        playthroughPlayers[index].isChecked = !playthroughPlayers[index].isChecked;
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+    return Stepper(
+      currentStep: _step,
+      steps: [
+        Step(
+          content: _PlaythroughTimeStep(),
+          title: const Text('Pick time'),
         ),
-        if (playthroughPlayers.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: Dimensions.standardSpacing,
-            ),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: IconAndTextButton(
-                icon: const DefaultIcon(Icons.play_arrow),
-                onPressed: () => _onStartNewGame(context),
-              ),
-            ),
+        Step(
+          content: _StepperPlayersStep(
+            playthroughPlayers: widget.startPlaythroughStore.playthroughPlayers,
+            boardGameDetails: widget.boardGameDetails,
           ),
+          title: const Text('Pick players'),
+        ),
+        Step(
+          content: _StepperDateStep(),
+          title: const Text('Pick a date'),
+        ),
       ],
+      onStepCancel: () {
+        _cancel();
+      },
+      onStepContinue: () {
+        _continue();
+      },
+      onStepTapped: (int index) {
+        _stepTapped(index);
+      },
     );
   }
 
-  Future<void> _onStartNewGame(
+  void _stepTapped(int index) {
+    setState(() {
+      _step = index;
+    });
+  }
+
+  void _continue() {
+    if (_step <= 1) {
+      setState(() {
+        _step += 1;
+      });
+    }
+  }
+
+  void _cancel() {
+    if (_step > 0) {
+      setState(() {
+        _step -= 1;
+      });
+    }
+  }
+
+  Future<void> _startNewGame(
     BuildContext context,
   ) async {
     final startPlaythroughStore = Provider.of<StartPlaythroughStore>(
@@ -308,7 +290,7 @@ class _Players extends StatelessWidget {
 
     final playthroughsStore = getIt<PlaythroughsStore>();
     final newPlaythrough = await playthroughsStore.createPlaythrough(
-      boardGameDetails.id,
+      widget.boardGameDetails.id,
       selectedPlaythoughPlayers,
     );
 
@@ -326,8 +308,143 @@ class _Players extends StatelessWidget {
       );
       return;
     }
+  }
+}
 
-    pageController.animateToTab(_playthroughsPageIndex);
+class _StepperDateStep extends StatelessWidget {
+  const _StepperDateStep({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CalendarCard(DateTime.now());
+  }
+}
+
+class _StepperPlayersStep extends StatelessWidget {
+  const _StepperPlayersStep({
+    Key key,
+    @required this.playthroughPlayers,
+    @required this.boardGameDetails,
+  }) : super(key: key);
+
+  final List<PlaythroughPlayer> playthroughPlayers;
+  final BoardGameDetails boardGameDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.blue,
+      height: 400,
+      child: _Players(
+        playthroughPlayers: playthroughPlayers,
+        boardGameDetails: boardGameDetails,
+      ),
+    );
+  }
+}
+
+class _PlaythroughTimeStep extends StatefulWidget {
+  const _PlaythroughTimeStep({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  __PlaythroughTimeStepState createState() => __PlaythroughTimeStepState();
+}
+
+class __PlaythroughTimeStepState extends State<_PlaythroughTimeStep> {
+  PlaythoughTime _playthroughTime = PlaythoughTime.now;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: const Text('Now'),
+          leading: Radio<PlaythoughTime>(
+            value: PlaythoughTime.now,
+            groupValue: _playthroughTime,
+            onChanged: (PlaythoughTime value) {
+              setState(() {
+                _playthroughTime = value;
+              });
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('In the past'),
+          leading: Radio<PlaythoughTime>(
+            value: PlaythoughTime.inThePast,
+            groupValue: _playthroughTime,
+            onChanged: (PlaythoughTime value) {
+              setState(() {
+                _playthroughTime = value;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Players extends StatelessWidget {
+  const _Players({
+    Key key,
+    @required this.playthroughPlayers,
+    @required this.boardGameDetails,
+  }) : super(key: key);
+
+  int get _numberOfPlayerColumns => 3;
+  final List<PlaythroughPlayer> playthroughPlayers;
+  final BoardGameDetails boardGameDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      padding: const EdgeInsets.all(
+        Dimensions.standardSpacing,
+      ),
+      crossAxisCount: _numberOfPlayerColumns,
+      children: List.generate(
+        playthroughPlayers.length,
+        (int index) {
+          return Stack(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+                child: PlayerAvatar(playthroughPlayers[index].player),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: ChangeNotifierProvider.value(
+                  value: playthroughPlayers[index],
+                  child: Consumer<PlaythroughPlayer>(
+                    builder: (_, store, __) {
+                      return Checkbox(
+                        checkColor: AppTheme.accentColor,
+                        activeColor: AppTheme.primaryColor.withOpacity(0.7),
+                        value: playthroughPlayers[index].isChecked,
+                        onChanged: (checked) {},
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: RippleEffect(
+                  onTap: () {
+                    playthroughPlayers[index].isChecked = !playthroughPlayers[index].isChecked;
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -369,4 +486,9 @@ class _NoPlayers extends StatelessWidget {
       ),
     );
   }
+}
+
+enum PlaythoughTime {
+  now,
+  inThePast,
 }
