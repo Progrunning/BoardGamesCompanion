@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -233,13 +234,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
               steps: [
                 Step(
                   title: const Text('When?'),
-                  content: _StepperTimeStep(
+                  content: _StepperWhenStep(
                     onPlaythroughTimeChanged: (DateTime playthoughDate) {},
                   ),
                 ),
                 Step(
                   title: const Text('Who?'),
-                  content: _StepperPlayersStep(
+                  content: _StepperWhoStep(
                     playthroughPlayers: widget.startPlaythroughStore.playthroughPlayers,
                     boardGameDetails: widget.boardGameDetails,
                   ),
@@ -484,8 +485,8 @@ class _StepperDurationStepState extends State<_StepperDurationStep> {
   }
 }
 
-class _StepperPlayersStep extends StatelessWidget {
-  const _StepperPlayersStep({
+class _StepperWhoStep extends StatelessWidget {
+  const _StepperWhoStep({
     Key key,
     @required this.playthroughPlayers,
     @required this.boardGameDetails,
@@ -507,8 +508,8 @@ class _StepperPlayersStep extends StatelessWidget {
   }
 }
 
-class _StepperTimeStep extends StatefulWidget {
-  const _StepperTimeStep({
+class _StepperWhenStep extends StatefulWidget {
+  const _StepperWhenStep({
     @required this.onPlaythroughTimeChanged,
     Key key,
   }) : super(key: key);
@@ -516,17 +517,28 @@ class _StepperTimeStep extends StatefulWidget {
   final Function(DateTime) onPlaythroughTimeChanged;
 
   @override
-  _StepperTimeStepState createState() => _StepperTimeStepState();
+  _StepperWhenStepState createState() => _StepperWhenStepState();
 }
 
-class _StepperTimeStepState extends State<_StepperTimeStep> {
-  DateTime _playthroughDate = DateTime.now();
+class _StepperWhenStepState extends State<_StepperWhenStep> {
+  DateTime _playthroughDate;
+
+  @override
+  void initState() {
+    _playthroughDate = DateTime.now();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        CalendarCard(_playthroughDate),
+        Material(
+          child: InkWell(
+            onTap: () => _pickPlaythroughDate(context, _playthroughDate),
+            child: CalendarCard(_playthroughDate),
+          ),
+        ),
         const SizedBox(
           width: Dimensions.standardSpacing,
         ),
@@ -535,6 +547,35 @@ class _StepperTimeStepState extends State<_StepperTimeStep> {
         ),
       ],
     );
+  }
+
+  Future<void> _pickPlaythroughDate(BuildContext context, DateTime playthroughDate) async {
+    final DateTime newPlaythroughDate = await showDatePicker(
+      context: context,
+      initialDate: playthroughDate,
+      firstDate: playthroughDate.add(const Duration(days: -Constants.DaysInTenYears)),
+      lastDate: DateTime.now(),
+      currentDate: playthroughDate,
+      helpText: 'Pick a playthrough date',
+      builder: (_, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: AppTheme.accentColor,
+                ),
+          ),
+          child: child,
+        );
+      },
+    );
+
+    if (newPlaythroughDate == null) {
+      return;
+    }
+
+    setState(() {
+      _playthroughDate = newPlaythroughDate;
+    });
   }
 }
 
