@@ -252,9 +252,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
               onStepCancel: () => _cancel(),
               onStepContinue: () => _continue(),
               onStepTapped: (int index) => _stepTapped(index),
-              controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-                return _stepActionButtons(onStepContinue, onStepCancel);
-              },
+              controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) =>
+                  _stepActionButtons(onStepContinue, onStepCancel),
             ),
           ),
         ),
@@ -385,73 +384,90 @@ class _StepperDurationStepState extends State<_StepperDurationStep> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Radio<PlaythroughStartTime>(
-              value: PlaythroughStartTime.now,
-              groupValue: _playthroughStartTime,
-              activeColor: AppTheme.accentColor,
-              onChanged: (PlaythroughStartTime value) {
-                setState(() {
-                  _playthroughStartTime = value;
-                });
-              },
+    return Material(
+      color: Colors.transparent,
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                _playthroughStartTime = PlaythroughStartTime.now;
+              });
+            },
+            child: Row(
+              children: [
+                Radio<PlaythroughStartTime>(
+                  value: PlaythroughStartTime.now,
+                  groupValue: _playthroughStartTime,
+                  activeColor: AppTheme.accentColor,
+                  onChanged: (PlaythroughStartTime value) {
+                    setState(() {
+                      _playthroughStartTime = value;
+                    });
+                  },
+                ),
+                Text(
+                  'Start the timer now!',
+                  style: AppTheme.theme.textTheme.bodyText1,
+                ),
+              ],
             ),
-            Text(
-              'Start the timer now!',
-              style: AppTheme.theme.textTheme.bodyText1,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Radio<PlaythroughStartTime>(
-              value: PlaythroughStartTime.inThePast,
-              groupValue: _playthroughStartTime,
-              activeColor: AppTheme.accentColor,
-              onChanged: (PlaythroughStartTime value) {
-                setState(() {
-                  _playthroughStartTime = value;
-                });
-              },
-            ),
-            Text(
-              'The game took us...',
-              style: AppTheme.theme.textTheme.bodyText1,
-            ),
-          ],
-        ),
-        if (_playthroughStartTime == PlaythroughStartTime.inThePast)
-          Row(
-            children: <Widget>[
-              NumberPicker.integer(
-                initialValue: hoursPlayed,
-                minValue: 0,
-                maxValue: 99,
-                onChanged: (num value) => _updateDurationHours(value),
-                listViewWidth: 46,
-              ),
-              Text(
-                'h',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-              const SizedBox(width: Dimensions.halfStandardSpacing),
-              NumberPicker.integer(
-                initialValue: minutesPlyed,
-                minValue: 0,
-                maxValue: 59,
-                onChanged: (num value) => _updateDurationMinutes(value),
-                listViewWidth: 46,
-              ),
-              Text(
-                'min ',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-            ],
           ),
-      ],
+          InkWell(
+            onTap: () {
+              setState(() {
+                _playthroughStartTime = PlaythroughStartTime.inThePast;
+              });
+            },
+            child: Row(
+              children: [
+                Radio<PlaythroughStartTime>(
+                  value: PlaythroughStartTime.inThePast,
+                  groupValue: _playthroughStartTime,
+                  activeColor: AppTheme.accentColor,
+                  onChanged: (PlaythroughStartTime value) {
+                    setState(() {
+                      _playthroughStartTime = value;
+                    });
+                  },
+                ),
+                Text(
+                  'The game took us...',
+                  style: AppTheme.theme.textTheme.bodyText1,
+                ),
+              ],
+            ),
+          ),
+          if (_playthroughStartTime == PlaythroughStartTime.inThePast)
+            Row(
+              children: <Widget>[
+                NumberPicker.integer(
+                  initialValue: hoursPlayed,
+                  minValue: 0,
+                  maxValue: 99,
+                  onChanged: (num value) => _updateDurationHours(value),
+                  listViewWidth: 46,
+                ),
+                Text(
+                  'h',
+                  style: AppTheme.theme.textTheme.bodyText2,
+                ),
+                const SizedBox(width: Dimensions.halfStandardSpacing),
+                NumberPicker.integer(
+                  initialValue: minutesPlyed,
+                  minValue: 0,
+                  maxValue: 59,
+                  onChanged: (num value) => _updateDurationMinutes(value),
+                  listViewWidth: 46,
+                ),
+                Text(
+                  'min ',
+                  style: AppTheme.theme.textTheme.bodyText2,
+                ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 
