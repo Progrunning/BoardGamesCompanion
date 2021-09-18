@@ -91,41 +91,43 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
             style: AppTheme.theme.textTheme.headline2,
           ),
         ),
-        SingleChildScrollView(
-          child: Theme(
-            data: AppTheme.theme.copyWith(
-              colorScheme: AppTheme.theme.colorScheme.copyWith(
-                primary: AppTheme.accentColor,
+        Expanded(
+          child: SingleChildScrollView(
+            child: Theme(
+              data: AppTheme.theme.copyWith(
+                colorScheme: AppTheme.theme.colorScheme.copyWith(
+                  primary: AppTheme.accentColor,
+                ),
               ),
-            ),
-            child: Stepper(
-              currentStep: widget.viewModel.logGameStep,
-              steps: [
-                Step(
-                  title: const Text('When?'),
-                  content: _StepperWhenStep(
-                    onPlaythroughTimeChanged: (DateTime playthoughDate) {
-                      widget.viewModel.playthroughDate = playthoughDate;
-                    },
+              child: Stepper(
+                currentStep: widget.viewModel.logGameStep,
+                steps: [
+                  Step(
+                    title: const Text('When?'),
+                    content: _StepperWhenStep(
+                      onPlaythroughTimeChanged: (DateTime playthoughDate) {
+                        widget.viewModel.playthroughDate = playthoughDate;
+                      },
+                    ),
                   ),
-                ),
-                Step(
-                  title: const Text('Who?'),
-                  content: _StepperWhoStep(
-                    playthroughPlayers: widget.viewModel.playthroughPlayers,
-                    boardGameDetails: widget.boardGameDetails,
+                  Step(
+                    title: const Text('Who?'),
+                    content: _StepperWhoStep(
+                      playthroughPlayers: widget.viewModel.playthroughPlayers,
+                      boardGameDetails: widget.boardGameDetails,
+                    ),
                   ),
-                ),
-                Step(
-                  title: const Text('How long?'),
-                  content: _StepperDurationStep(viewModel: widget.viewModel),
-                ),
-              ],
-              onStepCancel: () => _stepCancel(),
-              onStepContinue: () => _stepContinue(context),
-              onStepTapped: (int index) => _stepTapped(context, index),
-              controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) =>
-                  _stepActionButtons(onStepContinue, onStepCancel),
+                  Step(
+                    title: const Text('How long?'),
+                    content: _StepperDurationStep(viewModel: widget.viewModel),
+                  ),
+                ],
+                onStepCancel: () => _stepCancel(),
+                onStepContinue: () => _stepContinue(context),
+                onStepTapped: (int index) => _stepTapped(context, index),
+                controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) =>
+                    _stepActionButtons(onStepContinue, onStepCancel),
+              ),
             ),
           ),
         ),
@@ -177,7 +179,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     }
   }
 
-  void _stepContinue(BuildContext context) async {
+  Future<void> _stepContinue(BuildContext context) async {
     if (widget.viewModel.logGameStep == whoStep && !widget.viewModel.anyPlayerSelected) {
       _showSelectPlayerError(context);
     } else {
@@ -402,9 +404,8 @@ class _StepperWhoStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      height: 200,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 3,
       child: _Players(
         playthroughPlayers: playthroughPlayers,
         boardGameDetails: boardGameDetails,
@@ -498,23 +499,19 @@ class _Players extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      padding: const EdgeInsets.all(
-        Dimensions.standardSpacing,
-      ),
       crossAxisCount: _numberOfPlayerColumns,
+      padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+      crossAxisSpacing: Dimensions.standardSpacing,
+      mainAxisSpacing: Dimensions.standardSpacing,
       children: List.generate(
         playthroughPlayers.length,
         (int index) {
           return Stack(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-                child: PlayerAvatar(
-                  playthroughPlayers[index].player,
-                  onTap: () {
-                    playthroughPlayers[index].isChecked = !playthroughPlayers[index].isChecked;
-                  },
-                ),
+              PlayerAvatar(
+                playthroughPlayers[index].player,
+                onTap: () =>
+                    playthroughPlayers[index].isChecked = !playthroughPlayers[index].isChecked,
               ),
               Align(
                 alignment: Alignment.topRight,
