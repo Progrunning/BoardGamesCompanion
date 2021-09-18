@@ -184,7 +184,6 @@ class AppTheme {
           color: secondaryTextColor,
         ),
       ),
-
       inputDecorationTheme: originalInputDecorationTheme.copyWith(
         focusColor: accentColor,
         hintStyle: const TextStyle(
@@ -217,6 +216,10 @@ class AppTheme {
       chipTheme: ThemeData.light().chipTheme.copyWith(
             elevation: Dimensions.defaultElevation,
           ),
+      snackBarTheme: ThemeData.light().snackBarTheme.copyWith(
+        backgroundColor: secondaryLightColor,
+        actionTextColor: accentColor
+      ),
     );
   }
 }
