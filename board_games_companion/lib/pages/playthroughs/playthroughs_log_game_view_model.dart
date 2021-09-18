@@ -1,15 +1,18 @@
-import 'package:board_games_companion/pages/playthroughs/playthroughs_log_game_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../models/hive/playthrough.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/players_store.dart';
+import '../../stores/playthroughs_store.dart';
+import 'playthroughs_log_game_page.dart';
 
 @injectable
 class PlaythroughsLogGameViewModel with ChangeNotifier {
-  PlaythroughsLogGameViewModel(this._playersStore);
+  PlaythroughsLogGameViewModel(this._playersStore, this._playthroughsStore);
 
   final PlayersStore _playersStore;
+  final PlaythroughsStore _playthroughsStore;
 
   List<PlaythroughPlayer> _playthroughPlayers;
   List<PlaythroughPlayer> get playthroughPlayers => _playthroughPlayers;
@@ -43,4 +46,11 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
   }
 
   bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
+
+  Future<Playthrough> createPlaythrough(String boardGameId) async {
+    return _playthroughsStore.createPlaythrough(
+      boardGameId,
+      playthroughPlayers.where((player) => player.isChecked).toList(),
+    );
+  }
 }
