@@ -1,7 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 
-import '../common/enums/enums.dart';
 import '../common/enums/playthrough_status.dart';
 import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
@@ -11,7 +10,8 @@ import '../services/player_service.dart';
 import '../services/score_service.dart';
 import 'playthroughs_store.dart';
 
-class PlaythroughStore with ChangeNotifier {
+@injectable
+class PlaythroughStore {
   PlaythroughStore(
     this._playerService,
     this._scoreService,
@@ -23,10 +23,6 @@ class PlaythroughStore with ChangeNotifier {
   final PlayerService _playerService;
   final ScoreService _scoreService;
   final PlaythroughsStore _playthroughsStore;
-
-  LoadDataState _loadDataState;
-
-  LoadDataState get loadDataState => _loadDataState;
 
   Playthrough _playthrough;
   Playthrough get playthrough => _playthrough;
@@ -50,10 +46,7 @@ class PlaythroughStore with ChangeNotifier {
   List<PlayerScore> get playerScores => _playerScores;
 
   Future<void> loadPlaythrough(Playthrough playthrough) async {
-    _loadDataState = LoadDataState.Loading;
-
     if (playthrough?.id?.isEmpty ?? true) {
-      _loadDataState = LoadDataState.Error;
       return;
     }
 
@@ -76,14 +69,9 @@ class PlaythroughStore with ChangeNotifier {
           score,
         );
       }).toList();
-
-      _loadDataState = LoadDataState.Loaded;
     } catch (e, stack) {
-      _loadDataState = LoadDataState.Error;
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
-
-    notifyListeners();
   }
 
   Future<void> updatePlaythrough(Playthrough playthrough, List<PlayerScore> playerScores) async {
@@ -93,8 +81,6 @@ class PlaythroughStore with ChangeNotifier {
     }
 
     await loadPlaythrough(playthrough);
-
-    notifyListeners();
   }
 
   Future<bool> stopPlaythrough() async {
@@ -109,8 +95,6 @@ class PlaythroughStore with ChangeNotifier {
       playthrough.endDate = null;
       return false;
     }
-
-    notifyListeners();
 
     return true;
   }
