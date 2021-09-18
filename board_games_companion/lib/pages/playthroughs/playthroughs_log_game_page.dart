@@ -6,15 +6,12 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/date_time_extensions.dart';
-import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/players_store.dart';
-import '../../stores/playthroughs_store.dart';
 import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
@@ -183,10 +180,12 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     if (widget.viewModel.logGameStep == whoStep && !widget.viewModel.anyPlayerSelected) {
       _showSelectPlayerError(context);
     } else {
-      if (widget.viewModel.logGameStep <= howLongStep) {
+      if (widget.viewModel.logGameStep < howLongStep) {
         setState(() {
           widget.viewModel.logGameStep += 1;
         });
+      } else {
+        await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);  
       }
     }
   }
@@ -197,57 +196,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         widget.viewModel.logGameStep -= 1;
       });
     }
-  }
-
-  Future<void> _startNewGame(
-    BuildContext context,
-  ) async {
-    final startPlaythroughStore = Provider.of<PlaythroughsLogGameViewModel>(
-      context,
-      listen: false,
-    );
-
-    final selectedPlaythoughPlayers =
-        startPlaythroughStore.playthroughPlayers?.where((pp) => pp.isChecked)?.toList();
-
-    final scaffold = Scaffold.of(context);
-    if (selectedPlaythoughPlayers?.isEmpty ?? true) {
-      scaffold.showSnackBar(
-        SnackBar(
-          content: const Text('You need to select at least one player to start a game'),
-          action: SnackBarAction(
-            label: 'Ok',
-            onPressed: () {
-              scaffold.hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
-
-      return;
-    }
-
-    final playthroughsStore = getIt<PlaythroughsStore>();
-    final newPlaythrough = await playthroughsStore.createPlaythrough(
-      widget.boardGameDetails.id,
-      selectedPlaythoughPlayers,
-    );
-
-    if (newPlaythrough == null) {
-      scaffold.showSnackBar(
-        SnackBar(
-          content: const GenericErrorMessage(),
-          action: SnackBarAction(
-            label: 'Ok',
-            onPressed: () {
-              scaffold.hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
-      return;
-    }
-  }
+  }  
 
   void _showSelectPlayerError(BuildContext context) {
     Scaffold.of(context).showSnackBar(
