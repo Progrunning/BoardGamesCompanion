@@ -158,7 +158,7 @@ class App extends StatelessWidget {
             final AnalyticsService analyticsService = getIt<AnalyticsService>();
             return BoardGamesFiltersStore(boardGamesFiltersService, analyticsService);
           },
-        ),        
+        ),
         ChangeNotifierProxyProvider<BoardGamesFiltersStore, BoardGamesStore>(
           create: (context) {
             final BoardGamesService boardGamesService = getIt<BoardGamesService>();

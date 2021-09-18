@@ -1,19 +1,15 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/enums.dart';
 import '../../common/strings.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/playthrough.dart';
-import '../../services/player_service.dart';
-import '../../services/score_service.dart';
 import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
 import '../../utilities/navigator_helper.dart';
@@ -31,9 +27,9 @@ import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
-  const PlaythroughsHistoryPage(
-    this.boardGameDetails,
-    this.playthroughsStore, {
+  const PlaythroughsHistoryPage({
+    @required this.boardGameDetails,
+    @required this.playthroughsStore,
     Key key,
   }) : super(key: key);
 
@@ -60,11 +56,12 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {
+                    final PlaythroughStore playthroughStore = getIt<PlaythroughStore>();
                     return _Playthrough(
-                      widget.playthroughsStore,
-                      store.playthroughs[index],
-                      store.playthroughs.length - index,
-                      key: ValueKey(store.playthroughs[index].id),
+                      playthroughsStore: widget.playthroughsStore,
+                      playthroughStore: playthroughStore,
+                      playthrough: store.playthroughs[index],
+                      playthroughNumber: store.playthroughs.length - index,
                     );
                   },
                   separatorBuilder: (_, index) {
@@ -95,16 +92,18 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
 }
 
 class _Playthrough extends StatelessWidget {
-  const _Playthrough(
-    this._playthroughsStore,
-    this._playthrough,
-    this._playthroughNumber, {
+  const _Playthrough({
+    this.playthroughsStore,
+    this.playthroughStore,
+    this.playthrough,
+    this.playthroughNumber,
     Key key,
   }) : super(key: key);
 
-  final PlaythroughsStore _playthroughsStore;
-  final Playthrough _playthrough;
-  final int _playthroughNumber;
+  final PlaythroughsStore playthroughsStore;
+  final PlaythroughStore playthroughStore;
+  final Playthrough playthrough;
+  final int playthroughNumber;
 
   static const double _maxPlaythroughItemHeight = 240;
 
@@ -123,78 +122,64 @@ class _Playthrough extends StatelessWidget {
             padding: const EdgeInsets.all(
               Dimensions.standardSpacing,
             ),
-            child: ChangeNotifierProvider<PlaythroughStore>(
-              create: (context) => _createAndLoadPlatythroughStore(context),
-              child: Consumer<PlaythroughStore>(
-                builder: (_, store, __) {
-                  if (store.loadDataState == LoadDataState.Loaded) {
-                    store.playerScores.sortByScore();
-                    store.playerScores
-                        .where((ps) => ps?.score?.value?.isNotEmpty ?? false)
-                        .toList()
-                        .asMap()
-                        .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
-
-                    debugPrint(store.playthrough.endDate?.toIso8601String() ?? '');
-
-                    return Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _PlaythroughGameStats(
-                          playthroughsStore: _playthroughsStore,
-                          playthroughStore: store,
-                          playthroughNumber: _playthroughNumber,
-                          playthrough: store.playthrough,
-                        ),
-                        const SizedBox(
-                          width: Dimensions.doubleStandardSpacing,
-                        ),
-                        Expanded(
-                          child: _PlaythroughPlayersStats(
-                            playthroughsStore: _playthroughsStore,
-                            playthroughStore: store,
-                          ),
-                        ),
-                      ],
-                    );
-                  } else if (store.loadDataState == LoadDataState.Error) {
-                    return const Center(
-                      child: GenericErrorMessage(),
-                    );
-                  }
-
+            child: FutureBuilder<void>(
+              future: playthroughStore.loadPlaythrough(playthrough),
+              builder: (_, AsyncSnapshot<void> snapshot) {
+                if (snapshot.hasError) {
                   return const Center(
-                    child: LoadingIndicator(),
+                    child: GenericErrorMessage(),
                   );
-                },
-              ),
+                }
+
+                if (snapshot.connectionState == ConnectionState.done) {
+                  playthroughStore.playerScores.sortByScore();
+                  playthroughStore.playerScores
+                      .where((ps) => ps?.score?.value?.isNotEmpty ?? false)
+                      .toList()
+                      .asMap()
+                      .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
+
+                  debugPrint(playthroughStore.playthrough.endDate?.toIso8601String() ?? '');
+
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _PlaythroughGameStats(
+                        playthroughStore: playthroughStore,
+                        playthroughNumber: playthroughNumber,
+                        playthrough: playthroughStore.playthrough,
+                      ),
+                      const SizedBox(
+                        width: Dimensions.doubleStandardSpacing,
+                      ),
+                      Expanded(
+                        child: _PlaythroughPlayersStats(
+                          playthroughStore: playthroughStore,
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                return const Center(
+                  child: LoadingIndicator(),
+                );
+              },
             ),
           ),
         ),
       ),
     );
   }
-
-  PlaythroughStore _createAndLoadPlatythroughStore(BuildContext context) {
-    // TODO MK Fix dependencies to be injectable (if possible)
-    final playerService = getIt<PlayerService>();
-    final scoreService = getIt<ScoreService>();
-    final playthroughsStore = getIt<PlaythroughsStore>();
-    final playthroughStore = PlaythroughStore(playerService, scoreService, playthroughsStore);
-    playthroughStore.loadPlaythrough(_playthrough);
-    return playthroughStore;
-  }
 }
 
 class _PlaythroughPlayersStats extends StatelessWidget {
   const _PlaythroughPlayersStats({
     Key key,
-    @required this.playthroughsStore,
     @required this.playthroughStore,
   }) : super(key: key);
 
-  final PlaythroughsStore playthroughsStore;
   final PlaythroughStore playthroughStore;
 
   @override
@@ -284,13 +269,11 @@ class _PlaythroughPlayerList extends StatelessWidget {
 class _PlaythroughGameStats extends StatelessWidget {
   const _PlaythroughGameStats({
     Key key,
-    @required this.playthroughsStore,
     @required this.playthroughStore,
     @required this.playthroughNumber,
     @required this.playthrough,
   }) : super(key: key);
 
-  final PlaythroughsStore playthroughsStore;
   final PlaythroughStore playthroughStore;
   final int playthroughNumber;
   final Playthrough playthrough;
