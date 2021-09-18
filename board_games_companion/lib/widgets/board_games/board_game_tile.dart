@@ -112,17 +112,21 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             child: RankRibbon(widget.boardGame.rank),
           ),
         Positioned.fill(
-          child: RippleEffect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(Styles.defaultCornerRadius),
+          child: Padding(
+            padding: const EdgeInsets.only(
+              right: Dimensions.halfStandardSpacing,
+              bottom: Dimensions.halfStandardSpacing,
             ),
-            onTap: () async {
-              if (widget.onTap == null) {
-                return;
-              }
+            child: RippleEffect(
+              borderRadius: AppTheme.defaultBoxRadius,
+              onTap: () async {
+                if (widget.onTap == null) {
+                  return;
+                }
 
-              await widget.onTap();
-            },
+                await widget.onTap();
+              },
+            ),
           ),
         )
       ],

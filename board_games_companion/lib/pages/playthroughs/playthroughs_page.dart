@@ -7,14 +7,15 @@ import '../../extensions/page_controller_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../stores/board_game_playthroughs_store.dart';
+import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
-import 'playthroughs_log_game_view_model.dart';
 import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../base_page_state.dart';
 import 'playthroughs_history_page.dart';
 import 'playthroughs_log_game_page.dart';
+import 'playthroughs_log_game_view_model.dart';
 import 'playthroughs_statistics_page.dart';
 
 class PlaythroughsPage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
   BoardGamePlaythroughsStore boardGamePlaythoughsStore;
   PageController pageController;
   PlaythroughsStore playthroughsStore;
+  PlaythroughStore playthroughStore;
   PlaythroughsLogGameViewModel playthroughsLogGameViewModel;
 
   @override
@@ -80,7 +82,10 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
                 boardGameDetails: widget.boardGameDetails,
                 collectionType: widget.collectionType,
               ),
-              PlaythroughsHistoryPage(widget.boardGameDetails, playthroughsStore),
+              PlaythroughsHistoryPage(
+                boardGameDetails: widget.boardGameDetails,
+                playthroughsStore: playthroughsStore,
+              ),
               PlaythroughsLogGamePage(
                 boardGameDetails: widget.boardGameDetails,
                 playthroughsLogGameViewModel: playthroughsLogGameViewModel,

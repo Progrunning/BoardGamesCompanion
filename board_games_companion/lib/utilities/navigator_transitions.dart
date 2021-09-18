@@ -20,8 +20,10 @@ class NavigatorTransitions {
     );
   }
 
-  static Route<T> fadeScale<T>(RoutePageBuilder page,
-      [int duration = defaultDurationInMilliseconds]) {
+  static Route<T> fadeScale<T>(
+    RoutePageBuilder page, [
+    int duration = defaultDurationInMilliseconds,
+  ]) {
     return PageRouteBuilder<T>(
       transitionDuration: const Duration(milliseconds: defaultDurationInMilliseconds),
       pageBuilder: (context, animation, secondaryAnimation) =>
