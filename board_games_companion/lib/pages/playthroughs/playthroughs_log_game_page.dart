@@ -468,14 +468,18 @@ class _Players extends StatelessWidget {
                   value: playthroughPlayers[index],
                   child: Consumer<PlaythroughPlayer>(
                     builder: (_, store, __) {
-                      return Checkbox(
-                        checkColor: AppTheme.accentColor,
-                        activeColor: AppTheme.primaryColor.withOpacity(0.7),
-                        value: playthroughPlayers[index].isChecked,
-                        onChanged: (checked) {
-                          playthroughPlayers[index].isChecked =
-                              !playthroughPlayers[index].isChecked;
-                        },
+                      return SizedBox(
+                        height: 34,
+                        width: 34,
+                        child: Checkbox(                        
+                          checkColor: AppTheme.accentColor,
+                          activeColor: AppTheme.primaryColor.withOpacity(0.7),
+                          value: playthroughPlayers[index].isChecked,
+                          onChanged: (checked) {
+                            playthroughPlayers[index].isChecked =
+                                !playthroughPlayers[index].isChecked;
+                          },
+                        ),
                       );
                     },
                   ),

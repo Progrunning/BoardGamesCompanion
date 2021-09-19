@@ -31,8 +31,6 @@ class Constants {
   static const MoveBelow = 1;
   static const MoveAbove = -1;
 
-  static const PlayersTabIndex = 2;
-
   static const DefaultAvatartAssetsPath = 'assets/default_avatar.png';
 
   static const String FilterByAny = 'any';

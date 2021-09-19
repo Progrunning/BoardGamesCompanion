@@ -33,7 +33,8 @@ class PlayerAvatar extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Hero(
-                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
+                  tag:
+                      '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
                   child: PlayerImage(
                     imageUri: providerPlayer?.avatarImageUri,
                   ),
@@ -42,7 +43,11 @@ class PlayerAvatar extends StatelessWidget {
                   PlayerAvatarSubtitle(
                     player: providerPlayer,
                   ),
-                if (topRightCornerActionWidget != null) topRightCornerActionWidget,
+                if (topRightCornerActionWidget != null)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: topRightCornerActionWidget,
+                  ),
                 Positioned.fill(
                   child: RippleEffect(
                     onTap: onTap,
