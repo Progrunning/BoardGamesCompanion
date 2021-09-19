@@ -29,11 +29,11 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
     return _playthroughPlayers ?? <PlaythroughPlayer>[];
   }
 
-  DateTime playthroughDate = DateTime.now();
+  DateTime playthroughDate;
 
   PlaythroughStartTime playthroughStartTime = PlaythroughStartTime.now;
 
-  Duration playthroughDuration = const Duration(minutes: 30);
+  Duration playthroughDuration = const Duration();
 
   int _logGameStep = 0;
   int get logGameStep => _logGameStep;
@@ -48,11 +48,19 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
   bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
 
   Future<Playthrough> createPlaythrough(String boardGameId) async {
-    return _playthroughsStore.createPlaythrough(
+    final Playthrough newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
       playthroughPlayers.where((player) => player.isChecked).toList(),
-      playthroughDate,
+      playthroughStartTime == PlaythroughStartTime.now ? DateTime.now() : playthroughDate,
       playthroughStartTime == PlaythroughStartTime.inThePast ? playthroughDuration : null,
     );
+
+    logGameStep = 0;
+    playthroughDate = null;
+    playthroughStartTime = PlaythroughStartTime.now;
+    playthroughDuration = const Duration();
+    await loadPlaythroughPlayers();
+
+    return newPlaythrough;
   }
 }
