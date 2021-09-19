@@ -148,7 +148,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
             ],
           ),
           content: const Text(
-            "This will delete your sync'd board games collection, including the history of gameplays",
+            'This will delete your synchronized board games collection, including the history of gameplays',
           ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
