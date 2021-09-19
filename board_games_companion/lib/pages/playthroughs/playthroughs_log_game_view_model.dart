@@ -51,6 +51,8 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
     return _playthroughsStore.createPlaythrough(
       boardGameId,
       playthroughPlayers.where((player) => player.isChecked).toList(),
+      playthroughDate,
+      playthroughStartTime == PlaythroughStartTime.inThePast ? playthroughDuration : null,
     );
   }
 }

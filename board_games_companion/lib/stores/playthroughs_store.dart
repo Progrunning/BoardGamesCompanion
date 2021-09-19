@@ -46,10 +46,14 @@ class PlaythroughsStore with ChangeNotifier {
   Future<Playthrough> createPlaythrough(
     String boardGameId,
     List<PlaythroughPlayer> playthoughPlayers,
+    DateTime startDate,
+    Duration duration,
   ) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
       boardGameId,
       playthoughPlayers,
+      startDate,
+      duration,
     );
 
     _playthroughs.add(newPlaythrough);
