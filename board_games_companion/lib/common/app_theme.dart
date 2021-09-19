@@ -71,6 +71,11 @@ class AppTheme {
     fontSize: Dimensions.standardFontSize,
     color: defaultTextColor,
   );
+  
+  static const TextStyle defaultTextFieldLabelStyle = TextStyle(
+    fontSize: Dimensions.smallFontSize,
+    color: secondaryTextColor,
+  );
 
   // MK Material fonts https://miro.medium.com/max/1400/1*Jlt_w6Bs7KAae42rYkFlwg.png
   static ThemeData get theme {
