@@ -95,6 +95,12 @@ class AppTheme {
       color: defaultTextColor,
     );
 
+    final headline2TextStyle = originalTextTheme.headline2.copyWith(
+      fontSize: Dimensions.largeFontSize,
+      fontWeight: FontWeight.bold,
+      color: defaultTextColor,
+    );
+    
     final headline3TextStyle = originalTextTheme.headline3.copyWith(
       fontSize: Dimensions.mediumFontSize,
       fontWeight: FontWeight.bold,
@@ -119,10 +125,11 @@ class AppTheme {
       dialogBackgroundColor: primaryColorLight,
       dialogTheme: ThemeData.light().dialogTheme.copyWith(
             backgroundColor: primaryColorLight,
-            titleTextStyle: headline3TextStyle,
-            contentTextStyle: headline4TextStyle.copyWith(
-              color: defaultTextColor,
+            titleTextStyle: headline2TextStyle,
+            contentTextStyle: headline3TextStyle.copyWith(
+              fontWeight: FontWeight.normal,
             ),
+
           ),
       colorScheme: originalColorScheme.copyWith(
         primary: primaryColor,
@@ -216,10 +223,9 @@ class AppTheme {
       chipTheme: ThemeData.light().chipTheme.copyWith(
             elevation: Dimensions.defaultElevation,
           ),
-      snackBarTheme: ThemeData.light().snackBarTheme.copyWith(
-        backgroundColor: secondaryLightColor,
-        actionTextColor: accentColor
-      ),
+      snackBarTheme: ThemeData.light()
+          .snackBarTheme
+          .copyWith(backgroundColor: secondaryLightColor, actionTextColor: accentColor),
     );
   }
 }

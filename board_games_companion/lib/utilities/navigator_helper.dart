@@ -5,7 +5,7 @@ import '../common/analytics.dart';
 import '../injectable.dart';
 import '../models/hive/player.dart';
 import '../pages/board_game_details/board_game_details_page.dart';
-import '../pages/create_edit_player.dart';
+import '../pages/player/player_page.dart';
 import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../pages/edit_playthrough/edit_playthrouhg_view_model.dart';
 import '../services/analytics_service.dart';
@@ -27,13 +27,10 @@ class NavigatorHelper {
       context,
       NavigatorTransitions.fadeThrough(
         (_, __, ___) {
-          final playerStore = Provider.of<PlayersStore>(
-            context,
-            listen: false,
-          );
-          playerStore.setPlayerToCreateOrEdit(player: player);
+          final playersStore = getIt<PlayersStore>();
+          playersStore.setPlayerToCreateOrEdit(player: player);
 
-          return CreateEditPlayerPage(playerStore);
+          return PlayerPage(playersStore: playersStore);
         },
       ),
     );
