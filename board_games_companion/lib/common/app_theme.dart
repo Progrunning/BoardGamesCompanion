@@ -68,12 +68,12 @@ class AppTheme {
   );
 
   static const TextStyle defaultTextFieldStyle = TextStyle(
-    fontSize: Dimensions.standardFontSize,
+    fontSize: Dimensions.mediumFontSize,
     color: defaultTextColor,
   );
   
   static const TextStyle defaultTextFieldLabelStyle = TextStyle(
-    fontSize: Dimensions.smallFontSize,
+    fontSize: Dimensions.standardFontSize,
     color: secondaryTextColor,
   );
 
