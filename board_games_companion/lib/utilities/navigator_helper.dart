@@ -5,7 +5,7 @@ import '../common/analytics.dart';
 import '../injectable.dart';
 import '../models/hive/player.dart';
 import '../pages/board_game_details/board_game_details_page.dart';
-import '../pages/player/player_page.dart';
+import '../pages/players/player_page.dart';
 import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../pages/edit_playthrough/edit_playthrouhg_view_model.dart';
 import '../services/analytics_service.dart';
