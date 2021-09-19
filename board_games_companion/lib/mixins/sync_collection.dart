@@ -8,10 +8,7 @@ import '../stores/board_games_store.dart';
 import '../stores/user_store.dart';
 
 mixin SyncCollection {
-  Future<CollectionSyncResult> syncCollection(
-    BuildContext context,
-    String username,
-  ) async {
+  Future<CollectionSyncResult> syncCollection(BuildContext context, String username) async {
     final userStore = Provider.of<UserStore>(
       context,
       listen: false,

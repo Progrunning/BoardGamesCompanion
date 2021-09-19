@@ -380,12 +380,29 @@ class _Grid extends StatelessWidget {
   }
 }
 
-class _Empty extends StatelessWidget with SyncCollection {
+class _Empty extends StatefulWidget with SyncCollection {
   _Empty({
     Key key,
   }) : super(key: key);
 
-  final _syncController = TextEditingController();
+  @override
+  _EmptyState createState() => _EmptyState();
+}
+
+class _EmptyState extends State<_Empty> with SyncCollection {
+  TextEditingController _bggUserNameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _bggUserNameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _bggUserNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -455,20 +472,15 @@ class _Empty extends StatelessWidget with SyncCollection {
               ),
               const BggCommunityMemberText(),
               BggCommunityMemberUserNameTextField(
-                controller: _syncController,
-                onSubmit: () async {
-                  await syncCollection(
-                    context,
-                    _syncController.text,
-                  );
-                },
+                controller: _bggUserNameController,
+                onSubmit: () async => syncCollection(context, _bggUserNameController.text),
               ),
               const SizedBox(
                 height: Dimensions.standardSpacing,
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: SyncButton(usernameCallback: () => _syncController.text),
+                child: SyncButton(usernameCallback: () => _bggUserNameController.text),
               ),
               const SizedBox(
                 height: Dimensions.standardSpacing,
