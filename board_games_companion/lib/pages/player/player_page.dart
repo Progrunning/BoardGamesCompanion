@@ -134,8 +134,14 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                           ),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Name',
+                            labelStyle: AppTheme.defaultTextFieldLabelStyle.copyWith(
+                              fontSize: Dimensions.standardFontSize,
+                            ),
+                          ),
+                          style: AppTheme.defaultTextFieldStyle.copyWith(
+                            fontSize: Dimensions.mediumFontSize,
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
