@@ -80,6 +80,10 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   bool selectPlayersStepError = false;
   int completedSteps = 0;
 
+  int get lastStep => widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
+      ? newOldGameStep
+      : playersScoreStep;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -171,12 +175,15 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     }
 
     if (widget.viewModel.logGameStep == selectPlayersStep ||
-        widget.viewModel.logGameStep == newOldGameStep) {
+        widget.viewModel.logGameStep == newOldGameStep ||
+        widget.viewModel.logGameStep == playersScoreStep) {
       step = Row(
         children: <Widget>[
           ElevatedButton(
             onPressed: () => onStepContinue(),
-            child: widget.viewModel.logGameStep == 1 ? const Text('Next') : const Text('Done'),
+            child: widget.viewModel.logGameStep == lastStep
+                ? const Text('Done')
+                : const Text('Next'),
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           TextButton(
@@ -209,21 +216,22 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   Future<void> _stepContinue(BuildContext context) async {
     if (widget.viewModel.logGameStep == selectPlayersStep && !widget.viewModel.anyPlayerSelected) {
       _showSelectPlayerError(context);
-    } else {
-      if (selectPlayersStepError) {
-        setState(() {
-          selectPlayersStepError = false;
-        });
-      }
+      return;
+    }
 
-      if (widget.viewModel.logGameStep < newOldGameStep) {
-        setState(() {
-          widget.viewModel.logGameStep += 1;
-          completedSteps = widget.viewModel.logGameStep;
-        });
-      } else {
-        await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
-      }
+    if (widget.viewModel.logGameStep >= selectPlayersStep && selectPlayersStepError) {
+      setState(() {
+        selectPlayersStepError = false;
+      });
+    }
+
+    if (widget.viewModel.logGameStep < lastStep) {
+      setState(() {
+        widget.viewModel.logGameStep += 1;
+        completedSteps = widget.viewModel.logGameStep;
+      });
+    } else {
+      await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
     }
   }
 
