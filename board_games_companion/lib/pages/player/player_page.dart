@@ -2,88 +2,66 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../common/animation_tags.dart';
-import '../common/app_theme.dart';
-import '../common/dimensions.dart';
-import '../common/strings.dart';
-import '../common/styles.dart';
-import '../models/hive/player.dart';
-import '../stores/players_store.dart';
-import '../widgets/common/custom_icon_button.dart';
-import '../widgets/common/page_container_widget.dart';
-import '../widgets/player/create_edit_player.dart';
-import '../widgets/player/delete_player_widget.dart';
-import '../widgets/player/player_image.dart';
-import 'base_page_state.dart';
+import '../../common/animation_tags.dart';
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../common/routes.dart';
+import '../../common/strings.dart';
+import '../../common/styles.dart';
+import '../../models/hive/player.dart';
+import '../../stores/players_store.dart';
+import '../../widgets/common/custom_icon_button.dart';
+import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/player/player_image.dart';
+import '../base_page_state.dart';
 
-class CreateEditPlayerPage extends StatefulWidget {
-  const CreateEditPlayerPage(
-    this._playersStore, {
+class PlayerPage extends StatefulWidget {
+  const PlayerPage({
+    @required this.playersStore,
     Key key,
   }) : super(key: key);
 
-  final PlayersStore _playersStore;
+  final PlayersStore playersStore;
 
   @override
-  _CreateEditPlayerPageState createState() => _CreateEditPlayerPageState();
+  _PlayerPageState createState() => _PlayerPageState();
 }
 
-class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _imagePicker = ImagePicker();
+class _PlayerPageState extends BasePageState<PlayerPage> {
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final imagePicker = ImagePicker();
 
-  Player _player;
-  bool _isEditMode;
+  Player player;
+  bool isEditMode;
 
   @override
   void initState() {
     super.initState();
 
-    _player = Player();
-    _player.id = widget._playersStore.playerToCreateOrEdit.id;
-    _player.name = widget._playersStore.playerToCreateOrEdit.name;
-    _player.avatarFileName = widget._playersStore.playerToCreateOrEdit.avatarFileName;
-    _player.avatarImageUri = widget._playersStore.playerToCreateOrEdit.avatarImageUri;
+    player = Player();
+    player.id = widget.playersStore.playerToCreateOrEdit.id;
+    player.name = widget.playersStore.playerToCreateOrEdit.name;
+    player.avatarFileName = widget.playersStore.playerToCreateOrEdit.avatarFileName;
+    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit.avatarImageUri;
 
-    _isEditMode = _player.name?.isNotEmpty ?? false;
+    isEditMode = player.name?.isNotEmpty ?? false;
 
-    _nameController.text = _player.name ?? '';
-    _nameController.addListener(() {
-      _player.name = _nameController.text;
+    nameController.text = player.name ?? '';
+    nameController.addListener(() {
+      player.name = nameController.text;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _floatingActionButtons = [
-      CreateOrUpdatePlayer(
-          isEditMode: _isEditMode,
-          formKey: _formKey,
-          player: _player,
-          nameController: _nameController,
-          playersStore: widget._playersStore),
-    ];
-
-    if (_isEditMode) {
-      _floatingActionButtons.addAll(
-        [
-          const Divider(
-            indent: Dimensions.standardSpacing,
-          ),
-          DeletePlayer(
-            player: _player,
-            playersStore: widget._playersStore,
-          ),
-        ],
-      );
-    }
-
     return ChangeNotifierProvider.value(
-      value: _player,
+      value: player,
       child: Consumer<Player>(
         builder: (_, player, __) {
-          final _hasName = _nameController.text?.isNotEmpty ?? false;
+          final _hasName = nameController.text?.isNotEmpty ?? false;
 
           return WillPopScope(
             onWillPop: () async {
@@ -98,11 +76,9 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
               ),
               body: PageContainer(
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                    Dimensions.standardSpacing,
-                  ),
+                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
                   child: Form(
-                    key: _formKey,
+                    key: formKey,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
@@ -168,17 +144,21 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
 
                             return null;
                           },
-                          controller: _nameController,
-                        )
+                          controller: nameController,
+                        ),
+                        const Expanded(
+                          child: SizedBox.shrink(),
+                        ),
+                        _ActionButtons(
+                          isEditMode: isEditMode,
+                          onCreate: () => _createOrUpdatePlayer(),
+                          onUpdate: () => _createOrUpdatePlayer(),
+                          onDelete: () => _showDeletePlayerDialog(),
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: _floatingActionButtons,
               ),
             ),
           );
@@ -189,7 +169,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -202,7 +182,7 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
   }
 
   Future _handlePickingAndSavingAvatar(Player player, ImageSource imageSource) async {
-    player.avatarFileToSave = await _imagePicker.getImage(source: imageSource);
+    player.avatarFileToSave = await imagePicker.getImage(source: imageSource);
     if (player.avatarFileToSave?.path?.isEmpty ?? true) {
       return;
     }
@@ -212,8 +192,8 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
   }
 
   Future<bool> _handleOnWillPop(BuildContext context, Player player) async {
-    if (widget._playersStore.playerToCreateOrEdit.avatarImageUri != player.avatarImageUri ||
-        widget._playersStore.playerToCreateOrEdit.name != player.name) {
+    if (widget.playersStore.playerToCreateOrEdit.avatarImageUri != player.avatarImageUri ||
+        widget.playersStore.playerToCreateOrEdit.name != player.name) {
       await showDialog<AlertDialog>(
           context: context,
           builder: (context) {
@@ -232,10 +212,10 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
                   child: const Text('Navigate away'),
                   color: Colors.red,
                   onPressed: () async {
-                    widget._playersStore.playerToCreateOrEdit.avatarImageUri =
-                        widget._playersStore.playerToCreateOrEdit.avatarImageUri;
-                    widget._playersStore.playerToCreateOrEdit.name =
-                        widget._playersStore.playerToCreateOrEdit.name;
+                    widget.playersStore.playerToCreateOrEdit.avatarImageUri =
+                        widget.playersStore.playerToCreateOrEdit.avatarImageUri;
+                    widget.playersStore.playerToCreateOrEdit.name =
+                        widget.playersStore.playerToCreateOrEdit.name;
                     // MK Pop the dialog
                     Navigator.of(context).pop();
                     // MK Go back
@@ -250,5 +230,104 @@ class _CreateEditPlayerPageState extends BasePageState<CreateEditPlayerPage> {
     }
 
     return true;
+  }
+
+  Future<void> _createOrUpdatePlayer() async {
+    if (!formKey.currentState.validate()) {
+      return;
+    }
+
+    player.name = nameController.text;
+
+    final playerUpdatedSuccess = await widget.playersStore.addOrUpdatePlayer(player);
+    if (playerUpdatedSuccess) {
+      _showPlayerUpdatedSnackbar(context, player);
+    }
+  }
+
+  Future<void> _showDeletePlayerDialog() async {
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete ${player?.name}'),
+          content: const Text('Are you sure you want to delete this player?'),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(Strings.Cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
+              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              onPressed: () async {
+                final bool deletionSucceeded = await widget.playersStore.deletePlayer(player.id);
+                if (deletionSucceeded) {
+                  Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+void _showPlayerUpdatedSnackbar(BuildContext context, Player playerToAddOrUpdate) {
+  Scaffold.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Player ${playerToAddOrUpdate.name} has been updated successfully'),
+      action: SnackBarAction(
+        label: 'Ok',
+        onPressed: () async {
+          Navigator.of(context).pop();
+        },
+      ),
+    ),
+  );
+}
+
+class _ActionButtons extends StatelessWidget {
+  const _ActionButtons({
+    @required this.isEditMode,
+    @required this.onCreate,
+    @required this.onUpdate,
+    @required this.onDelete,
+    Key key,
+  }) : super(key: key);
+
+  final bool isEditMode;
+  final VoidCallback onCreate;
+  final VoidCallback onUpdate;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if (isEditMode) ...[
+          IconAndTextButton(
+            title: 'Delete',
+            icon: const DefaultIcon(Icons.delete),
+            color: Colors.redAccent,
+            onPressed: () => onDelete(),
+          ),
+          const SizedBox(width: Dimensions.standardSpacing),
+        ],
+        IconAndTextButton(
+          title: isEditMode ? 'Update' : 'Create',
+          icon: const DefaultIcon(Icons.create),
+          onPressed: () => isEditMode ? onUpdate() : onCreate(),
+        ),
+      ],
+    );
   }
 }

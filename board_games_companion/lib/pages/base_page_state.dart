@@ -47,25 +47,41 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
           ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
-            FlatButton(
-              child: const Text(Strings.AskMeLater),
-              onPressed: () async {
-                Navigator.of(context).pop();
-
-                await rateAndReviewService.askMeLater();
-              },
-            ),
-            FlatButton(
-              child: const Text(Strings.DontAskAgain),
+            TextButton(
+              child: const Text(
+                Strings.DontAskAgain,
+                style: TextStyle(
+                  color: AppTheme.accentColor,
+                ),
+              ),
               onPressed: () async {
                 Navigator.of(context).pop();
 
                 await rateAndReviewService.dontAskAgain();
               },
             ),
-            FlatButton(
-              child: const Text(Strings.Rate),
-              color: AppTheme.primaryColorLight,
+            TextButton(
+              child: const Text(
+                Strings.AskMeLater,
+                style: TextStyle(
+                  color: AppTheme.accentColor,
+                ),
+              ),
+              
+              onPressed: () async {
+                Navigator.of(context).pop();
+
+                await rateAndReviewService.askMeLater();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                Strings.Rate,
+                style: TextStyle(
+                  color: AppTheme.defaultTextColor,
+                ),
+              ),
+              style: TextButton.styleFrom(backgroundColor: AppTheme.accentColor),
               onPressed: () async {
                 Navigator.of(context).pop();
 
