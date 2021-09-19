@@ -72,9 +72,13 @@ class _LogPlaythroughStepper extends StatefulWidget {
 }
 
 class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
-  int whenStep = 0;
-  int whoStep = 1;
-  int howLongStep = 2;
+  int selectDateStep = 0;
+  int selectPlayersStep = 1;
+  int newOldGameStep = 2;
+  int playersScoreStep = 3;
+
+  bool selectPlayersStepError = false;
+  int completedSteps = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -100,23 +104,45 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                 currentStep: widget.viewModel.logGameStep,
                 steps: [
                   Step(
-                    title: const Text('When?'),
-                    content: _StepperWhenStep(
+                    title: const Text('Select date'),
+                    state: completedSteps > selectDateStep ? StepState.complete : StepState.indexed,
+                    content: _SelectDateStep(
                       onPlaythroughTimeChanged: (DateTime playthoughDate) {
                         widget.viewModel.playthroughDate = playthoughDate;
                       },
                     ),
                   ),
                   Step(
-                    title: const Text('Who?'),
-                    content: _StepperWhoStep(
+                    title: const Text('Select players'),
+                    state: selectPlayersStepError
+                        ? StepState.error
+                        : completedSteps > selectPlayersStep
+                            ? StepState.complete
+                            : StepState.indexed,
+                    content: _SelectPlayersStep(
                       playthroughPlayers: widget.viewModel.playthroughPlayers,
                       boardGameDetails: widget.boardGameDetails,
                     ),
                   ),
                   Step(
-                    title: const Text('How long?'),
-                    content: _StepperDurationStep(viewModel: widget.viewModel),
+                    title: const Text('New/Old game'),
+                    state: completedSteps > newOldGameStep ? StepState.complete : StepState.indexed,
+                    content: _NewOldGameStep(
+                      viewModel: widget.viewModel,
+                      onSelectionChanged: (PlaythroughStartTime playthroughStartTime) =>
+                          setState(() {}),
+                    ),
+                  ),
+                  Step(
+                    title: const Text('Player scores'),
+                    isActive:
+                        widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
+                    state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
+                        ? StepState.disabled
+                        : completedSteps > playersScoreStep
+                            ? StepState.complete
+                            : StepState.indexed,
+                    content: Container(),
                   ),
                 ],
                 onStepCancel: () => _stepCancel(),
@@ -134,7 +160,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
 
   Widget _stepActionButtons(VoidCallback onStepContinue, VoidCallback onStepCancel) {
     Widget step;
-    if (widget.viewModel.logGameStep == whenStep) {
+    if (widget.viewModel.logGameStep == selectDateStep) {
       step = Align(
         alignment: Alignment.centerLeft,
         child: ElevatedButton(
@@ -144,7 +170,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       );
     }
 
-    if (widget.viewModel.logGameStep == whoStep || widget.viewModel.logGameStep == howLongStep) {
+    if (widget.viewModel.logGameStep == selectPlayersStep ||
+        widget.viewModel.logGameStep == newOldGameStep) {
       step = Row(
         children: <Widget>[
           ElevatedButton(
@@ -167,8 +194,11 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   }
 
   void _stepTapped(BuildContext context, int step) {
-    if (widget.viewModel.logGameStep == whoStep && !widget.viewModel.anyPlayerSelected) {
+    if (step > selectPlayersStep && !widget.viewModel.anyPlayerSelected) {
       _showSelectPlayerError(context);
+      setState(() {
+        widget.viewModel.logGameStep = selectPlayersStep;
+      });
     } else {
       setState(() {
         widget.viewModel.logGameStep = step;
@@ -177,15 +207,22 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   }
 
   Future<void> _stepContinue(BuildContext context) async {
-    if (widget.viewModel.logGameStep == whoStep && !widget.viewModel.anyPlayerSelected) {
+    if (widget.viewModel.logGameStep == selectPlayersStep && !widget.viewModel.anyPlayerSelected) {
       _showSelectPlayerError(context);
     } else {
-      if (widget.viewModel.logGameStep < howLongStep) {
+      if (selectPlayersStepError) {
+        setState(() {
+          selectPlayersStepError = false;
+        });
+      }
+
+      if (widget.viewModel.logGameStep < newOldGameStep) {
         setState(() {
           widget.viewModel.logGameStep += 1;
+          completedSteps = widget.viewModel.logGameStep;
         });
       } else {
-        await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);  
+        await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
       }
     }
   }
@@ -196,9 +233,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         widget.viewModel.logGameStep -= 1;
       });
     }
-  }  
+  }
 
   void _showSelectPlayerError(BuildContext context) {
+    setState(() {
+      selectPlayersStepError = true;
+    });
+
     Scaffold.of(context).showSnackBar(
       SnackBar(
         content: const Text('You need to select at least one player'),
@@ -213,19 +254,21 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   }
 }
 
-class _StepperDurationStep extends StatefulWidget {
-  const _StepperDurationStep({
+class _NewOldGameStep extends StatefulWidget {
+  const _NewOldGameStep({
     @required this.viewModel,
+    @required this.onSelectionChanged,
     Key key,
   }) : super(key: key);
 
   final PlaythroughsLogGameViewModel viewModel;
+  final Function(PlaythroughStartTime) onSelectionChanged;
 
   @override
-  _StepperDurationStepState createState() => _StepperDurationStepState();
+  _NewOldGameStepState createState() => _NewOldGameStepState();
 }
 
-class _StepperDurationStepState extends State<_StepperDurationStep> {
+class _NewOldGameStepState extends State<_NewOldGameStep> {
   int hoursPlayed;
   int minutesPlyed;
 
@@ -244,50 +287,36 @@ class _StepperDurationStepState extends State<_StepperDurationStep> {
       child: Column(
         children: [
           InkWell(
-            onTap: () {
-              setState(() {
-                widget.viewModel.playthroughStartTime = PlaythroughStartTime.now;
-              });
-            },
+            onTap: () => _updatePlaythroughStartTimeSelection(PlaythroughStartTime.now),
             child: Row(
               children: [
                 Radio<PlaythroughStartTime>(
                   value: PlaythroughStartTime.now,
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
-                  onChanged: (PlaythroughStartTime value) {
-                    setState(() {
-                      widget.viewModel.playthroughStartTime = value;
-                    });
-                  },
+                  onChanged: (PlaythroughStartTime value) =>
+                      _updatePlaythroughStartTimeSelection(value),
                 ),
                 Text(
-                  'Start the timer now!',
+                  'Game started now',
                   style: AppTheme.theme.textTheme.bodyText1,
                 ),
               ],
             ),
           ),
           InkWell(
-            onTap: () {
-              setState(() {
-                widget.viewModel.playthroughStartTime = PlaythroughStartTime.inThePast;
-              });
-            },
+            onTap: () => _updatePlaythroughStartTimeSelection(PlaythroughStartTime.inThePast),
             child: Row(
               children: [
                 Radio<PlaythroughStartTime>(
                   value: PlaythroughStartTime.inThePast,
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
-                  onChanged: (PlaythroughStartTime value) {
-                    setState(() {
-                      widget.viewModel.playthroughStartTime = value;
-                    });
-                  },
+                  onChanged: (PlaythroughStartTime value) =>
+                      _updatePlaythroughStartTimeSelection(value),
                 ),
                 Text(
-                  'The game took us...',
+                  'The game took...',
                   style: AppTheme.theme.textTheme.bodyText1,
                 ),
               ],
@@ -326,6 +355,13 @@ class _StepperDurationStepState extends State<_StepperDurationStep> {
     );
   }
 
+  void _updatePlaythroughStartTimeSelection(PlaythroughStartTime playthroughStartTime) {
+    setState(() {
+      widget.viewModel.playthroughStartTime = playthroughStartTime;
+    });
+    widget.onSelectionChanged(playthroughStartTime);
+  }
+
   void _updateDurationHours(num value) {
     setState(() {
       hoursPlayed = value.toInt();
@@ -341,8 +377,8 @@ class _StepperDurationStepState extends State<_StepperDurationStep> {
   }
 }
 
-class _StepperWhoStep extends StatelessWidget {
-  const _StepperWhoStep({
+class _SelectPlayersStep extends StatelessWidget {
+  const _SelectPlayersStep({
     Key key,
     @required this.playthroughPlayers,
     @required this.boardGameDetails,
@@ -363,8 +399,8 @@ class _StepperWhoStep extends StatelessWidget {
   }
 }
 
-class _StepperWhenStep extends StatefulWidget {
-  const _StepperWhenStep({
+class _SelectDateStep extends StatefulWidget {
+  const _SelectDateStep({
     @required this.onPlaythroughTimeChanged,
     Key key,
   }) : super(key: key);
@@ -372,10 +408,10 @@ class _StepperWhenStep extends StatefulWidget {
   final Function(DateTime) onPlaythroughTimeChanged;
 
   @override
-  _StepperWhenStepState createState() => _StepperWhenStepState();
+  _SelectDateStepState createState() => _SelectDateStepState();
 }
 
-class _StepperWhenStepState extends State<_StepperWhenStep> {
+class _SelectDateStepState extends State<_SelectDateStep> {
   DateTime _playthroughDate;
 
   @override
@@ -471,7 +507,7 @@ class _Players extends StatelessWidget {
                       return SizedBox(
                         height: 34,
                         width: 34,
-                        child: Checkbox(                        
+                        child: Checkbox(
                           checkColor: AppTheme.accentColor,
                           activeColor: AppTheme.primaryColor.withOpacity(0.7),
                           value: playthroughPlayers[index].isChecked,
