@@ -43,7 +43,9 @@ class _SyncButtonState extends State<SyncButton> with SyncCollection, TickerProv
           context,
           widget._usernameCallback(),
         );
-        _animationController?.stop();
+        if (mounted) {
+          _animationController?.stop();
+        }
       },
     );
   }
