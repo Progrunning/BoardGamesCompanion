@@ -12,7 +12,7 @@ import 'score_service.dart';
 @singleton
 class PlaythroughService extends BaseHiveService<Playthrough> {
   PlaythroughService(this.scoreService);
-  
+
   final ScoreService scoreService;
 
   Future<List<Playthrough>> retrievePlaythroughs(Iterable<String> boardGameIds) async {
@@ -33,7 +33,11 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<Playthrough> createPlaythrough(
-      String boardGameId, List<PlaythroughPlayer> playthoughPlayers) async {
+    String boardGameId,
+    List<PlaythroughPlayer> playthoughPlayers,
+    DateTime startDate,
+    Duration duration,
+  ) async {
     if ((boardGameId?.isEmpty ?? true) || (playthoughPlayers?.isEmpty ?? true)) {
       return null;
     }
@@ -52,8 +56,14 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     newPlaythrough.id = uuid.v4();
     newPlaythrough.boardGameId = boardGameId;
     newPlaythrough.playerIds = playthroughPlayerIds;
-    newPlaythrough.startDate = DateTime.now().toUtc();
-    newPlaythrough.status = PlaythroughStatus.Started;
+    newPlaythrough.startDate = startDate;
+    if (duration == null) {
+      newPlaythrough.status = PlaythroughStatus.Started;
+    } else {
+      newPlaythrough.status = PlaythroughStatus.Finished;
+      newPlaythrough.endDate = startDate.add(duration);
+    }
+
     newPlaythrough.scoreIds = <String>[];
 
     try {
