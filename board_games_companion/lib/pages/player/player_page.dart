@@ -134,15 +134,11 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                           ),
                         ),
                         TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Name',
-                            labelStyle: AppTheme.defaultTextFieldLabelStyle.copyWith(
-                              fontSize: Dimensions.standardFontSize,
-                            ),
+                            labelStyle: AppTheme.defaultTextFieldLabelStyle,
                           ),
-                          style: AppTheme.defaultTextFieldStyle.copyWith(
-                            fontSize: Dimensions.mediumFontSize,
-                          ),
+                          style: AppTheme.defaultTextFieldStyle,
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Player needs to have a name';
