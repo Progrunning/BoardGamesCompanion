@@ -338,6 +338,7 @@ class _DurationState extends State<_Duration> {
               const SizedBox(width: Dimensions.halfStandardSpacing),
               NumberPicker.integer(
                 initialValue: minutesPlyed,
+                infiniteLoop: true,
                 minValue: minMinutes,
                 maxValue: maxMinutes,
                 onChanged: (num value) => _updateDurationMinutes(value),

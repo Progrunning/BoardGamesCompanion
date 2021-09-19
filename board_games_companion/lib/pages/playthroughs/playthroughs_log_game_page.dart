@@ -129,7 +129,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                     ),
                   ),
                   Step(
-                    title: const Text('New/Old game'),
+                    title: const Text('Played/Playing now'),
                     state: completedSteps > newOldGameStep ? StepState.complete : StepState.indexed,
                     content: _NewOldGameStep(
                       viewModel: widget.viewModel,
@@ -306,7 +306,7 @@ class _NewOldGameStepState extends State<_NewOldGameStep> {
                       _updatePlaythroughStartTimeSelection(value),
                 ),
                 Text(
-                  'Game started now',
+                  'Playing now',
                   style: AppTheme.theme.textTheme.bodyText1,
                 ),
               ],
@@ -324,7 +324,7 @@ class _NewOldGameStepState extends State<_NewOldGameStep> {
                       _updatePlaythroughStartTimeSelection(value),
                 ),
                 Text(
-                  'The game took...',
+                  'Played some time ago. It took...',
                   style: AppTheme.theme.textTheme.bodyText1,
                 ),
               ],
@@ -347,6 +347,7 @@ class _NewOldGameStepState extends State<_NewOldGameStep> {
                 const SizedBox(width: Dimensions.halfStandardSpacing),
                 NumberPicker.integer(
                   initialValue: minutesPlyed,
+                  infiniteLoop: true,
                   minValue: 0,
                   maxValue: 59,
                   onChanged: (num value) => _updateDurationMinutes(value),
