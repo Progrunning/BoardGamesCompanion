@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
@@ -46,12 +47,14 @@ class PlaythroughsStore with ChangeNotifier {
   Future<Playthrough> createPlaythrough(
     String boardGameId,
     List<PlaythroughPlayer> playthoughPlayers,
+    Map<String, PlayerScore> playerScores,
     DateTime startDate,
     Duration duration,
   ) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
       boardGameId,
       playthoughPlayers,
+      playerScores,
       startDate,
       duration,
     );

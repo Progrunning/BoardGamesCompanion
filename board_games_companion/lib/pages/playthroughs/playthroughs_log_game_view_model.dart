@@ -1,3 +1,5 @@
+import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
@@ -17,6 +19,12 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
   List<PlaythroughPlayer> _playthroughPlayers;
   List<PlaythroughPlayer> get playthroughPlayers => _playthroughPlayers;
 
+  List<PlaythroughPlayer> get selectedPlaythroughPlayers =>
+      playthroughPlayers.where((player) => player.isChecked).toList();
+
+  final Map<String, PlayerScore> _playerScores = {};
+  Map<String, PlayerScore> get playerScores => _playerScores;
+
   Future<List<PlaythroughPlayer>> loadPlaythroughPlayers() async {
     final players = await _playersStore.loadPlayers();
 
@@ -29,7 +37,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
     return _playthroughPlayers ?? <PlaythroughPlayer>[];
   }
 
-  DateTime playthroughDate;
+  DateTime playthroughDate = DateTime.now();
 
   PlaythroughStartTime playthroughStartTime = PlaythroughStartTime.now;
 
@@ -50,17 +58,32 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
   Future<Playthrough> createPlaythrough(String boardGameId) async {
     final Playthrough newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
-      playthroughPlayers.where((player) => player.isChecked).toList(),
+      selectedPlaythroughPlayers,
+      playerScores,
       playthroughStartTime == PlaythroughStartTime.now ? DateTime.now() : playthroughDate,
       playthroughStartTime == PlaythroughStartTime.inThePast ? playthroughDuration : null,
     );
 
     logGameStep = 0;
-    playthroughDate = null;
+    playthroughDate = DateTime.now();
     playthroughStartTime = PlaythroughStartTime.now;
     playthroughDuration = const Duration();
+    playerScores.clear();
+
     await loadPlaythroughPlayers();
 
     return newPlaythrough;
+  }
+
+  void selectPlayer(PlaythroughPlayer playthroughPlayer) {
+    playthroughPlayer.isChecked = true;
+    playerScores[playthroughPlayer.player.id] = PlayerScore(playthroughPlayer.player, Score());
+  }
+
+  void deselectPlayer(PlaythroughPlayer playthroughPlayer) {
+    playthroughPlayer.isChecked = false;
+    if (playerScores.containsKey(playthroughPlayer.player.id)) {
+      playerScores.remove(playthroughPlayer.player.id);
+    }
   }
 }
