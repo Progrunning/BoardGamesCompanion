@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
@@ -35,6 +36,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   Future<Playthrough> createPlaythrough(
     String boardGameId,
     List<PlaythroughPlayer> playthoughPlayers,
+    Map<String, PlayerScore> playerScores,
     DateTime startDate,
     Duration duration,
   ) async {
@@ -69,11 +71,16 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     try {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
-      for (final playthroughPlayerId in playthroughPlayerIds) {
-        final playerScore = Score();
+      for (final String playthroughPlayerId in playthroughPlayerIds) {
+        var playerScore = Score();
+        if (playerScores.containsKey(playthroughPlayerId)) {
+          playerScore = playerScores[playthroughPlayerId].score;
+        }
+
         playerScore.boardGameId = boardGameId;
         playerScore.playerId = playthroughPlayerId;
         playerScore.playthroughId = newPlaythrough.id;
+
         if (!await scoreService.addOrUpdateScore(playerScore)) {
           FirebaseCrashlytics.instance.log(
               'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId');

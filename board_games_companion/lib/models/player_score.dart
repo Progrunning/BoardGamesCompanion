@@ -5,10 +5,7 @@ import 'hive/player.dart';
 import 'hive/score.dart';
 
 class PlayerScore with ChangeNotifier {
-  PlayerScore(
-    this._player,
-    this._score,
-  );
+  PlayerScore(this._player, this._score);
 
   final Player _player;
 
