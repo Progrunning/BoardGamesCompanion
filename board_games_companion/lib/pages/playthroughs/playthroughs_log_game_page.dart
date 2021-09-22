@@ -7,6 +7,7 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/players_store.dart';
 import '../../utilities/navigator_helper.dart';
@@ -97,72 +98,73 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Theme(
-              data: AppTheme.theme.copyWith(
-                colorScheme: AppTheme.theme.colorScheme.copyWith(
-                  primary: AppTheme.accentColor,
+          child: Theme(
+            data: AppTheme.theme.copyWith(
+              colorScheme: AppTheme.theme.colorScheme.copyWith(
+                primary: AppTheme.accentColor,
+              ),
+            ),
+            child: Stepper(
+              // physics: const ClampingScrollPhysics(),
+              currentStep: widget.viewModel.logGameStep,
+              steps: [
+                Step(
+                  title: const Text('Playing or played'),
+                  state: completedSteps > playingOrPlayedStep
+                      ? StepState.complete
+                      : StepState.indexed,
+                  content: _PlayingOrPlayedStep(
+                    viewModel: widget.viewModel,
+                    onSelectionChanged: (PlaythroughStartTime playthroughStartTime) =>
+                        setState(() {}),
+                  ),
                 ),
-              ),
-              child: Stepper(
-                currentStep: widget.viewModel.logGameStep,
-                steps: [
-                  Step(
-                    title: const Text('Playing or played'),
-                    state: completedSteps > playingOrPlayedStep
-                        ? StepState.complete
-                        : StepState.indexed,
-                    content: _PlayedOrPlayingStep(
-                      viewModel: widget.viewModel,
-                      onSelectionChanged: (PlaythroughStartTime playthroughStartTime) =>
-                          setState(() {}),
-                    ),
+                Step(
+                  title: const Text('Select date'),
+                  isActive:
+                      widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
+                  state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
+                      ? StepState.disabled
+                      : completedSteps > selectDateStep
+                          ? StepState.complete
+                          : StepState.indexed,
+                  content: _SelectDateStep(
+                    onPlaythroughTimeChanged: (DateTime playthoughDate) {
+                      widget.viewModel.playthroughDate = playthoughDate;
+                    },
                   ),
-                  Step(
-                    title: const Text('Select date'),
-                    isActive:
-                        widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
-                    state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
-                        ? StepState.disabled
-                        : completedSteps > selectDateStep
-                            ? StepState.complete
-                            : StepState.indexed,
-                    content: _SelectDateStep(
-                      onPlaythroughTimeChanged: (DateTime playthoughDate) {
-                        widget.viewModel.playthroughDate = playthoughDate;
-                      },
-                    ),
+                ),
+                Step(
+                  title: const Text('Select players'),
+                  state: selectPlayersStepError
+                      ? StepState.error
+                      : completedSteps > selectPlayersStep
+                          ? StepState.complete
+                          : StepState.indexed,
+                  content: _SelectPlayersStep(
+                    playthroughPlayers: widget.viewModel.playthroughPlayers,
+                    boardGameDetails: widget.boardGameDetails,
+                    onPlayerSelectionChanged: (bool isSelected, PlaythroughPlayer player) =>
+                        _togglePlayerSelection(isSelected, player),
                   ),
-                  Step(
-                    title: const Text('Select players'),
-                    state: selectPlayersStepError
-                        ? StepState.error
-                        : completedSteps > selectPlayersStep
-                            ? StepState.complete
-                            : StepState.indexed,
-                    content: _SelectPlayersStep(
-                      playthroughPlayers: widget.viewModel.playthroughPlayers,
-                      boardGameDetails: widget.boardGameDetails,
-                    ),
-                  ),
-                  Step(
-                    title: const Text('Player scores'),
-                    isActive:
-                        widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
-                    state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
-                        ? StepState.disabled
-                        : completedSteps > playersScoreStep
-                            ? StepState.complete
-                            : StepState.indexed,
-                    content: Container(),
-                  ),
-                ],
-                onStepCancel: () => _stepCancel(),
-                onStepContinue: () => _stepContinue(context),
-                onStepTapped: (int index) => _stepTapped(context, index),
-                controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) =>
-                    _stepActionButtons(onStepContinue, onStepCancel),
-              ),
+                ),
+                Step(
+                  title: const Text('Player scores'),
+                  isActive:
+                      widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
+                  state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
+                      ? StepState.disabled
+                      : completedSteps > playersScoreStep
+                          ? StepState.complete
+                          : StepState.indexed,
+                  content: _PlayerScoresStep(viewModel: widget.viewModel),
+                ),
+              ],
+              onStepCancel: () => _stepCancel(),
+              onStepContinue: () => _stepContinue(context),
+              onStepTapped: (int index) => _stepTapped(context, index),
+              controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) =>
+                  _stepActionButtons(onStepContinue, onStepCancel),
             ),
           ),
         ),
@@ -279,10 +281,44 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       ),
     );
   }
+
+  void _togglePlayerSelection(bool isSelected, PlaythroughPlayer player) {
+    if (isSelected) {
+      widget.viewModel.selectPlayer(player);
+    } else {
+      widget.viewModel.deselectPlayer(player);
+    }
+  }
 }
 
-class _PlayedOrPlayingStep extends StatefulWidget {
-  const _PlayedOrPlayingStep({
+class _PlayerScoresStep extends StatelessWidget {
+  const _PlayerScoresStep({
+    @required this.viewModel,
+    Key key,
+  }) : super(key: key);
+
+  final PlaythroughsLogGameViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 3,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            for (var playerScore in viewModel.playerScores.values) ...[
+              _PlayerScore(playerScore: playerScore),
+              const SizedBox(height: Dimensions.standardSpacing),
+            ]
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PlayingOrPlayedStep extends StatefulWidget {
+  const _PlayingOrPlayedStep({
     @required this.viewModel,
     @required this.onSelectionChanged,
     Key key,
@@ -292,10 +328,10 @@ class _PlayedOrPlayingStep extends StatefulWidget {
   final Function(PlaythroughStartTime) onSelectionChanged;
 
   @override
-  _PlayedOrPlayingStepState createState() => _PlayedOrPlayingStepState();
+  _PlayingOrPlayedStepState createState() => _PlayingOrPlayedStepState();
 }
 
-class _PlayedOrPlayingStepState extends State<_PlayedOrPlayingStep> {
+class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
   int hoursPlayed;
   int minutesPlyed;
 
@@ -414,10 +450,12 @@ class _SelectPlayersStep extends StatelessWidget {
     Key key,
     @required this.playthroughPlayers,
     @required this.boardGameDetails,
+    @required this.onPlayerSelectionChanged,
   }) : super(key: key);
 
   final List<PlaythroughPlayer> playthroughPlayers;
   final BoardGameDetails boardGameDetails;
+  final Function(bool, PlaythroughPlayer) onPlayerSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -426,6 +464,8 @@ class _SelectPlayersStep extends StatelessWidget {
       child: _Players(
         playthroughPlayers: playthroughPlayers,
         boardGameDetails: boardGameDetails,
+        onPlayerSelectionChanged: (bool isSelected, PlaythroughPlayer player) =>
+            onPlayerSelectionChanged(isSelected, player),
       ),
     );
   }
@@ -507,11 +547,13 @@ class _Players extends StatelessWidget {
     Key key,
     @required this.playthroughPlayers,
     @required this.boardGameDetails,
+    @required this.onPlayerSelectionChanged,
   }) : super(key: key);
 
   int get _numberOfPlayerColumns => 3;
   final List<PlaythroughPlayer> playthroughPlayers;
   final BoardGameDetails boardGameDetails;
+  final Function(bool, PlaythroughPlayer) onPlayerSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -520,20 +562,19 @@ class _Players extends StatelessWidget {
       padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
       crossAxisSpacing: Dimensions.standardSpacing,
       mainAxisSpacing: Dimensions.standardSpacing,
-      children: List.generate(
-        playthroughPlayers.length,
-        (int index) {
-          return Stack(
+      children: [
+        for (var playthroughPlayer in playthroughPlayers)
+          Stack(
             children: <Widget>[
               PlayerAvatar(
-                playthroughPlayers[index].player,
+                playthroughPlayer.player,
                 onTap: () =>
-                    playthroughPlayers[index].isChecked = !playthroughPlayers[index].isChecked,
+                    onPlayerSelectionChanged(!playthroughPlayer.isChecked, playthroughPlayer),
               ),
               Align(
                 alignment: Alignment.topRight,
                 child: ChangeNotifierProvider.value(
-                  value: playthroughPlayers[index],
+                  value: playthroughPlayer,
                   child: Consumer<PlaythroughPlayer>(
                     builder: (_, store, __) {
                       return SizedBox(
@@ -542,11 +583,9 @@ class _Players extends StatelessWidget {
                         child: Checkbox(
                           checkColor: AppTheme.accentColor,
                           activeColor: AppTheme.primaryColor.withOpacity(0.7),
-                          value: playthroughPlayers[index].isChecked,
-                          onChanged: (checked) {
-                            playthroughPlayers[index].isChecked =
-                                !playthroughPlayers[index].isChecked;
-                          },
+                          value: playthroughPlayer.isChecked,
+                          onChanged: (bool isChecked) =>
+                              onPlayerSelectionChanged(isChecked, playthroughPlayer),
                         ),
                       );
                     },
@@ -554,9 +593,8 @@ class _Players extends StatelessWidget {
                 ),
               ),
             ],
-          );
-        },
-      ),
+          ),
+      ],
     );
   }
 }
@@ -597,6 +635,63 @@ class _NoPlayers extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PlayerScore extends StatelessWidget {
+  const _PlayerScore({
+    Key key,
+    @required this.playerScore,
+  }) : super(key: key);
+
+  final PlayerScore playerScore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        SizedBox(
+          height: Dimensions.smallPlayerAvatarSize,
+          width: Dimensions.smallPlayerAvatarSize,
+          child: PlayerAvatar(playerScore.player),
+        ),
+        const SizedBox(
+          width: Dimensions.standardSpacing,
+        ),
+        Column(
+          children: <Widget>[
+            ChangeNotifierProvider<PlayerScore>.value(
+              value: playerScore,
+              child: Consumer<PlayerScore>(
+                builder: (_, PlayerScore playerScoreConsumer, __) {
+                  return NumberPicker.horizontal(
+                    listViewHeight: 46,
+                    initialValue: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                    minValue: 0,
+                    maxValue: 10000,
+                    onChanged: (num value) async {
+                      final String valueText = value.toString();
+                      if (playerScoreConsumer.score?.value == valueText) {
+                        return;
+                      }
+
+                      await playerScoreConsumer.updatePlayerScore(valueText);
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: Dimensions.halfStandardSpacing,
+            ),
+            Text(
+              'points',
+              style: AppTheme.theme.textTheme.bodyText2,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -222,13 +222,9 @@ class _PlayerScore extends StatelessWidget {
         SizedBox(
           height: Dimensions.smallPlayerAvatarSize,
           width: Dimensions.smallPlayerAvatarSize,
-          child: Stack(
-            children: [
-              PlayerAvatar(
-                playerScore.player,
-                playerHeroIdSuffix: playthroughId,
-              ),
-            ],
+          child: PlayerAvatar(
+            playerScore.player,
+            playerHeroIdSuffix: playthroughId,
           ),
         ),
         const SizedBox(
