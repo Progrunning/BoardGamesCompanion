@@ -542,6 +542,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
 
     setState(() {
       _playthroughDate = newPlaythroughDate;
+      widget.onPlaythroughTimeChanged(_playthroughDate);
     });
   }
 }
