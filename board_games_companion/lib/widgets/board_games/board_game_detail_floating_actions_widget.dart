@@ -84,14 +84,9 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text(
             '${boardGameDetailsStore.boardGameDetails.name} has been added to your collection'),
-        action: SnackBarAction(
-          label: 'Ok',
-          onPressed: () async {
-            Scaffold.of(context).hideCurrentSnackBar();
-          },
-        ),
       ),
     );
   }
@@ -107,6 +102,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 10),
         content: Text(
             '${boardGameDetailsStore.boardGameDetails.name} has been removed from your collection'),
