@@ -46,15 +46,10 @@ mixin SyncCollection {
 
 void _showSuccessSnackBar() {
   HomePage.homePageGlobalKey.currentState.showSnackBar(
-    SnackBar(
-      content: const Text(
+    const SnackBar(
+      behavior: SnackBarBehavior.floating,
+      content: Text(
         'Your collection is now in sync with BGG!',
-      ),
-      action: SnackBarAction(
-        label: 'Ok',
-        onPressed: () {
-          HomePage.homePageGlobalKey.currentState.hideCurrentSnackBar();
-        },
       ),
     ),
   );
@@ -62,17 +57,12 @@ void _showSuccessSnackBar() {
 
 void _showFailureSnackBar() {
   HomePage.homePageGlobalKey.currentState.showSnackBar(
-    SnackBar(
-      content: const Text(
+    const SnackBar(
+      behavior: SnackBarBehavior.floating,
+      content: Text(
         "Sorry, we've run into some problems with syncing your collection with BGG, please try again or contact support.",
       ),
-      duration: const Duration(seconds: 10),
-      action: SnackBarAction(
-        label: 'Ok',
-        onPressed: () {
-          HomePage.homePageGlobalKey.currentState.hideCurrentSnackBar();
-        },
-      ),
+      duration: Duration(seconds: 10),
     ),
   );
 }

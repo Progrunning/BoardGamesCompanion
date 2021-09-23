@@ -110,9 +110,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
               steps: [
                 Step(
                   title: const Text('Playing or played'),
-                  state: completedSteps > playingOrPlayedStep
-                      ? StepState.complete
-                      : StepState.indexed,
+                  state:
+                      completedSteps > playingOrPlayedStep ? StepState.complete : StepState.indexed,
                   content: _PlayingOrPlayedStep(
                     viewModel: widget.viewModel,
                     onSelectionChanged: (PlaythroughStartTime playthroughStartTime) =>
@@ -121,8 +120,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                 ),
                 Step(
                   title: const Text('Select date'),
-                  isActive:
-                      widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
+                  isActive: widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
                   state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
                       ? StepState.disabled
                       : completedSteps > selectDateStep
@@ -150,8 +148,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                 ),
                 Step(
                   title: const Text('Player scores'),
-                  isActive:
-                      widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
+                  isActive: widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
                   state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
                       ? StepState.disabled
                       : completedSteps > playersScoreStep
@@ -247,6 +244,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       });
     } else {
       await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
+      _showConfirmationSnackbar(context);
       setState(() {});
     }
   }
@@ -269,15 +267,11 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       selectPlayersStepError = true;
     });
 
+    Scaffold.of(context).hideCurrentSnackBar();
     Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('You need to select at least one player'),
-        action: SnackBarAction(
-          label: 'Ok',
-          onPressed: () async {
-            Scaffold.of(context).hideCurrentSnackBar();
-          },
-        ),
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text('You need to select at least one player'),
       ),
     );
   }
@@ -288,6 +282,16 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     } else {
       widget.viewModel.deselectPlayer(player);
     }
+  }
+
+  void _showConfirmationSnackbar(BuildContext context) {
+    Scaffold.of(context).hideCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text('Your game has been logged!'),
+      ),
+    );
   }
 }
 
