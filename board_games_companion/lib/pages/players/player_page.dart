@@ -285,13 +285,8 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 void _showPlayerUpdatedSnackbar(BuildContext context, Player playerToAddOrUpdate) {
   Scaffold.of(context).showSnackBar(
     SnackBar(
+      behavior: SnackBarBehavior.floating,
       content: Text('Player ${playerToAddOrUpdate.name} has been updated successfully'),
-      action: SnackBarAction(
-        label: 'Ok',
-        onPressed: () async {
-          Navigator.of(context).pop();
-        },
-      ),
     ),
   );
 }

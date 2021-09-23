@@ -71,7 +71,7 @@ class AppTheme {
     fontSize: Dimensions.mediumFontSize,
     color: defaultTextColor,
   );
-  
+
   static const TextStyle defaultTextFieldLabelStyle = TextStyle(
     fontSize: Dimensions.standardFontSize,
     color: secondaryTextColor,
@@ -105,7 +105,7 @@ class AppTheme {
       fontWeight: FontWeight.bold,
       color: defaultTextColor,
     );
-    
+
     final headline3TextStyle = originalTextTheme.headline3.copyWith(
       fontSize: Dimensions.mediumFontSize,
       fontWeight: FontWeight.bold,
@@ -134,7 +134,6 @@ class AppTheme {
             contentTextStyle: headline3TextStyle.copyWith(
               fontWeight: FontWeight.normal,
             ),
-
           ),
       colorScheme: originalColorScheme.copyWith(
         primary: primaryColor,
@@ -228,9 +227,10 @@ class AppTheme {
       chipTheme: ThemeData.light().chipTheme.copyWith(
             elevation: Dimensions.defaultElevation,
           ),
-      snackBarTheme: ThemeData.light()
-          .snackBarTheme
-          .copyWith(backgroundColor: secondaryLightColor, actionTextColor: accentColor),
+      snackBarTheme: ThemeData.light().snackBarTheme.copyWith(
+            backgroundColor: primaryColorLight,
+            actionTextColor: accentColor,
+          ),
     );
   }
 }
