@@ -129,6 +129,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                           ? StepState.complete
                           : StepState.indexed,
                   content: _SelectDateStep(
+                    playthroughDate: widget.viewModel.playthroughDate,
                     onPlaythroughTimeChanged: (DateTime playthoughDate) {
                       widget.viewModel.playthroughDate = playthoughDate;
                     },
@@ -479,10 +480,12 @@ class _SelectPlayersStep extends StatelessWidget {
 
 class _SelectDateStep extends StatefulWidget {
   const _SelectDateStep({
+    @required this.playthroughDate,
     @required this.onPlaythroughTimeChanged,
     Key key,
   }) : super(key: key);
 
+  final DateTime playthroughDate;
   final Function(DateTime) onPlaythroughTimeChanged;
 
   @override
@@ -494,7 +497,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
 
   @override
   void initState() {
-    _playthroughDate = DateTime.now();
+    _playthroughDate = widget.playthroughDate;
     super.initState();
   }
 
