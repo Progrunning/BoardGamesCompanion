@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -344,7 +346,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
     super.initState();
 
     hoursPlayed = widget.viewModel.playthroughDuration.inHours;
-    minutesPlyed = widget.viewModel.playthroughDuration.inMinutes;
+    minutesPlyed = widget.viewModel.playthroughDuration.inMinutes % Duration.minutesPerHour;
   }
 
   @override
@@ -409,10 +411,10 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                 ),
                 const SizedBox(width: Dimensions.halfStandardSpacing),
                 NumberPicker.integer(
-                  initialValue: minutesPlyed,
+                  initialValue: math.min(Duration.minutesPerHour - 1, minutesPlyed),
                   infiniteLoop: true,
                   minValue: 0,
-                  maxValue: 59,
+                  maxValue: Duration.minutesPerHour - 1,
                   onChanged: (num value) => _updateDurationMinutes(value),
                   listViewWidth: 46,
                 ),
