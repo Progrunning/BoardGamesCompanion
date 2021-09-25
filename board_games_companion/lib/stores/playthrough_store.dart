@@ -56,7 +56,10 @@ class PlaythroughStore {
 
     try {
       _scores = await _scoreService.retrieveScores([_playthrough.id]);
-      _players = await _playerService.retrievePlayers(_playthrough.playerIds);
+      _players = await _playerService.retrievePlayers(
+        playerIds: _playthrough.playerIds,
+        includeDeletedPlayers: true,
+      );
 
       _playerScores = _players.map((p) {
         final score = _scores.firstWhere(
