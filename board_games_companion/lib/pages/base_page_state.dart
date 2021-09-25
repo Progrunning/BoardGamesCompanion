@@ -66,8 +66,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
                 style: TextStyle(
                   color: AppTheme.accentColor,
                 ),
-              ),
-              
+              ),              
               onPressed: () async {
                 Navigator.of(context).pop();
 
