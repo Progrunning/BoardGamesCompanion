@@ -16,7 +16,10 @@ class PlayerService extends BaseHiveService<Player> {
 
   final FileService fileService;
 
-  Future<List<Player>> retrievePlayers([List<String> playerIds]) async {
+  Future<List<Player>> retrievePlayers({
+    List<String> playerIds,
+    bool includeDeletedPlayers = false,
+  }) async {
     if (!await ensureBoxOpen(HiveBoxes.Players)) {
       return <Player>[];
     }
@@ -25,7 +28,8 @@ class PlayerService extends BaseHiveService<Player> {
         ?.toMap()
         ?.values
         ?.where((Player player) =>
-            !(player.isDeleted ?? false) && (playerIds?.contains(player.id) ?? true))
+            (playerIds?.contains(player.id) ?? true) &&
+            (includeDeletedPlayers || !(player.isDeleted ?? false)))
         ?.toList();
 
     for (final Player player in players) {

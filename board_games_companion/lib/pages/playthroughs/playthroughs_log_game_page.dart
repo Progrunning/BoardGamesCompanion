@@ -45,15 +45,12 @@ class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
               ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsLogGameViewModel>(
                 future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
                 success: (_, PlaythroughsLogGameViewModel viewModel) {
-                  if (viewModel.playthroughPlayers?.isNotEmpty ?? false) {
-                    return _LogPlaythroughStepper(
-                      viewModel: viewModel,
-                      boardGameDetails: widget.boardGameDetails,
-                    );
-                  }
+                  return _LogPlaythroughStepper(
+                    viewModel: viewModel,
+                    boardGameDetails: widget.boardGameDetails,
+                  );
 
-                  // TODO Think how to deal with a situation when there's no players yet
-                  return const _NoPlayers();
+                  // return const _NoPlayers();
                 },
               )),
     );
@@ -466,13 +463,21 @@ class _SelectPlayersStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (playthroughPlayers?.isEmpty ?? true) {
+      return const _NoPlayers();
+    }
+
     return SizedBox(
       height: MediaQuery.of(context).size.height / 3,
-      child: _Players(
-        playthroughPlayers: playthroughPlayers,
-        boardGameDetails: boardGameDetails,
-        onPlayerSelectionChanged: (bool isSelected, PlaythroughPlayer player) =>
-            onPlayerSelectionChanged(isSelected, player),
+      child: Builder(
+        builder: (_) {
+          return _Players(
+            playthroughPlayers: playthroughPlayers,
+            boardGameDetails: boardGameDetails,
+            onPlayerSelectionChanged: (bool isSelected, PlaythroughPlayer player) =>
+                onPlayerSelectionChanged(isSelected, player),
+          );
+        },
       ),
     );
   }
@@ -616,35 +621,29 @@ class _NoPlayers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  const Text('To start a new game, you need to create players first'),
-                  const Divider(
-                    height: Dimensions.halfStandardSpacing,
-                  ),
-                  IconAndTextButton(
-                    title: 'Add Player',
-                    icon: const DefaultIcon(Icons.add),
-                    onPressed: () async {
-                      await NavigatorHelper.navigateToCreatePlayerPage(
-                        context,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Text(
+          'To log a game, you need to create players first',
+          style: AppTheme.theme.textTheme.bodyText1,
+        ),
+        const SizedBox(
+          height: Dimensions.halfStandardSpacing,
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: IconAndTextButton(
+            title: 'Create Player',
+            icon: const DefaultIcon(Icons.add),
+            onPressed: () async {
+              await NavigatorHelper.navigateToCreatePlayerPage(
+                context,
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

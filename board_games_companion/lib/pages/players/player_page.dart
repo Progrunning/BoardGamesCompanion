@@ -153,9 +153,9 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                         ),
                         _ActionButtons(
                           isEditMode: isEditMode,
-                          onCreate: () => _createOrUpdatePlayer(),
-                          onUpdate: () => _createOrUpdatePlayer(),
-                          onDelete: () => _showDeletePlayerDialog(),
+                          onCreate: () => _createOrUpdatePlayer(context),
+                          onUpdate: () => _createOrUpdatePlayer(context),
+                          onDelete: () => _showDeletePlayerDialog(context),
                         ),
                       ],
                     ),
@@ -204,15 +204,18 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               content: const Text('Are you sure you want to navigate away?'),
               elevation: Dimensions.defaultElevation,
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: const Text(Strings.Cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
-                FlatButton(
-                  child: const Text('Navigate away'),
-                  color: Colors.red,
+                TextButton(
+                  child: const Text(
+                    'Navigate away',
+                    style: TextStyle(color: AppTheme.defaultTextColor),
+                  ),
+                  style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
                   onPressed: () async {
                     widget.playersStore.playerToCreateOrEdit.avatarImageUri =
                         widget.playersStore.playerToCreateOrEdit.avatarImageUri;
@@ -234,7 +237,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
     return true;
   }
 
-  Future<void> _createOrUpdatePlayer() async {
+  Future<void> _createOrUpdatePlayer(BuildContext context) async {
     if (!formKey.currentState.validate()) {
       return;
     }
@@ -247,7 +250,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
     }
   }
 
-  Future<void> _showDeletePlayerDialog() async {
+  Future<void> _showDeletePlayerDialog(BuildContext context) async {
     await showDialog<AlertDialog>(
       context: context,
       builder: (context) {
