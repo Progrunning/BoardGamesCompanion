@@ -40,10 +40,41 @@ class _PlayersPageState extends State<PlayersPage> {
       future: playerStore.loadPlayers(),
       success: (context, PlayersStore store) {
         if (store.players?.isEmpty ?? true) {
-          return const Padding(
-            padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
-            child: Center(
-              child: Text('It looks empty here, try adding a new player'),
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(
+                Dimensions.doubleStandardSpacing,
+              ),
+              child: Column(
+                children: const <Widget>[
+                  SizedBox(
+                    height: 60,
+                  ),
+                  Center(
+                    child: Text(
+                      "You don't have any players",
+                      style: TextStyle(
+                        fontSize: Dimensions.extraLargeFontSize,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Dimensions.doubleStandardSpacing,
+                  ),
+                  Icon(
+                    Icons.sentiment_dissatisfied_sharp,
+                    size: 80,
+                    color: AppTheme.primaryColor,
+                  ),
+                  Text(
+                    'If you want to record your scores for the games played, you will need to create players',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: Dimensions.mediumFontSize,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -52,7 +83,15 @@ class _PlayersPageState extends State<PlayersPage> {
 
         return SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                child: Text(
+                  'Players',
+                  style: AppTheme.theme.textTheme.headline2,
+                ),
+              ),
               Expanded(
                 child: GridView.count(
                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
@@ -84,7 +123,7 @@ class _PlayersPageState extends State<PlayersPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
                   child: IconAndTextButton(
-                    title: 'Add Player',
+                    title: 'Create Player',
                     icon: const DefaultIcon(
                       Icons.add,
                     ),
