@@ -39,14 +39,15 @@ class PlayersStore with ChangeNotifier {
         orElse: () => null,
       );
 
-      final isCreatingNewPlayer = existingPlayer == null;
+      final isNewPlayer = existingPlayer == null;
       final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(player);
       if (addOrUpdateSucceeded) {
+        _playerToCreateOrEdit.id = player.id;
         _playerToCreateOrEdit.avatarFileName = player.avatarFileName;
         _playerToCreateOrEdit.avatarImageUri = player.avatarImageUri;
         _playerToCreateOrEdit.name = player.name;
 
-        if (isCreatingNewPlayer) {
+        if (isNewPlayer) {
           _players.add(player);
 
           notifyListeners();
