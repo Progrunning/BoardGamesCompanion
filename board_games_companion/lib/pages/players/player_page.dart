@@ -32,6 +32,7 @@ class PlayerPage extends StatefulWidget {
 class _PlayerPageState extends BasePageState<PlayerPage> {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final nameFocusNode = FocusNode();
   final imagePicker = ImagePicker();
 
   Player player;
@@ -41,18 +42,18 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   void initState() {
     super.initState();
 
-    player = Player();
-    player.id = widget.playersStore.playerToCreateOrEdit.id;
-    player.name = widget.playersStore.playerToCreateOrEdit.name;
-    player.avatarFileName = widget.playersStore.playerToCreateOrEdit.avatarFileName;
-    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit.avatarImageUri;
-
-    isEditMode = player.name?.isNotEmpty ?? false;
+    _setPlayerData();
 
     nameController.text = player.name ?? '';
     nameController.addListener(() {
       player.name = nameController.text;
     });
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -147,15 +148,16 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                             return null;
                           },
                           controller: nameController,
+                          focusNode: nameFocusNode,
                         ),
                         const Expanded(
                           child: SizedBox.shrink(),
                         ),
                         _ActionButtons(
                           isEditMode: isEditMode,
-                          onCreate: () => _createOrUpdatePlayer(context),
-                          onUpdate: () => _createOrUpdatePlayer(context),
-                          onDelete: () => _showDeletePlayerDialog(context),
+                          onCreate: (BuildContext context) => _createOrUpdatePlayer(context),
+                          onUpdate: (BuildContext context) => _createOrUpdatePlayer(context),
+                          onDelete: (BuildContext context) => _showDeletePlayerDialog(context),
                         ),
                       ],
                     ),
@@ -169,10 +171,14 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
     );
   }
 
-  @override
-  void dispose() {
-    nameController.dispose();
-    super.dispose();
+  void _setPlayerData() {
+    player = Player();
+    player.id = widget.playersStore.playerToCreateOrEdit.id;
+    player.name = widget.playersStore.playerToCreateOrEdit.name;
+    player.avatarFileName = widget.playersStore.playerToCreateOrEdit.avatarFileName;
+    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit.avatarImageUri;
+
+    isEditMode = player.name?.isNotEmpty ?? false;
   }
 
   Future _handleTakingPicture(Player player) async {
@@ -246,7 +252,11 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
     final playerUpdatedSuccess = await widget.playersStore.addOrUpdatePlayer(player);
     if (playerUpdatedSuccess) {
-      _showPlayerUpdatedSnackbar(context, player);
+      _showPlayerUpdatedSnackbar(context, player, isEditMode: isEditMode);
+      nameFocusNode.unfocus();
+      setState(() {
+        _setPlayerData();
+      });
     }
   }
 
@@ -285,11 +295,31 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   }
 }
 
-void _showPlayerUpdatedSnackbar(BuildContext context, Player playerToAddOrUpdate) {
+void _showPlayerUpdatedSnackbar(
+  BuildContext context,
+  Player playerToAddOrUpdate, {
+  @required bool isEditMode,
+}) {
+  final String actionText = isEditMode ? 'updated' : 'created';
   Scaffold.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
-      content: Text('Player ${playerToAddOrUpdate.name} has been updated successfully'),
+      content: Text.rich(
+        TextSpan(
+          children: [
+            const TextSpan(text: 'Player '),
+            TextSpan(
+              text: '${playerToAddOrUpdate.name} ',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: 'has been $actionText successfully'),
+          ],
+        ),
+      ),
+      action: SnackBarAction(
+        label: 'Go Back',
+        onPressed: () => Navigator.of(context).pop(),
+      ),
     ),
   );
 }
@@ -304,9 +334,9 @@ class _ActionButtons extends StatelessWidget {
   }) : super(key: key);
 
   final bool isEditMode;
-  final VoidCallback onCreate;
-  final VoidCallback onUpdate;
-  final VoidCallback onDelete;
+  final Function(BuildContext) onCreate;
+  final Function(BuildContext) onUpdate;
+  final Function(BuildContext) onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -318,14 +348,14 @@ class _ActionButtons extends StatelessWidget {
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
             color: Colors.redAccent,
-            onPressed: () => onDelete(),
+            onPressed: () => onDelete(context),
           ),
           const SizedBox(width: Dimensions.standardSpacing),
         ],
         IconAndTextButton(
           title: isEditMode ? 'Update' : 'Create',
           icon: const DefaultIcon(Icons.create),
-          onPressed: () => isEditMode ? onUpdate() : onCreate(),
+          onPressed: () => isEditMode ? onUpdate(context) : onCreate(context),
         ),
       ],
     );
