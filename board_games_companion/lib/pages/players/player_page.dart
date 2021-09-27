@@ -75,91 +75,93 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               appBar: AppBar(
                 title: Text(_hasName ? player.name : 'New Player'),
               ),
-              body: PageContainer(
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Center(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              boxShadow: [
-                                AppTheme.defaultBoxShadow,
-                              ],
-                            ),
-                            child: SizedBox(
-                              height: 220,
-                              width: 190,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Hero(
-                                      tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
-                                      child: PlayerImage(
-                                        imageUri: player?.avatarImageUri,
+              body: SafeArea(
+                  child: PageContainer(
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                boxShadow: [
+                                  AppTheme.defaultBoxShadow,
+                                ],
+                              ),
+                              child: SizedBox(
+                                height: 220,
+                                width: 190,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Hero(
+                                        tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
+                                        child: PlayerImage(
+                                          imageUri: player?.avatarImageUri,
+                                        ),
                                       ),
-                                    ),
-                                    Positioned(
-                                      bottom: Dimensions.halfStandardSpacing,
-                                      right: Dimensions.halfStandardSpacing,
-                                      child: Row(
-                                        children: <Widget>[
-                                          CustomIconButton(
-                                            const Icon(
-                                              Icons.filter,
-                                              color: AppTheme.defaultTextColor,
+                                      Positioned(
+                                        bottom: Dimensions.halfStandardSpacing,
+                                        right: Dimensions.halfStandardSpacing,
+                                        child: Row(
+                                          children: <Widget>[
+                                            CustomIconButton(
+                                              const Icon(
+                                                Icons.filter,
+                                                color: AppTheme.defaultTextColor,
+                                              ),
+                                              onTap: () => _handleImagePicking(player),
                                             ),
-                                            onTap: () => _handleImagePicking(player),
-                                          ),
-                                          const Divider(
-                                            indent: Dimensions.halfStandardSpacing,
-                                          ),
-                                          CustomIconButton(
-                                            const Icon(
-                                              Icons.camera,
-                                              color: AppTheme.defaultTextColor,
+                                            const Divider(
+                                              indent: Dimensions.halfStandardSpacing,
                                             ),
-                                            onTap: () => _handleTakingPicture(player),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                            CustomIconButton(
+                                              const Icon(
+                                                Icons.camera,
+                                                color: AppTheme.defaultTextColor,
+                                              ),
+                                              onTap: () => _handleTakingPicture(player),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'Name',
-                            labelStyle: AppTheme.defaultTextFieldLabelStyle,
-                          ),
-                          style: AppTheme.defaultTextFieldStyle,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Player needs to have a name';
-                            }
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Name',
+                              labelStyle: AppTheme.defaultTextFieldLabelStyle,
+                            ),
+                            style: AppTheme.defaultTextFieldStyle,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Player needs to have a name';
+                              }
 
-                            return null;
-                          },
-                          controller: nameController,
-                          focusNode: nameFocusNode,
-                        ),
-                        const Expanded(
-                          child: SizedBox.shrink(),
-                        ),
-                        _ActionButtons(
-                          isEditMode: isEditMode,
-                          onCreate: (BuildContext context) => _createOrUpdatePlayer(context),
-                          onUpdate: (BuildContext context) => _createOrUpdatePlayer(context),
-                          onDelete: (BuildContext context) => _showDeletePlayerDialog(context),
-                        ),
-                      ],
+                              return null;
+                            },
+                            controller: nameController,
+                            focusNode: nameFocusNode,
+                          ),
+                          const Expanded(
+                            child: SizedBox.shrink(),
+                          ),
+                          _ActionButtons(
+                            isEditMode: isEditMode,
+                            onCreate: (BuildContext context) => _createOrUpdatePlayer(context),
+                            onUpdate: (BuildContext context) => _createOrUpdatePlayer(context),
+                            onDelete: (BuildContext context) => _showDeletePlayerDialog(context),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
