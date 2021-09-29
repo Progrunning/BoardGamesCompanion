@@ -18,7 +18,7 @@ stages:
   condition: eq(variables['Build.SourceBranchName'], 'develop')
   jobs:
     - job: Build
-      timeoutInMinutes: 12
+      timeoutInMinutes: 20
       pool:
         vmImage: 'macOS-latest'
 
@@ -54,7 +54,7 @@ stages:
   jobs:
 
   - job: BuildAndroid
-    timeoutInMinutes: 12
+    timeoutInMinutes: 20
     pool:
       vmImage: 'macOS-latest'
 
@@ -124,7 +124,7 @@ stages:
   condition: succeeded('CdBuildAndroid')
   jobs:
   - job: PublishAndroid
-    timeoutInMinutes: 3
+    timeoutInMinutes: 5
     pool:
       vmImage: 'macOS-latest'
 
@@ -156,7 +156,7 @@ stages:
   condition: eq(variables['Build.SourceBranchName'], 'release')
   jobs:
   - job: BuildiOS
-    timeoutInMinutes: 15
+    timeoutInMinutes: 30
     pool:
       vmImage: 'macOS-latest'
 
@@ -223,7 +223,7 @@ stages:
   condition: succeeded('CdBuildiOS')
   jobs:
   - job: PublishiOS
-    timeoutInMinutes: 10
+    timeoutInMinutes: 20
     pool:
       vmImage: 'macOS-latest'
 
