@@ -42,9 +42,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  boxShadow: const <BoxShadow>[
-                    AppTheme.defaultBoxShadow,
-                  ],
+                  boxShadow: const <BoxShadow>[AppTheme.defaultBoxShadow],
                   borderRadius: AppTheme.defaultBoxRadius,
                   image: DecorationImage(
                     image: imageProvider,
@@ -55,10 +53,11 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             ),
             fit: BoxFit.fitWidth,
             placeholder: (context, url) => Container(
-              color: AppTheme.primaryColor,
-              child: const Center(
-                child: CircularProgressIndicator(),
+              decoration: const BoxDecoration(
+                color: AppTheme.primaryColor,
+                borderRadius: AppTheme.defaultBoxRadius,
               ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
             // TODO Add shadow to the error state
             errorWidget: (context, url, error) => ClipRRect(
@@ -68,9 +67,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
                   color: AppTheme.primaryColor,
                   image: DecorationImage(
                     alignment: Alignment.center,
-                    image: AssetImage(
-                      'assets/icons/logo.png',
-                    ),
+                    image: AssetImage('assets/icons/logo.png'),
                   ),
                 ),
               ),
@@ -79,18 +76,17 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
         ),
         Padding(
           padding: const EdgeInsets.only(
-              bottom: Dimensions.standardSpacing,
-              left: Dimensions.halfStandardSpacing,
-              right: Dimensions.standardSpacing),
+            bottom: Dimensions.standardSpacing,
+            left: Dimensions.halfStandardSpacing,
+            right: Dimensions.standardSpacing,
+          ),
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
                 borderRadius: const BorderRadius.all(
-                  Radius.circular(
-                    Styles.defaultCornerRadius,
-                  ),
+                  Radius.circular(Styles.defaultCornerRadius),
                 ),
               ),
               child: Padding(
@@ -99,7 +95,9 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
                   widget.boardGame.name ?? '',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      color: AppTheme.defaultTextColor, fontSize: Dimensions.smallFontSize),
+                    color: AppTheme.defaultTextColor,
+                    fontSize: Dimensions.smallFontSize,
+                  ),
                 ),
               ),
             ),

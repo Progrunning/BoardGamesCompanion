@@ -8,6 +8,7 @@ class Analytics {
   static const String SearchBoardGames = 'search_board_games';
   static const String BoardGameDetailsLinks = 'board_game_details_links';
   static const String EditPlaythrough = 'edit_playthough';
+  static const String LogPlaythrough = 'log_playthough';
 
   static const String BoardGameIdParameter = 'board_game_id';
   static const String BoardGameNameParameter = 'board_game_name';
@@ -22,4 +23,8 @@ class Analytics {
   static const String SearchBoardGamesPhraseParameter = 'phrase';
 
   static const String BoardGameDetailsLinksName = 'board_game_details_link_name';
+
+  static const String LogPlaythroughNumberOfPlayers = 'number_of_players';
+  static const String LogPlaythroughStarTime = 'start_time';
+  static const String LogPlaythroughDuration = 'duration';
 }
