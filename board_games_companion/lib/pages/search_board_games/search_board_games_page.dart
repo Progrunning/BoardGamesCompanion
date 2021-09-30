@@ -37,40 +37,89 @@ class SearchBoardGamesPage extends StatefulWidget {
 }
 
 class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
+  FocusNode searchFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    searchFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: PageContainer(
         child: CustomScrollView(
           slivers: <Widget>[
-            _SearchBar(),
-            const _SearchResults(),
+            _SearchBar(searchFocusNode: searchFocusNode),
+            _SearchResults(
+              onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+            ),
             SliverPersistentHeader(
               pinned: true,
               delegate: _HotBoardGamesHeader(),
             ),
-            _HotBoardGames(analyticsService: widget.analyticsService),
+            _HotBoardGames(
+              analyticsService: widget.analyticsService,
+              onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+            ),
           ],
         ),
       ),
     );
   }
+
+  Future<void> _navigateToBoardGameDetails(BoardGame boardGame) async {
+    searchFocusNode.unfocus();
+    await NavigatorHelper.navigateToBoardGameDetails(
+      context,
+      boardGame?.id,
+      boardGame?.name,
+      SearchBoardGamesPage,
+    );
+  }
 }
 
-class _SearchBar extends StatelessWidget {
-  _SearchBar({
+class _SearchBar extends StatefulWidget {
+  const _SearchBar({
+    @required this.searchFocusNode,
     Key key,
   }) : super(key: key);
 
-  final _searchController = TextEditingController();
+  final FocusNode searchFocusNode;
 
   @override
-  Widget build(BuildContext context) {
-    final searchBoardGamesStore = Provider.of<SearchBoardGamesStore>(
+  _SearchBarState createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<_SearchBar> {
+  TextEditingController searchController;
+  SearchBoardGamesStore searchBoardGamesStore;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+    searchBoardGamesStore = Provider.of<SearchBoardGamesStore>(
       context,
       listen: false,
     );
+  }
 
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SliverAppBar(
       titleSpacing: 0,
       title: Consumer<SearchBarBoardGamesStore>(
@@ -80,22 +129,16 @@ class _SearchBar extends StatelessWidget {
               horizontal: Dimensions.standardSpacing,
             ),
             child: TextField(
-              controller: _searchController,
+              controller: searchController,
               style: AppTheme.defaultTextFieldStyle,
+              focusNode: widget.searchFocusNode,
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 hintText: 'Search...',
-                suffixIcon: retrieveSearchBarSuffixIcon(
-                  store,
-                  searchBoardGamesStore,
-                ),
+                suffixIcon: retrieveSearchBarSuffixIcon(store, searchBoardGamesStore),
               ),
-              onChanged: (searchPhrase) {
-                store.searchPhrase = searchPhrase;
-              },
-              onSubmitted: (searchPhrase) {
-                searchBoardGamesStore.updateSearchResults();
-              },
+              onChanged: (searchPhrase) => store.searchPhrase = searchPhrase,
+              onSubmitted: (searchPhrase) => searchBoardGamesStore.updateSearchResults(),
             ),
           );
         },
@@ -114,7 +157,7 @@ class _SearchBar extends StatelessWidget {
         ),
         color: AppTheme.accentColor,
         onPressed: () {
-          _searchController.text = '';
+          searchController.text = '';
           searchBarBoardGamesStore.searchPhrase = null;
           searchBoardGamesStore.updateSearchResults();
         },
@@ -129,7 +172,12 @@ class _SearchBar extends StatelessWidget {
 }
 
 class _SearchResults extends StatefulWidget {
-  const _SearchResults({Key key}) : super(key: key);
+  const _SearchResults({
+    Key key,
+    @required this.onBoardGameTapped,
+  }) : super(key: key);
+
+  final void Function(BoardGame) onBoardGameTapped;
 
   @override
   _SearchResultsState createState() => _SearchResultsState();
@@ -141,10 +189,7 @@ class _SearchResultsState extends State<_SearchResults> {
   @override
   void initState() {
     super.initState();
-    searchBarBoardGamesStore = Provider.of<SearchBarBoardGamesStore>(
-      context,
-      listen: false,
-    );
+    searchBarBoardGamesStore = Provider.of<SearchBarBoardGamesStore>(context, listen: false);
   }
 
   @override
@@ -199,15 +244,8 @@ class _SearchResultsState extends State<_SearchResults> {
                               ],
                             ),
                           ),
-                          onTap: () async {
-                            final boardGame = searchResults[itemIndex];
-                            await NavigatorHelper.navigateToBoardGameDetails(
-                              context,
-                              boardGame?.id,
-                              boardGame?.name,
-                              SearchBoardGamesPage,
-                            );
-                          },
+                          onTap: () async =>
+                              _navigateToBoardGameDetails(searchResults, itemIndex, context),
                         ),
                       );
                     }
@@ -258,6 +296,15 @@ class _SearchResultsState extends State<_SearchResults> {
         );
       },
     );
+  }
+
+  Future _navigateToBoardGameDetails(
+    List<BoardGame> searchResults,
+    int itemIndex,
+    BuildContext context,
+  ) async {
+    final boardGame = searchResults[itemIndex];
+    widget.onBoardGameTapped(boardGame);
   }
 }
 
@@ -381,10 +428,12 @@ class _NoResults extends StatelessWidget {
 class _HotBoardGames extends StatelessWidget {
   const _HotBoardGames({
     @required this.analyticsService,
+    @required this.onBoardGameTapped,
     Key key,
   }) : super(key: key);
 
   final AnalyticsService analyticsService;
+  final void Function(BoardGame) onBoardGameTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -409,22 +458,7 @@ class _HotBoardGames extends StatelessWidget {
                     final BoardGame boardGame = snapshot.data[index] as BoardGame;
                     return BoardGameTile(
                       boardGame: boardGame,
-                      onTap: () async {
-                        await analyticsService.logEvent(
-                          name: Analytics.ViewHotBoardGame,
-                          parameters: <String, String>{
-                            Analytics.BoardGameIdParameter: boardGame.id,
-                            Analytics.BoardGameNameParameter: boardGame.name,
-                          },
-                        );
-
-                        await NavigatorHelper.navigateToBoardGameDetails(
-                          context,
-                          boardGame?.id,
-                          boardGame?.name,
-                          SearchBoardGamesPage,
-                        );
-                      },
+                      onTap: () async => _navigateToBoardGameDetails(boardGame, context),
                     );
                   },
                 ),
@@ -483,6 +517,18 @@ class _HotBoardGames extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future _navigateToBoardGameDetails(BoardGame boardGame, BuildContext context) async {
+    await analyticsService.logEvent(
+      name: Analytics.ViewHotBoardGame,
+      parameters: <String, String>{
+        Analytics.BoardGameIdParameter: boardGame.id,
+        Analytics.BoardGameNameParameter: boardGame.name,
+      },
+    );
+
+    onBoardGameTapped(boardGame);
   }
 }
 
