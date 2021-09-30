@@ -26,7 +26,7 @@ import '../../widgets/common/ripple_effect.dart';
 
 class SearchBoardGamesPage extends StatefulWidget {
   const SearchBoardGamesPage({
-    this.analyticsService,
+    @required this.analyticsService,
     Key key,
   }) : super(key: key);
 
@@ -49,7 +49,7 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
               pinned: true,
               delegate: _HotBoardGamesHeader(),
             ),
-            const _HotBoardGames(),
+            _HotBoardGames(analyticsService: widget.analyticsService),
           ],
         ),
       ),
@@ -380,8 +380,8 @@ class _NoResults extends StatelessWidget {
 
 class _HotBoardGames extends StatelessWidget {
   const _HotBoardGames({
+    @required this.analyticsService,
     Key key,
-    this.analyticsService,
   }) : super(key: key);
 
   final AnalyticsService analyticsService;

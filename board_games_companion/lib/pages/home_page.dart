@@ -53,7 +53,7 @@ class _HomePageState extends BasePageState<HomePage> {
                 );
               },
             ),
-            const SearchBoardGamesPage(),
+            SearchBoardGamesPage(analyticsService: widget.analyticsService),
             const PlayersPage(),
             const SettingsPage(),
           ],
@@ -65,7 +65,7 @@ class _HomePageState extends BasePageState<HomePage> {
             homeStore.boardGamesPageIndex = pageIndex;
           },
         ),
-      ),      
+      ),
       bottomNavigationBar: Consumer<HomeStore>(
         builder: (_, homeStore, __) {
           return BottomNavigationBar(
@@ -85,5 +85,5 @@ class _HomePageState extends BasePageState<HomePage> {
         },
       ),
     );
-  }  
+  }
 }

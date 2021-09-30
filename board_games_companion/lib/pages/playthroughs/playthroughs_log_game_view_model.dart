@@ -1,5 +1,7 @@
+import 'package:board_games_companion/common/analytics.dart';
 import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/player_score.dart';
+import 'package:board_games_companion/services/analytics_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
@@ -11,10 +13,11 @@ import 'playthroughs_log_game_page.dart';
 
 @injectable
 class PlaythroughsLogGameViewModel with ChangeNotifier {
-  PlaythroughsLogGameViewModel(this._playersStore, this._playthroughsStore);
+  PlaythroughsLogGameViewModel(this._playersStore, this._playthroughsStore, this._analyticsService);
 
   final PlayersStore _playersStore;
   final PlaythroughsStore _playthroughsStore;
+  final AnalyticsService _analyticsService;
 
   List<PlaythroughPlayer> _playthroughPlayers;
   List<PlaythroughPlayer> get playthroughPlayers => _playthroughPlayers;
@@ -62,6 +65,16 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
       playerScores,
       playthroughStartTime == PlaythroughStartTime.now ? DateTime.now() : playthroughDate,
       playthroughStartTime == PlaythroughStartTime.inThePast ? playthroughDuration : null,
+    );
+
+    await _analyticsService.logEvent(
+      name: Analytics.LogPlaythrough,
+      parameters: <String, String>{
+        Analytics.BoardGameIdParameter: boardGameId,
+        Analytics.LogPlaythroughNumberOfPlayers: selectedPlaythroughPlayers.length.toString(),
+        Analytics.LogPlaythroughStarTime: playthroughStartTime.toString(),
+        Analytics.LogPlaythroughDuration: playthroughDuration.toString(),
+      },
     );
 
     logGameStep = 0;
