@@ -247,13 +247,13 @@ class _StatisticsDetails extends StatelessWidget {
           ],
         ),
         const SizedBox(
-          height: Dimensions.standardSpacing,
+          height: Dimensions.standardSpacing + Dimensions.halfStandardSpacing,
         ),
         _StatisticsItem(
           value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
           icon: Icons.hourglass_empty,
           iconColor: Colors.blue,
-          subtitle: 'Ave. playtime',
+          subtitle: 'Average playtime',
         ),
       ],
     );
