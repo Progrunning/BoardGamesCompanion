@@ -16,7 +16,10 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
 
   final ScoreService scoreService;
 
-  Future<List<Playthrough>> retrievePlaythroughs(Iterable<String> boardGameIds) async {
+  Future<List<Playthrough>> retrievePlaythroughs(
+    Iterable<String> boardGameIds, {
+    bool includeDeleted = false,
+  }) async {
     if (boardGameIds?.isEmpty ?? true) {
       return <Playthrough>[];
     }
@@ -26,11 +29,13 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     }
 
     return storageBox
-        ?.toMap()
-        ?.values
-        ?.where((playthrough) =>
-            !(playthrough.isDeleted ?? false) && boardGameIds.contains(playthrough.boardGameId))
-        ?.toList();
+            ?.toMap()
+            ?.values
+            ?.where((playthrough) =>
+                (includeDeleted || !(playthrough.isDeleted ?? false)) &&
+                boardGameIds.contains(playthrough.boardGameId))
+            ?.toList() ??
+        <Playthrough>[];
   }
 
   Future<Playthrough> createPlaythrough(

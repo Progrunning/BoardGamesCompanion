@@ -29,25 +29,20 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
   final Map<String, BoardGameStatistics> _boardGamesStatistics = {};
   Map<String, BoardGameStatistics> get boardGamesStatistics => _boardGamesStatistics;
 
-  Future<void> loadBoardGamesStatistics(
-    List<BoardGameDetails> allBoardGames,
-  ) async {
+  Future<void> loadBoardGamesStatistics(List<BoardGameDetails> allBoardGames) async {
     if (allBoardGames?.isEmpty ?? true) {
       return;
     }
 
-    // MK Retrieve players
-    final players = (await _playerService.retrievePlayers()) ?? <Player>[];
+    final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
-    // MK Retrieve playthroughs
     final boardGameDetailsMapById = <String, BoardGameDetails>{
       for (BoardGameDetails boardGameDetails in allBoardGames) boardGameDetails.id: boardGameDetails
     };
 
     final boardGamePlaythroughs =
-        (await _playthroughService.retrievePlaythroughs(boardGameDetailsMapById.keys)) ??
-            <Playthrough>[];
+        await _playthroughService.retrievePlaythroughs(boardGameDetailsMapById.keys);
 
     final Map<String, List<Playthrough>> boardGamePlaythroughsGroupedByBoardGameId =
         groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
@@ -79,7 +74,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
       final finishedPlaythroughs = playthroughs
           ?.where((p) => p.status == PlaythroughStatus.Finished && p.endDate != null)
           ?.toList();
-      finishedPlaythroughs?.sort((a, b) => b.endDate?.compareTo(a.endDate));
+      finishedPlaythroughs?.sort((a, b) => b.startDate?.compareTo(a.startDate));
 
       _updateLastPlayedAndWinner(
         finishedPlaythroughs,
