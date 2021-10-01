@@ -58,7 +58,7 @@ class PlaythroughStore {
       _scores = await _scoreService.retrieveScores([_playthrough.id]);
       _players = await _playerService.retrievePlayers(
         playerIds: _playthrough.playerIds,
-        includeDeletedPlayers: true,
+        includeDeleted: true,
       );
 
       _playerScores = _players.map((p) {
