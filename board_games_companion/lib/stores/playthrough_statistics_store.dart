@@ -94,14 +94,13 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
           }
         }
 
-        boardGameStatistics.averagePlaytimeInSeconds = ((finishedPlaythroughs
-                            ?.map((p) => p.endDate.difference(p.startDate))
-                            ?.reduce((a, b) => a + b)
-                            ?.inSeconds ??
-                        0) /
-                    finishedPlaythroughs?.length ??
-                1)
-            .floor();
+        final int allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
+            ?.map((p) => p.endDate.difference(p.startDate).inSeconds)
+            ?.reduce((a, b) => a + b);
+        if (allPlaythroughsDurationSumInSeconds != null) {
+          boardGameStatistics.averagePlaytimeInSeconds =
+              (allPlaythroughsDurationSumInSeconds / finishedPlaythroughs.length).floor();
+        }
       }
     }
 

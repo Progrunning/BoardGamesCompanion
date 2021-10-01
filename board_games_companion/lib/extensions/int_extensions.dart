@@ -52,10 +52,7 @@ extension IntExtensions on int {
     final minutes = (this / Duration.secondsPerMinute).floor();
 
     if (hours > 0) {
-      final hoursWithMinutesFraction = hours +
-          Duration.minutesPerHour /
-              (minutes % Duration.minutesPerHour);
-      return '~${hoursWithMinutesFraction.toStringAsFixed(1)}h';
+      return '~${hours}h ${minutes % Duration.minutesPerHour}min';
     }
 
     return '~${minutes}min';
