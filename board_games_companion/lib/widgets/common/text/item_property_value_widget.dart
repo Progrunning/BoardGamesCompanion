@@ -5,10 +5,10 @@ import '../../../common/dimensions.dart';
 class ItemPropertyValue extends StatelessWidget {
   const ItemPropertyValue(
     this.value, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final String value;
+  final String? value;
 
   @override
   Widget build(BuildContext context) {

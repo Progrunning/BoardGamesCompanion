@@ -21,12 +21,12 @@ class PlaythroughsStore with ChangeNotifier {
   final PlaythroughService _playthroughService;
   final AnalyticsService _analyticsService;
 
-  BoardGameDetails _selectedBoardGame;
-  List<Playthrough> _playthroughs;
+  BoardGameDetails? _selectedBoardGame;
+  List<Playthrough>? _playthroughs;
 
-  BoardGameDetails get selectedBoardGame => _selectedBoardGame;
+  BoardGameDetails? get selectedBoardGame => _selectedBoardGame;
 
-  List<Playthrough> get playthroughs => _playthroughs;
+  List<Playthrough>? get playthroughs => _playthroughs;
 
   Future<List<Playthrough>> loadPlaythroughs(BoardGameDetails boardGameDetails) async {
     if (boardGameDetails?.id?.isEmpty ?? true) {
@@ -36,7 +36,7 @@ class PlaythroughsStore with ChangeNotifier {
     _selectedBoardGame = boardGameDetails;
 
     try {
-      _playthroughs = await _playthroughService.retrievePlaythroughs([_selectedBoardGame.id]);
+      _playthroughs = await _playthroughService.retrievePlaythroughs([_selectedBoardGame!.id!]);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -49,7 +49,7 @@ class PlaythroughsStore with ChangeNotifier {
     List<PlaythroughPlayer> playthoughPlayers,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
-    Duration duration,
+    Duration? duration,
   ) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
       boardGameId,
@@ -59,7 +59,7 @@ class PlaythroughsStore with ChangeNotifier {
       duration,
     );
 
-    _playthroughs.add(newPlaythrough);
+    _playthroughs!.add(newPlaythrough);
     notifyListeners();
 
     await _analyticsService.logEvent(
@@ -73,15 +73,15 @@ class PlaythroughsStore with ChangeNotifier {
     return newPlaythrough;
   }
 
-  Future<bool> updatePlaythrough(Playthrough playthrough) async {
+  Future<bool> updatePlaythrough(Playthrough? playthrough) async {
     if (playthrough?.id?.isEmpty ?? true) {
       return false;
     }
 
     try {
-      final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough);
+      final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough!);
       if (updateSuceeded) {
-        await loadPlaythroughs(_selectedBoardGame);
+        await loadPlaythroughs(_selectedBoardGame!);
         notifyListeners();
         return true;
       }
@@ -96,7 +96,7 @@ class PlaythroughsStore with ChangeNotifier {
     try {
       final deleteSucceeded = await _playthroughService.deletePlaythrough(playthroughId);
       if (deleteSucceeded) {
-        _playthroughs.removeWhere((p) => p.id == playthroughId);
+        _playthroughs!.removeWhere((p) => p.id == playthroughId);
         notifyListeners();
       }
 

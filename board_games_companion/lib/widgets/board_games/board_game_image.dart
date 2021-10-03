@@ -9,7 +9,7 @@ import '../common/shadow_box.dart';
 class BoardGameImage extends StatelessWidget {
   const BoardGameImage(
     BoardGameDetails boardGameDetails, {
-    Key key,
+    Key? key,
     this.minImageHeight = 300,
     this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
   })  : _boardGameDetails = boardGameDetails,

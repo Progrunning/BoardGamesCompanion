@@ -5,8 +5,8 @@ import '../../common/dimensions.dart';
 
 class SectionTitle extends StatelessWidget {
   const SectionTitle({
-    @required this.title,
-    Key key,
+    required this.title,
+    Key? key,
   }) : super(key: key);
 
   final String title;

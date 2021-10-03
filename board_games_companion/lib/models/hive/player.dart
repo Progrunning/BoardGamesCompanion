@@ -13,25 +13,25 @@ class Player with ChangeNotifier {
   String id;
 
   @HiveField(1)
-  String _name;
+  String? _name;
   @HiveField(2)
   @Deprecated('Use avatarImageUri instead. The path to the image should be created at runtime, based on the avatarFileName and the path to the Documents folder.')
-  String _imageUri;
+  String? _imageUri;
   @HiveField(3)
-  bool _isDeleted;
+  bool? _isDeleted;
   @HiveField(4)
-  String _avatarFileName;
+  String? _avatarFileName;
   
-  String _avatarImageUri;
+  String? _avatarImageUri;
 
-  String get name => _name;
+  String? get name => _name;
   String get avatarImageUri => _avatarImageUri ?? _imageUri ?? Constants.DefaultAvatartAssetsPath;
-  String get avatarFileName => _avatarFileName;
-  bool get isDeleted => _isDeleted;
+  String? get avatarFileName => _avatarFileName;
+  bool? get isDeleted => _isDeleted;
 
-  PickedFile avatarFileToSave;
+  PickedFile? avatarFileToSave;
 
-  set name(String value) {
+  set name(String? value) {
     if (_name != value) {
       _name = value;
       notifyListeners();
@@ -45,13 +45,13 @@ class Player with ChangeNotifier {
     }
   }
   
-  set avatarFileName(String value) {
+  set avatarFileName(String? value) {
     if (_avatarFileName != value) {
       _avatarFileName = value;
     }
   }
 
-  set isDeleted(bool value) {
+  set isDeleted(bool? value) {
     if (_isDeleted != value) {
       _isDeleted = value;
       notifyListeners();

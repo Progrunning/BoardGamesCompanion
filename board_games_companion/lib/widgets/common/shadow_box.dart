@@ -5,8 +5,8 @@ import '../../common/app_theme.dart';
 
 class ShadowBox extends StatelessWidget {
   const ShadowBox({
-    @required this.child,
-    Key key,
+    required this.child,
+    Key? key,
   }) : super(key: key);
 
   final Widget child;

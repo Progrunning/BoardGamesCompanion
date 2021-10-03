@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
@@ -24,26 +25,26 @@ class PlaythroughStore {
   final ScoreService _scoreService;
   final PlaythroughsStore _playthroughsStore;
 
-  Playthrough _playthrough;
-  Playthrough get playthrough => _playthrough;
+  Playthrough? _playthrough;
+  Playthrough? get playthrough => _playthrough;
 
-  int _daysSinceStart;
-  int get daysSinceStart => _daysSinceStart;
+  int? _daysSinceStart;
+  int? get daysSinceStart => _daysSinceStart;
 
   Duration get duration {
     final nowUtc = DateTime.now().toUtc();
-    final playthroughEndDate = playthrough.endDate ?? nowUtc;
-    return playthroughEndDate.difference(playthrough.startDate);
+    final playthroughEndDate = playthrough!.endDate ?? nowUtc;
+    return playthroughEndDate.difference(playthrough!.startDate);
   }
 
-  List<Score> _scores;
-  List<Score> get scores => _scores;
+  List<Score>? _scores;
+  List<Score>? get scores => _scores;
 
-  List<Player> _players;
-  List<Player> get players => _players;
+  List<Player>? _players;
+  List<Player>? get players => _players;
 
-  List<PlayerScore> _playerScores;
-  List<PlayerScore> get playerScores => _playerScores;
+  List<PlayerScore>? _playerScores;
+  List<PlayerScore>? get playerScores => _playerScores;
 
   Future<void> loadPlaythrough(Playthrough playthrough) async {
     if (playthrough?.id?.isEmpty ?? true) {
@@ -52,19 +53,18 @@ class PlaythroughStore {
 
     final nowUtc = DateTime.now().toUtc();
     _playthrough = playthrough;
-    _daysSinceStart = nowUtc.difference(_playthrough.startDate).inDays;
+    _daysSinceStart = nowUtc.difference(_playthrough!.startDate).inDays;
 
     try {
-      _scores = await _scoreService.retrieveScores([_playthrough.id]);
+      _scores = await _scoreService.retrieveScores([_playthrough!.id]);
       _players = await _playerService.retrievePlayers(
-        playerIds: _playthrough.playerIds,
+        playerIds: _playthrough!.playerIds,
         includeDeleted: true,
       );
 
-      _playerScores = _players.map((p) {
-        final score = _scores.firstWhere(
+      _playerScores = _players!.map((p) {
+        final score = _scores!.firstWhereOrNull(
           (s) => s.playerId == p.id,
-          orElse: () => null,
         );
 
         return PlayerScore(
@@ -80,22 +80,22 @@ class PlaythroughStore {
   Future<void> updatePlaythrough(Playthrough playthrough, List<PlayerScore> playerScores) async {
     await _playthroughsStore.updatePlaythrough(playthrough);
     for (final PlayerScore playerScore in playerScores) {
-      await _scoreService.addOrUpdateScore(playerScore.score);
+      await _scoreService.addOrUpdateScore(playerScore.score!);
     }
 
     await loadPlaythrough(playthrough);
   }
 
   Future<bool> stopPlaythrough() async {
-    final oldStatus = playthrough.status;
+    final oldStatus = playthrough!.status;
 
-    playthrough.status = PlaythroughStatus.Finished;
-    playthrough.endDate = DateTime.now().toUtc();
+    playthrough!.status = PlaythroughStatus.Finished;
+    playthrough!.endDate = DateTime.now().toUtc();
 
     final updateSucceeded = await _playthroughsStore.updatePlaythrough(playthrough);
     if (!updateSucceeded) {
-      playthrough.status = oldStatus;
-      playthrough.endDate = null;
+      playthrough!.status = oldStatus;
+      playthrough!.endDate = null;
       return false;
     }
 

@@ -19,9 +19,9 @@ import '../stores/playthroughs_store.dart';
 import 'navigator_transitions.dart';
 
 class NavigatorHelper {
-  static Future<T> navigateToCreatePlayerPage<T extends Object>(
+  static Future<T?> navigateToCreatePlayerPage<T extends Object>(
     BuildContext context, {
-    Player player,
+    required Player player,
   }) async {
     return Navigator.push(
       context,
@@ -36,7 +36,7 @@ class NavigatorHelper {
     );
   }
 
-  static Future<T> navigateToBoardGameDetails<T extends Object>(
+  static Future<T?> navigateToBoardGameDetails<T extends Object>(
     BuildContext context,
     String boardGameId,
     String boardGameName,
@@ -79,17 +79,17 @@ class NavigatorHelper {
     );
   }
 
-  static Future<T> navigateToEditPlaythrough<T extends Object>(
+  static Future<T?> navigateToEditPlaythrough<T extends Object>(
     BuildContext context,
     PlaythroughStore playthroughStore,
   ) async {
     final analytics = getIt<AnalyticsService>();
-    final playthroughsStore = getIt<PlaythroughsStore>();
+    final PlaythroughsStore? playthroughsStore = getIt<PlaythroughsStore>();
 
     analytics.logEvent(
       name: Analytics.EditPlaythrough,
       parameters: <String, String>{
-        Analytics.BoardGameIdParameter: playthroughStore.playthrough.boardGameId,
+        Analytics.BoardGameIdParameter: playthroughStore.playthrough!.boardGameId,
       },
     );
 
@@ -98,7 +98,7 @@ class NavigatorHelper {
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
           return EditPlaythoughPage(
-            viewModel: EditPlaythoughViewModel(playthroughStore, playthroughsStore),
+            viewModel: EditPlaythoughViewModel(playthroughStore, playthroughsStore!),
           );
         },
       ),

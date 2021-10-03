@@ -1,18 +1,18 @@
 import '../common/constants.dart';
 
-extension IntExtensions on int {
+extension IntExtensions on int? {
   String toOrdinalAbbreviations() {
     if (this == null) {
       return '';
     }
 
-    switch (this % 100) {
+    switch (this! % 100) {
       case 11:
       case 12:
       case 13:
         return 'th';
       default:
-        switch (this % 10) {
+        switch (this! % 10) {
           case 1:
             return 'st';
           case 2:
@@ -25,16 +25,16 @@ extension IntExtensions on int {
     }
   }
 
-  String toPlaythroughDuration([String fallbackValue]) {
+  String toPlaythroughDuration([String? fallbackValue]) {
     if (this == null) {
       return fallbackValue ?? '';
     }
 
-    final hours = (this / Duration.secondsPerHour).floor();
-    final minutes = (this / Duration.secondsPerMinute).floor();
+    final hours = (this! / Duration.secondsPerHour).floor();
+    final minutes = (this! / Duration.secondsPerMinute).floor();
 
     if (hours == 0) {
-      return '${minutes}m ${this - minutes * Duration.secondsPerMinute}s';
+      return '${minutes}m ${this! - minutes * Duration.secondsPerMinute}s';
     }
     if (hours > 0) {
       return '${hours}h ${minutes - hours * Duration.minutesPerHour}min';
@@ -43,13 +43,13 @@ extension IntExtensions on int {
     return '${minutes}min';
   }
 
-  String toAverageDuration([String fallbackValue]) {
+  String toAverageDuration([String? fallbackValue]) {
     if (this == null) {
       return fallbackValue ?? '';
     }
 
-    final hours = (this / Duration.secondsPerHour).floor();
-    final minutes = (this / Duration.secondsPerMinute).floor();
+    final hours = (this! / Duration.secondsPerHour).floor();
+    final minutes = (this! / Duration.secondsPerMinute).floor();
 
     if (hours > 0) {
       return '~${hours}h ${minutes % Duration.minutesPerHour}min';
@@ -58,7 +58,7 @@ extension IntExtensions on int {
     return '~${minutes}min';
   }
 
-  int safeCompareTo(int intToCompare) {
+  int safeCompareTo(int? intToCompare) {
     if (this == null && intToCompare == null) {
       return Constants.LeaveAsIs;
     }
@@ -71,6 +71,6 @@ extension IntExtensions on int {
       return Constants.MoveBelow;
     }
 
-    return compareTo(intToCompare);
+    return compareTo(intToCompare!);
   }
 }

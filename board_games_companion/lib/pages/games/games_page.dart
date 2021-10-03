@@ -35,7 +35,7 @@ class GamesPage extends StatefulWidget {
     this.userStore,
     this.analyticsService,
     this.rateAndReviewService, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
@@ -48,7 +48,7 @@ class GamesPage extends StatefulWidget {
 }
 
 class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMixin {
-  TabController _topTabController;
+  late TabController _topTabController;
 
   @override
   void initState() {
@@ -93,11 +93,11 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
 
 class _Collection extends StatelessWidget {
   const _Collection({
-    @required this.boardGamesStore,
-    @required this.topTabController,
-    @required this.analyticsService,
-    @required this.rateAndReviewService,
-    Key key,
+    required this.boardGamesStore,
+    required this.topTabController,
+    required this.analyticsService,
+    required this.rateAndReviewService,
+    Key? key,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
@@ -158,11 +158,11 @@ class _Collection extends StatelessWidget {
 
 class _AppBar extends StatefulWidget {
   const _AppBar({
-    @required this.boardGamesStore,
-    @required this.topTabController,
-    @required this.analyticsService,
-    @required this.rateAndReviewService,
-    Key key,
+    required this.boardGamesStore,
+    required this.topTabController,
+    required this.analyticsService,
+    required this.rateAndReviewService,
+    Key? key,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
@@ -177,7 +177,7 @@ class _AppBar extends StatefulWidget {
 class _AppBarState extends State<_AppBar> {
   final _searchController = TextEditingController();
 
-  Timer _debounce;
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -278,7 +278,7 @@ class _AppBarState extends State<_AppBar> {
 
   void _handleSearchChanged() {
     if (_debounce?.isActive ?? false) {
-      _debounce.cancel();
+      _debounce!.cancel();
     }
 
     _debounce = Timer(
@@ -323,10 +323,10 @@ class _AppBarState extends State<_AppBar> {
 
 class _Grid extends StatelessWidget {
   const _Grid({
-    Key key,
-    @required this.boardGames,
-    @required this.collectionFlag,
-    @required this.analyticsService,
+    Key? key,
+    required this.boardGames,
+    required this.collectionFlag,
+    required this.analyticsService,
   }) : super(key: key);
 
   final List<BoardGameDetails> boardGames;
@@ -353,7 +353,7 @@ class _Grid extends StatelessWidget {
               onTap: () async {
                 await analyticsService.logEvent(
                   name: Analytics.ViewGameStats,
-                  parameters: <String, String>{
+                  parameters: <String, String?>{
                     Analytics.BoardGameIdParameter: boardGame.id,
                     Analytics.BoardGameNameParameter: boardGame.name,
                   },
@@ -382,7 +382,7 @@ class _Grid extends StatelessWidget {
 
 class _Empty extends StatefulWidget with SyncCollection {
   _Empty({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -390,7 +390,7 @@ class _Empty extends StatefulWidget with SyncCollection {
 }
 
 class _EmptyState extends State<_Empty> with SyncCollection {
-  TextEditingController _bggUserNameController;
+  late TextEditingController _bggUserNameController;
 
   @override
   void initState() {
@@ -495,8 +495,8 @@ class _EmptyState extends State<_Empty> with SyncCollection {
 
 class _EmptySearchResult extends StatelessWidget {
   const _EmptySearchResult({
-    Key key,
-    @required BoardGamesStore boardGamesStore,
+    Key? key,
+    required BoardGamesStore boardGamesStore,
   })  : _boardGamesStore = boardGamesStore,
         super(key: key);
 
@@ -550,8 +550,8 @@ class _EmptySearchResult extends StatelessWidget {
 
 class _EmptyCollection extends StatelessWidget {
   const _EmptyCollection({
-    Key key,
-    @required this.boardGamesStore,
+    Key? key,
+    required this.boardGamesStore,
   }) : super(key: key);
 
   final BoardGamesStore boardGamesStore;
@@ -651,7 +651,7 @@ class _TopTab extends StatelessWidget {
     this.title,
     this.icon, {
     this.isSelected = true,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String title;

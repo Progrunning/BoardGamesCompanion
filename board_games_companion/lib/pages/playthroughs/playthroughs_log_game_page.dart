@@ -23,9 +23,9 @@ import 'playthroughs_log_game_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
   const PlaythroughsLogGamePage({
-    @required this.boardGameDetails,
-    @required this.playthroughsLogGameViewModel,
-    Key key,
+    required this.boardGameDetails,
+    required this.playthroughsLogGameViewModel,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;
@@ -59,9 +59,9 @@ class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
 
 class _LogPlaythroughStepper extends StatefulWidget {
   const _LogPlaythroughStepper({
-    @required this.viewModel,
-    @required this.boardGameDetails,
-    Key key,
+    required this.viewModel,
+    required this.boardGameDetails,
+    Key? key,
   }) : super(key: key);
 
   final PlaythroughsLogGameViewModel viewModel;
@@ -160,7 +160,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
               onStepCancel: () => _stepCancel(),
               onStepContinue: () => _stepContinue(context),
               onStepTapped: (int index) => _stepTapped(context, index),
-              controlsBuilder: (_, {VoidCallback onStepContinue, VoidCallback onStepCancel}) =>
+              controlsBuilder: (_, {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) =>
                   _stepActionButtons(onStepContinue, onStepCancel),
             ),
           ),
@@ -169,13 +169,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     );
   }
 
-  Widget _stepActionButtons(VoidCallback onStepContinue, VoidCallback onStepCancel) {
-    Widget step;
+  Widget _stepActionButtons(VoidCallback? onStepContinue, VoidCallback? onStepCancel) {
+    Widget? step;
     if (widget.viewModel.logGameStep == playingOrPlayedStep) {
       step = Align(
         alignment: Alignment.centerLeft,
         child: ElevatedButton(
-          onPressed: () => onStepContinue(),
+          onPressed: () => onStepContinue!(),
           child: const Text('Next'),
         ),
       );
@@ -187,13 +187,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       step = Row(
         children: <Widget>[
           ElevatedButton(
-            onPressed: () => onStepContinue(),
+            onPressed: () => onStepContinue!(),
             child:
                 widget.viewModel.logGameStep == lastStep ? const Text('Done') : const Text('Next'),
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           TextButton(
-            onPressed: () => onStepCancel(),
+            onPressed: () => onStepCancel!(),
             child: const Text('Go Back'),
           ),
         ],
@@ -243,7 +243,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         completedSteps = widget.viewModel.logGameStep;
       });
     } else {
-      await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
+      await widget.viewModel.createPlaythrough(widget.boardGameDetails.id!);
       _showConfirmationSnackbar(context);
       setState(() {});
     }
@@ -297,8 +297,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
 
 class _PlayerScoresStep extends StatelessWidget {
   const _PlayerScoresStep({
-    @required this.viewModel,
-    Key key,
+    required this.viewModel,
+    Key? key,
   }) : super(key: key);
 
   final PlaythroughsLogGameViewModel viewModel;
@@ -323,9 +323,9 @@ class _PlayerScoresStep extends StatelessWidget {
 
 class _PlayingOrPlayedStep extends StatefulWidget {
   const _PlayingOrPlayedStep({
-    @required this.viewModel,
-    @required this.onSelectionChanged,
-    Key key,
+    required this.viewModel,
+    required this.onSelectionChanged,
+    Key? key,
   }) : super(key: key);
 
   final PlaythroughsLogGameViewModel viewModel;
@@ -336,8 +336,8 @@ class _PlayingOrPlayedStep extends StatefulWidget {
 }
 
 class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
-  int hoursPlayed;
-  int minutesPlyed;
+  late int hoursPlayed;
+  late int minutesPlyed;
 
   @override
   void initState() {
@@ -361,8 +361,8 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   value: PlaythroughStartTime.now,
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
-                  onChanged: (PlaythroughStartTime value) =>
-                      _updatePlaythroughStartTimeSelection(value),
+                  onChanged: ((PlaythroughStartTime value) =>
+                      _updatePlaythroughStartTimeSelection(value)) as void Function(PlaythroughStartTime?)?,
                 ),
                 Text(
                   'Playing now',
@@ -379,8 +379,8 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   value: PlaythroughStartTime.inThePast,
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
-                  onChanged: (PlaythroughStartTime value) =>
-                      _updatePlaythroughStartTimeSelection(value),
+                  onChanged: ((PlaythroughStartTime value) =>
+                      _updatePlaythroughStartTimeSelection(value)) as void Function(PlaythroughStartTime?)?,
                 ),
                 Text(
                   'Played some time ago',
@@ -451,13 +451,13 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
 
 class _SelectPlayersStep extends StatelessWidget {
   const _SelectPlayersStep({
-    Key key,
-    @required this.playthroughPlayers,
-    @required this.boardGameDetails,
-    @required this.onPlayerSelectionChanged,
+    Key? key,
+    required this.playthroughPlayers,
+    required this.boardGameDetails,
+    required this.onPlayerSelectionChanged,
   }) : super(key: key);
 
-  final List<PlaythroughPlayer> playthroughPlayers;
+  final List<PlaythroughPlayer>? playthroughPlayers;
   final BoardGameDetails boardGameDetails;
   final Function(bool, PlaythroughPlayer) onPlayerSelectionChanged;
 
@@ -485,20 +485,20 @@ class _SelectPlayersStep extends StatelessWidget {
 
 class _SelectDateStep extends StatefulWidget {
   const _SelectDateStep({
-    @required this.playthroughDate,
-    @required this.onPlaythroughTimeChanged,
-    Key key,
+    required this.playthroughDate,
+    required this.onPlaythroughTimeChanged,
+    Key? key,
   }) : super(key: key);
 
   final DateTime playthroughDate;
-  final Function(DateTime) onPlaythroughTimeChanged;
+  final Function(DateTime?) onPlaythroughTimeChanged;
 
   @override
   _SelectDateStepState createState() => _SelectDateStepState();
 }
 
 class _SelectDateStepState extends State<_SelectDateStep> {
-  DateTime _playthroughDate;
+  DateTime? _playthroughDate;
 
   @override
   void initState() {
@@ -512,7 +512,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
       children: <Widget>[
         Material(
           child: InkWell(
-            onTap: () => _pickPlaythroughDate(context, _playthroughDate),
+            onTap: () => _pickPlaythroughDate(context, _playthroughDate!),
             child: CalendarCard(_playthroughDate),
           ),
         ),
@@ -527,21 +527,21 @@ class _SelectDateStepState extends State<_SelectDateStep> {
   }
 
   Future<void> _pickPlaythroughDate(BuildContext context, DateTime playthroughDate) async {
-    final DateTime newPlaythroughDate = await showDatePicker(
+    final DateTime? newPlaythroughDate = await showDatePicker(
       context: context,
       initialDate: playthroughDate,
       firstDate: playthroughDate.add(const Duration(days: -Constants.DaysInTenYears)),
       lastDate: DateTime.now(),
       currentDate: playthroughDate,
       helpText: 'Pick a playthrough date',
-      builder: (_, Widget child) {
+      builder: (_, Widget? child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
                   primary: AppTheme.accentColor,
                 ),
           ),
-          child: child,
+          child: child!,
         );
       },
     );
@@ -559,16 +559,16 @@ class _SelectDateStepState extends State<_SelectDateStep> {
 
 class _Players extends StatelessWidget {
   const _Players({
-    Key key,
-    @required this.playthroughPlayers,
-    @required this.boardGameDetails,
-    @required this.onPlayerSelectionChanged,
+    Key? key,
+    required this.playthroughPlayers,
+    required this.boardGameDetails,
+    required this.onPlayerSelectionChanged,
   }) : super(key: key);
 
   int get _numberOfPlayerColumns => 3;
-  final List<PlaythroughPlayer> playthroughPlayers;
+  final List<PlaythroughPlayer>? playthroughPlayers;
   final BoardGameDetails boardGameDetails;
-  final Function(bool, PlaythroughPlayer) onPlayerSelectionChanged;
+  final Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -578,7 +578,7 @@ class _Players extends StatelessWidget {
       crossAxisSpacing: Dimensions.standardSpacing,
       mainAxisSpacing: Dimensions.standardSpacing,
       children: [
-        for (var playthroughPlayer in playthroughPlayers)
+        for (var playthroughPlayer in playthroughPlayers!)
           Stack(
             children: <Widget>[
               PlayerAvatar(
@@ -599,7 +599,7 @@ class _Players extends StatelessWidget {
                           checkColor: AppTheme.accentColor,
                           activeColor: AppTheme.primaryColor.withOpacity(0.7),
                           value: playthroughPlayer.isChecked,
-                          onChanged: (bool isChecked) =>
+                          onChanged: (bool? isChecked) =>
                               onPlayerSelectionChanged(isChecked, playthroughPlayer),
                         ),
                       );
@@ -616,7 +616,7 @@ class _Players extends StatelessWidget {
 
 class _NoPlayers extends StatelessWidget {
   const _NoPlayers({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -650,8 +650,8 @@ class _NoPlayers extends StatelessWidget {
 
 class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
-    Key key,
-    @required this.playerScore,
+    Key? key,
+    required this.playerScore,
   }) : super(key: key);
 
   final PlayerScore playerScore;

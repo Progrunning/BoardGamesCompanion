@@ -13,8 +13,8 @@ class PeriodicBroadcastStream {
 
   final Duration duration;
 
-  StreamController<void> _controller;
-  Timer _timer;
+  late StreamController<void> _controller;
+  Timer? _timer;
 
   Stream<void> get stream => _controller.stream;
 

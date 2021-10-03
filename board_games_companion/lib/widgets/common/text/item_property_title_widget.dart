@@ -6,7 +6,7 @@ class ItemPropertyTitle extends StatelessWidget {
   const ItemPropertyTitle(
     this.title, {
     this.color = AppTheme.secondaryTextColor,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String title;

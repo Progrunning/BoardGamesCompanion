@@ -19,7 +19,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return <BoardGameDetails>[];
     }
 
-    final boardGames = storageBox.values?.toList();
+    final List<BoardGameDetails> boardGames = storageBox.values?.toList();
     if (!await _preferenceService.getMigratedToMultipleCollections()) {
       await _migrateToMultipleCollections(boardGames);
     }
@@ -94,16 +94,16 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     }
 
     final syncedCollectionMap = <String, BoardGameDetails>{
-      for (BoardGameDetails boardGameDetails in collectionSyncResult.data)
-        boardGameDetails.id: boardGameDetails
+      for (BoardGameDetails boardGameDetails in collectionSyncResult.data!)
+        boardGameDetails.id!: boardGameDetails
     };
 
     final existingCollectionMap = <String, BoardGameDetails>{
       for (BoardGameDetails boardGameDetails in storageBox.values)
-        boardGameDetails.id: boardGameDetails
+        boardGameDetails.id!: boardGameDetails
     };
 
-    final boardGamesToRemove = storageBox.values
+    final List<BoardGameDetails> boardGamesToRemove = storageBox.values
         ?.where((boardGameDetails) =>
             boardGameDetails.isBggSynced && !syncedCollectionMap.containsKey(boardGameDetails.id))
         ?.toList();
@@ -114,10 +114,10 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     }
 
     // Add & Update
-    for (final syncedBoardGame in collectionSyncResult.data) {
+    for (final syncedBoardGame in collectionSyncResult.data!) {
       // Take local collection settings over the BGG
       if (existingCollectionMap.containsKey(syncedBoardGame.id)) {
-        final existingBoardGame = existingCollectionMap[syncedBoardGame.id];
+        final existingBoardGame = existingCollectionMap[syncedBoardGame.id!]!;
         syncedBoardGame.isOnWishlist = existingBoardGame.isOnWishlist;
         syncedBoardGame.isOwned = existingBoardGame.isOwned;
         syncedBoardGame.isFriends = existingBoardGame.isFriends;

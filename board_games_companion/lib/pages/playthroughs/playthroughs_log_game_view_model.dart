@@ -19,11 +19,11 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
   final PlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
 
-  List<PlaythroughPlayer> _playthroughPlayers;
-  List<PlaythroughPlayer> get playthroughPlayers => _playthroughPlayers;
+  List<PlaythroughPlayer>? _playthroughPlayers;
+  List<PlaythroughPlayer>? get playthroughPlayers => _playthroughPlayers;
 
   List<PlaythroughPlayer> get selectedPlaythroughPlayers =>
-      playthroughPlayers.where((player) => player.isChecked).toList();
+      playthroughPlayers!.where((player) => player.isChecked).toList();
 
   final Map<String, PlayerScore> _playerScores = {};
   Map<String, PlayerScore> get playerScores => _playerScores;
@@ -56,7 +56,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
     }
   }
 
-  bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
+  bool get anyPlayerSelected => playthroughPlayers!.any((player) => player.isChecked);
 
   Future<Playthrough> createPlaythrough(String boardGameId) async {
     final Playthrough newPlaythrough = await _playthroughsStore.createPlaythrough(

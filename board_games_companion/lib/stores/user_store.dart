@@ -14,13 +14,13 @@ class UserStore with ChangeNotifier {
   final UserService _userService;
   final AnalyticsService _analyticsService;
 
-  User _user;
+  late User _user;
 
   User get user => _user;
 
-  bool _isSyncing;
-  bool get isSyncing => _isSyncing;
-  set isSyncing(bool value) {
+  bool? _isSyncing;
+  bool? get isSyncing => _isSyncing;
+  set isSyncing(bool? value) {
     if (_isSyncing != value) {
       _isSyncing = value;
       notifyListeners();

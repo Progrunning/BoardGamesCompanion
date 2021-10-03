@@ -35,28 +35,28 @@ class PreferencesService extends BaseHiveService<dynamic> {
     return await _getValue(
       _firstTimeAppLaunchDateKey,
       defaultValue: null,
-    );
+    )!;
   }
 
   Future<DateTime> getAppLaunchDate() async {
     return await _getValue(
       _appLaunchDateKey,
       defaultValue: null,
-    );
+    )!;
   }
 
   Future<DateTime> getRemindMeLaterDate() async {
     return await _getValue(
       _remindMeLaterDateKey,
       defaultValue: null,
-    );
+    )!;
   }
 
   Future<bool> getRateAndReviewDialogSeen() async {
     return await _getValue(
       _rateAndReviewDialogSeenKey,
       defaultValue: false,
-    );
+    )!;
   }
 
   Future<void> setRateAndReviewDialogSeen() async {
@@ -70,18 +70,18 @@ class PreferencesService extends BaseHiveService<dynamic> {
     return await _getValue(
       _numberOfSignificantActionsKey,
       defaultValue: 0,
-    );
+    )!;
   }
 
   Future<bool> getMigratedToMultipleCollections() async {
     return await _getValue(
       _migratedToMultipleCollectionsKey,
       defaultValue: false,
-    );
+    )!;
   }
 
   Future<void> setMigratedToMultipleCollections(
-      {@required bool migratedToMultipleCollections}) async {
+      {required bool migratedToMultipleCollections}) async {
     await _setValue(
       _migratedToMultipleCollectionsKey,
       migratedToMultipleCollections,
@@ -106,11 +106,11 @@ class PreferencesService extends BaseHiveService<dynamic> {
     return await _getValue(
       _expansionsPanelExpandedStateKey,
       defaultValue: false,
-    );
+    )!;
   }
 
-  T _getValue<T>(dynamic key, {T defaultValue}) =>
-      storageBox.get(key, defaultValue: defaultValue) as T;
+  T? _getValue<T>(dynamic key, {T? defaultValue}) =>
+      storageBox.get(key, defaultValue: defaultValue) as T?;
 
   Future<void> _setValue<T>(dynamic key, T value) => storageBox.put(key, value);
 
@@ -118,7 +118,7 @@ class PreferencesService extends BaseHiveService<dynamic> {
     final DateTime firstTimeLaunchDate = await _getValue(
       _firstTimeAppLaunchDateKey,
       defaultValue: null,
-    );
+    )!;
 
     return firstTimeLaunchDate == null;
   }

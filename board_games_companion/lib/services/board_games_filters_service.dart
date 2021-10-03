@@ -8,7 +8,7 @@ import 'hive_base_service.dart';
 class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
   static const String _collectionFiltersPreferenceKey = 'collectionFilters';
 
-  Future<CollectionFilters> retrieveCollectionFiltersPreferences() async {
+  Future<CollectionFilters?> retrieveCollectionFiltersPreferences() async {
     if (!await ensureBoxOpen(HiveBoxes.CollectionFilters)) {
       return null;
     }
@@ -21,7 +21,7 @@ class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
   }
 
   Future<bool> addOrUpdateCollectionFilters(
-      CollectionFilters collectionFilters) async {
+      CollectionFilters? collectionFilters) async {
     if (collectionFilters == null) {
       return false;
     }

@@ -20,9 +20,9 @@ import 'playthroughs_statistics_page.dart';
 
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
-    @required this.boardGameDetails,
-    @required this.collectionType,
-    Key key,
+    required this.boardGameDetails,
+    required this.collectionType,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;
@@ -33,11 +33,11 @@ class PlaythroughsPage extends StatefulWidget {
 }
 
 class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
-  BoardGamePlaythroughsStore boardGamePlaythoughsStore;
+  late BoardGamePlaythroughsStore boardGamePlaythoughsStore;
   PageController pageController;
-  PlaythroughsStore playthroughsStore;
-  PlaythroughStore playthroughStore;
-  PlaythroughsLogGameViewModel playthroughsLogGameViewModel;
+  late PlaythroughsStore playthroughsStore;
+  late PlaythroughStore playthroughStore;
+  late PlaythroughsLogGameViewModel playthroughsLogGameViewModel;
 
   @override
   void initState() {
@@ -127,8 +127,8 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
   ) async {
     await NavigatorHelper.navigateToBoardGameDetails(
       context,
-      boardGameDetails?.id,
-      boardGameDetails?.name,
+      boardGameDetails?.id!,
+      boardGameDetails?.name!,
       PlaythroughsPage,
     );
   }

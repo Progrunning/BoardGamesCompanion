@@ -7,15 +7,15 @@ import 'loading_indicator_widget.dart';
 class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier> extends StatelessWidget {
 
   const ConsumerFutureBuilder({
-    @required this.future,
-    @required this.success,
+    required this.future,
+    required this.success,
     this.loading,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final Future<TFuture> future;
   final Widget Function(BuildContext context, TStore store) success;
-  final Widget Function(BuildContext context) loading;
+  final Widget Function(BuildContext context)? loading;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier> extends Stat
         }
 
         if (loading != null) {
-          return loading(context);
+          return loading!(context);
         } else {
           return const LoadingIndicator();
         }

@@ -6,7 +6,7 @@ import '../../common/dimensions.dart';
 class DefaultIcon extends StatelessWidget {
   const DefaultIcon(
     IconData icon, {
-    Key key,
+    Key? key,
   })  : _icon = icon,
         super(key: key);
 

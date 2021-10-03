@@ -4,8 +4,8 @@ import '../../common/app_theme.dart';
 
 class PageContainer extends StatelessWidget {
   const PageContainer({
-    @required this.child,
-    Key key,
+    required this.child,
+    Key? key,
   }) : super(key: key);
 
   final Widget child;

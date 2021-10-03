@@ -7,25 +7,25 @@ import 'hive/score.dart';
 class PlayerScore with ChangeNotifier {
   PlayerScore(this._player, this._score);
 
-  final Player _player;
+  final Player? _player;
 
-  Player get player => _player;
+  Player? get player => _player;
 
-  final Score _score;
-  Score get score => _score;
+  final Score? _score;
+  Score? get score => _score;
 
-  int _place;
-  int get place => _place;
+  int? _place;
+  int? get place => _place;
 
-  MedalEnum _medal;
-  MedalEnum get medal => _medal;
+  MedalEnum? _medal;
+  MedalEnum? get medal => _medal;
 
   Future<bool> updatePlayerScore(String score) async {
     if (score?.isEmpty ?? true) {
       return false;
     }
 
-    _score.value = score;
+    _score!.value = score;
 
     notifyListeners();
 

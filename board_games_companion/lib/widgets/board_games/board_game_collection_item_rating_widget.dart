@@ -9,8 +9,8 @@ import '../../models/hive/board_game_details.dart';
 
 class BoardGameCollectionItemRating extends StatelessWidget {
   const BoardGameCollectionItemRating({
-    Key key,
-    @required this.boardGameDetails,
+    Key? key,
+    required this.boardGameDetails,
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;

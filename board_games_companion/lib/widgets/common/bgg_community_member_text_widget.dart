@@ -8,7 +8,7 @@ import '../../utilities/launcher_helper.dart';
 class BggCommunityMemberText extends StatelessWidget {
   const BggCommunityMemberText({
     this.fontSize = Dimensions.mediumFontSize,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final double fontSize;
