@@ -19,9 +19,9 @@ class SearchBoardGamesStore with ChangeNotifier {
   final SearchBarBoardGamesStore _searchBarBoardGamesStore;
   final AnalyticsService _analyticsService;
 
-  List<BoardGame> _searchResults;
+  List<BoardGame>? _searchResults;
 
-  List<BoardGame> get searchResults => _searchResults;
+  List<BoardGame>? get searchResults => _searchResults;
 
   AsyncMemoizer<List<BoardGame>> _searchResultsMemoizer = AsyncMemoizer<List<BoardGame>>();
 
@@ -36,7 +36,7 @@ class SearchBoardGamesStore with ChangeNotifier {
         try {
           await _analyticsService.logEvent(
             name: Analytics.SearchBoardGames,
-            parameters: <String, String>{
+            parameters: <String, String?>{
               Analytics.SearchBoardGamesPhraseParameter: _searchBarBoardGamesStore.searchPhrase,
             },
           );

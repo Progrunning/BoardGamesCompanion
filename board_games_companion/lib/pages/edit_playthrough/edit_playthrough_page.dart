@@ -18,8 +18,8 @@ import 'edit_playthrouhg_view_model.dart';
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
-    @required this.viewModel,
-    Key key,
+    required this.viewModel,
+    Key? key,
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
@@ -207,9 +207,9 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
 
 class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
-    Key key,
-    @required this.playerScore,
-    @required this.playthroughId,
+    Key? key,
+    required this.playerScore,
+    required this.playthroughId,
   }) : super(key: key);
 
   final PlayerScore playerScore;
@@ -270,8 +270,8 @@ class _PlayerScore extends StatelessWidget {
 
 class _Duration extends StatefulWidget {
   const _Duration({
-    @required this.viewModel,
-    Key key,
+    required this.viewModel,
+    Key? key,
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
@@ -283,16 +283,16 @@ class _Duration extends StatefulWidget {
 class _DurationState extends State<_Duration> {
   static const int _maxHours = 99;
 
-  DateTime startDateTime;
-  Duration playthroughDuration;
-  int playthroughDurationInSeconds;
-  int hoursPlayed;
-  int minutesPlyed;
+  late DateTime startDateTime;
+  late Duration playthroughDuration;
+  int? playthroughDurationInSeconds;
+  late int hoursPlayed;
+  late int minutesPlyed;
 
-  int minHours;
-  int maxHours;
-  int minMinutes;
-  int maxMinutes;
+  late int minHours;
+  late int maxHours;
+  late int minMinutes;
+  late int maxMinutes;
 
   @override
   void initState() {
@@ -368,21 +368,21 @@ class _DurationState extends State<_Duration> {
 
   Future<void> _pickStartDate() async {
     final DateTime now = DateTime.now();
-    final DateTime newStartDate = await showDatePicker(
+    final DateTime? newStartDate = await showDatePicker(
       context: context,
       initialDate: startDateTime,
       firstDate: now.add(const Duration(days: -Constants.DaysInTenYears)),
       lastDate: now,
       currentDate: now,
       helpText: 'Pick a playthrough date',
-      builder: (_, Widget child) {
+      builder: (_, Widget? child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
                   primary: AppTheme.accentColor,
                 ),
           ),
-          child: child,
+          child: child!,
         );
       },
     );
@@ -408,17 +408,17 @@ class _DurationState extends State<_Duration> {
 
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
-    this.viewModel,
+    required this.viewModel,
     this.onSave,
     this.onStop,
     this.onDelete,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
-  final VoidCallback onSave;
-  final VoidCallback onStop;
-  final VoidCallback onDelete;
+  final VoidCallback? onSave;
+  final VoidCallback? onStop;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {

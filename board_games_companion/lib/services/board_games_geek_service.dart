@@ -112,11 +112,11 @@ class BoardGamesGeekService {
     );
 
     try {
-      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml);
+      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml)!;
       final hotBoardGameItems = hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName);
       for (final hotBoardGameItem in hotBoardGameItems) {
         final hotBoardGameName = hotBoardGameItem.firstOrDefaultElementsAttribute(
-            _xmlNameElementName, _xmlValueAttributeName);
+            _xmlNameElementName, _xmlValueAttributeName)!;
 
         if (hotBoardGameName.isEmpty) {
           continue;
@@ -143,7 +143,7 @@ class BoardGamesGeekService {
     return hotBoardGames;
   }
 
-  Future<BoardGameDetails> getDetails(String id) async {
+  Future<BoardGameDetails?> getDetails(String id) async {
     if (id?.isEmpty ?? true) {
       return null;
     }
@@ -166,7 +166,7 @@ class BoardGamesGeekService {
     );
 
     try {
-      final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsXml);
+      final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsXml)!;
       final boardGameDetailsItem =
           boardGameDetailsXmlDocument?.findAllElements(_xmlItemElementName)?.single;
 
@@ -184,7 +184,7 @@ class BoardGamesGeekService {
         return null;
       }
 
-      final boardGameDetails = BoardGameDetails(boardGameDetailName);
+      final boardGameDetails = BoardGameDetails(boardGameDetailName!);
       boardGameDetails.id = id;
 
       final boardGameType =
@@ -233,10 +233,10 @@ class BoardGamesGeekService {
       _extractBoardGameLinks(boardGameLinks, boardGameDetails);
 
       final boardGameDetailStatistics =
-          boardGameDetailsItem.firstOrDefault(_xmlStatisticsElementName);
+          boardGameDetailsItem.firstOrDefault(_xmlStatisticsElementName)!;
 
       final boardGameDetailsRatings =
-          boardGameDetailStatistics.firstOrDefault(_xmlRatingsElementName);
+          boardGameDetailStatistics.firstOrDefault(_xmlRatingsElementName)!;
 
       boardGameDetails.rating = double.tryParse(boardGameDetailsRatings
               ?.firstOrDefault(_xmlAverageElementName)
@@ -268,14 +268,14 @@ class BoardGamesGeekService {
     return null;
   }
 
-  Future<List<BoardGame>> search(String searchPhrase) async {
+  Future<List<BoardGame>?> search(String? searchPhrase) async {
     if (searchPhrase?.isEmpty ?? true) {
       return null;
     }
 
     final searchResultsXml = await _dio.get<String>(
       _searchBoardGamesUrl,
-      queryParameters: <String, String>{
+      queryParameters: <String, String?>{
         _boardGameQueryParamterType: _boardGameType,
         _boardGameQueryParamterQuery: searchPhrase,
       },
@@ -291,7 +291,7 @@ class BoardGamesGeekService {
     for (final searchResult in searchResultItems) {
       final boardGameId = searchResult.firstOrDefaultAttributeValue(_xmlIdAttributeName);
       final boardGameName =
-          searchResult.firstOrDefaultElementsAttribute(_xmlNameElementName, _xmlValueAttributeName);
+          searchResult.firstOrDefaultElementsAttribute(_xmlNameElementName, _xmlValueAttributeName)!;
       final boardGameYearPublished = searchResult.firstOrDefaultElementsAttribute(
           _xmlYearPublishedElementName, _xmlValueAttributeName);
 
@@ -330,9 +330,9 @@ class BoardGamesGeekService {
           wishlistGameSyncResult.isSuccess &&
           wantToBuyGameSyncResult.isSuccess
       ..data = [
-        ...ownGameSyncResult.data,
-        ...wishlistGameSyncResult.data,
-        ...wantToBuyGameSyncResult.data
+        ...ownGameSyncResult.data!,
+        ...wishlistGameSyncResult.data!,
+        ...wantToBuyGameSyncResult.data!
       ];
   }
 
@@ -390,7 +390,7 @@ class BoardGamesGeekService {
       final lastModifiedString = collectionItem.firstOrDefaultElementsAttribute(
           _xmlStatusElementName, _xmlLastModifiedAttributeTypeName);
       if (lastModifiedString?.isNotEmpty ?? false) {
-        boardGame.lastModified = DateTime.tryParse(lastModifiedString);
+        boardGame.lastModified = DateTime.tryParse(lastModifiedString!);
       }
 
       _extractBoardGameCollectionItemStas(collectionItem, boardGame);
@@ -416,9 +416,9 @@ class BoardGamesGeekService {
       ..data = boardGames;
   }
 
-  xml.XmlDocument _retrieveXmlDocument(Response<String> httpResponse) {
+  xml.XmlDocument? _retrieveXmlDocument(Response<String> httpResponse) {
     try {
-      return xml.XmlDocument.parse(httpResponse.data);
+      return xml.XmlDocument.parse(httpResponse.data!);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -446,32 +446,32 @@ class BoardGamesGeekService {
       switch (type) {
         case _xmlCategoryAttributeTypeName:
           final boardGameCategory = BoardGameCategory();
-          boardGameCategory.id = id;
-          boardGameCategory.name = value;
-          boardGameDetails.categories.add(boardGameCategory);
+          boardGameCategory.id = id!;
+          boardGameCategory.name = value!;
+          boardGameDetails.categories!.add(boardGameCategory);
           break;
         case _xmlDesignerAttributeTypeName:
           final boardGameDesigner = BoardGameDesigner();
-          boardGameDesigner.id = id;
-          boardGameDesigner.name = value;
+          boardGameDesigner.id = id!;
+          boardGameDesigner.name = value!;
           boardGameDetails.desingers.add(boardGameDesigner);
           break;
         case _xmlPublisherAttributeTypeName:
           final boardGamePublisher = BoardGamePublisher();
-          boardGamePublisher.id = id;
-          boardGamePublisher.name = value;
+          boardGamePublisher.id = id!;
+          boardGamePublisher.name = value!;
           boardGameDetails.publishers.add(boardGamePublisher);
           break;
         case _xmlArtistAttributeTypeName:
           final boardGameArtist = BoardGameArtist();
-          boardGameArtist.id = id;
-          boardGameArtist.name = value;
+          boardGameArtist.id = id!;
+          boardGameArtist.name = value!;
           boardGameDetails.artists.add(boardGameArtist);
           break;
         case _xmlExpansionAttributeTypeName:
           final boardGameArtist = BoardGamesExpansion();
-          boardGameArtist.id = id;
-          boardGameArtist.name = value;
+          boardGameArtist.id = id!;
+          boardGameArtist.name = value!;
           boardGameDetails.expansions.add(boardGameArtist);
           break;
         default:
@@ -488,18 +488,18 @@ class BoardGamesGeekService {
       return;
     }
 
-    final boardGameDetailsRanks = boardGameDetailsRatings
+    final Iterable<XmlElement> boardGameDetailsRanks = boardGameDetailsRatings
         .firstOrDefault(_xmlRanksElementName)
         ?.findElements(_xmlRankElementName);
 
     for (final boardGameRank in boardGameDetailsRanks) {
       final rank = BoardGameRank();
-      rank.type = boardGameRank.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
-      rank.id = boardGameRank.firstOrDefaultAttributeValue(_xmlIdAttributeName);
-      rank.name = boardGameRank.firstOrDefaultAttributeValue(_xmlNameAttributeName);
-      rank.friendlyName = boardGameRank.firstOrDefaultAttributeValue(_xmlFriendlyNameAttributeName);
+      rank.type = boardGameRank.firstOrDefaultAttributeValue(_xmlTypeAttributeName)!;
+      rank.id = boardGameRank.firstOrDefaultAttributeValue(_xmlIdAttributeName)!;
+      rank.name = boardGameRank.firstOrDefaultAttributeValue(_xmlNameAttributeName)!;
+      rank.friendlyName = boardGameRank.firstOrDefaultAttributeValue(_xmlFriendlyNameAttributeName)!;
       rank.rank =
-          num.tryParse(boardGameRank.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+          num.tryParse(boardGameRank.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '')!;
 
       if (rank.name == 'boardgame') {
         boardGameDetails.rank = rank.rank?.toInt();
@@ -513,7 +513,7 @@ class BoardGamesGeekService {
     xml.XmlElement collectionItem,
     BoardGameDetails boardGameDetails,
   ) {
-    final boardGameDetailsStats = collectionItem.firstOrDefault(_xmlStatsElementName);
+    final boardGameDetailsStats = collectionItem.firstOrDefault(_xmlStatsElementName)!;
 
     boardGameDetails.minPlayers = int.tryParse(
         boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMinPlayersElementName) ?? '');
@@ -524,7 +524,7 @@ class BoardGamesGeekService {
     boardGameDetails.maxPlaytime = int.tryParse(
         boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMaxPlaytimeElementName) ?? '');
 
-    final boardGameDetailsRating = boardGameDetailsStats?.firstOrDefault(_xmlRatingElementName);
+    final boardGameDetailsRating = boardGameDetailsStats?.firstOrDefault(_xmlRatingElementName)!;
 
     boardGameDetails.rating = double.tryParse(boardGameDetailsRating
             ?.firstOrDefault(_xmlAverageElementName)

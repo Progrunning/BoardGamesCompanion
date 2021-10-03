@@ -15,13 +15,13 @@ class PlayerAvatar extends StatelessWidget {
     this.topRightCornerActionWidget,
     this.onTap,
     this.playerHeroIdSuffix,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final Player player;
-  final Widget topRightCornerActionWidget;
-  final VoidCallback onTap;
-  final String playerHeroIdSuffix;
+  final Player? player;
+  final Widget? topRightCornerActionWidget;
+  final VoidCallback? onTap;
+  final String? playerHeroIdSuffix;
 
   @override
   Widget build(BuildContext context) {

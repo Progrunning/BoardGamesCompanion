@@ -13,14 +13,14 @@ import '../../stores/board_games_store.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 
 class GamesFilterPanel extends StatefulWidget {
-  const GamesFilterPanel({Key key}) : super(key: key);
+  const GamesFilterPanel({Key? key}) : super(key: key);
 
   @override
   _GamesFilterPanelState createState() => _GamesFilterPanelState();
 }
 
 class _GamesFilterPanelState extends State<GamesFilterPanel> {
-  BoardGamesStore boardGamesStore;
+  late BoardGamesStore boardGamesStore;
 
   @override
   void initState() {
@@ -64,8 +64,8 @@ class _GamesFilterPanelState extends State<GamesFilterPanel> {
 
 class _SortBy extends StatelessWidget {
   const _SortBy({
-    Key key,
-    @required BoardGamesFiltersStore boardGamesFiltersStore,
+    Key? key,
+    required BoardGamesFiltersStore boardGamesFiltersStore,
   })  : _boardGamesFiltersStore = boardGamesFiltersStore,
         super(key: key);
 
@@ -102,9 +102,9 @@ class _SortBy extends StatelessWidget {
 
 class _SortByChip extends StatelessWidget {
   const _SortByChip({
-    @required this.sortBy,
-    @required this.boardGamesFiltersStore,
-    Key key,
+    required this.sortBy,
+    required this.boardGamesFiltersStore,
+    Key? key,
   }) : super(key: key);
 
   final SortBy sortBy;
@@ -154,9 +154,9 @@ class _SortByChip extends StatelessWidget {
 
 class _Filters extends StatelessWidget {
   const _Filters({
-    @required this.boardGamesFiltersStore,
-    @required this.boardGamesStore,
-    Key key,
+    required this.boardGamesFiltersStore,
+    required this.boardGamesStore,
+    Key? key,
   }) : super(key: key);
 
   final BoardGamesFiltersStore boardGamesFiltersStore;
@@ -246,8 +246,8 @@ class _Filters extends StatelessWidget {
 
 class _FilterRatingAnyValue extends StatelessWidget {
   const _FilterRatingAnyValue({
-    Key key,
-    @required BoardGamesFiltersStore boardGamesFiltersStore,
+    Key? key,
+    required BoardGamesFiltersStore boardGamesFiltersStore,
   })  : _boardGamesFiltersStore = boardGamesFiltersStore,
         super(key: key);
 
@@ -285,9 +285,9 @@ class _FilterRatingAnyValue extends StatelessWidget {
 
 class _FilterNumberOfPlayersSlider extends StatelessWidget {
   const _FilterNumberOfPlayersSlider({
-    @required this.boardGamesFiltersStore,
-    @required this.boardGamesStore,
-    Key key,
+    required this.boardGamesFiltersStore,
+    required this.boardGamesStore,
+    Key? key,
   }) : super(key: key);
 
   final BoardGamesFiltersStore boardGamesFiltersStore;
@@ -295,14 +295,14 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minNumberOfPlayers = boardGamesStore.allboardGames
+    final minNumberOfPlayers = boardGamesStore.allboardGames!
         .where((boardGameDetails) => boardGameDetails.minPlayers != null)
         .map((boardGameDetails) => boardGameDetails.minPlayers)
-        ?.reduce(min);
-    final maxNumberOfPlayers = boardGamesStore.allboardGames
+        ?.reduce(min)!;
+    final maxNumberOfPlayers = boardGamesStore.allboardGames!
         .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
         .map((boardGameDetails) => boardGameDetails.maxPlayers)
-        ?.reduce(max);
+        ?.reduce(max)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -371,9 +371,9 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
 
 class _FilterRatingValue extends StatelessWidget {
   const _FilterRatingValue({
-    Key key,
-    @required double rating,
-    @required BoardGamesFiltersStore boardGamesFiltersStore,
+    Key? key,
+    required double rating,
+    required BoardGamesFiltersStore boardGamesFiltersStore,
   })  : _rating = rating,
         _boardGamesFiltersStore = boardGamesFiltersStore,
         super(key: key);
@@ -418,8 +418,8 @@ class _FilterRatingValue extends StatelessWidget {
 
 class _FilterRatingValueContainer extends StatelessWidget {
   const _FilterRatingValueContainer({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Center child;

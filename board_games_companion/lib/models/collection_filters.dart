@@ -8,11 +8,11 @@ part 'collection_filters.g.dart';
 @HiveType(typeId: HiveBoxes.CollectionFiltersId)
 class CollectionFilters {
   @HiveField(0)
-  SortBy sortBy;
+  SortBy? sortBy;
 
   @HiveField(1)
-  double filterByRating;
+  double? filterByRating;
   
   @HiveField(2)
-  int numberOfPlayers;
+  int? numberOfPlayers;
 }

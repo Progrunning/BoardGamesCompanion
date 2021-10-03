@@ -13,7 +13,7 @@ import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/player/player_avatar.dart';
 
 class PlayersPage extends StatefulWidget {
-  const PlayersPage({Key key}) : super(key: key);
+  const PlayersPage({Key? key}) : super(key: key);
 
   @override
   _PlayersPageState createState() => _PlayersPageState();
@@ -22,7 +22,7 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   final int _numberOfPlayerColumns = 3;
 
-  PlayersStore playerStore;
+  late PlayersStore playerStore;
 
   @override
   void initState() {
@@ -92,7 +92,7 @@ class _PlayersPageState extends State<PlayersPage> {
             );
           }
 
-          store.players.sort((a, b) => a.name?.compareTo(b.name));
+          store.players!.sort((a, b) => a.name?.compareTo(b.name!));
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,9 +111,9 @@ class _PlayersPageState extends State<PlayersPage> {
                   mainAxisSpacing: Dimensions.standardSpacing,
                   crossAxisCount: _numberOfPlayerColumns,
                   children: List.generate(
-                    store.players.length,
+                    store.players!.length,
                     (int index) {
-                      final player = store.players[index];
+                      final player = store.players![index];
                       return PlayerAvatar(
                         player,
                         topRightCornerActionWidget: CustomIconButton(
@@ -156,8 +156,8 @@ class _PlayersPageState extends State<PlayersPage> {
 
 class _CreatePlayerButton extends StatelessWidget {
   const _CreatePlayerButton({
-    @required this.onCreatePlayer,
-    Key key,
+    required this.onCreatePlayer,
+    Key? key,
   }) : super(key: key);
 
   final VoidCallback onCreatePlayer;

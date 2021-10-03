@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../common/enums/enums.dart';
 
 class Medal extends StatelessWidget {
-  const Medal(this.medal, {Key key}) : super(key: key);
+  const Medal(this.medal, {Key? key}) : super(key: key);
 
   final MedalEnum medal;
 

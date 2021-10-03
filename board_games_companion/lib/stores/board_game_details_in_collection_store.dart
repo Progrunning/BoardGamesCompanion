@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 
 import '../models/hive/board_game_details.dart';
@@ -10,21 +11,20 @@ class BoardGameDetailsInCollectionStore extends ChangeNotifier {
   );
 
   final BoardGamesStore _boardGamesStore;
-  BoardGameDetails _boardGameDetails;
+  BoardGameDetails? _boardGameDetails;
 
   bool get isInCollection {
     if ((_boardGamesStore?.filteredBoardGames?.isEmpty ?? true) || _boardGameDetails == null) {
       return false;
     }
 
-    final boardGameInCollection = _boardGamesStore.filteredBoardGames.firstWhere(
-      (boardGameDetails) => boardGameDetails.id == _boardGameDetails.id,
-      orElse: () => null,
+    final boardGameInCollection = _boardGamesStore.filteredBoardGames!.firstWhereOrNull(
+      (boardGameDetails) => boardGameDetails.id == _boardGameDetails!.id,
     );
     return boardGameInCollection != null;
   }
 
-  void updateIsInCollectionStatus([BoardGameDetails boardGameDetails]) {
+  void updateIsInCollectionStatus([BoardGameDetails? boardGameDetails]) {
     if (boardGameDetails != null) {
       _boardGameDetails = boardGameDetails;
     }

@@ -13,7 +13,7 @@ import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({Key key}) : super(key: key);
+  const AboutPage({Key? key}) : super(key: key);
 
   @override
   _AboutPageState createState() => _AboutPageState();
@@ -218,7 +218,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
 
 class _LicensePageDetailsItem extends StatelessWidget {
   const _LicensePageDetailsItem({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

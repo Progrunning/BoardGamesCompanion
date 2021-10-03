@@ -9,13 +9,13 @@ class HotBoardGamesStore with ChangeNotifier {
 
   final BoardGamesGeekService _boardGameGeekService;
 
-  List<BoardGame> _hotBoardGames;
+  List<BoardGame>? _hotBoardGames;
 
-  List<BoardGame> get hotBoardGames => _hotBoardGames;
+  List<BoardGame>? get hotBoardGames => _hotBoardGames;
 
   Future<List<BoardGame>> load() async {
     if (_hotBoardGames != null) {
-      return _hotBoardGames;
+      return _hotBoardGames!;
     }
 
     try {

@@ -1,7 +1,7 @@
 import '../common/constants.dart';
 
-extension DoubleExtensions on double {
-  int safeCompareTo(double doubleToCompare) {
+extension DoubleExtensions on double? {
+  int safeCompareTo(double? doubleToCompare) {
     if (this == null && doubleToCompare == null) {
       return Constants.LeaveAsIs;
     }
@@ -14,6 +14,6 @@ extension DoubleExtensions on double {
       return Constants.MoveBelow;
     }
 
-    return compareTo(doubleToCompare);
+    return compareTo(doubleToCompare!);
   }
 }

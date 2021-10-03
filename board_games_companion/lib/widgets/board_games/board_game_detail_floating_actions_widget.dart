@@ -9,8 +9,8 @@ import '../common/icon_and_text_button.dart';
 
 class BoardGameDetailFloatingActions extends StatelessWidget {
   const BoardGameDetailFloatingActions({
-    @required this.boardGameDetailsStore,
-    Key key,
+    required this.boardGameDetailsStore,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameDetailsStore boardGameDetailsStore;
@@ -32,7 +32,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
           );
         },
         update: (_, boardGameDetailsStore, boardGameDetailsInCollectionStore) {
-          boardGameDetailsInCollectionStore.updateIsInCollectionStatus(
+          boardGameDetailsInCollectionStore!.updateIsInCollectionStatus(
             boardGameDetailsStore.boardGameDetails,
           );
           return boardGameDetailsInCollectionStore;
@@ -78,7 +78,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     BoardGamesStore boardGamesStore,
     BuildContext context,
   ) async {
-    await boardGamesStore.addOrUpdateBoardGame(boardGameDetailsStore.boardGameDetails);
+    await boardGamesStore.addOrUpdateBoardGame(boardGameDetailsStore.boardGameDetails!);
     boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
 
     Scaffold.of(context).hideCurrentSnackBar();
@@ -86,7 +86,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
       SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text(
-            '${boardGameDetailsStore.boardGameDetails.name} has been added to your collection'),
+            '${boardGameDetailsStore.boardGameDetails!.name} has been added to your collection'),
       ),
     );
   }
@@ -96,7 +96,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     BoardGameDetailsInCollectionStore boardGameDetailsInCollectionStore,
     BoardGamesStore boardGamesStore,
   ) async {
-    await boardGamesStore.removeBoardGame(boardGameDetailsStore.boardGameDetails.id);
+    await boardGamesStore.removeBoardGame(boardGameDetailsStore.boardGameDetails!.id!);
     boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
 
     Scaffold.of(context).hideCurrentSnackBar();
@@ -105,11 +105,11 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 10),
         content: Text(
-            '${boardGameDetailsStore.boardGameDetails.name} has been removed from your collection'),
+            '${boardGameDetailsStore.boardGameDetails!.name} has been removed from your collection'),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () async {
-            await boardGamesStore.addOrUpdateBoardGame(boardGameDetailsStore.boardGameDetails);
+            await boardGamesStore.addOrUpdateBoardGame(boardGameDetailsStore.boardGameDetails!);
             boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
           },
         ),

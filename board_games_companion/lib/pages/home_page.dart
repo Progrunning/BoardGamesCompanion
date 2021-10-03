@@ -18,9 +18,9 @@ import 'settings/settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
-    @required this.analyticsService,
-    @required this.rateAndReviewService,
-    Key key,
+    required this.analyticsService,
+    required this.rateAndReviewService,
+    Key? key,
   }) : super(key: key);
 
   final AnalyticsService analyticsService;

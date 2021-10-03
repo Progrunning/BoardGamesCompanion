@@ -30,11 +30,11 @@ class BoardGamesFiltersStore with ChangeNotifier {
   final BoardGamesFiltersService _boardGamesFiltersService;
   final AnalyticsService _analyticsService;
 
-  CollectionFilters _collectionFilters;
+  CollectionFilters? _collectionFilters;
 
   List<SortBy> get sortBy => _sortBy;
-  double get filterByRating => _collectionFilters?.filterByRating;
-  int get numberOfPlayers => _collectionFilters?.numberOfPlayers;
+  double? get filterByRating => _collectionFilters?.filterByRating;
+  int? get numberOfPlayers => _collectionFilters?.numberOfPlayers;
 
   Future<void> loadFilterPreferences() async {
     _collectionFilters = await _boardGamesFiltersService.retrieveCollectionFiltersPreferences();
@@ -56,11 +56,11 @@ class BoardGamesFiltersStore with ChangeNotifier {
     final selectedSortBy =
         _sortBy.firstWhere((sb) => sb.name == _collectionFilters?.sortBy?.name, orElse: () {
       return null;
-    });
+    } as SortBy Function()?);
 
     if (selectedSortBy != null) {
-      selectedSortBy.orderBy = _collectionFilters.sortBy.orderBy;
-      selectedSortBy.selected = _collectionFilters.sortBy.selected;
+      selectedSortBy.orderBy = _collectionFilters!.sortBy!.orderBy;
+      selectedSortBy.selected = _collectionFilters!.sortBy!.selected;
     }
   }
 
@@ -85,25 +85,25 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
     await _analyticsService.logEvent(
       name: Analytics.SortCollection,
-      parameters: <String, String>{
+      parameters: <String, String?>{
         Analytics.SortByParameter: sortBy.name,
         Analytics.OrderByParameter: sortBy.orderBy.toString()
       },
     );
 
-    _collectionFilters.sortBy = sortBy;
+    _collectionFilters!.sortBy = sortBy;
 
     await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
 
     notifyListeners();
   }
 
-  Future<void> updateFilterByRating(double filterByRating) async {
+  Future<void> updateFilterByRating(double? filterByRating) async {
     if (_collectionFilters == null) {
       _collectionFilters = CollectionFilters();
     }
 
-    _collectionFilters.filterByRating = filterByRating;
+    _collectionFilters!.filterByRating = filterByRating;
 
     await _analyticsService.logEvent(
       name: Analytics.FilterCollection,
@@ -118,17 +118,17 @@ class BoardGamesFiltersStore with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeNumberOfPlayers(int numberOfPlayers) async {
+  Future<void> changeNumberOfPlayers(int? numberOfPlayers) async {
     if (_collectionFilters == null) {
       _collectionFilters = CollectionFilters();
     }
 
-    _collectionFilters.numberOfPlayers = numberOfPlayers;
+    _collectionFilters!.numberOfPlayers = numberOfPlayers;
 
     notifyListeners();
   }
 
-  Future<void> updateNumberOfPlayers(int numberOfPlayers) async {
+  Future<void> updateNumberOfPlayers(int? numberOfPlayers) async {
     await _analyticsService.logEvent(
       name: Analytics.FilterCollection,
       parameters: <String, dynamic>{

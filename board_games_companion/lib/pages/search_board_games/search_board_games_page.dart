@@ -26,8 +26,8 @@ import '../../widgets/common/ripple_effect.dart';
 
 class SearchBoardGamesPage extends StatefulWidget {
   const SearchBoardGamesPage({
-    @required this.analyticsService,
-    Key key,
+    required this.analyticsService,
+    Key? key,
   }) : super(key: key);
 
   final AnalyticsService analyticsService;
@@ -37,7 +37,7 @@ class SearchBoardGamesPage extends StatefulWidget {
 }
 
 class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
-  FocusNode searchFocusNode;
+  late FocusNode searchFocusNode;
 
   @override
   void initState() {
@@ -79,8 +79,8 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
     searchFocusNode.unfocus();
     await NavigatorHelper.navigateToBoardGameDetails(
       context,
-      boardGame?.id,
-      boardGame?.name,
+      boardGame?.id!,
+      boardGame?.name!,
       SearchBoardGamesPage,
     );
   }
@@ -88,8 +88,8 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
 
 class _SearchBar extends StatefulWidget {
   const _SearchBar({
-    @required this.searchFocusNode,
-    Key key,
+    required this.searchFocusNode,
+    Key? key,
   }) : super(key: key);
 
   final FocusNode searchFocusNode;
@@ -100,7 +100,7 @@ class _SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<_SearchBar> {
   TextEditingController searchController;
-  SearchBoardGamesStore searchBoardGamesStore;
+  late SearchBoardGamesStore searchBoardGamesStore;
 
   @override
   void initState() {
@@ -173,8 +173,8 @@ class _SearchBarState extends State<_SearchBar> {
 
 class _SearchResults extends StatefulWidget {
   const _SearchResults({
-    Key key,
-    @required this.onBoardGameTapped,
+    Key? key,
+    required this.onBoardGameTapped,
   }) : super(key: key);
 
   final void Function(BoardGame) onBoardGameTapped;
@@ -184,7 +184,7 @@ class _SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<_SearchResults> {
-  SearchBarBoardGamesStore searchBarBoardGamesStore;
+  late SearchBarBoardGamesStore searchBarBoardGamesStore;
 
   @override
   void initState() {
@@ -199,7 +199,7 @@ class _SearchResultsState extends State<_SearchResults> {
       future: searchBoardGamesStore.search(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          final searchResults = snapshot.data as List<BoardGame>;
+          final searchResults = snapshot.data as List<BoardGame>?;
           if (searchResults?.isNotEmpty ?? false) {
             return SliverPadding(
               padding: const EdgeInsets.all(
@@ -229,7 +229,7 @@ class _SearchResultsState extends State<_SearchResults> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 Text(
-                                  searchResults[itemIndex].name,
+                                  searchResults![itemIndex].name!,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppTheme.titleTextStyle,
                                 ),
@@ -254,7 +254,7 @@ class _SearchResultsState extends State<_SearchResults> {
                       height: Dimensions.standardSpacing,
                     );
                   },
-                  childCount: math.max(0, searchResults.length * 2 - 1),
+                  childCount: math.max(0, searchResults!.length * 2 - 1),
                 ),
               ),
             );
@@ -310,7 +310,7 @@ class _SearchResultsState extends State<_SearchResults> {
 
 class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
   const _SearchResultsTemplate({
-    @required this.child,
+    required this.child,
     this.height = defaultHeight,
   });
 
@@ -345,9 +345,9 @@ class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
 
 class _NoResults extends StatelessWidget {
   const _NoResults({
-    Key key,
-    @required this.searchBarBoardGamesStore,
-    @required this.searchBoardGamesStore,
+    Key? key,
+    required this.searchBarBoardGamesStore,
+    required this.searchBoardGamesStore,
   }) : super(key: key);
 
   final SearchBarBoardGamesStore searchBarBoardGamesStore;
@@ -427,9 +427,9 @@ class _NoResults extends StatelessWidget {
 
 class _HotBoardGames extends StatelessWidget {
   const _HotBoardGames({
-    @required this.analyticsService,
-    @required this.onBoardGameTapped,
-    Key key,
+    required this.analyticsService,
+    required this.onBoardGameTapped,
+    Key? key,
   }) : super(key: key);
 
   final AnalyticsService analyticsService;
@@ -522,7 +522,7 @@ class _HotBoardGames extends StatelessWidget {
   Future _navigateToBoardGameDetails(BoardGame boardGame, BuildContext context) async {
     await analyticsService.logEvent(
       name: Analytics.ViewHotBoardGame,
-      parameters: <String, String>{
+      parameters: <String, String?>{
         Analytics.BoardGameIdParameter: boardGame.id,
         Analytics.BoardGameNameParameter: boardGame.name,
       },

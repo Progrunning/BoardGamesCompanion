@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,9 +20,9 @@ class BoardGameDetailsStore with ChangeNotifier {
   final BoardGamesStore _boardGamesStore;
   final AnalyticsService _analyticsService;
 
-  BoardGameDetails _boardGameDetails;
+  BoardGameDetails? _boardGameDetails;
 
-  BoardGameDetails get boardGameDetails => _boardGameDetails;
+  BoardGameDetails? get boardGameDetails => _boardGameDetails;
 
   Future<BoardGameDetails> loadBoardGameDetails(String boardGameId) async {
     try {
@@ -29,16 +30,15 @@ class BoardGameDetailsStore with ChangeNotifier {
       //         Alternatively set cache expiration (~a week?) and then retrieve data to update
       final boardGameDetails = await _boardGameGeekService.getDetails(boardGameId);
       if (boardGameDetails == null) {
-        return _boardGameDetails;
+        return _boardGameDetails!;
       }
       for (final boardGameExpansion in boardGameDetails.expansions) {
-        final boardGameExpansionDetails = _boardGamesStore.allboardGames.firstWhere(
+        final boardGameExpansionDetails = _boardGamesStore.allboardGames!.firstWhereOrNull(
           (boardGame) => boardGame.id == boardGameExpansion.id,
-          orElse: () => null,
         );
 
         if (boardGameExpansionDetails != null &&
-            boardGameExpansionDetails.isExpansion &&
+            boardGameExpansionDetails.isExpansion! &&
             boardGameExpansionDetails.isOwned) {
           boardGameExpansion.isInCollection = true;
         }
@@ -60,7 +60,7 @@ class BoardGameDetailsStore with ChangeNotifier {
 
     notifyListeners();
 
-    return _boardGameDetails;
+    return _boardGameDetails!;
   }
 
   Future<void> captureLinkAnalytics(String linkName) async {
@@ -75,26 +75,26 @@ class BoardGameDetailsStore with ChangeNotifier {
   Future<void> toggleCollection(CollectionType collectionType) async {
     switch (collectionType) {
       case CollectionType.Owned:
-        _boardGameDetails.isOwned = !_boardGameDetails.isOwned;
-        if (_boardGameDetails.isOwned) {
-          _boardGameDetails.isOnWishlist = false;
-          _boardGameDetails.isFriends = false;
+        _boardGameDetails!.isOwned = !_boardGameDetails!.isOwned;
+        if (_boardGameDetails!.isOwned) {
+          _boardGameDetails!.isOnWishlist = false;
+          _boardGameDetails!.isFriends = false;
         }
         break;
       case CollectionType.Friends:
-        if (_boardGameDetails.isOwned) {
-          _boardGameDetails.isOwned = false;
+        if (_boardGameDetails!.isOwned) {
+          _boardGameDetails!.isOwned = false;
         }
-        _boardGameDetails.isFriends = !_boardGameDetails.isFriends;
+        _boardGameDetails!.isFriends = !_boardGameDetails!.isFriends;
         break;
       case CollectionType.Wishlist:
-        if (_boardGameDetails.isOwned) {
-          _boardGameDetails.isOwned = false;
+        if (_boardGameDetails!.isOwned) {
+          _boardGameDetails!.isOwned = false;
         }
-        _boardGameDetails.isOnWishlist = !_boardGameDetails.isOnWishlist;
+        _boardGameDetails!.isOnWishlist = !_boardGameDetails!.isOnWishlist;
         break;
     }
 
-    await _boardGamesStore.updateDetails(_boardGameDetails);
+    await _boardGamesStore.updateDetails(_boardGameDetails!);
   }
 }

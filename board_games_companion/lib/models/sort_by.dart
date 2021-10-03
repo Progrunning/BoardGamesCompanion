@@ -11,7 +11,7 @@ class SortBy {
   @HiveField(0)
   SortByOption sortByOption;
 
-  String get name {
+  String? get name {
     switch (sortByOption) {
       case SortByOption.Name:
         return 'Name';

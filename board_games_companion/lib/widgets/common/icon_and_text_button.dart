@@ -5,27 +5,27 @@ import '../../common/dimensions.dart';
 
 class IconAndTextButton extends StatelessWidget {
   const IconAndTextButton({
-    this.icon,
+    required this.icon,
     this.title,
     this.color,
     this.splashColor,
     this.horizontalPadding,
     this.verticalPadding,
-    @required this.onPressed,
-    Key key,
+    required this.onPressed,
+    Key? key,
   }) : super(key: key);
 
   static const double rippleEffectOpacityFactor = 0.7;
 
-  final GestureTapCallback onPressed;
+  final GestureTapCallback? onPressed;
 
   final Widget icon;
-  final String title;
-  final Color color;
-  final Color splashColor;
+  final String? title;
+  final Color? color;
+  final Color? splashColor;
 
-  final double horizontalPadding;
-  final double verticalPadding;
+  final double? horizontalPadding;
+  final double? verticalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class IconAndTextButton extends StatelessWidget {
                 width: Dimensions.halfStandardSpacing,
               ),
               Text(
-                title,
+                title!,
                 style: const TextStyle(
                   color: AppTheme.defaultTextColor,
                   fontWeight: FontWeight.bold,

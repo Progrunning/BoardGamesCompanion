@@ -45,7 +45,7 @@ mixin SyncCollection {
 }
 
 void _showSuccessSnackBar() {
-  HomePage.homePageGlobalKey.currentState.showSnackBar(
+  HomePage.homePageGlobalKey.currentState!.showSnackBar(
     const SnackBar(
       behavior: SnackBarBehavior.floating,
       content: Text(
@@ -56,7 +56,7 @@ void _showSuccessSnackBar() {
 }
 
 void _showFailureSnackBar() {
-  HomePage.homePageGlobalKey.currentState.showSnackBar(
+  HomePage.homePageGlobalKey.currentState!.showSnackBar(
     const SnackBar(
       behavior: SnackBarBehavior.floating,
       content: Text(

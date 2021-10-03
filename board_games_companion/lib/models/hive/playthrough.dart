@@ -19,7 +19,7 @@ class Playthrough {
   @HiveField(4)
   DateTime startDate;
   @HiveField(5)
-  DateTime endDate;
+  DateTime? endDate;
   @HiveField(6)
   PlaythroughStatus status;
   @HiveField(7)

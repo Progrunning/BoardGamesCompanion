@@ -8,8 +8,8 @@ import 'icon_and_text_button.dart';
 
 class SyncButton extends StatefulWidget {
   const SyncButton({
-    @required String Function() usernameCallback,
-    Key key,
+    required String Function() usernameCallback,
+    Key? key,
   })  : _usernameCallback = usernameCallback,
         super(key: key);
 
@@ -60,8 +60,8 @@ class _SyncButtonState extends State<SyncButton> with SyncCollection, TickerProv
 
 class _SyncCollectionIcon extends AnimatedWidget {
   const _SyncCollectionIcon({
-    @required this.animationController,
-    Key key,
+    required this.animationController,
+    Key? key,
   }) : super(
           key: key,
           listenable: animationController,

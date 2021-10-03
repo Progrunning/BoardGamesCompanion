@@ -92,8 +92,8 @@ Future<void> main() async {
 
 class App extends StatelessWidget {
   const App({
-    @required this.preferencesService,
-    Key key,
+    required this.preferencesService,
+    Key? key,
   }) : super(key: key);
 
   final PreferencesService preferencesService;
@@ -180,7 +180,7 @@ class App extends StatelessWidget {
             return boardGamesStore;
           },
           update: (_, filtersStore, boardGamesStore) {
-            boardGamesStore.applyFilters();
+            boardGamesStore!.applyFilters();
             return boardGamesStore;
           },
         ),
@@ -199,7 +199,7 @@ class App extends StatelessWidget {
             return boardGamesStore;
           },
           update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
-            playthroughStatisticsStore.loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
+            playthroughStatisticsStore!.loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
             return playthroughStatisticsStore;
           },
         ),

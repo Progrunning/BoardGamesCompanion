@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class DebugBox extends StatelessWidget {
   const DebugBox({
-    @required this.child,
+    required this.child,
     this.color = Colors.red,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final Color color;

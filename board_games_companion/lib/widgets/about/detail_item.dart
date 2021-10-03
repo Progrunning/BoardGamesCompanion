@@ -8,19 +8,19 @@ import '../common/shadow_box.dart';
 
 class DetailsItem extends StatelessWidget {
   const DetailsItem({
-    @required this.title,
-    @required this.subtitle,
+    required this.title,
+    required this.subtitle,
     this.iconUri,
     this.onTap,
     this.uri,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String title;
   final String subtitle;
-  final String iconUri;
-  final VoidCallback onTap;
-  final String uri;
+  final String? iconUri;
+  final VoidCallback? onTap;
+  final String? uri;
 
   static const double _size = 60;
 
@@ -47,7 +47,7 @@ class DetailsItem extends StatelessWidget {
                       child: Image(
                         height: _size,
                         width: _size,
-                        image: AssetImage(iconUri),
+                        image: AssetImage(iconUri!),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -63,7 +63,7 @@ class DetailsItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         title,
-                        style: AppTheme.theme.textTheme.headline3.copyWith(
+                        style: AppTheme.theme.textTheme.headline3!.copyWith(
                           fontWeight: FontWeight.normal,
                         ),
                       ),
@@ -83,7 +83,7 @@ class DetailsItem extends StatelessWidget {
         ),
         onTap: () async {
           if (onTap != null) {
-            onTap();
+            onTap!();
           }
 
           if (uri?.isEmpty ?? true) {
@@ -92,7 +92,7 @@ class DetailsItem extends StatelessWidget {
 
           await LauncherHelper.launchUri(
             context,
-            uri,
+            uri!,
           );
         },
       ),

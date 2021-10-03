@@ -6,8 +6,8 @@ import '../../common/dimensions.dart';
 class SectionText extends StatelessWidget {
 
   const SectionText({
-    @required this.text,
-    Key key,
+    required this.text,
+    Key? key,
   }) : super(key: key);
   
   final String text;

@@ -12,14 +12,14 @@ import '../common/ripple_effect.dart';
 
 class BoardGameTile extends StatefulWidget {
   const BoardGameTile({
-    Key key,
-    this.boardGame,
+    Key? key,
+    required this.boardGame,
     this.onTap,
     this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
   }) : super(key: key);
 
   final BaseBoardGame boardGame;
-  final Future<void> Function() onTap;
+  final Future<void> Function()? onTap;
   final String heroTag;
 
   @override
@@ -103,11 +103,11 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             ),
           ),
         ),
-        if (widget.boardGame.rank != null && widget.boardGame.rank < Constants.Top100)
+        if (widget.boardGame.rank != null && widget.boardGame.rank! < Constants.Top100)
           Positioned(
             top: 0,
             right: 12,
-            child: RankRibbon(widget.boardGame.rank),
+            child: RankRibbon(widget.boardGame.rank!),
           ),
         Positioned.fill(
           child: Padding(
@@ -122,7 +122,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
                   return;
                 }
 
-                await widget.onTap();
+                await widget.onTap!();
               },
             ),
           ),

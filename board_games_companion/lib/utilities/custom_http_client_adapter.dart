@@ -20,7 +20,7 @@ class CustomHttpClientAdapter extends HttpClientAdapter {
 
   @override
   Future<ResponseBody> fetch(
-      RequestOptions options, Stream<Uint8List> requestStream, Future cancelFuture) async {
+      RequestOptions options, Stream<Uint8List>? requestStream, Future? cancelFuture) async {
     log.d('[HTTP] Request ${options?.uri}...');
     final response = await _adapter.fetch(options, requestStream, cancelFuture);
     log.d('[HTTP] Response ${response?.statusCode}');
