@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:polygon_clipper/polygon_clipper.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';

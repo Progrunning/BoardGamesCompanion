@@ -236,9 +236,10 @@ class _PlayerScore extends StatelessWidget {
               value: playerScore,
               child: Consumer<PlayerScore>(
                 builder: (_, PlayerScore playerScoreConsumer, __) {
-                  return NumberPicker.horizontal(
-                    listViewHeight: 46,
-                    initialValue: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                  return NumberPicker(
+                    value: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                    axis: Axis.horizontal,
+                    itemHeight: 46,
                     minValue: 0,
                     maxValue: 10000,
                     onChanged: (num value) async {
@@ -320,25 +321,25 @@ class _DurationState extends State<_Duration> {
           absorbing: !widget.viewModel.playthoughEnded,
           child: Row(
             children: <Widget>[
-              NumberPicker.integer(
-                initialValue: math.min(hoursPlayed, _maxHours),
+              NumberPicker(
+                value: math.min(hoursPlayed, _maxHours),
                 minValue: minHours,
                 maxValue: maxHours,
                 onChanged: (num value) => _updateDurationHours(value),
-                listViewWidth: 46,
+                itemWidth: 46,
               ),
               Text(
                 'h',
                 style: AppTheme.theme.textTheme.bodyText2,
               ),
               const SizedBox(width: Dimensions.halfStandardSpacing),
-              NumberPicker.integer(
-                initialValue: minutesPlyed,
+              NumberPicker(
+                value: minutesPlyed,
                 infiniteLoop: true,
                 minValue: minMinutes,
                 maxValue: maxMinutes,
                 onChanged: (num value) => _updateDurationMinutes(value),
-                listViewWidth: 46,
+                itemWidth: 46,
               ),
               Text(
                 'min ',
