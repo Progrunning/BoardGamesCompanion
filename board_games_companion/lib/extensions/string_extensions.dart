@@ -1,7 +1,7 @@
 import '../common/constants.dart';
 
-extension StringExtensions on String {
-  int safeCompareTo(String stringToCompare) {
+extension StringExtensions on String? {
+  int safeCompareTo(String? stringToCompare) {
     if (this == null && stringToCompare == null) {
       return Constants.LeaveAsIs;
     }
@@ -14,6 +14,6 @@ extension StringExtensions on String {
       return Constants.MoveBelow;
     }
 
-    return compareTo(stringToCompare);
+    return compareTo(stringToCompare!);
   }
 }

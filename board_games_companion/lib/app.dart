@@ -10,7 +10,7 @@ import 'services/rate_and_review_service.dart';
 
 class BoardGamesCompanionApp extends StatefulWidget {
   const BoardGamesCompanionApp({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class BoardGamesCompanionApp extends StatefulWidget {
 }
 
 class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
-  FirebaseAnalyticsObserver _analyticsObserver;
+  late FirebaseAnalyticsObserver _analyticsObserver;
 
   @override
   void initState() {

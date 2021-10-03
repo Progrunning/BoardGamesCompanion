@@ -19,8 +19,8 @@ import '../base_page_state.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({
-    @required this.playersStore,
-    Key key,
+    required this.playersStore,
+    Key? key,
   }) : super(key: key);
 
   final PlayersStore playersStore;
@@ -36,7 +36,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   final imagePicker = ImagePicker();
 
   Player player;
-  bool isEditMode;
+  late bool isEditMode;
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
             },
             child: Scaffold(
               appBar: AppBar(
-                title: Text(_hasName ? player.name : 'New Player'),
+                title: Text(_hasName ? player.name! : 'New Player'),
               ),
               body: SafeArea(
                   child: PageContainer(
@@ -142,7 +142,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                             ),
                             style: AppTheme.defaultTextFieldStyle,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return 'Player needs to have a name';
                               }
 
@@ -175,10 +175,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
   void _setPlayerData() {
     player = Player();
-    player.id = widget.playersStore.playerToCreateOrEdit.id;
-    player.name = widget.playersStore.playerToCreateOrEdit.name;
-    player.avatarFileName = widget.playersStore.playerToCreateOrEdit.avatarFileName;
-    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit.avatarImageUri;
+    player.id = widget.playersStore.playerToCreateOrEdit!.id;
+    player.name = widget.playersStore.playerToCreateOrEdit!.name;
+    player.avatarFileName = widget.playersStore.playerToCreateOrEdit!.avatarFileName;
+    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit!.avatarImageUri;
 
     isEditMode = player.name?.isNotEmpty ?? false;
   }
@@ -198,12 +198,12 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
     }
 
     // MK Temporarily assign direct path to the file, until user saves the changes for the player and saves the image into the Documents storage.
-    player.avatarImageUri = player.avatarFileToSave.path;
+    player.avatarImageUri = player.avatarFileToSave!.path;
   }
 
   Future<bool> _handleOnWillPop(BuildContext context, Player player) async {
-    if (widget.playersStore.playerToCreateOrEdit.avatarImageUri != player.avatarImageUri ||
-        widget.playersStore.playerToCreateOrEdit.name != player.name) {
+    if (widget.playersStore.playerToCreateOrEdit!.avatarImageUri != player.avatarImageUri ||
+        widget.playersStore.playerToCreateOrEdit!.name != player.name) {
       await showDialog<AlertDialog>(
           context: context,
           builder: (context) {
@@ -225,10 +225,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                   ),
                   style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
                   onPressed: () async {
-                    widget.playersStore.playerToCreateOrEdit.avatarImageUri =
-                        widget.playersStore.playerToCreateOrEdit.avatarImageUri;
-                    widget.playersStore.playerToCreateOrEdit.name =
-                        widget.playersStore.playerToCreateOrEdit.name;
+                    widget.playersStore.playerToCreateOrEdit!.avatarImageUri =
+                        widget.playersStore.playerToCreateOrEdit!.avatarImageUri;
+                    widget.playersStore.playerToCreateOrEdit!.name =
+                        widget.playersStore.playerToCreateOrEdit!.name;
                     // MK Pop the dialog
                     Navigator.of(context).pop();
                     // MK Go back
@@ -246,7 +246,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   }
 
   Future<void> _createOrUpdatePlayer(BuildContext context) async {
-    if (!formKey.currentState.validate()) {
+    if (!formKey.currentState!.validate()) {
       return;
     }
 
@@ -300,7 +300,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 void _showPlayerUpdatedSnackbar(
   BuildContext context,
   Player playerToAddOrUpdate, {
-  @required bool isEditMode,
+  required bool isEditMode,
 }) {
   final String actionText = isEditMode ? 'updated' : 'created';
   Scaffold.of(context).showSnackBar(
@@ -328,11 +328,11 @@ void _showPlayerUpdatedSnackbar(
 
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
-    @required this.isEditMode,
-    @required this.onCreate,
-    @required this.onUpdate,
-    @required this.onDelete,
-    Key key,
+    required this.isEditMode,
+    required this.onCreate,
+    required this.onUpdate,
+    required this.onDelete,
+    Key? key,
   }) : super(key: key);
 
   final bool isEditMode;

@@ -17,13 +17,13 @@ class ExpanionsBannerPainter extends CustomPainter {
   /// The [message] and [location]
   /// arguments must not be null.
   ExpanionsBannerPainter({
-    @required this.message,
-    @required this.location,
+    required this.message,
+    required this.location,
     this.color = AppTheme.accentColor,
   })  : assert(message != null),
         assert(location != null),
         assert(color != null),
-        super(repaint: PaintingBinding.instance.systemFonts);
+        super(repaint: PaintingBinding.instance!.systemFonts);
 
   /// The message to show in the banner.
   final String message;
@@ -39,9 +39,9 @@ class ExpanionsBannerPainter extends CustomPainter {
   static const BoxShadow _shadow = AppTheme.defaultBoxShadow;
 
   bool _prepared = false;
-  TextPainter _textPainter;
-  Paint _paintShadow;
-  Paint _paintBanner;
+  late TextPainter _textPainter;
+  late Paint _paintShadow;
+  late Paint _paintBanner;
 
   void _prepare() {
     _paintShadow = _shadow.toPaint();
@@ -66,8 +66,8 @@ class ExpanionsBannerPainter extends CustomPainter {
     }
 
     canvas
-      ..translate(_translationX(size.width), _translationY(size.height))
-      ..rotate(_rotation)
+      ..translate(_translationX(size.width)!, _translationY(size.height)!)
+      ..rotate(_rotation!)
       ..drawRect(_kRect, _paintShadow)
       ..drawRect(_kRect, _paintBanner);
     const double width = _kOffset * 2.0;
@@ -86,7 +86,7 @@ class ExpanionsBannerPainter extends CustomPainter {
   @override
   bool hitTest(Offset position) => false;
 
-  double _translationX(double width) {
+  double? _translationX(double width) {
     assert(location != null);
     switch (location) {
       case BannerLocation.bottomEnd:
@@ -101,7 +101,7 @@ class ExpanionsBannerPainter extends CustomPainter {
     return null;
   }
 
-  double _translationY(double height) {
+  double? _translationY(double height) {
     assert(location != null);
     switch (location) {
       case BannerLocation.bottomStart:
@@ -114,7 +114,7 @@ class ExpanionsBannerPainter extends CustomPainter {
     return null;
   }
 
-  double get _rotation {
+  double? get _rotation {
     assert(location != null);
     switch (location) {
       case BannerLocation.bottomStart:

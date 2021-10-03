@@ -36,22 +36,22 @@ class BoardGameDetails extends BaseBoardGame {
     'up',
   };
 
-  String _imageUrl;
+  String? _imageUrl;
   @HiveField(5)
-  String get imageUrl => _imageUrl;
+  String? get imageUrl => _imageUrl;
   @HiveField(5)
-  set imageUrl(String value) {
+  set imageUrl(String? value) {
     if (_imageUrl != value) {
       _imageUrl = value;
       notifyListeners();
     }
   }
 
-  String _description;
+  String? _description;
   @HiveField(6)
-  String get description => _description;
+  String? get description => _description;
   @HiveField(6)
-  set description(String value) {
+  set description(String? value) {
     if (_description != value) {
       _description = value;
       notifyListeners();
@@ -59,90 +59,90 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   @HiveField(7)
-  List<BoardGameCategory> categories = <BoardGameCategory>[];
+  List<BoardGameCategory>? categories = <BoardGameCategory>[];
 
-  double _rating;
+  double? _rating;
   @HiveField(8)
-  double get rating => _rating;
+  double? get rating => _rating;
   @HiveField(8)
-  set rating(double value) {
+  set rating(double? value) {
     if (_rating != value) {
       _rating = value;
       notifyListeners();
     }
   }
 
-  int _votes;
+  int? _votes;
   @HiveField(9)
-  int get votes => _votes;
+  int? get votes => _votes;
   @HiveField(9)
-  set votes(int value) {
+  set votes(int? value) {
     if (_votes != value) {
       _votes = value;
       notifyListeners();
     }
   }
 
-  int _minPlayers;
+  int? _minPlayers;
   @HiveField(10)
-  int get minPlayers => _minPlayers;
+  int? get minPlayers => _minPlayers;
   @HiveField(10)
-  set minPlayers(int value) {
+  set minPlayers(int? value) {
     if (_minPlayers != value) {
       _minPlayers = value;
       notifyListeners();
     }
   }
 
-  int _minPlaytime;
+  int? _minPlaytime;
   @HiveField(11)
-  int get minPlaytime => _minPlaytime;
+  int? get minPlaytime => _minPlaytime;
   @HiveField(11)
-  set minPlaytime(int value) {
+  set minPlaytime(int? value) {
     if (_minPlaytime != value) {
       _minPlaytime = value;
       notifyListeners();
     }
   }
 
-  int _maxPlayers;
+  int? _maxPlayers;
   @HiveField(12)
-  int get maxPlayers => _maxPlayers;
+  int? get maxPlayers => _maxPlayers;
   @HiveField(12)
-  set maxPlayers(int value) {
+  set maxPlayers(int? value) {
     if (_maxPlayers != value) {
       _maxPlayers = value;
       notifyListeners();
     }
   }
 
-  int _maxPlaytime;
+  int? _maxPlaytime;
   @HiveField(13)
-  int get maxPlaytime => _maxPlaytime;
+  int? get maxPlaytime => _maxPlaytime;
   @HiveField(13)
-  set maxPlaytime(int value) {
+  set maxPlaytime(int? value) {
     if (_maxPlaytime != value) {
       _maxPlaytime = value;
       notifyListeners();
     }
   }
 
-  int _minAge;
+  int? _minAge;
   @HiveField(14)
-  int get minAge => _minAge;
+  int? get minAge => _minAge;
   @HiveField(14)
-  set minAge(int value) {
+  set minAge(int? value) {
     if (_minAge != value) {
       _minAge = value;
       notifyListeners();
     }
   }
 
-  num _avgWeight;
+  num? _avgWeight;
   @HiveField(15)
-  num get avgWeight => _avgWeight;
+  num? get avgWeight => _avgWeight;
   @HiveField(15)
-  set avgWeight(num value) {
+  set avgWeight(num? value) {
     if (_avgWeight != value) {
       _avgWeight = value;
       notifyListeners();
@@ -158,11 +158,11 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(18)
   List<BoardGameDesigner> desingers = <BoardGameDesigner>[];
 
-  int _commentsNumber;
+  int? _commentsNumber;
   @HiveField(19)
-  int get commentsNumber => _commentsNumber;
+  int? get commentsNumber => _commentsNumber;
   @HiveField(19)
-  set commentsNumber(int value) {
+  set commentsNumber(int? value) {
     if (_commentsNumber != value) {
       _commentsNumber = value;
       notifyListeners();
@@ -172,11 +172,11 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(20)
   List<BoardGameRank> ranks = <BoardGameRank>[];
 
-  DateTime _lastModified;
+  DateTime? _lastModified;
   @HiveField(21)
-  DateTime get lastModified => _lastModified;
+  DateTime? get lastModified => _lastModified;
   @HiveField(21)
-  set lastModified(DateTime value) {
+  set lastModified(DateTime? value) {
     if (_lastModified != value) {
       _lastModified = value;
       notifyListeners();
@@ -190,44 +190,44 @@ class BoardGameDetails extends BaseBoardGame {
     return expansions?.where((expansion) => expansion?.isInCollection ?? false)?.length ?? 0;
   }
 
-  bool _isExpansion;
+  bool? _isExpansion;
   @HiveField(23)
-  bool get isExpansion => _isExpansion;
+  bool? get isExpansion => _isExpansion;
   @HiveField(23)
-  set isExpansion(bool value) {
+  set isExpansion(bool? value) {
     if (_isExpansion != value) {
       _isExpansion = value;
       notifyListeners();
     }
   }
 
-  bool _isOwned;
+  bool? _isOwned;
   @HiveField(24)
   bool get isOwned => _isOwned ?? false;
   @HiveField(24)
-  set isOwned(bool value) {
+  set isOwned(bool? value) {
     if (_isOwned != value) {
       _isOwned = value;
       notifyListeners();
     }
   }
 
-  bool _isOnWishlist;
+  bool? _isOnWishlist;
   @HiveField(25)
   bool get isOnWishlist => _isOnWishlist ?? false;
   @HiveField(25)
-  set isOnWishlist(bool value) {
+  set isOnWishlist(bool? value) {
     if (_isOnWishlist != value) {
       _isOnWishlist = value;
       notifyListeners();
     }
   }
 
-  bool _isFriends;
+  bool? _isFriends;
   @HiveField(26)
   bool get isFriends => _isFriends ?? false;
   @HiveField(26)
-  set isFriends(bool value) {
+  set isFriends(bool? value) {
     if (_isFriends != value) {
       _isFriends = value;
       notifyListeners();
@@ -236,11 +236,11 @@ class BoardGameDetails extends BaseBoardGame {
 
   // MK Flag to indicate that the board game got synced from BGG
   //    This is important when removing BGG's user account (only these games will be removed)
-  bool _isBggSynced;
+  bool? _isBggSynced;
   @HiveField(27)
   bool get isBggSynced => _isBggSynced ?? false;
   @HiveField(27)
-  set isBggSynced(bool value) {
+  set isBggSynced(bool? value) {
     if (_isBggSynced != value) {
       _isBggSynced = value;
       notifyListeners();
@@ -255,7 +255,7 @@ class BoardGameDetails extends BaseBoardGame {
     return '$minPlaytime - $maxPlaytime';
   }
 
-  String get rankFormatted {
+  String? get rankFormatted {
     if (rank != null) {
       return rank.toString();
     } else if (ranks?.isNotEmpty ?? false) {
@@ -285,22 +285,22 @@ class BoardGameDetails extends BaseBoardGame {
   String get _baseBggBoardGameUrl => '${Constants.BoardGameGeekBaseUrl}boardgame';
 
   String get _bggUrlEncodedName {
-    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
+    final List<String> spaceSeparatedNameParts = name!.toLowerCase().split(' ');
     return spaceSeparatedNameParts.where((part) {
       final String trimmedAndLoweredPart = part.trim();
       return !bggNotUsedUrlEncodedNameParts.contains(trimmedAndLoweredPart);
     }).map((part) {
       final String trimmedAndLoweredPart = part.trim();
-      final String regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
+      final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
       return regexMatch;
     }).join('-');
   }
 
   String get _boardGameOracleUrlEncodedName {
-    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
+    final List<String> spaceSeparatedNameParts = name!.toLowerCase().split(' ');
     return spaceSeparatedNameParts.map((part) {
       final String trimmedAndLoweredPart = part.trim();
-      final String regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
+      final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
       return regexMatch;
     }).join('-');
   }

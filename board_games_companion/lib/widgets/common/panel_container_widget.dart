@@ -5,9 +5,9 @@ import '../../common/styles.dart';
 
 class PanelContainer extends StatelessWidget {
   const PanelContainer({
-    @required this.child,
+    required this.child,
     this.borderRadius = Styles.defaultCornerRadius * 3,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final Widget child;

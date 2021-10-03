@@ -11,11 +11,11 @@ class CalendarCard extends StatelessWidget {
   const CalendarCard(
     this._date, {
     this.onTap,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final DateTime _date;
-  final VoidCallback onTap;
+  final DateTime? _date;
+  final VoidCallback? onTap;
   double get _width => 64;
 
   @override

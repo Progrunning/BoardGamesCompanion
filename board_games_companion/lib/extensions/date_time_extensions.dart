@@ -2,21 +2,21 @@ import 'package:intl/intl.dart';
 
 import '../common/constants.dart';
 
-extension DateTimeExtensions on DateTime {
-  String toShortMonth([String fallbackValue]) {
+extension DateTimeExtensions on DateTime? {
+  String toShortMonth([String? fallbackValue]) {
     if (this == null) {
       return fallbackValue ?? '';
     }
 
-    return DateFormat(Constants.ShortMonthDateFormat).format(this);
+    return DateFormat(Constants.ShortMonthDateFormat).format(this!);
   }
 
-  String toShortWeek([String fallbackValue]) {
+  String toShortWeek([String? fallbackValue]) {
     if (this == null) {
       return fallbackValue ?? '';
     }
 
-    return DateFormat(Constants.ShortWeekDayDateFormat).format(this);
+    return DateFormat(Constants.ShortWeekDayDateFormat).format(this!);
   }
 
   String toDaysAgo() {
@@ -26,7 +26,7 @@ extension DateTimeExtensions on DateTime {
     }
 
     final nowUtc = DateTime.now().toUtc();
-    final daysAgo = nowUtc.difference(this).inDays;
+    final daysAgo = nowUtc.difference(this!).inDays;
     if (daysAgo == 0) {
       return 'today';
     }
@@ -40,7 +40,7 @@ extension DateTimeExtensions on DateTime {
     return '$daysAgo $daysAgoText';
   }
 
-  int safeCompareTo(DateTime dateTimeToCompare) {
+  int safeCompareTo(DateTime? dateTimeToCompare) {
     if (this == null && dateTimeToCompare == null) {
       return Constants.LeaveAsIs;
     }
@@ -53,6 +53,6 @@ extension DateTimeExtensions on DateTime {
       return Constants.MoveBelow;
     }
 
-    return compareTo(dateTimeToCompare);
+    return compareTo(dateTimeToCompare!);
   }
 }

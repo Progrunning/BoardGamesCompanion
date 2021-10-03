@@ -5,24 +5,24 @@ abstract class BaseBoardGame with ChangeNotifier {
   BaseBoardGame(this._name);
 
   @HiveField(0)
-  String id;
+  String? id;
 
-  int _rank;
-  String _name;
-  String _thumbnailUrl;
-  int _yearPublished;
+  int? _rank;
+  String? _name;
+  String? _thumbnailUrl;
+  int? _yearPublished;
 
   @HiveField(1)
-  String get name => _name;
+  String? get name => _name;
   @HiveField(2)
-  String get thumbnailUrl => _thumbnailUrl;
+  String? get thumbnailUrl => _thumbnailUrl;
   @HiveField(3)
-  int get rank => _rank;
+  int? get rank => _rank;
   @HiveField(4)
-  int get yearPublished => _yearPublished;
+  int? get yearPublished => _yearPublished;
 
   @HiveField(1)
-  set name(String value) {
+  set name(String? value) {
     if (_name != value) {
       _name = value;
       notifyListeners();
@@ -30,7 +30,7 @@ abstract class BaseBoardGame with ChangeNotifier {
   }
 
   @HiveField(2)
-  set thumbnailUrl(String value) {
+  set thumbnailUrl(String? value) {
     if (_thumbnailUrl != value) {
       _thumbnailUrl = value;
       notifyListeners();
@@ -38,7 +38,7 @@ abstract class BaseBoardGame with ChangeNotifier {
   }
 
   @HiveField(3)
-  set rank(int value) {
+  set rank(int? value) {
     if (_rank != value) {
       _rank = value;
       notifyListeners();
@@ -46,7 +46,7 @@ abstract class BaseBoardGame with ChangeNotifier {
   }
 
   @HiveField(4)
-  set yearPublished(int value) {
+  set yearPublished(int? value) {
     if (_yearPublished != value) {
       _yearPublished = value;
       notifyListeners();

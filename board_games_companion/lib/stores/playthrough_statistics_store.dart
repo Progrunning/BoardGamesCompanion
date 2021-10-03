@@ -29,7 +29,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
   final Map<String, BoardGameStatistics> _boardGamesStatistics = {};
   Map<String, BoardGameStatistics> get boardGamesStatistics => _boardGamesStatistics;
 
-  Future<void> loadBoardGamesStatistics(List<BoardGameDetails> allBoardGames) async {
+  Future<void> loadBoardGamesStatistics(List<BoardGameDetails>? allBoardGames) async {
     if (allBoardGames?.isEmpty ?? true) {
       return;
     }
@@ -37,17 +37,17 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
-    final boardGameDetailsMapById = <String, BoardGameDetails>{
-      for (BoardGameDetails boardGameDetails in allBoardGames) boardGameDetails.id: boardGameDetails
+    final boardGameDetailsMapById = <String?, BoardGameDetails>{
+      for (BoardGameDetails boardGameDetails in allBoardGames!) boardGameDetails.id: boardGameDetails
     };
 
     final boardGamePlaythroughs =
-        await _playthroughService.retrievePlaythroughs(boardGameDetailsMapById.keys);
+        await _playthroughService.retrievePlaythroughs(boardGameDetailsMapById.keys as Iterable<String>);
 
     final Map<String, List<Playthrough>> boardGamePlaythroughsGroupedByBoardGameId =
         groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
     for (final boardGameId in boardGameDetailsMapById.keys) {
-      var boardGameStatistics = _boardGamesStatistics[boardGameId];
+      var boardGameStatistics = _boardGamesStatistics[boardGameId!];
       if (boardGameStatistics == null) {
         boardGameStatistics = _boardGamesStatistics[boardGameId] = BoardGameStatistics();
       }
@@ -94,12 +94,12 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
           }
         }
 
-        final int allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
-            ?.map((p) => p.endDate.difference(p.startDate).inSeconds)
+        final int? allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
+            ?.map((p) => p.endDate!.difference(p.startDate).inSeconds)
             ?.reduce((a, b) => a + b);
         if (allPlaythroughsDurationSumInSeconds != null) {
           boardGameStatistics.averagePlaytimeInSeconds =
-              (allPlaythroughsDurationSumInSeconds / finishedPlaythroughs.length).floor();
+              (allPlaythroughsDurationSumInSeconds / finishedPlaythroughs!.length).floor();
         }
       }
     }
@@ -108,12 +108,12 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
   }
 
   void _updateLastPlayedAndWinner(
-      List<Playthrough> finishedPlaythroughs,
+      List<Playthrough>? finishedPlaythroughs,
       BoardGameStatistics boardGameStatistics,
       Map<String, List<Score>> playthroughScoresByPlaythroughId,
       Map<String, Player> playersById) {
     if (finishedPlaythroughs?.isNotEmpty ?? false) {
-      final lastPlaythrough = finishedPlaythroughs.first;
+      final lastPlaythrough = finishedPlaythroughs!.first;
       boardGameStatistics.lastPlayed = lastPlaythrough.startDate;
 
       if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
@@ -122,7 +122,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
       final lastPlaythroughScores =
           playthroughScoresByPlaythroughId[lastPlaythrough.id].onlyScoresWithValue();
-      lastPlaythroughScores?.sort((a, b) => num.tryParse(b.value).compareTo(num.tryParse(a.value)));
+      lastPlaythroughScores?.sort((a, b) => num.tryParse(b.value)!.compareTo(num.tryParse(a.value)!));
       if (lastPlaythroughScores?.isEmpty ?? true) {
         if (boardGameStatistics.lastWinner != null) {
           boardGameStatistics.lastWinner = null;

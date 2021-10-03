@@ -7,8 +7,8 @@ import '../../models/hive/player.dart';
 
 class PlayerAvatarSubtitle extends StatelessWidget {
   const PlayerAvatarSubtitle({
-    Key key,
-    @required this.player,
+    Key? key,
+    required this.player,
   }) : super(key: key);
 
   final Player player;

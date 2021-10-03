@@ -17,7 +17,7 @@ class PlayerService extends BaseHiveService<Player> {
   final FileService fileService;
 
   Future<List<Player>> retrievePlayers({
-    List<String> playerIds,
+    required List<String> playerIds,
     bool includeDeleted = false,
   }) async {
     if (!await ensureBoxOpen(HiveBoxes.Players)) {
@@ -35,7 +35,7 @@ class PlayerService extends BaseHiveService<Player> {
 
     for (final Player player in players) {
       if (player.avatarFileName?.isNotEmpty ?? false) {
-        player.avatarImageUri = await fileService.createDocumentsFilePath(player.avatarFileName);
+        player.avatarImageUri = await fileService.createDocumentsFilePath(player.avatarFileName!);
       }
     }
 
@@ -52,7 +52,7 @@ class PlayerService extends BaseHiveService<Player> {
     }
 
     if (player.avatarFileToSave != null) {
-      final File savedAvatarImage = await saveAvatar(player);
+      final File? savedAvatarImage = await saveAvatar(player);
       if (savedAvatarImage == null) {
         return false;
       }
@@ -62,7 +62,7 @@ class PlayerService extends BaseHiveService<Player> {
 
     if ((existingPlayer?.avatarFileName?.isEmpty ?? false) &&
         player.avatarFileName != existingPlayer?.avatarFileName) {
-      await deleteAvatar(existingPlayer?.avatarFileName);
+      await deleteAvatar(existingPlayer?.avatarFileName!);
     }
 
     await storageBox.put(player.id, player);
@@ -91,21 +91,21 @@ class PlayerService extends BaseHiveService<Player> {
     return true;
   }
 
-  Future<File> saveAvatar(Player player) async {
+  Future<File?> saveAvatar(Player player) async {
     if (player?.avatarFileToSave == null) {
       return null;
     }
 
     final avatarImageName = Uuid().v4();
-    var avatarImageNameFileExtension = '.jpg';
-    if (_fileExtensionRegex.hasMatch(player.avatarFileToSave.path)) {
+    String? avatarImageNameFileExtension = '.jpg';
+    if (_fileExtensionRegex.hasMatch(player.avatarFileToSave!.path)) {
       avatarImageNameFileExtension =
-          _fileExtensionRegex.firstMatch(player.avatarFileToSave.path).group(0);
+          _fileExtensionRegex.firstMatch(player.avatarFileToSave!.path)!.group(0);
     }
 
     player.avatarFileName = '$avatarImageName$avatarImageNameFileExtension';
 
-    return fileService.saveToDocumentsDirectory(player.avatarFileName, player.avatarFileToSave);
+    return fileService.saveToDocumentsDirectory(player.avatarFileName!, player.avatarFileToSave!);
   }
 
   Future<bool> deleteAvatar(String avatarFileName) async {

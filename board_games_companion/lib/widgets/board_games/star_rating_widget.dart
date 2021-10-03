@@ -6,7 +6,7 @@ class StarRating extends StatelessWidget {
     this.rating = .0,
     this.color = Colors.yellow,
     this.size = 15,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final int starCount;

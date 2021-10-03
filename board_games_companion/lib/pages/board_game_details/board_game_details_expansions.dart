@@ -13,15 +13,15 @@ import 'board_game_details_page.dart';
 
 class BoardGameDetailsExpansions extends StatefulWidget {
   const BoardGameDetailsExpansions({
-    Key key,
-    @required this.boardGameDetailsStore,
-    @required this.spacingBetweenSecions,
-    @required this.preferencesService,
+    Key? key,
+    required this.boardGameDetailsStore,
+    required this.spacingBetweenSecions,
+    required this.preferencesService,
   }) : super(key: key);
 
   final BoardGameDetailsStore boardGameDetailsStore;
   final double spacingBetweenSecions;
-  final PreferencesService preferencesService;
+  final PreferencesService? preferencesService;
 
   @override
   _BoardGameDetailsExpansionsState createState() => _BoardGameDetailsExpansionsState();
@@ -44,14 +44,14 @@ class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions>
               unselectedWidgetColor: AppTheme.accentColor,
             ),
             child: FutureBuilder<bool>(
-              future: widget.preferencesService.getExpansionsPanelExpandedState(),
+              future: widget.preferencesService!.getExpansionsPanelExpandedState(),
               builder: (_, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return _Expansions(
                       boardGameDetailsStore: widget.boardGameDetailsStore,
-                      preferencesService: widget.preferencesService,
-                      initiallyExpanded: snapshot.data as bool,
+                      preferencesService: widget.preferencesService!,
+                      initiallyExpanded: snapshot.data as bool?,
                     );
                   }
                 }
@@ -68,29 +68,29 @@ class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions>
 
 class _Expansions extends StatelessWidget {
   const _Expansions({
-    Key key,
-    @required this.boardGameDetailsStore,
-    @required this.preferencesService,
-    @required this.initiallyExpanded,
+    Key? key,
+    required this.boardGameDetailsStore,
+    required this.preferencesService,
+    required this.initiallyExpanded,
   }) : super(key: key);
 
   final BoardGameDetailsStore boardGameDetailsStore;
   final PreferencesService preferencesService;
-  final bool initiallyExpanded;
+  final bool? initiallyExpanded;
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: Text(
-        'Expansions (${boardGameDetailsStore.boardGameDetails.expansions.length})',
+        'Expansions (${boardGameDetailsStore.boardGameDetails!.expansions.length})',
         style: const TextStyle(
           fontSize: Dimensions.standardFontSize,
         ),
       ),
       subtitle: Text(
-        boardGameDetailsStore.boardGameDetails.expansionsOwned == 0
+        boardGameDetailsStore.boardGameDetails!.expansionsOwned == 0
             ? "You don't own any expansions"
-            : 'You own ${boardGameDetailsStore.boardGameDetails.expansionsOwned} expansion(s)',
+            : 'You own ${boardGameDetailsStore.boardGameDetails!.expansionsOwned} expansion(s)',
         style: const TextStyle(
           color: AppTheme.defaultTextColor,
           fontSize: Dimensions.smallFontSize,
@@ -99,15 +99,15 @@ class _Expansions extends StatelessWidget {
       tilePadding: const EdgeInsets.symmetric(
         horizontal: Dimensions.standardSpacing,
       ),
-      initiallyExpanded: initiallyExpanded,
+      initiallyExpanded: initiallyExpanded!,
       onExpansionChanged: (bool isExpanded) async {
         await preferencesService.setExpansionsPanelExpandedState(isExpanded);
       },
       children: [
         ...List.generate(
-          boardGameDetailsStore.boardGameDetails.expansions.length,
+          boardGameDetailsStore.boardGameDetails!.expansions.length,
           (index) {
-            final expansion = boardGameDetailsStore.boardGameDetails.expansions[index];
+            final expansion = boardGameDetailsStore.boardGameDetails!.expansions[index];
 
             return ChangeNotifierProvider<BoardGamesExpansion>.value(
               value: expansion,
@@ -128,8 +128,8 @@ class _Expansions extends StatelessWidget {
 
 class _Expansion extends StatelessWidget {
   const _Expansion({
-    Key key,
-    @required BoardGamesExpansion boardGamesExpansion,
+    Key? key,
+    required BoardGamesExpansion boardGamesExpansion,
   })  : _boardGameExpansion = boardGamesExpansion,
         super(key: key);
 

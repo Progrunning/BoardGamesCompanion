@@ -12,8 +12,8 @@ class AnalyticsService {
   final RateAndReviewService _rateAndReviewService;
 
   Future<void> logEvent({
-    @required String name,
-    Map<String, dynamic> parameters,
+    required String name,
+    Map<String, dynamic>? parameters,
   }) async {
     await _firebaseAnalytics.logEvent(name: name, parameters: parameters);
     await _rateAndReviewService.increaseNumberOfSignificantActions();

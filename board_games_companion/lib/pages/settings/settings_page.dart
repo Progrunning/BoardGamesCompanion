@@ -21,7 +21,7 @@ import '../../widgets/common/sync_collection_button.dart';
 import '../about_page.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -58,7 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
 class _UserDetailsPanel extends StatelessWidget with SyncCollection {
   const _UserDetailsPanel({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -184,7 +184,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
 }
 
 class _RateAndReviewTile extends StatelessWidget {
-  const _RateAndReviewTile({Key key}) : super(key: key);
+  const _RateAndReviewTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +216,7 @@ class _RateAndReviewTile extends StatelessWidget {
 
 class _AboutPageTile extends StatelessWidget {
   const _AboutPageTile({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -256,7 +256,7 @@ class _AboutPageTile extends StatelessWidget {
 
 class _VersionNumber extends StatelessWidget {
   const _VersionNumber({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

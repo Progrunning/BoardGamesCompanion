@@ -43,7 +43,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     List<PlaythroughPlayer> playthoughPlayers,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
-    Duration duration,
+    Duration? duration,
   ) async {
     if ((boardGameId?.isEmpty ?? true) || (playthoughPlayers?.isEmpty ?? true)) {
       return null;
@@ -77,12 +77,12 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playthroughPlayerId in playthroughPlayerIds) {
-        var playerScore = Score();
+        Score? playerScore = Score();
         if (playerScores.containsKey(playthroughPlayerId)) {
-          playerScore = playerScores[playthroughPlayerId].score;
+          playerScore = playerScores[playthroughPlayerId]!.score;
         }
 
-        playerScore.boardGameId = boardGameId;
+        playerScore!.boardGameId = boardGameId;
         playerScore.playerId = playthroughPlayerId;
         playerScore.playthroughId = newPlaythrough.id;
 
@@ -134,12 +134,12 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     return true;
   }
 
-  Future<bool> deletePlaythroughsForGames(List<String> boardGameIds) async {
+  Future<bool> deletePlaythroughsForGames(List<String?> boardGameIds) async {
     if ((boardGameIds?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return false;
     }
 
-    final playthroughsToDelete = storageBox.values
+    final List<Playthrough> playthroughsToDelete = storageBox.values
         .where((playthrough) => boardGameIds.contains(playthrough.boardGameId))
         .toList();
     if (playthroughsToDelete?.isEmpty ?? true) {
@@ -165,7 +165,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    final playthroughs = storageBox.values;
+    final Iterable<Playthrough> playthroughs = storageBox.values;
     if (playthroughs?.isEmpty ?? true) {
       return false;
     }

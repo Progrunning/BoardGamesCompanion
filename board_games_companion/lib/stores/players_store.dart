@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
@@ -12,15 +13,15 @@ class PlayersStore with ChangeNotifier {
 
   final PlayerService _playerService;
 
-  List<Player> _players;
-  Player _playerToCreateOrEdit;
+  List<Player>? _players;
+  Player? _playerToCreateOrEdit;
 
-  List<Player> get players => _players;
-  Player get playerToCreateOrEdit => _playerToCreateOrEdit;
+  List<Player>? get players => _players;
+  Player? get playerToCreateOrEdit => _playerToCreateOrEdit;
 
   Future<List<Player>> loadPlayers() async {
     if (_players != null) {
-      return _players;
+      return _players!;
     }
 
     try {
@@ -34,21 +35,20 @@ class PlayersStore with ChangeNotifier {
 
   Future<bool> addOrUpdatePlayer(Player player) async {
     try {
-      final existingPlayer = _players.firstWhere(
+      final existingPlayer = _players!.firstWhereOrNull(
         (p) => p.id == player.id,
-        orElse: () => null,
       );
 
       final isNewPlayer = existingPlayer == null;
       final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(player);
       if (addOrUpdateSucceeded) {
-        _playerToCreateOrEdit.id = player.id;
-        _playerToCreateOrEdit.avatarFileName = player.avatarFileName;
-        _playerToCreateOrEdit.avatarImageUri = player.avatarImageUri;
-        _playerToCreateOrEdit.name = player.name;
+        _playerToCreateOrEdit!.id = player.id;
+        _playerToCreateOrEdit!.avatarFileName = player.avatarFileName;
+        _playerToCreateOrEdit!.avatarImageUri = player.avatarImageUri;
+        _playerToCreateOrEdit!.name = player.name;
 
         if (isNewPlayer) {
-          _players.add(player);
+          _players!.add(player);
 
           notifyListeners();
         }
@@ -66,7 +66,7 @@ class PlayersStore with ChangeNotifier {
     try {
       final deleteSucceeded = await _playerService.deletePlayer(playerId);
       if (deleteSucceeded) {
-        _players.removeWhere((p) => p.id == playerId);
+        _players!.removeWhere((p) => p.id == playerId);
         notifyListeners();
       }
       return deleteSucceeded;
@@ -77,7 +77,7 @@ class PlayersStore with ChangeNotifier {
     return false;
   }
 
-  void setPlayerToCreateOrEdit({Player player}) {
+  void setPlayerToCreateOrEdit({Player? player}) {
     _playerToCreateOrEdit = player ?? Player();
   }
 

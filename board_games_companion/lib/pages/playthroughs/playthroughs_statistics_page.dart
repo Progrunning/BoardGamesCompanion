@@ -19,9 +19,9 @@ import '../../widgets/playthrough/calendar_card.dart';
 
 class PlaythroughStatistcsPage extends StatefulWidget {
   const PlaythroughStatistcsPage({
-    @required this.boardGameDetails,
-    @required this.collectionType,
-    Key key,
+    required this.boardGameDetails,
+    required this.collectionType,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;
@@ -68,7 +68,7 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
 
 class _Statistics extends StatelessWidget {
   const _Statistics({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -78,7 +78,7 @@ class _Statistics extends StatelessWidget {
     return Consumer<BoardGameDetails>(
       builder: (_, boardGameDetails, __) {
         final boardGameStatistics =
-            playthroughStatisticsStore.boardGamesStatistics[boardGameDetails.id];
+            playthroughStatisticsStore.boardGamesStatistics[boardGameDetails.id!]!;
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Dimensions.standardSpacing,
@@ -169,8 +169,8 @@ class _Statistics extends StatelessWidget {
 
 class _LastWinner extends StatelessWidget {
   const _LastWinner({
-    @required this.boardGameStatistics,
-    Key key,
+    required this.boardGameStatistics,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameStatistics boardGameStatistics;
@@ -189,8 +189,8 @@ class _LastWinner extends StatelessWidget {
 
 class _LastTimePlayed extends StatelessWidget {
   const _LastTimePlayed({
-    @required this.boardGameStatistics,
-    Key key,
+    required this.boardGameStatistics,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameStatistics boardGameStatistics;
@@ -216,8 +216,8 @@ class _LastTimePlayed extends StatelessWidget {
 
 class _StatisticsDetails extends StatelessWidget {
   const _StatisticsDetails({
-    @required this.boardGameStatistics,
-    Key key,
+    required this.boardGameStatistics,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameStatistics boardGameStatistics;
@@ -262,15 +262,15 @@ class _StatisticsDetails extends StatelessWidget {
 
 class _StatisticsItem extends StatelessWidget {
   const _StatisticsItem({
-    Key key,
-    @required this.icon,
-    @required this.value,
-    @required this.subtitle,
+    Key? key,
+    required this.icon,
+    required this.value,
+    required this.subtitle,
     this.iconColor,
   }) : super(key: key);
 
   final IconData icon;
-  final Color iconColor;
+  final Color? iconColor;
   final String value;
   final String subtitle;
 

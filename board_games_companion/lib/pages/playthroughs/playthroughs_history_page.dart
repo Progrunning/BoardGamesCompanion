@@ -28,9 +28,9 @@ import '../../widgets/playthrough/calendar_card.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
   const PlaythroughsHistoryPage({
-    @required this.boardGameDetails,
-    @required this.playthroughsStore,
-    Key key,
+    required this.boardGameDetails,
+    required this.playthroughsStore,
+    Key? key,
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;
@@ -52,7 +52,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
             success: (_, PlaythroughsStore store) {
               final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
               if (hasPlaythroughs) {
-                store.playthroughs.sort((a, b) => b.startDate?.compareTo(a.startDate));
+                store.playthroughs!.sort((a, b) => b.startDate?.compareTo(a.startDate));
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {
@@ -60,8 +60,8 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                     return _Playthrough(
                       playthroughsStore: widget.playthroughsStore,
                       playthroughStore: playthroughStore,
-                      playthrough: store.playthroughs[index],
-                      playthroughNumber: store.playthroughs.length - index,
+                      playthrough: store.playthroughs![index],
+                      playthroughNumber: store.playthroughs!.length - index,
                     );
                   },
                   separatorBuilder: (_, index) {
@@ -69,7 +69,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                       height: Dimensions.doubleStandardSpacing,
                     );
                   },
-                  itemCount: store.playthroughs.length,
+                  itemCount: store.playthroughs!.length,
                 );
               }
 
@@ -93,17 +93,17 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
 
 class _Playthrough extends StatelessWidget {
   const _Playthrough({
-    this.playthroughsStore,
-    this.playthroughStore,
-    this.playthrough,
+    required this.playthroughsStore,
+    required this.playthroughStore,
+    required this.playthrough,
     this.playthroughNumber,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final PlaythroughsStore playthroughsStore;
   final PlaythroughStore playthroughStore;
   final Playthrough playthrough;
-  final int playthroughNumber;
+  final int? playthroughNumber;
 
   static const double _maxPlaythroughItemHeight = 240;
 
@@ -133,13 +133,13 @@ class _Playthrough extends StatelessWidget {
 
                 if (snapshot.connectionState == ConnectionState.done) {
                   playthroughStore.playerScores.sortByScore();
-                  playthroughStore.playerScores
+                  playthroughStore.playerScores!
                       .where((ps) => ps?.score?.value?.isNotEmpty ?? false)
                       .toList()
                       .asMap()
                       .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
 
-                  debugPrint(playthroughStore.playthrough.endDate?.toIso8601String() ?? '');
+                  debugPrint(playthroughStore.playthrough!.endDate?.toIso8601String() ?? '');
 
                   return Row(
                     mainAxisSize: MainAxisSize.max,
@@ -148,7 +148,7 @@ class _Playthrough extends StatelessWidget {
                       _PlaythroughGameStats(
                         playthroughStore: playthroughStore,
                         playthroughNumber: playthroughNumber,
-                        playthrough: playthroughStore.playthrough,
+                        playthrough: playthroughStore.playthrough!,
                       ),
                       const SizedBox(
                         width: Dimensions.doubleStandardSpacing,
@@ -176,8 +176,8 @@ class _Playthrough extends StatelessWidget {
 
 class _PlaythroughPlayersStats extends StatelessWidget {
   const _PlaythroughPlayersStats({
-    Key key,
-    @required this.playthroughStore,
+    Key? key,
+    required this.playthroughStore,
   }) : super(key: key);
 
   final PlaythroughStore playthroughStore;
@@ -212,8 +212,8 @@ class _PlaythroughPlayersStats extends StatelessWidget {
 
 class _PlaythroughPlayerList extends StatelessWidget {
   const _PlaythroughPlayerList({
-    Key key,
-    @required PlaythroughStore playthroughStore,
+    Key? key,
+    required PlaythroughStore playthroughStore,
   })  : _playthroughStore = playthroughStore,
         super(key: key);
 
@@ -238,12 +238,12 @@ class _PlaythroughPlayerList extends StatelessWidget {
               child: Stack(
                 children: [
                   PlayerAvatar(
-                    _playthroughStore.playerScores[index].player,
-                    playerHeroIdSuffix: _playthroughStore.playthrough.id,
+                    _playthroughStore.playerScores![index].player,
+                    playerHeroIdSuffix: _playthroughStore.playthrough!.id,
                   ),
-                  if (_playthroughStore.playerScores[index].place != null)
+                  if (_playthroughStore.playerScores![index].place != null)
                     PositionedTileRankRibbon(
-                      rank: _playthroughStore.playerScores[index].place,
+                      rank: _playthroughStore.playerScores![index].place!,
                     ),
                 ],
               ),
@@ -252,7 +252,7 @@ class _PlaythroughPlayerList extends StatelessWidget {
               height: Dimensions.standardSpacing,
             ),
             Text(
-              _playthroughStore.playerScores[index]?.score?.value ?? '-',
+              _playthroughStore.playerScores![index]?.score?.value ?? '-',
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
@@ -268,14 +268,14 @@ class _PlaythroughPlayerList extends StatelessWidget {
 
 class _PlaythroughGameStats extends StatelessWidget {
   const _PlaythroughGameStats({
-    Key key,
-    @required this.playthroughStore,
-    @required this.playthroughNumber,
-    @required this.playthrough,
+    Key? key,
+    required this.playthroughStore,
+    required this.playthroughNumber,
+    required this.playthrough,
   }) : super(key: key);
 
   final PlaythroughStore playthroughStore;
-  final int playthroughNumber;
+  final int? playthroughNumber;
   final Playthrough playthrough;
 
   @override
@@ -284,7 +284,7 @@ class _PlaythroughGameStats extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        CalendarCard(playthroughStore.playthrough.startDate),
+        CalendarCard(playthroughStore.playthrough!.startDate),
         _PlaythroughItemDetail(
           playthroughStore.daysSinceStart?.toString(),
           'day(s) ago',
@@ -300,7 +300,7 @@ class _PlaythroughGameStats extends StatelessWidget {
 }
 
 class _PlaythroughDuration extends StatefulWidget {
-  const _PlaythroughDuration({@required this.playthroughStore});
+  const _PlaythroughDuration({required this.playthroughStore});
 
   final PlaythroughStore playthroughStore;
 
@@ -341,11 +341,11 @@ class _PlaythroughItemDetail extends StatelessWidget {
   const _PlaythroughItemDetail(
     this.title,
     this.subtitle, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String subtitle;
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {

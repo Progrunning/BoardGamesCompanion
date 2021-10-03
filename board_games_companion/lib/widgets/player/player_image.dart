@@ -8,15 +8,15 @@ import '../../common/styles.dart';
 
 class PlayerImage extends StatelessWidget {
   const PlayerImage({
-    Key key,
+    Key? key,
     this.medal,
     this.place,
     this.imageUri,
   }) : super(key: key);
 
-  final String imageUri;
-  final MedalEnum medal;
-  final int place;
+  final String? imageUri;
+  final MedalEnum? medal;
+  final int? place;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class PlayerImage extends StatelessWidget {
               }
               return Positioned.fill(
                 child: Image.file(
-                  File(imageUri),
+                  File(imageUri!),
                   fit: BoxFit.cover,
                 ),
               );

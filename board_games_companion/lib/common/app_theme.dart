@@ -82,37 +82,37 @@ class AppTheme {
     final originalTextTheme = GoogleFonts.latoTextTheme();
     const originalColorScheme = ColorScheme.light();
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
-    final originalBodyText1 = originalTextTheme.bodyText1;
-    final originalBodyText2 = originalTextTheme.bodyText2;
-    final originalHeadline5 = originalTextTheme.headline5;
-    final originalHeadline2 = originalTextTheme.headline2;
-    final originalHeadline1 = originalTextTheme.headline1;
-    final originalSubtitle2 = originalTextTheme.subtitle2;
+    final originalBodyText1 = originalTextTheme.bodyText1!;
+    final originalBodyText2 = originalTextTheme.bodyText2!;
+    final originalHeadline5 = originalTextTheme.headline5!;
+    final originalHeadline2 = originalTextTheme.headline2!;
+    final originalHeadline1 = originalTextTheme.headline1!;
+    final originalSubtitle2 = originalTextTheme.subtitle2!;
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
     final originaltimePickerTheme = ThemeData.light().timePickerTheme;
 
-    final subtitle1TextStyle = originalTextTheme.subtitle1.copyWith(
+    final subtitle1TextStyle = originalTextTheme.subtitle1!.copyWith(
       fontSize: Dimensions.smallFontSize,
       color: secondaryTextColor,
     );
 
-    final headline6TextStyle = originalTextTheme.headline6.copyWith(
+    final headline6TextStyle = originalTextTheme.headline6!.copyWith(
       color: defaultTextColor,
     );
 
-    final headline2TextStyle = originalTextTheme.headline2.copyWith(
+    final headline2TextStyle = originalTextTheme.headline2!.copyWith(
       fontSize: Dimensions.largeFontSize,
       fontWeight: FontWeight.bold,
       color: defaultTextColor,
     );
 
-    final headline3TextStyle = originalTextTheme.headline3.copyWith(
+    final headline3TextStyle = originalTextTheme.headline3!.copyWith(
       fontSize: Dimensions.mediumFontSize,
       fontWeight: FontWeight.bold,
       color: defaultTextColor,
     );
 
-    final headline4TextStyle = originalTextTheme.headline4.copyWith(
+    final headline4TextStyle = originalTextTheme.headline4!.copyWith(
       fontSize: Dimensions.standardFontSize,
       color: defaultTextColor,
     );

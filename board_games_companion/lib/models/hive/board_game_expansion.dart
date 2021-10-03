@@ -12,11 +12,11 @@ class BoardGamesExpansion with ChangeNotifier {
   @HiveField(1)
   String name;
 
-  bool _isInCollection;
+  bool? _isInCollection;
   @HiveField(2)
-  bool get isInCollection => _isInCollection;
+  bool? get isInCollection => _isInCollection;
   @HiveField(2)
-  set isInCollection(bool value) {
+  set isInCollection(bool? value) {
     if (_isInCollection != value) {
       _isInCollection = value;
       notifyListeners();

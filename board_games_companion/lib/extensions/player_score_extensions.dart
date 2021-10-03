@@ -1,6 +1,6 @@
 import '../models/player_score.dart';
 
-extension PlayerScoreExtensions on List<PlayerScore> {
+extension PlayerScoreExtensions on List<PlayerScore>? {
   static const moveDownTheList = 1;
   static const moveUpTheList = -1;
 
@@ -20,8 +20,8 @@ extension PlayerScoreExtensions on List<PlayerScore> {
         return moveUpTheList;
       }
 
-      final scoreNumber = num.tryParse(a.score.value);
-      final comparerScoreNumber = num.tryParse(b.score.value);
+      final scoreNumber = num.tryParse(a.score!.value);
+      final comparerScoreNumber = num.tryParse(b.score!.value);
       if (scoreNumber == null && comparerScoreNumber != null) {
         return moveDownTheList;
       }
@@ -30,7 +30,7 @@ extension PlayerScoreExtensions on List<PlayerScore> {
         return moveUpTheList;
       }
 
-      return comparerScoreNumber.compareTo(scoreNumber);
+      return comparerScoreNumber!.compareTo(scoreNumber!);
     });
   }
 }

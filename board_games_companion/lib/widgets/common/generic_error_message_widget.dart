@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GenericErrorMessage extends StatelessWidget {
-  const GenericErrorMessage({Key key}) : super(key: key);
+  const GenericErrorMessage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
