@@ -31,12 +31,14 @@ New app version will be pushed into the *TestFlight*.
 New app version will be pushed into the Google Play Store.
 
 
-# Running Hive Generator
+# Code generation
 
-The command to generate hive files is:
-`flutter packages pub run build_runner build -v --delete-conflicting-outputs`
+The command to auto generate files `flutter packages pub run build_runner build -v --delete-conflicting-outputs`. The following are libraries using auto generated code:
 
-Sometimes when the generation fails you might need to add this parameter `--delete-conflicting-outputs` in order to delete conflicting files
+- hive
+- injactable
+
+NOTE: Adding `--delete-conflicting-outputs` parameter fixes problems with conflicting files.
 
 # App Mockups
 
