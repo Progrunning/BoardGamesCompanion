@@ -28,7 +28,7 @@ class SortByOptionAdapter extends TypeAdapter<SortByOption> {
       case 6:
         return SortByOption.Rating;
       default:
-        return null;
+        return SortByOption.Name;
     }
   }
 
