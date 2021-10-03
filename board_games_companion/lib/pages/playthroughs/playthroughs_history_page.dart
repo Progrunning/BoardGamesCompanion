@@ -52,7 +52,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
             success: (_, PlaythroughsStore store) {
               final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
               if (hasPlaythroughs) {
-                store.playthroughs!.sort((a, b) => b.startDate?.compareTo(a.startDate));
+                store.playthroughs!.sort((a, b) => b.startDate.compareTo(a.startDate));
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {

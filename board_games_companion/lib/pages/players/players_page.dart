@@ -92,7 +92,7 @@ class _PlayersPageState extends State<PlayersPage> {
             );
           }
 
-          store.players!.sort((a, b) => a.name?.compareTo(b.name!));
+          store.players!.sort((a, b) => a.name!.compareTo(b.name!));
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

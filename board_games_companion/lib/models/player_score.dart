@@ -11,8 +11,8 @@ class PlayerScore with ChangeNotifier {
 
   Player? get player => _player;
 
-  final Score? _score;
-  Score? get score => _score;
+  final Score _score;
+  Score get score => _score;
 
   int? _place;
   int? get place => _place;
@@ -21,11 +21,11 @@ class PlayerScore with ChangeNotifier {
   MedalEnum? get medal => _medal;
 
   Future<bool> updatePlayerScore(String score) async {
-    if (score?.isEmpty ?? true) {
+    if (score.isEmpty) {
       return false;
     }
 
-    _score!.value = score;
+    _score.value = score;
 
     notifyListeners();
 

@@ -113,7 +113,8 @@ class BoardGamesGeekService {
 
     try {
       final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml);
-      final hotBoardGameItems = hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName);
+      final hotBoardGameItems =
+          hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName) ?? [];
       for (final hotBoardGameItem in hotBoardGameItems) {
         final hotBoardGameName = hotBoardGameItem.firstOrDefaultElementsAttribute(
             _xmlNameElementName, _xmlValueAttributeName)!;
@@ -122,8 +123,12 @@ class BoardGamesGeekService {
           continue;
         }
 
-        final newHotBoardGame = BoardGame(hotBoardGameName);
-        newHotBoardGame.id = hotBoardGameItem.getAttribute(_xmlIdAttributeName);
+        final String? hotBoardGameId = hotBoardGameItem.getAttribute(_xmlIdAttributeName);
+        if (hotBoardGameId == null) {
+          continue;
+        }
+
+        final newHotBoardGame = BoardGame(id: hotBoardGameId, name: hotBoardGameName);
         newHotBoardGame.rank =
             int.tryParse(hotBoardGameItem.getAttribute(_xmlRankAttributeName) ?? '');
 
@@ -184,8 +189,7 @@ class BoardGamesGeekService {
         return null;
       }
 
-      final boardGameDetails = BoardGameDetails(boardGameDetailName!);
-      boardGameDetails.id = id;
+      final boardGameDetails = BoardGameDetails(id: id, name: boardGameDetailName!);
 
       final boardGameType =
           boardGameDetailsItem.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
@@ -287,16 +291,19 @@ class BoardGamesGeekService {
       return boardGames;
     }
 
-    final searchResultItems = xmlDocument?.findAllElements(_xmlItemElementName);
+    final searchResultItems = xmlDocument.findAllElements(_xmlItemElementName);
     for (final searchResult in searchResultItems) {
       final boardGameId = searchResult.firstOrDefaultAttributeValue(_xmlIdAttributeName);
       final boardGameName =
-          searchResult.firstOrDefaultElementsAttribute(_xmlNameElementName, _xmlValueAttributeName)!;
+          searchResult.firstOrDefaultElementsAttribute(_xmlNameElementName, _xmlValueAttributeName);
+      if (boardGameId == null || boardGameName == null) {
+        return boardGames;
+      }
+
       final boardGameYearPublished = searchResult.firstOrDefaultElementsAttribute(
           _xmlYearPublishedElementName, _xmlValueAttributeName);
 
-      final boardGame = BoardGame(boardGameName);
-      boardGame.id = boardGameId;
+      final boardGame = BoardGame(id: boardGameId, name: boardGameName);
       boardGame.yearPublished = int.tryParse(boardGameYearPublished ?? '');
       boardGames.add(boardGame);
     }
@@ -373,16 +380,17 @@ class BoardGamesGeekService {
       return CollectionSyncResult();
     }
 
-    final collectionItems = xmlDocument?.findAllElements(_xmlItemElementName);
+    final collectionItems = xmlDocument.findAllElements(_xmlItemElementName);
     for (final collectionItem in collectionItems) {
-      final boardGame = BoardGameDetails();
-      boardGame.id = collectionItem.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
+      final String? boardGameId =
+          collectionItem.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
+      final String? boardGameName = collectionItem.firstOrDefault(_xmlNameElementName)?.text;
 
-      if (boardGame.id?.isEmpty ?? true) {
+      if ((boardGameId?.isEmpty ?? true) || (boardGameName?.isEmpty ?? true)) {
         continue;
       }
 
-      boardGame.name = collectionItem.firstOrDefault(_xmlNameElementName)?.text;
+      final boardGame = BoardGameDetails(id: boardGameId!, name: boardGameName!);
       boardGame.yearPublished =
           int.tryParse(collectionItem.firstOrDefault(_xmlYearPublishedElementName)?.text ?? '');
       boardGame.imageUrl = collectionItem.firstOrDefault(_xmlImageElementName)?.text;
@@ -445,33 +453,23 @@ class BoardGamesGeekService {
 
       switch (type) {
         case _xmlCategoryAttributeTypeName:
-          final boardGameCategory = BoardGameCategory();
-          boardGameCategory.id = id!;
-          boardGameCategory.name = value!;
+          final boardGameCategory = BoardGameCategory(id: id!, name: value!);
           boardGameDetails.categories!.add(boardGameCategory);
           break;
         case _xmlDesignerAttributeTypeName:
-          final boardGameDesigner = BoardGameDesigner();
-          boardGameDesigner.id = id!;
-          boardGameDesigner.name = value!;
+          final boardGameDesigner = BoardGameDesigner(id: id!, name: value!);
           boardGameDetails.desingers.add(boardGameDesigner);
           break;
         case _xmlPublisherAttributeTypeName:
-          final boardGamePublisher = BoardGamePublisher();
-          boardGamePublisher.id = id!;
-          boardGamePublisher.name = value!;
+          final boardGamePublisher = BoardGamePublisher(id: id!, name: value!);
           boardGameDetails.publishers.add(boardGamePublisher);
           break;
         case _xmlArtistAttributeTypeName:
-          final boardGameArtist = BoardGameArtist();
-          boardGameArtist.id = id!;
-          boardGameArtist.name = value!;
+          final boardGameArtist = BoardGameArtist(id: id!, name: value!);
           boardGameDetails.artists.add(boardGameArtist);
           break;
         case _xmlExpansionAttributeTypeName:
-          final boardGameArtist = BoardGamesExpansion();
-          boardGameArtist.id = id!;
-          boardGameArtist.name = value!;
+          final boardGameArtist = BoardGamesExpansion(id: id!, name: value!);
           boardGameDetails.expansions.add(boardGameArtist);
           break;
         default:
@@ -497,7 +495,8 @@ class BoardGamesGeekService {
       rank.type = boardGameRank.firstOrDefaultAttributeValue(_xmlTypeAttributeName)!;
       rank.id = boardGameRank.firstOrDefaultAttributeValue(_xmlIdAttributeName)!;
       rank.name = boardGameRank.firstOrDefaultAttributeValue(_xmlNameAttributeName)!;
-      rank.friendlyName = boardGameRank.firstOrDefaultAttributeValue(_xmlFriendlyNameAttributeName)!;
+      rank.friendlyName =
+          boardGameRank.firstOrDefaultAttributeValue(_xmlFriendlyNameAttributeName)!;
       rank.rank =
           num.tryParse(boardGameRank.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '')!;
 

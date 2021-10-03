@@ -17,7 +17,7 @@ class PlayerService extends BaseHiveService<Player> {
   final FileService fileService;
 
   Future<List<Player>> retrievePlayers({
-    required List<String> playerIds,
+    List<String>? playerIds,
     bool includeDeleted = false,
   }) async {
     if (!await ensureBoxOpen(HiveBoxes.Players)) {
@@ -25,13 +25,12 @@ class PlayerService extends BaseHiveService<Player> {
     }
 
     final List<Player> players = storageBox
-            ?.toMap()
-            ?.values
-            ?.where((Player player) =>
-                (playerIds?.contains(player.id) ?? true) &&
-                (includeDeleted || !(player.isDeleted ?? false)))
-            ?.toList() ??
-        <Player>[];
+        .toMap()
+        .values
+        .where((Player player) =>
+            (playerIds?.contains(player.id) ?? true) &&
+            (includeDeleted || !(player.isDeleted ?? false)))
+        .toList();
 
     for (final Player player in players) {
       if (player.avatarFileName?.isNotEmpty ?? false) {
@@ -60,9 +59,9 @@ class PlayerService extends BaseHiveService<Player> {
 
     final existingPlayer = storageBox.get(player.id);
 
-    if ((existingPlayer?.avatarFileName?.isEmpty ?? false) &&
+    if ((existingPlayer?.avatarFileName?.isNotEmpty ?? false) &&
         player.avatarFileName != existingPlayer?.avatarFileName) {
-      await deleteAvatar(existingPlayer?.avatarFileName!);
+      await deleteAvatar(existingPlayer!.avatarFileName!);
     }
 
     await storageBox.put(player.id, player);

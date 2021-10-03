@@ -35,7 +35,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   final nameFocusNode = FocusNode();
   final imagePicker = ImagePicker();
 
-  Player player;
+  late Player player;
   late bool isEditMode;
 
   @override
@@ -76,7 +76,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                 title: Text(_hasName ? player.name! : 'New Player'),
               ),
               body: SafeArea(
-                  child: PageContainer(
+                child: PageContainer(
                   child: Padding(
                     padding: const EdgeInsets.all(Dimensions.standardSpacing),
                     child: Form(
@@ -174,11 +174,13 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   }
 
   void _setPlayerData() {
-    player = Player();
-    player.id = widget.playersStore.playerToCreateOrEdit!.id;
-    player.name = widget.playersStore.playerToCreateOrEdit!.name;
-    player.avatarFileName = widget.playersStore.playerToCreateOrEdit!.avatarFileName;
-    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit!.avatarImageUri;
+    player = Player(
+      id: widget.playersStore.playerToCreateOrEdit!.id,
+    );
+
+    player.name = widget.playersStore.playerToCreateOrEdit?.name;
+    player.avatarFileName = widget.playersStore.playerToCreateOrEdit?.avatarFileName;
+    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit?.avatarImageUri;
 
     isEditMode = player.name?.isNotEmpty ?? false;
   }

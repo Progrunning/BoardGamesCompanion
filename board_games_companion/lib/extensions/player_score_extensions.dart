@@ -9,19 +9,19 @@ extension PlayerScoreExtensions on List<PlayerScore>? {
       return;
     }
 
-    this?.sort((a, b) {
-      final hasScore = a?.score?.value != null;
+    this!.sort((a, b) {
+      final hasScore = a.score?.value != null;
       if (!hasScore) {
         return moveDownTheList;
       }
 
-      final comparerHasScore = b?.score?.value != null;
+      final comparerHasScore = b.score?.value != null;
       if (!comparerHasScore) {
         return moveUpTheList;
       }
 
-      final scoreNumber = num.tryParse(a.score!.value);
-      final comparerScoreNumber = num.tryParse(b.score!.value);
+      final scoreNumber = num.tryParse(a.score!.value!);
+      final comparerScoreNumber = num.tryParse(b.score!.value!);
       if (scoreNumber == null && comparerScoreNumber != null) {
         return moveDownTheList;
       }
