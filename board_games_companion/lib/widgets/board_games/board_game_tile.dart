@@ -60,7 +60,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
               child: const Center(child: CircularProgressIndicator()),
             ),
             // TODO Add shadow to the error state
-            errorWidget: (context, url, error) => ClipRRect(
+            errorWidget: (context, url, dynamic error) => ClipRRect(
               borderRadius: AppTheme.defaultBoxRadius,
               child: Container(
                 decoration: const BoxDecoration(
