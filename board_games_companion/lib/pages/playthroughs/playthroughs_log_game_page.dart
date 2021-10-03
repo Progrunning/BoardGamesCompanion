@@ -396,25 +396,25 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   'The game took: ',
                   style: AppTheme.theme.textTheme.bodyText1,
                 ),
-                NumberPicker.integer(
-                  initialValue: hoursPlayed,
+                NumberPicker(
+                  value: hoursPlayed,
                   minValue: 0,
                   maxValue: 99,
                   onChanged: (num value) => _updateDurationHours(value),
-                  listViewWidth: 46,
+                  itemWidth: 46,
                 ),
                 Text(
                   'h',
                   style: AppTheme.theme.textTheme.bodyText2,
                 ),
                 const SizedBox(width: Dimensions.halfStandardSpacing),
-                NumberPicker.integer(
-                  initialValue: math.min(Duration.minutesPerHour - 1, minutesPlyed),
+                NumberPicker(
+                  value: math.min(Duration.minutesPerHour - 1, minutesPlyed),
                   infiniteLoop: true,
                   minValue: 0,
                   maxValue: Duration.minutesPerHour - 1,
                   onChanged: (num value) => _updateDurationMinutes(value),
-                  listViewWidth: 46,
+                  itemWidth: 46,
                 ),
                 Text(
                   'min ',
@@ -674,9 +674,10 @@ class _PlayerScore extends StatelessWidget {
               value: playerScore,
               child: Consumer<PlayerScore>(
                 builder: (_, PlayerScore playerScoreConsumer, __) {
-                  return NumberPicker.horizontal(
-                    listViewHeight: 46,
-                    initialValue: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                  return NumberPicker(
+                    value: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                    axis: Axis.horizontal,
+                    itemHeight: 46,
                     minValue: 0,
                     maxValue: 10000,
                     onChanged: (num value) async {

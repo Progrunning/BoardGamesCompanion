@@ -1,7 +1,9 @@
+import '../common/exceptions/bgg_retry_exception.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
+import 'package:retry/retry.dart';
 import 'package:xml/xml.dart' as xml;
 
 import '../common/enums/collection_type.dart';
@@ -15,7 +17,6 @@ import '../models/hive/board_game_details.dart';
 import '../models/hive/board_game_expansion.dart';
 import '../models/hive/board_game_publisher.dart';
 import '../models/hive/board_game_rank.dart';
-import '../utilities/bgg_retry_interceptor.dart';
 import '../utilities/custom_http_client_adapter.dart';
 
 @singleton
@@ -87,6 +88,7 @@ class BoardGamesGeekService {
   static const String _hotBoardGamesCacheSubKey = 'boardgame';
 
   static const int _numberOfDaysToCacheBoardGameDetails = 1;
+  static const int _bggRetryStatusCode = 202;
 
   final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
@@ -345,16 +347,20 @@ class BoardGamesGeekService {
     };
     queryParamters.addAll(additionalQueryParameters);
 
-    final dioWithRetry = _dio
-      ..interceptors.add(
-        RetryInterceptor(
-          dio: _dio,
-        ),
-      );
+    final collectionResultsXml = await retry(
+      () async {
+        final response = await _dio.get<String>(
+          _collectionBoardGamesUrl,
+          queryParameters: queryParamters,
+        );
 
-    final collectionResultsXml = await dioWithRetry.get<String>(
-      _collectionBoardGamesUrl,
-      queryParameters: queryParamters,
+        if (response.statusCode == _bggRetryStatusCode) {
+          throw BggRetryException;
+        }
+
+        return response;
+      },
+      retryIf: (e) => e is BggRetryException,
     );
 
     final boardGames = <BoardGameDetails>[];
