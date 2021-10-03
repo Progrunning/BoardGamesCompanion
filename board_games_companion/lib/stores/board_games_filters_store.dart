@@ -17,14 +17,12 @@ class BoardGamesFiltersStore with ChangeNotifier {
   );
 
   final List<SortBy> _sortBy = [
-    SortBy()..sortByOption = SortByOption.Name,
-    SortBy()..sortByOption = SortByOption.YearPublished,
-    SortBy()
-      ..sortByOption = SortByOption.LastUpdated
-      ..selected = true,
-    SortBy()..sortByOption = SortByOption.Rank,
-    SortBy()..sortByOption = SortByOption.Playtime,
-    SortBy()..sortByOption = SortByOption.Rating,
+    SortBy(sortByOption: SortByOption.Name),
+    SortBy(sortByOption: SortByOption.YearPublished),
+    SortBy(sortByOption: SortByOption.LastUpdated)..selected = true,
+    SortBy(sortByOption: SortByOption.Rank),
+    SortBy(sortByOption: SortByOption.Playtime),
+    SortBy(sortByOption: SortByOption.Rating),
   ];
 
   final BoardGamesFiltersService _boardGamesFiltersService;
@@ -53,10 +51,10 @@ class BoardGamesFiltersStore with ChangeNotifier {
       sb.selected = false;
     }
 
-    final selectedSortBy =
-        _sortBy.firstWhere((sb) => sb.name == _collectionFilters?.sortBy?.name, orElse: () {
-      return null;
-    } as SortBy Function()?);
+    final selectedSortBy = _sortBy.firstWhere((sb) => sb.name == _collectionFilters?.sortBy?.name,
+        orElse: () {
+          return null;
+        } as SortBy Function()?);
 
     if (selectedSortBy != null) {
       selectedSortBy.orderBy = _collectionFilters!.sortBy!.orderBy;

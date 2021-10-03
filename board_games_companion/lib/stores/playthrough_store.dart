@@ -67,10 +67,7 @@ class PlaythroughStore {
           (s) => s.playerId == p.id,
         );
 
-        return PlayerScore(
-          p,
-          score,
-        );
+        return PlayerScore(p, score!);
       }).toList();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

@@ -76,9 +76,9 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
         Score? playerScore = Score(
           id: uuid.v4(),
           playerId: playthroughPlayerId,
-          playthroughId: newPlaythrough.id,
           boardGameId: boardGameId,
         );
+        playerScore.playthroughId = newPlaythrough.id;
 
         if (playerScores.containsKey(playthroughPlayerId)) {
           playerScore = playerScores[playthroughPlayerId]!.score;
