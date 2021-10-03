@@ -624,14 +624,14 @@ class _EmptyCollection extends StatelessWidget {
                       textAlign: TextAlign.justify,
                     ),
                     if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
-                        (userStore.user?.name?.isNotEmpty ?? false)) ...[
+                        (userStore.user?.name.isNotEmpty ?? false)) ...[
                       const SizedBox(
                         height: Dimensions.doubleStandardSpacing,
                       ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: SyncButton(
-                          usernameCallback: () => userStore.user.name,
+                          usernameCallback: () => userStore.user!.name,
                         ),
                       ),
                     ]

@@ -7,7 +7,9 @@ import 'hive_base_service.dart';
 @singleton
 class ScoreService extends BaseHiveService<Score> {
   Future<bool> addOrUpdateScore(Score score) async {
-    if ((score.playthroughId.isEmpty) || (score.playerId.isEmpty) || (score.boardGameId.isEmpty)) {
+    if ((score.playthroughId?.isEmpty ?? true) ||
+        (score.playerId.isEmpty) ||
+        (score.boardGameId.isEmpty)) {
       return false;
     }
 
@@ -21,14 +23,14 @@ class ScoreService extends BaseHiveService<Score> {
   }
 
   Future<List<Score>> retrieveScores(Iterable<String> playthroughIds) async {
-    if ((playthroughIds?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Scores)) {
+    if ((playthroughIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.Scores)) {
       return <Score>[];
     }
 
     return storageBox
-        ?.toMap()
-        ?.values
-        ?.where((score) => playthroughIds.contains(score.playthroughId))
-        ?.toList();
+        .toMap()
+        .values
+        .where((score) => playthroughIds.contains(score.playthroughId))
+        .toList();
   }
 }

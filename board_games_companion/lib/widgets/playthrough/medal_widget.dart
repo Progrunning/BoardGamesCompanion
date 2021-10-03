@@ -9,7 +9,7 @@ class Medal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color _medalColor;
+    Color? _medalColor;
     switch (medal) {
       case MedalEnum.Gold:
         _medalColor = Colors.yellow;

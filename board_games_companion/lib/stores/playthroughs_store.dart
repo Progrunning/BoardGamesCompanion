@@ -59,7 +59,7 @@ class PlaythroughsStore with ChangeNotifier {
       duration,
     );
 
-    _playthroughs!.add(newPlaythrough);
+    _playthroughs!.add(newPlaythrough!);
     notifyListeners();
 
     await _analyticsService.logEvent(
