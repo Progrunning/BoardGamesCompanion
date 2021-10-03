@@ -297,12 +297,12 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     final minNumberOfPlayers = boardGamesStore.allboardGames!
         .where((boardGameDetails) => boardGameDetails.minPlayers != null)
-        .map((boardGameDetails) => boardGameDetails.minPlayers)
-        ?.reduce(min)!;
+        .map((boardGameDetails) => boardGameDetails.minPlayers!)
+        .reduce(min);
     final maxNumberOfPlayers = boardGamesStore.allboardGames!
         .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
-        .map((boardGameDetails) => boardGameDetails.maxPlayers)
-        ?.reduce(max)!;
+        .map((boardGameDetails) => boardGameDetails.maxPlayers!)
+        .reduce(max);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

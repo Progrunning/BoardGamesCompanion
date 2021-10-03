@@ -14,6 +14,6 @@ extension DoubleExtensions on double? {
       return Constants.MoveBelow;
     }
 
-    return compareTo(doubleToCompare!);
+    return this!.compareTo(doubleToCompare!);
   }
 }

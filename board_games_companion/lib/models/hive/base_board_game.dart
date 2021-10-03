@@ -2,18 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 abstract class BaseBoardGame with ChangeNotifier {
-  BaseBoardGame(this._name);
+  BaseBoardGame({required this.id, required String name}) {
+    _name = name;
+  }
 
   @HiveField(0)
-  String? id;
+  String id;
 
   int? _rank;
-  String? _name;
+  late String _name;
   String? _thumbnailUrl;
   int? _yearPublished;
 
   @HiveField(1)
-  String? get name => _name;
+  String get name => _name;
   @HiveField(2)
   String? get thumbnailUrl => _thumbnailUrl;
   @HiveField(3)
@@ -22,7 +24,7 @@ abstract class BaseBoardGame with ChangeNotifier {
   int? get yearPublished => _yearPublished;
 
   @HiveField(1)
-  set name(String? value) {
+  set name(String value) {
     if (_name != value) {
       _name = value;
       notifyListeners();

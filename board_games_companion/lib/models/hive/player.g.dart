@@ -18,10 +18,10 @@ class PlayerAdapter extends TypeAdapter<Player> {
     };
     return Player()
       ..id = fields[0] as String
-      .._name = fields[1] as String
-      .._imageUri = fields[2] as String
-      .._isDeleted = fields[3] as bool
-      .._avatarFileName = fields[4] as String;
+      .._name = fields[1] as String?
+      .._imageUri = fields[2] as String?
+      .._isDeleted = fields[3] as bool?
+      .._avatarFileName = fields[4] as String?;
   }
 
   @override

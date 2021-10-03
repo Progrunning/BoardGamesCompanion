@@ -6,6 +6,14 @@ part 'board_game_rank.g.dart';
 
 @HiveType(typeId: HiveBoxes.BoardGamesrankTypeId)
 class BoardGameRank {
+  BoardGameRank({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.friendlyName,
+    required this.rank,
+  });
+
   @HiveField(0)
   String id;
   @HiveField(1)

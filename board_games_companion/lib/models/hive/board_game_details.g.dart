@@ -19,33 +19,33 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
     return BoardGameDetails(
       fields[1] as String,
     )
-      ..categories = (fields[7] as List)?.cast<BoardGameCategory>()
-      ..publishers = (fields[16] as List)?.cast<BoardGamePublisher>()
-      ..artists = (fields[17] as List)?.cast<BoardGameArtist>()
-      ..desingers = (fields[18] as List)?.cast<BoardGameDesigner>()
-      ..ranks = (fields[20] as List)?.cast<BoardGameRank>()
-      ..expansions = (fields[22] as List)?.cast<BoardGamesExpansion>()
-      ..imageUrl = fields[5] as String
-      ..description = fields[6] as String
-      ..rating = fields[8] as double
-      ..votes = fields[9] as int
-      ..minPlayers = fields[10] as int
-      ..minPlaytime = fields[11] as int
-      ..maxPlayers = fields[12] as int
-      ..maxPlaytime = fields[13] as int
-      ..minAge = fields[14] as int
-      ..avgWeight = fields[15] as num
-      ..commentsNumber = fields[19] as int
-      ..lastModified = fields[21] as DateTime
-      ..isExpansion = fields[23] as bool
+      ..categories = (fields[7] as List?)?.cast<BoardGameCategory>()
+      ..publishers = (fields[16] as List).cast<BoardGamePublisher>()
+      ..artists = (fields[17] as List).cast<BoardGameArtist>()
+      ..desingers = (fields[18] as List).cast<BoardGameDesigner>()
+      ..ranks = (fields[20] as List).cast<BoardGameRank>()
+      ..expansions = (fields[22] as List).cast<BoardGamesExpansion>()
+      ..imageUrl = fields[5] as String?
+      ..description = fields[6] as String?
+      ..rating = fields[8] as double?
+      ..votes = fields[9] as int?
+      ..minPlayers = fields[10] as int?
+      ..minPlaytime = fields[11] as int?
+      ..maxPlayers = fields[12] as int?
+      ..maxPlaytime = fields[13] as int?
+      ..minAge = fields[14] as int?
+      ..avgWeight = fields[15] as num?
+      ..commentsNumber = fields[19] as int?
+      ..lastModified = fields[21] as DateTime?
+      ..isExpansion = fields[23] as bool?
       ..isOwned = fields[24] as bool
       ..isOnWishlist = fields[25] as bool
       ..isFriends = fields[26] as bool
       ..isBggSynced = fields[27] as bool
-      ..id = fields[0] as String
-      ..thumbnailUrl = fields[2] as String
-      ..rank = fields[3] as int
-      ..yearPublished = fields[4] as int;
+      ..id = fields[0] as String?
+      ..thumbnailUrl = fields[2] as String?
+      ..rank = fields[3] as int?
+      ..yearPublished = fields[4] as int?;
   }
 
   @override

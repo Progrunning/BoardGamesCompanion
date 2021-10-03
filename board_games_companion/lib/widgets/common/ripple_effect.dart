@@ -10,7 +10,7 @@ class RippleEffect extends StatelessWidget {
     this.backgroundColor = Colors.transparent,
     this.splashColor,
     this.highlightColor = Colors.transparent,
-    required this.borderRadius,
+    this.borderRadius,
     Key? key,
   }) : super(key: key);
 
@@ -19,7 +19,7 @@ class RippleEffect extends StatelessWidget {
   final Color backgroundColor;
   final Color? splashColor;
   final Color highlightColor;
-  final BorderRadius borderRadius;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context) {

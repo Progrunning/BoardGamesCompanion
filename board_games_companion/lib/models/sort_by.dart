@@ -8,6 +8,8 @@ part 'sort_by.g.dart';
 
 @HiveType(typeId: HiveBoxes.SortByTypeId)
 class SortBy {
+  SortBy({required this.sortByOption});
+
   @HiveField(0)
   SortByOption sortByOption;
 

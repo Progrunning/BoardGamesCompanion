@@ -16,7 +16,7 @@ part 'board_game_details.g.dart';
 
 @HiveType(typeId: HiveBoxes.BoardGamesDetailsTypeId)
 class BoardGameDetails extends BaseBoardGame {
-  BoardGameDetails([String name]) : super(name);
+  BoardGameDetails({required String id, required String name}) : super(id: id, name: name);
 
   final RegExp onlyLettersOrNumbersRegex = RegExp(r'[a-zA-Z0-9\-]+');
   final Set<String> bggNotUsedUrlEncodedNameParts = {

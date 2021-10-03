@@ -6,9 +6,17 @@ part 'score.g.dart';
 
 @HiveType(typeId: HiveBoxes.ScoreTypeId)
 class Score {
+  Score({
+    required this.id,
+    required this.playthroughId,
+    required this.playerId,
+    required this.boardGameId,
+    required this.value,
+  });
+
   @HiveField(0)
   String id;
-  
+
   @HiveField(1)
   String playthroughId;
   @HiveField(2)
@@ -18,8 +26,4 @@ class Score {
 
   @HiveField(4)
   String value;
-
-  // TODO MK What is this used for?
-  @HiveField(5)
-  String isDeleted;
 }
