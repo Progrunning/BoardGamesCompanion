@@ -38,32 +38,30 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
         <Playthrough>[];
   }
 
-  Future<Playthrough> createPlaythrough(
+  Future<Playthrough?> createPlaythrough(
     String boardGameId,
     List<PlaythroughPlayer> playthoughPlayers,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
     Duration? duration,
   ) async {
-    if ((boardGameId?.isEmpty ?? true) || (playthoughPlayers?.isEmpty ?? true)) {
+    if ((boardGameId.isEmpty) || (playthoughPlayers.isEmpty)) {
       return null;
     }
 
-    final playthroughPlayerIds = playthoughPlayers
-        .map(
-          (p) => p.player?.id,
-        )
-        .toList();
-
-    if (playthroughPlayerIds.isEmpty || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    final playthroughPlayerIds = playthoughPlayers.map((p) => p.player.id).toList();
+    if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return null;
     }
 
-    final newPlaythrough = Playthrough();
-    newPlaythrough.id = uuid.v4();
-    newPlaythrough.boardGameId = boardGameId;
-    newPlaythrough.playerIds = playthroughPlayerIds;
-    newPlaythrough.startDate = startDate;
+    final newPlaythrough = Playthrough(
+      id: uuid.v4(),
+      boardGameId: boardGameId,
+      playerIds: playthroughPlayerIds,
+      scoreIds: <String>[],
+      startDate: startDate,
+    );
+
     if (duration == null) {
       newPlaythrough.status = PlaythroughStatus.Started;
     } else {
@@ -71,24 +69,25 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       newPlaythrough.endDate = startDate.add(duration);
     }
 
-    newPlaythrough.scoreIds = <String>[];
-
     try {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playthroughPlayerId in playthroughPlayerIds) {
-        Score? playerScore = Score();
+        Score? playerScore = Score(
+          id: uuid.v4(),
+          playerId: playthroughPlayerId,
+          playthroughId: newPlaythrough.id,
+          boardGameId: boardGameId,
+        );
+
         if (playerScores.containsKey(playthroughPlayerId)) {
           playerScore = playerScores[playthroughPlayerId]!.score;
         }
 
-        playerScore!.boardGameId = boardGameId;
-        playerScore.playerId = playthroughPlayerId;
-        playerScore.playthroughId = newPlaythrough.id;
-
-        if (!await scoreService.addOrUpdateScore(playerScore)) {
+        if (!await scoreService.addOrUpdateScore(playerScore!)) {
           FirebaseCrashlytics.instance.log(
-              'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId');
+            'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId',
+          );
         } else {
           newPlaythrough.scoreIds.add(playerScore.id);
         }
@@ -103,7 +102,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> updatePlaythrough(Playthrough playthrough) async {
-    if ((playthrough?.id?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if ((playthrough.id.isEmpty) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return false;
     }
 

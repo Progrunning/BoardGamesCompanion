@@ -18,23 +18,23 @@ import '../stores/playthrough_store.dart';
 import '../stores/playthroughs_store.dart';
 import 'navigator_transitions.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class NavigatorHelper {
   static Future<T?> navigateToCreatePlayerPage<T extends Object>(
     BuildContext context, {
-    required Player player,
-  }) async {
-    return Navigator.push(
-      context,
-      NavigatorTransitions.fadeThrough(
-        (_, __, ___) {
-          final playersStore = getIt<PlayersStore>();
-          playersStore.setPlayerToCreateOrEdit(player: player);
+    Player? player,
+  }) async =>
+      Navigator.push(
+        context,
+        NavigatorTransitions.fadeThrough(
+          (_, __, ___) {
+            final playersStore = getIt<PlayersStore>();
+            playersStore.setPlayerToCreateOrEdit(player: player);
 
-          return PlayerPage(playersStore: playersStore);
-        },
-      ),
-    );
-  }
+            return PlayerPage(playersStore: playersStore);
+          },
+        ),
+      );
 
   static Future<T?> navigateToBoardGameDetails<T extends Object>(
     BuildContext context,

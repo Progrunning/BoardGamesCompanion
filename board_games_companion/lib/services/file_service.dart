@@ -27,7 +27,7 @@ class FileService {
   }
 
   Future<bool> deleteFileFromDocumentsDirectory(String fileName) async {
-    if (fileName?.isEmpty ?? true) {
+    if (fileName.isEmpty) {
       return false;
     }
 

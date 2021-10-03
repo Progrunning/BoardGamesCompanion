@@ -4,6 +4,7 @@ import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/services/analytics_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/hive/playthrough.dart';
 import '../../models/playthrough_player.dart';
@@ -88,9 +89,15 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
     return newPlaythrough;
   }
 
-  void selectPlayer(PlaythroughPlayer playthroughPlayer) {
+  void selectPlayer(PlaythroughPlayer playthroughPlayer, String boardGameId) {
+    final playerScore = Score(
+      id: const Uuid().v4(),
+      playerId: playthroughPlayer.player.id,
+      boardGameId: boardGameId,
+    );
+
     playthroughPlayer.isChecked = true;
-    playerScores[playthroughPlayer.player.id] = PlayerScore(playthroughPlayer.player, Score());
+    playerScores[playthroughPlayer.player.id] = PlayerScore(playthroughPlayer.player, playerScore);
   }
 
   void deselectPlayer(PlaythroughPlayer playthroughPlayer) {
