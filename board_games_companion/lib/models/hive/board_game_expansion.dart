@@ -7,6 +7,8 @@ part 'board_game_expansion.g.dart';
 
 @HiveType(typeId: HiveBoxes.BoardGamesExpansionId)
 class BoardGamesExpansion with ChangeNotifier {
+  BoardGamesExpansion({required this.id, required this.name});
+
   @HiveField(0)
   String id;
   @HiveField(1)

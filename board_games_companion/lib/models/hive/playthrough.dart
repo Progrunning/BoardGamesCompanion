@@ -7,6 +7,14 @@ part 'playthrough.g.dart';
 
 @HiveType(typeId: HiveBoxes.PlaythroughTypeId)
 class Playthrough {
+  Playthrough({
+    required this.id,
+    required this.boardGameId,
+    required this.playerIds,
+    required this.scoreIds,
+    required this.startDate,
+  });
+
   @HiveField(0)
   String id;
   @HiveField(1)
@@ -21,7 +29,7 @@ class Playthrough {
   @HiveField(5)
   DateTime? endDate;
   @HiveField(6)
-  PlaythroughStatus status;
+  PlaythroughStatus? status;
   @HiveField(7)
-  bool isDeleted;
+  bool isDeleted = false;
 }

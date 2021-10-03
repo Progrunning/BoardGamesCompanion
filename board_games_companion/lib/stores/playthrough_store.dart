@@ -25,8 +25,8 @@ class PlaythroughStore {
   final ScoreService _scoreService;
   final PlaythroughsStore _playthroughsStore;
 
-  Playthrough? _playthrough;
-  Playthrough? get playthrough => _playthrough;
+  late Playthrough _playthrough;
+  Playthrough get playthrough => _playthrough;
 
   int? _daysSinceStart;
   int? get daysSinceStart => _daysSinceStart;
@@ -47,7 +47,7 @@ class PlaythroughStore {
   List<PlayerScore>? get playerScores => _playerScores;
 
   Future<void> loadPlaythrough(Playthrough playthrough) async {
-    if (playthrough?.id?.isEmpty ?? true) {
+    if (playthrough.id.isEmpty) {
       return;
     }
 

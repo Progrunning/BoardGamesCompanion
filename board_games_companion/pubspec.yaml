@@ -62,12 +62,6 @@ dev_dependencies:
     sdk: flutter
   injectable_generator: ^1.4.1
 
-# TODO Workaround for pub get issues. Follow https://github.com/hivedb/hive/issues/268 to see what's the actual fix
-# dependency_overrides:
-#   path: ^1.6.4
-#   dartx: ^0.4.0
-#   collection: any
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

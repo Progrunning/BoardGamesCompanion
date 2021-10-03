@@ -53,23 +53,24 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDirectory.path);
-  Hive.registerAdapter(BoardGameDetailsAdapter());
-  Hive.registerAdapter(BoardGameCategoryAdapter());
-  Hive.registerAdapter(PlayerAdapter());
-  Hive.registerAdapter(PlaythroughAdapter());
-  Hive.registerAdapter(PlaythroughStatusAdapter());
-  Hive.registerAdapter(ScoreAdapter());
-  Hive.registerAdapter(BoardGameDesignerAdapter());
-  Hive.registerAdapter(BoardGamePublisherAdapter());
-  Hive.registerAdapter(BoardGameArtistAdapter());
-  Hive.registerAdapter(BoardGamesExpansionAdapter());
-  Hive.registerAdapter(BoardGameRankAdapter());
-  Hive.registerAdapter(UserAdapter());
-  Hive.registerAdapter(SortByAdapter());
-  Hive.registerAdapter(SortByOptionAdapter());
-  Hive.registerAdapter(OrderByAdapter());
-  Hive.registerAdapter(CollectionFiltersAdapter());
+  Hive
+    ..init(appDocumentDirectory.path)
+    ..registerAdapter(BoardGameDetailsAdapter())
+    ..registerAdapter(BoardGameCategoryAdapter())
+    ..registerAdapter(PlayerAdapter())
+    ..registerAdapter(PlaythroughAdapter())
+    ..registerAdapter(PlaythroughStatusAdapter())
+    ..registerAdapter(ScoreAdapter())
+    ..registerAdapter(BoardGameDesignerAdapter())
+    ..registerAdapter(BoardGamePublisherAdapter())
+    ..registerAdapter(BoardGameArtistAdapter())
+    ..registerAdapter(BoardGamesExpansionAdapter())
+    ..registerAdapter(BoardGameRankAdapter())
+    ..registerAdapter(UserAdapter())
+    ..registerAdapter(SortByAdapter())
+    ..registerAdapter(SortByOptionAdapter())
+    ..registerAdapter(OrderByAdapter())
+    ..registerAdapter(CollectionFiltersAdapter());
 
   final PreferencesService preferencesService = getIt<PreferencesService>();
   await preferencesService.initialize();

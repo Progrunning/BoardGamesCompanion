@@ -4,12 +4,12 @@ import 'package:uuid/uuid.dart';
 
 class BaseHiveService<T> {
   @protected
-  final uuid = Uuid();
+  final uuid = const Uuid();
 
-  Box<T> storageBox;
+  late Box<T> storageBox;
 
   void closeBox(String boxName) {
-    if (boxName?.isEmpty ?? true) {
+    if (boxName.isEmpty) {
       return;
     }
 

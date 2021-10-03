@@ -112,7 +112,7 @@ class BoardGamesGeekService {
     );
 
     try {
-      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml)!;
+      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml);
       final hotBoardGameItems = hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName);
       for (final hotBoardGameItem in hotBoardGameItems) {
         final hotBoardGameName = hotBoardGameItem.firstOrDefaultElementsAttribute(

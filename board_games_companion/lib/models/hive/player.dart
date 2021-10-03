@@ -9,19 +9,22 @@ part 'player.g.dart';
 
 @HiveType(typeId: HiveBoxes.PlayersTypeId)
 class Player with ChangeNotifier {
+  Player({required this.id});
+
   @HiveField(0)
   String id;
 
   @HiveField(1)
   String? _name;
   @HiveField(2)
-  @Deprecated('Use avatarImageUri instead. The path to the image should be created at runtime, based on the avatarFileName and the path to the Documents folder.')
+  @Deprecated(
+      'Use avatarImageUri instead. The path to the image should be created at runtime, based on the avatarFileName and the path to the Documents folder.')
   String? _imageUri;
   @HiveField(3)
   bool? _isDeleted;
   @HiveField(4)
   String? _avatarFileName;
-  
+
   String? _avatarImageUri;
 
   String? get name => _name;
@@ -44,7 +47,7 @@ class Player with ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   set avatarFileName(String? value) {
     if (_avatarFileName != value) {
       _avatarFileName = value;
