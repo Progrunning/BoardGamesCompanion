@@ -5,52 +5,15 @@ variables:
   KeyStoreFileName: boardgamescompanion.keystore
 
 trigger:
-  batch: 'true'
+  batch: true
   branches:
     include:
-      - develop
       - release
-      - azure-pipelines
 
 stages:
 
-- stage: CI
-  condition: eq(variables['Build.SourceBranchName'], 'develop')
-  jobs:
-    - job: Build
-      timeoutInMinutes: 20
-      pool:
-        vmImage: 'macOS-latest'
 
-      steps:
-      
-        - task: FlutterInstall@0
-          displayName: 'Install Flutter'
-          inputs:
-            channel: 'stable'
-            version: 'custom'
-            customVersion: '1.22.3'
-
-        - task: FlutterBuild@0
-          displayName: 'Build Android'
-          inputs:
-            target: 'aab'
-            debugMode: true
-            projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
-            buildNumber: '$(Build.BuildID)'
-            buildName: '$(app.version).$(Build.BuildID)'
-
-        - task: FlutterBuild@0
-          displayName: 'Build iOS'
-          inputs:
-            target: 'ios'
-            iosCodesign: false
-            projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
-            buildNumber: '$(Build.BuildID)'
-            buildName: '$(app.version).$(Build.BuildID)'
-
-- stage: CdBuildAndroid
-  condition: eq(variables['Build.SourceBranchName'], 'release')
+- stage: CdBuildAndroid  
   jobs:
 
   - job: BuildAndroid
@@ -152,8 +115,7 @@ stages:
           
             fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(AppPackageName) --skip_upload_apk true
 
-- stage: CdBuildiOS
-  condition: eq(variables['Build.SourceBranchName'], 'release')
+- stage: CdBuildiOS  
   jobs:
   - job: BuildiOS
     timeoutInMinutes: 30
