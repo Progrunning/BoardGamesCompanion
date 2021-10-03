@@ -16,7 +16,9 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BoardGameDetails()
+    return BoardGameDetails(
+      fields[1] as String,
+    )
       ..categories = (fields[7] as List)?.cast<BoardGameCategory>()
       ..publishers = (fields[16] as List)?.cast<BoardGamePublisher>()
       ..artists = (fields[17] as List)?.cast<BoardGameArtist>()
@@ -41,7 +43,6 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..isFriends = fields[26] as bool
       ..isBggSynced = fields[27] as bool
       ..id = fields[0] as String
-      ..name = fields[1] as String
       ..thumbnailUrl = fields[2] as String
       ..rank = fields[3] as int
       ..yearPublished = fields[4] as int;

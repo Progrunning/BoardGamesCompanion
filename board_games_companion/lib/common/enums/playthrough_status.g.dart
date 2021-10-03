@@ -18,7 +18,7 @@ class PlaythroughStatusAdapter extends TypeAdapter<PlaythroughStatus> {
       case 1:
         return PlaythroughStatus.Finished;
       default:
-        return null;
+        return PlaythroughStatus.Started;
     }
   }
 

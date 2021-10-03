@@ -18,7 +18,7 @@ class OrderByAdapter extends TypeAdapter<OrderBy> {
       case 1:
         return OrderBy.Descending;
       default:
-        return null;
+        return OrderBy.Ascending;
     }
   }
 
