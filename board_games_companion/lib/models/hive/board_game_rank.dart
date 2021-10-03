@@ -21,7 +21,7 @@ class BoardGameRank {
   @HiveField(2)
   String type;
   @HiveField(3)
-  String friendlyName;
+  String? friendlyName;
   @HiveField(4)
   num rank;
 }

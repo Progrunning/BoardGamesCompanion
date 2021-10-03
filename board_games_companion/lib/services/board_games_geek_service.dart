@@ -1,3 +1,5 @@
+import 'package:xml/xml.dart';
+
 import '../common/exceptions/bgg_retry_exception.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -478,7 +480,7 @@ class BoardGamesGeekService {
   }
 
   void _extractBoardGameRanks(
-    xml.XmlElement boardGameDetailsRatings,
+    xml.XmlElement? boardGameDetailsRatings,
     BoardGameDetails boardGameDetails,
   ) {
     if (boardGameDetailsRatings == null || boardGameDetails == null) {
@@ -487,21 +489,35 @@ class BoardGamesGeekService {
     }
 
     final Iterable<XmlElement> boardGameDetailsRanks = boardGameDetailsRatings
-        .firstOrDefault(_xmlRanksElementName)
-        ?.findElements(_xmlRankElementName);
+            .firstOrDefault(_xmlRanksElementName)
+            ?.findElements(_xmlRankElementName) ??
+        [];
 
     for (final boardGameRank in boardGameDetailsRanks) {
-      final rank = BoardGameRank();
-      rank.type = boardGameRank.firstOrDefaultAttributeValue(_xmlTypeAttributeName)!;
-      rank.id = boardGameRank.firstOrDefaultAttributeValue(_xmlIdAttributeName)!;
-      rank.name = boardGameRank.firstOrDefaultAttributeValue(_xmlNameAttributeName)!;
-      rank.friendlyName =
-          boardGameRank.firstOrDefaultAttributeValue(_xmlFriendlyNameAttributeName)!;
-      rank.rank =
-          num.tryParse(boardGameRank.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '')!;
+      final String? rankId = boardGameRank.firstOrDefaultAttributeValue(_xmlIdAttributeName);
+      final String? rankName = boardGameRank.firstOrDefaultAttributeValue(_xmlNameAttributeName);
+      final String? rankType = boardGameRank.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
+      final String? rankFriendlyName =
+          boardGameRank.firstOrDefaultAttributeValue(_xmlFriendlyNameAttributeName);
+      final num? rankRank =
+          num.tryParse(boardGameRank.firstOrDefaultAttributeValue(_xmlValueAttributeName) ?? '');
+      if ((rankType?.isEmpty ?? true) ||
+          (rankId?.isEmpty ?? true) ||
+          (rankName?.isEmpty ?? true) ||
+          (rankRank == null)) {
+        FirebaseCrashlytics.instance
+            .log('Faild to extract some of the board game detail rank information');
+      }
+      final rank = BoardGameRank(
+        id: rankId!,
+        name: rankName!,
+        type: rankType!,
+        friendlyName: rankFriendlyName!,
+        rank: rankRank!,
+      );
 
       if (rank.name == 'boardgame') {
-        boardGameDetails.rank = rank.rank?.toInt();
+        boardGameDetails.rank = rank.rank.toInt();
       }
 
       boardGameDetails.ranks.add(rank);
@@ -512,7 +528,7 @@ class BoardGamesGeekService {
     xml.XmlElement collectionItem,
     BoardGameDetails boardGameDetails,
   ) {
-    final boardGameDetailsStats = collectionItem.firstOrDefault(_xmlStatsElementName)!;
+    final boardGameDetailsStats = collectionItem.firstOrDefault(_xmlStatsElementName);
 
     boardGameDetails.minPlayers = int.tryParse(
         boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMinPlayersElementName) ?? '');

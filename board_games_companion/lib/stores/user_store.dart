@@ -14,9 +14,8 @@ class UserStore with ChangeNotifier {
   final UserService _userService;
   final AnalyticsService _analyticsService;
 
-  late User _user;
-
-  User get user => _user;
+  User? _user;
+  User? get user => _user;
 
   bool? _isSyncing;
   bool? get isSyncing => _isSyncing;
@@ -32,7 +31,7 @@ class UserStore with ChangeNotifier {
       final user = await _userService.retrieveUser();
       if (user != null) {
         _user = user;
-        await _analyticsService.setUserId(_user.name);
+        await _analyticsService.setUserId(_user!.name);
         notifyListeners();
       }
     } catch (e, stack) {

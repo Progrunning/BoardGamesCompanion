@@ -2,6 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
 import '../common/hive_boxes.dart';
 import '../models/hive/player.dart';
@@ -78,7 +79,7 @@ class PlayersStore with ChangeNotifier {
   }
 
   void setPlayerToCreateOrEdit({Player? player}) {
-    _playerToCreateOrEdit = player ?? Player();
+    _playerToCreateOrEdit = player ?? Player(id: const Uuid().v4());
   }
 
   @override

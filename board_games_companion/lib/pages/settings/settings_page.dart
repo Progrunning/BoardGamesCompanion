@@ -124,7 +124,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                   const SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
-                  SyncButton(usernameCallback: () => userStore.user.name),
+                  SyncButton(usernameCallback: () => userStore.user!.name),
                 ],
               ),
             ),
@@ -170,7 +170,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                   listen: false,
                 );
 
-                await userStore.removeUser(userStore.user);
+                await userStore.removeUser(userStore.user!);
                 await boardGameStore.removeAllBggBoardGames();
 
                 Navigator.of(context).pop();

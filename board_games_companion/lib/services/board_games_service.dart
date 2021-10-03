@@ -104,9 +104,9 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     };
 
     final List<BoardGameDetails> boardGamesToRemove = storageBox.values
-        ?.where((boardGameDetails) =>
+        .where((boardGameDetails) =>
             boardGameDetails.isBggSynced && !syncedCollectionMap.containsKey(boardGameDetails.id))
-        ?.toList();
+        .toList();
 
     // Remove
     for (final boardGameToRemove in boardGamesToRemove) {

@@ -6,7 +6,7 @@ import '../../common/styles.dart';
 class RippleEffect extends StatelessWidget {
   const RippleEffect({
     required this.onTap,
-    required this.child,
+    this.child,
     this.backgroundColor = Colors.transparent,
     this.splashColor,
     this.highlightColor = Colors.transparent,
@@ -15,7 +15,7 @@ class RippleEffect extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback? onTap;
-  final Widget child;
+  final Widget? child;
   final Color backgroundColor;
   final Color? splashColor;
   final Color highlightColor;

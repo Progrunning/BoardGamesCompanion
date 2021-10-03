@@ -38,11 +38,12 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
     final boardGameDetailsMapById = <String?, BoardGameDetails>{
-      for (BoardGameDetails boardGameDetails in allBoardGames!) boardGameDetails.id: boardGameDetails
+      for (BoardGameDetails boardGameDetails in allBoardGames!)
+        boardGameDetails.id: boardGameDetails
     };
 
-    final boardGamePlaythroughs =
-        await _playthroughService.retrievePlaythroughs(boardGameDetailsMapById.keys as Iterable<String>);
+    final boardGamePlaythroughs = await _playthroughService
+        .retrievePlaythroughs(boardGameDetailsMapById.keys as Iterable<String>);
 
     final Map<String, List<Playthrough>> boardGamePlaythroughsGroupedByBoardGameId =
         groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
@@ -63,9 +64,9 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
       // MK Retrieve scores
       final playthroughIds = boardGamePlaythroughs.map((p) => p.id);
-      final playthroughsScores = (await _scoreService.retrieveScores(playthroughIds)) ?? [];
+      final playthroughsScores = await _scoreService.retrieveScores(playthroughIds);
       final Map<String, List<Score>> playthroughScoresByPlaythroughId =
-          groupBy(playthroughsScores, (s) => s.playthroughId);
+          groupBy(playthroughsScores, (s) => s.playthroughId!);
       final Map<String, List<Score>> playthroughScoresByBoardGameId =
           groupBy(playthroughsScores, (s) => s.boardGameId);
 
@@ -73,8 +74,8 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
       final finishedPlaythroughs = playthroughs
           ?.where((p) => p.status == PlaythroughStatus.Finished && p.endDate != null)
-          ?.toList();
-      finishedPlaythroughs?.sort((a, b) => b.startDate?.compareTo(a.startDate));
+          .toList();
+      finishedPlaythroughs?.sort((a, b) => b.startDate.compareTo(a.startDate));
 
       _updateLastPlayedAndWinner(
         finishedPlaythroughs,
@@ -85,11 +86,11 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
       if (finishedPlaythroughs?.isNotEmpty ?? false) {
         boardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs?.length;
-        if (playthroughScoresByBoardGameId?.containsKey(boardGameId) ?? false) {
+        if (playthroughScoresByBoardGameId.containsKey(boardGameId)) {
           final playerScoresWithValue = playthroughScoresByBoardGameId[boardGameId]
               .onlyScoresWithValue()
-              .map((s) => num.tryParse(s.value));
-          if (playerScoresWithValue?.isNotEmpty ?? false) {
+              .map((s) => num.tryParse(s.value!)!);
+          if (playerScoresWithValue.isNotEmpty) {
             boardGameStatistics.highscore = playerScoresWithValue.reduce(max).toString();
           }
         }
@@ -122,11 +123,13 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
       final lastPlaythroughScores =
           playthroughScoresByPlaythroughId[lastPlaythrough.id].onlyScoresWithValue();
-      lastPlaythroughScores?.sort((a, b) => num.tryParse(b.value)!.compareTo(num.tryParse(a.value)!));
-      if (lastPlaythroughScores?.isEmpty ?? true) {
+      lastPlaythroughScores
+          .sort((a, b) => num.tryParse(b.value!)!.compareTo(num.tryParse(a.value!)!));
+      if (lastPlaythroughScores.isEmpty) {
         if (boardGameStatistics.lastWinner != null) {
           boardGameStatistics.lastWinner = null;
         }
+
         return;
       }
 
