@@ -71,6 +71,6 @@ extension IntExtensions on int? {
       return Constants.MoveBelow;
     }
 
-    return compareTo(intToCompare!);
+    return this!.compareTo(intToCompare!);
   }
 }

@@ -6,6 +6,8 @@ part 'board_game_publisher.g.dart';
 
 @HiveType(typeId: HiveBoxes.BoardGamesPublisherTypeId)
 class BoardGamePublisher {
+  BoardGamePublisher({required this.id, required this.name});
+
   @HiveField(0)
   String id;
   @HiveField(1)

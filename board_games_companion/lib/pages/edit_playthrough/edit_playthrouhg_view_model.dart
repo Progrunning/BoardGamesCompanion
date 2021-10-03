@@ -14,15 +14,17 @@ class EditPlaythoughViewModel {
   Playthrough? _playthrough;
   Playthrough get playthrough {
     if (_playthrough == null) {
-      _playthrough = Playthrough();
-      _playthrough!.id = _playthroughStore.playthrough!.id;
-      _playthrough!.boardGameId = _playthroughStore.playthrough!.boardGameId;
-      _playthrough!.playerIds = _playthroughStore.playthrough!.playerIds;
-      _playthrough!.scoreIds = _playthroughStore.playthrough!.scoreIds;
-      _playthrough!.startDate = _playthroughStore.playthrough!.startDate;
-      _playthrough!.endDate = _playthroughStore.playthrough!.endDate;
-      _playthrough!.status = _playthroughStore.playthrough!.status;
-      _playthrough!.isDeleted = _playthroughStore.playthrough!.isDeleted;
+      _playthrough = Playthrough(
+        id: _playthroughStore.playthrough.id,
+        boardGameId: _playthroughStore.playthrough.boardGameId,
+        playerIds: _playthroughStore.playthrough.playerIds,
+        scoreIds: _playthroughStore.playthrough.scoreIds,
+        startDate: _playthroughStore.playthrough.startDate,
+      );
+
+      _playthrough!.endDate = _playthroughStore.playthrough.endDate;
+      _playthrough!.status = _playthroughStore.playthrough.status;
+      _playthrough!.isDeleted = _playthroughStore.playthrough.isDeleted;
     }
 
     return _playthrough!;
@@ -33,13 +35,13 @@ class EditPlaythoughViewModel {
     if (_playerScores == null) {
       _playerScores = <PlayerScore>[];
       for (final PlayerScore playerScore in _playthroughStore.playerScores!) {
-        final score = Score();
-        score.id = playerScore.score!.id;
-        score.boardGameId = playerScore.score!.boardGameId;
-        score.playerId = playerScore.score!.playerId;
-        score.playthroughId = playerScore.score!.playthroughId;
-        score.isDeleted = playerScore.score!.isDeleted;
-        score.value = playerScore.score!.value;
+        final score = Score(
+          id: playerScore.score!.id,
+          playthroughId: playerScore.score!.playthroughId,
+          playerId: playerScore.score!.playerId,
+          boardGameId: playerScore.score!.boardGameId,
+          value: playerScore.score!.value,
+        );
 
         _playerScores!.add(PlayerScore(playerScore.player, score));
       }

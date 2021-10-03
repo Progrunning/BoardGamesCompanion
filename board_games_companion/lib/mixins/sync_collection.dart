@@ -28,9 +28,8 @@ mixin SyncCollection {
 
       final syncResult = await boardGamesStore.syncCollection(username);
       if (syncResult?.isSuccess ?? false) {
-        final user = User();
-        user.name = username;
-        await userStore?.addOrUpdateUser(user);
+        final user = User(name: username);
+        await userStore.addOrUpdateUser(user);
 
         _showSuccessSnackBar();
       } else {

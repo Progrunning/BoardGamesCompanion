@@ -53,6 +53,6 @@ extension DateTimeExtensions on DateTime? {
       return Constants.MoveBelow;
     }
 
-    return compareTo(dateTimeToCompare!);
+    return this!.compareTo(dateTimeToCompare!);
   }
 }

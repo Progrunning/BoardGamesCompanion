@@ -1,14 +1,14 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:xml/xml.dart';
 
-extension XmlElementExtensions on XmlElement {
+extension XmlElementExtensions on XmlElement? {
   XmlElement? firstOrDefault(String elementName) {
     final element = this?.findElements(elementName);
     if (element?.isEmpty ?? true) {
       return null;
     }
 
-    return element.first;
+    return element!.first;
   }
 
   String? firstOrDefaultElementsAttribute(String? elementName, String attributeName) {
@@ -21,17 +21,15 @@ extension XmlElementExtensions on XmlElement {
       return null;
     }
 
-    return elements.single?.firstOrDefaultAttributeValue(attributeName);
+    return elements!.single.firstOrDefaultAttributeValue(attributeName);
   }
 
   XmlAttribute? firstOrDefaultAttributeWhere(bool Function(XmlAttribute element) test) {
-    if (attributes?.isEmpty ?? true) {
+    if (this?.attributes.isEmpty ?? true) {
       return null;
     }
 
-    return attributes?.firstWhereOrNull(
-      test,
-    );
+    return this!.attributes.firstWhereOrNull(test);
   }
 
   String? firstOrDefaultAttributeValue(String? attributeName) {

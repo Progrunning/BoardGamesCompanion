@@ -17,9 +17,9 @@ class CollectionFiltersAdapter extends TypeAdapter<CollectionFilters> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CollectionFilters()
-      ..sortBy = fields[0] as SortBy
-      ..filterByRating = fields[1] as double
-      ..numberOfPlayers = fields[2] as int;
+      ..sortBy = fields[0] as SortBy?
+      ..filterByRating = fields[1] as double?
+      ..numberOfPlayers = fields[2] as int?;
   }
 
   @override
