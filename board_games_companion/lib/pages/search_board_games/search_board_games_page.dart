@@ -79,8 +79,8 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
     searchFocusNode.unfocus();
     await NavigatorHelper.navigateToBoardGameDetails(
       context,
-      boardGame?.id!,
-      boardGame?.name!,
+      boardGame.id,
+      boardGame.name,
       SearchBoardGamesPage,
     );
   }
@@ -99,7 +99,7 @@ class _SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<_SearchBar> {
-  TextEditingController searchController;
+  late TextEditingController searchController;
   late SearchBoardGamesStore searchBoardGamesStore;
 
   @override
@@ -443,7 +443,8 @@ class _HotBoardGames extends StatelessWidget {
       future: _hotBoardGamesStore.load(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data is List<BoardGame> && (snapshot.data as List<BoardGame>).isNotEmpty) {
+          final boardGames = snapshot.data as List<BoardGame>;
+          if (boardGames != null && boardGames.isNotEmpty) {
             return SliverPadding(
               padding: const EdgeInsets.all(
                 Dimensions.standardSpacing,
@@ -453,9 +454,9 @@ class _HotBoardGames extends StatelessWidget {
                 mainAxisSpacing: Dimensions.standardSpacing,
                 maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
                 children: List<BoardGameTile>.generate(
-                  (snapshot.data as List<BoardGame>).length,
+                  boardGames.length,
                   (int index) {
-                    final BoardGame boardGame = snapshot.data[index] as BoardGame;
+                    final BoardGame boardGame = boardGames[index];
                     return BoardGameTile(
                       boardGame: boardGame,
                       onTap: () async => _navigateToBoardGameDetails(boardGame, context),

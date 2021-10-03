@@ -55,7 +55,7 @@ class RateAndReviewService {
     try {
       final bool rateAndReviewDialogSeen = await _preferencesService.getRateAndReviewDialogSeen();
       if (rateAndReviewDialogSeen) {
-        return false;
+        return;
       }
 
       final DateTime nowUtc = DateTime.now().toUtc();
@@ -63,7 +63,7 @@ class RateAndReviewService {
       final DateTime appLaunchDate = await _preferencesService.getAppLaunchDate();
       final DateTime remindMeLaterDate = await _preferencesService.getRemindMeLaterDate();
       if (firstTimeLaunchDate == null || appLaunchDate == null) {
-        return false;
+        return;
       }
 
       final int numberOfSignificantActions =

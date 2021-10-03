@@ -36,12 +36,13 @@ class EditPlaythoughViewModel {
       _playerScores = <PlayerScore>[];
       for (final PlayerScore playerScore in _playthroughStore.playerScores!) {
         final score = Score(
-          id: playerScore.score!.id,
-          playthroughId: playerScore.score!.playthroughId,
-          playerId: playerScore.score!.playerId,
-          boardGameId: playerScore.score!.boardGameId,
-          value: playerScore.score!.value,
+          id: playerScore.score.id,
+          playerId: playerScore.score.playerId,
+          boardGameId: playerScore.score.boardGameId,
         );
+
+        score.value = playerScore.score.value;
+        score.playthroughId = playerScore.score.playthroughId;
 
         _playerScores!.add(PlayerScore(playerScore.player, score));
       }

@@ -34,7 +34,7 @@ class PlaythroughsPage extends StatefulWidget {
 
 class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
   late BoardGamePlaythroughsStore boardGamePlaythoughsStore;
-  PageController pageController;
+  late PageController pageController;
   late PlaythroughsStore playthroughsStore;
   late PlaythroughStore playthroughStore;
   late PlaythroughsLogGameViewModel playthroughsLogGameViewModel;
@@ -127,8 +127,8 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
   ) async {
     await NavigatorHelper.navigateToBoardGameDetails(
       context,
-      boardGameDetails?.id!,
-      boardGameDetails?.name!,
+      boardGameDetails.id,
+      boardGameDetails.name,
       PlaythroughsPage,
     );
   }

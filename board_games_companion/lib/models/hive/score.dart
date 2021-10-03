@@ -8,22 +8,20 @@ part 'score.g.dart';
 class Score {
   Score({
     required this.id,
-    required this.playthroughId,
     required this.playerId,
     required this.boardGameId,
-    required this.value,
   });
 
   @HiveField(0)
   String id;
 
   @HiveField(1)
-  String playthroughId;
+  String? playthroughId;
   @HiveField(2)
   String playerId;
   @HiveField(3)
   String boardGameId;
 
   @HiveField(4)
-  String value;
+  String? value;
 }

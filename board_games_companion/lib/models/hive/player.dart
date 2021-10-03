@@ -41,7 +41,7 @@ class Player with ChangeNotifier {
     }
   }
 
-  set avatarImageUri(String value) {
+  set avatarImageUri(String? value) {
     if (_avatarImageUri != value) {
       _avatarImageUri = value;
       notifyListeners();

@@ -142,8 +142,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                   content: _SelectPlayersStep(
                     playthroughPlayers: widget.viewModel.playthroughPlayers,
                     boardGameDetails: widget.boardGameDetails,
-                    onPlayerSelectionChanged: (bool isSelected, PlaythroughPlayer player) =>
-                        _togglePlayerSelection(isSelected, player),
+                    onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
+                        _togglePlayerSelection(isSelected, player, widget.boardGameDetails.id),
                   ),
                 ),
                 Step(
@@ -276,9 +276,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     );
   }
 
-  void _togglePlayerSelection(bool isSelected, PlaythroughPlayer player) {
+  void _togglePlayerSelection(bool? isSelected, PlaythroughPlayer player, String boardGameId) {
+    if (isSelected == null) {
+      return;
+    }
+    
     if (isSelected) {
-      widget.viewModel.selectPlayer(player);
+      widget.viewModel.selectPlayer(player, boardGameId);
     } else {
       widget.viewModel.deselectPlayer(player);
     }
@@ -362,7 +366,8 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
                   onChanged: ((PlaythroughStartTime value) =>
-                      _updatePlaythroughStartTimeSelection(value)) as void Function(PlaythroughStartTime?)?,
+                          _updatePlaythroughStartTimeSelection(value))
+                      as void Function(PlaythroughStartTime?)?,
                 ),
                 Text(
                   'Playing now',
@@ -380,7 +385,8 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
                   onChanged: ((PlaythroughStartTime value) =>
-                      _updatePlaythroughStartTimeSelection(value)) as void Function(PlaythroughStartTime?)?,
+                          _updatePlaythroughStartTimeSelection(value))
+                      as void Function(PlaythroughStartTime?)?,
                 ),
                 Text(
                   'Played some time ago',
@@ -459,7 +465,7 @@ class _SelectPlayersStep extends StatelessWidget {
 
   final List<PlaythroughPlayer>? playthroughPlayers;
   final BoardGameDetails boardGameDetails;
-  final Function(bool, PlaythroughPlayer) onPlayerSelectionChanged;
+  final Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +480,7 @@ class _SelectPlayersStep extends StatelessWidget {
           return _Players(
             playthroughPlayers: playthroughPlayers,
             boardGameDetails: boardGameDetails,
-            onPlayerSelectionChanged: (bool isSelected, PlaythroughPlayer player) =>
+            onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
                 onPlayerSelectionChanged(isSelected, player),
           );
         },
@@ -491,7 +497,7 @@ class _SelectDateStep extends StatefulWidget {
   }) : super(key: key);
 
   final DateTime playthroughDate;
-  final Function(DateTime?) onPlaythroughTimeChanged;
+  final Function(DateTime) onPlaythroughTimeChanged;
 
   @override
   _SelectDateStepState createState() => _SelectDateStepState();
@@ -552,7 +558,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
 
     setState(() {
       _playthroughDate = newPlaythroughDate;
-      widget.onPlaythroughTimeChanged(_playthroughDate);
+      widget.onPlaythroughTimeChanged(_playthroughDate!);
     });
   }
 }
