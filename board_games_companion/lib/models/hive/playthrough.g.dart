@@ -16,14 +16,15 @@ class PlaythroughAdapter extends TypeAdapter<Playthrough> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Playthrough()
-      ..id = fields[0] as String
-      ..boardGameId = fields[1] as String
-      ..playerIds = (fields[2] as List).cast<String>()
-      ..scoreIds = (fields[3] as List).cast<String>()
-      ..startDate = fields[4] as DateTime
+    return Playthrough(
+      id: fields[0] as String,
+      boardGameId: fields[1] as String,
+      playerIds: (fields[2] as List).cast<String>(),
+      scoreIds: (fields[3] as List).cast<String>(),
+      startDate: fields[4] as DateTime,
+    )
       ..endDate = fields[5] as DateTime?
-      ..status = fields[6] as PlaythroughStatus
+      ..status = fields[6] as PlaythroughStatus?
       ..isDeleted = fields[7] as bool;
   }
 
