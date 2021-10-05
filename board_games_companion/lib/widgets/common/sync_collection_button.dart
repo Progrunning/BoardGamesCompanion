@@ -38,13 +38,13 @@ class _SyncButtonState extends State<SyncButton> with SyncCollection, TickerProv
       title: 'Sync',
       icon: _SyncCollectionIcon(animationController: _animationController),
       onPressed: () async {
-        _animationController?.repeat();
+        _animationController.repeat();
         await syncCollection(
           context,
           widget._usernameCallback(),
         );
         if (mounted) {
-          _animationController?.stop();
+          _animationController.stop();
         }
       },
     );

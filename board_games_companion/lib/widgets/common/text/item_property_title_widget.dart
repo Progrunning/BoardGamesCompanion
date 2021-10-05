@@ -15,7 +15,7 @@ class ItemPropertyTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      title ?? '',
+      title,
       style: AppTheme.sectionHeaderTextStyle.copyWith(
         color: color,
       ),

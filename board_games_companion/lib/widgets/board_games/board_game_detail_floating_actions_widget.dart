@@ -28,7 +28,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
         create: (_) {
           return BoardGameDetailsInCollectionStore(
             boardGamesStore,
-            boardGameDetailsStore?.boardGameDetails,
+            boardGameDetailsStore.boardGameDetails,
           );
         },
         update: (_, boardGameDetailsStore, boardGameDetailsInCollectionStore) {
@@ -96,7 +96,7 @@ class BoardGameDetailFloatingActions extends StatelessWidget {
     BoardGameDetailsInCollectionStore boardGameDetailsInCollectionStore,
     BoardGamesStore boardGamesStore,
   ) async {
-    await boardGamesStore.removeBoardGame(boardGameDetailsStore.boardGameDetails!.id!);
+    await boardGamesStore.removeBoardGame(boardGameDetailsStore.boardGameDetails!.id);
     boardGameDetailsInCollectionStore.updateIsInCollectionStatus();
 
     Scaffold.of(context).hideCurrentSnackBar();
