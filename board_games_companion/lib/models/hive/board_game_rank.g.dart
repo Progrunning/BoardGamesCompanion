@@ -16,12 +16,13 @@ class BoardGameRankAdapter extends TypeAdapter<BoardGameRank> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BoardGameRank()
-      ..id = fields[0] as String
-      ..name = fields[1] as String
-      ..type = fields[2] as String
-      ..friendlyName = fields[3] as String
-      ..rank = fields[4] as num;
+    return BoardGameRank(
+      id: fields[0] as String,
+      name: fields[1] as String,
+      type: fields[2] as String,
+      friendlyName: fields[3] as String?,
+      rank: fields[4] as num,
+    );
   }
 
   @override

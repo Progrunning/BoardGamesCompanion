@@ -16,19 +16,19 @@ class ScoreAdapter extends TypeAdapter<Score> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Score()
-      ..id = fields[0] as String
-      ..playthroughId = fields[1] as String
-      ..playerId = fields[2] as String
-      ..boardGameId = fields[3] as String
-      ..value = fields[4] as String
-      ..isDeleted = fields[5] as String;
+    return Score(
+      id: fields[0] as String,
+      playerId: fields[2] as String,
+      boardGameId: fields[3] as String,
+    )
+      ..playthroughId = fields[1] as String?
+      ..value = fields[4] as String?;
   }
 
   @override
   void write(BinaryWriter writer, Score obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,9 +38,7 @@ class ScoreAdapter extends TypeAdapter<Score> {
       ..writeByte(3)
       ..write(obj.boardGameId)
       ..writeByte(4)
-      ..write(obj.value)
-      ..writeByte(5)
-      ..write(obj.isDeleted);
+      ..write(obj.value);
   }
 
   @override

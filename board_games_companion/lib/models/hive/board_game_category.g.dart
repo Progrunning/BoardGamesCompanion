@@ -16,9 +16,10 @@ class BoardGameCategoryAdapter extends TypeAdapter<BoardGameCategory> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BoardGameCategory()
-      ..id = fields[0] as String
-      ..name = fields[1] as String;
+    return BoardGameCategory(
+      id: fields[0] as String,
+      name: fields[1] as String,
+    );
   }
 
   @override

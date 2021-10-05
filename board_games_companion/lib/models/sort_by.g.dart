@@ -16,8 +16,9 @@ class SortByAdapter extends TypeAdapter<SortBy> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SortBy()
-      ..sortByOption = fields[0] as SortByOption
+    return SortBy(
+      sortByOption: fields[0] as SortByOption,
+    )
       ..orderBy = fields[1] as OrderBy
       ..selected = fields[2] as bool;
   }
