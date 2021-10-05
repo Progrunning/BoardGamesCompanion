@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class LauncherHelper {
   static Future<void> launchUri(BuildContext context, String uri) async {
-    if (context == null || (uri?.isEmpty ?? true)) {
+    if (context == null || uri.isEmpty) {
       return;
     }
 

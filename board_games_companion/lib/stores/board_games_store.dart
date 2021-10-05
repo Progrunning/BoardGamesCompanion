@@ -37,8 +37,8 @@ class BoardGamesStore with ChangeNotifier {
   final BoardGamesFiltersStore _boardGamesFiltersStore;
 
   String? _searchPhrase;
-  late List<BoardGameDetails> _allBoardGames;
-  late List<BoardGameDetails> _filteredBoardGames;
+  List<BoardGameDetails> _allBoardGames = [];
+  List<BoardGameDetails> _filteredBoardGames = [];
   LoadDataState _loadDataState = LoadDataState.None;
   GamesTab _selectedTab = GamesTab.Owned;
 
@@ -91,7 +91,7 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id!);
+    final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
     if (existingBoardGameDetails == null) {
       _allBoardGames.add(boardGameDetails);
       _filteredBoardGames.add(boardGameDetails);
@@ -170,7 +170,7 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    final boardGameToRemove = _allBoardGames!.firstWhereOrNull(
+    final boardGameToRemove = _allBoardGames.firstWhereOrNull(
       (boardGame) => boardGame.id == boardGameDetailsId,
     );
 

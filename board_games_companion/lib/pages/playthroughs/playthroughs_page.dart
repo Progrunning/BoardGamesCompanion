@@ -59,7 +59,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.boardGameDetails.name ?? ''),
+        title: Text(widget.boardGameDetails.name),
         actions: <Widget>[
           IconButton(
             icon: const Icon(

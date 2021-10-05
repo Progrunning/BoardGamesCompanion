@@ -62,7 +62,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
       value: player,
       child: Consumer<Player>(
         builder: (_, player, __) {
-          final _hasName = nameController.text?.isNotEmpty ?? false;
+          final _hasName = nameController.text.isNotEmpty;
 
           return WillPopScope(
             onWillPop: () async {
@@ -99,9 +99,9 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                                   child: Stack(
                                     children: <Widget>[
                                       Hero(
-                                        tag: '${AnimationTags.playerImageHeroTag}${player?.id}',
+                                        tag: '${AnimationTags.playerImageHeroTag}${player.id}',
                                         child: PlayerImage(
-                                          imageUri: player?.avatarImageUri,
+                                          imageUri: player.avatarImageUri,
                                         ),
                                       ),
                                       Positioned(
@@ -195,7 +195,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
   Future _handlePickingAndSavingAvatar(Player player, ImageSource imageSource) async {
     player.avatarFileToSave = await imagePicker.getImage(source: imageSource);
-    if (player.avatarFileToSave?.path?.isEmpty ?? true) {
+    if (player.avatarFileToSave?.path.isEmpty ?? true) {
       return;
     }
 
@@ -269,7 +269,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Delete ${player?.name}'),
+          title: Text('Delete ${player.name}'),
           content: const Text('Are you sure you want to delete this player?'),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[

@@ -29,14 +29,14 @@ class PlaythroughsStore with ChangeNotifier {
   List<Playthrough>? get playthroughs => _playthroughs;
 
   Future<List<Playthrough>> loadPlaythroughs(BoardGameDetails boardGameDetails) async {
-    if (boardGameDetails?.id?.isEmpty ?? true) {
+    if (boardGameDetails.id.isEmpty) {
       return <Playthrough>[];
     }
 
     _selectedBoardGame = boardGameDetails;
 
     try {
-      _playthroughs = await _playthroughService.retrievePlaythroughs([_selectedBoardGame!.id!]);
+      _playthroughs = await _playthroughService.retrievePlaythroughs([_selectedBoardGame!.id]);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -74,7 +74,7 @@ class PlaythroughsStore with ChangeNotifier {
   }
 
   Future<bool> updatePlaythrough(Playthrough? playthrough) async {
-    if (playthrough?.id?.isEmpty ?? true) {
+    if (playthrough?.id.isEmpty ?? true) {
       return false;
     }
 

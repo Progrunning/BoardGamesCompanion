@@ -28,7 +28,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
-    if (boardGameDetails?.id?.isEmpty ?? true) {
+    if (boardGameDetails.id.isEmpty) {
       return;
     }
 
@@ -40,7 +40,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<bool> isInCollection(BoardGameDetails boardGameDetails) async {
-    if (boardGameDetails?.id?.isEmpty ?? true) {
+    if (boardGameDetails.id.isEmpty) {
       return false;
     }
 
@@ -52,7 +52,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<void> removeBoardGame(String boardGameDetailsId) async {
-    if (boardGameDetailsId?.isEmpty ?? true) {
+    if (boardGameDetailsId.isEmpty) {
       return;
     }
 
@@ -64,7 +64,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<void> removeBoardGames(List<String> boardGameDetailsIds) async {
-    if (boardGameDetailsIds?.isEmpty ?? true) {
+    if (boardGameDetailsIds.isEmpty) {
       return;
     }
 
@@ -95,12 +95,12 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
 
     final syncedCollectionMap = <String, BoardGameDetails>{
       for (BoardGameDetails boardGameDetails in collectionSyncResult.data!)
-        boardGameDetails.id!: boardGameDetails
+        boardGameDetails.id: boardGameDetails
     };
 
     final existingCollectionMap = <String, BoardGameDetails>{
       for (BoardGameDetails boardGameDetails in storageBox.values)
-        boardGameDetails.id!: boardGameDetails
+        boardGameDetails.id: boardGameDetails
     };
 
     final List<BoardGameDetails> boardGamesToRemove = storageBox.values
@@ -117,7 +117,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     for (final syncedBoardGame in collectionSyncResult.data!) {
       // Take local collection settings over the BGG
       if (existingCollectionMap.containsKey(syncedBoardGame.id)) {
-        final existingBoardGame = existingCollectionMap[syncedBoardGame.id!]!;
+        final existingBoardGame = existingCollectionMap[syncedBoardGame.id]!;
         syncedBoardGame.isOnWishlist = existingBoardGame.isOnWishlist;
         syncedBoardGame.isOwned = existingBoardGame.isOwned;
         syncedBoardGame.isFriends = existingBoardGame.isFriends;

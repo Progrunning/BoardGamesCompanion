@@ -45,7 +45,7 @@ class FileService {
 
   Future<bool> fileExists(String fileUri) async {
     try {
-      if (fileUri?.isEmpty ?? true) {
+      if (fileUri.isEmpty) {
         throw ArgumentError();
       }
 

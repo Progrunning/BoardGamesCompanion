@@ -26,13 +26,13 @@ class StarRating extends StatelessWidget {
       icon = Icon(
         Icons.star_half,
         size: size,
-        color: color ?? Theme.of(context).primaryColor,
+        color: color,
       );
     } else {
       icon = Icon(
         Icons.star,
         size: size,
-        color: color ?? Theme.of(context).primaryColor,
+        color: color,
       );
     }
 

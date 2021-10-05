@@ -243,7 +243,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         completedSteps = widget.viewModel.logGameStep;
       });
     } else {
-      await widget.viewModel.createPlaythrough(widget.boardGameDetails.id!);
+      await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
       _showConfirmationSnackbar(context);
       setState(() {});
     }
@@ -280,7 +280,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     if (isSelected == null) {
       return;
     }
-    
+
     if (isSelected) {
       widget.viewModel.selectPlayer(player, boardGameId);
     } else {
@@ -365,9 +365,11 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   value: PlaythroughStartTime.now,
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
-                  onChanged: ((PlaythroughStartTime value) =>
-                          _updatePlaythroughStartTimeSelection(value))
-                      as void Function(PlaythroughStartTime?)?,
+                  onChanged: (PlaythroughStartTime? value) {
+                    if (value != null) {
+                      _updatePlaythroughStartTimeSelection(value);
+                    }
+                  },
                 ),
                 Text(
                   'Playing now',
@@ -681,14 +683,14 @@ class _PlayerScore extends StatelessWidget {
               child: Consumer<PlayerScore>(
                 builder: (_, PlayerScore playerScoreConsumer, __) {
                   return NumberPicker(
-                    value: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                    value: int.tryParse(playerScoreConsumer.score.value ?? '0') ?? 0,
                     axis: Axis.horizontal,
                     itemHeight: 46,
                     minValue: 0,
                     maxValue: 10000,
                     onChanged: (num value) async {
                       final String valueText = value.toString();
-                      if (playerScoreConsumer.score?.value == valueText) {
+                      if (playerScoreConsumer.score.value == valueText) {
                         return;
                       }
 

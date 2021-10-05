@@ -61,7 +61,7 @@ class CalendarCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
               child: Center(
                 child: Text(
-                  _date?.day?.toString() ?? '-',
+                  _date?.day.toString() ?? '-',
                   style: const TextStyle(
                       color: AppTheme.invertedTextColor,
                       fontWeight: FontWeight.bold,
