@@ -84,12 +84,12 @@ class NavigatorHelper {
     PlaythroughStore playthroughStore,
   ) async {
     final analytics = getIt<AnalyticsService>();
-    final PlaythroughsStore? playthroughsStore = getIt<PlaythroughsStore>();
+    final PlaythroughsStore playthroughsStore = getIt<PlaythroughsStore>();
 
     analytics.logEvent(
       name: Analytics.EditPlaythrough,
       parameters: <String, String>{
-        Analytics.BoardGameIdParameter: playthroughStore.playthrough!.boardGameId,
+        Analytics.BoardGameIdParameter: playthroughStore.playthrough.boardGameId,
       },
     );
 
@@ -98,7 +98,7 @@ class NavigatorHelper {
       NavigatorTransitions.fadeScale(
         (_, __, ___) {
           return EditPlaythoughPage(
-            viewModel: EditPlaythoughViewModel(playthroughStore, playthroughsStore!),
+            viewModel: EditPlaythoughViewModel(playthroughStore, playthroughsStore),
           );
         },
       ),
