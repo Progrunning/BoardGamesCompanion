@@ -16,10 +16,10 @@ class BoardGamesExpansionAdapter extends TypeAdapter<BoardGamesExpansion> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BoardGamesExpansion()
-      ..id = fields[0] as String
-      ..name = fields[1] as String
-      ..isInCollection = fields[2] as bool?;
+    return BoardGamesExpansion(
+      id: fields[0] as String,
+      name: fields[1] as String,
+    )..isInCollection = fields[2] as bool?;
   }
 
   @override

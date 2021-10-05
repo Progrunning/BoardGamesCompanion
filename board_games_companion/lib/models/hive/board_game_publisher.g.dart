@@ -16,9 +16,10 @@ class BoardGamePublisherAdapter extends TypeAdapter<BoardGamePublisher> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BoardGamePublisher()
-      ..id = fields[0] as String
-      ..name = fields[1] as String;
+    return BoardGamePublisher(
+      id: fields[0] as String,
+      name: fields[1] as String,
+    );
   }
 
   @override

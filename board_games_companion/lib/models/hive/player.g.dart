@@ -16,8 +16,9 @@ class PlayerAdapter extends TypeAdapter<Player> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Player()
-      ..id = fields[0] as String
+    return Player(
+      id: fields[0] as String,
+    )
       .._name = fields[1] as String?
       .._imageUri = fields[2] as String?
       .._isDeleted = fields[3] as bool?
