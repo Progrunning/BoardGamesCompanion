@@ -78,7 +78,7 @@ class _Statistics extends StatelessWidget {
     return Consumer<BoardGameDetails>(
       builder: (_, boardGameDetails, __) {
         final boardGameStatistics =
-            playthroughStatisticsStore.boardGamesStatistics[boardGameDetails.id!]!;
+            playthroughStatisticsStore.boardGamesStatistics[boardGameDetails.id];
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Dimensions.standardSpacing,
@@ -133,7 +133,7 @@ class _Statistics extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: ' ${boardGameStatistics?.lastWinner?.score?.value ?? '-'} ',
+                          text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 32,
@@ -173,7 +173,7 @@ class _LastWinner extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics boardGameStatistics;
+  final BoardGameStatistics? boardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +193,7 @@ class _LastTimePlayed extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics boardGameStatistics;
+  final BoardGameStatistics? boardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +220,7 @@ class _StatisticsDetails extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics boardGameStatistics;
+  final BoardGameStatistics? boardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -289,11 +289,11 @@ class _StatisticsItem extends StatelessWidget {
             const SizedBox(
               width: Dimensions.quarterStandardSpacing,
             ),
-            ItemPropertyValue(value ?? ''),
+            ItemPropertyValue(value),
           ],
         ),
         ItemPropertyTitle(
-          subtitle ?? '',
+          subtitle,
           color: AppTheme.defaultTextColor,
         ),
       ],

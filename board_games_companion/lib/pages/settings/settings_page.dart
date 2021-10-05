@@ -67,7 +67,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
 
     return Consumer<UserStore>(
       builder: (_, userStore, __) {
-        if (userStore.user?.name?.isEmpty ?? true) {
+        if (userStore.user?.name.isEmpty ?? true) {
           return Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: Dimensions.standardSpacing,
@@ -101,9 +101,9 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
               title: 'User',
             ),
             DetailsItem(
-              title: userStore?.user?.name ?? '',
+              title: userStore.user?.name ?? '',
               subtitle: 'BGG profile page',
-              uri: '${Constants.BoardGameGeekBaseApiUrl}user/${userStore?.user?.name}',
+              uri: '${Constants.BoardGameGeekBaseApiUrl}user/${userStore.user?.name}',
             ),
             Padding(
               padding: const EdgeInsets.symmetric(

@@ -17,7 +17,7 @@ mixin SyncCollection {
     try {
       userStore.isSyncing = true;
 
-      if (username?.isEmpty ?? true) {
+      if (username.isEmpty) {
         return CollectionSyncResult();
       }
 
@@ -27,7 +27,7 @@ mixin SyncCollection {
       );
 
       final syncResult = await boardGamesStore.syncCollection(username);
-      if (syncResult?.isSuccess ?? false) {
+      if (syncResult.isSuccess) {
         final user = User(name: username);
         await userStore.addOrUpdateUser(user);
 

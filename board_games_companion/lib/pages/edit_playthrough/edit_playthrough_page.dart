@@ -79,7 +79,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 ),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: widget.viewModel.playerScores?.length ?? 0,
+                    itemCount: widget.viewModel.playerScores.length,
                     separatorBuilder: (context, index) {
                       return const SizedBox(
                         height: Dimensions.doubleStandardSpacing,
@@ -237,14 +237,14 @@ class _PlayerScore extends StatelessWidget {
               child: Consumer<PlayerScore>(
                 builder: (_, PlayerScore playerScoreConsumer, __) {
                   return NumberPicker(
-                    value: int.tryParse(playerScoreConsumer.score?.value ?? '0') ?? 0,
+                    value: int.tryParse(playerScoreConsumer.score.value ?? '0') ?? 0,
                     axis: Axis.horizontal,
                     itemHeight: 46,
                     minValue: 0,
                     maxValue: 10000,
                     onChanged: (num value) async {
                       final String valueText = value.toString();
-                      if (playerScoreConsumer.score?.value == valueText) {
+                      if (playerScoreConsumer.score.value == valueText) {
                         return;
                       }
 

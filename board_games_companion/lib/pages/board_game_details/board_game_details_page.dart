@@ -95,7 +95,7 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
     );
     final boardGameDetailsInCollectionStore = BoardGameDetailsInCollectionStore(
       boardGamesStore,
-      widget.boardGameDetailsStore?.boardGameDetails,
+      widget.boardGameDetailsStore.boardGameDetails,
     );
 
     if (!boardGameDetailsInCollectionStore.isInCollection &&
@@ -141,7 +141,7 @@ class _Header extends StatelessWidget {
               Dimensions.halfStandardSpacing,
             ),
             child: Text(
-              _boardGameName ?? '',
+              _boardGameName,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -483,7 +483,7 @@ class _Link extends StatelessWidget {
   Widget build(BuildContext context) {
     return RippleEffect(
       onTap: () async {
-        onPressed?.call();
+        onPressed();
         await boardGameDetailsStore.captureLinkAnalytics(title);
       },
       child: Padding(
@@ -579,21 +579,21 @@ class _Credits extends StatelessWidget {
         children: <Widget>[
           _CreditsItem(
             title: 'Designer:',
-            detail: boardGameDetails?.desingers?.map((d) => d.name)?.join(', '),
+            detail: boardGameDetails?.desingers.map((d) => d.name).join(', '),
           ),
           const SizedBox(
             height: _spacingBetweenCredits,
           ),
           _CreditsItem(
             title: 'Artist:',
-            detail: boardGameDetails?.artists?.map((d) => d.name)?.join(', '),
+            detail: boardGameDetails?.artists.map((d) => d.name).join(', '),
           ),
           const SizedBox(
             height: _spacingBetweenCredits,
           ),
           _CreditsItem(
             title: 'Publisher:',
-            detail: boardGameDetails?.publishers?.map((d) => d.name)?.join(', '),
+            detail: boardGameDetails?.publishers.map((d) => d.name).join(', '),
           ),
         ],
       ),
@@ -617,7 +617,7 @@ class _CreditsItem extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(
-            text: title ?? '',
+            text: title,
             style: AppTheme.titleTextStyle.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -626,7 +626,7 @@ class _CreditsItem extends StatelessWidget {
             text: ' ',
           ),
           TextSpan(
-            text: detail ?? '',
+            text: detail,
           ),
         ],
       ),
@@ -912,7 +912,7 @@ class _InfoPanel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  title ?? '',
+                  title,
                   textAlign: TextAlign.center,
                   style: AppTheme.titleTextStyle,
                 ),

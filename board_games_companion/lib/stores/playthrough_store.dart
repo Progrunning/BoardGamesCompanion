@@ -33,8 +33,8 @@ class PlaythroughStore {
 
   Duration get duration {
     final nowUtc = DateTime.now().toUtc();
-    final playthroughEndDate = playthrough!.endDate ?? nowUtc;
-    return playthroughEndDate.difference(playthrough!.startDate);
+    final playthroughEndDate = playthrough.endDate ?? nowUtc;
+    return playthroughEndDate.difference(playthrough.startDate);
   }
 
   List<Score>? _scores;
@@ -53,12 +53,12 @@ class PlaythroughStore {
 
     final nowUtc = DateTime.now().toUtc();
     _playthrough = playthrough;
-    _daysSinceStart = nowUtc.difference(_playthrough!.startDate).inDays;
+    _daysSinceStart = nowUtc.difference(_playthrough.startDate).inDays;
 
     try {
-      _scores = await _scoreService.retrieveScores([_playthrough!.id]);
+      _scores = await _scoreService.retrieveScores([_playthrough.id]);
       _players = await _playerService.retrievePlayers(
-        playerIds: _playthrough!.playerIds,
+        playerIds: _playthrough.playerIds,
         includeDeleted: true,
       );
 
@@ -77,22 +77,22 @@ class PlaythroughStore {
   Future<void> updatePlaythrough(Playthrough playthrough, List<PlayerScore> playerScores) async {
     await _playthroughsStore.updatePlaythrough(playthrough);
     for (final PlayerScore playerScore in playerScores) {
-      await _scoreService.addOrUpdateScore(playerScore.score!);
+      await _scoreService.addOrUpdateScore(playerScore.score);
     }
 
     await loadPlaythrough(playthrough);
   }
 
   Future<bool> stopPlaythrough() async {
-    final oldStatus = playthrough!.status;
+    final oldStatus = playthrough.status;
 
-    playthrough!.status = PlaythroughStatus.Finished;
-    playthrough!.endDate = DateTime.now().toUtc();
+    playthrough.status = PlaythroughStatus.Finished;
+    playthrough.endDate = DateTime.now().toUtc();
 
     final updateSucceeded = await _playthroughsStore.updatePlaythrough(playthrough);
     if (!updateSucceeded) {
-      playthrough!.status = oldStatus;
-      playthrough!.endDate = null;
+      playthrough.status = oldStatus;
+      playthrough.endDate = null;
       return false;
     }
 

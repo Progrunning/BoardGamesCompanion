@@ -21,7 +21,7 @@ class BoardGameRankAdapter extends TypeAdapter<BoardGameRank> {
       name: fields[1] as String,
       type: fields[2] as String,
       friendlyName: fields[3] as String?,
-      rank: fields[4] as num,
+      rank: fields[4] as num?,
     );
   }
 

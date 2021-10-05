@@ -1,5 +1,4 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import 'rate_and_review_service.dart';

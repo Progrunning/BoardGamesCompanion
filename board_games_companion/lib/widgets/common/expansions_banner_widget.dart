@@ -66,8 +66,8 @@ class ExpanionsBannerPainter extends CustomPainter {
     }
 
     canvas
-      ..translate(_translationX(size.width)!, _translationY(size.height)!)
-      ..rotate(_rotation!)
+      ..translate(_translationX(size.width), _translationY(size.height))
+      ..rotate(_rotation)
       ..drawRect(_kRect, _paintShadow)
       ..drawRect(_kRect, _paintBanner);
     const double width = _kOffset * 2.0;
@@ -86,7 +86,7 @@ class ExpanionsBannerPainter extends CustomPainter {
   @override
   bool hitTest(Offset position) => false;
 
-  double? _translationX(double width) {
+  double _translationX(double width) {
     assert(location != null);
     switch (location) {
       case BannerLocation.bottomEnd:
@@ -98,10 +98,9 @@ class ExpanionsBannerPainter extends CustomPainter {
       case BannerLocation.topStart:
         return 0.0;
     }
-    return null;
   }
 
-  double? _translationY(double height) {
+  double _translationY(double height) {
     assert(location != null);
     switch (location) {
       case BannerLocation.bottomStart:
@@ -111,10 +110,9 @@ class ExpanionsBannerPainter extends CustomPainter {
       case BannerLocation.topEnd:
         return 0.0;
     }
-    return null;
   }
 
-  double? get _rotation {
+  double get _rotation {
     assert(location != null);
     switch (location) {
       case BannerLocation.bottomStart:
@@ -124,6 +122,5 @@ class ExpanionsBannerPainter extends CustomPainter {
       case BannerLocation.topStart:
         return -math.pi / 4.0;
     }
-    return null;
   }
 }

@@ -11,7 +11,7 @@ class UserService extends BaseHiveService<User> {
       return null;
     }
 
-    if (storageBox?.values?.isEmpty ?? true) {
+    if (storageBox.values.isEmpty) {
       return null;
     }
 
@@ -19,7 +19,7 @@ class UserService extends BaseHiveService<User> {
   }
 
   Future<bool> addOrUpdateUser(User user) async {
-    if (user?.name?.isEmpty ?? true) {
+    if (user.name.isEmpty) {
       return false;
     }
 
@@ -33,7 +33,7 @@ class UserService extends BaseHiveService<User> {
   }
 
   Future<bool> removeUser(User user) async {
-    if (user?.name?.isEmpty ?? true) {
+    if (user.name.isEmpty) {
       return false;
     }
 

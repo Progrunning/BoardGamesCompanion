@@ -92,7 +92,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
               child: Padding(
                 padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
                 child: Text(
-                  widget.boardGame.name ?? '',
+                  widget.boardGame.name,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: AppTheme.defaultTextColor,
