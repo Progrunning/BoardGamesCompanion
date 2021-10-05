@@ -33,10 +33,10 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
     final players = await _playersStore.loadPlayers();
 
     _playthroughPlayers = players
-        ?.map(
+        .map(
           (p) => PlaythroughPlayer(p),
         )
-        ?.toList();
+        .toList();
 
     return _playthroughPlayers ?? <PlaythroughPlayer>[];
   }

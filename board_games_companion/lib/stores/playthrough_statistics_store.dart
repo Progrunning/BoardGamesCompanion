@@ -97,7 +97,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
         final int? allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
             ?.map((p) => p.endDate!.difference(p.startDate).inSeconds)
-            ?.reduce((a, b) => a + b);
+            .reduce((a, b) => a + b);
         if (allPlaythroughsDurationSumInSeconds != null) {
           boardGameStatistics.averagePlaytimeInSeconds =
               (allPlaythroughsDurationSumInSeconds / finishedPlaythroughs!.length).floor();

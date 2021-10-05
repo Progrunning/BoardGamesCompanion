@@ -33,13 +33,12 @@ class PlayerAvatar extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Hero(
-                  tag:
-                      '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
+                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer.id}$playerHeroIdSuffix',
                   child: PlayerImage(
-                    imageUri: providerPlayer?.avatarImageUri,
+                    imageUri: providerPlayer.avatarImageUri,
                   ),
                 ),
-                if (providerPlayer?.name?.isNotEmpty ?? false)
+                if (providerPlayer.name?.isNotEmpty ?? false)
                   PlayerAvatarSubtitle(
                     player: providerPlayer,
                   ),

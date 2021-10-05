@@ -20,7 +20,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     Iterable<String> boardGameIds, {
     bool includeDeleted = false,
   }) async {
-    if (boardGameIds?.isEmpty ?? true) {
+    if (boardGameIds.isEmpty) {
       return <Playthrough>[];
     }
 
@@ -29,13 +29,12 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     }
 
     return storageBox
-            ?.toMap()
-            ?.values
-            ?.where((playthrough) =>
-                (includeDeleted || !(playthrough.isDeleted ?? false)) &&
-                boardGameIds.contains(playthrough.boardGameId))
-            ?.toList() ??
-        <Playthrough>[];
+        .toMap()
+        .values
+        .where((playthrough) =>
+            (includeDeleted || !playthrough.isDeleted) &&
+            boardGameIds.contains(playthrough.boardGameId))
+        .toList();
   }
 
   Future<Playthrough?> createPlaythrough(
@@ -84,7 +83,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
           playerScore = playerScores[playthroughPlayerId]!.score;
         }
 
-        if (!await scoreService.addOrUpdateScore(playerScore!)) {
+        if (!await scoreService.addOrUpdateScore(playerScore)) {
           FirebaseCrashlytics.instance.log(
             'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId',
           );
@@ -117,12 +116,12 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deletePlaythrough(String playthroughId) async {
-    if ((playthroughId?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if ((playthroughId.isEmpty) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return false;
     }
 
     final playthroughToDelete = storageBox.get(playthroughId);
-    if (playthroughToDelete == null || (playthroughToDelete.isDeleted ?? false)) {
+    if (playthroughToDelete == null || playthroughToDelete.isDeleted) {
       return false;
     }
 
@@ -134,14 +133,14 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deletePlaythroughsForGames(List<String?> boardGameIds) async {
-    if ((boardGameIds?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if ((boardGameIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
       return false;
     }
 
     final List<Playthrough> playthroughsToDelete = storageBox.values
         .where((playthrough) => boardGameIds.contains(playthrough.boardGameId))
         .toList();
-    if (playthroughsToDelete?.isEmpty ?? true) {
+    if (playthroughsToDelete.isEmpty) {
       return false;
     }
 
@@ -165,7 +164,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     }
 
     final Iterable<Playthrough> playthroughs = storageBox.values;
-    if (playthroughs?.isEmpty ?? true) {
+    if (playthroughs.isEmpty) {
       return false;
     }
 

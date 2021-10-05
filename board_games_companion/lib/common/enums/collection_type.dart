@@ -19,7 +19,6 @@ extension ToInt on CollectionType {
         return 2;
       case CollectionType.Wishlist:
         return 3;
-        break;
       default:
         return 0;
     }

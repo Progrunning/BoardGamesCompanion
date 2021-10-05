@@ -13,7 +13,7 @@ class SortBy {
   @HiveField(0)
   SortByOption sortByOption;
 
-  String? get name {
+  String get name {
     switch (sortByOption) {
       case SortByOption.Name:
         return 'Name';
@@ -30,8 +30,6 @@ class SortBy {
       case SortByOption.Rating:
         return 'Rating';
     }
-
-    return null;
   }
 
   @HiveField(1)

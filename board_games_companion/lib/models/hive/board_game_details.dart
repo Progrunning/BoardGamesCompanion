@@ -187,7 +187,7 @@ class BoardGameDetails extends BaseBoardGame {
   List<BoardGamesExpansion> expansions = <BoardGamesExpansion>[];
 
   int get expansionsOwned {
-    return expansions?.where((expansion) => expansion?.isInCollection ?? false)?.length ?? 0;
+    return expansions.where((expansion) => expansion.isInCollection ?? false).length;
   }
 
   bool? _isExpansion;
@@ -258,8 +258,8 @@ class BoardGameDetails extends BaseBoardGame {
   String? get rankFormatted {
     if (rank != null) {
       return rank.toString();
-    } else if (ranks?.isNotEmpty ?? false) {
-      final overallRank = ranks?.first?.rank;
+    } else if (ranks.isNotEmpty) {
+      final overallRank = ranks.first.rank;
       return overallRank?.toString() ?? 'Not Ranked';
     }
 
@@ -285,7 +285,7 @@ class BoardGameDetails extends BaseBoardGame {
   String get _baseBggBoardGameUrl => '${Constants.BoardGameGeekBaseUrl}boardgame';
 
   String get _bggUrlEncodedName {
-    final List<String> spaceSeparatedNameParts = name!.toLowerCase().split(' ');
+    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
     return spaceSeparatedNameParts.where((part) {
       final String trimmedAndLoweredPart = part.trim();
       return !bggNotUsedUrlEncodedNameParts.contains(trimmedAndLoweredPart);
@@ -297,7 +297,7 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   String get _boardGameOracleUrlEncodedName {
-    final List<String> spaceSeparatedNameParts = name!.toLowerCase().split(' ');
+    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
     return spaceSeparatedNameParts.map((part) {
       final String trimmedAndLoweredPart = part.trim();
       final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);

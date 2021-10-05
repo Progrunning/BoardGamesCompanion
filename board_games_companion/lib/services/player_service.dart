@@ -42,11 +42,11 @@ class PlayerService extends BaseHiveService<Player> {
   }
 
   Future<bool> addOrUpdatePlayer(Player player) async {
-    if ((player?.name?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Players)) {
+    if ((player.name?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Players)) {
       return false;
     }
 
-    if (player.id?.isEmpty ?? true) {
+    if (player.id.isEmpty) {
       player.id = uuid.v4();
     }
 
@@ -70,7 +70,7 @@ class PlayerService extends BaseHiveService<Player> {
   }
 
   Future<bool> deletePlayer(String playerId) async {
-    if (playerId?.isEmpty ?? true) {
+    if (playerId.isEmpty ) {
       return false;
     }
 
@@ -91,11 +91,11 @@ class PlayerService extends BaseHiveService<Player> {
   }
 
   Future<File?> saveAvatar(Player player) async {
-    if (player?.avatarFileToSave == null) {
+    if (player.avatarFileToSave == null) {
       return null;
     }
 
-    final avatarImageName = Uuid().v4();
+    final avatarImageName = const Uuid().v4();
     String? avatarImageNameFileExtension = '.jpg';
     if (_fileExtensionRegex.hasMatch(player.avatarFileToSave!.path)) {
       avatarImageNameFileExtension =

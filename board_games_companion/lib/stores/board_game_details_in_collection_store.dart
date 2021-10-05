@@ -14,7 +14,7 @@ class BoardGameDetailsInCollectionStore extends ChangeNotifier {
   BoardGameDetails? _boardGameDetails;
 
   bool get isInCollection {
-    if ((_boardGamesStore?.filteredBoardGames?.isEmpty ?? true) || _boardGameDetails == null) {
+    if ((_boardGamesStore.filteredBoardGames?.isEmpty ?? true) || _boardGameDetails == null) {
       return false;
     }
 

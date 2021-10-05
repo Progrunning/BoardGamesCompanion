@@ -229,7 +229,7 @@ class _SearchResultsState extends State<_SearchResults> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 Text(
-                                  searchResults![itemIndex].name!,
+                                  searchResults![itemIndex].name,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppTheme.titleTextStyle,
                                 ),

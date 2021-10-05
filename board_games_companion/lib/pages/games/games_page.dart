@@ -63,7 +63,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     if (widget.boardGamesStore.loadDataState == LoadDataState.Loaded) {
-      if (!widget.boardGamesStore.hasBoardGames && (widget.userStore.user?.name?.isEmpty ?? true)) {
+      if (!widget.boardGamesStore.hasBoardGames && (widget.userStore.user?.name.isEmpty ?? true)) {
         return _Empty();
       }
 
@@ -314,7 +314,7 @@ class _AppBarState extends State<_AppBar> {
   @override
   void dispose() {
     _searchController.removeListener(_handleSearchChanged);
-    _searchController?.dispose();
+    _searchController.dispose();
     _debounce?.cancel();
 
     super.dispose();
@@ -589,7 +589,7 @@ class _EmptyCollection extends StatelessWidget {
                             text: ' collection yet.',
                           ),
                           if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
-                              (userStore.user?.name?.isNotEmpty ?? false)) ...[
+                              (userStore.user?.name.isNotEmpty ?? false)) ...[
                             const TextSpan(
                               text: "\n\nIf you want to see board games from BGG's  ",
                             ),

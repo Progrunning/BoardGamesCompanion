@@ -1,14 +1,13 @@
-import 'package:xml/xml.dart';
-
-import '../common/exceptions/bgg_retry_exception.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retry/retry.dart';
+import 'package:xml/xml.dart';
 import 'package:xml/xml.dart' as xml;
 
 import '../common/enums/collection_type.dart';
+import '../common/exceptions/bgg_retry_exception.dart';
 import '../extensions/xml_element_extensions.dart';
 import '../models/board_game.dart';
 import '../models/collection_sync_result.dart';
@@ -151,7 +150,7 @@ class BoardGamesGeekService {
   }
 
   Future<BoardGameDetails?> getDetails(String id) async {
-    if (id?.isEmpty ?? true) {
+    if (id.isEmpty) {
       return null;
     }
 
@@ -175,7 +174,7 @@ class BoardGamesGeekService {
     try {
       final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsXml)!;
       final boardGameDetailsItem =
-          boardGameDetailsXmlDocument?.findAllElements(_xmlItemElementName)?.single;
+          boardGameDetailsXmlDocument.findAllElements(_xmlItemElementName).single;
 
       if (boardGameDetailsItem == null) {
         return null;
@@ -245,22 +244,22 @@ class BoardGamesGeekService {
           boardGameDetailStatistics.firstOrDefault(_xmlRatingsElementName)!;
 
       boardGameDetails.rating = double.tryParse(boardGameDetailsRatings
-              ?.firstOrDefault(_xmlAverageElementName)
+              .firstOrDefault(_xmlAverageElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
       boardGameDetails.votes = int.tryParse(boardGameDetailsRatings
-              ?.firstOrDefault(_xmlUsersRatedElementName)
+              .firstOrDefault(_xmlUsersRatedElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
       boardGameDetails.commentsNumber = int.tryParse(boardGameDetailsRatings
-              ?.firstOrDefault(_xmlNumCommentsElementName)
+              .firstOrDefault(_xmlNumCommentsElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
       boardGameDetails.avgWeight = num.tryParse(boardGameDetailsRatings
-              ?.firstOrDefault(_xmlAverageWeightElementName)
+              .firstOrDefault(_xmlAverageWeightElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
@@ -314,7 +313,7 @@ class BoardGamesGeekService {
   }
 
   Future<CollectionSyncResult> syncCollection(String username) async {
-    if (username?.isEmpty ?? true) {
+    if (username.isEmpty) {
       return CollectionSyncResult();
     }
 
@@ -441,7 +440,7 @@ class BoardGamesGeekService {
     BoardGameDetails boardGameDetails,
   ) {
     for (final boardGameLink in boardGameLinks) {
-      if (boardGameLink.attributes?.isEmpty ?? true) {
+      if (boardGameLink.attributes.isEmpty) {
         continue;
       }
 
@@ -517,7 +516,7 @@ class BoardGamesGeekService {
       );
 
       if (rank.name == 'boardgame') {
-        boardGameDetails.rank = rank.rank.toInt();
+        boardGameDetails.rank = rank.rank?.toInt();
       }
 
       boardGameDetails.ranks.add(rank);
@@ -555,8 +554,8 @@ class BoardGamesGeekService {
   }
 
   bool _hasErrors(xml.XmlDocument xmlDocument) {
-    final errorElements = xmlDocument?.findAllElements(_xmlErrorElementName);
-    if (errorElements?.isEmpty ?? true) {
+    final errorElements = xmlDocument.findAllElements(_xmlErrorElementName);
+    if (errorElements.isEmpty) {
       return false;
     }
 

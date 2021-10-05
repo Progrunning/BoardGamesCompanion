@@ -113,7 +113,7 @@ class _SortByChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget avatarIcon = Container();
-    switch (sortBy?.orderBy) {
+    switch (sortBy.orderBy) {
       case OrderBy.Ascending:
         avatarIcon = const Icon(Icons.arrow_drop_up);
         break;
@@ -127,13 +127,12 @@ class _SortByChip extends StatelessWidget {
         color: AppTheme.defaultTextColor,
       ),
       label: Text(
-        sortBy?.name ?? '',
+        sortBy.name,
         style: TextStyle(
-          color:
-              (sortBy?.selected ?? false) ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
+          color: (sortBy.selected) ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
         ),
       ),
-      selected: sortBy?.selected ?? false,
+      selected: sortBy.selected,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           Styles.defaultCornerRadius,
@@ -146,7 +145,7 @@ class _SortByChip extends StatelessWidget {
       ),
       avatar: avatarIcon,
       onSelected: (isSelected) {
-        boardGamesFiltersStore?.updateSortBySelection(sortBy);
+        boardGamesFiltersStore.updateSortBySelection(sortBy);
       },
     );
   }
@@ -172,7 +171,7 @@ class _Filters extends StatelessWidget {
         ),
         const SizedBox(
           height: Dimensions.standardSpacing,
-        ),        
+        ),
         const Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -255,7 +254,7 @@ class _FilterRatingAnyValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSelected = _boardGamesFiltersStore?.filterByRating == null;
+    final isSelected = _boardGamesFiltersStore.filterByRating == null;
     final anyRating = Center(
       child: Text(
         'Any',
@@ -295,11 +294,11 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minNumberOfPlayers = boardGamesStore.allboardGames!
+    final minNumberOfPlayers = boardGamesStore.allboardGames
         .where((boardGameDetails) => boardGameDetails.minPlayers != null)
         .map((boardGameDetails) => boardGameDetails.minPlayers!)
         .reduce(min);
-    final maxNumberOfPlayers = boardGamesStore.allboardGames!
+    final maxNumberOfPlayers = boardGamesStore.allboardGames
         .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
         .map((boardGameDetails) => boardGameDetails.maxPlayers!)
         .reduce(max);
@@ -383,7 +382,7 @@ class _FilterRatingValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSelected = _rating == _boardGamesFiltersStore?.filterByRating;
+    final isSelected = _rating == _boardGamesFiltersStore.filterByRating;
     final boardGameRatingHexagon = BoardGameRatingHexagon(
       width: Dimensions.collectionFilterHexagonSize,
       height: Dimensions.collectionFilterHexagonSize,

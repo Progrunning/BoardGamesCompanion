@@ -64,15 +64,15 @@ class EditPlaythoughViewModel {
     };
 
     for (final PlayerScore playerScore in playerScores) {
-      if (playerScoresMap[playerScore.player!.id]!.value != playerScore.score!.value) {
+      if (playerScoresMap[playerScore.player!.id]!.value != playerScore.score.value) {
         playerScoresUpdated = true;
         break;
       }
     }
 
     return playerScoresUpdated ||
-        _playthroughStore.playthrough!.startDate != playthrough.startDate ||
-        _playthroughStore.playthrough!.endDate != playthrough.endDate;
+        _playthroughStore.playthrough.startDate != playthrough.startDate ||
+        _playthroughStore.playthrough.endDate != playthrough.endDate;
   }
 
   Future<void> stopPlaythrough() async {

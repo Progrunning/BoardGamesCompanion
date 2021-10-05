@@ -134,12 +134,12 @@ class _Playthrough extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.done) {
                   playthroughStore.playerScores.sortByScore();
                   playthroughStore.playerScores!
-                      .where((ps) => ps?.score?.value?.isNotEmpty ?? false)
+                      .where((ps) => ps.score.value?.isNotEmpty ?? false)
                       .toList()
                       .asMap()
                       .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
 
-                  debugPrint(playthroughStore.playthrough!.endDate?.toIso8601String() ?? '');
+                  debugPrint(playthroughStore.playthrough.endDate?.toIso8601String() ?? '');
 
                   return Row(
                     mainAxisSize: MainAxisSize.max,
@@ -148,7 +148,7 @@ class _Playthrough extends StatelessWidget {
                       _PlaythroughGameStats(
                         playthroughStore: playthroughStore,
                         playthroughNumber: playthroughNumber,
-                        playthrough: playthroughStore.playthrough!,
+                        playthrough: playthroughStore.playthrough,
                       ),
                       const SizedBox(
                         width: Dimensions.doubleStandardSpacing,
@@ -239,7 +239,7 @@ class _PlaythroughPlayerList extends StatelessWidget {
                 children: [
                   PlayerAvatar(
                     _playthroughStore.playerScores![index].player,
-                    playerHeroIdSuffix: _playthroughStore.playthrough!.id,
+                    playerHeroIdSuffix: _playthroughStore.playthrough.id,
                   ),
                   if (_playthroughStore.playerScores![index].place != null)
                     PositionedTileRankRibbon(
@@ -252,7 +252,7 @@ class _PlaythroughPlayerList extends StatelessWidget {
               height: Dimensions.standardSpacing,
             ),
             Text(
-              _playthroughStore.playerScores![index]?.score?.value ?? '-',
+              _playthroughStore.playerScores![index].score.value ?? '-',
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
@@ -284,7 +284,7 @@ class _PlaythroughGameStats extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        CalendarCard(playthroughStore.playthrough!.startDate),
+        CalendarCard(playthroughStore.playthrough.startDate),
         _PlaythroughItemDetail(
           playthroughStore.daysSinceStart?.toString(),
           'day(s) ago',

@@ -13,15 +13,14 @@ class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
       return null;
     }
 
-    if (storageBox?.values?.isEmpty ?? true) {
+    if (storageBox.values.isEmpty) {
       return null;
     }
 
     return storageBox.get(_collectionFiltersPreferenceKey);
   }
 
-  Future<bool> addOrUpdateCollectionFilters(
-      CollectionFilters? collectionFilters) async {
+  Future<bool> addOrUpdateCollectionFilters(CollectionFilters? collectionFilters) async {
     if (collectionFilters == null) {
       return false;
     }

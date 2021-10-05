@@ -15,7 +15,6 @@ extension ToGamesTab on int {
         return GamesTab.Friends;
       case 2:
         return GamesTab.Wishlist;
-        break;
     }
 
     return GamesTab.Owned;
@@ -29,12 +28,8 @@ extension ToCollectionType on GamesTab {
         return CollectionType.Owned;
       case GamesTab.Friends:
         return CollectionType.Friends;
-        break;
       case GamesTab.Wishlist:
         return CollectionType.Wishlist;
-        break;
     }
-
-    return CollectionType.Owned;
   }
 }

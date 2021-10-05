@@ -33,7 +33,7 @@ class BoardGameDetailsStore with ChangeNotifier {
         return _boardGameDetails!;
       }
       for (final boardGameExpansion in boardGameDetails.expansions) {
-        final boardGameExpansionDetails = _boardGamesStore.allboardGames!.firstWhereOrNull(
+        final boardGameExpansionDetails = _boardGamesStore.allboardGames.firstWhereOrNull(
           (boardGame) => boardGame.id == boardGameExpansion.id,
         );
 
