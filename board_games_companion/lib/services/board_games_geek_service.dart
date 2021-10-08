@@ -511,8 +511,8 @@ class BoardGamesGeekService {
         id: rankId!,
         name: rankName!,
         type: rankType!,
-        friendlyName: rankFriendlyName!,
-        rank: rankRank!,
+        friendlyName: rankFriendlyName,
+        rank: rankRank,
       );
 
       if (rank.name == 'boardgame') {

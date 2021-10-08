@@ -24,7 +24,7 @@ class BoardGameDetailsStore with ChangeNotifier {
 
   BoardGameDetails? get boardGameDetails => _boardGameDetails;
 
-  Future<BoardGameDetails> loadBoardGameDetails(String boardGameId) async {
+  Future<BoardGameDetails?> loadBoardGameDetails(String boardGameId) async {
     try {
       // TODO MK Think about retrieving the data from Hive and updating with the HTTP call
       //         Alternatively set cache expiration (~a week?) and then retrieve data to update
@@ -60,7 +60,7 @@ class BoardGameDetailsStore with ChangeNotifier {
 
     notifyListeners();
 
-    return _boardGameDetails!;
+    return _boardGameDetails;
   }
 
   Future<void> captureLinkAnalytics(String linkName) async {

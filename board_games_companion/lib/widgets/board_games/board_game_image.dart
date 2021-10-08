@@ -8,7 +8,7 @@ import '../common/shadow_box.dart';
 
 class BoardGameImage extends StatelessWidget {
   const BoardGameImage(
-    BoardGameDetails boardGameDetails, {
+    BoardGameDetails? boardGameDetails, {
     Key? key,
     this.minImageHeight = 300,
     this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
@@ -18,7 +18,7 @@ class BoardGameImage extends StatelessWidget {
   final double minImageHeight;
   final String heroTag;
 
-  final BoardGameDetails _boardGameDetails;
+  final BoardGameDetails? _boardGameDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +27,9 @@ class BoardGameImage extends StatelessWidget {
     }
 
     return Hero(
-      tag: '$heroTag${_boardGameDetails.id}',
+      tag: '$heroTag${_boardGameDetails!.id}',
       child: CachedNetworkImage(
-        imageUrl: _boardGameDetails.imageUrl ?? '',
+        imageUrl: _boardGameDetails!.imageUrl ?? '',
         imageBuilder: (context, imageProvider) => ConstrainedBox(
           constraints: BoxConstraints(minHeight: minImageHeight),
           child: ShadowBox(
