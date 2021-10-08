@@ -25,7 +25,7 @@ class PlaythroughAdapter extends TypeAdapter<Playthrough> {
     )
       ..endDate = fields[5] as DateTime?
       ..status = fields[6] as PlaythroughStatus?
-      ..isDeleted = fields[7] as bool;
+      ..isDeleted = fields[7] as bool?;
   }
 
   @override

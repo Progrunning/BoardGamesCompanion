@@ -1,3 +1,4 @@
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/foundation.dart';
 
 import '../common/analytics.dart';
@@ -51,10 +52,8 @@ class BoardGamesFiltersStore with ChangeNotifier {
       sb.selected = false;
     }
 
-    final selectedSortBy = _sortBy.firstWhere((sb) => sb.name == _collectionFilters?.sortBy?.name,
-        orElse: () {
-          return null;
-        } as SortBy Function()?);
+    final SortBy? selectedSortBy =
+        _sortBy.firstWhereOrNull((sb) => sb.name == _collectionFilters?.sortBy?.name);
 
     if (selectedSortBy != null) {
       selectedSortBy.orderBy = _collectionFilters!.sortBy!.orderBy;

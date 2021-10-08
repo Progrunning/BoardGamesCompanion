@@ -27,20 +27,20 @@ class PlayerAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: player,
-      child: Consumer<Player>(
-        builder: (_, Player providerPlayer, __) {
+      child: Consumer<Player?>(
+        builder: (_, Player? providerPlayer, __) {
           return ShadowBox(
             child: Stack(
               children: <Widget>[
                 Hero(
-                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer.id}$playerHeroIdSuffix',
+                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
                   child: PlayerImage(
-                    imageUri: providerPlayer.avatarImageUri,
+                    imageUri: providerPlayer?.avatarImageUri,
                   ),
                 ),
-                if (providerPlayer.name?.isNotEmpty ?? false)
+                if (providerPlayer?.name?.isNotEmpty ?? false)
                   PlayerAvatarSubtitle(
-                    player: providerPlayer,
+                    player: providerPlayer!,
                   ),
                 if (topRightCornerActionWidget != null)
                   Align(
