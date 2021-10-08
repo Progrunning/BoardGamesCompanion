@@ -131,7 +131,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
           title: const Text('Are you sure you want to delete this playthrough?'),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: const Text(
                 Strings.Cancel,
                 style: TextStyle(color: AppTheme.accentColor),
@@ -140,9 +140,12 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
-              child: const Text(Strings.Delete),
-              color: AppTheme.redColor,
+            TextButton(
+              child: const Text(
+                Strings.Delete,
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
+              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
 
@@ -172,7 +175,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
             ),
             elevation: Dimensions.defaultElevation,
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: const Text(
                   Strings.Cancel,
                   style: TextStyle(
@@ -183,9 +186,12 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   Navigator.of(context).pop();
                 },
               ),
-              FlatButton(
-                child: const Text('Navigate away'),
-                color: Colors.red,
+              TextButton(
+                child: const Text(
+                  'Navigate away',
+                  style: TextStyle(color: AppTheme.defaultTextColor),
+                ),
+                style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
                 onPressed: () async {
                   // MK Pop the dialog
                   Navigator.of(context).pop();
