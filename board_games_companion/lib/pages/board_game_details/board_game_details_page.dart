@@ -157,7 +157,7 @@ class _Header extends StatelessWidget {
             builder: (_, store, __) {
               // TODO Add shadow to the image
               return BoardGameImage(
-                _boardGameDetailsStore.boardGameDetails!,
+                _boardGameDetailsStore.boardGameDetails,
                 minImageHeight: Constants.BoardGameDetailsImageHeight,
               );
             },
