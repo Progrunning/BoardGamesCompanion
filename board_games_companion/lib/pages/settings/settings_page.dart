@@ -152,7 +152,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
           ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: const Text(
                 Strings.Cancel,
                 style: TextStyle(color: AppTheme.accentColor),
@@ -161,9 +161,12 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
-              child: const Text('Remove'),
-              color: AppTheme.redColor,
+            TextButton(
+              child: const Text(
+                'Remove',
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
+              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 final boardGameStore = Provider.of<BoardGamesStore>(
                   context,
