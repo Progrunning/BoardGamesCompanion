@@ -31,5 +31,5 @@ class Playthrough {
   @HiveField(6)
   PlaythroughStatus? status;
   @HiveField(7)
-  bool isDeleted = false;
+  bool? isDeleted = false;
 }

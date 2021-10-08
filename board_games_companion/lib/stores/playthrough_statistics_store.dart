@@ -37,18 +37,18 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
-    final boardGameDetailsMapById = <String?, BoardGameDetails>{
+    final boardGameDetailsMapById = <String, BoardGameDetails>{
       for (BoardGameDetails boardGameDetails in allBoardGames!)
         boardGameDetails.id: boardGameDetails
     };
 
-    final boardGamePlaythroughs = await _playthroughService
-        .retrievePlaythroughs(boardGameDetailsMapById.keys as Iterable<String>);
+    final boardGamePlaythroughs =
+        await _playthroughService.retrievePlaythroughs(boardGameDetailsMapById.keys.toList());
 
     final Map<String, List<Playthrough>> boardGamePlaythroughsGroupedByBoardGameId =
         groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
     for (final boardGameId in boardGameDetailsMapById.keys) {
-      var boardGameStatistics = _boardGamesStatistics[boardGameId!];
+      var boardGameStatistics = _boardGamesStatistics[boardGameId];
       if (boardGameStatistics == null) {
         boardGameStatistics = _boardGamesStatistics[boardGameId] = BoardGameStatistics();
       }

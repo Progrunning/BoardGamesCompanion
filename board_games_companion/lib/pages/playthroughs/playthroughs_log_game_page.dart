@@ -386,9 +386,13 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   value: PlaythroughStartTime.inThePast,
                   groupValue: widget.viewModel.playthroughStartTime,
                   activeColor: AppTheme.accentColor,
-                  onChanged: ((PlaythroughStartTime value) =>
-                          _updatePlaythroughStartTimeSelection(value))
-                      as void Function(PlaythroughStartTime?)?,
+                  onChanged: (PlaythroughStartTime? value) {
+                    if (value == null) {
+                      return;
+                    }
+
+                    _updatePlaythroughStartTimeSelection(value);
+                  },
                 ),
                 Text(
                   'Played some time ago',
