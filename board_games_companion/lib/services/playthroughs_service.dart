@@ -17,7 +17,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   final ScoreService scoreService;
 
   Future<List<Playthrough>> retrievePlaythroughs(
-    Iterable<String> boardGameIds, {
+    List<String> boardGameIds, {
     bool includeDeleted = false,
   }) async {
     if (boardGameIds.isEmpty) {
@@ -32,7 +32,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
         .toMap()
         .values
         .where((playthrough) =>
-            (includeDeleted || !playthrough.isDeleted) &&
+            (includeDeleted || !(playthrough.isDeleted ?? false)) &&
             boardGameIds.contains(playthrough.boardGameId))
         .toList();
   }
@@ -77,11 +77,11 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
           playerId: playthroughPlayerId,
           boardGameId: boardGameId,
         );
-        playerScore.playthroughId = newPlaythrough.id;
 
         if (playerScores.containsKey(playthroughPlayerId)) {
           playerScore = playerScores[playthroughPlayerId]!.score;
         }
+        playerScore.playthroughId = newPlaythrough.id;
 
         if (!await scoreService.addOrUpdateScore(playerScore)) {
           FirebaseCrashlytics.instance.log(
@@ -121,7 +121,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     }
 
     final playthroughToDelete = storageBox.get(playthroughId);
-    if (playthroughToDelete == null || playthroughToDelete.isDeleted) {
+    if (playthroughToDelete == null || (playthroughToDelete.isDeleted ?? false)) {
       return false;
     }
 
