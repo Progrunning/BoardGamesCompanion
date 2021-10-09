@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -79,9 +80,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
       );
     }
 
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const LoadingIndicator();
   }
 
   @override
@@ -272,8 +271,7 @@ class _AppBarState extends State<_AppBar> {
       },
     );
 
-    // TODO MK After updating to Flutter 2.x see https://stackoverflow.com/questions/44991968/how-can-i-dismiss-the-on-screen-keyboard/56946311#56946311 for solution
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   void _handleSearchChanged() {

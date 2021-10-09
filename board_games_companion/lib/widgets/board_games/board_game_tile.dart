@@ -7,6 +7,7 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../models/hive/base_board_game.dart';
+import '../common/loading_indicator_widget.dart';
 import '../common/rank_ribbon.dart';
 import '../common/ripple_effect.dart';
 
@@ -57,7 +58,6 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
                 color: AppTheme.primaryColor,
                 borderRadius: AppTheme.defaultBoxRadius,
               ),
-              child: const Center(child: CircularProgressIndicator()),
             ),
             // TODO Add shadow to the error state
             errorWidget: (context, url, dynamic error) => ClipRRect(
