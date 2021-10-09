@@ -81,6 +81,8 @@ class _HomePageState extends BasePageState<HomePage> {
             onTap: (pageIndex) {
               pageController.animateToTab(pageIndex);
             },
+            unselectedItemColor: AppTheme.secondaryTextColor,
+            selectedItemColor: AppTheme.accentColor,
           );
         },
       ),
