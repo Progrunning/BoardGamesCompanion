@@ -43,7 +43,7 @@ mixin SyncCollection {
   }
 }
 
-void _showSuccessSnackBar() {
+void _showSuccessSnackBar() {  
   HomePage.homePageGlobalKey.currentState!.showSnackBar(
     const SnackBar(
       behavior: SnackBarBehavior.floating,

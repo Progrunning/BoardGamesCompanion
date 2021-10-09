@@ -267,8 +267,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       selectPlayersStepError = true;
     });
 
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text('You need to select at least one player'),
@@ -289,8 +289,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   }
 
   void _showConfirmationSnackbar(BuildContext context) {
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text('Your game has been logged!'),

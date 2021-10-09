@@ -11,7 +11,7 @@ class LauncherHelper {
     if (await canLaunch(uri)) {
       await launch(uri);
     } else {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
           content: Text("Sorry, we couldn't open the $uri"),
