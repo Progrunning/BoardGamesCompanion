@@ -414,6 +414,10 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   maxValue: 99,
                   onChanged: (num value) => _updateDurationHours(value),
                   itemWidth: 46,
+                  selectedTextStyle: const TextStyle(
+                    color: AppTheme.accentColor,
+                    fontSize: Dimensions.doubleExtraLargeFontSize,
+                  ),
                 ),
                 Text(
                   'h',
@@ -427,6 +431,10 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   maxValue: Duration.minutesPerHour - 1,
                   onChanged: (num value) => _updateDurationMinutes(value),
                   itemWidth: 46,
+                  selectedTextStyle: const TextStyle(
+                    color: AppTheme.accentColor,
+                    fontSize: Dimensions.doubleExtraLargeFontSize,
+                  ),
                 ),
                 Text(
                   'min ',
@@ -700,6 +708,10 @@ class _PlayerScore extends StatelessWidget {
 
                       await playerScoreConsumer.updatePlayerScore(valueText);
                     },
+                    selectedTextStyle: const TextStyle(
+                      color: AppTheme.accentColor,
+                      fontSize: Dimensions.doubleExtraLargeFontSize,
+                    ),
                   );
                 },
               ),

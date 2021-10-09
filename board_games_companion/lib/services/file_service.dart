@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 
 @singleton
 class FileService {
-  Future<File?> saveToDocumentsDirectory(String fileName, PickedFile pickedFile,
+  Future<File?> saveToDocumentsDirectory(String fileName, XFile pickedFile,
       {bool overrideExistingFile = false}) async {
     try {
       final fileContent = await pickedFile.readAsBytes();

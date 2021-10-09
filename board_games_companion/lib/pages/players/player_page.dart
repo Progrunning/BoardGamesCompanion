@@ -194,7 +194,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   }
 
   Future _handlePickingAndSavingAvatar(Player player, ImageSource imageSource) async {
-    player.avatarFileToSave = await imagePicker.getImage(source: imageSource);
+    player.avatarFileToSave = await imagePicker.pickImage(source: imageSource);
     if (player.avatarFileToSave?.path.isEmpty ?? true) {
       return;
     }

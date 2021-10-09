@@ -32,7 +32,7 @@ class Player with ChangeNotifier {
   String? get avatarFileName => _avatarFileName;
   bool? get isDeleted => _isDeleted;
 
-  PickedFile? avatarFileToSave;
+  XFile? avatarFileToSave;
 
   set name(String? value) {
     if (_name != value) {

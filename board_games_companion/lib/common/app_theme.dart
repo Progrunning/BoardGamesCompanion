@@ -36,10 +36,6 @@ class AppTheme {
   static const Color startDefaultPageElementBackgroundColorGradient = secondaryLightColor;
   static const Color endDefaultPageElementBackgroundColorGradient = secondaryColor;
 
-  static const TextStyle defaultBottomTabItemTextStyle = TextStyle(
-    color: defaultTextColor,
-  );
-
   static const TextStyle titleTextStyle = TextStyle(
     fontSize: Dimensions.mediumFontSize,
     color: defaultTextColor,
@@ -122,8 +118,6 @@ class AppTheme {
       scaffoldBackgroundColor: primaryColorLight, // LicensePage when loading
       primaryColor: primaryColor,
       primaryColorLight: primaryColorLight,
-      buttonColor: accentColor,
-      textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
       highlightColor: accentColor,
       dialogBackgroundColor: primaryColorLight,
@@ -135,9 +129,8 @@ class AppTheme {
             ),
           ),
       colorScheme: originalColorScheme.copyWith(
-        primary: primaryColor,        
+        primary: primaryColor,
         onPrimary: defaultTextColor,
-        // secondary: secondaryColor,
         secondary: accentColor,
         onSecondary: defaultTextColor,
         surface: primaryColorLight,
@@ -207,9 +200,7 @@ class AppTheme {
           ),
         ),
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppTheme.accentColor,
-          ),
+          borderSide: BorderSide(color: AppTheme.accentColor),
         ),
       ),
       textSelectionTheme: const TextSelectionThemeData(
@@ -217,12 +208,9 @@ class AppTheme {
         selectionColor: accentColor,
         selectionHandleColor: accentColor,
       ),
-      useTextSelectionTheme: true,
       bottomNavigationBarTheme: originalBottomNavigationBarTheme.copyWith(
         unselectedLabelStyle: const TextStyle(color: defaultTextColor),
-        selectedLabelStyle: const TextStyle(
-          color: defaultTextColor,
-        ),
+        selectedLabelStyle: const TextStyle(color: defaultTextColor),
       ),
       chipTheme: ThemeData.light().chipTheme.copyWith(
             elevation: Dimensions.defaultElevation,
