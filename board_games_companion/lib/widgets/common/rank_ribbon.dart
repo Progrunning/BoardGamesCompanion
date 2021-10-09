@@ -23,7 +23,7 @@ class RankRibbon extends StatelessWidget {
           'assets/icons/rank_ribbon.svg',
           height: 34,
           width: 26,
-          color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
+          color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
         ),
         Positioned.fill(
           child: Center(
