@@ -80,36 +80,37 @@ class _Expansions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      title: Text(
-        'Expansions (${boardGameDetailsStore.boardGameDetails!.expansions.length})',
-        style: const TextStyle(
-          fontSize: Dimensions.standardFontSize,
+    return Theme(
+      data: AppTheme.theme.copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        title: Text(
+          'Expansions (${boardGameDetailsStore.boardGameDetails!.expansions.length})',
+          style: const TextStyle(fontSize: Dimensions.standardFontSize),
         ),
-      ),
-      subtitle: Text(
-        boardGameDetailsStore.boardGameDetails!.expansionsOwned == 0
-            ? "You don't own any expansions"
-            : 'You own ${boardGameDetailsStore.boardGameDetails!.expansionsOwned} expansion(s)',
-        style: const TextStyle(
-          color: AppTheme.defaultTextColor,
-          fontSize: Dimensions.smallFontSize,
+        textColor: AppTheme.accentColor,
+        collapsedTextColor: AppTheme.secondaryTextColor,
+        iconColor: AppTheme.accentColor,
+        collapsedIconColor: AppTheme.accentColor,
+        subtitle: Text(
+          boardGameDetailsStore.boardGameDetails!.expansionsOwned == 0
+              ? "You don't own any expansions"
+              : 'You own ${boardGameDetailsStore.boardGameDetails!.expansionsOwned} expansion(s)',
+          style: const TextStyle(
+            color: AppTheme.defaultTextColor,
+            fontSize: Dimensions.smallFontSize,
+          ),
         ),
-      ),
-      tilePadding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.standardSpacing,
-      ),
-      initiallyExpanded: initiallyExpanded!,
-      onExpansionChanged: (bool isExpanded) async {
-        await preferencesService.setExpansionsPanelExpandedState(isExpanded);
-      },
-      children: [
-        ...List.generate(
-          boardGameDetailsStore.boardGameDetails!.expansions.length,
-          (index) {
-            final expansion = boardGameDetailsStore.boardGameDetails!.expansions[index];
-
-            return ChangeNotifierProvider<BoardGamesExpansion>.value(
+        tilePadding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.standardSpacing,
+        ),
+        initiallyExpanded: initiallyExpanded!,
+        onExpansionChanged: (bool isExpanded) async {
+          await preferencesService.setExpansionsPanelExpandedState(isExpanded);
+        },
+        children: [
+          for (final BoardGamesExpansion expansion
+              in boardGameDetailsStore.boardGameDetails!.expansions)
+            ChangeNotifierProvider<BoardGamesExpansion>.value(
               value: expansion,
               child: Consumer<BoardGamesExpansion>(
                 builder: (_, store, __) {
@@ -118,10 +119,9 @@ class _Expansions extends StatelessWidget {
                   );
                 },
               ),
-            );
-          },
-        ),
-      ],
+            ),
+        ],
+      ),
     );
   }
 }
