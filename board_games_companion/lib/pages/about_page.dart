@@ -1,3 +1,4 @@
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
@@ -267,9 +268,7 @@ class _LicensePageDetailsItem extends StatelessWidget {
           );
         }
 
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const LoadingIndicator();
       },
     );
   }
