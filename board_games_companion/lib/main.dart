@@ -50,45 +50,46 @@ import 'stores/user_store.dart';
 
 Future<void> main() async {
   configureDependencies();
-  WidgetsFlutterBinding.ensureInitialized();
 
-  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
-  Hive
-    ..init(appDocumentDirectory.path)
-    ..registerAdapter(BoardGameDetailsAdapter())
-    ..registerAdapter(BoardGameCategoryAdapter())
-    ..registerAdapter(PlayerAdapter())
-    ..registerAdapter(PlaythroughAdapter())
-    ..registerAdapter(PlaythroughStatusAdapter())
-    ..registerAdapter(ScoreAdapter())
-    ..registerAdapter(BoardGameDesignerAdapter())
-    ..registerAdapter(BoardGamePublisherAdapter())
-    ..registerAdapter(BoardGameArtistAdapter())
-    ..registerAdapter(BoardGamesExpansionAdapter())
-    ..registerAdapter(BoardGameRankAdapter())
-    ..registerAdapter(UserAdapter())
-    ..registerAdapter(SortByAdapter())
-    ..registerAdapter(SortByOptionAdapter())
-    ..registerAdapter(OrderByAdapter())
-    ..registerAdapter(CollectionFiltersAdapter());
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  final PreferencesService preferencesService = getIt<PreferencesService>();
-  await preferencesService.initialize();
+    final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+    Hive
+      ..init(appDocumentDirectory.path)
+      ..registerAdapter(BoardGameDetailsAdapter())
+      ..registerAdapter(BoardGameCategoryAdapter())
+      ..registerAdapter(PlayerAdapter())
+      ..registerAdapter(PlaythroughAdapter())
+      ..registerAdapter(PlaythroughStatusAdapter())
+      ..registerAdapter(ScoreAdapter())
+      ..registerAdapter(BoardGameDesignerAdapter())
+      ..registerAdapter(BoardGamePublisherAdapter())
+      ..registerAdapter(BoardGameArtistAdapter())
+      ..registerAdapter(BoardGamesExpansionAdapter())
+      ..registerAdapter(BoardGameRankAdapter())
+      ..registerAdapter(UserAdapter())
+      ..registerAdapter(SortByAdapter())
+      ..registerAdapter(SortByOptionAdapter())
+      ..registerAdapter(OrderByAdapter())
+      ..registerAdapter(CollectionFiltersAdapter());
 
-  await Firebase.initializeApp();
+    final PreferencesService preferencesService = getIt<PreferencesService>();
+    await preferencesService.initialize();
 
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    LicenseRegistry.addLicense(() async* {
+      final license = await rootBundle.loadString('google_fonts/OFL.txt');
+      yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+    });
 
-  LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('google_fonts/OFL.txt');
-    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
-  });
-
-  runZoned(() {
+    await Firebase.initializeApp();
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     runApp(App(
       preferencesService: preferencesService,
     ));
-  }, onError: FirebaseCrashlytics.instance.recordError);
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }
 
 class App extends StatelessWidget {

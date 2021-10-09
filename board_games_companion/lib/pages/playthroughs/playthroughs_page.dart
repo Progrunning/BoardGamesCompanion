@@ -107,6 +107,8 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
               await _onTabChanged(index, pageController);
             },
             currentIndex: store.boardGamePlaythroughPageIndex,
+            unselectedItemColor: AppTheme.secondaryTextColor,
+            selectedItemColor: AppTheme.accentColor,
           );
         },
       ),

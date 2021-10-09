@@ -256,6 +256,10 @@ class _PlayerScore extends StatelessWidget {
 
                       await playerScoreConsumer.updatePlayerScore(valueText);
                     },
+                    selectedTextStyle: const TextStyle(
+                      color: AppTheme.accentColor,
+                      fontSize: Dimensions.doubleExtraLargeFontSize,
+                    ),
                   );
                 },
               ),
@@ -333,6 +337,10 @@ class _DurationState extends State<_Duration> {
                 maxValue: maxHours,
                 onChanged: (num value) => _updateDurationHours(value),
                 itemWidth: 46,
+                selectedTextStyle: const TextStyle(
+                  color: AppTheme.accentColor,
+                  fontSize: Dimensions.doubleExtraLargeFontSize,
+                ),
               ),
               Text(
                 'h',
@@ -346,6 +354,10 @@ class _DurationState extends State<_Duration> {
                 maxValue: maxMinutes,
                 onChanged: (num value) => _updateDurationMinutes(value),
                 itemWidth: 46,
+                selectedTextStyle: const TextStyle(
+                  color: AppTheme.accentColor,
+                  fontSize: Dimensions.doubleExtraLargeFontSize,
+                ),
               ),
               Text(
                 'min ',
