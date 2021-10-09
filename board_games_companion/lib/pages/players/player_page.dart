@@ -305,7 +305,7 @@ void _showPlayerUpdatedSnackbar(
   required bool isEditMode,
 }) {
   final String actionText = isEditMode ? 'updated' : 'created';
-  Scaffold.of(context).showSnackBar(
+  ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
       content: Text.rich(
