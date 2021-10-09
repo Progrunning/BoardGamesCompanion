@@ -26,7 +26,8 @@ class HomePage extends StatefulWidget {
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
 
-  static final GlobalKey<ScaffoldState> homePageGlobalKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldMessengerState> homePageGlobalKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -37,54 +38,56 @@ class _HomePageState extends BasePageState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldMessenger(
       key: HomePage.homePageGlobalKey,
-      body: PageContainer(
-        child: PageView(
-          controller: pageController,
-          children: <Widget>[
-            Consumer2<BoardGamesStore, UserStore>(
-              builder: (_, boardGamesStore, userStore, __) {
-                return GamesPage(
-                  boardGamesStore,
-                  userStore,
-                  widget.analyticsService,
-                  widget.rateAndReviewService,
-                );
+      child: Scaffold(
+        body: PageContainer(
+          child: PageView(
+            controller: pageController,
+            children: <Widget>[
+              Consumer2<BoardGamesStore, UserStore>(
+                builder: (_, boardGamesStore, userStore, __) {
+                  return GamesPage(
+                    boardGamesStore,
+                    userStore,
+                    widget.analyticsService,
+                    widget.rateAndReviewService,
+                  );
+                },
+              ),
+              SearchBoardGamesPage(analyticsService: widget.analyticsService),
+              const PlayersPage(),
+              const SettingsPage(),
+            ],
+            onPageChanged: (pageIndex) {
+              final homeStore = Provider.of<HomeStore>(
+                context,
+                listen: false,
+              );
+              homeStore.boardGamesPageIndex = pageIndex;
+            },
+          ),
+        ),
+        bottomNavigationBar: Consumer<HomeStore>(
+          builder: (_, homeStore, __) {
+            return BottomNavigationBar(
+              backgroundColor: AppTheme.bottomTabBackgroundColor,
+              type: BottomNavigationBarType.fixed,
+              items: <BottomNavigationBarItem>[
+                CustomBottomNavigationBarItem('Games', Icons.video_library),
+                CustomBottomNavigationBarItem('Search', Icons.search),
+                CustomBottomNavigationBarItem('Players', Icons.group),
+                CustomBottomNavigationBarItem('Settings', Icons.settings),
+              ],
+              currentIndex: homeStore.boardGamesPageIndex,
+              onTap: (pageIndex) {
+                pageController.animateToTab(pageIndex);
               },
-            ),
-            SearchBoardGamesPage(analyticsService: widget.analyticsService),
-            const PlayersPage(),
-            const SettingsPage(),
-          ],
-          onPageChanged: (pageIndex) {
-            final homeStore = Provider.of<HomeStore>(
-              context,
-              listen: false,
+              unselectedItemColor: AppTheme.secondaryTextColor,
+              selectedItemColor: AppTheme.defaultTextColor,
             );
-            homeStore.boardGamesPageIndex = pageIndex;
           },
         ),
-      ),
-      bottomNavigationBar: Consumer<HomeStore>(
-        builder: (_, homeStore, __) {
-          return BottomNavigationBar(
-            backgroundColor: AppTheme.bottomTabBackgroundColor,
-            type: BottomNavigationBarType.fixed,
-            items: <BottomNavigationBarItem>[
-              CustomBottomNavigationBarItem('Games', Icons.video_library),
-              CustomBottomNavigationBarItem('Search', Icons.search),
-              CustomBottomNavigationBarItem('Players', Icons.group),
-              CustomBottomNavigationBarItem('Settings', Icons.settings),
-            ],
-            currentIndex: homeStore.boardGamesPageIndex,
-            onTap: (pageIndex) {
-              pageController.animateToTab(pageIndex);
-            },
-            unselectedItemColor: AppTheme.secondaryTextColor,
-            selectedItemColor: AppTheme.defaultTextColor,
-          );
-        },
       ),
     );
   }
