@@ -122,7 +122,6 @@ class AppTheme {
       scaffoldBackgroundColor: primaryColorLight, // LicensePage when loading
       primaryColor: primaryColor,
       primaryColorLight: primaryColorLight,
-      accentColor: accentColor,
       buttonColor: accentColor,
       textSelectionColor: Colors.cyan[100],
       backgroundColor: Colors.grey[800],
@@ -136,9 +135,10 @@ class AppTheme {
             ),
           ),
       colorScheme: originalColorScheme.copyWith(
-        primary: primaryColor,
+        primary: primaryColor,        
         onPrimary: defaultTextColor,
-        secondary: secondaryColor,
+        // secondary: secondaryColor,
+        secondary: accentColor,
         onSecondary: defaultTextColor,
         surface: primaryColorLight,
         onSurface: defaultTextColor,

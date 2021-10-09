@@ -84,7 +84,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             alignment: Alignment.bottomCenter,
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
+                color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Styles.defaultCornerRadius),
                 ),

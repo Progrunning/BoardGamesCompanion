@@ -29,13 +29,13 @@ class IconAndTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fillColor = color ?? Theme.of(context).accentColor;
+    final fillColor = color ?? AppTheme.accentColor;
 
     return RawMaterialButton(
       constraints: const BoxConstraints(),
       fillColor: fillColor,
-      splashColor: splashColor ??
-          fillColor.withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt()),
+      splashColor:
+          splashColor ?? fillColor.withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt()),
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: horizontalPadding ?? Dimensions.doubleStandardSpacing,
