@@ -232,7 +232,7 @@ class _StatisticsDetails extends StatelessWidget {
             _StatisticsItem(
               value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
               icon: Icons.insert_chart,
-              iconColor: Theme.of(context).accentColor,
+              iconColor: AppTheme.accentColor,
               subtitle: 'Played games',
             ),
             const SizedBox(

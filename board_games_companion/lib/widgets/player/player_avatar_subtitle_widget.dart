@@ -26,7 +26,7 @@ class PlayerAvatarSubtitle extends StatelessWidget {
             borderRadius: const BorderRadius.all(
               Radius.circular(Styles.defaultCornerRadius),
             ),
-            color: Theme.of(context).accentColor.withAlpha(Styles.opacity70Percent),
+            color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
           ),
           child: Padding(
             padding: const EdgeInsets.all(

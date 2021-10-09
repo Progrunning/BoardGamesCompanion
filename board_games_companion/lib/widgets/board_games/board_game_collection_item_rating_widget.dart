@@ -27,14 +27,11 @@ class BoardGameCollectionItemRating extends StatelessWidget {
           child: ClipPolygon(
             sides: Dimensions.edgeNumberOfHexagon,
             child: Container(
-              color: Theme.of(context)
-                  // TODO Migration
-                  .accentColor
-                  .withAlpha(Styles.opacity90Percent),
+              color: AppTheme.accentColor.withAlpha(Styles.opacity90Percent),
               child: Center(
                 child: Text(
-                  (boardGameDetails.rating ?? 0).toStringAsFixed(
-                      Constants.BoardGameRatingNumberOfDecimalPlaces),
+                  (boardGameDetails.rating ?? 0)
+                      .toStringAsFixed(Constants.BoardGameRatingNumberOfDecimalPlaces),
                   style: const TextStyle(
                     color: AppTheme.defaultTextColor,
                     fontSize: Dimensions.standardFontSize,
