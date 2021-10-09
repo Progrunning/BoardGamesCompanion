@@ -1,4 +1,4 @@
-import 'package:collection/src/iterable_extensions.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 import '../common/analytics.dart';
