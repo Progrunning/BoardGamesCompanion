@@ -245,7 +245,7 @@ class _PlayerScore extends StatelessWidget {
                   return NumberPicker(
                     value: int.tryParse(playerScoreConsumer.score.value ?? '0') ?? 0,
                     axis: Axis.horizontal,
-                    itemHeight: 46,
+                    itemWidth: 46,
                     minValue: 0,
                     maxValue: 10000,
                     onChanged: (num value) async {
