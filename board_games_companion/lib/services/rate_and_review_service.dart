@@ -19,7 +19,7 @@ class RateAndReviewService {
   bool showRateAndReviewDialog = false;
 
   Future<void> increaseNumberOfSignificantActions() async {
-    int numberOfLoggedEvents = await _preferencesService.getNumberOfSignificantActions();
+    int numberOfLoggedEvents = _preferencesService.getNumberOfSignificantActions();
     if (numberOfLoggedEvents < _requiredNumberOfEventsLogged) {
       await _preferencesService.setNumberOfSignificantActions(
         numberOfLoggedEvents += 1,
@@ -53,21 +53,20 @@ class RateAndReviewService {
 
   Future<void> _updateShowRateAndReviewDialogFlag() async {
     try {
-      final bool rateAndReviewDialogSeen = await _preferencesService.getRateAndReviewDialogSeen();
+      final bool rateAndReviewDialogSeen = _preferencesService.getRateAndReviewDialogSeen();
       if (rateAndReviewDialogSeen) {
         return;
       }
 
       final DateTime nowUtc = DateTime.now().toUtc();
-      final DateTime firstTimeLaunchDate = await _preferencesService.getFirstTimeLaunchDate();
-      final DateTime appLaunchDate = await _preferencesService.getAppLaunchDate();
-      final DateTime remindMeLaterDate = await _preferencesService.getRemindMeLaterDate();
-      if (firstTimeLaunchDate == null || appLaunchDate == null) {
+      final DateTime? firstTimeLaunchDate = _preferencesService.getFirstTimeLaunchDate();
+      final DateTime? appLaunchDate = _preferencesService.getAppLaunchDate();
+      final DateTime? remindMeLaterDate = _preferencesService.getRemindMeLaterDate();
+      if (firstTimeLaunchDate == null || appLaunchDate == null || remindMeLaterDate == null) {
         return;
       }
 
-      final int numberOfSignificantActions =
-          await _preferencesService.getNumberOfSignificantActions();
+      final int numberOfSignificantActions = _preferencesService.getNumberOfSignificantActions();
 
       showRateAndReviewDialog =
           firstTimeLaunchDate.add(_requiredAppUsedForDuration).isBefore(nowUtc) &&

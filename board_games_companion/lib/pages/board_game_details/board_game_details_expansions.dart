@@ -1,4 +1,3 @@
-import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +8,6 @@ import '../../services/preferences_service.dart';
 import '../../stores/board_game_details_store.dart';
 import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/expansions_banner_widget.dart';
-import '../../widgets/common/loading_indicator_widget.dart';
 import 'board_game_details_page.dart';
 
 class BoardGameDetailsExpansions extends StatefulWidget {
@@ -44,21 +42,10 @@ class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions>
             data: AppTheme.theme.copyWith(
               unselectedWidgetColor: AppTheme.accentColor,
             ),
-            child: FutureBuilder<bool>(
-              future: widget.preferencesService!.getExpansionsPanelExpandedState(),
-              builder: (_, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasData) {
-                    return _Expansions(
-                      boardGameDetailsStore: widget.boardGameDetailsStore,
-                      preferencesService: widget.preferencesService!,
-                      initiallyExpanded: snapshot.data as bool?,
-                    );
-                  }
-                }
-
-                return const Center(child: LoadingIndicator());
-              },
+            child: _Expansions(
+              boardGameDetailsStore: widget.boardGameDetailsStore,
+              preferencesService: widget.preferencesService!,
+              initiallyExpanded: widget.preferencesService!.getExpansionsPanelExpandedState(),
             ),
           ),
         ),
