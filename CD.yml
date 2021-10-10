@@ -121,11 +121,13 @@ stages:
           vmImage: "macOS-latest"
 
         steps:
-          - task: FlutterInstall@0
-            inputs:
-              channel: "stable"
-              version: "custom"
-              customVersion: "1.22.3"
+          -  task: FlutterInstall@0
+             displayName: "Install Flutter"
+             inputs:
+                mode: "auto"
+                channel: "stable"
+                version: "custom"
+                customVersion: "2.5.2"
 
           - task: InstallAppleCertificate@2
             inputs:
