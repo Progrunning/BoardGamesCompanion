@@ -19,7 +19,8 @@ stages:
               customVersion: "2.5.2"
 
           - task: FlutterBuild@0
-            displayName: "Build Android"
+            displayName: "Build Android"            
+            condition: eq('1','0')
             inputs:
               target: "aab"
               debugMode: true
