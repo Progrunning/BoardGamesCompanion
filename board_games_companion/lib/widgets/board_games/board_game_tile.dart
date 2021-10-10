@@ -7,7 +7,6 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../models/hive/base_board_game.dart';
-import '../common/loading_indicator_widget.dart';
 import '../common/rank_ribbon.dart';
 import '../common/ripple_effect.dart';
 

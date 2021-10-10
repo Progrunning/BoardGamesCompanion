@@ -20,7 +20,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     }
 
     final List<BoardGameDetails> boardGames = storageBox.values.toList();
-    if (!await _preferenceService.getMigratedToMultipleCollections()) {
+    if (!_preferenceService.getMigratedToMultipleCollections()) {
       await _migrateToMultipleCollections(boardGames);
     }
 
