@@ -11,8 +11,6 @@ trigger:
       - release
 
 stages:
-
-
 - stage: CdBuildAndroid  
   jobs:
 
@@ -24,10 +22,12 @@ stages:
     steps:
     
       - task: FlutterInstall@0
+        displayName: "Install Flutter"
         inputs:
-          channel: 'stable'
-          version: 'custom'
-          customVersion: '1.22.3'
+            mode: "auto"
+            channel: "stable"
+            version: "custom"
+            customVersion: "2.5.2"
 
       - task: DownloadSecureFile@1
         displayName: 'Downloading key.properties file'
@@ -54,11 +54,12 @@ stages:
           TargetFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app'
 
       - task: FlutterBuild@0
+        displayName: "Build Android"
         inputs:
-          target: 'aab'
-          projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
-          buildNumber: '$(Build.BuildID)'
-          buildName: '$(app.version).$(Build.BuildID)'
+            target: "aab"
+            projectDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
+            buildNumber: "$(Build.BuildID)"
+            buildName: "$(app.version).$(Build.BuildID)"
 
       - task: DeleteFiles@1
         displayName: 'Deleting key.properties file'
