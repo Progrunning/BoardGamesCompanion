@@ -14,13 +14,14 @@ stages:
         vmImage: 'macOS-latest'
 
       steps:
-      
+
         - task: FlutterInstall@0
           displayName: 'Install Flutter'
           inputs:
+            mode: 'auto'
             channel: 'stable'
             version: 'custom'
-            customVersion: '1.22.3'
+            customVersion: '2.5.2'
 
         - task: FlutterBuild@0
           displayName: 'Build Android'
@@ -30,11 +31,12 @@ stages:
             projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
             buildNumber: '$(Build.BuildID)'
             buildName: '$(app.version).$(Build.BuildID)'
-
+        
         - task: FlutterBuild@0
-          displayName: 'Build iOS'
+          displayName: 'Build Android'
           inputs:
             target: 'ios'
+            debugMode: true
             iosCodesign: false
             projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
             buildNumber: '$(Build.BuildID)'
