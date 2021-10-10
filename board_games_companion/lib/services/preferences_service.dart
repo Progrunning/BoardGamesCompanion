@@ -19,7 +19,7 @@ class PreferencesService extends BaseHiveService<dynamic> {
 
   Future<void> setAppLaunchDate() async {
     final DateTime nowUtc = DateTime.now().toUtc();
-    if (await _isFirstTimeAppLaunch()) {
+    if (_isFirstTimeAppLaunch()) {
       await _setValue(_firstTimeAppLaunchDateKey, nowUtc);
     }
 
@@ -30,29 +30,29 @@ class PreferencesService extends BaseHiveService<dynamic> {
     await _setValue(_remindMeLaterDateKey, remindMeLaterDate);
   }
 
-  Future<DateTime> getFirstTimeLaunchDate() async {
-    return await _getValue(
+  DateTime? getFirstTimeLaunchDate() {
+    return _getValue(
       _firstTimeAppLaunchDateKey,
       defaultValue: null,
-    )!;
+    );
   }
 
-  Future<DateTime> getAppLaunchDate() async {
-    return await _getValue(
+  DateTime? getAppLaunchDate() {
+    return _getValue(
       _appLaunchDateKey,
       defaultValue: null,
-    )!;
+    );
   }
 
-  Future<DateTime> getRemindMeLaterDate() async {
-    return await _getValue(
+  DateTime? getRemindMeLaterDate() {
+    return _getValue(
       _remindMeLaterDateKey,
       defaultValue: null,
-    )!;
+    );
   }
 
-  Future<bool> getRateAndReviewDialogSeen() async {
-    return await _getValue(
+  bool getRateAndReviewDialogSeen() {
+    return _getValue(
       _rateAndReviewDialogSeenKey,
       defaultValue: false,
     )!;
@@ -65,15 +65,15 @@ class PreferencesService extends BaseHiveService<dynamic> {
     );
   }
 
-  Future<int> getNumberOfSignificantActions() async {
-    return await _getValue(
+  int getNumberOfSignificantActions() {
+    return _getValue(
       _numberOfSignificantActionsKey,
       defaultValue: 0,
     )!;
   }
 
-  Future<bool> getMigratedToMultipleCollections() async {
-    return await _getValue(
+  bool getMigratedToMultipleCollections() {
+    return _getValue(
       _migratedToMultipleCollectionsKey,
       defaultValue: false,
     )!;
@@ -101,8 +101,8 @@ class PreferencesService extends BaseHiveService<dynamic> {
     );
   }
 
-  Future<bool> getExpansionsPanelExpandedState() async {
-    return await _getValue(
+  bool getExpansionsPanelExpandedState() {
+    return _getValue(
       _expansionsPanelExpandedStateKey,
       defaultValue: false,
     )!;
@@ -113,11 +113,11 @@ class PreferencesService extends BaseHiveService<dynamic> {
 
   Future<void> _setValue<T>(dynamic key, T value) => storageBox.put(key, value);
 
-  Future<bool> _isFirstTimeAppLaunch() async {
-    final DateTime firstTimeLaunchDate = await _getValue(
+  bool _isFirstTimeAppLaunch() {
+    final DateTime? firstTimeLaunchDate = _getValue(
       _firstTimeAppLaunchDateKey,
       defaultValue: null,
-    )!;
+    );
 
     return firstTimeLaunchDate == null;
   }
