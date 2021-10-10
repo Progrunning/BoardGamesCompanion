@@ -11,212 +11,206 @@ trigger:
       - release
 
 stages:
-- stage: CdBuildAndroid  
-  jobs:
+  - stage: CdBuildAndroid
+    jobs:
+      - job: BuildAndroid
+        timeoutInMinutes: 20
+        pool:
+          vmImage: "macOS-latest"
 
-  - job: BuildAndroid
-    timeoutInMinutes: 20
-    pool:
-      vmImage: 'macOS-latest'
+        steps:
+          - task: FlutterInstall@0
+            displayName: "Install Flutter"
+            inputs:
+              mode: "auto"
+              channel: "stable"
+              version: "custom"
+              customVersion: "2.5.2"
 
-    steps:
-    
-      - task: FlutterInstall@0
-        displayName: "Install Flutter"
-        inputs:
-            mode: "auto"
-            channel: "stable"
-            version: "custom"
-            customVersion: "2.5.2"
+          - task: DownloadSecureFile@1
+            displayName: "Downloading key.properties file"
+            inputs:
+              secureFile: "$(KeyPropertiesFileName)"
 
-      - task: DownloadSecureFile@1
-        displayName: 'Downloading key.properties file'
-        inputs:
-          secureFile: '$(KeyPropertiesFileName)'
+          - task: CopyFiles@2
+            displayName: "Copying key.properties file into the android directory"
+            inputs:
+              SourceFolder: "$(Agent.TempDirectory)"
+              Contents: "$(KeyPropertiesFileName)"
+              TargetFolder: "$(Build.SourcesDirectory)/$(AppDirectoryName)/android/"
 
-      - task: CopyFiles@2
-        displayName: 'Copying key.properties file into the android directory'
-        inputs:
-          SourceFolder: '$(Agent.TempDirectory)'
-          Contents: '$(KeyPropertiesFileName)'
-          TargetFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/'
+          - task: DownloadSecureFile@1
+            displayName: "Downloading keystore file"
+            inputs:
+              secureFile: "$(KeyStoreFileName)"
 
-      - task: DownloadSecureFile@1
-        displayName: 'Downloading keystore file'
-        inputs:
-          secureFile: '$(KeyStoreFileName)'
+          - task: CopyFiles@2
+            displayName: "Copying keystore file into the app directory"
+            inputs:
+              SourceFolder: "$(Agent.TempDirectory)"
+              Contents: "$(KeyStoreFileName)"
+              TargetFolder: "$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app"
 
-      - task: CopyFiles@2
-        displayName: 'Copying keystore file into the app directory'
-        inputs:
-          SourceFolder: '$(Agent.TempDirectory)'
-          Contents: '$(KeyStoreFileName)'
-          TargetFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app'
+          - task: FlutterBuild@0
+            displayName: "Build Android"
+            inputs:
+              target: "aab"
+              projectDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
+              buildNumber: "$(Build.BuildID)"
+              buildName: "$(app.version).$(Build.BuildID)"
 
-      - task: FlutterBuild@0
-        displayName: "Build Android"
-        inputs:
-            target: "aab"
-            projectDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
-            buildNumber: "$(Build.BuildID)"
-            buildName: "$(app.version).$(Build.BuildID)"
+          - task: DeleteFiles@1
+            displayName: "Deleting key.properties file"
+            condition: always()
+            inputs:
+              SourceFolder: "$(Build.SourcesDirectory)/android/"
+              Contents: "$(KeyPropertiesFileName)"
 
-      - task: DeleteFiles@1
-        displayName: 'Deleting key.properties file'
-        condition: always()
-        inputs:
-          SourceFolder: '$(Build.SourcesDirectory)/android/'
-          Contents: '$(KeyPropertiesFileName)'
+          - task: DeleteFiles@1
+            displayName: "Deleting keystore file"
+            condition: always()
+            inputs:
+              SourceFolder: "$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app"
+              Contents: "$(KeyStoreFileName)"
 
-      - task: DeleteFiles@1
-        displayName: 'Deleting keystore file'
-        condition: always()
-        inputs:
-          SourceFolder: '$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app'
-          Contents: '$(KeyStoreFileName)'
+          - task: PublishPipelineArtifact@1
+            condition: always()
+            displayName: "Publishing aab artifacts"
+            inputs:
+              targetPath: "$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab"
+              artifact: "drop-droid"
+              publishLocation: pipeline
 
-      - task: PublishPipelineArtifact@1
-        condition: always()
-        displayName: 'Publishing aab artifacts'
-        inputs:
-          targetPath: '$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab'
-          artifact: 'drop-droid'
-          publishLocation: pipeline
-      
-- stage: CdPublishAndroid
-  dependsOn: CdBuildAndroid
-  condition: succeeded('CdBuildAndroid')
-  jobs:
-  - job: PublishAndroid
-    timeoutInMinutes: 5
-    pool:
-      vmImage: 'macOS-latest'
+  - stage: CdPublishAndroid
+    dependsOn: CdBuildAndroid
+    condition: succeeded('CdBuildAndroid')
+    jobs:
+      - job: PublishAndroid
+        timeoutInMinutes: 5
+        pool:
+          vmImage: "macOS-latest"
 
-    steps:
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: "current"
+              artifactName: "drop-droid"
+              itemPattern: "*.aab"
+              targetPath: "$(Pipeline.Workspace)"
 
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          buildType: 'current'
-          artifactName: 'drop-droid'
-          itemPattern: '*.aab'
-          targetPath: '$(Pipeline.Workspace)'
+          - task: DownloadSecureFile@1
+            displayName: "Download Google Play Console JSON key auth file"
+            name: serviceAccAuthJson
+            inputs:
+              secureFile: "Google_Play_Store_Dev_Ops_Service_Acc_Auth.json"
 
-      - task: DownloadSecureFile@1
-        displayName: 'Download Google Play Console JSON key auth file'
-        name: serviceAccAuthJson
-        inputs:
-          secureFile: 'Google_Play_Store_Dev_Ops_Service_Acc_Auth.json'
+          - task: Bash@3
+            displayName: "Fastlane - publish aab to Beta"
+            inputs:
+              workingDirectory: "$(Pipeline.Workspace)"
+              targetType: "inline"
+              script: |
 
-      - task: Bash@3
-        displayName: 'Fastlane - publish aab to Beta'
-        inputs:
-          workingDirectory: '$(Pipeline.Workspace)'
-          targetType: 'inline'
-          script: |
-          
-            fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(AppPackageName) --skip_upload_apk true
+                fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(AppPackageName) --skip_upload_apk true
 
-- stage: CdBuildiOS  
-  jobs:
-  - job: BuildiOS
-    timeoutInMinutes: 30
-    pool:
-      vmImage: 'macOS-latest'
+  - stage: CdBuildiOS
+    jobs:
+      - job: BuildiOS
+        timeoutInMinutes: 30
+        pool:
+          vmImage: "macOS-latest"
 
-    steps:
+        steps:
+          - task: FlutterInstall@0
+            inputs:
+              channel: "stable"
+              version: "custom"
+              customVersion: "1.22.3"
 
-      - task: FlutterInstall@0
-        inputs:
-          channel: 'stable'
-          version: 'custom'
-          customVersion: '1.22.3'
+          - task: InstallAppleCertificate@2
+            inputs:
+              certSecureFile: "Progrunning_Distribution_Cert.p12"
+              certPwd: "$(iOSProgrunningDistributionCert)"
+              keychain: "temp"
+              deleteCert: true
 
-      - task: InstallAppleCertificate@2
-        inputs:
-          certSecureFile: 'Progrunning_Distribution_Cert.p12'
-          certPwd: '$(iOSProgrunningDistributionCert)'
-          keychain: 'temp'
-          deleteCert: true
+          - task: InstallAppleProvisioningProfile@1
+            inputs:
+              provisioningProfileLocation: "secureFiles"
+              provProfileSecureFile: "Board_Games_Companion_Distribution.mobileprovision"
+              removeProfile: true
 
-      - task: InstallAppleProvisioningProfile@1
-        inputs:
-          provisioningProfileLocation: 'secureFiles'
-          provProfileSecureFile: 'Board_Games_Companion_Distribution.mobileprovision'
-          removeProfile: true
+          - task: FlutterBuild@0
+            displayName: "Build iOS"
+            inputs:
+              target: "ios"
+              iosCodesign: false
+              projectDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
+              buildNumber: "$(Build.BuildID)"
+              buildName: "$(app.version).$(Build.BuildID)"
 
-      - task: FlutterBuild@0
-        displayName: 'Build iOS'
-        inputs:
-          target: 'ios'
-          iosCodesign: false
-          projectDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
-          buildNumber: '$(Build.BuildID)'
-          buildName: '$(app.version).$(Build.BuildID)'
+          - task: Xcode@5
+            inputs:
+              actions: "build"
+              configuration: "Release"
+              sdk: "iphoneos"
+              xcWorkspacePath: "**/ios/Runner.xcworkspace"
+              scheme: "Runner"
+              packageApp: true
+              exportMethod: app-store
+              signingOption: "manual"
+              signingIdentity: "$(APPLE_CERTIFICATE_SIGNING_IDENTITY)"
+              provisioningProfileUuid: "$(APPLE_PROV_PROFILE_UUID)"
+              exportPath: "$(Agent.BuildDirectory)/output/iphoneos/Release"
 
-      - task: Xcode@5
-        inputs:
-          actions: 'build'
-          configuration: 'Release'
-          sdk: 'iphoneos'
-          xcWorkspacePath: '**/ios/Runner.xcworkspace'
-          scheme: 'Runner'
-          packageApp: true
-          exportMethod: app-store
-          signingOption: 'manual'
-          signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
-          provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
-          exportPath: '$(Agent.BuildDirectory)/output/iphoneos/Release'
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: "$(Agent.BuildDirectory)/output/iphoneos/Release"
+              Contents: "**/*.ipa"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/output/"
 
-      - task: CopyFiles@2
-        inputs:
-          SourceFolder: '$(Agent.BuildDirectory)/output/iphoneos/Release'
-          Contents: '**/*.ipa'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)/output/'
+          - task: PublishPipelineArtifact@1
+            condition: always()
+            displayName: "Publishing ipa artifacts"
+            inputs:
+              targetPath: "$(Build.ArtifactStagingDirectory)/output/BGC.ipa"
+              artifact: "drop-ios"
+              publishLocation: pipeline
 
-      - task: PublishPipelineArtifact@1
-        condition: always()
-        displayName: 'Publishing ipa artifacts'
-        inputs:
-          targetPath: '$(Build.ArtifactStagingDirectory)/output/BGC.ipa'
-          artifact: 'drop-ios'
-          publishLocation: pipeline
+  - stage: CdPublishiOS
+    dependsOn: CdBuildiOS
+    condition: succeeded('CdBuildiOS')
+    jobs:
+      - job: PublishiOS
+        timeoutInMinutes: 20
+        pool:
+          vmImage: "macOS-latest"
 
-- stage: CdPublishiOS
-  dependsOn: CdBuildiOS
-  condition: succeeded('CdBuildiOS')
-  jobs:
-  - job: PublishiOS
-    timeoutInMinutes: 20
-    pool:
-      vmImage: 'macOS-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Download ipa"
+            inputs:
+              buildType: "current"
+              artifactName: "drop-ios"
+              itemPattern: "*.ipa"
+              targetPath: "$(Pipeline.Workspace)"
 
-    steps:
+          - task: DownloadSecureFile@1
+            displayName: "Downloading App Store Connect Api Key"
+            inputs:
+              secureFile: "App_Store_Connect_Api_Key.p8"
 
-
-      - task: DownloadPipelineArtifact@2
-        displayName: 'Download ipa'
-        inputs:
-          buildType: 'current'
-          artifactName: 'drop-ios'
-          itemPattern: '*.ipa'
-          targetPath: '$(Pipeline.Workspace)'
-
-      - task: DownloadSecureFile@1
-        displayName: 'Downloading App Store Connect Api Key'
-        inputs:
-          secureFile: 'App_Store_Connect_Api_Key.p8'
-
-      - task: AppStoreRelease@1
-        displayName: 'Publish to TestFlight'
-        inputs:
-          authType: 'ApiKey'
-          apiKeyId: '$(AppStoreConnectApiKeyId)'
-          apiKeyIssuerId: '69a6de91-779b-47e3-e053-5b8c7c11a4d1'
-          apitoken: '$(AppStoreConnectApiKeyContentBase64)'
-          appIdentifier: '$(AppPackageName)'
-          appType: 'iOS'
-          releaseTrack: 'TestFlight'
-          ipaPath: '$(Pipeline.Workspace)/*.ipa'
-          shouldSkipWaitingForProcessing: true
-          shouldSkipSubmission: true
-          fastlaneArguments: '--verbose'
+          - task: AppStoreRelease@1
+            displayName: "Publish to TestFlight"
+            inputs:
+              authType: "ApiKey"
+              apiKeyId: "$(AppStoreConnectApiKeyId)"
+              apiKeyIssuerId: "69a6de91-779b-47e3-e053-5b8c7c11a4d1"
+              apitoken: "$(AppStoreConnectApiKeyContentBase64)"
+              appIdentifier: "$(AppPackageName)"
+              appType: "iOS"
+              releaseTrack: "TestFlight"
+              ipaPath: "$(Pipeline.Workspace)/*.ipa"
+              shouldSkipWaitingForProcessing: true
+              shouldSkipSubmission: true
+              fastlaneArguments: "--verbose"
