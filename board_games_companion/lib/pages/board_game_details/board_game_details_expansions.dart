@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -100,24 +101,17 @@ class _Expansions extends StatelessWidget {
             fontSize: Dimensions.smallFontSize,
           ),
         ),
-        tilePadding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.standardSpacing,
-        ),
+        tilePadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
         initiallyExpanded: initiallyExpanded!,
-        onExpansionChanged: (bool isExpanded) async {
-          await preferencesService.setExpansionsPanelExpandedState(isExpanded);
-        },
+        onExpansionChanged: (bool isExpanded) async =>
+            preferencesService.setExpansionsPanelExpandedState(isExpanded),
         children: [
           for (final BoardGamesExpansion expansion
               in boardGameDetailsStore.boardGameDetails!.expansions)
             ChangeNotifierProvider<BoardGamesExpansion>.value(
               value: expansion,
               child: Consumer<BoardGamesExpansion>(
-                builder: (_, store, __) {
-                  return _Expansion(
-                    boardGamesExpansion: expansion,
-                  );
-                },
+                builder: (_, store, __) => _Expansion(boardGamesExpansion: expansion),
               ),
             ),
         ],
