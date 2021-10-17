@@ -22,7 +22,7 @@ class PlaythroughsStore with ChangeNotifier {
   final AnalyticsService _analyticsService;
 
   BoardGameDetails? _selectedBoardGame;
-  List<Playthrough>? _playthroughs;
+  List<Playthrough> _playthroughs = <Playthrough>[];
 
   BoardGameDetails? get selectedBoardGame => _selectedBoardGame;
 
@@ -41,7 +41,7 @@ class PlaythroughsStore with ChangeNotifier {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
-    return _playthroughs ?? <Playthrough>[];
+    return _playthroughs;
   }
 
   Future<Playthrough> createPlaythrough(
@@ -59,7 +59,7 @@ class PlaythroughsStore with ChangeNotifier {
       duration,
     );
 
-    _playthroughs!.add(newPlaythrough!);
+    _playthroughs.add(newPlaythrough!);
     notifyListeners();
 
     await _analyticsService.logEvent(
@@ -96,7 +96,7 @@ class PlaythroughsStore with ChangeNotifier {
     try {
       final deleteSucceeded = await _playthroughService.deletePlaythrough(playthroughId);
       if (deleteSucceeded) {
-        _playthroughs!.removeWhere((p) => p.id == playthroughId);
+        _playthroughs.removeWhere((p) => p.id == playthroughId);
         notifyListeners();
       }
 
