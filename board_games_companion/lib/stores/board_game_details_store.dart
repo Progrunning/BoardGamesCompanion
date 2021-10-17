@@ -38,7 +38,7 @@ class BoardGameDetailsStore with ChangeNotifier {
         );
 
         if (boardGameExpansionDetails != null &&
-            boardGameExpansionDetails.isExpansion! &&
+            (boardGameExpansionDetails.isExpansion ?? false) &&
             boardGameExpansionDetails.isOwned) {
           boardGameExpansion.isInCollection = true;
         }
