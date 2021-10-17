@@ -14,15 +14,15 @@ class RateAndReviewService {
   static const Duration _requiredAppUsedForDuration = Duration(days: 14);
   static const Duration _remindMeLaterDuration = Duration(days: 7);
   static const Duration _requiredAppLaunchedForDuration = Duration(seconds: 30);
-  static const int _requiredNumberOfEventsLogged = 300;
+  static const int _requiredNumberOfSignificantActions = 300;
 
   bool showRateAndReviewDialog = false;
 
   Future<void> increaseNumberOfSignificantActions() async {
-    int numberOfLoggedEvents = _preferencesService.getNumberOfSignificantActions();
-    if (numberOfLoggedEvents < _requiredNumberOfEventsLogged) {
+    int numberOfSignificantActions = _preferencesService.getNumberOfSignificantActions();
+    if (numberOfSignificantActions < _requiredNumberOfSignificantActions) {
       await _preferencesService.setNumberOfSignificantActions(
-        numberOfLoggedEvents += 1,
+        numberOfSignificantActions += 1,
       );
     }
 
@@ -36,7 +36,7 @@ class RateAndReviewService {
       return;
     }
 
-    InAppReview.instance.requestReview();
+    await InAppReview.instance.requestReview();
     await _preferencesService.setRateAndReviewDialogSeen();
   }
 
@@ -72,7 +72,7 @@ class RateAndReviewService {
           firstTimeLaunchDate.add(_requiredAppUsedForDuration).isBefore(nowUtc) &&
               appLaunchDate.add(_requiredAppLaunchedForDuration).isBefore(nowUtc) &&
               (remindMeLaterDate == null || remindMeLaterDate.isBefore(nowUtc)) &&
-              numberOfSignificantActions >= _requiredNumberOfEventsLogged;
+              numberOfSignificantActions >= _requiredNumberOfSignificantActions;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
