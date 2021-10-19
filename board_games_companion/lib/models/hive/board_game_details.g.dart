@@ -39,10 +39,10 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..commentsNumber = fields[19] as int?
       ..lastModified = fields[21] as DateTime?
       ..isExpansion = fields[23] as bool?
-      ..isOwned = fields[24] as bool
-      ..isOnWishlist = fields[25] as bool
-      ..isFriends = fields[26] as bool
-      ..isBggSynced = fields[27] as bool
+      ..isOwned = fields[24] as bool?
+      ..isOnWishlist = fields[25] as bool?
+      ..isFriends = fields[26] as bool?
+      ..isBggSynced = fields[27] as bool?
       ..thumbnailUrl = fields[2] as String?
       ..rank = fields[3] as int?
       ..yearPublished = fields[4] as int?;
