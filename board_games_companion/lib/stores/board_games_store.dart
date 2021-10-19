@@ -45,15 +45,15 @@ class BoardGamesStore with ChangeNotifier {
   LoadDataState get loadDataState => _loadDataState;
   List<BoardGameDetails>? get filteredBoardGames => _filteredBoardGames;
   List<BoardGameDetails> get filteredBoardGamesOwned =>
-      _filteredBoardGames.where((boardGame) => boardGame.isOwned).toList();
+      _filteredBoardGames.where((boardGame) => boardGame.isOwned!).toList();
   List<BoardGameDetails> get filteredBoardGamesOnWishlist =>
-      _filteredBoardGames.where((boardGame) => boardGame.isOnWishlist).toList();
+      _filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
   List<BoardGameDetails> get filteredBoardGamesFriends =>
-      _filteredBoardGames.where((boardGame) => boardGame.isFriends).toList();
+      _filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
-  bool get hasBoardGames => _allBoardGames
-      .any((boardGame) => boardGame.isOwned || boardGame.isOnWishlist || boardGame.isFriends);
+  bool get anyBoardGamesInCollections => _allBoardGames
+      .any((boardGame) => boardGame.isOwned! || boardGame.isOnWishlist! || boardGame.isFriends!);
   String? get searchPhrase => _searchPhrase;
 
   List<BoardGameCategory> get filteredBoardGamesCategories {
@@ -187,14 +187,14 @@ class BoardGamesStore with ChangeNotifier {
   Future<void> removeAllBggBoardGames() async {
     try {
       final bggSyncedBoardGames = _allBoardGames
-          .where((boardGame) => boardGame.isBggSynced)
+          .where((boardGame) => boardGame.isBggSynced!)
           .map((boardGame) => boardGame.id)
           .toList();
       await _boardGamesService.removeBoardGames(bggSyncedBoardGames);
       await _playthroughService.deletePlaythroughsForGames(bggSyncedBoardGames);
 
-      _filteredBoardGames.removeWhere((boardGame) => boardGame.isBggSynced);
-      _allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced);
+      _filteredBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
+      _allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
 
       notifyListeners();
     } catch (e, stack) {

@@ -719,19 +719,19 @@ class _CollectionFlags extends StatelessWidget {
                 disabledBorderColor: Colors.transparent,
                 borderColor: Colors.transparent,
                 isSelected: [
-                  boardGameDetailsProvider.isFriends,
-                  boardGameDetailsProvider.isOnWishlist
+                  boardGameDetailsProvider.isFriends!,
+                  boardGameDetailsProvider.isOnWishlist!
                 ],
                 children: <Widget>[
                   _CollectionFlag(
                     icon: Icons.group,
                     title: 'Friends',
-                    isSelected: boardGameDetailsProvider.isFriends,
+                    isSelected: boardGameDetailsProvider.isFriends!,
                   ),
                   _CollectionFlag(
                     icon: Icons.card_giftcard,
                     title: 'Wishlist',
-                    isSelected: boardGameDetailsProvider.isOnWishlist,
+                    isSelected: boardGameDetailsProvider.isOnWishlist!,
                   ),
                 ],
                 onPressed: (int index) async {
@@ -746,12 +746,12 @@ class _CollectionFlags extends StatelessWidget {
                 selectedColor: Colors.white,
                 selectedBorderColor: Colors.transparent,
                 borderColor: Colors.transparent,
-                isSelected: [boardGameDetailsProvider.isOwned],
+                isSelected: [boardGameDetailsProvider.isOwned!],
                 children: <Widget>[
                   _CollectionFlag(
                     icon: Icons.grid_on,
                     title: 'Owned',
-                    isSelected: boardGameDetailsProvider.isOwned,
+                    isSelected: boardGameDetailsProvider.isOwned!,
                   ),
                 ],
                 onPressed: (int index) async {

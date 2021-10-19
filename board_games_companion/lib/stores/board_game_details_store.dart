@@ -39,7 +39,7 @@ class BoardGameDetailsStore with ChangeNotifier {
 
         if (boardGameExpansionDetails != null &&
             (boardGameExpansionDetails.isExpansion ?? false) &&
-            boardGameExpansionDetails.isOwned) {
+            boardGameExpansionDetails.isOwned!) {
           boardGameExpansion.isInCollection = true;
         }
       }
@@ -75,23 +75,23 @@ class BoardGameDetailsStore with ChangeNotifier {
   Future<void> toggleCollection(CollectionType collectionType) async {
     switch (collectionType) {
       case CollectionType.Owned:
-        _boardGameDetails!.isOwned = !_boardGameDetails!.isOwned;
-        if (_boardGameDetails!.isOwned) {
+        _boardGameDetails!.isOwned = !_boardGameDetails!.isOwned!;
+        if (_boardGameDetails!.isOwned!) {
           _boardGameDetails!.isOnWishlist = false;
           _boardGameDetails!.isFriends = false;
         }
         break;
       case CollectionType.Friends:
-        if (_boardGameDetails!.isOwned) {
+        if (_boardGameDetails!.isOwned!) {
           _boardGameDetails!.isOwned = false;
         }
-        _boardGameDetails!.isFriends = !_boardGameDetails!.isFriends;
+        _boardGameDetails!.isFriends = !_boardGameDetails!.isFriends!;
         break;
       case CollectionType.Wishlist:
-        if (_boardGameDetails!.isOwned) {
+        if (_boardGameDetails!.isOwned!) {
           _boardGameDetails!.isOwned = false;
         }
-        _boardGameDetails!.isOnWishlist = !_boardGameDetails!.isOnWishlist;
+        _boardGameDetails!.isOnWishlist = !_boardGameDetails!.isOnWishlist!;
         break;
     }
 

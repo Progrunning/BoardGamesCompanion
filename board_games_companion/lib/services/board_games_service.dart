@@ -105,7 +105,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
 
     final List<BoardGameDetails> boardGamesToRemove = storageBox.values
         .where((boardGameDetails) =>
-            boardGameDetails.isBggSynced && !syncedCollectionMap.containsKey(boardGameDetails.id))
+            boardGameDetails.isBggSynced! && !syncedCollectionMap.containsKey(boardGameDetails.id))
         .toList();
 
     // Remove
@@ -130,7 +130,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
 
   Future<void> _migrateToMultipleCollections(List<BoardGameDetails> boardGames) async {
     for (final boardGame in boardGames.where(
-        (boardGame) => !boardGame.isOwned && !boardGame.isOnWishlist && !boardGame.isFriends)) {
+        (boardGame) => !boardGame.isOwned! && !boardGame.isOnWishlist! && !boardGame.isFriends!)) {
       boardGame.isOwned = true;
       await addOrUpdateBoardGame(boardGame);
     }
