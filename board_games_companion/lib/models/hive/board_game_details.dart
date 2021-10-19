@@ -203,7 +203,7 @@ class BoardGameDetails extends BaseBoardGame {
 
   bool? _isOwned;
   @HiveField(24)
-  bool get isOwned => _isOwned ?? false;
+  bool? get isOwned => _isOwned ?? false;
   @HiveField(24)
   set isOwned(bool? value) {
     if (_isOwned != value) {
@@ -214,7 +214,7 @@ class BoardGameDetails extends BaseBoardGame {
 
   bool? _isOnWishlist;
   @HiveField(25)
-  bool get isOnWishlist => _isOnWishlist ?? false;
+  bool? get isOnWishlist => _isOnWishlist ?? false;
   @HiveField(25)
   set isOnWishlist(bool? value) {
     if (_isOnWishlist != value) {
@@ -225,7 +225,7 @@ class BoardGameDetails extends BaseBoardGame {
 
   bool? _isFriends;
   @HiveField(26)
-  bool get isFriends => _isFriends ?? false;
+  bool? get isFriends => _isFriends ?? false;
   @HiveField(26)
   set isFriends(bool? value) {
     if (_isFriends != value) {
@@ -238,7 +238,7 @@ class BoardGameDetails extends BaseBoardGame {
   //    This is important when removing BGG's user account (only these games will be removed)
   bool? _isBggSynced;
   @HiveField(27)
-  bool get isBggSynced => _isBggSynced ?? false;
+  bool? get isBggSynced => _isBggSynced ?? false;
   @HiveField(27)
   set isBggSynced(bool? value) {
     if (_isBggSynced != value) {

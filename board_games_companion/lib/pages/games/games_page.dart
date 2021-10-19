@@ -64,7 +64,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     if (widget.boardGamesStore.loadDataState == LoadDataState.Loaded) {
-      if (!widget.boardGamesStore.hasBoardGames && (widget.userStore.user?.name.isEmpty ?? true)) {
+      if (!widget.boardGamesStore.anyBoardGamesInCollections && (widget.userStore.user?.name.isEmpty ?? true)) {
         return _Empty();
       }
 
