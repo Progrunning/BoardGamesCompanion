@@ -338,9 +338,9 @@ class BoardGamesGeekService {
           wishlistGameSyncResult.isSuccess &&
           wantToBuyGameSyncResult.isSuccess
       ..data = [
-        ...ownGameSyncResult.data!,
-        ...wishlistGameSyncResult.data!,
-        ...wantToBuyGameSyncResult.data!
+        ...ownGameSyncResult.data ?? <BoardGameDetails>[],
+        ...wishlistGameSyncResult.data ?? <BoardGameDetails>[],
+        ...wantToBuyGameSyncResult.data ?? <BoardGameDetails>[]
       ];
   }
 
