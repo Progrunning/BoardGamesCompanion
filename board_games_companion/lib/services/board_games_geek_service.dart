@@ -363,7 +363,7 @@ class BoardGamesGeekService {
         );
 
         if (response.statusCode == _bggRetryStatusCode) {
-          throw BggRetryException;
+          throw BggRetryException();
         }
 
         return response;
