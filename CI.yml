@@ -1,5 +1,12 @@
+name: $(app.version).$(Build.BuildID)_$(SourceBranchName)
+
 variables:
   AppDirectoryName: board_games_companion
+
+pr:
+  branches:
+    include:
+      - main
 
 stages:
   - stage: CI

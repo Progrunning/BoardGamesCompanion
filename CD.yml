@@ -1,3 +1,5 @@
+name: $(app.version).$(Build.BuildID)_$(SourceBranchName)
+
 variables:
   AppPackageName: com.progrunning.boardgamescompanion
   AppDirectoryName: board_games_companion
@@ -8,7 +10,7 @@ trigger:
   batch: true
   branches:
     include:
-      - release
+      - main
 
 stages:
   - stage: CdBuildAndroid
@@ -121,13 +123,13 @@ stages:
           vmImage: "macOS-latest"
 
         steps:
-          -  task: FlutterInstall@0
-             displayName: "Install Flutter"
-             inputs:
-                mode: "auto"
-                channel: "stable"
-                version: "custom"
-                customVersion: "2.5.2"
+          - task: FlutterInstall@0
+            displayName: "Install Flutter"
+            inputs:
+              mode: "auto"
+              channel: "stable"
+              version: "custom"
+              customVersion: "2.5.2"
 
           - task: InstallAppleCertificate@2
             inputs:
