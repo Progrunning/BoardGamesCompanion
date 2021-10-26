@@ -1,10 +1,10 @@
 # Pipelines
 
-### CI `develop`
-[![CI](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build?definitionId=20)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/CI?branchName=main)
+## CI
+[![Build Status](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/CI?branchName=main)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/latest?definitionId=20&branchName=main)
 
-### CD  `release`
-[![CD](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build?definitionId=19)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/CD?branchName=main)
+## CD
+[![Build Status](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/CD?branchName=main)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/latest?definitionId=19&branchName=main)
 
 # Overview
 
