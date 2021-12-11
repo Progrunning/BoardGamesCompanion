@@ -6,13 +6,10 @@
 ## CD
 
 
-# Overview
 
-Board Games Companion is an [iOS](https://apps.apple.com/us/app/board-games-companion/id1506458832?ls=1) and [Android](https://play.google.com/store/apps/details?id=com.progrunning.boardgamescompanion) app dedicated to board games enthusiasts. It helps them manage their board games collection and track scores of the played games.
 
 ## Mockups
 
-Store listing of the iOS and Android apps were create with the use of a free mockup tool https://studio.app-mockup.com/.
 
 
 # Features
