@@ -160,8 +160,8 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
               onStepCancel: () => _stepCancel(),
               onStepContinue: () => _stepContinue(context),
               onStepTapped: (int index) => _stepTapped(context, index),
-              controlsBuilder: (_, {VoidCallback? onStepContinue, VoidCallback? onStepCancel}) =>
-                  _stepActionButtons(onStepContinue, onStepCancel),
+              controlsBuilder: (BuildContext _, ControlsDetails details) =>
+                  _stepActionButtons(details.onStepContinue, details.onStepCancel),
             ),
           ),
         ),
