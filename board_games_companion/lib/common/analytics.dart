@@ -2,6 +2,7 @@ class Analytics {
   static const String CreatePlaythrough = 'create_playthrough';
   static const String FilterCollection = 'filter_collection';
   static const String SortCollection = 'sort_collection';
+  static const String ViewPage = 'view_page';
   static const String ViewGameStats = 'view_game_stats';
   static const String ViewGameDetails = 'view_game_details';
   static const String ViewHotBoardGame = 'view_hot_board_game';
@@ -9,6 +10,8 @@ class Analytics {
   static const String BoardGameDetailsLinks = 'board_game_details_links';
   static const String EditPlaythrough = 'edit_playthough';
   static const String LogPlaythrough = 'log_playthough';
+
+  static const String RouteName = 'route_name';
 
   static const String BoardGameIdParameter = 'board_game_id';
   static const String BoardGameNameParameter = 'board_game_name';
