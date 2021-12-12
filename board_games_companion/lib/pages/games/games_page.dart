@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,17 +13,18 @@ import '../../common/enums/games_tab.dart';
 import '../../common/styles.dart';
 import '../../mixins/sync_collection.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
-import '../../utilities/navigator_transitions.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/sync_collection_button.dart';
 import '../playthroughs/playthroughs_page.dart';
@@ -152,7 +152,7 @@ class _Collection extends StatelessWidget {
 
                   return _Grid(
                     boardGames: boardGames,
-                    collectionFlag: boardGamesStore.selectedTab.toCollectionFlag(),
+                    collectionType: boardGamesStore.selectedTab.toCollectionType(),
                     analyticsService: analyticsService,
                   );
                 },
@@ -341,12 +341,12 @@ class _Grid extends StatelessWidget {
   const _Grid({
     Key? key,
     required this.boardGames,
-    required this.collectionFlag,
+    required this.collectionType,
     required this.analyticsService,
   }) : super(key: key);
 
   final List<BoardGameDetails> boardGames;
-  final CollectionType collectionFlag;
+  final CollectionType collectionType;
   final AnalyticsService analyticsService;
 
   @override
@@ -367,27 +367,13 @@ class _Grid extends StatelessWidget {
             return BoardGameTile(
               boardGame: boardGame,
               onTap: () async {
-                await analyticsService.logEvent(
-                  name: Analytics.ViewGameStats,
-                  parameters: <String, String?>{
-                    Analytics.BoardGameIdParameter: boardGame.id,
-                    Analytics.BoardGameNameParameter: boardGame.name,
-                  },
-                );
-
-                await Navigator.push<PlaythroughsPage>(
+                await Navigator.pushNamed(
                   context,
-                  NavigatorTransitions.fadeThrough(
-                    (_, __, ___) {
-                      return PlaythroughsPage(
-                        boardGameDetails: boardGames[index],
-                        collectionType: collectionFlag,
-                      );
-                    },
-                  ),
+                  PlaythroughsPage.pageRoute,
+                  arguments: PlaythroughsPageArguments(boardGames[index], collectionType),
                 );
               },
-              heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_$collectionFlag',
+              heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_$collectionType',
             );
           },
         ),
@@ -594,7 +580,7 @@ class _EmptyCollection extends StatelessWidget {
                           ),
                           TextSpan(
                             text: boardGamesStore.selectedTab
-                                .toCollectionFlag()
+                                .toCollectionType()
                                 .toHumandReadableText(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,

@@ -22,7 +22,7 @@ extension ToGamesTab on int {
 }
 
 extension ToCollectionType on GamesTab {
-  CollectionType toCollectionFlag() {
+  CollectionType toCollectionType() {
     switch (this) {
       case GamesTab.Owned:
         return CollectionType.Owned;

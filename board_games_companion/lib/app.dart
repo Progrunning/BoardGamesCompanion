@@ -1,3 +1,5 @@
+import 'package:board_games_companion/models/navigation/playthroughs_page_arguments.dart';
+import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -96,6 +98,25 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           playersStore.setPlayer(player: _arguments.player);
 
           return PlayerPage(playersStore: playersStore);
+        },
+        PlaythroughsPage.pageRoute: (BuildContext context) {
+          final _arguments =
+              ModalRoute.of(context)!.settings.arguments as PlaythroughsPageArguments;
+
+          // TODO MK Consider capturing analtyics of pages in a more generic way
+          final _analytics = getIt<AnalyticsService>();
+          _analytics.logEvent(
+            name: Analytics.ViewGameStats,
+            parameters: <String, String?>{
+              Analytics.BoardGameIdParameter: _arguments.boardGameDetails.id,
+              Analytics.BoardGameNameParameter: _arguments.boardGameDetails.name,
+            },
+          );
+
+          return PlaythroughsPage(
+            boardGameDetails: _arguments.boardGameDetails,
+            collectionType: _arguments.collectionType,
+          );
         },
         AboutPage.pageRoute: (BuildContext _) {
           return const AboutPage();

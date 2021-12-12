@@ -26,6 +26,8 @@ class PlaythroughsPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+  static const String pageRoute = '/playthroughs';
+
   final BoardGameDetails boardGameDetails;
   final CollectionType collectionType;
 
