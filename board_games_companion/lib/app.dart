@@ -1,4 +1,6 @@
 import 'package:board_games_companion/models/navigation/playthroughs_page_arguments.dart';
+import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
+import 'package:board_games_companion/pages/edit_playthrough/edit_playthrouhg_view_model.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'common/analytics.dart';
 import 'common/app_theme.dart';
 import 'injectable.dart';
 import 'models/navigation/board_game_details_page_arguments.dart';
+import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
 import 'pages/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
@@ -20,6 +23,7 @@ import 'services/rate_and_review_service.dart';
 import 'stores/board_game_details_store.dart';
 import 'stores/board_games_store.dart';
 import 'stores/players_store.dart';
+import 'stores/playthroughs_store.dart';
 
 class BoardGamesCompanionApp extends StatefulWidget {
   const BoardGamesCompanionApp({
@@ -116,6 +120,23 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           return PlaythroughsPage(
             boardGameDetails: _arguments.boardGameDetails,
             collectionType: _arguments.collectionType,
+          );
+        },
+        EditPlaythoughPage.pageRoute: (BuildContext context) {
+          final _arguments =
+              ModalRoute.of(context)!.settings.arguments as EditPlaythroughPageArguments;
+
+          final analytics = getIt<AnalyticsService>();
+          analytics.logEvent(
+            name: Analytics.EditPlaythrough,
+            parameters: <String, String>{
+              Analytics.BoardGameIdParameter: _arguments.playthroughStore.playthrough.boardGameId,
+            },
+          );
+          final PlaythroughsStore playthroughsStore = getIt<PlaythroughsStore>();
+
+          return EditPlaythoughPage(
+            viewModel: EditPlaythoughViewModel(_arguments.playthroughStore, playthroughsStore),
           );
         },
         AboutPage.pageRoute: (BuildContext _) {
