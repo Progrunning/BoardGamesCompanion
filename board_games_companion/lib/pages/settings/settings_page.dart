@@ -10,7 +10,6 @@ import '../../common/strings.dart';
 import '../../mixins/sync_collection.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
-import '../../utilities/navigator_transitions.dart';
 import '../../widgets/about/detail_item.dart';
 import '../../widgets/about/section_title.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
@@ -246,14 +245,7 @@ class _AboutPageTile extends StatelessWidget {
   }
 
   Future<void> _navigateToAboutPage(BuildContext context) async {
-    await Navigator.push<AboutPage>(
-      context,
-      NavigatorTransitions.fadeThrough(
-        (_, __, ___) {
-          return const AboutPage();
-        },
-      ),
-    );
+    await Navigator.pushNamed(context, AboutPage.pageRoute);
   }
 }
 

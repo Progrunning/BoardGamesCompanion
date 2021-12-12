@@ -4,13 +4,14 @@ import 'package:provider/provider.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/player.dart';
+import '../../models/navigation/player_page_arguments.dart';
 import '../../stores/players_store.dart';
-import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/player/player_avatar.dart';
+import 'player_page.dart';
 
 class PlayersPage extends StatefulWidget {
   const PlayersPage({Key? key}) : super(key: key);
@@ -83,7 +84,11 @@ class _PlayersPageState extends State<PlayersPage> {
                     Align(
                       alignment: Alignment.topRight,
                       child: _CreatePlayerButton(
-                        onCreatePlayer: () => NavigatorHelper.navigateToCreatePlayerPage(context),
+                        onCreatePlayer: () => Navigator.pushNamed(
+                          context,
+                          PlayerPage.pageRoute,
+                          arguments: const PlayerPageArguments(),
+                        ),
                       ),
                     ),
                   ],
@@ -122,9 +127,9 @@ class _PlayersPageState extends State<PlayersPage> {
                             size: Dimensions.defaultButtonIconSize,
                             color: AppTheme.defaultTextColor,
                           ),
-                          onTap: () async => _navigateToCreateOrEditPlayer(context, player),
+                          onTap: () async => _navigateToPlayerPage(context, player),
                         ),
-                        onTap: () async => _navigateToCreateOrEditPlayer(context, player),
+                        onTap: () async => _navigateToPlayerPage(context, player),
                       );
                     },
                   ),
@@ -135,7 +140,11 @@ class _PlayersPageState extends State<PlayersPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
                   child: _CreatePlayerButton(
-                    onCreatePlayer: () => NavigatorHelper.navigateToCreatePlayerPage(context),
+                    onCreatePlayer: () => Navigator.pushNamed(
+                      context,
+                      PlayerPage.pageRoute,
+                      arguments: const PlayerPageArguments(),
+                    ),
                   ),
                 ),
               ),
@@ -146,10 +155,11 @@ class _PlayersPageState extends State<PlayersPage> {
     );
   }
 
-  Future<void> _navigateToCreateOrEditPlayer(BuildContext context, Player player) async {
-    await NavigatorHelper.navigateToCreatePlayerPage(
+  Future<void> _navigateToPlayerPage(BuildContext context, Player player) async {
+    await Navigator.pushNamed(
       context,
-      player: player,
+      PlayerPage.pageRoute,
+      arguments: PlayerPageArguments(player: player),
     );
   }
 }

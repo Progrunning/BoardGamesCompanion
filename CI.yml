@@ -23,7 +23,7 @@ stages:
               mode: "auto"
               channel: "stable"
               version: "custom"
-              customVersion: "2.5.2"
+              customVersion: "2.8.0"
 
           - task: FlutterBuild@0
             displayName: "Build Android"

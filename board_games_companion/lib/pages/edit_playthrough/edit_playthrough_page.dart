@@ -22,6 +22,8 @@ class EditPlaythoughPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+  static const String pageRoute = '/editPlaythrough';
+
   final EditPlaythoughViewModel viewModel;
 
   @override

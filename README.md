@@ -2,7 +2,7 @@
 
 Welcome to the official **Board Games Companion** Github repository - an open source [iOS](https://apps.apple.com/us/app/board-games-companion/id1506458832?ls=1) and [Android](https://play.google.com/store/apps/details?id=com.progrunning.boardgamescompanion) application dedicated to board games enthusiasts.
 
-For more information about the application itself, please see our [Github webpage]().
+For more information about the application itself, please see our [Wiki pages](https://github.com/Progrunning/BoardGamesCompanion/wiki).
 
 # Contributing
 

@@ -23,6 +23,8 @@ class HomePage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+  static const String pageRoute = '/home';
+
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
 

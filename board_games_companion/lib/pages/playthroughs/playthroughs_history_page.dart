@@ -10,9 +10,9 @@ import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/playthrough.dart';
+import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
-import '../../utilities/navigator_helper.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
@@ -25,6 +25,7 @@ import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/common/tile_positioned_rank_ribbon.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../edit_playthrough/edit_playthrough_page.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
   const PlaythroughsHistoryPage({
@@ -199,8 +200,11 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               title: Strings.Edit,
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,
-              onPressed: () async =>
-                  NavigatorHelper.navigateToEditPlaythrough(context, playthroughStore),
+              onPressed: () => Navigator.pushNamed(
+                context,
+                EditPlaythoughPage.pageRoute,
+                arguments: EditPlaythroughPageArguments(playthroughStore),
+              ),
               splashColor: AppTheme.whiteColor,
             ),
           ],

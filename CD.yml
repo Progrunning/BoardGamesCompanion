@@ -27,7 +27,7 @@ stages:
               mode: "auto"
               channel: "stable"
               version: "custom"
-              customVersion: "2.5.2"
+              customVersion: "2.8.0"
 
           - task: DownloadSecureFile@1
             displayName: "Downloading key.properties file"
@@ -129,7 +129,7 @@ stages:
               mode: "auto"
               channel: "stable"
               version: "custom"
-              customVersion: "2.5.2"
+              customVersion: "2.8.0"
 
           - task: InstallAppleCertificate@2
             inputs:

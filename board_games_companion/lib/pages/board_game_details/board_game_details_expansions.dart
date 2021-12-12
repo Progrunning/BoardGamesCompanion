@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_expansion.dart';
+import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/preferences_service.dart';
 import '../../stores/board_game_details_store.dart';
-import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/expansions_banner_widget.dart';
 import 'board_game_details_page.dart';
 
@@ -142,11 +142,14 @@ class _Expansion extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        await NavigatorHelper.navigateToBoardGameDetails(
+        await Navigator.pushNamed(
           context,
-          _boardGameExpansion.id,
-          _boardGameExpansion.name,
-          BoardGamesDetailsPage,
+          BoardGamesDetailsPage.pageRoute,
+          arguments: BoardGameDetailsPageArguments(
+            _boardGameExpansion.id,
+            _boardGameExpansion.name,
+            BoardGamesDetailsPage,
+          ),
         );
       },
     );
