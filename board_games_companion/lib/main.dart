@@ -91,10 +91,7 @@ Future<void> main() async {
       FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     }
 
-
-    runApp(App(
-      preferencesService: preferencesService,
-    ));
+    runApp(App(preferencesService: preferencesService));
   }, (error, stackTrace) {
     if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);

@@ -10,12 +10,12 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../models/board_game.dart';
+import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../stores/hot_board_games_store.dart';
 import '../../stores/search_bar_board_games_store.dart';
 import '../../stores/search_board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
-import '../../utilities/navigator_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
@@ -23,6 +23,7 @@ import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
+import '../board_game_details/board_game_details_page.dart';
 
 class SearchBoardGamesPage extends StatefulWidget {
   const SearchBoardGamesPage({
@@ -77,11 +78,14 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
 
   Future<void> _navigateToBoardGameDetails(BoardGame boardGame) async {
     searchFocusNode.unfocus();
-    await NavigatorHelper.navigateToBoardGameDetails(
+    await Navigator.pushNamed(
       context,
-      boardGame.id,
-      boardGame.name,
-      SearchBoardGamesPage,
+      BoardGamesDetailsPage.pageRoute,
+      arguments: BoardGameDetailsPageArguments(
+        boardGame.id,
+        boardGame.name,
+        SearchBoardGamesPage,
+      ),
     );
   }
 }

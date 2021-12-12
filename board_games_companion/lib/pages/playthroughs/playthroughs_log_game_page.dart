@@ -9,16 +9,17 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
 import '../../stores/players_store.dart';
-import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../players/player_page.dart';
 import 'playthroughs_log_game_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
@@ -656,11 +657,11 @@ class _NoPlayers extends StatelessWidget {
           child: IconAndTextButton(
             title: 'Create Player',
             icon: const DefaultIcon(Icons.add),
-            onPressed: () async {
-              await NavigatorHelper.navigateToCreatePlayerPage(
-                context,
-              );
-            },
+            onPressed: () => Navigator.pushNamed(
+              context,
+              PlayerPage.pageRoute,
+              arguments: const PlayerPageArguments(),
+            ),
           ),
         ),
       ],

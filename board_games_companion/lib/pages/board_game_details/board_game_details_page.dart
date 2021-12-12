@@ -1,5 +1,4 @@
-// import 'dart:io';
-
+import 'package:board_games_companion/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -9,7 +8,6 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
-import '../../common/routes.dart';
 import '../../common/styles.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/preferences_service.dart';
@@ -44,6 +42,8 @@ class BoardGamesDetailsPage extends StatefulWidget {
   final BoardGameDetailsStore boardGameDetailsStore;
   final Type navigatingFromType;
   final PreferencesService preferencesService;
+
+  static const String pageRoute = '/boardGameDetails';
 
   @override
   _BoardGamesDetailsPageState createState() => _BoardGamesDetailsPageState();
@@ -100,7 +100,7 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 
     if (!boardGameDetailsInCollectionStore.isInCollection &&
         widget.navigatingFromType == PlaythroughsPage) {
-      Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+      Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
       return false;
     }
 

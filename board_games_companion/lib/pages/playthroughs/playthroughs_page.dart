@@ -6,13 +6,14 @@ import '../../common/enums/collection_type.dart';
 import '../../extensions/page_controller_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../stores/board_game_playthroughs_store.dart';
 import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
-import '../../utilities/navigator_helper.dart';
 import '../../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../base_page_state.dart';
+import '../board_game_details/board_game_details_page.dart';
 import 'playthroughs_history_page.dart';
 import 'playthroughs_log_game_page.dart';
 import 'playthroughs_log_game_view_model.dart';
@@ -67,7 +68,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
               color: AppTheme.accentColor,
             ),
             onPressed: () async {
-              await _goToBoardGameDetails(context, widget.boardGameDetails);
+              await _navigateToBoardGameDetails(context, widget.boardGameDetails);
             },
           )
         ],
@@ -123,15 +124,18 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
     boardGamePlaythroughsStore.boardGamePlaythroughPageIndex = pageIndex;
   }
 
-  Future<void> _goToBoardGameDetails(
+  Future<void> _navigateToBoardGameDetails(
     BuildContext context,
     BoardGameDetails boardGameDetails,
   ) async {
-    await NavigatorHelper.navigateToBoardGameDetails(
+    await Navigator.pushNamed(
       context,
-      boardGameDetails.id,
-      boardGameDetails.name,
-      PlaythroughsPage,
+      BoardGamesDetailsPage.pageRoute,
+      arguments: BoardGameDetailsPageArguments(
+        boardGameDetails.id,
+        boardGameDetails.name,
+        PlaythroughsPage,
+      ),
     );
   }
 }

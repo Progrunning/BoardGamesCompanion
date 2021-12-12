@@ -16,6 +16,8 @@ import 'base_page_state.dart';
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
 
+  static const String pageRoute = '/about';
+
   @override
   _AboutPageState createState() => _AboutPageState();
 }

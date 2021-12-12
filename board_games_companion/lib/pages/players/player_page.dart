@@ -1,3 +1,4 @@
+import 'package:board_games_companion/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../../common/animation_tags.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/routes.dart';
 import '../../common/strings.dart';
 import '../../common/styles.dart';
 import '../../models/hive/player.dart';
@@ -22,6 +22,8 @@ class PlayerPage extends StatefulWidget {
     required this.playersStore,
     Key? key,
   }) : super(key: key);
+
+  static const String pageRoute = '/player';
 
   final PlayersStore playersStore;
 
@@ -175,12 +177,12 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
   void _setPlayerData() {
     player = Player(
-      id: widget.playersStore.playerToCreateOrEdit!.id,
+      id: widget.playersStore.player!.id,
     );
 
-    player.name = widget.playersStore.playerToCreateOrEdit?.name;
-    player.avatarFileName = widget.playersStore.playerToCreateOrEdit?.avatarFileName;
-    player.avatarImageUri = widget.playersStore.playerToCreateOrEdit?.avatarImageUri;
+    player.name = widget.playersStore.player?.name;
+    player.avatarFileName = widget.playersStore.player?.avatarFileName;
+    player.avatarImageUri = widget.playersStore.player?.avatarImageUri;
 
     isEditMode = player.name?.isNotEmpty ?? false;
   }
@@ -204,8 +206,8 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   }
 
   Future<bool> _handleOnWillPop(BuildContext context, Player player) async {
-    if (widget.playersStore.playerToCreateOrEdit!.avatarImageUri != player.avatarImageUri ||
-        widget.playersStore.playerToCreateOrEdit!.name != player.name) {
+    if (widget.playersStore.player!.avatarImageUri != player.avatarImageUri ||
+        widget.playersStore.player!.name != player.name) {
       await showDialog<AlertDialog>(
           context: context,
           builder: (context) {
@@ -227,10 +229,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                   ),
                   style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
                   onPressed: () async {
-                    widget.playersStore.playerToCreateOrEdit!.avatarImageUri =
-                        widget.playersStore.playerToCreateOrEdit!.avatarImageUri;
-                    widget.playersStore.playerToCreateOrEdit!.name =
-                        widget.playersStore.playerToCreateOrEdit!.name;
+                    widget.playersStore.player!.avatarImageUri =
+                        widget.playersStore.player!.avatarImageUri;
+                    widget.playersStore.player!.name =
+                        widget.playersStore.player!.name;
                     // MK Pop the dialog
                     Navigator.of(context).pop();
                     // MK Go back
@@ -254,7 +256,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
     player.name = nameController.text;
 
-    final playerUpdatedSuccess = await widget.playersStore.addOrUpdatePlayer(player);
+    final playerUpdatedSuccess = await widget.playersStore.createOrUpdatePlayer(player);
     if (playerUpdatedSuccess) {
       _showPlayerUpdatedSnackbar(context, player, isEditMode: isEditMode);
       nameFocusNode.unfocus();
@@ -288,7 +290,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               onPressed: () async {
                 final bool deletionSucceeded = await widget.playersStore.deletePlayer(player.id);
                 if (deletionSucceeded) {
-                  Navigator.popUntil(context, ModalRoute.withName(Routes.home));
+                  Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
                 }
               },
             ),

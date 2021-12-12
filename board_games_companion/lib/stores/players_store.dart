@@ -15,10 +15,10 @@ class PlayersStore with ChangeNotifier {
   final PlayerService _playerService;
 
   List<Player>? _players;
-  Player? _playerToCreateOrEdit;
+  Player? _player;
 
   List<Player>? get players => _players;
-  Player? get playerToCreateOrEdit => _playerToCreateOrEdit;
+  Player? get player => _player;
 
   Future<List<Player>> loadPlayers() async {
     if (_players != null) {
@@ -34,7 +34,7 @@ class PlayersStore with ChangeNotifier {
     return _players ?? <Player>[];
   }
 
-  Future<bool> addOrUpdatePlayer(Player player) async {
+  Future<bool> createOrUpdatePlayer(Player player) async {
     try {
       final existingPlayer = _players!.firstWhereOrNull(
         (p) => p.id == player.id,
@@ -43,10 +43,10 @@ class PlayersStore with ChangeNotifier {
       final isNewPlayer = existingPlayer == null;
       final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(player);
       if (addOrUpdateSucceeded) {
-        _playerToCreateOrEdit!.id = player.id;
-        _playerToCreateOrEdit!.avatarFileName = player.avatarFileName;
-        _playerToCreateOrEdit!.avatarImageUri = player.avatarImageUri;
-        _playerToCreateOrEdit!.name = player.name;
+        _player!.id = player.id;
+        _player!.avatarFileName = player.avatarFileName;
+        _player!.avatarImageUri = player.avatarImageUri;
+        _player!.name = player.name;
 
         if (isNewPlayer) {
           _players!.add(player);
@@ -78,8 +78,8 @@ class PlayersStore with ChangeNotifier {
     return false;
   }
 
-  void setPlayerToCreateOrEdit({Player? player}) {
-    _playerToCreateOrEdit = player ?? Player(id: const Uuid().v4());
+  void setPlayer({Player? player}) {
+    _player = player ?? Player(id: const Uuid().v4());
   }
 
   @override
