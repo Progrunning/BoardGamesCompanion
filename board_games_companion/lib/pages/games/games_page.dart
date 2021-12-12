@@ -64,7 +64,8 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     if (widget.boardGamesStore.loadDataState == LoadDataState.Loaded) {
-      if (!widget.boardGamesStore.anyBoardGamesInCollections && (widget.userStore.user?.name.isEmpty ?? true)) {
+      if (!widget.boardGamesStore.anyBoardGamesInCollections &&
+          (widget.userStore.user?.name.isEmpty ?? true)) {
         return _Empty();
       }
 
@@ -107,51 +108,66 @@ class _Collection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: PageContainer(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            _AppBar(
-              boardGamesStore: boardGamesStore,
-              topTabController: topTabController,
-              analyticsService: analyticsService,
-              rateAndReviewService: rateAndReviewService,
-            ),
-            Builder(
-              builder: (_) {
-                final List<BoardGameDetails> boardGames = [];
-                switch (boardGamesStore.selectedTab) {
-                  case GamesTab.Owned:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
-                    break;
-                  case GamesTab.Friends:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
-                    break;
-                  case GamesTab.Wishlist:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
-                    break;
-                }
-
-                if (boardGames.isEmpty) {
-                  if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-                    return _EmptySearchResult(boardGamesStore: boardGamesStore);
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: PageContainer(
+          child: CustomScrollView(
+            slivers: <Widget>[
+              _AppBar(
+                boardGamesStore: boardGamesStore,
+                topTabController: topTabController,
+                analyticsService: analyticsService,
+                rateAndReviewService: rateAndReviewService,
+                updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
+              ),
+              Builder(
+                builder: (_) {
+                  final List<BoardGameDetails> boardGames = [];
+                  switch (boardGamesStore.selectedTab) {
+                    case GamesTab.Owned:
+                      boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
+                      break;
+                    case GamesTab.Friends:
+                      boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
+                      break;
+                    case GamesTab.Wishlist:
+                      boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
+                      break;
                   }
 
-                  return _EmptyCollection(
-                    boardGamesStore: boardGamesStore,
-                  );
-                }
+                  if (boardGames.isEmpty) {
+                    if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
+                      return _EmptySearchResult(
+                        boardGamesStore: boardGamesStore,
+                        onClearSearch: () => _updateSearchResults(''),
+                      );
+                    }
 
-                return _Grid(
-                  boardGames: boardGames,
-                  collectionFlag: boardGamesStore.selectedTab.toCollectionFlag(),
-                  analyticsService: analyticsService,
-                );
-              },
-            ),
-          ],
+                    return _EmptyCollection(
+                      boardGamesStore: boardGamesStore,
+                    );
+                  }
+
+                  return _Grid(
+                    boardGames: boardGames,
+                    collectionFlag: boardGamesStore.selectedTab.toCollectionFlag(),
+                    analyticsService: analyticsService,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> _updateSearchResults(String searchPhrase) async {
+    boardGamesStore.updateSearchResults(searchPhrase);
+
+    await rateAndReviewService.increaseNumberOfSignificantActions();
   }
 }
 
@@ -161,6 +177,7 @@ class _AppBar extends StatefulWidget {
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
+    required this.updateSearchResults,
     Key? key,
   }) : super(key: key);
 
@@ -168,13 +185,15 @@ class _AppBar extends StatefulWidget {
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
+  final Future Function(String) updateSearchResults;
 
   @override
   _AppBarState createState() => _AppBarState();
 }
 
 class _AppBarState extends State<_AppBar> {
-  final _searchController = TextEditingController();
+  late TextEditingController _searchController;
+  late FocusNode _searchFocusNode;
 
   Timer? _debounce;
 
@@ -182,7 +201,10 @@ class _AppBarState extends State<_AppBar> {
   void initState() {
     super.initState();
 
+    _searchController = TextEditingController();
     _searchController.addListener(_handleSearchChanged);
+
+    _searchFocusNode = FocusNode();
   }
 
   @override
@@ -196,18 +218,38 @@ class _AppBarState extends State<_AppBar> {
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
       title: TextField(
+        autofocus: false,
+        focusNode: _searchFocusNode,
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
         style: AppTheme.defaultTextFieldStyle,
         decoration: InputDecoration(
           hintText: 'Search for a game...',
-          suffixIcon: _retrieveSearchBarSuffixIcon(),
+          suffixIcon: (widget.boardGamesStore.searchPhrase?.isNotEmpty ?? false)
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                  ),
+                  color: AppTheme.accentColor,
+                  onPressed: () async {
+                    _searchController.text = '';
+                    await widget.updateSearchResults('');
+                  },
+                )
+              : const Icon(
+                  Icons.search,
+                  color: AppTheme.accentColor,
+                ),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: AppTheme.primaryColorLight),
           ),
         ),
         onSubmitted: (searchPhrase) async {
-          FocusScope.of(context).unfocus();
+          _debounce?.cancel();
+          if (widget.boardGamesStore.searchPhrase != _searchController.text) {
+            await widget.updateSearchResults(_searchController.text);
+          }
+          _searchFocusNode.unfocus();
         },
       ),
       actions: <Widget>[
@@ -218,7 +260,6 @@ class _AppBarState extends State<_AppBar> {
           ),
           onPressed: () async {
             await _openFiltersPanel(context);
-
             await widget.analyticsService.logEvent(
               name: Analytics.FilterCollection,
             );
@@ -271,7 +312,7 @@ class _AppBarState extends State<_AppBar> {
       },
     );
 
-    FocusScope.of(context).unfocus();
+    _searchFocusNode.unfocus();
   }
 
   void _handleSearchChanged() {
@@ -281,31 +322,7 @@ class _AppBarState extends State<_AppBar> {
 
     _debounce = Timer(
       const Duration(milliseconds: 500),
-      () async {
-        widget.boardGamesStore.updateSearchResults(_searchController.text);
-
-        await widget.rateAndReviewService.increaseNumberOfSignificantActions();
-      },
-    );
-  }
-
-  Widget _retrieveSearchBarSuffixIcon() {
-    if (widget.boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-      return IconButton(
-        icon: const Icon(
-          Icons.clear,
-        ),
-        color: AppTheme.accentColor,
-        onPressed: () {
-          _searchController.text = '';
-          widget.boardGamesStore.updateSearchResults('');
-        },
-      );
-    }
-
-    return const Icon(
-      Icons.search,
-      color: AppTheme.accentColor,
+      () => widget.updateSearchResults(_searchController.text),
     );
   }
 
@@ -313,6 +330,7 @@ class _AppBarState extends State<_AppBar> {
   void dispose() {
     _searchController.removeListener(_handleSearchChanged);
     _searchController.dispose();
+    _searchFocusNode.dispose();
     _debounce?.cancel();
 
     super.dispose();
@@ -493,12 +511,13 @@ class _EmptyState extends State<_Empty> with SyncCollection {
 
 class _EmptySearchResult extends StatelessWidget {
   const _EmptySearchResult({
+    required this.boardGamesStore,
+    required this.onClearSearch,
     Key? key,
-    required BoardGamesStore boardGamesStore,
-  })  : _boardGamesStore = boardGamesStore,
-        super(key: key);
+  }) : super(key: key);
 
-  final BoardGamesStore _boardGamesStore;
+  final BoardGamesStore boardGamesStore;
+  final VoidCallback onClearSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -518,7 +537,7 @@ class _EmptySearchResult extends StatelessWidget {
                         '''It looks like you don't have any board games in your collection that match the search phrase ''',
                   ),
                   TextSpan(
-                    text: _boardGamesStore.searchPhrase,
+                    text: boardGamesStore.searchPhrase,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -534,9 +553,7 @@ class _EmptySearchResult extends StatelessWidget {
               child: IconAndTextButton(
                 title: 'Clear search',
                 icon: const DefaultIcon(Icons.clear),
-                onPressed: () {
-                  _boardGamesStore.updateSearchResults('');
-                },
+                onPressed: onClearSearch,
               ),
             ),
           ],
