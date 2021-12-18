@@ -2,7 +2,7 @@
 
 Welcome to the official **Board Games Companion** Github repository - an open source [iOS](https://apps.apple.com/us/app/board-games-companion/id1506458832?ls=1) and [Android](https://play.google.com/store/apps/details?id=com.progrunning.boardgamescompanion) application dedicated to board games enthusiasts.
 
-For more information about the application itself, please see our [Wiki pages](https://github.com/Progrunning/BoardGamesCompanion/wiki).
+For more information about the application and its features please visit our [Wiki pages](https://github.com/Progrunning/BoardGamesCompanion/wiki).
 
 # Contributing
 
@@ -30,7 +30,7 @@ This repository follows the [*trunk based development*](https://www.atlassian.co
 
 ## Hotfix
 
-In case of a need for a hotfix, the branch with a fix should be branched off of the latest release's tag. The branch itself should have the following naming convention `hotfix\<short_fix_description>`.
+In case of a need for a hotfix, the branch with a fix should be branched off of the latest release's tag. The branch itself should have the following naming convention `hotfix\<short_fix_description>`. After the hotfix gets released the `hotfix/*` branch gets merged into the `main`.
 
 ## Release
 
