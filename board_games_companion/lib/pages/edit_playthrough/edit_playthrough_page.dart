@@ -259,6 +259,8 @@ class _PlayerScore extends StatefulWidget {
 
 class _PlayerScoreState extends State<_PlayerScore> {
   static const double _scorePointsFontSize = 22;
+  static const double _numericPickerItemWidth = 48;
+  static const double _numericPickerWidgetWidth = _numericPickerItemWidth * 3;
 
   bool useKeyboardToEnterScore = false;
   late TextEditingController playerScoreEditingController;
@@ -285,8 +287,9 @@ class _PlayerScoreState extends State<_PlayerScore> {
     return Row(
       children: <Widget>[
         SizedBox(
-          width: 140,
+          width: _numericPickerWidgetWidth,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               if (useKeyboardToEnterScore)
                 Form(
@@ -295,7 +298,8 @@ class _PlayerScoreState extends State<_PlayerScore> {
                     child: TextFormField(
                       controller: playerScoreEditingController,
                       focusNode: playerScoreFocusNode,
-                      style: AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
+                      style:
+                          AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
                       autofocus: true,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -315,7 +319,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
                 NumberPicker(
                   value: widget.playerScore.score.valueInt,
                   axis: Axis.horizontal,
-                  itemWidth: 48,
+                  itemWidth: _numericPickerItemWidth,
                   minValue: 0,
                   maxValue: 10000,
                   onChanged: (num score) async {
@@ -327,6 +331,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
                   ),
                 ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.remove),
