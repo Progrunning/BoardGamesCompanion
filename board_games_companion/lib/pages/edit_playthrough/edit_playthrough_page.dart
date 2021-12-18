@@ -263,12 +263,22 @@ class _PlayerScoreState extends State<_PlayerScore> {
 
   bool useKeyboardToEnterScore = false;
   late TextEditingController playerScoreEditingController;
+  late FocusNode playerScoreFocusNode;
 
   @override
   void initState() {
     super.initState();
 
     playerScoreEditingController = TextEditingController(text: widget.playerScore.score.value);
+    playerScoreFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    playerScoreEditingController.dispose();
+    playerScoreFocusNode.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -283,6 +293,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
                   width: 144,
                   child: TextFormField(
                     controller: playerScoreEditingController,
+                    focusNode: playerScoreFocusNode,
                     style: AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
                     autofocus: true,
                     keyboardType: TextInputType.number,
@@ -350,6 +361,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
                   setState(() {
                     playerScoreEditingController.text = widget.playerScore.score.value ?? '';
                     useKeyboardToEnterScore = true;
+                    playerScoreFocusNode.requestFocus();
                   });
                 },
           icon: const Icon(Icons.keyboard_alt_outlined),
