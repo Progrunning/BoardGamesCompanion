@@ -24,4 +24,6 @@ class Score {
 
   @HiveField(4)
   String? value;
+
+  int get valueInt => int.tryParse(value ?? '0') ?? 0;
 }

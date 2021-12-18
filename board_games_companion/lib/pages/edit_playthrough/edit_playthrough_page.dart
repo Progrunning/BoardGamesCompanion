@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/common/constants.dart';
+import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
+import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/strings.dart';
 import '../../models/player_score.dart';
@@ -88,7 +88,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                       );
                     },
                     itemBuilder: (context, index) {
-                      return _PlayerScore(
+                      return _PlayerScoreTile(
                         playerScore: widget.viewModel.playerScores[index],
                         playthroughId: widget.viewModel.playthrough.id,
                       );
@@ -213,8 +213,8 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
   }
 }
 
-class _PlayerScore extends StatelessWidget {
-  const _PlayerScore({
+class _PlayerScoreTile extends StatelessWidget {
+  const _PlayerScoreTile({
     Key? key,
     required this.playerScore,
     required this.playthroughId,
@@ -238,45 +238,141 @@ class _PlayerScore extends StatelessWidget {
         const SizedBox(
           width: Dimensions.standardSpacing,
         ),
-        Column(
-          children: <Widget>[
-            ChangeNotifierProvider<PlayerScore>.value(
-              value: playerScore,
-              child: Consumer<PlayerScore>(
-                builder: (_, PlayerScore playerScoreConsumer, __) {
-                  return NumberPicker(
-                    value: int.tryParse(playerScoreConsumer.score.value ?? '0') ?? 0,
-                    axis: Axis.horizontal,
-                    itemWidth: 46,
-                    minValue: 0,
-                    maxValue: 10000,
-                    onChanged: (num value) async {
-                      final String valueText = value.toString();
-                      if (playerScoreConsumer.score.value == valueText) {
-                        return;
-                      }
-
-                      await playerScoreConsumer.updatePlayerScore(valueText);
-                    },
-                    selectedTextStyle: const TextStyle(
-                      color: AppTheme.accentColor,
-                      fontSize: Dimensions.doubleExtraLargeFontSize,
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(
-              height: Dimensions.halfStandardSpacing,
-            ),
-            Text(
-              'points',
-              style: AppTheme.theme.textTheme.bodyText2,
-            ),
-          ],
+        Expanded(
+          child: _PlayerScore(playerScore: playerScore),
         ),
       ],
     );
+  }
+}
+
+class _PlayerScore extends StatefulWidget {
+  const _PlayerScore({
+    Key? key,
+    required this.playerScore,
+  }) : super(key: key);
+
+  final PlayerScore playerScore;
+
+  @override
+  State<_PlayerScore> createState() => _PlayerScoreState();
+}
+
+class _PlayerScoreState extends State<_PlayerScore> {
+  static const double _scorePointsFontSize = 24;
+
+  bool useKeyboardToEnterScore = false;
+  late TextEditingController playerScoreEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    playerScoreEditingController = TextEditingController(text: widget.playerScore.score.value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            if (useKeyboardToEnterScore)
+              Form(
+                child: SizedBox(
+                  width: 144,
+                  child: TextFormField(
+                    controller: playerScoreEditingController,
+                    style: AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
+                    autofocus: true,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    onFieldSubmitted: (String? text) async {
+                      if (text?.isNotBlank ?? false) {
+                        await _updatePlayerScore(int.tryParse(text!)!);
+                      }
+
+                      setState(() {
+                        useKeyboardToEnterScore = false;
+                      });
+                    },
+                  ),
+                ),
+              )
+            else
+              NumberPicker(
+                value: widget.playerScore.score.valueInt,
+                axis: Axis.horizontal,
+                itemWidth: 48,
+                minValue: 0,
+                maxValue: 10000,
+                onChanged: (num score) async {
+                  await _updatePlayerScore(score);
+                },
+                selectedTextStyle: const TextStyle(
+                  color: AppTheme.accentColor,
+                  fontSize: _scorePointsFontSize,
+                ),
+              ),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: useKeyboardToEnterScore
+                      ? null
+                      : () async {
+                          await _updatePlayerScore(widget.playerScore.score.valueInt - 1);
+                        },
+                  color: AppTheme.accentColor,
+                ),
+                Text(
+                  'points',
+                  style: AppTheme.theme.textTheme.bodyText2,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: useKeyboardToEnterScore
+                      ? null
+                      : () async {
+                          await _updatePlayerScore(widget.playerScore.score.valueInt + 1);
+                        },
+                  color: AppTheme.accentColor,
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(width: Dimensions.standardSpacing),
+        IconButton(
+          onPressed: useKeyboardToEnterScore
+              ? null
+              : () {
+                  setState(() {
+                    playerScoreEditingController.text = widget.playerScore.score.value ?? '';
+                    useKeyboardToEnterScore = true;
+                  });
+                },
+          icon: const Icon(Icons.keyboard_alt_outlined),
+          color: AppTheme.accentColor,
+          iconSize: 32,
+        ),
+      ],
+    );
+  }
+
+  Future<void> _updatePlayerScore(num score) async {
+    if (score < 0) {
+      return;
+    }
+
+    final String scoreText = score.toString();
+    if (widget.playerScore.score.value == scoreText) {
+      return;
+    }
+
+    await widget.playerScore.updatePlayerScore(scoreText);
+
+    setState(() {});
   }
 }
 
