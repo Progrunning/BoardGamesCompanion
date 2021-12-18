@@ -83,9 +83,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   child: ListView.separated(
                     itemCount: widget.viewModel.playerScores.length,
                     separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: Dimensions.doubleStandardSpacing,
-                      );
+                      return const SizedBox(height: Dimensions.doubleStandardSpacing);
                     },
                     itemBuilder: (context, index) {
                       return _PlayerScoreTile(
@@ -225,23 +223,24 @@ class _PlayerScoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          height: Dimensions.smallPlayerAvatarSize,
-          width: Dimensions.smallPlayerAvatarSize,
-          child: PlayerAvatar(
-            playerScore.player,
-            playerHeroIdSuffix: playthroughId,
+    return SizedBox(
+      height: Dimensions.smallPlayerAvatarSize,
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: Dimensions.smallPlayerAvatarSize,
+            width: Dimensions.smallPlayerAvatarSize,
+            child: PlayerAvatar(
+              playerScore.player,
+              playerHeroIdSuffix: playthroughId,
+            ),
           ),
-        ),
-        const SizedBox(
-          width: Dimensions.standardSpacing,
-        ),
-        Expanded(
-          child: _PlayerScore(playerScore: playerScore),
-        ),
-      ],
+          const SizedBox(width: Dimensions.standardSpacing),
+          Expanded(
+            child: _PlayerScore(playerScore: playerScore),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -259,7 +258,7 @@ class _PlayerScore extends StatefulWidget {
 }
 
 class _PlayerScoreState extends State<_PlayerScore> {
-  static const double _scorePointsFontSize = 24;
+  static const double _scorePointsFontSize = 22;
 
   bool useKeyboardToEnterScore = false;
   late TextEditingController playerScoreEditingController;
@@ -285,73 +284,76 @@ class _PlayerScoreState extends State<_PlayerScore> {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            if (useKeyboardToEnterScore)
-              Form(
-                child: SizedBox(
-                  width: 144,
-                  child: TextFormField(
-                    controller: playerScoreEditingController,
-                    focusNode: playerScoreFocusNode,
-                    style: AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
-                    autofocus: true,
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.center,
-                    onFieldSubmitted: (String? text) async {
-                      if (text?.isNotBlank ?? false) {
-                        await _updatePlayerScore(int.tryParse(text!)!);
-                      }
+        SizedBox(
+          width: 140,
+          child: Column(
+            children: <Widget>[
+              if (useKeyboardToEnterScore)
+                Form(
+                  child: SizedBox(
+                    width: 120,
+                    child: TextFormField(
+                      controller: playerScoreEditingController,
+                      focusNode: playerScoreFocusNode,
+                      style: AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
+                      autofocus: true,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                      onFieldSubmitted: (String? text) async {
+                        if (text?.isNotBlank ?? false) {
+                          await _updatePlayerScore(int.tryParse(text!)!);
+                        }
 
-                      setState(() {
-                        useKeyboardToEnterScore = false;
-                      });
-                    },
+                        setState(() {
+                          useKeyboardToEnterScore = false;
+                        });
+                      },
+                    ),
+                  ),
+                )
+              else
+                NumberPicker(
+                  value: widget.playerScore.score.valueInt,
+                  axis: Axis.horizontal,
+                  itemWidth: 48,
+                  minValue: 0,
+                  maxValue: 10000,
+                  onChanged: (num score) async {
+                    await _updatePlayerScore(score);
+                  },
+                  selectedTextStyle: const TextStyle(
+                    color: AppTheme.accentColor,
+                    fontSize: _scorePointsFontSize,
                   ),
                 ),
-              )
-            else
-              NumberPicker(
-                value: widget.playerScore.score.valueInt,
-                axis: Axis.horizontal,
-                itemWidth: 48,
-                minValue: 0,
-                maxValue: 10000,
-                onChanged: (num score) async {
-                  await _updatePlayerScore(score);
-                },
-                selectedTextStyle: const TextStyle(
-                  color: AppTheme.accentColor,
-                  fontSize: _scorePointsFontSize,
-                ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: useKeyboardToEnterScore
+                        ? null
+                        : () async {
+                            await _updatePlayerScore(widget.playerScore.score.valueInt - 1);
+                          },
+                    color: AppTheme.accentColor,
+                  ),
+                  Text(
+                    'points',
+                    style: AppTheme.theme.textTheme.bodyText2,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: useKeyboardToEnterScore
+                        ? null
+                        : () async {
+                            await _updatePlayerScore(widget.playerScore.score.valueInt + 1);
+                          },
+                    color: AppTheme.accentColor,
+                  ),
+                ],
               ),
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: useKeyboardToEnterScore
-                      ? null
-                      : () async {
-                          await _updatePlayerScore(widget.playerScore.score.valueInt - 1);
-                        },
-                  color: AppTheme.accentColor,
-                ),
-                Text(
-                  'points',
-                  style: AppTheme.theme.textTheme.bodyText2,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: useKeyboardToEnterScore
-                      ? null
-                      : () async {
-                          await _updatePlayerScore(widget.playerScore.score.valueInt + 1);
-                        },
-                  color: AppTheme.accentColor,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(width: Dimensions.standardSpacing),
         IconButton(
