@@ -360,6 +360,12 @@ class _PlayerScoreState extends State<_PlayerScore> {
               : () {
                   setState(() {
                     playerScoreEditingController.text = widget.playerScore.score.value ?? '';
+                    if (playerScoreEditingController.text.isNotBlank) {
+                      playerScoreEditingController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: playerScoreEditingController.text.length,
+                      );
+                    }
                     useKeyboardToEnterScore = true;
                     playerScoreFocusNode.requestFocus();
                   });
