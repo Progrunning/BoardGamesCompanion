@@ -360,12 +360,13 @@ class _PlayerScoreState extends State<_PlayerScore> {
               : () {
                   setState(() {
                     playerScoreEditingController.text = widget.playerScore.score.value ?? '';
-                    if (playerScoreEditingController.text.isNotBlank) {
-                      playerScoreEditingController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: playerScoreEditingController.text.length,
-                      );
-                    }
+                    // TODO Work out why when selecting text in the text field the text field is not scrolled into the screen (i.e. keyboard overflows it)
+                    // if (playerScoreEditingController.text.isNotBlank) {
+                    //   playerScoreEditingController.selection = TextSelection(
+                    //     baseOffset: 0,
+                    //     extentOffset: playerScoreEditingController.text.length,
+                    //   );
+                    // }
                     useKeyboardToEnterScore = true;
                     playerScoreFocusNode.requestFocus();
                   });
