@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
 
 import 'app.dart';
+import 'common/enums/order_by.dart';
 import 'common/enums/playthrough_status.dart';
 import 'common/enums/sort_by_option.dart';
 import 'injectable.dart';
