@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../common/enums/playthrough_status.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
@@ -5,7 +7,7 @@ import '../../models/player_score.dart';
 import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
 
-class EditPlaythoughViewModel {
+class EditPlaythoughViewModel with ChangeNotifier {
   EditPlaythoughViewModel(this._playthroughStore, this._playthroughsStore);
 
   final PlaythroughStore _playthroughStore;
@@ -53,6 +55,8 @@ class EditPlaythoughViewModel {
 
   bool get playthoughEnded => playthrough.status == PlaythroughStatus.Finished;
 
+  bool isKeyboardShown = false;
+
   Duration get playthoughDuration =>
       (playthrough.endDate ?? DateTime.now()).difference(playthrough.startDate);
 
@@ -89,6 +93,11 @@ class EditPlaythoughViewModel {
   void updateDuration(int hoursPlayed, int minutesPlyed) {
     playthrough.endDate =
         playthrough.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed));
+  }
+
+  void toggleKeyboard(bool isKeyboardShown) {
+    this.isKeyboardShown = isKeyboardShown;
+    notifyListeners();
   }
 
   Future<void> deletePlaythrough() async {

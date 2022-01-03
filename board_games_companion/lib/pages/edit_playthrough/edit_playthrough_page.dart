@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -15,6 +17,12 @@ import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import 'edit_playthrouhg_view_model.dart';
+
+enum UpdateScoreMethod {
+  swipe,
+  increment,
+  keyboard,
+}
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
@@ -80,25 +88,30 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   height: Dimensions.halfStandardSpacing,
                 ),
                 Expanded(
-                  child: ListView.separated(
-                    itemCount: widget.viewModel.playerScores.length,
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: Dimensions.doubleStandardSpacing);
-                    },
-                    itemBuilder: (context, index) {
-                      return _PlayerScoreTile(
-                        playerScore: widget.viewModel.playerScores[index],
-                        playthroughId: widget.viewModel.playthrough.id,
-                      );
+                  child: _ScoresSection(
+                    viewModel: widget.viewModel,
+                    onToggleKeyboard: (bool isKeyboardShown) {
+                      widget.viewModel.toggleKeyboard(isKeyboardShown);
                     },
                   ),
                 ),
-                _ActionButtons(
-                  viewModel: widget.viewModel,
-                  onSave: () async => _save(),
-                  onStop: () async => _stopPlaythrough(),
-                  onDelete: () async => _showDeletePlaythroughDialog(context),
-                )
+                ChangeNotifierProvider<EditPlaythoughViewModel>.value(
+                  value: widget.viewModel,
+                  child: Consumer<EditPlaythoughViewModel>(
+                    builder: (_, viewModel, __) {
+                      if (!viewModel.isKeyboardShown) {
+                        return _ActionButtons(
+                          viewModel: viewModel,
+                          onSave: () async => _save(),
+                          onStop: () async => _stopPlaythrough(),
+                          onDelete: () async => _showDeletePlaythroughDialog(context),
+                        );
+                      }
+
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -148,11 +161,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
-
-                // MK Close dialog
-                Navigator.of(context).pop();
-                // MK Close popup
-                Navigator.of(context).pop();
+                Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
             ),
           ],
@@ -193,10 +202,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 ),
                 style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
                 onPressed: () async {
-                  // MK Pop the dialog
-                  Navigator.of(context).pop();
-                  // MK Go back
-                  Navigator.of(context).pop();
+                  Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
                 },
               ),
             ],
@@ -211,15 +217,80 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
   }
 }
 
+class _ScoresSection extends StatefulWidget {
+  const _ScoresSection({
+    Key? key,
+    required this.viewModel,
+    required this.onToggleKeyboard,
+  }) : super(key: key);
+
+  final EditPlaythoughViewModel viewModel;
+  final void Function(bool) onToggleKeyboard;
+
+  @override
+  State<_ScoresSection> createState() => _ScoresSectionState();
+}
+
+class _ScoresSectionState extends State<_ScoresSection> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: widget.viewModel.playerScores.length,
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: Dimensions.doubleStandardSpacing);
+      },
+      itemBuilder: (context, index) {
+        return ChangeNotifierProvider<EditPlaythoughViewModel>.value(
+          value: widget.viewModel,
+          child: Consumer<EditPlaythoughViewModel>(
+            builder: (_, viewModel, __) {
+              return _PlayerScoreTile(
+                playerScore: viewModel.playerScores[index],
+                playthroughId: viewModel.playthrough.id,
+                isKeyboardShown: viewModel.isKeyboardShown,
+                onUpdatePlayerScore: (num score) async {
+                  await _updatePlayerScore(viewModel.playerScores[index], score);
+                },
+                onToggleKeyboard: widget.onToggleKeyboard,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _updatePlayerScore(PlayerScore playerScore, num newScore) async {
+    if (newScore < 0) {
+      return;
+    }
+
+    final String scoreText = newScore.toString();
+    if (playerScore.score.value == scoreText) {
+      return;
+    }
+
+    await playerScore.updatePlayerScore(scoreText);
+
+    setState(() {});
+  }
+}
+
 class _PlayerScoreTile extends StatelessWidget {
   const _PlayerScoreTile({
     Key? key,
     required this.playerScore,
     required this.playthroughId,
+    required this.isKeyboardShown,
+    required this.onUpdatePlayerScore,
+    required this.onToggleKeyboard,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String playthroughId;
+  final bool isKeyboardShown;
+  final Future<void> Function(num) onUpdatePlayerScore;
+  final void Function(bool) onToggleKeyboard;
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +308,12 @@ class _PlayerScoreTile extends StatelessWidget {
           ),
           const SizedBox(width: Dimensions.standardSpacing),
           Expanded(
-            child: _PlayerScore(playerScore: playerScore),
+            child: _PlayerScore(
+              playerScore: playerScore,
+              isKeyboardShown: isKeyboardShown,
+              onUpdatePlayerScore: onUpdatePlayerScore,
+              onToggleKeyboard: onToggleKeyboard,
+            ),
           ),
         ],
       ),
@@ -249,9 +325,15 @@ class _PlayerScore extends StatefulWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
+    required this.isKeyboardShown,
+    required this.onUpdatePlayerScore,
+    required this.onToggleKeyboard,
   }) : super(key: key);
 
   final PlayerScore playerScore;
+  final bool isKeyboardShown;
+  final Future<void> Function(num) onUpdatePlayerScore;
+  final void Function(bool) onToggleKeyboard;
 
   @override
   State<_PlayerScore> createState() => _PlayerScoreState();
@@ -305,12 +387,11 @@ class _PlayerScoreState extends State<_PlayerScore> {
                       textAlign: TextAlign.center,
                       onFieldSubmitted: (String? text) async {
                         if (text?.isNotBlank ?? false) {
-                          await _updatePlayerScore(int.tryParse(text!)!);
+                          await widget.onUpdatePlayerScore(int.tryParse(text!)!);
                         }
 
-                        setState(() {
-                          useKeyboardToEnterScore = false;
-                        });
+                        useKeyboardToEnterScore = false;
+                        widget.onToggleKeyboard(useKeyboardToEnterScore);
                       },
                     ),
                   ),
@@ -323,7 +404,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
                   minValue: 0,
                   maxValue: 10000,
                   onChanged: (num score) async {
-                    await _updatePlayerScore(score);
+                    await widget.onUpdatePlayerScore(score);
                   },
                   selectedTextStyle: const TextStyle(
                     color: AppTheme.accentColor,
@@ -335,10 +416,10 @@ class _PlayerScoreState extends State<_PlayerScore> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.remove),
-                    onPressed: useKeyboardToEnterScore
+                    onPressed: widget.isKeyboardShown
                         ? null
                         : () async {
-                            await _updatePlayerScore(widget.playerScore.score.valueInt - 1);
+                            await widget.onUpdatePlayerScore(widget.playerScore.score.valueInt - 1);
                           },
                     color: AppTheme.accentColor,
                   ),
@@ -348,10 +429,10 @@ class _PlayerScoreState extends State<_PlayerScore> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    onPressed: useKeyboardToEnterScore
+                    onPressed: widget.isKeyboardShown
                         ? null
                         : () async {
-                            await _updatePlayerScore(widget.playerScore.score.valueInt + 1);
+                            await widget.onUpdatePlayerScore(widget.playerScore.score.valueInt + 1);
                           },
                     color: AppTheme.accentColor,
                   ),
@@ -362,21 +443,20 @@ class _PlayerScoreState extends State<_PlayerScore> {
         ),
         const SizedBox(width: Dimensions.standardSpacing),
         IconButton(
-          onPressed: useKeyboardToEnterScore
+          onPressed: widget.isKeyboardShown
               ? null
               : () {
-                  setState(() {
-                    playerScoreEditingController.text = widget.playerScore.score.value ?? '';
-                    // TODO Work out why when selecting text in the text field the text field is not scrolled into the screen (i.e. keyboard overflows it)
-                    // if (playerScoreEditingController.text.isNotBlank) {
-                    //   playerScoreEditingController.selection = TextSelection(
-                    //     baseOffset: 0,
-                    //     extentOffset: playerScoreEditingController.text.length,
-                    //   );
-                    // }
-                    useKeyboardToEnterScore = true;
-                    playerScoreFocusNode.requestFocus();
-                  });
+                  playerScoreEditingController.text = widget.playerScore.score.value ?? '';
+                  // TODO Work out why when selecting text in the text field the text field is not scrolled into the screen (i.e. keyboard overflows it)
+                  // if (playerScoreEditingController.text.isNotBlank) {
+                  //   playerScoreEditingController.selection = TextSelection(
+                  //     baseOffset: 0,
+                  //     extentOffset: playerScoreEditingController.text.length,
+                  //   );
+                  // }
+                  useKeyboardToEnterScore = true;
+                  playerScoreFocusNode.requestFocus();
+                  widget.onToggleKeyboard(useKeyboardToEnterScore);
                 },
           icon: const Icon(Icons.keyboard_alt_outlined),
           color: AppTheme.accentColor,
@@ -384,21 +464,6 @@ class _PlayerScoreState extends State<_PlayerScore> {
         ),
       ],
     );
-  }
-
-  Future<void> _updatePlayerScore(num score) async {
-    if (score < 0) {
-      return;
-    }
-
-    final String scoreText = score.toString();
-    if (widget.playerScore.score.value == scoreText) {
-      return;
-    }
-
-    await widget.playerScore.updatePlayerScore(scoreText);
-
-    setState(() {});
   }
 }
 
