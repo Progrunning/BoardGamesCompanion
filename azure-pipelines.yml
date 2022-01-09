@@ -1,12 +1,25 @@
-trigger:
-- main
-- feature/gamePrices
+name: $(app.version).$(Build.BuildID)_$(SourceBranchName)
 
+pr:
+  branches:
+    include:
+      - main
+
+trigger:
+  branches:
+    include:
+      - main
+      - feature/gamePrices
+  paths:
+      include:
+      - BGC.Functions
 pool:
   vmImage: ubuntu-latest
 
 steps:
+  
   - task: DotNetCoreCLI@2
+    displayName: Dotnet Publish
     inputs:
       command: 'publish'
       publishWebProjects: false
@@ -15,6 +28,7 @@ steps:
       arguments: '-o $(Build.ArtifactStagingDirectory) -a linux-x64'
   
   - task: PublishBuildArtifacts@1
+    displayName: Publish Artifacts
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)/*.zip'
       ArtifactName: 'drop'
