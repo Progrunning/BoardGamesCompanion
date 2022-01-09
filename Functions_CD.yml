@@ -1,25 +1,31 @@
-name: $(app.version).$(Build.BuildID) $(SourceBranchName)
-
 trigger:
   branches:
     include:
       - main
 
-variables:
-  # Azure service connection established during pipeline creation
-  azureSubscription: <Name of your Azure subscription>
-  appName: <Name of the function app>
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+stages:
+  - stage: DEV
+    jobs:
+      - job: PublishFunctions
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: AzureFunctionApp@1
+            inputs:
+              azureSubscription: 'bgc-dev(0b0b0e44-f48a-4f5b-9ee0-6bf6c571e58a)'
+              appType: 'functionAppLinux'
+              appName: 'bgc-func-dev'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
-- task: AzureFunctionApp@1 # Add this at the end of your file
-  inputs:
-    azureSubscription: <Azure service connection>
-    appType: functionAppLinux # default is functionApp
-    appName: $(appName)
-    package: $(System.ArtifactsDirectory)/**/*.zip
-    #Uncomment the next lines to deploy to a deployment slot
-    #Note that deployment slots is not supported for Linux Dynamic SKU
-    #deployToSlotOrASE: true
-    #resourceGroupName: '<Resource Group Name>'
-    #slotName: '<Slot name>'
+  - stage: PROD
+    jobs:
+      - job: PublishFunctions
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: AzureFunctionApp@1
+            inputs:
+              azureSubscription: 'bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)'
+              appType: 'functionAppLinux'
+              appName: 'bgc-func-prod'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
