@@ -26,7 +26,7 @@ stages:
               azureSubscription: 'bgc-dev(0b0b0e44-f48a-4f5b-9ee0-6bf6c571e58a)'
               appType: 'functionAppLinux'
               appName: 'bgc-func-dev'
-              package: '$(System.ArtifactsDirectory)/*.zip'
+              package: '$(Pipeline.Workspace)/*.zip'
 
   - stage: PROD
     dependsOn:
@@ -52,4 +52,4 @@ stages:
               azureSubscription: 'bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)'
               appType: 'functionAppLinux'
               appName: 'bgc-func-prod'
-              package: '$(System.ArtifactsDirectory)/*.zip'
+              package: '$(Pipeline.Workspace)/*.zip'
