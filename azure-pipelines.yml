@@ -23,6 +23,12 @@ steps:
       packageType: 'sdk'
       version: '6.0.x'
 
+  - script: |
+      dotnet restore
+      dotnet build -c Release
+    displayName: Dotnet Restore & Build
+    workingDirectory: 'BGC.Functions'
+
   - task: DotNetCoreCLI@2
     displayName: Dotnet Publish
     inputs:
@@ -30,7 +36,7 @@ steps:
       publishWebProjects: false
       projects: 'BGC.Functions/*.csproj'
       modifyOutputPath: false
-      arguments: '-o $(Build.ArtifactStagingDirectory) -a linux-x64'
+      arguments: '-c Release -o $(Build.ArtifactStagingDirectory) -a linux-x64'
   
   - task: PublishBuildArtifacts@1
     displayName: Publish Artifacts
