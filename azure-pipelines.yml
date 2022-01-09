@@ -27,7 +27,11 @@ steps:
       packageType: 'sdk'
       version: '6.0.x'
 
-  - powershell: Get-ChildItem -Path 'Insert root path' -recurse
+  - powershell: |
+      Write-Host "Show all folder content"
+      Get-ChildItem -Path $(Agent.WorkFolder)\*.* -Recurse -Force
+    errorActionPreference: continue
+    displayName: 'PowerShell Script List folder structure'    
 
   - script: |      
       tree $(Build.SourcesDirectory) /f
