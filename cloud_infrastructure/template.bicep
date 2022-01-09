@@ -112,7 +112,7 @@ resource bgc_func_plan_resource 'Microsoft.Web/serverfarms@2021-02-01' = {
     hyperV: false
     targetWorkerCount: 0
     targetWorkerSizeId: 0
-    zoneRedundant: false
+    zoneRedundant: false    
   }
 }
 
@@ -250,7 +250,7 @@ resource sites_bgc_func_name_resource 'Microsoft.Web/sites@2021-02-01' = {
     customDomainVerificationId: '4E29F012A8C2676B1655214BBEBEF22FEFC382D40F991B746D06404AFA458295'
     containerSize: 1536
     dailyMemoryTimeQuota: 0
-    httpsOnly: false
+    httpsOnly: true
     redundancyMode: 'None'
     storageAccountRequired: false
     keyVaultReferenceIdentity: 'SystemAssigned'
