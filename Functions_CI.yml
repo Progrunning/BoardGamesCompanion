@@ -1,4 +1,4 @@
-name: $(app.version).$(Build.BuildID)_$(SourceBranchName)
+name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
   AppDirectoryName: BGC.Functions
@@ -29,21 +29,21 @@ steps:
   - script: |
       dotnet restore
       dotnet build -c Release
-    displayName: Dotnet Restore & Build
+    displayName: Restore & Build
     workingDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
 
   - task: DotNetCoreCLI@2
-    displayName: Dotnet Publish
+    displayName: Publish
     inputs:
       command: "publish"
       publishWebProjects: false
       projects: "$(Build.SourcesDirectory)/$(AppDirectoryName)/*.csproj"
       modifyOutputPath: false
-      arguments: "-c Release -o $(Build.ArtifactStagingDirectory)"
+      arguments: "-c Release -o $(Build.ArtifactStagingDirectory)/dist"
 
   - task: PublishBuildArtifacts@1
     displayName: Publish Artifacts
     inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/*.zip"
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)/dist/*.zip"
       ArtifactName: "drop"
       publishLocation: "Container"

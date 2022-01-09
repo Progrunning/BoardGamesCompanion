@@ -1,4 +1,4 @@
-name: $(app.version).$(Build.BuildID)_$(SourceBranchName)
+name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
   AppPackageName: com.progrunning.boardgamescompanion
