@@ -7,6 +7,9 @@ pr:
   branches:
     include:
       - main
+  paths:
+    include:
+      - board_games_companion
 
 stages:
   - stage: CI
