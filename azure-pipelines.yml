@@ -13,6 +13,7 @@ trigger:
   paths:
       include:
       - BGC.Functions
+
 pool:
   vmImage: ubuntu-latest
 
@@ -27,7 +28,7 @@ steps:
       dotnet restore
       dotnet build -c Release
     displayName: Dotnet Restore & Build
-    workingDirectory: 'BGC.Functions'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/BGC.Functions'
 
   - task: DotNetCoreCLI@2
     displayName: Dotnet Publish
