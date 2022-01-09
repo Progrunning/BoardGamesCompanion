@@ -35,7 +35,7 @@ stages:
               project: $(PipelineSourceProjectId)
               definition: $(PipelineSourceProjectDefinitionId)
               buildVersionToDownload: 'latest'
-              itemPattern: $(BicepTemplateFileName)
+              itemPattern: '**/*.template'
               targetPath: '$(Pipeline.Workspace)'
           
           - task: AzureCLI@2
