@@ -49,9 +49,8 @@ steps:
       includeRootFolder: false
       archiveFile: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
 
-  - task: PublishBuildArtifacts@1
-    displayName: Publish Artifacts
+  - task: PublishPipelineArtifact@1
     inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
-      ArtifactName: "drop"
-      publishLocation: "Container"
+      targetPath: '$(Build.ArtifactStagingDirectory)/out'
+      artifact: '$(app.version).$(Build.BuildID).zip'
+      publishLocation: 'pipeline'
