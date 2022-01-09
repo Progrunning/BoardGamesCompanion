@@ -29,6 +29,8 @@ stages:
         pool:
           vmImage: "ubuntu-latest"
         steps:
+          - checkout: none
+
           - task: DownloadPipelineArtifact@2
             displayName: 'Download Artifacts'
             inputs:
@@ -67,6 +69,7 @@ stages:
         pool:
           vmImage: "ubuntu-latest"
         steps:
+          - checkout: none
           - task: DownloadPipelineArtifact@2
             displayName: 'Download Artifacts'
             inputs:
