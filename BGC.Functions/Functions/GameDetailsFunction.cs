@@ -14,8 +14,8 @@ namespace BGC.Functions
             _logger = loggerFactory.CreateLogger<GameDetailsFunction>();
         }
 
-        [Function("Details")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.System, "get", Route = "games/{id:string}")] HttpRequestData req)
+        [Function("GameDetails")]
+        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.System, "get", Route = "games/{id}")] HttpRequestData req, string id)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
