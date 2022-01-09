@@ -1,5 +1,8 @@
 name: $(app.version).$(Build.BuildID)_$(SourceBranchName)
 
+variables:
+  AppDirectoryName: BGC.Functions
+
 pr:
   branches:
     include:
@@ -30,14 +33,14 @@ steps:
       dotnet restore
       dotnet build -c Release
     displayName: Dotnet Restore & Build
-    workingDirectory: '$(System.DefaultWorkingDirectory)/BGC.Functions/'
+    workingDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
 
   - task: DotNetCoreCLI@2
     displayName: Dotnet Publish
     inputs:
       command: 'publish'
       publishWebProjects: false
-      projects: 'BGC.Functions/*.csproj'
+      projects: '$(Build.SourcesDirectory)/$(AppDirectoryName)/*.csproj'
       modifyOutputPath: false
       arguments: '-c Release -o $(Build.ArtifactStagingDirectory) -a linux-x64'
   
