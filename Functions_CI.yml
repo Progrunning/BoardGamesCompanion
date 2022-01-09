@@ -11,9 +11,9 @@ pr:
 trigger:
   branches:
     include:
-      - main      
+      - main
   paths:
-      include:
+    include:
       - BGC.Functions
 
 pool:
@@ -23,34 +23,27 @@ steps:
   - task: UseDotNet@2
     displayName: Use .NET 6.0
     inputs:
-      packageType: 'sdk'
-      version: '6.0.x'
+      packageType: "sdk"
+      version: "6.0.x"
 
-  - powershell: |
-      Write-Host "Show all folder content"
-      Get-ChildItem -Path $(Agent.WorkFolder)\*.* -Recurse -Force
-    errorActionPreference: continue
-    displayName: 'PowerShell Script List folder structure'    
-
-  - script: |      
-      tree $(Build.SourcesDirectory) /f
+  - script: |
       dotnet restore
       dotnet build -c Release
     displayName: Dotnet Restore & Build
-    workingDirectory: '$(Build.SourcesDirectory)/$(AppDirectoryName)'
+    workingDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
 
   - task: DotNetCoreCLI@2
     displayName: Dotnet Publish
     inputs:
-      command: 'publish'
+      command: "publish"
       publishWebProjects: false
-      projects: '$(Build.SourcesDirectory)/$(AppDirectoryName)/*.csproj'
+      projects: "$(Build.SourcesDirectory)/$(AppDirectoryName)/*.csproj"
       modifyOutputPath: false
-      arguments: '-c Release -o $(Build.ArtifactStagingDirectory) -a linux-x64'
-  
+      arguments: "-c Release -o $(Build.ArtifactStagingDirectory)"
+
   - task: PublishBuildArtifacts@1
     displayName: Publish Artifacts
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/*.zip'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)/*.zip"
+      ArtifactName: "drop"
+      publishLocation: "Container"
