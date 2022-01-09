@@ -25,10 +25,12 @@ steps:
       version: '6.0.x'
 
   - script: |
+      pwd
+      ls
       dotnet restore
       dotnet build -c Release
     displayName: Dotnet Restore & Build
-    workingDirectory: '$(System.DefaultWorkingDirectory)/BGC.Functions'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/BGC.Functions/'
 
   - task: DotNetCoreCLI@2
     displayName: Dotnet Publish
