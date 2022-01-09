@@ -1,0 +1,21 @@
+trigger:
+- main
+- feature/gamePrices
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'BGC.Functions/*.csproj'
+      modifyOutputPath: false
+      arguments: '-o $(Build.ArtifactStagingDirectory) -a linux-x64'
+  
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/*.zip'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
