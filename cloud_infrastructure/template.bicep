@@ -243,24 +243,24 @@ resource bgc_func_resource 'Microsoft.Web/sites@2021-02-01' = {
       minimumElasticInstanceCount: 0
       appSettings: [
         {
-          'name': 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          'value': bgc_func_appi_resource.properties.InstrumentationKey
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: bgc_func_appi_resource.properties.InstrumentationKey
         }
         {
           name: 'AzureWebJobsStorage'
           value: 'DefaultEndpointsProtocol=https;AccountName=${bgc_st_resource.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(bgc_st_resource.id, bgc_st_resource.apiVersion).keys[0].value}'
         }
         {
-          'name': 'FUNCTIONS_EXTENSION_VERSION'
-          'value': '~4'
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'node'
         }
         {
-          'name': 'FUNCTIONS_WORKER_RUNTIME'
-          'value': 'dotnet'
+          name: 'WEBSITE_NODE_DEFAULT_VERSION'
+          value: '10.14.1'
         }
         {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${bgc_st_resource.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(bgc_st_resource.id, bgc_st_resource.apiVersion).keys[0].value}'
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~4'
         }
       ]
     }
@@ -276,7 +276,7 @@ resource bgc_func_resource 'Microsoft.Web/sites@2021-02-01' = {
     redundancyMode: 'None'
     storageAccountRequired: false
     keyVaultReferenceIdentity: 'SystemAssigned'
-  }  
+  }
 }
 
 resource bgc_func_host_name_bindings_resource 'Microsoft.Web/sites/hostNameBindings@2021-02-01' = {
