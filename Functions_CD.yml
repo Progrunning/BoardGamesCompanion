@@ -10,22 +10,40 @@ stages:
         pool:
           vmImage: "ubuntu-latest"
         steps:
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: '*.zip'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          
           - task: AzureFunctionApp@1
             inputs:
               azureSubscription: 'bgc-dev(0b0b0e44-f48a-4f5b-9ee0-6bf6c571e58a)'
               appType: 'functionAppLinux'
               appName: 'bgc-func-dev'
-              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              package: '$(System.ArtifactsDirectory)/*.zip'
 
   - stage: PROD
+    dependsOn:
+      - DEV
+    # Preventing PROD stage from running automatically - only manual deployments allowed
+    condition: eq('true', 'false') 
     jobs:
       - job: PublishFunctions
         pool:
           vmImage: "ubuntu-latest"
         steps:
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: '*.zip'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          
           - task: AzureFunctionApp@1
             inputs:
               azureSubscription: 'bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)'
               appType: 'functionAppLinux'
               appName: 'bgc-func-prod'
-              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              package: '$(System.ArtifactsDirectory)/*.zip'
