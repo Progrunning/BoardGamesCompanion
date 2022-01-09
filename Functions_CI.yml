@@ -52,13 +52,15 @@ steps:
       archiveFile: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
 
   - task: PublishPipelineArtifact@1
-    displayName: 'Publish Functions Artifact'
+    displayName: "Publish Functions Artifact"
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip'      
-      publishLocation: 'pipeline'
+      targetPath: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
+      artifactName: "functions"
+      publishLocation: "pipeline"
 
   - task: PublishPipelineArtifact@1
-    displayName: 'Publish Bicep Template'
+    displayName: "Publish Bicep Template"
     inputs:
-      targetPath: '$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)/$(BicepTemplateFileName)'      
-      publishLocation: 'pipeline'
+      targetPath: "$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)/$(BicepTemplateFileName)"
+      artifactName: "bicep"
+      publishLocation: "pipeline"
