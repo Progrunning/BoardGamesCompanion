@@ -36,14 +36,22 @@ steps:
     displayName: Publish
     inputs:
       command: "publish"
-      publishWebProjects: false
       projects: "$(Build.SourcesDirectory)/$(AppDirectoryName)/*.csproj"
+      arguments: "-c Release -o $(Build.ArtifactStagingDirectory)/out"
+      publishWebProjects: false
       modifyOutputPath: false
-      arguments: "-c Release -o $(Build.ArtifactStagingDirectory)/dist"
+      zipAfterPublish: false
+
+  - task: ArchiveFiles@2
+    displayName: "Zip"
+    inputs:
+      rootFolderOrFile: "$(Build.ArtifactStagingDirectory)/out"
+      includeRootFolder: false
+      archiveFile: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
 
   - task: PublishBuildArtifacts@1
     displayName: Publish Artifacts
     inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/dist/*.zip"
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
       ArtifactName: "drop"
       publishLocation: "Container"
