@@ -1,3 +1,5 @@
+name: $(app.version).$(Build.BuildID) $(SourceBranchName)
+
 trigger:
   branches:
     include:
@@ -10,12 +12,14 @@ stages:
         pool:
           vmImage: "ubuntu-latest"
         steps:
-          - task: DownloadBuildArtifacts@1
+          - task: DownloadPipelineArtifact@2
             inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: '*.zip'
-              downloadPath: '$(System.ArtifactsDirectory)'
+              buildType: 'specific'
+              project: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
+              definition: '22'
+              buildVersionToDownload: 'latest'
+              itemPattern: '**/*.zip'
+              targetPath: '$(Pipeline.Workspace)'
           
           - task: AzureFunctionApp@1
             inputs:
@@ -34,12 +38,14 @@ stages:
         pool:
           vmImage: "ubuntu-latest"
         steps:
-          - task: DownloadBuildArtifacts@1
+          - task: DownloadPipelineArtifact@2
             inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: '*.zip'
-              downloadPath: '$(System.ArtifactsDirectory)'
+              buildType: 'specific'
+              project: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
+              definition: '22'
+              buildVersionToDownload: 'latest'
+              itemPattern: '**/*.zip'
+              targetPath: '$(Pipeline.Workspace)'
           
           - task: AzureFunctionApp@1
             inputs:
