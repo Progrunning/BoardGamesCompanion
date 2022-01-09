@@ -14,7 +14,7 @@ variables:
   ProdAzureSubscription: bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)
   ProdBicepTemplateParametersFileName: paramteres.prod.json
   
-  ResourceGroupName: bgc
+  ResourceGroupName: bgc-rg
   FunctionsAppName: bgc-func
 
   BicepTemplateFileName: template.bicep
@@ -50,8 +50,8 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 az --version
-                az group create --name '$(ResourceGroupName)-$(DevEnvironmentAffix)' --location $(AzureRegionLocation)
-                az deployment group create --resource-group '$(ResourceGroupName)-$(DevEnvironmentAffix)' --template-file '$(Pipeline.Workspace)/bicep/$(BicepTemplateFileName)' --parameters '$(Pipeline.Workspace)/bicep/$(DevBicepTemplateParametersFileName)'
+                az group create --name $(ResourceGroupName) --location $(AzureRegionLocation)
+                az deployment group create --resource-group $(ResourceGroupName) --template-file '$(Pipeline.Workspace)/bicep/$(BicepTemplateFileName)' --parameters '$(Pipeline.Workspace)/bicep/$(DevBicepTemplateParametersFileName)'
 
           - task: AzureFunctionApp@1
             displayName: 'Deploy Functions'
