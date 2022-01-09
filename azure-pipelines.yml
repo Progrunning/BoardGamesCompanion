@@ -27,9 +27,8 @@ steps:
       packageType: 'sdk'
       version: '6.0.x'
 
-  - script: |
-      pwd
-      ls
+  - script: |      
+      tree $(Build.SourcesDirectory) /f
       dotnet restore
       dotnet build -c Release
     displayName: Dotnet Restore & Build
