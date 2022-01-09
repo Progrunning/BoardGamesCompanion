@@ -54,13 +54,11 @@ steps:
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Functions Artifact'
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/out'
-      artifact: '$(app.version).$(Build.BuildID).zip'
+      targetPath: '$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip'      
       publishLocation: 'pipeline'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Bicep Template'
     inputs:
-      targetPath: '$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)'
-      artifact: '$(BicepTemplateFileName)'
+      targetPath: '$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)/$(BicepTemplateFileName)'      
       publishLocation: 'pipeline'

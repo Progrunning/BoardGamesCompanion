@@ -1,3 +1,4 @@
+# TODO Base pipeline name on the zipped artifact file name (i.e. version)
 name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
