@@ -13,6 +13,7 @@ stages:
           vmImage: "ubuntu-latest"
         steps:
           - task: DownloadPipelineArtifact@2
+            displayName: 'Download Artifacts'
             inputs:
               buildType: 'specific'
               project: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
@@ -22,6 +23,7 @@ stages:
               targetPath: '$(Pipeline.Workspace)'
           
           - task: AzureFunctionApp@1
+            displayName: 'Deploy Functions'
             inputs:
               azureSubscription: 'bgc-dev(0b0b0e44-f48a-4f5b-9ee0-6bf6c571e58a)'
               appType: 'functionAppLinux'
@@ -39,6 +41,7 @@ stages:
           vmImage: "ubuntu-latest"
         steps:
           - task: DownloadPipelineArtifact@2
+            displayName: 'Download Artifacts'
             inputs:
               buildType: 'specific'
               project: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
@@ -48,6 +51,7 @@ stages:
               targetPath: '$(Pipeline.Workspace)'
           
           - task: AzureFunctionApp@1
+            displayName: 'Deploy Functions'
             inputs:
               azureSubscription: 'bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)'
               appType: 'functionAppLinux'
