@@ -30,13 +30,12 @@ stages:
           vmImage: "ubuntu-latest"
         steps:
           - task: DownloadPipelineArtifact@2
-            displayName: 'Download Bicep template'
+            displayName: 'Download Artifacts'
             inputs:
               buildType: 'specific'
               project: $(PipelineSourceProjectId)
               definition: $(PipelineSourceProjectDefinitionId)
               buildVersionToDownload: 'latest'
-              itemPattern: '**/*.bicep'
               targetPath: '$(Pipeline.Workspace)'
           
           - task: AzureCLI@2
@@ -48,17 +47,7 @@ stages:
               inlineScript: |
                 az --version
                 az group create --name '$(ResourceGroupName)-$(DevEnvironmentAffix)' --location $(AzureRegionLocation)
-                az deployment group create --resource-group '$(ResourceGroupName)-$(DevEnvironmentAffix)' --template-file '$(Pipeline.Workspace)/$(BicepTemplateFileName)'
-          
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Functions Artifacts'
-            inputs:
-              buildType: 'specific'
-              project: $(PipelineSourceProjectId)
-              definition: $(PipelineSourceProjectDefinitionId)
-              buildVersionToDownload: 'latest'
-              itemPattern: '**/*.zip'
-              targetPath: '$(Pipeline.Workspace)'
+                az deployment group create --resource-group '$(ResourceGroupName)-$(DevEnvironmentAffix)' --template-file '$(Pipeline.Workspace)/bicep/$(BicepTemplateFileName)'
 
           - task: AzureFunctionApp@1
             displayName: 'Deploy Functions'
