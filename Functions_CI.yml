@@ -2,8 +2,7 @@ name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
   AppDirectoryName: BGC.Functions
-  BicepTemplateDirectoryName: cloud_infrastructure
-  BicepTemplateFileName: template.bicep
+  BicepTemplateDirectoryName: cloud_infrastructure  
 
 pr:
   branches:
@@ -61,6 +60,6 @@ steps:
   - task: PublishPipelineArtifact@1
     displayName: "Publish Bicep Template"
     inputs:
-      targetPath: "$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)/$(BicepTemplateFileName)"
+      targetPath: "$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)"
       artifactName: "bicep"
       publishLocation: "pipeline"
