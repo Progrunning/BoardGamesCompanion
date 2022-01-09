@@ -1,5 +1,21 @@
 name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
+variables:
+  PipelineSourceProjectId: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
+  PipelineSourceProjectDefinitionId: '22'
+  
+  AzureRegionLocation: 'East US'
+  
+  DevEnvironmentAffix: dev
+  DevAzureSubscription: bgc-dev(0b0b0e44-f48a-4f5b-9ee0-6bf6c571e58a)
+  ProdEnvironmentAffix: prod
+  ProdAzureSubscription: bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)
+  
+  ResourceGroupName: bgc
+  FunctionsAppName: bgc-func
+
+  BicepTemplateFileName: template.bicep
+
 trigger:
   branches:
     include:
@@ -13,21 +29,42 @@ stages:
           vmImage: "ubuntu-latest"
         steps:
           - task: DownloadPipelineArtifact@2
-            displayName: 'Download Artifacts'
+            displayName: 'Download Bicep template'
             inputs:
               buildType: 'specific'
-              project: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
-              definition: '22'
+              project: $(PipelineSourceProjectId)
+              definition: $(PipelineSourceProjectDefinitionId)
+              buildVersionToDownload: 'latest'
+              itemPattern: $(BicepTemplateFileName)
+              targetPath: '$(Pipeline.Workspace)'
+          
+          - task: AzureCLI@2
+            displayName: 'Deploy Bicep template to Azure'
+            inputs:
+              azureSubscription: $(DevAzureSubscription)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az --version
+                az group create --name '$(ResourceGroupName)-$(DevEnvironmentAffix)' --location $(AzureRegionLocation)
+                az deployment group create --resource-group '$(ResourceGroupName)-$(DevEnvironmentAffix)' --template-file '$(Pipeline.Workspace)/$(BicepTemplateFileName)'
+          
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Functions Artifacts'
+            inputs:
+              buildType: 'specific'
+              project: $(PipelineSourceProjectId)
+              definition: $(PipelineSourceProjectDefinitionId)
               buildVersionToDownload: 'latest'
               itemPattern: '**/*.zip'
               targetPath: '$(Pipeline.Workspace)'
-          
+
           - task: AzureFunctionApp@1
             displayName: 'Deploy Functions'
             inputs:
-              azureSubscription: 'bgc-dev(0b0b0e44-f48a-4f5b-9ee0-6bf6c571e58a)'
+              azureSubscription: $(DevAzureSubscription)
               appType: 'functionAppLinux'
-              appName: 'bgc-func-dev'
+              appName: '$(FunctionsAppName)-$(DevEnvironmentAffix)'
               package: '$(Pipeline.Workspace)/*.zip'
 
   - stage: PROD
@@ -44,8 +81,8 @@ stages:
             displayName: 'Download Artifacts'
             inputs:
               buildType: 'specific'
-              project: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
-              definition: '22'
+              project: $(PipelineSourceProjectId)
+              definition: $(PipelineSourceProjectDefinitionId)
               buildVersionToDownload: 'latest'
               itemPattern: '**/*.zip'
               targetPath: '$(Pipeline.Workspace)'
@@ -53,7 +90,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Deploy Functions'
             inputs:
-              azureSubscription: 'bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)'
+              azureSubscription: $(ProdAzureSubscription)
               appType: 'functionAppLinux'
-              appName: 'bgc-func-prod'
+              appName: '$(FunctionsAppName)-$(ProdEnvironmentAffix)'
               package: '$(Pipeline.Workspace)/*.zip'

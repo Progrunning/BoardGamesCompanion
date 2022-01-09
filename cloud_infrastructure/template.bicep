@@ -60,7 +60,7 @@ resource bgc_vnet_resource 'Microsoft.Network/virtualNetworks@2020-11-01' = {
   }
 }
 
-resource bgcst_resource 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+resource bgc_st_resource 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: bgc_st_name
   location: location
   sku: {
@@ -112,7 +112,7 @@ resource bgc_func_plan_resource 'Microsoft.Web/serverfarms@2021-02-01' = {
     hyperV: false
     targetWorkerCount: 0
     targetWorkerSizeId: 0
-    zoneRedundant: false    
+    zoneRedundant: false
   }
 }
 
@@ -211,7 +211,7 @@ resource bgc_vnet_subnet_resource 'Microsoft.Network/virtualNetworks/subnets@202
   }
 }
 
-resource sites_bgc_func_name_resource 'Microsoft.Web/sites@2021-02-01' = {
+resource bgc_func_resource 'Microsoft.Web/sites@2021-02-01' = {
   name: bgc_func_name
   location: location
   kind: 'functionapp,linux'
@@ -241,6 +241,28 @@ resource sites_bgc_func_name_resource 'Microsoft.Web/sites@2021-02-01' = {
       http20Enabled: false
       functionAppScaleLimit: 20
       minimumElasticInstanceCount: 0
+      appSettings: [
+        {
+          'name': 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          'value': bgc_func_appi_resource.properties.InstrumentationKey
+        }
+        {
+          name: 'AzureWebJobsStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${bgc_st_resource.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(bgc_st_resource.id, bgc_st_resource.apiVersion).keys[0].value}'
+        }
+        {
+          'name': 'FUNCTIONS_EXTENSION_VERSION'
+          'value': '~4'
+        }
+        {
+          'name': 'FUNCTIONS_WORKER_RUNTIME'
+          'value': 'dotnet'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${bgc_st_resource.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(bgc_st_resource.id, bgc_st_resource.apiVersion).keys[0].value}'
+        }
+      ]
     }
     scmSiteAlsoStopped: false
     clientAffinityEnabled: false
@@ -254,11 +276,11 @@ resource sites_bgc_func_name_resource 'Microsoft.Web/sites@2021-02-01' = {
     redundancyMode: 'None'
     storageAccountRequired: false
     keyVaultReferenceIdentity: 'SystemAssigned'
-  }
+  }  
 }
 
 resource bgc_func_host_name_bindings_resource 'Microsoft.Web/sites/hostNameBindings@2021-02-01' = {
-  parent: sites_bgc_func_name_resource
+  parent: bgc_func_resource
   name: '${bgc_func_name}.azurewebsites.net'
   properties: {
     siteName: 'bgc-func'

@@ -2,6 +2,8 @@ name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
   AppDirectoryName: BGC.Functions
+  BicepTemplateDirectoryName: cloud_infrastructure
+  BicepTemplateFileName: template.bicep
 
 pr:
   branches:
@@ -50,7 +52,15 @@ steps:
       archiveFile: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
 
   - task: PublishPipelineArtifact@1
+    displayName: 'Publish Functions Artifact'
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/out'
+      artifact: '$(app.version).$(Build.BuildID).zip'
+      publishLocation: 'pipeline'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Bicep Template'
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)/$(BicepTemplateFileName)'
       artifact: '$(app.version).$(Build.BuildID).zip'
       publishLocation: 'pipeline'
