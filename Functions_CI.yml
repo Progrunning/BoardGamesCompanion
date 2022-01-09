@@ -11,7 +11,7 @@ pr:
 trigger:
   branches:
     include:
-      - main      
+      - main
   paths:
       include:
       - BGC.Functions
