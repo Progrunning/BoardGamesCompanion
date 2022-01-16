@@ -58,16 +58,14 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
                 borderRadius: AppTheme.defaultBoxRadius,
               ),
             ),
-            // TODO Add shadow to the error state
-            errorWidget: (context, url, dynamic error) => ClipRRect(
-              borderRadius: AppTheme.defaultBoxRadius,
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: AppTheme.primaryColor,
-                  image: DecorationImage(
-                    alignment: Alignment.center,
-                    image: AssetImage('assets/icons/logo.png'),
-                  ),
+            errorWidget: (context, url, dynamic error) => Container(
+              decoration: const BoxDecoration(
+                boxShadow: <BoxShadow>[AppTheme.defaultBoxShadow],
+                borderRadius: AppTheme.defaultBoxRadius,
+                color: AppTheme.primaryColor,
+                image: DecorationImage(
+                  alignment: Alignment.center,
+                  image: AssetImage('assets/icons/logo.png'),
                 ),
               ),
             ),
