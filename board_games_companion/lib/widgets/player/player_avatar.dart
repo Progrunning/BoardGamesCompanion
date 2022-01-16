@@ -33,15 +33,12 @@ class PlayerAvatar extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Hero(
-                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
-                  child: PlayerImage(
-                    imageUri: providerPlayer?.avatarImageUri,
-                  ),
+                  tag:
+                      '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
+                  child: PlayerImage(imageUri: providerPlayer?.avatarImageUri),
                 ),
                 if (providerPlayer?.name?.isNotEmpty ?? false)
-                  PlayerAvatarSubtitle(
-                    player: providerPlayer!,
-                  ),
+                  PlayerAvatarSubtitle(player: providerPlayer!),
                 if (topRightCornerActionWidget != null)
                   Align(
                     alignment: Alignment.topRight,

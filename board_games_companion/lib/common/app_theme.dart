@@ -58,9 +58,7 @@ class AppTheme {
   );
 
   static const BorderRadius defaultBoxRadius = BorderRadius.all(
-    Radius.circular(
-      Styles.boardGameTileImageCircularRadius,
-    ),
+    Radius.circular(Styles.boardGameTileImageCircularRadius),
   );
 
   static const TextStyle defaultTextFieldStyle = TextStyle(
