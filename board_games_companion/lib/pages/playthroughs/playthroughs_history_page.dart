@@ -66,18 +66,14 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                     );
                   },
                   separatorBuilder: (_, index) {
-                    return const SizedBox(
-                      height: Dimensions.doubleStandardSpacing,
-                    );
+                    return const SizedBox(height: Dimensions.doubleStandardSpacing);
                   },
                   itemCount: store.playthroughs!.length,
                 );
               }
 
               return const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.doubleStandardSpacing,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
                 child: Center(
                   child: Text(
                     "It looks like you haven't played this game yet",

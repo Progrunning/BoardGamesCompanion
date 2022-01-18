@@ -80,85 +80,38 @@ class _Statistics extends StatelessWidget {
         final boardGameStatistics =
             playthroughStatisticsStore.boardGamesStatistics[boardGameDetails.id];
         return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.standardSpacing,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Row(
                 children: const <Widget>[
-                  ItemPropertyTitle('Last time played'),
+                  ItemPropertyTitle('Last winner'),
                   Expanded(child: SizedBox.shrink()),
-                  ItemPropertyTitle('Stats'),
+                  ItemPropertyTitle('Last time played'),
                 ],
               ),
-              const SizedBox(
-                height: Dimensions.halfStandardSpacing,
-              ),
+              const SizedBox(height: Dimensions.halfStandardSpacing),
               Row(
                 children: [
-                  _LastTimePlayed(boardGameStatistics: boardGameStatistics),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _LastWinnerAvatar(boardGameStatistics: boardGameStatistics),
+                      const SizedBox(width: Dimensions.standardSpacing),
+                      _LastWinnerText(boardGameStatistics: boardGameStatistics),
+                    ],
+                  ),
                   const Expanded(child: SizedBox.shrink()),
-                  _StatisticsDetails(boardGameStatistics: boardGameStatistics),
+                  _LastTimePlayed(boardGameStatistics: boardGameStatistics),
                 ],
               ),
-              const SizedBox(
-                height: Dimensions.doubleStandardSpacing,
-              ),
-              const ItemPropertyTitle('Last winner'),
-              const SizedBox(
-                height: Dimensions.halfStandardSpacing,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _LastWinner(boardGameStatistics: boardGameStatistics),
-                  const SizedBox(
-                    width: Dimensions.standardSpacing,
-                  ),
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        const WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: Text(
-                            'won with',
-                            style: TextStyle(
-                              fontSize: Dimensions.smallFontSize,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        TextSpan(
-                          text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32,
-                          ),
-                        ),
-                        const WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: Text(
-                            'points',
-                            style: TextStyle(
-                              fontSize: Dimensions.smallFontSize,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 32,
-                    ),
-                  ),
-                ],
-              ),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              const ItemPropertyTitle('Quick stats'),
+              const SizedBox(height: Dimensions.halfStandardSpacing),
+              _QuickStats(boardGameStatistics: boardGameStatistics),
             ],
           ),
         );
@@ -167,8 +120,59 @@ class _Statistics extends StatelessWidget {
   }
 }
 
-class _LastWinner extends StatelessWidget {
-  const _LastWinner({
+class _LastWinnerText extends StatelessWidget {
+  const _LastWinnerText({
+    Key? key,
+    required this.boardGameStatistics,
+  }) : super(key: key);
+
+  final BoardGameStatistics? boardGameStatistics;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          const WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Text(
+              'won with',
+              style: TextStyle(
+                fontSize: Dimensions.smallFontSize,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          TextSpan(
+            text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 32,
+            ),
+          ),
+          const WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Text(
+              'points',
+              style: TextStyle(
+                fontSize: Dimensions.smallFontSize,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+        ],
+      ),
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 32,
+      ),
+    );
+  }
+}
+
+class _LastWinnerAvatar extends StatelessWidget {
+  const _LastWinnerAvatar({
     required this.boardGameStatistics,
     Key? key,
   }) : super(key: key);
@@ -180,9 +184,7 @@ class _LastWinner extends StatelessWidget {
     return SizedBox(
       height: Dimensions.smallPlayerAvatarSize,
       width: Dimensions.smallPlayerAvatarSize,
-      child: PlayerAvatar(
-        boardGameStatistics?.lastWinner?.player,
-      ),
+      child: PlayerAvatar(boardGameStatistics?.lastWinner?.player),
     );
   }
 }
@@ -197,15 +199,13 @@ class _LastTimePlayed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         CalendarCard(
           boardGameStatistics?.lastPlayed,
         ),
-        const SizedBox(
-          width: Dimensions.standardSpacing,
-        ),
+        const SizedBox(height: Dimensions.standardSpacing),
         ItemPropertyValue(
           boardGameStatistics?.lastPlayed?.toDaysAgo(),
         ),
@@ -214,8 +214,8 @@ class _LastTimePlayed extends StatelessWidget {
   }
 }
 
-class _StatisticsDetails extends StatelessWidget {
-  const _StatisticsDetails({
+class _QuickStats extends StatelessWidget {
+  const _QuickStats({
     required this.boardGameStatistics,
     Key? key,
   }) : super(key: key);
@@ -227,7 +227,6 @@ class _StatisticsDetails extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             _StatisticsItem(
               value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
@@ -235,25 +234,39 @@ class _StatisticsDetails extends StatelessWidget {
               iconColor: AppTheme.accentColor,
               subtitle: 'Played games',
             ),
-            const SizedBox(
-              width: Dimensions.doubleStandardSpacing,
-            ),
+            const Expanded(child: SizedBox.shrink()),
             _StatisticsItem(
               value: boardGameStatistics?.highscore?.toString() ?? '-',
               icon: Icons.show_chart,
               iconColor: Colors.red,
               subtitle: 'Highscore',
             ),
+            const Expanded(child: SizedBox.shrink()),
+            _StatisticsItem(
+              value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
+              icon: Icons.hourglass_empty,
+              iconColor: Colors.blue,
+              subtitle: 'Avg. playtime',
+            ),
           ],
         ),
-        const SizedBox(
-          height: Dimensions.standardSpacing + Dimensions.halfStandardSpacing,
-        ),
-        _StatisticsItem(
-          value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
-          icon: Icons.hourglass_empty,
-          iconColor: Colors.blue,
-          subtitle: 'Average playtime',
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _StatisticsItem(
+              value: boardGameStatistics?.averageScore?.toString() ?? '-',
+              icon: Icons.calculate,
+              iconColor: AppTheme.pinkColor,
+              subtitle: 'Avg. score',
+            ),
+            _StatisticsItem(
+              value: boardGameStatistics?.averageNumberOfPlayers?.toString() ?? '-',
+              icon: Icons.person,
+              iconColor: AppTheme.greenColor,
+              subtitle: 'Avg. player count',
+            ),
+          ],
         ),
       ],
     );
@@ -285,16 +298,19 @@ class _StatisticsItem extends StatelessWidget {
             Icon(
               icon,
               color: iconColor ?? IconTheme.of(context).color,
+              size: 28,
             ),
-            const SizedBox(
-              width: Dimensions.quarterStandardSpacing,
+            const SizedBox(width: Dimensions.quarterStandardSpacing),
+            ItemPropertyValue(
+              value,
+              fontSize: Dimensions.largeFontSize,
             ),
-            ItemPropertyValue(value),
           ],
         ),
         ItemPropertyTitle(
           subtitle,
           color: AppTheme.defaultTextColor,
+          fontSize: Dimensions.smallFontSize,
         ),
       ],
     );

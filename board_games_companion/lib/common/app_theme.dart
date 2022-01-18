@@ -10,6 +10,8 @@ class AppTheme {
   static const Color blackColor = Colors.black;
   static const Color blueColor = Colors.blue;
   static const Color redColor = Colors.red;
+  static const Color greenColor = Colors.green;
+  static const Color pinkColor = Colors.pink;
 
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);

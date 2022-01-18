@@ -70,9 +70,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
       final Map<String, List<Score>> playthroughScoresByBoardGameId =
           groupBy(playthroughsScores, (s) => s.boardGameId);
 
-      final playthroughs = boardGamePlaythroughsGroupedByBoardGameId[boardGameId];
-
-      final finishedPlaythroughs = playthroughs
+      final finishedPlaythroughs = boardGamePlaythroughsGroupedByBoardGameId[boardGameId]
           ?.where((p) => p.status == PlaythroughStatus.Finished && p.endDate != null)
           .toList();
       finishedPlaythroughs?.sort((a, b) => b.startDate.compareTo(a.startDate));
@@ -85,22 +83,28 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
       );
 
       if (finishedPlaythroughs?.isNotEmpty ?? false) {
-        boardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs?.length;
+        boardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs!.length;
+        boardGameStatistics.averageNumberOfPlayers = finishedPlaythroughs
+                .map((Playthrough playthrough) => playthrough.playerIds.length)
+                .reduce((a, b) => a + b) /
+            boardGameStatistics.numberOfGamesPlayed!;
         if (playthroughScoresByBoardGameId.containsKey(boardGameId)) {
           final playerScoresWithValue = playthroughScoresByBoardGameId[boardGameId]
               .onlyScoresWithValue()
               .map((s) => num.tryParse(s.value!)!);
           if (playerScoresWithValue.isNotEmpty) {
-            boardGameStatistics.highscore = playerScoresWithValue.reduce(max).toString();
+            boardGameStatistics.highscore = playerScoresWithValue.reduce(max);
+            boardGameStatistics.averageScore =
+                playerScoresWithValue.reduce((a, b) => a + b) / playerScoresWithValue.length;
           }
         }
 
-        final int? allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
-            ?.map((p) => p.endDate!.difference(p.startDate).inSeconds)
+        final int allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
+            .map((p) => p.endDate!.difference(p.startDate).inSeconds)
             .reduce((a, b) => a + b);
         if (allPlaythroughsDurationSumInSeconds != null) {
           boardGameStatistics.averagePlaytimeInSeconds =
-              (allPlaythroughsDurationSumInSeconds / finishedPlaythroughs!.length).floor();
+              (allPlaythroughsDurationSumInSeconds / finishedPlaythroughs.length).floor();
         }
       }
     }
