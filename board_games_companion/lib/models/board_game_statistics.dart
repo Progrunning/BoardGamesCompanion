@@ -1,3 +1,4 @@
+import 'hive/player.dart';
 import 'player_score.dart';
 
 class BoardGameStatistics {
@@ -56,4 +57,6 @@ class BoardGameStatistics {
       _averageNumberOfPlayers = value;
     }
   }
+
+  Map<Player, String>? topScoreres;
 }

@@ -22,9 +22,8 @@ import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container_widget.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
-import '../../widgets/common/tile_positioned_rank_ribbon.dart';
-import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../../widgets/playthrough/player_score_rank_avatar.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
@@ -147,14 +146,8 @@ class _Playthrough extends StatelessWidget {
                         playthroughNumber: playthroughNumber,
                         playthrough: playthroughStore.playthrough,
                       ),
-                      const SizedBox(
-                        width: Dimensions.doubleStandardSpacing,
-                      ),
-                      Expanded(
-                        child: _PlaythroughPlayersStats(
-                          playthroughStore: playthroughStore,
-                        ),
-                      ),
+                      const SizedBox(width: Dimensions.doubleStandardSpacing),
+                      Expanded(child: _PlaythroughPlayersStats(playthroughStore: playthroughStore)),
                     ],
                   );
                 }
@@ -184,11 +177,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Expanded(
-          child: _PlaythroughPlayerList(
-            playthroughStore: playthroughStore,
-          ),
-        ),
+        Expanded(child: _PlaythroughPlayerList(playthroughStore: playthroughStore)),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -225,41 +214,14 @@ class _PlaythroughPlayerList extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemCount: _playthroughStore.playerScores?.length ?? 0,
       separatorBuilder: (context, index) {
-        return const SizedBox(
-          width: Dimensions.doubleStandardSpacing,
-        );
+        return const SizedBox(width: Dimensions.doubleStandardSpacing);
       },
       itemBuilder: (context, index) {
-        return Column(
-          children: [
-            SizedBox(
-              height: Dimensions.smallPlayerAvatarSize,
-              width: Dimensions.smallPlayerAvatarSize,
-              child: Stack(
-                children: [
-                  PlayerAvatar(
-                    _playthroughStore.playerScores![index].player,
-                    playerHeroIdSuffix: _playthroughStore.playthrough.id,
-                  ),
-                  if (_playthroughStore.playerScores![index].place != null)
-                    PositionedTileRankRibbon(
-                      rank: _playthroughStore.playerScores![index].place!,
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: Dimensions.standardSpacing,
-            ),
-            Text(
-              _playthroughStore.playerScores![index].score.value ?? '-',
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: Dimensions.doubleExtraLargeFontSize,
-              ),
-            ),
-          ],
+        return PlayerScoreRankAvatar(
+          player: _playthroughStore.playerScores![index].player,
+          playerHeroIdSuffix: _playthroughStore.playthrough.id,
+          rank: _playthroughStore.playerScores![index].place,
+          score: _playthroughStore.playerScores![index].score.value,
         );
       },
     );

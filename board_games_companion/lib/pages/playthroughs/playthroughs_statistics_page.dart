@@ -10,12 +10,14 @@ import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/hive/player.dart';
 import '../../stores/playthrough_statistics_store.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../../widgets/playthrough/player_score_rank_avatar.dart';
 
 class PlaythroughStatistcsPage extends StatefulWidget {
   const PlaythroughStatistcsPage({
@@ -112,6 +114,15 @@ class _Statistics extends StatelessWidget {
               const ItemPropertyTitle('Quick stats'),
               const SizedBox(height: Dimensions.halfStandardSpacing),
               _QuickStats(boardGameStatistics: boardGameStatistics),
+              if (boardGameStatistics?.topScoreres?.isNotEmpty ?? false) ...<Widget>[
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                const ItemPropertyTitle('Top Scorers'),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
+                SizedBox(
+                  height: 140,
+                  child: _TopScores(boardGameStatistics: boardGameStatistics!),
+                ),
+              ],
             ],
           ),
         );
@@ -184,7 +195,7 @@ class _LastWinnerAvatar extends StatelessWidget {
     return SizedBox(
       height: Dimensions.smallPlayerAvatarSize,
       width: Dimensions.smallPlayerAvatarSize,
-      child: PlayerAvatar(boardGameStatistics?.lastWinner?.player),
+      child: PlayerAvatar(boardGameStatistics?.lastWinner?.player, useHeroAnimation: false),
     );
   }
 }
@@ -269,6 +280,35 @@ class _QuickStats extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _TopScores extends StatelessWidget {
+  const _TopScores({
+    required this.boardGameStatistics,
+    Key? key,
+  }) : super(key: key);
+
+  final BoardGameStatistics boardGameStatistics;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Player> keys = boardGameStatistics.topScoreres!.keys.toList();
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: boardGameStatistics.topScoreres!.length,
+      separatorBuilder: (context, index) {
+        return const SizedBox(width: Dimensions.doubleStandardSpacing);
+      },
+      itemBuilder: (context, index) {
+        return PlayerScoreRankAvatar(
+          player: keys[index],
+          rank: index + 1,
+          score: boardGameStatistics.topScoreres![keys[index]],
+          useHeroAnimation: false,
+        );
+      },
     );
   }
 }

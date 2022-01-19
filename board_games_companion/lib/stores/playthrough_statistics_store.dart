@@ -89,13 +89,20 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
                 .reduce((a, b) => a + b) /
             boardGameStatistics.numberOfGamesPlayed!;
         if (playthroughScoresByBoardGameId.containsKey(boardGameId)) {
-          final playerScoresWithValue = playthroughScoresByBoardGameId[boardGameId]
+          final playerScoresCollection = playthroughScoresByBoardGameId[boardGameId]
               .onlyScoresWithValue()
-              .map((s) => num.tryParse(s.value!)!);
-          if (playerScoresWithValue.isNotEmpty) {
-            boardGameStatistics.highscore = playerScoresWithValue.reduce(max);
+            ..sort((Score a, Score b) =>
+                num.tryParse(b.value!)?.compareTo(num.tryParse(a.value!) ?? 0) ?? -1);
+          if (playerScoresCollection.isNotEmpty) {
+            final playerScores = playerScoresCollection.map((s) => num.tryParse(s.value!)!);
+            boardGameStatistics.highscore = playerScores.reduce(max);
             boardGameStatistics.averageScore =
-                playerScoresWithValue.reduce((a, b) => a + b) / playerScoresWithValue.length;
+                playerScores.reduce((a, b) => a + b) / playerScores.length;
+
+            boardGameStatistics.topScoreres = {
+              for (final Score score in playerScoresCollection)
+                playersById[score.playerId]!: score.value!
+            };
           }
         }
 
