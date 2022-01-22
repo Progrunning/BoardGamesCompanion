@@ -89,7 +89,7 @@ class _Statistics extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               const ItemPropertyTitle(AppText.playthroughsStatisticsPageLastWinnerSectionTitle),
               const SizedBox(height: Dimensions.halfStandardSpacing),
@@ -123,8 +123,33 @@ class _Statistics extends StatelessWidget {
                     AppText.playthroughsStatisticsPagePlayerCountPercentageSectionTitle),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _PlayerCountPercentageChart(boardGameStatistics: boardGameStatistics!),
-                const SizedBox(height: Dimensions.doubleStandardSpacing),
               ],
+              if (boardGameStatistics?.personalBests?.isNotEmpty ?? false) ...<Widget>[
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                const ItemPropertyTitle(
+                    AppText.playthroughsStatisticsPagePersonalBestsSectionTitle),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
+                
+                // TODO Fix expanding with Sliver?
+                SizedBox(
+                  height: 300,
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: Dimensions.standardSpacing,
+                    mainAxisSpacing: Dimensions.standardSpacing,
+                    children: <Widget>[
+                      for (final MapEntry<Player, String> personalBest
+                          in boardGameStatistics!.personalBests!.entries)
+                        PlayerScoreRankAvatar(
+                          player: personalBest.key,
+                          score: personalBest.value,
+                          useHeroAnimation: false,
+                        )
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
             ],
           ),
         );
@@ -306,7 +331,7 @@ class _LastTimePlayed extends StatelessWidget {
             style: const TextStyle(
               fontSize: Dimensions.smallFontSize,
               fontWeight: FontWeight.normal,
-            ),                    
+            ),
           ),
         ),
       ],

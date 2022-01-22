@@ -352,9 +352,7 @@ class _Grid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.all(
-        Dimensions.standardSpacing,
-      ),
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
       sliver: SliverGrid.extent(
         crossAxisSpacing: Dimensions.standardSpacing,
         mainAxisSpacing: Dimensions.standardSpacing,

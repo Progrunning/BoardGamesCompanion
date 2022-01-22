@@ -21,4 +21,5 @@ class AppText {
   static const playthroughsStatisticsPageQuickStatsAvgScore = 'Avg. score';
   static const playthroughsStatisticsPageQuickStatsAvgPlayerCount = 'Avg. player count';
   static const playthroughsStatisticsPageQuickStatsAvgPlayedGames = 'Played games';
+  static const playthroughsStatisticsPagePersonalBestsSectionTitle = 'Personal bests';
 }

@@ -104,9 +104,10 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
                 playerScores.reduce((a, b) => a + b) / playerScores.length;
 
             boardGameStatistics.topScoreres = {};
+            boardGameStatistics.personalBests = {};
             for (final Score score in playerScoresCollection) {
+              final Player player = playersById[score.playerId]!;
               if (boardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
-                final Player player = playersById[score.playerId]!;
                 if (boardGameStatistics.topScoreres!.containsKey(player)) {
                   continue;
                 }
@@ -114,7 +115,11 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
                 boardGameStatistics.topScoreres![player] = score.value!;
               }
 
-              // TODO Add Personal Best logic
+              if (boardGameStatistics.personalBests!.containsKey(player)) {
+                continue;
+              }
+              
+              boardGameStatistics.personalBests![player] = score.value!;
             }
           }
         }
