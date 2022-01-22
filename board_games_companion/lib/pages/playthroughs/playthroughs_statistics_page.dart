@@ -91,27 +91,17 @@ class _Statistics extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Row(
-                children: const <Widget>[
-                  ItemPropertyTitle(AppText.playthroughsStatisticsPageLastWinnerSectionTitle),
-                  Expanded(child: SizedBox.shrink()),
-                  ItemPropertyTitle(AppText.playthroughsStatisticsPageLastTimePlayedSectionTitle),
-                ],
-              ),
+              const ItemPropertyTitle(AppText.playthroughsStatisticsPageLastWinnerSectionTitle),
               const SizedBox(height: Dimensions.halfStandardSpacing),
               Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _LastWinnerAvatar(boardGameStatistics: boardGameStatistics),
-                      const SizedBox(width: Dimensions.standardSpacing),
-                      _LastWinnerText(boardGameStatistics: boardGameStatistics),
-                    ],
-                  ),
-                  const Expanded(child: SizedBox.shrink()),
-                  _LastTimePlayed(boardGameStatistics: boardGameStatistics),
+                  _LastWinnerAvatar(boardGameStatistics: boardGameStatistics),
+                  const SizedBox(width: Dimensions.standardSpacing),
+                  _LastWinnerText(boardGameStatistics: boardGameStatistics),
+                  const SizedBox(width: Dimensions.standardSpacing),
+                  Expanded(child: _LastTimePlayed(boardGameStatistics: boardGameStatistics)),
                 ],
               ),
               const SizedBox(height: Dimensions.doubleStandardSpacing),
@@ -260,7 +250,7 @@ class _LastWinnerText extends StatelessWidget {
           const WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: Text(
-              'points',
+              'points on',
               style: TextStyle(
                 fontSize: Dimensions.smallFontSize,
                 fontWeight: FontWeight.normal,
@@ -306,14 +296,18 @@ class _LastTimePlayed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Row(
       children: <Widget>[
         CalendarCard(boardGameStatistics?.lastPlayed),
-        const SizedBox(height: Dimensions.standardSpacing),
-        ItemPropertyValue(
-          boardGameStatistics?.lastPlayed?.toDaysAgo(),
+        const SizedBox(width: Dimensions.standardSpacing),
+        Flexible(
+          child: Text(
+            boardGameStatistics?.lastPlayed?.toDaysAgo() ?? '',
+            style: const TextStyle(
+              fontSize: Dimensions.smallFontSize,
+              fontWeight: FontWeight.normal,
+            ),                    
+          ),
         ),
       ],
     );

@@ -13,7 +13,6 @@ class AppText {
   static const Edit = 'Edit';
   
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
-  static const playthroughsStatisticsPageLastTimePlayedSectionTitle = 'Last time played';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
   static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle = 'Games % by player count';
   static const playthroughsStatisticsPageQuickStatsSectionTitle = 'Quick Stats';
