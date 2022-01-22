@@ -186,7 +186,7 @@ class _PlayerCountPercentageChartState extends State<_PlayerCountPercentageChart
                     in widget.boardGameStatistics.playerCountPercentage!.entries)
                   PieChartSectionData(
                     value: playeCountPercentage.value,
-                    title: '${(playeCountPercentage.value * 100).toStringAsPrecision(2)}%',
+                    title: '${(playeCountPercentage.value * 100).toStringAsFixed(0)}%',
                     color: playerCountChartColor[playeCountPercentage.key],
                   ),
               ],
@@ -361,13 +361,13 @@ class _QuickStats extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _StatisticsItem(
-              value: boardGameStatistics?.averageScore?.toString() ?? '-',
+              value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
               icon: Icons.calculate,
               iconColor: AppTheme.purpleColor,
               subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgScore,
             ),
             _StatisticsItem(
-              value: boardGameStatistics?.averageNumberOfPlayers?.toString() ?? '-',
+              value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
               icon: Icons.person,
               iconColor: AppTheme.greenColor,
               subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlayerCount,
