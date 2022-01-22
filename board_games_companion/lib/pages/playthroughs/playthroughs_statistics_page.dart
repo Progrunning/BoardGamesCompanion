@@ -392,7 +392,7 @@ class _TopScores extends StatelessWidget {
     final List<Player> keys = boardGameStatistics.topScoreres!.keys.toList();
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      itemCount: min(boardGameStatistics.topScoreres!.length, 5),
+      itemCount: boardGameStatistics.topScoreres!.length,
       separatorBuilder: (context, index) {
         return const SizedBox(width: Dimensions.doubleStandardSpacing);
       },

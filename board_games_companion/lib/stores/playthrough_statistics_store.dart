@@ -26,6 +26,8 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
   final ScoreService _scoreService;
   final PlaythroughService _playthroughService;
 
+  static const int _maxNumberOfTopScoresToDisplay = 5;
+
   final Map<String, BoardGameStatistics> _boardGamesStatistics = {};
   Map<String, BoardGameStatistics> get boardGamesStatistics => _boardGamesStatistics;
 
@@ -101,17 +103,23 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
             boardGameStatistics.averageScore =
                 playerScores.reduce((a, b) => a + b) / playerScores.length;
 
-            boardGameStatistics.topScoreres = {
-              for (final Score score in playerScoresCollection)
-                playersById[score.playerId]!: score.value!
-            };
+            boardGameStatistics.topScoreres = {};
+            for (final Score score in playerScoresCollection) {
+              if (boardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
+                final Player player = playersById[score.playerId]!;
+                if (boardGameStatistics.topScoreres!.containsKey(player)) {
+                  continue;
+                }
+
+                boardGameStatistics.topScoreres![player] = score.value!;
+              }
+
+              // TODO Add Personal Best logic
+            }
           }
         }
 
-        _updatePlayerCountPercentage(
-          finishedPlaythroughs,
-          boardGameStatistics,
-        );
+        _updatePlayerCountPercentage(finishedPlaythroughs, boardGameStatistics);
 
         final int allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
             .map((p) => p.endDate!.difference(p.startDate).inSeconds)
@@ -175,8 +183,9 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
             finishedPlaythroughs
                 .map((Playthrough playthrough) => playthrough.playerIds.length)
                 .toList()
-                ..sort((int numberOfPlayersA, int numberOfPlayersB) => numberOfPlayersA.compareTo(numberOfPlayersB)),
-            (int numberOfPlayers) => numberOfPlayers)        
-        .map((key, value) => MapEntry(key, value.length / finishedPlaythroughs.length));        
+              ..sort((int numberOfPlayersA, int numberOfPlayersB) =>
+                  numberOfPlayersA.compareTo(numberOfPlayersB)),
+            (int numberOfPlayers) => numberOfPlayers)
+        .map((key, value) => MapEntry(key, value.length / finishedPlaythroughs.length));
   }
 }
