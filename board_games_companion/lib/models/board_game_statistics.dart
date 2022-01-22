@@ -59,4 +59,6 @@ class BoardGameStatistics {
   }
 
   Map<Player, String>? topScoreres;
+
+  Map<int, double>? playerCountPercentage;
 }

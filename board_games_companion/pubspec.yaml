@@ -27,6 +27,7 @@ dependencies:
   firebase_core: ^1.7.0
   firebase_crashlytics: ^2.2.2
   firebase_analytics: ^8.3.3
+  fl_chart: ^0.41.0
   flutter_lints: ^1.0.4
   flutter_polygon: ^0.2.0
   flutter_svg: ^0.22.0

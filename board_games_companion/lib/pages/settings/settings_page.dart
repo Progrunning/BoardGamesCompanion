@@ -3,10 +3,10 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/strings.dart';
 import '../../mixins/sync_collection.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
@@ -153,7 +153,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
           actions: <Widget>[
             TextButton(
               child: const Text(
-                Strings.Cancel,
+                AppText.Cancel,
                 style: TextStyle(color: AppTheme.accentColor),
               ),
               onPressed: () {

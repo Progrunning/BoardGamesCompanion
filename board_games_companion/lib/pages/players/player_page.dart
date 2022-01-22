@@ -1,12 +1,11 @@
-import 'package:board_games_companion/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/strings.dart';
 import '../../common/styles.dart';
 import '../../models/hive/player.dart';
 import '../../stores/players_store.dart';
@@ -16,6 +15,7 @@ import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
+import '../home_page.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({
@@ -217,7 +217,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               elevation: Dimensions.defaultElevation,
               actions: <Widget>[
                 TextButton(
-                  child: const Text(Strings.Cancel),
+                  child: const Text(AppText.Cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -276,7 +276,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(Strings.Cancel),
+              child: const Text(AppText.Cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -1,21 +1,21 @@
 import 'dart:math' as math;
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/strings.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../playthroughs/playthroughs_page.dart';
 import 'edit_playthrouhg_view_model.dart';
 
 enum UpdateScoreMethod {
@@ -146,7 +146,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
           actions: <Widget>[
             TextButton(
               child: const Text(
-                Strings.Cancel,
+                AppText.Cancel,
                 style: TextStyle(color: AppTheme.accentColor),
               ),
               onPressed: () {
@@ -155,7 +155,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
             ),
             TextButton(
               child: const Text(
-                Strings.Delete,
+                AppText.Delete,
                 style: TextStyle(color: AppTheme.defaultTextColor),
               ),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
@@ -186,7 +186,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
             actions: <Widget>[
               TextButton(
                 child: const Text(
-                  Strings.Cancel,
+                  AppText.Cancel,
                   style: TextStyle(
                     color: AppTheme.accentColor,
                   ),
@@ -643,7 +643,7 @@ class _ActionButtons extends StatelessWidget {
           const Expanded(child: SizedBox.shrink()),
           if (!viewModel.playthoughEnded) ...[
             IconAndTextButton(
-              title: Strings.Stop,
+              title: AppText.Stop,
               icon: const DefaultIcon(
                 Icons.stop,
               ),

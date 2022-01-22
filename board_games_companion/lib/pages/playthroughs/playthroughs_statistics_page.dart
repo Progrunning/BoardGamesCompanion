@@ -1,7 +1,11 @@
+import 'dart:math';
+
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
@@ -89,9 +93,9 @@ class _Statistics extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: const <Widget>[
-                  ItemPropertyTitle('Last winner'),
+                  ItemPropertyTitle(AppText.playthroughsStatisticsPageLastWinnerSectionTitle),
                   Expanded(child: SizedBox.shrink()),
-                  ItemPropertyTitle('Last time played'),
+                  ItemPropertyTitle(AppText.playthroughsStatisticsPageLastTimePlayedSectionTitle),
                 ],
               ),
               const SizedBox(height: Dimensions.halfStandardSpacing),
@@ -111,22 +115,114 @@ class _Statistics extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: Dimensions.doubleStandardSpacing),
-              const ItemPropertyTitle('Quick stats'),
+              const ItemPropertyTitle(AppText.playthroughsStatisticsPageQuickStatsSectionTitle),
               const SizedBox(height: Dimensions.halfStandardSpacing),
               _QuickStats(boardGameStatistics: boardGameStatistics),
               if (boardGameStatistics?.topScoreres?.isNotEmpty ?? false) ...<Widget>[
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                const ItemPropertyTitle('Top Scorers'),
+                const ItemPropertyTitle(AppText.playthroughsStatisticsPageTopFiveSectionTitle),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 SizedBox(
                   height: 140,
                   child: _TopScores(boardGameStatistics: boardGameStatistics!),
                 ),
               ],
+              if (boardGameStatistics?.playerCountPercentage?.isNotEmpty ?? false) ...<Widget>[
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                const ItemPropertyTitle(
+                    AppText.playthroughsStatisticsPagePlayerCountPercentageSectionTitle),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
+                _PlayerCountPercentageChart(boardGameStatistics: boardGameStatistics!),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+              ],
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class _PlayerCountPercentageChart extends StatefulWidget {
+  const _PlayerCountPercentageChart({
+    required this.boardGameStatistics,
+    Key? key,
+  }) : super(key: key);
+
+  final BoardGameStatistics boardGameStatistics;
+
+  @override
+  State<_PlayerCountPercentageChart> createState() => _PlayerCountPercentageChartState();
+}
+
+class _PlayerCountPercentageChartState extends State<_PlayerCountPercentageChart> {
+  late final Map<int, Color> playerCountChartColor;
+
+  @override
+  void initState() {
+    super.initState();
+
+    playerCountChartColor = {};
+    int i = 0;
+    for (final MapEntry<int, double> playeCountPercentage
+        in widget.boardGameStatistics.playerCountPercentage!.entries) {
+      playerCountChartColor[playeCountPercentage.key] =
+          AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          height: 160,
+          width: 160,
+          child: PieChart(
+            PieChartData(
+              sections: <PieChartSectionData>[
+                for (final MapEntry<int, double> playeCountPercentage
+                    in widget.boardGameStatistics.playerCountPercentage!.entries)
+                  PieChartSectionData(
+                    value: playeCountPercentage.value,
+                    title: '${(playeCountPercentage.value * 100).toStringAsPrecision(2)}%',
+                    color: playerCountChartColor[playeCountPercentage.key],
+                  ),
+              ],
+            ),
+            swapAnimationDuration: const Duration(milliseconds: 150),
+            swapAnimationCurve: Curves.linear,
+          ),
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            for (final MapEntry<int, double> playeCountPercentage
+                in widget.boardGameStatistics.playerCountPercentage!.entries)
+              Padding(
+                padding: const EdgeInsets.only(top: Dimensions.standardSpacing),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: playerCountChartColor[playeCountPercentage.key],
+                      ),
+                    ),
+                    const SizedBox(width: Dimensions.halfStandardSpacing),
+                    Text(
+                        '${playeCountPercentage.key} player${playeCountPercentage.key > 1 ? "s" : ""}'),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -212,10 +308,9 @@ class _LastTimePlayed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        CalendarCard(
-          boardGameStatistics?.lastPlayed,
-        ),
+        CalendarCard(boardGameStatistics?.lastPlayed),
         const SizedBox(height: Dimensions.standardSpacing),
         ItemPropertyValue(
           boardGameStatistics?.lastPlayed?.toDaysAgo(),
@@ -243,21 +338,21 @@ class _QuickStats extends StatelessWidget {
               value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
               icon: Icons.insert_chart,
               iconColor: AppTheme.accentColor,
-              subtitle: 'Played games',
+              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlayedGames,
             ),
             const Expanded(child: SizedBox.shrink()),
             _StatisticsItem(
               value: boardGameStatistics?.highscore?.toString() ?? '-',
               icon: Icons.show_chart,
               iconColor: Colors.red,
-              subtitle: 'Highscore',
+              subtitle: AppText.playthroughsStatisticsPageQuickStatsHighscore,
             ),
             const Expanded(child: SizedBox.shrink()),
             _StatisticsItem(
               value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
               icon: Icons.hourglass_empty,
               iconColor: Colors.blue,
-              subtitle: 'Avg. playtime',
+              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlaytime,
             ),
           ],
         ),
@@ -268,14 +363,14 @@ class _QuickStats extends StatelessWidget {
             _StatisticsItem(
               value: boardGameStatistics?.averageScore?.toString() ?? '-',
               icon: Icons.calculate,
-              iconColor: AppTheme.pinkColor,
-              subtitle: 'Avg. score',
+              iconColor: AppTheme.purpleColor,
+              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgScore,
             ),
             _StatisticsItem(
               value: boardGameStatistics?.averageNumberOfPlayers?.toString() ?? '-',
               icon: Icons.person,
               iconColor: AppTheme.greenColor,
-              subtitle: 'Avg. player count',
+              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlayerCount,
             ),
           ],
         ),
@@ -297,7 +392,7 @@ class _TopScores extends StatelessWidget {
     final List<Player> keys = boardGameStatistics.topScoreres!.keys.toList();
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      itemCount: boardGameStatistics.topScoreres!.length,
+      itemCount: min(boardGameStatistics.topScoreres!.length, 5),
       separatorBuilder: (context, index) {
         return const SizedBox(width: Dimensions.doubleStandardSpacing);
       },

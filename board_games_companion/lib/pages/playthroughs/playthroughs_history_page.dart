@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/strings.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
@@ -182,7 +182,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconAndTextButton(
-              title: Strings.Edit,
+              title: AppText.Edit,
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,
               onPressed: () => Navigator.pushNamed(
