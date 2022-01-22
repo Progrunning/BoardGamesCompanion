@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
+import 'package:tuple/tuple.dart';
 
 import '../common/enums/playthrough_status.dart';
 import '../extensions/scores_extensions.dart';
@@ -104,16 +105,12 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
             boardGameStatistics.averageScore =
                 playerScores.reduce((a, b) => a + b) / playerScores.length;
 
-            boardGameStatistics.topScoreres = {};
+            boardGameStatistics.topScoreres = [];
             boardGameStatistics.personalBests = {};
             for (final Score score in playerScoresCollection) {
               final Player player = playersById[score.playerId]!;
               if (boardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
-                if (boardGameStatistics.topScoreres!.containsKey(player)) {
-                  continue;
-                }
-
-                boardGameStatistics.topScoreres![player] = score.value!;
+                boardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
               }
 
               if (boardGameStatistics.personalBests!.containsKey(player)) {

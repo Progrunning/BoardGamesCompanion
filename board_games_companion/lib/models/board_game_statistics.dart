@@ -1,3 +1,5 @@
+import 'package:tuple/tuple.dart';
+
 import 'hive/player.dart';
 import 'player_score.dart';
 
@@ -58,7 +60,7 @@ class BoardGameStatistics {
     }
   }
 
-  Map<Player, String>? topScoreres;
+  List<Tuple2<Player, String>>? topScoreres;
   
   Map<Player, String>? personalBests;
 

@@ -415,7 +415,6 @@ class _TopScores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Player> keys = boardGameStatistics.topScoreres!.keys.toList();
     return SizedBox(
       height: Dimensions.smallPlayerAvatarWithScoreSize,
       child: ListView.separated(
@@ -426,9 +425,9 @@ class _TopScores extends StatelessWidget {
         },
         itemBuilder: (context, index) {
           return PlayerScoreRankAvatar(
-            player: keys[index],
+            player: boardGameStatistics.topScoreres![index].item1,
             rank: index + 1,
-            score: boardGameStatistics.topScoreres![keys[index]],
+            score: boardGameStatistics.topScoreres![index].item2,
             useHeroAnimation: false,
           );
         },
