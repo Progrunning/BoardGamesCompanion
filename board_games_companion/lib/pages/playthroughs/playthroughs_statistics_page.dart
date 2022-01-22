@@ -87,13 +87,24 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                   _SliverSectionWrapper(
                     child: _PlayerCountPercentageChart(boardGameStatistics: boardGameStatistics!),
                   ),
-                if (boardGameStatistics?.personalBests?.isNotEmpty ?? false)
+                if (boardGameStatistics?.personalBests?.isNotEmpty ?? false) ...<Widget>[
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const <Widget>[
+                        ItemPropertyTitle(
+                            AppText.playthroughsStatisticsPagePersonalBestsSectionTitle),
+                        SizedBox(height: Dimensions.halfStandardSpacing),
+                      ],
+                    ),
+                  ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                     sliver: SliverGrid.extent(
                       crossAxisSpacing: Dimensions.standardSpacing,
                       mainAxisSpacing: Dimensions.standardSpacing,
-                      maxCrossAxisExtent: Dimensions.smallPlayerAvatarSize,
+                      maxCrossAxisExtent: Dimensions.smallPlayerAvatarWithScoreSize,
+                      childAspectRatio: 0.9,
                       children: <Widget>[
                         for (final MapEntry<Player, String> personalBest
                             in boardGameStatistics!.personalBests!.entries)
@@ -105,6 +116,8 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                       ],
                     ),
                   ),
+                ],
+                const SliverPadding(padding: EdgeInsets.only(bottom: Dimensions.standardSpacing)),
               ],
             );
           },
@@ -404,7 +417,7 @@ class _TopScores extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Player> keys = boardGameStatistics.topScoreres!.keys.toList();
     return SizedBox(
-      height: 140,
+      height: Dimensions.smallPlayerAvatarWithScoreSize,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: boardGameStatistics.topScoreres!.length,

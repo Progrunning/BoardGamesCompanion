@@ -30,7 +30,8 @@ class Dimensions {
   static const int edgeNumberOfHexagon = 6;
 
   static const double defaultPlayerAvatarSize = 150;
-  static const double smallPlayerAvatarSize = 100;
+  static const double smallPlayerAvatarSize = 100;  
+  static const double smallPlayerAvatarWithScoreSize = 140;  
 
   static const double defaultButtonIconSize = 20;
   static const double defaultCheckboxSize = 24;
