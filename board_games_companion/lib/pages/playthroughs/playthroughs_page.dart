@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/enums/collection_type.dart';
 import '../../extensions/page_controller_extensions.dart';
-import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
-import '../../stores/board_game_playthroughs_store.dart';
-import '../../stores/playthrough_store.dart';
 import '../../stores/playthroughs_store.dart';
 import '../../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
@@ -21,6 +17,8 @@ import 'playthroughs_statistics_page.dart';
 
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
+    required this.viewModel,
+    required this.playthroughsStore,
     required this.boardGameDetails,
     required this.collectionType,
     Key? key,
@@ -30,31 +28,22 @@ class PlaythroughsPage extends StatefulWidget {
 
   final BoardGameDetails boardGameDetails;
   final CollectionType collectionType;
+  final PlaythroughsLogGameViewModel viewModel;
+  final PlaythroughsStore playthroughsStore;
 
   @override
   _PlaythroughsPageState createState() => _PlaythroughsPageState();
 }
 
 class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
-  late BoardGamePlaythroughsStore boardGamePlaythoughsStore;
   late PageController pageController;
-  late PlaythroughsStore playthroughsStore;
-  late PlaythroughStore playthroughStore;
-  late PlaythroughsLogGameViewModel playthroughsLogGameViewModel;
+  int _pageIndex = 0;
 
   @override
   void initState() {
     super.initState();
-
-    boardGamePlaythoughsStore = Provider.of<BoardGamePlaythroughsStore>(
-      context,
-      listen: false,
-    );
-    pageController = PageController(
-      initialPage: boardGamePlaythoughsStore.boardGamePlaythroughPageIndex,
-    );
-    playthroughsStore = getIt<PlaythroughsStore>();
-    playthroughsLogGameViewModel = getIt<PlaythroughsLogGameViewModel>();
+    
+    pageController = PageController(initialPage: _pageIndex);
   }
 
   @override
@@ -79,7 +68,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
         child: PageContainer(
           child: PageView(
             controller: pageController,
-            onPageChanged: (index) => _onTabPageChanged(index, boardGamePlaythoughsStore),
+            onPageChanged: (index) => _onTabPageChanged(index),
             children: <Widget>[
               PlaythroughStatistcsPage(
                 boardGameDetails: widget.boardGameDetails,
@@ -87,33 +76,29 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
               ),
               PlaythroughsHistoryPage(
                 boardGameDetails: widget.boardGameDetails,
-                playthroughsStore: playthroughsStore,
+                playthroughsStore: widget.playthroughsStore,
               ),
               PlaythroughsLogGamePage(
                 boardGameDetails: widget.boardGameDetails,
-                playthroughsLogGameViewModel: playthroughsLogGameViewModel,
+                playthroughsLogGameViewModel: widget.viewModel,
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Consumer<BoardGamePlaythroughsStore>(
-        builder: (_, store, __) {
-          return BottomNavigationBar(
-            backgroundColor: AppTheme.bottomTabBackgroundColor,
-            items: <BottomNavigationBarItem>[
-              CustomBottomNavigationBarItem('Stats', Icons.multiline_chart),
-              CustomBottomNavigationBarItem('History', Icons.history),
-              CustomBottomNavigationBarItem('Log Game', Icons.casino),
-            ],
-            onTap: (index) async {
-              await _onTabChanged(index, pageController);
-            },
-            currentIndex: store.boardGamePlaythroughPageIndex,
-            unselectedItemColor: AppTheme.secondaryTextColor,
-            selectedItemColor: AppTheme.defaultTextColor,
-          );
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppTheme.bottomTabBackgroundColor,
+        items: <BottomNavigationBarItem>[
+          CustomBottomNavigationBarItem('Stats', Icons.multiline_chart),
+          CustomBottomNavigationBarItem('History', Icons.history),
+          CustomBottomNavigationBarItem('Log Game', Icons.casino),
+        ],
+        onTap: (index) async {
+          await _onTabChanged(index, pageController);
         },
+        currentIndex: _pageIndex,
+        unselectedItemColor: AppTheme.secondaryTextColor,
+        selectedItemColor: AppTheme.defaultTextColor,
       ),
     );
   }
@@ -122,8 +107,10 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage> {
     await pageController.animateToTab(index);
   }
 
-  void _onTabPageChanged(int pageIndex, BoardGamePlaythroughsStore boardGamePlaythroughsStore) {
-    boardGamePlaythroughsStore.boardGamePlaythroughPageIndex = pageIndex;
+  void _onTabPageChanged(int pageIndex) {
+    setState(() {
+      _pageIndex = pageIndex;
+    });
   }
 
   Future<void> _navigateToBoardGameDetails(

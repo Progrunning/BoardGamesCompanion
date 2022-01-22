@@ -36,7 +36,6 @@ import 'services/playthroughs_service.dart';
 import 'services/preferences_service.dart';
 import 'services/score_service.dart';
 import 'services/user_service.dart';
-import 'stores/board_game_playthroughs_store.dart';
 import 'stores/board_games_filters_store.dart';
 import 'stores/board_games_store.dart';
 import 'stores/home_store.dart';
@@ -156,9 +155,6 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<PlaythroughsStore>(
           create: (context) => getIt<PlaythroughsStore>(),
         ),
-        ChangeNotifierProvider<BoardGamePlaythroughsStore>(
-          create: (context) => BoardGamePlaythroughsStore(),
-        ),
         ChangeNotifierProvider<BoardGamesFiltersStore>(
           create: (context) {
             final BoardGamesFiltersService boardGamesFiltersService =
@@ -178,10 +174,7 @@ class App extends StatelessWidget {
               playthroughService,
               scoreService,
               playerService,
-              Provider.of<BoardGamesFiltersStore>(
-                context,
-                listen: false,
-              ),
+              Provider.of<BoardGamesFiltersStore>(context, listen: false),
             );
 
             boardGamesStore.loadBoardGames();
@@ -194,18 +187,7 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
             PlaythroughStatisticsStore>(
-          create: (context) {
-            final PlayerService playerService = getIt<PlayerService>();
-            final ScoreService scoreService = getIt<ScoreService>();
-            final PlaythroughService playthroughService = getIt<PlaythroughService>();
-            final boardGamesStore = PlaythroughStatisticsStore(
-              playerService,
-              scoreService,
-              playthroughService,
-            );
-
-            return boardGamesStore;
-          },
+          create: (context) => getIt<PlaythroughStatisticsStore>(),
           update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
             playthroughStatisticsStore!.loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
             return playthroughStatisticsStore;

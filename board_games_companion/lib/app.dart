@@ -14,6 +14,7 @@ import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrouhg_view_model.dart';
 import 'pages/home_page.dart';
 import 'pages/players/player_page.dart';
+import 'pages/playthroughs/playthroughs_log_game_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
@@ -99,7 +100,12 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           final _arguments =
               ModalRoute.of(context)!.settings.arguments as PlaythroughsPageArguments;
 
+          final playthroughsStore = getIt<PlaythroughsStore>();
+          final viewModel = getIt<PlaythroughsLogGameViewModel>();
+
           return PlaythroughsPage(
+            viewModel: viewModel,
+            playthroughsStore: playthroughsStore,
             boardGameDetails: _arguments.boardGameDetails,
             collectionType: _arguments.collectionType,
           );

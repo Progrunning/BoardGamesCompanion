@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
+import 'package:injectable/injectable.dart';
 
 import '../common/enums/playthrough_status.dart';
 import '../extensions/scores_extensions.dart';
@@ -15,6 +16,7 @@ import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
 import '../services/score_service.dart';
 
+@singleton
 class PlaythroughStatisticsStore extends ChangeNotifier {
   PlaythroughStatisticsStore(
     this._playerService,
@@ -28,8 +30,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
   static const int _maxNumberOfTopScoresToDisplay = 5;
 
-  final Map<String, BoardGameStatistics> _boardGamesStatistics = {};
-  Map<String, BoardGameStatistics> get boardGamesStatistics => _boardGamesStatistics;
+  Map<String, BoardGameStatistics> boardGamesStatistics = {};
 
   Future<void> loadBoardGamesStatistics(List<BoardGameDetails>? allBoardGames) async {
     if (allBoardGames?.isEmpty ?? true) {
@@ -50,9 +51,9 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
     final Map<String, List<Playthrough>> boardGamePlaythroughsGroupedByBoardGameId =
         groupBy(boardGamePlaythroughs, (key) => key.boardGameId);
     for (final boardGameId in boardGameDetailsMapById.keys) {
-      var boardGameStatistics = _boardGamesStatistics[boardGameId];
+      var boardGameStatistics = boardGamesStatistics[boardGameId];
       if (boardGameStatistics == null) {
-        boardGameStatistics = _boardGamesStatistics[boardGameId] = BoardGameStatistics();
+        boardGameStatistics = boardGamesStatistics[boardGameId] = BoardGameStatistics();
       }
 
       if (!boardGamePlaythroughsGroupedByBoardGameId.containsKey(boardGameId)) {
@@ -118,7 +119,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
               if (boardGameStatistics.personalBests!.containsKey(player)) {
                 continue;
               }
-              
+
               boardGameStatistics.personalBests![player] = score.value!;
             }
           }
