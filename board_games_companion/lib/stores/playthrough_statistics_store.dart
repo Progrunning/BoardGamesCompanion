@@ -13,6 +13,7 @@ import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
 import '../models/player_score.dart';
+import '../models/player_statistics.dart';
 import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
 import '../services/score_service.dart';
@@ -99,6 +100,8 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
             ..sort((Score a, Score b) =>
                 num.tryParse(b.value!)?.compareTo(num.tryParse(a.value!) ?? 0) ?? -1);
           if (playerScoresCollection.isNotEmpty) {
+            final Map<String, List<Score>> playerScoresGrouped =
+                groupBy(playerScoresCollection, (Score score) => score.playerId);
             final Iterable<num> playerScores =
                 playerScoresCollection.map((s) => num.tryParse(s.value!)!);
             boardGameStatistics.highscore = playerScores.reduce(max);
@@ -106,18 +109,26 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
                 playerScores.reduce((a, b) => a + b) / playerScores.length;
 
             boardGameStatistics.topScoreres = [];
-            boardGameStatistics.personalBests = {};
+            boardGameStatistics.playersStatistics = [];
             for (final Score score in playerScoresCollection) {
               final Player player = playersById[score.playerId]!;
               if (boardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
                 boardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
               }
 
-              if (boardGameStatistics.personalBests!.containsKey(player)) {
+              if (boardGameStatistics.playersStatistics!
+                  .any((PlayerStatistics playerStats) => playerStats.player == player)) {
                 continue;
               }
 
-              boardGameStatistics.personalBests![player] = score.value!;
+              final PlayerStatistics playerStatistics = PlayerStatistics(player);
+              playerStatistics.personalBestScore = num.tryParse(score.value!);
+              playerStatistics.numberOfGamesPlayed = playerScoresGrouped[player.id]?.length ?? 0;
+              playerStatistics.averageScore = playerScoresGrouped[player.id]!
+                      .map((Score score) => num.tryParse(score.value!)!)
+                      .reduce((a, b) => a + b) /
+                  playerStatistics.numberOfGamesPlayed!;
+              boardGameStatistics.playersStatistics!.add(playerStatistics);
             }
           }
         }

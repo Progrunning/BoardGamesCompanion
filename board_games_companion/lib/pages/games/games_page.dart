@@ -442,22 +442,16 @@ class _EmptyState extends State<_Empty> with SyncCollection {
                   children: <InlineSpan>[
                     TextSpan(
                       text: 'Nothing to worry about though! ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                       text:
                           'Follow the below instructions to fill up this screen with board games.\n\n',
                     ),
-                    TextSpan(
-                      text: 'Use the bottom ',
-                    ),
+                    TextSpan(text: 'Use the bottom '),
                     TextSpan(
                       text: 'Search',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                       text:
@@ -466,25 +460,19 @@ class _EmptyState extends State<_Empty> with SyncCollection {
                   ],
                 ),
                 textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontSize: Dimensions.mediumFontSize,
-                ),
+                style: TextStyle(fontSize: Dimensions.mediumFontSize),
               ),
               const BggCommunityMemberText(),
               BggCommunityMemberUserNameTextField(
                 controller: _bggUserNameController,
                 onSubmit: () async => syncCollection(context, _bggUserNameController.text),
               ),
-              const SizedBox(
-                height: Dimensions.standardSpacing,
-              ),
+              const SizedBox(height: Dimensions.standardSpacing),
               Align(
                 alignment: Alignment.centerRight,
                 child: SyncButton(usernameCallback: () => _bggUserNameController.text),
               ),
-              const SizedBox(
-                height: Dimensions.standardSpacing,
-              ),
+              const SizedBox(height: Dimensions.standardSpacing),
             ],
           ),
         ),

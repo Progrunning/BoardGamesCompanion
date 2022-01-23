@@ -18,14 +18,10 @@ class BggCommunityMemberText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          const TextSpan(
-            text: "If you're a member of the ",
-          ),
+          const TextSpan(text: "If you're a member of the "),
           TextSpan(
             text: 'BoardGameGeek',
-            style: const TextStyle(
-              decoration: TextDecoration.underline,
-            ),
+            style: const TextStyle(decoration: TextDecoration.underline),
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
                 await LauncherHelper.launchUri(
@@ -39,19 +35,13 @@ class BggCommunityMemberText extends StatelessWidget {
           ),
           const TextSpan(
             text: 'user name',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          const TextSpan(
-            text: ' in the below field, to sync down your collection.',
-          ),
+          const TextSpan(text: ' in the below field, to sync down your collection.'),
         ],
       ),
       textAlign: TextAlign.justify,
-      style: TextStyle(
-        fontSize: fontSize,
-      ),
+      style: TextStyle(fontSize: fontSize),
     );
   }
 }

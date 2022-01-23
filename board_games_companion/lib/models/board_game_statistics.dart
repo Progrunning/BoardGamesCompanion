@@ -2,6 +2,7 @@ import 'package:tuple/tuple.dart';
 
 import 'hive/player.dart';
 import 'player_score.dart';
+import 'player_statistics.dart';
 
 class BoardGameStatistics {
   DateTime? _lastPlayed;
@@ -62,7 +63,7 @@ class BoardGameStatistics {
 
   List<Tuple2<Player, String>>? topScoreres;
   
-  Map<Player, String>? personalBests;
+  List<PlayerStatistics>? playersStatistics;
 
   Map<int, double>? playerCountPercentage;
   

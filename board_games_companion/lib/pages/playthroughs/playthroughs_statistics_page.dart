@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +14,7 @@ import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/board_game_details.dart';
-import '../../models/hive/player.dart';
+import '../../models/player_statistics.dart';
 import '../../stores/playthrough_statistics_store.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
@@ -87,35 +89,21 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                   _SliverSectionWrapper(
                     child: _PlayerCountPercentageChart(boardGameStatistics: boardGameStatistics!),
                   ),
-                if (boardGameStatistics?.personalBests?.isNotEmpty ?? false) ...<Widget>[
+                if (boardGameStatistics?.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
                   SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
-                        ItemPropertyTitle(
-                            AppText.playthroughsStatisticsPagePersonalBestsSectionTitle),
-                        SizedBox(height: Dimensions.halfStandardSpacing),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const <Widget>[
+                          ItemPropertyTitle(
+                              AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
+                          SizedBox(height: Dimensions.halfStandardSpacing),
+                        ],
+                      ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                    sliver: SliverGrid.extent(
-                      crossAxisSpacing: Dimensions.standardSpacing,
-                      mainAxisSpacing: Dimensions.standardSpacing,
-                      maxCrossAxisExtent: Dimensions.smallPlayerAvatarWithScoreSize,
-                      childAspectRatio: 0.9,
-                      children: <Widget>[
-                        for (final MapEntry<Player, String> personalBest
-                            in boardGameStatistics!.personalBests!.entries)
-                          PlayerScoreRankAvatar(
-                            player: personalBest.key,
-                            score: personalBest.value,
-                            useHeroAnimation: false,
-                          )
-                      ],
-                    ),
-                  ),
+                  _PlayersStatisticsSection(boardGameStatistics: boardGameStatistics!),
                 ],
                 const SliverPadding(padding: EdgeInsets.only(bottom: Dimensions.standardSpacing)),
               ],
@@ -123,6 +111,102 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
           },
         );
       },
+    );
+  }
+}
+
+class _PlayersStatisticsSection extends StatelessWidget {
+  const _PlayersStatisticsSection({
+    Key? key,
+    required this.boardGameStatistics,
+  }) : super(key: key);
+
+  final BoardGameStatistics boardGameStatistics;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (_, index) {
+            final int itemIndex = index ~/ 2;
+            if (index.isEven) {
+              final PlayerStatistics playerStatistics =
+                  boardGameStatistics.playersStatistics![itemIndex];
+              return SizedBox(
+                height: Dimensions.smallPlayerAvatarSize,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    SizedBox(
+                      height: Dimensions.smallPlayerAvatarSize,
+                      width: Dimensions.smallPlayerAvatarSize,
+                      child: PlayerAvatar(
+                        playerStatistics.player,
+                        useHeroAnimation: false,
+                      ),
+                    ),
+                    const Expanded(child: SizedBox.shrink()),
+                    if (playerStatistics.personalBestScore != null) ...<Widget>[
+                      Center(
+                        child: _StatisticsItem(
+                          value: playerStatistics.personalBestScore.toString(),
+                          valueTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: Dimensions.extraLargeFontSize,
+                          ),
+                          icon: Icons.poll,
+                          iconColor: AppTheme.chartColorPallete[0],
+                          iconSize: 38,
+                          subtitle: 'Personal Best',
+                        ),
+                      ),
+                      const Expanded(child: SizedBox.shrink()),
+                    ],
+                    if (playerStatistics.averageScore != null) ...<Widget>[
+                      Center(
+                        child: _StatisticsItem(
+                          value: playerStatistics.averageScore!.toStringAsFixed(0),
+                          valueTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: Dimensions.extraLargeFontSize,
+                          ),
+                          icon: Icons.calculate,
+                          iconColor: AppTheme.chartColorPallete[3],
+                          iconSize: 38,
+                          subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgScore,
+                        ),
+                      ),
+                      const Expanded(child: SizedBox.shrink()),
+                    ],
+                    if (playerStatistics.numberOfGamesPlayed != null) ...<Widget>[
+                      Center(
+                        child: _StatisticsItem(
+                          value: playerStatistics.numberOfGamesPlayed.toString(),
+                          valueTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: Dimensions.extraLargeFontSize,
+                          ),
+                          icon: Icons.casino,
+                          iconColor: AppTheme.chartColorPallete[6],
+                          iconSize: 38,
+                          subtitle: 'Games played',
+                        ),
+                      ),
+                      const Expanded(child: SizedBox.shrink()),
+                    ],
+                  ],
+                ),
+              );
+            }
+
+            return const Divider(height: Dimensions.standardSpacing);
+          },
+          childCount: max(0, boardGameStatistics.playersStatistics!.length * 2 - 1),
+        ),
+      ),
     );
   }
 }
@@ -363,21 +447,21 @@ class _QuickStatsSection extends StatelessWidget {
             _StatisticsItem(
               value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
               icon: Icons.insert_chart,
-              iconColor: AppTheme.accentColor,
+              iconColor: AppTheme.chartColorPallete[0],
               subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlayedGames,
             ),
             const Expanded(child: SizedBox.shrink()),
             _StatisticsItem(
               value: boardGameStatistics?.highscore?.toString() ?? '-',
               icon: Icons.show_chart,
-              iconColor: Colors.red,
+              iconColor: AppTheme.chartColorPallete[1],
               subtitle: AppText.playthroughsStatisticsPageQuickStatsHighscore,
             ),
             const Expanded(child: SizedBox.shrink()),
             _StatisticsItem(
               value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
               icon: Icons.hourglass_empty,
-              iconColor: Colors.blue,
+              iconColor: AppTheme.chartColorPallete[2],
               subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlaytime,
             ),
           ],
@@ -389,13 +473,13 @@ class _QuickStatsSection extends StatelessWidget {
             _StatisticsItem(
               value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
               icon: Icons.calculate,
-              iconColor: AppTheme.purpleColor,
+              iconColor: AppTheme.chartColorPallete[3],
               subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgScore,
             ),
             _StatisticsItem(
               value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
               icon: Icons.person,
-              iconColor: AppTheme.greenColor,
+              iconColor: AppTheme.chartColorPallete[5],
               subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlayerCount,
             ),
           ],
@@ -443,12 +527,16 @@ class _StatisticsItem extends StatelessWidget {
     required this.value,
     required this.subtitle,
     this.iconColor,
+    this.iconSize = 28,
+    this.valueTextStyle = const TextStyle(fontSize: Dimensions.largeFontSize),
   }) : super(key: key);
 
   final IconData icon;
   final Color? iconColor;
+  final double iconSize;
   final String value;
   final String subtitle;
+  final TextStyle valueTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -461,13 +549,10 @@ class _StatisticsItem extends StatelessWidget {
             Icon(
               icon,
               color: iconColor ?? IconTheme.of(context).color,
-              size: 28,
+              size: iconSize,
             ),
             const SizedBox(width: Dimensions.quarterStandardSpacing),
-            ItemPropertyValue(
-              value,
-              fontSize: Dimensions.largeFontSize,
-            ),
+            Text(value, style: valueTextStyle),
           ],
         ),
         ItemPropertyTitle(
