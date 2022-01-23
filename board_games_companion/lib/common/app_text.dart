@@ -15,6 +15,7 @@ class AppText {
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
   static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle = 'Games % by player count';
+  static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle = 'Games % won by player';
   static const playthroughsStatisticsPageQuickStatsSectionTitle = 'Quick Stats';
   static const playthroughsStatisticsPageQuickStatsAvgPlaytime = 'Avg. playtime';
   static const playthroughsStatisticsPageQuickStatsHighscore = 'Highscore';

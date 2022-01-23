@@ -14,11 +14,11 @@ import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/hive/player.dart';
 import '../../models/player_statistics.dart';
 import '../../stores/playthrough_statistics_store.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
-import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/player_score_rank_avatar.dart';
@@ -85,9 +85,10 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                       ],
                     ),
                   ),
-                if (boardGameStatistics?.playerCountPercentage?.isNotEmpty ?? false)
+                if ((boardGameStatistics?.playerCountPercentage?.isNotEmpty ?? false) &&
+                    (boardGameStatistics?.playerWinsPercentage?.isNotEmpty ?? false))
                   _SliverSectionWrapper(
-                    child: _PlayerCountPercentageChart(boardGameStatistics: boardGameStatistics!),
+                    child: _PlayerCharts(boardGameStatistics: boardGameStatistics!),
                   ),
                 if (boardGameStatistics?.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
                   SliverToBoxAdapter(
@@ -243,8 +244,8 @@ class _LastWinnerSection extends StatelessWidget {
   }
 }
 
-class _PlayerCountPercentageChart extends StatefulWidget {
-  const _PlayerCountPercentageChart({
+class _PlayerCharts extends StatefulWidget {
+  const _PlayerCharts({
     required this.boardGameStatistics,
     Key? key,
   }) : super(key: key);
@@ -252,21 +253,31 @@ class _PlayerCountPercentageChart extends StatefulWidget {
   final BoardGameStatistics boardGameStatistics;
 
   @override
-  State<_PlayerCountPercentageChart> createState() => _PlayerCountPercentageChartState();
+  State<_PlayerCharts> createState() => _PlayerChartsState();
 }
 
-class _PlayerCountPercentageChartState extends State<_PlayerCountPercentageChart> {
-  late final Map<int, Color> playerCountChartColor;
+class _PlayerChartsState extends State<_PlayerCharts> {
+  late final Map<int, Color> playerCountChartColors;
+  late final Map<Player, Color> playerWinsChartColors;
+
+  static const double _chartSize = 160;
 
   @override
   void initState() {
     super.initState();
 
-    playerCountChartColor = {};
+    playerCountChartColors = {};
+    playerWinsChartColors = {};
     int i = 0;
     for (final MapEntry<int, double> playeCountPercentage
         in widget.boardGameStatistics.playerCountPercentage!.entries) {
-      playerCountChartColor[playeCountPercentage.key] =
+      playerCountChartColors[playeCountPercentage.key] =
+          AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
+    }
+    i = 0;
+    for (final MapEntry<Player, double> playeWinsPercentage
+        in widget.boardGameStatistics.playerWinsPercentage!.entries) {
+      playerWinsChartColors[playeWinsPercentage.key] =
           AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
     }
   }
@@ -276,56 +287,123 @@ class _PlayerCountPercentageChartState extends State<_PlayerCountPercentageChart
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const ItemPropertyTitle(
-            AppText.playthroughsStatisticsPagePlayerCountPercentageSectionTitle),
+        Row(
+          children: const <Widget>[
+            ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayerCountPercentageSectionTitle),
+            Expanded(child: SizedBox.shrink()),
+            ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayerWinsPercentageSectionTitle),
+          ],
+        ),
         const SizedBox(height: Dimensions.halfStandardSpacing),
-        SizedBox(
-          height: 160,
-          width: 160,
-          child: PieChart(
-            PieChartData(
-              sections: <PieChartSectionData>[
+        Row(
+          children: <Widget>[
+            SizedBox(
+              height: _chartSize,
+              width: _chartSize,
+              child: PieChart(
+                PieChartData(
+                  sections: <PieChartSectionData>[
+                    for (final MapEntry<int, double> playeCountPercentage
+                        in widget.boardGameStatistics.playerCountPercentage!.entries)
+                      PieChartSectionData(
+                        value: playeCountPercentage.value,
+                        title: '${(playeCountPercentage.value * 100).toStringAsFixed(0)}%',
+                        color: playerCountChartColors[playeCountPercentage.key],
+                      ),
+                  ],
+                ),
+                swapAnimationDuration: const Duration(milliseconds: 150),
+                swapAnimationCurve: Curves.linear,
+              ),
+            ),
+            const Expanded(child: SizedBox.shrink()),
+            SizedBox(
+              height: _chartSize,
+              width: _chartSize,
+              child: PieChart(
+                PieChartData(
+                  sections: <PieChartSectionData>[
+                    for (final MapEntry<Player, double> playeWinsPercentage
+                        in widget.boardGameStatistics.playerWinsPercentage!.entries)
+                      PieChartSectionData(
+                        value: playeWinsPercentage.value,
+                        title: '${(playeWinsPercentage.value * 100).toStringAsFixed(0)}%',
+                        color: playerWinsChartColors[playeWinsPercentage.key],
+                      ),
+                  ],
+                ),
+                swapAnimationDuration: const Duration(milliseconds: 150),
+                swapAnimationCurve: Curves.linear,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
                 for (final MapEntry<int, double> playeCountPercentage
                     in widget.boardGameStatistics.playerCountPercentage!.entries)
-                  PieChartSectionData(
-                    value: playeCountPercentage.value,
-                    title: '${(playeCountPercentage.value * 100).toStringAsFixed(0)}%',
-                    color: playerCountChartColor[playeCountPercentage.key],
+                  Padding(
+                    padding: const EdgeInsets.only(top: Dimensions.standardSpacing),
+                    child: Row(
+                      children: <Widget>[
+                        _ChartLegendBox(color: playerCountChartColors[playeCountPercentage.key]!),
+                        const SizedBox(width: Dimensions.halfStandardSpacing),
+                        Text(
+                            '${playeCountPercentage.key} player${playeCountPercentage.key > 1 ? "s" : ""}'),
+                      ],
+                    ),
                   ),
               ],
             ),
-            swapAnimationDuration: const Duration(milliseconds: 150),
-            swapAnimationCurve: Curves.linear,
-          ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            for (final MapEntry<int, double> playeCountPercentage
-                in widget.boardGameStatistics.playerCountPercentage!.entries)
-              Padding(
-                padding: const EdgeInsets.only(top: Dimensions.standardSpacing),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: playerCountChartColor[playeCountPercentage.key],
-                      ),
+            const Expanded(child: SizedBox.shrink()),
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                for (final MapEntry<Player, double> playerWinsPercentage
+                    in widget.boardGameStatistics.playerWinsPercentage!.entries)
+                  Padding(
+                    padding: const EdgeInsets.only(top: Dimensions.standardSpacing),
+                    child: Row(
+                      children: <Widget>[
+                        Text('${playerWinsPercentage.key.name}'),
+                        const SizedBox(width: Dimensions.halfStandardSpacing),
+                        _ChartLegendBox(color: playerWinsChartColors[playerWinsPercentage.key]!),
+                      ],
                     ),
-                    const SizedBox(width: Dimensions.halfStandardSpacing),
-                    Text(
-                        '${playeCountPercentage.key} player${playeCountPercentage.key > 1 ? "s" : ""}'),
-                  ],
-                ),
-              ),
+                  ),
+              ],
+            ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class _ChartLegendBox extends StatelessWidget {
+  const _ChartLegendBox({
+    required this.color,
+    Key? key,
+  }) : super(key: key);
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 16,
+      height: 16,
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        color: color,
+      ),
     );
   }
 }

@@ -67,5 +67,7 @@ class BoardGameStatistics {
 
   Map<int, double>? playerCountPercentage;
   
+  Map<Player, double>? playerWinsPercentage;
+  
   Map<Player, int>? playerWins;
 }

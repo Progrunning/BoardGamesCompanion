@@ -134,6 +134,12 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
         }
 
         _updatePlayerCountPercentage(finishedPlaythroughs, boardGameStatistics);
+        _updatePlayerWinsPercentage(
+          finishedPlaythroughs,
+          boardGameStatistics,
+          playthroughScoresByPlaythroughId,
+          playersById,
+        );
 
         final int allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
             .map((p) => p.endDate!.difference(p.startDate).inSeconds)
@@ -201,5 +207,71 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
                   numberOfPlayersA.compareTo(numberOfPlayersB)),
             (int numberOfPlayers) => numberOfPlayers)
         .map((key, value) => MapEntry(key, value.length / finishedPlaythroughs.length));
+  }
+
+  void _updatePlayerWinsPercentage(
+    List<Playthrough>? finishedPlaythroughs,
+    BoardGameStatistics boardGameStatistics,
+    Map<String, List<Score>> playthroughScoresByPlaythroughId,
+    Map<String, Player> playersById,
+  ) {
+    if (finishedPlaythroughs == null) {
+      return;
+    }
+
+    final Map<Player, int> playerWins = {};
+    for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
+      final List<Score>? playthroughScores =
+          playthroughScoresByPlaythroughId[finishedPlaythrough.id]
+            ?..sort((Score a, Score b) {
+              if (a.value == null && b.value == null) {
+                return 1;
+              }
+
+              if (a.value == null) {
+                return -1;
+              }
+
+              if (b.value == null) {
+                return 1;
+              }
+
+              final num? aNumber = num.tryParse(a.value!);
+              final num? bNumber = num.tryParse(b.value!);
+              if (aNumber == null && bNumber == null) {
+                return 1;
+              }
+
+              if (aNumber == null) {
+                return -1;
+              }
+
+              if (bNumber == null) {
+                return 1;
+              }
+
+              return bNumber.compareTo(aNumber);
+            });
+      if (playthroughScores?.isNotEmpty == null) {
+        continue;
+      }
+
+      final Player? winner = playersById[playthroughScores!.first.playerId];
+      if (winner == null) {
+        continue;
+      }
+
+      if (!playerWins.containsKey(winner)) {
+        playerWins[winner] = 1;
+      } else {
+        playerWins[winner] = playerWins[winner]! + 1;
+      }
+    }
+
+    boardGameStatistics.playerWinsPercentage = {};
+    for (final MapEntry<Player, int> playerWin in playerWins.entries) {
+      boardGameStatistics.playerWinsPercentage![playerWin.key] =
+          playerWin.value / finishedPlaythroughs.length;
+    }    
   }
 }
