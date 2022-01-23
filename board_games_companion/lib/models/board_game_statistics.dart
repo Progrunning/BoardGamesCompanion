@@ -1,4 +1,8 @@
+import 'package:tuple/tuple.dart';
+
+import 'hive/player.dart';
 import 'player_score.dart';
+import 'player_statistics.dart';
 
 class BoardGameStatistics {
   DateTime? _lastPlayed;
@@ -33,11 +37,37 @@ class BoardGameStatistics {
     }
   }
 
-  String? _highscore;
-  String? get highscore => _highscore;
-  set highscore(String? value) {
+  num? _highscore;
+  num? get highscore => _highscore;
+  set highscore(num? value) {
     if (_highscore != value) {
       _highscore = value;
     }
   }
+
+  double? _averageScore;
+  double? get averageScore => _averageScore;
+  set averageScore(double? value) {
+    if (_averageScore != value) {
+      _averageScore = value;
+    }
+  }
+
+  double? _averageNumberOfPlayers;
+  double? get averageNumberOfPlayers => _averageNumberOfPlayers;
+  set averageNumberOfPlayers(double? value) {
+    if (_averageNumberOfPlayers != value) {
+      _averageNumberOfPlayers = value;
+    }
+  }
+
+  List<Tuple2<Player, String>>? topScoreres;
+  
+  List<PlayerStatistics>? playersStatistics;
+
+  Map<int, double>? playerCountPercentage;
+  
+  Map<Player, double>? playerWinsPercentage;
+  
+  Map<Player, int>? playerWins;
 }

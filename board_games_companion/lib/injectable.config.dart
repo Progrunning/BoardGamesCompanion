@@ -15,7 +15,7 @@ import 'services/board_games_filters_service.dart' as _i12;
 import 'services/board_games_geek_service.dart' as _i19;
 import 'services/board_games_service.dart' as _i20;
 import 'services/file_service.dart' as _i13;
-import 'services/injectable_register_module.dart' as _i22;
+import 'services/injectable_register_module.dart' as _i23;
 import 'services/player_service.dart' as _i7;
 import 'services/playthroughs_service.dart' as _i21;
 import 'services/preferences_service.dart' as _i16;
@@ -23,6 +23,7 @@ import 'services/rate_and_review_service.dart' as _i17;
 import 'services/score_service.dart' as _i8;
 import 'services/user_service.dart' as _i18;
 import 'stores/players_store.dart' as _i11;
+import 'stores/playthrough_statistics_store.dart' as _i22;
 import 'stores/playthrough_store.dart' as _i6;
 import 'stores/playthroughs_store.dart' as _i9;
 import 'utilities/analytics_route_observer.dart' as _i4;
@@ -65,12 +66,16 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i19.BoardGamesGeekService>(), get<_i16.PreferencesService>()));
   gh.singleton<_i21.PlaythroughService>(
       _i21.PlaythroughService(get<_i8.ScoreService>()));
+  gh.singleton<_i22.PlaythroughStatisticsStore>(_i22.PlaythroughStatisticsStore(
+      get<_i7.PlayerService>(),
+      get<_i8.ScoreService>(),
+      get<_i21.PlaythroughService>()));
   gh.singleton<_i9.PlaythroughsStore>(_i9.PlaythroughsStore(
       get<_i21.PlaythroughService>(), get<_i5.AnalyticsService>()));
   return get;
 }
 
-class _$RegisterModule extends _i22.RegisterModule {
+class _$RegisterModule extends _i23.RegisterModule {
   @override
   _i14.FirebaseAnalytics get firebaseAnalytics => _i14.FirebaseAnalytics();
 }

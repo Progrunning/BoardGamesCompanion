@@ -871,9 +871,7 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
                 title: 'Age: ${boardGameDetails!.minAge}+',
               ),
             ),
-            const SizedBox(
-              width: Dimensions.standardSpacing,
-            ),
+            const SizedBox(width: Dimensions.standardSpacing),
             Flexible(
               child: _InfoPanel(
                 title: 'Weight: ${boardGameDetails!.avgWeight?.toStringAsFixed(2)} / 5',
@@ -903,9 +901,7 @@ class _InfoPanel extends StatelessWidget {
       child: Container(
         color: AppTheme.primaryColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Dimensions.halfStandardSpacing,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,

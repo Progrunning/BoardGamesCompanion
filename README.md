@@ -1,3 +1,20 @@
+<p align="center">  
+    <img src="https://github.com/Progrunning/BoardGamesCompanion/blob/main/board_games_companion/assets/icons/logo_transparent.png?raw=true" height="128"/>  
+  <h1 align="center">Board Games Companion</h1>
+</p>
+
+<p align="center">
+  <a href="https://progrunning.visualstudio.com/Board%20Games%20Companion/_build?definitionId=20&_a=summary">
+    <img src="https://img.shields.io/azure-devops/build/progrunning/cf1ca5c2-9446-441f-b3af-6e9f951997cf/20/main?label=CI">
+  </a>
+  <a href="https://progrunning.visualstudio.com/Board%20Games%20Companion/_build?definitionId=19&_a=summary">
+    <img src="https://img.shields.io/azure-devops/build/progrunning/cf1ca5c2-9446-441f-b3af-6e9f951997cf/19/main?label=CD">
+  </a>  
+  <a href="https://github.com/Progrunning/BoardGamesCompanion/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/progrunning/BoardGamesCompanion">
+  </a>
+</p>
+
 # Overview
 
 Welcome to the official **Board Games Companion** Github repository - an open source [iOS](https://apps.apple.com/us/app/board-games-companion/id1506458832?ls=1) and [Android](https://play.google.com/store/apps/details?id=com.progrunning.boardgamescompanion) application dedicated to board games enthusiasts.

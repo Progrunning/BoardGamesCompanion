@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../common/app_text.dart';
 import '../common/app_theme.dart';
 import '../common/dimensions.dart';
-import '../common/strings.dart';
 import '../injectable.dart';
 import '../services/rate_and_review_service.dart';
 
@@ -33,7 +33,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(Strings.RateAndReview),
+          title: const Text(AppText.RateAndReview),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               Text(
                   "We apologise that we're interupting you but we would really appreciate your support.\n"),
               Text(
-                  "If you're enjoying ${Strings.AppTitle} app, would you mind taking a moment to rate it? It shouldn't take more than a minute.\n"),
+                  "If you're enjoying ${AppText.AppTitle} app, would you mind taking a moment to rate it? It shouldn't take more than a minute.\n"),
               Text('Thank you.'),
             ],
           ),
@@ -49,7 +49,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
           actions: <Widget>[
             TextButton(
               child: const Text(
-                Strings.DontAskAgain,
+                AppText.DontAskAgain,
                 style: TextStyle(
                   color: AppTheme.accentColor,
                 ),
@@ -62,7 +62,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
             ),
             TextButton(
               child: const Text(
-                Strings.AskMeLater,
+                AppText.AskMeLater,
                 style: TextStyle(
                   color: AppTheme.accentColor,
                 ),
@@ -75,7 +75,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
             ),
             TextButton(
               child: const Text(
-                Strings.Rate,
+                AppText.Rate,
                 style: TextStyle(
                   color: AppTheme.defaultTextColor,
                 ),

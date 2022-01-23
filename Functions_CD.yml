@@ -1,0 +1,91 @@
+# TODO Base pipeline name on the zipped artifact file name (i.e. version)
+name: $(app.version).$(Build.BuildID) $(SourceBranchName)
+
+variables:
+  PipelineSourceProjectId: 'cf1ca5c2-9446-441f-b3af-6e9f951997cf'
+  PipelineSourceProjectDefinitionId: '22'
+  
+  AzureRegionLocation: eastus
+  
+  DevEnvironmentAffix: dev
+  DevAzureSubscription: bgc-dev(0b0b0e44-f48a-4f5b-9ee0-6bf6c571e58a)
+  DevBicepTemplateParametersFileName: paramteres.dev.json
+  ProdEnvironmentAffix: prod
+  ProdAzureSubscription: bgc-prod(637f5988-c385-408a-9b44-61b1c72f6b36)
+  ProdBicepTemplateParametersFileName: paramteres.prod.json
+  
+  ResourceGroupName: bgc-rg
+  FunctionsAppName: bgc-func
+
+  BicepTemplateFileName: template.bicep
+
+trigger:
+  branches:
+    include:
+      - main
+
+stages:
+  - stage: DEV
+    jobs:
+      - job: PublishFunctions
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - checkout: none
+
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Artifacts'
+            inputs:
+              buildType: 'specific'
+              project: $(PipelineSourceProjectId)
+              definition: $(PipelineSourceProjectDefinitionId)
+              buildVersionToDownload: 'latest'
+              targetPath: '$(Pipeline.Workspace)'
+          
+          - task: AzureCLI@2
+            displayName: 'Deploy Bicep template to Azure'
+            inputs:
+              azureSubscription: $(DevAzureSubscription)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az --version
+                az group create --name $(ResourceGroupName) --location $(AzureRegionLocation)
+                az deployment group create --resource-group $(ResourceGroupName) --template-file '$(Pipeline.Workspace)/bicep/$(BicepTemplateFileName)' --parameters '$(Pipeline.Workspace)/bicep/$(DevBicepTemplateParametersFileName)'
+
+          - task: AzureFunctionApp@1
+            displayName: 'Deploy Functions'
+            inputs:
+              azureSubscription: $(DevAzureSubscription)
+              appType: 'functionAppLinux'
+              appName: '$(FunctionsAppName)-$(DevEnvironmentAffix)'
+              package: '$(Pipeline.Workspace)/*.zip'
+
+  - stage: PROD
+    dependsOn:
+      - DEV
+    # Preventing PROD stage from running automatically - only manual deployments allowed
+    condition: eq('true', 'false') 
+    jobs:
+      - job: PublishFunctions
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - checkout: none
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Artifacts'
+            inputs:
+              buildType: 'specific'
+              project: $(PipelineSourceProjectId)
+              definition: $(PipelineSourceProjectDefinitionId)
+              buildVersionToDownload: 'latest'
+              itemPattern: '**/*.zip'
+              targetPath: '$(Pipeline.Workspace)'
+          
+          - task: AzureFunctionApp@1
+            displayName: 'Deploy Functions'
+            inputs:
+              azureSubscription: $(ProdAzureSubscription)
+              appType: 'functionAppLinux'
+              appName: '$(FunctionsAppName)-$(ProdEnvironmentAffix)'
+              package: '$(Pipeline.Workspace)/*.zip'

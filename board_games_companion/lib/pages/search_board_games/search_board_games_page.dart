@@ -217,18 +217,12 @@ class _SearchResultsState extends State<_SearchResults> {
                       return Container(
                         decoration: BoxDecoration(
                           color: AppTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(
-                            Styles.defaultCornerRadius,
-                          ),
-                          boxShadow: const <BoxShadow>[
-                            AppTheme.defaultBoxShadow,
-                          ],
+                          borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                          boxShadow: const <BoxShadow>[AppTheme.defaultBoxShadow],
                         ),
                         child: RippleEffect(
                           child: Padding(
-                            padding: const EdgeInsets.all(
-                              Dimensions.standardSpacing,
-                            ),
+                            padding: const EdgeInsets.all(Dimensions.standardSpacing),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
@@ -254,9 +248,7 @@ class _SearchResultsState extends State<_SearchResults> {
                       );
                     }
 
-                    return const Divider(
-                      height: Dimensions.standardSpacing,
-                    );
+                    return const Divider(height: Dimensions.standardSpacing);
                   },
                   childCount: math.max(0, searchResults!.length * 2 - 1),
                 ),

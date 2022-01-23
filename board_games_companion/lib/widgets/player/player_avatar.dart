@@ -14,6 +14,7 @@ class PlayerAvatar extends StatelessWidget {
     this.player, {
     this.topRightCornerActionWidget,
     this.onTap,
+    this.useHeroAnimation = true,
     this.playerHeroIdSuffix,
     Key? key,
   }) : super(key: key);
@@ -21,6 +22,7 @@ class PlayerAvatar extends StatelessWidget {
   final Player? player;
   final Widget? topRightCornerActionWidget;
   final VoidCallback? onTap;
+  final bool useHeroAnimation;
   final String? playerHeroIdSuffix;
 
   @override
@@ -32,16 +34,16 @@ class PlayerAvatar extends StatelessWidget {
           return ShadowBox(
             child: Stack(
               children: <Widget>[
-                Hero(
-                  tag: '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
-                  child: PlayerImage(
-                    imageUri: providerPlayer?.avatarImageUri,
-                  ),
-                ),
+                if (useHeroAnimation)
+                  Hero(
+                    tag:
+                        '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
+                    child: PlayerImage(imageUri: providerPlayer?.avatarImageUri),
+                  )
+                else
+                  PlayerImage(imageUri: providerPlayer?.avatarImageUri),
                 if (providerPlayer?.name?.isNotEmpty ?? false)
-                  PlayerAvatarSubtitle(
-                    player: providerPlayer!,
-                  ),
+                  PlayerAvatarSubtitle(player: providerPlayer!),
                 if (topRightCornerActionWidget != null)
                   Align(
                     alignment: Alignment.topRight,

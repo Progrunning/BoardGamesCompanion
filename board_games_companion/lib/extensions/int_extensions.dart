@@ -52,10 +52,10 @@ extension IntExtensions on int? {
     final minutes = (this! / Duration.secondsPerMinute).floor();
 
     if (hours > 0) {
-      return '~${hours}h ${minutes % Duration.minutesPerHour}min';
+      return '${hours}h ${minutes % Duration.minutesPerHour}min';
     }
 
-    return '~${minutes}min';
+    return '${minutes}min';
   }
 
   int safeCompareTo(int? intToCompare) {

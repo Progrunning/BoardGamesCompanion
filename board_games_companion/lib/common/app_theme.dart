@@ -10,6 +10,9 @@ class AppTheme {
   static const Color blackColor = Colors.black;
   static const Color blueColor = Colors.blue;
   static const Color redColor = Colors.red;
+  static const Color greenColor = Colors.green;
+  static const Color pinkColor = Colors.pink;
+  static const Color purpleColor = Colors.purple;
 
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
@@ -36,6 +39,16 @@ class AppTheme {
   static const Color startDefaultPageElementBackgroundColorGradient = secondaryLightColor;
   static const Color endDefaultPageElementBackgroundColorGradient = secondaryColor;
 
+  static const List<Color> chartColorPallete = <Color>[
+    Color(0xFF1784A4),
+    Color(0xFFC84634),
+    Color(0xFF9ED86B),
+    Color(0xFFF5C766),
+    Color(0xFF6F4E7B),
+    Color(0xFF8FDDD0),
+    Color(0xFFFD9F5C),
+  ];
+
   static const TextStyle titleTextStyle = TextStyle(
     fontSize: Dimensions.mediumFontSize,
     color: defaultTextColor,
@@ -58,9 +71,7 @@ class AppTheme {
   );
 
   static const BorderRadius defaultBoxRadius = BorderRadius.all(
-    Radius.circular(
-      Styles.boardGameTileImageCircularRadius,
-    ),
+    Radius.circular(Styles.boardGameTileImageCircularRadius),
   );
 
   static const TextStyle defaultTextFieldStyle = TextStyle(
