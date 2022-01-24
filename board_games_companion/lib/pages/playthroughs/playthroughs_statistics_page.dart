@@ -71,7 +71,7 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                 _SliverSectionWrapper(
                     child: _LastWinnerSection(boardGameStatistics: boardGameStatistics)),
                 _SliverSectionWrapper(
-                  child: _QuickStatsSection(boardGameStatistics: boardGameStatistics),
+                  child: _OverallStatsSection(boardGameStatistics: boardGameStatistics),
                 ),
                 if (boardGameStatistics?.topScoreres?.isNotEmpty ?? false)
                   _SliverSectionWrapper(
@@ -158,10 +158,10 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
-                          icon: Icons.poll,
-                          iconColor: AppTheme.chartColorPallete[0],
+                          icon: Icons.show_chart,
+                          iconColor: AppTheme.chartColorPallete[1],
                           iconSize: 38,
-                          subtitle: 'Personal Best',
+                          subtitle: AppText.playthroughsStatisticsPagePlayersStatsPersonalBest,
                         ),
                       ),
                       const Expanded(child: SizedBox.shrink()),
@@ -177,7 +177,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                           icon: Icons.calculate,
                           iconColor: AppTheme.chartColorPallete[3],
                           iconSize: 38,
-                          subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgScore,
+                          subtitle: AppText.playthroughsStatisticsPagePlayersStatsAvgScore,
                         ),
                       ),
                       const Expanded(child: SizedBox.shrink()),
@@ -191,9 +191,9 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
                           icon: Icons.casino,
-                          iconColor: AppTheme.chartColorPallete[6],
+                          iconColor: AppTheme.chartColorPallete[0],
                           iconSize: 38,
-                          subtitle: 'Games played',
+                          subtitle: AppText.playthroughsStatisticsPagePlayersStatsPlayedGames,
                         ),
                       ),
                       const Expanded(child: SizedBox.shrink()),
@@ -275,9 +275,9 @@ class _PlayerChartsState extends State<_PlayerCharts> {
           AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
     }
     i = 0;
-    for (final MapEntry<Player, double> playeWinsPercentage
+    for (final MapEntry<Player, double> playerWinsPercentage
         in widget.boardGameStatistics.playerWinsPercentage!.entries) {
-      playerWinsChartColors[playeWinsPercentage.key] =
+      playerWinsChartColors[playerWinsPercentage.key] =
           AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
     }
   }
@@ -312,8 +312,6 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                       ),
                   ],
                 ),
-                swapAnimationDuration: const Duration(milliseconds: 150),
-                swapAnimationCurve: Curves.linear,
               ),
             ),
             const Expanded(child: SizedBox.shrink()),
@@ -332,23 +330,23 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                       ),
                   ],
                 ),
-                swapAnimationDuration: const Duration(milliseconds: 150),
-                swapAnimationCurve: Curves.linear,
               ),
             ),
           ],
         ),
+        const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 for (final MapEntry<int, double> playeCountPercentage
                     in widget.boardGameStatistics.playerCountPercentage!.entries)
                   Padding(
-                    padding: const EdgeInsets.only(top: Dimensions.standardSpacing),
+                    padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
                       children: <Widget>[
                         _ChartLegendBox(color: playerCountChartColors[playeCountPercentage.key]!),
@@ -363,13 +361,13 @@ class _PlayerChartsState extends State<_PlayerCharts> {
             const Expanded(child: SizedBox.shrink()),
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 for (final MapEntry<Player, double> playerWinsPercentage
                     in widget.boardGameStatistics.playerWinsPercentage!.entries)
                   Padding(
-                    padding: const EdgeInsets.only(top: Dimensions.standardSpacing),
+                    padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
                       children: <Widget>[
                         Text('${playerWinsPercentage.key.name}'),
@@ -505,8 +503,8 @@ class _LastTimePlayed extends StatelessWidget {
   }
 }
 
-class _QuickStatsSection extends StatelessWidget {
-  const _QuickStatsSection({
+class _OverallStatsSection extends StatelessWidget {
+  const _OverallStatsSection({
     required this.boardGameStatistics,
     Key? key,
   }) : super(key: key);
@@ -518,29 +516,29 @@ class _QuickStatsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ItemPropertyTitle(AppText.playthroughsStatisticsPageQuickStatsSectionTitle),
+        const ItemPropertyTitle(AppText.playthroughsStatisticsPageOverallStatsSectionTitle),
         const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
           children: <Widget>[
             _StatisticsItem(
               value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
-              icon: Icons.insert_chart,
+              icon: Icons.casino,
               iconColor: AppTheme.chartColorPallete[0],
-              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlayedGames,
+              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
             ),
             const Expanded(child: SizedBox.shrink()),
             _StatisticsItem(
               value: boardGameStatistics?.highscore?.toString() ?? '-',
               icon: Icons.show_chart,
               iconColor: AppTheme.chartColorPallete[1],
-              subtitle: AppText.playthroughsStatisticsPageQuickStatsHighscore,
+              subtitle: AppText.playthroughsStatisticsPageOverallStatsHighscore,
             ),
             const Expanded(child: SizedBox.shrink()),
             _StatisticsItem(
               value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
-              icon: Icons.hourglass_empty,
+              icon: Icons.av_timer,
               iconColor: AppTheme.chartColorPallete[2],
-              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlaytime,
+              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
             ),
           ],
         ),
@@ -552,13 +550,13 @@ class _QuickStatsSection extends StatelessWidget {
               value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
               icon: Icons.calculate,
               iconColor: AppTheme.chartColorPallete[3],
-              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgScore,
+              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgScore,
             ),
             _StatisticsItem(
               value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
               icon: Icons.person,
               iconColor: AppTheme.chartColorPallete[5],
-              subtitle: AppText.playthroughsStatisticsPageQuickStatsAvgPlayerCount,
+              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
             ),
           ],
         ),

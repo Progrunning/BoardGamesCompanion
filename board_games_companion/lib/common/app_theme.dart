@@ -47,6 +47,14 @@ class AppTheme {
     Color(0xFF6F4E7B),
     Color(0xFF8FDDD0),
     Color(0xFFFD9F5C),
+    Color(0xFF003f5c),
+    Color(0xFF2f4b7c),
+    Color(0xFF665191),
+    Color(0xFFa05195),
+    Color(0xFFd45087),
+    Color(0xFFf95d6a),
+    Color(0xFFff7c43),
+    Color(0xFFffa600),
   ];
 
   static const TextStyle titleTextStyle = TextStyle(
