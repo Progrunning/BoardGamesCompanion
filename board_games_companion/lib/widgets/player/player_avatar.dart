@@ -15,7 +15,7 @@ class PlayerAvatar extends StatelessWidget {
     this.topRightCornerActionWidget,
     this.onTap,
     this.useHeroAnimation = true,
-    this.playerHeroIdSuffix,
+    this.playerHeroIdSuffix = '',
     Key? key,
   }) : super(key: key);
 
@@ -23,27 +23,27 @@ class PlayerAvatar extends StatelessWidget {
   final Widget? topRightCornerActionWidget;
   final VoidCallback? onTap;
   final bool useHeroAnimation;
-  final String? playerHeroIdSuffix;
+  final String playerHeroIdSuffix;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: player,
       child: Consumer<Player?>(
-        builder: (_, Player? providerPlayer, __) {
+        builder: (_, Player? player, __) {
           return ShadowBox(
             child: Stack(
               children: <Widget>[
                 if (useHeroAnimation)
                   Hero(
                     tag:
-                        '${AnimationTags.playerImageHeroTag}${providerPlayer?.id}$playerHeroIdSuffix',
-                    child: PlayerImage(imageUri: providerPlayer?.avatarImageUri),
+                        '${AnimationTags.playerImageHeroTag}${player?.id}$playerHeroIdSuffix',
+                    child: PlayerImage(imageUri: player?.avatarImageUri),
                   )
                 else
-                  PlayerImage(imageUri: providerPlayer?.avatarImageUri),
-                if (providerPlayer?.name?.isNotEmpty ?? false)
-                  PlayerAvatarSubtitle(player: providerPlayer!),
+                  PlayerImage(imageUri: player?.avatarImageUri),
+                if (player?.name?.isNotEmpty ?? false)
+                  PlayerAvatarSubtitle(player: player!),
                 if (topRightCornerActionWidget != null)
                   Align(
                     alignment: Alignment.topRight,

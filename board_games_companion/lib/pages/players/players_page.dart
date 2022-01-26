@@ -128,7 +128,7 @@ class _PlayersPageState extends State<PlayersPage> {
                             color: AppTheme.defaultTextColor,
                           ),
                           onTap: () async => _navigateToPlayerPage(context, player),
-                        ),
+                        ),                        
                         onTap: () async => _navigateToPlayerPage(context, player),
                       );
                     },

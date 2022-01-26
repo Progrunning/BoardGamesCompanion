@@ -102,9 +102,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                                     children: <Widget>[
                                       Hero(
                                         tag: '${AnimationTags.playerImageHeroTag}${player.id}',
-                                        child: PlayerImage(
-                                          imageUri: player.avatarImageUri,
-                                        ),
+                                        child: PlayerImage(imageUri: player.avatarImageUri),
                                       ),
                                       Positioned(
                                         bottom: Dimensions.halfStandardSpacing,
@@ -231,8 +229,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                   onPressed: () async {
                     widget.playersStore.player!.avatarImageUri =
                         widget.playersStore.player!.avatarImageUri;
-                    widget.playersStore.player!.name =
-                        widget.playersStore.player!.name;
+                    widget.playersStore.player!.name = widget.playersStore.player!.name;
                     // MK Pop the dialog
                     Navigator.of(context).pop();
                     // MK Go back
