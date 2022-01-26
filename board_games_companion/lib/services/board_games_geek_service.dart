@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -94,15 +96,19 @@ class BoardGamesGeekService {
   final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
 
-  Future<List<BoardGame>> getHot() async {
+  Future<List<BoardGame>> getHot({int retryCount = 0}) async {
     final hotBoardGames = <BoardGame>[];
 
-    final retrievalOptions = buildCacheOptions(
-        const Duration(days: _numberOfDaysToCacheHotBoardGames),
-        maxStale: const Duration(days: _numberOfDaysToCacheHotBoardGames),
-        forceRefresh: false,
-        primaryKey: _hotBoardGamesCachePrimaryKey,
-        subKey: _hotBoardGamesCacheSubKey);
+    // MK Apply exponential backoff when retrying
+    await Future<void>.delayed(Duration(seconds: pow(retryCount, 2) as int));
+
+    final Options retrievalOptions = buildCacheOptions(
+      const Duration(days: _numberOfDaysToCacheHotBoardGames),
+      maxStale: const Duration(days: _numberOfDaysToCacheHotBoardGames),
+      forceRefresh: retryCount > 0,
+      primaryKey: _hotBoardGamesCachePrimaryKey,
+      subKey: _hotBoardGamesCacheSubKey,
+    );
     retrievalOptions.contentType = 'application/xml';
     retrievalOptions.responseType = ResponseType.plain;
 

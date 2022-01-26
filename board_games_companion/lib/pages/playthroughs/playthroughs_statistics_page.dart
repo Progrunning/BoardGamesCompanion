@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_text.dart';
@@ -228,16 +229,18 @@ class _LastWinnerSection extends StatelessWidget {
       children: <Widget>[
         const ItemPropertyTitle(AppText.playthroughsStatisticsPageLastWinnerSectionTitle),
         const SizedBox(height: Dimensions.halfStandardSpacing),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _LastWinnerAvatar(boardGameStatistics: boardGameStatistics),
-            const SizedBox(width: Dimensions.standardSpacing),
-            _LastWinnerText(boardGameStatistics: boardGameStatistics),
-            const SizedBox(width: Dimensions.standardSpacing),
-            Expanded(child: _LastTimePlayed(boardGameStatistics: boardGameStatistics)),
-          ],
+        SingleChildScrollView(
+          clipBehavior: Clip.none,
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: <Widget>[
+              _LastWinnerAvatar(boardGameStatistics: boardGameStatistics),
+              const SizedBox(width: Dimensions.standardSpacing),
+              _LastWinnerText(boardGameStatistics: boardGameStatistics),
+              const SizedBox(width: Dimensions.standardSpacing),
+              _LastTimePlayed(boardGameStatistics: boardGameStatistics),
+            ],
+          ),
         ),
       ],
     );
@@ -352,7 +355,14 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                         _ChartLegendBox(color: playerCountChartColors[playeCountPercentage.key]!),
                         const SizedBox(width: Dimensions.halfStandardSpacing),
                         Text(
-                            '${playeCountPercentage.key} player${playeCountPercentage.key > 1 ? "s" : ""}'),
+                          sprintf(
+                            AppText.playthroughsStatisticsPagePlayerCountChartLegendFormat,
+                            [
+                              playeCountPercentage.key,
+                              if (playeCountPercentage.key > 1) 's' else ''
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -416,42 +426,35 @@ class _LastWinnerText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          const WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Text(
-              'won with',
-              style: TextStyle(
-                fontSize: Dimensions.smallFontSize,
-                fontWeight: FontWeight.normal,
+    return Center(
+      child: Text.rich(
+        TextSpan(
+          children: [
+            const WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Text(
+                'won with',
+                style: TextStyle(fontSize: Dimensions.smallFontSize, fontWeight: FontWeight.normal),
               ),
             ),
-          ),
-          TextSpan(
-            text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 32,
-            ),
-          ),
-          const WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Text(
-              'points on',
-              style: TextStyle(
-                fontSize: Dimensions.smallFontSize,
-                fontWeight: FontWeight.normal,
+            TextSpan(
+              text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
               ),
             ),
-          ),
-        ],
-      ),
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 32,
+            const WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Text(
+                'points on',
+                style: TextStyle(fontSize: Dimensions.smallFontSize, fontWeight: FontWeight.normal),
+              ),
+            ),
+          ],
+        ),
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
       ),
     );
   }
@@ -489,13 +492,11 @@ class _LastTimePlayed extends StatelessWidget {
       children: <Widget>[
         CalendarCard(boardGameStatistics?.lastPlayed),
         const SizedBox(width: Dimensions.standardSpacing),
-        Flexible(
-          child: Text(
-            boardGameStatistics?.lastPlayed?.toDaysAgo() ?? '',
-            style: const TextStyle(
-              fontSize: Dimensions.smallFontSize,
-              fontWeight: FontWeight.normal,
-            ),
+        Text(
+          boardGameStatistics?.lastPlayed?.toDaysAgo() ?? '',
+          style: const TextStyle(
+            fontSize: Dimensions.smallFontSize,
+            fontWeight: FontWeight.normal,
           ),
         ),
       ],

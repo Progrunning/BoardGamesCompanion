@@ -9,6 +9,8 @@ class HotBoardGamesStore with ChangeNotifier {
 
   final BoardGamesGeekService _boardGameGeekService;
 
+  int _refreshRetryCount = 0;
+
   List<BoardGame>? _hotBoardGames;
 
   List<BoardGame>? get hotBoardGames => _hotBoardGames;
@@ -19,7 +21,8 @@ class HotBoardGamesStore with ChangeNotifier {
     }
 
     try {
-      _hotBoardGames = await _boardGameGeekService.getHot();
+      _hotBoardGames = await _boardGameGeekService.getHot(retryCount: _refreshRetryCount);
+      _refreshRetryCount = 0;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -27,7 +30,8 @@ class HotBoardGamesStore with ChangeNotifier {
     return _hotBoardGames ?? <BoardGame>[];
   }
 
-  Future refresh() async {
+  void refresh() {
+    _refreshRetryCount++;
     notifyListeners();
   }
 }

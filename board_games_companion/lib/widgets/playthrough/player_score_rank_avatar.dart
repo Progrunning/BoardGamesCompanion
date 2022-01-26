@@ -8,7 +8,7 @@ import '../player/player_avatar.dart';
 class PlayerScoreRankAvatar extends StatelessWidget {
   const PlayerScoreRankAvatar({
     required this.player,
-    this.playerHeroIdSuffix,
+    this.playerHeroIdSuffix = '',
     this.rank,
     this.score,
     this.useHeroAnimation = true,
@@ -16,7 +16,7 @@ class PlayerScoreRankAvatar extends StatelessWidget {
   }) : super(key: key);
 
   final Player? player;
-  final String? playerHeroIdSuffix;
+  final String playerHeroIdSuffix;
   final num? rank;
   final String? score;
   final bool useHeroAnimation;
