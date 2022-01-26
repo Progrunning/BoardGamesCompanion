@@ -21,7 +21,7 @@ class PlayerImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return ClipRRect(      
       borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
       child: Stack(
         children: [

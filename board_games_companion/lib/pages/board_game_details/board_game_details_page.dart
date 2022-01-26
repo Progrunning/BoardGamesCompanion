@@ -818,9 +818,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.standardSpacing,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
       child: IntrinsicHeight(
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -858,9 +856,7 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.standardSpacing,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
       child: IntrinsicHeight(
         child: Row(
           mainAxisSize: MainAxisSize.max,

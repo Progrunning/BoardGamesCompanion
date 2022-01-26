@@ -29,6 +29,8 @@ class AppText {
       playthroughsStatisticsPageOverallStatsAvgScore;
   static const playthroughsStatisticsPagePlayersStatsPlayedGames =
       playthroughsStatisticsPageOverallStatsAvgPlayedGames;
+  static const playthroughsStatisticsPagePlayerCountChartLegendFormat =
+      '%s player%s';
 
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';
@@ -36,6 +38,5 @@ class AppText {
       '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';
   static const searchBoardGamesPageHotBoardGamesErrorPartTwo =
       '''If the issue persists, it's most likely related to some problems with BGG API which unfortuantely we cannot control.''';
-  static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText =
-      'Retry';
+  static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
 }
