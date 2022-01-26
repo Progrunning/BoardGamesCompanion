@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/analytics.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
@@ -266,7 +267,8 @@ class _SearchResultsState extends State<_SearchResults> {
           return const SliverPersistentHeader(
             delegate: _SearchResultsTemplate(
               child: Text(
-                'To search for board games, please type a board game title in the above search bar.',
+                AppText.searchBoardGamesPageSearchInstructions,
+                textAlign: TextAlign.justify,
               ),
             ),
           );
@@ -400,15 +402,11 @@ class _NoResults extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(
-              height: Dimensions.doubleStandardSpacing,
-            ),
+            const SizedBox(height: Dimensions.doubleStandardSpacing),
             Center(
               child: IconAndTextButton(
                 title: 'Retry',
-                icon: const DefaultIcon(
-                  Icons.refresh,
-                ),
+                icon: const DefaultIcon(Icons.refresh),
                 onPressed: () {
                   searchBoardGamesStore.updateSearchResults();
                 },
@@ -464,54 +462,45 @@ class _HotBoardGames extends StatelessWidget {
           }
 
           return SliverFillRemaining(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(
-                  Dimensions.doubleStandardSpacing,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Padding(
-                      padding: EdgeInsets.all(Dimensions.standardSpacing),
-                      child: Center(
-                        child: Text(
-                            '''We couldn't retrieve any board games. Check your Internet connectivity and try again.'''),
-                      ),
+            child: Padding(
+              padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const Text(
+                    AppText.searchBoardGamesPageHotBoardGamesErrorPartOne,
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: Dimensions.halfStandardSpacing),
+                  const Text(
+                    AppText.searchBoardGamesPageHotBoardGamesErrorPartTwo,
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: Dimensions.standardSpacing),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconAndTextButton(
+                      icon: const DefaultIcon(Icons.refresh),
+                      title: AppText.searchBoardGamesPageHotBoardGamesErrorRetryButtonText,
+                      onPressed: () => _hotBoardGamesStore.refresh(),
                     ),
-                    const SizedBox(
-                      height: Dimensions.standardSpacing,
-                    ),
-                    IconAndTextButton(
-                      icon: const DefaultIcon(
-                        Icons.add,
-                      ),
-                      title: 'Refresh',
-                      onPressed: () async {
-                        await _hotBoardGamesStore.refresh();
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
         } else if (snapshot.hasError) {
           return const SliverFillRemaining(
             child: Padding(
-              padding: EdgeInsets.all(
-                Dimensions.doubleStandardSpacing,
-              ),
-              child: Center(
-                child: GenericErrorMessage(),
-              ),
+              padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
+              child: Center(child: GenericErrorMessage()),
             ),
           );
         }
 
-        return const SliverFillRemaining(
-          child: LoadingIndicator(),
-        );
+        return const SliverFillRemaining(child: LoadingIndicator());
       },
     );
   }
