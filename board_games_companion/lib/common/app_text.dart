@@ -16,8 +16,7 @@ class AppText {
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
   static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle =
       'Games played by player count';
-  static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle =
-      'Games won by a player';
+  static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle = 'Games won by a player';
   static const playthroughsStatisticsPageOverallStatsSectionTitle = 'Overall stats';
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
   static const playthroughsStatisticsPageOverallStatsHighscore = 'Highscore';
@@ -30,14 +29,11 @@ class AppText {
       playthroughsStatisticsPageOverallStatsAvgScore;
   static const playthroughsStatisticsPagePlayersStatsPlayedGames =
       playthroughsStatisticsPageOverallStatsAvgPlayedGames;
-  static const playthroughsStatisticsPagePlayerCountChartLegendFormat =
-      '%s player%s';
+  static const playthroughsStatisticsPagePlayerCountChartLegendFormat = '%s player%s';
 
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';
   static const searchBoardGamesPageHotBoardGamesErrorPartOne =
-      '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';
-  static const searchBoardGamesPageHotBoardGamesErrorPartTwo =
-      '''If the issue persists, it's most likely related to some problems with BGG API which unfortuantely we cannot control.''';
+      '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';  
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
 }
