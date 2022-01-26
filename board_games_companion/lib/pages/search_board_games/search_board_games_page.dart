@@ -473,11 +473,6 @@ class _HotBoardGames extends StatelessWidget {
                     AppText.searchBoardGamesPageHotBoardGamesErrorPartOne,
                     textAlign: TextAlign.justify,
                   ),
-                  const SizedBox(height: Dimensions.halfStandardSpacing),
-                  const Text(
-                    AppText.searchBoardGamesPageHotBoardGamesErrorPartTwo,
-                    textAlign: TextAlign.justify,
-                  ),
                   const SizedBox(height: Dimensions.standardSpacing),
                   Align(
                     alignment: Alignment.centerRight,

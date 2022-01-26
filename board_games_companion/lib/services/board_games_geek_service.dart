@@ -92,6 +92,7 @@ class BoardGamesGeekService {
 
   static const int _numberOfDaysToCacheBoardGameDetails = 1;
   static const int _bggRetryStatusCode = 202;
+  static const int _maxBackoffDurationInSeconts = 8;
 
   final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
@@ -100,7 +101,10 @@ class BoardGamesGeekService {
     final hotBoardGames = <BoardGame>[];
 
     // MK Apply exponential backoff when retrying
-    await Future<void>.delayed(Duration(seconds: pow(retryCount, 2) as int));
+    if (retryCount > 0) {
+      await Future<void>.delayed(
+          Duration(seconds: min(pow(retryCount, 2), _maxBackoffDurationInSeconts) as int));
+    }
 
     final Options retrievalOptions = buildCacheOptions(
       const Duration(days: _numberOfDaysToCacheHotBoardGames),
