@@ -19,6 +19,7 @@ class AppText {
   static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle = 'Games won by a player';
   static const playthroughsStatisticsPageOverallStatsSectionTitle = 'Overall stats';
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
+  static const playthroughsStatisticsPageOverallStatsTotalPlaytime = 'Total playtime';
   static const playthroughsStatisticsPageOverallStatsHighscore = 'Highscore';
   static const playthroughsStatisticsPageOverallStatsAvgScore = 'Avg. score';
   static const playthroughsStatisticsPageOverallStatsAvgPlayerCount = 'Avg. player count';
@@ -36,4 +37,7 @@ class AppText {
   static const searchBoardGamesPageHotBoardGamesErrorPartOne =
       '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';  
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
+  
+  static const playtimeDurationHoursFormat = '%sh %smin';
+  static const playtimeDurationDaysFormat = '%s day%s %sh';
 }

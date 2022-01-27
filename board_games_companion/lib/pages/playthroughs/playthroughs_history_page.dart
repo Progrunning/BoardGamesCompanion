@@ -289,7 +289,7 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
   @override
   Widget build(BuildContext context) {
     return _PlaythroughItemDetail(
-      widget.playthroughStore.duration.inSeconds.toPlaythroughDuration(),
+      widget.playthroughStore.duration.inSeconds.toPlaytimeDuration(),
       'duration',
     );
   }

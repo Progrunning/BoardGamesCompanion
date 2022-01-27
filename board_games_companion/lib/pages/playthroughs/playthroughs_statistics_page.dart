@@ -521,43 +521,59 @@ class _OverallStatsSection extends StatelessWidget {
         const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
           children: <Widget>[
-            _StatisticsItem(
-              value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
-              icon: Icons.casino,
-              iconColor: AppTheme.chartColorPallete[0],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
+                  icon: Icons.casino,
+                  iconColor: AppTheme.chartColorPallete[0],
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: boardGameStatistics?.highscore?.toString() ?? '-',
+                  icon: Icons.show_chart,
+                  iconColor: AppTheme.chartColorPallete[1],
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsHighscore,
+                ),
+              ],
             ),
             const Expanded(child: SizedBox.shrink()),
-            _StatisticsItem(
-              value: boardGameStatistics?.highscore?.toString() ?? '-',
-              icon: Icons.show_chart,
-              iconColor: AppTheme.chartColorPallete[1],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsHighscore,
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
+                  icon: Icons.person,
+                  iconColor: AppTheme.chartColorPallete[5],
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
+                  icon: Icons.calculate,
+                  iconColor: AppTheme.chartColorPallete[3],
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgScore,
+                ),
+              ],
             ),
             const Expanded(child: SizedBox.shrink()),
-            _StatisticsItem(
-              value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
-              icon: Icons.av_timer,
-              iconColor: AppTheme.chartColorPallete[2],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
-            ),
-          ],
-        ),
-        const SizedBox(height: Dimensions.doubleStandardSpacing),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            _StatisticsItem(
-              value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
-              icon: Icons.calculate,
-              iconColor: AppTheme.chartColorPallete[3],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgScore,
-            ),
-            _StatisticsItem(
-              value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
-              icon: Icons.person,
-              iconColor: AppTheme.chartColorPallete[5],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value:
+                      boardGameStatistics?.averagePlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
+                  icon: Icons.av_timer,
+                  iconColor: AppTheme.chartColorPallete[2],
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: boardGameStatistics?.totalPlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
+                  icon: Icons.time_to_leave,
+                  iconColor: AppTheme.chartColorPallete[6],
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
+                ),
+              ],
             ),
           ],
         ),

@@ -63,7 +63,7 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
         boardGameStatistics.lastWinner = null;
         boardGameStatistics.numberOfGamesPlayed = null;
         boardGameStatistics.highscore = null;
-        boardGameStatistics.averagePlaytimeInSeconds = null;
+        boardGameStatistics.totalPlaytimeInSeconds = null;
         continue;
       }
 
@@ -141,13 +141,9 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
           playersById,
         );
 
-        final int allPlaythroughsDurationSumInSeconds = finishedPlaythroughs
+        boardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
             .map((p) => p.endDate!.difference(p.startDate).inSeconds)
             .reduce((a, b) => a + b);
-        if (allPlaythroughsDurationSumInSeconds != null) {
-          boardGameStatistics.averagePlaytimeInSeconds =
-              (allPlaythroughsDurationSumInSeconds / finishedPlaythroughs.length).floor();
-        }
       }
     }
 
@@ -272,6 +268,6 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
     for (final MapEntry<Player, int> playerWin in playerWins.entries) {
       boardGameStatistics.playerWinsPercentage![playerWin.key] =
           playerWin.value / finishedPlaythroughs.length;
-    }    
+    }
   }
 }

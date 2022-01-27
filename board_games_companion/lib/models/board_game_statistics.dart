@@ -5,69 +5,35 @@ import 'player_score.dart';
 import 'player_statistics.dart';
 
 class BoardGameStatistics {
-  DateTime? _lastPlayed;
-  DateTime? get lastPlayed => _lastPlayed;
-  set lastPlayed(DateTime? value) {
-    if (_lastPlayed != value) {
-      _lastPlayed = value;
+  DateTime? lastPlayed;
+
+  PlayerScore? lastWinner;
+
+  int? numberOfGamesPlayed;
+
+  int? totalPlaytimeInSeconds;
+
+  int? get averagePlaytimeInSeconds {
+    if (totalPlaytimeInSeconds == null || numberOfGamesPlayed == null) {
+      return null;
     }
+
+    return (totalPlaytimeInSeconds! / numberOfGamesPlayed!).floor();
   }
 
-  PlayerScore? _lastWinner;
-  PlayerScore? get lastWinner => _lastWinner;
-  set lastWinner(PlayerScore? value) {
-    if (_lastWinner != value) {
-      _lastWinner = value;
-    }
-  }
+  num? highscore;
 
-  int? _numberOfGamesPlayed;
-  int? get numberOfGamesPlayed => _numberOfGamesPlayed;
-  set numberOfGamesPlayed(int? value) {
-    if (_numberOfGamesPlayed != value) {
-      _numberOfGamesPlayed = value;
-    }
-  }
+  double? averageScore;
 
-  int? _averagePlaytimeInSeconds;
-  int? get averagePlaytimeInSeconds => _averagePlaytimeInSeconds;
-  set averagePlaytimeInSeconds(int? value) {
-    if (_averagePlaytimeInSeconds != value) {
-      _averagePlaytimeInSeconds = value;
-    }
-  }
-
-  num? _highscore;
-  num? get highscore => _highscore;
-  set highscore(num? value) {
-    if (_highscore != value) {
-      _highscore = value;
-    }
-  }
-
-  double? _averageScore;
-  double? get averageScore => _averageScore;
-  set averageScore(double? value) {
-    if (_averageScore != value) {
-      _averageScore = value;
-    }
-  }
-
-  double? _averageNumberOfPlayers;
-  double? get averageNumberOfPlayers => _averageNumberOfPlayers;
-  set averageNumberOfPlayers(double? value) {
-    if (_averageNumberOfPlayers != value) {
-      _averageNumberOfPlayers = value;
-    }
-  }
+  double? averageNumberOfPlayers;
 
   List<Tuple2<Player, String>>? topScoreres;
-  
+
   List<PlayerStatistics>? playersStatistics;
 
   Map<int, double>? playerCountPercentage;
-  
+
   Map<Player, double>? playerWinsPercentage;
-  
+
   Map<Player, int>? playerWins;
 }
