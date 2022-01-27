@@ -43,12 +43,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   _UserDetailsPanel(),
                   _RateAndReviewTile(),
-                  _AboutPageTile()
+                  _AboutPageTile(),
                 ],
               ),
             ),
           ),
           const _VersionNumber(),
+          const SizedBox(height: Dimensions.bottomTabTopHeight),
         ],
       ),
     );

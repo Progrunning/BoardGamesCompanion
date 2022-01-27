@@ -157,6 +157,7 @@ class _Collection extends StatelessWidget {
                   );
                 },
               ),
+              const SliverPadding(padding:  EdgeInsets.all(8.0)),
             ],
           ),
         ),

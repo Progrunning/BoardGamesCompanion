@@ -27,6 +27,7 @@ import 'models/hive/playthrough.dart';
 import 'models/hive/score.dart';
 import 'models/hive/user.dart';
 import 'models/sort_by.dart';
+import 'pages/players/players_view_model.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_filters_service.dart';
 import 'services/board_games_geek_service.dart';
@@ -38,9 +39,7 @@ import 'services/score_service.dart';
 import 'services/user_service.dart';
 import 'stores/board_games_filters_store.dart';
 import 'stores/board_games_store.dart';
-import 'stores/home_store.dart';
 import 'stores/hot_board_games_store.dart';
-import 'stores/players_store.dart';
 import 'stores/playthrough_statistics_store.dart';
 import 'stores/playthroughs_store.dart';
 import 'stores/search_bar_board_games_store.dart';
@@ -109,9 +108,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<HomeStore>(
-          create: (context) => HomeStore(),
-        ),
         ChangeNotifierProvider<UserStore>(
           create: (context) {
             final UserService userService = getIt<UserService>();
@@ -149,8 +145,8 @@ class App extends StatelessWidget {
             );
           },
         ),
-        ChangeNotifierProvider<PlayersStore>(
-          create: (context) => getIt<PlayersStore>(),
+        ChangeNotifierProvider<PlayersViewModel>(
+          create: (context) => getIt<PlayersViewModel>(),
         ),
         ChangeNotifierProvider<PlaythroughsStore>(
           create: (context) => getIt<PlaythroughsStore>(),

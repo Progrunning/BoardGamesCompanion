@@ -46,9 +46,7 @@ class IconAndTextButton extends StatelessWidget {
           children: [
             icon,
             if (title?.isNotEmpty ?? false) ...[
-              const SizedBox(
-                width: Dimensions.halfStandardSpacing,
-              ),
+              const SizedBox(width: Dimensions.halfStandardSpacing),
               Text(
                 title!,
                 style: const TextStyle(

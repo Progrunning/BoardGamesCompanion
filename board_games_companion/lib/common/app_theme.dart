@@ -13,6 +13,7 @@ class AppTheme {
   static const Color greenColor = Colors.green;
   static const Color pinkColor = Colors.pink;
   static const Color purpleColor = Colors.purple;
+  static const Color greyColor = Colors.grey;
 
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
@@ -27,7 +28,7 @@ class AppTheme {
   static const Color defaultTextColor = whiteColor;
   static const Color invertedTextColor = blackColor;
 
-  static const Color secondaryTextColor = Colors.grey;
+  static const Color secondaryTextColor = greyColor;
 
   static const Color bottomTabBackgroundColor = primaryColorLight;
   static const Color selectedTabIconColor = accentColor;
@@ -38,6 +39,9 @@ class AppTheme {
 
   static const Color startDefaultPageElementBackgroundColorGradient = secondaryLightColor;
   static const Color endDefaultPageElementBackgroundColorGradient = secondaryColor;
+
+  static const Color activeBottomTabColor = whiteColor;
+  static const Color inactiveBottomTabColor = greyColor;
 
   static const List<Color> chartColorPallete = <Color>[
     Color(0xFF1784A4),

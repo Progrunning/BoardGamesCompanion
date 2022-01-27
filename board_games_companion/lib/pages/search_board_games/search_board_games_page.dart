@@ -441,8 +441,11 @@ class _HotBoardGames extends StatelessWidget {
           final boardGames = snapshot.data as List<BoardGame>;
           if (boardGames != null && boardGames.isNotEmpty) {
             return SliverPadding(
-              padding: const EdgeInsets.all(
-                Dimensions.standardSpacing,
+              padding: const EdgeInsets.only(
+                left: Dimensions.standardSpacing,
+                top: Dimensions.standardSpacing,
+                right: Dimensions.standardSpacing,
+                bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
               ),
               sliver: SliverGrid.extent(
                 crossAxisSpacing: Dimensions.standardSpacing,

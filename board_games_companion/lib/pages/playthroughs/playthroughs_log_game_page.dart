@@ -12,7 +12,6 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
-import '../../stores/players_store.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
@@ -20,6 +19,7 @@ import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../players/player_page.dart';
+import '../players/players_view_model.dart';
 import 'playthroughs_log_game_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
@@ -41,7 +41,7 @@ class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: widget.playthroughsLogGameViewModel,
-      child: Consumer<PlayersStore>(
+      child: Consumer<PlayersViewModel>(
           builder: (_, __, ___) =>
               ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsLogGameViewModel>(
                 future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
