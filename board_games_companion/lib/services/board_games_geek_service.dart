@@ -391,11 +391,11 @@ class BoardGamesGeekService {
       return CollectionSyncResult();
     }
 
-    final collectionItems = xmlDocument.findAllElements(_xmlItemElementName);
-    for (final collectionItem in collectionItems) {
+    final collectionElements = xmlDocument.findAllElements(_xmlItemElementName);
+    for (final XmlElement collectionElement in collectionElements) {
       final String? boardGameId =
-          collectionItem.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
-      final String? boardGameName = collectionItem.firstOrDefault(_xmlNameElementName)?.text;
+          collectionElement.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
+      final String? boardGameName = collectionElement.firstOrDefault(_xmlNameElementName)?.text;
 
       if ((boardGameId?.isEmpty ?? true) || (boardGameName?.isEmpty ?? true)) {
         continue;
@@ -403,16 +403,16 @@ class BoardGamesGeekService {
 
       final boardGame = BoardGameDetails(id: boardGameId!, name: boardGameName!);
       boardGame.yearPublished =
-          int.tryParse(collectionItem.firstOrDefault(_xmlYearPublishedElementName)?.text ?? '');
-      boardGame.imageUrl = collectionItem.firstOrDefault(_xmlImageElementName)?.text;
-      boardGame.thumbnailUrl = collectionItem.firstOrDefault(_xmlThumbnailElementName)?.text;
-      final lastModifiedString = collectionItem.firstOrDefaultElementsAttribute(
+          int.tryParse(collectionElement.firstOrDefault(_xmlYearPublishedElementName)?.text ?? '');
+      boardGame.imageUrl = collectionElement.firstOrDefault(_xmlImageElementName)?.text;
+      boardGame.thumbnailUrl = collectionElement.firstOrDefault(_xmlThumbnailElementName)?.text;
+      final lastModifiedString = collectionElement.firstOrDefaultElementsAttribute(
           _xmlStatusElementName, _xmlLastModifiedAttributeTypeName);
       if (lastModifiedString?.isNotEmpty ?? false) {
         boardGame.lastModified = DateTime.tryParse(lastModifiedString!);
       }
 
-      _extractBoardGameCollectionItemStas(collectionItem, boardGame);
+      _extractBoardGameCollectionItemStats(collectionElement, boardGame);
 
       boardGame.isBggSynced = true;
 
@@ -533,7 +533,7 @@ class BoardGamesGeekService {
     }
   }
 
-  void _extractBoardGameCollectionItemStas(
+  void _extractBoardGameCollectionItemStats(
     xml.XmlElement collectionItem,
     BoardGameDetails boardGameDetails,
   ) {
@@ -568,8 +568,6 @@ class BoardGamesGeekService {
     if (errorElements.isEmpty) {
       return false;
     }
-
-    // for (var errorElement in errorElements) {}
 
     return true;
   }

@@ -21,11 +21,7 @@ mixin SyncCollection {
         return CollectionSyncResult();
       }
 
-      final boardGamesStore = Provider.of<BoardGamesStore>(
-        context,
-        listen: false,
-      );
-
+      final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
       final syncResult = await boardGamesStore.syncCollection(username);
       if (syncResult.isSuccess) {
         final user = User(name: username);
@@ -43,7 +39,7 @@ mixin SyncCollection {
   }
 }
 
-void _showSuccessSnackBar() {  
+void _showSuccessSnackBar() {
   HomePage.homePageGlobalKey.currentState!.showSnackBar(
     const SnackBar(
       behavior: SnackBarBehavior.floating,
