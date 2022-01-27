@@ -222,6 +222,7 @@ class _AppBarState extends State<_AppBar> {
         focusNode: _searchFocusNode,
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
+        textInputAction: TextInputAction.search,
         style: AppTheme.defaultTextFieldStyle,
         decoration: InputDecoration(
           hintText: 'Search for a game...',

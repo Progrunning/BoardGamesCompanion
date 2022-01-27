@@ -137,6 +137,7 @@ class _SearchBarState extends State<_SearchBar> {
               controller: searchController,
               style: AppTheme.defaultTextFieldStyle,
               focusNode: widget.searchFocusNode,
+              textInputAction: TextInputAction.search,
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 hintText: 'Search...',
