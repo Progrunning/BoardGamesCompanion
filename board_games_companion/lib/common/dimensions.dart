@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Dimensions {
   static const double quarterStandardSpacing = standardSpacing / 4;
   static const double halfStandardSpacing = standardSpacing / 2;
@@ -44,4 +46,10 @@ class Dimensions {
   static const double defaultElevation = 3;
 
   static const double bottomTabTopHeight = 20;
+
+  static const EdgeInsets snackbarMargin = EdgeInsets.only(
+    left: Dimensions.standardSpacing,
+    right: Dimensions.standardSpacing,
+    bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
+  );
 }
