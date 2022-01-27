@@ -569,7 +569,7 @@ class _OverallStatsSection extends StatelessWidget {
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
                   value: boardGameStatistics?.totalPlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
-                  icon: Icons.time_to_leave,
+                  icon: Icons.timelapse,
                   iconColor: AppTheme.totalPlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
                 ),
