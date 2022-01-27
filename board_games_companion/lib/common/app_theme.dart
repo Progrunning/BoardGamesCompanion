@@ -43,6 +43,13 @@ class AppTheme {
   static const Color activeBottomTabColor = whiteColor;
   static const Color inactiveBottomTabColor = greyColor;
 
+  static Color playedGamesStatColor = chartColorPallete[0];
+  static Color highscoreStatColor = chartColorPallete[1];
+  static Color averagePlayerCountStatColor = chartColorPallete[5];
+  static Color averageScoreStatColor = chartColorPallete[3];
+  static Color averagePlaytimeStatColor = chartColorPallete[2];
+  static Color totalPlaytimeStatColor = chartColorPallete[6];
+
   static const List<Color> chartColorPallete = <Color>[
     Color(0xFF1784A4),
     Color(0xFFC84634),
