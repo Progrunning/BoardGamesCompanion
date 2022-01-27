@@ -8,6 +8,7 @@ import '../services/analytics_service.dart';
 import '../services/rate_and_review_service.dart';
 import '../stores/board_games_store.dart';
 import '../stores/user_store.dart';
+import '../widgets/bottom_tab_icon.dart';
 import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
 import 'games/games_page.dart';
@@ -81,25 +82,25 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
           backgroundColor: AppTheme.bottomTabBackgroundColor,
           top: -Dimensions.bottomTabTopHeight,
           items: const <TabItem>[
-            TabItem<_BottomTabIcon>(
+            TabItem<BottomTabIcon>(
               title: 'Games',
-              icon: _BottomTabIcon(iconData: Icons.video_library),
-              activeIcon: _BottomTabIcon(iconData: Icons.video_library, isActive: true),
+              icon: BottomTabIcon(iconData: Icons.video_library),
+              activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
             ),
-            TabItem<_BottomTabIcon>(
+            TabItem<BottomTabIcon>(
               title: 'Search',
-              icon: _BottomTabIcon(iconData: Icons.search),
-              activeIcon: _BottomTabIcon(iconData: Icons.search, isActive: true),
+              icon: BottomTabIcon(iconData: Icons.search),
+              activeIcon: BottomTabIcon(iconData: Icons.search, isActive: true),
             ),
-            TabItem<_BottomTabIcon>(
+            TabItem<BottomTabIcon>(
               title: 'Players',
-              icon: _BottomTabIcon(iconData: Icons.group),
-              activeIcon: _BottomTabIcon(iconData: Icons.group, isActive: true),
+              icon: BottomTabIcon(iconData: Icons.group),
+              activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
             ),
-            TabItem<_BottomTabIcon>(
+            TabItem<BottomTabIcon>(
               title: 'Settings',
-              icon: _BottomTabIcon(iconData: Icons.settings),
-              activeIcon: _BottomTabIcon(iconData: Icons.settings, isActive: true),
+              icon: BottomTabIcon(iconData: Icons.settings),
+              activeIcon: BottomTabIcon(iconData: Icons.settings, isActive: true),
             ),
           ],
           initialActiveIndex: _initialTabIndex,
@@ -107,25 +108,6 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
           color: AppTheme.inactiveBottomTabColor,
         ),
       ),
-    );
-  }
-}
-
-class _BottomTabIcon extends StatelessWidget {
-  const _BottomTabIcon({
-    required this.iconData,
-    this.isActive = false,
-    Key? key,
-  }) : super(key: key);
-
-  final IconData iconData;
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    return Icon(
-      iconData,
-      color: isActive ? AppTheme.activeBottomTabColor : AppTheme.inactiveBottomTabColor,
     );
   }
 }

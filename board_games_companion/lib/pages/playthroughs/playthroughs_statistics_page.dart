@@ -107,7 +107,7 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                   ),
                   _PlayersStatisticsSection(boardGameStatistics: boardGameStatistics!),
                 ],
-                const SliverPadding(padding: EdgeInsets.only(bottom: Dimensions.standardSpacing)),
+                const SliverPadding(padding: EdgeInsets.only(bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
               ],
             );
           },

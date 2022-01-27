@@ -42,18 +42,17 @@ class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
     return ChangeNotifierProvider.value(
       value: widget.playthroughsLogGameViewModel,
       child: Consumer<PlayersViewModel>(
-          builder: (_, __, ___) =>
-              ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsLogGameViewModel>(
-                future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
-                success: (_, PlaythroughsLogGameViewModel viewModel) {
-                  return _LogPlaythroughStepper(
-                    viewModel: viewModel,
-                    boardGameDetails: widget.boardGameDetails,
-                  );
-
-                  // return const _NoPlayers();
-                },
-              )),
+        builder: (_, __, ___) =>
+            ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsLogGameViewModel>(
+          future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
+          success: (_, PlaythroughsLogGameViewModel viewModel) {
+            return _LogPlaythroughStepper(
+              viewModel: viewModel,
+              boardGameDetails: widget.boardGameDetails,
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -92,20 +91,14 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       children: [
         Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Text(
-            'Log a game',
-            style: AppTheme.theme.textTheme.headline2,
-          ),
+          child: Text('Log a game', style: AppTheme.theme.textTheme.headline2),
         ),
         Expanded(
           child: Theme(
             data: AppTheme.theme.copyWith(
-              colorScheme: AppTheme.theme.colorScheme.copyWith(
-                primary: AppTheme.accentColor,
-              ),
+              colorScheme: AppTheme.theme.colorScheme.copyWith(primary: AppTheme.accentColor),
             ),
             child: Stepper(
-              // physics: const ClampingScrollPhysics(),
               currentStep: widget.viewModel.logGameStep,
               steps: [
                 Step(

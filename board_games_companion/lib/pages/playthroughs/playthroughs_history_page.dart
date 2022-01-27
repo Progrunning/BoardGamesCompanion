@@ -57,12 +57,22 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {
                     final PlaythroughStore playthroughStore = getIt<PlaythroughStore>();
-                    return _Playthrough(
+
+                    final _Playthrough playthough = _Playthrough(
                       playthroughsStore: widget.playthroughsStore,
                       playthroughStore: playthroughStore,
                       playthrough: store.playthroughs![index],
                       playthroughNumber: store.playthroughs!.length - index,
                     );
+                    
+                    // Last playthough
+                    if (index == store.playthroughs!.length - 1) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: Dimensions.bottomTabTopHeight),
+                        child: playthough,
+                      );
+                    }
+                    return playthough;
                   },
                   separatorBuilder: (_, index) {
                     return const SizedBox(height: Dimensions.doubleStandardSpacing);
