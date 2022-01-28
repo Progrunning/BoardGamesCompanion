@@ -59,34 +59,28 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         ),
         body: Form(
           child: Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: const <Widget>[
-                    ItemPropertyTitle('Played on'),
-                    Expanded(
-                      child: SizedBox.shrink(),
-                    ),
-                    ItemPropertyTitle('Duration')
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  child: Row(
+                    children: const <Widget>[
+                      ItemPropertyTitle('Played on'),
+                      Expanded(child: SizedBox.shrink()),
+                      ItemPropertyTitle('Duration')
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: Dimensions.halfStandardSpacing,
-                ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
                 _Duration(viewModel: widget.viewModel),
-                const SizedBox(
-                  height: Dimensions.standardSpacing,
+                const SizedBox(height: Dimensions.standardSpacing),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  child: ItemPropertyTitle('Scores'),
                 ),
-                Divider(
-                  thickness: 1,
-                  color: AppTheme.accentColor.withOpacity(0.2),
-                ),
-                const ItemPropertyTitle('Scores'),
-                const SizedBox(
-                  height: Dimensions.halfStandardSpacing,
-                ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
                 Expanded(
                   child: _ScoresSection(
                     viewModel: widget.viewModel,
@@ -244,14 +238,17 @@ class _ScoresSectionState extends State<_ScoresSection> {
           value: widget.viewModel,
           child: Consumer<EditPlaythoughViewModel>(
             builder: (_, viewModel, __) {
-              return _PlayerScoreTile(
-                playerScore: viewModel.playerScores[index],
-                playthroughId: viewModel.playthrough.id,
-                isKeyboardShown: viewModel.isKeyboardShown,
-                onUpdatePlayerScore: (num score) async {
-                  await _updatePlayerScore(viewModel.playerScores[index], score);
-                },
-                onToggleKeyboard: widget.onToggleKeyboard,
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                child: _PlayerScoreTile(
+                  playerScore: viewModel.playerScores[index],
+                  playthroughId: viewModel.playthrough.id,
+                  isKeyboardShown: viewModel.isKeyboardShown,
+                  onUpdatePlayerScore: (num score) async {
+                    await _updatePlayerScore(viewModel.playerScores[index], score);
+                  },
+                  onToggleKeyboard: widget.onToggleKeyboard,
+                ),
               );
             },
           ),
@@ -507,55 +504,58 @@ class _DurationState extends State<_Duration> {
   @override
   Widget build(BuildContext context) {
     _setHourseAndMinutesRange();
-    return Row(
-      children: [
-        Center(
-          child: CalendarCard(
-            widget.viewModel.playthrough.startDate,
-            onTap: () async => _pickStartDate(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      child: Row(
+        children: [
+          Center(
+            child: CalendarCard(
+              widget.viewModel.playthrough.startDate,
+              onTap: () async => _pickStartDate(),
+            ),
           ),
-        ),
-        const Expanded(child: SizedBox.shrink()),
-        AbsorbPointer(
-          absorbing: !widget.viewModel.playthoughEnded,
-          child: Row(
-            children: <Widget>[
-              NumberPicker(
-                value: math.min(hoursPlayed, _maxHours),
-                minValue: minHours,
-                maxValue: maxHours,
-                onChanged: (num value) => _updateDurationHours(value),
-                itemWidth: 46,
-                selectedTextStyle: const TextStyle(
-                  color: AppTheme.accentColor,
-                  fontSize: Dimensions.doubleExtraLargeFontSize,
+          const Expanded(child: SizedBox.shrink()),
+          AbsorbPointer(
+            absorbing: !widget.viewModel.playthoughEnded,
+            child: Row(
+              children: <Widget>[
+                NumberPicker(
+                  value: math.min(hoursPlayed, _maxHours),
+                  minValue: minHours,
+                  maxValue: maxHours,
+                  onChanged: (num value) => _updateDurationHours(value),
+                  itemWidth: 46,
+                  selectedTextStyle: const TextStyle(
+                    color: AppTheme.accentColor,
+                    fontSize: Dimensions.doubleExtraLargeFontSize,
+                  ),
                 ),
-              ),
-              Text(
-                'h',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-              const SizedBox(width: Dimensions.halfStandardSpacing),
-              NumberPicker(
-                value: minutesPlyed,
-                infiniteLoop: true,
-                minValue: minMinutes,
-                maxValue: maxMinutes,
-                onChanged: (num value) => _updateDurationMinutes(value),
-                itemWidth: 46,
-                selectedTextStyle: const TextStyle(
-                  color: AppTheme.accentColor,
-                  fontSize: Dimensions.doubleExtraLargeFontSize,
+                Text(
+                  'h',
+                  style: AppTheme.theme.textTheme.bodyText2,
                 ),
-              ),
-              Text(
-                'min ',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-            ],
-          ),
-        )
-      ],
+                const SizedBox(width: Dimensions.halfStandardSpacing),
+                NumberPicker(
+                  value: minutesPlyed,
+                  infiniteLoop: true,
+                  minValue: minMinutes,
+                  maxValue: maxMinutes,
+                  onChanged: (num value) => _updateDurationMinutes(value),
+                  itemWidth: 46,
+                  selectedTextStyle: const TextStyle(
+                    color: AppTheme.accentColor,
+                    fontSize: Dimensions.doubleExtraLargeFontSize,
+                  ),
+                ),
+                Text(
+                  'min ',
+                  style: AppTheme.theme.textTheme.bodyText2,
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
