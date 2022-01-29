@@ -25,20 +25,16 @@ mixin EnterScoreDialogMixin {
                 boxShadow: const [AppTheme.defaultBoxShadow],
                 borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
               ),
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  const _Header(),
+                  const _CircularNumberPicker(strokeWidth: 50, thumbSize: 50),
                   Row(
-                    children: const <Widget>[
-                      Text('Miko'),
-                      SizedBox(width: Dimensions.standardSpacing),
-                      Text('80'),
-                    ],
-                  ),
-                  CircularNumberPicker(
-                    strokeWidth: 10,
+                    children: const <Widget>[],
                   ),
                 ],
               ),
@@ -50,14 +46,39 @@ mixin EnterScoreDialogMixin {
   }
 }
 
-class CircularNumberPicker extends StatefulWidget {
-  const CircularNumberPicker({
+class _Header extends StatelessWidget {
+  const _Header({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Text(
+          'Miko',
+          style: AppTheme.theme.textTheme.headline1!,
+        ),
+        const SizedBox(width: Dimensions.standardSpacing),
+        Text(
+          '80',
+          style: AppTheme.theme.textTheme.headline1!.copyWith(
+            fontSize: Dimensions.doubleExtraLargeFontSize,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CircularNumberPicker extends StatefulWidget {
+  const _CircularNumberPicker({
     Key? key,
     this.onChanged,
     this.onEnded,
     this.size = const Size(280, 280),
     this.strokeWidth = 30,
-    this.thumbSize = 32,
+    this.thumbSize = 30,
     this.highestNumberInSingleSpin = 12,
   }) : super(key: key);
 
@@ -94,7 +115,8 @@ class CircularNumberPicker extends StatefulWidget {
   _CircularNumberPickerState createState() => _CircularNumberPickerState();
 }
 
-class _CircularNumberPickerState extends State<CircularNumberPicker> with TickerProviderStateMixin {
+class _CircularNumberPickerState extends State<_CircularNumberPicker>
+    with TickerProviderStateMixin {
   static const int _fullCricleDegrees = 360;
 
   late double _angle;
@@ -348,7 +370,7 @@ class _CirclePickerPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth
-        ..color = AppTheme.darkGreyColor,
+        ..color = AppTheme.primaryColor.withOpacity(0.3),
     );
   }
 

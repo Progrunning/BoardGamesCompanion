@@ -77,11 +77,6 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _Duration(viewModel: widget.viewModel),
                 const SizedBox(height: Dimensions.standardSpacing),
-                CircularNumberPicker(
-                  onChanged: (int number) {
-                    debugPrint('$number');
-                  },
-                ),
                 const SizedBox(height: Dimensions.standardSpacing),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
@@ -92,7 +87,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                   child: _ScoresSection(
                     viewModel: widget.viewModel,
                     onToggleKeyboard: (bool isKeyboardShown) async {
-                      // final int? score = await showEnterScoreDialog(context);
+                      final int? score = await showEnterScoreDialog(context);
                       // widget.viewModel.toggleKeyboard(isKeyboardShown);
                     },
                   ),
