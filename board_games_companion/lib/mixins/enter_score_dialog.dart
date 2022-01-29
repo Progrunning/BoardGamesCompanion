@@ -235,6 +235,9 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
   }
 
   void _onEnd(DragEndDetails details) {
+    _fullCirclesCount = 0;
+    _isApproachingFromLeft = false;
+    _isApproachingFromRight = false;
     widget.onEnded();
   }
 
@@ -270,8 +273,6 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
       _isApproachingFromRight = false;
       _isApproachingFromLeft = true;
     }
-
-    debugPrint('CIRCLES $_fullCirclesCount');
 
     widget.onChanged(angle, _fullCirclesCount);
   }
