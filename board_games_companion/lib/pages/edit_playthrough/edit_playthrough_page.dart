@@ -77,13 +77,10 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _Duration(viewModel: widget.viewModel),
                 const SizedBox(height: Dimensions.standardSpacing),
-                Container(
-                  color: Colors.red,
-                  child: CircularNumberPicker(
-                    onChanged: (int number) {
-                      debugPrint('$number');
-                    },
-                  ),
+                CircularNumberPicker(
+                  onChanged: (int number) {
+                    debugPrint('$number');
+                  },
                 ),
                 const SizedBox(height: Dimensions.standardSpacing),
                 const Padding(

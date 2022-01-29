@@ -97,14 +97,14 @@ class CircularNumberPicker extends StatefulWidget {
 class _CircularNumberPickerState extends State<CircularNumberPicker> with TickerProviderStateMixin {
   static const int _fullCricleDegrees = 360;
 
-  late double _pickerAngle;
+  late double _angle;
   late int _number;
   late final double _degreesPerNumber;
 
   @override
   void initState() {
     super.initState();
-    _pickerAngle = 0;
+    _angle = 0;
     _number = 0;
 
     assert(widget.highestNumberInSingleSpin > 0);
@@ -121,27 +121,46 @@ class _CircularNumberPickerState extends State<CircularNumberPicker> with Ticker
     return SizedBox(
       width: widget.size.width,
       height: widget.size.height,
-      child: _NumberPicker(
-        angle: _pickerAngle,
-        size: widget.size,
-        strokeWidth: widget.strokeWidth,
-        thumbSize: widget.thumbSize,
-        onEnded: _onEnded,
-        onChanged: (double angle, int multiplier) {
-          setState(() {
-            _pickerAngle = angle;
-            widget.onChanged?.call(((angle / _degreesPerNumber).floor() + 1) +
-                widget.highestNumberInSingleSpin * multiplier);
-          });
-        },
+      child: Stack(
+        children: <Widget>[
+          _NumberPicker(
+            angle: _angle,
+            size: widget.size,
+            strokeWidth: widget.strokeWidth,
+            thumbSize: widget.thumbSize,
+            onEnded: () => _handleEndedPicking(),
+            onChanged: (double angle, int multiplier) => _handleNumberChange(angle, multiplier),
+          ),
+          Positioned.fill(
+              child: Center(
+            child: Text(
+              _number > 0 ? '+$_number' : '$_number',
+              style: AppTheme.theme.textTheme.headline1?.copyWith(fontSize: 60),
+            ),
+          )),
+        ],
       ),
     );
   }
 
-  void _onEnded() {
+  void _handleNumberChange(double angle, int multiplier) {
+    setState(() {
+      _angle = angle;
+      _number =
+          ((angle / _degreesPerNumber).floor() + 1) + widget.highestNumberInSingleSpin * multiplier;
+      if (multiplier < 0) {
+        _number--;
+      }
+
+      widget.onChanged?.call(_number);
+    });
+  }
+
+  void _handleEndedPicking() {
     widget.onEnded?.call(_number);
     setState(() {
-      _pickerAngle = 0;
+      _angle = 0;
+      _number = 0;
       widget.onChanged?.call(0);
     });
   }
@@ -175,6 +194,7 @@ class _NumberPicker extends StatefulWidget {
 }
 
 class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMixin {
+  late bool _isInit;
   late int _fullCirclesCount;
   late bool _isApproachingFromRight;
   late bool _isApproachingFromLeft;
@@ -182,6 +202,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
   @override
   void initState() {
     super.initState();
+    _isInit = true;
     _fullCirclesCount = 0;
     _isApproachingFromLeft = false;
     _isApproachingFromRight = false;
@@ -235,9 +256,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
   }
 
   void _onEnd(DragEndDetails details) {
-    _fullCirclesCount = 0;
-    _isApproachingFromLeft = false;
-    _isApproachingFromRight = false;
+    _reset();
     widget.onEnded();
   }
 
@@ -261,6 +280,10 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
       _isApproachingFromLeft = false;
     }
 
+    if (_isInit && angle.isBetween(270, 360)) {
+      _fullCirclesCount--;
+    }
+
     if (angle.isBetween(90, 270)) {
       _isApproachingFromRight = false;
       _isApproachingFromLeft = false;
@@ -275,6 +298,17 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
     }
 
     widget.onChanged(angle, _fullCirclesCount);
+
+    if (_isInit) {
+      _isInit = false;
+    }
+  }
+
+  void _reset() {
+    _isInit = true;
+    _fullCirclesCount = 0;
+    _isApproachingFromLeft = false;
+    _isApproachingFromRight = false;
   }
 }
 

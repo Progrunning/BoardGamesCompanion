@@ -132,6 +132,12 @@ class AppTheme {
       fontWeight: FontWeight.bold,
       color: defaultTextColor,
     );
+    
+    final headline1TextStyle = originalTextTheme.headline1!.copyWith(
+      fontSize: Dimensions.extraLargeFontSize,
+      fontWeight: FontWeight.bold,
+      color: defaultTextColor,
+    );
 
     final headline3TextStyle = originalTextTheme.headline3!.copyWith(
       fontSize: Dimensions.mediumFontSize,
@@ -209,10 +215,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           color: defaultTextColor,
         ),
-        headline1: originalHeadline1.copyWith(
-          fontSize: Dimensions.extraLargeFontSize,
-          color: defaultTextColor,
-        ),
+        headline1: headline1TextStyle,
         subtitle1: subtitle1TextStyle,
         subtitle2: originalSubtitle2.copyWith(
           fontSize: Dimensions.extraLargeFontSize,
