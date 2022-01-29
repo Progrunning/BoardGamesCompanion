@@ -9,6 +9,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/icon_and_text_button.dart';
@@ -38,7 +39,7 @@ class EditPlaythoughPage extends StatefulWidget {
   _EditPlaythoughPageState createState() => _EditPlaythoughPageState();
 }
 
-class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
+class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -76,6 +77,15 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _Duration(viewModel: widget.viewModel),
                 const SizedBox(height: Dimensions.standardSpacing),
+                Container(
+                  color: Colors.red,
+                  child: CircularNumberPicker(
+                    onChanged: (int number) {
+                      debugPrint('$number');
+                    },
+                  ),
+                ),
+                const SizedBox(height: Dimensions.standardSpacing),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                   child: ItemPropertyTitle('Scores'),
@@ -84,8 +94,9 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                 Expanded(
                   child: _ScoresSection(
                     viewModel: widget.viewModel,
-                    onToggleKeyboard: (bool isKeyboardShown) {
-                      widget.viewModel.toggleKeyboard(isKeyboardShown);
+                    onToggleKeyboard: (bool isKeyboardShown) async {
+                      // final int? score = await showEnterScoreDialog(context);
+                      // widget.viewModel.toggleKeyboard(isKeyboardShown);
                     },
                   ),
                 ),

@@ -88,11 +88,8 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                         children: <Widget>[
                           Center(
                             child: Container(
-                              decoration: const BoxDecoration(
-                                boxShadow: [
-                                  AppTheme.defaultBoxShadow,
-                                ],
-                              ),
+                              decoration:
+                                  const BoxDecoration(boxShadow: [AppTheme.defaultBoxShadow]),
                               child: SizedBox(
                                 height: 220,
                                 width: 190,

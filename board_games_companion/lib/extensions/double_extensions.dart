@@ -1,6 +1,6 @@
 import '../common/constants.dart';
 
-extension DoubleExtensions on double? {
+extension NullableDoubleExtensions on double? {
   int safeCompareTo(double? doubleToCompare) {
     if (this == null && doubleToCompare == null) {
       return Constants.LeaveAsIs;
@@ -15,5 +15,15 @@ extension DoubleExtensions on double? {
     }
 
     return this!.compareTo(doubleToCompare!);
+  }
+}
+
+extension DoubleExtensions on double {
+  bool isBetween(double from, double to, {bool inclusive = false}) {
+    if (inclusive) {
+      return from <= this && this <= to;
+    }
+
+    return from < this && this < to;
   }
 }

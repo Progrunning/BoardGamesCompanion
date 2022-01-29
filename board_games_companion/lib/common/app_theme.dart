@@ -14,6 +14,7 @@ class AppTheme {
   static const Color pinkColor = Colors.pink;
   static const Color purpleColor = Colors.purple;
   static const Color greyColor = Colors.grey;
+  static Color darkGreyColor = Colors.grey.shade800;
 
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
