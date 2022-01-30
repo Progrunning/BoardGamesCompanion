@@ -11,6 +11,7 @@ import '../../models/sort_by.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import '../../widgets/rounded_container.dart';
 
 class GamesFilterPanel extends StatefulWidget {
   const GamesFilterPanel({Key? key}) : super(key: key);
@@ -165,74 +166,41 @@ class _Filters extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const Text(
-          'Filter by',
-          style: AppTheme.titleTextStyle,
-        ),
-        const SizedBox(
-          height: Dimensions.standardSpacing,
-        ),
+        const Text('Filter by', style: AppTheme.titleTextStyle),
+        const SizedBox(height: Dimensions.standardSpacing),
         const Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            'Rating',
-            style: AppTheme.sectionHeaderTextStyle,
-          ),
+          child: Text('Rating', style: AppTheme.sectionHeaderTextStyle),
         ),
-        const SizedBox(
-          height: Dimensions.standardSpacing,
-        ),
+        const SizedBox(height: Dimensions.standardSpacing),
         SizedBox(
           height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
           child: Material(
             shadowColor: AppTheme.shadowColor,
             elevation: Dimensions.defaultElevation,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                Styles.defaultCornerRadius,
-              ),
+              borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
             ),
             child: Container(
-              color: AppTheme.primaryColor.withAlpha(
-                Styles.opacity80Percent,
-              ),
+              color: AppTheme.primaryColor.withAlpha(Styles.opacity80Percent),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  _FilterRatingAnyValue(
-                    boardGamesFiltersStore: boardGamesFiltersStore,
-                  ),
-                  _FilterRatingValue(
-                    rating: 6.5,
-                    boardGamesFiltersStore: boardGamesFiltersStore,
-                  ),
-                  _FilterRatingValue(
-                    rating: 7.5,
-                    boardGamesFiltersStore: boardGamesFiltersStore,
-                  ),
-                  _FilterRatingValue(
-                    rating: 8.0,
-                    boardGamesFiltersStore: boardGamesFiltersStore,
-                  ),
-                  _FilterRatingValue(
-                    rating: 8.5,
-                    boardGamesFiltersStore: boardGamesFiltersStore,
-                  ),
+                  _FilterRatingAnyValue(boardGamesFiltersStore: boardGamesFiltersStore),
+                  _FilterRatingValue(rating: 6.5, boardGamesFiltersStore: boardGamesFiltersStore),
+                  _FilterRatingValue(rating: 7.5, boardGamesFiltersStore: boardGamesFiltersStore),
+                  _FilterRatingValue(rating: 8.0, boardGamesFiltersStore: boardGamesFiltersStore),
+                  _FilterRatingValue(rating: 8.5, boardGamesFiltersStore: boardGamesFiltersStore),
                 ],
               ),
             ),
           ),
         ),
-        const SizedBox(
-          height: Dimensions.doubleStandardSpacing * 2,
-        ),
+        const SizedBox(height: Dimensions.doubleStandardSpacing * 2),
         const Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            'Number of players',
-            style: AppTheme.sectionHeaderTextStyle,
-          ),
+          child: Text('Number of players', style: AppTheme.sectionHeaderTextStyle),
         ),
         _FilterNumberOfPlayersSlider(
           boardGamesFiltersStore: boardGamesFiltersStore,
@@ -266,9 +234,7 @@ class _FilterRatingAnyValue extends StatelessWidget {
 
     if (isSelected) {
       return Expanded(
-        child: _FilterRatingValueContainer(
-          child: anyRating,
-        ),
+        child: RoundedContainer(child: anyRating),
       );
     }
     return Expanded(
@@ -395,13 +361,9 @@ class _FilterRatingValue extends StatelessWidget {
     );
 
     if (isSelected) {
-      final selectionContainer = _FilterRatingValueContainer(
-        child: centeredBoardGameRatingHexagon,
-      );
+      final selectionContainer = RoundedContainer(child: centeredBoardGameRatingHexagon);
 
-      return Expanded(
-        child: selectionContainer,
-      );
+      return Expanded(child: selectionContainer);
     }
 
     return Expanded(
@@ -411,28 +373,6 @@ class _FilterRatingValue extends StatelessWidget {
           _boardGamesFiltersStore.updateFilterByRating(_rating);
         },
       ),
-    );
-  }
-}
-
-class _FilterRatingValueContainer extends StatelessWidget {
-  const _FilterRatingValueContainer({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  final Center child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.accentColor,
-        borderRadius: BorderRadius.circular(
-          Styles.defaultCornerRadius,
-        ),
-      ),
-      child: child,
     );
   }
 }

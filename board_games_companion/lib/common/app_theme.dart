@@ -44,6 +44,8 @@ class AppTheme {
   static const Color activeBottomTabColor = whiteColor;
   static const Color inactiveBottomTabColor = greyColor;
 
+  static Color alternativeSplashColor = primaryColorLight.withOpacity(0.7);
+
   static Color playedGamesStatColor = chartColorPallete[0];
   static Color highscoreStatColor = chartColorPallete[1];
   static Color averagePlayerCountStatColor = chartColorPallete[5];
@@ -113,7 +115,6 @@ class AppTheme {
     final originalBodyText2 = originalTextTheme.bodyText2!;
     final originalHeadline5 = originalTextTheme.headline5!;
     final originalHeadline2 = originalTextTheme.headline2!;
-    final originalHeadline1 = originalTextTheme.headline1!;
     final originalSubtitle2 = originalTextTheme.subtitle2!;
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
     final originaltimePickerTheme = ThemeData.light().timePickerTheme;
@@ -132,7 +133,7 @@ class AppTheme {
       fontWeight: FontWeight.bold,
       color: defaultTextColor,
     );
-    
+
     final headline1TextStyle = originalTextTheme.headline1!.copyWith(
       fontSize: Dimensions.extraLargeFontSize,
       fontWeight: FontWeight.bold,

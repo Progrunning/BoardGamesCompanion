@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 
 import '../common/app_theme.dart';
 import '../common/dimensions.dart';
 import '../common/styles.dart';
 import '../extensions/double_extensions.dart';
+import '../widgets/common/default_icon.dart';
+import '../widgets/common/icon_and_text_button.dart';
+import '../widgets/rounded_container.dart';
 
 mixin EnterScoreDialogMixin {
   Future<int?> showEnterScoreDialog(BuildContext context) async {
@@ -15,33 +19,49 @@ mixin EnterScoreDialogMixin {
       barrierLabel: 'dismiss',
       context: context,
       pageBuilder: (_, __, ___) {
-        // TODO Work out a better padding because on very large screens this won't look good
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Dimensions.trippleStandardSpacing),
-          child: Center(
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppTheme.primaryColorLight,
-                boxShadow: const [AppTheme.defaultBoxShadow],
-                borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
-              ),
-              padding: const EdgeInsets.all(Dimensions.standardSpacing),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const _Header(),
-                  const _CircularNumberPicker(strokeWidth: 50, thumbSize: 50),
-                  Row(
-                    children: const <Widget>[],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return const EnterScoreDialog();
       },
+    );
+  }
+}
+
+class EnterScoreDialog extends StatelessWidget {
+  const EnterScoreDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO Work out a better padding because on very large screens this won't look good
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.trippleStandardSpacing),
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppTheme.primaryColorLight,
+            boxShadow: const [AppTheme.defaultBoxShadow],
+            borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+          ),
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const _Header(),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              const _CircularNumberPicker(strokeWidth: 50, thumbSize: 50),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              const _InstantScorePanel(),
+              const SizedBox(height: Dimensions.trippleStandardSpacing),
+              _ActionButtons(
+                onUndo: () {},
+                onSave: () {},
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -65,6 +85,123 @@ class _Header extends StatelessWidget {
           style: AppTheme.theme.textTheme.headline1!.copyWith(
             fontSize: Dimensions.doubleExtraLargeFontSize,
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _InstantScorePanel extends StatelessWidget {
+  const _InstantScorePanel({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        RoundedContainer(
+          backgroundColor: AppTheme.primaryColor,
+          addShadow: true,
+          child: Column(
+            children: [
+              RoundedContainer(
+                onTap: () {},
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.doubleStandardSpacing,
+                    vertical: Dimensions.standardSpacing,
+                  ),
+                  child: Text('+'),
+                ),
+              ),
+              RoundedContainer(
+                onTap: () {},
+                backgroundColor: Colors.transparent,
+                splashColor: AppTheme.accentColor,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.doubleStandardSpacing,
+                    vertical: Dimensions.standardSpacing,
+                  ),
+                  child: Text('-'),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: Dimensions.doubleStandardSpacing),
+        _InstantScoreTile(text: '1', onTap: () {}),
+        const Expanded(child: SizedBox.shrink()),
+        _InstantScoreTile(text: '5', onTap: () {}),
+        const Expanded(child: SizedBox.shrink()),
+        _InstantScoreTile(text: '10', onTap: () {}),
+        const Expanded(child: SizedBox.shrink()),
+        _InstantScoreTile(text: '50', onTap: () {}),
+      ],
+    );
+  }
+}
+
+class _InstantScoreTile extends StatelessWidget {
+  const _InstantScoreTile({
+    required this.text,
+    required this.onTap,
+    Key? key,
+  }) : super(key: key);
+
+  final VoidCallback onTap;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedContainer(
+      addShadow: true,
+      onTap: onTap,
+      width: 52,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.doubleStandardSpacing,
+          vertical: Dimensions.standardSpacing,
+        ),
+        child: Text(
+          text,
+          style: AppTheme.theme.textTheme.bodyText1!,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionButtons extends StatelessWidget {
+  const _ActionButtons({
+    required this.onUndo,
+    required this.onSave,
+    Key? key,
+  }) : super(key: key);
+
+  final VoidCallback onUndo;
+  final VoidCallback onSave;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconAndTextButton(
+          title: AppText.enterScoreDialogUndoButtonText,
+          icon: const DefaultIcon(Icons.undo),
+          color: AppTheme.blueColor,
+          onPressed: onUndo,
+        ),
+        const Expanded(child: SizedBox.shrink()),
+        IconAndTextButton(
+          title: AppText.enterScoreDialogSaveButtonText,
+          icon: const DefaultIcon(
+            Icons.save,
+          ),
+          color: AppTheme.accentColor,
+          onPressed: onSave,
         ),
       ],
     );

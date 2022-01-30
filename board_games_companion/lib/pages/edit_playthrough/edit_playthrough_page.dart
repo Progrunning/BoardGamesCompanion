@@ -82,16 +82,17 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                   padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                   child: ItemPropertyTitle('Scores'),
                 ),
+                const EnterScoreDialog(),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
-                Expanded(
-                  child: _ScoresSection(
-                    viewModel: widget.viewModel,
-                    onToggleKeyboard: (bool isKeyboardShown) async {
-                      final int? score = await showEnterScoreDialog(context);
-                      // widget.viewModel.toggleKeyboard(isKeyboardShown);
-                    },
-                  ),
-                ),
+                // Expanded(
+                //   child: _ScoresSection(
+                //     viewModel: widget.viewModel,
+                //     onToggleKeyboard: (bool isKeyboardShown) async {
+                //       final int? score = await showEnterScoreDialog(context);
+                //       // widget.viewModel.toggleKeyboard(isKeyboardShown);
+                //     },
+                //   ),
+                // ),
                 ChangeNotifierProvider<EditPlaythoughViewModel>.value(
                   value: widget.viewModel,
                   child: Consumer<EditPlaythoughViewModel>(

@@ -35,9 +35,12 @@ class AppText {
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';
   static const searchBoardGamesPageHotBoardGamesErrorPartOne =
-      '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';  
+      '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
-  
-  static const playtimeDurationHoursFormat = '%sh %smin';
-  static const playtimeDurationDaysFormat = '%s day%s %sh';
+
+  static const playtimeDurationHoursFormat = '%ih %imin';
+  static const playtimeDurationDaysFormat = '%i day%s %ih';
+
+  static const enterScoreDialogUndoButtonText = 'Undo';
+  static const enterScoreDialogSaveButtonText = 'Save';
 }
