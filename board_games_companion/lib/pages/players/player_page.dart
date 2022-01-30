@@ -344,7 +344,7 @@ class _ActionButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         if (isEditMode) ...[
-          IconAndTextButton(
+          IconAndElevatedButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
             color: Colors.redAccent,
@@ -352,7 +352,7 @@ class _ActionButtons extends StatelessWidget {
           ),
           const SizedBox(width: Dimensions.standardSpacing),
         ],
-        IconAndTextButton(
+        IconAndElevatedButton(
           title: isEditMode ? 'Update' : 'Create',
           icon: const DefaultIcon(Icons.create),
           onPressed: () => isEditMode ? onUpdate(context) : onCreate(context),

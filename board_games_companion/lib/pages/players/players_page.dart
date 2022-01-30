@@ -175,7 +175,7 @@ class _CreatePlayerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconAndTextButton(
+    return IconAndElevatedButton(
       title: 'Create Player',
       icon: const DefaultIcon(Icons.add),
       onPressed: () => onCreatePlayer(),

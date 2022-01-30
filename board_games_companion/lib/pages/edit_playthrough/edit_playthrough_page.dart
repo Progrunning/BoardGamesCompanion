@@ -533,7 +533,7 @@ class _ActionButtons extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          IconAndTextButton(
+          IconAndElevatedButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
             color: AppTheme.redColor,
@@ -541,20 +541,19 @@ class _ActionButtons extends StatelessWidget {
           ),
           const Expanded(child: SizedBox.shrink()),
           if (!viewModel.playthoughEnded) ...[
-            IconAndTextButton(
+            IconAndElevatedButton(
               title: AppText.Stop,
               icon: const DefaultIcon(
                 Icons.stop,
               ),
               color: AppTheme.blueColor,
-              splashColor: AppTheme.whiteColor,
               onPressed: onStop,
             ),
             const SizedBox(
               width: Dimensions.standardSpacing,
             ),
           ],
-          IconAndTextButton(
+          IconAndElevatedButton(
             title: 'Save',
             icon: const DefaultIcon(
               Icons.save,

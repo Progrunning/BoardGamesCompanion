@@ -26,6 +26,8 @@ class EnterScoreViewModel with ChangeNotifier {
 
   bool get canUndo => partialScores.isNotEmpty;
 
+  bool get hasUnsavedChanged => partialScores.isNotEmpty;
+
   List<int> partialScores = <int>[];
 
   void updateOperation(EnterScoreOperation operation) {
@@ -47,6 +49,16 @@ class EnterScoreViewModel with ChangeNotifier {
 
     partialScores.removeLast();
 
+    _score = playerScore.score.valueInt + _partialScoresSum;
+
     notifyListeners();
+  }
+
+  int get _partialScoresSum {
+    if (partialScores.isEmpty) {
+      return 0;
+    }
+
+    return partialScores.reduce((a, b) => a + b);
   }
 }

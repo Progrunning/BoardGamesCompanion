@@ -113,7 +113,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  IconAndTextButton(
+                  IconAndElevatedButton(
                     title: 'Remove',
                     icon: const DefaultIcon(
                       Icons.remove_circle_outline,

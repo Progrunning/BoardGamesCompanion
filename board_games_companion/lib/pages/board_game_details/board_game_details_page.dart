@@ -342,7 +342,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                   const SizedBox(
                     height: Dimensions.standardSpacing,
                   ),
-                  IconAndTextButton(
+                  IconAndElevatedButton(
                     title: 'Refresh',
                     icon: const DefaultIcon(
                       Icons.refresh,

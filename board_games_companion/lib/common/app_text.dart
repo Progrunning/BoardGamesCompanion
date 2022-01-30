@@ -44,5 +44,5 @@ class AppText {
   static const editPlaythroughScorePoints = 'points';
 
   static const enterScoreDialogUndoButtonText = 'Undo';
-  static const enterScoreDialogSaveButtonText = 'Save';
+  static const enterScoreDialogDoneButtonText = 'Done';
 }

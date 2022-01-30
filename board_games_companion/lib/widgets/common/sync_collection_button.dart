@@ -34,7 +34,7 @@ class _SyncButtonState extends State<SyncButton> with SyncCollection, TickerProv
 
   @override
   Widget build(BuildContext context) {
-    return IconAndTextButton(
+    return IconAndElevatedButton(
       title: 'Sync',
       icon: _SyncCollectionIcon(animationController: _animationController),
       onPressed: () async {

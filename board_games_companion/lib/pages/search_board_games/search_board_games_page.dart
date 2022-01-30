@@ -405,7 +405,7 @@ class _NoResults extends StatelessWidget {
             ),
             const SizedBox(height: Dimensions.doubleStandardSpacing),
             Center(
-              child: IconAndTextButton(
+              child: IconAndElevatedButton(
                 title: 'Retry',
                 icon: const DefaultIcon(Icons.refresh),
                 onPressed: () {
@@ -480,7 +480,7 @@ class _HotBoardGames extends StatelessWidget {
                   const SizedBox(height: Dimensions.standardSpacing),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: IconAndTextButton(
+                    child: IconAndElevatedButton(
                       icon: const DefaultIcon(Icons.refresh),
                       title: AppText.searchBoardGamesPageHotBoardGamesErrorRetryButtonText,
                       onPressed: () => _hotBoardGamesStore.refresh(),

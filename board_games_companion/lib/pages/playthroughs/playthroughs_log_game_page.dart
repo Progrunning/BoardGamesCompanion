@@ -647,7 +647,7 @@ class _NoPlayers extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.topRight,
-          child: IconAndTextButton(
+          child: IconAndElevatedButton(
             title: 'Create Player',
             icon: const DefaultIcon(Icons.add),
             onPressed: () => Navigator.pushNamed(

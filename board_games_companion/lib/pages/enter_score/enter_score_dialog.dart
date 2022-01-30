@@ -24,84 +24,68 @@ class EnterScoreDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EnterScoreViewModel>.value(
-        value: viewModel,
-        builder: (_, __) {
-          // TODO Work out a better padding because on very large screens this won't look good
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimensions.trippleStandardSpacing),
-            child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryColorLight,
-                  boxShadow: const [AppTheme.defaultBoxShadow],
-                  borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+      value: viewModel,
+      builder: (_, __) {
+        // TODO Work out a better padding because on very large screens this won't look good
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.trippleStandardSpacing),
+          child: Center(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColorLight,
+                boxShadow: const [AppTheme.defaultBoxShadow],
+                borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Dimensions.doubleStandardSpacing,
+                  vertical: Dimensions.standardSpacing,
                 ),
-                child: Stack(
-                  children: [
-                    const _CloseButton(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.doubleStandardSpacing,
-                        vertical: Dimensions.standardSpacing,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          _Header(
-                            playerName: viewModel.playerScore.player?.name,
-                            playerScore: viewModel.playerScore.score.valueInt,
-                          ),
-                          const SizedBox(height: Dimensions.doubleStandardSpacing),
-                          const _CircularNumberPicker(strokeWidth: 50, thumbSize: 50),
-                          const SizedBox(height: Dimensions.doubleStandardSpacing),
-                          Consumer<EnterScoreViewModel>(
-                            builder: (_, viewModel, __) {
-                              return _InstantScorePanel(
-                                operation: viewModel.operation,
-                                onOperationChange: (EnterScoreOperation operation) {
-                                  viewModel.updateOperation(operation);
-                                },
-                              );
-                            },
-                          ),
-                          const SizedBox(height: Dimensions.trippleStandardSpacing),
-                          _ActionButtons(
-                            onUndo: () {},
-                            onSave: () {},
-                          ),
-                        ],
-                      ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
+                    _CircularNumberPicker(
+                      strokeWidth: 50,
+                      thumbSize: 50,
+                      onEnded: (int partialScore) {
+                        viewModel.updateScore(partialScore);
+                      },
+                    ),
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
+                    Consumer<EnterScoreViewModel>(
+                      builder: (_, viewModel, __) {
+                        return _InstantScorePanel(
+                          operation: viewModel.operation,
+                          onOperationChange: (EnterScoreOperation operation) {
+                            viewModel.updateOperation(operation);
+                          },
+                          onScoreChange: (int partialScore) {
+                            if (viewModel.operation == EnterScoreOperation.subtract) {
+                              partialScore = -partialScore;
+                            }
+
+                            viewModel.updateScore(partialScore);
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
+                    _Header(playerName: viewModel.playerScore.player?.name),
+                    const SizedBox(height: Dimensions.trippleStandardSpacing),
+                    _ActionButtons(
+                      onUndo: () => viewModel.undo(),
+                      onDone: () => Navigator.pop(context),
                     ),
                   ],
                 ),
               ),
             ),
-          );
-        });
-  }
-}
-
-class _CloseButton extends StatelessWidget {
-  const _CloseButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Material(
-          child: IconButton(
-            icon: const Icon(Icons.close),
-            color: AppTheme.whiteColor,
-            onPressed: () => Navigator.pop(context),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -109,26 +93,29 @@ class _CloseButton extends StatelessWidget {
 class _Header extends StatelessWidget {
   const _Header({
     required this.playerName,
-    required this.playerScore,
     Key? key,
   }) : super(key: key);
 
   final String? playerName;
-  final int playerScore;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
           '$playerName scored',
           style: AppTheme.theme.textTheme.headline1!.copyWith(fontWeight: FontWeight.normal),
         ),
-        Text(
-          ' $playerScore ',
-          style: AppTheme.theme.textTheme.headline1!.copyWith(
-            fontSize: Dimensions.doubleExtraLargeFontSize,
-          ),
+        Consumer<EnterScoreViewModel>(
+          builder: (_, viewModel, __) {
+            return Text(
+              ' ${viewModel.score} ',
+              style: AppTheme.theme.textTheme.headline1!.copyWith(
+                fontSize: Dimensions.doubleExtraLargeFontSize,
+              ),
+            );
+          },
         ),
         Text(
           AppText.editPlaythroughScorePoints,
@@ -143,11 +130,13 @@ class _InstantScorePanel extends StatelessWidget {
   const _InstantScorePanel({
     required this.operation,
     required this.onOperationChange,
+    required this.onScoreChange,
     Key? key,
   }) : super(key: key);
 
   final EnterScoreOperation operation;
   final ValueChanged<EnterScoreOperation> onOperationChange;
+  final ValueChanged<int> onScoreChange;
 
   @override
   Widget build(BuildContext context) {
@@ -173,13 +162,13 @@ class _InstantScorePanel extends StatelessWidget {
           ),
         ),
         const SizedBox(width: Dimensions.doubleStandardSpacing),
-        _InstantScoreTile(text: '1', onTap: () {}),
+        _InstantScoreTile(text: '1', onTap: () => onScoreChange(1)),
         const Expanded(child: SizedBox.shrink()),
-        _InstantScoreTile(text: '5', onTap: () {}),
+        _InstantScoreTile(text: '5', onTap: () => onScoreChange(5)),
         const Expanded(child: SizedBox.shrink()),
-        _InstantScoreTile(text: '10', onTap: () {}),
+        _InstantScoreTile(text: '10', onTap: () => onScoreChange(10)),
         const Expanded(child: SizedBox.shrink()),
-        _InstantScoreTile(text: '50', onTap: () {}),
+        _InstantScoreTile(text: '50', onTap: () => onScoreChange(50)),
       ],
     );
   }
@@ -202,16 +191,16 @@ class _InstantScoreOperationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
+      width: 44,
+      height: 44,
       backgroundColor: isActive ? AppTheme.accentColor : Colors.transparent,
       splashColor: isActive ? null : AppTheme.accentColor,
       onTap: () => onOperationChange(operation),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.doubleStandardSpacing,
-          vertical: Dimensions.standardSpacing,
-        ),
-        child: Text(symbol),
-      ),
+      child: Center(
+          child: Text(
+        symbol,
+        style: AppTheme.theme.textTheme.headline1,
+      )),
     );
   }
 }
@@ -232,14 +221,11 @@ class _InstantScoreTile extends StatelessWidget {
       addShadow: true,
       onTap: onTap,
       width: 52,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.doubleStandardSpacing,
-          vertical: Dimensions.standardSpacing,
-        ),
+      height: 52,
+      child: Center(
         child: Text(
           text,
-          style: AppTheme.theme.textTheme.bodyText1!,
+          style: AppTheme.theme.textTheme.headline3!,
           textAlign: TextAlign.center,
         ),
       ),
@@ -250,31 +236,31 @@ class _InstantScoreTile extends StatelessWidget {
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
     required this.onUndo,
-    required this.onSave,
+    required this.onDone,
     Key? key,
   }) : super(key: key);
 
   final VoidCallback onUndo;
-  final VoidCallback onSave;
+  final VoidCallback onDone;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconAndTextButton(
-          title: AppText.enterScoreDialogUndoButtonText,
-          icon: const DefaultIcon(Icons.undo),
-          color: AppTheme.blueColor,
-          onPressed: onUndo,
-        ),
+        Consumer<EnterScoreViewModel>(builder: (_, viewModel, __) {
+          return IconAndElevatedButton(
+            title: AppText.enterScoreDialogUndoButtonText,
+            icon: const DefaultIcon(Icons.undo),
+            color: AppTheme.blueColor,
+            onPressed: viewModel.canUndo ? onUndo : null,
+          );
+        }),
         const Expanded(child: SizedBox.shrink()),
-        IconAndTextButton(
-          title: AppText.enterScoreDialogSaveButtonText,
-          icon: const DefaultIcon(
-            Icons.save,
-          ),
+        IconAndElevatedButton(
+          title: AppText.enterScoreDialogDoneButtonText,
+          icon: const DefaultIcon(Icons.done),
           color: AppTheme.accentColor,
-          onPressed: onSave,
+          onPressed: onDone,
         ),
       ],
     );
@@ -363,13 +349,15 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
             onEnded: () => _handleEndedPicking(),
             onChanged: (double angle, int multiplier) => _handleNumberChange(angle, multiplier),
           ),
-          Positioned.fill(
+          if (_number != 0)
+            Positioned.fill(
               child: Center(
-            child: Text(
-              _number > 0 ? '+$_number' : '$_number',
-              style: AppTheme.theme.textTheme.headline1?.copyWith(fontSize: 60),
+                child: Text(
+                  _number > 0 ? '+$_number' : '$_number',
+                  style: AppTheme.theme.textTheme.headline1?.copyWith(fontSize: 60),
+                ),
+              ),
             ),
-          )),
         ],
       ),
     );
@@ -449,7 +437,6 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
 
     return GestureDetector(
       onPanDown: _onDown,
-      onPanCancel: _onCancel,
       onHorizontalDragStart: _onStart,
       onHorizontalDragUpdate: _onUpdate,
       onHorizontalDragEnd: _onEnd,
@@ -489,10 +476,6 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
 
   void _onEnd(DragEndDetails details) {
     _reset();
-    widget.onEnded();
-  }
-
-  void _onCancel() {
     widget.onEnded();
   }
 

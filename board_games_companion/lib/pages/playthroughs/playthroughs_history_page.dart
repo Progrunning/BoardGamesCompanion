@@ -64,7 +64,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                       playthrough: store.playthroughs![index],
                       playthroughNumber: store.playthroughs!.length - index,
                     );
-                    
+
                     // Last playthough
                     if (index == store.playthroughs!.length - 1) {
                       return Padding(
@@ -191,7 +191,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconAndTextButton(
+            IconAndElevatedButton(
               title: AppText.Edit,
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,
@@ -200,7 +200,6 @@ class _PlaythroughPlayersStats extends StatelessWidget {
                 EditPlaythoughPage.pageRoute,
                 arguments: EditPlaythroughPageArguments(playthroughStore),
               ),
-              splashColor: AppTheme.whiteColor,
             ),
           ],
         ),

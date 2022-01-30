@@ -157,7 +157,7 @@ class _Collection extends StatelessWidget {
                   );
                 },
               ),
-              const SliverPadding(padding:  EdgeInsets.all(8.0)),
+              const SliverPadding(padding: EdgeInsets.all(8.0)),
             ],
           ),
         ),
@@ -524,7 +524,7 @@ class _EmptySearchResult extends StatelessWidget {
               height: Dimensions.standardSpacing,
             ),
             Center(
-              child: IconAndTextButton(
+              child: IconAndElevatedButton(
                 title: 'Clear search',
                 icon: const DefaultIcon(Icons.clear),
                 onPressed: onClearSearch,

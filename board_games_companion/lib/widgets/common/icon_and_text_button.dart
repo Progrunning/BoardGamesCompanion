@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../common/app_theme.dart';
-import '../../common/dimensions.dart';
 
-class IconAndTextButton extends StatelessWidget {
-  const IconAndTextButton({
+class IconAndElevatedButton extends StatelessWidget {
+  const IconAndElevatedButton({
     required this.icon,
     this.title,
-    this.color,
-    this.splashColor,
-    this.horizontalPadding,
-    this.verticalPadding,
+    this.color = AppTheme.accentColor,
     required this.onPressed,
     Key? key,
   }) : super(key: key);
@@ -21,45 +17,37 @@ class IconAndTextButton extends StatelessWidget {
 
   final Widget icon;
   final String? title;
-  final Color? color;
-  final Color? splashColor;
-
-  final double? horizontalPadding;
-  final double? verticalPadding;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    final fillColor = color ?? AppTheme.accentColor;
+    return ElevatedButton.icon(
+      icon: icon,
+      label: title?.isNotEmpty ?? false ? Text(title!) : const SizedBox.shrink(),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed)) {
+              return color.withOpacity(0.5);
+            }
 
-    return RawMaterialButton(
-      constraints: const BoxConstraints(),
-      fillColor: fillColor,
-      splashColor:
-          splashColor ?? fillColor.withAlpha((fillColor.alpha * rippleEffectOpacityFactor).toInt()),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: horizontalPadding ?? Dimensions.doubleStandardSpacing,
-          vertical: verticalPadding ?? Dimensions.standardSpacing,
+            return color;
+          },
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            icon,
-            if (title?.isNotEmpty ?? false) ...[
-              const SizedBox(width: Dimensions.halfStandardSpacing),
-              Text(
-                title!,
-                style: const TextStyle(
-                  color: AppTheme.defaultTextColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ]
-          ],
+        shape: MaterialStateProperty.all(const StadiumBorder()),
+        foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppTheme.darkGreyColor.withOpacity(0.4);
+            }
+
+            return AppTheme.defaultTextColor;
+          },
         ),
+        textStyle: MaterialStateProperty.all(
+            const TextStyle(color: AppTheme.defaultTextColor, fontWeight: FontWeight.bold)),
       ),
       onPressed: onPressed,
-      shape: const StadiumBorder(),
     );
   }
 }
