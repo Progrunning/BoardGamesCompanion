@@ -113,6 +113,7 @@ class _Header extends StatelessWidget {
               ' ${viewModel.score} ',
               style: AppTheme.theme.textTheme.headline1!.copyWith(
                 fontSize: Dimensions.doubleExtraLargeFontSize,
+                color: AppTheme.accentColor,
               ),
             );
           },
