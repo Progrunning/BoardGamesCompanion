@@ -41,6 +41,8 @@ class AppText {
   static const playtimeDurationHoursFormat = '%ih %imin';
   static const playtimeDurationDaysFormat = '%i day%s %ih';
 
+  static const editPlaythroughScorePoints = 'points';
+
   static const enterScoreDialogUndoButtonText = 'Undo';
   static const enterScoreDialogSaveButtonText = 'Save';
 }

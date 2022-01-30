@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:basics/basics.dart';
+import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +9,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../common/styles.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/default_icon.dart';
@@ -18,12 +19,6 @@ import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'edit_playthrouhg_view_model.dart';
-
-enum UpdateScoreMethod {
-  swipe,
-  increment,
-  keyboard,
-}
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
@@ -82,31 +77,26 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                   padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                   child: ItemPropertyTitle('Scores'),
                 ),
-                const EnterScoreDialog(),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
-                // Expanded(
-                //   child: _ScoresSection(
-                //     viewModel: widget.viewModel,
-                //     onToggleKeyboard: (bool isKeyboardShown) async {
-                //       final int? score = await showEnterScoreDialog(context);
-                //       // widget.viewModel.toggleKeyboard(isKeyboardShown);
-                //     },
-                //   ),
-                // ),
+                Expanded(
+                  child: _ScoresSection(
+                    viewModel: widget.viewModel,
+                    onItemTapped: (PlayerScore playerScore) async {
+                      final int? score =
+                          await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
+                    },
+                  ),
+                ),
                 ChangeNotifierProvider<EditPlaythoughViewModel>.value(
                   value: widget.viewModel,
                   child: Consumer<EditPlaythoughViewModel>(
                     builder: (_, viewModel, __) {
-                      if (!viewModel.isKeyboardShown) {
-                        return _ActionButtons(
-                          viewModel: viewModel,
-                          onSave: () async => _save(),
-                          onStop: () async => _stopPlaythrough(),
-                          onDelete: () async => _showDeletePlaythroughDialog(context),
-                        );
-                      }
-
-                      return const SizedBox.shrink();
+                      return _ActionButtons(
+                        viewModel: viewModel,
+                        onSave: () async => _save(),
+                        onStop: () async => _stopPlaythrough(),
+                        onDelete: () async => _showDeletePlaythroughDialog(context),
+                      );
                     },
                   ),
                 ),
@@ -219,11 +209,11 @@ class _ScoresSection extends StatefulWidget {
   const _ScoresSection({
     Key? key,
     required this.viewModel,
-    required this.onToggleKeyboard,
+    required this.onItemTapped,
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
-  final void Function(bool) onToggleKeyboard;
+  final void Function(PlayerScore) onItemTapped;
 
   @override
   State<_ScoresSection> createState() => _ScoresSectionState();
@@ -238,23 +228,24 @@ class _ScoresSectionState extends State<_ScoresSection> {
         return const SizedBox(height: Dimensions.doubleStandardSpacing);
       },
       itemBuilder: (context, index) {
-        return ChangeNotifierProvider<EditPlaythoughViewModel>.value(
-          value: widget.viewModel,
-          child: Consumer<EditPlaythoughViewModel>(
-            builder: (_, viewModel, __) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                child: _PlayerScoreTile(
-                  playerScore: viewModel.playerScores[index],
-                  playthroughId: viewModel.playthrough.id,
-                  isKeyboardShown: viewModel.isKeyboardShown,
-                  onUpdatePlayerScore: (num score) async {
-                    await _updatePlayerScore(viewModel.playerScores[index], score);
-                  },
-                  onToggleKeyboard: widget.onToggleKeyboard,
-                ),
-              );
-            },
+        return InkWell(
+          onTap: () => widget.onItemTapped(widget.viewModel.playerScores[index]),
+          child: ChangeNotifierProvider<EditPlaythoughViewModel>.value(
+            value: widget.viewModel,
+            child: Consumer<EditPlaythoughViewModel>(
+              builder: (_, viewModel, __) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  child: _PlayerScoreTile(
+                    playerScore: viewModel.playerScores[index],
+                    playthroughId: viewModel.playthrough.id,
+                    onUpdatePlayerScore: (num score) async {
+                      await _updatePlayerScore(viewModel.playerScores[index], score);
+                    },
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
@@ -282,16 +273,12 @@ class _PlayerScoreTile extends StatelessWidget {
     Key? key,
     required this.playerScore,
     required this.playthroughId,
-    required this.isKeyboardShown,
     required this.onUpdatePlayerScore,
-    required this.onToggleKeyboard,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String playthroughId;
-  final bool isKeyboardShown;
   final Future<void> Function(num) onUpdatePlayerScore;
-  final void Function(bool) onToggleKeyboard;
 
   @override
   Widget build(BuildContext context) {
@@ -311,9 +298,7 @@ class _PlayerScoreTile extends StatelessWidget {
           Expanded(
             child: _PlayerScore(
               playerScore: playerScore,
-              isKeyboardShown: isKeyboardShown,
               onUpdatePlayerScore: onUpdatePlayerScore,
-              onToggleKeyboard: onToggleKeyboard,
             ),
           ),
         ],
@@ -326,26 +311,17 @@ class _PlayerScore extends StatefulWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
-    required this.isKeyboardShown,
     required this.onUpdatePlayerScore,
-    required this.onToggleKeyboard,
   }) : super(key: key);
 
   final PlayerScore playerScore;
-  final bool isKeyboardShown;
   final Future<void> Function(num) onUpdatePlayerScore;
-  final void Function(bool) onToggleKeyboard;
 
   @override
   State<_PlayerScore> createState() => _PlayerScoreState();
 }
 
 class _PlayerScoreState extends State<_PlayerScore> {
-  static const double _scorePointsFontSize = 22;
-  static const double _numericPickerItemWidth = 48;
-  static const double _numericPickerWidgetWidth = _numericPickerItemWidth * 3;
-
-  bool useKeyboardToEnterScore = false;
   late TextEditingController playerScoreEditingController;
   late FocusNode playerScoreFocusNode;
 
@@ -368,100 +344,19 @@ class _PlayerScoreState extends State<_PlayerScore> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        SizedBox(
-          width: _numericPickerWidgetWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              if (useKeyboardToEnterScore)
-                Form(
-                  child: SizedBox(
-                    width: 120,
-                    child: TextFormField(
-                      controller: playerScoreEditingController,
-                      focusNode: playerScoreFocusNode,
-                      style:
-                          AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
-                      autofocus: true,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      onFieldSubmitted: (String? text) async {
-                        if (text?.isNotBlank ?? false) {
-                          await widget.onUpdatePlayerScore(int.tryParse(text!)!);
-                        }
-
-                        useKeyboardToEnterScore = false;
-                        widget.onToggleKeyboard(useKeyboardToEnterScore);
-                      },
-                    ),
-                  ),
-                )
-              else
-                NumberPicker(
-                  value: widget.playerScore.score.valueInt,
-                  axis: Axis.horizontal,
-                  itemWidth: _numericPickerItemWidth,
-                  minValue: 0,
-                  maxValue: 10000,
-                  onChanged: (num score) async {
-                    await widget.onUpdatePlayerScore(score);
-                  },
-                  selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
-                    fontSize: _scorePointsFontSize,
-                  ),
-                ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: widget.isKeyboardShown
-                        ? null
-                        : () async {
-                            await widget.onUpdatePlayerScore(widget.playerScore.score.valueInt - 1);
-                          },
-                    color: AppTheme.accentColor,
-                  ),
-                  Text(
-                    'points',
-                    style: AppTheme.theme.textTheme.bodyText2,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: widget.isKeyboardShown
-                        ? null
-                        : () async {
-                            await widget.onUpdatePlayerScore(widget.playerScore.score.valueInt + 1);
-                          },
-                    color: AppTheme.accentColor,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
         const SizedBox(width: Dimensions.standardSpacing),
-        IconButton(
-          onPressed: widget.isKeyboardShown
-              ? null
-              : () {
-                  playerScoreEditingController.text = widget.playerScore.score.value ?? '';
-                  // TODO Work out why when selecting text in the text field the text field is not scrolled into the screen (i.e. keyboard overflows it)
-                  // if (playerScoreEditingController.text.isNotBlank) {
-                  //   playerScoreEditingController.selection = TextSelection(
-                  //     baseOffset: 0,
-                  //     extentOffset: playerScoreEditingController.text.length,
-                  //   );
-                  // }
-                  useKeyboardToEnterScore = true;
-                  playerScoreFocusNode.requestFocus();
-                  widget.onToggleKeyboard(useKeyboardToEnterScore);
-                },
-          icon: const Icon(Icons.keyboard_alt_outlined),
-          color: AppTheme.accentColor,
-          iconSize: 32,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('${widget.playerScore.score.valueInt}', style: Styles.playerScoreTextStyle),
+            const SizedBox(height: Dimensions.halfStandardSpacing),
+            Text(
+              AppText.editPlaythroughScorePoints,
+              style: AppTheme.theme.textTheme.bodyText2,
+            ),
+          ],
         ),
       ],
     );

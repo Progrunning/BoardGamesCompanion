@@ -11,6 +11,7 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
@@ -107,7 +108,9 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                   ),
                   _PlayersStatisticsSection(boardGameStatistics: boardGameStatistics!),
                 ],
-                const SliverPadding(padding: EdgeInsets.only(bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
+                const SliverPadding(
+                    padding: EdgeInsets.only(
+                        bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
               ],
             );
           },
@@ -439,10 +442,7 @@ class _LastWinnerText extends StatelessWidget {
             ),
             TextSpan(
               text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 32,
-              ),
+              style: Styles.playerScoreTextStyle,
             ),
             const WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -568,7 +568,8 @@ class _OverallStatsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value: boardGameStatistics?.totalPlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
+                  value:
+                      boardGameStatistics?.totalPlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
                   icon: Icons.timelapse,
                   iconColor: AppTheme.totalPlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
