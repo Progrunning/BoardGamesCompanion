@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
@@ -73,7 +74,8 @@ class EnterScoreDialog extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    _Header(playerName: viewModel.playerScore.player?.name),
+                    _Score(playerName: viewModel.playerScore.player?.name),
+                    const _ScoreHistory(),
                     const SizedBox(height: Dimensions.trippleStandardSpacing),
                     _ActionButtons(
                       onUndo: () => viewModel.undo(),
@@ -90,8 +92,49 @@ class EnterScoreDialog extends StatelessWidget {
   }
 }
 
-class _Header extends StatelessWidget {
-  const _Header({
+class _ScoreHistory extends StatelessWidget {
+  const _ScoreHistory({
+    Key? key,
+  }) : super(key: key);
+
+  static const double _height = 20;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<EnterScoreViewModel>(builder: (_, viewModel, __) {
+      if (viewModel.partialScores.isEmpty) {
+        return const SizedBox(height: _height);
+      }
+
+      final lastPartialScore = viewModel.partialScores.last;
+      return SizedBox(
+        height: _height,
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            Text('(', style: AppTheme.theme.textTheme.bodyText1),
+            for (final int partialScore in viewModel.partialScores) ...[
+              Text(
+                partialScore > 0 ? '+$partialScore' : '$partialScore',
+                style: AppTheme.theme.textTheme.bodyText1,
+              ),
+              if (partialScore != lastPartialScore) ...[
+                Text(
+                  ', ',
+                  style: AppTheme.theme.textTheme.bodyText1,
+                ),
+              ]
+            ],
+            Text(')', style: AppTheme.theme.textTheme.bodyText1),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class _Score extends StatelessWidget {
+  const _Score({
     required this.playerName,
     Key? key,
   }) : super(key: key);
@@ -104,7 +147,7 @@ class _Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          '$playerName scored',
+          sprintf(AppText.editPlaythroughPlayerScoredFormat, [playerName]),
           style: AppTheme.theme.textTheme.headline1!.copyWith(fontWeight: FontWeight.normal),
         ),
         Consumer<EnterScoreViewModel>(
