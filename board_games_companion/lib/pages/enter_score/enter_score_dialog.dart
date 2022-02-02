@@ -357,6 +357,8 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
     with TickerProviderStateMixin {
   static const int _fullCricleDegrees = 360;
 
+  double _numberOpacity = 0.0;
+
   late double _angle;
   late int _number;
   late final double _degreesPerNumber;
@@ -391,23 +393,34 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
             onEnded: () => _handleEndedPicking(),
             onChanged: (double angle, int multiplier) => _handleNumberChange(angle, multiplier),
           ),
-          if (_number != 0)
-            Positioned.fill(
-              child: Center(
+          Positioned.fill(
+            child: Center(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: _numberOpacity,
+                onEnd: () => _resetPickedNumber(),
                 child: Text(
                   _number > 0 ? '+$_number' : '$_number',
-                  style: AppTheme.theme.textTheme.headline1?.copyWith(fontSize: 60),
+                  style: AppTheme.theme.textTheme.headline1?.copyWith(fontSize: 56),
                 ),
               ),
             ),
+          ),
         ],
       ),
     );
   }
 
+  void _resetPickedNumber() {
+    if (_angle == 0) {
+      _number = 0;
+    }
+  }
+
   void _handleNumberChange(double angle, int multiplier) {
     setState(() {
       _angle = angle;
+      _numberOpacity = 1;
       _number =
           ((angle / _degreesPerNumber).floor() + 1) + widget.highestNumberInSingleSpin * multiplier;
       if (multiplier < 0) {
@@ -422,7 +435,7 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
     widget.onEnded?.call(_number);
     setState(() {
       _angle = 0;
-      _number = 0;
+      _numberOpacity = 0;
       widget.onChanged?.call(0);
     });
   }
