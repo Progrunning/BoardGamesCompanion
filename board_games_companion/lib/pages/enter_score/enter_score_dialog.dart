@@ -474,10 +474,21 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
   late bool _isApproachingFromRight;
   late bool _isApproachingFromLeft;
 
+  late double _circleRadius;
+  late double _circlePositionX;
+  late double _circlePositionY;
+
+  double? _numberPickedAngle;
+
   @override
   void initState() {
     super.initState();
+    final minSize = min(widget.size.width, widget.size.height);
+
     _isInit = true;
+    _circleRadius = minSize / 2 - widget.thumbSize / 2;
+    _circlePositionX = _circleRadius;
+    _circlePositionY = _circleRadius;
     _fullCirclesCount = 0;
     _isApproachingFromLeft = false;
     _isApproachingFromRight = false;
@@ -485,10 +496,11 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
-    final minSize = min(widget.size.width, widget.size.height);
-    final offset = _CircleTween(
-      minSize / 2 - widget.thumbSize / 2,
-    ).lerp(widget.angle * pi / 180);
+    final angleRadians = widget.angle.toRadians();
+    final offset = Offset(
+      _circlePositionX + _circleRadius * cos(angleRadians),
+      _circlePositionY + _circleRadius * sin(angleRadians),
+    );
 
     return GestureDetector(
       onPanDown: _onDown,
@@ -511,6 +523,25 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
               top: offset.dy,
               child: _Thumb(size: widget.thumbSize, color: AppTheme.accentColor),
             ),
+            if (_numberPickedAngle != null && _isInit)
+              TweenAnimationBuilder<Offset>(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInCubic,
+                tween: _CircleTween(
+                  radius: _circleRadius,
+                  beginAngle: _numberPickedAngle!,
+                ),
+                onEnd: () {
+                  _numberPickedAngle = null;
+                },
+                builder: (_, Offset offset, __) {
+                  return Positioned(
+                    left: offset.dx,
+                    top: offset.dy,
+                    child: _Thumb(size: widget.thumbSize, color: AppTheme.accentColor),
+                  );
+                },
+              ),
           ],
         ),
       ),
@@ -539,7 +570,8 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
       position.dy - widget.size.height / 2,
       position.dx - widget.size.width / 2,
     );
-    final double angle = radians % (2 * pi) * 180 / pi;
+    debugPrint('$_numberPickedAngle');
+    final double angle = _numberPickedAngle = radians % (2 * pi) * 180 / pi;
 
     if (_isApproachingFromRight && angle.isBetween(0, 90)) {
       _fullCirclesCount++;
@@ -583,16 +615,23 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
 }
 
 class _CircleTween extends Tween<Offset> {
-  _CircleTween(this.radius)
-      : super(
-          begin: _radiansToOffset(0, radius),
-          end: _radiansToOffset(2 * pi, radius),
+  _CircleTween({
+    required this.radius,
+    required this.beginAngle,
+  }) : super(
+          begin: _radiansToOffset(beginAngle.toRadians(), radius),
+          end: _radiansToOffset(0, radius),
         );
 
   final double radius;
+  final double beginAngle;
 
+  // TODO Add direction (when spinning - or +)
   @override
-  Offset lerp(double t) => _radiansToOffset(t, radius);
+  Offset lerp(double t) {
+    final radians = (beginAngle - beginAngle * t).toRadians();
+    return _radiansToOffset(radians, radius);
+  }
 
   static Offset _radiansToOffset(double radians, double radius) {
     return Offset(

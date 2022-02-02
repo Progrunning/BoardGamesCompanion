@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../common/constants.dart';
 
 extension NullableDoubleExtensions on double? {
@@ -25,5 +27,9 @@ extension DoubleExtensions on double {
     }
 
     return from < this && this < to;
+  }
+
+  double toRadians() {
+    return this * pi / 180;
   }
 }
