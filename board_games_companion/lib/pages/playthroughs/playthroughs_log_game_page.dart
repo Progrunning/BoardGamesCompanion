@@ -694,13 +694,13 @@ class _PlayerScore extends StatelessWidget {
                     itemWidth: 46,
                     minValue: 0,
                     maxValue: 10000,
-                    onChanged: (num value) async {
+                    onChanged: (num value) {
                       final String valueText = value.toString();
                       if (playerScoreConsumer.score.value == valueText) {
                         return;
                       }
 
-                      await playerScoreConsumer.updatePlayerScore(valueText);
+                      playerScoreConsumer.updatePlayerScore(valueText);
                     },
                     selectedTextStyle: const TextStyle(
                       color: AppTheme.accentColor,

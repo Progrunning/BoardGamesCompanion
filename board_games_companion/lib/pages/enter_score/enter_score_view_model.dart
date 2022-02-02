@@ -39,6 +39,8 @@ class EnterScoreViewModel with ChangeNotifier {
     _score = score + partialScore;
     partialScores.add(partialScore);
 
+    playerScore.updatePlayerScore(_score.toString());
+
     notifyListeners();
   }
 

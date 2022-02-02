@@ -82,8 +82,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                   child: _ScoresSection(
                     viewModel: widget.viewModel,
                     onItemTapped: (PlayerScore playerScore) async {
-                      final int? score =
-                          await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
+                      await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
                     },
                   ),
                 ),
@@ -240,7 +239,7 @@ class _ScoresSectionState extends State<_ScoresSection> {
                     playerScore: viewModel.playerScores[index],
                     playthroughId: viewModel.playthrough.id,
                     onUpdatePlayerScore: (num score) async {
-                      await _updatePlayerScore(viewModel.playerScores[index], score);
+                      _updatePlayerScore(viewModel.playerScores[index], score);
                     },
                   ),
                 );
@@ -252,7 +251,7 @@ class _ScoresSectionState extends State<_ScoresSection> {
     );
   }
 
-  Future<void> _updatePlayerScore(PlayerScore playerScore, num newScore) async {
+  void _updatePlayerScore(PlayerScore playerScore, num newScore) {
     if (newScore < 0) {
       return;
     }
@@ -262,7 +261,7 @@ class _ScoresSectionState extends State<_ScoresSection> {
       return;
     }
 
-    await playerScore.updatePlayerScore(scoreText);
+    playerScore.updatePlayerScore(scoreText);
 
     setState(() {});
   }
@@ -350,12 +349,17 @@ class _PlayerScoreState extends State<_PlayerScore> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('${widget.playerScore.score.valueInt}', style: Styles.playerScoreTextStyle),
-            const SizedBox(height: Dimensions.halfStandardSpacing),
-            Text(
-              AppText.editPlaythroughScorePoints,
-              style: AppTheme.theme.textTheme.bodyText2,
+            ChangeNotifierProvider<PlayerScore>.value(
+              value: widget.playerScore,
+              child: Consumer<PlayerScore>(builder: (_, playerScore, __) {
+                return Text(
+                  '${playerScore.score.valueInt}',
+                  style: Styles.playerScoreTextStyle,
+                );
+              }),
             ),
+            const SizedBox(height: Dimensions.halfStandardSpacing),
+            Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyText2),
           ],
         ),
       ],

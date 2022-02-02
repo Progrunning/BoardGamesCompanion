@@ -63,7 +63,7 @@ class EnterScoreDialog extends StatelessWidget {
                           onOperationChange: (EnterScoreOperation operation) {
                             viewModel.updateOperation(operation);
                           },
-                          onScoreChange: (int partialScore) {
+                          onScoreChange: (int partialScore) async {
                             if (viewModel.operation == EnterScoreOperation.subtract) {
                               partialScore = -partialScore;
                             }
@@ -106,23 +106,21 @@ class _ScoreHistory extends StatelessWidget {
         return const SizedBox(height: _height);
       }
 
-      final lastPartialScore = viewModel.partialScores.last;
       return SizedBox(
         height: _height,
         child: Wrap(
           alignment: WrapAlignment.center,
           children: [
             Text('(', style: AppTheme.theme.textTheme.bodyText1),
-            for (final int partialScore in viewModel.partialScores) ...[
+            for (var i = 0; i < viewModel.partialScores.length; i++) ...[
               Text(
-                partialScore > 0 ? '+$partialScore' : '$partialScore',
+                viewModel.partialScores[i] > 0
+                    ? '+${viewModel.partialScores[i]}'
+                    : '${viewModel.partialScores[i]}',
                 style: AppTheme.theme.textTheme.bodyText1,
               ),
-              if (partialScore != lastPartialScore) ...[
-                Text(
-                  ', ',
-                  style: AppTheme.theme.textTheme.bodyText1,
-                ),
+              if (i != viewModel.partialScores.length - 1) ...[
+                Text(', ', style: AppTheme.theme.textTheme.bodyText1),
               ]
             ],
             Text(')', style: AppTheme.theme.textTheme.bodyText1),

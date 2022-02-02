@@ -20,7 +20,7 @@ class PlayerScore with ChangeNotifier {
   MedalEnum? _medal;
   MedalEnum? get medal => _medal;
 
-  Future<bool> updatePlayerScore(String score) async {
+  bool updatePlayerScore(String score) {
     if (score.isEmpty) {
       return false;
     }
