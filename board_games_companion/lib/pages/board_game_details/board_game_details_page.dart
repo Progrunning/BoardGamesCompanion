@@ -16,7 +16,7 @@ import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
@@ -342,7 +342,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                   const SizedBox(
                     height: Dimensions.standardSpacing,
                   ),
-                  IconAndElevatedButton(
+                  ElevatedIconButton(
                     title: 'Refresh',
                     icon: const DefaultIcon(
                       Icons.refresh,

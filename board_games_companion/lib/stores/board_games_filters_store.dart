@@ -35,6 +35,8 @@ class BoardGamesFiltersStore with ChangeNotifier {
   double? get filterByRating => _collectionFilters?.filterByRating;
   int? get numberOfPlayers => _collectionFilters?.numberOfPlayers;
 
+  bool get anyFiltersApplied => filterByRating != null || numberOfPlayers != null;
+
   Future<void> loadFilterPreferences() async {
     _collectionFilters = await _boardGamesFiltersService.retrieveCollectionFiltersPreferences();
     if (_collectionFilters == null) {
@@ -47,18 +49,10 @@ class BoardGamesFiltersStore with ChangeNotifier {
     notifyListeners();
   }
 
-  void _updateSortBy() {
-    for (final sb in _sortBy) {
-      sb.selected = false;
-    }
-
-    final SortBy? selectedSortBy =
-        _sortBy.firstWhereOrNull((sb) => sb.name == _collectionFilters?.sortBy?.name);
-
-    if (selectedSortBy != null) {
-      selectedSortBy.orderBy = _collectionFilters!.sortBy!.orderBy;
-      selectedSortBy.selected = _collectionFilters!.sortBy!.selected;
-    }
+  Future<void> clearFilters() async {
+    await _boardGamesFiltersService.clearFilters();
+    _collectionFilters = null;
+    notifyListeners();
   }
 
   Future<void> updateSortBySelection(SortBy sortBy) async {
@@ -135,6 +129,20 @@ class BoardGamesFiltersStore with ChangeNotifier {
     );
 
     await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
+  }
+
+  void _updateSortBy() {
+    for (final sb in _sortBy) {
+      sb.selected = false;
+    }
+
+    final SortBy? selectedSortBy =
+        _sortBy.firstWhereOrNull((sb) => sb.name == _collectionFilters?.sortBy?.name);
+
+    if (selectedSortBy != null) {
+      selectedSortBy.orderBy = _collectionFilters!.sortBy!.orderBy;
+      selectedSortBy.selected = _collectionFilters!.sortBy!.selected;
+    }
   }
 
   @override

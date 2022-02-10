@@ -19,8 +19,8 @@ import '../../stores/search_board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
-import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
@@ -405,7 +405,7 @@ class _NoResults extends StatelessWidget {
             ),
             const SizedBox(height: Dimensions.doubleStandardSpacing),
             Center(
-              child: IconAndElevatedButton(
+              child: ElevatedIconButton(
                 title: 'Retry',
                 icon: const DefaultIcon(Icons.refresh),
                 onPressed: () {
@@ -480,7 +480,7 @@ class _HotBoardGames extends StatelessWidget {
                   const SizedBox(height: Dimensions.standardSpacing),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: IconAndElevatedButton(
+                    child: ElevatedIconButton(
                       icon: const DefaultIcon(Icons.refresh),
                       title: AppText.searchBoardGamesPageHotBoardGamesErrorRetryButtonText,
                       onPressed: () => _hotBoardGamesStore.refresh(),

@@ -46,4 +46,6 @@ class AppText {
 
   static const enterScoreDialogUndoButtonText = 'Undo';
   static const enterScoreDialogDoneButtonText = 'Done';
+
+  static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 }

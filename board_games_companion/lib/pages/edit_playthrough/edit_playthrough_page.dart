@@ -13,7 +13,7 @@ import '../../common/styles.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -537,7 +537,7 @@ class _ActionButtons extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          IconAndElevatedButton(
+          ElevatedIconButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
             color: AppTheme.redColor,
@@ -545,7 +545,7 @@ class _ActionButtons extends StatelessWidget {
           ),
           const Expanded(child: SizedBox.shrink()),
           if (!viewModel.playthoughEnded) ...[
-            IconAndElevatedButton(
+            ElevatedIconButton(
               title: AppText.Stop,
               icon: const DefaultIcon(
                 Icons.stop,
@@ -557,7 +557,7 @@ class _ActionButtons extends StatelessWidget {
               width: Dimensions.standardSpacing,
             ),
           ],
-          IconAndElevatedButton(
+          ElevatedIconButton(
             title: 'Save',
             icon: const DefaultIcon(
               Icons.save,

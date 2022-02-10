@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/common/constants.dart';
+import 'package:board_games_companion/widgets/common/elevated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +10,7 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
 import '../../common/styles.dart';
+import '../../extensions/int_extensions.dart';
 import '../../models/sort_by.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
@@ -43,16 +47,26 @@ class _GamesFilterPanelState extends State<GamesFilterPanel> {
               left: Dimensions.standardSpacing,
               top: Dimensions.doubleStandardSpacing,
               right: Dimensions.standardSpacing,
-              bottom: Dimensions.standardSpacing,
+              bottom: Dimensions.doubleStandardSpacing,
             ),
             child: Column(
               children: <Widget>[
-                _SortBy(
-                  boardGamesFiltersStore: boardGamesFiltersStore,
-                ),
+                _SortBy(boardGamesFiltersStore: boardGamesFiltersStore),
                 _Filters(
                   boardGamesFiltersStore: boardGamesFiltersStore,
                   boardGamesStore: boardGamesStore,
+                ),
+                const SizedBox(height: Dimensions.standardSpacing),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedIconButton(
+                    icon: const Icon(Icons.clear),
+                    title: AppText.filterGamesPanelClearFiltersButtonText,
+                    color: AppTheme.accentColor,
+                    onPressed: boardGamesFiltersStore.anyFiltersApplied
+                        ? () => _clearFilters(boardGamesFiltersStore)
+                        : null,
+                  ),
                 ),
               ],
             ),
@@ -60,6 +74,10 @@ class _GamesFilterPanelState extends State<GamesFilterPanel> {
         );
       },
     );
+  }
+
+  Future<void> _clearFilters(BoardGamesFiltersStore boardGamesFiltersStore) async {
+    await boardGamesFiltersStore.clearFilters();
   }
 }
 
@@ -202,10 +220,11 @@ class _Filters extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text('Number of players', style: AppTheme.sectionHeaderTextStyle),
         ),
-        _FilterNumberOfPlayersSlider(
-          boardGamesFiltersStore: boardGamesFiltersStore,
-          boardGamesStore: boardGamesStore,
-        ),
+        if (boardGamesStore.allboardGames.isNotEmpty)
+          _FilterNumberOfPlayersSlider(
+            boardGamesFiltersStore: boardGamesFiltersStore,
+            boardGamesStore: boardGamesStore,
+          ),
       ],
     );
   }
@@ -264,10 +283,12 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
         .where((boardGameDetails) => boardGameDetails.minPlayers != null)
         .map((boardGameDetails) => boardGameDetails.minPlayers!)
         .reduce(min);
-    final maxNumberOfPlayers = boardGamesStore.allboardGames
-        .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
-        .map((boardGameDetails) => boardGameDetails.maxPlayers!)
-        .reduce(max);
+    final maxNumberOfPlayers = min(
+        boardGamesStore.allboardGames
+            .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
+            .map((boardGameDetails) => boardGameDetails.maxPlayers!)
+            .reduce(max),
+        Constants.maxNumberOfPlayers);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -279,9 +300,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
           children: [
             const Text(
               'Any',
-              style: TextStyle(
-                fontSize: Dimensions.smallFontSize,
-              ),
+              style: TextStyle(fontSize: Dimensions.smallFontSize),
             ),
             Expanded(
               child: SliderTheme(
@@ -304,9 +323,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                   divisions: maxNumberOfPlayers - 1,
                   min: minNumberOfPlayers.toDouble() - 1,
                   max: maxNumberOfPlayers.toDouble(),
-                  label: (boardGamesFiltersStore.numberOfPlayers ?? 0) > 0
-                      ? boardGamesFiltersStore.numberOfPlayers?.toString()
-                      : 'Any',
+                  label: boardGamesFiltersStore.numberOfPlayers.toNumberOfPlayersFilter(),
                   onChanged: (value) {
                     boardGamesFiltersStore.changeNumberOfPlayers(
                       value != 0 ? value.round() : null,
@@ -323,9 +340,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
             ),
             Text(
               '$maxNumberOfPlayers',
-              style: const TextStyle(
-                fontSize: Dimensions.smallFontSize,
-              ),
+              style: const TextStyle(fontSize: Dimensions.smallFontSize),
             ),
           ],
         ),

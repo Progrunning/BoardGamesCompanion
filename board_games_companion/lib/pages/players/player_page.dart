@@ -10,7 +10,7 @@ import '../../common/styles.dart';
 import '../../models/hive/player.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
@@ -344,7 +344,7 @@ class _ActionButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         if (isEditMode) ...[
-          IconAndElevatedButton(
+          ElevatedIconButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
             color: Colors.redAccent,
@@ -352,7 +352,7 @@ class _ActionButtons extends StatelessWidget {
           ),
           const SizedBox(width: Dimensions.standardSpacing),
         ],
-        IconAndElevatedButton(
+        ElevatedIconButton(
           title: isEditMode ? 'Update' : 'Create',
           icon: const DefaultIcon(Icons.create),
           onPressed: () => isEditMode ? onUpdate(context) : onCreate(context),

@@ -14,7 +14,7 @@ import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -647,7 +647,7 @@ class _NoPlayers extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.topRight,
-          child: IconAndElevatedButton(
+          child: ElevatedIconButton(
             title: 'Create Player',
             icon: const DefaultIcon(Icons.add),
             onPressed: () => Navigator.pushNamed(

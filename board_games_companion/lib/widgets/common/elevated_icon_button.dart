@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../common/app_theme.dart';
 
-class IconAndElevatedButton extends StatelessWidget {
-  const IconAndElevatedButton({
+class ElevatedIconButton extends StatelessWidget {
+  const ElevatedIconButton({
     required this.icon,
     this.title,
     this.color = AppTheme.accentColor,
@@ -45,7 +45,8 @@ class IconAndElevatedButton extends StatelessWidget {
           },
         ),
         textStyle: MaterialStateProperty.all(
-            const TextStyle(color: AppTheme.defaultTextColor, fontWeight: FontWeight.bold)),
+          const TextStyle(color: AppTheme.defaultTextColor, fontWeight: FontWeight.bold),
+        ),
       ),
       onPressed: onPressed,
     );

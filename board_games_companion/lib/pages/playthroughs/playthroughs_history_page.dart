@@ -16,8 +16,8 @@ import '../../stores/playthroughs_store.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
-import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container_widget.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
@@ -191,7 +191,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconAndElevatedButton(
+            ElevatedIconButton(
               title: AppText.Edit,
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,

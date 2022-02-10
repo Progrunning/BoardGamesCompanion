@@ -71,4 +71,21 @@ extension IntExtensions on int? {
 
     return this!.compareTo(intToCompare!);
   }
+
+  String toNumberOfPlayersFilter() {
+    var numberOfPlayers = this;
+    if (numberOfPlayers == null) {
+      numberOfPlayers = 0;
+    }
+
+    if (numberOfPlayers <= 0) {
+      return 'Any';
+    }
+
+    if (numberOfPlayers >= Constants.maxNumberOfPlayers) {
+      return '${Constants.maxNumberOfPlayers}+';
+    }
+
+    return numberOfPlayers.toString();
+  }
 }

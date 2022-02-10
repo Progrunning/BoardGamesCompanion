@@ -11,7 +11,7 @@ import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../extensions/double_extensions.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/rounded_container.dart';
 
 class EnterScoreDialog extends StatelessWidget {
@@ -290,7 +290,7 @@ class _ActionButtons extends StatelessWidget {
     return Row(
       children: [
         Consumer<EnterScoreViewModel>(builder: (_, viewModel, __) {
-          return IconAndElevatedButton(
+          return ElevatedIconButton(
             title: AppText.enterScoreDialogUndoButtonText,
             icon: const DefaultIcon(Icons.undo),
             color: AppTheme.blueColor,
@@ -298,7 +298,7 @@ class _ActionButtons extends StatelessWidget {
           );
         }),
         const Expanded(child: SizedBox.shrink()),
-        IconAndElevatedButton(
+        ElevatedIconButton(
           title: AppText.enterScoreDialogDoneButtonText,
           icon: const DefaultIcon(Icons.done),
           color: AppTheme.accentColor,

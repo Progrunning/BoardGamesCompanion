@@ -8,7 +8,7 @@ import '../../models/navigation/player_page_arguments.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/player/player_avatar.dart';
 import 'player_page.dart';
 import 'players_view_model.dart';
@@ -175,7 +175,7 @@ class _CreatePlayerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconAndElevatedButton(
+    return ElevatedIconButton(
       title: 'Create Player',
       icon: const DefaultIcon(Icons.add),
       onPressed: () => onCreatePlayer(),
