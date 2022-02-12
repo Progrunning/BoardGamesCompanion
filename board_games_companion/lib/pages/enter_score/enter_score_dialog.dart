@@ -473,6 +473,7 @@ class _NumberPicker extends StatefulWidget {
 
 class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMixin {
   late bool _isInitState;
+  late bool _isSpinning;
   late int _fullCirclesCount;
   late SpinDirection _spinDirection;
   late bool _isApproachingFromRight;
@@ -490,6 +491,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
     final minSize = min(widget.size.width, widget.size.height);
 
     _isInitState = true;
+    _isSpinning = false;
     _circleRadius = minSize / 2 - widget.thumbSize / 2;
     _circlePositionX = _circleRadius;
     _circlePositionY = _circleRadius;
@@ -607,9 +609,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
     widget.onChanged(angle, _fullCirclesCount);
 
     if (_isInitState) {
-      _spinDirection = _fullCirclesCount >= previousFullCircleCount
-          ? SpinDirection.forward
-          : SpinDirection.backward;
+      _spinDirection = angle.isBetween(0, 90) ? SpinDirection.forward : SpinDirection.backward;
       _isInitState = false;
     }
   }
@@ -649,7 +649,6 @@ class _CircleTween extends Tween<Offset> {
         break;
     }
 
-    debugPrint('$newAngle | $t');
     final radians = newAngle.toRadians();
     return _radiansToOffset(radians, circleRadius);
   }
