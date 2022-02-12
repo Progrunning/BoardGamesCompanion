@@ -19,6 +19,7 @@ class AppText {
   static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle = 'Games won by a player';
   static const playthroughsStatisticsPageOverallStatsSectionTitle = 'Overall stats';
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
+  static const playthroughsStatisticsPageOverallStatsTotalPlaytime = 'Total playtime';
   static const playthroughsStatisticsPageOverallStatsHighscore = 'Highscore';
   static const playthroughsStatisticsPageOverallStatsAvgScore = 'Avg. score';
   static const playthroughsStatisticsPageOverallStatsAvgPlayerCount = 'Avg. player count';
@@ -34,6 +35,17 @@ class AppText {
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';
   static const searchBoardGamesPageHotBoardGamesErrorPartOne =
-      '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';  
+      '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
+
+  static const playtimeDurationHoursFormat = '%ih %imin';
+  static const playtimeDurationDaysFormat = '%i day%s %ih';
+
+  static const editPlaythroughScorePoints = 'points';
+  static const editPlaythroughPlayerScored = 'scored';
+
+  static const enterScoreDialogUndoButtonText = 'Undo';
+  static const enterScoreDialogDoneButtonText = 'Done';
+
+  static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 }

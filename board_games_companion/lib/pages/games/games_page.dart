@@ -16,14 +16,15 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
+import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
-import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/sync_collection_button.dart';
@@ -157,6 +158,7 @@ class _Collection extends StatelessWidget {
                   );
                 },
               ),
+              const SliverPadding(padding: EdgeInsets.all(8.0)),
             ],
           ),
         ),
@@ -222,6 +224,7 @@ class _AppBarState extends State<_AppBar> {
         focusNode: _searchFocusNode,
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
+        textInputAction: TextInputAction.search,
         style: AppTheme.defaultTextFieldStyle,
         decoration: InputDecoration(
           hintText: 'Search for a game...',
@@ -253,19 +256,22 @@ class _AppBarState extends State<_AppBar> {
         },
       ),
       actions: <Widget>[
-        IconButton(
-          icon: const Icon(
-            Icons.filter_list,
-            color: AppTheme.accentColor,
-          ),
-          onPressed: () async {
-            await _openFiltersPanel(context);
-            await widget.analyticsService.logEvent(
-              name: Analytics.FilterCollection,
+        Consumer<BoardGamesFiltersStore>(
+          builder: (_, boardGamesFiltersStore, __) {
+            return IconButton(
+              icon: boardGamesFiltersStore.anyFiltersApplied
+                  ? const Icon(Icons.filter_alt_rounded, color: AppTheme.accentColor)
+                  : const Icon(Icons.filter_alt_outlined, color: AppTheme.accentColor),
+              onPressed: widget.boardGamesStore.allboardGames.isNotEmpty
+                  ? () async {
+                      await _openFiltersPanel(context);
+                      await widget.analyticsService.logEvent(name: Analytics.FilterCollection);
+                      await widget.rateAndReviewService.increaseNumberOfSignificantActions();
+                    }
+                  : null,
             );
-            await widget.rateAndReviewService.increaseNumberOfSignificantActions();
           },
-        )
+        ),
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(74),
@@ -522,7 +528,7 @@ class _EmptySearchResult extends StatelessWidget {
               height: Dimensions.standardSpacing,
             ),
             Center(
-              child: IconAndTextButton(
+              child: ElevatedIconButton(
                 title: 'Clear search',
                 icon: const DefaultIcon(Icons.clear),
                 onPressed: onClearSearch,

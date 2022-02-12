@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:basics/basics.dart';
+import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -9,20 +9,16 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../common/styles.dart';
+import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'edit_playthrouhg_view_model.dart';
-
-enum UpdateScoreMethod {
-  swipe,
-  increment,
-  keyboard,
-}
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
@@ -38,7 +34,7 @@ class EditPlaythoughPage extends StatefulWidget {
   _EditPlaythoughPageState createState() => _EditPlaythoughPageState();
 }
 
-class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
+class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -59,39 +55,34 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
         ),
         body: Form(
           child: Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: const <Widget>[
-                    ItemPropertyTitle('Played on'),
-                    Expanded(
-                      child: SizedBox.shrink(),
-                    ),
-                    ItemPropertyTitle('Duration')
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  child: Row(
+                    children: const <Widget>[
+                      ItemPropertyTitle('Played on'),
+                      Expanded(child: SizedBox.shrink()),
+                      ItemPropertyTitle('Duration')
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: Dimensions.halfStandardSpacing,
-                ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
                 _Duration(viewModel: widget.viewModel),
-                const SizedBox(
-                  height: Dimensions.standardSpacing,
+                const SizedBox(height: Dimensions.standardSpacing),
+                const SizedBox(height: Dimensions.standardSpacing),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  child: ItemPropertyTitle('Scores'),
                 ),
-                Divider(
-                  thickness: 1,
-                  color: AppTheme.accentColor.withOpacity(0.2),
-                ),
-                const ItemPropertyTitle('Scores'),
-                const SizedBox(
-                  height: Dimensions.halfStandardSpacing,
-                ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
                 Expanded(
                   child: _ScoresSection(
                     viewModel: widget.viewModel,
-                    onToggleKeyboard: (bool isKeyboardShown) {
-                      widget.viewModel.toggleKeyboard(isKeyboardShown);
+                    onItemTapped: (PlayerScore playerScore) async {
+                      await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
                     },
                   ),
                 ),
@@ -99,16 +90,12 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> {
                   value: widget.viewModel,
                   child: Consumer<EditPlaythoughViewModel>(
                     builder: (_, viewModel, __) {
-                      if (!viewModel.isKeyboardShown) {
-                        return _ActionButtons(
-                          viewModel: viewModel,
-                          onSave: () async => _save(),
-                          onStop: () async => _stopPlaythrough(),
-                          onDelete: () async => _showDeletePlaythroughDialog(context),
-                        );
-                      }
-
-                      return const SizedBox.shrink();
+                      return _ActionButtons(
+                        viewModel: viewModel,
+                        onSave: () async => _save(),
+                        onStop: () async => _stopPlaythrough(),
+                        onDelete: () async => _showDeletePlaythroughDialog(context),
+                      );
                     },
                   ),
                 ),
@@ -221,11 +208,11 @@ class _ScoresSection extends StatefulWidget {
   const _ScoresSection({
     Key? key,
     required this.viewModel,
-    required this.onToggleKeyboard,
+    required this.onItemTapped,
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
-  final void Function(bool) onToggleKeyboard;
+  final void Function(PlayerScore) onItemTapped;
 
   @override
   State<_ScoresSection> createState() => _ScoresSectionState();
@@ -240,27 +227,31 @@ class _ScoresSectionState extends State<_ScoresSection> {
         return const SizedBox(height: Dimensions.doubleStandardSpacing);
       },
       itemBuilder: (context, index) {
-        return ChangeNotifierProvider<EditPlaythoughViewModel>.value(
-          value: widget.viewModel,
-          child: Consumer<EditPlaythoughViewModel>(
-            builder: (_, viewModel, __) {
-              return _PlayerScoreTile(
-                playerScore: viewModel.playerScores[index],
-                playthroughId: viewModel.playthrough.id,
-                isKeyboardShown: viewModel.isKeyboardShown,
-                onUpdatePlayerScore: (num score) async {
-                  await _updatePlayerScore(viewModel.playerScores[index], score);
-                },
-                onToggleKeyboard: widget.onToggleKeyboard,
-              );
-            },
+        return InkWell(
+          onTap: () => widget.onItemTapped(widget.viewModel.playerScores[index]),
+          child: ChangeNotifierProvider<EditPlaythoughViewModel>.value(
+            value: widget.viewModel,
+            child: Consumer<EditPlaythoughViewModel>(
+              builder: (_, viewModel, __) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  child: _PlayerScoreTile(
+                    playerScore: viewModel.playerScores[index],
+                    playthroughId: viewModel.playthrough.id,
+                    onUpdatePlayerScore: (num score) async {
+                      _updatePlayerScore(viewModel.playerScores[index], score);
+                    },
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
     );
   }
 
-  Future<void> _updatePlayerScore(PlayerScore playerScore, num newScore) async {
+  void _updatePlayerScore(PlayerScore playerScore, num newScore) {
     if (newScore < 0) {
       return;
     }
@@ -270,7 +261,7 @@ class _ScoresSectionState extends State<_ScoresSection> {
       return;
     }
 
-    await playerScore.updatePlayerScore(scoreText);
+    playerScore.updatePlayerScore(scoreText);
 
     setState(() {});
   }
@@ -281,16 +272,12 @@ class _PlayerScoreTile extends StatelessWidget {
     Key? key,
     required this.playerScore,
     required this.playthroughId,
-    required this.isKeyboardShown,
     required this.onUpdatePlayerScore,
-    required this.onToggleKeyboard,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String playthroughId;
-  final bool isKeyboardShown;
   final Future<void> Function(num) onUpdatePlayerScore;
-  final void Function(bool) onToggleKeyboard;
 
   @override
   Widget build(BuildContext context) {
@@ -310,9 +297,7 @@ class _PlayerScoreTile extends StatelessWidget {
           Expanded(
             child: _PlayerScore(
               playerScore: playerScore,
-              isKeyboardShown: isKeyboardShown,
               onUpdatePlayerScore: onUpdatePlayerScore,
-              onToggleKeyboard: onToggleKeyboard,
             ),
           ),
         ],
@@ -325,26 +310,17 @@ class _PlayerScore extends StatefulWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
-    required this.isKeyboardShown,
     required this.onUpdatePlayerScore,
-    required this.onToggleKeyboard,
   }) : super(key: key);
 
   final PlayerScore playerScore;
-  final bool isKeyboardShown;
   final Future<void> Function(num) onUpdatePlayerScore;
-  final void Function(bool) onToggleKeyboard;
 
   @override
   State<_PlayerScore> createState() => _PlayerScoreState();
 }
 
 class _PlayerScoreState extends State<_PlayerScore> {
-  static const double _scorePointsFontSize = 22;
-  static const double _numericPickerItemWidth = 48;
-  static const double _numericPickerWidgetWidth = _numericPickerItemWidth * 3;
-
-  bool useKeyboardToEnterScore = false;
   late TextEditingController playerScoreEditingController;
   late FocusNode playerScoreFocusNode;
 
@@ -367,100 +343,24 @@ class _PlayerScoreState extends State<_PlayerScore> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        SizedBox(
-          width: _numericPickerWidgetWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              if (useKeyboardToEnterScore)
-                Form(
-                  child: SizedBox(
-                    width: 120,
-                    child: TextFormField(
-                      controller: playerScoreEditingController,
-                      focusNode: playerScoreFocusNode,
-                      style:
-                          AppTheme.defaultTextFieldStyle.copyWith(fontSize: _scorePointsFontSize),
-                      autofocus: true,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      onFieldSubmitted: (String? text) async {
-                        if (text?.isNotBlank ?? false) {
-                          await widget.onUpdatePlayerScore(int.tryParse(text!)!);
-                        }
-
-                        useKeyboardToEnterScore = false;
-                        widget.onToggleKeyboard(useKeyboardToEnterScore);
-                      },
-                    ),
-                  ),
-                )
-              else
-                NumberPicker(
-                  value: widget.playerScore.score.valueInt,
-                  axis: Axis.horizontal,
-                  itemWidth: _numericPickerItemWidth,
-                  minValue: 0,
-                  maxValue: 10000,
-                  onChanged: (num score) async {
-                    await widget.onUpdatePlayerScore(score);
-                  },
-                  selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
-                    fontSize: _scorePointsFontSize,
-                  ),
-                ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: widget.isKeyboardShown
-                        ? null
-                        : () async {
-                            await widget.onUpdatePlayerScore(widget.playerScore.score.valueInt - 1);
-                          },
-                    color: AppTheme.accentColor,
-                  ),
-                  Text(
-                    'points',
-                    style: AppTheme.theme.textTheme.bodyText2,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: widget.isKeyboardShown
-                        ? null
-                        : () async {
-                            await widget.onUpdatePlayerScore(widget.playerScore.score.valueInt + 1);
-                          },
-                    color: AppTheme.accentColor,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
         const SizedBox(width: Dimensions.standardSpacing),
-        IconButton(
-          onPressed: widget.isKeyboardShown
-              ? null
-              : () {
-                  playerScoreEditingController.text = widget.playerScore.score.value ?? '';
-                  // TODO Work out why when selecting text in the text field the text field is not scrolled into the screen (i.e. keyboard overflows it)
-                  // if (playerScoreEditingController.text.isNotBlank) {
-                  //   playerScoreEditingController.selection = TextSelection(
-                  //     baseOffset: 0,
-                  //     extentOffset: playerScoreEditingController.text.length,
-                  //   );
-                  // }
-                  useKeyboardToEnterScore = true;
-                  playerScoreFocusNode.requestFocus();
-                  widget.onToggleKeyboard(useKeyboardToEnterScore);
-                },
-          icon: const Icon(Icons.keyboard_alt_outlined),
-          color: AppTheme.accentColor,
-          iconSize: 32,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ChangeNotifierProvider<PlayerScore>.value(
+              value: widget.playerScore,
+              child: Consumer<PlayerScore>(builder: (_, playerScore, __) {
+                return Text(
+                  '${playerScore.score.valueInt}',
+                  style: Styles.playerScoreTextStyle,
+                );
+              }),
+            ),
+            const SizedBox(height: Dimensions.halfStandardSpacing),
+            Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyText2),
+          ],
         ),
       ],
     );
@@ -507,55 +407,58 @@ class _DurationState extends State<_Duration> {
   @override
   Widget build(BuildContext context) {
     _setHourseAndMinutesRange();
-    return Row(
-      children: [
-        Center(
-          child: CalendarCard(
-            widget.viewModel.playthrough.startDate,
-            onTap: () async => _pickStartDate(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      child: Row(
+        children: [
+          Center(
+            child: CalendarCard(
+              widget.viewModel.playthrough.startDate,
+              onTap: () async => _pickStartDate(),
+            ),
           ),
-        ),
-        const Expanded(child: SizedBox.shrink()),
-        AbsorbPointer(
-          absorbing: !widget.viewModel.playthoughEnded,
-          child: Row(
-            children: <Widget>[
-              NumberPicker(
-                value: math.min(hoursPlayed, _maxHours),
-                minValue: minHours,
-                maxValue: maxHours,
-                onChanged: (num value) => _updateDurationHours(value),
-                itemWidth: 46,
-                selectedTextStyle: const TextStyle(
-                  color: AppTheme.accentColor,
-                  fontSize: Dimensions.doubleExtraLargeFontSize,
+          const Expanded(child: SizedBox.shrink()),
+          AbsorbPointer(
+            absorbing: !widget.viewModel.playthoughEnded,
+            child: Row(
+              children: <Widget>[
+                NumberPicker(
+                  value: math.min(hoursPlayed, _maxHours),
+                  minValue: minHours,
+                  maxValue: maxHours,
+                  onChanged: (num value) => _updateDurationHours(value),
+                  itemWidth: 46,
+                  selectedTextStyle: const TextStyle(
+                    color: AppTheme.accentColor,
+                    fontSize: Dimensions.doubleExtraLargeFontSize,
+                  ),
                 ),
-              ),
-              Text(
-                'h',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-              const SizedBox(width: Dimensions.halfStandardSpacing),
-              NumberPicker(
-                value: minutesPlyed,
-                infiniteLoop: true,
-                minValue: minMinutes,
-                maxValue: maxMinutes,
-                onChanged: (num value) => _updateDurationMinutes(value),
-                itemWidth: 46,
-                selectedTextStyle: const TextStyle(
-                  color: AppTheme.accentColor,
-                  fontSize: Dimensions.doubleExtraLargeFontSize,
+                Text(
+                  'h',
+                  style: AppTheme.theme.textTheme.bodyText2,
                 ),
-              ),
-              Text(
-                'min ',
-                style: AppTheme.theme.textTheme.bodyText2,
-              ),
-            ],
-          ),
-        )
-      ],
+                const SizedBox(width: Dimensions.halfStandardSpacing),
+                NumberPicker(
+                  value: minutesPlyed,
+                  infiniteLoop: true,
+                  minValue: minMinutes,
+                  maxValue: maxMinutes,
+                  onChanged: (num value) => _updateDurationMinutes(value),
+                  itemWidth: 46,
+                  selectedTextStyle: const TextStyle(
+                    color: AppTheme.accentColor,
+                    fontSize: Dimensions.doubleExtraLargeFontSize,
+                  ),
+                ),
+                Text(
+                  'min ',
+                  style: AppTheme.theme.textTheme.bodyText2,
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -634,7 +537,7 @@ class _ActionButtons extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          IconAndTextButton(
+          ElevatedIconButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
             color: AppTheme.redColor,
@@ -642,20 +545,19 @@ class _ActionButtons extends StatelessWidget {
           ),
           const Expanded(child: SizedBox.shrink()),
           if (!viewModel.playthoughEnded) ...[
-            IconAndTextButton(
+            ElevatedIconButton(
               title: AppText.Stop,
               icon: const DefaultIcon(
                 Icons.stop,
               ),
               color: AppTheme.blueColor,
-              splashColor: AppTheme.whiteColor,
               onPressed: onStop,
             ),
             const SizedBox(
               width: Dimensions.standardSpacing,
             ),
           ],
-          IconAndTextButton(
+          ElevatedIconButton(
             title: 'Save',
             icon: const DefaultIcon(
               Icons.save,

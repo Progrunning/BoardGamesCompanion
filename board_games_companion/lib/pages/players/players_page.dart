@@ -5,13 +5,13 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/player.dart';
 import '../../models/navigation/player_page_arguments.dart';
-import '../../stores/players_store.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/player/player_avatar.dart';
 import 'player_page.dart';
+import 'players_view_model.dart';
 
 class PlayersPage extends StatefulWidget {
   const PlayersPage({Key? key}) : super(key: key);
@@ -23,13 +23,13 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   final int _numberOfPlayerColumns = 3;
 
-  late PlayersStore playerStore;
+  late PlayersViewModel playerStore;
 
   @override
   void initState() {
     super.initState();
 
-    playerStore = Provider.of<PlayersStore>(
+    playerStore = Provider.of<PlayersViewModel>(
       context,
       listen: false,
     );
@@ -38,9 +38,9 @@ class _PlayersPageState extends State<PlayersPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ConsumerFutureBuilder<List<Player>, PlayersStore>(
+      child: ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
         future: playerStore.loadPlayers(),
-        success: (context, PlayersStore store) {
+        success: (context, PlayersViewModel store) {
           if (store.players?.isEmpty ?? true) {
             return SingleChildScrollView(
               child: Padding(
@@ -128,7 +128,7 @@ class _PlayersPageState extends State<PlayersPage> {
                             color: AppTheme.defaultTextColor,
                           ),
                           onTap: () async => _navigateToPlayerPage(context, player),
-                        ),                        
+                        ),
                         onTap: () async => _navigateToPlayerPage(context, player),
                       );
                     },
@@ -138,7 +138,7 @@ class _PlayersPageState extends State<PlayersPage> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                  padding: const EdgeInsets.only(right: Dimensions.standardSpacing),
                   child: _CreatePlayerButton(
                     onCreatePlayer: () => Navigator.pushNamed(
                       context,
@@ -148,6 +148,7 @@ class _PlayersPageState extends State<PlayersPage> {
                   ),
                 ),
               ),
+              const SizedBox(height: Dimensions.bottomTabTopHeight),
             ],
           );
         },
@@ -174,11 +175,9 @@ class _CreatePlayerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconAndTextButton(
+    return ElevatedIconButton(
       title: 'Create Player',
-      icon: const DefaultIcon(
-        Icons.add,
-      ),
+      icon: const DefaultIcon(Icons.add),
       onPressed: () => onCreatePlayer(),
     );
   }

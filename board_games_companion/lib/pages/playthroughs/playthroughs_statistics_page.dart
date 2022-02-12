@@ -11,6 +11,7 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
@@ -107,7 +108,9 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                   ),
                   _PlayersStatisticsSection(boardGameStatistics: boardGameStatistics!),
                 ],
-                const SliverPadding(padding: EdgeInsets.only(bottom: Dimensions.standardSpacing)),
+                const SliverPadding(
+                    padding: EdgeInsets.only(
+                        bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
               ],
             );
           },
@@ -160,7 +163,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
                           icon: Icons.show_chart,
-                          iconColor: AppTheme.chartColorPallete[1],
+                          iconColor: AppTheme.highscoreStatColor,
                           iconSize: 38,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsPersonalBest,
                         ),
@@ -176,7 +179,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
                           icon: Icons.calculate,
-                          iconColor: AppTheme.chartColorPallete[3],
+                          iconColor: AppTheme.averageScoreStatColor,
                           iconSize: 38,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsAvgScore,
                         ),
@@ -192,7 +195,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
                           icon: Icons.casino,
-                          iconColor: AppTheme.chartColorPallete[0],
+                          iconColor: AppTheme.playedGamesStatColor,
                           iconSize: 38,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsPlayedGames,
                         ),
@@ -439,10 +442,7 @@ class _LastWinnerText extends StatelessWidget {
             ),
             TextSpan(
               text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 32,
-              ),
+              style: Styles.playerScoreTextStyle,
             ),
             const WidgetSpan(
               alignment: PlaceholderAlignment.middle,
@@ -521,43 +521,60 @@ class _OverallStatsSection extends StatelessWidget {
         const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
           children: <Widget>[
-            _StatisticsItem(
-              value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
-              icon: Icons.casino,
-              iconColor: AppTheme.chartColorPallete[0],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
+                  icon: Icons.casino,
+                  iconColor: AppTheme.playedGamesStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: boardGameStatistics?.highscore?.toString() ?? '-',
+                  icon: Icons.show_chart,
+                  iconColor: AppTheme.highscoreStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsHighscore,
+                ),
+              ],
             ),
             const Expanded(child: SizedBox.shrink()),
-            _StatisticsItem(
-              value: boardGameStatistics?.highscore?.toString() ?? '-',
-              icon: Icons.show_chart,
-              iconColor: AppTheme.chartColorPallete[1],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsHighscore,
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
+                  icon: Icons.person,
+                  iconColor: AppTheme.averagePlayerCountStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
+                  icon: Icons.calculate,
+                  iconColor: AppTheme.averageScoreStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgScore,
+                ),
+              ],
             ),
             const Expanded(child: SizedBox.shrink()),
-            _StatisticsItem(
-              value: boardGameStatistics?.averagePlaytimeInSeconds?.toAverageDuration('-') ?? '-',
-              icon: Icons.av_timer,
-              iconColor: AppTheme.chartColorPallete[2],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
-            ),
-          ],
-        ),
-        const SizedBox(height: Dimensions.doubleStandardSpacing),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            _StatisticsItem(
-              value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
-              icon: Icons.calculate,
-              iconColor: AppTheme.chartColorPallete[3],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgScore,
-            ),
-            _StatisticsItem(
-              value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
-              icon: Icons.person,
-              iconColor: AppTheme.chartColorPallete[5],
-              subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value:
+                      boardGameStatistics?.averagePlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
+                  icon: Icons.av_timer,
+                  iconColor: AppTheme.averagePlaytimeStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value:
+                      boardGameStatistics?.totalPlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
+                  icon: Icons.timelapse,
+                  iconColor: AppTheme.totalPlaytimeStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
+                ),
+              ],
             ),
           ],
         ),

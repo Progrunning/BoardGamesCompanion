@@ -1,4 +1,3 @@
-import 'package:board_games_companion/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -12,20 +11,21 @@ import '../../common/styles.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/preferences_service.dart';
 import '../../stores/board_game_details_in_collection_store.dart';
-import '../../stores/board_game_details_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
 import '../../widgets/common/shadow_box.dart';
 import '../base_page_state.dart';
+import '../home_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'board_game_details_expansions.dart';
+import 'board_game_details_view_model.dart';
 
 class BoardGamesDetailsPage extends StatefulWidget {
   const BoardGamesDetailsPage({
@@ -39,7 +39,7 @@ class BoardGamesDetailsPage extends StatefulWidget {
 
   final String boardGameId;
   final String boardGameName;
-  final BoardGameDetailsStore boardGameDetailsStore;
+  final BoardGameDetailsViewModel boardGameDetailsStore;
   final Type navigatingFromType;
   final PreferencesService preferencesService;
 
@@ -111,14 +111,14 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 class _Header extends StatelessWidget {
   const _Header({
     Key? key,
-    required BoardGameDetailsStore boardGameDetailsStore,
+    required BoardGameDetailsViewModel boardGameDetailsStore,
     required String boardGameName,
   })  : _boardGameDetailsStore = boardGameDetailsStore,
         _boardGameName = boardGameName,
         super(key: key);
 
   final String _boardGameName;
-  final BoardGameDetailsStore _boardGameDetailsStore;
+  final BoardGameDetailsViewModel _boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {
@@ -151,9 +151,9 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        background: ChangeNotifierProvider<BoardGameDetailsStore>.value(
+        background: ChangeNotifierProvider<BoardGameDetailsViewModel>.value(
           value: _boardGameDetailsStore,
-          child: Consumer<BoardGameDetailsStore>(
+          child: Consumer<BoardGameDetailsViewModel>(
             builder: (_, store, __) {
               // TODO Add shadow to the image
               return BoardGameImage(
@@ -179,7 +179,7 @@ class _Body extends StatelessWidget {
 
   final String boardGameId;
   final String boardGameName;
-  final BoardGameDetailsStore boardGameDetailsStore;
+  final BoardGameDetailsViewModel boardGameDetailsStore;
   final PreferencesService preferencesService;
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
@@ -209,9 +209,9 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
             );
           }
 
-          return ChangeNotifierProvider<BoardGameDetailsStore>.value(
+          return ChangeNotifierProvider<BoardGameDetailsViewModel>.value(
             value: boardGameDetailsStore,
-            child: Consumer<BoardGameDetailsStore>(
+            child: Consumer<BoardGameDetailsViewModel>(
               builder: (_, store, __) {
                 return SliverPadding(
                   padding: const EdgeInsets.symmetric(
@@ -342,7 +342,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                   const SizedBox(
                     height: Dimensions.standardSpacing,
                   ),
-                  IconAndTextButton(
+                  ElevatedIconButton(
                     title: 'Refresh',
                     icon: const DefaultIcon(
                       Icons.refresh,
@@ -367,7 +367,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
 
   Future<void> _refreshBoardGameDetails(
     String boardGameDetailsId,
-    BoardGameDetailsStore boardGameDetailsStore,
+    BoardGameDetailsViewModel boardGameDetailsStore,
   ) async {
     await boardGameDetailsStore.loadBoardGameDetails(boardGameDetailsId);
   }
@@ -376,11 +376,11 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
 class _Links extends StatelessWidget {
   const _Links({
     Key? key,
-    required BoardGameDetailsStore boardGameDetailsStore,
+    required BoardGameDetailsViewModel boardGameDetailsStore,
   })  : _boardGameDetailsStore = boardGameDetailsStore,
         super(key: key);
 
-  final BoardGameDetailsStore _boardGameDetailsStore;
+  final BoardGameDetailsViewModel _boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +474,7 @@ class _Link extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final BoardGameDetailsStore boardGameDetailsStore;
+  final BoardGameDetailsViewModel boardGameDetailsStore;
   final String title;
   final IconData icon;
   final VoidCallback onPressed;
@@ -640,7 +640,7 @@ class _StatsAndCollections extends StatelessWidget {
     required this.boardGameDetailsStore,
   }) : super(key: key);
 
-  final BoardGameDetailsStore boardGameDetailsStore;
+  final BoardGameDetailsViewModel boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {
@@ -701,7 +701,7 @@ class _CollectionFlags extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final BoardGameDetailsStore boardGameDetailsStore;
+  final BoardGameDetailsViewModel boardGameDetailsStore;
 
   @override
   Widget build(BuildContext context) {

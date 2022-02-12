@@ -15,7 +15,7 @@ import '../../widgets/about/section_title.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/sync_collection_button.dart';
 import '../about_page.dart';
 
@@ -43,12 +43,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   _UserDetailsPanel(),
                   _RateAndReviewTile(),
-                  _AboutPageTile()
+                  _AboutPageTile(),
                 ],
               ),
             ),
           ),
           const _VersionNumber(),
+          const SizedBox(height: Dimensions.bottomTabTopHeight),
         ],
       ),
     );
@@ -112,7 +113,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  IconAndTextButton(
+                  ElevatedIconButton(
                     title: 'Remove',
                     icon: const DefaultIcon(
                       Icons.remove_circle_outline,

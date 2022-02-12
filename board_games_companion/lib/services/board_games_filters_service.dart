@@ -33,4 +33,8 @@ class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
 
     return true;
   }
+
+  Future<void> clearFilters() async {
+    await storageBox.delete(_collectionFiltersPreferenceKey);
+  }
 }

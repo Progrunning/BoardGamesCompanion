@@ -27,4 +27,9 @@ class Styles {
 
   static const double transparentOpacity = 0.0;
   static const double opaqueOpacity = 1.0;
+
+  static const TextStyle playerScoreTextStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 32,
+  );
 }

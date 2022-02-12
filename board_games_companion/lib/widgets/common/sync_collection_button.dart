@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../mixins/sync_collection.dart';
 import 'default_icon.dart';
-import 'icon_and_text_button.dart';
+import 'elevated_icon_button.dart';
 
 class SyncButton extends StatefulWidget {
   const SyncButton({
@@ -34,7 +34,7 @@ class _SyncButtonState extends State<SyncButton> with SyncCollection, TickerProv
 
   @override
   Widget build(BuildContext context) {
-    return IconAndTextButton(
+    return ElevatedIconButton(
       title: 'Sync',
       icon: _SyncCollectionIcon(animationController: _animationController),
       onPressed: () async {

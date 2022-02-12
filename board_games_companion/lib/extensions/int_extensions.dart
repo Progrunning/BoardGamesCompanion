@@ -1,3 +1,6 @@
+import 'package:sprintf/sprintf.dart';
+
+import '../common/app_text.dart';
 import '../common/constants.dart';
 
 extension IntExtensions on int? {
@@ -25,34 +28,29 @@ extension IntExtensions on int? {
     }
   }
 
-  String toPlaythroughDuration([String? fallbackValue]) {
+  String toPlaytimeDuration([String? fallbackValue, bool showSeconds = true]) {
     if (this == null) {
       return fallbackValue ?? '';
     }
 
+    final days = (this! / Duration.secondsPerDay).floor();
     final hours = (this! / Duration.secondsPerHour).floor();
     final minutes = (this! / Duration.secondsPerMinute).floor();
 
-    if (hours == 0) {
+    if (days > 0) {
+      return sprintf(
+        AppText.playtimeDurationDaysFormat,
+        [days, if (days > 1) 's' else '', hours - days * Duration.hoursPerDay],
+      );
+    }
+    if (hours > 0) {
+      return sprintf(
+        AppText.playtimeDurationHoursFormat,
+        [hours, minutes % Duration.minutesPerHour],
+      );
+    }
+    if (hours == 0 && showSeconds) {
       return '${minutes}m ${this! - minutes * Duration.secondsPerMinute}s';
-    }
-    if (hours > 0) {
-      return '${hours}h ${minutes - hours * Duration.minutesPerHour}min';
-    }
-
-    return '${minutes}min';
-  }
-
-  String toAverageDuration([String? fallbackValue]) {
-    if (this == null) {
-      return fallbackValue ?? '';
-    }
-
-    final hours = (this! / Duration.secondsPerHour).floor();
-    final minutes = (this! / Duration.secondsPerMinute).floor();
-
-    if (hours > 0) {
-      return '${hours}h ${minutes % Duration.minutesPerHour}min';
     }
 
     return '${minutes}min';
@@ -72,5 +70,22 @@ extension IntExtensions on int? {
     }
 
     return this!.compareTo(intToCompare!);
+  }
+
+  String toNumberOfPlayersFilter() {
+    var numberOfPlayers = this;
+    if (numberOfPlayers == null) {
+      numberOfPlayers = 0;
+    }
+
+    if (numberOfPlayers <= 0) {
+      return 'Any';
+    }
+
+    if (numberOfPlayers >= Constants.maxNumberOfPlayers) {
+      return '${Constants.maxNumberOfPlayers}+';
+    }
+
+    return numberOfPlayers.toString();
   }
 }

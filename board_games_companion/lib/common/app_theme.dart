@@ -13,6 +13,8 @@ class AppTheme {
   static const Color greenColor = Colors.green;
   static const Color pinkColor = Colors.pink;
   static const Color purpleColor = Colors.purple;
+  static const Color greyColor = Colors.grey;
+  static Color darkGreyColor = Colors.grey.shade800;
 
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
@@ -27,7 +29,7 @@ class AppTheme {
   static const Color defaultTextColor = whiteColor;
   static const Color invertedTextColor = blackColor;
 
-  static const Color secondaryTextColor = Colors.grey;
+  static const Color secondaryTextColor = greyColor;
 
   static const Color bottomTabBackgroundColor = primaryColorLight;
   static const Color selectedTabIconColor = accentColor;
@@ -38,6 +40,18 @@ class AppTheme {
 
   static const Color startDefaultPageElementBackgroundColorGradient = secondaryLightColor;
   static const Color endDefaultPageElementBackgroundColorGradient = secondaryColor;
+
+  static const Color activeBottomTabColor = whiteColor;
+  static const Color inactiveBottomTabColor = greyColor;
+
+  static Color alternativeSplashColor = primaryColorLight.withOpacity(0.7);
+
+  static Color playedGamesStatColor = chartColorPallete[0];
+  static Color highscoreStatColor = chartColorPallete[1];
+  static Color averagePlayerCountStatColor = chartColorPallete[5];
+  static Color averageScoreStatColor = chartColorPallete[3];
+  static Color averagePlaytimeStatColor = chartColorPallete[2];
+  static Color totalPlaytimeStatColor = chartColorPallete[6];
 
   static const List<Color> chartColorPallete = <Color>[
     Color(0xFF1784A4),
@@ -101,7 +115,6 @@ class AppTheme {
     final originalBodyText2 = originalTextTheme.bodyText2!;
     final originalHeadline5 = originalTextTheme.headline5!;
     final originalHeadline2 = originalTextTheme.headline2!;
-    final originalHeadline1 = originalTextTheme.headline1!;
     final originalSubtitle2 = originalTextTheme.subtitle2!;
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
     final originaltimePickerTheme = ThemeData.light().timePickerTheme;
@@ -117,6 +130,12 @@ class AppTheme {
 
     final headline2TextStyle = originalTextTheme.headline2!.copyWith(
       fontSize: Dimensions.largeFontSize,
+      fontWeight: FontWeight.bold,
+      color: defaultTextColor,
+    );
+
+    final headline1TextStyle = originalTextTheme.headline1!.copyWith(
+      fontSize: Dimensions.extraLargeFontSize,
       fontWeight: FontWeight.bold,
       color: defaultTextColor,
     );
@@ -197,10 +216,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           color: defaultTextColor,
         ),
-        headline1: originalHeadline1.copyWith(
-          fontSize: Dimensions.extraLargeFontSize,
-          color: defaultTextColor,
-        ),
+        headline1: headline1TextStyle,
         subtitle1: subtitle1TextStyle,
         subtitle2: originalSubtitle2.copyWith(
           fontSize: Dimensions.extraLargeFontSize,

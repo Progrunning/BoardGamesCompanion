@@ -8,14 +8,14 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../models/hive/player.dart';
-import '../../stores/players_store.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
 import '../home_page.dart';
+import 'players_view_model.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({
@@ -25,7 +25,7 @@ class PlayerPage extends StatefulWidget {
 
   static const String pageRoute = '/player';
 
-  final PlayersStore playersStore;
+  final PlayersViewModel playersStore;
 
   @override
   _PlayerPageState createState() => _PlayerPageState();
@@ -88,11 +88,8 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                         children: <Widget>[
                           Center(
                             child: Container(
-                              decoration: const BoxDecoration(
-                                boxShadow: [
-                                  AppTheme.defaultBoxShadow,
-                                ],
-                              ),
+                              decoration:
+                                  const BoxDecoration(boxShadow: [AppTheme.defaultBoxShadow]),
                               child: SizedBox(
                                 height: 220,
                                 width: 190,
@@ -347,7 +344,7 @@ class _ActionButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         if (isEditMode) ...[
-          IconAndTextButton(
+          ElevatedIconButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
             color: Colors.redAccent,
@@ -355,7 +352,7 @@ class _ActionButtons extends StatelessWidget {
           ),
           const SizedBox(width: Dimensions.standardSpacing),
         ],
-        IconAndTextButton(
+        ElevatedIconButton(
           title: isEditMode ? 'Update' : 'Create',
           icon: const DefaultIcon(Icons.create),
           onPressed: () => isEditMode ? onUpdate(context) : onCreate(context),

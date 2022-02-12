@@ -1,22 +1,22 @@
-import 'package:board_games_companion/common/analytics.dart';
-import 'package:board_games_companion/models/hive/score.dart';
-import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/services/analytics_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../common/analytics.dart';
 import '../../models/hive/playthrough.dart';
+import '../../models/hive/score.dart';
+import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
-import '../../stores/players_store.dart';
+import '../../services/analytics_service.dart';
 import '../../stores/playthroughs_store.dart';
+import '../players/players_view_model.dart';
 import 'playthroughs_log_game_page.dart';
 
 @injectable
 class PlaythroughsLogGameViewModel with ChangeNotifier {
   PlaythroughsLogGameViewModel(this._playersStore, this._playthroughsStore, this._analyticsService);
 
-  final PlayersStore _playersStore;
+  final PlayersViewModel _playersStore;
   final PlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
 

@@ -94,12 +94,12 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     }
 
     final syncedCollectionMap = <String, BoardGameDetails>{
-      for (BoardGameDetails boardGameDetails in collectionSyncResult.data!)
+      for (final BoardGameDetails boardGameDetails in collectionSyncResult.data!)
         boardGameDetails.id: boardGameDetails
     };
 
     final existingCollectionMap = <String, BoardGameDetails>{
-      for (BoardGameDetails boardGameDetails in storageBox.values)
+      for (final BoardGameDetails boardGameDetails in storageBox.values)
         boardGameDetails.id: boardGameDetails
     };
 

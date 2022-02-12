@@ -55,8 +55,6 @@ class EditPlaythoughViewModel with ChangeNotifier {
 
   bool get playthoughEnded => playthrough.status == PlaythroughStatus.Finished;
 
-  bool isKeyboardShown = false;
-
   Duration get playthoughDuration =>
       (playthrough.endDate ?? DateTime.now()).difference(playthrough.startDate);
 
@@ -93,11 +91,6 @@ class EditPlaythoughViewModel with ChangeNotifier {
   void updateDuration(int hoursPlayed, int minutesPlyed) {
     playthrough.endDate =
         playthrough.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed));
-  }
-
-  void toggleKeyboard(bool isKeyboardShown) {
-    this.isKeyboardShown = isKeyboardShown;
-    notifyListeners();
   }
 
   Future<void> deletePlaythrough() async {

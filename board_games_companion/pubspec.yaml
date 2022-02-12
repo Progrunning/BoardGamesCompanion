@@ -22,6 +22,7 @@ dependencies:
   basics: ^0.6.0
   cached_network_image: ^3.1.0
   collection: ^1.15.0
+  convex_bottom_bar: ^3.0.0
   dio_http_cache: ^0.3.0
   dio_http2_adapter: ^2.0.0
   firebase_core: ^1.7.0

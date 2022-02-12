@@ -10,19 +10,19 @@ import 'models/navigation/player_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
 import 'pages/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
+import 'pages/board_game_details/board_game_details_view_model.dart';
 import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrouhg_view_model.dart';
 import 'pages/home_page.dart';
 import 'pages/players/player_page.dart';
+import 'pages/players/players_view_model.dart';
 import 'pages/playthroughs/playthroughs_log_game_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
 import 'services/rate_and_review_service.dart';
-import 'stores/board_game_details_store.dart';
 import 'stores/board_games_store.dart';
-import 'stores/players_store.dart';
 import 'stores/playthroughs_store.dart';
 import 'utilities/analytics_route_observer.dart';
 
@@ -74,7 +74,7 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             context,
             listen: false,
           );
-          final _boardGameDetailsStore = BoardGameDetailsStore(
+          final _boardGameDetailsStore = BoardGameDetailsViewModel(
             _boardGamesGeekService,
             _boardGamesStore,
             _analytics,
@@ -90,7 +90,7 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
         },
         PlayerPage.pageRoute: (BuildContext context) {
           final _arguments = ModalRoute.of(context)!.settings.arguments as PlayerPageArguments;
-          final playersStore = getIt<PlayersStore>();
+          final playersStore = getIt<PlayersViewModel>();
 
           playersStore.setPlayer(player: _arguments.player);
 

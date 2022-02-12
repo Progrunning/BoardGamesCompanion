@@ -16,8 +16,8 @@ import '../../stores/playthroughs_store.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
-import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container_widget.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
@@ -57,12 +57,22 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {
                     final PlaythroughStore playthroughStore = getIt<PlaythroughStore>();
-                    return _Playthrough(
+
+                    final _Playthrough playthough = _Playthrough(
                       playthroughsStore: widget.playthroughsStore,
                       playthroughStore: playthroughStore,
                       playthrough: store.playthroughs![index],
                       playthroughNumber: store.playthroughs!.length - index,
                     );
+
+                    // Last playthough
+                    if (index == store.playthroughs!.length - 1) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: Dimensions.bottomTabTopHeight),
+                        child: playthough,
+                      );
+                    }
+                    return playthough;
                   },
                   separatorBuilder: (_, index) {
                     return const SizedBox(height: Dimensions.doubleStandardSpacing);
@@ -181,7 +191,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconAndTextButton(
+            ElevatedIconButton(
               title: AppText.Edit,
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,
@@ -190,7 +200,6 @@ class _PlaythroughPlayersStats extends StatelessWidget {
                 EditPlaythoughPage.pageRoute,
                 arguments: EditPlaythroughPageArguments(playthroughStore),
               ),
-              splashColor: AppTheme.whiteColor,
             ),
           ],
         ),
@@ -289,7 +298,7 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
   @override
   Widget build(BuildContext context) {
     return _PlaythroughItemDetail(
-      widget.playthroughStore.duration.inSeconds.toPlaythroughDuration(),
+      widget.playthroughStore.duration.inSeconds.toPlaytimeDuration(),
       'duration',
     );
   }

@@ -19,8 +19,8 @@ import '../../stores/search_board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
-import '../../widgets/common/icon_and_text_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
@@ -137,6 +137,7 @@ class _SearchBarState extends State<_SearchBar> {
               controller: searchController,
               style: AppTheme.defaultTextFieldStyle,
               focusNode: widget.searchFocusNode,
+              textInputAction: TextInputAction.search,
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 hintText: 'Search...',
@@ -404,7 +405,7 @@ class _NoResults extends StatelessWidget {
             ),
             const SizedBox(height: Dimensions.doubleStandardSpacing),
             Center(
-              child: IconAndTextButton(
+              child: ElevatedIconButton(
                 title: 'Retry',
                 icon: const DefaultIcon(Icons.refresh),
                 onPressed: () {
@@ -440,8 +441,11 @@ class _HotBoardGames extends StatelessWidget {
           final boardGames = snapshot.data as List<BoardGame>;
           if (boardGames != null && boardGames.isNotEmpty) {
             return SliverPadding(
-              padding: const EdgeInsets.all(
-                Dimensions.standardSpacing,
+              padding: const EdgeInsets.only(
+                left: Dimensions.standardSpacing,
+                top: Dimensions.standardSpacing,
+                right: Dimensions.standardSpacing,
+                bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
               ),
               sliver: SliverGrid.extent(
                 crossAxisSpacing: Dimensions.standardSpacing,
@@ -476,7 +480,7 @@ class _HotBoardGames extends StatelessWidget {
                   const SizedBox(height: Dimensions.standardSpacing),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: IconAndTextButton(
+                    child: ElevatedIconButton(
                       icon: const DefaultIcon(Icons.refresh),
                       title: AppText.searchBoardGamesPageHotBoardGamesErrorRetryButtonText,
                       onPressed: () => _hotBoardGamesStore.refresh(),

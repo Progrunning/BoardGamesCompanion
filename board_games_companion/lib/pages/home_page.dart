@@ -1,14 +1,14 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../common/app_theme.dart';
-import '../extensions/page_controller_extensions.dart';
+import '../common/dimensions.dart';
 import '../services/analytics_service.dart';
 import '../services/rate_and_review_service.dart';
 import '../stores/board_games_store.dart';
-import '../stores/home_store.dart';
 import '../stores/user_store.dart';
-import '../widgets/common/bottom_tabs/custom_bottom_navigation_bar_item_widget.dart';
+import '../widgets/bottom_tab_icon.dart';
 import '../widgets/common/page_container_widget.dart';
 import 'base_page_state.dart';
 import 'games/games_page.dart';
@@ -35,8 +35,22 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends BasePageState<HomePage> {
-  final PageController pageController = PageController();
+class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
+  late final TabController tabController;
+
+  static const int _numberOfTabs = 4;
+  static const int _initialTabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabController = TabController(
+      initialIndex: _initialTabIndex,
+      length: _numberOfTabs,
+      vsync: this,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +58,8 @@ class _HomePageState extends BasePageState<HomePage> {
       key: HomePage.homePageGlobalKey,
       child: Scaffold(
         body: PageContainer(
-          child: PageView(
-            controller: pageController,
+          child: TabBarView(
+            controller: tabController,
             children: <Widget>[
               Consumer2<BoardGamesStore, UserStore>(
                 builder: (_, boardGamesStore, userStore, __) {
@@ -61,34 +75,37 @@ class _HomePageState extends BasePageState<HomePage> {
               const PlayersPage(),
               const SettingsPage(),
             ],
-            onPageChanged: (pageIndex) {
-              final homeStore = Provider.of<HomeStore>(
-                context,
-                listen: false,
-              );
-              homeStore.boardGamesPageIndex = pageIndex;
-            },
           ),
         ),
-        bottomNavigationBar: Consumer<HomeStore>(
-          builder: (_, homeStore, __) {
-            return BottomNavigationBar(
-              backgroundColor: AppTheme.bottomTabBackgroundColor,
-              type: BottomNavigationBarType.fixed,
-              items: <BottomNavigationBarItem>[
-                CustomBottomNavigationBarItem('Games', Icons.video_library),
-                CustomBottomNavigationBarItem('Search', Icons.search),
-                CustomBottomNavigationBarItem('Players', Icons.group),
-                CustomBottomNavigationBarItem('Settings', Icons.settings),
-              ],
-              currentIndex: homeStore.boardGamesPageIndex,
-              onTap: (pageIndex) {
-                pageController.animateToTab(pageIndex);
-              },
-              unselectedItemColor: AppTheme.secondaryTextColor,
-              selectedItemColor: AppTheme.defaultTextColor,
-            );
-          },
+        bottomNavigationBar: ConvexAppBar(
+          controller: tabController,
+          backgroundColor: AppTheme.bottomTabBackgroundColor,
+          top: -Dimensions.bottomTabTopHeight,
+          items: const <TabItem>[
+            TabItem<BottomTabIcon>(
+              title: 'Games',
+              icon: BottomTabIcon(iconData: Icons.video_library),
+              activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
+            ),
+            TabItem<BottomTabIcon>(
+              title: 'Search',
+              icon: BottomTabIcon(iconData: Icons.search),
+              activeIcon: BottomTabIcon(iconData: Icons.search, isActive: true),
+            ),
+            TabItem<BottomTabIcon>(
+              title: 'Players',
+              icon: BottomTabIcon(iconData: Icons.group),
+              activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
+            ),
+            TabItem<BottomTabIcon>(
+              title: 'Settings',
+              icon: BottomTabIcon(iconData: Icons.settings),
+              activeIcon: BottomTabIcon(iconData: Icons.settings, isActive: true),
+            ),
+          ],
+          initialActiveIndex: _initialTabIndex,
+          activeColor: AppTheme.accentColor,
+          color: AppTheme.inactiveBottomTabColor,
         ),
       ),
     );

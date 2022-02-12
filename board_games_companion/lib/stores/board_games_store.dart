@@ -50,6 +50,7 @@ class BoardGamesStore with ChangeNotifier {
       _filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
   List<BoardGameDetails> get filteredBoardGamesFriends =>
       _filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
+
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
   bool get anyBoardGamesInCollections => _allBoardGames

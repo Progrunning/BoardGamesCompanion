@@ -6,9 +6,9 @@ import '../../common/dimensions.dart';
 import '../../models/hive/board_game_expansion.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/preferences_service.dart';
-import '../../stores/board_game_details_store.dart';
 import '../../widgets/common/expansions_banner_widget.dart';
 import 'board_game_details_page.dart';
+import 'board_game_details_view_model.dart';
 
 class BoardGameDetailsExpansions extends StatefulWidget {
   const BoardGameDetailsExpansions({
@@ -18,7 +18,7 @@ class BoardGameDetailsExpansions extends StatefulWidget {
     required this.preferencesService,
   }) : super(key: key);
 
-  final BoardGameDetailsStore boardGameDetailsStore;
+  final BoardGameDetailsViewModel boardGameDetailsStore;
   final double spacingBetweenSecions;
   final PreferencesService? preferencesService;
 
@@ -62,7 +62,7 @@ class _Expansions extends StatelessWidget {
     required this.initiallyExpanded,
   }) : super(key: key);
 
-  final BoardGameDetailsStore boardGameDetailsStore;
+  final BoardGameDetailsViewModel boardGameDetailsStore;
   final PreferencesService preferencesService;
   final bool? initiallyExpanded;
 

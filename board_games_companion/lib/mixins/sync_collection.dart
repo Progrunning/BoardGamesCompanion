@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../common/dimensions.dart';
 import '../models/collection_sync_result.dart';
 import '../models/hive/user.dart';
 import '../pages/home_page.dart';
@@ -21,11 +22,7 @@ mixin SyncCollection {
         return CollectionSyncResult();
       }
 
-      final boardGamesStore = Provider.of<BoardGamesStore>(
-        context,
-        listen: false,
-      );
-
+      final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
       final syncResult = await boardGamesStore.syncCollection(username);
       if (syncResult.isSuccess) {
         final user = User(name: username);
@@ -43,13 +40,12 @@ mixin SyncCollection {
   }
 }
 
-void _showSuccessSnackBar() {  
+void _showSuccessSnackBar() {
   HomePage.homePageGlobalKey.currentState!.showSnackBar(
     const SnackBar(
+      margin: Dimensions.snackbarMargin,
       behavior: SnackBarBehavior.floating,
-      content: Text(
-        'Your collection is now in sync with BGG!',
-      ),
+      content: Text('Your collection is now in sync with BGG!'),
     ),
   );
 }
@@ -58,6 +54,7 @@ void _showFailureSnackBar() {
   HomePage.homePageGlobalKey.currentState!.showSnackBar(
     const SnackBar(
       behavior: SnackBarBehavior.floating,
+      margin: Dimensions.snackbarMargin,
       content: Text(
         "Sorry, we've run into some problems with syncing your collection with BGG, please try again or contact support.",
       ),

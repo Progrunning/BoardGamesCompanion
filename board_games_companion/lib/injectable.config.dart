@@ -9,6 +9,7 @@ import 'package:firebase_analytics/observer.dart' as _i15;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
+import 'pages/players/players_view_model.dart' as _i11;
 import 'pages/playthroughs/playthroughs_log_game_view_model.dart' as _i10;
 import 'services/analytics_service.dart' as _i5;
 import 'services/board_games_filters_service.dart' as _i12;
@@ -22,7 +23,6 @@ import 'services/preferences_service.dart' as _i16;
 import 'services/rate_and_review_service.dart' as _i17;
 import 'services/score_service.dart' as _i8;
 import 'services/user_service.dart' as _i18;
-import 'stores/players_store.dart' as _i11;
 import 'stores/playthrough_statistics_store.dart' as _i22;
 import 'stores/playthrough_store.dart' as _i6;
 import 'stores/playthroughs_store.dart' as _i9;
@@ -44,7 +44,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i8.ScoreService>(),
       get<_i9.PlaythroughsStore>()));
   gh.factory<_i10.PlaythroughsLogGameViewModel>(() =>
-      _i10.PlaythroughsLogGameViewModel(get<_i11.PlayersStore>(),
+      _i10.PlaythroughsLogGameViewModel(get<_i11.PlayersViewModel>(),
           get<_i9.PlaythroughsStore>(), get<_i5.AnalyticsService>()));
   gh.singleton<_i12.BoardGamesFiltersService>(_i12.BoardGamesFiltersService());
   gh.singleton<_i13.FileService>(_i13.FileService());
@@ -52,7 +52,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i15.FirebaseAnalyticsObserver>(
       registerModule.firebaseAnalyticsObserver);
   gh.singleton<_i7.PlayerService>(_i7.PlayerService(get<_i13.FileService>()));
-  gh.singleton<_i11.PlayersStore>(_i11.PlayersStore(get<_i7.PlayerService>()));
+  gh.singleton<_i11.PlayersViewModel>(
+      _i11.PlayersViewModel(get<_i7.PlayerService>()));
   gh.singleton<_i16.PreferencesService>(_i16.PreferencesService());
   gh.singleton<_i17.RateAndReviewService>(
       _i17.RateAndReviewService(get<_i16.PreferencesService>()));

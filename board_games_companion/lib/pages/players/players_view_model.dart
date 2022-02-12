@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
 
-import '../common/hive_boxes.dart';
-import '../models/hive/player.dart';
-import '../services/player_service.dart';
+import '../../common/hive_boxes.dart';
+import '../../models/hive/player.dart';
+import '../../services/player_service.dart';
 
 @singleton
-class PlayersStore with ChangeNotifier {
-  PlayersStore(this._playerService);
+class PlayersViewModel with ChangeNotifier {
+  PlayersViewModel(this._playerService);
 
   final PlayerService _playerService;
 

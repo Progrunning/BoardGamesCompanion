@@ -2,15 +2,15 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
-import '../common/analytics.dart';
-import '../common/enums/collection_type.dart';
-import '../models/hive/board_game_details.dart';
-import '../services/analytics_service.dart';
-import '../services/board_games_geek_service.dart';
-import 'board_games_store.dart';
+import '../../common/analytics.dart';
+import '../../common/enums/collection_type.dart';
+import '../../models/hive/board_game_details.dart';
+import '../../services/analytics_service.dart';
+import '../../services/board_games_geek_service.dart';
+import '../../stores/board_games_store.dart';
 
-class BoardGameDetailsStore with ChangeNotifier {
-  BoardGameDetailsStore(
+class BoardGameDetailsViewModel with ChangeNotifier {
+  BoardGameDetailsViewModel(
     this._boardGameGeekService,
     this._boardGamesStore,
     this._analyticsService,

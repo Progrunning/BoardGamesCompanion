@@ -12,14 +12,14 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
-import '../../stores/players_store.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/icon_and_text_button.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../players/player_page.dart';
+import '../players/players_view_model.dart';
 import 'playthroughs_log_game_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
@@ -41,19 +41,18 @@ class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: widget.playthroughsLogGameViewModel,
-      child: Consumer<PlayersStore>(
-          builder: (_, __, ___) =>
-              ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsLogGameViewModel>(
-                future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
-                success: (_, PlaythroughsLogGameViewModel viewModel) {
-                  return _LogPlaythroughStepper(
-                    viewModel: viewModel,
-                    boardGameDetails: widget.boardGameDetails,
-                  );
-
-                  // return const _NoPlayers();
-                },
-              )),
+      child: Consumer<PlayersViewModel>(
+        builder: (_, __, ___) =>
+            ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsLogGameViewModel>(
+          future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
+          success: (_, PlaythroughsLogGameViewModel viewModel) {
+            return _LogPlaythroughStepper(
+              viewModel: viewModel,
+              boardGameDetails: widget.boardGameDetails,
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -92,20 +91,14 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       children: [
         Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Text(
-            'Log a game',
-            style: AppTheme.theme.textTheme.headline2,
-          ),
+          child: Text('Log a game', style: AppTheme.theme.textTheme.headline2),
         ),
         Expanded(
           child: Theme(
             data: AppTheme.theme.copyWith(
-              colorScheme: AppTheme.theme.colorScheme.copyWith(
-                primary: AppTheme.accentColor,
-              ),
+              colorScheme: AppTheme.theme.colorScheme.copyWith(primary: AppTheme.accentColor),
             ),
             child: Stepper(
-              // physics: const ClampingScrollPhysics(),
               currentStep: widget.viewModel.logGameStep,
               steps: [
                 Step(
@@ -654,7 +647,7 @@ class _NoPlayers extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.topRight,
-          child: IconAndTextButton(
+          child: ElevatedIconButton(
             title: 'Create Player',
             icon: const DefaultIcon(Icons.add),
             onPressed: () => Navigator.pushNamed(
@@ -701,13 +694,13 @@ class _PlayerScore extends StatelessWidget {
                     itemWidth: 46,
                     minValue: 0,
                     maxValue: 10000,
-                    onChanged: (num value) async {
+                    onChanged: (num value) {
                       final String valueText = value.toString();
                       if (playerScoreConsumer.score.value == valueText) {
                         return;
                       }
 
-                      await playerScoreConsumer.updatePlayerScore(valueText);
+                      playerScoreConsumer.updatePlayerScore(valueText);
                     },
                     selectedTextStyle: const TextStyle(
                       color: AppTheme.accentColor,
