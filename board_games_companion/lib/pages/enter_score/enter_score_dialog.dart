@@ -8,9 +8,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../extensions/double_extensions.dart';
-import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/rounded_container.dart';
 import 'enter_score_view_model.dart';
@@ -21,69 +19,69 @@ class EnterScoreDialog extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  static const double _minWidth = 340;
+  static const double _maxWidth = 380;
+
   final EnterScoreViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final enterScoreDialogWidth =
+        max(_minWidth, min(width - 2 * Dimensions.doubleStandardSpacing, _maxWidth));
+
     return ChangeNotifierProvider<EnterScoreViewModel>.value(
       value: viewModel,
       builder: (_, __) {
-        // TODO Work out a better padding because on very large screens this won't look good
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Dimensions.trippleStandardSpacing),
-          child: Center(
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppTheme.primaryColorLight,
-                boxShadow: const [AppTheme.defaultBoxShadow],
-                borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+        return Center(
+          child: RoundedContainer(
+            width: enterScoreDialogWidth,
+            backgroundColor: AppTheme.primaryColorLight,
+            addShadow: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.doubleStandardSpacing,
+                vertical: Dimensions.standardSpacing,
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.doubleStandardSpacing,
-                  vertical: Dimensions.standardSpacing,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    _CircularNumberPicker(
-                      strokeWidth: 50,
-                      thumbSize: 50,
-                      onEnded: (int partialScore) {
-                        viewModel.updateScore(partialScore);
-                      },
-                    ),
-                    const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    Consumer<EnterScoreViewModel>(
-                      builder: (_, viewModel, __) {
-                        return _InstantScorePanel(
-                          operation: viewModel.operation,
-                          onOperationChange: (EnterScoreOperation operation) {
-                            viewModel.updateOperation(operation);
-                          },
-                          onScoreChange: (int partialScore) async {
-                            if (viewModel.operation == EnterScoreOperation.subtract) {
-                              partialScore = -partialScore;
-                            }
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _Score(playerName: viewModel.playerScore.player?.name),
+                  const _ScoreHistory(),
+                  const SizedBox(height: Dimensions.trippleStandardSpacing),
+                  _CircularNumberPicker(
+                    strokeWidth: 50,
+                    thumbSize: 50,
+                    onEnded: (int partialScore) {
+                      viewModel.updateScore(partialScore);
+                    },
+                  ),
+                  const SizedBox(height: Dimensions.doubleStandardSpacing),
+                  Consumer<EnterScoreViewModel>(
+                    builder: (_, viewModel, __) {
+                      return _InstantScorePanel(
+                        operation: viewModel.operation,
+                        onOperationChange: (EnterScoreOperation operation) {
+                          viewModel.updateOperation(operation);
+                        },
+                        onScoreChange: (int partialScore) async {
+                          if (viewModel.operation == EnterScoreOperation.subtract) {
+                            partialScore = -partialScore;
+                          }
 
-                            viewModel.updateScore(partialScore);
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    _Score(playerName: viewModel.playerScore.player?.name),
-                    const _ScoreHistory(),
-                    const SizedBox(height: Dimensions.trippleStandardSpacing),
-                    _ActionButtons(
-                      onUndo: () => viewModel.undo(),
-                      onDone: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
+                          viewModel.updateScore(partialScore);
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: Dimensions.trippleStandardSpacing),
+                  _ActionButtons(
+                    onUndo: () => viewModel.undo(),
+                    onDone: () => Navigator.pop(context),
+                  ),
+                ],
               ),
             ),
           ),
@@ -191,6 +189,7 @@ class _InstantScorePanel extends StatelessWidget {
       children: [
         RoundedContainer(
           backgroundColor: AppTheme.primaryColor,
+          addShadow: true,
           child: Column(
             children: [
               _InstantScoreOperationTile(
@@ -208,7 +207,7 @@ class _InstantScorePanel extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: Dimensions.doubleStandardSpacing),
+        const Expanded(child: SizedBox.shrink()),
         _InstantScoreTile(text: '1', onTap: () => onScoreChange(1)),
         const Expanded(child: SizedBox.shrink()),
         _InstantScoreTile(text: '5', onTap: () => onScoreChange(5)),
@@ -294,18 +293,20 @@ class _ActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Consumer<EnterScoreViewModel>(builder: (_, viewModel, __) {
-          return ElevatedIconButton(
-            title: AppText.enterScoreDialogUndoButtonText,
-            icon: const DefaultIcon(Icons.undo),
-            color: AppTheme.blueColor,
-            onPressed: viewModel.canUndo ? onUndo : null,
-          );
-        }),
+        Consumer<EnterScoreViewModel>(
+          builder: (_, viewModel, __) {
+            return ElevatedIconButton(
+              title: AppText.enterScoreDialogUndoButtonText,
+              icon: const Icon(Icons.undo),
+              color: AppTheme.blueColor,
+              onPressed: viewModel.canUndo ? onUndo : null,
+            );
+          },
+        ),
         const Expanded(child: SizedBox.shrink()),
         ElevatedIconButton(
           title: AppText.enterScoreDialogDoneButtonText,
-          icon: const DefaultIcon(Icons.done),
+          icon: const Icon(Icons.done),
           color: AppTheme.accentColor,
           onPressed: onDone,
         ),
