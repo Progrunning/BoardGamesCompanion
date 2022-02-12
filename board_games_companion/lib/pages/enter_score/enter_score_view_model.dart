@@ -8,8 +8,9 @@ enum EnterScoreOperation {
 }
 
 class EnterScoreViewModel with ChangeNotifier {
-  EnterScoreViewModel(this.playerScore);
+  EnterScoreViewModel(this.playerScore) : initialScore = playerScore.score.valueInt;
 
+  final int initialScore;
   final PlayerScore playerScore;
 
   int? _score;
@@ -51,7 +52,7 @@ class EnterScoreViewModel with ChangeNotifier {
 
     partialScores.removeLast();
 
-    _score = playerScore.score.valueInt + _partialScoresSum;
+    _score = initialScore + _partialScoresSum;
 
     notifyListeners();
   }
