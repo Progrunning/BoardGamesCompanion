@@ -19,16 +19,23 @@ class EnterScoreDialog extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  static const double _minWidth = 340;
+  static const double _maxWidth = 380;
+
   final EnterScoreViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final enterScoreDialogWidth =
+        max(_minWidth, min(width - 2 * Dimensions.doubleStandardSpacing, _maxWidth));
+
     return ChangeNotifierProvider<EnterScoreViewModel>.value(
       value: viewModel,
       builder: (_, __) {
         return Center(
           child: RoundedContainer(
-            width: 380,
+            width: enterScoreDialogWidth,
             backgroundColor: AppTheme.primaryColorLight,
             addShadow: true,
             child: Padding(
@@ -41,7 +48,6 @@ class EnterScoreDialog extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(height: Dimensions.doubleStandardSpacing),
                   _Score(playerName: viewModel.playerScore.player?.name),
                   const _ScoreHistory(),
                   const SizedBox(height: Dimensions.trippleStandardSpacing),
@@ -201,7 +207,7 @@ class _InstantScorePanel extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: Dimensions.trippleStandardSpacing),
+        const Expanded(child: SizedBox.shrink()),
         _InstantScoreTile(text: '1', onTap: () => onScoreChange(1)),
         const Expanded(child: SizedBox.shrink()),
         _InstantScoreTile(text: '5', onTap: () => onScoreChange(5)),
