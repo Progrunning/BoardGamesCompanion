@@ -41,4 +41,6 @@ class Constants {
   static const int DaysInTenYears = DaysInYear * 10;
 
   static const int maxNumberOfPlayers = 20;
+
+  static const int fullCricleDegrees = 360;
 }

@@ -42,7 +42,7 @@ class AppText {
   static const playtimeDurationDaysFormat = '%i day%s %ih';
 
   static const editPlaythroughScorePoints = 'points';
-  static const editPlaythroughPlayerScoredFormat = '%s scored';
+  static const editPlaythroughPlayerScored = 'scored';
 
   static const enterScoreDialogUndoButtonText = 'Undo';
   static const enterScoreDialogDoneButtonText = 'Done';

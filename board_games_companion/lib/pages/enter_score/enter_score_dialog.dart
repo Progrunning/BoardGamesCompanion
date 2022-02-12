@@ -1,18 +1,19 @@
 import 'dart:math';
 
-import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
+import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../extensions/double_extensions.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/rounded_container.dart';
+import 'enter_score_view_model.dart';
 
 class EnterScoreDialog extends StatelessWidget {
   const EnterScoreDialog({
@@ -145,7 +146,11 @@ class _Score extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          sprintf(AppText.editPlaythroughPlayerScoredFormat, [playerName]),
+          '$playerName ',
+          style: AppTheme.theme.textTheme.headline1!,
+        ),
+        Text(
+          sprintf(AppText.editPlaythroughPlayerScored, [playerName]),
           style: AppTheme.theme.textTheme.headline1!.copyWith(fontWeight: FontWeight.normal),
         ),
         Consumer<EnterScoreViewModel>(
@@ -355,8 +360,6 @@ class _CircularNumberPicker extends StatefulWidget {
 
 class _CircularNumberPickerState extends State<_CircularNumberPicker>
     with TickerProviderStateMixin {
-  static const int _fullCricleDegrees = 360;
-
   double _numberOpacity = 0.0;
 
   late double _angle;
@@ -370,7 +373,7 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
     _number = 0;
 
     assert(widget.highestNumberInSingleSpin > 0);
-    _degreesPerNumber = _fullCricleDegrees / widget.highestNumberInSingleSpin;
+    _degreesPerNumber = Constants.fullCricleDegrees / widget.highestNumberInSingleSpin;
   }
 
   @override
@@ -469,8 +472,9 @@ class _NumberPicker extends StatefulWidget {
 }
 
 class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMixin {
-  late bool _isInit;
+  late bool _isInitState;
   late int _fullCirclesCount;
+  late SpinDirection _spinDirection;
   late bool _isApproachingFromRight;
   late bool _isApproachingFromLeft;
 
@@ -485,7 +489,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
     super.initState();
     final minSize = min(widget.size.width, widget.size.height);
 
-    _isInit = true;
+    _isInitState = true;
     _circleRadius = minSize / 2 - widget.thumbSize / 2;
     _circlePositionX = _circleRadius;
     _circlePositionY = _circleRadius;
@@ -523,13 +527,14 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
               top: offset.dy,
               child: _Thumb(size: widget.thumbSize, color: AppTheme.accentColor),
             ),
-            if (_numberPickedAngle != null && _isInit)
+            if (_numberPickedAngle != null && _isInitState)
               TweenAnimationBuilder<Offset>(
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInCubic,
                 tween: _CircleTween(
-                  radius: _circleRadius,
+                  circleRadius: _circleRadius,
                   beginAngle: _numberPickedAngle!,
+                  spinDirection: _spinDirection,
                 ),
                 onEnd: () {
                   _numberPickedAngle = null;
@@ -570,8 +575,8 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
       position.dy - widget.size.height / 2,
       position.dx - widget.size.width / 2,
     );
-    debugPrint('$_numberPickedAngle');
     final double angle = _numberPickedAngle = radians % (2 * pi) * 180 / pi;
+    final int previousFullCircleCount = _fullCirclesCount;
 
     if (_isApproachingFromRight && angle.isBetween(0, 90)) {
       _fullCirclesCount++;
@@ -582,7 +587,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
       _isApproachingFromLeft = false;
     }
 
-    if (_isInit && angle.isBetween(270, 360)) {
+    if (_isInitState && angle.isBetween(270, 360)) {
       _fullCirclesCount--;
     }
 
@@ -601,13 +606,16 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
 
     widget.onChanged(angle, _fullCirclesCount);
 
-    if (_isInit) {
-      _isInit = false;
+    if (_isInitState) {
+      _spinDirection = _fullCirclesCount >= previousFullCircleCount
+          ? SpinDirection.forward
+          : SpinDirection.backward;
+      _isInitState = false;
     }
   }
 
   void _reset() {
-    _isInit = true;
+    _isInitState = true;
     _fullCirclesCount = 0;
     _isApproachingFromLeft = false;
     _isApproachingFromRight = false;
@@ -616,21 +624,34 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
 
 class _CircleTween extends Tween<Offset> {
   _CircleTween({
-    required this.radius,
+    required this.circleRadius,
     required this.beginAngle,
+    required this.spinDirection,
   }) : super(
-          begin: _radiansToOffset(beginAngle.toRadians(), radius),
-          end: _radiansToOffset(0, radius),
+          begin: _radiansToOffset(beginAngle.toRadians(), circleRadius),
+          end: _radiansToOffset(0, circleRadius),
         );
 
-  final double radius;
+  final double circleRadius;
   final double beginAngle;
+  final SpinDirection spinDirection;
 
   // TODO Add direction (when spinning - or +)
   @override
   Offset lerp(double t) {
-    final radians = (beginAngle - beginAngle * t).toRadians();
-    return _radiansToOffset(radians, radius);
+    double newAngle = 0;
+    switch (spinDirection) {
+      case SpinDirection.backward:
+        newAngle = beginAngle + ((Constants.fullCricleDegrees - beginAngle) * t);
+        break;
+      case SpinDirection.forward:
+        newAngle = beginAngle - beginAngle * t;
+        break;
+    }
+
+    debugPrint('$newAngle | $t');
+    final radians = newAngle.toRadians();
+    return _radiansToOffset(radians, circleRadius);
   }
 
   static Offset _radiansToOffset(double radians, double radius) {
@@ -684,4 +705,9 @@ class _Thumb extends StatelessWidget {
       decoration: BoxDecoration(shape: BoxShape.circle, color: color),
     );
   }
+}
+
+enum SpinDirection {
+  backward,
+  forward,
 }
