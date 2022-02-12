@@ -456,15 +456,10 @@ class _NumberPicker extends StatefulWidget {
   }) : super(key: key);
 
   final double angle;
-
   final void Function(double, int) onChanged;
-
   final VoidCallback onEnded;
-
   final Size size;
-
   final double strokeWidth;
-
   final double thumbSize;
 
   @override
@@ -473,9 +468,9 @@ class _NumberPicker extends StatefulWidget {
 
 class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMixin {
   late bool _isInitState;
-  late bool _isSpinning;
-  late int _fullCirclesCount;
+  late bool? _isSpinning;
   late SpinDirection _spinDirection;
+  late int _fullCirclesCount;
   late bool _isApproachingFromRight;
   late bool _isApproachingFromLeft;
 
@@ -491,7 +486,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
     final minSize = min(widget.size.width, widget.size.height);
 
     _isInitState = true;
-    _isSpinning = false;
+    _isSpinning = null;
     _circleRadius = minSize / 2 - widget.thumbSize / 2;
     _circlePositionX = _circleRadius;
     _circlePositionY = _circleRadius;
@@ -524,11 +519,12 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
             SizedBox.expand(
               child: CustomPaint(painter: _CirclePickerPainter(widget.strokeWidth)),
             ),
-            Positioned(
-              left: offset.dx,
-              top: offset.dy,
-              child: _Thumb(size: widget.thumbSize, color: AppTheme.accentColor),
-            ),
+            if (_isSpinning ?? true)
+              Positioned(
+                left: offset.dx,
+                top: offset.dy,
+                child: _Thumb(size: widget.thumbSize, color: AppTheme.accentColor),
+              ),
             if (_numberPickedAngle != null && _isInitState)
               TweenAnimationBuilder<Offset>(
                 duration: const Duration(milliseconds: 400),
@@ -540,6 +536,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
                 ),
                 onEnd: () {
                   _numberPickedAngle = null;
+                  _isSpinning = null;
                 },
                 builder: (_, Offset offset, __) {
                   return Positioned(
@@ -578,7 +575,6 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
       position.dx - widget.size.width / 2,
     );
     final double angle = _numberPickedAngle = radians % (2 * pi) * 180 / pi;
-    final int previousFullCircleCount = _fullCirclesCount;
 
     if (_isApproachingFromRight && angle.isBetween(0, 90)) {
       _fullCirclesCount++;
@@ -609,13 +605,15 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
     widget.onChanged(angle, _fullCirclesCount);
 
     if (_isInitState) {
-      _spinDirection = angle.isBetween(0, 90) ? SpinDirection.forward : SpinDirection.backward;
+      _isSpinning = true;
       _isInitState = false;
     }
   }
 
   void _reset() {
     _isInitState = true;
+    _isSpinning = false;
+    _spinDirection = _fullCirclesCount >= 0 ? SpinDirection.forward : SpinDirection.backward;
     _fullCirclesCount = 0;
     _isApproachingFromLeft = false;
     _isApproachingFromRight = false;
@@ -636,7 +634,6 @@ class _CircleTween extends Tween<Offset> {
   final double beginAngle;
   final SpinDirection spinDirection;
 
-  // TODO Add direction (when spinning - or +)
   @override
   Offset lerp(double t) {
     double newAngle = 0;
