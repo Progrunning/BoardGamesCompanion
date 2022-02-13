@@ -238,9 +238,6 @@ class _ScoresSectionState extends State<_ScoresSection> {
                   child: _PlayerScoreTile(
                     playerScore: viewModel.playerScores[index],
                     playthroughId: viewModel.playthrough.id,
-                    onUpdatePlayerScore: (num score) async {
-                      _updatePlayerScore(viewModel.playerScores[index], score);
-                    },
                   ),
                 );
               },
@@ -250,21 +247,6 @@ class _ScoresSectionState extends State<_ScoresSection> {
       },
     );
   }
-
-  void _updatePlayerScore(PlayerScore playerScore, num newScore) {
-    if (newScore < 0) {
-      return;
-    }
-
-    final String scoreText = newScore.toString();
-    if (playerScore.score.value == scoreText) {
-      return;
-    }
-
-    playerScore.updatePlayerScore(scoreText);
-
-    setState(() {});
-  }
 }
 
 class _PlayerScoreTile extends StatelessWidget {
@@ -272,12 +254,10 @@ class _PlayerScoreTile extends StatelessWidget {
     Key? key,
     required this.playerScore,
     required this.playthroughId,
-    required this.onUpdatePlayerScore,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String playthroughId;
-  final Future<void> Function(num) onUpdatePlayerScore;
 
   @override
   Widget build(BuildContext context) {
@@ -295,10 +275,7 @@ class _PlayerScoreTile extends StatelessWidget {
           ),
           const SizedBox(width: Dimensions.standardSpacing),
           Expanded(
-            child: _PlayerScore(
-              playerScore: playerScore,
-              onUpdatePlayerScore: onUpdatePlayerScore,
-            ),
+            child: _PlayerScore(playerScore: playerScore),
           ),
         ],
       ),
@@ -306,39 +283,13 @@ class _PlayerScoreTile extends StatelessWidget {
   }
 }
 
-class _PlayerScore extends StatefulWidget {
+class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
-    required this.onUpdatePlayerScore,
   }) : super(key: key);
 
   final PlayerScore playerScore;
-  final Future<void> Function(num) onUpdatePlayerScore;
-
-  @override
-  State<_PlayerScore> createState() => _PlayerScoreState();
-}
-
-class _PlayerScoreState extends State<_PlayerScore> {
-  late TextEditingController playerScoreEditingController;
-  late FocusNode playerScoreFocusNode;
-
-  @override
-  void initState() {
-    super.initState();
-
-    playerScoreEditingController = TextEditingController(text: widget.playerScore.score.value);
-    playerScoreFocusNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    playerScoreEditingController.dispose();
-    playerScoreFocusNode.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -350,13 +301,15 @@ class _PlayerScoreState extends State<_PlayerScore> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ChangeNotifierProvider<PlayerScore>.value(
-              value: widget.playerScore,
-              child: Consumer<PlayerScore>(builder: (_, playerScore, __) {
-                return Text(
-                  '${playerScore.score.valueInt}',
-                  style: Styles.playerScoreTextStyle,
-                );
-              }),
+              value: playerScore,
+              child: Consumer<PlayerScore>(
+                builder: (_, playerScore, __) {
+                  return Text(
+                    '${playerScore.score.valueInt}',
+                    style: Styles.playerScoreTextStyle,
+                  );
+                },
+              ),
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),
             Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyText2),

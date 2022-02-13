@@ -48,4 +48,6 @@ class AppText {
   static const enterScoreDialogDoneButtonText = 'Done';
 
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
+
+  static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
 }
