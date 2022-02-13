@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
+import '../../mixins/enter_score_dialog.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
@@ -18,6 +21,7 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../enter_score/enter_score_view_model.dart';
 import '../players/player_page.dart';
 import '../players/players_view_model.dart';
 import 'playthroughs_log_game_view_model.dart';
@@ -141,7 +145,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                   ),
                 ),
                 Step(
-                  title: const Text('Player scores'),
+                  title: const Text(AppText.playthroughsLogGamePagePlayerScoresStepTitle),
                   isActive: widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
                   state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
                       ? StepState.disabled
@@ -293,7 +297,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   }
 }
 
-class _PlayerScoresStep extends StatelessWidget {
+class _PlayerScoresStep extends StatelessWidget with EnterScoreDialogMixin {
   const _PlayerScoresStep({
     required this.viewModel,
     Key? key,
@@ -309,7 +313,12 @@ class _PlayerScoresStep extends StatelessWidget {
         child: Column(
           children: [
             for (var playerScore in viewModel.playerScores.values) ...[
-              _PlayerScore(playerScore: playerScore),
+              _PlayerScore(
+                playerScore: playerScore,
+                onTap: (PlayerScore playerScore) async {
+                  await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
+                },
+              ),
               const SizedBox(height: Dimensions.standardSpacing),
             ]
           ],
@@ -666,60 +675,43 @@ class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
+    required this.onTap,
   }) : super(key: key);
 
   final PlayerScore playerScore;
+  final void Function(PlayerScore) onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          height: Dimensions.smallPlayerAvatarSize,
-          width: Dimensions.smallPlayerAvatarSize,
-          child: PlayerAvatar(playerScore.player),
-        ),
-        const SizedBox(
-          width: Dimensions.standardSpacing,
-        ),
-        Column(
-          children: <Widget>[
-            ChangeNotifierProvider<PlayerScore>.value(
-              value: playerScore,
-              child: Consumer<PlayerScore>(
-                builder: (_, PlayerScore playerScoreConsumer, __) {
-                  return NumberPicker(
-                    value: int.tryParse(playerScoreConsumer.score.value ?? '0') ?? 0,
-                    axis: Axis.horizontal,
-                    itemWidth: 46,
-                    minValue: 0,
-                    maxValue: 10000,
-                    onChanged: (num value) {
-                      final String valueText = value.toString();
-                      if (playerScoreConsumer.score.value == valueText) {
-                        return;
-                      }
-
-                      playerScoreConsumer.updatePlayerScore(valueText);
-                    },
-                    selectedTextStyle: const TextStyle(
-                      color: AppTheme.accentColor,
-                      fontSize: Dimensions.doubleExtraLargeFontSize,
-                    ),
-                  );
-                },
+    return InkWell(
+      onTap: () => onTap(playerScore),
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: Dimensions.smallPlayerAvatarSize,
+            width: Dimensions.smallPlayerAvatarSize,
+            child: PlayerAvatar(playerScore.player),
+          ),
+          const SizedBox(width: Dimensions.doubleStandardSpacing),
+          Column(
+            children: <Widget>[
+              ChangeNotifierProvider<PlayerScore>.value(
+                value: playerScore,
+                child: Consumer<PlayerScore>(
+                  builder: (_, PlayerScore playerScore, __) {
+                    return Text(
+                      '${playerScore.score.valueInt}',
+                      style: Styles.playerScoreTextStyle,
+                    );
+                  },
+                ),
               ),
-            ),
-            const SizedBox(
-              height: Dimensions.halfStandardSpacing,
-            ),
-            Text(
-              'points',
-              style: AppTheme.theme.textTheme.bodyText2,
-            ),
-          ],
-        ),
-      ],
+              const SizedBox(height: Dimensions.halfStandardSpacing),
+              Text('points', style: AppTheme.theme.textTheme.bodyText2),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
