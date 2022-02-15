@@ -50,4 +50,7 @@ class AppText {
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
+
+  static const importCollectionsSucceeded = 'Your collection is now in sync with BGG!';
+  static const importCollectionsButtonText = 'Import';
 }

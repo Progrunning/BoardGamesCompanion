@@ -11,7 +11,7 @@ import '../extensions/date_time_extensions.dart';
 import '../extensions/double_extensions.dart';
 import '../extensions/int_extensions.dart';
 import '../extensions/string_extensions.dart';
-import '../models/collection_sync_result.dart';
+import '../models/collection_import_result.dart';
 import '../models/hive/board_game_category.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/board_game_expansion.dart';
@@ -204,8 +204,8 @@ class BoardGamesStore with ChangeNotifier {
     }
   }
 
-  Future<CollectionSyncResult> syncCollection(String username) async {
-    var syncResult = CollectionSyncResult();
+  Future<CollectionImportResult> importCollections(String username) async {
+    var syncResult = CollectionImportResult();
 
     try {
       syncResult = await _boardGamesService.syncCollection(username);

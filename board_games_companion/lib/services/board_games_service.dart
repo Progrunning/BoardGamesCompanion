@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 
 import '../common/hive_boxes.dart';
-import '../models/collection_sync_result.dart';
+import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
 import 'board_games_geek_service.dart';
 import 'hive_base_service.dart';
@@ -83,9 +83,9 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     await storageBox.clear();
   }
 
-  Future<CollectionSyncResult> syncCollection(String username) async {
+  Future<CollectionImportResult> syncCollection(String username) async {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
-      return CollectionSyncResult();
+      return CollectionImportResult();
     }
 
     final collectionSyncResult = await _boardGameGeekService.syncCollection(username);

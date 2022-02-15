@@ -12,7 +12,7 @@ import '../common/enums/collection_type.dart';
 import '../common/exceptions/bgg_retry_exception.dart';
 import '../extensions/xml_element_extensions.dart';
 import '../models/board_game.dart';
-import '../models/collection_sync_result.dart';
+import '../models/collection_import_result.dart';
 import '../models/hive/board_game_artist.dart';
 import '../models/hive/board_game_category.dart';
 import '../models/hive/board_game_designer.dart';
@@ -322,9 +322,9 @@ class BoardGamesGeekService {
     return boardGames;
   }
 
-  Future<CollectionSyncResult> syncCollection(String username) async {
+  Future<CollectionImportResult> syncCollection(String username) async {
     if (username.isEmpty) {
-      return CollectionSyncResult();
+      return CollectionImportResult();
     }
 
     final ownGameSyncResult = await _syncCollection(
@@ -343,7 +343,7 @@ class BoardGamesGeekService {
       <String, dynamic>{_boardGameQueryParamterWantToBuy: 1},
     );
 
-    return CollectionSyncResult()
+    return CollectionImportResult()
       ..isSuccess = ownGameSyncResult.isSuccess &&
           wishlistGameSyncResult.isSuccess &&
           wantToBuyGameSyncResult.isSuccess
@@ -354,7 +354,7 @@ class BoardGamesGeekService {
       ];
   }
 
-  Future<CollectionSyncResult> _syncCollection(
+  Future<CollectionImportResult> _syncCollection(
     String username,
     CollectionType collectionType,
     Map<String, dynamic> additionalQueryParameters,
@@ -384,11 +384,11 @@ class BoardGamesGeekService {
     final boardGames = <BoardGameDetails>[];
     final xmlDocument = _retrieveXmlDocument(collectionResultsXml);
     if (xmlDocument == null) {
-      return CollectionSyncResult();
+      return CollectionImportResult();
     }
 
     if (_hasErrors(xmlDocument)) {
-      return CollectionSyncResult();
+      return CollectionImportResult();
     }
 
     final collectionElements = xmlDocument.findAllElements(_xmlItemElementName);
@@ -430,7 +430,7 @@ class BoardGamesGeekService {
       boardGames.add(boardGame);
     }
 
-    return CollectionSyncResult()
+    return CollectionImportResult()
       ..isSuccess = true
       ..data = boardGames;
   }

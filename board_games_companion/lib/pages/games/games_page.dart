@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,7 @@ import '../../common/enums/collection_type.dart';
 import '../../common/enums/enums.dart';
 import '../../common/enums/games_tab.dart';
 import '../../common/styles.dart';
-import '../../mixins/sync_collection.dart';
+import '../../mixins/import_collection.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
@@ -25,9 +26,9 @@ import '../../widgets/common/bgg_community_member_user_name_text_field_widget.da
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
+import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
-import '../../widgets/common/sync_collection_button.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'games_filter_panel.dart';
 
@@ -386,7 +387,7 @@ class _Grid extends StatelessWidget {
   }
 }
 
-class _Empty extends StatefulWidget with SyncCollection {
+class _Empty extends StatefulWidget with ImportCollection {
   _Empty({
     Key? key,
   }) : super(key: key);
@@ -395,7 +396,7 @@ class _Empty extends StatefulWidget with SyncCollection {
   _EmptyState createState() => _EmptyState();
 }
 
-class _EmptyState extends State<_Empty> with SyncCollection {
+class _EmptyState extends State<_Empty> with ImportCollection {
   late TextEditingController _bggUserNameController;
 
   @override
@@ -469,14 +470,15 @@ class _EmptyState extends State<_Empty> with SyncCollection {
                 style: TextStyle(fontSize: Dimensions.mediumFontSize),
               ),
               const BggCommunityMemberText(),
+              // TODO Connect submition of this fied with triggering import button animation (here and in the settings)
               BggCommunityMemberUserNameTextField(
                 controller: _bggUserNameController,
-                onSubmit: () async => syncCollection(context, _bggUserNameController.text),
+                onSubmit: () async => importCollections(context, _bggUserNameController.text),
               ),
               const SizedBox(height: Dimensions.standardSpacing),
               Align(
                 alignment: Alignment.centerRight,
-                child: SyncButton(usernameCallback: () => _bggUserNameController.text),
+                child: ImportCollectionsButton(usernameCallback: () => _bggUserNameController.text),
               ),
               const SizedBox(height: Dimensions.standardSpacing),
             ],
@@ -574,41 +576,25 @@ class _EmptyCollection extends StatelessWidget {
                             text: boardGamesStore.selectedTab
                                 .toCollectionType()
                                 .toHumandReadableText(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          const TextSpan(
-                            text: ' collection yet.',
-                          ),
+                          const TextSpan(text: ' collection yet.'),
                           if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
                               (userStore.user?.name.isNotEmpty ?? false)) ...[
-                            const TextSpan(
-                              text: "\n\nIf you want to see board games from BGG's  ",
-                            ),
+                            const TextSpan(text: "\n\nIf you want to see board games from BGG's  "),
                             const TextSpan(
                               text: 'Wishlist ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            const TextSpan(
-                              text: 'or ',
-                            ),
+                            const TextSpan(text: 'or '),
                             const TextSpan(
                               text: 'Want to Buy ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
+                            const TextSpan(text: 'collections then tap the below  '),
                             const TextSpan(
-                              text: 'collection, then tap the below  ',
-                            ),
-                            const TextSpan(
-                              text: 'Sync ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              text: '${AppText.importCollectionsButtonText} ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const TextSpan(text: 'button.'),
                           ]
@@ -618,12 +604,10 @@ class _EmptyCollection extends StatelessWidget {
                     ),
                     if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
                         (userStore.user?.name.isNotEmpty ?? false)) ...[
-                      const SizedBox(
-                        height: Dimensions.doubleStandardSpacing,
-                      ),
+                      const SizedBox(height: Dimensions.doubleStandardSpacing),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: SyncButton(
+                        child: ImportCollectionsButton(
                           usernameCallback: () => userStore.user!.name,
                         ),
                       ),

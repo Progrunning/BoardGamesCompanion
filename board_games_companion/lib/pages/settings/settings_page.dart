@@ -7,7 +7,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../mixins/sync_collection.dart';
+import '../../mixins/import_collection.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/about/detail_item.dart';
@@ -16,7 +16,7 @@ import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
-import '../../widgets/common/sync_collection_button.dart';
+import '../../widgets/common/import_collections_button.dart';
 import '../about_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -56,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-class _UserDetailsPanel extends StatelessWidget with SyncCollection {
+class _UserDetailsPanel extends StatelessWidget with ImportCollection {
   const _UserDetailsPanel({
     Key? key,
   }) : super(key: key);
@@ -85,7 +85,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: SyncButton(usernameCallback: () => syncController.text),
+                  child: ImportCollectionsButton(usernameCallback: () => syncController.text),
                 ),
                 const Divider(
                   color: AppTheme.accentColor,
@@ -124,7 +124,7 @@ class _UserDetailsPanel extends StatelessWidget with SyncCollection {
                   const SizedBox(
                     width: Dimensions.standardSpacing,
                   ),
-                  SyncButton(usernameCallback: () => userStore.user!.name),
+                  ImportCollectionsButton(usernameCallback: () => userStore.user!.name),
                 ],
               ),
             ),

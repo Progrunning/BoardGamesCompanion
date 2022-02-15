@@ -1,15 +1,16 @@
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../common/dimensions.dart';
-import '../models/collection_sync_result.dart';
+import '../models/collection_import_result.dart';
 import '../models/hive/user.dart';
 import '../pages/home_page.dart';
 import '../stores/board_games_store.dart';
 import '../stores/user_store.dart';
 
-mixin SyncCollection {
-  Future<CollectionSyncResult> syncCollection(BuildContext context, String username) async {
+mixin ImportCollection {
+  Future<CollectionImportResult> importCollections(BuildContext context, String username) async {
     final userStore = Provider.of<UserStore>(
       context,
       listen: false,
@@ -19,11 +20,11 @@ mixin SyncCollection {
       userStore.isSyncing = true;
 
       if (username.isEmpty) {
-        return CollectionSyncResult();
+        return CollectionImportResult();
       }
 
       final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
-      final syncResult = await boardGamesStore.syncCollection(username);
+      final syncResult = await boardGamesStore.importCollections(username);
       if (syncResult.isSuccess) {
         final user = User(name: username);
         await userStore.addOrUpdateUser(user);
@@ -45,7 +46,7 @@ void _showSuccessSnackBar() {
     const SnackBar(
       margin: Dimensions.snackbarMargin,
       behavior: SnackBarBehavior.floating,
-      content: Text('Your collection is now in sync with BGG!'),
+      content: Text(AppText.importCollectionsSucceeded),
     ),
   );
 }
@@ -56,9 +57,9 @@ void _showFailureSnackBar() {
       behavior: SnackBarBehavior.floating,
       margin: Dimensions.snackbarMargin,
       content: Text(
-        "Sorry, we've run into some problems with syncing your collection with BGG, please try again or contact support.",
+        "Sorry, we've run into some problems with importing your collections from BGG. Please try again.",
       ),
-      duration: Duration(seconds: 10),
+      duration: Duration(seconds: 8),
     ),
   );
 }
