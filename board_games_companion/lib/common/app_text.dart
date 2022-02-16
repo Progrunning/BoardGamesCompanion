@@ -53,4 +53,8 @@ class AppText {
 
   static const importCollectionsSucceeded = 'Your collection is now in sync with BGG!';
   static const importCollectionsButtonText = 'Import';
+
+  static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
+  static const logGameFailureConfirmationSnackbarText =
+      "We ran into a problem and your game wasn't logged. Please try again.";
 }

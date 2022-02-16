@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -241,8 +242,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         completedSteps = widget.viewModel.logGameStep;
       });
     } else {
-      await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
-      _showConfirmationSnackbar(context);
+      final Playthrough? newPlaythrough =
+          await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
+      if (newPlaythrough == null) {
+        _showFailureSnackbar(context);
+      } else {
+        _showConfirmationSnackbar(context);
+      }
       setState(() {});
     }
   }
@@ -291,7 +297,17 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         behavior: SnackBarBehavior.floating,
-        content: Text('Your game has been logged!'),
+        content: Text(AppText.logGameSuccessConfirmationSnackbarText),
+      ),
+    );
+  }
+
+  void _showFailureSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text(AppText.logGameFailureConfirmationSnackbarText),
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
-import '../common/analytics.dart';
 import '../common/hive_boxes.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/playthrough.dart';
@@ -44,7 +43,7 @@ class PlaythroughsStore with ChangeNotifier {
     return _playthroughs;
   }
 
-  Future<Playthrough> createPlaythrough(
+  Future<Playthrough?> createPlaythrough(
     String boardGameId,
     List<PlaythroughPlayer> playthoughPlayers,
     Map<String, PlayerScore> playerScores,
@@ -59,16 +58,16 @@ class PlaythroughsStore with ChangeNotifier {
       duration,
     );
 
-    _playthroughs.add(newPlaythrough!);
-    notifyListeners();
+    if (newPlaythrough == null) {
+      FirebaseCrashlytics.instance.log(
+        'Faild to new playthrough for a board game $boardGameId with ${playthoughPlayers.length} players',
+      );
 
-    await _analyticsService.logEvent(
-      name: Analytics.CreatePlaythrough,
-      parameters: <String, dynamic>{
-        Analytics.BoardGameIdParameter: boardGameId,
-        Analytics.NumberOfPlayersParameter: playthoughPlayers.length,
-      },
-    );
+      return null;
+    }
+
+    _playthroughs.add(newPlaythrough);
+    notifyListeners();
 
     return newPlaythrough;
   }

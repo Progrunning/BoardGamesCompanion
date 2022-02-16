@@ -59,8 +59,8 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
 
   bool get anyPlayerSelected => playthroughPlayers!.any((player) => player.isChecked);
 
-  Future<Playthrough> createPlaythrough(String boardGameId) async {
-    final Playthrough newPlaythrough = await _playthroughsStore.createPlaythrough(
+  Future<Playthrough?> createPlaythrough(String boardGameId) async {
+    final Playthrough? newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
       selectedPlaythroughPlayers,
       playerScores,
