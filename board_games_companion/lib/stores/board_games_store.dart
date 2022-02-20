@@ -205,11 +205,11 @@ class BoardGamesStore with ChangeNotifier {
   }
 
   Future<CollectionImportResult> importCollections(String username) async {
-    var syncResult = CollectionImportResult();
+    var importResult = CollectionImportResult();
 
     try {
-      syncResult = await _boardGamesService.syncCollection(username);
-      if (syncResult.isSuccess) {
+      importResult = await _boardGamesService.importCollections(username);
+      if (importResult.isSuccess) {
         _allBoardGames = await _boardGamesService.retrieveBoardGames();
         _filteredBoardGames = List.of(_allBoardGames);
       }
@@ -220,7 +220,7 @@ class BoardGamesStore with ChangeNotifier {
     _loadDataState = LoadDataState.Loaded;
     applyFilters();
 
-    return syncResult;
+    return importResult;
   }
 
   void updateSearchResults(String searchPhrase) {

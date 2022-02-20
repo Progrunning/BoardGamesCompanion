@@ -21,8 +21,8 @@ mixin ImportCollection {
     }
 
     final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
-    final syncResult = await boardGamesStore.importCollections(username);
-    if (syncResult.isSuccess) {
+    final importResult = await boardGamesStore.importCollections(username);
+    if (importResult.isSuccess) {
       final user = User(name: username);
       await userStore.addOrUpdateUser(user);
 
@@ -31,7 +31,7 @@ mixin ImportCollection {
       _showFailureSnackBar();
     }
 
-    return syncResult;
+    return importResult;
   }
 }
 

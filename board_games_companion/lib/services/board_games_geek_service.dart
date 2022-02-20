@@ -322,35 +322,35 @@ class BoardGamesGeekService {
     return boardGames;
   }
 
-  Future<CollectionImportResult> syncCollection(String username) async {
+  Future<CollectionImportResult> importCollections(String username) async {
     if (username.isEmpty) {
       return CollectionImportResult();
     }
 
-    final ownGameSyncResult = await _importCollection(
+    final ownGameImportResult = await _importCollection(
       username,
       CollectionType.Owned,
       <String, dynamic>{_boardGameQueryParamterOwn: 1},
     );
-    final wishlistGameSyncResult = await _importCollection(
+    final wishlistGameImportResult = await _importCollection(
       username,
       CollectionType.Wishlist,
       <String, dynamic>{_boardGameQueryParamterWishlist: 1},
     );
-    final wantToBuyGameSyncResult = await _importCollection(
+    final wantToBuyGameImportResult = await _importCollection(
       username,
       CollectionType.Wishlist,
       <String, dynamic>{_boardGameQueryParamterWantToBuy: 1},
     );
 
     return CollectionImportResult()
-      ..isSuccess = ownGameSyncResult.isSuccess &&
-          wishlistGameSyncResult.isSuccess &&
-          wantToBuyGameSyncResult.isSuccess
+      ..isSuccess = ownGameImportResult.isSuccess &&
+          wishlistGameImportResult.isSuccess &&
+          wantToBuyGameImportResult.isSuccess
       ..data = [
-        ...ownGameSyncResult.data ?? <BoardGameDetails>[],
-        ...wishlistGameSyncResult.data ?? <BoardGameDetails>[],
-        ...wantToBuyGameSyncResult.data ?? <BoardGameDetails>[]
+        ...ownGameImportResult.data ?? <BoardGameDetails>[],
+        ...wishlistGameImportResult.data ?? <BoardGameDetails>[],
+        ...wantToBuyGameImportResult.data ?? <BoardGameDetails>[]
       ];
   }
 
