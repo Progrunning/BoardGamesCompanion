@@ -88,6 +88,11 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return CollectionImportResult();
     }
 
+// TODO Continue with import plays implementation (use results to populate playthroughs)
+// TODO Consider using isolates to parse and iterate over the results
+    final playsImportResult = await _boardGameGeekService.importPlays(username);
+    return CollectionImportResult();
+
     final collectionImportResult = await _boardGameGeekService.importCollections(username);
     if (!collectionImportResult.isSuccess || (collectionImportResult.data?.isEmpty ?? true)) {
       return collectionImportResult;

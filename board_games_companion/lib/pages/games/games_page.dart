@@ -502,7 +502,7 @@ class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
         Align(
           alignment: Alignment.centerRight,
           child: ImportCollectionsButton(
-            bggUserName: _bggUserNameController.text,
+            usernameCallback: () => _bggUserNameController.text,
             triggerImport: _triggerImport ?? false,
           ),
         ),
@@ -629,7 +629,8 @@ class _EmptyCollection extends StatelessWidget {
                       const SizedBox(height: Dimensions.doubleStandardSpacing),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: ImportCollectionsButton(bggUserName: userStore.user!.name),
+                        child:
+                            ImportCollectionsButton(usernameCallback: () => userStore.user!.name),
                       ),
                     ]
                   ],

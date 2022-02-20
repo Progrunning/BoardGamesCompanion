@@ -8,14 +8,14 @@ import 'elevated_icon_button.dart';
 
 class ImportCollectionsButton extends StatefulWidget {
   const ImportCollectionsButton({
-    required String bggUserName,
+    required String Function() usernameCallback,
     bool? triggerImport,
     Key? key,
-  })  : _bggUserName = bggUserName,
+  })  : _usernameCallback = usernameCallback,
         _triggerImport = triggerImport,
         super(key: key);
 
-  final String _bggUserName;
+  final String Function() _usernameCallback;
   final bool? _triggerImport;
 
   @override
@@ -72,7 +72,7 @@ class _ImportCollectionsButtonState extends State<ImportCollectionsButton>
     _fadeInAnimationController.forward();
     _sizeAnimationController.reverse();
 
-    await importCollections(context, widget._bggUserName);
+    await importCollections(context, widget._usernameCallback());
 
     if (mounted) {
       _sizeAnimationController.forward();
