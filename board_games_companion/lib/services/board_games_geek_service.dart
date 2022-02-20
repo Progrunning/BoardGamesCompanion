@@ -327,17 +327,17 @@ class BoardGamesGeekService {
       return CollectionImportResult();
     }
 
-    final ownGameSyncResult = await _syncCollection(
+    final ownGameSyncResult = await _importCollection(
       username,
       CollectionType.Owned,
       <String, dynamic>{_boardGameQueryParamterOwn: 1},
     );
-    final wishlistGameSyncResult = await _syncCollection(
+    final wishlistGameSyncResult = await _importCollection(
       username,
       CollectionType.Wishlist,
       <String, dynamic>{_boardGameQueryParamterWishlist: 1},
     );
-    final wantToBuyGameSyncResult = await _syncCollection(
+    final wantToBuyGameSyncResult = await _importCollection(
       username,
       CollectionType.Wishlist,
       <String, dynamic>{_boardGameQueryParamterWantToBuy: 1},
@@ -354,7 +354,7 @@ class BoardGamesGeekService {
       ];
   }
 
-  Future<CollectionImportResult> _syncCollection(
+  Future<CollectionImportResult> _importCollection(
     String username,
     CollectionType collectionType,
     Map<String, dynamic> additionalQueryParameters,

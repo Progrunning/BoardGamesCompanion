@@ -17,15 +17,6 @@ class UserStore with ChangeNotifier {
   User? _user;
   User? get user => _user;
 
-  bool? _isSyncing;
-  bool? get isSyncing => _isSyncing;
-  set isSyncing(bool? value) {
-    if (_isSyncing != value) {
-      _isSyncing = value;
-      notifyListeners();
-    }
-  }
-
   Future<void> loadUser() async {
     try {
       final user = await _userService.retrieveUser();

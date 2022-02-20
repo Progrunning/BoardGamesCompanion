@@ -8,19 +8,22 @@ import 'elevated_icon_button.dart';
 
 class ImportCollectionsButton extends StatefulWidget {
   const ImportCollectionsButton({
-    required String Function() usernameCallback,
+    required String bggUserName,
+    bool? triggerImport,
     Key? key,
-  })  : _usernameCallback = usernameCallback,
+  })  : _bggUserName = bggUserName,
+        _triggerImport = triggerImport,
         super(key: key);
 
-  final String Function() _usernameCallback;
+  final String _bggUserName;
+  final bool? _triggerImport;
 
   @override
   _ImportCollectionsButtonState createState() => _ImportCollectionsButtonState();
 }
 
 class _ImportCollectionsButtonState extends State<ImportCollectionsButton>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, ImportCollection {
   late AnimationController _fadeInAnimationController;
   late AnimationController _sizeAnimationController;
 
@@ -40,13 +43,12 @@ class _ImportCollectionsButtonState extends State<ImportCollectionsButton>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _AnimatedButton(
-      sizeAnimationController: _sizeAnimationController,
-      fadeInAnimationController: _fadeInAnimationController,
-      usernameCallback: widget._usernameCallback,
-      parentMounted: mounted,
-    );
+  void didUpdateWidget(covariant ImportCollectionsButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget._triggerImport ?? false) {
+      _import(context);
+    }
   }
 
   @override
@@ -56,17 +58,38 @@ class _ImportCollectionsButtonState extends State<ImportCollectionsButton>
 
     super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return _AnimatedButton(
+      sizeAnimationController: _sizeAnimationController,
+      fadeInAnimationController: _fadeInAnimationController,
+      onPressed: () => _import(context),
+    );
+  }
+
+  Future<void> _import(BuildContext context) async {
+    _fadeInAnimationController.forward();
+    _sizeAnimationController.reverse();
+
+    await importCollections(context, widget._bggUserName);
+
+    if (mounted) {
+      _sizeAnimationController.forward();
+      _fadeInAnimationController.reverse();
+    }
+  }
 }
 
-class _AnimatedButton extends AnimatedWidget with ImportCollection {
+class _AnimatedButton extends AnimatedWidget {
   const _AnimatedButton({
     Key? key,
     required AnimationController sizeAnimationController,
     required AnimationController fadeInAnimationController,
-    required this.usernameCallback,
-    required this.parentMounted,
+    required VoidCallback onPressed,
   })  : _sizeAnimationController = sizeAnimationController,
         _fadeInAnimationController = fadeInAnimationController,
+        _onPressed = onPressed,
         super(
           key: key,
           listenable: sizeAnimationController,
@@ -75,8 +98,7 @@ class _AnimatedButton extends AnimatedWidget with ImportCollection {
   final AnimationController _sizeAnimationController;
   final AnimationController _fadeInAnimationController;
 
-  final String Function() usernameCallback;
-  final bool parentMounted;
+  final VoidCallback _onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -87,17 +109,7 @@ class _AnimatedButton extends AnimatedWidget with ImportCollection {
           child: ElevatedIconButton(
             title: AppText.importCollectionsButtonText,
             icon: const DefaultIcon(Icons.download),
-            onPressed: () async {
-              _fadeInAnimationController.forward();
-              _sizeAnimationController.reverse();
-
-              await importCollections(context, usernameCallback());
-
-              if (parentMounted) {
-                _sizeAnimationController.forward();
-                _fadeInAnimationController.reverse();
-              }
-            },
+            onPressed: _onPressed,
           ),
         ),
         Positioned.fill(

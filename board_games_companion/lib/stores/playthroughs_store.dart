@@ -7,18 +7,13 @@ import '../common/hive_boxes.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/playthrough.dart';
 import '../models/playthrough_player.dart';
-import '../services/analytics_service.dart';
 import '../services/playthroughs_service.dart';
 
 @singleton
 class PlaythroughsStore with ChangeNotifier {
-  PlaythroughsStore(
-    this._playthroughService,
-    this._analyticsService,
-  );
+  PlaythroughsStore(this._playthroughService);
 
   final PlaythroughService _playthroughService;
-  final AnalyticsService _analyticsService;
 
   BoardGameDetails? _selectedBoardGame;
   List<Playthrough> _playthroughs = <Playthrough>[];

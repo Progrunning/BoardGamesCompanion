@@ -71,8 +71,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i7.PlayerService>(),
       get<_i8.ScoreService>(),
       get<_i21.PlaythroughService>()));
-  gh.singleton<_i9.PlaythroughsStore>(_i9.PlaythroughsStore(
-      get<_i21.PlaythroughService>(), get<_i5.AnalyticsService>()));
+  gh.singleton<_i9.PlaythroughsStore>(
+      _i9.PlaythroughsStore(get<_i21.PlaythroughService>()));
   return get;
 }
 

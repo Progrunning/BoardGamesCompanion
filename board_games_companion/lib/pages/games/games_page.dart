@@ -12,7 +12,6 @@ import '../../common/enums/collection_type.dart';
 import '../../common/enums/enums.dart';
 import '../../common/enums/games_tab.dart';
 import '../../common/styles.dart';
-import '../../mixins/import_collection.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
@@ -68,7 +67,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     if (widget.boardGamesStore.loadDataState == LoadDataState.Loaded) {
       if (!widget.boardGamesStore.anyBoardGamesInCollections &&
           (widget.userStore.user?.name.isEmpty ?? true)) {
-        return _Empty();
+        return const _Empty();
       }
 
       return _Collection(
@@ -387,29 +386,10 @@ class _Grid extends StatelessWidget {
   }
 }
 
-class _Empty extends StatefulWidget with ImportCollection {
-  _Empty({
+class _Empty extends StatelessWidget {
+  const _Empty({
     Key? key,
   }) : super(key: key);
-
-  @override
-  _EmptyState createState() => _EmptyState();
-}
-
-class _EmptyState extends State<_Empty> with ImportCollection {
-  late TextEditingController _bggUserNameController;
-
-  @override
-  void initState() {
-    super.initState();
-    _bggUserNameController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _bggUserNameController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -421,11 +401,11 @@ class _EmptyState extends State<_Empty> with ImportCollection {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const SizedBox(
+            children: const <Widget>[
+              SizedBox(
                 height: 60,
               ),
-              const Center(
+              Center(
                 child: Text(
                   'Your games collection is empty',
                   style: TextStyle(
@@ -433,18 +413,18 @@ class _EmptyState extends State<_Empty> with ImportCollection {
                   ),
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: Dimensions.doubleStandardSpacing,
               ),
-              const Icon(
+              Icon(
                 Icons.sentiment_dissatisfied_sharp,
                 size: 80,
                 color: AppTheme.primaryColor,
               ),
-              const SizedBox(
+              SizedBox(
                 height: Dimensions.doubleStandardSpacing,
               ),
-              const Text.rich(
+              Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
                     TextSpan(
@@ -469,22 +449,64 @@ class _EmptyState extends State<_Empty> with ImportCollection {
                 textAlign: TextAlign.justify,
                 style: TextStyle(fontSize: Dimensions.mediumFontSize),
               ),
-              const BggCommunityMemberText(),
-              // TODO Connect submition of this fied with triggering import button animation (here and in the settings)
-              BggCommunityMemberUserNameTextField(
-                controller: _bggUserNameController,
-                onSubmit: () async => importCollections(context, _bggUserNameController.text),
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ImportCollectionsButton(usernameCallback: () => _bggUserNameController.text),
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
+              BggCommunityMemberText(),
+              _ImportDataFromBggSection(),
+              SizedBox(height: Dimensions.standardSpacing),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ImportDataFromBggSection extends StatefulWidget {
+  const _ImportDataFromBggSection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_ImportDataFromBggSection> createState() => _ImportDataFromBggSectionState();
+}
+
+class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
+  late TextEditingController _bggUserNameController;
+
+  bool? _triggerImport;
+
+  @override
+  void initState() {
+    super.initState();
+    _bggUserNameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _bggUserNameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BggCommunityMemberUserNameTextField(
+          controller: _bggUserNameController,
+          onSubmit: () {
+            setState(() {
+              _triggerImport = true;
+            });
+          },
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        Align(
+          alignment: Alignment.centerRight,
+          child: ImportCollectionsButton(
+            bggUserName: _bggUserNameController.text,
+            triggerImport: _triggerImport ?? false,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -607,9 +629,7 @@ class _EmptyCollection extends StatelessWidget {
                       const SizedBox(height: Dimensions.doubleStandardSpacing),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: ImportCollectionsButton(
-                          usernameCallback: () => userStore.user!.name,
-                        ),
+                        child: ImportCollectionsButton(bggUserName: userStore.user!.name),
                       ),
                     ]
                   ],

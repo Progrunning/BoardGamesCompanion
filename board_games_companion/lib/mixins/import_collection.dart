@@ -16,28 +16,22 @@ mixin ImportCollection {
       listen: false,
     );
 
-    try {
-      userStore.isSyncing = true;
-
-      if (username.isEmpty) {
-        return CollectionImportResult();
-      }
-
-      final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
-      final syncResult = await boardGamesStore.importCollections(username);
-      if (syncResult.isSuccess) {
-        final user = User(name: username);
-        await userStore.addOrUpdateUser(user);
-
-        _showSuccessSnackBar();
-      } else {
-        _showFailureSnackBar();
-      }
-
-      return syncResult;
-    } finally {
-      userStore.isSyncing = false;
+    if (username.isEmpty) {
+      return CollectionImportResult();
     }
+
+    final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
+    final syncResult = await boardGamesStore.importCollections(username);
+    if (syncResult.isSuccess) {
+      final user = User(name: username);
+      await userStore.addOrUpdateUser(user);
+
+      _showSuccessSnackBar();
+    } else {
+      _showFailureSnackBar();
+    }
+
+    return syncResult;
   }
 }
 
