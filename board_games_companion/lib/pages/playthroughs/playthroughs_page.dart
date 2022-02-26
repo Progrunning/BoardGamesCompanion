@@ -60,12 +60,19 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       appBar: AppBar(
         title: Text(widget.boardGameDetails.name),
         actions: <Widget>[
+          // TODO Call import games?
+          IconButton(
+            icon: const Icon(Icons.download, color: AppTheme.accentColor),
+            onPressed: () async {
+              // await _navigateToBoardGameDetails(context, widget.boardGameDetails);
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.info, color: AppTheme.accentColor),
             onPressed: () async {
               await _navigateToBoardGameDetails(context, widget.boardGameDetails);
             },
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -74,9 +81,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
             controller: tabController,
             children: <Widget>[
               PlaythroughStatistcsPage(
-                boardGameDetails: widget.boardGameDetails,
-                collectionType: widget.collectionType,
-              ),
+                  boardGameDetails: widget.boardGameDetails, collectionType: widget.collectionType),
               PlaythroughsHistoryPage(
                 boardGameDetails: widget.boardGameDetails,
                 playthroughsStore: widget.playthroughsStore,
