@@ -320,7 +320,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                 ),
                 child: Slider(
                   value: boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 0,
-                  divisions: maxNumberOfPlayers - 1,
+                  divisions: maxNumberOfPlayers,
                   min: minNumberOfPlayers.toDouble() - 1,
                   max: maxNumberOfPlayers.toDouble(),
                   label: boardGamesFiltersStore.numberOfPlayers.toNumberOfPlayersFilter(),
