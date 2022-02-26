@@ -1,4 +1,4 @@
-class PlayPlayer {
+class BggPlayPlayer {
   late String playerName;
   late String? playerBggName;
   late int? playerBggUserId;

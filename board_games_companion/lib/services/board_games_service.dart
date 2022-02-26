@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/hive_boxes.dart';
@@ -83,15 +84,17 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     await storageBox.clear();
   }
 
+  Future<BggPlaysImportResult> importPlays(String username, String boardGameId) async {
+    // TODO Continue with import plays implementation (use results to populate playthroughs)
+// TODO Consider using isolates to parse and iterate over the results
+    final bggPlaysImportResult = await _boardGameGeekService.importPlays(username, boardGameId);
+    return bggPlaysImportResult;
+  }
+
   Future<CollectionImportResult> importCollections(String username) async {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
       return CollectionImportResult();
     }
-
-// TODO Continue with import plays implementation (use results to populate playthroughs)
-// TODO Consider using isolates to parse and iterate over the results
-    final playsImportResult = await _boardGameGeekService.importPlays(username);
-    return CollectionImportResult();
 
     final collectionImportResult = await _boardGameGeekService.importCollections(username);
     if (!collectionImportResult.isSuccess || (collectionImportResult.data?.isEmpty ?? true)) {

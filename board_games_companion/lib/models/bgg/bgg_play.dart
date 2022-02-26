@@ -1,10 +1,10 @@
-import 'package:board_games_companion/models/play_players.dart';
+import 'package:board_games_companion/models/bgg/bgg_play_player.dart';
 
-class Play {
+class BggPlay {
   late int id;
   late String boardGameId;
   late int? playTimeInMinutes;
   late DateTime? playDate;
   late bool completed;
-  late List<PlayPlayer> players;
+  late List<BggPlayPlayer> players;
 }

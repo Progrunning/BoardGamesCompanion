@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/models/play.dart';
-import 'package:board_games_companion/models/play_players.dart';
-import 'package:board_games_companion/models/plays_import_result.dart';
+import 'package:board_games_companion/models/bgg/bgg_play.dart';
+import 'package:board_games_companion/models/bgg/bgg_play_player.dart';
+import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -369,12 +369,15 @@ class BoardGamesGeekService {
       ];
   }
 
-  Future<PlaysImportResult> importPlays(String username) async {
+  Future<BggPlaysImportResult> importPlays(String username, String boardGameId) async {
     if (username.isEmpty) {
-      return PlaysImportResult();
+      return BggPlaysImportResult();
     }
 
-    final queryParamters = <String, dynamic>{_boardGameQueryParamterUsername: username};
+    final queryParamters = <String, dynamic>{
+      _boardGameQueryParamterUsername: username,
+      _boardGameQueryParamterId: boardGameId,
+    };
     final playsResultXml = await retry(
       () async {
         final response = await _dio.get<String>(
@@ -389,10 +392,10 @@ class BoardGamesGeekService {
 
     final playsXmlDocument = await compute(retrieveXmlDocument, playsResultXml);
     if (playsXmlDocument == null) {
-      return PlaysImportResult();
+      return BggPlaysImportResult();
     }
 
-    final playsImportResult = PlaysImportResult()..data = [];
+    final playsImportResult = BggPlaysImportResult()..data = [];
 
     final playsElements = playsXmlDocument.findAllElements(_xmlPlayElementName);
     for (final XmlElement playElement in playsElements) {
@@ -414,7 +417,7 @@ class BoardGamesGeekService {
         continue;
       }
 
-      final play = Play()
+      final play = BggPlay()
         ..id = playId
         ..boardGameId = boardGameId!
         ..playTimeInMinutes = playTimeInMinutes
@@ -437,7 +440,7 @@ class BoardGamesGeekService {
           continue;
         }
 
-        play.players.add(PlayPlayer()
+        play.players.add(BggPlayPlayer()
           ..playerName = playerName!
           ..playerScore = playerScore
           ..playerBggName = playerBggName
