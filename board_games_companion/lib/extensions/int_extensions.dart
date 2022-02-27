@@ -79,7 +79,7 @@ extension IntExtensions on int? {
     }
 
     if (numberOfPlayers <= 0) {
-      return 'Any';
+      return AppText.gameFiltersAnyNumberOfPlayers;
     }
 
     if (numberOfPlayers >= Constants.maxNumberOfPlayers) {

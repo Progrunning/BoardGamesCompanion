@@ -279,10 +279,12 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minNumberOfPlayers = boardGamesStore.allboardGames
-        .where((boardGameDetails) => boardGameDetails.minPlayers != null)
-        .map((boardGameDetails) => boardGameDetails.minPlayers!)
-        .reduce(min);
+    final minNumberOfPlayers = max(
+        boardGamesStore.allboardGames
+            .where((boardGameDetails) => boardGameDetails.minPlayers != null)
+            .map((boardGameDetails) => boardGameDetails.minPlayers!)
+            .reduce(min),
+        Constants.minNumberOfPlayers);
     final maxNumberOfPlayers = min(
         boardGamesStore.allboardGames
             .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
@@ -298,24 +300,18 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            const Text(
-              'Any',
-              style: TextStyle(fontSize: Dimensions.smallFontSize),
-            ),
+            const Text(AppText.gameFiltersAnyNumberOfPlayers,
+                style: TextStyle(fontSize: Dimensions.smallFontSize)),
             Expanded(
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   trackHeight: 8,
                   trackShape: const RoundedRectSliderTrackShape(),
-                  inactiveTrackColor: AppTheme.primaryColorLight.withAlpha(
-                    Styles.opacity30Percent,
-                  ),
+                  inactiveTrackColor: AppTheme.primaryColorLight.withAlpha(Styles.opacity30Percent),
                   overlayShape: const RoundSliderOverlayShape(overlayRadius: 24.0),
                   tickMarkShape: const RoundSliderTickMarkShape(),
                   valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
-                  valueIndicatorTextStyle: const TextStyle(
-                    fontSize: Dimensions.smallFontSize,
-                  ),
+                  valueIndicatorTextStyle: const TextStyle(fontSize: Dimensions.smallFontSize),
                   showValueIndicator: ShowValueIndicator.always,
                 ),
                 child: Slider(
@@ -325,23 +321,16 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                   max: maxNumberOfPlayers.toDouble(),
                   label: boardGamesFiltersStore.numberOfPlayers.toNumberOfPlayersFilter(),
                   onChanged: (value) {
-                    boardGamesFiltersStore.changeNumberOfPlayers(
-                      value != 0 ? value.round() : null,
-                    );
+                    boardGamesFiltersStore.changeNumberOfPlayers(value != 0 ? value.round() : null);
                   },
                   onChangeEnd: (value) {
-                    boardGamesFiltersStore.updateNumberOfPlayers(
-                      value != 0 ? value.round() : null,
-                    );
+                    boardGamesFiltersStore.updateNumberOfPlayers(value != 0 ? value.round() : null);
                   },
                   activeColor: AppTheme.accentColor,
                 ),
               ),
             ),
-            Text(
-              '$maxNumberOfPlayers',
-              style: const TextStyle(fontSize: Dimensions.smallFontSize),
-            ),
+            Text('$maxNumberOfPlayers', style: const TextStyle(fontSize: Dimensions.smallFontSize)),
           ],
         ),
       ],

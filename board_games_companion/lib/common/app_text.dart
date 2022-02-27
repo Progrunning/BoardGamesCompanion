@@ -50,4 +50,6 @@ class AppText {
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
+
+  static const gameFiltersAnyNumberOfPlayers = 'Any';
 }
