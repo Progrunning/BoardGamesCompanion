@@ -651,7 +651,7 @@ class _StatsAndCollections extends StatelessWidget {
         children: <Widget>[
           Center(
             child: BoardGameRatingHexagon(
-              rating: boardGameDetailsStore.boardGameDetails?.rating!,
+              rating: boardGameDetailsStore.boardGameDetails?.rating,
             ),
           ),
           const SizedBox(
