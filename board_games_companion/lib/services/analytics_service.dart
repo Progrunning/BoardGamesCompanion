@@ -17,8 +17,4 @@ class AnalyticsService {
     await _firebaseAnalytics.logEvent(name: name, parameters: parameters);
     await _rateAndReviewService.increaseNumberOfSignificantActions();
   }
-
-  Future<void> setUserId(String userId) async {
-    await _firebaseAnalytics.setUserId(userId);
-  }
 }
