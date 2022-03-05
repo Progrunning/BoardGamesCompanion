@@ -37,13 +37,13 @@ class PlayerScore with ChangeNotifier {
 
     switch (_place) {
       case 1:
-        _medal = MedalEnum.Gold;
+        _medal = MedalEnum.gold;
         break;
       case 2:
-        _medal = MedalEnum.Silver;
+        _medal = MedalEnum.silver;
         break;
       case 3:
-        _medal = MedalEnum.Bronze;
+        _medal = MedalEnum.bronze;
         break;
       default:
         _medal = null;

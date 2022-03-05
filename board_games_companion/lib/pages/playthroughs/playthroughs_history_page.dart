@@ -8,7 +8,6 @@ import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
-import '../../models/hive/board_game_details.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../stores/playthrough_store.dart';
@@ -28,12 +27,10 @@ import '../edit_playthrough/edit_playthrough_page.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
   const PlaythroughsHistoryPage({
-    required this.boardGameDetails,
     required this.playthroughsStore,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameDetails boardGameDetails;
   final PlaythroughsStore playthroughsStore;
 
   @override
@@ -48,7 +45,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
       children: <Widget>[
         Expanded(
           child: ConsumerFutureBuilder<List<Playthrough>, PlaythroughsStore>(
-            future: widget.playthroughsStore.loadPlaythroughs(widget.boardGameDetails),
+            future: widget.playthroughsStore.loadPlaythroughs(),
             success: (_, PlaythroughsStore store) {
               final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
               if (hasPlaythroughs) {

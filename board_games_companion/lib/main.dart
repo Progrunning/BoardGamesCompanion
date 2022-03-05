@@ -181,7 +181,8 @@ class App extends StatelessWidget {
             PlaythroughStatisticsStore>(
           create: (context) => getIt<PlaythroughStatisticsStore>(),
           update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
-            playthroughStatisticsStore!.loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
+            playthroughStatisticsStore!
+                .loadBoardGamesStatistics(playthroughsStore.selectedBoardGame!.id);
             return playthroughStatisticsStore;
           },
         ),

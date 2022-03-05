@@ -11,13 +11,13 @@ class Medal extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? _medalColor;
     switch (medal) {
-      case MedalEnum.Gold:
+      case MedalEnum.gold:
         _medalColor = Colors.yellow;
         break;
-      case MedalEnum.Silver:
+      case MedalEnum.silver:
         _medalColor = Colors.grey;
         break;
-      case MedalEnum.Bronze:
+      case MedalEnum.bronze:
         _medalColor = Colors.brown;
         break;
       default:

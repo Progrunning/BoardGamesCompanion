@@ -47,73 +47,66 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: widget.boardGameDetails,
-      builder: (_, __) {
-        return Consumer2<PlaythroughStatisticsStore, BoardGameDetails>(
-          builder: (_, store, boardGameDetails, __) {
-            final boardGameStatistics = store.boardGamesStatistics[boardGameDetails.id];
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  floating: false,
-                  expandedHeight: Constants.BoardGameDetailsImageHeight,
-                  flexibleSpace: FlexibleSpaceBar(
-                    collapseMode: CollapseMode.parallax,
-                    centerTitle: true,
-                    background: BoardGameImage(
-                      widget.boardGameDetails,
-                      minImageHeight: Constants.BoardGameDetailsImageHeight,
-                      heroTag:
-                          '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionType}',
-                    ),
+    return Consumer<PlaythroughStatisticsStore>(
+      builder: (_, store, __) {
+        final boardGameStatistics = store.boardGamesStatistics[widget.boardGameDetails.id];
+        return CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              floating: false,
+              expandedHeight: Constants.BoardGameDetailsImageHeight,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.parallax,
+                centerTitle: true,
+                background: BoardGameImage(
+                  widget.boardGameDetails,
+                  minImageHeight: Constants.BoardGameDetailsImageHeight,
+                  heroTag:
+                      '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionType}',
+                ),
+              ),
+            ),
+            _SliverSectionWrapper(
+                child: _LastWinnerSection(boardGameStatistics: boardGameStatistics)),
+            _SliverSectionWrapper(
+              child: _OverallStatsSection(boardGameStatistics: boardGameStatistics),
+            ),
+            if (boardGameStatistics?.topScoreres?.isNotEmpty ?? false)
+              _SliverSectionWrapper(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ItemPropertyTitle(AppText.playthroughsStatisticsPageTopFiveSectionTitle),
+                    const SizedBox(height: Dimensions.halfStandardSpacing),
+                    _TopScores(boardGameStatistics: boardGameStatistics!),
+                  ],
+                ),
+              ),
+            if ((boardGameStatistics?.playerCountPercentage?.isNotEmpty ?? false) &&
+                (boardGameStatistics?.playerWinsPercentage?.isNotEmpty ?? false))
+              _SliverSectionWrapper(
+                child: _PlayerCharts(boardGameStatistics: boardGameStatistics!),
+              ),
+            if (boardGameStatistics?.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const <Widget>[
+                      ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
+                      SizedBox(height: Dimensions.halfStandardSpacing),
+                    ],
                   ),
                 ),
-                _SliverSectionWrapper(
-                    child: _LastWinnerSection(boardGameStatistics: boardGameStatistics)),
-                _SliverSectionWrapper(
-                  child: _OverallStatsSection(boardGameStatistics: boardGameStatistics),
-                ),
-                if (boardGameStatistics?.topScoreres?.isNotEmpty ?? false)
-                  _SliverSectionWrapper(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const ItemPropertyTitle(
-                            AppText.playthroughsStatisticsPageTopFiveSectionTitle),
-                        const SizedBox(height: Dimensions.halfStandardSpacing),
-                        _TopScores(boardGameStatistics: boardGameStatistics!),
-                      ],
-                    ),
-                  ),
-                if ((boardGameStatistics?.playerCountPercentage?.isNotEmpty ?? false) &&
-                    (boardGameStatistics?.playerWinsPercentage?.isNotEmpty ?? false))
-                  _SliverSectionWrapper(
-                    child: _PlayerCharts(boardGameStatistics: boardGameStatistics!),
-                  ),
-                if (boardGameStatistics?.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const <Widget>[
-                          ItemPropertyTitle(
-                              AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
-                          SizedBox(height: Dimensions.halfStandardSpacing),
-                        ],
-                      ),
-                    ),
-                  ),
-                  _PlayersStatisticsSection(boardGameStatistics: boardGameStatistics!),
-                ],
-                const SliverPadding(
-                    padding: EdgeInsets.only(
-                        bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
-              ],
-            );
-          },
+              ),
+              _PlayersStatisticsSection(boardGameStatistics: boardGameStatistics!),
+            ],
+            const SliverPadding(
+                padding: EdgeInsets.only(
+                    bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
+          ],
         );
       },
     );
