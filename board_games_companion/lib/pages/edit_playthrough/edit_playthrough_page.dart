@@ -45,12 +45,9 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
-          title: const Text('Edit Playthrough'),
+          title: const Text(AppText.editPlaythroughPageTitle),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => _close(context),
-            ),
+            IconButton(icon: const Icon(Icons.close), onPressed: () => _close(context)),
           ],
         ),
         body: Form(
@@ -63,9 +60,9 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                   padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                   child: Row(
                     children: const <Widget>[
-                      ItemPropertyTitle('Played on'),
+                      ItemPropertyTitle(AppText.editPlaythroughPagePlayedOnSectionTitle),
                       Expanded(child: SizedBox.shrink()),
-                      ItemPropertyTitle('Duration')
+                      ItemPropertyTitle(AppText.editPlaythroughPageDurationSectionTitle),
                     ],
                   ),
                 ),
@@ -75,7 +72,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                 const SizedBox(height: Dimensions.standardSpacing),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                  child: ItemPropertyTitle('Scores'),
+                  child: ItemPropertyTitle(AppText.editPlaythroughPageScoresSectionTitle),
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 Expanded(
@@ -128,23 +125,17 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Are you sure you want to delete this playthrough?'),
+          title: const Text(AppText.editPlaythroughPageDeleteConfirmationDialogTitle),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(
-                AppText.Cancel,
-                style: TextStyle(color: AppTheme.accentColor),
-              ),
+              child: const Text(AppText.Cancel, style: TextStyle(color: AppTheme.accentColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(
-                AppText.Delete,
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
+              child: const Text(AppText.Delete, style: TextStyle(color: AppTheme.defaultTextColor)),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
@@ -158,49 +149,40 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
   }
 
   Future<bool> _handleOnWillPop(BuildContext context) async {
-    if (widget.viewModel.isDirty()) {
-      await showDialog<AlertDialog>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text(
-              "You didn't save your changes.",
-            ),
-            content: const Text(
-              'Are you sure you want to navigate away?',
-            ),
-            elevation: Dimensions.defaultElevation,
-            actions: <Widget>[
-              TextButton(
-                child: const Text(
-                  AppText.Cancel,
-                  style: TextStyle(
-                    color: AppTheme.accentColor,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: const Text(
-                  'Navigate away',
-                  style: TextStyle(color: AppTheme.defaultTextColor),
-                ),
-                style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
-                onPressed: () async {
-                  Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
-                },
-              ),
-            ],
-          );
-        },
-      );
-
-      return false;
+    if (!widget.viewModel.isDirty()) {
+      return true;
     }
 
-    return true;
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(AppText.editPlaythroughPageUnsavedChangesDialogTitle),
+          content: const Text(AppText.editPlaythroughPageUnsavedChangesDialogContent),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppText.Cancel, style: TextStyle(color: AppTheme.accentColor)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                AppText.editPlaythroughPageUnsavedChangesActionButtonText,
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
+              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              onPressed: () async {
+                Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    return false;
   }
 }
 
@@ -268,10 +250,7 @@ class _PlayerScoreTile extends StatelessWidget {
           SizedBox(
             height: Dimensions.smallPlayerAvatarSize,
             width: Dimensions.smallPlayerAvatarSize,
-            child: PlayerAvatar(
-              playerScore.player,
-              playerHeroIdSuffix: playthroughId,
-            ),
+            child: PlayerAvatar(playerScore.player, playerHeroIdSuffix: playthroughId),
           ),
           const SizedBox(width: Dimensions.standardSpacing),
           Expanded(
@@ -305,7 +284,7 @@ class _PlayerScore extends StatelessWidget {
               child: Consumer<PlayerScore>(
                 builder: (_, playerScore, __) {
                   return Text(
-                    '${playerScore.score.valueInt}',
+                    playerScore.score.value ?? '-',
                     style: Styles.playerScoreTextStyle,
                   );
                 },

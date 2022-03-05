@@ -33,15 +33,15 @@ class Constants {
 
   static const DefaultAvatartAssetsPath = 'assets/default_avatar.png';
 
-  static const String FilterByAny = 'any';
+  static const FilterByAny = 'any';
 
-  static const String AppleAppId = '1506458832';
+  static const AppleAppId = '1506458832';
 
-  static const int DaysInYear = 365;
-  static const int DaysInTenYears = DaysInYear * 10;
+  static const DaysInYear = 365;
+  static const DaysInTenYears = DaysInYear * 10;
 
-  static const int maxNumberOfPlayers = 20;
-  static const int minNumberOfPlayers = 1;
+  static const maxNumberOfPlayers = 20;
+  static const minNumberOfPlayers = 1;
 
-  static const int fullCricleDegrees = 360;
+  static const fullCricleDegrees = 360;
 }

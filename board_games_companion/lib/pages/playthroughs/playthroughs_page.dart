@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -77,10 +78,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
                 boardGameDetails: widget.boardGameDetails,
                 collectionType: widget.collectionType,
               ),
-              PlaythroughsHistoryPage(
-                boardGameDetails: widget.boardGameDetails,
-                playthroughsStore: widget.playthroughsStore,
-              ),
+              PlaythroughsHistoryPage(playthroughsStore: widget.playthroughsStore),
               PlaythroughsLogGamePage(
                 boardGameDetails: widget.boardGameDetails,
                 playthroughsLogGameViewModel: widget.viewModel,
@@ -95,17 +93,17 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         top: -Dimensions.bottomTabTopHeight,
         items: const <TabItem>[
           TabItem<BottomTabIcon>(
-            title: 'Stats',
+            title: AppText.playthroughPageStatsBottomTabTitle,
             icon: BottomTabIcon(iconData: Icons.multiline_chart),
             activeIcon: BottomTabIcon(iconData: Icons.multiline_chart, isActive: true),
           ),
           TabItem<BottomTabIcon>(
-            title: 'History',
+            title: AppText.playthroughPageHistoryBottomTabTitle,
             icon: BottomTabIcon(iconData: Icons.history),
             activeIcon: BottomTabIcon(iconData: Icons.history, isActive: true),
           ),
           TabItem<BottomTabIcon>(
-            title: 'Log Game',
+            title: AppText.playthroughPageLogGameBottomTabTitle,
             icon: BottomTabIcon(iconData: Icons.casino),
             activeIcon: BottomTabIcon(iconData: Icons.casino, isActive: true),
           ),

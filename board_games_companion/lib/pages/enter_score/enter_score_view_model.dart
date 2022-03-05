@@ -8,19 +8,21 @@ enum EnterScoreOperation {
 }
 
 class EnterScoreViewModel with ChangeNotifier {
-  EnterScoreViewModel(this.playerScore) : initialScore = playerScore.score.valueInt;
+  EnterScoreViewModel(this._playerScore) : _initialScore = _playerScore.score.valueInt;
 
-  final int initialScore;
-  final PlayerScore playerScore;
+  final int _initialScore;
+  final PlayerScore _playerScore;
 
   int? _score;
   int get score {
     if (_score == null) {
-      _score = playerScore.score.valueInt;
+      _score = _playerScore.score.valueInt;
     }
 
     return _score!;
   }
+
+  String? get playerName => _playerScore.player?.name;
 
   EnterScoreOperation _operation = EnterScoreOperation.add;
   EnterScoreOperation get operation => _operation;
@@ -40,7 +42,13 @@ class EnterScoreViewModel with ChangeNotifier {
     _score = score + partialScore;
     partialScores.add(partialScore);
 
-    playerScore.updatePlayerScore(_score.toString());
+    _playerScore.updatePlayerScore(_score.toString());
+
+    notifyListeners();
+  }
+
+  void scoreZero() {
+    _playerScore.updatePlayerScore(0.toString());
 
     notifyListeners();
   }
@@ -52,8 +60,8 @@ class EnterScoreViewModel with ChangeNotifier {
 
     partialScores.removeLast();
 
-    _score = initialScore + _partialScoresSum;
-    playerScore.updatePlayerScore(_score.toString());
+    _score = _initialScore + _partialScoresSum;
+    _playerScore.updatePlayerScore(_score.toString());
 
     notifyListeners();
   }

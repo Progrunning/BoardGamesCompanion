@@ -13,30 +13,24 @@ import '../services/playthroughs_service.dart';
 
 @singleton
 class PlaythroughsStore with ChangeNotifier {
-  PlaythroughsStore(
-    this._playthroughService,
-    this._analyticsService,
-  );
+  PlaythroughsStore(this._playthroughService, this._analyticsService);
 
   final PlaythroughService _playthroughService;
   final AnalyticsService _analyticsService;
 
-  BoardGameDetails? _selectedBoardGame;
   List<Playthrough> _playthroughs = <Playthrough>[];
 
-  BoardGameDetails? get selectedBoardGame => _selectedBoardGame;
+  BoardGameDetails? selectedBoardGame;
 
   List<Playthrough>? get playthroughs => _playthroughs;
 
-  Future<List<Playthrough>> loadPlaythroughs(BoardGameDetails boardGameDetails) async {
-    if (boardGameDetails.id.isEmpty) {
+  Future<List<Playthrough>> loadPlaythroughs() async {
+    if (selectedBoardGame == null) {
       return <Playthrough>[];
     }
 
-    _selectedBoardGame = boardGameDetails;
-
     try {
-      _playthroughs = await _playthroughService.retrievePlaythroughs([_selectedBoardGame!.id]);
+      _playthroughs = await _playthroughService.retrievePlaythroughs([selectedBoardGame!.id]);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -81,7 +75,7 @@ class PlaythroughsStore with ChangeNotifier {
     try {
       final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough!);
       if (updateSuceeded) {
-        await loadPlaythroughs(_selectedBoardGame!);
+        await loadPlaythroughs();
         notifyListeners();
         return true;
       }
