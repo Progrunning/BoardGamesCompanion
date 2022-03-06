@@ -15,7 +15,6 @@ import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
-import '../../models/hive/board_game_details.dart';
 import '../../models/hive/player.dart';
 import '../../models/player_statistics.dart';
 import '../../stores/playthrough_statistics_store.dart';
@@ -27,12 +26,12 @@ import '../../widgets/playthrough/player_score_rank_avatar.dart';
 
 class PlaythroughStatistcsPage extends StatefulWidget {
   const PlaythroughStatistcsPage({
-    required this.boardGameDetails,
+    required this.playthroughStatisticsStore,
     required this.collectionType,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameDetails boardGameDetails;
+  final PlaythroughStatisticsStore playthroughStatisticsStore;
   final CollectionType collectionType;
 
   @override
@@ -47,69 +46,75 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PlaythroughStatisticsStore>(
-      builder: (_, store, __) {
-        final boardGameStatistics = store.boardGamesStatistics[widget.boardGameDetails.id];
-        return CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              floating: false,
-              expandedHeight: Constants.BoardGameDetailsImageHeight,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.parallax,
-                centerTitle: true,
-                background: BoardGameImage(
-                  widget.boardGameDetails,
-                  minImageHeight: Constants.BoardGameDetailsImageHeight,
-                  heroTag:
-                      '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionType}',
-                ),
-              ),
-            ),
-            _SliverSectionWrapper(
-                child: _LastWinnerSection(boardGameStatistics: boardGameStatistics)),
-            _SliverSectionWrapper(
-              child: _OverallStatsSection(boardGameStatistics: boardGameStatistics),
-            ),
-            if (boardGameStatistics?.topScoreres?.isNotEmpty ?? false)
-              _SliverSectionWrapper(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const ItemPropertyTitle(AppText.playthroughsStatisticsPageTopFiveSectionTitle),
-                    const SizedBox(height: Dimensions.halfStandardSpacing),
-                    _TopScores(boardGameStatistics: boardGameStatistics!),
-                  ],
-                ),
-              ),
-            if ((boardGameStatistics?.playerCountPercentage?.isNotEmpty ?? false) &&
-                (boardGameStatistics?.playerWinsPercentage?.isNotEmpty ?? false))
-              _SliverSectionWrapper(
-                child: _PlayerCharts(boardGameStatistics: boardGameStatistics!),
-              ),
-            if (boardGameStatistics?.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const <Widget>[
-                      ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
-                      SizedBox(height: Dimensions.halfStandardSpacing),
-                    ],
+    return FutureBuilder(
+        future: widget.playthroughStatisticsStore
+            .loadBoardGamesStatistics(widget.playthroughStatisticsStore.boardGame!.id),
+        builder: (_, __) {
+          return Consumer<PlaythroughStatisticsStore>(
+            builder: (_, store, __) {
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    floating: false,
+                    expandedHeight: Constants.BoardGameDetailsImageHeight,
+                    flexibleSpace: FlexibleSpaceBar(
+                      collapseMode: CollapseMode.parallax,
+                      centerTitle: true,
+                      background: BoardGameImage(
+                        store.boardGame,
+                        minImageHeight: Constants.BoardGameDetailsImageHeight,
+                        heroTag:
+                            '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionType}',
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              _PlayersStatisticsSection(boardGameStatistics: boardGameStatistics!),
-            ],
-            const SliverPadding(
-                padding: EdgeInsets.only(
-                    bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
-          ],
-        );
-      },
-    );
+                  _SliverSectionWrapper(
+                      child: _LastWinnerSection(boardGameStatistics: store.boardGameStatistics)),
+                  _SliverSectionWrapper(
+                    child: _OverallStatsSection(boardGameStatistics: store.boardGameStatistics),
+                  ),
+                  if (store.boardGameStatistics.topScoreres?.isNotEmpty ?? false)
+                    _SliverSectionWrapper(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const ItemPropertyTitle(
+                              AppText.playthroughsStatisticsPageTopFiveSectionTitle),
+                          const SizedBox(height: Dimensions.halfStandardSpacing),
+                          _TopScores(boardGameStatistics: store.boardGameStatistics),
+                        ],
+                      ),
+                    ),
+                  if ((store.boardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
+                      (store.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false))
+                    _SliverSectionWrapper(
+                      child: _PlayerCharts(boardGameStatistics: store.boardGameStatistics),
+                    ),
+                  if (store.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const <Widget>[
+                            ItemPropertyTitle(
+                                AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
+                            SizedBox(height: Dimensions.halfStandardSpacing),
+                          ],
+                        ),
+                      ),
+                    ),
+                    _PlayersStatisticsSection(boardGameStatistics: store.boardGameStatistics),
+                  ],
+                  const SliverPadding(
+                      padding: EdgeInsets.only(
+                          bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
+                ],
+              );
+            },
+          );
+        });
   }
 }
 
@@ -256,15 +261,20 @@ class _PlayerCharts extends StatefulWidget {
 }
 
 class _PlayerChartsState extends State<_PlayerCharts> {
-  late final Map<int, Color> playerCountChartColors;
-  late final Map<Player, Color> playerWinsChartColors;
+  late Map<int, Color> playerCountChartColors;
+  late Map<Player, Color> playerWinsChartColors;
 
   static const double _chartSize = 160;
 
   @override
   void initState() {
     super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    // TODO MK Probalby not best to calculate this with every build
+    //         Need a better state control strategy (mobx?)
     playerCountChartColors = {};
     playerWinsChartColors = {};
     int i = 0;
@@ -279,10 +289,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
       playerWinsChartColors[playerWinsPercentage.key] =
           AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

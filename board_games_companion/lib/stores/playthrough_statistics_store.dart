@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:board_games_companion/mixins/board_game_aware_mixin.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
@@ -18,7 +19,7 @@ import '../services/playthroughs_service.dart';
 import '../services/score_service.dart';
 
 @singleton
-class PlaythroughStatisticsStore extends ChangeNotifier {
+class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
   PlaythroughStatisticsStore(
     this._playerService,
     this._scoreService,
@@ -31,21 +32,15 @@ class PlaythroughStatisticsStore extends ChangeNotifier {
 
   static const int _maxNumberOfTopScoresToDisplay = 5;
 
-  Map<String, BoardGameStatistics> boardGamesStatistics = {};
+  BoardGameStatistics boardGameStatistics = BoardGameStatistics();
 
   Future<void> loadBoardGamesStatistics(String boardGameId) async {
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
     final boardGamePlaythroughs = await _playthroughService.retrievePlaythroughs([boardGameId]);
-
-    var boardGameStatistics = boardGamesStatistics[boardGameId];
-    if (boardGameStatistics == null) {
-      boardGameStatistics = boardGamesStatistics[boardGameId] = BoardGameStatistics();
-    }
-
     if (boardGamePlaythroughs.isEmpty) {
-      boardGamesStatistics[boardGameId] = BoardGameStatistics();
+      boardGameStatistics = BoardGameStatistics();
       return;
     }
 
