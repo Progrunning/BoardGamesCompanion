@@ -100,13 +100,11 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           final _arguments =
               ModalRoute.of(context)!.settings.arguments as PlaythroughsPageArguments;
 
-          final playthroughsStore = getIt<PlaythroughsStore>();
-          playthroughsStore.selectedBoardGame = _arguments.boardGameDetails;
           final viewModel = getIt<PlaythroughsLogGameViewModel>();
+          viewModel.setBoardGame(_arguments.boardGameDetails);
 
           return PlaythroughsPage(
             viewModel: viewModel,
-            playthroughsStore: playthroughsStore,
             boardGameDetails: _arguments.boardGameDetails,
             collectionType: _arguments.collectionType,
           );

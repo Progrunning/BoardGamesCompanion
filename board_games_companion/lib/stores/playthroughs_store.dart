@@ -1,3 +1,4 @@
+import 'package:board_games_companion/mixins/board_game_aware_mixin.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,14 +6,13 @@ import 'package:injectable/injectable.dart';
 
 import '../common/analytics.dart';
 import '../common/hive_boxes.dart';
-import '../models/hive/board_game_details.dart';
 import '../models/hive/playthrough.dart';
 import '../models/playthrough_player.dart';
 import '../services/analytics_service.dart';
 import '../services/playthroughs_service.dart';
 
 @singleton
-class PlaythroughsStore with ChangeNotifier {
+class PlaythroughsStore with ChangeNotifier, BoardGameAware {
   PlaythroughsStore(this._playthroughService, this._analyticsService);
 
   final PlaythroughService _playthroughService;
@@ -20,17 +20,15 @@ class PlaythroughsStore with ChangeNotifier {
 
   List<Playthrough> _playthroughs = <Playthrough>[];
 
-  BoardGameDetails? selectedBoardGame;
-
   List<Playthrough>? get playthroughs => _playthroughs;
 
   Future<List<Playthrough>> loadPlaythroughs() async {
-    if (selectedBoardGame == null) {
+    if (boardGame == null) {
       return <Playthrough>[];
     }
 
     try {
-      _playthroughs = await _playthroughService.retrievePlaythroughs([selectedBoardGame!.id]);
+      _playthroughs = await _playthroughService.retrievePlaythroughs([boardGame!.id]);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
