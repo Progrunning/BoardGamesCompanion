@@ -1,6 +1,8 @@
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/stores/user_store.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -58,18 +60,19 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       appBar: AppBar(
         title: Text(widget.boardGameDetails.name),
         actions: <Widget>[
-          // TODO Call import games?
-          IconButton(
-            icon: const Icon(Icons.download, color: AppTheme.accentColor),
-            onPressed: () async {
-              // await _navigateToBoardGameDetails(context, widget.boardGameDetails);
-            },
-          ),
+          Consumer<UserStore>(builder: (_, store, ___) {
+            if (store.user?.name.isEmpty ?? true) {
+              return const SizedBox.shrink();
+            }
+
+            return IconButton(
+              icon: const Icon(Icons.download, color: AppTheme.accentColor),
+              onPressed: () async => _importBggPlays(store.user!.name, widget.boardGameDetails.id),
+            );
+          }),
           IconButton(
             icon: const Icon(Icons.info, color: AppTheme.accentColor),
-            onPressed: () async {
-              await _navigateToBoardGameDetails(context, widget.boardGameDetails);
-            },
+            onPressed: () async => _navigateToBoardGameDetails(context, widget.boardGameDetails),
           ),
         ],
       ),
@@ -120,9 +123,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   }
 
   Future<void> _navigateToBoardGameDetails(
-    BuildContext context,
-    BoardGameDetails boardGameDetails,
-  ) async {
+      BuildContext context, BoardGameDetails boardGameDetails) async {
     await Navigator.pushNamed(
       context,
       BoardGamesDetailsPage.pageRoute,
@@ -132,5 +133,9 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         PlaythroughsPage,
       ),
     );
+  }
+
+  Future<void> _importBggPlays(String username, String boardGameId) async {
+    await widget.viewModel.importPlays(username, boardGameId);
   }
 }

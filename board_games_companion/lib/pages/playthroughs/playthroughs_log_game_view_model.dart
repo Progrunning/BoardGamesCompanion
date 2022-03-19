@@ -10,6 +10,7 @@ import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
 import '../../services/analytics_service.dart';
+import '../../services/board_games_service.dart';
 import '../../stores/playthrough_statistics_store.dart';
 import '../../stores/playthroughs_store.dart';
 import '../players/players_view_model.dart';
@@ -22,12 +23,14 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
     this.playthroughsStore,
     this._analyticsService,
     this.playthroughStatisticsStore,
+    this._boardGamesService,
   );
 
   final PlayersViewModel _playersStore;
   final PlaythroughsStore playthroughsStore;
   final AnalyticsService _analyticsService;
   final PlaythroughStatisticsStore playthroughStatisticsStore;
+  final BoardGamesService _boardGamesService;
 
   List<PlaythroughPlayer>? _playthroughPlayers;
   List<PlaythroughPlayer>? get playthroughPlayers => _playthroughPlayers;
@@ -37,18 +40,6 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
 
   final Map<String, PlayerScore> _playerScores = {};
   Map<String, PlayerScore> get playerScores => _playerScores;
-
-  Future<List<PlaythroughPlayer>> loadPlaythroughPlayers() async {
-    final players = await _playersStore.loadPlayers();
-
-    _playthroughPlayers = players
-        .map(
-          (p) => PlaythroughPlayer(p),
-        )
-        .toList();
-
-    return _playthroughPlayers ?? <PlaythroughPlayer>[];
-  }
 
   DateTime playthroughDate = DateTime.now();
 
@@ -73,6 +64,18 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
     super.setBoardGame(boardGame);
     playthroughsStore.setBoardGame(boardGame);
     playthroughStatisticsStore.setBoardGame(boardGame);
+  }
+
+  Future<List<PlaythroughPlayer>> loadPlaythroughPlayers() async {
+    final players = await _playersStore.loadPlayers();
+
+    _playthroughPlayers = players
+        .map(
+          (p) => PlaythroughPlayer(p),
+        )
+        .toList();
+
+    return _playthroughPlayers ?? <PlaythroughPlayer>[];
   }
 
   Future<Playthrough?> createPlaythrough(String boardGameId) async {
@@ -121,5 +124,9 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
     if (playerScores.containsKey(playthroughPlayer.player.id)) {
       playerScores.remove(playthroughPlayer.player.id);
     }
+  }
+
+  Future<void> importPlays(String username, String boardGameId) async {
+    await _boardGamesService.importPlays(username, boardGameId);
   }
 }

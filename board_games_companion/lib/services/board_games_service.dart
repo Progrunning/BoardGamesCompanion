@@ -85,9 +85,10 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<BggPlaysImportResult> importPlays(String username, String boardGameId) async {
-    // TODO Continue with import plays implementation (use results to populate playthroughs)
-// TODO Consider using isolates to parse and iterate over the results
+    // TODO Consider using isolates to parse and iterate over the results
     final bggPlaysImportResult = await _boardGameGeekService.importPlays(username, boardGameId);
+
+    // TODO Continue with import plays implementation (use results to populate playthroughs and players)
     return bggPlaysImportResult;
   }
 
