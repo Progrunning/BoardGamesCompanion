@@ -2,12 +2,15 @@ name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
   AppDirectoryName: BGC.Functions
-  BicepTemplateDirectoryName: cloud_infrastructure  
+  BicepTemplateDirectoryName: cloud_infrastructure
 
 pr:
   branches:
     include:
       - main
+  paths:
+    include:
+      - BGC.Functions
 
 trigger:
   branches:
