@@ -39,7 +39,7 @@ class BoardGamesStore with ChangeNotifier {
   String? _searchPhrase;
   List<BoardGameDetails> _allBoardGames = [];
   List<BoardGameDetails> _filteredBoardGames = [];
-  LoadDataState _loadDataState = LoadDataState.None;
+  LoadDataState _loadDataState = LoadDataState.none;
   GamesTab _selectedTab = GamesTab.Owned;
 
   LoadDataState get loadDataState => _loadDataState;
@@ -68,7 +68,7 @@ class BoardGamesStore with ChangeNotifier {
   }
 
   Future<void> loadBoardGames() async {
-    _loadDataState = LoadDataState.Loading;
+    _loadDataState = LoadDataState.loading;
     notifyListeners();
 
     try {
@@ -77,10 +77,10 @@ class BoardGamesStore with ChangeNotifier {
       await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
-      _loadDataState = LoadDataState.Error;
+      _loadDataState = LoadDataState.error;
     }
 
-    _loadDataState = LoadDataState.Loaded;
+    _loadDataState = LoadDataState.loaded;
     notifyListeners();
   }
 
@@ -217,7 +217,7 @@ class BoardGamesStore with ChangeNotifier {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
-    _loadDataState = LoadDataState.Loaded;
+    _loadDataState = LoadDataState.loaded;
     applyFilters();
 
     return importResult;

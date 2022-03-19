@@ -111,11 +111,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<UserStore>(
           create: (context) {
             final UserService userService = getIt<UserService>();
-            final AnalyticsService analyticsService = getIt<AnalyticsService>();
-            final userStore = UserStore(
-              userService,
-              analyticsService,
-            );
+            final userStore = UserStore(userService);
 
             preferencesService.setAppLaunchDate();
             userStore.loadUser();
@@ -185,8 +181,7 @@ class App extends StatelessWidget {
             PlaythroughStatisticsStore>(
           create: (context) => getIt<PlaythroughStatisticsStore>(),
           update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
-            playthroughStatisticsStore!.loadBoardGamesStatistics(boardGameStore.filteredBoardGames);
-            return playthroughStatisticsStore;
+            return playthroughStatisticsStore!;
           },
         ),
       ],

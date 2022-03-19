@@ -3,22 +3,31 @@ import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
+import '../../mixins/board_game_aware_mixin.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
 import '../../services/analytics_service.dart';
+import '../../stores/playthrough_statistics_store.dart';
 import '../../stores/playthroughs_store.dart';
 import '../players/players_view_model.dart';
 import 'playthroughs_log_game_page.dart';
 
 @injectable
-class PlaythroughsLogGameViewModel with ChangeNotifier {
-  PlaythroughsLogGameViewModel(this._playersStore, this._playthroughsStore, this._analyticsService);
+class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
+  PlaythroughsLogGameViewModel(
+    this._playersStore,
+    this.playthroughsStore,
+    this._analyticsService,
+    this.playthroughStatisticsStore,
+  );
 
   final PlayersViewModel _playersStore;
-  final PlaythroughsStore _playthroughsStore;
+  final PlaythroughsStore playthroughsStore;
   final AnalyticsService _analyticsService;
+  final PlaythroughStatisticsStore playthroughStatisticsStore;
 
   List<PlaythroughPlayer>? _playthroughPlayers;
   List<PlaythroughPlayer>? get playthroughPlayers => _playthroughPlayers;
@@ -58,6 +67,13 @@ class PlaythroughsLogGameViewModel with ChangeNotifier {
   }
 
   bool get anyPlayerSelected => playthroughPlayers!.any((player) => player.isChecked);
+
+  @override
+  void setBoardGame(BoardGameDetails boardGame) {
+    super.setBoardGame(boardGame);
+    playthroughsStore.setBoardGame(boardGame);
+    playthroughStatisticsStore.setBoardGame(boardGame);
+  }
 
   Future<Playthrough?> createPlaythrough(String boardGameId) async {
     final Playthrough? newPlaythrough = await _playthroughsStore.createPlaythrough(

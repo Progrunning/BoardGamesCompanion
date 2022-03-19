@@ -48,7 +48,7 @@ class EnterScoreDialog extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  _Score(playerName: viewModel.playerScore.player?.name),
+                  _Score(playerName: viewModel.playerName),
                   const _ScoreHistory(),
                   const SizedBox(height: Dimensions.trippleStandardSpacing),
                   _CircularNumberPicker(
@@ -79,7 +79,14 @@ class EnterScoreDialog extends StatelessWidget {
                   const SizedBox(height: Dimensions.trippleStandardSpacing),
                   _ActionButtons(
                     onUndo: () => viewModel.undo(),
-                    onDone: () => Navigator.pop(context),
+                    onDone: () {
+                      // MK In case score was not entered assume 0 was the score
+                      if (viewModel.score == 0) {
+                        viewModel.scoreZero();
+                      }
+
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),

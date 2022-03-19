@@ -57,4 +57,20 @@ class AppText {
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
   static const logGameFailureConfirmationSnackbarText =
       "We ran into a problem and your game wasn't logged. Please try again.";
+  static const gameFiltersAnyNumberOfPlayers = 'Any';
+
+  static const playthroughPageStatsBottomTabTitle = 'Stats';
+  static const playthroughPageHistoryBottomTabTitle = 'History';
+  static const playthroughPageLogGameBottomTabTitle = 'Log Game';
+
+  static const editPlaythroughPageTitle = 'Edit Playthrough';
+  static const editPlaythroughPagePlayedOnSectionTitle = 'Played on';
+  static const editPlaythroughPageDurationSectionTitle = 'Duration';
+  static const editPlaythroughPageScoresSectionTitle = 'Scores';
+  static const editPlaythroughPageDeleteConfirmationDialogTitle =
+      'Are you sure you want to delete this playthrough?';
+  static const editPlaythroughPageUnsavedChangesDialogTitle = "You didn't save your changes.";
+  static const editPlaythroughPageUnsavedChangesDialogContent =
+      'Are you sure you want to navigate away?';
+  static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
 }

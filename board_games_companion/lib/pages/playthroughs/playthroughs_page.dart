@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,6 @@ import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
-import '../../stores/playthroughs_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../base_page_state.dart';
@@ -19,7 +19,6 @@ import 'playthroughs_statistics_page.dart';
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
     required this.viewModel,
-    required this.playthroughsStore,
     required this.boardGameDetails,
     required this.collectionType,
     Key? key,
@@ -27,10 +26,9 @@ class PlaythroughsPage extends StatefulWidget {
 
   static const String pageRoute = '/playthroughs';
 
+  final PlaythroughsLogGameViewModel viewModel;
   final BoardGameDetails boardGameDetails;
   final CollectionType collectionType;
-  final PlaythroughsLogGameViewModel viewModel;
-  final PlaythroughsStore playthroughsStore;
 
   @override
   _PlaythroughsPageState createState() => _PlaythroughsPageState();
@@ -81,11 +79,10 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
             controller: tabController,
             children: <Widget>[
               PlaythroughStatistcsPage(
-                  boardGameDetails: widget.boardGameDetails, collectionType: widget.collectionType),
-              PlaythroughsHistoryPage(
-                boardGameDetails: widget.boardGameDetails,
-                playthroughsStore: widget.playthroughsStore,
+                playthroughStatisticsStore: widget.viewModel.playthroughStatisticsStore,
+                collectionType: widget.collectionType,
               ),
+              PlaythroughsHistoryPage(playthroughsStore: widget.viewModel.playthroughsStore),
               PlaythroughsLogGamePage(
                 boardGameDetails: widget.boardGameDetails,
                 playthroughsLogGameViewModel: widget.viewModel,
@@ -100,17 +97,17 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         top: -Dimensions.bottomTabTopHeight,
         items: const <TabItem>[
           TabItem<BottomTabIcon>(
-            title: 'Stats',
+            title: AppText.playthroughPageStatsBottomTabTitle,
             icon: BottomTabIcon(iconData: Icons.multiline_chart),
             activeIcon: BottomTabIcon(iconData: Icons.multiline_chart, isActive: true),
           ),
           TabItem<BottomTabIcon>(
-            title: 'History',
+            title: AppText.playthroughPageHistoryBottomTabTitle,
             icon: BottomTabIcon(iconData: Icons.history),
             activeIcon: BottomTabIcon(iconData: Icons.history, isActive: true),
           ),
           TabItem<BottomTabIcon>(
-            title: 'Log Game',
+            title: AppText.playthroughPageLogGameBottomTabTitle,
             icon: BottomTabIcon(iconData: Icons.casino),
             activeIcon: BottomTabIcon(iconData: Icons.casino, isActive: true),
           ),

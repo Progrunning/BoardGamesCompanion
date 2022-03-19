@@ -1,12 +1,12 @@
 enum MedalEnum {
-  Gold,
-  Silver,
-  Bronze,
+  gold,
+  silver,
+  bronze,
 }
 
 enum LoadDataState {
-  None,
-  Loading,
-  Loaded,
-  Error,
+  none,
+  loading,
+  loaded,
+  error,
 }
