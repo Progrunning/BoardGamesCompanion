@@ -76,7 +76,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   }
 
   Future<Playthrough?> createPlaythrough(String boardGameId) async {
-    final Playthrough? newPlaythrough = await _playthroughsStore.createPlaythrough(
+    final Playthrough? newPlaythrough = await playthroughsStore.createPlaythrough(
       boardGameId,
       selectedPlaythroughPlayers,
       playerScores,
