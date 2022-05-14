@@ -384,10 +384,6 @@ class _Links extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final bool isPricingInCountrySupported =
-    //     Constants.BoardGameOracleSupportedCultureNames.contains(
-    //         Platform.localeName.replaceFirst('_', '-'));
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

@@ -57,6 +57,7 @@ class PlayerService extends BaseHiveService<Player> {
       }
     }
 
+    // TODO Think about how to handle bggId and uuid
     final existingPlayer = storageBox.get(player.id);
 
     if ((existingPlayer?.avatarFileName?.isNotEmpty ?? false) &&
@@ -70,7 +71,7 @@ class PlayerService extends BaseHiveService<Player> {
   }
 
   Future<bool> deletePlayer(String playerId) async {
-    if (playerId.isEmpty ) {
+    if (playerId.isEmpty) {
       return false;
     }
 

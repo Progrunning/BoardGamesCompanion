@@ -24,6 +24,10 @@ class Player with ChangeNotifier {
   bool? _isDeleted;
   @HiveField(4)
   String? _avatarFileName;
+  @HiveField(5)
+  String? bggName;
+  @HiveField(6)
+  int? bggPlayerUserId;
 
   String? _avatarImageUri;
 

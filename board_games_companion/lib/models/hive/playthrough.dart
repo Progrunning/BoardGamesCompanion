@@ -13,6 +13,7 @@ class Playthrough {
     required this.playerIds,
     required this.scoreIds,
     required this.startDate,
+    this.bggPlayId,
   });
 
   @HiveField(0)
@@ -32,4 +33,6 @@ class Playthrough {
   PlaythroughStatus? status;
   @HiveField(7)
   bool? isDeleted = false;
+  @HiveField(8)
+  int? bggPlayId;
 }

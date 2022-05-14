@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
@@ -19,14 +20,14 @@ import 'playthroughs_log_game_page.dart';
 @injectable
 class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   PlaythroughsLogGameViewModel(
-    this._playersStore,
     this.playthroughsStore,
-    this._analyticsService,
     this.playthroughStatisticsStore,
+    this._playersViewModel,
+    this._analyticsService,
     this._boardGamesService,
   );
 
-  final PlayersViewModel _playersStore;
+  final PlayersViewModel _playersViewModel;
   final PlaythroughsStore playthroughsStore;
   final AnalyticsService _analyticsService;
   final PlaythroughStatisticsStore playthroughStatisticsStore;
@@ -67,7 +68,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   }
 
   Future<List<PlaythroughPlayer>> loadPlaythroughPlayers() async {
-    final players = await _playersStore.loadPlayers();
+    final players = await _playersViewModel.loadPlayers();
 
     _playthroughPlayers = players
         .map(
@@ -127,6 +128,49 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   }
 
   Future<void> importPlays(String username, String boardGameId) async {
-    await _boardGamesService.importPlays(username, boardGameId);
+    final bggPlaysImportResult = await _boardGamesService.importPlays(username, boardGameId);
+    if (!bggPlaysImportResult.isSuccess) {
+      // TODO Handle import failure
+      return;
+    }
+
+    if (bggPlaysImportResult.data?.isEmpty ?? true) {
+      // TODO Handle import failure
+      return;
+    }
+
+    // TODO Consider using isolates to parse and iterate over the results
+    for (final bggPlay in bggPlaysImportResult.data!) {
+      if (bggPlay.playDate == null) {
+        continue;
+      }
+
+      if (playthroughsStore.playthroughs
+              ?.any((Playthrough playthrough) => playthrough.bggPlayId == bggPlay.id) ??
+          false) {
+        continue;
+      }
+      final List<PlaythroughPlayer> playthroughPlayers = [];
+      final Map<String, PlayerScore> playerScores = {};
+      for (final bggPlayer in bggPlay.players) {
+        final player = Player(id: const Uuid().v4());
+        player.name = bggPlayer.playerName;
+        player.bggName = bggPlayer.playerBggName;
+        player.bggPlayerUserId = bggPlayer.playerBggUserId;
+        // TODO Add logic to createOrUpdatePlayer to handle check for bgg players
+        if (await _playersViewModel.createOrUpdatePlayer(player)) {
+          playthroughPlayers.add(PlaythroughPlayer(player));
+        }
+      }
+
+      await playthroughsStore.createPlaythrough(
+        bggPlay.boardGameId,
+        playthroughPlayers,
+        playerScores,
+        bggPlay.playDate!,
+        Duration(minutes: bggPlay.playTimeInMinutes ?? 0),
+        bggPlayId: bggPlay.id,
+      );
+    }
   }
 }

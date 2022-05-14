@@ -38,14 +38,16 @@ class PlaythroughsStore with ChangeNotifier, BoardGameAware {
     List<PlaythroughPlayer> playthoughPlayers,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
-    Duration? duration,
-  ) async {
+    Duration? duration, {
+    int? bggPlayId,
+  }) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
       boardGameId,
       playthoughPlayers,
       playerScores,
       startDate,
       duration,
+      bggPlayId: bggPlayId,
     );
 
     if (newPlaythrough == null) {

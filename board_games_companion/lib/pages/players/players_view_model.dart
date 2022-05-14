@@ -37,7 +37,7 @@ class PlayersViewModel with ChangeNotifier {
   Future<bool> createOrUpdatePlayer(Player player) async {
     try {
       final existingPlayer = _players!.firstWhereOrNull(
-        (p) => p.id == player.id,
+        (p) => p.id == player.id || p.bggPlayerUserId == player.bggPlayerUserId,
       );
 
       final isNewPlayer = existingPlayer == null;
