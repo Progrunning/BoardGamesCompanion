@@ -41,7 +41,7 @@ class _PlayersPageState extends State<PlayersPage> {
       child: ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
         future: playerStore.loadPlayers(),
         success: (context, PlayersViewModel store) {
-          if (store.players?.isEmpty ?? true) {
+          if (store.players.isEmpty) {
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(
@@ -97,7 +97,7 @@ class _PlayersPageState extends State<PlayersPage> {
             );
           }
 
-          store.players!.sort((a, b) => a.name!.compareTo(b.name!));
+          store.players.sort((a, b) => a.name!.compareTo(b.name!));
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,9 +116,9 @@ class _PlayersPageState extends State<PlayersPage> {
                   mainAxisSpacing: Dimensions.standardSpacing,
                   crossAxisCount: _numberOfPlayerColumns,
                   children: List.generate(
-                    store.players!.length,
+                    store.players.length,
                     (int index) {
-                      final player = store.players![index];
+                      final player = store.players[index];
                       return PlayerAvatar(
                         player,
                         topRightCornerActionWidget: CustomIconButton(

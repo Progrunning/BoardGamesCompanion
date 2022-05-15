@@ -454,7 +454,7 @@ class BoardGamesGeekService {
       playsImportResult.data!.add(play);
     }
 
-    return playsImportResult;
+    return playsImportResult..isSuccess = true;
   }
 
   Future<CollectionImportResult> _importCollection(

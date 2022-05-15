@@ -57,7 +57,6 @@ class PlayerService extends BaseHiveService<Player> {
       }
     }
 
-    // TODO Think about how to handle bggId and uuid
     final existingPlayer = storageBox.get(player.id);
 
     if ((existingPlayer?.avatarFileName?.isNotEmpty ?? false) &&

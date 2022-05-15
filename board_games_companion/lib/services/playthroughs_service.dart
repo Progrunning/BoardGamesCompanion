@@ -74,7 +74,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playthroughPlayerId in playthroughPlayerIds) {
-        Score? playerScore = Score(
+        Score playerScore = Score(
           id: uuid.v4(),
           playerId: playthroughPlayerId,
           boardGameId: boardGameId,

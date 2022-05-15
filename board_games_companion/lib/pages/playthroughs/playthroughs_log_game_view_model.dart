@@ -1,4 +1,6 @@
 import 'package:board_games_companion/models/hive/player.dart';
+import 'package:board_games_companion/stores/players_store.dart';
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
@@ -14,7 +16,6 @@ import '../../services/analytics_service.dart';
 import '../../services/board_games_service.dart';
 import '../../stores/playthrough_statistics_store.dart';
 import '../../stores/playthroughs_store.dart';
-import '../players/players_view_model.dart';
 import 'playthroughs_log_game_page.dart';
 
 @injectable
@@ -22,12 +23,12 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   PlaythroughsLogGameViewModel(
     this.playthroughsStore,
     this.playthroughStatisticsStore,
-    this._playersViewModel,
+    this._playersStore,
     this._analyticsService,
     this._boardGamesService,
   );
 
-  final PlayersViewModel _playersViewModel;
+  final PlayersStore _playersStore;
   final PlaythroughsStore playthroughsStore;
   final AnalyticsService _analyticsService;
   final PlaythroughStatisticsStore playthroughStatisticsStore;
@@ -68,7 +69,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   }
 
   Future<List<PlaythroughPlayer>> loadPlaythroughPlayers() async {
-    final players = await _playersViewModel.loadPlayers();
+    final players = await _playersStore.loadPlayers();
 
     _playthroughPlayers = players
         .map(
@@ -141,29 +142,40 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
 
     // TODO Consider using isolates to parse and iterate over the results
     for (final bggPlay in bggPlaysImportResult.data!) {
-      if (bggPlay.playDate == null) {
+      if (bggPlay.playDate == null ||
+          (playthroughsStore.playthroughs
+                  ?.any((Playthrough playthrough) => playthrough.bggPlayId == bggPlay.id) ??
+              false)) {
         continue;
       }
 
-      if (playthroughsStore.playthroughs
-              ?.any((Playthrough playthrough) => playthrough.bggPlayId == bggPlay.id) ??
-          false) {
-        continue;
-      }
       final List<PlaythroughPlayer> playthroughPlayers = [];
       final Map<String, PlayerScore> playerScores = {};
       for (final bggPlayer in bggPlay.players) {
-        final player = Player(id: const Uuid().v4());
-        player.name = bggPlayer.playerName;
-        player.bggName = bggPlayer.playerBggName;
-        player.bggPlayerUserId = bggPlayer.playerBggUserId;
-        // TODO Add logic to createOrUpdatePlayer to handle check for bgg players
-        if (await _playersViewModel.createOrUpdatePlayer(player)) {
+        String playerId;
+        if (bggPlayer.playerBggUserId == null) {
+          playerId =
+              _playersStore.players.firstWhereOrNull((p) => p.name == bggPlayer.playerName)?.id ??
+                  const Uuid().v4();
+        } else {
+          playerId = bggPlayer.playerBggUserId.toString();
+        }
+        final Player player = Player(id: playerId)
+          ..name = bggPlayer.playerName
+          ..bggName = bggPlayer.playerBggName;
+
+        if (await _playersStore.createOrUpdatePlayer(player)) {
           playthroughPlayers.add(PlaythroughPlayer(player));
+          final Score playerScore = Score(
+            id: const Uuid().v4(),
+            playerId: player.id,
+            boardGameId: boardGameId,
+          );
+          playerScores[player.id] = PlayerScore(player, playerScore);
         }
       }
 
-      await playthroughsStore.createPlaythrough(
+      final newPlaythrough = await playthroughsStore.createPlaythrough(
         bggPlay.boardGameId,
         playthroughPlayers,
         playerScores,
@@ -171,6 +183,10 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
         Duration(minutes: bggPlay.playTimeInMinutes ?? 0),
         bggPlayId: bggPlay.id,
       );
+
+      if (newPlaythrough == null) {
+        // TODO Handle error
+      }
     }
   }
 }

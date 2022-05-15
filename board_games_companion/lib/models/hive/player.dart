@@ -26,8 +26,6 @@ class Player with ChangeNotifier {
   String? _avatarFileName;
   @HiveField(5)
   String? bggName;
-  @HiveField(6)
-  int? bggPlayerUserId;
 
   String? _avatarImageUri;
 
