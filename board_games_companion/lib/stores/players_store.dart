@@ -1,6 +1,7 @@
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -29,8 +30,21 @@ class PlayersStore with ChangeNotifier {
 
   Future<bool> createOrUpdatePlayer(Player player) async {
     try {
+      final existingPlayer = players.firstWhereOrNull(
+        (p) => p.id == player.id,
+      );
       final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(player);
       if (addOrUpdateSucceeded) {
+        if (existingPlayer == null) {
+          players.add(player);
+        } else {
+          existingPlayer.id = player.id;
+          existingPlayer.avatarFileName = player.avatarFileName;
+          existingPlayer.avatarImageUri = player.avatarImageUri;
+          existingPlayer.name = player.name;
+          existingPlayer.bggName = player.bggName;
+        }
+
         notifyListeners();
       }
 

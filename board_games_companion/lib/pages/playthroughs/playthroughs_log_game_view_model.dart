@@ -1,6 +1,6 @@
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
-import 'package:collection/src/iterable_extensions.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
@@ -129,6 +129,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   }
 
   Future<void> importPlays(String username, String boardGameId) async {
+    // TODO Import multiple pages
     final bggPlaysImportResult = await _boardGamesService.importPlays(username, boardGameId);
     if (!bggPlaysImportResult.isSuccess) {
       // TODO Handle import failure
@@ -170,6 +171,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
             id: const Uuid().v4(),
             playerId: player.id,
             boardGameId: boardGameId,
+            value: bggPlayer.playerScore.toString(),
           );
           playerScores[player.id] = PlayerScore(player, playerScore);
         }

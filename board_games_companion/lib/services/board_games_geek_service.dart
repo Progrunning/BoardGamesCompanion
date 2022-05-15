@@ -70,6 +70,7 @@ class BoardGamesGeekService {
   static const String _xmlNameAttributeName = 'name';
   static const String _xmlUsernameAttributeName = 'username';
   static const String _xmlUserIdAttributeName = 'userid';
+  static const String _xmlScoreAttributeName = 'score';
   static const String _xmlRankAttributeName = 'rank';
   static const String _xmlFriendlyNameAttributeName = 'friendlyname';
   static const String _xmlCategoryAttributeTypeName = 'boardgamecategory';
@@ -434,7 +435,7 @@ class BoardGamesGeekService {
         final int? playerBggUserId =
             int.tryParse(playElement.firstOrDefaultAttributeValue(_xmlUserIdAttributeName) ?? '');
         final int? playerScore =
-            int.tryParse(playerElement.firstOrDefaultAttributeValue(_xmlUserIdAttributeName) ?? '');
+            int.tryParse(playerElement.firstOrDefaultAttributeValue(_xmlScoreAttributeName) ?? '');
 
         if ((playerName?.isBlank ?? true) || playerScore == null) {
           continue;

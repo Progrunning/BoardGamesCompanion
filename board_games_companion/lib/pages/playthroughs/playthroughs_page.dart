@@ -137,5 +137,6 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
   Future<void> _importBggPlays(String username, String boardGameId) async {
     await widget.viewModel.importPlays(username, boardGameId);
+    setState(() {});
   }
 }

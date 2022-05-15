@@ -51,7 +51,7 @@ class AppText {
 
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
 
-  static const importCollectionsSucceeded = 'Your collection is now in sync with BGG!';
+  static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';
   static const importCollectionsButtonText = 'Import';
 
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
