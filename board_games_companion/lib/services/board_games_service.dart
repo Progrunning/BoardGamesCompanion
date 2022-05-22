@@ -1,4 +1,6 @@
+import 'package:board_games_companion/models/bgg/bgg_import_plays.dart';
 import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/hive_boxes.dart';
@@ -14,6 +16,8 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
 
   final BoardGamesGeekService _boardGameGeekService;
   final PreferencesService _preferenceService;
+
+  static const int _maxNumberOfImportedPlaysPerPage = 100;
 
   Future<List<BoardGameDetails>> retrieveBoardGames() async {
     if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
@@ -85,7 +89,21 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<BggPlaysImportResult> importPlays(String username, String boardGameId) async {
-    return _boardGameGeekService.importPlays(username, boardGameId);
+    final playsImportResult = BggPlaysImportResult();
+    playsImportResult.data = [];
+
+    BggPlaysImportResult pagePlaysImportResult;
+    var pageNumber = 1;
+
+    do {
+      pagePlaysImportResult = await compute(_boardGameGeekService.importPlays,
+          BggImportPlays(username, boardGameId, pageNumber: pageNumber));
+      playsImportResult.data!.addAll(pagePlaysImportResult.data ?? []);
+      playsImportResult.errors?.addAll(pagePlaysImportResult.errors ?? []);
+      pageNumber++;
+    } while ((pagePlaysImportResult.data?.length ?? 0) >= _maxNumberOfImportedPlaysPerPage);
+
+    return playsImportResult;
   }
 
   Future<CollectionImportResult> importCollections(String username) async {
@@ -93,7 +111,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return CollectionImportResult();
     }
 
-    final collectionImportResult = await _boardGameGeekService.importCollections(username);
+    final collectionImportResult = await compute(_boardGameGeekService.importCollections, username);
     if (!collectionImportResult.isSuccess || (collectionImportResult.data?.isEmpty ?? true)) {
       return collectionImportResult;
     }

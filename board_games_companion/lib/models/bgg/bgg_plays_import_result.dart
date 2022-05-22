@@ -1,4 +1,9 @@
-import '../result.dart';
+import 'package:board_games_companion/models/import_result.dart';
+
 import 'bgg_play.dart';
 
-class BggPlaysImportResult extends Result<List<BggPlay>> {}
+class BggPlaysImportResult extends ImportResult<List<BggPlay>> {
+  BggPlaysImportResult();
+
+  BggPlaysImportResult.failure(List<ImportError> errors) : super.failure(errors);
+}

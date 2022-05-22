@@ -1,4 +1,8 @@
 import 'hive/board_game_details.dart';
-import 'result.dart';
+import 'import_result.dart';
 
-class CollectionImportResult extends Result<List<BoardGameDetails>> {}
+class CollectionImportResult extends ImportResult<List<BoardGameDetails>> {
+  CollectionImportResult();
+
+  CollectionImportResult.failure(List<ImportError> errors) : super.failure(errors);
+}

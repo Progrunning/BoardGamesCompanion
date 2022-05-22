@@ -3,13 +3,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/models/bgg/bgg_play.dart';
-import 'package:board_games_companion/models/bgg/bgg_play_player.dart';
-import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
+import 'package:board_games_companion/models/import_result.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retry/retry.dart';
 import 'package:xml/xml.dart';
@@ -18,6 +15,10 @@ import 'package:xml/xml.dart' as xml;
 import '../common/enums/collection_type.dart';
 import '../common/exceptions/bgg_retry_exception.dart';
 import '../extensions/xml_element_extensions.dart';
+import '../models/bgg/bgg_import_plays.dart';
+import '../models/bgg/bgg_play.dart';
+import '../models/bgg/bgg_play_player.dart';
+import '../models/bgg/bgg_plays_import_result.dart';
 import '../models/board_game.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_artist.dart';
@@ -99,6 +100,7 @@ class BoardGamesGeekService {
   static const String _boardGameQueryParamterQuery = 'query';
   static const String _boardGameQueryParamterStats = 'stats';
   static const String _boardGameQueryParamterId = 'id';
+  static const String _boardGameQueryParamterPageNumber = 'page';
   static const String _boardGameType = 'boardgame';
   static const String _boardGameExpansionType = 'boardgameexpansion';
 
@@ -363,6 +365,11 @@ class BoardGamesGeekService {
       ..isSuccess = ownGameImportResult.isSuccess &&
           wishlistGameImportResult.isSuccess &&
           wantToBuyGameImportResult.isSuccess
+      ..errors = [
+        ...ownGameImportResult.errors ?? <ImportError>[],
+        ...wishlistGameImportResult.errors ?? <ImportError>[],
+        ...wantToBuyGameImportResult.errors ?? <ImportError>[]
+      ]
       ..data = [
         ...ownGameImportResult.data ?? <BoardGameDetails>[],
         ...wishlistGameImportResult.data ?? <BoardGameDetails>[],
@@ -370,15 +377,17 @@ class BoardGamesGeekService {
       ];
   }
 
-  Future<BggPlaysImportResult> importPlays(String username, String boardGameId) async {
-    if (username.isEmpty) {
-      return BggPlaysImportResult();
+  Future<BggPlaysImportResult> importPlays(BggImportPlays bggImportPlays) async {
+    if (bggImportPlays.username.isEmpty) {
+      return BggPlaysImportResult.failure([ImportError('Username is empty')]);
     }
 
     final queryParamters = <String, dynamic>{
-      _boardGameQueryParamterUsername: username,
-      _boardGameQueryParamterId: boardGameId,
+      _boardGameQueryParamterUsername: bggImportPlays.username,
+      _boardGameQueryParamterId: bggImportPlays.boardGameId,
+      _boardGameQueryParamterPageNumber: bggImportPlays.pageNumber,
     };
+
     final playsResultXml = await retry(
       () async {
         final response = await _dio.get<String>(
@@ -391,9 +400,11 @@ class BoardGamesGeekService {
       retryIf: (e) => e is SocketException || e is TimeoutException,
     );
 
-    final playsXmlDocument = await compute(retrieveXmlDocument, playsResultXml);
-    if (playsXmlDocument == null) {
-      return BggPlaysImportResult();
+    XmlDocument? playsXmlDocument;
+    try {
+      playsXmlDocument = xml.XmlDocument.parse(playsResultXml.data!);
+    } catch (e, stack) {
+      return BggPlaysImportResult.failure([ImportError.exception(e, stack)]);
     }
 
     final playsImportResult = BggPlaysImportResult()..data = [];
@@ -455,7 +466,7 @@ class BoardGamesGeekService {
       playsImportResult.data!.add(play);
     }
 
-    return playsImportResult..isSuccess = true;
+    return playsImportResult;
   }
 
   Future<CollectionImportResult> _importCollection(
@@ -486,13 +497,16 @@ class BoardGamesGeekService {
     );
 
     final boardGames = <BoardGameDetails>[];
-    final xmlDocument = await compute(retrieveXmlDocument, collectionResultsXml);
-    if (xmlDocument == null) {
-      return CollectionImportResult();
+    XmlDocument xmlDocument;
+
+    try {
+      xmlDocument = xml.XmlDocument.parse(collectionResultsXml.data!);
+    } catch (e, stack) {
+      return CollectionImportResult.failure([ImportError.exception(e, stack)]);
     }
 
     if (_hasErrors(xmlDocument)) {
-      return CollectionImportResult();
+      return CollectionImportResult.failure([ImportError('XML document has errors')]);
     }
 
     final collectionElements = xmlDocument.findAllElements(_xmlItemElementName);
@@ -587,7 +601,6 @@ class BoardGamesGeekService {
     BoardGameDetails boardGameDetails,
   ) {
     if (boardGameDetailsRatings == null || boardGameDetails == null) {
-      FirebaseCrashlytics.instance.log('Faild to extract board game detail rank information');
       return;
     }
 
@@ -608,9 +621,9 @@ class BoardGamesGeekService {
           (rankId?.isEmpty ?? true) ||
           (rankName?.isEmpty ?? true) ||
           (rankRank == null)) {
-        FirebaseCrashlytics.instance
-            .log('Faild to extract some of the board game detail rank information');
+        continue;
       }
+
       final rank = BoardGameRank(
         id: rankId!,
         name: rankName!,

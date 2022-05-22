@@ -28,7 +28,7 @@ mixin ImportCollection {
 
       _showSuccessSnackBar();
     } else {
-      _showFailureSnackBar();
+      _showFailureSnackBar(context);
     }
 
     return importResult;
@@ -45,15 +45,19 @@ void _showSuccessSnackBar() {
   );
 }
 
-void _showFailureSnackBar() {
+void _showFailureSnackBar(BuildContext context) {
   HomePage.homePageGlobalKey.currentState!.showSnackBar(
-    const SnackBar(
+    SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: Dimensions.snackbarMargin,
-      content: Text(
-        "Sorry, we've run into some problems with importing your collections from BGG. Please try again.",
+      content: const Text(AppText.importCollectionsFailureMessage),
+      // TODO Test this action button
+      action: SnackBarAction(
+        label: 'OK',
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
-      duration: Duration(seconds: 8),
     ),
   );
 }
