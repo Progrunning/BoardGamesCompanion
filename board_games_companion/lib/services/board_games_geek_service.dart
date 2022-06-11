@@ -407,9 +407,12 @@ class BoardGamesGeekService {
       return BggPlaysImportResult.failure([ImportError.exception(e, stack)]);
     }
 
-    final playsImportResult = BggPlaysImportResult()..data = [];
+    final playsImportResult = BggPlaysImportResult()
+      ..data = []
+      ..errors = [];
 
     final playsElements = playsXmlDocument.findAllElements(_xmlPlayElementName);
+    playsImportResult.playsToImportTotal = playsElements.length;
     for (final XmlElement playElement in playsElements) {
       final int? playId =
           int.tryParse(playElement.firstOrDefaultAttributeValue(_xmlIdAttributeName) ?? '');
@@ -425,7 +428,9 @@ class BoardGamesGeekService {
       final String? boardGameId =
           playItemElement.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
 
-      if (playId == null || (boardGameId?.isBlank ?? false) || playDate == null || !playCompleted) {
+      if (playId == null || (boardGameId?.isBlank ?? false) || playDate == null) {
+        playsImportResult.errors!
+            .add(ImportError('Failed to parse required information (e.g. playId)'));
         continue;
       }
 
@@ -448,7 +453,15 @@ class BoardGamesGeekService {
         final int? playerScore =
             int.tryParse(playerElement.firstOrDefaultAttributeValue(_xmlScoreAttributeName) ?? '');
 
-        if ((playerName?.isBlank ?? true) || playerScore == null) {
+        if (playerName?.isBlank ?? true) {
+          playsImportResult.errors!
+              .add(ImportError("Cannot import a play $playId without player's name"));
+          continue;
+        }
+
+        if (playerScore == null) {
+          playsImportResult.errors!
+              .add(ImportError('Cannot import a play $playId without a numeric score'));
           continue;
         }
 

@@ -101,7 +101,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       playsImportResult.data!.addAll(pagePlaysImportResult.data ?? []);
       playsImportResult.errors?.addAll(pagePlaysImportResult.errors ?? []);
       pageNumber++;
-    } while ((pagePlaysImportResult.data?.length ?? 0) >= _maxNumberOfImportedPlaysPerPage);
+    } while (pagePlaysImportResult.playsToImportTotal >= _maxNumberOfImportedPlaysPerPage);
 
     return playsImportResult;
   }

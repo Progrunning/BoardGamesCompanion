@@ -6,4 +6,7 @@ class BggPlaysImportResult extends ImportResult<List<BggPlay>> {
   BggPlaysImportResult();
 
   BggPlaysImportResult.failure(List<ImportError> errors) : super.failure(errors);
+
+  int playsToImportTotal = 0;
+  int get playsFailedToImportTotal => playsToImportTotal - (data?.length ?? 0);
 }
