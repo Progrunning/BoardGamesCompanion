@@ -9,6 +9,7 @@ class Analytics {
   static const String BoardGameDetailsLinks = 'board_game_details_links';
   static const String EditPlaythrough = 'edit_playthough';
   static const String LogPlaythrough = 'log_playthough';
+  static const String ImportBggPlays = 'import_bgg_plays';
 
   static const String RouteName = 'route_name';
 
