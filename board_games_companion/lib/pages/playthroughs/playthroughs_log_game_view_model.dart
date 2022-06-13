@@ -130,6 +130,11 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   }
 
   Future<BggPlaysImportRaport> importPlays(String username, String boardGameId) async {
+    await _analyticsService.logEvent(
+      name: Analytics.ImportBggPlays,
+      parameters: <String, String>{Analytics.BoardGameIdParameter: boardGameId},
+    );
+
     final bggPlaysImportRaport = BggPlaysImportRaport();
     final bggPlaysImportResult = await _boardGamesService.importPlays(username, boardGameId);
     if (!bggPlaysImportResult.isSuccess) {
