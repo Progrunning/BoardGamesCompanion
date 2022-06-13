@@ -20,9 +20,8 @@ class ScoreAdapter extends TypeAdapter<Score> {
       id: fields[0] as String,
       playerId: fields[2] as String,
       boardGameId: fields[3] as String,
-    )
-      ..playthroughId = fields[1] as String?
-      ..value = fields[4] as String?;
+      value: fields[4] as String?,
+    )..playthroughId = fields[1] as String?;
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'package:basics/basics.dart';
+import 'package:board_games_companion/models/import_result.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
@@ -20,8 +22,8 @@ import '../../stores/playthroughs_store.dart';
 import 'playthroughs_log_game_page.dart';
 
 @injectable
-class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
-  PlaythroughsLogGameViewModel(
+class PlaythroughsViewModel with ChangeNotifier, BoardGameAware {
+  PlaythroughsViewModel(
     this.playthroughsStore,
     this.playthroughStatisticsStore,
     this._playersStore,
@@ -45,10 +47,9 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
   Map<String, PlayerScore> get playerScores => _playerScores;
 
   DateTime playthroughDate = DateTime.now();
-
   PlaythroughStartTime playthroughStartTime = PlaythroughStartTime.now;
-
   Duration playthroughDuration = const Duration();
+  BggPlaysImportRaport? bggPlaysImportRaport;
 
   int _logGameStep = 0;
   int get logGameStep => _logGameStep;
@@ -129,31 +130,29 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
     }
   }
 
-  Future<BggPlaysImportRaport> importPlays(String username, String boardGameId) async {
+  Future<void> importPlays(String username, String boardGameId) async {
     await _analyticsService.logEvent(
       name: Analytics.ImportBggPlays,
       parameters: <String, String>{Analytics.BoardGameIdParameter: boardGameId},
     );
 
-    final bggPlaysImportRaport = BggPlaysImportRaport();
     final bggPlaysImportResult = await _boardGamesService.importPlays(username, boardGameId);
-    if (!bggPlaysImportResult.isSuccess) {
-      if (!bggPlaysImportResult.isPartialSuccess) {
-        // TODO Handle import failure
-        return bggPlaysImportRaport;
-      }
+    bggPlaysImportRaport = BggPlaysImportRaport()
+      ..playsToImportTotal = bggPlaysImportResult.playsToImportTotal
+      ..playsFailedToImportTotal = bggPlaysImportResult.playsFailedToImportTotal
+      ..errors = bggPlaysImportResult.errors ?? []
+      ..createdPlayers = [];
 
-      // TODO Handle partial failure
+    if (!bggPlaysImportResult.isSuccess && !bggPlaysImportResult.isPartialSuccess) {
+      return;
     }
 
     if (bggPlaysImportResult.data?.isEmpty ?? true) {
       if (bggPlaysImportResult.playsToImportTotal == 0) {
-        // TODO Handle no games to import
+        bggPlaysImportRaport!.errors.add(ImportError('No plays to import'));
       }
 
-      // TODO Handle no data import failure
-
-      return bggPlaysImportRaport;
+      return;
     }
 
     // TODO Consider using isolates to parse and iterate over the results
@@ -177,11 +176,18 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
           playerId = bggPlayer.playerBggUserId.toString();
         }
 
+        final bool newPlayer =
+            _playersStore.players.firstWhereOrNull((p) => p.id == playerId) != null;
         final Player player = Player(id: playerId)
           ..name = bggPlayer.playerName
           ..bggName = bggPlayer.playerBggName;
 
         if (await _playersStore.createOrUpdatePlayer(player)) {
+          if (!newPlayer &&
+              ((player.name?.isBlank ?? false) || (player.bggName?.isBlank ?? false))) {
+            bggPlaysImportRaport!.createdPlayers.add(player.name ?? player.bggName ?? '');
+          }
+
           playthroughPlayers.add(PlaythroughPlayer(player));
           final Score playerScore = Score(
             id: const Uuid().v4(),
@@ -203,11 +209,8 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
       );
 
       if (newPlaythrough == null) {
-        // TODO Handle error
+        bggPlaysImportRaport!.errors.add(ImportError('Failed to import a play [${bggPlay.id}]'));
       }
     }
-
-    // TODO Populate report
-    return bggPlaysImportRaport;
   }
 }

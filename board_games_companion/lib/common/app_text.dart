@@ -57,6 +57,8 @@ class AppText {
       "Sorry, we've run into some problems with importing your collections from BGG. Please try again.";
 
   static const importPlaysLoadingIndicator = 'Importing games from BGG...';
+  static const importPlaysSendReportViaEmailButtonText = 'Send';
+  static const importPlaysOkButtonText = 'Ok';
 
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
   static const logGameFailureConfirmationSnackbarText =

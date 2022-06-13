@@ -1,23 +1,26 @@
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/stores/user_store.dart';
-import 'package:board_games_companion/widgets/common/loading_overlay.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
+import '../../stores/user_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
+import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../base_page_state.dart';
 import '../board_game_details/board_game_details_page.dart';
+import 'bgg_plays_import_report_dialog.dart';
 import 'playthroughs_history_page.dart';
 import 'playthroughs_log_game_page.dart';
-import 'playthroughs_log_game_view_model.dart';
 import 'playthroughs_statistics_page.dart';
+import 'playthroughs_view_model.dart';
 
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
@@ -29,7 +32,7 @@ class PlaythroughsPage extends StatefulWidget {
 
   static const String pageRoute = '/playthroughs';
 
-  final PlaythroughsLogGameViewModel viewModel;
+  final PlaythroughsViewModel viewModel;
   final BoardGameDetails boardGameDetails;
   final CollectionType collectionType;
 
@@ -152,10 +155,23 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         _showImportGamesLoadingIndicator = true;
       });
       await widget.viewModel.importPlays(username, boardGameId);
+      await showImportPlaysReportDialog(context, widget.viewModel.bggPlaysImportRaport!);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
     } finally {
       setState(() {
         _showImportGamesLoadingIndicator = false;
       });
     }
+  }
+
+  Future<void> showImportPlaysReportDialog(
+      BuildContext context, BggPlaysImportRaport bggPlaysImportRaport) async {
+    showGeneralDialog<void>(
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return BggPlaysImportReportDialog(report: bggPlaysImportRaport);
+      },
+    );
   }
 }
