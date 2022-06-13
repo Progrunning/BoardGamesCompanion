@@ -133,8 +133,7 @@ class PlaythroughsLogGameViewModel with ChangeNotifier, BoardGameAware {
     final bggPlaysImportRaport = BggPlaysImportRaport();
     final bggPlaysImportResult = await _boardGamesService.importPlays(username, boardGameId);
     if (!bggPlaysImportResult.isSuccess) {
-      if (bggPlaysImportResult.playsFailedToImportTotal ==
-          bggPlaysImportResult.playsToImportTotal) {
+      if (!bggPlaysImportResult.isPartialSuccess) {
         // TODO Handle import failure
         return bggPlaysImportRaport;
       }

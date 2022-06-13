@@ -55,31 +55,21 @@ class _AboutPageState extends BasePageState<AboutPage> {
                           uri: 'mailto:${Constants.FeedbackEmailAddress}?subject=BGC%20Feedback',
                           iconUri: 'assets/mikolaj_profile_picture.jpg',
                         ),
-                        Divider(
-                          color: AppTheme.accentColor,
-                        ),
-                        SectionTitle(
-                          title: 'Design & Art',
-                        ),
+                        Divider(color: AppTheme.accentColor),
+                        SectionTitle(title: 'Design & Art'),
                         DetailsItem(
                           title: 'Alicja Adamkiewicz',
                           subtitle: 'instagram.com/adamkiewicz_art',
                           uri: 'https://www.instagram.com/adamkiewicz_art',
                           iconUri: 'assets/adamkiewiczart_logo.png',
                         ),
-                        Divider(
-                          color: AppTheme.accentColor,
-                        ),
-                        SectionTitle(
-                          title: 'Content & Data',
-                        ),
+                        Divider(color: AppTheme.accentColor),
+                        SectionTitle(title: 'Content & Data'),
                         SectionText(
                           text:
                               "The board games data shown in the app is a courtesy of the publicly available BoardGameGeek's XML API.",
                         ),
-                        SectionText(
-                          text: 'See below links for more details:',
-                        ),
+                        SectionText(text: 'See below links for more details:'),
                         DetailsItem(
                             title: 'BGG',
                             subtitle: 'boardgamegeek.com',
@@ -92,12 +82,8 @@ class _AboutPageState extends BasePageState<AboutPage> {
                             title: 'Terms of Service',
                             subtitle: 'boardgamegeek.com/terms',
                             uri: 'https://www.boardgamegeek.com/terms'),
-                        Divider(
-                          color: AppTheme.accentColor,
-                        ),
-                        SectionTitle(
-                          title: 'Plugins & Libraries',
-                        ),
+                        Divider(color: AppTheme.accentColor),
+                        SectionTitle(title: 'Plugins & Libraries'),
                         SectionText(
                           text:
                               'The below is a list of the plugins and libraries that helped in building this app:',

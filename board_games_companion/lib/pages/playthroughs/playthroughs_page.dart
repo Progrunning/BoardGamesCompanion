@@ -1,5 +1,6 @@
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/stores/user_store.dart';
+import 'package:board_games_companion/widgets/common/loading_overlay.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,8 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   static const int _initialTabIndex = 0;
   static const int _numberOfTabs = 3;
 
+  bool _showImportGamesLoadingIndicator = false;
+
   @override
   void initState() {
     super.initState();
@@ -55,21 +58,23 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.boardGameDetails.name),
         actions: <Widget>[
-          Consumer<UserStore>(builder: (_, store, ___) {
-            if (store.user?.name.isEmpty ?? true) {
-              return const SizedBox.shrink();
-            }
+          Consumer<UserStore>(
+            builder: (_, store, ___) {
+              if (store.user?.name.isEmpty ?? true) {
+                return const SizedBox.shrink();
+              }
 
-            return IconButton(
-              icon: const Icon(Icons.download, color: AppTheme.accentColor),
-              onPressed: () async => _importBggPlays(store.user!.name, widget.boardGameDetails.id),
-            );
-          }),
+              return IconButton(
+                icon: const Icon(Icons.download, color: AppTheme.accentColor),
+                onPressed: () => _importBggPlays(store.user!.name, widget.boardGameDetails.id),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.info, color: AppTheme.accentColor),
             onPressed: () async => _navigateToBoardGameDetails(context, widget.boardGameDetails),
@@ -120,6 +125,12 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         color: AppTheme.inactiveBottomTabColor,
       ),
     );
+
+    if (_showImportGamesLoadingIndicator) {
+      return LoadingOverlay(child: scaffold, title: AppText.importPlaysLoadingIndicator);
+    }
+
+    return scaffold;
   }
 
   Future<void> _navigateToBoardGameDetails(
@@ -136,7 +147,15 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   }
 
   Future<void> _importBggPlays(String username, String boardGameId) async {
-    await widget.viewModel.importPlays(username, boardGameId);
-    setState(() {});
+    try {
+      setState(() {
+        _showImportGamesLoadingIndicator = true;
+      });
+      await widget.viewModel.importPlays(username, boardGameId);
+    } finally {
+      setState(() {
+        _showImportGamesLoadingIndicator = false;
+      });
+    }
   }
 }
