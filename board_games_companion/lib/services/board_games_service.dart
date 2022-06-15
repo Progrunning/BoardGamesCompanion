@@ -89,8 +89,9 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<BggPlaysImportResult> importPlays(String username, String boardGameId) async {
-    final playsImportResult = BggPlaysImportResult();
-    playsImportResult.data = [];
+    final playsImportResult = BggPlaysImportResult()
+      ..data = []
+      ..errors = [];
 
     BggPlaysImportResult pagePlaysImportResult;
     var pageNumber = 1;
@@ -99,7 +100,8 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       pagePlaysImportResult = await compute(_boardGameGeekService.importPlays,
           BggImportPlays(username, boardGameId, pageNumber: pageNumber));
       playsImportResult.data!.addAll(pagePlaysImportResult.data ?? []);
-      playsImportResult.errors?.addAll(pagePlaysImportResult.errors ?? []);
+      playsImportResult.errors!.addAll(pagePlaysImportResult.errors ?? []);
+      playsImportResult.playsToImportTotal += pagePlaysImportResult.playsToImportTotal;
       pageNumber++;
     } while (pagePlaysImportResult.playsToImportTotal >= _maxNumberOfImportedPlaysPerPage);
 

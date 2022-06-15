@@ -59,6 +59,9 @@ class AppText {
   static const importPlaysLoadingIndicator = 'Importing games from BGG...';
   static const importPlaysSendReportViaEmailButtonText = 'Send';
   static const importPlaysOkButtonText = 'Ok';
+  static const importPlaysReportImportedPlaysSectionTitle = 'Imported plays';
+  static const importPlaysReportImportedPlayersSectionTitle = 'Imported players';
+  static const importPlaysReportImportErrorsSectionTitle = 'Import errors';
 
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
   static const logGameFailureConfirmationSnackbarText =

@@ -220,77 +220,46 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
                   sliver: SliverList(
                     delegate: SliverChildListDelegate.fixed(
                       <Widget>[
-                        const _BodySectionHeader(
-                          title: 'Stats',
-                          secondaryTitle: 'Collections',
-                        ),
-                        _StatsAndCollections(
-                          boardGameDetailsStore: boardGameDetailsStore,
-                        ),
-                        const SizedBox(
-                          height: _spacingBetweenSecions,
-                        ),
-                        const _BodySectionHeader(
-                          title: 'General',
-                        ),
+                        const _BodySectionHeader(title: 'Stats', secondaryTitle: 'Collections'),
+                        _StatsAndCollections(boardGameDetailsStore: boardGameDetailsStore),
+                        const SizedBox(height: _spacingBetweenSecions),
+                        const _BodySectionHeader(title: 'General'),
                         _FirstRowGeneralInfoPanels(
                           boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
-                        const SizedBox(
-                          height: _spacingBetweenSecions,
-                        ),
+                        const SizedBox(height: _spacingBetweenSecions),
                         _SecondRowGeneralInfoPanels(
                           boardGameDetails: boardGameDetailsStore.boardGameDetails,
                         ),
-                        const SizedBox(
-                          height: _spacingBetweenSecions,
-                        ),
-                        const _BodySectionHeader(
-                          title: 'Links',
-                        ),
-                        _Links(
-                          boardGameDetailsStore: boardGameDetailsStore,
-                        ),
-                        const SizedBox(
-                          height: _halfSpacingBetweenSecions,
-                        ),
-                        const _BodySectionHeader(
-                          title: 'Credits',
-                        ),
-                        _Credits(
-                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
-                        ),
-                        const SizedBox(
-                          height: _halfSpacingBetweenSecions,
-                        ),
-                        const _BodySectionHeader(
-                          title: 'Categories',
-                        ),
+                        const SizedBox(height: _spacingBetweenSecions),
+                        const _BodySectionHeader(title: 'Links'),
+                        _Links(boardGameDetailsStore: boardGameDetailsStore),
+                        const SizedBox(height: _halfSpacingBetweenSecions),
+                        const _BodySectionHeader(title: 'Credits'),
+                        _Credits(boardGameDetails: boardGameDetailsStore.boardGameDetails),
+                        const SizedBox(height: _halfSpacingBetweenSecions),
+                        const _BodySectionHeader(title: 'Categories'),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.standardSpacing,
-                          ),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                           child: Wrap(
                             direction: Axis.horizontal,
                             spacing: Dimensions.standardSpacing,
                             alignment: WrapAlignment.spaceEvenly,
-                            children: boardGameDetailsStore.boardGameDetails!.categories!
-                                .map<Widget>((category) {
-                              return Chip(
-                                padding: const EdgeInsets.all(
-                                  Dimensions.standardSpacing,
-                                ),
-                                backgroundColor: AppTheme.primaryColor.withAlpha(
-                                  Styles.opacity80Percent,
-                                ),
-                                label: Text(
-                                  category.name,
-                                  style: const TextStyle(
-                                    color: AppTheme.defaultTextColor,
+                            children: [
+                              for (var category
+                                  in boardGameDetailsStore.boardGameDetails!.categories!)
+                                Chip(
+                                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                                  backgroundColor: AppTheme.primaryColor.withAlpha(
+                                    Styles.opacity80Percent,
                                   ),
-                                ),
-                              );
-                            }).toList(),
+                                  label: Text(
+                                    category.name,
+                                    style: const TextStyle(color: AppTheme.defaultTextColor),
+                                  ),
+                                )
+                            ],
                           ),
                         ),
                         if (!store.boardGameDetails!.isExpansion! &&
