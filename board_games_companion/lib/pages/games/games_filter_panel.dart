@@ -142,9 +142,7 @@ class _SortByChip extends StatelessWidget {
     }
 
     return ChoiceChip(
-      labelStyle: const TextStyle(
-        color: AppTheme.defaultTextColor,
-      ),
+      labelStyle: const TextStyle(color: AppTheme.defaultTextColor),
       label: Text(
         sortBy.name,
         style: TextStyle(
@@ -153,15 +151,11 @@ class _SortByChip extends StatelessWidget {
       ),
       selected: sortBy.selected,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          Styles.defaultCornerRadius,
-        ),
+        borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
       ),
       selectedColor: AppTheme.accentColor,
       shadowColor: AppTheme.shadowColor,
-      backgroundColor: AppTheme.primaryColor.withAlpha(
-        Styles.opacity80Percent,
-      ),
+      backgroundColor: AppTheme.primaryColor.withAlpha(Styles.opacity80Percent),
       avatar: avatarIcon,
       onSelected: (isSelected) {
         boardGamesFiltersStore.updateSortBySelection(sortBy);

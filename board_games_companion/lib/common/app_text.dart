@@ -51,6 +51,22 @@ class AppText {
 
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
 
+  static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';
+  static const importCollectionsButtonText = 'Import';
+  static const importCollectionsFailureMessage =
+      "Sorry, we've run into some problems with importing your collections from BGG. Please try again.";
+
+  static const importPlaysLoadingIndicator = 'Importing games from BGG...';
+  static const importPlaysSendReportViaEmailButtonText = 'Email Report';
+  static const importPlaysOkButtonText = 'Ok';
+  static const importPlaysReportImportedPlaysSectionTitle = 'Imported plays';
+  static const importPlaysReportImportReportTitle = 'Import Report';
+  static const importPlaysReportImportedPlayersSectionTitle = 'Created players';
+  static const importPlaysReportImportErrorsSectionTitle = 'Import errors';
+
+  static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
+  static const logGameFailureConfirmationSnackbarText =
+      "We ran into a problem and your game wasn't logged. Please try again.";
   static const gameFiltersAnyNumberOfPlayers = 'Any';
 
   static const playthroughPageStatsBottomTabTitle = 'Stats';
@@ -67,4 +83,23 @@ class AppText {
   static const editPlaythroughPageUnsavedChangesDialogContent =
       'Are you sure you want to navigate away?';
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
+
+  static const playerPagePlayerNameTitle = 'Name';
+  static const playerPagePlayerBggNameTitle = 'BGG Username';
+
+  static const playersPageTitle = 'Players';
+  static const playersPageCreatePlayerButtonText = 'Create Player';
+  static const playersPageDeletePlayersButtonText = 'Delete Players';
+  static const playersPageNoPlayersTitle = "You don't have any players";
+  static const playersPageNoPlayersInstructions =
+      'Create players to log games you played with your family or friends';
+  static const playersPageConfirmationTitle = 'Delete players';
+  static const playersPageConfirmationDialogDeletePlayersButtonText = 'Delete';
+  static const playersPageConfirmationDialogContent =
+      'Are you sure you want to delete selected players?';
+
+  static const playerPageSearchClearSaerch = 'Clear search';
+  static const playerPageSearchNoSearchResults =
+      '''It looks there's no players that match the search phrase ''';
+  static const playerPageSearchHintText = 'Search for players...';
 }

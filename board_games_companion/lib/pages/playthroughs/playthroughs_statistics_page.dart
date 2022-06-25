@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,9 +48,10 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: widget.playthroughStatisticsStore
-            .loadBoardGamesStatistics(widget.playthroughStatisticsStore.boardGame!.id),
-        builder: (_, __) {
+      future: widget.playthroughStatisticsStore
+          .loadBoardGamesStatistics(widget.playthroughStatisticsStore.boardGame!.id),
+      builder: (_, __) {
+        return Consumer<PlaythroughsStore>(builder: (_, __, ___) {
           return Consumer<PlaythroughStatisticsStore>(
             builder: (_, store, __) {
               return CustomScrollView(
@@ -115,6 +117,8 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
             },
           );
         });
+      },
+    );
   }
 }
 

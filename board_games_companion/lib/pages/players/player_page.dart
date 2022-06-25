@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +20,13 @@ import 'players_view_model.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({
-    required this.playersStore,
+    required this.playersViewModel,
     Key? key,
   }) : super(key: key);
 
   static const String pageRoute = '/player';
 
-  final PlayersViewModel playersStore;
+  final PlayersViewModel playersViewModel;
 
   @override
   _PlayerPageState createState() => _PlayerPageState();
@@ -85,6 +86,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                       key: formKey,
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Center(
                             child: Container(
@@ -134,7 +136,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                           ),
                           TextFormField(
                             decoration: const InputDecoration(
-                              labelText: 'Name',
+                              labelText: AppText.playerPagePlayerNameTitle,
                               labelStyle: AppTheme.defaultTextFieldLabelStyle,
                             ),
                             style: AppTheme.defaultTextFieldStyle,
@@ -148,6 +150,19 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                             controller: nameController,
                             focusNode: nameFocusNode,
                           ),
+                          if (player.bggName?.isNotBlank ?? false) ...[
+                            const SizedBox(height: Dimensions.doubleStandardSpacing),
+                            Text(
+                              AppText.playerPagePlayerBggNameTitle,
+                              style: AppTheme.defaultTextFieldLabelStyle.copyWith(
+                                fontSize: Dimensions.extraSmallFontSize,
+                              ),
+                            ),
+                            Text(
+                              player.bggName!,
+                              style: AppTheme.defaultTextFieldStyle,
+                            ),
+                          ],
                           const Expanded(
                             child: SizedBox.shrink(),
                           ),
@@ -172,12 +187,13 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
   void _setPlayerData() {
     player = Player(
-      id: widget.playersStore.player!.id,
+      id: widget.playersViewModel.player!.id,
     );
 
-    player.name = widget.playersStore.player?.name;
-    player.avatarFileName = widget.playersStore.player?.avatarFileName;
-    player.avatarImageUri = widget.playersStore.player?.avatarImageUri;
+    player.name = widget.playersViewModel.player?.name;
+    player.avatarFileName = widget.playersViewModel.player?.avatarFileName;
+    player.avatarImageUri = widget.playersViewModel.player?.avatarImageUri;
+    player.bggName = widget.playersViewModel.player?.bggName;
 
     isEditMode = player.name?.isNotEmpty ?? false;
   }
@@ -201,8 +217,8 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
   }
 
   Future<bool> _handleOnWillPop(BuildContext context, Player player) async {
-    if (widget.playersStore.player!.avatarImageUri != player.avatarImageUri ||
-        widget.playersStore.player!.name != player.name) {
+    if (widget.playersViewModel.player!.avatarImageUri != player.avatarImageUri ||
+        widget.playersViewModel.player!.name != player.name) {
       await showDialog<AlertDialog>(
           context: context,
           builder: (context) {
@@ -224,9 +240,9 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                   ),
                   style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
                   onPressed: () async {
-                    widget.playersStore.player!.avatarImageUri =
-                        widget.playersStore.player!.avatarImageUri;
-                    widget.playersStore.player!.name = widget.playersStore.player!.name;
+                    widget.playersViewModel.player!.avatarImageUri =
+                        widget.playersViewModel.player!.avatarImageUri;
+                    widget.playersViewModel.player!.name = widget.playersViewModel.player!.name;
                     // MK Pop the dialog
                     Navigator.of(context).pop();
                     // MK Go back
@@ -250,7 +266,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
     player.name = nameController.text;
 
-    final playerUpdatedSuccess = await widget.playersStore.createOrUpdatePlayer(player);
+    final playerUpdatedSuccess = await widget.playersViewModel.createOrUpdatePlayer(player);
     if (playerUpdatedSuccess) {
       _showPlayerUpdatedSnackbar(context, player, isEditMode: isEditMode);
       nameFocusNode.unfocus();
@@ -282,10 +298,8 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               ),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
-                final bool deletionSucceeded = await widget.playersStore.deletePlayer(player.id);
-                if (deletionSucceeded) {
-                  Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
-                }
+                await widget.playersViewModel.deletePlayers([player.id]);
+                Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
               },
             ),
           ],

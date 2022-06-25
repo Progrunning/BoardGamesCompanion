@@ -1,20 +1,26 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
+import '../../stores/user_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
+import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../base_page_state.dart';
 import '../board_game_details/board_game_details_page.dart';
+import 'bgg_plays_import_report_dialog.dart';
 import 'playthroughs_history_page.dart';
 import 'playthroughs_log_game_page.dart';
-import 'playthroughs_log_game_view_model.dart';
 import 'playthroughs_statistics_page.dart';
+import 'playthroughs_view_model.dart';
 
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
@@ -26,7 +32,7 @@ class PlaythroughsPage extends StatefulWidget {
 
   static const String pageRoute = '/playthroughs';
 
-  final PlaythroughsLogGameViewModel viewModel;
+  final PlaythroughsViewModel viewModel;
   final BoardGameDetails boardGameDetails;
   final CollectionType collectionType;
 
@@ -39,6 +45,8 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   late TabController tabController;
   static const int _initialTabIndex = 0;
   static const int _numberOfTabs = 3;
+
+  bool _showImportGamesLoadingIndicator = false;
 
   @override
   void initState() {
@@ -53,17 +61,27 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.boardGameDetails.name),
+        title: Text(widget.boardGameDetails.name, style: AppTheme.titleTextStyle),
         actions: <Widget>[
+          Consumer<UserStore>(
+            builder: (_, store, ___) {
+              if (store.user?.name.isEmpty ?? true) {
+                return const SizedBox.shrink();
+              }
+
+              return IconButton(
+                icon: const Icon(Icons.download, color: AppTheme.accentColor),
+                onPressed: () => _importBggPlays(store.user!.name, widget.boardGameDetails.id),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.info, color: AppTheme.accentColor),
-            onPressed: () async {
-              await _navigateToBoardGameDetails(context, widget.boardGameDetails);
-            },
-          )
+            onPressed: () async => _navigateToBoardGameDetails(context, widget.boardGameDetails),
+          ),
         ],
       ),
       body: SafeArea(
@@ -110,12 +128,16 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         color: AppTheme.inactiveBottomTabColor,
       ),
     );
+
+    if (_showImportGamesLoadingIndicator) {
+      return LoadingOverlay(child: scaffold, title: AppText.importPlaysLoadingIndicator);
+    }
+
+    return scaffold;
   }
 
   Future<void> _navigateToBoardGameDetails(
-    BuildContext context,
-    BoardGameDetails boardGameDetails,
-  ) async {
+      BuildContext context, BoardGameDetails boardGameDetails) async {
     await Navigator.pushNamed(
       context,
       BoardGamesDetailsPage.pageRoute,
@@ -124,6 +146,32 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         boardGameDetails.name,
         PlaythroughsPage,
       ),
+    );
+  }
+
+  Future<void> _importBggPlays(String username, String boardGameId) async {
+    try {
+      setState(() {
+        _showImportGamesLoadingIndicator = true;
+      });
+      await widget.viewModel.importPlays(username, boardGameId);
+      await showImportPlaysReportDialog(context, widget.viewModel.bggPlaysImportRaport!);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    } finally {
+      setState(() {
+        _showImportGamesLoadingIndicator = false;
+      });
+    }
+  }
+
+  Future<void> showImportPlaysReportDialog(
+      BuildContext context, BggPlaysImportRaport bggPlaysImportRaport) async {
+    showGeneralDialog<void>(
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return BggPlaysImportReportDialog(report: bggPlaysImportRaport);
+      },
     );
   }
 }

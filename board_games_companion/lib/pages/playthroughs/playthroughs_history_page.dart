@@ -159,9 +159,7 @@ class _Playthrough extends StatelessWidget {
                   );
                 }
 
-                return const Center(
-                  child: LoadingIndicator(),
-                );
+                return const LoadingIndicator();
               },
             ),
           ),

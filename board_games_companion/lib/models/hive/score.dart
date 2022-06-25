@@ -10,6 +10,7 @@ class Score {
     required this.id,
     required this.playerId,
     required this.boardGameId,
+    this.value,
   });
 
   @HiveField(0)

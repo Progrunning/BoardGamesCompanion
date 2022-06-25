@@ -16,8 +16,8 @@ import 'pages/edit_playthrough/edit_playthrouhg_view_model.dart';
 import 'pages/home_page.dart';
 import 'pages/players/player_page.dart';
 import 'pages/players/players_view_model.dart';
-import 'pages/playthroughs/playthroughs_log_game_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
+import 'pages/playthroughs/playthroughs_view_model.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
@@ -55,12 +55,14 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
       initialRoute: HomePage.pageRoute,
       routes: {
         HomePage.pageRoute: (BuildContext _) {
-          final AnalyticsService analyticsService = getIt<AnalyticsService>();
-          final RateAndReviewService rateAndReviewService = getIt<RateAndReviewService>();
+          final analyticsService = getIt<AnalyticsService>();
+          final rateAndReviewService = getIt<RateAndReviewService>();
+          final playersViewModel = getIt<PlayersViewModel>();
 
           return HomePage(
             analyticsService: analyticsService,
             rateAndReviewService: rateAndReviewService,
+            playersViewModel: playersViewModel,
           );
         },
         BoardGamesDetailsPage.pageRoute: (BuildContext context) {
@@ -90,17 +92,17 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
         },
         PlayerPage.pageRoute: (BuildContext context) {
           final _arguments = ModalRoute.of(context)!.settings.arguments as PlayerPageArguments;
-          final playersStore = getIt<PlayersViewModel>();
+          final playersViewModel = getIt<PlayersViewModel>();
 
-          playersStore.setPlayer(player: _arguments.player);
+          playersViewModel.setPlayer(player: _arguments.player);
 
-          return PlayerPage(playersStore: playersStore);
+          return PlayerPage(playersViewModel: playersViewModel);
         },
         PlaythroughsPage.pageRoute: (BuildContext context) {
           final _arguments =
               ModalRoute.of(context)!.settings.arguments as PlaythroughsPageArguments;
 
-          final viewModel = getIt<PlaythroughsLogGameViewModel>();
+          final viewModel = getIt<PlaythroughsViewModel>();
           viewModel.setBoardGame(_arguments.boardGameDetails);
 
           return PlaythroughsPage(

@@ -1,16 +1,19 @@
 name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
-  AppPackageName: com.progrunning.boardgamescompanion
-  AppDirectoryName: board_games_companion
-  KeyPropertiesFileName: key.properties
-  KeyStoreFileName: boardgamescompanion.keystore
+  appPackageName: com.progrunning.boardgamescompanion
+  appDirectoryName: board_games_companion
+  keyPropertiesFileName: key.properties
+  keyStoreFileName: boardgamescompanion.keystore
 
 trigger:
   batch: true
   branches:
     include:
       - main
+  paths:
+    include:
+      - board_games_companion
 
 stages:
   - stage: CdBuildAndroid
@@ -32,32 +35,32 @@ stages:
           - task: DownloadSecureFile@1
             displayName: "Downloading key.properties file"
             inputs:
-              secureFile: "$(KeyPropertiesFileName)"
+              secureFile: "$(keyPropertiesFileName)"
 
           - task: CopyFiles@2
             displayName: "Copying key.properties file into the android directory"
             inputs:
               SourceFolder: "$(Agent.TempDirectory)"
-              Contents: "$(KeyPropertiesFileName)"
-              TargetFolder: "$(Build.SourcesDirectory)/$(AppDirectoryName)/android/"
+              Contents: "$(keyPropertiesFileName)"
+              TargetFolder: "$(Build.SourcesDirectory)/$(appDirectoryName)/android/"
 
           - task: DownloadSecureFile@1
             displayName: "Downloading keystore file"
             inputs:
-              secureFile: "$(KeyStoreFileName)"
+              secureFile: "$(keyStoreFileName)"
 
           - task: CopyFiles@2
             displayName: "Copying keystore file into the app directory"
             inputs:
               SourceFolder: "$(Agent.TempDirectory)"
-              Contents: "$(KeyStoreFileName)"
-              TargetFolder: "$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app"
+              Contents: "$(keyStoreFileName)"
+              TargetFolder: "$(Build.SourcesDirectory)/$(appDirectoryName)/android/app"
 
           - task: FlutterBuild@0
             displayName: "Build Android"
             inputs:
               target: "aab"
-              projectDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
+              projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
               buildName: "$(app.version).$(Build.BuildID)"
 
@@ -66,20 +69,20 @@ stages:
             condition: always()
             inputs:
               SourceFolder: "$(Build.SourcesDirectory)/android/"
-              Contents: "$(KeyPropertiesFileName)"
+              Contents: "$(keyPropertiesFileName)"
 
           - task: DeleteFiles@1
             displayName: "Deleting keystore file"
             condition: always()
             inputs:
-              SourceFolder: "$(Build.SourcesDirectory)/$(AppDirectoryName)/android/app"
-              Contents: "$(KeyStoreFileName)"
+              SourceFolder: "$(Build.SourcesDirectory)/$(appDirectoryName)/android/app"
+              Contents: "$(keyStoreFileName)"
 
           - task: PublishPipelineArtifact@1
             condition: always()
             displayName: "Publishing aab artifacts"
             inputs:
-              targetPath: "$(Build.SourcesDirectory)/$(AppDirectoryName)/build/app/outputs/bundle/release/app-release.aab"
+              targetPath: "$(Build.SourcesDirectory)/$(appDirectoryName)/build/app/outputs/bundle/release/app-release.aab"
               artifact: "drop-droid"
               publishLocation: pipeline
 
@@ -113,7 +116,7 @@ stages:
               targetType: "inline"
               script: |
 
-                fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(AppPackageName) --skip_upload_apk true
+                fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(appPackageName) --skip_upload_apk true
 
   - stage: CdBuildiOS
     jobs:
@@ -149,7 +152,7 @@ stages:
             inputs:
               target: "ios"
               iosCodesign: false
-              projectDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
+              projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
               buildName: "$(app.version).$(Build.BuildID)"
 
@@ -211,7 +214,7 @@ stages:
               apiKeyId: "$(AppStoreConnectApiKeyId)"
               apiKeyIssuerId: "69a6de91-779b-47e3-e053-5b8c7c11a4d1"
               apitoken: "$(AppStoreConnectApiKeyContentBase64)"
-              appIdentifier: "$(AppPackageName)"
+              appIdentifier: "$(appPackageName)"
               appType: "iOS"
               releaseTrack: "TestFlight"
               ipaPath: "$(Pipeline.Workspace)/*.ipa"

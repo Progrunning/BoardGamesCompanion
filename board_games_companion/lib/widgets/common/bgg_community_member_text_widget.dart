@@ -37,7 +37,7 @@ class BggCommunityMemberText extends StatelessWidget {
             text: 'user name',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          const TextSpan(text: ' in the below field, to sync down your collection.'),
+          const TextSpan(text: ' in the below field to import your collection.'),
         ],
       ),
       textAlign: TextAlign.justify,

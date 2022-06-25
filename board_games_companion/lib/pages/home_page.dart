@@ -1,3 +1,4 @@
+import 'package:board_games_companion/pages/players/players_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class HomePage extends StatefulWidget {
   const HomePage({
     required this.analyticsService,
     required this.rateAndReviewService,
+    required this.playersViewModel,
     Key? key,
   }) : super(key: key);
 
@@ -27,6 +29,7 @@ class HomePage extends StatefulWidget {
 
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
+  final PlayersViewModel playersViewModel;
 
   static final GlobalKey<ScaffoldMessengerState> homePageGlobalKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -72,7 +75,7 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
                 },
               ),
               SearchBoardGamesPage(analyticsService: widget.analyticsService),
-              const PlayersPage(),
+              PlayersPage(playersViewModel: widget.playersViewModel),
               const SettingsPage(),
             ],
           ),

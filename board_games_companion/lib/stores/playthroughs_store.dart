@@ -4,19 +4,16 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
-import '../common/analytics.dart';
 import '../common/hive_boxes.dart';
 import '../models/hive/playthrough.dart';
 import '../models/playthrough_player.dart';
-import '../services/analytics_service.dart';
 import '../services/playthroughs_service.dart';
 
 @singleton
 class PlaythroughsStore with ChangeNotifier, BoardGameAware {
-  PlaythroughsStore(this._playthroughService, this._analyticsService);
+  PlaythroughsStore(this._playthroughService);
 
   final PlaythroughService _playthroughService;
-  final AnalyticsService _analyticsService;
 
   List<Playthrough> _playthroughs = <Playthrough>[];
 
@@ -36,31 +33,33 @@ class PlaythroughsStore with ChangeNotifier, BoardGameAware {
     return _playthroughs;
   }
 
-  Future<Playthrough> createPlaythrough(
+  Future<Playthrough?> createPlaythrough(
     String boardGameId,
     List<PlaythroughPlayer> playthoughPlayers,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
-    Duration? duration,
-  ) async {
+    Duration? duration, {
+    int? bggPlayId,
+  }) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
       boardGameId,
       playthoughPlayers,
       playerScores,
       startDate,
       duration,
+      bggPlayId: bggPlayId,
     );
 
-    _playthroughs.add(newPlaythrough!);
+    if (newPlaythrough == null) {
+      FirebaseCrashlytics.instance.log(
+        'Faild to new playthrough for a board game $boardGameId with ${playthoughPlayers.length} players',
+      );
+
+      return null;
+    }
+
+    _playthroughs.add(newPlaythrough);
     notifyListeners();
-
-    await _analyticsService.logEvent(
-      name: Analytics.CreatePlaythrough,
-      parameters: <String, dynamic>{
-        Analytics.BoardGameIdParameter: boardGameId,
-        Analytics.NumberOfPlayersParameter: playthoughPlayers.length,
-      },
-    );
 
     return newPlaythrough;
   }

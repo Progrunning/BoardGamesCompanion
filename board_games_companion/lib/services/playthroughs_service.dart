@@ -42,8 +42,9 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     List<PlaythroughPlayer> playthoughPlayers,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
-    Duration? duration,
-  ) async {
+    Duration? duration, {
+    int? bggPlayId,
+  }) async {
     if ((boardGameId.isEmpty) || (playthoughPlayers.isEmpty)) {
       return null;
     }
@@ -59,6 +60,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       playerIds: playthroughPlayerIds,
       scoreIds: <String>[],
       startDate: startDate,
+      bggPlayId: bggPlayId,
     );
 
     if (duration == null) {
@@ -72,7 +74,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playthroughPlayerId in playthroughPlayerIds) {
-        Score? playerScore = Score(
+        Score playerScore = Score(
           id: uuid.v4(),
           playerId: playthroughPlayerId,
           boardGameId: boardGameId,

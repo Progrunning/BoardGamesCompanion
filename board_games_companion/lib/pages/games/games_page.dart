@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,6 @@ import '../../common/enums/collection_type.dart';
 import '../../common/enums/enums.dart';
 import '../../common/enums/games_tab.dart';
 import '../../common/styles.dart';
-import '../../mixins/sync_collection.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
@@ -25,9 +25,8 @@ import '../../widgets/common/bgg_community_member_user_name_text_field_widget.da
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
+import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
-import '../../widgets/common/page_container_widget.dart';
-import '../../widgets/common/sync_collection_button.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'games_filter_panel.dart';
 
@@ -67,7 +66,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     if (widget.boardGamesStore.loadDataState == LoadDataState.loaded) {
       if (!widget.boardGamesStore.anyBoardGamesInCollections &&
           (widget.userStore.user?.name.isEmpty ?? true)) {
-        return _Empty();
+        return const _Empty();
       }
 
       return _Collection(
@@ -113,54 +112,52 @@ class _Collection extends StatelessWidget {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: PageContainer(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              _AppBar(
-                boardGamesStore: boardGamesStore,
-                topTabController: topTabController,
-                analyticsService: analyticsService,
-                rateAndReviewService: rateAndReviewService,
-                updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
-              ),
-              Builder(
-                builder: (_) {
-                  final List<BoardGameDetails> boardGames = [];
-                  switch (boardGamesStore.selectedTab) {
-                    case GamesTab.Owned:
-                      boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
-                      break;
-                    case GamesTab.Friends:
-                      boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
-                      break;
-                    case GamesTab.Wishlist:
-                      boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
-                      break;
-                  }
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _AppBar(
+              boardGamesStore: boardGamesStore,
+              topTabController: topTabController,
+              analyticsService: analyticsService,
+              rateAndReviewService: rateAndReviewService,
+              updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
+            ),
+            Builder(
+              builder: (_) {
+                final List<BoardGameDetails> boardGames = [];
+                switch (boardGamesStore.selectedTab) {
+                  case GamesTab.Owned:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
+                    break;
+                  case GamesTab.Friends:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
+                    break;
+                  case GamesTab.Wishlist:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
+                    break;
+                }
 
-                  if (boardGames.isEmpty) {
-                    if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-                      return _EmptySearchResult(
-                        boardGamesStore: boardGamesStore,
-                        onClearSearch: () => _updateSearchResults(''),
-                      );
-                    }
-
-                    return _EmptyCollection(
+                if (boardGames.isEmpty) {
+                  if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
+                    return _EmptySearchResult(
                       boardGamesStore: boardGamesStore,
+                      onClearSearch: () => _updateSearchResults(''),
                     );
                   }
 
-                  return _Grid(
-                    boardGames: boardGames,
-                    collectionType: boardGamesStore.selectedTab.toCollectionType(),
-                    analyticsService: analyticsService,
+                  return _EmptyCollection(
+                    boardGamesStore: boardGamesStore,
                   );
-                },
-              ),
-              const SliverPadding(padding: EdgeInsets.all(8.0)),
-            ],
-          ),
+                }
+
+                return _Grid(
+                  boardGames: boardGames,
+                  collectionType: boardGamesStore.selectedTab.toCollectionType(),
+                  analyticsService: analyticsService,
+                );
+              },
+            ),
+            const SliverPadding(padding: EdgeInsets.all(8.0)),
+          ],
         ),
       ),
     );
@@ -239,10 +236,7 @@ class _AppBarState extends State<_AppBar> {
                     await widget.updateSearchResults('');
                   },
                 )
-              : const Icon(
-                  Icons.search,
-                  color: AppTheme.accentColor,
-                ),
+              : const Icon(Icons.search, color: AppTheme.accentColor),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: AppTheme.primaryColorLight),
           ),
@@ -386,29 +380,10 @@ class _Grid extends StatelessWidget {
   }
 }
 
-class _Empty extends StatefulWidget with SyncCollection {
-  _Empty({
+class _Empty extends StatelessWidget {
+  const _Empty({
     Key? key,
   }) : super(key: key);
-
-  @override
-  _EmptyState createState() => _EmptyState();
-}
-
-class _EmptyState extends State<_Empty> with SyncCollection {
-  late TextEditingController _bggUserNameController;
-
-  @override
-  void initState() {
-    super.initState();
-    _bggUserNameController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _bggUserNameController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -420,11 +395,11 @@ class _EmptyState extends State<_Empty> with SyncCollection {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const SizedBox(
+            children: const <Widget>[
+              SizedBox(
                 height: 60,
               ),
-              const Center(
+              Center(
                 child: Text(
                   'Your games collection is empty',
                   style: TextStyle(
@@ -432,18 +407,18 @@ class _EmptyState extends State<_Empty> with SyncCollection {
                   ),
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: Dimensions.doubleStandardSpacing,
               ),
-              const Icon(
+              Icon(
                 Icons.sentiment_dissatisfied_sharp,
                 size: 80,
                 color: AppTheme.primaryColor,
               ),
-              const SizedBox(
+              SizedBox(
                 height: Dimensions.doubleStandardSpacing,
               ),
-              const Text.rich(
+              Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
                     TextSpan(
@@ -468,21 +443,64 @@ class _EmptyState extends State<_Empty> with SyncCollection {
                 textAlign: TextAlign.justify,
                 style: TextStyle(fontSize: Dimensions.mediumFontSize),
               ),
-              const BggCommunityMemberText(),
-              BggCommunityMemberUserNameTextField(
-                controller: _bggUserNameController,
-                onSubmit: () async => syncCollection(context, _bggUserNameController.text),
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
-              Align(
-                alignment: Alignment.centerRight,
-                child: SyncButton(usernameCallback: () => _bggUserNameController.text),
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
+              BggCommunityMemberText(),
+              _ImportDataFromBggSection(),
+              SizedBox(height: Dimensions.standardSpacing),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ImportDataFromBggSection extends StatefulWidget {
+  const _ImportDataFromBggSection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_ImportDataFromBggSection> createState() => _ImportDataFromBggSectionState();
+}
+
+class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
+  late TextEditingController _bggUserNameController;
+
+  bool? _triggerImport;
+
+  @override
+  void initState() {
+    super.initState();
+    _bggUserNameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _bggUserNameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BggCommunityMemberUserNameTextField(
+          controller: _bggUserNameController,
+          onSubmit: () {
+            setState(() {
+              _triggerImport = true;
+            });
+          },
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        Align(
+          alignment: Alignment.centerRight,
+          child: ImportCollectionsButton(
+            usernameCallback: () => _bggUserNameController.text,
+            triggerImport: _triggerImport ?? false,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -574,41 +592,25 @@ class _EmptyCollection extends StatelessWidget {
                             text: boardGamesStore.selectedTab
                                 .toCollectionType()
                                 .toHumandReadableText(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          const TextSpan(
-                            text: ' collection yet.',
-                          ),
+                          const TextSpan(text: ' collection yet.'),
                           if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
                               (userStore.user?.name.isNotEmpty ?? false)) ...[
-                            const TextSpan(
-                              text: "\n\nIf you want to see board games from BGG's  ",
-                            ),
+                            const TextSpan(text: "\n\nIf you want to see board games from BGG's  "),
                             const TextSpan(
                               text: 'Wishlist ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            const TextSpan(
-                              text: 'or ',
-                            ),
+                            const TextSpan(text: 'or '),
                             const TextSpan(
                               text: 'Want to Buy ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
+                            const TextSpan(text: 'collections then tap the below  '),
                             const TextSpan(
-                              text: 'collection, then tap the below  ',
-                            ),
-                            const TextSpan(
-                              text: 'Sync ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              text: '${AppText.importCollectionsButtonText} ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const TextSpan(text: 'button.'),
                           ]
@@ -618,14 +620,11 @@ class _EmptyCollection extends StatelessWidget {
                     ),
                     if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
                         (userStore.user?.name.isNotEmpty ?? false)) ...[
-                      const SizedBox(
-                        height: Dimensions.doubleStandardSpacing,
-                      ),
+                      const SizedBox(height: Dimensions.doubleStandardSpacing),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: SyncButton(
-                          usernameCallback: () => userStore.user!.name,
-                        ),
+                        child:
+                            ImportCollectionsButton(usernameCallback: () => userStore.user!.name),
                       ),
                     ]
                   ],

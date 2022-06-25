@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:basics/basics.dart';
+import 'package:board_games_companion/models/import_result.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -11,8 +15,12 @@ import 'package:xml/xml.dart' as xml;
 import '../common/enums/collection_type.dart';
 import '../common/exceptions/bgg_retry_exception.dart';
 import '../extensions/xml_element_extensions.dart';
+import '../models/bgg/bgg_import_plays.dart';
+import '../models/bgg/bgg_play.dart';
+import '../models/bgg/bgg_play_player.dart';
+import '../models/bgg/bgg_plays_import_result.dart';
 import '../models/board_game.dart';
-import '../models/collection_sync_result.dart';
+import '../models/collection_import_result.dart';
 import '../models/hive/board_game_artist.dart';
 import '../models/hive/board_game_category.dart';
 import '../models/hive/board_game_designer.dart';
@@ -32,6 +40,8 @@ class BoardGamesGeekService {
   }
 
   static const String _xmlItemElementName = 'item';
+  static const String _xmlPlayElementName = 'play';
+  static const String _xmlPlayerElementName = 'player';
   static const String _xmlNameElementName = 'name';
   static const String _xmlErrorElementName = 'error';
   static const String _xmlDescriptionElementName = 'description';
@@ -59,6 +69,9 @@ class BoardGamesGeekService {
   static const String _xmlTypeAttributeName = 'type';
   static const String _xmlValueAttributeName = 'value';
   static const String _xmlNameAttributeName = 'name';
+  static const String _xmlUsernameAttributeName = 'username';
+  static const String _xmlUserIdAttributeName = 'userid';
+  static const String _xmlScoreAttributeName = 'score';
   static const String _xmlRankAttributeName = 'rank';
   static const String _xmlFriendlyNameAttributeName = 'friendlyname';
   static const String _xmlCategoryAttributeTypeName = 'boardgamecategory';
@@ -67,6 +80,9 @@ class BoardGamesGeekService {
   static const String _xmlPublisherAttributeTypeName = 'boardgamepublisher';
   static const String _xmlExpansionAttributeTypeName = 'boardgameexpansion';
   static const String _xmlObjectIdAttributeTypeName = 'objectid';
+  static const String _xmlLengthAttributeTypeName = 'length';
+  static const String _xmlDateAttributeTypeName = 'date';
+  static const String _xmlIncompleteAttributeTypeName = 'incomplete';
   static const String _xmlLastModifiedAttributeTypeName = 'lastmodified';
 
   static const String _baseBoardGamesUrl = 'https://www.boardgamegeek.com/xmlapi2';
@@ -74,6 +90,7 @@ class BoardGamesGeekService {
   static const String _boardGamesDetailsUrl = '$_baseBoardGamesUrl/thing';
   static const String _searchBoardGamesUrl = '$_baseBoardGamesUrl/search';
   static const String _collectionBoardGamesUrl = '$_baseBoardGamesUrl/collection';
+  static const String _playesBoardGamesUrl = '$_baseBoardGamesUrl/plays';
 
   static const String _boardGameQueryParamterType = 'type';
   static const String _boardGameQueryParamterUsername = 'username';
@@ -83,6 +100,7 @@ class BoardGamesGeekService {
   static const String _boardGameQueryParamterQuery = 'query';
   static const String _boardGameQueryParamterStats = 'stats';
   static const String _boardGameQueryParamterId = 'id';
+  static const String _boardGameQueryParamterPageNumber = 'page';
   static const String _boardGameType = 'boardgame';
   static const String _boardGameExpansionType = 'boardgameexpansion';
 
@@ -123,7 +141,7 @@ class BoardGamesGeekService {
     );
 
     try {
-      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml);
+      final hotBoardGamesXmlDocument = retrieveXmlDocument(hotBoardGamesXml);
       final hotBoardGameItems =
           hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName) ?? [];
       for (final hotBoardGameItem in hotBoardGameItems) {
@@ -182,7 +200,7 @@ class BoardGamesGeekService {
     );
 
     try {
-      final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsXml)!;
+      final boardGameDetailsXmlDocument = retrieveXmlDocument(boardGameDetailsXml)!;
       final boardGameDetailsItem =
           boardGameDetailsXmlDocument.findAllElements(_xmlItemElementName).single;
 
@@ -297,7 +315,7 @@ class BoardGamesGeekService {
     );
 
     final boardGames = <BoardGame>[];
-    final xmlDocument = _retrieveXmlDocument(searchResultsXml);
+    final xmlDocument = retrieveXmlDocument(searchResultsXml);
     if (xmlDocument == null) {
       return boardGames;
     }
@@ -322,39 +340,149 @@ class BoardGamesGeekService {
     return boardGames;
   }
 
-  Future<CollectionSyncResult> syncCollection(String username) async {
+  Future<CollectionImportResult> importCollections(String username) async {
     if (username.isEmpty) {
-      return CollectionSyncResult();
+      return CollectionImportResult();
     }
 
-    final ownGameSyncResult = await _syncCollection(
+    final ownGameImportResult = await _importCollection(
       username,
       CollectionType.Owned,
       <String, dynamic>{_boardGameQueryParamterOwn: 1},
     );
-    final wishlistGameSyncResult = await _syncCollection(
+    final wishlistGameImportResult = await _importCollection(
       username,
       CollectionType.Wishlist,
       <String, dynamic>{_boardGameQueryParamterWishlist: 1},
     );
-    final wantToBuyGameSyncResult = await _syncCollection(
+    final wantToBuyGameImportResult = await _importCollection(
       username,
       CollectionType.Wishlist,
       <String, dynamic>{_boardGameQueryParamterWantToBuy: 1},
     );
 
-    return CollectionSyncResult()
-      ..isSuccess = ownGameSyncResult.isSuccess &&
-          wishlistGameSyncResult.isSuccess &&
-          wantToBuyGameSyncResult.isSuccess
+    return CollectionImportResult()
+      ..isSuccess = ownGameImportResult.isSuccess &&
+          wishlistGameImportResult.isSuccess &&
+          wantToBuyGameImportResult.isSuccess
+      ..errors = [
+        ...ownGameImportResult.errors ?? <ImportError>[],
+        ...wishlistGameImportResult.errors ?? <ImportError>[],
+        ...wantToBuyGameImportResult.errors ?? <ImportError>[]
+      ]
       ..data = [
-        ...ownGameSyncResult.data ?? <BoardGameDetails>[],
-        ...wishlistGameSyncResult.data ?? <BoardGameDetails>[],
-        ...wantToBuyGameSyncResult.data ?? <BoardGameDetails>[]
+        ...ownGameImportResult.data ?? <BoardGameDetails>[],
+        ...wishlistGameImportResult.data ?? <BoardGameDetails>[],
+        ...wantToBuyGameImportResult.data ?? <BoardGameDetails>[]
       ];
   }
 
-  Future<CollectionSyncResult> _syncCollection(
+  Future<BggPlaysImportResult> importPlays(BggImportPlays bggImportPlays) async {
+    if (bggImportPlays.username.isEmpty) {
+      return BggPlaysImportResult.failure([ImportError('Username is empty')]);
+    }
+
+    final queryParamters = <String, dynamic>{
+      _boardGameQueryParamterUsername: bggImportPlays.username,
+      _boardGameQueryParamterId: bggImportPlays.boardGameId,
+      _boardGameQueryParamterPageNumber: bggImportPlays.pageNumber,
+    };
+
+    final playsResultXml = await retry(
+      () async {
+        final response = await _dio.get<String>(
+          _playesBoardGamesUrl,
+          queryParameters: queryParamters,
+        );
+
+        return response;
+      },
+      retryIf: (e) => e is SocketException || e is TimeoutException,
+    );
+
+    XmlDocument? playsXmlDocument;
+    try {
+      playsXmlDocument = xml.XmlDocument.parse(playsResultXml.data!);
+    } catch (e, stack) {
+      return BggPlaysImportResult.failure([ImportError.exception(e, stack)]);
+    }
+
+    final playsImportResult = BggPlaysImportResult()
+      ..data = []
+      ..errors = [];
+
+    final playsElements = playsXmlDocument.findAllElements(_xmlPlayElementName);
+    playsImportResult.playsToImportTotal = playsElements.length;
+    for (final XmlElement playElement in playsElements) {
+      final int? playId =
+          int.tryParse(playElement.firstOrDefaultAttributeValue(_xmlIdAttributeName) ?? '');
+      final int? playTimeInMinutes =
+          int.tryParse(playElement.firstOrDefaultAttributeValue(_xmlLengthAttributeTypeName) ?? '');
+      final DateTime? playDate = DateTime.tryParse(
+          playElement.firstOrDefaultAttributeValue(_xmlDateAttributeTypeName) ?? '');
+      final bool playCompleted = int.tryParse(
+              playElement.firstOrDefaultAttributeValue(_xmlIncompleteAttributeTypeName) ?? '0') ==
+          0;
+
+      final XmlElement? playItemElement = playElement.firstOrDefault(_xmlItemElementName);
+      final String? boardGameId =
+          playItemElement.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
+
+      if (playId == null || (boardGameId?.isBlank ?? false) || playDate == null) {
+        playsImportResult.errors!
+            .add(ImportError('Failed to parse required information (e.g. playId)'));
+        continue;
+      }
+
+      final play = BggPlay()
+        ..id = playId
+        ..boardGameId = boardGameId!
+        ..playTimeInMinutes = playTimeInMinutes
+        ..playDate = playDate
+        ..completed = playCompleted
+        ..players = [];
+
+      final playPlayersElements = playElement.findAllElements(_xmlPlayerElementName);
+      for (final XmlElement playerElement in playPlayersElements) {
+        final String? playerName =
+            playerElement.firstOrDefaultAttributeValue(_xmlNameAttributeName);
+        final String? playerBggName =
+            playerElement.firstOrDefaultAttributeValue(_xmlUsernameAttributeName);
+        final int? playerBggUserId =
+            int.tryParse(playElement.firstOrDefaultAttributeValue(_xmlUserIdAttributeName) ?? '');
+        final int? playerScore =
+            int.tryParse(playerElement.firstOrDefaultAttributeValue(_xmlScoreAttributeName) ?? '');
+
+        if (playerName?.isBlank ?? true) {
+          playsImportResult.errors!
+              .add(ImportError("Cannot import a play #$playId without player's name"));
+          continue;
+        }
+
+        if (playerScore == null) {
+          playsImportResult.errors!
+              .add(ImportError('Cannot import a play #$playId without a numeric score'));
+          continue;
+        }
+
+        play.players.add(BggPlayPlayer()
+          ..playerName = playerName!
+          ..playerScore = playerScore
+          ..playerBggName = playerBggName
+          ..playerBggUserId = playerBggUserId);
+      }
+
+      if (play.players.isEmpty) {
+        continue;
+      }
+
+      playsImportResult.data!.add(play);
+    }
+
+    return playsImportResult;
+  }
+
+  Future<CollectionImportResult> _importCollection(
     String username,
     CollectionType collectionType,
     Map<String, dynamic> additionalQueryParameters,
@@ -382,13 +510,16 @@ class BoardGamesGeekService {
     );
 
     final boardGames = <BoardGameDetails>[];
-    final xmlDocument = _retrieveXmlDocument(collectionResultsXml);
-    if (xmlDocument == null) {
-      return CollectionSyncResult();
+    XmlDocument xmlDocument;
+
+    try {
+      xmlDocument = xml.XmlDocument.parse(collectionResultsXml.data!);
+    } catch (e, stack) {
+      return CollectionImportResult.failure([ImportError.exception(e, stack)]);
     }
 
     if (_hasErrors(xmlDocument)) {
-      return CollectionSyncResult();
+      return CollectionImportResult.failure([ImportError('XML document has errors')]);
     }
 
     final collectionElements = xmlDocument.findAllElements(_xmlItemElementName);
@@ -430,19 +561,9 @@ class BoardGamesGeekService {
       boardGames.add(boardGame);
     }
 
-    return CollectionSyncResult()
+    return CollectionImportResult()
       ..isSuccess = true
       ..data = boardGames;
-  }
-
-  xml.XmlDocument? _retrieveXmlDocument(Response<String> httpResponse) {
-    try {
-      return xml.XmlDocument.parse(httpResponse.data!);
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-    }
-
-    return null;
   }
 
   void _extractBoardGameLinks(
@@ -493,7 +614,6 @@ class BoardGamesGeekService {
     BoardGameDetails boardGameDetails,
   ) {
     if (boardGameDetailsRatings == null || boardGameDetails == null) {
-      FirebaseCrashlytics.instance.log('Faild to extract board game detail rank information');
       return;
     }
 
@@ -514,9 +634,9 @@ class BoardGamesGeekService {
           (rankId?.isEmpty ?? true) ||
           (rankName?.isEmpty ?? true) ||
           (rankRank == null)) {
-        FirebaseCrashlytics.instance
-            .log('Faild to extract some of the board game detail rank information');
+        continue;
       }
+
       final rank = BoardGameRank(
         id: rankId!,
         name: rankName!,
@@ -571,4 +691,14 @@ class BoardGamesGeekService {
 
     return true;
   }
+}
+
+xml.XmlDocument? retrieveXmlDocument(Response<String> httpResponse) {
+  try {
+    return xml.XmlDocument.parse(httpResponse.data!);
+  } catch (e, stack) {
+    FirebaseCrashlytics.instance.recordError(e, stack);
+  }
+
+  return null;
 }

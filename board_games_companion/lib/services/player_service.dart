@@ -70,7 +70,7 @@ class PlayerService extends BaseHiveService<Player> {
   }
 
   Future<bool> deletePlayer(String playerId) async {
-    if (playerId.isEmpty ) {
+    if (playerId.isEmpty) {
       return false;
     }
 

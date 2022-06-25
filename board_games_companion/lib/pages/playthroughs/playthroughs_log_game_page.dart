@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,7 @@ import '../../widgets/playthrough/calendar_card.dart';
 import '../enter_score/enter_score_view_model.dart';
 import '../players/player_page.dart';
 import '../players/players_view_model.dart';
-import 'playthroughs_log_game_view_model.dart';
+import 'playthroughs_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
   const PlaythroughsLogGamePage({
@@ -34,7 +35,7 @@ class PlaythroughsLogGamePage extends StatefulWidget {
   }) : super(key: key);
 
   final BoardGameDetails boardGameDetails;
-  final PlaythroughsLogGameViewModel playthroughsLogGameViewModel;
+  final PlaythroughsViewModel playthroughsLogGameViewModel;
 
   @override
   _PlaythroughsLogGamePageState createState() => _PlaythroughsLogGamePageState();
@@ -47,9 +48,9 @@ class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
       value: widget.playthroughsLogGameViewModel,
       child: Consumer<PlayersViewModel>(
         builder: (_, __, ___) =>
-            ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsLogGameViewModel>(
+            ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsViewModel>(
           future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
-          success: (_, PlaythroughsLogGameViewModel viewModel) {
+          success: (_, PlaythroughsViewModel viewModel) {
             return _LogPlaythroughStepper(
               viewModel: viewModel,
               boardGameDetails: widget.boardGameDetails,
@@ -68,7 +69,7 @@ class _LogPlaythroughStepper extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsLogGameViewModel viewModel;
+  final PlaythroughsViewModel viewModel;
   final BoardGameDetails boardGameDetails;
 
   @override
@@ -241,8 +242,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         completedSteps = widget.viewModel.logGameStep;
       });
     } else {
-      await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
-      _showConfirmationSnackbar(context);
+      final Playthrough? newPlaythrough =
+          await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
+      if (newPlaythrough == null) {
+        _showFailureSnackbar(context);
+      } else {
+        _showConfirmationSnackbar(context);
+      }
       setState(() {});
     }
   }
@@ -291,7 +297,17 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         behavior: SnackBarBehavior.floating,
-        content: Text('Your game has been logged!'),
+        content: Text(AppText.logGameSuccessConfirmationSnackbarText),
+      ),
+    );
+  }
+
+  void _showFailureSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text(AppText.logGameFailureConfirmationSnackbarText),
       ),
     );
   }
@@ -303,7 +319,7 @@ class _PlayerScoresStep extends StatelessWidget with EnterScoreDialogMixin {
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsLogGameViewModel viewModel;
+  final PlaythroughsViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +351,7 @@ class _PlayingOrPlayedStep extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsLogGameViewModel viewModel;
+  final PlaythroughsViewModel viewModel;
   final Function(PlaythroughStartTime) onSelectionChanged;
 
   @override

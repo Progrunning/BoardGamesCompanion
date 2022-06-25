@@ -11,7 +11,7 @@ import '../extensions/date_time_extensions.dart';
 import '../extensions/double_extensions.dart';
 import '../extensions/int_extensions.dart';
 import '../extensions/string_extensions.dart';
-import '../models/collection_sync_result.dart';
+import '../models/collection_import_result.dart';
 import '../models/hive/board_game_category.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/board_game_expansion.dart';
@@ -204,12 +204,12 @@ class BoardGamesStore with ChangeNotifier {
     }
   }
 
-  Future<CollectionSyncResult> syncCollection(String username) async {
-    var syncResult = CollectionSyncResult();
+  Future<CollectionImportResult> importCollections(String username) async {
+    var importResult = CollectionImportResult();
 
     try {
-      syncResult = await _boardGamesService.syncCollection(username);
-      if (syncResult.isSuccess) {
+      importResult = await _boardGamesService.importCollections(username);
+      if (importResult.isSuccess) {
         _allBoardGames = await _boardGamesService.retrieveBoardGames();
         _filteredBoardGames = List.of(_allBoardGames);
       }
@@ -220,7 +220,7 @@ class BoardGamesStore with ChangeNotifier {
     _loadDataState = LoadDataState.loaded;
     applyFilters();
 
-    return syncResult;
+    return importResult;
   }
 
   void updateSearchResults(String searchPhrase) {
