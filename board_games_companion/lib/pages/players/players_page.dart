@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,43 +45,29 @@ class _PlayersPageState extends State<PlayersPage> {
           if (store.players.isEmpty) {
             return SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(
-                  Dimensions.doubleStandardSpacing,
-                ),
+                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
                 child: Column(
                   children: <Widget>[
-                    const SizedBox(
-                      height: 60,
-                    ),
+                    const SizedBox(height: 60),
                     const Center(
                       child: Text(
-                        "You don't have any players",
-                        style: TextStyle(
-                          fontSize: Dimensions.extraLargeFontSize,
-                        ),
+                        AppText.playerPageNoPlayersTitle,
+                        style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
                       ),
                     ),
-                    const SizedBox(
-                      height: Dimensions.doubleStandardSpacing,
-                    ),
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
                     const Icon(
                       Icons.sentiment_dissatisfied_sharp,
                       size: 80,
                       color: AppTheme.primaryColor,
                     ),
-                    const SizedBox(
-                      height: Dimensions.doubleStandardSpacing,
-                    ),
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
                     const Text(
-                      'Create players to log games you played with your family or friends',
+                      AppText.playerPageNoPlayersInstructions,
                       textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: Dimensions.mediumFontSize,
-                      ),
+                      style: TextStyle(fontSize: Dimensions.mediumFontSize),
                     ),
-                    const SizedBox(
-                      height: Dimensions.doubleStandardSpacing,
-                    ),
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
                     Align(
                       alignment: Alignment.topRight,
                       child: _CreatePlayerButton(
@@ -99,56 +86,54 @@ class _PlayersPageState extends State<PlayersPage> {
 
           store.players.sort((a, b) => a.name!.compareTo(b.name!));
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                child: Text(
-                  'Players',
-                  style: AppTheme.theme.textTheme.headline2,
-                ),
-              ),
-              Expanded(
-                child: GridView.count(
-                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                  crossAxisSpacing: Dimensions.standardSpacing,
-                  mainAxisSpacing: Dimensions.standardSpacing,
-                  crossAxisCount: _numberOfPlayerColumns,
-                  children: List.generate(
-                    store.players.length,
-                    (int index) {
-                      final player = store.players[index];
-                      return PlayerAvatar(
-                        player,
-                        topRightCornerActionWidget: CustomIconButton(
-                          const Icon(
-                            Icons.edit,
-                            size: Dimensions.defaultButtonIconSize,
-                            color: AppTheme.defaultTextColor,
-                          ),
-                          onTap: () async => _navigateToPlayerPage(context, player),
-                        ),
-                        onTap: () async => _navigateToPlayerPage(context, player),
-                      );
-                    },
+          return Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                    child: Text(AppText.playerPageTitle, style: AppTheme.theme.textTheme.headline2),
                   ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: Dimensions.standardSpacing),
-                  child: _CreatePlayerButton(
-                    onCreatePlayer: () => Navigator.pushNamed(
-                      context,
-                      PlayerPage.pageRoute,
-                      arguments: const PlayerPageArguments(),
+                  Expanded(
+                    child: GridView.count(
+                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                      crossAxisSpacing: Dimensions.standardSpacing,
+                      mainAxisSpacing: Dimensions.standardSpacing,
+                      crossAxisCount: _numberOfPlayerColumns,
+                      children: List.generate(
+                        store.players.length,
+                        (int index) {
+                          final player = store.players[index];
+                          return PlayerAvatar(
+                            player,
+                            topRightCornerActionWidget: CustomIconButton(
+                              const Icon(
+                                Icons.edit,
+                                size: Dimensions.defaultButtonIconSize,
+                                color: AppTheme.defaultTextColor,
+                              ),
+                              onTap: () async => _navigateToPlayerPage(context, player),
+                            ),
+                            onTap: () async => _navigateToPlayerPage(context, player),
+                          );
+                        },
+                      ),
                     ),
                   ),
+                ],
+              ),
+              Positioned(
+                bottom: Dimensions.bottomTabTopHeight,
+                right: Dimensions.standardSpacing,
+                child: _CreatePlayerButton(
+                  onCreatePlayer: () => Navigator.pushNamed(
+                    context,
+                    PlayerPage.pageRoute,
+                    arguments: const PlayerPageArguments(),
+                  ),
                 ),
               ),
-              const SizedBox(height: Dimensions.bottomTabTopHeight),
             ],
           );
         },
@@ -176,7 +161,7 @@ class _CreatePlayerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedIconButton(
-      title: 'Create Player',
+      title: AppText.playerPageCreatePlayerButtonText,
       icon: const DefaultIcon(Icons.add),
       onPressed: () => onCreatePlayer(),
     );

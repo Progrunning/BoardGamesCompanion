@@ -82,4 +82,10 @@ class AppText {
   static const editPlaythroughPageUnsavedChangesDialogContent =
       'Are you sure you want to navigate away?';
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
+
+  static const playerPageCreatePlayerButtonText = 'Create Player';
+  static const playerPageTitle = 'Players';
+  static const playerPageNoPlayersTitle = "You don't have any players";
+  static const playerPageNoPlayersInstructions =
+      'Create players to log games you played with your family or friends';
 }
