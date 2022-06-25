@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:board_games_companion/common/constants.dart';
+import 'package:board_games_companion/models/import_result.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_text.dart';
@@ -7,6 +9,7 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
+import '../../utilities/launcher_helper.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/rounded_container.dart';
@@ -22,11 +25,18 @@ class BggPlaysImportReportDialog extends StatelessWidget {
   static const double _minWidth = 340;
   static const double _maxWidth = 380;
 
+  static const double _minHeight = 400;
+  static const double _maxHeight = 500;
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     final bggPlaysImportReportDialogWidth =
         max(_minWidth, min(width - 2 * Dimensions.doubleStandardSpacing, _maxWidth));
+    final bggPlaysImportReportDialogHeight =
+        max(_minHeight, min(height - 2 * Dimensions.doubleStandardSpacing, _maxHeight));
 
     return Material(
       color: Colors.transparent,
@@ -36,41 +46,47 @@ class BggPlaysImportReportDialog extends StatelessWidget {
           backgroundColor: AppTheme.primaryColorLight,
           addShadow: true,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.doubleStandardSpacing,
-              vertical: Dimensions.standardSpacing,
-            ),
+            padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Import Report', style: AppTheme.theme.textTheme.headline2),
+                Text(AppText.importPlaysReportImportReportTitle,
+                    style: AppTheme.theme.textTheme.headline2),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                const ItemPropertyTitle(AppText.importPlaysReportImportedPlaysSectionTitle),
-                _ImportedPlays(report: report),
-                const SizedBox(height: Dimensions.halfStandardSpacing),
-                if (report.createdPlayers.isNotEmpty) ...[
-                  const SizedBox(height: Dimensions.standardSpacing),
-                  const ItemPropertyTitle(AppText.importPlaysReportImportedPlayersSectionTitle),
-                  const SizedBox(height: Dimensions.halfStandardSpacing),
-                  _ImportedPlayers(players: report.createdPlayers),
-                ],
-                if (report.errors.isNotEmpty) ...[
-                  const SizedBox(height: Dimensions.standardSpacing),
-                  const ItemPropertyTitle(AppText.importPlaysReportImportErrorsSectionTitle),
-                  const SizedBox(height: Dimensions.halfStandardSpacing),
-                  Column(
-                    children: [for (var error in report.errors) Text(error.description!)],
-                  )
-                ],
+                LimitedBox(
+                  maxHeight: bggPlaysImportReportDialogHeight,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const ItemPropertyTitle(AppText.importPlaysReportImportedPlaysSectionTitle),
+                        _ImportedPlays(report: report),
+                        if (report.createdPlayers.isNotEmpty) ...[
+                          const SizedBox(height: Dimensions.standardSpacing),
+                          const ItemPropertyTitle(
+                              AppText.importPlaysReportImportedPlayersSectionTitle),
+                          const SizedBox(height: Dimensions.halfStandardSpacing),
+                          _ImportedPlayers(players: report.createdPlayers),
+                        ],
+                        if (report.errors.isNotEmpty) ...[
+                          const SizedBox(height: Dimensions.standardSpacing),
+                          const ItemPropertyTitle(
+                              AppText.importPlaysReportImportErrorsSectionTitle),
+                          const SizedBox(height: Dimensions.halfStandardSpacing),
+                          Column(
+                            children: [for (var error in report.errors) Text(error.description!)],
+                          )
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _ActionButtons(
-                  onSend: report.errors.isNotEmpty
-                      ? () {
-                          // TODO Handle
-                        }
-                      : null,
+                  onSend:
+                      report.errors.isNotEmpty ? () => _sendReportViaEmail(context, report) : null,
                   onOk: () => Navigator.pop(context),
                 ),
               ],
@@ -78,6 +94,15 @@ class BggPlaysImportReportDialog extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _sendReportViaEmail(BuildContext context, BggPlaysImportRaport report) async {
+    final errorsFormatted =
+        report.errors.map((ImportError importError) => importError.description).join(', ');
+    await LauncherHelper.launchUri(
+      context,
+      'mailto:${Constants.FeedbackEmailAddress}?subject=${Uri.encodeComponent('BGG Import Report')}&body=${Uri.encodeComponent(errorsFormatted)}',
     );
   }
 }

@@ -26,7 +26,6 @@ mixin ImportCollection {
       final user = User(name: username);
       await userStore.addOrUpdateUser(user);
 
-      _showFailureSnackBar(context);
       _showSuccessSnackBar();
     } else {
       _showFailureSnackBar(context);

@@ -57,9 +57,10 @@ class AppText {
       "Sorry, we've run into some problems with importing your collections from BGG. Please try again.";
 
   static const importPlaysLoadingIndicator = 'Importing games from BGG...';
-  static const importPlaysSendReportViaEmailButtonText = 'Send Report';
+  static const importPlaysSendReportViaEmailButtonText = 'Email Report';
   static const importPlaysOkButtonText = 'Ok';
   static const importPlaysReportImportedPlaysSectionTitle = 'Imported plays';
+  static const importPlaysReportImportReportTitle = 'Import Report';
   static const importPlaysReportImportedPlayersSectionTitle = 'Created players';
   static const importPlaysReportImportErrorsSectionTitle = 'Import errors';
 
