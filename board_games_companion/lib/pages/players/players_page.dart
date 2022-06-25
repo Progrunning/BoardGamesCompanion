@@ -399,7 +399,7 @@ class _SearchResults extends StatelessWidget {
         },
         itemBuilder: (_, index) {
           final player = filterPlayers[index];
-          // TODO Fix the splash to show on top of the player image and clip the corners
+          // TODO Fix the ripple effect when tapped to show on top of the player image and clip the corners
           return InkWell(
             onTap: () => onResultTap(player),
             child: Row(

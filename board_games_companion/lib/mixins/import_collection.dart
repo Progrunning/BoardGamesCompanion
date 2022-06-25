@@ -26,6 +26,7 @@ mixin ImportCollection {
       final user = User(name: username);
       await userStore.addOrUpdateUser(user);
 
+      _showFailureSnackBar(context);
       _showSuccessSnackBar();
     } else {
       _showFailureSnackBar(context);
@@ -51,11 +52,11 @@ void _showFailureSnackBar(BuildContext context) {
       behavior: SnackBarBehavior.floating,
       margin: Dimensions.snackbarMargin,
       content: const Text(AppText.importCollectionsFailureMessage),
-      // TODO Test this action button
       action: SnackBarAction(
         label: 'OK',
         onPressed: () {
-          Navigator.of(context).pop();
+          HomePage.homePageGlobalKey.currentState
+              ?.hideCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
         },
       ),
     ),
