@@ -298,11 +298,8 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               ),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
-                final bool deletionSucceeded =
-                    await widget.playersViewModel.deletePlayer(player.id);
-                if (deletionSucceeded) {
-                  Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
-                }
+                await widget.playersViewModel.deletePlayers([player.id]);
+                Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
               },
             ),
           ],

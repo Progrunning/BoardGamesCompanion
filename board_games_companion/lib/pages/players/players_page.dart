@@ -16,6 +16,9 @@ import '../../widgets/player/player_image.dart';
 import 'player_page.dart';
 import 'players_view_model.dart';
 
+typedef PlayerTapped = void Function(Player player, bool isChecked);
+typedef PlayerSearchResultTapped = void Function(Player player);
+
 class PlayersPage extends StatefulWidget {
   const PlayersPage({
     required this.playersViewModel,
@@ -43,10 +46,13 @@ class _PlayersPageState extends State<PlayersPage> {
                     _AppBar(
                       players: viewModel.players,
                       onSearchResultTap: (Player player) => _navigateToPlayerPage(context, player),
+                      onToggleEditModeTap: () => _toggleEditMode(),
                     ),
                     _Players(
                       players: viewModel.players,
-                      onPlayerSelected: (Player player) => _navigateToPlayerPage(context, player),
+                      isEditMode: viewModel.isEditMode,
+                      onPlayerTap: (Player player, bool isChecked) =>
+                          _playerTapped(viewModel, player, isChecked),
                     ),
                   ] else
                     const _NoPlayers(),
@@ -55,13 +61,26 @@ class _PlayersPageState extends State<PlayersPage> {
               Positioned(
                 bottom: Dimensions.bottomTabTopHeight,
                 right: Dimensions.standardSpacing,
-                child: _CreatePlayerButton(
-                  onCreatePlayer: () => Navigator.pushNamed(
-                    context,
-                    PlayerPage.pageRoute,
-                    arguments: const PlayerPageArguments(),
-                  ),
-                ),
+                child: viewModel.isEditMode
+                    ? ElevatedIconButton(
+                        title: AppText.playersPageDeletePlayersButtonText,
+                        icon: const DefaultIcon(Icons.delete),
+                        color: AppTheme.redColor,
+                        onPressed: () async {
+                          if (await _showDeletePlayersDialog(context) ?? false) {
+                            setState(() {});
+                          }
+                        },
+                      )
+                    : ElevatedIconButton(
+                        title: AppText.playersPageCreatePlayerButtonText,
+                        icon: const DefaultIcon(Icons.add),
+                        onPressed: () => Navigator.pushNamed(
+                          context,
+                          PlayerPage.pageRoute,
+                          arguments: const PlayerPageArguments(),
+                        ),
+                      ),
               ),
             ],
           );
@@ -77,6 +96,55 @@ class _PlayersPageState extends State<PlayersPage> {
       arguments: PlayerPageArguments(player: player),
     );
   }
+
+  Future<void> _playerTapped(
+      PlayersViewModel playersViewModel, Player player, bool isChecked) async {
+    if (!playersViewModel.isEditMode) {
+      return _navigateToPlayerPage(context, player);
+    }
+
+    if (isChecked) {
+      playersViewModel.selectPlayer(player);
+    } else {
+      playersViewModel.deselectPlayer(player);
+    }
+  }
+
+  void _toggleEditMode() {
+    widget.playersViewModel.isEditMode = !widget.playersViewModel.isEditMode;
+  }
+
+  Future<bool?> _showDeletePlayersDialog(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(AppText.playersPageConfirmationTitle),
+          content: const Text(AppText.playersPageConfirmationDialogContent),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppText.Cancel),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text(
+                AppText.playersPageConfirmationDialogDeletePlayersButtonText,
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
+              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              onPressed: () async {
+                await widget.playersViewModel.deleteSelectedPlayers();
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class _AppBar extends StatelessWidget {
@@ -84,10 +152,12 @@ class _AppBar extends StatelessWidget {
     Key? key,
     required this.players,
     required this.onSearchResultTap,
+    required this.onToggleEditModeTap,
   }) : super(key: key);
 
   final List<Player> players;
-  final Function(Player) onSearchResultTap;
+  final PlayerSearchResultTapped onSearchResultTap;
+  final VoidCallback onToggleEditModeTap;
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +165,12 @@ class _AppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
-      title: const Text('Players'),
-
-      // TODO Add ability to edit/select multiple players at once
+      title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.edit, color: AppTheme.accentColor),
+          onPressed: onToggleEditModeTap,
+        ),
         IconButton(
           icon: const Icon(Icons.search, color: AppTheme.accentColor),
           onPressed: () async {
@@ -156,14 +228,16 @@ class _NoPlayers extends StatelessWidget {
 class _Players extends StatelessWidget {
   const _Players({
     required this.players,
-    required this.onPlayerSelected,
+    required this.isEditMode,
+    required this.onPlayerTap,
     Key? key,
   }) : super(key: key);
 
   static const int _numberOfPlayerColumns = 3;
 
   final List<Player> players;
-  final Function(Player) onPlayerSelected;
+  final bool isEditMode;
+  final PlayerTapped onPlayerTap;
 
   @override
   Widget build(BuildContext context) {
@@ -177,31 +251,63 @@ class _Players extends StatelessWidget {
         mainAxisSpacing: Dimensions.standardSpacing,
         children: [
           for (var player in players)
-            PlayerAvatar(
-              player,
-              onTap: () async => onPlayerSelected(player),
-            ),
+            _Player(player: player, onPlayerTap: onPlayerTap, isEditMode: isEditMode),
         ],
       ),
     );
   }
 }
 
-class _CreatePlayerButton extends StatelessWidget {
-  const _CreatePlayerButton({
-    required this.onCreatePlayer,
+class _Player extends StatefulWidget {
+  const _Player({
     Key? key,
+    required this.player,
+    required this.onPlayerTap,
+    required this.isEditMode,
   }) : super(key: key);
 
-  final VoidCallback onCreatePlayer;
+  final Player player;
+  final PlayerTapped onPlayerTap;
+  final bool isEditMode;
+
+  @override
+  State<_Player> createState() => _PlayerState();
+}
+
+class _PlayerState extends State<_Player> {
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedIconButton(
-      title: AppText.playersPageCreatePlayerButtonText,
-      icon: const DefaultIcon(Icons.add),
-      onPressed: () => onCreatePlayer(),
+    return Stack(
+      children: [
+        PlayerAvatar(
+          widget.player,
+          onTap: () => _onTap(),
+        ),
+        if (widget.isEditMode)
+          Align(
+            alignment: Alignment.topRight,
+            child: SizedBox(
+              height: 34,
+              width: 34,
+              child: Checkbox(
+                checkColor: AppTheme.accentColor,
+                activeColor: AppTheme.primaryColor.withOpacity(0.7),
+                value: isChecked,
+                onChanged: (_) => _onTap(),
+              ),
+            ),
+          ),
+      ],
     );
+  }
+
+  void _onTap() {
+    setState(() {
+      isChecked = !isChecked;
+      widget.onPlayerTap(widget.player, isChecked);
+    });
   }
 }
 
@@ -212,7 +318,7 @@ class _PlayersSerach extends SearchDelegate<Player?> {
   });
 
   final List<Player> players;
-  final Function(Player) onResultTap;
+  final PlayerSearchResultTapped onResultTap;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -280,7 +386,7 @@ class _SearchResults extends StatelessWidget {
   }) : super(key: key);
 
   final List<Player> filterPlayers;
-  final Function(Player player) onResultTap;
+  final PlayerSearchResultTapped onResultTap;
 
   @override
   Widget build(BuildContext context) {

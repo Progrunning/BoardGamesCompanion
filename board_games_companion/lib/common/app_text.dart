@@ -60,7 +60,7 @@ class AppText {
   static const importPlaysSendReportViaEmailButtonText = 'Send Report';
   static const importPlaysOkButtonText = 'Ok';
   static const importPlaysReportImportedPlaysSectionTitle = 'Imported plays';
-  static const importPlaysReportImportedPlayersSectionTitle = 'Imported players';
+  static const importPlaysReportImportedPlayersSectionTitle = 'Created players';
   static const importPlaysReportImportErrorsSectionTitle = 'Import errors';
 
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
@@ -84,12 +84,18 @@ class AppText {
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
 
   static const playerPagePlayerNameTitle = 'Name';
-  static const playerPagePlayerBggNameTitle = 'BGG Name';
+  static const playerPagePlayerBggNameTitle = 'BGG Username';
 
+  static const playersPageTitle = 'Players';
   static const playersPageCreatePlayerButtonText = 'Create Player';
+  static const playersPageDeletePlayersButtonText = 'Delete Players';
   static const playersPageNoPlayersTitle = "You don't have any players";
   static const playersPageNoPlayersInstructions =
       'Create players to log games you played with your family or friends';
+  static const playersPageConfirmationTitle = 'Delete players';
+  static const playersPageConfirmationDialogDeletePlayersButtonText = 'Delete';
+  static const playersPageConfirmationDialogContent =
+      'Are you sure you want to delete selected players?';
 
   static const playerPageSearchClearSaerch = 'Clear search';
   static const playerPageSearchNoSearchResults =

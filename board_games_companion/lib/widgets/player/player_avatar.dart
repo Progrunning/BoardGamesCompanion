@@ -12,7 +12,6 @@ import 'player_image.dart';
 class PlayerAvatar extends StatelessWidget {
   const PlayerAvatar(
     this.player, {
-    this.topRightCornerActionWidget,
     this.onTap,
     this.useHeroAnimation = true,
     this.playerHeroIdSuffix = '',
@@ -20,7 +19,6 @@ class PlayerAvatar extends StatelessWidget {
   }) : super(key: key);
 
   final Player? player;
-  final Widget? topRightCornerActionWidget;
   final VoidCallback? onTap;
   final bool useHeroAnimation;
   final String playerHeroIdSuffix;
@@ -42,8 +40,6 @@ class PlayerAvatar extends StatelessWidget {
                 else
                   PlayerImage(imageUri: player?.avatarImageUri),
                 if (player?.name?.isNotEmpty ?? false) PlayerAvatarSubtitle(player: player!),
-                if (topRightCornerActionWidget != null)
-                  Align(alignment: Alignment.topRight, child: topRightCornerActionWidget),
                 Positioned.fill(
                   child: RippleEffect(
                     onTap: onTap,

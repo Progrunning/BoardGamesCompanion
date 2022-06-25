@@ -12,6 +12,7 @@ class PlayersViewModel with ChangeNotifier {
 
   final PlayersStore _playersStore;
 
+  final List<Player> _selectedPlayers = <Player>[];
   Player? _player;
 
   List<Player> get players => _playersStore.players;
@@ -19,7 +20,19 @@ class PlayersViewModel with ChangeNotifier {
 
   String? searchPhrase;
 
+  // TODO Update these flags to proper visual states using Freezed and Mobx
   bool get isSearching => searchPhrase?.isNotEmpty ?? false;
+
+  bool _isEditMode = false;
+  bool get isEditMode => _isEditMode;
+  set isEditMode(bool value) {
+    if (_isEditMode == value) {
+      return;
+    }
+
+    _isEditMode = value;
+    notifyListeners();
+  }
 
   Future<List<Player>> loadPlayers() async {
     if (players.isNotEmpty) {
@@ -35,7 +48,6 @@ class PlayersViewModel with ChangeNotifier {
     return players;
   }
 
-  // TODO Test creating and updating players to see if there's no data flashing because of frequent data updates and notification
   Future<bool> createOrUpdatePlayer(Player player) async {
     try {
       final addOrUpdateSucceeded = await _playersStore.createOrUpdatePlayer(player);
@@ -57,19 +69,30 @@ class PlayersViewModel with ChangeNotifier {
     return false;
   }
 
-  Future<bool> deletePlayer(String playerId) async {
+  Future<void> deletePlayers(List<String> playerIds) async {
     try {
-      final deleteSucceeded = await _playersStore.deletePlayer(playerId);
-      if (deleteSucceeded) {
-        notifyListeners();
+      for (final playerId in playerIds) {
+        await _playersStore.deletePlayer(playerId);
       }
 
-      return deleteSucceeded;
+      notifyListeners();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
+  }
 
-    return false;
+  void selectPlayer(Player player) {
+    _selectedPlayers.add(player);
+  }
+
+  void deselectPlayer(Player player) {
+    _selectedPlayers.remove(player);
+  }
+
+  Future<void> deleteSelectedPlayers() async {
+    await deletePlayers(_selectedPlayers.map((Player player) => player.id).toList());
+    _selectedPlayers.clear();
+    isEditMode = false;
   }
 
   void setPlayer({Player? player}) {
