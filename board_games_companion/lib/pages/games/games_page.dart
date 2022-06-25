@@ -236,10 +236,7 @@ class _AppBarState extends State<_AppBar> {
                     await widget.updateSearchResults('');
                   },
                 )
-              : const Icon(
-                  Icons.search,
-                  color: AppTheme.accentColor,
-                ),
+              : const Icon(Icons.search, color: AppTheme.accentColor),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: AppTheme.primaryColorLight),
           ),

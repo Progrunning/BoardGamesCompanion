@@ -36,19 +36,14 @@ class PlayerAvatar extends StatelessWidget {
               children: <Widget>[
                 if (useHeroAnimation)
                   Hero(
-                    tag:
-                        '${AnimationTags.playerImageHeroTag}${player?.id}$playerHeroIdSuffix',
+                    tag: '${AnimationTags.playerImageHeroTag}${player?.id}$playerHeroIdSuffix',
                     child: PlayerImage(imageUri: player?.avatarImageUri),
                   )
                 else
                   PlayerImage(imageUri: player?.avatarImageUri),
-                if (player?.name?.isNotEmpty ?? false)
-                  PlayerAvatarSubtitle(player: player!),
+                if (player?.name?.isNotEmpty ?? false) PlayerAvatarSubtitle(player: player!),
                 if (topRightCornerActionWidget != null)
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: topRightCornerActionWidget,
-                  ),
+                  Align(alignment: Alignment.topRight, child: topRightCornerActionWidget),
                 Positioned.fill(
                   child: RippleEffect(
                     onTap: onTap,

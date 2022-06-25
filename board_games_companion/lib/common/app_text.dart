@@ -83,8 +83,16 @@ class AppText {
       'Are you sure you want to navigate away?';
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
 
-  static const playerPageCreatePlayerButtonText = 'Create Player';
-  static const playerPageNoPlayersTitle = "You don't have any players";
-  static const playerPageNoPlayersInstructions =
+  static const playerPagePlayerNameTitle = 'Name';
+  static const playerPagePlayerBggNameTitle = 'BGG Name';
+
+  static const playersPageCreatePlayerButtonText = 'Create Player';
+  static const playersPageNoPlayersTitle = "You don't have any players";
+  static const playersPageNoPlayersInstructions =
       'Create players to log games you played with your family or friends';
+
+  static const playerPageSearchClearSaerch = 'Clear search';
+  static const playerPageSearchNoSearchResults =
+      '''It looks there's no players that match the search phrase ''';
+  static const playerPageSearchHintText = 'Search for players...';
 }

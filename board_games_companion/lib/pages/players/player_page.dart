@@ -132,9 +132,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                               ),
                             ),
                           ),
+                          // TODO Add Bgg name to show in the player details
                           TextFormField(
                             decoration: const InputDecoration(
-                              labelText: 'Name',
+                              labelText: AppText.playerPagePlayerNameTitle,
                               labelStyle: AppTheme.defaultTextFieldLabelStyle,
                             ),
                             style: AppTheme.defaultTextFieldStyle,

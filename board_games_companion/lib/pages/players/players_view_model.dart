@@ -17,6 +17,10 @@ class PlayersViewModel with ChangeNotifier {
   List<Player> get players => _playersStore.players;
   Player? get player => _player;
 
+  String? searchPhrase;
+
+  bool get isSearching => searchPhrase?.isNotEmpty ?? false;
+
   Future<List<Player>> loadPlayers() async {
     if (players.isNotEmpty) {
       return players;
