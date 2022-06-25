@@ -64,7 +64,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     final scaffold = Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.boardGameDetails.name),
+        title: Text(widget.boardGameDetails.name, style: AppTheme.titleTextStyle),
         actions: <Widget>[
           Consumer<UserStore>(
             builder: (_, store, ___) {

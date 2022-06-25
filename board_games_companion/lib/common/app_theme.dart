@@ -72,7 +72,7 @@ class AppTheme {
   ];
 
   static const TextStyle titleTextStyle = TextStyle(
-    fontSize: Dimensions.mediumFontSize,
+    fontSize: Dimensions.largeFontSize,
     color: defaultTextColor,
   );
 
