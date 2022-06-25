@@ -92,11 +92,11 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
         },
         PlayerPage.pageRoute: (BuildContext context) {
           final _arguments = ModalRoute.of(context)!.settings.arguments as PlayerPageArguments;
-          final playersStore = getIt<PlayersViewModel>();
+          final playersViewModel = getIt<PlayersViewModel>();
 
-          playersStore.setPlayer(player: _arguments.player);
+          playersViewModel.setPlayer(player: _arguments.player);
 
-          return PlayerPage(playersStore: playersStore);
+          return PlayerPage(playersViewModel: playersViewModel);
         },
         PlaythroughsPage.pageRoute: (BuildContext context) {
           final _arguments =

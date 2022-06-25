@@ -1,10 +1,7 @@
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/widgets/common/shadow_box.dart';
-import 'package:board_games_companion/widgets/common/text/item_property_title_widget.dart';
-import 'package:board_games_companion/widgets/player/player_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/player.dart';
@@ -12,7 +9,10 @@ import '../../models/navigation/player_page_arguments.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
+import '../../widgets/common/shadow_box.dart';
+import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
+import '../../widgets/player/player_image.dart';
 import 'player_page.dart';
 import 'players_view_model.dart';
 
