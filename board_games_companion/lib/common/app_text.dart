@@ -57,7 +57,7 @@ class AppText {
       "Sorry, we've run into some problems with importing your collections from BGG. Please try again.";
 
   static const importPlaysLoadingIndicator = 'Importing games from BGG...';
-  static const importPlaysSendReportViaEmailButtonText = 'Send';
+  static const importPlaysSendReportViaEmailButtonText = 'Send Report';
   static const importPlaysOkButtonText = 'Ok';
   static const importPlaysReportImportedPlaysSectionTitle = 'Imported plays';
   static const importPlaysReportImportedPlayersSectionTitle = 'Imported players';
@@ -84,7 +84,6 @@ class AppText {
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
 
   static const playerPageCreatePlayerButtonText = 'Create Player';
-  static const playerPageTitle = 'Players';
   static const playerPageNoPlayersTitle = "You don't have any players";
   static const playerPageNoPlayersInstructions =
       'Create players to log games you played with your family or friends';

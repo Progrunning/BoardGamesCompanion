@@ -1,6 +1,5 @@
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -15,112 +14,33 @@ import 'player_page.dart';
 import 'players_view_model.dart';
 
 class PlayersPage extends StatefulWidget {
-  const PlayersPage({Key? key}) : super(key: key);
+  const PlayersPage({
+    required this.playersViewModel,
+    Key? key,
+  }) : super(key: key);
+
+  final PlayersViewModel playersViewModel;
 
   @override
   _PlayersPageState createState() => _PlayersPageState();
 }
 
 class _PlayersPageState extends State<PlayersPage> {
-  final int _numberOfPlayerColumns = 3;
-
-  late PlayersViewModel playerStore;
-
-  @override
-  void initState() {
-    super.initState();
-
-    playerStore = Provider.of<PlayersViewModel>(
-      context,
-      listen: false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
-        future: playerStore.loadPlayers(),
-        success: (context, PlayersViewModel store) {
-          if (store.players.isEmpty) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
-                child: Column(
-                  children: <Widget>[
-                    const SizedBox(height: 60),
-                    const Center(
-                      child: Text(
-                        AppText.playerPageNoPlayersTitle,
-                        style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
-                      ),
-                    ),
-                    const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    const Icon(
-                      Icons.sentiment_dissatisfied_sharp,
-                      size: 80,
-                      color: AppTheme.primaryColor,
-                    ),
-                    const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    const Text(
-                      AppText.playerPageNoPlayersInstructions,
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(fontSize: Dimensions.mediumFontSize),
-                    ),
-                    const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: _CreatePlayerButton(
-                        onCreatePlayer: () => Navigator.pushNamed(
-                          context,
-                          PlayerPage.pageRoute,
-                          arguments: const PlayerPageArguments(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-
-          store.players.sort((a, b) => a.name!.compareTo(b.name!));
-
+        future: widget.playersViewModel.loadPlayers(),
+        success: (context, PlayersViewModel viewModel) {
           return Stack(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                    child: Text(AppText.playerPageTitle, style: AppTheme.theme.textTheme.headline2),
-                  ),
-                  Expanded(
-                    child: GridView.count(
-                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                      crossAxisSpacing: Dimensions.standardSpacing,
-                      mainAxisSpacing: Dimensions.standardSpacing,
-                      crossAxisCount: _numberOfPlayerColumns,
-                      children: List.generate(
-                        store.players.length,
-                        (int index) {
-                          final player = store.players[index];
-                          return PlayerAvatar(
-                            player,
-                            topRightCornerActionWidget: CustomIconButton(
-                              const Icon(
-                                Icons.edit,
-                                size: Dimensions.defaultButtonIconSize,
-                                color: AppTheme.defaultTextColor,
-                              ),
-                              onTap: () async => _navigateToPlayerPage(context, player),
-                            ),
-                            onTap: () async => _navigateToPlayerPage(context, player),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+              CustomScrollView(
+                slivers: [
+                  if (viewModel.players.isNotEmpty) ...[
+                    const _AppBar(),
+                    _Players(playersViewModel: viewModel),
+                  ] else
+                    const _NoPlayers(),
                 ],
               ),
               Positioned(
@@ -137,6 +57,150 @@ class _PlayersPageState extends State<PlayersPage> {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _AppBar extends StatelessWidget {
+  const _AppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverAppBar(
+      pinned: true,
+      floating: true,
+      titleSpacing: Dimensions.standardSpacing,
+      title: TextField(
+        autofocus: false,
+        // focusNode: _searchFocusNode,
+        // controller: _searchController,
+        textAlignVertical: TextAlignVertical.center,
+        textInputAction: TextInputAction.search,
+        style: AppTheme.defaultTextFieldStyle,
+        decoration: InputDecoration(
+          hintText: 'Search for a player...',
+          // suffixIcon: (widget.boardGamesStore.searchPhrase?.isNotEmpty ?? false)
+          //     ? IconButton(
+          //         icon: const Icon(
+          //           Icons.clear,
+          //         ),
+          //         color: AppTheme.accentColor,
+          //         onPressed: () async {
+          //           _searchController.text = '';
+          //           await widget.updateSearchResults('');
+          //         },
+          //       )
+          //     : const Icon(
+          //         Icons.search,
+          //         color: AppTheme.accentColor,
+          //       ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.primaryColorLight),
+          ),
+        ),
+        // onSubmitted: (searchPhrase) async {
+        //   _debounce?.cancel();
+        //   if (widget.boardGamesStore.searchPhrase != _searchController.text) {
+        //     await widget.updateSearchResults(_searchController.text);
+        //   }
+        //   _searchFocusNode.unfocus();
+        // },
+      ),
+      // actions: <Widget>[
+      //   Consumer<BoardGamesFiltersStore>(
+      //     builder: (_, boardGamesFiltersStore, __) {
+      //       return IconButton(
+      //         icon: boardGamesFiltersStore.anyFiltersApplied
+      //             ? const Icon(Icons.filter_alt_rounded, color: AppTheme.accentColor)
+      //             : const Icon(Icons.filter_alt_outlined, color: AppTheme.accentColor),
+      //         onPressed: widget.boardGamesStore.allboardGames.isNotEmpty
+      //             ? () async {
+      //                 await _openFiltersPanel(context);
+      //                 await widget.analyticsService.logEvent(name: Analytics.FilterCollection);
+      //                 await widget.rateAndReviewService.increaseNumberOfSignificantActions();
+      //               }
+      //             : null,
+      //       );
+      //     },
+      //   ),
+      // ],
+    );
+  }
+}
+
+class _NoPlayers extends StatelessWidget {
+  const _NoPlayers({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: Padding(
+        padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+        child: Column(
+          children: const <Widget>[
+            SizedBox(height: 60),
+            Center(
+              child: Text(
+                AppText.playerPageNoPlayersTitle,
+                style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+              ),
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+            Icon(
+              Icons.sentiment_dissatisfied_sharp,
+              size: 80,
+              color: AppTheme.primaryColor,
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+            Text(
+              AppText.playerPageNoPlayersInstructions,
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: Dimensions.mediumFontSize),
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Players extends StatelessWidget {
+  const _Players({
+    required this.playersViewModel,
+    Key? key,
+  }) : super(key: key);
+
+  static const int _numberOfPlayerColumns = 3;
+
+  final PlayersViewModel playersViewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    playersViewModel.players.sort((a, b) => a.name!.compareTo(b.name!));
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      sliver: SliverGrid.count(
+        crossAxisCount: _numberOfPlayerColumns,
+        crossAxisSpacing: Dimensions.standardSpacing,
+        mainAxisSpacing: Dimensions.standardSpacing,
+        children: [
+          for (var player in playersViewModel.players)
+            PlayerAvatar(
+              player,
+              topRightCornerActionWidget: CustomIconButton(
+                const Icon(
+                  Icons.edit,
+                  size: Dimensions.defaultButtonIconSize,
+                  color: AppTheme.defaultTextColor,
+                ),
+                onTap: () async => _navigateToPlayerPage(context, player),
+              ),
+              onTap: () async => _navigateToPlayerPage(context, player),
+            ),
+        ],
       ),
     );
   }

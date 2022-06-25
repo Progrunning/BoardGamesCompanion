@@ -55,12 +55,14 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
       initialRoute: HomePage.pageRoute,
       routes: {
         HomePage.pageRoute: (BuildContext _) {
-          final AnalyticsService analyticsService = getIt<AnalyticsService>();
-          final RateAndReviewService rateAndReviewService = getIt<RateAndReviewService>();
+          final analyticsService = getIt<AnalyticsService>();
+          final rateAndReviewService = getIt<RateAndReviewService>();
+          final playersViewModel = getIt<PlayersViewModel>();
 
           return HomePage(
             analyticsService: analyticsService,
             rateAndReviewService: rateAndReviewService,
+            playersViewModel: playersViewModel,
           );
         },
         BoardGamesDetailsPage.pageRoute: (BuildContext context) {

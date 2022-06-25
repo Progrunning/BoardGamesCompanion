@@ -27,7 +27,6 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
-import '../../widgets/common/page_container_widget.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'games_filter_panel.dart';
 
@@ -113,54 +112,52 @@ class _Collection extends StatelessWidget {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: PageContainer(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              _AppBar(
-                boardGamesStore: boardGamesStore,
-                topTabController: topTabController,
-                analyticsService: analyticsService,
-                rateAndReviewService: rateAndReviewService,
-                updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
-              ),
-              Builder(
-                builder: (_) {
-                  final List<BoardGameDetails> boardGames = [];
-                  switch (boardGamesStore.selectedTab) {
-                    case GamesTab.Owned:
-                      boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
-                      break;
-                    case GamesTab.Friends:
-                      boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
-                      break;
-                    case GamesTab.Wishlist:
-                      boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
-                      break;
-                  }
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _AppBar(
+              boardGamesStore: boardGamesStore,
+              topTabController: topTabController,
+              analyticsService: analyticsService,
+              rateAndReviewService: rateAndReviewService,
+              updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
+            ),
+            Builder(
+              builder: (_) {
+                final List<BoardGameDetails> boardGames = [];
+                switch (boardGamesStore.selectedTab) {
+                  case GamesTab.Owned:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
+                    break;
+                  case GamesTab.Friends:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
+                    break;
+                  case GamesTab.Wishlist:
+                    boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
+                    break;
+                }
 
-                  if (boardGames.isEmpty) {
-                    if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-                      return _EmptySearchResult(
-                        boardGamesStore: boardGamesStore,
-                        onClearSearch: () => _updateSearchResults(''),
-                      );
-                    }
-
-                    return _EmptyCollection(
+                if (boardGames.isEmpty) {
+                  if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
+                    return _EmptySearchResult(
                       boardGamesStore: boardGamesStore,
+                      onClearSearch: () => _updateSearchResults(''),
                     );
                   }
 
-                  return _Grid(
-                    boardGames: boardGames,
-                    collectionType: boardGamesStore.selectedTab.toCollectionType(),
-                    analyticsService: analyticsService,
+                  return _EmptyCollection(
+                    boardGamesStore: boardGamesStore,
                   );
-                },
-              ),
-              const SliverPadding(padding: EdgeInsets.all(8.0)),
-            ],
-          ),
+                }
+
+                return _Grid(
+                  boardGames: boardGames,
+                  collectionType: boardGamesStore.selectedTab.toCollectionType(),
+                  analyticsService: analyticsService,
+                );
+              },
+            ),
+            const SliverPadding(padding: EdgeInsets.all(8.0)),
+          ],
         ),
       ),
     );

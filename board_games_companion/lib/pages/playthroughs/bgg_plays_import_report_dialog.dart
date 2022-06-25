@@ -45,6 +45,8 @@ class BggPlaysImportReportDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text('Import Report', style: AppTheme.theme.textTheme.headline2),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
                 const ItemPropertyTitle(AppText.importPlaysReportImportedPlaysSectionTitle),
                 _ImportedPlays(report: report),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
@@ -93,18 +95,12 @@ class _ImportedPlays extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          const TextSpan(
-            text: 'Imported ',
-          ),
+          const TextSpan(text: 'Imported '),
           TextSpan(
             text: '${report.percentageOfImportedGames.toStringAsFixed(0)}%',
-            style: AppTheme.titleTextStyle.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTheme.titleTextStyle.copyWith(fontWeight: FontWeight.bold),
           ),
-          TextSpan(
-            text: ' of plays (${report.playsImported} / ${report.playsToImportTotal})',
-          ),
+          TextSpan(text: ' of plays (${report.playsImported} / ${report.playsToImportTotal})'),
         ],
       ),
     );

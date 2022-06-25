@@ -455,13 +455,13 @@ class BoardGamesGeekService {
 
         if (playerName?.isBlank ?? true) {
           playsImportResult.errors!
-              .add(ImportError("Cannot import a play $playId without player's name"));
+              .add(ImportError("Cannot import a play #$playId without player's name"));
           continue;
         }
 
         if (playerScore == null) {
           playsImportResult.errors!
-              .add(ImportError('Cannot import a play $playId without a numeric score'));
+              .add(ImportError('Cannot import a play #$playId without a numeric score'));
           continue;
         }
 
