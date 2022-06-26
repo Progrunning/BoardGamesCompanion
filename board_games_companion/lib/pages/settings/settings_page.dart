@@ -1,3 +1,4 @@
+import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,21 +31,23 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(title: const Text(AppText.settingsPageTitle, style: AppTheme.titleTextStyle)),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: const <Widget>[
-                    SizedBox(height: Dimensions.standardFontSize),
-                    _UserDetailsPanel(),
-                  ],
+        child: PageContainer(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: const <Widget>[
+                      SizedBox(height: Dimensions.standardFontSize),
+                      _UserDetailsPanel(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

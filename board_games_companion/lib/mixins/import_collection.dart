@@ -50,6 +50,7 @@ void _showFailureSnackBar(BuildContext context) {
       behavior: SnackBarBehavior.floating,
       margin: Dimensions.snackbarMargin,
       content: const Text(AppText.importCollectionsFailureMessage),
+      duration: const Duration(seconds: 8),
       action: SnackBarAction(
         label: AppText.ok,
         onPressed: () {

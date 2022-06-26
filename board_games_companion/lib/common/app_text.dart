@@ -55,7 +55,7 @@ class AppText {
   static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';
   static const importCollectionsButtonText = 'Import';
   static const importCollectionsFailureMessage =
-      "Sorry, we've run into some problems with importing your collections from BGG. Please try again.";
+      "Sorry, we've run into some problems with importing your collections from BGG. Please try again later.";
 
   static const importPlaysLoadingIndicator = 'Importing games from BGG...';
   static const importPlaysSendReportViaEmailButtonText = 'Email Report';
