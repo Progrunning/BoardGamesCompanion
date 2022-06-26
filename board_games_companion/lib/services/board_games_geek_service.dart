@@ -110,7 +110,7 @@ class BoardGamesGeekService {
 
   static const int _numberOfDaysToCacheBoardGameDetails = 1;
   static const int _bggRetryStatusCode = 202;
-  static const Duration _bggRetryDelayFactor = Duration(milliseconds: 400);
+  static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;
 
   final CustomHttpClientAdapter _httpClientAdapter;
