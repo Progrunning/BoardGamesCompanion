@@ -4,8 +4,8 @@
 </p>
 
 <p align="center">
-  <a href="https://progrunning.visualstudio.com/Board%20Games%20Companion/_build?definitionId=20&_a=summary">
-    <img src="https://img.shields.io/azure-devops/build/progrunning/cf1ca5c2-9446-441f-b3af-6e9f951997cf/20/main?label=CI">
+  <a href="https://progrunning.visualstudio.com/Board%20Games%20Companion/_build?definitionId=24&_a=summary">
+    <img src="https://img.shields.io/azure-devops/build/progrunning/cf1ca5c2-9446-441f-b3af-6e9f951997cf/24/main?label=CI">
   </a>
   <a href="https://progrunning.visualstudio.com/Board%20Games%20Companion/_build?definitionId=19&_a=summary">
     <img src="https://img.shields.io/azure-devops/build/progrunning/cf1ca5c2-9446-441f-b3af-6e9f951997cf/19/main?label=CD">
