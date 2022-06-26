@@ -11,6 +11,7 @@ class AppText {
   static const stop = 'Stop';
   static const delete = 'Delete';
   static const edit = 'Edit';
+  static const ok = 'Ok';
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
@@ -63,6 +64,7 @@ class AppText {
   static const importPlaysReportImportReportTitle = 'Import Report';
   static const importPlaysReportImportedPlayersSectionTitle = 'Created players';
   static const importPlaysReportImportErrorsSectionTitle = 'Import errors';
+  static const importPlaysReportNoPlaysToImportError = 'There were no plays to import';
 
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
   static const logGameFailureConfirmationSnackbarText =

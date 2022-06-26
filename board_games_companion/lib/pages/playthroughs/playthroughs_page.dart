@@ -155,7 +155,11 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         _showImportGamesLoadingIndicator = true;
       });
       await widget.viewModel.importPlays(username, boardGameId);
-      await showImportPlaysReportDialog(context, widget.viewModel.bggPlaysImportRaport!);
+      if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
+        await showImportPlaysReportDialog(context, widget.viewModel.bggPlaysImportRaport!);
+      } else {
+        _showNoPlaysToImportDialog();
+      }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     } finally {
@@ -163,6 +167,22 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         _showImportGamesLoadingIndicator = false;
       });
     }
+  }
+
+  void _showNoPlaysToImportDialog() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: Dimensions.snackbarMargin,
+        content: const Text(AppText.importPlaysReportNoPlaysToImportError),
+        action: SnackBarAction(
+          label: AppText.ok,
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+          },
+        ),
+      ),
+    );
   }
 
   Future<void> showImportPlaysReportDialog(
