@@ -1,5 +1,7 @@
 name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
+trigger: none
+
 pr:
   branches:
     include:
