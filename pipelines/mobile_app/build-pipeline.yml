@@ -8,6 +8,7 @@ pr:
     include:
       - board_games_companion
 
+
 variables:
   - name: appDirectoryName
     value: board_games_companion
