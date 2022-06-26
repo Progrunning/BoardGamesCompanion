@@ -1,7 +1,6 @@
 name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
-variables:
-  appDirectoryName: board_games_companion
+trigger: none
 
 pr:
   branches:
@@ -10,6 +9,12 @@ pr:
   paths:
     include:
       - board_games_companion
+
+
+variables:
+  - name: appDirectoryName
+    value: board_games_companion
+  - group: BGC-GLOBAL
 
 jobs:
   - job: Build
@@ -24,7 +29,7 @@ jobs:
           mode: "auto"
           channel: "stable"
           version: "custom"
-          customVersion: "2.8.0"
+          customVersion: $(flutter.version)
 
       - task: FlutterBuild@0
         displayName: "Build Android"
