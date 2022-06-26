@@ -216,6 +216,7 @@ class _AppBarState extends State<_AppBar> {
       pinned: true,
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
+      foregroundColor: AppTheme.accentColor,
       title: TextField(
         autofocus: false,
         focusNode: _searchFocusNode,

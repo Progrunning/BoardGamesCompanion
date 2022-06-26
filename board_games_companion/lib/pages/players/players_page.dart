@@ -165,6 +165,7 @@ class _AppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
+      foregroundColor: AppTheme.accentColor,
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: <Widget>[
         IconButton(

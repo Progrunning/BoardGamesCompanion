@@ -127,6 +127,7 @@ class _SearchBarState extends State<_SearchBar> {
   Widget build(BuildContext context) {
     return SliverAppBar(
       titleSpacing: 0,
+      foregroundColor: AppTheme.accentColor,
       title: Consumer<SearchBarBoardGamesStore>(
         builder: (_, store, __) {
           return Padding(
