@@ -209,7 +209,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
               );
             }
 
-            return const Divider(height: Dimensions.standardSpacing);
+            return const SizedBox(height: Dimensions.standardSpacing);
           },
           childCount: max(0, boardGameStatistics.playersStatistics!.length * 2 - 1),
         ),
