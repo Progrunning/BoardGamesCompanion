@@ -124,7 +124,7 @@ class _PlayersPageState extends State<PlayersPage> {
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.Cancel),
+              child: const Text(AppText.cancel),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
@@ -165,6 +165,7 @@ class _AppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
+      foregroundColor: AppTheme.accentColor,
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: <Widget>[
         IconButton(

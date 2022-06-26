@@ -15,7 +15,7 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
-import '../home_page.dart';
+import '../home/home_page.dart';
 import 'players_view_model.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -228,7 +228,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               elevation: Dimensions.defaultElevation,
               actions: <Widget>[
                 TextButton(
-                  child: const Text(AppText.Cancel),
+                  child: const Text(AppText.cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -286,7 +286,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.Cancel),
+              child: const Text(AppText.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

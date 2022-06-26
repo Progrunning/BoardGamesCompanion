@@ -110,6 +110,7 @@ class BoardGamesGeekService {
 
   static const int _numberOfDaysToCacheBoardGameDetails = 1;
   static const int _bggRetryStatusCode = 202;
+  static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;
 
   final CustomHttpClientAdapter _httpClientAdapter;
@@ -397,6 +398,7 @@ class BoardGamesGeekService {
 
         return response;
       },
+      delayFactor: _bggRetryDelayFactor,
       retryIf: (e) => e is SocketException || e is TimeoutException,
     );
 
@@ -506,6 +508,7 @@ class BoardGamesGeekService {
 
         return response;
       },
+      delayFactor: _bggRetryDelayFactor,
       retryIf: (e) => e is BggRetryException,
     );
 

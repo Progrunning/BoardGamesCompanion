@@ -52,8 +52,10 @@ class BggPlaysImportReportDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(AppText.importPlaysReportImportReportTitle,
-                    style: AppTheme.theme.textTheme.headline2),
+                Text(
+                  AppText.importPlaysReportImportReportTitle,
+                  style: AppTheme.theme.textTheme.headline2,
+                ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 LimitedBox(
                   maxHeight: bggPlaysImportReportDialogHeight,
@@ -73,10 +75,13 @@ class BggPlaysImportReportDialog extends StatelessWidget {
                         if (report.errors.isNotEmpty) ...[
                           const SizedBox(height: Dimensions.standardSpacing),
                           const ItemPropertyTitle(
-                              AppText.importPlaysReportImportErrorsSectionTitle),
+                            AppText.importPlaysReportImportErrorsSectionTitle,
+                          ),
                           const SizedBox(height: Dimensions.halfStandardSpacing),
                           Column(
-                            children: [for (var error in report.errors) Text(error.description!)],
+                            children: [
+                              for (var error in report.errors) Text(error.description!),
+                            ],
                           )
                         ],
                       ],

@@ -1,11 +1,10 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../common/app_text.dart';
 import '../common/dimensions.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/user.dart';
-import '../pages/home_page.dart';
 import '../stores/board_games_store.dart';
 import '../stores/user_store.dart';
 
@@ -26,7 +25,7 @@ mixin ImportCollection {
       final user = User(name: username);
       await userStore.addOrUpdateUser(user);
 
-      _showSuccessSnackBar();
+      _showSuccessSnackBar(context);
     } else {
       _showFailureSnackBar(context);
     }
@@ -35,8 +34,8 @@ mixin ImportCollection {
   }
 }
 
-void _showSuccessSnackBar() {
-  HomePage.homePageGlobalKey.currentState!.showSnackBar(
+void _showSuccessSnackBar(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
       margin: Dimensions.snackbarMargin,
       behavior: SnackBarBehavior.floating,
@@ -46,16 +45,16 @@ void _showSuccessSnackBar() {
 }
 
 void _showFailureSnackBar(BuildContext context) {
-  HomePage.homePageGlobalKey.currentState!.showSnackBar(
+  ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: Dimensions.snackbarMargin,
       content: const Text(AppText.importCollectionsFailureMessage),
+      duration: const Duration(seconds: 8),
       action: SnackBarAction(
-        label: 'OK',
+        label: AppText.ok,
         onPressed: () {
-          HomePage.homePageGlobalKey.currentState
-              ?.hideCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+          ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
         },
       ),
     ),

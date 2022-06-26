@@ -95,10 +95,7 @@ class _SortBy extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Text(
-          'Sort by',
-          style: AppTheme.titleTextStyle,
-        ),
+        const Text('Sort by', style: AppTheme.titleTextStyle),
         Wrap(
           spacing: Dimensions.standardSpacing,
           children: List<Widget>.generate(
@@ -111,9 +108,7 @@ class _SortBy extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(
-          height: Dimensions.doubleStandardSpacing,
-        ),
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
       ],
     );
   }
@@ -131,13 +126,14 @@ class _SortByChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget avatarIcon = Container();
+    Widget orderByIcon = Container();
+    final orderByIconColor = sortBy.selected ? AppTheme.defaultTextColor : AppTheme.accentColor;
     switch (sortBy.orderBy) {
       case OrderBy.Ascending:
-        avatarIcon = const Icon(Icons.arrow_drop_up);
+        orderByIcon = Icon(Icons.arrow_drop_up, color: orderByIconColor);
         break;
       case OrderBy.Descending:
-        avatarIcon = const Icon(Icons.arrow_drop_down);
+        orderByIcon = Icon(Icons.arrow_drop_down, color: orderByIconColor);
         break;
     }
 
@@ -146,7 +142,7 @@ class _SortByChip extends StatelessWidget {
       label: Text(
         sortBy.name,
         style: TextStyle(
-          color: (sortBy.selected) ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
+          color: sortBy.selected ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
         ),
       ),
       selected: sortBy.selected,
@@ -156,7 +152,7 @@ class _SortByChip extends StatelessWidget {
       selectedColor: AppTheme.accentColor,
       shadowColor: AppTheme.shadowColor,
       backgroundColor: AppTheme.primaryColor.withAlpha(Styles.opacity80Percent),
-      avatar: avatarIcon,
+      avatar: orderByIcon,
       onSelected: (isSelected) {
         boardGamesFiltersStore.updateSortBySelection(sortBy);
       },
@@ -309,7 +305,8 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                   showValueIndicator: ShowValueIndicator.always,
                 ),
                 child: Slider(
-                  value: boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 0,
+                  value: min(boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 0,
+                      maxNumberOfPlayers.toDouble()),
                   divisions: maxNumberOfPlayers,
                   min: minNumberOfPlayers.toDouble() - 1,
                   max: maxNumberOfPlayers.toDouble(),

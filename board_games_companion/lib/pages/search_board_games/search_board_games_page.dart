@@ -127,6 +127,7 @@ class _SearchBarState extends State<_SearchBar> {
   Widget build(BuildContext context) {
     return SliverAppBar(
       titleSpacing: 0,
+      foregroundColor: AppTheme.accentColor,
       title: Consumer<SearchBarBoardGamesStore>(
         builder: (_, store, __) {
           return Padding(
@@ -208,9 +209,7 @@ class _SearchResultsState extends State<_SearchResults> {
           final searchResults = snapshot.data as List<BoardGame>?;
           if (searchResults?.isNotEmpty ?? false) {
             return SliverPadding(
-              padding: const EdgeInsets.all(
-                Dimensions.standardSpacing,
-              ),
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (_, index) {
@@ -250,7 +249,7 @@ class _SearchResultsState extends State<_SearchResults> {
                       );
                     }
 
-                    return const Divider(height: Dimensions.standardSpacing);
+                    return const SizedBox(height: Dimensions.standardSpacing);
                   },
                   childCount: math.max(0, searchResults!.length * 2 - 1),
                 ),
