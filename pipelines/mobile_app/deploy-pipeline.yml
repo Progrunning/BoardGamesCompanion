@@ -17,7 +17,7 @@ parameters:
 
 variables:
   - name: appVersion
-    value: "$[coalesce('${{ parameters.appVersion }}', variables['app.version'])]"
+    value: $[coalesce('${{ parameters.appVersion }}', variables['app.version'])]
   - name: appPackageName
     value: com.progrunning.boardgamescompanion
   - name: appDirectoryName
