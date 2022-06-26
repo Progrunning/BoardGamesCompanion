@@ -3,19 +3,19 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../common/app_theme.dart';
-import '../common/dimensions.dart';
-import '../services/analytics_service.dart';
-import '../services/rate_and_review_service.dart';
-import '../stores/board_games_store.dart';
-import '../stores/user_store.dart';
-import '../widgets/bottom_tab_icon.dart';
-import '../widgets/common/page_container_widget.dart';
-import 'base_page_state.dart';
-import 'games/games_page.dart';
-import 'players/players_page.dart';
-import 'search_board_games/search_board_games_page.dart';
-import 'settings/settings_page.dart';
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../services/analytics_service.dart';
+import '../../services/rate_and_review_service.dart';
+import '../../stores/board_games_store.dart';
+import '../../stores/user_store.dart';
+import '../../widgets/bottom_tab_icon.dart';
+import '../../widgets/common/page_container_widget.dart';
+import '../base_page_state.dart';
+import '../games/games_page.dart';
+import '../players/players_page.dart';
+import '../search_board_games/search_board_games_page.dart';
+import 'home_page_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -41,7 +41,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
   late final TabController tabController;
 
-  static const int _numberOfTabs = 4;
+  static const int _numberOfTabs = 3;
   static const int _initialTabIndex = 0;
 
   @override
@@ -60,6 +60,7 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
     return ScaffoldMessenger(
       key: HomePage.homePageGlobalKey,
       child: Scaffold(
+        drawer: const Drawer(child: HomePageDrawer()),
         body: PageContainer(
           child: TabBarView(
             controller: tabController,
@@ -76,7 +77,6 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
               ),
               SearchBoardGamesPage(analyticsService: widget.analyticsService),
               PlayersPage(playersViewModel: widget.playersViewModel),
-              const SettingsPage(),
             ],
           ),
         ),
@@ -99,11 +99,6 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
               title: 'Players',
               icon: BottomTabIcon(iconData: Icons.group),
               activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
-            ),
-            TabItem<BottomTabIcon>(
-              title: 'Settings',
-              icon: BottomTabIcon(iconData: Icons.settings),
-              activeIcon: BottomTabIcon(iconData: Icons.settings, isActive: true),
             ),
           ],
           initialActiveIndex: _initialTabIndex,

@@ -208,9 +208,7 @@ class _SearchResultsState extends State<_SearchResults> {
           final searchResults = snapshot.data as List<BoardGame>?;
           if (searchResults?.isNotEmpty ?? false) {
             return SliverPadding(
-              padding: const EdgeInsets.all(
-                Dimensions.standardSpacing,
-              ),
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (_, index) {

@@ -187,7 +187,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ElevatedIconButton(
-              title: AppText.Edit,
+              title: AppText.edit,
               icon: const DefaultIcon(Icons.edit),
               color: AppTheme.accentColor,
               onPressed: () => Navigator.pushNamed(

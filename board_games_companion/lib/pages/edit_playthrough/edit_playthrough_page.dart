@@ -129,13 +129,13 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.Cancel, style: TextStyle(color: AppTheme.accentColor)),
+              child: const Text(AppText.cancel, style: TextStyle(color: AppTheme.accentColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(AppText.Delete, style: TextStyle(color: AppTheme.defaultTextColor)),
+              child: const Text(AppText.delete, style: TextStyle(color: AppTheme.defaultTextColor)),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
@@ -162,7 +162,7 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.Cancel, style: TextStyle(color: AppTheme.accentColor)),
+              child: const Text(AppText.cancel, style: TextStyle(color: AppTheme.accentColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -478,7 +478,7 @@ class _ActionButtons extends StatelessWidget {
           const Expanded(child: SizedBox.shrink()),
           if (!viewModel.playthoughEnded) ...[
             ElevatedIconButton(
-              title: AppText.Stop,
+              title: AppText.stop,
               icon: const DefaultIcon(
                 Icons.stop,
               ),

@@ -22,7 +22,7 @@ import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
 import '../../widgets/common/shadow_box.dart';
 import '../base_page_state.dart';
-import '../home_page.dart';
+import '../home/home_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'board_game_details_expansions.dart';
 import 'board_game_details_view_model.dart';

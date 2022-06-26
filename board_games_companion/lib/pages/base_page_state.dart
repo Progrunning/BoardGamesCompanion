@@ -33,7 +33,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(AppText.RateAndReview),
+          title: const Text(AppText.rateAndReview),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               Text(
                   "We apologise that we're interupting you but we would really appreciate your support.\n"),
               Text(
-                  "If you're enjoying ${AppText.AppTitle} app, would you mind taking a moment to rate it? It shouldn't take more than a minute.\n"),
+                  "If you're enjoying ${AppText.appTitle} app, would you mind taking a moment to rate it? It shouldn't take more than a minute.\n"),
               Text('Thank you.'),
             ],
           ),
@@ -49,7 +49,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
           actions: <Widget>[
             TextButton(
               child: const Text(
-                AppText.DontAskAgain,
+                AppText.aontAskAgain,
                 style: TextStyle(
                   color: AppTheme.accentColor,
                 ),
@@ -62,11 +62,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
             ),
             TextButton(
               child: const Text(
-                AppText.AskMeLater,
+                AppText.askMeLater,
                 style: TextStyle(
                   color: AppTheme.accentColor,
                 ),
-              ),              
+              ),
               onPressed: () async {
                 Navigator.of(context).pop();
 
@@ -75,7 +75,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
             ),
             TextButton(
               child: const Text(
-                AppText.Rate,
+                AppText.rate,
                 style: TextStyle(
                   color: AppTheme.defaultTextColor,
                 ),

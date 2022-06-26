@@ -1,11 +1,11 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../common/app_text.dart';
 import '../common/dimensions.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/user.dart';
-import '../pages/home_page.dart';
+import '../pages/home/home_page.dart';
 import '../stores/board_games_store.dart';
 import '../stores/user_store.dart';
 

@@ -124,7 +124,7 @@ class _PlayersPageState extends State<PlayersPage> {
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.Cancel),
+              child: const Text(AppText.cancel),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },

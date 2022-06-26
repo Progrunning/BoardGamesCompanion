@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_text.dart';
@@ -16,40 +14,40 @@ import '../../widgets/common/bgg_community_member_user_name_text_field_widget.da
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/import_collections_button.dart';
-import '../about_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
+
+  static const String pageRoute = '/settings';
 }
 
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: const <Widget>[
-                  SizedBox(
-                    height: Dimensions.standardFontSize,
-                  ),
-                  _UserDetailsPanel(),
-                  _RateAndReviewTile(),
-                  _AboutPageTile(),
-                ],
+    return Scaffold(
+      appBar: AppBar(title: const Text(AppText.settingsPageTitle, style: AppTheme.titleTextStyle)),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: const <Widget>[
+                    SizedBox(
+                      height: Dimensions.standardFontSize,
+                    ),
+                    _UserDetailsPanel(),
+                  ],
+                ),
               ),
             ),
-          ),
-          const _VersionNumber(),
-          const SizedBox(height: Dimensions.bottomTabTopHeight),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -105,9 +103,6 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                       triggerImport: _triggerImport ?? false,
                     ),
                   ),
-                  const Divider(
-                    color: AppTheme.accentColor,
-                  ),
                 ],
               ),
             );
@@ -142,9 +137,6 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                   ],
                 ),
               ),
-              const Divider(
-                color: AppTheme.accentColor,
-              ),
             ],
           );
         },
@@ -167,7 +159,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
           actions: <Widget>[
             TextButton(
               child: const Text(
-                AppText.Cancel,
+                AppText.cancel,
                 style: TextStyle(color: AppTheme.accentColor),
               ),
               onPressed: () {
@@ -194,103 +186,6 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
             ),
           ],
         );
-      },
-    );
-  }
-}
-
-class _RateAndReviewTile extends StatelessWidget {
-  const _RateAndReviewTile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        DetailsItem(
-          title: 'Rate & Review',
-          subtitle: 'Store listing',
-          onTap: () async {
-            await InAppReview.instance.openStoreListing(
-              appStoreId: Constants.AppleAppId,
-            );
-          },
-        ),
-        const Positioned.fill(
-          right: Dimensions.standardSpacing,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Icon(
-              Icons.star,
-              color: AppTheme.accentColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _AboutPageTile extends StatelessWidget {
-  const _AboutPageTile({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        DetailsItem(
-          title: 'About',
-          subtitle: 'App information',
-          onTap: () async => _navigateToAboutPage(context),
-        ),
-        const Positioned.fill(
-          right: Dimensions.standardSpacing,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Icon(
-              Icons.navigate_next,
-              color: AppTheme.accentColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Future<void> _navigateToAboutPage(BuildContext context) async {
-    await Navigator.pushNamed(context, AboutPage.pageRoute);
-  }
-}
-
-class _VersionNumber extends StatelessWidget {
-  const _VersionNumber({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: PackageInfo.fromPlatform(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData &&
-            snapshot.data is PackageInfo) {
-          return Padding(
-            padding: const EdgeInsets.all(
-              Dimensions.halfStandardSpacing,
-            ),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Text(
-                'v${(snapshot.data as PackageInfo).version}',
-                style: AppTheme.subTitleTextStyle,
-              ),
-            ),
-          );
-        }
-
-        return Container();
       },
     );
   }

@@ -8,16 +8,17 @@ import 'models/navigation/board_game_details_page_arguments.dart';
 import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
-import 'pages/about_page.dart';
+import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
 import 'pages/board_game_details/board_game_details_view_model.dart';
 import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrouhg_view_model.dart';
-import 'pages/home_page.dart';
+import 'pages/home/home_page.dart';
 import 'pages/players/player_page.dart';
 import 'pages/players/players_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
+import 'pages/settings/settings_page.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
@@ -123,6 +124,9 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
         },
         AboutPage.pageRoute: (BuildContext _) {
           return const AboutPage();
+        },
+        SettingsPage.pageRoute: (BuildContext _) {
+          return const SettingsPage();
         },
       },
     );

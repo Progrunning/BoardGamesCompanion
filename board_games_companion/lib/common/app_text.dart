@@ -1,16 +1,16 @@
 class AppText {
-  static const AddBoardGameTooltip = 'Add a board game';
-  static const AppTitle = 'Board Games Companion';
+  static const addBoardGameTooltip = 'Add a board game';
+  static const appTitle = 'Board Games Companion';
 
-  static const RateAndReview = 'Rate & Review';
-  static const Rate = 'Rate';
-  static const AskMeLater = 'Ask me later';
-  static const DontAskAgain = "Don't ask again";
+  static const rateAndReview = 'Rate & Review';
+  static const rate = 'Rate';
+  static const askMeLater = 'Ask me later';
+  static const aontAskAgain = "Don't ask again";
 
-  static const Cancel = 'Cancel';
-  static const Stop = 'Stop';
-  static const Delete = 'Delete';
-  static const Edit = 'Edit';
+  static const cancel = 'Cancel';
+  static const stop = 'Stop';
+  static const delete = 'Delete';
+  static const edit = 'Edit';
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
@@ -102,4 +102,10 @@ class AppText {
   static const playerPageSearchNoSearchResults =
       '''It looks there's no players that match the search phrase ''';
   static const playerPageSearchHintText = 'Search for players...';
+
+  static const aboutPageTitle = 'About';
+
+  static const settingsPageTitle = 'Settings';
+
+  static const drawerVersionFormat = 'Version %s';
 }

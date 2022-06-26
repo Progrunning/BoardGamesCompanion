@@ -254,6 +254,11 @@ class AppTheme {
             backgroundColor: primaryColorLight,
             actionTextColor: accentColor,
           ),
+      dividerTheme: ThemeData.light().dividerTheme.copyWith(
+            color: AppTheme.accentColor,
+            space: 0.5,
+            thickness: 0.5,
+          ),
     );
   }
 }
