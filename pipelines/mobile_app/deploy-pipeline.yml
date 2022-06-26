@@ -1,11 +1,5 @@
 name: $(app.version).$(Build.BuildID) $(SourceBranchName)
 
-variables:
-  appPackageName: com.progrunning.boardgamescompanion
-  appDirectoryName: board_games_companion
-  keyPropertiesFileName: key.properties
-  keyStoreFileName: boardgamescompanion.keystore
-
 trigger:
   batch: true
   branches:
@@ -14,6 +8,25 @@ trigger:
   paths:
     include:
       - board_games_companion
+
+parameters:
+  - name: appVersion
+    displayName: App version
+    type: string
+    default: ""
+
+variables:
+  - name: appVersion
+    value: "$[coalesce('${{ parameters.appVersion }}', variables['app.version'])].$(Build.BuildID)"
+  - name: appPackageName
+    value: com.progrunning.boardgamescompanion
+  - name: appDirectoryName
+    value: board_games_companion
+  - name: keyPropertiesFileName
+    value: key.properties
+  - name: keyStoreFileName
+    value: boardgamescompanion.keystore
+  - group: BGC-GLOBAL
 
 stages:
   - stage: CdBuildAndroid
@@ -30,7 +43,7 @@ stages:
               mode: "auto"
               channel: "stable"
               version: "custom"
-              customVersion: "2.8.0"
+              customVersion: $(flutter.version)
 
           - task: DownloadSecureFile@1
             displayName: "Downloading key.properties file"
@@ -62,7 +75,7 @@ stages:
               target: "aab"
               projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
-              buildName: "$(app.version).$(Build.BuildID)"
+              buildName: "$(appVersion)"
 
           - task: DeleteFiles@1
             displayName: "Deleting key.properties file"
@@ -132,7 +145,7 @@ stages:
               mode: "auto"
               channel: "stable"
               version: "custom"
-              customVersion: "2.8.0"
+              customVersion: $(flutter.version)
 
           - task: InstallAppleCertificate@2
             inputs:
@@ -154,7 +167,7 @@ stages:
               iosCodesign: false
               projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
-              buildName: "$(app.version).$(Build.BuildID)"
+              buildName: "$(appVersion)"
 
           - task: Xcode@5
             inputs:
