@@ -38,9 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: const <Widget>[
-                    SizedBox(
-                      height: Dimensions.standardFontSize,
-                    ),
+                    SizedBox(height: Dimensions.standardFontSize),
                     _UserDetailsPanel(),
                   ],
                 ),
@@ -88,6 +86,8 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  const SectionTitle(title: 'BGG Username', padding: EdgeInsets.zero),
+                  const SizedBox(height: Dimensions.standardSpacing),
                   const BggCommunityMemberText(),
                   BggCommunityMemberUserNameTextField(
                     controller: _bggUserNameController,
@@ -110,9 +110,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
 
           return Column(
             children: <Widget>[
-              const SectionTitle(
-                title: 'User',
-              ),
+              const SectionTitle(title: 'User'),
               DetailsItem(
                 title: userStore.user?.name ?? '',
                 subtitle: 'BGG profile page',
@@ -126,9 +124,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                   children: <Widget>[
                     ElevatedIconButton(
                       title: 'Remove',
-                      icon: const DefaultIcon(
-                        Icons.remove_circle_outline,
-                      ),
+                      icon: const DefaultIcon(Icons.remove_circle_outline),
                       color: AppTheme.redColor,
                       onPressed: () async => _showRemoveBggUserDialog(context, userStore),
                     ),

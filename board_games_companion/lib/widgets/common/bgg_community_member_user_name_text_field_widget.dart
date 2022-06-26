@@ -18,9 +18,9 @@ class BggCommunityMemberUserNameTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      style: AppTheme.defaultTextFieldStyle,      
+      style: AppTheme.defaultTextFieldStyle,
       decoration: const InputDecoration(
-        hintText: "Enter your BGG user's name",
+        hintText: "Enter your BGG's username",
       ),
       onSubmitted: (username) {
         _onSubmit();

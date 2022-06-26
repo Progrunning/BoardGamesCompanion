@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/import_result.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -215,6 +216,7 @@ class BoardGamesStore with ChangeNotifier {
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
+      importResult = CollectionImportResult.failure([ImportError.exception(e, stack)]);
     }
 
     _loadDataState = LoadDataState.loaded;

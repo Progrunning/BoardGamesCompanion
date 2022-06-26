@@ -249,7 +249,7 @@ class _SearchResultsState extends State<_SearchResults> {
                       );
                     }
 
-                    return const Divider(height: Dimensions.standardSpacing);
+                    return const SizedBox(height: Dimensions.standardSpacing);
                   },
                   childCount: math.max(0, searchResults!.length * 2 - 1),
                 ),

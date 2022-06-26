@@ -43,16 +43,12 @@ class _AboutPageState extends BasePageState<AboutPage> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.standardSpacing,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: const <Widget>[
-                          SectionTitle(
-                            title: 'Author',
-                          ),
+                          SectionTitle(title: 'Author'),
                           DetailsItem(
                             title: 'Mikolaj Kieres',
                             subtitle: Constants.FeedbackEmailAddress,
