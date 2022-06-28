@@ -356,7 +356,7 @@ class _PlayersSerach extends SearchDelegate<Player?> {
   @override
   Widget buildResults(BuildContext context) {
     if (query.isEmpty) {
-      return const SizedBox();
+      return ListView();
     }
 
     final queryLowercased = query.toLowerCase();
