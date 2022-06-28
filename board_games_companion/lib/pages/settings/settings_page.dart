@@ -112,6 +112,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
           }
 
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SectionTitle(title: 'User'),
               DetailsItem(
