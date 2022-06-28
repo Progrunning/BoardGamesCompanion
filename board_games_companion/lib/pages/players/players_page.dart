@@ -359,12 +359,7 @@ class _PlayersSerach extends SearchDelegate<Player?> {
       return ListView();
     }
 
-    final queryLowercased = query.toLowerCase();
-    final filterPlayers = players
-        .where((player) =>
-            (player.name?.toLowerCase().contains(queryLowercased) ?? false) ||
-            (player.bggName?.toLowerCase().contains(queryLowercased) ?? false))
-        .toList();
+    final filterPlayers = _filterPlayers(query);
 
     if (filterPlayers.isEmpty) {
       return _NoSearchResults(query: query, onClear: () => query = '');
@@ -375,7 +370,38 @@ class _PlayersSerach extends SearchDelegate<Player?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const SizedBox();
+    if (query.isEmpty) {
+      return ListView();
+    }
+
+    final filterPlayers = _filterPlayers(query);
+    if (filterPlayers.isEmpty) {
+      return ListView();
+    }
+
+    return ListView.builder(
+      itemCount: filterPlayers.length,
+      itemBuilder: (_, index) {
+        final player = filterPlayers[index];
+        return ListTile(
+          title: Text(player.name!),
+          subtitle: player.bggName != null ? Text(player.bggName!) : const SizedBox.shrink(),
+          onTap: () {
+            query = player.name!;
+            showResults(context);
+          },
+        );
+      },
+    );
+  }
+
+  List<Player> _filterPlayers(String query) {
+    final queryLowercased = query.toLowerCase();
+    return players
+        .where((player) =>
+            (player.name?.toLowerCase().contains(queryLowercased) ?? false) ||
+            (player.bggName?.toLowerCase().contains(queryLowercased) ?? false))
+        .toList();
   }
 }
 
