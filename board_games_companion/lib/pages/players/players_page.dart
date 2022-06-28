@@ -391,17 +391,20 @@ class _SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(Dimensions.standardSpacing),
-      child: ListView.separated(
-        itemCount: filterPlayers.length,
-        separatorBuilder: (_, index) {
-          return const SizedBox(height: Dimensions.doubleStandardSpacing);
-        },
-        itemBuilder: (_, index) {
-          final player = filterPlayers[index];
-          // TODO Fix the ripple effect when tapped to show on top of the player image and clip the corners
-          return InkWell(
+    return ListView.separated(
+      itemCount: filterPlayers.length,
+      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
+      itemBuilder: (_, index) {
+        final player = filterPlayers[index];
+        // TODO Fix the ripple effect when tapped to show on top of the player image and clip the corners
+        return Padding(
+          padding: EdgeInsets.only(
+            top: index == 0 ? Dimensions.standardSpacing : 0,
+            bottom: index == filterPlayers.length - 1 ? Dimensions.standardSpacing : 0,
+            left: Dimensions.standardSpacing,
+            right: Dimensions.standardSpacing,
+          ),
+          child: InkWell(
             onTap: () => onResultTap(player),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -437,9 +440,9 @@ class _SearchResults extends StatelessWidget {
                 )
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
