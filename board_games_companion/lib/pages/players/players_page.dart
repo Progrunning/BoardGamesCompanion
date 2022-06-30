@@ -1,6 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/animation_tags.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -438,7 +439,14 @@ class _SearchResults extends StatelessWidget {
                 SizedBox(
                   height: Dimensions.searchResultsPlayerAvatarSize,
                   width: Dimensions.searchResultsPlayerAvatarSize,
-                  child: Ink(child: ShadowBox(child: PlayerImage(imageUri: player.avatarImageUri))),
+                  child: Ink(
+                    child: ShadowBox(
+                      child: Hero(
+                        tag: '${AnimationTags.playerImageHeroTag}${player.id}',
+                        child: PlayerImage(imageUri: player.avatarImageUri),
+                      ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
