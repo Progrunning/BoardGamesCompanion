@@ -110,4 +110,6 @@ class AppText {
   static const settingsPageTitle = 'Settings';
 
   static const drawerVersionFormat = 'Version %s';
+  static const drawerReleaseNotes = 'Release notes';
+  static const drawerAppWiki = 'Wiki';
 }

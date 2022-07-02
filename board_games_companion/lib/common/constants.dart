@@ -44,4 +44,8 @@ class Constants {
   static const minNumberOfPlayers = 1;
 
   static const fullCricleDegrees = 360;
+
+  static const appReleaseNotesUrl = 'https://github.com/Progrunning/BoardGamesCompanion/releases';
+  static const appWikiFeaturesUrl =
+      'https://github.com/Progrunning/BoardGamesCompanion/wiki/Features';
 }
