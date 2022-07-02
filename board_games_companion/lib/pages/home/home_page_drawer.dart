@@ -22,7 +22,10 @@ class HomePageDrawer extends StatelessWidget {
           Container(
             color: AppTheme.primaryColor,
             child: Padding(
-              padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.doubleStandardSpacing,
+                vertical: Dimensions.doubleStandardSpacing * 2,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
