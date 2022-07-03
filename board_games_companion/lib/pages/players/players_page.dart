@@ -35,58 +35,61 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
-        future: widget.playersViewModel.loadPlayers(),
-        success: (context, PlayersViewModel viewModel) {
-          return Stack(
-            children: [
-              CustomScrollView(
-                slivers: [
-                  if (viewModel.players.isNotEmpty) ...[
-                    _AppBar(
-                      players: viewModel.players,
-                      onSearchResultTap: (Player player) => _navigateToPlayerPage(context, player),
-                      onToggleEditModeTap: () => _toggleEditMode(),
-                    ),
-                    _Players(
-                      players: viewModel.players,
-                      isEditMode: viewModel.isEditMode,
-                      onPlayerTap: (Player player, bool isChecked) =>
-                          _playerTapped(viewModel, player, isChecked),
-                    ),
-                  ] else
-                    const _NoPlayers(),
-                ],
-              ),
-              Positioned(
-                bottom: Dimensions.bottomTabTopHeight,
-                right: Dimensions.standardSpacing,
-                child: viewModel.isEditMode
-                    ? ElevatedIconButton(
-                        title: AppText.playersPageDeletePlayersButtonText,
-                        icon: const DefaultIcon(Icons.delete),
-                        color: AppTheme.redColor,
-                        onPressed: () async {
-                          if (await _showDeletePlayersDialog(context) ?? false) {
-                            setState(() {});
-                          }
-                        },
-                      )
-                    : ElevatedIconButton(
-                        title: AppText.playersPageCreatePlayerButtonText,
-                        icon: const DefaultIcon(Icons.add),
-                        onPressed: () => Navigator.pushNamed(
-                          context,
-                          PlayerPage.pageRoute,
-                          arguments: const PlayerPageArguments(),
-                        ),
+    return ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
+      future: widget.playersViewModel.loadPlayers(),
+      success: (context, PlayersViewModel viewModel) {
+        return Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                if (viewModel.players.isNotEmpty) ...[
+                  _AppBar(
+                    players: viewModel.players,
+                    onSearchResultTap: (Player player) => _navigateToPlayerPage(context, player),
+                    onToggleEditModeTap: () => _toggleEditMode(),
+                  ),
+                  _Players(
+                    players: viewModel.players,
+                    isEditMode: viewModel.isEditMode,
+                    onPlayerTap: (Player player, bool isChecked) =>
+                        _playerTapped(viewModel, player, isChecked),
+                  ),
+                ] else ...[
+                  const SliverAppBar(
+                    pinned: true,
+                    foregroundColor: AppTheme.accentColor,
+                  ),
+                  const _NoPlayers(),
+                ]
+              ],
+            ),
+            Positioned(
+              bottom: Dimensions.bottomTabTopHeight,
+              right: Dimensions.standardSpacing,
+              child: viewModel.isEditMode
+                  ? ElevatedIconButton(
+                      title: AppText.playersPageDeletePlayersButtonText,
+                      icon: const DefaultIcon(Icons.delete),
+                      color: AppTheme.redColor,
+                      onPressed: () async {
+                        if (await _showDeletePlayersDialog(context) ?? false) {
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : ElevatedIconButton(
+                      title: AppText.playersPageCreatePlayerButtonText,
+                      icon: const DefaultIcon(Icons.add),
+                      onPressed: () => Navigator.pushNamed(
+                        context,
+                        PlayerPage.pageRoute,
+                        arguments: const PlayerPageArguments(),
                       ),
-              ),
-            ],
-          );
-        },
-      ),
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -195,12 +198,12 @@ class _NoPlayers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
+    return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
         child: Column(
           children: const <Widget>[
-            SizedBox(height: 60),
+            SizedBox(height: 40),
             Center(
               child: Text(
                 AppText.playersPageNoPlayersTitle,
@@ -219,7 +222,6 @@ class _NoPlayers extends StatelessWidget {
               textAlign: TextAlign.justify,
               style: TextStyle(fontSize: Dimensions.mediumFontSize),
             ),
-            SizedBox(height: Dimensions.doubleStandardSpacing),
           ],
         ),
       ),
