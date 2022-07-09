@@ -107,58 +107,52 @@ class _Collection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: CustomScrollView(
-          slivers: <Widget>[
-            _AppBar(
-              boardGamesStore: boardGamesStore,
-              topTabController: topTabController,
-              analyticsService: analyticsService,
-              rateAndReviewService: rateAndReviewService,
-              updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
-            ),
-            Builder(
-              builder: (_) {
-                final List<BoardGameDetails> boardGames = [];
-                switch (boardGamesStore.selectedTab) {
-                  case GamesTab.Owned:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
-                    break;
-                  case GamesTab.Friends:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
-                    break;
-                  case GamesTab.Wishlist:
-                    boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
-                    break;
-                }
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: CustomScrollView(
+        slivers: <Widget>[
+          _AppBar(
+            boardGamesStore: boardGamesStore,
+            topTabController: topTabController,
+            analyticsService: analyticsService,
+            rateAndReviewService: rateAndReviewService,
+            updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
+          ),
+          Builder(
+            builder: (_) {
+              final List<BoardGameDetails> boardGames = [];
+              switch (boardGamesStore.selectedTab) {
+                case GamesTab.Owned:
+                  boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
+                  break;
+                case GamesTab.Friends:
+                  boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
+                  break;
+                case GamesTab.Wishlist:
+                  boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
+                  break;
+              }
 
-                if (boardGames.isEmpty) {
-                  if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-                    return _EmptySearchResult(
-                      boardGamesStore: boardGamesStore,
-                      onClearSearch: () => _updateSearchResults(''),
-                    );
-                  }
-
-                  return _EmptyCollection(
+              if (boardGames.isEmpty) {
+                if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
+                  return _EmptySearchResult(
                     boardGamesStore: boardGamesStore,
+                    onClearSearch: () => _updateSearchResults(''),
                   );
                 }
 
-                return _Grid(
-                  boardGames: boardGames,
-                  collectionType: boardGamesStore.selectedTab.toCollectionType(),
-                  analyticsService: analyticsService,
-                );
-              },
-            ),
-            const SliverPadding(padding: EdgeInsets.all(8.0)),
-          ],
-        ),
+                return _EmptyCollection(boardGamesStore: boardGamesStore);
+              }
+
+              return _Grid(
+                boardGames: boardGames,
+                collectionType: boardGamesStore.selectedTab.toCollectionType(),
+                analyticsService: analyticsService,
+              );
+            },
+          ),
+          const SliverPadding(padding: EdgeInsets.all(8.0)),
+        ],
       ),
     );
   }
@@ -382,83 +376,68 @@ class _Grid extends StatelessWidget {
 }
 
 class _Empty extends StatelessWidget {
-  const _Empty({
-    Key? key,
-  }) : super(key: key);
+  const _Empty({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(
-            Dimensions.doubleStandardSpacing,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const <Widget>[
-              SizedBox(
-                height: 60,
-              ),
-              Center(
-                child: Text(
-                  'Your games collection is empty',
-                  style: TextStyle(
-                    fontSize: Dimensions.extraLargeFontSize,
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(pinned: true, floating: true, foregroundColor: AppTheme.accentColor),
+        SliverPadding(
+          padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const <Widget>[
+                SizedBox(height: 40),
+                Center(
+                  child: Text(
+                    'Your games collection is empty',
+                    style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: Dimensions.doubleStandardSpacing,
-              ),
-              Icon(
-                Icons.sentiment_dissatisfied_sharp,
-                size: 80,
-                color: AppTheme.primaryColor,
-              ),
-              SizedBox(
-                height: Dimensions.doubleStandardSpacing,
-              ),
-              Text.rich(
-                TextSpan(
-                  children: <InlineSpan>[
-                    TextSpan(
-                      text: 'Nothing to worry about though! ',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text:
-                          'Follow the below instructions to fill up this screen with board games.\n\n',
-                    ),
-                    TextSpan(text: 'Use the bottom '),
-                    TextSpan(
-                      text: 'Search',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text:
-                          ' tab to check out current TOP 50 hot board games or look up any title.\n',
-                    ),
-                  ],
+                SizedBox(height: Dimensions.doubleStandardSpacing),
+                Icon(
+                  Icons.sentiment_dissatisfied_sharp,
+                  size: 80,
+                  color: AppTheme.primaryColor,
                 ),
-                textAlign: TextAlign.justify,
-                style: TextStyle(fontSize: Dimensions.mediumFontSize),
-              ),
-              BggCommunityMemberText(),
-              _ImportDataFromBggSection(),
-              SizedBox(height: Dimensions.standardSpacing),
-            ],
+                SizedBox(height: Dimensions.doubleStandardSpacing),
+                Text.rich(
+                  TextSpan(
+                    children: <InlineSpan>[
+                      TextSpan(
+                        text: 'Nothing to worry about though! ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text:
+                            'Follow the below instructions to fill up this screen with board games.\n\n',
+                      ),
+                      TextSpan(text: 'Use the bottom '),
+                      TextSpan(text: 'Search', style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(
+                        text:
+                            ' tab to check out current TOP 50 hot board games or look up any title and start adding them to your collections.\n',
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: Dimensions.mediumFontSize),
+                ),
+                BggCommunityMemberText(),
+                _ImportDataFromBggSection(),
+              ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
 
 class _ImportDataFromBggSection extends StatefulWidget {
-  const _ImportDataFromBggSection({
-    Key? key,
-  }) : super(key: key);
+  const _ImportDataFromBggSection({Key? key}) : super(key: key);
 
   @override
   State<_ImportDataFromBggSection> createState() => _ImportDataFromBggSectionState();
@@ -487,11 +466,9 @@ class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
       children: [
         BggCommunityMemberUserNameTextField(
           controller: _bggUserNameController,
-          onSubmit: () {
-            setState(() {
-              _triggerImport = true;
-            });
-          },
+          onSubmit: () => setState(() {
+            _triggerImport = true;
+          }),
         ),
         const SizedBox(height: Dimensions.standardSpacing),
         Align(

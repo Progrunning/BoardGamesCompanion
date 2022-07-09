@@ -61,23 +61,25 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
       key: HomePage.homePageGlobalKey,
       child: Scaffold(
         drawer: const Drawer(child: HomePageDrawer()),
-        body: PageContainer(
-          child: TabBarView(
-            controller: tabController,
-            children: <Widget>[
-              Consumer2<BoardGamesStore, UserStore>(
-                builder: (_, boardGamesStore, userStore, __) {
-                  return GamesPage(
-                    boardGamesStore,
-                    userStore,
-                    widget.analyticsService,
-                    widget.rateAndReviewService,
-                  );
-                },
-              ),
-              SearchBoardGamesPage(analyticsService: widget.analyticsService),
-              PlayersPage(playersViewModel: widget.playersViewModel),
-            ],
+        body: SafeArea(
+          child: PageContainer(
+            child: TabBarView(
+              controller: tabController,
+              children: <Widget>[
+                Consumer2<BoardGamesStore, UserStore>(
+                  builder: (_, boardGamesStore, userStore, __) {
+                    return GamesPage(
+                      boardGamesStore,
+                      userStore,
+                      widget.analyticsService,
+                      widget.rateAndReviewService,
+                    );
+                  },
+                ),
+                SearchBoardGamesPage(analyticsService: widget.analyticsService),
+                PlayersPage(playersViewModel: widget.playersViewModel),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: ConvexAppBar(

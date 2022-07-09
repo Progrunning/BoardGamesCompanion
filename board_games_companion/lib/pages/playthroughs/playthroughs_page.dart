@@ -156,7 +156,12 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       });
       await widget.viewModel.importPlays(username, boardGameId);
       if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
-        await showImportPlaysReportDialog(context, widget.viewModel.bggPlaysImportRaport!);
+        await showImportPlaysReportDialog(
+          context,
+          username,
+          boardGameId,
+          widget.viewModel.bggPlaysImportRaport!,
+        );
       } else {
         _showNoPlaysToImportDialog();
       }
@@ -186,11 +191,19 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   }
 
   Future<void> showImportPlaysReportDialog(
-      BuildContext context, BggPlaysImportRaport bggPlaysImportRaport) async {
+    BuildContext context,
+    String username,
+    String boardGameId,
+    BggPlaysImportRaport bggPlaysImportRaport,
+  ) async {
     showGeneralDialog<void>(
       context: context,
       pageBuilder: (_, __, ___) {
-        return BggPlaysImportReportDialog(report: bggPlaysImportRaport);
+        return BggPlaysImportReportDialog(
+          username: username,
+          boardGameId: boardGameId,
+          report: bggPlaysImportRaport,
+        );
       },
     );
   }

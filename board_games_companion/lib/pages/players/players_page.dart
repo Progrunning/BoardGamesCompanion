@@ -1,6 +1,7 @@
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/animation_tags.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -34,58 +35,61 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
-        future: widget.playersViewModel.loadPlayers(),
-        success: (context, PlayersViewModel viewModel) {
-          return Stack(
-            children: [
-              CustomScrollView(
-                slivers: [
-                  if (viewModel.players.isNotEmpty) ...[
-                    _AppBar(
-                      players: viewModel.players,
-                      onSearchResultTap: (Player player) => _navigateToPlayerPage(context, player),
-                      onToggleEditModeTap: () => _toggleEditMode(),
-                    ),
-                    _Players(
-                      players: viewModel.players,
-                      isEditMode: viewModel.isEditMode,
-                      onPlayerTap: (Player player, bool isChecked) =>
-                          _playerTapped(viewModel, player, isChecked),
-                    ),
-                  ] else
-                    const _NoPlayers(),
-                ],
-              ),
-              Positioned(
-                bottom: Dimensions.bottomTabTopHeight,
-                right: Dimensions.standardSpacing,
-                child: viewModel.isEditMode
-                    ? ElevatedIconButton(
-                        title: AppText.playersPageDeletePlayersButtonText,
-                        icon: const DefaultIcon(Icons.delete),
-                        color: AppTheme.redColor,
-                        onPressed: () async {
-                          if (await _showDeletePlayersDialog(context) ?? false) {
-                            setState(() {});
-                          }
-                        },
-                      )
-                    : ElevatedIconButton(
-                        title: AppText.playersPageCreatePlayerButtonText,
-                        icon: const DefaultIcon(Icons.add),
-                        onPressed: () => Navigator.pushNamed(
-                          context,
-                          PlayerPage.pageRoute,
-                          arguments: const PlayerPageArguments(),
-                        ),
+    return ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
+      future: widget.playersViewModel.loadPlayers(),
+      success: (context, PlayersViewModel viewModel) {
+        return Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                if (viewModel.players.isNotEmpty) ...[
+                  _AppBar(
+                    players: viewModel.players,
+                    onSearchResultTap: (Player player) => _navigateToPlayerPage(context, player),
+                    onToggleEditModeTap: () => _toggleEditMode(),
+                  ),
+                  _Players(
+                    players: viewModel.players,
+                    isEditMode: viewModel.isEditMode,
+                    onPlayerTap: (Player player, bool isChecked) =>
+                        _playerTapped(viewModel, player, isChecked),
+                  ),
+                ] else ...[
+                  const SliverAppBar(
+                    pinned: true,
+                    foregroundColor: AppTheme.accentColor,
+                  ),
+                  const _NoPlayers(),
+                ]
+              ],
+            ),
+            Positioned(
+              bottom: Dimensions.bottomTabTopHeight,
+              right: Dimensions.standardSpacing,
+              child: viewModel.isEditMode
+                  ? ElevatedIconButton(
+                      title: AppText.playersPageDeletePlayersButtonText,
+                      icon: const DefaultIcon(Icons.delete),
+                      color: AppTheme.redColor,
+                      onPressed: () async {
+                        if (await _showDeletePlayersDialog(context) ?? false) {
+                          setState(() {});
+                        }
+                      },
+                    )
+                  : ElevatedIconButton(
+                      title: AppText.playersPageCreatePlayerButtonText,
+                      icon: const DefaultIcon(Icons.add),
+                      onPressed: () => Navigator.pushNamed(
+                        context,
+                        PlayerPage.pageRoute,
+                        arguments: const PlayerPageArguments(),
                       ),
-              ),
-            ],
-          );
-        },
-      ),
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -194,12 +198,12 @@ class _NoPlayers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
+    return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
         child: Column(
           children: const <Widget>[
-            SizedBox(height: 60),
+            SizedBox(height: 40),
             Center(
               child: Text(
                 AppText.playersPageNoPlayersTitle,
@@ -218,7 +222,6 @@ class _NoPlayers extends StatelessWidget {
               textAlign: TextAlign.justify,
               style: TextStyle(fontSize: Dimensions.mediumFontSize),
             ),
-            SizedBox(height: Dimensions.doubleStandardSpacing),
           ],
         ),
       ),
@@ -356,15 +359,10 @@ class _PlayersSerach extends SearchDelegate<Player?> {
   @override
   Widget buildResults(BuildContext context) {
     if (query.isEmpty) {
-      return const SizedBox();
+      return ListView();
     }
 
-    final queryLowercased = query.toLowerCase();
-    final filterPlayers = players
-        .where((player) =>
-            (player.name?.toLowerCase().contains(queryLowercased) ?? false) ||
-            (player.bggName?.toLowerCase().contains(queryLowercased) ?? false))
-        .toList();
+    final filterPlayers = _filterPlayers(query);
 
     if (filterPlayers.isEmpty) {
       return _NoSearchResults(query: query, onClear: () => query = '');
@@ -375,7 +373,38 @@ class _PlayersSerach extends SearchDelegate<Player?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const SizedBox();
+    if (query.isEmpty) {
+      return ListView();
+    }
+
+    final filterPlayers = _filterPlayers(query);
+    if (filterPlayers.isEmpty) {
+      return ListView();
+    }
+
+    return ListView.builder(
+      itemCount: filterPlayers.length,
+      itemBuilder: (_, index) {
+        final player = filterPlayers[index];
+        return ListTile(
+          title: Text(player.name!),
+          subtitle: player.bggName != null ? Text(player.bggName!) : const SizedBox.shrink(),
+          onTap: () {
+            query = player.name!;
+            showResults(context);
+          },
+        );
+      },
+    );
+  }
+
+  List<Player> _filterPlayers(String query) {
+    final queryLowercased = query.toLowerCase();
+    return players
+        .where((player) =>
+            (player.name?.toLowerCase().contains(queryLowercased) ?? false) ||
+            (player.bggName?.toLowerCase().contains(queryLowercased) ?? false))
+        .toList();
   }
 }
 
@@ -391,17 +420,20 @@ class _SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(Dimensions.standardSpacing),
-      child: ListView.separated(
-        itemCount: filterPlayers.length,
-        separatorBuilder: (_, index) {
-          return const SizedBox(height: Dimensions.doubleStandardSpacing);
-        },
-        itemBuilder: (_, index) {
-          final player = filterPlayers[index];
-          // TODO Fix the ripple effect when tapped to show on top of the player image and clip the corners
-          return InkWell(
+    return ListView.separated(
+      itemCount: filterPlayers.length,
+      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
+      itemBuilder: (_, index) {
+        final player = filterPlayers[index];
+        // TODO Fix the ripple effect when tapped to show on top of the player image and clip the corners
+        return Padding(
+          padding: EdgeInsets.only(
+            top: index == 0 ? Dimensions.standardSpacing : 0,
+            bottom: index == filterPlayers.length - 1 ? Dimensions.standardSpacing : 0,
+            left: Dimensions.standardSpacing,
+            right: Dimensions.standardSpacing,
+          ),
+          child: InkWell(
             onTap: () => onResultTap(player),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -409,7 +441,14 @@ class _SearchResults extends StatelessWidget {
                 SizedBox(
                   height: Dimensions.searchResultsPlayerAvatarSize,
                   width: Dimensions.searchResultsPlayerAvatarSize,
-                  child: Ink(child: ShadowBox(child: PlayerImage(imageUri: player.avatarImageUri))),
+                  child: Ink(
+                    child: ShadowBox(
+                      child: Hero(
+                        tag: '${AnimationTags.playerImageHeroTag}${player.id}',
+                        child: PlayerImage(imageUri: player.avatarImageUri),
+                      ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
@@ -437,9 +476,9 @@ class _SearchResults extends StatelessWidget {
                 )
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -16,11 +16,15 @@ import '../../widgets/rounded_container.dart';
 
 class BggPlaysImportReportDialog extends StatelessWidget {
   const BggPlaysImportReportDialog({
+    required this.username,
+    required this.boardGameId,
     required this.report,
     Key? key,
   }) : super(key: key);
 
   final BggPlaysImportRaport report;
+  final String username;
+  final String boardGameId;
 
   static const double _minWidth = 340;
   static const double _maxWidth = 380;
@@ -90,8 +94,7 @@ class BggPlaysImportReportDialog extends StatelessWidget {
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _ActionButtons(
-                  onSend:
-                      report.errors.isNotEmpty ? () => _sendReportViaEmail(context, report) : null,
+                  onSend: report.errors.isNotEmpty ? () => _sendReportViaEmail(context) : null,
                   onOk: () => Navigator.pop(context),
                 ),
               ],
@@ -102,9 +105,9 @@ class BggPlaysImportReportDialog extends StatelessWidget {
     );
   }
 
-  Future<void> _sendReportViaEmail(BuildContext context, BggPlaysImportRaport report) async {
+  Future<void> _sendReportViaEmail(BuildContext context) async {
     final errorsFormatted =
-        report.errors.map((ImportError importError) => importError.description).join(', ');
+        '[$username|$boardGameId] ${report.errors.map((ImportError importError) => importError.description).join(', ')}';
     await LauncherHelper.launchUri(
       context,
       'mailto:${Constants.FeedbackEmailAddress}?subject=${Uri.encodeComponent('BGG Import Report')}&body=${Uri.encodeComponent(errorsFormatted)}',

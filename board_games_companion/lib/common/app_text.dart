@@ -94,7 +94,7 @@ class AppText {
   static const playersPageDeletePlayersButtonText = 'Delete Players';
   static const playersPageNoPlayersTitle = "You don't have any players";
   static const playersPageNoPlayersInstructions =
-      'Create players to log games you played with your family or friends';
+      "Create players to log games you've played with your family or friends";
   static const playersPageConfirmationTitle = 'Delete players';
   static const playersPageConfirmationDialogDeletePlayersButtonText = 'Delete';
   static const playersPageConfirmationDialogContent =
@@ -110,4 +110,7 @@ class AppText {
   static const settingsPageTitle = 'Settings';
 
   static const drawerVersionFormat = 'Version %s';
+  static const drawerReleaseNotes = 'Release notes';
+  static const drawerAppWiki = 'Wiki';
+  static const drawerBuyMeACoffe = 'Buy Me a Coffee';
 }

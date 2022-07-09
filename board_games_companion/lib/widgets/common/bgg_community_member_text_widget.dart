@@ -30,14 +30,12 @@ class BggCommunityMemberText extends StatelessWidget {
                 );
               },
           ),
-          const TextSpan(
-            text: ' community, then you can enter your ',
-          ),
+          const TextSpan(text: ' community, then you can enter your '),
           const TextSpan(
             text: 'username',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          const TextSpan(text: ' in the below field to import your collection.'),
+          const TextSpan(text: ' in the below input field to import your collection.'),
         ],
       ),
       textAlign: TextAlign.justify,

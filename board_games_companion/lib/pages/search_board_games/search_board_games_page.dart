@@ -55,24 +55,22 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: PageContainer(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            _SearchBar(searchFocusNode: searchFocusNode),
-            _SearchResults(
-              onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
-            ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _HotBoardGamesHeader(),
-            ),
-            _HotBoardGames(
-              analyticsService: widget.analyticsService,
-              onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
-            ),
-          ],
-        ),
+    return PageContainer(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          _SearchBar(searchFocusNode: searchFocusNode),
+          _SearchResults(
+            onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+          ),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _HotBoardGamesHeader(),
+          ),
+          _HotBoardGames(
+            analyticsService: widget.analyticsService,
+            onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+          ),
+        ],
       ),
     );
   }

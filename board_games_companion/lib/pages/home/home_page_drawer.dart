@@ -1,3 +1,4 @@
+import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
@@ -22,7 +23,10 @@ class HomePageDrawer extends StatelessWidget {
           Container(
             color: AppTheme.primaryColor,
             child: Padding(
-              padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.doubleStandardSpacing,
+                vertical: Dimensions.doubleStandardSpacing * 2,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,6 +49,14 @@ class HomePageDrawer extends StatelessWidget {
             onTap: () async => Navigator.pushNamed(context, AboutPage.pageRoute),
           ),
           _MenuItem(
+            icon: Icons.menu_book_sharp,
+            title: AppText.drawerAppWiki,
+            onTap: () async => LauncherHelper.launchUri(context, Constants.appWikiFeaturesUrl),
+          ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          const Divider(),
+          const SizedBox(height: Dimensions.standardSpacing),
+          _MenuItem(
             icon: Icons.star,
             title: AppText.rateAndReview,
             onTap: () async => InAppReview.instance.openStoreListing(
@@ -52,16 +64,22 @@ class HomePageDrawer extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Dimensions.standardSpacing),
-          const Divider(),
-          const SizedBox(height: Dimensions.standardSpacing),
           _MenuItem(
             icon: Icons.settings,
             title: AppText.settingsPageTitle,
             onTap: () async => Navigator.pushNamed(context, SettingsPage.pageRoute),
           ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          const Divider(),
+          const SizedBox(height: Dimensions.standardSpacing),
+          _MenuItem(
+            icon: Icons.coffee,
+            title: AppText.drawerBuyMeACoffe,
+            onTap: () async => LauncherHelper.launchUri(context, Constants.buyMeACoffeeUrl),
+          ),
           const Expanded(child: SizedBox.shrink()),
           const Divider(),
-          const _VersionNumber(),
+          const _Footer(),
         ],
       ),
     );
@@ -93,6 +111,27 @@ class _MenuItem extends StatelessWidget {
   }
 }
 
+class _Footer extends StatelessWidget {
+  const _Footer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => LauncherHelper.launchUri(context, Constants.appReleaseNotesUrl),
+      child: Padding(
+        padding: const EdgeInsets.all(Dimensions.standardSpacing),
+        child: Column(
+          children: const [
+            _VersionNumber(),
+            SizedBox(height: Dimensions.halfStandardSpacing),
+            Text(AppText.drawerReleaseNotes),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _VersionNumber extends StatelessWidget {
   const _VersionNumber({
     Key? key,
@@ -106,14 +145,11 @@ class _VersionNumber extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData &&
             snapshot.data is PackageInfo) {
-          return Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-            child: Center(
-              child: Text(
-                sprintf(
-                    AppText.drawerVersionFormat, <String>[(snapshot.data as PackageInfo).version]),
-                style: AppTheme.subTitleTextStyle,
-              ),
+          return Center(
+            child: Text(
+              sprintf(
+                  AppText.drawerVersionFormat, <String>[(snapshot.data as PackageInfo).version]),
+              style: AppTheme.subTitleTextStyle,
             ),
           );
         }
