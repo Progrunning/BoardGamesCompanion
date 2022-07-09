@@ -48,4 +48,6 @@ class Constants {
   static const appReleaseNotesUrl = 'https://github.com/Progrunning/BoardGamesCompanion/releases';
   static const appWikiFeaturesUrl =
       'https://github.com/Progrunning/BoardGamesCompanion/wiki/Features';
+  static const buyMeACoffeeUrl =
+      'https://www.buymeacoffee.com/mkieres';
 }

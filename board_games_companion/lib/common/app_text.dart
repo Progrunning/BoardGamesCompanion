@@ -112,4 +112,5 @@ class AppText {
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';
   static const drawerAppWiki = 'Wiki';
+  static const drawerBuyMeACoffe = 'Buy Me a Coffee';
 }
