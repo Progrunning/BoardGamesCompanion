@@ -23,7 +23,6 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
-import '../../widgets/common/ripple_effect.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../board_game_details/board_game_details_page.dart';
 
@@ -214,14 +213,14 @@ class _SearchResultsState extends State<_SearchResults> {
                   (_, index) {
                     final int itemIndex = index ~/ 2;
                     if (index.isEven) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
+                      return Material(
+                        color: AppTheme.primaryColor,
+                        borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                        elevation: 4,
+                        child: InkWell(
                           borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
-                        ),
-                        child: RippleEffect(
-                          elevation: 4,
-                          borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                          onTap: () =>
+                              _navigateToBoardGameDetails(searchResults!, itemIndex, context),
                           child: Padding(
                             padding: const EdgeInsets.all(Dimensions.standardSpacing),
                             child: Column(
@@ -241,8 +240,6 @@ class _SearchResultsState extends State<_SearchResults> {
                               ],
                             ),
                           ),
-                          onTap: () async =>
-                              _navigateToBoardGameDetails(searchResults, itemIndex, context),
                         ),
                       );
                     }
