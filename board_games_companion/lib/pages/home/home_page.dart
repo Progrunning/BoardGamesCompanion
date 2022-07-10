@@ -1,3 +1,4 @@
+import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/pages/players/players_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
-import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container_widget.dart';
@@ -21,6 +21,7 @@ class HomePage extends StatefulWidget {
   const HomePage({
     required this.analyticsService,
     required this.rateAndReviewService,
+    required this.gamesViewModel,
     required this.playersViewModel,
     Key? key,
   }) : super(key: key);
@@ -29,6 +30,7 @@ class HomePage extends StatefulWidget {
 
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
+  final GamesViewModel gamesViewModel;
   final PlayersViewModel playersViewModel;
 
   static final GlobalKey<ScaffoldMessengerState> homePageGlobalKey =
@@ -66,10 +68,10 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                Consumer2<BoardGamesStore, UserStore>(
-                  builder: (_, boardGamesStore, userStore, __) {
+                Consumer2<GamesViewModel, UserStore>(
+                  builder: (_, viewModel, userStore, __) {
                     return GamesPage(
-                      boardGamesStore,
+                      viewModel,
                       userStore,
                       widget.analyticsService,
                       widget.rateAndReviewService,

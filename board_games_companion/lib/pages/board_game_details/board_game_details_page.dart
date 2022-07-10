@@ -10,7 +10,6 @@ import '../../common/enums/collection_type.dart';
 import '../../common/styles.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/preferences_service.dart';
-import '../../stores/board_game_details_in_collection_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_image.dart';
@@ -66,7 +65,7 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
             child: CustomScrollView(
               slivers: <Widget>[
                 _Header(
-                  boardGameDetailsStore: widget.boardGameDetailsStore,
+                  viewModel: widget.boardGameDetailsStore,
                   boardGameName: widget.boardGameName,
                 ),
                 SliverPadding(
@@ -93,12 +92,8 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
       context,
       listen: false,
     );
-    final boardGameDetailsInCollectionStore = BoardGameDetailsInCollectionStore(
-      boardGamesStore,
-      widget.boardGameDetailsStore.boardGameDetails,
-    );
 
-    if (!boardGameDetailsInCollectionStore.isInCollection &&
+    if (!boardGamesStore.isInAnyCollection(widget.boardGameDetailsStore.boardGameDetails?.id) &&
         widget.navigatingFromType == PlaythroughsPage) {
       Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
       return false;
@@ -111,14 +106,14 @@ class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 class _Header extends StatelessWidget {
   const _Header({
     Key? key,
-    required BoardGameDetailsViewModel boardGameDetailsStore,
+    required BoardGameDetailsViewModel viewModel,
     required String boardGameName,
-  })  : _boardGameDetailsStore = boardGameDetailsStore,
+  })  : _viewModel = viewModel,
         _boardGameName = boardGameName,
         super(key: key);
 
   final String _boardGameName;
-  final BoardGameDetailsViewModel _boardGameDetailsStore;
+  final BoardGameDetailsViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -152,12 +147,12 @@ class _Header extends StatelessWidget {
           ),
         ),
         background: ChangeNotifierProvider<BoardGameDetailsViewModel>.value(
-          value: _boardGameDetailsStore,
+          value: _viewModel,
           child: Consumer<BoardGameDetailsViewModel>(
             builder: (_, store, __) {
               // TODO Add shadow to the image
               return BoardGameImage(
-                _boardGameDetailsStore.boardGameDetails,
+                _viewModel.boardGameDetails,
                 minImageHeight: Constants.BoardGameDetailsImageHeight,
               );
             },

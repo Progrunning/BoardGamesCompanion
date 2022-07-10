@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 
 import '../common/analytics.dart';
 import '../common/constants.dart';
@@ -11,6 +12,7 @@ import '../models/sort_by.dart';
 import '../services/analytics_service.dart';
 import '../services/board_games_filters_service.dart';
 
+@singleton
 class BoardGamesFiltersStore with ChangeNotifier {
   BoardGamesFiltersStore(
     this._boardGamesFiltersService,
