@@ -128,35 +128,37 @@ class _Collection extends StatelessWidget {
           if (viewModel.collectionSate == CollectionState.emptyCollection)
             _EmptyCollection(gamesViewModel: viewModel),
           if (viewModel.collectionSate == CollectionState.collection) ...[
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: BgcSliverHeaderDelegate(
-                title: sprintf(
-                  AppText.gamesPageMainGamesSliverSectionTitleFormat,
-                  [viewModel.totalMainGamesInCollections],
-                ),
-              ),
-            ),
-            _Grid(
-              boardGames: viewModel.mainGamesInCollections,
-              collectionType: viewModel.selectedTab.toCollectionType(),
-              analyticsService: analyticsService,
-            ),
-            if (viewModel.hasAnyExpansionsInSelectedCollection) ...[
+            if (viewModel.hasAnyMainGameInSelectedCollection) ...[
               SliverPersistentHeader(
-                pinned: true,
                 delegate: BgcSliverHeaderDelegate(
                   title: sprintf(
-                    AppText.gamesPageExpansionsSliverSectionTitleFormat,
-                    [viewModel.totalExpansionsInCollections],
+                    AppText.gamesPageMainGamesSliverSectionTitleFormat,
+                    [viewModel.totalMainGamesInCollections],
                   ),
                 ),
               ),
               _Grid(
-                boardGames: viewModel.expansionsInSelectedCollection,
+                boardGames: viewModel.mainGamesInCollections,
                 collectionType: viewModel.selectedTab.toCollectionType(),
                 analyticsService: analyticsService,
               ),
+            ],
+            if (viewModel.hasAnyExpansionsInSelectedCollection) ...[
+              for (var expansionsMapEntry in viewModel.expansionGroupedByMainGame.entries) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    title: sprintf(
+                      AppText.gamesPageExpansionsSliverSectionTitleFormat,
+                      [expansionsMapEntry.key.name, expansionsMapEntry.value.length],
+                    ),
+                  ),
+                ),
+                _Grid(
+                  boardGames: expansionsMapEntry.value,
+                  collectionType: viewModel.selectedTab.toCollectionType(),
+                  analyticsService: analyticsService,
+                ),
+              ]
             ]
           ],
           const SliverPadding(padding: EdgeInsets.all(8.0)),

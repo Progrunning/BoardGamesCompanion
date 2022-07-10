@@ -19,7 +19,7 @@ class BgcSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
         padding: const EdgeInsets.all(Dimensions.standardSpacing),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Text(title, style: AppTheme.titleTextStyle),
+          child: Text(title, style: AppTheme.titleTextStyle, overflow: TextOverflow.ellipsis),
         ),
       ),
     );

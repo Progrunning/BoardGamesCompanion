@@ -27,9 +27,7 @@ class BoardGamesStore with ChangeNotifier {
   final PlayerService _playerService;
 
   List<BoardGameDetails> _allBoardGames = [];
-
-  // MK All board games in collection
-  List<BoardGameDetails> get allboardGames => _allBoardGames;
+  List<BoardGameDetails> get allBoardGames => _allBoardGames;
 
   bool isInAnyCollection(String? boardGameId) {
     if (boardGameId?.isBlank ?? true) {
@@ -97,7 +95,7 @@ class BoardGamesStore with ChangeNotifier {
 
 // MK If updating an expansion, update IsInCollection flag for the parent board game
     if (boardGameDetails.isExpansion!) {
-      final BoardGamesExpansion? parentBoardGameExpansion = allboardGames
+      final BoardGamesExpansion? parentBoardGameExpansion = allBoardGames
           .expand((BoardGameDetails boardGameDetails) => boardGameDetails.expansions)
           .firstWhereOrNull(
             (BoardGamesExpansion boardGameExpansion) =>
@@ -120,7 +118,7 @@ class BoardGamesStore with ChangeNotifier {
   }
 
   BoardGameDetails? retrieveBoardGame(String boardGameId) {
-    return allboardGames.firstWhereOrNull(
+    return allBoardGames.firstWhereOrNull(
       (BoardGameDetails boardGameDetails) => boardGameDetails.id == boardGameId,
     );
   }

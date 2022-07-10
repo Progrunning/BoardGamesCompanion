@@ -1,6 +1,5 @@
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
-import 'package:board_games_companion/extensions/string_extensions.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -32,13 +31,13 @@ class GamesViewModel with ChangeNotifier {
 
   String? _searchPhrase;
 
-  List<BoardGameDetails> _filteredBoardGames = [];
-  List<BoardGameDetails>? get filteredBoardGames => _filteredBoardGames;
+  final Map<String, BoardGameDetails> _mainBoardGameByExpansionId = {};
+  Map<String, BoardGameDetails> _filteredBoardGames = {};
 
-  bool get anyBoardGamesInCollections => _boardGamesStore.allboardGames
+  bool get anyBoardGamesInCollections => _boardGamesStore.allBoardGames
       .any((boardGame) => boardGame.isOwned! || boardGame.isOnWishlist! || boardGame.isFriends!);
 
-  bool get anyBoardGames => _boardGamesStore.allboardGames.isNotEmpty;
+  bool get anyBoardGames => _boardGamesStore.allBoardGames.isNotEmpty;
 
   LoadDataState _loadDataState = LoadDataState.none;
   LoadDataState get loadDataState => _loadDataState;
@@ -51,6 +50,7 @@ class GamesViewModel with ChangeNotifier {
 
       return CollectionState.emptyCollection;
     }
+
     return CollectionState.collection;
   }
 
@@ -63,28 +63,48 @@ class GamesViewModel with ChangeNotifier {
   List<BoardGameDetails> get boardGamesInSelectedCollection {
     switch (selectedTab) {
       case GamesTab.Owned:
-        return _filteredBoardGames.where((boardGame) => boardGame.isOwned!).toList();
+        return _filteredBoardGames.values.where((boardGame) => boardGame.isOwned!).toList();
       case GamesTab.Friends:
-        return _filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
+        return _filteredBoardGames.values.where((boardGame) => boardGame.isFriends!).toList();
       case GamesTab.Wishlist:
-        return _filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
+        return _filteredBoardGames.values.where((boardGame) => boardGame.isOnWishlist!).toList();
     }
   }
 
-  List<BoardGameDetails> get expansionsInSelectedCollection =>
-      boardGamesInSelectedCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
-
-  int get totalExpansionsInCollections => expansionsInSelectedCollection.length;
-
-  bool get hasAnyExpansionsInSelectedCollection => expansionsInSelectedCollection.isNotEmpty;
+  bool get anyBoardGamesInSelectedCollection => boardGamesInSelectedCollection.isNotEmpty;
 
   List<BoardGameDetails> get mainGamesInCollections => boardGamesInSelectedCollection
       .where((boardGame) => !(boardGame.isExpansion ?? false))
       .toList();
 
+  bool get hasAnyMainGameInSelectedCollection => mainGamesInCollections.isNotEmpty;
+
   int get totalMainGamesInCollections => mainGamesInCollections.length;
 
-  bool get anyBoardGamesInSelectedCollection => boardGamesInSelectedCollection.isNotEmpty;
+  List<BoardGameDetails> get _expansionsInSelectedCollection =>
+      boardGamesInSelectedCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
+
+  int get totalExpansionsInCollections => _expansionsInSelectedCollection.length;
+
+  bool get hasAnyExpansionsInSelectedCollection => _expansionsInSelectedCollection.isNotEmpty;
+
+  Map<BoardGameDetails, List<BoardGameDetails>> get expansionGroupedByMainGame {
+    final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGrouped = {};
+    for (final expansion in _expansionsInSelectedCollection) {
+      final mainGame = _mainBoardGameByExpansionId[expansion.id];
+      if (mainGame == null) {
+        continue;
+      }
+
+      if (!expansionsGrouped.containsKey(mainGame)) {
+        expansionsGrouped[mainGame] = [];
+      }
+
+      expansionsGrouped[mainGame]!.add(expansion);
+    }
+
+    return expansionsGrouped;
+  }
 
   GamesTab get selectedTab => _selectedTab;
   set selectedTab(GamesTab value) {
@@ -99,7 +119,13 @@ class GamesViewModel with ChangeNotifier {
     _loadDataState = LoadDataState.loading;
     try {
       await _boardGamesStore.loadBoardGames();
-      _filteredBoardGames = List.of(_boardGamesStore.allboardGames);
+      for (final boardGameDetails in _boardGamesStore.allBoardGames) {
+        _filteredBoardGames[boardGameDetails.id] = boardGameDetails;
+        for (final boardGameExpansion in boardGameDetails.expansions) {
+          _mainBoardGameByExpansionId[boardGameExpansion.id] = boardGameDetails;
+        }
+      }
+
       await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
@@ -124,10 +150,11 @@ class GamesViewModel with ChangeNotifier {
 
     final searchPhraseLowerCase = searchPhrase.toLowerCase();
 
-    _filteredBoardGames = List.of(_boardGamesStore.allboardGames
-        .where((boardGameDetails) =>
-            boardGameDetails.name.toLowerCase().contains(searchPhraseLowerCase))
-        .toList());
+    _filteredBoardGames = {
+      for (var boardGameDetails in _boardGamesStore.allBoardGames.where((boardGameDetails) =>
+          boardGameDetails.name.toLowerCase().contains(searchPhraseLowerCase)))
+        boardGameDetails.id: boardGameDetails
+    };
 
     notifyListeners();
   }
@@ -137,19 +164,21 @@ class GamesViewModel with ChangeNotifier {
       (sb) => sb.selected,
     );
 
-    _filteredBoardGames = _boardGamesStore.allboardGames
-        .where((boardGame) =>
-            (_boardGamesFiltersStore.filterByRating == null ||
-                boardGame.rating! >= _boardGamesFiltersStore.filterByRating!) &&
-            (_boardGamesFiltersStore.numberOfPlayers == null ||
-                (boardGame.maxPlayers != null &&
-                    boardGame.minPlayers != null &&
-                    (boardGame.maxPlayers! >= _boardGamesFiltersStore.numberOfPlayers! &&
-                        boardGame.minPlayers! <= _boardGamesFiltersStore.numberOfPlayers!))))
-        .toList();
+    _filteredBoardGames = {
+      for (var boardGameDetails in _boardGamesStore.allBoardGames.where((boardGame) =>
+          (_boardGamesFiltersStore.filterByRating == null ||
+              boardGame.rating! >= _boardGamesFiltersStore.filterByRating!) &&
+          (_boardGamesFiltersStore.numberOfPlayers == null ||
+              (boardGame.maxPlayers != null &&
+                  boardGame.minPlayers != null &&
+                  (boardGame.maxPlayers! >= _boardGamesFiltersStore.numberOfPlayers! &&
+                      boardGame.minPlayers! <= _boardGamesFiltersStore.numberOfPlayers!)))))
+        boardGameDetails.id: boardGameDetails
+    };
 
     if (selectedSortBy != null) {
-      filteredBoardGames?.sort((a, b) {
+      final sortedFilteredBoardGames = List.of(_filteredBoardGames.values);
+      sortedFilteredBoardGames.sort((a, b) {
         if (selectedSortBy.orderBy == OrderBy.Descending) {
           final buffer = a;
           a = b;
@@ -179,6 +208,9 @@ class GamesViewModel with ChangeNotifier {
             return a.lastModified.safeCompareTo(b.lastModified);
         }
       });
+      _filteredBoardGames = {
+        for (var boardGameDetails in sortedFilteredBoardGames) boardGameDetails.id: boardGameDetails
+      };
     }
 
     notifyListeners();

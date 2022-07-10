@@ -210,7 +210,7 @@ class _Filters extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text('Number of players', style: AppTheme.sectionHeaderTextStyle),
         ),
-        if (boardGamesStore.allboardGames.isNotEmpty)
+        if (boardGamesStore.allBoardGames.isNotEmpty)
           _FilterNumberOfPlayersSlider(
             boardGamesFiltersStore: boardGamesFiltersStore,
             boardGamesStore: boardGamesStore,
@@ -270,13 +270,13 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final minNumberOfPlayers = max(
-        boardGamesStore.allboardGames
+        boardGamesStore.allBoardGames
             .where((boardGameDetails) => boardGameDetails.minPlayers != null)
             .map((boardGameDetails) => boardGameDetails.minPlayers!)
             .reduce(min),
         Constants.minNumberOfPlayers);
     final maxNumberOfPlayers = min(
-        boardGamesStore.allboardGames
+        boardGamesStore.allBoardGames
             .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
             .map((boardGameDetails) => boardGameDetails.maxPlayers!)
             .reduce(max),

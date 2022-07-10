@@ -41,7 +41,7 @@ class AppText {
   static const hotBoardGamesSliverSectionTitle = 'Hot Board Games';
 
   static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
-  static const gamesPageExpansionsSliverSectionTitleFormat = 'Expansions (%s)';
+  static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
 
   static const playtimeDurationHoursFormat = '%ih %imin';
   static const playtimeDurationDaysFormat = '%i day%s %ih';
