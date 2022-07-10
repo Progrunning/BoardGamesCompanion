@@ -479,21 +479,15 @@ class _ActionButtons extends StatelessWidget {
           if (!viewModel.playthoughEnded) ...[
             ElevatedIconButton(
               title: AppText.stop,
-              icon: const DefaultIcon(
-                Icons.stop,
-              ),
+              icon: const DefaultIcon(Icons.stop),
               color: AppTheme.blueColor,
               onPressed: onStop,
             ),
-            const SizedBox(
-              width: Dimensions.standardSpacing,
-            ),
+            const SizedBox(width: Dimensions.standardSpacing),
           ],
           ElevatedIconButton(
             title: 'Save',
-            icon: const DefaultIcon(
-              Icons.save,
-            ),
+            icon: const DefaultIcon(Icons.save),
             color: AppTheme.accentColor,
             onPressed: onSave,
           ),

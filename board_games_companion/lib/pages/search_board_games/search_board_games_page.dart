@@ -24,6 +24,7 @@ import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
+import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../board_game_details/board_game_details_page.dart';
 
 class SearchBoardGamesPage extends StatefulWidget {
@@ -64,7 +65,7 @@ class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
           ),
           SliverPersistentHeader(
             pinned: true,
-            delegate: _HotBoardGamesHeader(),
+            delegate: BgcSliverHeaderDelegate(title: AppText.hotBoardGamesSliverSectionTitle),
           ),
           _HotBoardGames(
             analyticsService: widget.analyticsService,
@@ -217,9 +218,10 @@ class _SearchResultsState extends State<_SearchResults> {
                         decoration: BoxDecoration(
                           color: AppTheme.primaryColor,
                           borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
-                          boxShadow: const <BoxShadow>[AppTheme.defaultBoxShadow],
                         ),
                         child: RippleEffect(
+                          elevation: 4,
+                          borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
                           child: Padding(
                             padding: const EdgeInsets.all(Dimensions.standardSpacing),
                             child: Column(
@@ -235,9 +237,7 @@ class _SearchResultsState extends State<_SearchResults> {
                                     searchResults[itemIndex].yearPublished.toString(),
                                     style: AppTheme.subTitleTextStyle,
                                   ),
-                                const SizedBox(
-                                  height: Dimensions.halfStandardSpacing,
-                                ),
+                                const SizedBox(height: Dimensions.halfStandardSpacing),
                               ],
                             ),
                           ),
@@ -511,35 +511,5 @@ class _HotBoardGames extends StatelessWidget {
     );
 
     onBoardGameTapped(boardGame);
-  }
-}
-
-class _HotBoardGamesHeader extends SliverPersistentHeaderDelegate {
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: AppTheme.primaryColor,
-      padding: const EdgeInsets.all(
-        Dimensions.standardSpacing,
-      ),
-      child: const Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          'Hot Board Games',
-          style: AppTheme.titleTextStyle,
-        ),
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => 50;
-
-  @override
-  double get minExtent => 50;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }

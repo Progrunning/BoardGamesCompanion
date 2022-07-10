@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -118,39 +119,40 @@ class _Collection extends StatelessWidget {
             rateAndReviewService: rateAndReviewService,
             updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
           ),
-          Builder(
-            builder: (_) {
-              final List<BoardGameDetails> boardGames = [];
-              switch (boardGamesStore.selectedTab) {
-                case GamesTab.Owned:
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
-                  break;
-                case GamesTab.Friends:
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
-                  break;
-                case GamesTab.Wishlist:
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
-                  break;
-              }
-
-              if (boardGames.isEmpty) {
-                if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-                  return _EmptySearchResult(
-                    boardGamesStore: boardGamesStore,
-                    onClearSearch: () => _updateSearchResults(''),
-                  );
-                }
-
-                return _EmptyCollection(boardGamesStore: boardGamesStore);
-              }
-
-              return _Grid(
-                boardGames: boardGames,
+          if (boardGamesStore.collectionSate == CollectionState.emptySearchResult)
+            _EmptySearchResult(
+              boardGamesStore: boardGamesStore,
+              onClearSearch: () => _updateSearchResults(''),
+            ),
+          if (boardGamesStore.collectionSate == CollectionState.emptyCollection)
+            _EmptyCollection(boardGamesStore: boardGamesStore),
+          if (boardGamesStore.collectionSate == CollectionState.collection) ...[
+            if (boardGamesStore.hasAnyExpansionsInSelectedCollection)
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: BgcSliverHeaderDelegate(
+                  title: AppText.gamesPageMainGamesSliverSectionTitle,
+                ),
+              ),
+            _Grid(
+              boardGames: boardGamesStore.mainGamesInCollections,
+              collectionType: boardGamesStore.selectedTab.toCollectionType(),
+              analyticsService: analyticsService,
+            ),
+            if (boardGamesStore.hasAnyExpansionsInSelectedCollection) ...[
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: BgcSliverHeaderDelegate(
+                  title: AppText.gamesPageExpansionsSliverSectionTitle,
+                ),
+              ),
+              _Grid(
+                boardGames: boardGamesStore.expansionsInSelectedCollection,
                 collectionType: boardGamesStore.selectedTab.toCollectionType(),
                 analyticsService: analyticsService,
-              );
-            },
-          ),
+              ),
+            ]
+          ],
           const SliverPadding(padding: EdgeInsets.all(8.0)),
         ],
       ),
@@ -207,8 +209,9 @@ class _AppBarState extends State<_AppBar> {
     }
 
     return SliverAppBar(
-      pinned: true,
+      pinned: false,
       floating: true,
+      elevation: 0,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppTheme.accentColor,
       title: TextField(
@@ -352,24 +355,20 @@ class _Grid extends StatelessWidget {
         crossAxisSpacing: Dimensions.standardSpacing,
         mainAxisSpacing: Dimensions.standardSpacing,
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
-        children: List.generate(
-          boardGames.length,
-          (int index) {
-            final boardGame = boardGames[index];
-
-            return BoardGameTile(
+        children: [
+          for (var boardGame in boardGames)
+            BoardGameTile(
               boardGame: boardGame,
               onTap: () async {
                 await Navigator.pushNamed(
                   context,
                   PlaythroughsPage.pageRoute,
-                  arguments: PlaythroughsPageArguments(boardGames[index], collectionType),
+                  arguments: PlaythroughsPageArguments(boardGame, collectionType),
                 );
               },
               heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_$collectionType',
-            );
-          },
-        ),
+            )
+        ],
       ),
     );
   }

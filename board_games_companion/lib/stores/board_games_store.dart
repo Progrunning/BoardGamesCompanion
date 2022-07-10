@@ -22,6 +22,12 @@ import '../services/playthroughs_service.dart';
 import '../services/score_service.dart';
 import 'board_games_filters_store.dart';
 
+enum CollectionState {
+  emptySearchResult,
+  emptyCollection,
+  collection,
+}
+
 class BoardGamesStore with ChangeNotifier {
   BoardGamesStore(
     this._boardGamesService,
@@ -44,19 +50,48 @@ class BoardGamesStore with ChangeNotifier {
   GamesTab _selectedTab = GamesTab.Owned;
 
   LoadDataState get loadDataState => _loadDataState;
+  CollectionState get collectionSate {
+    if (!anyBoardGamesInSelectedCollection) {
+      if (!isSearchPhraseEmpty) {
+        return CollectionState.emptySearchResult;
+      }
+
+      return CollectionState.emptyCollection;
+    }
+    return CollectionState.collection;
+  }
+
   List<BoardGameDetails>? get filteredBoardGames => _filteredBoardGames;
-  List<BoardGameDetails> get filteredBoardGamesOwned =>
-      _filteredBoardGames.where((boardGame) => boardGame.isOwned!).toList();
-  List<BoardGameDetails> get filteredBoardGamesOnWishlist =>
-      _filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
-  List<BoardGameDetails> get filteredBoardGamesFriends =>
-      _filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
+
+  List<BoardGameDetails> get boardGamesInSelectedCollection {
+    switch (selectedTab) {
+      case GamesTab.Owned:
+        return _filteredBoardGames.where((boardGame) => boardGame.isOwned!).toList();
+      case GamesTab.Friends:
+        return _filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
+      case GamesTab.Wishlist:
+        return _filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
+    }
+  }
+
+  List<BoardGameDetails> get expansionsInSelectedCollection =>
+      boardGamesInSelectedCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
+
+  bool get hasAnyExpansionsInSelectedCollection => expansionsInSelectedCollection.isNotEmpty;
+
+  List<BoardGameDetails> get mainGamesInCollections => boardGamesInSelectedCollection
+      .where((boardGame) => !(boardGame.isExpansion ?? false))
+      .toList();
+
+  bool get anyBoardGamesInSelectedCollection => boardGamesInSelectedCollection.isNotEmpty;
 
   // MK All board games in collection
   List<BoardGameDetails> get allboardGames => _allBoardGames;
   bool get anyBoardGamesInCollections => _allBoardGames
       .any((boardGame) => boardGame.isOwned! || boardGame.isOnWishlist! || boardGame.isFriends!);
   String? get searchPhrase => _searchPhrase;
+
+  bool get isSearchPhraseEmpty => _searchPhrase?.isEmpty ?? true;
 
   List<BoardGameCategory> get filteredBoardGamesCategories {
     final allBoardGameCategories = filteredBoardGames!
