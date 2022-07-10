@@ -77,11 +77,15 @@ class BoardGamesStore with ChangeNotifier {
   List<BoardGameDetails> get expansionsInSelectedCollection =>
       boardGamesInSelectedCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
+  int get totalExpansionsInCollections => expansionsInSelectedCollection.length;
+
   bool get hasAnyExpansionsInSelectedCollection => expansionsInSelectedCollection.isNotEmpty;
 
   List<BoardGameDetails> get mainGamesInCollections => boardGamesInSelectedCollection
       .where((boardGame) => !(boardGame.isExpansion ?? false))
       .toList();
+
+  int get totalMainGamesInCollections => mainGamesInCollections.length;
 
   bool get anyBoardGamesInSelectedCollection => boardGamesInSelectedCollection.isNotEmpty;
 

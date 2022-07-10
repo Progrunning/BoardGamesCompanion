@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
@@ -127,13 +128,15 @@ class _Collection extends StatelessWidget {
           if (boardGamesStore.collectionSate == CollectionState.emptyCollection)
             _EmptyCollection(boardGamesStore: boardGamesStore),
           if (boardGamesStore.collectionSate == CollectionState.collection) ...[
-            if (boardGamesStore.hasAnyExpansionsInSelectedCollection)
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: BgcSliverHeaderDelegate(
-                  title: AppText.gamesPageMainGamesSliverSectionTitle,
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: BgcSliverHeaderDelegate(
+                title: sprintf(
+                  AppText.gamesPageMainGamesSliverSectionTitleFormat,
+                  [boardGamesStore.totalMainGamesInCollections],
                 ),
               ),
+            ),
             _Grid(
               boardGames: boardGamesStore.mainGamesInCollections,
               collectionType: boardGamesStore.selectedTab.toCollectionType(),
@@ -143,7 +146,10 @@ class _Collection extends StatelessWidget {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: BgcSliverHeaderDelegate(
-                  title: AppText.gamesPageExpansionsSliverSectionTitle,
+                  title: sprintf(
+                    AppText.gamesPageExpansionsSliverSectionTitleFormat,
+                    [boardGamesStore.totalExpansionsInCollections],
+                  ),
                 ),
               ),
               _Grid(

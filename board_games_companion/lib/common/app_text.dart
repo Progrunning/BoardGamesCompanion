@@ -40,8 +40,8 @@ class AppText {
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
   static const hotBoardGamesSliverSectionTitle = 'Hot Board Games';
 
-  static const gamesPageMainGamesSliverSectionTitle = 'Main Games';
-  static const gamesPageExpansionsSliverSectionTitle = 'Expansions';
+  static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
+  static const gamesPageExpansionsSliverSectionTitleFormat = 'Expansions (%s)';
 
   static const playtimeDurationHoursFormat = '%ih %imin';
   static const playtimeDurationDaysFormat = '%i day%s %ih';
