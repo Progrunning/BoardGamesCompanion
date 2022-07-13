@@ -38,6 +38,10 @@ class AppText {
   static const searchBoardGamesPageHotBoardGamesErrorPartOne =
       '''Sorry, we couldn't retrieve hot board games at this time. Please check your Internet connectivity and try again.''';
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
+  static const hotBoardGamesSliverSectionTitle = 'Hot Board Games';
+
+  static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
+  static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
 
   static const playtimeDurationHoursFormat = '%ih %imin';
   static const playtimeDurationDaysFormat = '%i day%s %ih';

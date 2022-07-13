@@ -156,7 +156,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       });
       await widget.viewModel.importPlays(username, boardGameId);
       if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
-        await showImportPlaysReportDialog(
+        await _showImportPlaysReportDialog(
           context,
           username,
           boardGameId,
@@ -190,7 +190,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     );
   }
 
-  Future<void> showImportPlaysReportDialog(
+  Future<void> _showImportPlaysReportDialog(
     BuildContext context,
     String username,
     String boardGameId,

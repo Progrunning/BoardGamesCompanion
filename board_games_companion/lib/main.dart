@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -29,7 +30,6 @@ import 'models/hive/user.dart';
 import 'models/sort_by.dart';
 import 'pages/players/players_view_model.dart';
 import 'services/analytics_service.dart';
-import 'services/board_games_filters_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/board_games_service.dart';
 import 'services/player_service.dart';
@@ -148,33 +148,20 @@ class App extends StatelessWidget {
           create: (context) => getIt<PlaythroughsStore>(),
         ),
         ChangeNotifierProvider<BoardGamesFiltersStore>(
-          create: (context) {
-            final BoardGamesFiltersService boardGamesFiltersService =
-                getIt<BoardGamesFiltersService>();
-            final AnalyticsService analyticsService = getIt<AnalyticsService>();
-            return BoardGamesFiltersStore(boardGamesFiltersService, analyticsService);
-          },
+          create: (context) => getIt<BoardGamesFiltersStore>(),
         ),
-        ChangeNotifierProxyProvider<BoardGamesFiltersStore, BoardGamesStore>(
+        ChangeNotifierProvider<BoardGamesStore>(
           create: (context) {
             final BoardGamesService boardGamesService = getIt<BoardGamesService>();
             final PlaythroughService playthroughService = getIt<PlaythroughService>();
             final ScoreService scoreService = getIt<ScoreService>();
             final PlayerService playerService = getIt<PlayerService>();
-            final boardGamesStore = BoardGamesStore(
+            return BoardGamesStore(
               boardGamesService,
               playthroughService,
               scoreService,
               playerService,
-              Provider.of<BoardGamesFiltersStore>(context, listen: false),
             );
-
-            boardGamesStore.loadBoardGames();
-            return boardGamesStore;
-          },
-          update: (_, filtersStore, boardGamesStore) {
-            boardGamesStore!.applyFilters();
-            return boardGamesStore;
           },
         ),
         ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
@@ -182,6 +169,23 @@ class App extends StatelessWidget {
           create: (context) => getIt<PlaythroughStatisticsStore>(),
           update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
             return playthroughStatisticsStore!;
+          },
+        ),
+        ChangeNotifierProxyProvider2<BoardGamesFiltersStore, BoardGamesStore, GamesViewModel>(
+          create: (context) {
+            final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
+            final boardGamesStore = Provider.of<BoardGamesStore>(
+              context,
+              listen: false,
+            );
+            final gamesViewModel = GamesViewModel(boardGamesStore, boardGamesFiltersStore);
+            gamesViewModel.loadBoardGames();
+
+            return gamesViewModel;
+          },
+          update: (_, filtersStore, boardGamesStore, gamesViewModel) {
+            gamesViewModel!.applyFilters();
+            return gamesViewModel;
           },
         ),
       ],

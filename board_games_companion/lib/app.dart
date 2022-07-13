@@ -1,3 +1,4 @@
+import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
 import 'services/rate_and_review_service.dart';
+import 'stores/board_games_filters_store.dart';
 import 'stores/board_games_store.dart';
 import 'stores/playthroughs_store.dart';
 import 'utilities/analytics_route_observer.dart';
@@ -59,10 +61,18 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           final analyticsService = getIt<AnalyticsService>();
           final rateAndReviewService = getIt<RateAndReviewService>();
           final playersViewModel = getIt<PlayersViewModel>();
+          final _boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
+
+          final _boardGamesStore = Provider.of<BoardGamesStore>(
+            context,
+            listen: false,
+          );
+          final gamesViewModel = GamesViewModel(_boardGamesStore, _boardGamesFiltersStore);
 
           return HomePage(
             analyticsService: analyticsService,
             rateAndReviewService: rateAndReviewService,
+            gamesViewModel: gamesViewModel,
             playersViewModel: playersViewModel,
           );
         },

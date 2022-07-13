@@ -1,26 +1,17 @@
-import 'package:board_games_companion/models/import_result.dart';
+import 'package:basics/basics.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
-import '../common/enums/enums.dart';
-import '../common/enums/games_tab.dart';
-import '../common/enums/order_by.dart';
-import '../common/enums/sort_by_option.dart';
 import '../common/hive_boxes.dart';
-import '../extensions/date_time_extensions.dart';
-import '../extensions/double_extensions.dart';
-import '../extensions/int_extensions.dart';
-import '../extensions/string_extensions.dart';
 import '../models/collection_import_result.dart';
-import '../models/hive/board_game_category.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/board_game_expansion.dart';
+import '../models/import_result.dart';
 import '../services/board_games_service.dart';
 import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
 import '../services/score_service.dart';
-import 'board_games_filters_store.dart';
 
 class BoardGamesStore with ChangeNotifier {
   BoardGamesStore(
@@ -28,61 +19,30 @@ class BoardGamesStore with ChangeNotifier {
     this._playthroughService,
     this._scoreService,
     this._playerService,
-    this._boardGamesFiltersStore,
   );
 
   final BoardGamesService _boardGamesService;
   final PlaythroughService _playthroughService;
   final ScoreService _scoreService;
   final PlayerService _playerService;
-  final BoardGamesFiltersStore _boardGamesFiltersStore;
 
-  String? _searchPhrase;
   List<BoardGameDetails> _allBoardGames = [];
-  List<BoardGameDetails> _filteredBoardGames = [];
-  LoadDataState _loadDataState = LoadDataState.none;
-  GamesTab _selectedTab = GamesTab.Owned;
+  List<BoardGameDetails> get allBoardGames => _allBoardGames;
 
-  LoadDataState get loadDataState => _loadDataState;
-  List<BoardGameDetails>? get filteredBoardGames => _filteredBoardGames;
-  List<BoardGameDetails> get filteredBoardGamesOwned =>
-      _filteredBoardGames.where((boardGame) => boardGame.isOwned!).toList();
-  List<BoardGameDetails> get filteredBoardGamesOnWishlist =>
-      _filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
-  List<BoardGameDetails> get filteredBoardGamesFriends =>
-      _filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
+  bool isInAnyCollection(String? boardGameId) {
+    if (boardGameId?.isBlank ?? true) {
+      return false;
+    }
 
-  // MK All board games in collection
-  List<BoardGameDetails> get allboardGames => _allBoardGames;
-  bool get anyBoardGamesInCollections => _allBoardGames
-      .any((boardGame) => boardGame.isOwned! || boardGame.isOnWishlist! || boardGame.isFriends!);
-  String? get searchPhrase => _searchPhrase;
-
-  List<BoardGameCategory> get filteredBoardGamesCategories {
-    final allBoardGameCategories = filteredBoardGames!
-        .map((boardGame) => boardGame.categories)
-        .expand((categories) => categories!)
-        .toList();
-    final uniqueBoardGameCategories = allBoardGameCategories.map((category) => category.id).toSet();
-    allBoardGameCategories.retainWhere((category) => uniqueBoardGameCategories.remove(category.id));
-    return allBoardGameCategories;
+    return _allBoardGames.any((boardGameDetails) =>
+        boardGameDetails.id == boardGameId &&
+        (boardGameDetails.isFriends! ||
+            boardGameDetails.isOnWishlist! ||
+            boardGameDetails.isOwned!));
   }
 
   Future<void> loadBoardGames() async {
-    _loadDataState = LoadDataState.loading;
-    notifyListeners();
-
-    try {
-      _allBoardGames = await _boardGamesService.retrieveBoardGames();
-      _filteredBoardGames = List.of(_allBoardGames);
-      await _boardGamesFiltersStore.loadFilterPreferences();
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      _loadDataState = LoadDataState.error;
-    }
-
-    _loadDataState = LoadDataState.loaded;
-    notifyListeners();
+    _allBoardGames = await _boardGamesService.retrieveBoardGames();
   }
 
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
@@ -96,7 +56,6 @@ class BoardGamesStore with ChangeNotifier {
     final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
     if (existingBoardGameDetails == null) {
       _allBoardGames.add(boardGameDetails);
-      _filteredBoardGames.add(boardGameDetails);
     } else {
       existingBoardGameDetails.imageUrl = boardGameDetails.imageUrl;
       existingBoardGameDetails.name = boardGameDetails.name;
@@ -136,7 +95,7 @@ class BoardGamesStore with ChangeNotifier {
 
 // MK If updating an expansion, update IsInCollection flag for the parent board game
     if (boardGameDetails.isExpansion!) {
-      final BoardGamesExpansion? parentBoardGameExpansion = allboardGames
+      final BoardGamesExpansion? parentBoardGameExpansion = allBoardGames
           .expand((BoardGameDetails boardGameDetails) => boardGameDetails.expansions)
           .firstWhereOrNull(
             (BoardGamesExpansion boardGameExpansion) =>
@@ -159,7 +118,7 @@ class BoardGamesStore with ChangeNotifier {
   }
 
   BoardGameDetails? retrieveBoardGame(String boardGameId) {
-    return allboardGames.firstWhereOrNull(
+    return allBoardGames.firstWhereOrNull(
       (BoardGameDetails boardGameDetails) => boardGameDetails.id == boardGameId,
     );
   }
@@ -181,7 +140,6 @@ class BoardGamesStore with ChangeNotifier {
     }
 
     _allBoardGames.remove(boardGameToRemove);
-    _filteredBoardGames.remove(boardGameToRemove);
 
     notifyListeners();
   }
@@ -195,7 +153,6 @@ class BoardGamesStore with ChangeNotifier {
       await _boardGamesService.removeBoardGames(bggSyncedBoardGames);
       await _playthroughService.deletePlaythroughsForGames(bggSyncedBoardGames);
 
-      _filteredBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
       _allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
 
       notifyListeners();
@@ -212,91 +169,15 @@ class BoardGamesStore with ChangeNotifier {
       importResult = await _boardGamesService.importCollections(username);
       if (importResult.isSuccess) {
         _allBoardGames = await _boardGamesService.retrieveBoardGames();
-        _filteredBoardGames = List.of(_allBoardGames);
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       importResult = CollectionImportResult.failure([ImportError.exception(e, stack)]);
     }
 
-    _loadDataState = LoadDataState.loaded;
-    applyFilters();
+    notifyListeners();
 
     return importResult;
-  }
-
-  void updateSearchResults(String searchPhrase) {
-    if (searchPhrase.isEmpty == true && _searchPhrase?.isEmpty == true) {
-      return;
-    }
-
-    _searchPhrase = searchPhrase;
-
-    if (searchPhrase.isEmpty) {
-      applyFilters();
-      return;
-    }
-
-    final searchPhraseLowerCase = searchPhrase.toLowerCase();
-
-    _filteredBoardGames = List.of(_allBoardGames
-        .where((boardGameDetails) =>
-            boardGameDetails.name.toLowerCase().contains(searchPhraseLowerCase))
-        .toList());
-
-    notifyListeners();
-  }
-
-  void applyFilters() {
-    final selectedSortBy = _boardGamesFiltersStore.sortBy.firstWhereOrNull(
-      (sb) => sb.selected,
-    );
-
-    _filteredBoardGames = _allBoardGames
-        .where((boardGame) =>
-            (_boardGamesFiltersStore.filterByRating == null ||
-                boardGame.rating! >= _boardGamesFiltersStore.filterByRating!) &&
-            (_boardGamesFiltersStore.numberOfPlayers == null ||
-                (boardGame.maxPlayers != null &&
-                    boardGame.minPlayers != null &&
-                    (boardGame.maxPlayers! >= _boardGamesFiltersStore.numberOfPlayers! &&
-                        boardGame.minPlayers! <= _boardGamesFiltersStore.numberOfPlayers!))))
-        .toList();
-
-    if (selectedSortBy != null) {
-      filteredBoardGames?.sort((a, b) {
-        if (selectedSortBy.orderBy == OrderBy.Descending) {
-          final buffer = a;
-          a = b;
-          b = buffer;
-        }
-
-        switch (selectedSortBy.sortByOption) {
-          case SortByOption.Name:
-            return a.name.safeCompareTo(b.name);
-          case SortByOption.YearPublished:
-            return a.yearPublished.safeCompareTo(b.yearPublished);
-          case SortByOption.LastUpdated:
-            return a.lastModified.safeCompareTo(b.lastModified);
-          case SortByOption.Rank:
-            return a.rank.safeCompareTo(b.rank);
-          case SortByOption.NumberOfPlayers:
-            if (selectedSortBy.orderBy == OrderBy.Descending) {
-              return b.maxPlayers.safeCompareTo(a.maxPlayers);
-            }
-
-            return a.minPlayers.safeCompareTo(b.maxPlayers);
-          case SortByOption.Playtime:
-            return a.maxPlaytime.safeCompareTo(b.maxPlaytime);
-          case SortByOption.Rating:
-            return b.rating.safeCompareTo(a.rating);
-          default:
-            return a.lastModified.safeCompareTo(b.lastModified);
-        }
-      });
-    }
-
-    notifyListeners();
   }
 
   @override
@@ -307,13 +188,5 @@ class BoardGamesStore with ChangeNotifier {
     _playerService.closeBox(HiveBoxes.Players);
 
     super.dispose();
-  }
-
-  GamesTab get selectedTab => _selectedTab;
-  set selectedTab(GamesTab value) {
-    if (_selectedTab != value) {
-      _selectedTab = value;
-      notifyListeners();
-    }
   }
 }

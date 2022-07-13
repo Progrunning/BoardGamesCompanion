@@ -35,6 +35,8 @@ mixin ImportCollection {
 }
 
 void _showSuccessSnackBar(BuildContext context) {
+  // TODO MK Consider using a "global context" to show a snackbar in case a user switches between pages
+  // https://stackoverflow.com/a/65607336/510627
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
       margin: Dimensions.snackbarMargin,

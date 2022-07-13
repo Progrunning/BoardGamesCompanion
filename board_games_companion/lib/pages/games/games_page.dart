@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/pages/games/games_view_model.dart';
+import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
@@ -17,7 +20,6 @@ import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
-import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
@@ -32,14 +34,14 @@ import 'games_filter_panel.dart';
 
 class GamesPage extends StatefulWidget {
   const GamesPage(
-    this.boardGamesStore,
+    this.viewModel,
     this.userStore,
     this.analyticsService,
     this.rateAndReviewService, {
     Key? key,
   }) : super(key: key);
 
-  final BoardGamesStore boardGamesStore;
+  final GamesViewModel viewModel;
   final UserStore userStore;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -56,26 +58,26 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     _topTabController = TabController(
       length: 3,
       vsync: this,
-      initialIndex: widget.boardGamesStore.selectedTab.index,
+      initialIndex: widget.viewModel.selectedTab.index,
     );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.boardGamesStore.loadDataState == LoadDataState.loaded) {
-      if (!widget.boardGamesStore.anyBoardGamesInCollections &&
+    if (widget.viewModel.loadDataState == LoadDataState.loaded) {
+      if (!widget.viewModel.anyBoardGamesInCollections &&
           (widget.userStore.user?.name.isEmpty ?? true)) {
         return const _Empty();
       }
 
       return _Collection(
-        boardGamesStore: widget.boardGamesStore,
+        viewModel: widget.viewModel,
         topTabController: _topTabController,
         analyticsService: widget.analyticsService,
         rateAndReviewService: widget.rateAndReviewService,
       );
-    } else if (widget.boardGamesStore.loadDataState == LoadDataState.error) {
+    } else if (widget.viewModel.loadDataState == LoadDataState.error) {
       return const Center(
         child: GenericErrorMessage(),
       );
@@ -93,14 +95,14 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
 
 class _Collection extends StatelessWidget {
   const _Collection({
-    required this.boardGamesStore,
+    required this.viewModel,
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
     Key? key,
   }) : super(key: key);
 
-  final BoardGamesStore boardGamesStore;
+  final GamesViewModel viewModel;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -112,45 +114,53 @@ class _Collection extends StatelessWidget {
       child: CustomScrollView(
         slivers: <Widget>[
           _AppBar(
-            boardGamesStore: boardGamesStore,
+            viewModel: viewModel,
             topTabController: topTabController,
             analyticsService: analyticsService,
             rateAndReviewService: rateAndReviewService,
             updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
           ),
-          Builder(
-            builder: (_) {
-              final List<BoardGameDetails> boardGames = [];
-              switch (boardGamesStore.selectedTab) {
-                case GamesTab.Owned:
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesOwned);
-                  break;
-                case GamesTab.Friends:
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesFriends);
-                  break;
-                case GamesTab.Wishlist:
-                  boardGames.addAll(boardGamesStore.filteredBoardGamesOnWishlist);
-                  break;
-              }
-
-              if (boardGames.isEmpty) {
-                if (boardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-                  return _EmptySearchResult(
-                    boardGamesStore: boardGamesStore,
-                    onClearSearch: () => _updateSearchResults(''),
-                  );
-                }
-
-                return _EmptyCollection(boardGamesStore: boardGamesStore);
-              }
-
-              return _Grid(
-                boardGames: boardGames,
-                collectionType: boardGamesStore.selectedTab.toCollectionType(),
+          if (viewModel.collectionSate == CollectionState.emptySearchResult)
+            _EmptySearchResult(
+              viewModel: viewModel,
+              onClearSearch: () => _updateSearchResults(''),
+            ),
+          if (viewModel.collectionSate == CollectionState.emptyCollection)
+            _EmptyCollection(gamesViewModel: viewModel),
+          if (viewModel.collectionSate == CollectionState.collection) ...[
+            if (viewModel.hasAnyMainGameInSelectedCollection) ...[
+              SliverPersistentHeader(
+                delegate: BgcSliverHeaderDelegate(
+                  title: sprintf(
+                    AppText.gamesPageMainGamesSliverSectionTitleFormat,
+                    [viewModel.totalMainGamesInCollections],
+                  ),
+                ),
+              ),
+              _Grid(
+                boardGames: viewModel.mainGamesInCollections,
+                collectionType: viewModel.selectedTab.toCollectionType(),
                 analyticsService: analyticsService,
-              );
-            },
-          ),
+              ),
+            ],
+            if (viewModel.hasAnyExpansionsInSelectedCollection) ...[
+              for (var expansionsMapEntry in viewModel.expansionGroupedByMainGame.entries) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    title: sprintf(
+                      AppText.gamesPageExpansionsSliverSectionTitleFormat,
+                      [expansionsMapEntry.key.name, expansionsMapEntry.value.length],
+                    ),
+                  ),
+                ),
+                _Grid(
+                  boardGames: expansionsMapEntry.value,
+                  collectionType: viewModel.selectedTab.toCollectionType(),
+                  analyticsService: analyticsService,
+                ),
+              ]
+            ]
+          ],
           const SliverPadding(padding: EdgeInsets.all(8.0)),
         ],
       ),
@@ -158,7 +168,7 @@ class _Collection extends StatelessWidget {
   }
 
   Future<void> _updateSearchResults(String searchPhrase) async {
-    boardGamesStore.updateSearchResults(searchPhrase);
+    viewModel.updateSearchResults(searchPhrase);
 
     await rateAndReviewService.increaseNumberOfSignificantActions();
   }
@@ -166,7 +176,7 @@ class _Collection extends StatelessWidget {
 
 class _AppBar extends StatefulWidget {
   const _AppBar({
-    required this.boardGamesStore,
+    required this.viewModel,
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
@@ -174,7 +184,7 @@ class _AppBar extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final BoardGamesStore boardGamesStore;
+  final GamesViewModel viewModel;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -202,13 +212,14 @@ class _AppBarState extends State<_AppBar> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.boardGamesStore.searchPhrase?.isEmpty ?? true) {
+    if (widget.viewModel.searchPhrase?.isEmpty ?? true) {
       _searchController.text = '';
     }
 
     return SliverAppBar(
-      pinned: true,
+      pinned: false,
       floating: true,
+      elevation: 0,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppTheme.accentColor,
       title: TextField(
@@ -220,7 +231,7 @@ class _AppBarState extends State<_AppBar> {
         style: AppTheme.defaultTextFieldStyle,
         decoration: InputDecoration(
           hintText: 'Search for a game...',
-          suffixIcon: (widget.boardGamesStore.searchPhrase?.isNotEmpty ?? false)
+          suffixIcon: (widget.viewModel.searchPhrase?.isNotEmpty ?? false)
               ? IconButton(
                   icon: const Icon(
                     Icons.clear,
@@ -238,7 +249,7 @@ class _AppBarState extends State<_AppBar> {
         ),
         onSubmitted: (searchPhrase) async {
           _debounce?.cancel();
-          if (widget.boardGamesStore.searchPhrase != _searchController.text) {
+          if (widget.viewModel.searchPhrase != _searchController.text) {
             await widget.updateSearchResults(_searchController.text);
           }
           _searchFocusNode.unfocus();
@@ -251,7 +262,7 @@ class _AppBarState extends State<_AppBar> {
               icon: boardGamesFiltersStore.anyFiltersApplied
                   ? const Icon(Icons.filter_alt_rounded, color: AppTheme.accentColor)
                   : const Icon(Icons.filter_alt_outlined, color: AppTheme.accentColor),
-              onPressed: widget.boardGamesStore.allboardGames.isNotEmpty
+              onPressed: widget.viewModel.anyBoardGames
                   ? () async {
                       await _openFiltersPanel(context);
                       await widget.analyticsService.logEvent(name: Analytics.FilterCollection);
@@ -266,24 +277,24 @@ class _AppBarState extends State<_AppBar> {
         preferredSize: const Size.fromHeight(74),
         child: TabBar(
           onTap: (int index) {
-            widget.boardGamesStore.selectedTab = index.toGamesTab();
+            widget.viewModel.selectedTab = index.toGamesTab();
           },
           controller: widget.topTabController,
           tabs: <Widget>[
             _TopTab(
               'Owned',
               Icons.grid_on,
-              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Owned,
+              isSelected: widget.viewModel.selectedTab == GamesTab.Owned,
             ),
             _TopTab(
               'Friends',
               Icons.group,
-              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Friends,
+              isSelected: widget.viewModel.selectedTab == GamesTab.Friends,
             ),
             _TopTab(
               'Wishlist',
               Icons.card_giftcard,
-              isSelected: widget.boardGamesStore.selectedTab == GamesTab.Wishlist,
+              isSelected: widget.viewModel.selectedTab == GamesTab.Wishlist,
             ),
           ],
           indicatorColor: AppTheme.accentColor,
@@ -352,24 +363,20 @@ class _Grid extends StatelessWidget {
         crossAxisSpacing: Dimensions.standardSpacing,
         mainAxisSpacing: Dimensions.standardSpacing,
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
-        children: List.generate(
-          boardGames.length,
-          (int index) {
-            final boardGame = boardGames[index];
-
-            return BoardGameTile(
+        children: [
+          for (var boardGame in boardGames)
+            BoardGameTile(
               boardGame: boardGame,
               onTap: () async {
                 await Navigator.pushNamed(
                   context,
                   PlaythroughsPage.pageRoute,
-                  arguments: PlaythroughsPageArguments(boardGames[index], collectionType),
+                  arguments: PlaythroughsPageArguments(boardGame, collectionType),
                 );
               },
               heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_$collectionType',
-            );
-          },
-        ),
+            )
+        ],
       ),
     );
   }
@@ -485,12 +492,12 @@ class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
 
 class _EmptySearchResult extends StatelessWidget {
   const _EmptySearchResult({
-    required this.boardGamesStore,
+    required this.viewModel,
     required this.onClearSearch,
     Key? key,
   }) : super(key: key);
 
-  final BoardGamesStore boardGamesStore;
+  final GamesViewModel viewModel;
   final VoidCallback onClearSearch;
 
   @override
@@ -511,7 +518,7 @@ class _EmptySearchResult extends StatelessWidget {
                         '''It looks like you don't have any board games in your collection that match the search phrase ''',
                   ),
                   TextSpan(
-                    text: boardGamesStore.searchPhrase,
+                    text: viewModel.searchPhrase,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -540,10 +547,10 @@ class _EmptySearchResult extends StatelessWidget {
 class _EmptyCollection extends StatelessWidget {
   const _EmptyCollection({
     Key? key,
-    required this.boardGamesStore,
+    required this.gamesViewModel,
   }) : super(key: key);
 
-  final BoardGamesStore boardGamesStore;
+  final GamesViewModel gamesViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -567,13 +574,13 @@ class _EmptyCollection extends StatelessWidget {
                             text: "It looks like you don't have any board games in your ",
                           ),
                           TextSpan(
-                            text: boardGamesStore.selectedTab
+                            text: gamesViewModel.selectedTab
                                 .toCollectionType()
                                 .toHumandReadableText(),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const TextSpan(text: ' collection yet.'),
-                          if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
+                          if (gamesViewModel.selectedTab == GamesTab.Wishlist &&
                               (userStore.user?.name.isNotEmpty ?? false)) ...[
                             const TextSpan(text: "\n\nIf you want to see board games from BGG's  "),
                             const TextSpan(
@@ -596,7 +603,7 @@ class _EmptyCollection extends StatelessWidget {
                       ),
                       textAlign: TextAlign.justify,
                     ),
-                    if (boardGamesStore.selectedTab == GamesTab.Wishlist &&
+                    if (gamesViewModel.selectedTab == GamesTab.Wishlist &&
                         (userStore.user?.name.isNotEmpty ?? false)) ...[
                       const SizedBox(height: Dimensions.doubleStandardSpacing),
                       Align(
