@@ -164,6 +164,10 @@ class PlaythroughsViewModel with ChangeNotifier, BoardGameAware {
         continue;
       }
 
+      // TODO MK Players should be loaded by the time this method is called.
+      //         This is to fix a bug in production that casues duplicate players to be created because players are not populated.
+      await _playersStore.loadPlayers();
+
       final List<PlaythroughPlayer> playthroughPlayers = [];
       final Map<String, PlayerScore> playerScores = {};
       for (final bggPlayer in bggPlay.players) {
