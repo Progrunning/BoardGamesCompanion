@@ -201,6 +201,8 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  bool get isMainGame => !(isExpansion ?? false);
+
   bool? _isOwned;
   @HiveField(24)
   bool? get isOwned => _isOwned ?? false;

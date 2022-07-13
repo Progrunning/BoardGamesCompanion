@@ -91,10 +91,8 @@ class BoardGamesStore with ChangeNotifier {
     BoardGameDetails existingBoardGameDetails,
     BoardGameDetails boardGameDetails,
   ) {
-    existingBoardGameDetails.expansions = boardGameDetails.expansions;
-
-// MK If updating an expansion, update IsInCollection flag for the parent board game
-    if (boardGameDetails.isExpansion!) {
+    if (boardGameDetails.isExpansion ?? false) {
+      // MK If updating an expansion, find the main game and update IsInCollection flag for this expansion
       final BoardGamesExpansion? parentBoardGameExpansion = allBoardGames
           .expand((BoardGameDetails boardGameDetails) => boardGameDetails.expansions)
           .firstWhereOrNull(
@@ -105,6 +103,9 @@ class BoardGamesStore with ChangeNotifier {
       if (parentBoardGameExpansion != null) {
         parentBoardGameExpansion.isInCollection = boardGameDetails.isOwned;
       }
+    } else {
+      // MK Update main board game expansions list
+      existingBoardGameDetails.expansions = boardGameDetails.expansions;
     }
   }
 

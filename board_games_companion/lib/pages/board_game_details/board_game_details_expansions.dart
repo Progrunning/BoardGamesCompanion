@@ -118,7 +118,7 @@ class _Expansion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget expansionItemWidget = InkWell(
+    Widget expansionItem = InkWell(
       splashColor: AppTheme.accentColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -134,10 +134,7 @@ class _Expansion extends StatelessWidget {
                 style: AppTheme.theme.textTheme.headline3,
               ),
             ),
-            const Icon(
-              Icons.navigate_next,
-              color: AppTheme.accentColor,
-            ),
+            const Icon(Icons.navigate_next, color: AppTheme.accentColor),
           ],
         ),
       ),
@@ -155,21 +152,21 @@ class _Expansion extends StatelessWidget {
     );
 
     if (_boardGameExpansion.isInCollection ?? false) {
-      expansionItemWidget = ClipRect(
+      expansionItem = ClipRect(
         child: CustomPaint(
           foregroundPainter: ExpanionsBannerPainter(
             location: BannerLocation.topStart,
             color: AppTheme.accentColor,
             message: 'own',
           ),
-          child: expansionItemWidget,
+          child: expansionItem,
         ),
       );
     }
 
     return Material(
       color: Colors.transparent,
-      child: expansionItemWidget,
+      child: expansionItem,
     );
   }
 }

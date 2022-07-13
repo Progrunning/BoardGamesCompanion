@@ -121,9 +121,10 @@ class GamesViewModel with ChangeNotifier {
       await _boardGamesStore.loadBoardGames();
       for (final boardGameDetails in _boardGamesStore.allBoardGames) {
         _filteredBoardGames[boardGameDetails.id] = boardGameDetails;
-        for (final boardGameExpansion in boardGameDetails.expansions) {
-          _mainBoardGameByExpansionId[boardGameExpansion.id] = boardGameDetails;
-        }
+        if (boardGameDetails.isMainGame)
+          for (final boardGameExpansion in boardGameDetails.expansions) {
+            _mainBoardGameByExpansionId[boardGameExpansion.id] = boardGameDetails;
+          }
       }
 
       await _boardGamesFiltersStore.loadFilterPreferences();
