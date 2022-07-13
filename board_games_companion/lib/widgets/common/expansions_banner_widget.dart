@@ -36,15 +36,11 @@ class ExpanionsBannerPainter extends CustomPainter {
   /// Defaults to a dark red.
   final Color color;
 
-  static const BoxShadow _shadow = AppTheme.defaultBoxShadow;
-
   bool _prepared = false;
   late TextPainter _textPainter;
-  late Paint _paintShadow;
   late Paint _paintBanner;
 
   void _prepare() {
-    _paintShadow = _shadow.toPaint();
     _paintBanner = Paint()..color = color;
     _textPainter = TextPainter(
       text: TextSpan(
@@ -68,7 +64,6 @@ class ExpanionsBannerPainter extends CustomPainter {
     canvas
       ..translate(_translationX(size.width), _translationY(size.height))
       ..rotate(_rotation)
-      ..drawRect(_kRect, _paintShadow)
       ..drawRect(_kRect, _paintBanner);
     const double width = _kOffset * 2.0;
     _textPainter.layout(minWidth: width, maxWidth: width);
