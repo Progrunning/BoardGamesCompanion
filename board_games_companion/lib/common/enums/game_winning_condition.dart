@@ -1,0 +1,4 @@
+enum GameWinningCondition {
+  HighestScore,
+  LowestScore,
+}
