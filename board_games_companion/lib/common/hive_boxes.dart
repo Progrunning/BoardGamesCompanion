@@ -24,4 +24,5 @@ class HiveBoxes {
   static const OrderByTypeId = 13;
   static const CollectionFiltersId = 14;
   static const BoardGamesExpansionId = 15;
+  static const WinningConditionTypeId = 16;
 }

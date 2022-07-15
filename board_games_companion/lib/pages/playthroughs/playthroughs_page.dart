@@ -99,7 +99,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
                 boardGameDetails: widget.boardGameDetails,
                 playthroughsLogGameViewModel: widget.viewModel,
               ),
-              const PlaythroughsGameSettingsPage()
+              PlaythroughsGameSettingsPage(boardGameDetails: widget.boardGameDetails)
             ],
           ),
         ),

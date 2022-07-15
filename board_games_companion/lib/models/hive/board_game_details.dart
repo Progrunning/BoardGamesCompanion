@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:hive/hive.dart';
 
 import '../../common/constants.dart';
+import '../../common/enums/game_winning_condition.dart';
 import '../../common/hive_boxes.dart';
 import 'base_board_game.dart';
 import 'board_game_artist.dart';
@@ -245,6 +246,17 @@ class BoardGameDetails extends BaseBoardGame {
   set isBggSynced(bool? value) {
     if (_isBggSynced != value) {
       _isBggSynced = value;
+      notifyListeners();
+    }
+  }
+
+  GameWinningCondition? _winningCondition = GameWinningCondition.HighestScore;
+  @HiveField(28)
+  GameWinningCondition? get winningCondition => _winningCondition;
+  @HiveField(28)
+  set winningCondition(GameWinningCondition? value) {
+    if (_winningCondition != value) {
+      _winningCondition = value;
       notifyListeners();
     }
   }
