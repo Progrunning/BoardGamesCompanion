@@ -26,6 +26,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..desingers = (fields[18] as List).cast<BoardGameDesigner>()
       ..ranks = (fields[20] as List).cast<BoardGameRank>()
       ..expansions = (fields[22] as List).cast<BoardGamesExpansion>()
+      ..settings = fields[28] as BoardGameSettings?
       ..imageUrl = fields[5] as String?
       ..description = fields[6] as String?
       ..rating = fields[8] as double?
@@ -43,7 +44,6 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..isOnWishlist = fields[25] as bool?
       ..isFriends = fields[26] as bool?
       ..isBggSynced = fields[27] as bool?
-      ..winningCondition = fields[28] as GameWinningCondition?
       ..thumbnailUrl = fields[2] as String?
       ..rank = fields[3] as int?
       ..yearPublished = fields[4] as int?;
@@ -65,6 +65,8 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..write(obj.ranks)
       ..writeByte(22)
       ..write(obj.expansions)
+      ..writeByte(28)
+      ..write(obj.settings)
       ..writeByte(5)
       ..write(obj.imageUrl)
       ..writeByte(6)
@@ -99,8 +101,6 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..write(obj.isFriends)
       ..writeByte(27)
       ..write(obj.isBggSynced)
-      ..writeByte(28)
-      ..write(obj.winningCondition)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)

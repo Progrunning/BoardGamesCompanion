@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:hive/hive.dart';
 
 import '../../common/constants.dart';
-import '../../common/enums/game_winning_condition.dart';
 import '../../common/hive_boxes.dart';
 import 'base_board_game.dart';
 import 'board_game_artist.dart';
@@ -250,16 +250,8 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
-  GameWinningCondition? _winningCondition = GameWinningCondition.HighestScore;
   @HiveField(28)
-  GameWinningCondition? get winningCondition => _winningCondition;
-  @HiveField(28)
-  set winningCondition(GameWinningCondition? value) {
-    if (_winningCondition != value) {
-      _winningCondition = value;
-      notifyListeners();
-    }
-  }
+  BoardGameSettings? settings;
 
   String get playtimeFormatted {
     if (_minPlaytime == _maxPlaytime) {

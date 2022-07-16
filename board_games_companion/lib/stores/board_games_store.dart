@@ -81,6 +81,7 @@ class BoardGamesStore with ChangeNotifier {
       existingBoardGameDetails.isFriends = boardGameDetails.isFriends;
       existingBoardGameDetails.isOnWishlist = boardGameDetails.isOnWishlist;
       existingBoardGameDetails.isOwned = boardGameDetails.isOwned;
+      existingBoardGameDetails.settings = boardGameDetails.settings;
       _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
     }
 
