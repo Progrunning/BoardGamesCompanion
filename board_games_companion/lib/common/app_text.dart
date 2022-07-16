@@ -21,7 +21,7 @@ class AppText {
   static const playthroughsStatisticsPageOverallStatsSectionTitle = 'Overall stats';
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
   static const playthroughsStatisticsPageOverallStatsTotalPlaytime = 'Total playtime';
-  static const playthroughsStatisticsPageOverallStatsHighscore = 'Highscore';
+  static const playthroughsStatisticsPageOverallStatsBestScore = 'Best score';
   static const playthroughsStatisticsPageOverallStatsAvgScore = 'Avg. score';
   static const playthroughsStatisticsPageOverallStatsAvgPlayerCount = 'Avg. player count';
   static const playthroughsStatisticsPageOverallStatsAvgPlayedGames = 'Played games';

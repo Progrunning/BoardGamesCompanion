@@ -41,15 +41,9 @@ class PlaythroughStatistcsPage extends StatefulWidget {
 
 class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: widget.playthroughStatisticsStore
-          .loadBoardGamesStatistics(widget.playthroughStatisticsStore.boardGame!.id),
+      future: widget.playthroughStatisticsStore.loadBoardGamesStatistics(),
       builder: (_, __) {
         return Consumer<PlaythroughsStore>(builder: (_, __, ___) {
           return Consumer<PlaythroughStatisticsStore>(
@@ -535,10 +529,10 @@ class _OverallStatsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value: boardGameStatistics?.highscore?.toString() ?? '-',
+                  value: boardGameStatistics?.bestScore?.toString() ?? '-',
                   icon: Icons.show_chart,
                   iconColor: AppTheme.highscoreStatColor,
-                  subtitle: AppText.playthroughsStatisticsPageOverallStatsHighscore,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsBestScore,
                 ),
               ],
             ),

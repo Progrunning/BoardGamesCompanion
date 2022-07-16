@@ -21,7 +21,7 @@ class BoardGameStatistics {
     return (totalPlaytimeInSeconds! / numberOfGamesPlayed!).floor();
   }
 
-  num? highscore;
+  num? bestScore;
 
   double? averageScore;
 
