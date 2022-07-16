@@ -53,8 +53,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {
-                    final PlaythroughStore playthroughStore = getIt<PlaythroughStore>();
-
+                    final playthroughStore = getIt<PlaythroughStore>();
                     final _Playthrough playthough = _Playthrough(
                       playthroughsStore: widget.playthroughsStore,
                       playthroughStore: playthroughStore,
@@ -129,20 +128,17 @@ class _Playthrough extends StatelessWidget {
               future: playthroughStore.loadPlaythrough(playthrough),
               builder: (_, AsyncSnapshot<void> snapshot) {
                 if (snapshot.hasError) {
-                  return const Center(
-                    child: GenericErrorMessage(),
-                  );
+                  return const Center(child: GenericErrorMessage());
                 }
 
                 if (snapshot.connectionState == ConnectionState.done) {
+                  // TODO Move this logic to a view model and update sorting to use existing sorting on Scores
                   playthroughStore.playerScores.sortByScore();
                   playthroughStore.playerScores!
                       .where((ps) => ps.score.value?.isNotEmpty ?? false)
                       .toList()
                       .asMap()
                       .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
-
-                  debugPrint(playthroughStore.playthrough.endDate?.toIso8601String() ?? '');
 
                   return Row(
                     mainAxisSize: MainAxisSize.max,

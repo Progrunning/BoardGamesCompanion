@@ -108,10 +108,7 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
         final PlayerStatistics playerStatistics = PlayerStatistics(player);
         playerStatistics.personalBestScore = num.tryParse(score.value!);
         playerStatistics.numberOfGamesPlayed = playerScoresGrouped[player.id]?.length ?? 0;
-        playerStatistics.averageScore = playerScoresGrouped[player.id]!
-                .map((Score score) => num.tryParse(score.value!)!)
-                .reduce((a, b) => a + b) /
-            playerStatistics.numberOfGamesPlayed!;
+        playerStatistics.averageScore = playerScoresGrouped[player.id]!.toAverageScore();
         boardGameStatistics.playersStatistics!.add(playerStatistics);
       }
     }
@@ -126,7 +123,7 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
     );
 
     boardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
-        .map((p) => p.endDate!.difference(p.startDate).inSeconds)
+        .map((Playthrough p) => p.endDate!.difference(p.startDate).inSeconds)
         .reduce((a, b) => a + b);
 
     notifyListeners();
@@ -178,33 +175,28 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
             finishedPlaythroughs
                 .map((Playthrough playthrough) => playthrough.playerIds.length)
                 .toList()
-              ..sort((int numberOfPlayersA, int numberOfPlayersB) =>
-                  numberOfPlayersA.compareTo(numberOfPlayersB)),
+              ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
+                  numberOfPlayers.compareTo(otherNumberOfPlayers)),
             (int numberOfPlayers) => numberOfPlayers)
         .map((key, value) => MapEntry(key, value.length / finishedPlaythroughs.length));
   }
 
   void _updatePlayerWinsPercentage(
-    List<Playthrough>? finishedPlaythroughs,
+    List<Playthrough> finishedPlaythroughs,
     BoardGameStatistics boardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
     GameWinningCondition gameWinningCondition,
   ) {
-    if (finishedPlaythroughs == null) {
-      return;
-    }
-
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
-      final List<Score>? playthroughScores =
-          playthroughScoresByPlaythroughId[finishedPlaythrough.id]
-              .sortByScore(gameWinningCondition);
-      if (playthroughScores?.isNotEmpty == null) {
+      final List<Score> playthroughScores = playthroughScoresByPlaythroughId[finishedPlaythrough.id]
+          .sortByScore(gameWinningCondition)!;
+      if (playthroughScores.isEmpty) {
         continue;
       }
 
-      final Player? winner = playersById[playthroughScores!.first.playerId];
+      final Player? winner = playersById[playthroughScores.first.playerId];
       if (winner == null) {
         continue;
       }

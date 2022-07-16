@@ -77,6 +77,10 @@ extension ScoresExtesions on List<Score>? {
             .map((Score score) => num.parse(score.value!)) ??
         [];
 
+    if (scores.isEmpty) {
+      return null;
+    }
+
     return scores.reduce((a, b) => a + b) / scores.length;
   }
 }

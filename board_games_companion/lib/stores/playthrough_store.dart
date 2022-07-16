@@ -63,10 +63,7 @@ class PlaythroughStore {
       );
 
       _playerScores = _players!.map((p) {
-        final score = _scores!.firstWhereOrNull(
-          (s) => s.playerId == p.id,
-        );
-
+        final score = _scores!.firstWhereOrNull((s) => s.playerId == p.id);
         return PlayerScore(p, score!);
       }).toList();
     } catch (e, stack) {
