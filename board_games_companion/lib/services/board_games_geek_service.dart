@@ -5,7 +5,8 @@ import 'dart:math';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/import_result.dart';
 import 'package:dio/dio.dart';
-
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retry/retry.dart';
@@ -33,10 +34,35 @@ import '../utilities/custom_http_client_adapter.dart';
 @singleton
 class BoardGamesGeekService {
   BoardGamesGeekService(this._httpClientAdapter) {
-    _dio.httpClientAdapter = _httpClientAdapter;
-    // _dio.interceptors
-        // .add(DioCacheManager(CacheConfig(baseUrl: _baseBoardGamesUrl)).interceptor as Interceptor);
-    _dio.interceptors.add(LogInterceptor(responseBody: true));
+    _dio
+      ..httpClientAdapter = _httpClientAdapter
+      ..interceptors.add(InterceptorsWrapper(
+        onRequest: (RequestOptions requestOptions, handler) async {
+          final String cacheKey = _dioCacheOptions.keyBuilder(requestOptions);
+          final CacheResponse? cachedResponse = await _dioCacheOptions.store?.get(cacheKey);
+          if (cachedResponse != null) {
+            // MK Hot board games cache expiration check
+            if (requestOptions.uri.toString().contains(_hotBoardGamesUrl) &&
+                DateTime.now().difference(cachedResponse.responseDate).inHours <
+                    _hotBoardGamesCacheExpirationInHours) {
+              Fimber.d('Getting hor board games from cache');
+              return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
+            }
+
+            // MK board game details cache expiration check
+            if (requestOptions.uri.toString().contains(_boardGamesDetailsUrl) &&
+                DateTime.now().difference(cachedResponse.responseDate).inHours <
+                    _boardGameDetailsCacheExpirationInHours) {
+              Fimber.d('Getting board game details from cache');
+              return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
+            }
+          }
+
+          return handler.next(requestOptions);
+        },
+      ))
+      ..interceptors.add(DioCacheInterceptor(options: _dioCacheOptions))
+      ..interceptors.add(LogInterceptor(responseBody: true));
   }
 
   static const String _xmlItemElementName = 'item';
@@ -104,14 +130,15 @@ class BoardGamesGeekService {
   static const String _boardGameType = 'boardgame';
   static const String _boardGameExpansionType = 'boardgameexpansion';
 
-  static const int _numberOfDaysToCacheHotBoardGames = 1;
-  static const String _hotBoardGamesCachePrimaryKey = 'hotBoardGames';
-  static const String _hotBoardGamesCacheSubKey = 'boardgame';
+  static const int _hotBoardGamesCacheExpirationInHours = 24;
 
-  static const int _numberOfDaysToCacheBoardGameDetails = 1;
+  static const int _boardGameDetailsCacheExpirationInHours = 24;
   static const int _bggRetryStatusCode = 202;
   static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;
+
+  // TODO Use Hive cache so the data is stored for a day
+  final CacheOptions _dioCacheOptions = CacheOptions(store: MemCacheStore());
 
   final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
@@ -125,21 +152,14 @@ class BoardGamesGeekService {
           Duration(seconds: min(pow(retryCount, 2), _maxBackoffDurationInSeconts) as int));
     }
 
-    // TODO Fix caching
-    // final Options retrievalOptions = buildCacheOptions(
-    //   const Duration(days: _numberOfDaysToCacheHotBoardGames),
-    //   maxStale: const Duration(days: _numberOfDaysToCacheHotBoardGames),
-    //   forceRefresh: retryCount > 0,
-    //   primaryKey: _hotBoardGamesCachePrimaryKey,
-    //   subKey: _hotBoardGamesCacheSubKey,
-    // // );
-    // retrievalOptions.contentType = 'application/xml';
-    // retrievalOptions.responseType = ResponseType.plain;
+    final retrievalOptions = _dioCacheOptions.toOptions();
+    retrievalOptions.contentType = 'application/xml';
+    retrievalOptions.responseType = ResponseType.plain;
 
     final hotBoardGamesXml = await _dio.get<String>(
       _hotBoardGamesUrl,
       queryParameters: <String, dynamic>{_boardGameQueryParamterType: _boardGameType},
-      // options: retrievalOptions,
+      options: retrievalOptions,
     );
 
     try {
@@ -184,15 +204,9 @@ class BoardGamesGeekService {
       return null;
     }
 
-
-    // TODO Fix caching https://github.com/flutterchina/dio/blob/develop/example/lib/custom_cache_interceptor.dart
-    // final retrievalOptions = buildCacheOptions(
-    //   const Duration(days: _numberOfDaysToCacheBoardGameDetails),
-    //   maxStale: const Duration(days: _numberOfDaysToCacheBoardGameDetails),
-    //   forceRefresh: false,
-    // );
-    // retrievalOptions.contentType = 'application/xml';
-    // retrievalOptions.responseType = ResponseType.plain;
+    final retrievalOptions = _dioCacheOptions.toOptions();
+    retrievalOptions.contentType = 'application/xml';
+    retrievalOptions.responseType = ResponseType.plain;
 
     final boardGameDetailsXml = await _dio.get<String>(
       _boardGamesDetailsUrl,
@@ -200,7 +214,7 @@ class BoardGamesGeekService {
         _boardGameQueryParamterId: id,
         _boardGameQueryParamterStats: 1,
       },
-      // options: retrievalOptions,
+      options: retrievalOptions,
     );
 
     try {
