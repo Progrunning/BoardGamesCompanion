@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/mixins/board_game_aware_mixin.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
@@ -34,7 +33,10 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
 
   BoardGameStatistics boardGameStatistics = BoardGameStatistics();
 
-  Future<void> loadBoardGamesStatistics(String boardGameId) async {
+  Future<void> loadBoardGamesStatistics() async {
+    final boardGameId = boardGame!.id;
+    final gameWinningCondition =
+        boardGame!.settings?.winningCondition ?? GameWinningCondition.HighestScore;
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
@@ -62,143 +64,139 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
       boardGameStatistics,
       playthroughScoresByPlaythroughId,
       playersById,
+      gameWinningCondition,
     );
 
-    if (finishedPlaythroughs.isNotEmpty) {
-      boardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs.length;
-      boardGameStatistics.averageNumberOfPlayers = finishedPlaythroughs
-              .map((Playthrough playthrough) => playthrough.playerIds.length)
-              .reduce((a, b) => a + b) /
-          boardGameStatistics.numberOfGamesPlayed!;
-      if (playthroughScoresByBoardGameId.containsKey(boardGameId)) {
-        final List<Score> playerScoresCollection = playthroughScoresByBoardGameId[boardGameId]
-            .onlyScoresWithValue()
-          ..sort((Score a, Score b) =>
-              num.tryParse(b.value!)?.compareTo(num.tryParse(a.value!) ?? 0) ?? -1);
-        if (playerScoresCollection.isNotEmpty) {
-          final Map<String, List<Score>> playerScoresGrouped =
-              groupBy(playerScoresCollection, (Score score) => score.playerId);
-          final Iterable<num> playerScores =
-              playerScoresCollection.map((s) => num.tryParse(s.value!)!);
-          boardGameStatistics.highscore = playerScores.reduce(max);
-          boardGameStatistics.averageScore =
-              playerScores.reduce((a, b) => a + b) / playerScores.length;
-
-          boardGameStatistics.topScoreres = [];
-          boardGameStatistics.playersStatistics = [];
-          for (final Score score in playerScoresCollection) {
-            final Player player = playersById[score.playerId]!;
-            if (boardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
-              boardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
-            }
-
-            if (boardGameStatistics.playersStatistics!
-                .any((PlayerStatistics playerStats) => playerStats.player == player)) {
-              continue;
-            }
-
-            final PlayerStatistics playerStatistics = PlayerStatistics(player);
-            playerStatistics.personalBestScore = num.tryParse(score.value!);
-            playerStatistics.numberOfGamesPlayed = playerScoresGrouped[player.id]?.length ?? 0;
-            playerStatistics.averageScore = playerScoresGrouped[player.id]!
-                    .map((Score score) => num.tryParse(score.value!)!)
-                    .reduce((a, b) => a + b) /
-                playerStatistics.numberOfGamesPlayed!;
-            boardGameStatistics.playersStatistics!.add(playerStatistics);
-          }
-        }
-      }
-
-      _updatePlayerCountPercentage(finishedPlaythroughs, boardGameStatistics);
-      _updatePlayerWinsPercentage(
-        finishedPlaythroughs,
-        boardGameStatistics,
-        playthroughScoresByPlaythroughId,
-        playersById,
-      );
-
-      boardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
-          .map((p) => p.endDate!.difference(p.startDate).inSeconds)
-          .reduce((a, b) => a + b);
+    if (finishedPlaythroughs.isEmpty) {
+      notifyListeners();
+      return;
     }
+
+    boardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs.length;
+    boardGameStatistics.averageNumberOfPlayers = finishedPlaythroughs
+            .map((Playthrough playthrough) => playthrough.playerIds.length)
+            .reduce((a, b) => a + b) /
+        boardGameStatistics.numberOfGamesPlayed!;
+
+    if (!playthroughScoresByBoardGameId.containsKey(boardGameId)) {
+      notifyListeners();
+      return;
+    }
+
+    final List<Score> playerScoresCollection = playthroughScoresByBoardGameId[boardGameId]
+        .onlyScoresWithValue()
+      ..sortByScore(gameWinningCondition);
+    if (playerScoresCollection.isNotEmpty) {
+      final Map<String, List<Score>> playerScoresGrouped =
+          groupBy(playerScoresCollection, (Score score) => score.playerId);
+      boardGameStatistics.bestScore = playerScoresCollection.toBestScore(gameWinningCondition);
+      boardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
+
+      boardGameStatistics.topScoreres = [];
+      boardGameStatistics.playersStatistics = [];
+      for (final Score score in playerScoresCollection) {
+        final Player player = playersById[score.playerId]!;
+        if (boardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
+          boardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
+        }
+
+        if (boardGameStatistics.playersStatistics!
+            .any((PlayerStatistics playerStats) => playerStats.player == player)) {
+          continue;
+        }
+
+        final PlayerStatistics playerStatistics = PlayerStatistics(player);
+        playerStatistics.personalBestScore = num.tryParse(score.value!);
+        playerStatistics.numberOfGamesPlayed = playerScoresGrouped[player.id]?.length ?? 0;
+        playerStatistics.averageScore = playerScoresGrouped[player.id]!.toAverageScore();
+        boardGameStatistics.playersStatistics!.add(playerStatistics);
+      }
+    }
+
+    _updatePlayerCountPercentage(finishedPlaythroughs, boardGameStatistics);
+    _updatePlayerWinsPercentage(
+      finishedPlaythroughs,
+      boardGameStatistics,
+      playthroughScoresByPlaythroughId,
+      playersById,
+      gameWinningCondition,
+    );
+
+    boardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
+        .map((Playthrough p) => p.endDate!.difference(p.startDate).inSeconds)
+        .reduce((a, b) => a + b);
 
     notifyListeners();
   }
 
   void _updateLastPlayedAndWinner(
-      List<Playthrough>? finishedPlaythroughs,
-      BoardGameStatistics boardGameStatistics,
-      Map<String, List<Score>> playthroughScoresByPlaythroughId,
-      Map<String, Player> playersById) {
-    if (finishedPlaythroughs?.isNotEmpty ?? false) {
-      final lastPlaythrough = finishedPlaythroughs!.first;
-      boardGameStatistics.lastPlayed = lastPlaythrough.startDate;
-
-      if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
-        return;
-      }
-
-      final lastPlaythroughScores =
-          playthroughScoresByPlaythroughId[lastPlaythrough.id].onlyScoresWithValue();
-      lastPlaythroughScores
-          .sort((a, b) => num.tryParse(b.value!)!.compareTo(num.tryParse(a.value!)!));
-      if (lastPlaythroughScores.isEmpty) {
-        if (boardGameStatistics.lastWinner != null) {
-          boardGameStatistics.lastWinner = null;
-        }
-
-        return;
-      }
-
-      final lastPlaythroughBestScore = lastPlaythroughScores.first;
-      if (!playersById.containsKey(lastPlaythroughBestScore.playerId)) {
-        return;
-      }
-
-      boardGameStatistics.lastWinner = PlayerScore(
-        playersById[lastPlaythroughBestScore.playerId],
-        lastPlaythroughBestScore,
-      );
-    }
-  }
-
-  void _updatePlayerCountPercentage(
     List<Playthrough>? finishedPlaythroughs,
     BoardGameStatistics boardGameStatistics,
+    Map<String, List<Score>> playthroughScoresByPlaythroughId,
+    Map<String, Player> playersById,
+    GameWinningCondition winningCondition,
   ) {
-    if (finishedPlaythroughs == null) {
+    if (finishedPlaythroughs?.isEmpty ?? true) {
       return;
     }
 
+    final lastPlaythrough = finishedPlaythroughs!.first;
+    boardGameStatistics.lastPlayed = lastPlaythrough.startDate;
+
+    if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
+      return;
+    }
+
+    final lastPlaythroughScores = playthroughScoresByPlaythroughId[lastPlaythrough.id]
+        .onlyScoresWithValue()
+      ..sortByScore(winningCondition);
+
+    if (lastPlaythroughScores.isEmpty) {
+      boardGameStatistics.lastWinner = null;
+      return;
+    }
+
+    final lastPlaythroughBestScore = lastPlaythroughScores.first;
+    if (!playersById.containsKey(lastPlaythroughBestScore.playerId)) {
+      return;
+    }
+
+    boardGameStatistics.lastWinner = PlayerScore(
+      playersById[lastPlaythroughBestScore.playerId],
+      lastPlaythroughBestScore,
+    );
+  }
+
+  void _updatePlayerCountPercentage(
+    List<Playthrough> finishedPlaythroughs,
+    BoardGameStatistics boardGameStatistics,
+  ) {
     boardGameStatistics.playerCountPercentage = groupBy(
             finishedPlaythroughs
                 .map((Playthrough playthrough) => playthrough.playerIds.length)
                 .toList()
-              ..sort((int numberOfPlayersA, int numberOfPlayersB) =>
-                  numberOfPlayersA.compareTo(numberOfPlayersB)),
+              ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
+                  numberOfPlayers.compareTo(otherNumberOfPlayers)),
             (int numberOfPlayers) => numberOfPlayers)
         .map((key, value) => MapEntry(key, value.length / finishedPlaythroughs.length));
   }
 
   void _updatePlayerWinsPercentage(
-    List<Playthrough>? finishedPlaythroughs,
+    List<Playthrough> finishedPlaythroughs,
     BoardGameStatistics boardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
+    GameWinningCondition gameWinningCondition,
   ) {
-    if (finishedPlaythroughs == null) {
-      return;
-    }
-
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
-      final List<Score>? playthroughScores =
-          playthroughScoresByPlaythroughId[finishedPlaythrough.id].sortByScore();
-      if (playthroughScores?.isNotEmpty == null) {
+      final List<Score> playthroughScores = playthroughScoresByPlaythroughId[finishedPlaythrough.id]
+          .sortByScore(gameWinningCondition)!;
+      if (playthroughScores.isEmpty) {
         continue;
       }
 
-      final Player? winner = playersById[playthroughScores!.first.playerId];
+      final Player? winner = playersById[playthroughScores.first.playerId];
       if (winner == null) {
         continue;
       }

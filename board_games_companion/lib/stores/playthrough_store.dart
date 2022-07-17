@@ -1,8 +1,10 @@
+import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/enums/playthrough_status.dart';
+import '../extensions/scores_extensions.dart';
 import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
@@ -56,18 +58,18 @@ class PlaythroughStore {
     _daysSinceStart = nowUtc.difference(_playthrough.startDate).inDays;
 
     try {
-      _scores = await _scoreService.retrieveScores([_playthrough.id]);
+      _scores = (await _scoreService.retrieveScores([_playthrough.id]))
+        ..sortByScore(_playthroughsStore.boardGame?.settings?.winningCondition ??
+            GameWinningCondition.HighestScore)
+        ..toList();
       _players = await _playerService.retrievePlayers(
         playerIds: _playthrough.playerIds,
         includeDeleted: true,
       );
 
-      _playerScores = _players!.map((p) {
-        final score = _scores!.firstWhereOrNull(
-          (s) => s.playerId == p.id,
-        );
-
-        return PlayerScore(p, score!);
+      _playerScores = _scores!.mapIndexed((int index, Score score) {
+        final player = _players!.firstWhereOrNull((Player p) => score.playerId == p.id);
+        return PlayerScore.withPlace(player, score, index + 1);
       }).toList();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

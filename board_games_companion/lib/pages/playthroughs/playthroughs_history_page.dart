@@ -6,7 +6,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
-import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
@@ -53,8 +52,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
                   itemBuilder: (_, index) {
-                    final PlaythroughStore playthroughStore = getIt<PlaythroughStore>();
-
+                    final playthroughStore = getIt<PlaythroughStore>();
                     final _Playthrough playthough = _Playthrough(
                       playthroughsStore: widget.playthroughsStore,
                       playthroughStore: playthroughStore,
@@ -62,7 +60,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                       playthroughNumber: store.playthroughs!.length - index,
                     );
 
-                    // Last playthough
+                    // Last playthrough
                     if (index == store.playthroughs!.length - 1) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: Dimensions.bottomTabTopHeight),
@@ -113,9 +111,7 @@ class _Playthrough extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.standardSpacing,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
       child: PanelContainer(
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -129,21 +125,10 @@ class _Playthrough extends StatelessWidget {
               future: playthroughStore.loadPlaythrough(playthrough),
               builder: (_, AsyncSnapshot<void> snapshot) {
                 if (snapshot.hasError) {
-                  return const Center(
-                    child: GenericErrorMessage(),
-                  );
+                  return const Center(child: GenericErrorMessage());
                 }
 
                 if (snapshot.connectionState == ConnectionState.done) {
-                  playthroughStore.playerScores.sortByScore();
-                  playthroughStore.playerScores!
-                      .where((ps) => ps.score.value?.isNotEmpty ?? false)
-                      .toList()
-                      .asMap()
-                      .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
-
-                  debugPrint(playthroughStore.playthrough.endDate?.toIso8601String() ?? '');
-
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,

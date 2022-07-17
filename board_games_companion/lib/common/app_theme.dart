@@ -44,6 +44,9 @@ class AppTheme {
   static const Color activeBottomTabColor = whiteColor;
   static const Color inactiveBottomTabColor = greyColor;
 
+  static const Color inactiveWinningConditionIcon = greyColor;
+  static const Color activeWinningConditionIcon = accentColor;
+
   static Color alternativeSplashColor = primaryColorLight.withOpacity(0.7);
 
   static Color playedGamesStatColor = chartColorPallete[0];

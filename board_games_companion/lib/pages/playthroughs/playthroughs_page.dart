@@ -17,6 +17,7 @@ import '../../widgets/common/page_container_widget.dart';
 import '../base_page_state.dart';
 import '../board_game_details/board_game_details_page.dart';
 import 'bgg_plays_import_report_dialog.dart';
+import 'playthroughs_game_settings_page.dart';
 import 'playthroughs_history_page.dart';
 import 'playthroughs_log_game_page.dart';
 import 'playthroughs_statistics_page.dart';
@@ -44,7 +45,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   static const int _initialTabIndex = 0;
-  static const int _numberOfTabs = 3;
+  static const int _numberOfTabs = 4;
 
   bool _showImportGamesLoadingIndicator = false;
 
@@ -98,6 +99,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
                 boardGameDetails: widget.boardGameDetails,
                 playthroughsLogGameViewModel: widget.viewModel,
               ),
+              PlaythroughsGameSettingsPage(boardGameDetails: widget.boardGameDetails)
             ],
           ),
         ),
@@ -121,6 +123,11 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
             title: AppText.playthroughPageLogGameBottomTabTitle,
             icon: BottomTabIcon(iconData: Icons.casino),
             activeIcon: BottomTabIcon(iconData: Icons.casino, isActive: true),
+          ),
+          TabItem<BottomTabIcon>(
+            title: AppText.playthroughPageGameSettingsLogGameBottomTabTitle,
+            icon: BottomTabIcon(iconData: Icons.settings_applications_sharp),
+            activeIcon: BottomTabIcon(iconData: Icons.settings_applications_sharp, isActive: true),
           ),
         ],
         initialActiveIndex: _initialTabIndex,

@@ -21,7 +21,7 @@ class AppText {
   static const playthroughsStatisticsPageOverallStatsSectionTitle = 'Overall stats';
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
   static const playthroughsStatisticsPageOverallStatsTotalPlaytime = 'Total playtime';
-  static const playthroughsStatisticsPageOverallStatsHighscore = 'Highscore';
+  static const playthroughsStatisticsPageOverallStatsBestScore = 'Best score';
   static const playthroughsStatisticsPageOverallStatsAvgScore = 'Avg. score';
   static const playthroughsStatisticsPageOverallStatsAvgPlayerCount = 'Avg. player count';
   static const playthroughsStatisticsPageOverallStatsAvgPlayedGames = 'Played games';
@@ -32,6 +32,10 @@ class AppText {
   static const playthroughsStatisticsPagePlayersStatsPlayedGames =
       playthroughsStatisticsPageOverallStatsAvgPlayedGames;
   static const playthroughsStatisticsPagePlayerCountChartLegendFormat = '%s player%s';
+
+  static const playthroughsGameSettingsWinningConditionSectionTitle = 'Winning Condition';
+  static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest score';
+  static const playthroughsGameSettingsWinningConditionLowestScore = 'Lowest score';
 
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';
@@ -78,6 +82,7 @@ class AppText {
   static const playthroughPageStatsBottomTabTitle = 'Stats';
   static const playthroughPageHistoryBottomTabTitle = 'History';
   static const playthroughPageLogGameBottomTabTitle = 'Log Game';
+  static const playthroughPageGameSettingsLogGameBottomTabTitle = 'Settings';
 
   static const editPlaythroughPageTitle = 'Edit Playthrough';
   static const editPlaythroughPagePlayedOnSectionTitle = 'Played on';

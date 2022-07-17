@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:hive/hive.dart';
 
 import '../../common/constants.dart';
@@ -248,6 +249,9 @@ class BoardGameDetails extends BaseBoardGame {
       notifyListeners();
     }
   }
+
+  @HiveField(28)
+  BoardGameSettings? settings;
 
   String get playtimeFormatted {
     if (_minPlaytime == _maxPlaytime) {

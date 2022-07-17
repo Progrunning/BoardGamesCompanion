@@ -26,6 +26,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..desingers = (fields[18] as List).cast<BoardGameDesigner>()
       ..ranks = (fields[20] as List).cast<BoardGameRank>()
       ..expansions = (fields[22] as List).cast<BoardGamesExpansion>()
+      ..settings = fields[28] as BoardGameSettings?
       ..imageUrl = fields[5] as String?
       ..description = fields[6] as String?
       ..rating = fields[8] as double?
@@ -51,7 +52,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
   @override
   void write(BinaryWriter writer, BoardGameDetails obj) {
     writer
-      ..writeByte(28)
+      ..writeByte(29)
       ..writeByte(7)
       ..write(obj.categories)
       ..writeByte(16)
@@ -64,6 +65,8 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
       ..write(obj.ranks)
       ..writeByte(22)
       ..write(obj.expansions)
+      ..writeByte(28)
+      ..write(obj.settings)
       ..writeByte(5)
       ..write(obj.imageUrl)
       ..writeByte(6)

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:board_games_companion/common/enums/game_winning_condition.dart';
+import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -70,7 +72,9 @@ Future<void> main() async {
       ..registerAdapter(SortByAdapter())
       ..registerAdapter(SortByOptionAdapter())
       ..registerAdapter(OrderByAdapter())
-      ..registerAdapter(CollectionFiltersAdapter());
+      ..registerAdapter(CollectionFiltersAdapter())
+      ..registerAdapter(GameWinningConditionAdapter())
+      ..registerAdapter(BoardGameSettingsAdapter());
 
     final PreferencesService preferencesService = getIt<PreferencesService>();
     await preferencesService.initialize();
