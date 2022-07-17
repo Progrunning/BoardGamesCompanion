@@ -232,6 +232,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  dio_cache_interceptor_hive_store:
+    dependency: "direct main"
+    description:
+      name: dio_cache_interceptor_hive_store
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   dio_http2_adapter:
     dependency: "direct main"
     description:

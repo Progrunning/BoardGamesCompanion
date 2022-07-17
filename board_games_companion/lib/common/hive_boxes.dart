@@ -7,6 +7,7 @@ class HiveBoxes {
   static const SortBy = 'sortBy';
   static const CollectionFilters = 'collectionFilters';
   static const Preferences = 'preferences';
+  static const DioCache = 'dioCache';
 
   static const BoardGamesDetailsTypeId = 0;
   static const BoardGamesCategoryTypeId = 1;

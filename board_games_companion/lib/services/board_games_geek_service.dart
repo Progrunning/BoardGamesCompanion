@@ -3,9 +3,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/models/import_result.dart';
+import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -29,6 +30,7 @@ import '../models/hive/board_game_details.dart';
 import '../models/hive/board_game_expansion.dart';
 import '../models/hive/board_game_publisher.dart';
 import '../models/hive/board_game_rank.dart';
+import '../models/import_result.dart';
 import '../utilities/custom_http_client_adapter.dart';
 
 @singleton
@@ -137,8 +139,10 @@ class BoardGamesGeekService {
   static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;
 
-  // TODO Use Hive cache so the data is stored for a day
-  final CacheOptions _dioCacheOptions = CacheOptions(store: MemCacheStore());
+  // TODO MK Check why there are exception from Hive at the launch of the app (not initialized check github docs)
+  final CacheOptions _dioCacheOptions = CacheOptions(
+    store: HiveCacheStore(null, hiveBoxName: HiveBoxes.DioCache),
+  );
 
   final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
