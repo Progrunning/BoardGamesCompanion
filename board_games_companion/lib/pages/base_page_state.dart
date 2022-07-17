@@ -15,7 +15,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
     rateAndReviewService = getIt<RateAndReviewService>();
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!rateAndReviewService.showRateAndReviewDialog) {
         return;
       }

@@ -20,7 +20,7 @@ dependencies:
   animations: ^2.0.1
   async: ^2.8.1
   basics: ^0.6.0
-  cached_network_image: ^3.1.0
+  cached_network_image: ^3.2.1
   collection: ^1.15.0
   convex_bottom_bar: ^3.0.0
   dio_http_cache: ^0.3.0
@@ -28,7 +28,7 @@ dependencies:
   firebase_core: ^1.7.0
   firebase_crashlytics: ^2.2.2
   firebase_analytics: ^8.3.3
-  fl_chart: ^0.41.0
+  fl_chart: ^0.55.0
   flutter_lints: ^1.0.4
   flutter_polygon: ^0.2.0
   flutter_svg: ^0.22.0
