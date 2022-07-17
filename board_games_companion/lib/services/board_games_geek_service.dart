@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/import_result.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retry/retry.dart';
@@ -34,8 +34,8 @@ import '../utilities/custom_http_client_adapter.dart';
 class BoardGamesGeekService {
   BoardGamesGeekService(this._httpClientAdapter) {
     _dio.httpClientAdapter = _httpClientAdapter;
-    _dio.interceptors
-        .add(DioCacheManager(CacheConfig(baseUrl: _baseBoardGamesUrl)).interceptor as Interceptor);
+    // _dio.interceptors
+        // .add(DioCacheManager(CacheConfig(baseUrl: _baseBoardGamesUrl)).interceptor as Interceptor);
     _dio.interceptors.add(LogInterceptor(responseBody: true));
   }
 
@@ -125,20 +125,21 @@ class BoardGamesGeekService {
           Duration(seconds: min(pow(retryCount, 2), _maxBackoffDurationInSeconts) as int));
     }
 
-    final Options retrievalOptions = buildCacheOptions(
-      const Duration(days: _numberOfDaysToCacheHotBoardGames),
-      maxStale: const Duration(days: _numberOfDaysToCacheHotBoardGames),
-      forceRefresh: retryCount > 0,
-      primaryKey: _hotBoardGamesCachePrimaryKey,
-      subKey: _hotBoardGamesCacheSubKey,
-    );
-    retrievalOptions.contentType = 'application/xml';
-    retrievalOptions.responseType = ResponseType.plain;
+    // TODO Fix caching
+    // final Options retrievalOptions = buildCacheOptions(
+    //   const Duration(days: _numberOfDaysToCacheHotBoardGames),
+    //   maxStale: const Duration(days: _numberOfDaysToCacheHotBoardGames),
+    //   forceRefresh: retryCount > 0,
+    //   primaryKey: _hotBoardGamesCachePrimaryKey,
+    //   subKey: _hotBoardGamesCacheSubKey,
+    // // );
+    // retrievalOptions.contentType = 'application/xml';
+    // retrievalOptions.responseType = ResponseType.plain;
 
     final hotBoardGamesXml = await _dio.get<String>(
       _hotBoardGamesUrl,
       queryParameters: <String, dynamic>{_boardGameQueryParamterType: _boardGameType},
-      options: retrievalOptions,
+      // options: retrievalOptions,
     );
 
     try {
@@ -183,13 +184,15 @@ class BoardGamesGeekService {
       return null;
     }
 
-    final retrievalOptions = buildCacheOptions(
-      const Duration(days: _numberOfDaysToCacheBoardGameDetails),
-      maxStale: const Duration(days: _numberOfDaysToCacheBoardGameDetails),
-      forceRefresh: false,
-    );
-    retrievalOptions.contentType = 'application/xml';
-    retrievalOptions.responseType = ResponseType.plain;
+
+    // TODO Fix caching https://github.com/flutterchina/dio/blob/develop/example/lib/custom_cache_interceptor.dart
+    // final retrievalOptions = buildCacheOptions(
+    //   const Duration(days: _numberOfDaysToCacheBoardGameDetails),
+    //   maxStale: const Duration(days: _numberOfDaysToCacheBoardGameDetails),
+    //   forceRefresh: false,
+    // );
+    // retrievalOptions.contentType = 'application/xml';
+    // retrievalOptions.responseType = ResponseType.plain;
 
     final boardGameDetailsXml = await _dio.get<String>(
       _boardGamesDetailsUrl,
@@ -197,7 +200,7 @@ class BoardGamesGeekService {
         _boardGameQueryParamterId: id,
         _boardGameQueryParamterStats: 1,
       },
-      options: retrievalOptions,
+      // options: retrievalOptions,
     );
 
     try {
