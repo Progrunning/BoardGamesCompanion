@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-import '../common/enums/enums.dart';
 import 'hive/player.dart';
 import 'hive/score.dart';
 
 class PlayerScore with ChangeNotifier {
   PlayerScore(this._player, this._score);
+
+  PlayerScore.withPlace(this._player, this._score, this._place);
 
   final Player? _player;
 
@@ -17,9 +18,6 @@ class PlayerScore with ChangeNotifier {
   int? _place;
   int? get place => _place;
 
-  MedalEnum? _medal;
-  MedalEnum? get medal => _medal;
-
   bool updatePlayerScore(String score) {
     if (score.isEmpty) {
       return false;
@@ -30,24 +28,5 @@ class PlayerScore with ChangeNotifier {
     notifyListeners();
 
     return true;
-  }
-
-  Future<void> updatePlayerPlace(int place) async {
-    _place = place;
-
-    switch (_place) {
-      case 1:
-        _medal = MedalEnum.gold;
-        break;
-      case 2:
-        _medal = MedalEnum.silver;
-        break;
-      case 3:
-        _medal = MedalEnum.bronze;
-        break;
-      default:
-        _medal = null;
-        break;
-    }
   }
 }

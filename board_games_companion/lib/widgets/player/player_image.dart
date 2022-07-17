@@ -4,19 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
-import '../../common/enums/enums.dart';
 import '../../common/styles.dart';
 
 class PlayerImage extends StatelessWidget {
   const PlayerImage({
     Key? key,
-    this.medal,
     this.place,
     this.imageUri,
   }) : super(key: key);
 
   final String? imageUri;
-  final MedalEnum? medal;
   final int? place;
 
   @override

@@ -6,7 +6,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
-import '../../extensions/player_score_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
@@ -61,7 +60,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                       playthroughNumber: store.playthroughs!.length - index,
                     );
 
-                    // Last playthough
+                    // Last playthrough
                     if (index == store.playthroughs!.length - 1) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: Dimensions.bottomTabTopHeight),
@@ -112,9 +111,7 @@ class _Playthrough extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.standardSpacing,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
       child: PanelContainer(
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -132,14 +129,6 @@ class _Playthrough extends StatelessWidget {
                 }
 
                 if (snapshot.connectionState == ConnectionState.done) {
-                  // TODO Move this logic to a view model and update sorting to use existing sorting on Scores
-                  playthroughStore.playerScores.sortByScore();
-                  playthroughStore.playerScores!
-                      .where((ps) => ps.score.value?.isNotEmpty ?? false)
-                      .toList()
-                      .asMap()
-                      .forEach((index, ps) => ps.updatePlayerPlace(index + 1));
-
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
