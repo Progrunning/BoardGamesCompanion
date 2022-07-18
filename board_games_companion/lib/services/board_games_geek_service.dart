@@ -139,7 +139,6 @@ class BoardGamesGeekService {
   static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;
 
-  // TODO MK Check why there are exception from Hive at the launch of the app (not initialized check github docs)
   final CacheOptions _dioCacheOptions = CacheOptions(
     store: HiveCacheStore(null, hiveBoxName: HiveBoxes.DioCache),
   );

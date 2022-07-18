@@ -52,8 +52,6 @@ import 'stores/user_store.dart';
 Future<void> main() async {
   Fimber.plantTree(DebugTree());
 
-  configureDependencies();
-
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -78,6 +76,8 @@ Future<void> main() async {
       ..registerAdapter(CollectionFiltersAdapter())
       ..registerAdapter(GameWinningConditionAdapter())
       ..registerAdapter(BoardGameSettingsAdapter());
+
+    configureDependencies();
 
     final PreferencesService preferencesService = getIt<PreferencesService>();
     await preferencesService.initialize();
