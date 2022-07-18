@@ -325,18 +325,10 @@ class _ActionButtons extends StatelessWidget {
 class _CircularNumberPicker extends StatefulWidget {
   const _CircularNumberPicker({
     Key? key,
-    this.onChanged,
     this.onEnded,
-    this.size = const Size(280, 280),
     this.strokeWidth = 30,
     this.thumbSize = 30,
-    this.highestNumberInSingleSpin = 12,
   }) : super(key: key);
-
-  /// Called during a drag when the user is selecting a color.
-  ///
-  /// This callback called with latest color that user selected.
-  final ValueChanged<int>? onChanged;
 
   /// Called when drag ended.
   ///
@@ -348,7 +340,7 @@ class _CircularNumberPicker extends StatefulWidget {
   /// so circle is smaller than the size.
   ///
   /// Default value is 280 x 280.
-  final Size size;
+  Size get size => const Size(280, 280);
 
   /// The width of circle border.
   ///
@@ -360,7 +352,7 @@ class _CircularNumberPicker extends StatefulWidget {
   /// Default value is 32.
   final double thumbSize;
 
-  final int highestNumberInSingleSpin;
+  int get highestNumberInSingleSpin => 12;
 
   @override
   _CircularNumberPickerState createState() => _CircularNumberPickerState();
@@ -437,8 +429,6 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
       if (multiplier < 0) {
         _number--;
       }
-
-      widget.onChanged?.call(_number);
     });
   }
 
@@ -447,7 +437,6 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
     setState(() {
       _angle = 0;
       _numberOpacity = 0;
-      widget.onChanged?.call(0);
     });
   }
 }

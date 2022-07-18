@@ -61,13 +61,13 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           final analyticsService = getIt<AnalyticsService>();
           final rateAndReviewService = getIt<RateAndReviewService>();
           final playersViewModel = getIt<PlayersViewModel>();
-          final _boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
+          final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
 
-          final _boardGamesStore = Provider.of<BoardGamesStore>(
+          final boardGamesStore = Provider.of<BoardGamesStore>(
             context,
             listen: false,
           );
-          final gamesViewModel = GamesViewModel(_boardGamesStore, _boardGamesFiltersStore);
+          final gamesViewModel = GamesViewModel(boardGamesStore, boardGamesFiltersStore);
 
           return HomePage(
             analyticsService: analyticsService,
@@ -77,59 +77,58 @@ class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           );
         },
         BoardGamesDetailsPage.pageRoute: (BuildContext context) {
-          final _arguments =
+          final arguments =
               ModalRoute.of(context)!.settings.arguments as BoardGameDetailsPageArguments;
 
-          final _analytics = getIt<AnalyticsService>();
-          final _boardGamesGeekService = getIt<BoardGamesGeekService>();
-          final _preferencesService = getIt<PreferencesService>();
-          final _boardGamesStore = Provider.of<BoardGamesStore>(
+          final analytics = getIt<AnalyticsService>();
+          final boardGamesGeekService = getIt<BoardGamesGeekService>();
+          final preferencesService = getIt<PreferencesService>();
+          final boardGamesStore = Provider.of<BoardGamesStore>(
             context,
             listen: false,
           );
-          final _boardGameDetailsStore = BoardGameDetailsViewModel(
-            _boardGamesGeekService,
-            _boardGamesStore,
-            _analytics,
+          final boardGameDetailsStore = BoardGameDetailsViewModel(
+            boardGamesGeekService,
+            boardGamesStore,
+            analytics,
           );
 
           return BoardGamesDetailsPage(
-            boardGameId: _arguments.boardGameId,
-            boardGameName: _arguments.boardGameName,
-            boardGameDetailsStore: _boardGameDetailsStore,
-            navigatingFromType: _arguments.navigatingFromType,
-            preferencesService: _preferencesService,
+            boardGameId: arguments.boardGameId,
+            boardGameName: arguments.boardGameName,
+            boardGameDetailsStore: boardGameDetailsStore,
+            navigatingFromType: arguments.navigatingFromType,
+            preferencesService: preferencesService,
           );
         },
         PlayerPage.pageRoute: (BuildContext context) {
-          final _arguments = ModalRoute.of(context)!.settings.arguments as PlayerPageArguments;
+          final arguments = ModalRoute.of(context)!.settings.arguments as PlayerPageArguments;
           final playersViewModel = getIt<PlayersViewModel>();
 
-          playersViewModel.setPlayer(player: _arguments.player);
+          playersViewModel.setPlayer(player: arguments.player);
 
           return PlayerPage(playersViewModel: playersViewModel);
         },
         PlaythroughsPage.pageRoute: (BuildContext context) {
-          final _arguments =
-              ModalRoute.of(context)!.settings.arguments as PlaythroughsPageArguments;
+          final arguments = ModalRoute.of(context)!.settings.arguments as PlaythroughsPageArguments;
 
           final viewModel = getIt<PlaythroughsViewModel>();
-          viewModel.setBoardGame(_arguments.boardGameDetails);
+          viewModel.setBoardGame(arguments.boardGameDetails);
 
           return PlaythroughsPage(
             viewModel: viewModel,
-            boardGameDetails: _arguments.boardGameDetails,
-            collectionType: _arguments.collectionType,
+            boardGameDetails: arguments.boardGameDetails,
+            collectionType: arguments.collectionType,
           );
         },
         EditPlaythoughPage.pageRoute: (BuildContext context) {
-          final _arguments =
+          final arguments =
               ModalRoute.of(context)!.settings.arguments as EditPlaythroughPageArguments;
 
           final PlaythroughsStore playthroughsStore = getIt<PlaythroughsStore>();
 
           return EditPlaythoughPage(
-            viewModel: EditPlaythoughViewModel(_arguments.playthroughStore, playthroughsStore),
+            viewModel: EditPlaythoughViewModel(arguments.playthroughStore, playthroughsStore),
           );
         },
         AboutPage.pageRoute: (BuildContext _) {

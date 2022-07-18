@@ -49,7 +49,7 @@ packages:
       name: basics
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.9.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -385,12 +385,12 @@ packages:
     source: hosted
     version: "0.9.3"
   flutter_lints:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "2.0.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -449,7 +449,7 @@ packages:
       name: google_fonts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.3"
+    version: "3.0.1"
   graphs:
     dependency: transitive
     description:
@@ -624,7 +624,7 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   logger:
     dependency: "direct main"
     description:

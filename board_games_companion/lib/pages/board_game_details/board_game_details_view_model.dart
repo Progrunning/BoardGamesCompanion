@@ -65,9 +65,9 @@ class BoardGameDetailsViewModel with ChangeNotifier {
 
   Future<void> captureLinkAnalytics(String linkName) async {
     await _analyticsService.logEvent(
-      name: Analytics.BoardGameDetailsLinks,
+      name: Analytics.boardGameDetailsLinks,
       parameters: <String, String>{
-        Analytics.BoardGameDetailsLinksName: linkName,
+        Analytics.boardGameDetailsLinksName: linkName,
       },
     );
   }

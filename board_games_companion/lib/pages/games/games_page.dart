@@ -265,7 +265,7 @@ class _AppBarState extends State<_AppBar> {
               onPressed: widget.viewModel.anyBoardGames
                   ? () async {
                       await _openFiltersPanel(context);
-                      await widget.analyticsService.logEvent(name: Analytics.FilterCollection);
+                      await widget.analyticsService.logEvent(name: Analytics.filterCollection);
                       await widget.rateAndReviewService.increaseNumberOfSignificantActions();
                     }
                   : null,

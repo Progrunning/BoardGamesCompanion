@@ -72,15 +72,13 @@ class BoardGamesFiltersStore with ChangeNotifier {
     }
     sortBy.selected = true;
 
-    if (_collectionFilters == null) {
-      _collectionFilters = CollectionFilters();
-    }
+    _collectionFilters ??= CollectionFilters();
 
     await _analyticsService.logEvent(
-      name: Analytics.SortCollection,
+      name: Analytics.sortCollection,
       parameters: <String, String?>{
-        Analytics.SortByParameter: sortBy.name,
-        Analytics.OrderByParameter: sortBy.orderBy.toString()
+        Analytics.sortByParameter: sortBy.name,
+        Analytics.orderByParameter: sortBy.orderBy.toString()
       },
     );
 
@@ -92,17 +90,15 @@ class BoardGamesFiltersStore with ChangeNotifier {
   }
 
   Future<void> updateFilterByRating(double? filterByRating) async {
-    if (_collectionFilters == null) {
-      _collectionFilters = CollectionFilters();
-    }
+    _collectionFilters ??= CollectionFilters();
 
     _collectionFilters!.filterByRating = filterByRating;
 
     await _analyticsService.logEvent(
-      name: Analytics.FilterCollection,
+      name: Analytics.filterCollection,
       parameters: <String, dynamic>{
-        Analytics.FilterByParameter: 'rating',
-        Analytics.FilterByValueParameter: filterByRating ?? Constants.FilterByAny
+        Analytics.filterByParameter: 'rating',
+        Analytics.filterByValueParameter: filterByRating ?? Constants.FilterByAny
       },
     );
 
@@ -112,9 +108,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
   }
 
   Future<void> changeNumberOfPlayers(int? numberOfPlayers) async {
-    if (_collectionFilters == null) {
-      _collectionFilters = CollectionFilters();
-    }
+    _collectionFilters ??= CollectionFilters();
 
     _collectionFilters!.numberOfPlayers = numberOfPlayers;
 
@@ -123,10 +117,10 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
   Future<void> updateNumberOfPlayers(int? numberOfPlayers) async {
     await _analyticsService.logEvent(
-      name: Analytics.FilterCollection,
+      name: Analytics.filterCollection,
       parameters: <String, dynamic>{
-        Analytics.FilterByParameter: 'number_of_players',
-        Analytics.FilterByValueParameter: filterByRating ?? Constants.FilterByAny,
+        Analytics.filterByParameter: 'number_of_players',
+        Analytics.filterByValueParameter: filterByRating ?? Constants.FilterByAny,
       },
     );
 
