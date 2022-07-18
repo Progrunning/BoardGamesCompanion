@@ -303,14 +303,12 @@ class _SearchResultsState extends State<_SearchResults> {
 
 class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
   const _SearchResultsTemplate({
-    required this.child,
-    this.height = defaultHeight,
+    required this.child    
   });
 
   static const double defaultHeight = 100;
 
-  final Widget child;
-  final double height;
+  final Widget child;  
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -325,10 +323,10 @@ class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => height;
+  double get maxExtent => defaultHeight;
 
   @override
-  double get minExtent => height;
+  double get minExtent => defaultHeight;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
