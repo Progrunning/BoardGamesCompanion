@@ -35,6 +35,7 @@ class CalendarCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(
           Radius.circular(Styles.boardGameTileImageCircularRadius),
         ),
+        onTap: onTap,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -89,7 +90,6 @@ class CalendarCard extends StatelessWidget {
             ),
           ],
         ),
-        onTap: onTap,
       ),
     );
   }

@@ -6,7 +6,7 @@ import '../common/hive_boxes.dart';
 
 part 'sort_by.g.dart';
 
-@HiveType(typeId: HiveBoxes.SortByTypeId)
+@HiveType(typeId: HiveBoxes.sortByTypeId)
 class SortBy {
   SortBy({required this.sortByOption});
 

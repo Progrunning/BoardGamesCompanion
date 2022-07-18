@@ -19,10 +19,10 @@ class ImportCollectionsButton extends StatefulWidget {
   final bool? _triggerImport;
 
   @override
-  _ImportCollectionsButtonState createState() => _ImportCollectionsButtonState();
+  ImportCollectionsButtonState createState() => ImportCollectionsButtonState();
 }
 
-class _ImportCollectionsButtonState extends State<ImportCollectionsButton>
+class ImportCollectionsButtonState extends State<ImportCollectionsButton>
     with TickerProviderStateMixin, ImportCollection {
   late AnimationController _fadeInAnimationController;
   late AnimationController _sizeAnimationController;

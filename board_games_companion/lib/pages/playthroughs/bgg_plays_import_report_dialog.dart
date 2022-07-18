@@ -110,7 +110,7 @@ class BggPlaysImportReportDialog extends StatelessWidget {
         '[$username|$boardGameId] ${report.errors.map((ImportError importError) => importError.description).join(', ')}';
     await LauncherHelper.launchUri(
       context,
-      'mailto:${Constants.FeedbackEmailAddress}?subject=${Uri.encodeComponent('BGG Import Report')}&body=${Uri.encodeComponent(errorsFormatted)}',
+      'mailto:${Constants.feedbackEmailAddress}?subject=${Uri.encodeComponent('BGG Import Report')}&body=${Uri.encodeComponent(errorsFormatted)}',
     );
   }
 }

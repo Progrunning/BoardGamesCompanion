@@ -74,18 +74,18 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               },
             ),
             TextButton(
-              child: const Text(
-                AppText.rate,
-                style: TextStyle(
-                  color: AppTheme.defaultTextColor,
-                ),
-              ),
               style: TextButton.styleFrom(backgroundColor: AppTheme.accentColor),
               onPressed: () async {
                 Navigator.of(context).pop();
 
                 await rateAndReviewService.requestReview();
               },
+              child: const Text(
+                AppText.rate,
+                style: TextStyle(
+                  color: AppTheme.defaultTextColor,
+                ),
+              ),
             ),
           ],
         );

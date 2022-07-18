@@ -46,7 +46,7 @@ class BoardGameRatingHexagon extends StatelessWidget {
             child: Text(
               _rating == null
                   ? '?'
-                  : _rating!.toStringAsFixed(Constants.BoardGameRatingNumberOfDecimalPlaces),
+                  : _rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
               style: TextStyle(color: _fontColor, fontSize: _fontSize),
             ),
           ),

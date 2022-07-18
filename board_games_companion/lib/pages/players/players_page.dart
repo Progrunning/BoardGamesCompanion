@@ -29,10 +29,10 @@ class PlayersPage extends StatefulWidget {
   final PlayersViewModel playersViewModel;
 
   @override
-  _PlayersPageState createState() => _PlayersPageState();
+  PlayersPageState createState() => PlayersPageState();
 }
 
-class _PlayersPageState extends State<PlayersPage> {
+class PlayersPageState extends State<PlayersPage> {
   @override
   Widget build(BuildContext context) {
     return ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
@@ -134,15 +134,15 @@ class _PlayersPageState extends State<PlayersPage> {
               },
             ),
             TextButton(
-              child: const Text(
-                AppText.playersPageConfirmationDialogDeletePlayersButtonText,
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.playersViewModel.deleteSelectedPlayers();
                 Navigator.of(context).pop(true);
               },
+              child: const Text(
+                AppText.playersPageConfirmationDialogDeletePlayersButtonText,
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
             ),
           ],
         );

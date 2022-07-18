@@ -47,10 +47,10 @@ class GamesPage extends StatefulWidget {
   final RateAndReviewService rateAndReviewService;
 
   @override
-  _GamesPageState createState() => _GamesPageState();
+  GamesPageState createState() => GamesPageState();
 }
 
-class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMixin {
+class GamesPageState extends State<GamesPage> with SingleTickerProviderStateMixin {
   late TabController _topTabController;
 
   @override
@@ -284,17 +284,17 @@ class _AppBarState extends State<_AppBar> {
             _TopTab(
               'Owned',
               Icons.grid_on,
-              isSelected: widget.viewModel.selectedTab == GamesTab.Owned,
+              isSelected: widget.viewModel.selectedTab == GamesTab.owned,
             ),
             _TopTab(
               'Friends',
               Icons.group,
-              isSelected: widget.viewModel.selectedTab == GamesTab.Friends,
+              isSelected: widget.viewModel.selectedTab == GamesTab.friends,
             ),
             _TopTab(
               'Wishlist',
               Icons.card_giftcard,
-              isSelected: widget.viewModel.selectedTab == GamesTab.Wishlist,
+              isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
             ),
           ],
           indicatorColor: AppTheme.accentColor,
@@ -580,7 +580,7 @@ class _EmptyCollection extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const TextSpan(text: ' collection yet.'),
-                          if (gamesViewModel.selectedTab == GamesTab.Wishlist &&
+                          if (gamesViewModel.selectedTab == GamesTab.wishlist &&
                               (userStore.user?.name.isNotEmpty ?? false)) ...[
                             const TextSpan(text: "\n\nIf you want to see board games from BGG's  "),
                             const TextSpan(
@@ -603,7 +603,7 @@ class _EmptyCollection extends StatelessWidget {
                       ),
                       textAlign: TextAlign.justify,
                     ),
-                    if (gamesViewModel.selectedTab == GamesTab.Wishlist &&
+                    if (gamesViewModel.selectedTab == GamesTab.wishlist &&
                         (userStore.user?.name.isNotEmpty ?? false)) ...[
                       const SizedBox(height: Dimensions.doubleStandardSpacing),
                       Align(

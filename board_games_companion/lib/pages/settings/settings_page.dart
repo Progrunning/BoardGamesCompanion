@@ -20,12 +20,12 @@ class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  SettingsPageState createState() => SettingsPageState();
 
   static const String pageRoute = '/settings';
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +118,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
               DetailsItem(
                 title: userStore.user?.name ?? '',
                 subtitle: 'BGG profile page',
-                uri: '${Constants.BoardGameGeekBaseApiUrl}user/${userStore.user?.name}',
+                uri: '${Constants.boardGameGeekBaseApiUrl}user/${userStore.user?.name}',
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
@@ -167,10 +167,6 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
               },
             ),
             TextButton(
-              child: const Text(
-                'Remove',
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 final boardGameStore = Provider.of<BoardGamesStore>(
@@ -183,6 +179,10 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
 
                 Navigator.of(context).pop();
               },
+              child: const Text(
+                'Remove',
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
             ),
           ],
         );

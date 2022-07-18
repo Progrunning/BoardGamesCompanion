@@ -98,7 +98,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
       name: Analytics.filterCollection,
       parameters: <String, dynamic>{
         Analytics.filterByParameter: 'rating',
-        Analytics.filterByValueParameter: filterByRating ?? Constants.FilterByAny
+        Analytics.filterByValueParameter: filterByRating ?? Constants.filterByAny
       },
     );
 
@@ -120,7 +120,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
       name: Analytics.filterCollection,
       parameters: <String, dynamic>{
         Analytics.filterByParameter: 'number_of_players',
-        Analytics.filterByValueParameter: filterByRating ?? Constants.FilterByAny,
+        Analytics.filterByValueParameter: filterByRating ?? Constants.filterByAny,
       },
     );
 
@@ -143,7 +143,7 @@ class BoardGamesFiltersStore with ChangeNotifier {
 
   @override
   void dispose() {
-    _boardGamesFiltersService.closeBox(HiveBoxes.CollectionFilters);
+    _boardGamesFiltersService.closeBox(HiveBoxes.collectionFilters);
 
     super.dispose();
   }

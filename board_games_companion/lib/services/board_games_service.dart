@@ -20,7 +20,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   static const int _maxNumberOfImportedPlaysPerPage = 100;
 
   Future<List<BoardGameDetails>> retrieveBoardGames() async {
-    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
       return <BoardGameDetails>[];
     }
 
@@ -37,7 +37,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
       return;
     }
 
@@ -49,7 +49,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
       return false;
     }
 
@@ -61,7 +61,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
       return;
     }
 
@@ -73,7 +73,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
       return;
     }
 
@@ -81,7 +81,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<void> removeAllBoardGames() async {
-    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
       return;
     }
 
@@ -109,7 +109,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<CollectionImportResult> importCollections(String username) async {
-    if (!await ensureBoxOpen(HiveBoxes.BoardGames)) {
+    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
       return CollectionImportResult();
     }
 

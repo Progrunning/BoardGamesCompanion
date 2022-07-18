@@ -140,7 +140,7 @@ class BoardGamesGeekService {
   static const int _maxBackoffDurationInSeconts = 8;
 
   final CacheOptions _dioCacheOptions = CacheOptions(
-    store: HiveCacheStore(null, hiveBoxName: HiveBoxes.DioCache),
+    store: HiveCacheStore(null, hiveBoxName: HiveBoxes.dioCache),
   );
 
   final CustomHttpClientAdapter _httpClientAdapter;
@@ -368,17 +368,17 @@ class BoardGamesGeekService {
 
     final ownGameImportResult = await _importCollection(
       username,
-      CollectionType.Owned,
+      CollectionType.owned,
       <String, dynamic>{_boardGameQueryParamterOwn: 1},
     );
     final wishlistGameImportResult = await _importCollection(
       username,
-      CollectionType.Wishlist,
+      CollectionType.wishlist,
       <String, dynamic>{_boardGameQueryParamterWishlist: 1},
     );
     final wantToBuyGameImportResult = await _importCollection(
       username,
-      CollectionType.Wishlist,
+      CollectionType.wishlist,
       <String, dynamic>{_boardGameQueryParamterWantToBuy: 1},
     );
 
@@ -571,12 +571,12 @@ class BoardGamesGeekService {
       boardGame.isBggSynced = true;
 
       switch (collectionType) {
-        case CollectionType.Owned:
+        case CollectionType.owned:
           boardGame.isOwned = true;
           break;
-        case CollectionType.Friends:
+        case CollectionType.friends:
           break;
-        case CollectionType.Wishlist:
+        case CollectionType.wishlist:
           boardGame.isOnWishlist = true;
           break;
       }

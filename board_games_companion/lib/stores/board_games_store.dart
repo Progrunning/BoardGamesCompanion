@@ -184,10 +184,10 @@ class BoardGamesStore with ChangeNotifier {
 
   @override
   void dispose() {
-    _boardGamesService.closeBox(HiveBoxes.BoardGames);
-    _playthroughService.closeBox(HiveBoxes.Playthroughs);
-    _scoreService.closeBox(HiveBoxes.Scores);
-    _playerService.closeBox(HiveBoxes.Players);
+    _boardGamesService.closeBox(HiveBoxes.boardGames);
+    _playthroughService.closeBox(HiveBoxes.playthroughs);
+    _scoreService.closeBox(HiveBoxes.scores);
+    _playerService.closeBox(HiveBoxes.players);
 
     super.dispose();
   }

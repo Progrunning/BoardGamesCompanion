@@ -35,10 +35,10 @@ class SearchBoardGamesPage extends StatefulWidget {
   final AnalyticsService analyticsService;
 
   @override
-  _SearchBoardGamesPageState createState() => _SearchBoardGamesPageState();
+  SearchBoardGamesPageState createState() => SearchBoardGamesPageState();
 }
 
-class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
+class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
   late FocusNode searchFocusNode;
 
   @override
@@ -386,7 +386,7 @@ class _NoResults extends StatelessWidget {
                       ..onTap = () async {
                         await LauncherHelper.launchUri(
                           context,
-                          'mailto:${Constants.FeedbackEmailAddress}?subject=BGC%20Feedback',
+                          'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
                         );
                       },
                   ),

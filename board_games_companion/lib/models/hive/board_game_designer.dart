@@ -4,7 +4,7 @@ import '../../common/hive_boxes.dart';
 
 part 'board_game_designer.g.dart';
 
-@HiveType(typeId: HiveBoxes.BoardGamesDesignerTypeId)
+@HiveType(typeId: HiveBoxes.boardGamesDesignerTypeId)
 class BoardGameDesigner {
   BoardGameDesigner({required this.id, required this.name});
 

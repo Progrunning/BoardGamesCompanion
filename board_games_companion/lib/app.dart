@@ -35,10 +35,10 @@ class BoardGamesCompanionApp extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BoardGamesCompanionAppState createState() => _BoardGamesCompanionAppState();
+  BoardGamesCompanionAppState createState() => BoardGamesCompanionAppState();
 }
 
-class _BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
+class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
   late FirebaseAnalyticsObserver _analyticsObserver;
   late AnalyticsRouteObserver _analyticsRouteObserver;
 

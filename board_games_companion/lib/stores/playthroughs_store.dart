@@ -101,7 +101,7 @@ class PlaythroughsStore with ChangeNotifier, BoardGameAware {
 
   @override
   void dispose() {
-    _playthroughService.closeBox(HiveBoxes.Playthroughs);
+    _playthroughService.closeBox(HiveBoxes.playthroughs);
     super.dispose();
   }
 }

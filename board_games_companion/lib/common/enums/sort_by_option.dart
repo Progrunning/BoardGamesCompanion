@@ -1,10 +1,12 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:hive/hive.dart';
 
 import '../hive_boxes.dart';
 
 part 'sort_by_option.g.dart';
 
-@HiveType(typeId: HiveBoxes.SortByOptionTypeId)
+@HiveType(typeId: HiveBoxes.sortByOptionTypeId)
 enum SortByOption {
   @HiveField(0)
   Name,
