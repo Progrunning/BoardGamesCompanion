@@ -40,8 +40,9 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11         
+        targetCompatibility JavaVersion.VERSION_11         
     }
 
     defaultConfig {
