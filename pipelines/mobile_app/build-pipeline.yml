@@ -24,6 +24,7 @@ jobs:
 
     steps:
       - task: JavaToolInstaller@0
+        displayName: Java Installer
         inputs:
           versionSpec: "11"
           jdkArchitectureOption: x64
