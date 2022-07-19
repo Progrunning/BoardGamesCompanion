@@ -38,9 +38,10 @@ stages:
 
         steps:
           - task: JavaToolInstaller@0
-            versionSpec: "11"
-            jdkArchitectureOption: x64
-            jdkSourceOption: PreInstalled
+            inputs:
+              versionSpec: "11"
+              jdkArchitectureOption: x64
+              jdkSourceOption: PreInstalled
 
           - task: FlutterInstall@0
             displayName: "Install Flutter"
