@@ -244,6 +244,10 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     } else {
       final Playthrough? newPlaythrough =
           await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
+      if (!mounted) {
+        return;
+      }
+
       if (newPlaythrough == null) {
         _showFailureSnackbar(context);
       } else {

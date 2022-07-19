@@ -23,6 +23,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       // MK Wait for all of the animations to finish before showing the dialog
       await Future<dynamic>.delayed(const Duration(seconds: 1));
 
+      // ignore: use_build_context_synchronously
       await _showRateAndReviewDialog(context);
     });
   }

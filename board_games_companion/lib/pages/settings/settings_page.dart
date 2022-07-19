@@ -177,6 +177,10 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                 await userStore.removeUser(userStore.user!);
                 await boardGameStore.removeAllBggBoardGames();
 
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.of(context).pop();
               },
               child: const Text(

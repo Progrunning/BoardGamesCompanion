@@ -268,6 +268,10 @@ class PlayerPageState extends BasePageState<PlayerPage> {
 
     final playerUpdatedSuccess = await widget.playersViewModel.createOrUpdatePlayer(player);
     if (playerUpdatedSuccess) {
+      if (!mounted) {
+        return;
+      }
+
       _showPlayerUpdatedSnackbar(context, player, isEditMode: isEditMode);
       nameFocusNode.unfocus();
       setState(() {
@@ -295,6 +299,10 @@ class PlayerPageState extends BasePageState<PlayerPage> {
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.playersViewModel.deletePlayers([player.id]);
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
               },
               child: const Text(
@@ -313,30 +321,28 @@ void _showPlayerUpdatedSnackbar(
   BuildContext context,
   Player playerToAddOrUpdate, {
   required bool isEditMode,
-}) {
-  final String actionText = isEditMode ? 'updated' : 'created';
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text.rich(
-        TextSpan(
-          children: [
-            const TextSpan(text: 'Player '),
-            TextSpan(
-              text: '${playerToAddOrUpdate.name} ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: 'has been $actionText successfully'),
-          ],
+}) =>
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text.rich(
+          TextSpan(
+            children: [
+              const TextSpan(text: 'Player '),
+              TextSpan(
+                text: '${playerToAddOrUpdate.name} ',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: 'has been ${isEditMode ? 'updated' : 'created'} successfully'),
+            ],
+          ),
+        ),
+        action: SnackBarAction(
+          label: AppText.goBack,
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      action: SnackBarAction(
-        label: 'Go Back',
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    ),
-  );
-}
+    );
 
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({

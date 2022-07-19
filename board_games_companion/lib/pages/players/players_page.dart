@@ -137,6 +137,10 @@ class PlayersPageState extends State<PlayersPage> {
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.playersViewModel.deleteSelectedPlayers();
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.of(context).pop(true);
               },
               child: const Text(

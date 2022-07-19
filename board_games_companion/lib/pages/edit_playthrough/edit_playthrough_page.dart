@@ -106,6 +106,10 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
 
   Future<void> _save() async {
     await widget.viewModel.saveChanges();
+    if (!mounted) {
+      return;
+    }
+
     Navigator.pop(context);
   }
 
@@ -138,6 +142,10 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
               child: const Text(AppText.delete, style: TextStyle(color: AppTheme.defaultTextColor)),
