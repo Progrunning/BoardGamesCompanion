@@ -113,7 +113,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return CollectionImportResult();
     }
 
-    final collectionImportResult = await compute(_boardGameGeekService.importCollections, username);
+    final collectionImportResult = await _boardGameGeekService.importCollections(username);
     if (!collectionImportResult.isSuccess || (collectionImportResult.data?.isEmpty ?? true)) {
       return collectionImportResult;
     }
