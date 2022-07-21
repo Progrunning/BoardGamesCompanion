@@ -25,10 +25,10 @@ class PlayerImage extends StatelessWidget {
           const _Placeholder(),
           Builder(
             builder: (_) {
-              if ((imageUri?.isEmpty ?? true) || imageUri == Constants.DefaultAvatartAssetsPath) {
+              if ((imageUri?.isEmpty ?? true) || imageUri == Constants.defaultAvatartAssetsPath) {
                 return Positioned.fill(
                   child: Image.asset(
-                    Constants.DefaultAvatartAssetsPath,
+                    Constants.defaultAvatartAssetsPath,
                     fit: BoxFit.cover,
                     frameBuilder: (BuildContext context, Widget child, int? frame,
                         bool wasSynchronouslyLoaded) {

@@ -4,7 +4,7 @@ import '../../common/hive_boxes.dart';
 
 part 'user.g.dart';
 
-@HiveType(typeId: HiveBoxes.UserTypeId)
+@HiveType(typeId: HiveBoxes.userTypeId)
 class User {
   User({required this.name});
 

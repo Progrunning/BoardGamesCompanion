@@ -29,10 +29,10 @@ class PlayerPage extends StatefulWidget {
   final PlayersViewModel playersViewModel;
 
   @override
-  _PlayerPageState createState() => _PlayerPageState();
+  PlayerPageState createState() => PlayerPageState();
 }
 
-class _PlayerPageState extends BasePageState<PlayerPage> {
+class PlayerPageState extends BasePageState<PlayerPage> {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final nameFocusNode = FocusNode();
@@ -65,7 +65,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
       value: player,
       child: Consumer<Player>(
         builder: (_, player, __) {
-          final _hasName = nameController.text.isNotEmpty;
+          final hasName = nameController.text.isNotEmpty;
 
           return WillPopScope(
             onWillPop: () async {
@@ -76,7 +76,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
             },
             child: Scaffold(
               appBar: AppBar(
-                title: Text(_hasName ? player.name! : 'New Player'),
+                title: Text(hasName ? player.name! : 'New Player'),
               ),
               body: SafeArea(
                 child: PageContainer(
@@ -234,10 +234,6 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                   },
                 ),
                 TextButton(
-                  child: const Text(
-                    'Navigate away',
-                    style: TextStyle(color: AppTheme.defaultTextColor),
-                  ),
                   style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
                   onPressed: () async {
                     widget.playersViewModel.player!.avatarImageUri =
@@ -248,6 +244,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                     // MK Go back
                     Navigator.of(context).pop();
                   },
+                  child: const Text(
+                    'Navigate away',
+                    style: TextStyle(color: AppTheme.defaultTextColor),
+                  ),
                 ),
               ],
             );
@@ -268,6 +268,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
     final playerUpdatedSuccess = await widget.playersViewModel.createOrUpdatePlayer(player);
     if (playerUpdatedSuccess) {
+      if (!mounted) {
+        return;
+      }
+
       _showPlayerUpdatedSnackbar(context, player, isEditMode: isEditMode);
       nameFocusNode.unfocus();
       setState(() {
@@ -292,15 +296,19 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               },
             ),
             TextButton(
+              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              onPressed: () async {
+                await widget.playersViewModel.deletePlayers([player.id]);
+                if (!mounted) {
+                  return;
+                }
+
+                Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
+              },
               child: const Text(
                 'Delete',
                 style: TextStyle(color: AppTheme.defaultTextColor),
               ),
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
-              onPressed: () async {
-                await widget.playersViewModel.deletePlayers([player.id]);
-                Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
-              },
             ),
           ],
         );
@@ -313,30 +321,28 @@ void _showPlayerUpdatedSnackbar(
   BuildContext context,
   Player playerToAddOrUpdate, {
   required bool isEditMode,
-}) {
-  final String actionText = isEditMode ? 'updated' : 'created';
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text.rich(
-        TextSpan(
-          children: [
-            const TextSpan(text: 'Player '),
-            TextSpan(
-              text: '${playerToAddOrUpdate.name} ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: 'has been $actionText successfully'),
-          ],
+}) =>
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text.rich(
+          TextSpan(
+            children: [
+              const TextSpan(text: 'Player '),
+              TextSpan(
+                text: '${playerToAddOrUpdate.name} ',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: 'has been ${isEditMode ? 'updated' : 'created'} successfully'),
+            ],
+          ),
+        ),
+        action: SnackBarAction(
+          label: AppText.goBack,
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      action: SnackBarAction(
-        label: 'Go Back',
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    ),
-  );
-}
+    );
 
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({

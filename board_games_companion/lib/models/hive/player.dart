@@ -7,7 +7,7 @@ import '../../common/hive_boxes.dart';
 
 part 'player.g.dart';
 
-@HiveType(typeId: HiveBoxes.PlayersTypeId)
+@HiveType(typeId: HiveBoxes.playersTypeId)
 class Player with ChangeNotifier {
   Player({required this.id});
 
@@ -30,7 +30,7 @@ class Player with ChangeNotifier {
   String? _avatarImageUri;
 
   String? get name => _name;
-  String get avatarImageUri => _avatarImageUri ?? _imageUri ?? Constants.DefaultAvatartAssetsPath;
+  String get avatarImageUri => _avatarImageUri ?? _imageUri ?? Constants.defaultAvatartAssetsPath;
   String? get avatarFileName => _avatarFileName;
   bool? get isDeleted => _isDeleted;
 

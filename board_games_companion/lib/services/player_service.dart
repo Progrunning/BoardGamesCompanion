@@ -20,7 +20,7 @@ class PlayerService extends BaseHiveService<Player> {
     List<String>? playerIds,
     bool includeDeleted = false,
   }) async {
-    if (!await ensureBoxOpen(HiveBoxes.Players)) {
+    if (!await ensureBoxOpen(HiveBoxes.players)) {
       return <Player>[];
     }
 
@@ -42,7 +42,7 @@ class PlayerService extends BaseHiveService<Player> {
   }
 
   Future<bool> addOrUpdatePlayer(Player player) async {
-    if ((player.name?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.Players)) {
+    if ((player.name?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.players)) {
       return false;
     }
 
@@ -74,7 +74,7 @@ class PlayerService extends BaseHiveService<Player> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.Players)) {
+    if (!await ensureBoxOpen(HiveBoxes.players)) {
       return false;
     }
 

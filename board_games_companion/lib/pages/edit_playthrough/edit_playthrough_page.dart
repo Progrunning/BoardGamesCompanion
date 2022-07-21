@@ -31,10 +31,10 @@ class EditPlaythoughPage extends StatefulWidget {
   final EditPlaythoughViewModel viewModel;
 
   @override
-  _EditPlaythoughPageState createState() => _EditPlaythoughPageState();
+  EditPlaythoughPageState createState() => EditPlaythoughPageState();
 }
 
-class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
+class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -106,6 +106,10 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
 
   Future<void> _save() async {
     await widget.viewModel.saveChanges();
+    if (!mounted) {
+      return;
+    }
+
     Navigator.pop(context);
   }
 
@@ -135,12 +139,16 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
               },
             ),
             TextButton(
-              child: const Text(AppText.delete, style: TextStyle(color: AppTheme.defaultTextColor)),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
+              child: const Text(AppText.delete, style: TextStyle(color: AppTheme.defaultTextColor)),
             ),
           ],
         );
@@ -168,14 +176,14 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
               },
             ),
             TextButton(
-              child: const Text(
-                AppText.editPlaythroughPageUnsavedChangesActionButtonText,
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
               style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
               onPressed: () async {
                 Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
+              child: const Text(
+                AppText.editPlaythroughPageUnsavedChangesActionButtonText,
+                style: TextStyle(color: AppTheme.defaultTextColor),
+              ),
             ),
           ],
         );
@@ -413,7 +421,7 @@ class _DurationState extends State<_Duration> {
     final DateTime? newStartDate = await showDatePicker(
       context: context,
       initialDate: startDateTime,
-      firstDate: now.add(const Duration(days: -Constants.DaysInTenYears)),
+      firstDate: now.add(const Duration(days: -Constants.daysInTenYears)),
       lastDate: now,
       currentDate: now,
       helpText: 'Pick a playthrough date',

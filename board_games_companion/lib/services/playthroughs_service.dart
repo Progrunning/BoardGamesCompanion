@@ -24,7 +24,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return <Playthrough>[];
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
       return <Playthrough>[];
     }
 
@@ -50,7 +50,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     }
 
     final playthroughPlayerIds = playthoughPlayers.map((p) => p.player.id).toList();
-    if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
       return null;
     }
 
@@ -103,7 +103,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> updatePlaythrough(Playthrough playthrough) async {
-    if ((playthrough.id.isEmpty) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if ((playthrough.id.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
       return false;
     }
 
@@ -118,7 +118,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deletePlaythrough(String playthroughId) async {
-    if ((playthroughId.isEmpty) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if ((playthroughId.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
       return false;
     }
 
@@ -135,7 +135,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deletePlaythroughsForGames(List<String?> boardGameIds) async {
-    if ((boardGameIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if ((boardGameIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
       return false;
     }
 
@@ -161,7 +161,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deleteAllPlaythrough() async {
-    if (!await ensureBoxOpen(HiveBoxes.Playthroughs)) {
+    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
       return false;
     }
 

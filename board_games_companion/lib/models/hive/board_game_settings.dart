@@ -6,7 +6,7 @@ import '../../common/hive_boxes.dart';
 
 part 'board_game_settings.g.dart';
 
-@HiveType(typeId: HiveBoxes.BoardGameSettingsTypeId)
+@HiveType(typeId: HiveBoxes.boardGameSettingsTypeId)
 class BoardGameSettings with ChangeNotifier {
   GameWinningCondition _winningCondition = GameWinningCondition.HighestScore;
   @HiveField(1)

@@ -1,3 +1,4 @@
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,7 +6,6 @@ import 'generic_error_message_widget.dart';
 import 'loading_indicator_widget.dart';
 
 class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier> extends StatelessWidget {
-
   const ConsumerFutureBuilder({
     required this.future,
     required this.success,
@@ -22,7 +22,7 @@ class ConsumerFutureBuilder<TFuture, TStore extends ChangeNotifier> extends Stat
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
-        print('${snapshot.connectionState} ${snapshot.hasData}');
+        Fimber.d('${snapshot.connectionState} ${snapshot.hasData}');
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return const GenericErrorMessage();

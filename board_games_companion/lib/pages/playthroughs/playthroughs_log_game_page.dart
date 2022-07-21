@@ -38,10 +38,10 @@ class PlaythroughsLogGamePage extends StatefulWidget {
   final PlaythroughsViewModel playthroughsLogGameViewModel;
 
   @override
-  _PlaythroughsLogGamePageState createState() => _PlaythroughsLogGamePageState();
+  PlaythroughsLogGamePageState createState() => PlaythroughsLogGamePageState();
 }
 
-class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
+class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -244,6 +244,10 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     } else {
       final Playthrough? newPlaythrough =
           await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
+      if (!mounted) {
+        return;
+      }
+
       if (newPlaythrough == null) {
         _showFailureSnackbar(context);
       } else {
@@ -569,7 +573,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
     final DateTime? newPlaythroughDate = await showDatePicker(
       context: context,
       initialDate: playthroughDate,
-      firstDate: playthroughDate.add(const Duration(days: -Constants.DaysInTenYears)),
+      firstDate: playthroughDate.add(const Duration(days: -Constants.daysInTenYears)),
       lastDate: DateTime.now(),
       currentDate: playthroughDate,
       helpText: 'Pick a playthrough date',

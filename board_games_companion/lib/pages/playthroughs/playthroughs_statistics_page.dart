@@ -36,10 +36,10 @@ class PlaythroughStatistcsPage extends StatefulWidget {
   final CollectionType collectionType;
 
   @override
-  _PlaythroughStatistcsPageState createState() => _PlaythroughStatistcsPageState();
+  PlaythroughStatistcsPageState createState() => PlaythroughStatistcsPageState();
 }
 
-class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
+class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -53,13 +53,13 @@ class _PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                   SliverAppBar(
                     automaticallyImplyLeading: false,
                     floating: false,
-                    expandedHeight: Constants.BoardGameDetailsImageHeight,
+                    expandedHeight: Constants.boardGameDetailsImageHeight,
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.parallax,
                       centerTitle: true,
                       background: BoardGameImage(
                         store.boardGame,
-                        minImageHeight: Constants.BoardGameDetailsImageHeight,
+                        minImageHeight: Constants.boardGameDetailsImageHeight,
                         heroTag:
                             '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionType}',
                       ),

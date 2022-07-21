@@ -15,7 +15,7 @@ import 'board_game_rank.dart';
 
 part 'board_game_details.g.dart';
 
-@HiveType(typeId: HiveBoxes.BoardGamesDetailsTypeId)
+@HiveType(typeId: HiveBoxes.boardGamesDetailsTypeId)
 class BoardGameDetails extends BaseBoardGame {
   BoardGameDetails({required String id, required String name}) : super(id: id, name: name);
 
@@ -280,15 +280,15 @@ class BoardGameDetails extends BaseBoardGame {
 
   String get boardGameOraclePriceUrl {
     final String currentCulture = Platform.localeName.replaceFirst('_', '-');
-    if (!Constants.BoardGameOracleSupportedCultureNames.contains(currentCulture) ||
-        currentCulture == Constants.BoardGameOracleUsaCultureName) {
-      return '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_boardGameOracleUrlEncodedName';
+    if (!Constants.boardGameOracleSupportedCultureNames.contains(currentCulture) ||
+        currentCulture == Constants.boardGameOracleUsaCultureName) {
+      return '${Constants.boardGameOracleBaseUrl}boardgame/price/$_boardGameOracleUrlEncodedName';
     }
 
-    return '${Constants.BoardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
+    return '${Constants.boardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
   }
 
-  String get _baseBggBoardGameUrl => '${Constants.BoardGameGeekBaseUrl}boardgame';
+  String get _baseBggBoardGameUrl => '${Constants.boardGameGeekBaseUrl}boardgame';
 
   String get _bggUrlEncodedName {
     final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');

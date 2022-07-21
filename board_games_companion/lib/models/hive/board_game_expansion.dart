@@ -5,7 +5,7 @@ import '../../common/hive_boxes.dart';
 
 part 'board_game_expansion.g.dart';
 
-@HiveType(typeId: HiveBoxes.BoardGamesExpansionId)
+@HiveType(typeId: HiveBoxes.boardGamesExpansionId)
 class BoardGamesExpansion with ChangeNotifier {
   BoardGamesExpansion({required this.id, required this.name});
 

@@ -74,7 +74,7 @@ class PlayersStore with ChangeNotifier {
 
   @override
   void dispose() {
-    _playerService.closeBox(HiveBoxes.Players);
+    _playerService.closeBox(HiveBoxes.players);
 
     super.dispose();
   }

@@ -38,10 +38,10 @@ class PlaythroughsPage extends StatefulWidget {
   final CollectionType collectionType;
 
   @override
-  _PlaythroughsPageState createState() => _PlaythroughsPageState();
+  PlaythroughsPageState createState() => PlaythroughsPageState();
 }
 
-class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
+class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   static const int _initialTabIndex = 0;
@@ -137,7 +137,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     );
 
     if (_showImportGamesLoadingIndicator) {
-      return LoadingOverlay(child: scaffold, title: AppText.importPlaysLoadingIndicator);
+      return LoadingOverlay(title: AppText.importPlaysLoadingIndicator, child: scaffold);
     }
 
     return scaffold;
@@ -163,6 +163,10 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       });
       await widget.viewModel.importPlays(username, boardGameId);
       if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
+        if (!mounted) {
+          return;
+        }
+
         await _showImportPlaysReportDialog(
           context,
           username,
@@ -203,7 +207,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     String boardGameId,
     BggPlaysImportRaport bggPlaysImportRaport,
   ) async {
-    showGeneralDialog<void>(
+    await showGeneralDialog<void>(
       context: context,
       pageBuilder: (_, __, ___) {
         return BggPlaysImportReportDialog(

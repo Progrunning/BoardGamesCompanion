@@ -5,7 +5,7 @@ import '../../common/hive_boxes.dart';
 
 part 'playthrough.g.dart';
 
-@HiveType(typeId: HiveBoxes.PlaythroughTypeId)
+@HiveType(typeId: HiveBoxes.playthroughTypeId)
 class Playthrough {
   Playthrough({
     required this.id,

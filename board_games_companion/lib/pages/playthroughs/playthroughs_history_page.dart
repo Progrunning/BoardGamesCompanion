@@ -33,10 +33,10 @@ class PlaythroughsHistoryPage extends StatefulWidget {
   final PlaythroughsStore playthroughsStore;
 
   @override
-  _PlaythroughsHistoryPageState createState() => _PlaythroughsHistoryPageState();
+  PlaythroughsHistoryPageState createState() => PlaythroughsHistoryPageState();
 }
 
-class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
+class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Column(

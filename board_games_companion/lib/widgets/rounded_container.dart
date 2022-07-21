@@ -38,9 +38,9 @@ class RoundedContainer extends StatelessWidget {
           ? child
           : RippleEffect(
               onTap: onTap,
-              child: child,
               splashColor: splashColor ?? AppTheme.alternativeSplashColor,
               borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+              child: child,
             ),
     );
   }

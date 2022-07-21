@@ -15,10 +15,7 @@ class EnterScoreViewModel with ChangeNotifier {
 
   int? _score;
   int get score {
-    if (_score == null) {
-      _score = _playerScore.score.valueInt;
-    }
-
+    _score ??= _playerScore.score.valueInt;
     return _score!;
   }
 

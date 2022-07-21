@@ -26,7 +26,7 @@ class BggCommunityMemberText extends StatelessWidget {
               ..onTap = () async {
                 await LauncherHelper.launchUri(
                   context,
-                  Constants.BoardGameGeekBaseApiUrl,
+                  Constants.boardGameGeekBaseApiUrl,
                 );
               },
           ),

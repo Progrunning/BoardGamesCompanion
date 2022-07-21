@@ -4,7 +4,7 @@ import '../../common/hive_boxes.dart';
 
 part 'board_game_rank.g.dart';
 
-@HiveType(typeId: HiveBoxes.BoardGamesrankTypeId)
+@HiveType(typeId: HiveBoxes.boardGamesrankTypeId)
 class BoardGameRank {
   BoardGameRank({
     required this.id,

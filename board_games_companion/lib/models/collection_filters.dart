@@ -5,14 +5,14 @@ import 'sort_by.dart';
 
 part 'collection_filters.g.dart';
 
-@HiveType(typeId: HiveBoxes.CollectionFiltersId)
+@HiveType(typeId: HiveBoxes.collectionFiltersId)
 class CollectionFilters {
   @HiveField(0)
   SortBy? sortBy;
 
   @HiveField(1)
   double? filterByRating;
-  
+
   @HiveField(2)
   int? numberOfPlayers;
 }

@@ -23,10 +23,10 @@ class BoardGameDetailsExpansions extends StatefulWidget {
   final PreferencesService? preferencesService;
 
   @override
-  _BoardGameDetailsExpansionsState createState() => _BoardGameDetailsExpansionsState();
+  BoardGameDetailsExpansionsState createState() => BoardGameDetailsExpansionsState();
 }
 
-class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> {
+class BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> {
   bool isExpanded = false;
 
   @override

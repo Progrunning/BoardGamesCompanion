@@ -58,15 +58,15 @@ extension IntExtensions on int? {
 
   int safeCompareTo(int? intToCompare) {
     if (this == null && intToCompare == null) {
-      return Constants.LeaveAsIs;
+      return Constants.leaveAsIs;
     }
 
     if (this != null && intToCompare == null) {
-      return Constants.MoveAbove;
+      return Constants.moveAbove;
     }
 
     if (this == null && intToCompare != null) {
-      return Constants.MoveBelow;
+      return Constants.moveBelow;
     }
 
     return this!.compareTo(intToCompare!);
@@ -74,9 +74,7 @@ extension IntExtensions on int? {
 
   String toNumberOfPlayersFilter() {
     var numberOfPlayers = this;
-    if (numberOfPlayers == null) {
-      numberOfPlayers = 0;
-    }
+    numberOfPlayers ??= 0;
 
     if (numberOfPlayers <= 0) {
       return AppText.gameFiltersAnyNumberOfPlayers;

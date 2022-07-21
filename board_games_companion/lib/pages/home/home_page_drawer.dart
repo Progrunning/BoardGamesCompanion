@@ -60,7 +60,7 @@ class HomePageDrawer extends StatelessWidget {
             icon: Icons.star,
             title: AppText.rateAndReview,
             onTap: () async => InAppReview.instance.openStoreListing(
-              appStoreId: Constants.AppleAppId,
+              appStoreId: Constants.appleAppId,
             ),
           ),
           const SizedBox(height: Dimensions.standardSpacing),
@@ -68,7 +68,7 @@ class HomePageDrawer extends StatelessWidget {
             icon: Icons.settings,
             title: AppText.settingsPageTitle,
             onTap: () async => Navigator.pushNamed(context, SettingsPage.pageRoute),
-          ),      
+          ),
           const Expanded(child: SizedBox.shrink()),
           const Divider(),
           const _Footer(),

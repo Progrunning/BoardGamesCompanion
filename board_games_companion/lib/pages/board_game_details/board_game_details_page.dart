@@ -45,10 +45,10 @@ class BoardGamesDetailsPage extends StatefulWidget {
   static const String pageRoute = '/boardGameDetails';
 
   @override
-  _BoardGamesDetailsPageState createState() => _BoardGamesDetailsPageState();
+  BoardGamesDetailsPageState createState() => BoardGamesDetailsPageState();
 }
 
-class _BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
+class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -120,7 +120,7 @@ class _Header extends StatelessWidget {
     return SliverAppBar(
       floating: false,
       pinned: true,
-      expandedHeight: Constants.BoardGameDetailsImageHeight,
+      expandedHeight: Constants.boardGameDetailsImageHeight,
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         centerTitle: true,
@@ -153,7 +153,7 @@ class _Header extends StatelessWidget {
               // TODO Add shadow to the image
               return BoardGameImage(
                 _viewModel.boardGameDetails,
-                minImageHeight: Constants.BoardGameDetailsImageHeight,
+                minImageHeight: Constants.boardGameDetailsImageHeight,
               );
             },
           ),
@@ -696,7 +696,7 @@ class _CollectionFlags extends StatelessWidget {
                 ],
                 onPressed: (int index) async {
                   await boardGameDetailsStore.toggleCollection(
-                    index == 0 ? CollectionType.Friends : CollectionType.Wishlist,
+                    index == 0 ? CollectionType.friends : CollectionType.wishlist,
                   );
                 },
               ),
@@ -715,7 +715,7 @@ class _CollectionFlags extends StatelessWidget {
                   ),
                 ],
                 onPressed: (int index) async {
-                  await boardGameDetailsStore.toggleCollection(CollectionType.Owned);
+                  await boardGameDetailsStore.toggleCollection(CollectionType.owned);
                 },
               ),
             ],

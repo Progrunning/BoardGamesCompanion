@@ -100,7 +100,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             ),
           ),
         ),
-        if (widget.boardGame.rank != null && widget.boardGame.rank! < Constants.Top100)
+        if (widget.boardGame.rank != null && widget.boardGame.rank! < Constants.top100)
           Positioned(
             top: 0,
             right: 12,

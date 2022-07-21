@@ -9,7 +9,7 @@ class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
   static const String _collectionFiltersPreferenceKey = 'collectionFilters';
 
   Future<CollectionFilters?> retrieveCollectionFiltersPreferences() async {
-    if (!await ensureBoxOpen(HiveBoxes.CollectionFilters)) {
+    if (!await ensureBoxOpen(HiveBoxes.collectionFilters)) {
       return null;
     }
 
@@ -25,7 +25,7 @@ class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.CollectionFilters)) {
+    if (!await ensureBoxOpen(HiveBoxes.collectionFilters)) {
       return false;
     }
 

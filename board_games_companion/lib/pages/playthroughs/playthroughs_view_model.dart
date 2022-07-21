@@ -92,12 +92,12 @@ class PlaythroughsViewModel with ChangeNotifier, BoardGameAware {
     );
 
     await _analyticsService.logEvent(
-      name: Analytics.LogPlaythrough,
+      name: Analytics.logPlaythrough,
       parameters: <String, String>{
-        Analytics.BoardGameIdParameter: boardGameId,
-        Analytics.LogPlaythroughNumberOfPlayers: selectedPlaythroughPlayers.length.toString(),
-        Analytics.LogPlaythroughStarTime: playthroughStartTime.toString(),
-        Analytics.LogPlaythroughDuration: playthroughDuration.toString(),
+        Analytics.boardGameIdParameter: boardGameId,
+        Analytics.logPlaythroughNumberOfPlayers: selectedPlaythroughPlayers.length.toString(),
+        Analytics.logPlaythroughStarTime: playthroughStartTime.toString(),
+        Analytics.logPlaythroughDuration: playthroughDuration.toString(),
       },
     );
 
@@ -132,8 +132,8 @@ class PlaythroughsViewModel with ChangeNotifier, BoardGameAware {
 
   Future<void> importPlays(String username, String boardGameId) async {
     await _analyticsService.logEvent(
-      name: Analytics.ImportBggPlays,
-      parameters: <String, String>{Analytics.BoardGameIdParameter: boardGameId},
+      name: Analytics.importBggPlays,
+      parameters: <String, String>{Analytics.boardGameIdParameter: boardGameId},
     );
 
     final bggPlaysImportResult = await _boardGamesService.importPlays(username, boardGameId);

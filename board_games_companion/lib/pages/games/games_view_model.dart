@@ -54,7 +54,7 @@ class GamesViewModel with ChangeNotifier {
     return CollectionState.collection;
   }
 
-  GamesTab _selectedTab = GamesTab.Owned;
+  GamesTab _selectedTab = GamesTab.owned;
 
   String? get searchPhrase => _searchPhrase;
 
@@ -62,11 +62,11 @@ class GamesViewModel with ChangeNotifier {
 
   List<BoardGameDetails> get boardGamesInSelectedCollection {
     switch (selectedTab) {
-      case GamesTab.Owned:
+      case GamesTab.owned:
         return _filteredBoardGames.values.where((boardGame) => boardGame.isOwned!).toList();
-      case GamesTab.Friends:
+      case GamesTab.friends:
         return _filteredBoardGames.values.where((boardGame) => boardGame.isFriends!).toList();
-      case GamesTab.Wishlist:
+      case GamesTab.wishlist:
         return _filteredBoardGames.values.where((boardGame) => boardGame.isOnWishlist!).toList();
     }
   }
@@ -121,10 +121,11 @@ class GamesViewModel with ChangeNotifier {
       await _boardGamesStore.loadBoardGames();
       for (final boardGameDetails in _boardGamesStore.allBoardGames) {
         _filteredBoardGames[boardGameDetails.id] = boardGameDetails;
-        if (boardGameDetails.isMainGame)
+        if (boardGameDetails.isMainGame) {
           for (final boardGameExpansion in boardGameDetails.expansions) {
             _mainBoardGameByExpansionId[boardGameExpansion.id] = boardGameDetails;
           }
+        }
       }
 
       await _boardGamesFiltersStore.loadFilterPreferences();

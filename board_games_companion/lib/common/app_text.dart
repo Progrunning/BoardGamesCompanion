@@ -13,6 +13,8 @@ class AppText {
   static const edit = 'Edit';
   static const ok = 'OK';
 
+  static const goBack = 'Go Back';
+
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
   static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle =

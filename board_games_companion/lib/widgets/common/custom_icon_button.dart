@@ -17,6 +17,7 @@ class CustomIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(
           Dimensions.halfStandardSpacing,
@@ -34,7 +35,6 @@ class CustomIconButton extends StatelessWidget {
           ),
         ),
       ),
-      onTap: onTap,
     );
   }
 }

@@ -37,10 +37,10 @@ class HomePage extends StatefulWidget {
       GlobalKey<ScaffoldMessengerState>();
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
+class HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
   late final TabController tabController;
 
   static const int _numberOfTabs = 3;

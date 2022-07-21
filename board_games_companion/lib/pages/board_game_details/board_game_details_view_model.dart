@@ -65,29 +65,29 @@ class BoardGameDetailsViewModel with ChangeNotifier {
 
   Future<void> captureLinkAnalytics(String linkName) async {
     await _analyticsService.logEvent(
-      name: Analytics.BoardGameDetailsLinks,
+      name: Analytics.boardGameDetailsLinks,
       parameters: <String, String>{
-        Analytics.BoardGameDetailsLinksName: linkName,
+        Analytics.boardGameDetailsLinksName: linkName,
       },
     );
   }
 
   Future<void> toggleCollection(CollectionType collectionType) async {
     switch (collectionType) {
-      case CollectionType.Owned:
+      case CollectionType.owned:
         _boardGameDetails!.isOwned = !_boardGameDetails!.isOwned!;
         if (_boardGameDetails!.isOwned!) {
           _boardGameDetails!.isOnWishlist = false;
           _boardGameDetails!.isFriends = false;
         }
         break;
-      case CollectionType.Friends:
+      case CollectionType.friends:
         if (_boardGameDetails!.isOwned!) {
           _boardGameDetails!.isOwned = false;
         }
         _boardGameDetails!.isFriends = !_boardGameDetails!.isFriends!;
         break;
-      case CollectionType.Wishlist:
+      case CollectionType.wishlist:
         if (_boardGameDetails!.isOwned!) {
           _boardGameDetails!.isOwned = false;
         }

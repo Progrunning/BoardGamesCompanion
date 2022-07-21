@@ -23,6 +23,13 @@ jobs:
       vmImage: "macOS-latest"
 
     steps:
+      - task: JavaToolInstaller@0
+        displayName: Java Installer
+        inputs:
+          versionSpec: "11"
+          jdkArchitectureOption: x64
+          jdkSourceOption: PreInstalled
+      
       - task: FlutterInstall@0
         displayName: "Install Flutter"
         inputs:

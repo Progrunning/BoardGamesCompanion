@@ -4,7 +4,7 @@ import '../../common/hive_boxes.dart';
 
 part 'score.g.dart';
 
-@HiveType(typeId: HiveBoxes.ScoreTypeId)
+@HiveType(typeId: HiveBoxes.scoreTypeId)
 class Score {
   Score({
     required this.id,

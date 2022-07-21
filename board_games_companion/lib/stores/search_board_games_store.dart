@@ -35,9 +35,9 @@ class SearchBoardGamesStore with ChangeNotifier {
 
         try {
           await _analyticsService.logEvent(
-            name: Analytics.SearchBoardGames,
+            name: Analytics.searchBoardGames,
             parameters: <String, String?>{
-              Analytics.SearchBoardGamesPhraseParameter: _searchBarBoardGamesStore.searchPhrase,
+              Analytics.searchBoardGamesPhraseParameter: _searchBarBoardGamesStore.searchPhrase,
             },
           );
 

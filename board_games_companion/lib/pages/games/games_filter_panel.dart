@@ -21,10 +21,10 @@ class GamesFilterPanel extends StatefulWidget {
   const GamesFilterPanel({Key? key}) : super(key: key);
 
   @override
-  _GamesFilterPanelState createState() => _GamesFilterPanelState();
+  GamesFilterPanelState createState() => GamesFilterPanelState();
 }
 
-class _GamesFilterPanelState extends State<GamesFilterPanel> {
+class GamesFilterPanelState extends State<GamesFilterPanel> {
   late BoardGamesStore boardGamesStore;
 
   @override

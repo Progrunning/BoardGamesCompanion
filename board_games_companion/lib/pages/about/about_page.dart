@@ -19,10 +19,10 @@ class AboutPage extends StatefulWidget {
   static const String pageRoute = '/about';
 
   @override
-  _AboutPageState createState() => _AboutPageState();
+  AboutPageState createState() => AboutPageState();
 }
 
-class _AboutPageState extends BasePageState<AboutPage> {
+class AboutPageState extends BasePageState<AboutPage> {
   static const String privactyPolicyUrl =
       'https://progrunning.net/board-games-companion-privacy-policy/';
 
@@ -51,8 +51,8 @@ class _AboutPageState extends BasePageState<AboutPage> {
                           SectionTitle(title: 'Author'),
                           DetailsItem(
                             title: 'Mikolaj Kieres',
-                            subtitle: Constants.FeedbackEmailAddress,
-                            uri: 'mailto:${Constants.FeedbackEmailAddress}?subject=BGC%20Feedback',
+                            subtitle: Constants.feedbackEmailAddress,
+                            uri: 'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
                             iconUri: 'assets/mikolaj_profile_picture.jpg',
                           ),
                           Divider(color: AppTheme.accentColor),
@@ -73,7 +73,7 @@ class _AboutPageState extends BasePageState<AboutPage> {
                           DetailsItem(
                               title: 'BGG',
                               subtitle: 'boardgamegeek.com',
-                              uri: Constants.BoardGameGeekBaseApiUrl),
+                              uri: Constants.boardGameGeekBaseApiUrl),
                           DetailsItem(
                               title: 'XML API',
                               subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',

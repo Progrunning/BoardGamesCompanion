@@ -23,7 +23,7 @@ class ExpanionsBannerPainter extends CustomPainter {
   })  : assert(message != null),
         assert(location != null),
         assert(color != null),
-        super(repaint: PaintingBinding.instance!.systemFonts);
+        super(repaint: PaintingBinding.instance.systemFonts);
 
   /// The message to show in the banner.
   final String message;

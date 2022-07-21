@@ -72,6 +72,23 @@ The release to the iOS and Android stores should be followed by:
 2. Creating a release in the Github
  - The release should include an overview of the changes made in this release
 
+### iOS
+
+Whenever updating flutter to a new version there might be a problem with plugin dependencies. This might require updating `pods`. In order to update pods you need to:
+
+1. Run Terminal
+2. Open iOS folder directory (e.g. `cd /path/to/the/project/board_games_companion/ios`)
+3. Run `pod install` command
+
+#### M1 processors shenanigans
+
+You may run into issues with updating pods on M1 processor devices. Here's some articles that might help with that:
+
+- https://stackoverflow.com/a/65334677
+- https://stackoverflow.com/a/64997047
+
+Generally speaking try using **homebrew** to manage cocoapods. The regular command `brew install cocoapods` might not work on the M1 devives therefore you should try running `arch -arm64 brew install cocoapods`.
+
 # Pipelines
 
 CI and CD pipelines are defined in the Microsft Azure DevOps environment. 

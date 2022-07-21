@@ -35,10 +35,10 @@ class SearchBoardGamesPage extends StatefulWidget {
   final AnalyticsService analyticsService;
 
   @override
-  _SearchBoardGamesPageState createState() => _SearchBoardGamesPageState();
+  SearchBoardGamesPageState createState() => SearchBoardGamesPageState();
 }
 
-class _SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
+class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
   late FocusNode searchFocusNode;
 
   @override
@@ -302,15 +302,11 @@ class _SearchResultsState extends State<_SearchResults> {
 }
 
 class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
-  const _SearchResultsTemplate({
-    required this.child,
-    this.height = defaultHeight,
-  });
+  const _SearchResultsTemplate({required this.child});
 
   static const double defaultHeight = 100;
 
   final Widget child;
-  final double height;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -325,10 +321,10 @@ class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => height;
+  double get maxExtent => defaultHeight;
 
   @override
-  double get minExtent => height;
+  double get minExtent => defaultHeight;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
@@ -390,7 +386,7 @@ class _NoResults extends StatelessWidget {
                       ..onTap = () async {
                         await LauncherHelper.launchUri(
                           context,
-                          'mailto:${Constants.FeedbackEmailAddress}?subject=BGC%20Feedback',
+                          'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
                         );
                       },
                   ),
@@ -426,10 +422,10 @@ class _HotBoardGames extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _hotBoardGamesStore = Provider.of<HotBoardGamesStore>(context);
+    final hotBoardGamesStore = Provider.of<HotBoardGamesStore>(context);
 
     return FutureBuilder(
-      future: _hotBoardGamesStore.load(),
+      future: hotBoardGamesStore.load(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final boardGames = snapshot.data as List<BoardGame>;
@@ -477,7 +473,7 @@ class _HotBoardGames extends StatelessWidget {
                     child: ElevatedIconButton(
                       icon: const DefaultIcon(Icons.refresh),
                       title: AppText.searchBoardGamesPageHotBoardGamesErrorRetryButtonText,
-                      onPressed: () => _hotBoardGamesStore.refresh(),
+                      onPressed: () => hotBoardGamesStore.refresh(),
                     ),
                   ),
                 ],
@@ -500,10 +496,10 @@ class _HotBoardGames extends StatelessWidget {
 
   Future _navigateToBoardGameDetails(BoardGame boardGame, BuildContext context) async {
     await analyticsService.logEvent(
-      name: Analytics.ViewHotBoardGame,
+      name: Analytics.viewHotBoardGame,
       parameters: <String, String?>{
-        Analytics.BoardGameIdParameter: boardGame.id,
-        Analytics.BoardGameNameParameter: boardGame.name,
+        Analytics.boardGameIdParameter: boardGame.id,
+        Analytics.boardGameNameParameter: boardGame.name,
       },
     );
 
