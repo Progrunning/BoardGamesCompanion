@@ -1,6 +1,5 @@
 import 'package:board_games_companion/models/bgg/bgg_import_plays.dart';
 import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/hive_boxes.dart';
@@ -97,8 +96,11 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     var pageNumber = 1;
 
     do {
-      pagePlaysImportResult = await compute(_boardGameGeekService.importPlays,
-          BggImportPlays(username, boardGameId, pageNumber: pageNumber));
+      pagePlaysImportResult = await _boardGameGeekService.importPlays(BggImportPlays(
+        username,
+        boardGameId,
+        pageNumber: pageNumber,
+      ));
       playsImportResult.data!.addAll(pagePlaysImportResult.data ?? []);
       playsImportResult.errors!.addAll(pagePlaysImportResult.errors ?? []);
       playsImportResult.playsToImportTotal += pagePlaysImportResult.playsToImportTotal;
