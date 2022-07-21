@@ -366,13 +366,12 @@ class _PlayersSerach extends SearchDelegate<Player?> {
       return ListView();
     }
 
-    final filterPlayers = _filterPlayers(query);
-
-    if (filterPlayers.isEmpty) {
+    final filteredPlayers = _filterPlayers(query);
+    if (filteredPlayers.isEmpty) {
       return _NoSearchResults(query: query, onClear: () => query = '');
     }
 
-    return _SearchResults(filterPlayers: filterPlayers, onResultTap: onResultTap);
+    return _SearchResults(filteredPlayers: filteredPlayers, onResultTap: onResultTap);
   }
 
   @override
@@ -381,15 +380,15 @@ class _PlayersSerach extends SearchDelegate<Player?> {
       return ListView();
     }
 
-    final filterPlayers = _filterPlayers(query);
-    if (filterPlayers.isEmpty) {
+    final filteredPlayers = _filterPlayers(query);
+    if (filteredPlayers.isEmpty) {
       return ListView();
     }
 
     return ListView.builder(
-      itemCount: filterPlayers.length,
+      itemCount: filteredPlayers.length,
       itemBuilder: (_, index) {
-        final player = filterPlayers[index];
+        final player = filteredPlayers[index];
         return ListTile(
           title: Text(player.name!),
           subtitle: player.bggName != null ? Text(player.bggName!) : const SizedBox.shrink(),
@@ -405,7 +404,7 @@ class _PlayersSerach extends SearchDelegate<Player?> {
   List<Player> _filterPlayers(String query) {
     final queryLowercased = query.toLowerCase();
     return players
-        .where((player) =>
+        .where((Player player) =>
             (player.name?.toLowerCase().contains(queryLowercased) ?? false) ||
             (player.bggName?.toLowerCase().contains(queryLowercased) ?? false))
         .toList();
@@ -415,25 +414,25 @@ class _PlayersSerach extends SearchDelegate<Player?> {
 class _SearchResults extends StatelessWidget {
   const _SearchResults({
     Key? key,
-    required this.filterPlayers,
+    required this.filteredPlayers,
     required this.onResultTap,
   }) : super(key: key);
 
-  final List<Player> filterPlayers;
+  final List<Player> filteredPlayers;
   final PlayerSearchResultTapped onResultTap;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: filterPlayers.length,
+      itemCount: filteredPlayers.length,
       separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
       itemBuilder: (_, index) {
-        final player = filterPlayers[index];
+        final player = filteredPlayers[index];
         // TODO Fix the ripple effect when tapped to show on top of the player image and clip the corners
         return Padding(
           padding: EdgeInsets.only(
             top: index == 0 ? Dimensions.standardSpacing : 0,
-            bottom: index == filterPlayers.length - 1 ? Dimensions.standardSpacing : 0,
+            bottom: index == filteredPlayers.length - 1 ? Dimensions.standardSpacing : 0,
             left: Dimensions.standardSpacing,
             right: Dimensions.standardSpacing,
           ),

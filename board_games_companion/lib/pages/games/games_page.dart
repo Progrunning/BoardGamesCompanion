@@ -21,6 +21,7 @@ import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../stores/user_store.dart';
+import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
@@ -31,6 +32,8 @@ import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'games_filter_panel.dart';
+
+typedef BoardGameResultTapped = void Function(BoardGameDetails boardGame);
 
 class GamesPage extends StatefulWidget {
   const GamesPage(
@@ -222,40 +225,55 @@ class _AppBarState extends State<_AppBar> {
       elevation: 0,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppTheme.accentColor,
-      title: TextField(
-        autofocus: false,
-        focusNode: _searchFocusNode,
-        controller: _searchController,
-        textAlignVertical: TextAlignVertical.center,
-        textInputAction: TextInputAction.search,
-        style: AppTheme.defaultTextFieldStyle,
-        decoration: InputDecoration(
-          hintText: 'Search for a game...',
-          suffixIcon: (widget.viewModel.searchPhrase?.isNotEmpty ?? false)
-              ? IconButton(
-                  icon: const Icon(
-                    Icons.clear,
-                  ),
-                  color: AppTheme.accentColor,
-                  onPressed: () async {
-                    _searchController.text = '';
-                    await widget.updateSearchResults('');
-                  },
-                )
-              : const Icon(Icons.search, color: AppTheme.accentColor),
-          enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.primaryColorLight),
-          ),
-        ),
-        onSubmitted: (searchPhrase) async {
-          _debounce?.cancel();
-          if (widget.viewModel.searchPhrase != _searchController.text) {
-            await widget.updateSearchResults(_searchController.text);
-          }
-          _searchFocusNode.unfocus();
-        },
+      title: const Text(
+        AppText.collectionsPageTitle,
+        style: TextStyle(color: AppTheme.whiteColor),
       ),
+      // title: TextField(
+      //   autofocus: false,
+      //   focusNode: _searchFocusNode,
+      //   controller: _searchController,
+      //   textAlignVertical: TextAlignVertical.center,
+      //   textInputAction: TextInputAction.search,
+      //   style: AppTheme.defaultTextFieldStyle,
+      //   decoration: InputDecoration(
+      //     hintText: 'Search for a game...',
+      //     suffixIcon: (widget.viewModel.searchPhrase?.isNotEmpty ?? false)
+      //         ? IconButton(
+      //             icon: const Icon(
+      //               Icons.clear,
+      //             ),
+      //             color: AppTheme.accentColor,
+      //             onPressed: () async {
+      //               _searchController.text = '';
+      //               await widget.updateSearchResults('');
+      //             },
+      //           )
+      //         : const Icon(Icons.search, color: AppTheme.accentColor),
+      //     enabledBorder: const UnderlineInputBorder(
+      //       borderSide: BorderSide(color: AppTheme.primaryColorLight),
+      //     ),
+      //   ),
+      //   onSubmitted: (searchPhrase) async {
+      //     _debounce?.cancel();
+      //     if (widget.viewModel.searchPhrase != _searchController.text) {
+      //       await widget.updateSearchResults(_searchController.text);
+      //     }
+      //     _searchFocusNode.unfocus();
+      //   },
+      // ),
       actions: <Widget>[
+        IconButton(
+            onPressed: () async {
+              await showSearch(
+                context: context,
+                delegate: _CollectionsSearch(
+                  boardGames: widget.viewModel.allBoardGames,
+                  onResultTap: (BoardGameDetails selectedBoardGame) {},
+                ),
+              );
+            },
+            icon: const Icon(Icons.search)),
         Consumer<BoardGamesFiltersStore>(
           builder: (_, boardGamesFiltersStore, __) {
             return IconButton(
@@ -653,6 +671,156 @@ class _TopTab extends StatelessWidget {
               fontSize: Dimensions.standardFontSize,
               color: isSelected ? AppTheme.defaultTextColor : AppTheme.deselectedTabIconColor,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
+  _CollectionsSearch({
+    required this.boardGames,
+    required this.onResultTap,
+  });
+
+  final List<BoardGameDetails> boardGames;
+  final BoardGameResultTapped onResultTap;
+
+  @override
+  ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
+        textTheme: const TextTheme(headline6: AppTheme.defaultTextFieldStyle),
+      );
+
+  @override
+  String? get searchFieldLabel => AppText.collectionsSearchHintText;
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    if (query.isEmpty) {
+      return [const SizedBox()];
+    }
+
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    if (query.isEmpty) {
+      return ListView();
+    }
+
+    final filteredGames = _filterGames(query);
+    if (filteredGames.isEmpty) {
+      return _NoSearchResults(query: query, onClear: () => query = '');
+    }
+
+    return ListView.separated(
+      itemCount: filteredGames.length,
+      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
+      itemBuilder: (_, index) {
+        final boardGame = filteredGames[index];
+        return Material(
+          child: Row(
+            children: [
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: BoardGameImage(boardGame),
+              ),
+              Text(boardGame.name),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    if (query.isEmpty) {
+      return ListView();
+    }
+
+    final filteredGames = _filterGames(query);
+    if (filteredGames.isEmpty) {
+      return ListView();
+    }
+
+    return ListView.builder(
+      itemCount: filteredGames.length,
+      itemBuilder: (_, index) {
+        final boardGame = filteredGames[index];
+        return ListTile(
+          title: Text(boardGame.name),
+          onTap: () {
+            query = boardGame.name;
+            showResults(context);
+          },
+        );
+      },
+    );
+  }
+
+  List<BoardGameDetails> _filterGames(String query) {
+    final queryLowercased = query.toLowerCase();
+    return boardGames
+        .where(
+            (BoardGameDetails boardGame) => boardGame.name.toLowerCase().contains(queryLowercased))
+        .toList();
+  }
+}
+
+class _NoSearchResults extends StatelessWidget {
+  const _NoSearchResults({
+    Key? key,
+    required this.query,
+    required this.onClear,
+  }) : super(key: key);
+
+  final String query;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text.rich(
+          TextSpan(
+            children: [
+              // TODO Update copy
+              const TextSpan(text: AppText.playerPageSearchNoSearchResults),
+              TextSpan(
+                text: query,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          textAlign: TextAlign.justify,
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        Center(
+          child: ElevatedIconButton(
+            // TODO Update copy
+            title: AppText.playerPageSearchClearSaerch,
+            icon: const DefaultIcon(Icons.clear),
+            onPressed: onClear,
           ),
         ),
       ],

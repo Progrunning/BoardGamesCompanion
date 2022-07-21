@@ -116,8 +116,10 @@ class AppText {
       '''It looks there's no players that match the search phrase ''';
   static const playerPageSearchHintText = 'Search for players...';
 
-  static const aboutPageTitle = 'About';
+  static const collectionsSearchHintText = 'Search your collection...';
 
+  static const aboutPageTitle = 'About';
+  static const collectionsPageTitle = 'Collections';
   static const settingsPageTitle = 'Settings';
 
   static const drawerVersionFormat = 'Version %s';

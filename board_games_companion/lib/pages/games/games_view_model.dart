@@ -39,6 +39,8 @@ class GamesViewModel with ChangeNotifier {
 
   bool get anyBoardGames => _boardGamesStore.allBoardGames.isNotEmpty;
 
+  List<BoardGameDetails> get allBoardGames => _boardGamesStore.allBoardGames;
+
   LoadDataState _loadDataState = LoadDataState.none;
   LoadDataState get loadDataState => _loadDataState;
 
