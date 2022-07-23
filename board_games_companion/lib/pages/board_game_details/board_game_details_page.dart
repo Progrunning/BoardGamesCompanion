@@ -1,3 +1,5 @@
+import 'package:board_games_companion/common/app_styles.dart';
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -20,7 +22,6 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/ripple_effect.dart';
-import '../../widgets/common/shadow_box.dart';
 import '../base_page_state.dart';
 import '../home/home_page.dart';
 import '../playthroughs/playthroughs_page.dart';
@@ -850,29 +851,28 @@ class _InfoPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadowBox(
-      child: Container(
-        color: AppColors.primaryColor,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
+    return ElevatedContainer(
+      elevation: AppStyles.defaultElevation,
+      backgroundColor: AppColors.primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: AppTheme.titleTextStyle,
+              ),
+              if (subtitle?.isNotEmpty ?? false)
                 Text(
-                  title,
+                  subtitle!,
                   textAlign: TextAlign.center,
-                  style: AppTheme.titleTextStyle,
+                  style: AppTheme.subTitleTextStyle,
                 ),
-                if (subtitle?.isNotEmpty ?? false)
-                  Text(
-                    subtitle!,
-                    textAlign: TextAlign.center,
-                    style: AppTheme.subTitleTextStyle,
-                  ),
-              ],
-            ),
+            ],
           ),
         ),
       ),

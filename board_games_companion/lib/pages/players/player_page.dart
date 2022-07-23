@@ -1,4 +1,6 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/app_styles.dart';
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -70,14 +72,14 @@ class PlayerPageState extends BasePageState<PlayerPage> {
 
           return WillPopScope(
             onWillPop: () async {
-              return _handleOnWillPop(
-                context,
-                player,
-              );
+              return _handleOnWillPop(context, player);
             },
             child: Scaffold(
               appBar: AppBar(
-                title: Text(hasName ? player.name! : 'New Player'),
+                title: Text(
+                  hasName ? nameController.text : AppText.newPlayerPageTitle,
+                  style: AppTheme.titleTextStyle,
+                ),
               ),
               body: SafeArea(
                 child: PageContainer(
@@ -90,12 +92,11 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Center(
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(boxShadow: [AppTheme.defaultBoxShadow]),
-                              child: SizedBox(
-                                height: 220,
-                                width: 190,
+                            child: SizedBox(
+                              height: 220,
+                              width: 190,
+                              child: ElevatedContainer(
+                                elevation: AppStyles.defaultElevation,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
                                   child: Stack(
