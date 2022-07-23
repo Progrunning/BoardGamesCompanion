@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
-import '../../common/animation_tags.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -57,7 +56,6 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                       background: BoardGameImage(
                         store.boardGame,
                         minImageHeight: Constants.boardGameDetailsImageHeight,
-                        heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
                       ),
                     ),
                   ),

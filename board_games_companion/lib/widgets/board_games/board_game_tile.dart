@@ -18,7 +18,7 @@ class BoardGameTile extends StatefulWidget {
     this.name,
     this.rank,
     this.onTap,
-    this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
+    this.heroTag = AnimationTags.boardGameHeroTag,
   }) : super(key: key);
 
   final String id;

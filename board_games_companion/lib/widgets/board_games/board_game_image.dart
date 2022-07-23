@@ -11,7 +11,7 @@ class BoardGameImage extends StatelessWidget {
     BoardGameDetails? boardGameDetails, {
     Key? key,
     this.minImageHeight = 300,
-    this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
+    this.heroTag = AnimationTags.boardGameHeroTag,
   })  : _boardGameDetails = boardGameDetails,
         super(key: key);
 

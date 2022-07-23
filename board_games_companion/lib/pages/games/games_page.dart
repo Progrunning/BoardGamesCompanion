@@ -300,7 +300,7 @@ class _Grid extends StatelessWidget {
                 PlaythroughsPage.pageRoute,
                 arguments: PlaythroughsPageArguments(boardGame),
               ),
-              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
+              heroTag: AnimationTags.boardGameHeroTag,
             )
         ],
       ),
@@ -681,7 +681,7 @@ class _SearchResultGame extends StatelessWidget {
             child: BoardGameTile(
               id: boardGame.id,
               imageUrl: boardGame.thumbnailUrl ?? '',
-              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
+              heroTag: AnimationTags.boardGameHeroTag,
             ),
           ),
           const SizedBox(width: Dimensions.standardSpacing),
