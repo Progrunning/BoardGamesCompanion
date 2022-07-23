@@ -56,9 +56,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
     ));
 
     return WillPopScope(
-      onWillPop: () async {
-        return _handleOnWillPop(context);
-      },
+      onWillPop: () async => _handleOnWillPop(context),
       child: Scaffold(
         body: SafeArea(
           child: PageContainer(
