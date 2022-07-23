@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/styles.dart';
 
@@ -21,8 +22,8 @@ class PanelContainer extends StatelessWidget {
           begin: Alignment(0.5, 0),
           end: Alignment(0.5, 1),
           colors: [
-            AppTheme.startDefaultPageElementBackgroundColorGradient,
-            AppTheme.endDefaultPageElementBackgroundColorGradient,
+            AppColors.startDefaultPageElementBackgroundColorGradient,
+            AppColors.endDefaultPageElementBackgroundColorGradient,
           ],
         ),
         boxShadow: const [AppTheme.defaultBoxShadow],

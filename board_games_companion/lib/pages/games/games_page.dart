@@ -11,6 +11,8 @@ import 'package:sprintf/sprintf.dart';
 
 import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
@@ -31,6 +33,7 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
+import '../../widgets/elevated_container.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'games_filter_panel.dart';
 
@@ -189,10 +192,10 @@ class _AppBarState extends State<_AppBar> {
         floating: true,
         elevation: 0,
         titleSpacing: Dimensions.standardSpacing,
-        foregroundColor: AppTheme.accentColor,
+        foregroundColor: AppColors.accentColor,
         title: const Text(
           AppText.collectionsPageTitle,
-          style: TextStyle(color: AppTheme.whiteColor),
+          style: TextStyle(color: AppColors.whiteColor),
         ),
         actions: <Widget>[
           IconButton(
@@ -211,8 +214,8 @@ class _AppBarState extends State<_AppBar> {
             builder: (_, boardGamesFiltersStore, __) {
               return IconButton(
                 icon: boardGamesFiltersStore.anyFiltersApplied
-                    ? const Icon(Icons.filter_alt_rounded, color: AppTheme.accentColor)
-                    : const Icon(Icons.filter_alt_outlined, color: AppTheme.accentColor),
+                    ? const Icon(Icons.filter_alt_rounded, color: AppColors.accentColor)
+                    : const Icon(Icons.filter_alt_outlined, color: AppColors.accentColor),
                 onPressed: widget.viewModel.anyBoardGames
                     ? () async {
                         await _openFiltersPanel(context);
@@ -248,14 +251,14 @@ class _AppBarState extends State<_AppBar> {
                 isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
               ),
             ],
-            indicatorColor: AppTheme.accentColor,
+            indicatorColor: AppColors.accentColor,
           ),
         ),
       );
 
   Future<void> _openFiltersPanel(BuildContext context) async {
     await showModalBottomSheet<Widget>(
-      backgroundColor: AppTheme.primaryColor,
+      backgroundColor: AppColors.primaryColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Styles.defaultBottomSheetCornerRadius),
@@ -295,6 +298,7 @@ class _Grid extends StatelessWidget {
               name: boardGame.name,
               imageUrl: boardGame.thumbnailUrl ?? '',
               rank: boardGame.rank,
+              elevation: AppStyles.defaultElevation,
               onTap: () => Navigator.pushNamed(
                 context,
                 PlaythroughsPage.pageRoute,
@@ -315,7 +319,7 @@ class _Empty extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        const SliverAppBar(pinned: true, floating: true, foregroundColor: AppTheme.accentColor),
+        const SliverAppBar(pinned: true, floating: true, foregroundColor: AppColors.accentColor),
         SliverPadding(
           padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
           sliver: SliverToBoxAdapter(
@@ -333,7 +337,7 @@ class _Empty extends StatelessWidget {
                 Icon(
                   Icons.sentiment_dissatisfied_sharp,
                   size: 80,
-                  color: AppTheme.primaryColor,
+                  color: AppColors.primaryColor,
                 ),
                 SizedBox(height: Dimensions.doubleStandardSpacing),
                 Text.rich(
@@ -514,7 +518,7 @@ class _TopTab extends StatelessWidget {
         Tab(
           icon: Icon(
             icon,
-            color: isSelected ? AppTheme.selectedTabIconColor : AppTheme.deselectedTabIconColor,
+            color: isSelected ? AppColors.selectedTabIconColor : AppColors.deselectedTabIconColor,
           ),
           iconMargin: const EdgeInsets.only(
             bottom: Dimensions.halfStandardSpacing,
@@ -523,7 +527,7 @@ class _TopTab extends StatelessWidget {
             title,
             style: AppTheme.titleTextStyle.copyWith(
               fontSize: Dimensions.standardFontSize,
-              color: isSelected ? AppTheme.defaultTextColor : AppTheme.deselectedTabIconColor,
+              color: isSelected ? AppColors.defaultTextColor : AppColors.deselectedTabIconColor,
             ),
           ),
         ),
@@ -634,7 +638,7 @@ class _SearchResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: filteredGames.length,
-      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
+      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.standardSpacing),
       itemBuilder: (_, index) {
         return _SearchResultGame(
           filteredGames: filteredGames,
@@ -661,8 +665,6 @@ class _SearchResultGame extends StatelessWidget {
   final bool isFirstItem;
   final bool isLastItem;
 
-  static const double _gameStatIconSize = 16;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -672,85 +674,123 @@ class _SearchResultGame extends StatelessWidget {
         left: Dimensions.standardSpacing,
         right: Dimensions.standardSpacing,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: Dimensions.collectionSearchResultBoardGameImageHeight,
-            width: Dimensions.collectionSearchResultBoardGameImageWidth,
-            child: BoardGameTile(
-              id: boardGame.id,
-              imageUrl: boardGame.thumbnailUrl ?? '',
-              heroTag: AnimationTags.boardGameHeroTag,
-            ),
-          ),
-          const SizedBox(width: Dimensions.standardSpacing),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  boardGame.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTheme.titleTextStyle,
-                ),
-                const SizedBox(height: Dimensions.halfStandardSpacing),
-                _SearchResultGameGeneralStat(
-                  icon: const Icon(Icons.people, size: _gameStatIconSize),
-                  statistic: sprintf(
-                    AppText.gamesPageSearchResultPlayersNumberGameStatFormat,
-                    [boardGame.minPlayers, boardGame.maxPlayers],
-                  ),
-                ),
-                const SizedBox(height: Dimensions.halfStandardSpacing),
-                _SearchResultGameGeneralStat(
-                  icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
-                  statistic: sprintf(
-                    AppText.gamesPageSearchResultPlaytimeGameStatFormat,
-                    [boardGame.playtimeFormatted],
-                  ),
-                ),
-                if (boardGame.avgWeight != null) ...[
-                  const SizedBox(height: Dimensions.halfStandardSpacing),
-                  _SearchResultGameGeneralStat(
-                    icon: const Icon(Icons.scale, size: _gameStatIconSize),
-                    statistic: sprintf(
-                      AppText.gamesPageSearchResultComplexityGameStatFormat,
-                      [boardGame.avgWeight!.toStringAsFixed(2)],
-                    ),
-                  ),
-                ]
-              ],
-            ),
-          ),
-          Column(
+      child: ElevatedContainer(
+        backgroundColor: AppColors.primaryColor,
+        elevation: AppStyles.defaultElevation,
+        boarderRadius: const BorderRadius.all(
+          Radius.circular(Styles.boardGameTileImageCircularRadius),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                icon: const Icon(Icons.info),
-                onPressed: () => Navigator.pushNamed(
-                  context,
-                  BoardGamesDetailsPage.pageRoute,
-                  arguments: BoardGameDetailsPageArguments(boardGame.id, boardGame.name, GamesPage),
+              SizedBox(
+                height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                child: BoardGameTile(
+                  id: boardGame.id,
+                  imageUrl: boardGame.thumbnailUrl ?? '',
+                  heroTag: AnimationTags.boardGameHeroTag,
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.casino),
-                onPressed: () => Navigator.pushNamed(
-                  context,
-                  PlaythroughsPage.pageRoute,
-                  arguments: PlaythroughsPageArguments(boardGame),
-                ),
-              ),
+              const SizedBox(width: Dimensions.standardSpacing),
+              Expanded(child: _SearchResultGameDetails(boardGame: boardGame)),
+              _SearchResultGameActions(boardGame: boardGame)
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class _SearchResultGameGeneralStat extends StatelessWidget {
-  const _SearchResultGameGeneralStat({
+class _SearchResultGameDetails extends StatelessWidget {
+  const _SearchResultGameDetails({
+    Key? key,
+    required this.boardGame,
+  }) : super(key: key);
+
+  final BoardGameDetails boardGame;
+
+  static const double _gameStatIconSize = 16;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          boardGame.name,
+          overflow: TextOverflow.ellipsis,
+          style: AppTheme.theme.textTheme.bodyLarge,
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        _SearchResultGameGeneralStats(
+          icon: const Icon(Icons.people, size: _gameStatIconSize),
+          statistic: sprintf(
+            AppText.gamesPageSearchResultPlayersNumberGameStatFormat,
+            [boardGame.minPlayers, boardGame.maxPlayers],
+          ),
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        _SearchResultGameGeneralStats(
+          icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
+          statistic: sprintf(
+            AppText.gamesPageSearchResultPlaytimeGameStatFormat,
+            [boardGame.playtimeFormatted],
+          ),
+        ),
+        if (boardGame.avgWeight != null) ...[
+          const SizedBox(height: Dimensions.standardSpacing),
+          _SearchResultGameGeneralStats(
+            icon: const Icon(Icons.scale, size: _gameStatIconSize),
+            statistic: sprintf(
+              AppText.gamesPageSearchResultComplexityGameStatFormat,
+              [boardGame.avgWeight!.toStringAsFixed(2)],
+            ),
+          ),
+        ]
+      ],
+    );
+  }
+}
+
+class _SearchResultGameActions extends StatelessWidget {
+  const _SearchResultGameActions({
+    Key? key,
+    required this.boardGame,
+  }) : super(key: key);
+
+  final BoardGameDetails boardGame;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.info),
+          onPressed: () => Navigator.pushNamed(
+            context,
+            BoardGamesDetailsPage.pageRoute,
+            arguments: BoardGameDetailsPageArguments(boardGame.id, boardGame.name, GamesPage),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.casino),
+          onPressed: () => Navigator.pushNamed(
+            context,
+            PlaythroughsPage.pageRoute,
+            arguments: PlaythroughsPageArguments(boardGame),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SearchResultGameGeneralStats extends StatelessWidget {
+  const _SearchResultGameGeneralStats({
     Key? key,
     required this.icon,
     required this.statistic,
@@ -765,11 +805,11 @@ class _SearchResultGameGeneralStat extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         icon,
-        const SizedBox(width: Dimensions.halfStandardSpacing),
+        const SizedBox(width: Dimensions.standardSpacing),
         Text(
           statistic,
           overflow: TextOverflow.ellipsis,
-          style: AppTheme.subTitleTextStyle.copyWith(color: AppTheme.whiteColor),
+          style: AppTheme.subTitleTextStyle,
         ),
       ],
     );

@@ -8,6 +8,7 @@ import 'package:board_games_companion/widgets/about/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 
 class PlaythroughsGameSettingsPage extends StatefulWidget {
@@ -88,15 +89,15 @@ class __WinningConditionSectionState extends State<_WinningConditionSection> {
       children: [
         const SectionTitle(title: AppText.playthroughsGameSettingsWinningConditionSectionTitle),
         RadioListTile<GameWinningCondition>(
-          activeColor: AppTheme.accentColor,
+          activeColor: AppColors.accentColor,
           title: const Text(
             AppText.playthroughsGameSettingsWinningConditionHighestScore,
             style: AppTheme.defaultTextFieldStyle,
           ),
           secondary: Icon(Icons.arrow_upward,
               color: _gameWinningCondition == GameWinningCondition.HighestScore
-                  ? AppTheme.activeWinningConditionIcon
-                  : AppTheme.inactiveBottomTabColor),
+                  ? AppColors.activeWinningConditionIcon
+                  : AppColors.inactiveBottomTabColor),
           value: GameWinningCondition.HighestScore,
           groupValue: _gameWinningCondition,
           onChanged: (GameWinningCondition? value) {
@@ -107,15 +108,15 @@ class __WinningConditionSectionState extends State<_WinningConditionSection> {
           },
         ),
         RadioListTile<GameWinningCondition>(
-          activeColor: AppTheme.accentColor,
+          activeColor: AppColors.accentColor,
           title: const Text(
             AppText.playthroughsGameSettingsWinningConditionLowestScore,
             style: AppTheme.defaultTextFieldStyle,
           ),
           secondary: Icon(Icons.arrow_downward,
               color: _gameWinningCondition == GameWinningCondition.LowestScore
-                  ? AppTheme.activeWinningConditionIcon
-                  : AppTheme.inactiveBottomTabColor),
+                  ? AppColors.activeWinningConditionIcon
+                  : AppColors.inactiveBottomTabColor),
           value: GameWinningCondition.LowestScore,
           groupValue: _gameWinningCondition,
           onChanged: (GameWinningCondition? value) {

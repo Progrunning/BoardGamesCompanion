@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -55,7 +56,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                             uri: 'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
                             iconUri: 'assets/mikolaj_profile_picture.jpg',
                           ),
-                          Divider(color: AppTheme.accentColor),
+                          Divider(color: AppColors.accentColor),
                           SectionTitle(title: 'Design & Art'),
                           DetailsItem(
                             title: 'Alicja Adamkiewicz',
@@ -63,7 +64,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                             uri: 'https://www.instagram.com/adamkiewicz_art',
                             iconUri: 'assets/adamkiewiczart_logo.png',
                           ),
-                          Divider(color: AppTheme.accentColor),
+                          Divider(color: AppColors.accentColor),
                           SectionTitle(title: 'Content & Data'),
                           SectionText(
                             text:
@@ -82,7 +83,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                               title: 'Terms of Service',
                               subtitle: 'boardgamegeek.com/terms',
                               uri: 'https://www.boardgamegeek.com/terms'),
-                          Divider(color: AppTheme.accentColor),
+                          Divider(color: AppColors.accentColor),
                           SectionTitle(title: 'Plugins & Libraries'),
                           SectionText(
                             text:
@@ -153,7 +154,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                               subtitle: "Launching Uri's",
                               uri: 'https://pub.dev/packages/url_launcher'),
                           Divider(
-                            color: AppTheme.accentColor,
+                            color: AppColors.accentColor,
                           ),
                           SectionTitle(
                             title: 'Licenses',
@@ -167,7 +168,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    splashColor: AppTheme.accentColor,
+                    splashColor: AppColors.accentColor,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: Dimensions.doubleStandardSpacing,
@@ -249,7 +250,7 @@ class _LicensePageDetailsItem extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: Icon(
                     Icons.navigate_next,
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                   ),
                 ),
               ),

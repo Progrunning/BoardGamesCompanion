@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../common/app_colors.dart';
 import '../common/app_text.dart';
-import '../common/app_theme.dart';
 import '../common/dimensions.dart';
 import '../injectable.dart';
 import '../services/rate_and_review_service.dart';
@@ -52,7 +52,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               child: const Text(
                 AppText.aontAskAgain,
                 style: TextStyle(
-                  color: AppTheme.accentColor,
+                  color: AppColors.accentColor,
                 ),
               ),
               onPressed: () async {
@@ -65,7 +65,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               child: const Text(
                 AppText.askMeLater,
                 style: TextStyle(
-                  color: AppTheme.accentColor,
+                  color: AppColors.accentColor,
                 ),
               ),
               onPressed: () async {
@@ -75,7 +75,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: AppTheme.accentColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.accentColor),
               onPressed: () async {
                 Navigator.of(context).pop();
 
@@ -84,7 +84,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               child: const Text(
                 AppText.rate,
                 style: TextStyle(
-                  color: AppTheme.defaultTextColor,
+                  color: AppColors.defaultTextColor,
                 ),
               ),
             ),

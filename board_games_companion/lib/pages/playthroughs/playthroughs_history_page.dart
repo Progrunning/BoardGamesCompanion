@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
-import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../injectable.dart';
@@ -174,7 +174,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
             ElevatedIconButton(
               title: AppText.edit,
               icon: const DefaultIcon(Icons.edit),
-              color: AppTheme.accentColor,
+              color: AppColors.accentColor,
               onPressed: () => Navigator.pushNamed(
                 context,
                 EditPlaythoughPage.pageRoute,

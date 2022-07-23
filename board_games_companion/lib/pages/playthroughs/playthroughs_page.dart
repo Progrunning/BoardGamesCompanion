@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -71,13 +72,13 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
               }
 
               return IconButton(
-                icon: const Icon(Icons.download, color: AppTheme.accentColor),
+                icon: const Icon(Icons.download, color: AppColors.accentColor),
                 onPressed: () => _importBggPlays(store.user!.name, widget.boardGameDetails.id),
               );
             },
           ),
           IconButton(
-            icon: const Icon(Icons.info, color: AppTheme.accentColor),
+            icon: const Icon(Icons.info, color: AppColors.accentColor),
             onPressed: () async => _navigateToBoardGameDetails(context, widget.boardGameDetails),
           ),
         ],
@@ -102,7 +103,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       ),
       bottomNavigationBar: ConvexAppBar(
         controller: tabController,
-        backgroundColor: AppTheme.bottomTabBackgroundColor,
+        backgroundColor: AppColors.bottomTabBackgroundColor,
         top: -Dimensions.bottomTabTopHeight,
         items: const <TabItem>[
           TabItem<BottomTabIcon>(
@@ -127,8 +128,8 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           ),
         ],
         initialActiveIndex: _initialTabIndex,
-        activeColor: AppTheme.accentColor,
-        color: AppTheme.inactiveBottomTabColor,
+        activeColor: AppColors.accentColor,
+        color: AppColors.inactiveBottomTabColor,
       ),
     );
 

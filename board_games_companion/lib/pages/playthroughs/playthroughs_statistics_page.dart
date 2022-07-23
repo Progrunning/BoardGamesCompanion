@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
-import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
@@ -153,7 +153,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
                           icon: Icons.show_chart,
-                          iconColor: AppTheme.highscoreStatColor,
+                          iconColor: AppColors.highscoreStatColor,
                           iconSize: 38,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsPersonalBest,
                         ),
@@ -169,7 +169,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
                           icon: Icons.calculate,
-                          iconColor: AppTheme.averageScoreStatColor,
+                          iconColor: AppColors.averageScoreStatColor,
                           iconSize: 38,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsAvgScore,
                         ),
@@ -185,7 +185,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                             fontSize: Dimensions.extraLargeFontSize,
                           ),
                           icon: Icons.casino,
-                          iconColor: AppTheme.playedGamesStatColor,
+                          iconColor: AppColors.playedGamesStatColor,
                           iconSize: 38,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsPlayedGames,
                         ),
@@ -273,13 +273,13 @@ class _PlayerChartsState extends State<_PlayerCharts> {
     for (final MapEntry<int, double> playeCountPercentage
         in widget.boardGameStatistics.playerCountPercentage!.entries) {
       playerCountChartColors[playeCountPercentage.key] =
-          AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
+          AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
     i = 0;
     for (final MapEntry<Player, double> playerWinsPercentage
         in widget.boardGameStatistics.playerWinsPercentage!.entries) {
       playerWinsChartColors[playerWinsPercentage.key] =
-          AppTheme.chartColorPallete[i++ % AppTheme.chartColorPallete.length];
+          AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
 
     return Column(
@@ -518,14 +518,14 @@ class _OverallStatsSection extends StatelessWidget {
                 _StatisticsItem(
                   value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
                   icon: Icons.casino,
-                  iconColor: AppTheme.playedGamesStatColor,
+                  iconColor: AppColors.playedGamesStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
                   value: boardGameStatistics?.bestScore?.toString() ?? '-',
                   icon: Icons.show_chart,
-                  iconColor: AppTheme.highscoreStatColor,
+                  iconColor: AppColors.highscoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsBestScore,
                 ),
               ],
@@ -536,14 +536,14 @@ class _OverallStatsSection extends StatelessWidget {
                 _StatisticsItem(
                   value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
                   icon: Icons.person,
-                  iconColor: AppTheme.averagePlayerCountStatColor,
+                  iconColor: AppColors.averagePlayerCountStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
                   value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
                   icon: Icons.calculate,
-                  iconColor: AppTheme.averageScoreStatColor,
+                  iconColor: AppColors.averageScoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgScore,
                 ),
               ],
@@ -555,7 +555,7 @@ class _OverallStatsSection extends StatelessWidget {
                   value:
                       boardGameStatistics?.averagePlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
                   icon: Icons.av_timer,
-                  iconColor: AppTheme.averagePlaytimeStatColor,
+                  iconColor: AppColors.averagePlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
@@ -563,7 +563,7 @@ class _OverallStatsSection extends StatelessWidget {
                   value:
                       boardGameStatistics?.totalPlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
                   icon: Icons.timelapse,
-                  iconColor: AppTheme.totalPlaytimeStatColor,
+                  iconColor: AppColors.totalPlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
                 ),
               ],
@@ -643,7 +643,7 @@ class _StatisticsItem extends StatelessWidget {
         ),
         ItemPropertyTitle(
           subtitle,
-          color: AppTheme.defaultTextColor,
+          color: AppColors.defaultTextColor,
           fontSize: Dimensions.smallFontSize,
         ),
       ],

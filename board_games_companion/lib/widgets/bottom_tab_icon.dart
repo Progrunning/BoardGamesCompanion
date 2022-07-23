@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/app_theme.dart';
+import '../common/app_colors.dart';
 
 class BottomTabIcon extends StatelessWidget {
   const BottomTabIcon({
@@ -16,7 +16,7 @@ class BottomTabIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       iconData,
-      color: isActive ? AppTheme.activeBottomTabColor : AppTheme.inactiveBottomTabColor,
+      color: isActive ? AppColors.activeBottomTabColor : AppColors.inactiveBottomTabColor,
     );
   }
 }

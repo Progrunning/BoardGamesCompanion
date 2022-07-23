@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../common/app_colors.dart';
 import '../../../common/app_theme.dart';
 import '../../../common/dimensions.dart';
 
@@ -15,7 +16,7 @@ class BgcSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
     return Material(
       elevation: 4,
       child: Container(
-        color: AppTheme.primaryColor,
+        color: AppColors.primaryColor,
         padding: const EdgeInsets.all(Dimensions.standardSpacing),
         child: Align(
           alignment: Alignment.centerLeft,

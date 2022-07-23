@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -101,7 +102,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         Expanded(
           child: Theme(
             data: AppTheme.theme.copyWith(
-              colorScheme: AppTheme.theme.colorScheme.copyWith(primary: AppTheme.accentColor),
+              colorScheme: AppTheme.theme.colorScheme.copyWith(primary: AppColors.accentColor),
             ),
             child: Stepper(
               currentStep: widget.viewModel.logGameStep,
@@ -387,7 +388,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                 Radio<PlaythroughStartTime>(
                   value: PlaythroughStartTime.now,
                   groupValue: widget.viewModel.playthroughStartTime,
-                  activeColor: AppTheme.accentColor,
+                  activeColor: AppColors.accentColor,
                   onChanged: (PlaythroughStartTime? value) {
                     if (value != null) {
                       _updatePlaythroughStartTimeSelection(value);
@@ -408,7 +409,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                 Radio<PlaythroughStartTime>(
                   value: PlaythroughStartTime.inThePast,
                   groupValue: widget.viewModel.playthroughStartTime,
-                  activeColor: AppTheme.accentColor,
+                  activeColor: AppColors.accentColor,
                   onChanged: (PlaythroughStartTime? value) {
                     if (value == null) {
                       return;
@@ -438,7 +439,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   onChanged: (num value) => _updateDurationHours(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
@@ -455,7 +456,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   onChanged: (num value) => _updateDurationMinutes(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
@@ -581,7 +582,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppTheme.accentColor,
+                  primary: AppColors.accentColor,
                 ),
           ),
           child: child!,
@@ -639,8 +640,8 @@ class _Players extends StatelessWidget {
                         height: 34,
                         width: 34,
                         child: Checkbox(
-                          checkColor: AppTheme.accentColor,
-                          activeColor: AppTheme.primaryColor.withOpacity(0.7),
+                          checkColor: AppColors.accentColor,
+                          activeColor: AppColors.primaryColor.withOpacity(0.7),
                           value: playthroughPlayer.isChecked,
                           onChanged: (bool? isChecked) =>
                               onPlayerSelectionChanged(isChecked, playthroughPlayer),

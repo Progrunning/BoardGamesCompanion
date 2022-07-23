@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
@@ -52,7 +53,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: AppTheme.primaryColor,
+      statusBarColor: AppColors.primaryColor,
     ));
 
     return WillPopScope(
@@ -124,7 +125,7 @@ class _Header extends StatelessWidget {
         centerTitle: true,
         title: Container(
           decoration: BoxDecoration(
-            color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+            color: AppColors.accentColor.withAlpha(Styles.opacity70Percent),
             borderRadius: const BorderRadius.all(
               Radius.circular(Styles.defaultCornerRadius),
             ),
@@ -138,7 +139,7 @@ class _Header extends StatelessWidget {
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                color: AppTheme.defaultTextColor,
+                color: AppColors.defaultTextColor,
                 fontSize: Dimensions.largeFontSize,
               ),
             ),
@@ -244,12 +245,12 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
                                   in boardGameDetailsStore.boardGameDetails!.categories!)
                                 Chip(
                                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                                  backgroundColor: AppTheme.primaryColor.withAlpha(
+                                  backgroundColor: AppColors.primaryColor.withAlpha(
                                     Styles.opacity80Percent,
                                   ),
                                   label: Text(
                                     category.name,
-                                    style: const TextStyle(color: AppTheme.defaultTextColor),
+                                    style: const TextStyle(color: AppColors.defaultTextColor),
                                   ),
                                 )
                             ],
@@ -451,7 +452,7 @@ class _Link extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: AppTheme.accentColor,
+              color: AppColors.accentColor,
               size: Dimensions.boardGameDetailsLinkIconSize,
             ),
             Text(
@@ -670,7 +671,7 @@ class _CollectionFlags extends StatelessWidget {
           return Column(
             children: [
               ToggleButtons(
-                splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
+                splashColor: AppColors.accentColor.withAlpha(Styles.opacity30Percent),
                 fillColor: Colors.transparent,
                 selectedColor: Colors.white,
                 selectedBorderColor: Colors.transparent,
@@ -699,7 +700,7 @@ class _CollectionFlags extends StatelessWidget {
                 },
               ),
               ToggleButtons(
-                splashColor: AppTheme.accentColor.withAlpha(Styles.opacity30Percent),
+                splashColor: AppColors.accentColor.withAlpha(Styles.opacity30Percent),
                 fillColor: Colors.transparent,
                 selectedColor: Colors.white,
                 selectedBorderColor: Colors.transparent,
@@ -748,13 +749,13 @@ class _CollectionFlag extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? AppTheme.accentColor : AppTheme.deselectedTabIconColor,
+                color: isSelected ? AppColors.accentColor : AppColors.deselectedTabIconColor,
               ),
               Text(
                 title,
                 style: TextStyle(
                   fontSize: Dimensions.smallFontSize,
-                  color: isSelected ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
+                  color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
                 ),
               ),
             ],
@@ -851,7 +852,7 @@ class _InfoPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShadowBox(
       child: Container(
-        color: AppTheme.primaryColor,
+        color: AppColors.primaryColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
           child: Center(

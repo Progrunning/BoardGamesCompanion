@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
@@ -19,6 +20,7 @@ class BoardGameTile extends StatefulWidget {
     this.rank,
     this.onTap,
     this.heroTag = AnimationTags.boardGameHeroTag,
+    this.elevation,
   }) : super(key: key);
 
   final String id;
@@ -27,6 +29,7 @@ class BoardGameTile extends StatefulWidget {
   final int? rank;
   final Future<void> Function()? onTap;
   final String heroTag;
+  final double? elevation;
 
   @override
   State<StatefulWidget> createState() => _BoardGameSearchItemWidget();
@@ -35,62 +38,53 @@ class BoardGameTile extends StatefulWidget {
 class _BoardGameSearchItemWidget extends State<BoardGameTile> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Hero(
-          tag: '${widget.heroTag}${widget.id}',
-          child: CachedNetworkImage(
-            imageUrl: widget.imageUrl,
-            imageBuilder: (context, imageProvider) => Padding(
-              padding: const EdgeInsets.only(
-                right: Dimensions.halfStandardSpacing,
-                bottom: Dimensions.halfStandardSpacing,
-              ),
-              child: Container(
+    return Material(
+      elevation: widget.elevation ?? 0,
+      borderRadius: AppTheme.defaultBoxRadius,
+      shadowColor: AppColors.primaryColor,
+      child: Stack(
+        children: <Widget>[
+          Hero(
+            tag: '${widget.heroTag}${widget.id}',
+            child: CachedNetworkImage(
+              imageUrl: widget.imageUrl,
+              imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
-                  boxShadow: const <BoxShadow>[AppTheme.defaultBoxShadow],
                   borderRadius: AppTheme.defaultBoxRadius,
                   image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
-            ),
-            fit: BoxFit.fitWidth,
-            placeholder: (context, url) => Container(
-              decoration: const BoxDecoration(
-                color: AppTheme.primaryColor,
-                borderRadius: AppTheme.defaultBoxRadius,
+              fit: BoxFit.fitWidth,
+              placeholder: (context, url) => Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: AppTheme.defaultBoxRadius,
+                ),
               ),
-            ),
-            errorWidget: (context, url, dynamic error) => Container(
-              decoration: const BoxDecoration(
-                boxShadow: <BoxShadow>[AppTheme.defaultBoxShadow],
-                borderRadius: AppTheme.defaultBoxRadius,
-                color: AppTheme.primaryColor,
-                image: DecorationImage(
-                  alignment: Alignment.center,
-                  image: AssetImage('assets/icons/logo.png'),
+              errorWidget: (context, url, dynamic error) => Container(
+                decoration: const BoxDecoration(
+                  borderRadius: AppTheme.defaultBoxRadius,
+                  color: AppColors.primaryColor,
+                  image: DecorationImage(
+                    alignment: Alignment.center,
+                    image: AssetImage('assets/icons/logo.png'),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        if (widget.name.isNotNullOrBlank) _Name(name: widget.name!),
-        if (widget.rank != null && widget.rank! < Constants.top100)
-          Positioned(
-            top: 0,
-            right: 12,
-            child: RankRibbon(rank: widget.rank!),
-          ),
-        Positioned.fill(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: Dimensions.halfStandardSpacing,
-              bottom: Dimensions.halfStandardSpacing,
+          if (widget.name.isNotNullOrBlank) _Name(name: widget.name!),
+          if (widget.rank != null && widget.rank! < Constants.top100)
+            Positioned(
+              top: 0,
+              right: 12,
+              child: RankRibbon(rank: widget.rank!),
             ),
+          Positioned.fill(
             child: RippleEffect(borderRadius: AppTheme.defaultBoxRadius, onTap: widget.onTap),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -115,7 +109,7 @@ class _Name extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Container(
           decoration: BoxDecoration(
-            color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+            color: AppColors.accentColor.withAlpha(Styles.opacity70Percent),
             borderRadius: const BorderRadius.all(
               Radius.circular(Styles.defaultCornerRadius),
             ),
@@ -126,7 +120,7 @@ class _Name extends StatelessWidget {
               name,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: AppTheme.defaultTextColor,
+                color: AppColors.defaultTextColor,
                 fontSize: Dimensions.smallFontSize,
               ),
             ),

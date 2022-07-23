@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_expansion.dart';
@@ -40,7 +41,7 @@ class BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> 
           color: Colors.transparent,
           child: Theme(
             data: AppTheme.theme.copyWith(
-              unselectedWidgetColor: AppTheme.accentColor,
+              unselectedWidgetColor: AppColors.accentColor,
             ),
             child: _Expansions(
               boardGameDetailsStore: widget.boardGameDetailsStore,
@@ -75,16 +76,16 @@ class _Expansions extends StatelessWidget {
           'Expansions (${boardGameDetailsStore.boardGameDetails!.expansions.length})',
           style: const TextStyle(fontSize: Dimensions.standardFontSize),
         ),
-        textColor: AppTheme.accentColor,
-        collapsedTextColor: AppTheme.secondaryTextColor,
-        iconColor: AppTheme.accentColor,
-        collapsedIconColor: AppTheme.accentColor,
+        textColor: AppColors.accentColor,
+        collapsedTextColor: AppColors.secondaryTextColor,
+        iconColor: AppColors.accentColor,
+        collapsedIconColor: AppColors.accentColor,
         subtitle: Text(
           boardGameDetailsStore.boardGameDetails!.expansionsOwned == 0
               ? "You don't own any expansions"
               : 'You own ${boardGameDetailsStore.boardGameDetails!.expansionsOwned} expansion(s)',
           style: const TextStyle(
-            color: AppTheme.defaultTextColor,
+            color: AppColors.defaultTextColor,
             fontSize: Dimensions.smallFontSize,
           ),
         ),
@@ -119,7 +120,7 @@ class _Expansion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget expansionItem = InkWell(
-      splashColor: AppTheme.accentColor,
+      splashColor: AppColors.accentColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: Dimensions.doubleStandardSpacing,
@@ -134,7 +135,7 @@ class _Expansion extends StatelessWidget {
                 style: AppTheme.theme.textTheme.headline3,
               ),
             ),
-            const Icon(Icons.navigate_next, color: AppTheme.accentColor),
+            const Icon(Icons.navigate_next, color: AppColors.accentColor),
           ],
         ),
       ),
@@ -156,7 +157,7 @@ class _Expansion extends StatelessWidget {
         child: CustomPaint(
           foregroundPainter: ExpanionsBannerPainter(
             location: BannerLocation.topStart,
-            color: AppTheme.accentColor,
+            color: AppColors.accentColor,
             message: 'own',
           ),
           child: expansionItem,

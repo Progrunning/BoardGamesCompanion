@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/analytics.dart';
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -125,7 +127,7 @@ class _SearchBarState extends State<_SearchBar> {
   Widget build(BuildContext context) {
     return SliverAppBar(
       titleSpacing: 0,
-      foregroundColor: AppTheme.accentColor,
+      foregroundColor: AppColors.accentColor,
       title: Consumer<SearchBarBoardGamesStore>(
         builder: (_, store, __) {
           return Padding(
@@ -160,7 +162,7 @@ class _SearchBarState extends State<_SearchBar> {
         icon: const Icon(
           Icons.clear,
         ),
-        color: AppTheme.accentColor,
+        color: AppColors.accentColor,
         onPressed: () {
           searchController.text = '';
           searchBarBoardGamesStore.searchPhrase = null;
@@ -171,7 +173,7 @@ class _SearchBarState extends State<_SearchBar> {
 
     return const Icon(
       Icons.search,
-      color: AppTheme.accentColor,
+      color: AppColors.accentColor,
     );
   }
 }
@@ -214,7 +216,7 @@ class _SearchResultsState extends State<_SearchResults> {
                     final int itemIndex = index ~/ 2;
                     if (index.isEven) {
                       return Material(
-                        color: AppTheme.primaryColor,
+                        color: AppColors.primaryColor,
                         borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
                         elevation: 4,
                         child: InkWell(
@@ -441,19 +443,17 @@ class _HotBoardGames extends StatelessWidget {
                 crossAxisSpacing: Dimensions.standardSpacing,
                 mainAxisSpacing: Dimensions.standardSpacing,
                 maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
-                children: List<BoardGameTile>.generate(
-                  boardGames.length,
-                  (int index) {
-                    final BoardGame boardGame = boardGames[index];
-                    return BoardGameTile(
+                children: [
+                  for (final boardGame in boardGames)
+                    BoardGameTile(
                       id: boardGame.id,
                       name: boardGame.name,
                       imageUrl: boardGame.thumbnailUrl ?? '',
                       rank: boardGame.rank,
+                      elevation: AppStyles.defaultElevation,
                       onTap: () async => _navigateToBoardGameDetails(boardGame, context),
-                    );
-                  },
-                ),
+                    ),
+                ],
               ),
             );
           }

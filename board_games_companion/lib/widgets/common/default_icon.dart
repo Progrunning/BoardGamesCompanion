@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 
 class DefaultIcon extends StatelessWidget {
@@ -16,7 +16,7 @@ class DefaultIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       _icon,
-      color: AppTheme.defaultTextColor,
+      color: AppColors.defaultTextColor,
       size: Dimensions.defaultButtonIconSize,
     );
   }

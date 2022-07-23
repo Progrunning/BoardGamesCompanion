@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/widgets/common/elevated_icon_button.dart';
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
@@ -15,7 +17,6 @@ import '../../models/sort_by.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
-import '../../widgets/rounded_container.dart';
 
 class GamesFilterPanel extends StatefulWidget {
   const GamesFilterPanel({Key? key}) : super(key: key);
@@ -62,7 +63,7 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
                   child: ElevatedIconButton(
                     icon: const Icon(Icons.clear),
                     title: AppText.filterGamesPanelClearFiltersButtonText,
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     onPressed: boardGamesFiltersStore.anyFiltersApplied
                         ? () => _clearFilters(boardGamesFiltersStore)
                         : null,
@@ -127,7 +128,7 @@ class _SortByChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget orderByIcon = Container();
-    final orderByIconColor = sortBy.selected ? AppTheme.defaultTextColor : AppTheme.accentColor;
+    final orderByIconColor = sortBy.selected ? AppColors.defaultTextColor : AppColors.accentColor;
     switch (sortBy.orderBy) {
       case OrderBy.Ascending:
         orderByIcon = Icon(Icons.arrow_drop_up, color: orderByIconColor);
@@ -138,20 +139,20 @@ class _SortByChip extends StatelessWidget {
     }
 
     return ChoiceChip(
-      labelStyle: const TextStyle(color: AppTheme.defaultTextColor),
+      labelStyle: const TextStyle(color: AppColors.defaultTextColor),
       label: Text(
         sortBy.name,
         style: TextStyle(
-          color: sortBy.selected ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
+          color: sortBy.selected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
         ),
       ),
       selected: sortBy.selected,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
       ),
-      selectedColor: AppTheme.accentColor,
-      shadowColor: AppTheme.shadowColor,
-      backgroundColor: AppTheme.primaryColor.withAlpha(Styles.opacity80Percent),
+      selectedColor: AppColors.accentColor,
+      shadowColor: AppColors.shadowColor,
+      backgroundColor: AppColors.primaryColor.withAlpha(Styles.opacity80Percent),
       avatar: orderByIcon,
       onSelected: (isSelected) {
         boardGamesFiltersStore.updateSortBySelection(sortBy);
@@ -184,13 +185,13 @@ class _Filters extends StatelessWidget {
         SizedBox(
           height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
           child: Material(
-            shadowColor: AppTheme.shadowColor,
+            shadowColor: AppColors.shadowColor,
             elevation: Dimensions.defaultElevation,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
             ),
             child: Container(
-              color: AppTheme.primaryColor.withAlpha(Styles.opacity80Percent),
+              color: AppColors.primaryColor.withAlpha(Styles.opacity80Percent),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -236,15 +237,17 @@ class _FilterRatingAnyValue extends StatelessWidget {
       child: Text(
         'Any',
         style: TextStyle(
-          color: isSelected ? AppTheme.defaultTextColor : AppTheme.secondaryTextColor,
+          color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
         ),
       ),
     );
 
     if (isSelected) {
       return Expanded(
-        child: RoundedContainer(child: anyRating),
-      );
+          child: ElevatedContainer(
+        backgroundColor: AppColors.accentColor,
+        child: anyRating,
+      ));
     }
     return Expanded(
       child: InkWell(
@@ -297,7 +300,8 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                 data: SliderTheme.of(context).copyWith(
                   trackHeight: 8,
                   trackShape: const RoundedRectSliderTrackShape(),
-                  inactiveTrackColor: AppTheme.primaryColorLight.withAlpha(Styles.opacity30Percent),
+                  inactiveTrackColor:
+                      AppColors.primaryColorLight.withAlpha(Styles.opacity30Percent),
                   overlayShape: const RoundSliderOverlayShape(overlayRadius: 24.0),
                   tickMarkShape: const RoundSliderTickMarkShape(),
                   valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
@@ -317,7 +321,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                   onChangeEnd: (value) {
                     boardGamesFiltersStore.updateNumberOfPlayers(value != 0 ? value.round() : null);
                   },
-                  activeColor: AppTheme.accentColor,
+                  activeColor: AppColors.accentColor,
                 ),
               ),
             ),
@@ -349,14 +353,17 @@ class _FilterRatingValue extends StatelessWidget {
       height: Dimensions.collectionFilterHexagonSize,
       rating: _rating,
       fontSize: Dimensions.smallFontSize,
-      hexColor: isSelected ? AppTheme.primaryColor : AppTheme.accentColor,
+      hexColor: isSelected ? AppColors.primaryColor : AppColors.accentColor,
     );
     final centeredBoardGameRatingHexagon = Center(
       child: boardGameRatingHexagon,
     );
 
     if (isSelected) {
-      final selectionContainer = RoundedContainer(child: centeredBoardGameRatingHexagon);
+      final selectionContainer = ElevatedContainer(
+        backgroundColor: AppColors.accentColor,
+        child: centeredBoardGameRatingHexagon,
+      );
 
       return Expanded(child: selectionContainer);
     }

@@ -2,6 +2,7 @@ import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -57,7 +58,7 @@ class PlayersPageState extends State<PlayersPage> {
                 ] else ...[
                   const SliverAppBar(
                     pinned: true,
-                    foregroundColor: AppTheme.accentColor,
+                    foregroundColor: AppColors.accentColor,
                   ),
                   const _NoPlayers(),
                 ]
@@ -70,7 +71,7 @@ class PlayersPageState extends State<PlayersPage> {
                   ? ElevatedIconButton(
                       title: AppText.playersPageDeletePlayersButtonText,
                       icon: const DefaultIcon(Icons.delete),
-                      color: AppTheme.redColor,
+                      color: AppColors.redColor,
                       onPressed: () async {
                         if (await _showDeletePlayersDialog(context) ?? false) {
                           setState(() {});
@@ -134,7 +135,7 @@ class PlayersPageState extends State<PlayersPage> {
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.playersViewModel.deleteSelectedPlayers();
                 if (!mounted) {
@@ -145,7 +146,7 @@ class PlayersPageState extends State<PlayersPage> {
               },
               child: const Text(
                 AppText.playersPageConfirmationDialogDeletePlayersButtonText,
-                style: TextStyle(color: AppTheme.defaultTextColor),
+                style: TextStyle(color: AppColors.defaultTextColor),
               ),
             ),
           ],
@@ -173,15 +174,15 @@ class _AppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
-      foregroundColor: AppTheme.accentColor,
+      foregroundColor: AppColors.accentColor,
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.edit, color: AppTheme.accentColor),
+          icon: const Icon(Icons.edit, color: AppColors.accentColor),
           onPressed: onToggleEditModeTap,
         ),
         IconButton(
-          icon: const Icon(Icons.search, color: AppTheme.accentColor),
+          icon: const Icon(Icons.search, color: AppColors.accentColor),
           onPressed: () async {
             await showSearch(
               context: context,
@@ -218,7 +219,7 @@ class _NoPlayers extends StatelessWidget {
             Icon(
               Icons.sentiment_dissatisfied_sharp,
               size: 80,
-              color: AppTheme.primaryColor,
+              color: AppColors.primaryColor,
             ),
             SizedBox(height: Dimensions.doubleStandardSpacing),
             Text(
@@ -300,8 +301,8 @@ class _PlayerState extends State<_Player> {
               height: 34,
               width: 34,
               child: Checkbox(
-                checkColor: AppTheme.accentColor,
-                activeColor: AppTheme.primaryColor.withOpacity(0.7),
+                checkColor: AppColors.accentColor,
+                activeColor: AppColors.primaryColor.withOpacity(0.7),
                 value: isChecked,
                 onChanged: (_) => _onTap(),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
@@ -29,7 +30,7 @@ class DetailsItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        splashColor: AppTheme.accentColor,
+        splashColor: AppColors.accentColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: Dimensions.standardSpacing,

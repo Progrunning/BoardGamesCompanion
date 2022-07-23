@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -133,13 +134,13 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.cancel, style: TextStyle(color: AppTheme.accentColor)),
+              child: const Text(AppText.cancel, style: TextStyle(color: AppColors.accentColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
                 if (!mounted) {
@@ -148,7 +149,8 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
 
                 Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
-              child: const Text(AppText.delete, style: TextStyle(color: AppTheme.defaultTextColor)),
+              child:
+                  const Text(AppText.delete, style: TextStyle(color: AppColors.defaultTextColor)),
             ),
           ],
         );
@@ -170,19 +172,19 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.cancel, style: TextStyle(color: AppTheme.accentColor)),
+              child: const Text(AppText.cancel, style: TextStyle(color: AppColors.accentColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
               child: const Text(
                 AppText.editPlaythroughPageUnsavedChangesActionButtonText,
-                style: TextStyle(color: AppTheme.defaultTextColor),
+                style: TextStyle(color: AppColors.defaultTextColor),
               ),
             ),
           ],
@@ -369,7 +371,7 @@ class _DurationState extends State<_Duration> {
                   onChanged: (num value) => _updateDurationHours(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
@@ -386,7 +388,7 @@ class _DurationState extends State<_Duration> {
                   onChanged: (num value) => _updateDurationMinutes(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
@@ -429,7 +431,7 @@ class _DurationState extends State<_Duration> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppTheme.accentColor,
+                  primary: AppColors.accentColor,
                 ),
           ),
           child: child!,
@@ -480,7 +482,7 @@ class _ActionButtons extends StatelessWidget {
           ElevatedIconButton(
             title: 'Delete',
             icon: const DefaultIcon(Icons.delete),
-            color: AppTheme.redColor,
+            color: AppColors.redColor,
             onPressed: onDelete,
           ),
           const Expanded(child: SizedBox.shrink()),
@@ -488,7 +490,7 @@ class _ActionButtons extends StatelessWidget {
             ElevatedIconButton(
               title: AppText.stop,
               icon: const DefaultIcon(Icons.stop),
-              color: AppTheme.blueColor,
+              color: AppColors.blueColor,
               onPressed: onStop,
             ),
             const SizedBox(width: Dimensions.standardSpacing),
@@ -496,7 +498,7 @@ class _ActionButtons extends StatelessWidget {
           ElevatedIconButton(
             title: 'Save',
             icon: const DefaultIcon(Icons.save),
-            color: AppTheme.accentColor,
+            color: AppColors.accentColor,
             onPressed: onSave,
           ),
         ],

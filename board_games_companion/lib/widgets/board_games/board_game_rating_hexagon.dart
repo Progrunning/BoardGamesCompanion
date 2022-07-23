@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_polygon/flutter_polygon.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
@@ -13,8 +13,8 @@ class BoardGameRatingHexagon extends StatelessWidget {
       double width = Dimensions.boardGameDetailsHexagonSize,
       double height = Dimensions.boardGameDetailsHexagonSize,
       double fontSize = Dimensions.boardGameDetailsHexagonFontSize,
-      Color fontColor = AppTheme.defaultTextColor,
-      Color hexColor = AppTheme.accentColor,
+      Color fontColor = AppColors.defaultTextColor,
+      Color hexColor = AppColors.accentColor,
       int hexColorOpacity = Styles.opacity90Percent})
       : _rating = rating,
         _width = width,

@@ -1,8 +1,9 @@
 import 'package:basics/string_basics.dart';
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/app_colors.dart';
 
 class LoadingOverlay extends StatelessWidget {
   const LoadingOverlay({
@@ -20,7 +21,7 @@ class LoadingOverlay extends StatelessWidget {
       children: [
         child,
         Container(
-          color: AppTheme.blackColor.withOpacity(0.7),
+          color: AppColors.blackColor.withOpacity(0.7),
           // TODO Add fade-in & out animation
           child: Column(
             children: [

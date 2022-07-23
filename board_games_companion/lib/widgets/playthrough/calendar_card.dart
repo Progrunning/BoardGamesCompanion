@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
@@ -31,7 +32,7 @@ class CalendarCard extends StatelessWidget {
         ],
       ),
       child: RippleEffect(
-        backgroundColor: AppTheme.whiteColor,
+        backgroundColor: AppColors.whiteColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(Styles.boardGameTileImageCircularRadius),
         ),
@@ -41,7 +42,7 @@ class CalendarCard extends StatelessWidget {
           children: <Widget>[
             Container(
               decoration: const BoxDecoration(
-                color: AppTheme.accentColor,
+                color: AppColors.accentColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(Styles.boardGameTileImageCircularRadius),
                   topRight: Radius.circular(Styles.boardGameTileImageCircularRadius),
@@ -52,7 +53,7 @@ class CalendarCard extends StatelessWidget {
                 child: Text(
                   _date.toShortMonth('-'),
                   style: const TextStyle(
-                    color: AppTheme.defaultTextColor,
+                    color: AppColors.defaultTextColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -64,7 +65,7 @@ class CalendarCard extends StatelessWidget {
                 child: Text(
                   _date?.day.toString() ?? '-',
                   style: const TextStyle(
-                      color: AppTheme.invertedTextColor,
+                      color: AppColors.invertedTextColor,
                       fontWeight: FontWeight.bold,
                       fontSize: Dimensions.doubleExtraLargeFontSize),
                 ),
@@ -85,7 +86,7 @@ class CalendarCard extends StatelessWidget {
               _date.toShortWeek('-'),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: AppTheme.invertedTextColor,
+                color: AppColors.invertedTextColor,
               ),
             ),
           ],

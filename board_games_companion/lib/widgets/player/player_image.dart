@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/constants.dart';
 import '../../common/styles.dart';
 
@@ -94,7 +94,7 @@ class _Placeholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.primaryColor,
+        color: AppColors.primaryColor,
         borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
       ),
     );

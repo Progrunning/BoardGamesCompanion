@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -111,7 +112,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                                             CustomIconButton(
                                               const Icon(
                                                 Icons.filter,
-                                                color: AppTheme.defaultTextColor,
+                                                color: AppColors.defaultTextColor,
                                               ),
                                               onTap: () => _handleImagePicking(player),
                                             ),
@@ -121,7 +122,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                                             CustomIconButton(
                                               const Icon(
                                                 Icons.camera,
-                                                color: AppTheme.defaultTextColor,
+                                                color: AppColors.defaultTextColor,
                                               ),
                                               onTap: () => _handleTakingPicture(player),
                                             ),
@@ -234,7 +235,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                   },
                 ),
                 TextButton(
-                  style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+                  style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
                   onPressed: () async {
                     widget.playersViewModel.player!.avatarImageUri =
                         widget.playersViewModel.player!.avatarImageUri;
@@ -246,7 +247,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                   },
                   child: const Text(
                     'Navigate away',
-                    style: TextStyle(color: AppTheme.defaultTextColor),
+                    style: TextStyle(color: AppColors.defaultTextColor),
                   ),
                 ),
               ],
@@ -296,7 +297,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.playersViewModel.deletePlayers([player.id]);
                 if (!mounted) {
@@ -307,7 +308,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
               },
               child: const Text(
                 'Delete',
-                style: TextStyle(color: AppTheme.defaultTextColor),
+                style: TextStyle(color: AppColors.defaultTextColor),
               ),
             ),
           ],

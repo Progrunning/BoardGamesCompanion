@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 
 class StarRating extends StatelessWidget {
   const StarRating({
@@ -22,7 +22,7 @@ class StarRating extends StatelessWidget {
       icon = Icon(
         Icons.star_border,
         size: size,
-        color: AppTheme.accentColor,
+        color: AppColors.accentColor,
       );
     } else if (index > rating - 1 && index < rating) {
       icon = Icon(

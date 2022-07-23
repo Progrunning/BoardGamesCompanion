@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 
@@ -23,14 +23,14 @@ class RankRibbon extends StatelessWidget {
           'assets/icons/rank_ribbon.svg',
           height: 34,
           width: 26,
-          color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+          color: AppColors.accentColor.withAlpha(Styles.opacity70Percent),
         ),
         Positioned.fill(
           child: Center(
             child: Text(
               '#${_rank.toString()}',
               style: const TextStyle(
-                color: AppTheme.defaultTextColor,
+                color: AppColors.defaultTextColor,
                 fontSize: Dimensions.smallFontSize,
               ),
             ),

@@ -4,7 +4,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
@@ -86,7 +86,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
         ),
         bottomNavigationBar: ConvexAppBar(
           controller: tabController,
-          backgroundColor: AppTheme.bottomTabBackgroundColor,
+          backgroundColor: AppColors.bottomTabBackgroundColor,
           top: -Dimensions.bottomTabTopHeight,
           items: const <TabItem>[
             TabItem<BottomTabIcon>(
@@ -106,8 +106,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             ),
           ],
           initialActiveIndex: _initialTabIndex,
-          activeColor: AppTheme.accentColor,
-          color: AppTheme.inactiveBottomTabColor,
+          activeColor: AppColors.accentColor,
+          color: AppColors.inactiveBottomTabColor,
         ),
       ),
     );

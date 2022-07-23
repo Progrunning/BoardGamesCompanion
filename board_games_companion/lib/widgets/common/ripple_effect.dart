@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/styles.dart';
 
 class RippleEffect extends StatelessWidget {
@@ -31,7 +31,7 @@ class RippleEffect extends StatelessWidget {
       elevation: elevation ?? 0,
       child: InkWell(
         highlightColor: highlightColor,
-        splashColor: splashColor ?? AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+        splashColor: splashColor ?? AppColors.accentColor.withAlpha(Styles.opacity70Percent),
         borderRadius: borderRadius,
         onTap: onTap,
         child: child,

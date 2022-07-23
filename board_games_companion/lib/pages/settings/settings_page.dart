@@ -2,6 +2,7 @@ import 'package:board_games_companion/widgets/common/page_container_widget.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -129,7 +130,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                     ElevatedIconButton(
                       title: 'Remove',
                       icon: const DefaultIcon(Icons.remove_circle_outline),
-                      color: AppTheme.redColor,
+                      color: AppColors.redColor,
                       onPressed: () async => _showRemoveBggUserDialog(context, userStore),
                     ),
                     const SizedBox(width: Dimensions.standardSpacing),
@@ -160,14 +161,14 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
             TextButton(
               child: const Text(
                 AppText.cancel,
-                style: TextStyle(color: AppTheme.accentColor),
+                style: TextStyle(color: AppColors.accentColor),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 final boardGameStore = Provider.of<BoardGamesStore>(
                   context,
@@ -185,7 +186,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
               },
               child: const Text(
                 'Remove',
-                style: TextStyle(color: AppTheme.defaultTextColor),
+                style: TextStyle(color: AppColors.defaultTextColor),
               ),
             ),
           ],

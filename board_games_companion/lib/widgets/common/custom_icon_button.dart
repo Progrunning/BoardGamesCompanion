@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 
@@ -29,7 +29,7 @@ class CustomIconButton extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
             decoration: BoxDecoration(
-              color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+              color: AppColors.accentColor.withAlpha(Styles.opacity70Percent),
             ),
             child: icon,
           ),
