@@ -15,7 +15,6 @@ import '../../models/hive/board_game_details.dart';
 import '../../stores/board_games_store.dart';
 
 enum CollectionState {
-  emptySearchResult,
   emptyCollection,
   collection,
 }
@@ -28,8 +27,6 @@ class GamesViewModel with ChangeNotifier {
 
   final BoardGamesStore _boardGamesStore;
   final BoardGamesFiltersStore _boardGamesFiltersStore;
-
-  String? _searchPhrase;
 
   final Map<String, BoardGameDetails> _mainBoardGameByExpansionId = {};
   Map<String, BoardGameDetails> _filteredBoardGames = {};
@@ -46,10 +43,6 @@ class GamesViewModel with ChangeNotifier {
 
   CollectionState get collectionSate {
     if (!anyBoardGamesInSelectedCollection) {
-      if (!isSearchPhraseEmpty) {
-        return CollectionState.emptySearchResult;
-      }
-
       return CollectionState.emptyCollection;
     }
 
@@ -57,10 +50,6 @@ class GamesViewModel with ChangeNotifier {
   }
 
   GamesTab _selectedTab = GamesTab.owned;
-
-  String? get searchPhrase => _searchPhrase;
-
-  bool get isSearchPhraseEmpty => _searchPhrase?.isEmpty ?? true;
 
   List<BoardGameDetails> get boardGamesInSelectedCollection {
     switch (selectedTab) {
@@ -137,29 +126,6 @@ class GamesViewModel with ChangeNotifier {
     }
 
     _loadDataState = LoadDataState.loaded;
-    notifyListeners();
-  }
-
-  void updateSearchResults(String searchPhrase) {
-    if (searchPhrase.isEmpty == true && _searchPhrase?.isEmpty == true) {
-      return;
-    }
-
-    _searchPhrase = searchPhrase;
-
-    if (searchPhrase.isEmpty) {
-      applyFilters();
-      return;
-    }
-
-    final searchPhraseLowerCase = searchPhrase.toLowerCase();
-
-    _filteredBoardGames = {
-      for (var boardGameDetails in _boardGamesStore.allBoardGames.where((boardGameDetails) =>
-          boardGameDetails.name.toLowerCase().contains(searchPhraseLowerCase)))
-        boardGameDetails.id: boardGameDetails
-    };
-
     notifyListeners();
   }
 

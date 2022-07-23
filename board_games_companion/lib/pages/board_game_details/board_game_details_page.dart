@@ -789,9 +789,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
                 title: '${boardGameDetails!.minPlayers} - ${boardGameDetails!.maxPlayers} Players',
               ),
             ),
-            const SizedBox(
-              width: Dimensions.standardSpacing,
-            ),
+            const SizedBox(width: Dimensions.standardSpacing),
             Flexible(
               child: _InfoPanel(
                 title: '${boardGameDetails!.playtimeFormatted} Min',

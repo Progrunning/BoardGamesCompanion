@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/models/navigation/board_game_details_page_arguments.dart';
+import 'package:board_games_companion/pages/board_game_details/board_game_details_page.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,6 @@ import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../stores/user_store.dart';
-import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
@@ -121,13 +122,7 @@ class _Collection extends StatelessWidget {
             topTabController: topTabController,
             analyticsService: analyticsService,
             rateAndReviewService: rateAndReviewService,
-            updateSearchResults: (String searchPhrase) => _updateSearchResults(searchPhrase),
           ),
-          if (viewModel.collectionSate == CollectionState.emptySearchResult)
-            _EmptySearchResult(
-              viewModel: viewModel,
-              onClearSearch: () => _updateSearchResults(''),
-            ),
           if (viewModel.collectionSate == CollectionState.emptyCollection)
             _EmptyCollection(gamesViewModel: viewModel),
           if (viewModel.collectionSate == CollectionState.collection) ...[
@@ -142,7 +137,6 @@ class _Collection extends StatelessWidget {
               ),
               _Grid(
                 boardGames: viewModel.mainGamesInCollections,
-                collectionType: viewModel.selectedTab.toCollectionType(),
                 analyticsService: analyticsService,
               ),
             ],
@@ -158,7 +152,6 @@ class _Collection extends StatelessWidget {
                 ),
                 _Grid(
                   boardGames: expansionsMapEntry.value,
-                  collectionType: viewModel.selectedTab.toCollectionType(),
                   analyticsService: analyticsService,
                 ),
               ]
@@ -169,12 +162,6 @@ class _Collection extends StatelessWidget {
       ),
     );
   }
-
-  Future<void> _updateSearchResults(String searchPhrase) async {
-    viewModel.updateSearchResults(searchPhrase);
-
-    await rateAndReviewService.increaseNumberOfSignificantActions();
-  }
 }
 
 class _AppBar extends StatefulWidget {
@@ -183,7 +170,6 @@ class _AppBar extends StatefulWidget {
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
-    required this.updateSearchResults,
     Key? key,
   }) : super(key: key);
 
@@ -191,135 +177,81 @@ class _AppBar extends StatefulWidget {
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
-  final Future Function(String) updateSearchResults;
 
   @override
   _AppBarState createState() => _AppBarState();
 }
 
 class _AppBarState extends State<_AppBar> {
-  late TextEditingController _searchController;
-  late FocusNode _searchFocusNode;
-
-  Timer? _debounce;
-
   @override
-  void initState() {
-    super.initState();
-
-    _searchController = TextEditingController();
-    _searchController.addListener(_handleSearchChanged);
-
-    _searchFocusNode = FocusNode();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.viewModel.searchPhrase?.isEmpty ?? true) {
-      _searchController.text = '';
-    }
-
-    return SliverAppBar(
-      pinned: false,
-      floating: true,
-      elevation: 0,
-      titleSpacing: Dimensions.standardSpacing,
-      foregroundColor: AppTheme.accentColor,
-      title: const Text(
-        AppText.collectionsPageTitle,
-        style: TextStyle(color: AppTheme.whiteColor),
-      ),
-      // title: TextField(
-      //   autofocus: false,
-      //   focusNode: _searchFocusNode,
-      //   controller: _searchController,
-      //   textAlignVertical: TextAlignVertical.center,
-      //   textInputAction: TextInputAction.search,
-      //   style: AppTheme.defaultTextFieldStyle,
-      //   decoration: InputDecoration(
-      //     hintText: 'Search for a game...',
-      //     suffixIcon: (widget.viewModel.searchPhrase?.isNotEmpty ?? false)
-      //         ? IconButton(
-      //             icon: const Icon(
-      //               Icons.clear,
-      //             ),
-      //             color: AppTheme.accentColor,
-      //             onPressed: () async {
-      //               _searchController.text = '';
-      //               await widget.updateSearchResults('');
-      //             },
-      //           )
-      //         : const Icon(Icons.search, color: AppTheme.accentColor),
-      //     enabledBorder: const UnderlineInputBorder(
-      //       borderSide: BorderSide(color: AppTheme.primaryColorLight),
-      //     ),
-      //   ),
-      //   onSubmitted: (searchPhrase) async {
-      //     _debounce?.cancel();
-      //     if (widget.viewModel.searchPhrase != _searchController.text) {
-      //       await widget.updateSearchResults(_searchController.text);
-      //     }
-      //     _searchFocusNode.unfocus();
-      //   },
-      // ),
-      actions: <Widget>[
-        IconButton(
-            onPressed: () async {
-              await showSearch(
-                context: context,
-                delegate: _CollectionsSearch(
-                  boardGames: widget.viewModel.allBoardGames,
-                  onResultTap: (BoardGameDetails selectedBoardGame) {},
-                ),
+  Widget build(BuildContext context) => SliverAppBar(
+        pinned: false,
+        floating: true,
+        elevation: 0,
+        titleSpacing: Dimensions.standardSpacing,
+        foregroundColor: AppTheme.accentColor,
+        title: const Text(
+          AppText.collectionsPageTitle,
+          style: TextStyle(color: AppTheme.whiteColor),
+        ),
+        actions: <Widget>[
+          IconButton(
+              onPressed: () async {
+                await widget.rateAndReviewService.increaseNumberOfSignificantActions();
+                await showSearch(
+                  context: context,
+                  delegate: _CollectionsSearch(
+                    boardGames: widget.viewModel.allBoardGames,
+                    onResultTap: (BoardGameDetails selectedBoardGame) {},
+                  ),
+                );
+              },
+              icon: const Icon(Icons.search)),
+          Consumer<BoardGamesFiltersStore>(
+            builder: (_, boardGamesFiltersStore, __) {
+              return IconButton(
+                icon: boardGamesFiltersStore.anyFiltersApplied
+                    ? const Icon(Icons.filter_alt_rounded, color: AppTheme.accentColor)
+                    : const Icon(Icons.filter_alt_outlined, color: AppTheme.accentColor),
+                onPressed: widget.viewModel.anyBoardGames
+                    ? () async {
+                        await _openFiltersPanel(context);
+                        await widget.analyticsService.logEvent(name: Analytics.filterCollection);
+                        await widget.rateAndReviewService.increaseNumberOfSignificantActions();
+                      }
+                    : null,
               );
             },
-            icon: const Icon(Icons.search)),
-        Consumer<BoardGamesFiltersStore>(
-          builder: (_, boardGamesFiltersStore, __) {
-            return IconButton(
-              icon: boardGamesFiltersStore.anyFiltersApplied
-                  ? const Icon(Icons.filter_alt_rounded, color: AppTheme.accentColor)
-                  : const Icon(Icons.filter_alt_outlined, color: AppTheme.accentColor),
-              onPressed: widget.viewModel.anyBoardGames
-                  ? () async {
-                      await _openFiltersPanel(context);
-                      await widget.analyticsService.logEvent(name: Analytics.filterCollection);
-                      await widget.rateAndReviewService.increaseNumberOfSignificantActions();
-                    }
-                  : null,
-            );
-          },
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(74),
+          child: TabBar(
+            onTap: (int index) {
+              widget.viewModel.selectedTab = index.toGamesTab();
+            },
+            controller: widget.topTabController,
+            tabs: <Widget>[
+              _TopTab(
+                'Owned',
+                Icons.grid_on,
+                isSelected: widget.viewModel.selectedTab == GamesTab.owned,
+              ),
+              _TopTab(
+                'Friends',
+                Icons.group,
+                isSelected: widget.viewModel.selectedTab == GamesTab.friends,
+              ),
+              _TopTab(
+                'Wishlist',
+                Icons.card_giftcard,
+                isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
+              ),
+            ],
+            indicatorColor: AppTheme.accentColor,
+          ),
         ),
-      ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(74),
-        child: TabBar(
-          onTap: (int index) {
-            widget.viewModel.selectedTab = index.toGamesTab();
-          },
-          controller: widget.topTabController,
-          tabs: <Widget>[
-            _TopTab(
-              'Owned',
-              Icons.grid_on,
-              isSelected: widget.viewModel.selectedTab == GamesTab.owned,
-            ),
-            _TopTab(
-              'Friends',
-              Icons.group,
-              isSelected: widget.viewModel.selectedTab == GamesTab.friends,
-            ),
-            _TopTab(
-              'Wishlist',
-              Icons.card_giftcard,
-              isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
-            ),
-          ],
-          indicatorColor: AppTheme.accentColor,
-        ),
-      ),
-    );
-  }
+      );
 
   Future<void> _openFiltersPanel(BuildContext context) async {
     await showModalBottomSheet<Widget>(
@@ -335,29 +267,6 @@ class _AppBarState extends State<_AppBar> {
         return const GamesFilterPanel();
       },
     );
-
-    _searchFocusNode.unfocus();
-  }
-
-  void _handleSearchChanged() {
-    if (_debounce?.isActive ?? false) {
-      _debounce!.cancel();
-    }
-
-    _debounce = Timer(
-      const Duration(milliseconds: 500),
-      () => widget.updateSearchResults(_searchController.text),
-    );
-  }
-
-  @override
-  void dispose() {
-    _searchController.removeListener(_handleSearchChanged);
-    _searchController.dispose();
-    _searchFocusNode.dispose();
-    _debounce?.cancel();
-
-    super.dispose();
   }
 }
 
@@ -365,12 +274,10 @@ class _Grid extends StatelessWidget {
   const _Grid({
     Key? key,
     required this.boardGames,
-    required this.collectionType,
     required this.analyticsService,
   }) : super(key: key);
 
   final List<BoardGameDetails> boardGames;
-  final CollectionType collectionType;
   final AnalyticsService analyticsService;
 
   @override
@@ -384,15 +291,16 @@ class _Grid extends StatelessWidget {
         children: [
           for (var boardGame in boardGames)
             BoardGameTile(
-              boardGame: boardGame,
-              onTap: () async {
-                await Navigator.pushNamed(
-                  context,
-                  PlaythroughsPage.pageRoute,
-                  arguments: PlaythroughsPageArguments(boardGame, collectionType),
-                );
-              },
-              heroTag: '${AnimationTags.boardGamePlaythroughImageHeroTag}_$collectionType',
+              id: boardGame.id,
+              name: boardGame.name,
+              imageUrl: boardGame.thumbnailUrl ?? '',
+              rank: boardGame.rank,
+              onTap: () => Navigator.pushNamed(
+                context,
+                PlaythroughsPage.pageRoute,
+                arguments: PlaythroughsPageArguments(boardGame),
+              ),
+              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
             )
         ],
       ),
@@ -504,60 +412,6 @@ class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _EmptySearchResult extends StatelessWidget {
-  const _EmptySearchResult({
-    required this.viewModel,
-    required this.onClearSearch,
-    Key? key,
-  }) : super(key: key);
-
-  final GamesViewModel viewModel;
-  final VoidCallback onClearSearch;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverFillRemaining(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.doubleStandardSpacing,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text.rich(
-              TextSpan(
-                children: [
-                  const TextSpan(
-                    text:
-                        '''It looks like you don't have any board games in your collection that match the search phrase ''',
-                  ),
-                  TextSpan(
-                    text: viewModel.searchPhrase,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.justify,
-            ),
-            const SizedBox(
-              height: Dimensions.standardSpacing,
-            ),
-            Center(
-              child: ElevatedIconButton(
-                title: 'Clear search',
-                icon: const DefaultIcon(Icons.clear),
-                onPressed: onClearSearch,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -730,25 +584,7 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
       return _NoSearchResults(query: query, onClear: () => query = '');
     }
 
-    return ListView.separated(
-      itemCount: filteredGames.length,
-      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
-      itemBuilder: (_, index) {
-        final boardGame = filteredGames[index];
-        return Material(
-          child: Row(
-            children: [
-              SizedBox(
-                height: 100,
-                width: 100,
-                child: BoardGameImage(boardGame),
-              ),
-              Text(boardGame.name),
-            ],
-          ),
-        );
-      },
-    );
+    return _SearchResults(filteredGames: filteredGames);
   }
 
   @override
@@ -786,6 +622,160 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   }
 }
 
+class _SearchResults extends StatelessWidget {
+  const _SearchResults({
+    Key? key,
+    required this.filteredGames,
+  }) : super(key: key);
+
+  final List<BoardGameDetails> filteredGames;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: filteredGames.length,
+      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
+      itemBuilder: (_, index) {
+        return _SearchResultGame(
+          filteredGames: filteredGames,
+          boardGame: filteredGames[index],
+          isFirstItem: index == 0,
+          isLastItem: index == filteredGames.length - 1,
+        );
+      },
+    );
+  }
+}
+
+class _SearchResultGame extends StatelessWidget {
+  const _SearchResultGame({
+    Key? key,
+    required this.filteredGames,
+    required this.boardGame,
+    required this.isFirstItem,
+    required this.isLastItem,
+  }) : super(key: key);
+
+  final List<BoardGameDetails> filteredGames;
+  final BoardGameDetails boardGame;
+  final bool isFirstItem;
+  final bool isLastItem;
+
+  static const double _gameStatIconSize = 16;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: isFirstItem ? Dimensions.standardSpacing : 0,
+        bottom: isLastItem ? Dimensions.standardSpacing : 0,
+        left: Dimensions.standardSpacing,
+        right: Dimensions.standardSpacing,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: Dimensions.collectionSearchResultBoardGameImageHeight,
+            width: Dimensions.collectionSearchResultBoardGameImageWidth,
+            child: BoardGameTile(
+              id: boardGame.id,
+              imageUrl: boardGame.thumbnailUrl ?? '',
+              heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
+            ),
+          ),
+          const SizedBox(width: Dimensions.standardSpacing),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  boardGame.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.titleTextStyle,
+                ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
+                _SearchResultGameGeneralStat(
+                  icon: const Icon(Icons.people, size: _gameStatIconSize),
+                  statistic: sprintf(
+                    AppText.gamesPageSearchResultPlayersNumberGameStatFormat,
+                    [boardGame.minPlayers, boardGame.maxPlayers],
+                  ),
+                ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
+                _SearchResultGameGeneralStat(
+                  icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
+                  statistic: sprintf(
+                    AppText.gamesPageSearchResultPlaytimeGameStatFormat,
+                    [boardGame.playtimeFormatted],
+                  ),
+                ),
+                if (boardGame.avgWeight != null) ...[
+                  const SizedBox(height: Dimensions.halfStandardSpacing),
+                  _SearchResultGameGeneralStat(
+                    icon: const Icon(Icons.scale, size: _gameStatIconSize),
+                    statistic: sprintf(
+                      AppText.gamesPageSearchResultComplexityGameStatFormat,
+                      [boardGame.avgWeight!.toStringAsFixed(2)],
+                    ),
+                  ),
+                ]
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.info),
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  BoardGamesDetailsPage.pageRoute,
+                  arguments: BoardGameDetailsPageArguments(boardGame.id, boardGame.name, GamesPage),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.casino),
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  PlaythroughsPage.pageRoute,
+                  arguments: PlaythroughsPageArguments(boardGame),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _SearchResultGameGeneralStat extends StatelessWidget {
+  const _SearchResultGameGeneralStat({
+    Key? key,
+    required this.icon,
+    required this.statistic,
+  }) : super(key: key);
+
+  final Icon icon;
+  final String statistic;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        icon,
+        const SizedBox(width: Dimensions.halfStandardSpacing),
+        Text(
+          statistic,
+          overflow: TextOverflow.ellipsis,
+          style: AppTheme.subTitleTextStyle.copyWith(color: AppTheme.whiteColor),
+        ),
+      ],
+    );
+  }
+}
+
 class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({
     Key? key,
@@ -804,8 +794,7 @@ class _NoSearchResults extends StatelessWidget {
         Text.rich(
           TextSpan(
             children: [
-              // TODO Update copy
-              const TextSpan(text: AppText.playerPageSearchNoSearchResults),
+              const TextSpan(text: AppText.gamesPageSearchNoSearchResults),
               TextSpan(
                 text: query,
                 style: const TextStyle(fontWeight: FontWeight.bold),
@@ -817,8 +806,7 @@ class _NoSearchResults extends StatelessWidget {
         const SizedBox(height: Dimensions.standardSpacing),
         Center(
           child: ElevatedIconButton(
-            // TODO Update copy
-            title: AppText.playerPageSearchClearSaerch,
+            title: AppText.gamesPageSearchClearSaerch,
             icon: const DefaultIcon(Icons.clear),
             onPressed: onClear,
           ),

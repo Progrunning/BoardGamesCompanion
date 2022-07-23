@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/collection_type.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
@@ -27,7 +26,6 @@ class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
     required this.viewModel,
     required this.boardGameDetails,
-    required this.collectionType,
     Key? key,
   }) : super(key: key);
 
@@ -35,7 +33,6 @@ class PlaythroughsPage extends StatefulWidget {
 
   final PlaythroughsViewModel viewModel;
   final BoardGameDetails boardGameDetails;
-  final CollectionType collectionType;
 
   @override
   PlaythroughsPageState createState() => PlaythroughsPageState();
@@ -92,7 +89,6 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
             children: <Widget>[
               PlaythroughStatistcsPage(
                 playthroughStatisticsStore: widget.viewModel.playthroughStatisticsStore,
-                collectionType: widget.collectionType,
               ),
               PlaythroughsHistoryPage(playthroughsStore: widget.viewModel.playthroughsStore),
               PlaythroughsLogGamePage(

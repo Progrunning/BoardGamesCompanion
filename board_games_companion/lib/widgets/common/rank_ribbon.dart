@@ -7,8 +7,8 @@ import '../../common/dimensions.dart';
 import '../../common/styles.dart';
 
 class RankRibbon extends StatelessWidget {
-  const RankRibbon(
-    num rank, {
+  const RankRibbon({
+    required num rank,
     Key? key,
   })  : _rank = rank,
         super(key: key);

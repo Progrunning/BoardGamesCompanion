@@ -446,7 +446,10 @@ class _HotBoardGames extends StatelessWidget {
                   (int index) {
                     final BoardGame boardGame = boardGames[index];
                     return BoardGameTile(
-                      boardGame: boardGame,
+                      id: boardGame.id,
+                      name: boardGame.name,
+                      imageUrl: boardGame.thumbnailUrl ?? '',
+                      rank: boardGame.rank,
                       onTap: () async => _navigateToBoardGameDetails(boardGame, context),
                     );
                   },

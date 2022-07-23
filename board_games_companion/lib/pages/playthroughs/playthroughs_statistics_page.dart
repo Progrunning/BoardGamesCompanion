@@ -11,7 +11,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/collection_type.dart';
 import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
@@ -28,12 +27,10 @@ import '../../widgets/playthrough/player_score_rank_avatar.dart';
 class PlaythroughStatistcsPage extends StatefulWidget {
   const PlaythroughStatistcsPage({
     required this.playthroughStatisticsStore,
-    required this.collectionType,
     Key? key,
   }) : super(key: key);
 
   final PlaythroughStatisticsStore playthroughStatisticsStore;
-  final CollectionType collectionType;
 
   @override
   PlaythroughStatistcsPageState createState() => PlaythroughStatistcsPageState();
@@ -60,8 +57,7 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                       background: BoardGameImage(
                         store.boardGame,
                         minImageHeight: Constants.boardGameDetailsImageHeight,
-                        heroTag:
-                            '${AnimationTags.boardGamePlaythroughImageHeroTag}_${widget.collectionType}',
+                        heroTag: AnimationTags.boardGamePlaythroughImageHeroTag,
                       ),
                     ),
                   ),

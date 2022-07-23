@@ -118,7 +118,6 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           return PlaythroughsPage(
             viewModel: viewModel,
             boardGameDetails: arguments.boardGameDetails,
-            collectionType: arguments.collectionType,
           );
         },
         EditPlaythoughPage.pageRoute: (BuildContext context) {

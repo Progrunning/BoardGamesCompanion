@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -6,19 +7,24 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/styles.dart';
-import '../../models/hive/base_board_game.dart';
 import '../common/rank_ribbon.dart';
 import '../common/ripple_effect.dart';
 
 class BoardGameTile extends StatefulWidget {
   const BoardGameTile({
     Key? key,
-    required this.boardGame,
+    required this.id,
+    required this.imageUrl,
+    this.name,
+    this.rank,
     this.onTap,
     this.heroTag = AnimationTags.boardGameDetalsImageHeroTag,
   }) : super(key: key);
 
-  final BaseBoardGame boardGame;
+  final String id;
+  final String imageUrl;
+  final String? name;
+  final int? rank;
   final Future<void> Function()? onTap;
   final String heroTag;
 
@@ -32,9 +38,9 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
     return Stack(
       children: <Widget>[
         Hero(
-          tag: '${widget.heroTag}${widget.boardGame.id}',
+          tag: '${widget.heroTag}${widget.id}',
           child: CachedNetworkImage(
-            imageUrl: widget.boardGame.thumbnailUrl ?? '',
+            imageUrl: widget.imageUrl,
             imageBuilder: (context, imageProvider) => Padding(
               padding: const EdgeInsets.only(
                 right: Dimensions.halfStandardSpacing,
@@ -44,10 +50,7 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
                 decoration: BoxDecoration(
                   boxShadow: const <BoxShadow>[AppTheme.defaultBoxShadow],
                   borderRadius: AppTheme.defaultBoxRadius,
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
             ),
@@ -71,40 +74,12 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: Dimensions.standardSpacing,
-            left: Dimensions.halfStandardSpacing,
-            right: Dimensions.standardSpacing,
-          ),
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(Styles.defaultCornerRadius),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-                child: Text(
-                  widget.boardGame.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: AppTheme.defaultTextColor,
-                    fontSize: Dimensions.smallFontSize,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        if (widget.boardGame.rank != null && widget.boardGame.rank! < Constants.top100)
+        if (widget.name.isNotNullOrBlank) _Name(name: widget.name!),
+        if (widget.rank != null && widget.rank! < Constants.top100)
           Positioned(
             top: 0,
             right: 12,
-            child: RankRibbon(widget.boardGame.rank!),
+            child: RankRibbon(rank: widget.rank!),
           ),
         Positioned.fill(
           child: Padding(
@@ -112,19 +87,52 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
               right: Dimensions.halfStandardSpacing,
               bottom: Dimensions.halfStandardSpacing,
             ),
-            child: RippleEffect(
-              borderRadius: AppTheme.defaultBoxRadius,
-              onTap: () async {
-                if (widget.onTap == null) {
-                  return;
-                }
-
-                await widget.onTap!();
-              },
-            ),
+            child: RippleEffect(borderRadius: AppTheme.defaultBoxRadius, onTap: widget.onTap),
           ),
         )
       ],
+    );
+  }
+}
+
+class _Name extends StatelessWidget {
+  const _Name({
+    Key? key,
+    required this.name,
+  }) : super(key: key);
+
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: Dimensions.standardSpacing,
+        left: Dimensions.halfStandardSpacing,
+        right: Dimensions.standardSpacing,
+      ),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(Styles.defaultCornerRadius),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppTheme.defaultTextColor,
+                fontSize: Dimensions.smallFontSize,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

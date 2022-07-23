@@ -20,6 +20,9 @@ class Dimensions {
   static const double boardGameItemCollectionImageWidth = 150;
   static const double boardGameItemCollectionImageHeight = 150;
 
+  static const double collectionSearchResultBoardGameImageHeight = 100;
+  static const double collectionSearchResultBoardGameImageWidth = 100;
+
   static const double boardGameRemoveIconSize = 40;
 
   static const double boardGameDetailsLinkIconSize = 40;

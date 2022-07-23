@@ -117,6 +117,12 @@ class AppText {
   static const playerPageSearchHintText = 'Search for players...';
 
   static const collectionsSearchHintText = 'Search your collection...';
+  static const gamesPageSearchNoSearchResults =
+      '''It looks there's no games in your collections that match the search phrase ''';
+  static const gamesPageSearchClearSaerch = 'Clear search';
+  static const gamesPageSearchResultPlayersNumberGameStatFormat = '%i - %i players';
+  static const gamesPageSearchResultPlaytimeGameStatFormat = '%s min';
+  static const gamesPageSearchResultComplexityGameStatFormat = '%s (complexity rating)';
 
   static const aboutPageTitle = 'About';
   static const collectionsPageTitle = 'Collections';
