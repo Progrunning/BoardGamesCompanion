@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/models/navigation/board_game_details_page_arguments.dart';
-import 'package:board_games_companion/pages/board_game_details/board_game_details_page.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +16,8 @@ import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../common/enums/enums.dart';
 import '../../common/enums/games_tab.dart';
-import '../../common/styles.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
@@ -34,10 +32,18 @@ import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/elevated_container.dart';
+import '../board_game_details/board_game_details_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'games_filter_panel.dart';
 
-typedef BoardGameResultTapped = void Function(BoardGameDetails boardGame);
+enum BoardGameResultActionType {
+  details,
+  playthroughs,
+  update,
+}
+
+typedef BoardGameResultAction = void Function(
+    BoardGameDetails boardGame, BoardGameResultActionType actionType);
 
 class GamesPage extends StatefulWidget {
   const GamesPage(
@@ -144,7 +150,8 @@ class _Collection extends StatelessWidget {
               ),
             ],
             if (viewModel.hasAnyExpansionsInSelectedCollection) ...[
-              for (var expansionsMapEntry in viewModel.expansionGroupedByMainGame.entries) ...[
+              for (var expansionsMapEntry
+                  in viewModel.expansionsInSelectedCollectionGroupedByMainGame.entries) ...[
                 SliverPersistentHeader(
                   delegate: BgcSliverHeaderDelegate(
                     title: sprintf(
@@ -205,7 +212,8 @@ class _AppBarState extends State<_AppBar> {
                   context: context,
                   delegate: _CollectionsSearch(
                     boardGames: widget.viewModel.allBoardGames,
-                    onResultTap: (BoardGameDetails selectedBoardGame) {},
+                    expansionsGroupedByMainGame: widget.viewModel.expansionsGroupedByMainGame,
+                    onResultAction: _handleSearchResultAction,
                   ),
                 );
               },
@@ -261,8 +269,8 @@ class _AppBarState extends State<_AppBar> {
       backgroundColor: AppColors.primaryColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(Styles.defaultBottomSheetCornerRadius),
-          topRight: Radius.circular(Styles.defaultBottomSheetCornerRadius),
+          topLeft: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
+          topRight: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
         ),
       ),
       context: context,
@@ -270,6 +278,29 @@ class _AppBarState extends State<_AppBar> {
         return const GamesFilterPanel();
       },
     );
+  }
+
+  Future<void> _handleSearchResultAction(
+      BoardGameDetails boardGame, BoardGameResultActionType actionType) async {
+    switch (actionType) {
+      case BoardGameResultActionType.update:
+        await widget.viewModel.updateBoardGameDetails(boardGame.id);
+        break;
+      case BoardGameResultActionType.details:
+        unawaited(Navigator.pushNamed(
+          context,
+          BoardGamesDetailsPage.pageRoute,
+          arguments: BoardGameDetailsPageArguments(boardGame.id, boardGame.name, GamesPage),
+        ));
+        break;
+      case BoardGameResultActionType.playthroughs:
+        unawaited(Navigator.pushNamed(
+          context,
+          PlaythroughsPage.pageRoute,
+          arguments: PlaythroughsPageArguments(boardGame),
+        ));
+        break;
+    }
   }
 }
 
@@ -539,11 +570,13 @@ class _TopTab extends StatelessWidget {
 class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   _CollectionsSearch({
     required this.boardGames,
-    required this.onResultTap,
+    required this.expansionsGroupedByMainGame,
+    required this.onResultAction,
   });
 
   final List<BoardGameDetails> boardGames;
-  final BoardGameResultTapped onResultTap;
+  Map<BoardGameDetails, List<BoardGameDetails>> expansionsGroupedByMainGame;
+  final BoardGameResultAction onResultAction;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -588,7 +621,11 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
       return _NoSearchResults(query: query, onClear: () => query = '');
     }
 
-    return _SearchResults(filteredGames: filteredGames);
+    return _SearchResults(
+      filteredGames: filteredGames,
+      expansionsGroupedByMainGame: expansionsGroupedByMainGame,
+      onResultAction: onResultAction,
+    );
   }
 
   @override
@@ -630,9 +667,13 @@ class _SearchResults extends StatelessWidget {
   const _SearchResults({
     Key? key,
     required this.filteredGames,
+    required this.expansionsGroupedByMainGame,
+    required this.onResultAction,
   }) : super(key: key);
 
   final List<BoardGameDetails> filteredGames;
+  final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGroupedByMainGame;
+  final BoardGameResultAction onResultAction;
 
   @override
   Widget build(BuildContext context) {
@@ -640,12 +681,13 @@ class _SearchResults extends StatelessWidget {
       itemCount: filteredGames.length,
       separatorBuilder: (_, index) => const SizedBox(height: Dimensions.standardSpacing),
       itemBuilder: (_, index) {
+        final boardGame = filteredGames[index];
         return _SearchResultGame(
-          filteredGames: filteredGames,
-          boardGame: filteredGames[index],
-          isFirstItem: index == 0,
-          isLastItem: index == filteredGames.length - 1,
-        );
+            boardGame: boardGame,
+            expansions: expansionsGroupedByMainGame[boardGame],
+            isFirstItem: index == 0,
+            isLastItem: index == filteredGames.length - 1,
+            onResultAction: onResultAction);
       },
     );
   }
@@ -654,16 +696,18 @@ class _SearchResults extends StatelessWidget {
 class _SearchResultGame extends StatelessWidget {
   const _SearchResultGame({
     Key? key,
-    required this.filteredGames,
     required this.boardGame,
+    required this.expansions,
     required this.isFirstItem,
     required this.isLastItem,
+    required this.onResultAction,
   }) : super(key: key);
 
-  final List<BoardGameDetails> filteredGames;
   final BoardGameDetails boardGame;
+  final List<BoardGameDetails>? expansions;
   final bool isFirstItem;
   final bool isLastItem;
+  final BoardGameResultAction onResultAction;
 
   @override
   Widget build(BuildContext context) {
@@ -677,30 +721,145 @@ class _SearchResultGame extends StatelessWidget {
       child: ElevatedContainer(
         backgroundColor: AppColors.primaryColor,
         elevation: AppStyles.defaultElevation,
-        boarderRadius: const BorderRadius.all(
-          Radius.circular(Styles.boardGameTileImageCircularRadius),
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(AppStyles.defaultCornerRadius)),
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: Dimensions.collectionSearchResultBoardGameImageHeight,
-                width: Dimensions.collectionSearchResultBoardGameImageWidth,
-                child: BoardGameTile(
-                  id: boardGame.id,
-                  imageUrl: boardGame.thumbnailUrl ?? '',
-                  heroTag: AnimationTags.boardGameHeroTag,
-                ),
-              ),
-              const SizedBox(width: Dimensions.standardSpacing),
-              Expanded(child: _SearchResultGameDetails(boardGame: boardGame)),
-              _SearchResultGameActions(boardGame: boardGame)
-            ],
+          child: ChangeNotifierProvider.value(
+            value: boardGame,
+            child: Consumer<BoardGameDetails>(builder: (_, boardGameDetails, __) {
+              return Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                        width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                        child: BoardGameTile(
+                          id: boardGameDetails.id,
+                          imageUrl: boardGameDetails.thumbnailUrl ?? '',
+                          heroTag: AnimationTags.boardGameHeroTag,
+                        ),
+                      ),
+                      const SizedBox(width: Dimensions.standardSpacing),
+                      Expanded(child: _SearchResultGameDetails(boardGame: boardGameDetails)),
+                      _SearchResultGameActions(
+                        boardGame: boardGameDetails,
+                        onResultAction: onResultAction,
+                      ),
+                    ],
+                  ),
+                  if (boardGameDetails.hasIncompleteDetails)
+                    _SearchResultGameRefreshData(
+                      boardGame: boardGame,
+                      onResultAction: onResultAction,
+                    ),
+                  // TODO MK This section should be updated when the refresh of data had happened
+                  //      The problem might be with the fact that expansions are not updated after the refresh
+                  if (expansions?.isNotEmpty ?? false)
+                    _SearchResultGameExpansions(
+                      expansions: expansions!,
+                      onResultAction: onResultAction,
+                    ),
+                ],
+              );
+            }),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SearchResultGameExpansions extends StatelessWidget {
+  const _SearchResultGameExpansions({
+    required this.expansions,
+    required this.onResultAction,
+    Key? key,
+  }) : super(key: key);
+
+  final List<BoardGameDetails> expansions;
+  final BoardGameResultAction onResultAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
+        const Divider(),
+        const SizedBox(height: Dimensions.standardSpacing),
+        Text(
+          AppText.gamesPageSearchResultExpansionsSectionTitle,
+          style: AppTheme.theme.textTheme.subtitle1,
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        SizedBox(
+          height: Dimensions.collectionSearchResultExpansionsImageHeight,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: expansions.length,
+            separatorBuilder: (context, index) =>
+                const SizedBox(width: Dimensions.doubleStandardSpacing),
+            itemBuilder: (context, index) {
+              final BoardGameDetails expansion = expansions[index];
+              return SizedBox(
+                height: Dimensions.collectionSearchResultExpansionsImageHeight,
+                width: Dimensions.collectionSearchResultExpansionsImageWidth,
+                child: BoardGameTile(
+                  id: expansion.id,
+                  name: expansion.name,
+                  nameFontSize: Dimensions.extraSmallFontSize,
+                  imageUrl: expansion.thumbnailUrl ?? '',
+                  elevation: AppStyles.defaultElevation,
+                  onTap: () async => onResultAction(expansion, BoardGameResultActionType.details),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// TODO Add animation to the refresh icon (spin it, while the update happens)
+class _SearchResultGameRefreshData extends StatelessWidget {
+  const _SearchResultGameRefreshData({
+    required this.boardGame,
+    required this.onResultAction,
+    Key? key,
+  }) : super(key: key);
+
+  final BoardGameDetails boardGame;
+  final BoardGameResultAction onResultAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
+        const Divider(),
+        const SizedBox(height: Dimensions.standardSpacing),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.info_outlined, size: Dimensions.smallButtonIconSize),
+            const SizedBox(width: Dimensions.standardSpacing),
+            Expanded(
+              child: Text(
+                AppText.gamesPageSearchResultRefreshDetails,
+                style: AppTheme.theme.textTheme.subtitle1,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () => onResultAction(boardGame, BoardGameResultActionType.update),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -760,9 +919,11 @@ class _SearchResultGameActions extends StatelessWidget {
   const _SearchResultGameActions({
     Key? key,
     required this.boardGame,
+    required this.onResultAction,
   }) : super(key: key);
 
   final BoardGameDetails boardGame;
+  final BoardGameResultAction onResultAction;
 
   @override
   Widget build(BuildContext context) {
@@ -770,19 +931,11 @@ class _SearchResultGameActions extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.info),
-          onPressed: () => Navigator.pushNamed(
-            context,
-            BoardGamesDetailsPage.pageRoute,
-            arguments: BoardGameDetailsPageArguments(boardGame.id, boardGame.name, GamesPage),
-          ),
+          onPressed: () => onResultAction(boardGame, BoardGameResultActionType.details),
         ),
         IconButton(
           icon: const Icon(Icons.casino),
-          onPressed: () => Navigator.pushNamed(
-            context,
-            PlaythroughsPage.pageRoute,
-            arguments: PlaythroughsPageArguments(boardGame),
-          ),
+          onPressed: () => onResultAction(boardGame, BoardGameResultActionType.playthroughs),
         ),
       ],
     );

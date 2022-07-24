@@ -1,4 +1,6 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/app_styles.dart';
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
@@ -11,7 +13,6 @@ import '../../models/navigation/player_page_arguments.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
-import '../../widgets/common/shadow_box.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/player/player_image.dart';
@@ -439,18 +440,21 @@ class _SearchResults extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () => onResultTap(player),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(AppStyles.defaultCornerRadius),
+              bottomLeft: Radius.circular(AppStyles.defaultCornerRadius),
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: Dimensions.searchResultsPlayerAvatarSize,
                   width: Dimensions.searchResultsPlayerAvatarSize,
-                  child: Ink(
-                    child: ShadowBox(
-                      child: Hero(
-                        tag: '${AnimationTags.playerImageHeroTag}${player.id}',
-                        child: PlayerImage(imageUri: player.avatarImageUri),
-                      ),
+                  child: ElevatedContainer(
+                    elevation: AppStyles.defaultElevation,
+                    child: Hero(
+                      tag: '${AnimationTags.playerImageHeroTag}${player.id}',
+                      child: PlayerImage(imageUri: player.avatarImageUri),
                     ),
                   ),
                 ),

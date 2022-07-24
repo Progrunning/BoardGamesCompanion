@@ -31,6 +31,9 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     return boardGames;
   }
 
+  Future<BoardGameDetails?> getBoardGame(String boardGameId) =>
+      _boardGameGeekService.getDetails(boardGameId);
+
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
     if (boardGameDetails.id.isEmpty) {
       return;

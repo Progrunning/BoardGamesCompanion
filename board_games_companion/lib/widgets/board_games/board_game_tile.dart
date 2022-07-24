@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../common/rank_ribbon.dart';
 import '../common/ripple_effect.dart';
 
@@ -17,6 +17,7 @@ class BoardGameTile extends StatefulWidget {
     required this.id,
     required this.imageUrl,
     this.name,
+    this.nameFontSize = Dimensions.smallFontSize,
     this.rank,
     this.onTap,
     this.heroTag = AnimationTags.boardGameHeroTag,
@@ -26,6 +27,7 @@ class BoardGameTile extends StatefulWidget {
   final String id;
   final String imageUrl;
   final String? name;
+  final double nameFontSize;
   final int? rank;
   final Future<void> Function()? onTap;
   final String heroTag;
@@ -73,7 +75,11 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
               ),
             ),
           ),
-          if (widget.name.isNotNullOrBlank) _Name(name: widget.name!),
+          if (widget.name.isNotNullOrBlank)
+            _Name(
+              name: widget.name!,
+              fontSize: widget.nameFontSize,
+            ),
           if (widget.rank != null && widget.rank! < Constants.top100)
             Positioned(
               top: 0,
@@ -93,9 +99,11 @@ class _Name extends StatelessWidget {
   const _Name({
     Key? key,
     required this.name,
+    required this.fontSize,
   }) : super(key: key);
 
   final String name;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +117,9 @@ class _Name extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.accentColor.withAlpha(Styles.opacity70Percent),
+            color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
             borderRadius: const BorderRadius.all(
-              Radius.circular(Styles.defaultCornerRadius),
+              Radius.circular(AppStyles.defaultCornerRadius),
             ),
           ),
           child: Padding(
@@ -119,9 +127,9 @@ class _Name extends StatelessWidget {
             child: Text(
               name,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.defaultTextColor,
-                fontSize: Dimensions.smallFontSize,
+                fontSize: fontSize,
               ),
             ),
           ),

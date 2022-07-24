@@ -72,6 +72,9 @@ class GamesViewModel with ChangeNotifier {
 
   int get totalMainGamesInCollections => mainGamesInCollections.length;
 
+  List<BoardGameDetails> get _allExpansions =>
+      allBoardGames.where((boardGame) => boardGame.isExpansion ?? false).toList();
+
   List<BoardGameDetails> get _expansionsInSelectedCollection =>
       boardGamesInSelectedCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
@@ -79,7 +82,26 @@ class GamesViewModel with ChangeNotifier {
 
   bool get hasAnyExpansionsInSelectedCollection => _expansionsInSelectedCollection.isNotEmpty;
 
-  Map<BoardGameDetails, List<BoardGameDetails>> get expansionGroupedByMainGame {
+  Map<BoardGameDetails, List<BoardGameDetails>> get expansionsGroupedByMainGame {
+    final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGrouped = {};
+    for (final expansion in _allExpansions) {
+      final mainGame = _mainBoardGameByExpansionId[expansion.id];
+      if (mainGame == null) {
+        continue;
+      }
+
+      if (!expansionsGrouped.containsKey(mainGame)) {
+        expansionsGrouped[mainGame] = [];
+      }
+
+      expansionsGrouped[mainGame]!.add(expansion);
+    }
+
+    return expansionsGrouped;
+  }
+
+  Map<BoardGameDetails, List<BoardGameDetails>>
+      get expansionsInSelectedCollectionGroupedByMainGame {
     final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGrouped = {};
     for (final expansion in _expansionsInSelectedCollection) {
       final mainGame = _mainBoardGameByExpansionId[expansion.id];
@@ -127,6 +149,10 @@ class GamesViewModel with ChangeNotifier {
 
     _loadDataState = LoadDataState.loaded;
     notifyListeners();
+  }
+
+  Future<void> updateBoardGameDetails(String boardGameId) async {
+    await _boardGamesStore.refreshBoardGameDetails(boardGameId);
   }
 
   void applyFilters() {

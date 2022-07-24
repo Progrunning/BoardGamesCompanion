@@ -11,7 +11,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../models/board_game.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/analytics_service.dart';
@@ -217,10 +216,10 @@ class _SearchResultsState extends State<_SearchResults> {
                     if (index.isEven) {
                       return Material(
                         color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                        borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
                         elevation: 4,
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                          borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
                           onTap: () =>
                               _navigateToBoardGameDetails(searchResults!, itemIndex, context),
                           child: Padding(

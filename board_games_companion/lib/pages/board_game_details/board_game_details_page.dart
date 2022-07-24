@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/app_styles.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,11 +5,11 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
-import '../../common/styles.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/preferences_service.dart';
 import '../../stores/board_games_store.dart';
@@ -126,9 +125,9 @@ class _Header extends StatelessWidget {
         centerTitle: true,
         title: Container(
           decoration: BoxDecoration(
-            color: AppColors.accentColor.withAlpha(Styles.opacity70Percent),
+            color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
             borderRadius: const BorderRadius.all(
-              Radius.circular(Styles.defaultCornerRadius),
+              Radius.circular(AppStyles.defaultCornerRadius),
             ),
           ),
           child: Padding(
@@ -150,7 +149,6 @@ class _Header extends StatelessWidget {
           value: _viewModel,
           child: Consumer<BoardGameDetailsViewModel>(
             builder: (_, store, __) {
-              // TODO Add shadow to the image
               return BoardGameImage(
                 _viewModel.boardGameDetails,
                 minImageHeight: Constants.boardGameDetailsImageHeight,
@@ -247,7 +245,7 @@ Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connec
                                 Chip(
                                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
                                   backgroundColor: AppColors.primaryColor.withAlpha(
-                                    Styles.opacity80Percent,
+                                    AppStyles.opacity80Percent,
                                   ),
                                   label: Text(
                                     category.name,
@@ -672,7 +670,7 @@ class _CollectionFlags extends StatelessWidget {
           return Column(
             children: [
               ToggleButtons(
-                splashColor: AppColors.accentColor.withAlpha(Styles.opacity30Percent),
+                splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
                 fillColor: Colors.transparent,
                 selectedColor: Colors.white,
                 selectedBorderColor: Colors.transparent,
@@ -701,7 +699,7 @@ class _CollectionFlags extends StatelessWidget {
                 },
               ),
               ToggleButtons(
-                splashColor: AppColors.accentColor.withAlpha(Styles.opacity30Percent),
+                splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
                 fillColor: Colors.transparent,
                 selectedColor: Colors.white,
                 selectedBorderColor: Colors.transparent,

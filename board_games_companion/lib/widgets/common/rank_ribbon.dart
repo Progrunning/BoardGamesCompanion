@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 
 class RankRibbon extends StatelessWidget {
   const RankRibbon({
@@ -23,7 +23,7 @@ class RankRibbon extends StatelessWidget {
           'assets/icons/rank_ribbon.svg',
           height: 34,
           width: 26,
-          color: AppColors.accentColor.withAlpha(Styles.opacity70Percent),
+          color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
         ),
         Positioned.fill(
           child: Center(

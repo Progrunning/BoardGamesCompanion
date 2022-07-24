@@ -1,13 +1,13 @@
 import 'package:board_games_companion/common/app_colors.dart';
 import 'package:flutter/material.dart';
 
-import '../common/styles.dart';
+import '../common/app_styles.dart';
 
 class ElevatedContainer extends StatelessWidget {
   const ElevatedContainer({
     required this.child,
-    this.boarderRadius = const BorderRadius.all(
-      Radius.circular(Styles.defaultCornerRadius),
+    this.borderRadius = const BorderRadius.all(
+      Radius.circular(AppStyles.defaultCornerRadius),
     ),
     this.backgroundColor,
     this.splashColor = AppColors.accentColor,
@@ -18,7 +18,7 @@ class ElevatedContainer extends StatelessWidget {
 
   final Widget child;
   final double elevation;
-  final BorderRadius? boarderRadius;
+  final BorderRadius? borderRadius;
   final Color? backgroundColor;
   final Color? splashColor;
   final VoidCallback? onTap;
@@ -28,9 +28,9 @@ class ElevatedContainer extends StatelessWidget {
     return Material(
       elevation: elevation,
       color: backgroundColor,
-      borderRadius: boarderRadius,
+      borderRadius: borderRadius,
       child: InkWell(
-        borderRadius: boarderRadius,
+        borderRadius: borderRadius,
         splashColor: splashColor,
         onTap: onTap,
         child: child,

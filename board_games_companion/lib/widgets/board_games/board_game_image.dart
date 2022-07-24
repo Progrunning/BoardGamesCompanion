@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../common/animation_tags.dart';
 import '../../models/hive/board_game_details.dart';
 import '../common/loading_indicator_widget.dart';
-import '../common/shadow_box.dart';
 
 class BoardGameImage extends StatelessWidget {
   const BoardGameImage(
@@ -32,14 +31,9 @@ class BoardGameImage extends StatelessWidget {
         imageUrl: _boardGameDetails!.imageUrl ?? '',
         imageBuilder: (context, imageProvider) => ConstrainedBox(
           constraints: BoxConstraints(minHeight: minImageHeight),
-          child: ShadowBox(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-              ),
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
             ),
           ),
         ),

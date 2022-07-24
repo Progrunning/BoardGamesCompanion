@@ -110,13 +110,42 @@ class BoardGamesStore with ChangeNotifier {
     }
   }
 
-  Future<void> updateDetails(BoardGameDetails boardGameDetails) async {
+  Future<BoardGameDetails?> refreshBoardGameDetails(String boardGameId) async {
     try {
+      final boardGameDetails = await _boardGamesService.getBoardGame(boardGameId);
+      if (boardGameDetails == null) {
+        return null;
+      }
+
+      // TODO MK Think why does the isInCollection flag exists
+      //         When determining if a board extension is in collection we should look at the collections and check if board game id of an expansion exists in it
+      for (final boardGameExpansion in boardGameDetails.expansions) {
+        final boardGameExpansionDetails = allBoardGames.firstWhereOrNull(
+          (boardGame) => boardGame.id == boardGameExpansion.id,
+        );
+
+        if (boardGameExpansionDetails != null &&
+            (boardGameExpansionDetails.isExpansion ?? false) &&
+            boardGameExpansionDetails.isOwned!) {
+          boardGameExpansion.isInCollection = true;
+        }
+      }
+
+      final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
+      if (existingBoardGameDetails != null) {
+        boardGameDetails.isFriends = existingBoardGameDetails.isFriends;
+        boardGameDetails.isOnWishlist = existingBoardGameDetails.isOnWishlist;
+        boardGameDetails.isOwned = existingBoardGameDetails.isOwned;
+      }
+
       await addOrUpdateBoardGame(boardGameDetails);
+
+      return boardGameDetails;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
-      return;
     }
+
+    return null;
   }
 
   BoardGameDetails? retrieveBoardGame(String boardGameId) {

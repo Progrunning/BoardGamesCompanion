@@ -21,6 +21,6 @@ class PlaythroughsGameSettingsViewModel with BoardGameAware {
     boardGameSettings.winningCondition = winningCondition;
 
     boardGame!.settings = boardGameSettings;
-    await _boardGamesStore.updateDetails(boardGame!);
+    await _boardGamesStore.addOrUpdateBoardGame(boardGame!);
   }
 }

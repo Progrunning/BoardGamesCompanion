@@ -23,6 +23,9 @@ class Dimensions {
   static const double collectionSearchResultBoardGameImageHeight = 100;
   static const double collectionSearchResultBoardGameImageWidth = 100;
 
+  static const double collectionSearchResultExpansionsImageHeight = 80;
+  static const double collectionSearchResultExpansionsImageWidth = 80;
+
   static const double boardGameRemoveIconSize = 40;
 
   static const double boardGameDetailsLinkIconSize = 40;
@@ -39,6 +42,7 @@ class Dimensions {
   static const double smallPlayerAvatarWithScoreSize = 140;
   static const double searchResultsPlayerAvatarSize = 80;
 
+  static const double smallButtonIconSize = 16;
   static const double defaultButtonIconSize = 20;
   static const double defaultCheckboxSize = 24;
 

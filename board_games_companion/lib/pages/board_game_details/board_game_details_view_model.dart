@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -6,54 +5,24 @@ import '../../common/analytics.dart';
 import '../../common/enums/collection_type.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/analytics_service.dart';
-import '../../services/board_games_geek_service.dart';
 import '../../stores/board_games_store.dart';
 
 class BoardGameDetailsViewModel with ChangeNotifier {
   BoardGameDetailsViewModel(
-    this._boardGameGeekService,
     this._boardGamesStore,
     this._analyticsService,
   );
 
-  final BoardGamesGeekService _boardGameGeekService;
   final BoardGamesStore _boardGamesStore;
   final AnalyticsService _analyticsService;
 
   BoardGameDetails? _boardGameDetails;
-
   BoardGameDetails? get boardGameDetails => _boardGameDetails;
 
   Future<BoardGameDetails?> loadBoardGameDetails(String boardGameId) async {
     try {
-      // TODO MK Think about retrieving the data from Hive and updating with the HTTP call
-      //         Alternatively set cache expiration (~a week?) and then retrieve data to update
-      final boardGameDetails = await _boardGameGeekService.getDetails(boardGameId);
-      if (boardGameDetails == null) {
-        return _boardGameDetails!;
-      }
-      for (final boardGameExpansion in boardGameDetails.expansions) {
-        final boardGameExpansionDetails = _boardGamesStore.allBoardGames.firstWhereOrNull(
-          (boardGame) => boardGame.id == boardGameExpansion.id,
-        );
-
-        if (boardGameExpansionDetails != null &&
-            (boardGameExpansionDetails.isExpansion ?? false) &&
-            boardGameExpansionDetails.isOwned!) {
-          boardGameExpansion.isInCollection = true;
-        }
-      }
-
-      final existingBoardGameDetails = _boardGamesStore.retrieveBoardGame(boardGameId);
-      if (existingBoardGameDetails != null) {
-        boardGameDetails.isFriends = existingBoardGameDetails.isFriends;
-        boardGameDetails.isOnWishlist = existingBoardGameDetails.isOnWishlist;
-        boardGameDetails.isOwned = existingBoardGameDetails.isOwned;
-      }
-
-      await _boardGamesStore.updateDetails(boardGameDetails);
-
-      _boardGameDetails = boardGameDetails;
+      final refreshedBoardGameDetails = await _boardGamesStore.refreshBoardGameDetails(boardGameId);
+      _boardGameDetails = refreshedBoardGameDetails;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -95,6 +64,6 @@ class BoardGameDetailsViewModel with ChangeNotifier {
         break;
     }
 
-    await _boardGamesStore.updateDetails(_boardGameDetails!);
+    await _boardGamesStore.addOrUpdateBoardGame(_boardGameDetails!);
   }
 }

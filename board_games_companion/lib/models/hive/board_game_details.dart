@@ -272,6 +272,10 @@ class BoardGameDetails extends BaseBoardGame {
     return null;
   }
 
+  bool get hasIncompleteDetails =>
+      (isBggSynced ?? false) &&
+      (avgWeight == null || rating == null || commentsNumber == null || votes == null);
+
   String get bggOverviewUrl => '$_baseBggBoardGameUrl/$id/$_bggUrlEncodedName';
 
   String get bggHotVideosUrl => '$bggOverviewUrl/videos/all?sort=hot';

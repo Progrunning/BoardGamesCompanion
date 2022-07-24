@@ -1,10 +1,9 @@
-import 'package:board_games_companion/common/app_styles.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
-import '../../common/styles.dart';
+import '../../common/app_styles.dart';
 import '../../models/hive/player.dart';
 import '../common/ripple_effect.dart';
 import 'player_avatar_subtitle_widget.dart';
@@ -45,7 +44,7 @@ class PlayerAvatar extends StatelessWidget {
                 Positioned.fill(
                   child: RippleEffect(
                     onTap: onTap,
-                    borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                    borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
                   ),
                 ),
               ],

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/constants.dart';
-import '../../common/styles.dart';
 
 class PlayerImage extends StatelessWidget {
   const PlayerImage({
@@ -19,7 +19,7 @@ class PlayerImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+      borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
       child: Stack(
         children: [
           const _Placeholder(),
@@ -95,7 +95,7 @@ class _Placeholder extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.primaryColor,
-        borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+        borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
       ),
     );
   }

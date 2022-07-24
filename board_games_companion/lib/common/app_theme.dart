@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
+import 'app_styles.dart';
 import 'dimensions.dart';
-import 'styles.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class AppTheme {
@@ -22,14 +22,8 @@ class AppTheme {
     color: AppColors.secondaryTextColor,
   );
 
-  static const BoxShadow defaultBoxShadow = BoxShadow(
-    color: AppColors.shadowColor,
-    blurRadius: Styles.defaultShadowRadius,
-    offset: Styles.defaultShadowOffset,
-  );
-
   static const BorderRadius defaultBoxRadius = BorderRadius.all(
-    Radius.circular(Styles.boardGameTileImageCircularRadius),
+    Radius.circular(AppStyles.boardGameTileImageCircularRadius),
   );
 
   static const TextStyle defaultTextFieldStyle = TextStyle(

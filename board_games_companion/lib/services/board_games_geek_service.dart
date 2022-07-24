@@ -134,9 +134,9 @@ class BoardGamesGeekService {
   static const String _boardGameType = 'boardgame';
   static const String _boardGameExpansionType = 'boardgameexpansion';
 
-  static const int _hotBoardGamesCacheExpirationInHours = 24;
+  static const int _hotBoardGamesCacheExpirationInHours = Duration.hoursPerDay;
 
-  static const int _boardGameDetailsCacheExpirationInHours = 24;
+  static const int _boardGameDetailsCacheExpirationInHours = Duration.hoursPerDay * 7;
   static const int _bggRetryStatusCode = 202;
   static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;

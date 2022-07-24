@@ -1,5 +1,4 @@
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/app_styles.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,10 +6,10 @@ import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../models/hive/player.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
@@ -98,7 +97,8 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                               child: ElevatedContainer(
                                 elevation: AppStyles.defaultElevation,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                                  borderRadius:
+                                      BorderRadius.circular(AppStyles.defaultCornerRadius),
                                   child: Stack(
                                     children: <Widget>[
                                       Hero(

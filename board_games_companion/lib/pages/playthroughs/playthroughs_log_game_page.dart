@@ -6,11 +6,11 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/hive/board_game_details.dart';
@@ -722,7 +722,7 @@ class _PlayerScore extends StatelessWidget {
                   builder: (_, PlayerScore playerScore, __) {
                     return Text(
                       '${playerScore.score.valueInt}',
-                      style: Styles.playerScoreTextStyle,
+                      style: AppStyles.playerScoreTextStyle,
                     );
                   },
                 ),

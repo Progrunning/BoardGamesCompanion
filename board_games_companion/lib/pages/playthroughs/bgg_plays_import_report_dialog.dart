@@ -1,16 +1,15 @@
 import 'dart:math';
 
-import 'package:board_games_companion/common/app_styles.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/models/import_result.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/common/elevated_icon_button.dart';
@@ -166,7 +165,7 @@ class _ImportedPlayers extends StatelessWidget {
             Chip(
               padding: const EdgeInsets.all(Dimensions.standardSpacing),
               backgroundColor: AppColors.primaryColor.withAlpha(
-                Styles.opacity80Percent,
+                AppStyles.opacity80Percent,
               ),
               label: Text(
                 player,

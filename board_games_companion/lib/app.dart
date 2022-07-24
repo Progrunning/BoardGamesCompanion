@@ -21,7 +21,6 @@ import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
 import 'pages/settings/settings_page.dart';
 import 'services/analytics_service.dart';
-import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
 import 'services/rate_and_review_service.dart';
 import 'stores/board_games_filters_store.dart';
@@ -81,17 +80,12 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
               ModalRoute.of(context)!.settings.arguments as BoardGameDetailsPageArguments;
 
           final analytics = getIt<AnalyticsService>();
-          final boardGamesGeekService = getIt<BoardGamesGeekService>();
           final preferencesService = getIt<PreferencesService>();
           final boardGamesStore = Provider.of<BoardGamesStore>(
             context,
             listen: false,
           );
-          final boardGameDetailsStore = BoardGameDetailsViewModel(
-            boardGamesGeekService,
-            boardGamesStore,
-            analytics,
-          );
+          final boardGameDetailsStore = BoardGameDetailsViewModel(boardGamesStore, analytics);
 
           return BoardGamesDetailsPage(
             boardGameId: arguments.boardGameId,

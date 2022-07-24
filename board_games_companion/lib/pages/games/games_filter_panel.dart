@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
-import '../../common/styles.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/sort_by.dart';
 import '../../stores/board_games_filters_store.dart';
@@ -148,11 +148,11 @@ class _SortByChip extends StatelessWidget {
       ),
       selected: sortBy.selected,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+        borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
       ),
       selectedColor: AppColors.accentColor,
       shadowColor: AppColors.shadowColor,
-      backgroundColor: AppColors.primaryColor.withAlpha(Styles.opacity80Percent),
+      backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
       avatar: orderByIcon,
       onSelected: (isSelected) {
         boardGamesFiltersStore.updateSortBySelection(sortBy);
@@ -188,10 +188,10 @@ class _Filters extends StatelessWidget {
             shadowColor: AppColors.shadowColor,
             elevation: Dimensions.defaultElevation,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+              borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
             ),
             child: Container(
-              color: AppColors.primaryColor.withAlpha(Styles.opacity80Percent),
+              color: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -301,7 +301,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                   trackHeight: 8,
                   trackShape: const RoundedRectSliderTrackShape(),
                   inactiveTrackColor:
-                      AppColors.primaryColorLight.withAlpha(Styles.opacity30Percent),
+                      AppColors.primaryColorLight.withAlpha(AppStyles.opacity30Percent),
                   overlayShape: const RoundSliderOverlayShape(overlayRadius: 24.0),
                   tickMarkShape: const RoundSliderTickMarkShape(),
                   valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
