@@ -824,7 +824,6 @@ class _SearchResultGameExpansions extends StatelessWidget {
   }
 }
 
-// TODO Add animation to the refresh icon (spin it, while the update happens)
 class _SearchResultGameRefreshData extends StatefulWidget {
   const _SearchResultGameRefreshData({
     required this.boardGame,
