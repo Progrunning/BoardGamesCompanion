@@ -825,7 +825,7 @@ class _SearchResultGameExpansions extends StatelessWidget {
 }
 
 // TODO Add animation to the refresh icon (spin it, while the update happens)
-class _SearchResultGameRefreshData extends StatelessWidget {
+class _SearchResultGameRefreshData extends StatefulWidget {
   const _SearchResultGameRefreshData({
     required this.boardGame,
     required this.onResultAction,
@@ -834,6 +834,30 @@ class _SearchResultGameRefreshData extends StatelessWidget {
 
   final BoardGameDetails boardGame;
   final BoardGameResultAction onResultAction;
+
+  @override
+  State<_SearchResultGameRefreshData> createState() => _SearchResultGameRefreshDataState();
+}
+
+class _SearchResultGameRefreshDataState extends State<_SearchResultGameRefreshData>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -853,9 +877,15 @@ class _SearchResultGameRefreshData extends StatelessWidget {
                 style: AppTheme.theme.textTheme.subtitle1,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: () => onResultAction(boardGame, BoardGameResultActionType.update),
+            RotationTransition(
+              turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
+              child: IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () async {
+                  _controller.repeat();
+                  widget.onResultAction(widget.boardGame, BoardGameResultActionType.update);
+                },
+              ),
             ),
           ],
         ),
