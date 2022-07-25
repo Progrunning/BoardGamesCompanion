@@ -608,9 +608,7 @@ class _StatsAndCollections extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Center(
-            child: BoardGameRatingHexagon(
-              rating: boardGameDetailsStore.boardGameDetails?.rating,
-            ),
+            child: BoardGameRatingHexagon(rating: boardGameDetailsStore.boardGameDetails?.rating),
           ),
           const SizedBox(
             width: Dimensions.standardSpacing,

@@ -34,6 +34,7 @@ dependencies:
   fl_chart: ^0.55.0  
   flutter_polygon: ^0.2.0
   flutter_svg: ^0.22.0
+  font_awesome_flutter: ^10.1.0
   google_fonts: ^3.0.1
   get_it: ^7.2.0
   hive: ^2.2.3

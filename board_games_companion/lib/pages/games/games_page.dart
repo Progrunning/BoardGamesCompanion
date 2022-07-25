@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -12,6 +13,7 @@ import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
+import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../common/enums/enums.dart';
@@ -31,6 +33,7 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
+import '../../widgets/common/rating_hexagon.dart';
 import '../../widgets/elevated_container.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../playthroughs/playthroughs_page.dart';
@@ -743,6 +746,7 @@ class _SearchResultGame extends StatelessWidget {
                       ),
                       const SizedBox(width: Dimensions.standardSpacing),
                       Expanded(child: _SearchResultGameDetails(boardGame: boardGameDetails)),
+                      // TODO MK Make these actions look better (stretch or place icons somehow differently)
                       _SearchResultGameActions(
                         boardGame: boardGameDetails,
                         onResultAction: onResultAction,
@@ -932,11 +936,19 @@ class _SearchResultGameDetails extends StatelessWidget {
         if (boardGame.avgWeight != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           _SearchResultGameGeneralStats(
-            icon: const Icon(Icons.scale, size: _gameStatIconSize),
+            icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced, size: _gameStatIconSize),
             statistic: sprintf(
               AppText.gamesPageSearchResultComplexityGameStatFormat,
               [boardGame.avgWeight!.toStringAsFixed(2)],
             ),
+          ),
+        ],
+        if (boardGame.rating != null) ...[
+          const SizedBox(height: Dimensions.standardSpacing),
+          _SearchResultGameGeneralStats(
+            icon: const RatingHexagon(width: _gameStatIconSize, height: _gameStatIconSize),
+            statistic:
+                boardGame.rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
           ),
         ]
       ],
@@ -963,7 +975,7 @@ class _SearchResultGameActions extends StatelessWidget {
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.details),
         ),
         IconButton(
-          icon: const Icon(Icons.casino),
+          icon: const FaIcon(FontAwesomeIcons.dice),
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.playthroughs),
         ),
       ],
@@ -978,15 +990,17 @@ class _SearchResultGameGeneralStats extends StatelessWidget {
     required this.statistic,
   }) : super(key: key);
 
-  final Icon icon;
+  final Widget icon;
   final String statistic;
+
+  static const double _uniformedIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        icon,
+        SizedBox(width: _uniformedIconSize, child: Center(child: icon)),
         const SizedBox(width: Dimensions.standardSpacing),
         Text(
           statistic,

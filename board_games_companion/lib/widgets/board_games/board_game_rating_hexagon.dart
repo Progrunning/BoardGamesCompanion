@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_polygon/flutter_polygon.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../common/rating_hexagon.dart';
 
 class BoardGameRatingHexagon extends StatelessWidget {
   const BoardGameRatingHexagon(
@@ -35,21 +35,17 @@ class BoardGameRatingHexagon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: _height,
+    return RatingHexagon(
       width: _width,
-      child: ClipPolygon(
-        sides: Dimensions.edgeNumberOfHexagon,
-        child: Container(
-          color: _hexColor.withAlpha(_hexColorOpacity),
-          child: Center(
-            child: Text(
-              _rating == null
-                  ? '?'
-                  : _rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
-              style: TextStyle(color: _fontColor, fontSize: _fontSize),
-            ),
-          ),
+      height: _height,
+      hexColor: _hexColor,
+      hexColorOpacity: _hexColorOpacity,
+      child: Center(
+        child: Text(
+          _rating == null
+              ? '?'
+              : _rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
+          style: TextStyle(color: _fontColor, fontSize: _fontSize),
         ),
       ),
     );
