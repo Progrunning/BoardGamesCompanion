@@ -732,26 +732,27 @@ class _SearchResultGame extends StatelessWidget {
             child: Consumer<BoardGameDetails>(builder: (_, boardGameDetails, __) {
               return Column(
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: Dimensions.collectionSearchResultBoardGameImageHeight,
-                        width: Dimensions.collectionSearchResultBoardGameImageWidth,
-                        child: BoardGameTile(
-                          id: boardGameDetails.id,
-                          imageUrl: boardGameDetails.thumbnailUrl ?? '',
-                          heroTag: AnimationTags.boardGameHeroTag,
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                          width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                          child: BoardGameTile(
+                            id: boardGameDetails.id,
+                            imageUrl: boardGameDetails.thumbnailUrl ?? '',
+                            heroTag: AnimationTags.boardGameHeroTag,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: Dimensions.standardSpacing),
-                      Expanded(child: _SearchResultGameDetails(boardGame: boardGameDetails)),
-                      // TODO MK Make these actions look better (stretch or place icons somehow differently)
-                      _SearchResultGameActions(
-                        boardGame: boardGameDetails,
-                        onResultAction: onResultAction,
-                      ),
-                    ],
+                        const SizedBox(width: Dimensions.standardSpacing),
+                        Expanded(child: _SearchResultGameDetails(boardGame: boardGameDetails)),
+                        _SearchResultGameActions(
+                          boardGame: boardGameDetails,
+                          onResultAction: onResultAction,
+                        ),
+                      ],
+                    ),
                   ),
                   if (boardGameDetails.hasIncompleteDetails)
                     _SearchResultGameRefreshData(
@@ -974,6 +975,7 @@ class _SearchResultGameActions extends StatelessWidget {
           icon: const Icon(Icons.info),
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.details),
         ),
+        const Expanded(child: SizedBox.shrink()),
         IconButton(
           icon: const FaIcon(FontAwesomeIcons.dice),
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.playthroughs),
