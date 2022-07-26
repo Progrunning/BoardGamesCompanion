@@ -117,17 +117,20 @@ class BoardGamesStore with ChangeNotifier {
         return null;
       }
 
-      // TODO MK Think why does the isInCollection flag exists
-      //         When determining if a board extension is in collection we should look at the collections and check if board game id of an expansion exists in it
-      for (final boardGameExpansion in boardGameDetails.expansions) {
-        final boardGameExpansionDetails = allBoardGames.firstWhereOrNull(
-          (boardGame) => boardGame.id == boardGameExpansion.id,
-        );
+      if (!(boardGameDetails.isExpansion ?? true)) {
+        for (final boardGameExpansion in boardGameDetails.expansions) {
+          final boardGameExpansionDetails = allBoardGames.firstWhereOrNull(
+            (boardGame) => boardGame.id == boardGameExpansion.id,
+          );
 
-        if (boardGameExpansionDetails != null &&
-            (boardGameExpansionDetails.isExpansion ?? false) &&
-            boardGameExpansionDetails.isOwned!) {
-          boardGameExpansion.isInCollection = true;
+          if (boardGameExpansionDetails != null) {
+            boardGameExpansionDetails.isExpansion = true;
+            if (boardGameExpansionDetails.isOwned!) {
+              // TODO MK Think why does the isInCollection flag exists
+              //         When determining if a board extension is in collection we should look at the collections and check if board game id of an expansion exists in it
+              boardGameExpansion.isInCollection = true;
+            }
+          }
         }
       }
 

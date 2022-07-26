@@ -132,14 +132,7 @@ class GamesViewModel with ChangeNotifier {
     _loadDataState = LoadDataState.loading;
     try {
       await _boardGamesStore.loadBoardGames();
-      for (final boardGameDetails in _boardGamesStore.allBoardGames) {
-        _filteredBoardGames[boardGameDetails.id] = boardGameDetails;
-        if (boardGameDetails.isMainGame) {
-          for (final boardGameExpansion in boardGameDetails.expansions) {
-            _mainBoardGameByExpansionId[boardGameExpansion.id] = boardGameDetails;
-          }
-        }
-      }
+      _updateCachedBoardGameDetails();
 
       await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
@@ -151,8 +144,9 @@ class GamesViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateBoardGameDetails(String boardGameId) async {
+  Future<void> refreshBoardGameDetails(String boardGameId) async {
     await _boardGamesStore.refreshBoardGameDetails(boardGameId);
+    _updateCachedBoardGameDetails();
   }
 
   void applyFilters() {
@@ -210,5 +204,16 @@ class GamesViewModel with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void _updateCachedBoardGameDetails() {
+    for (final boardGameDetails in _boardGamesStore.allBoardGames) {
+      _filteredBoardGames[boardGameDetails.id] = boardGameDetails;
+      if (boardGameDetails.isMainGame) {
+        for (final boardGameExpansion in boardGameDetails.expansions) {
+          _mainBoardGameByExpansionId[boardGameExpansion.id] = boardGameDetails;
+        }
+      }
+    }
   }
 }

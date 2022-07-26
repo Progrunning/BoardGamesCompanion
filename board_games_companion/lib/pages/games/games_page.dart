@@ -287,7 +287,7 @@ class _AppBarState extends State<_AppBar> {
       BoardGameDetails boardGame, BoardGameResultActionType actionType) async {
     switch (actionType) {
       case BoardGameResultActionType.update:
-        await widget.viewModel.updateBoardGameDetails(boardGame.id);
+        await widget.viewModel.refreshBoardGameDetails(boardGame.id);
         break;
       case BoardGameResultActionType.details:
         unawaited(Navigator.pushNamed(
