@@ -4,7 +4,9 @@ import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -16,7 +18,6 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
-import '../../common/enums/enums.dart';
 import '../../common/enums/games_tab.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
@@ -46,12 +47,15 @@ enum BoardGameResultActionType {
 }
 
 typedef BoardGameResultAction = void Function(
-    BoardGameDetails boardGame, BoardGameResultActionType actionType);
+  BoardGameDetails boardGame,
+  BoardGameResultActionType actionType,
+);
 
 class GamesPage extends StatefulWidget {
   const GamesPage(
     this.viewModel,
     this.userStore,
+    this.boardGamesFiltersStore,
     this.analyticsService,
     this.rateAndReviewService, {
     Key? key,
@@ -59,6 +63,7 @@ class GamesPage extends StatefulWidget {
 
   final GamesViewModel viewModel;
   final UserStore userStore;
+  final BoardGamesFiltersStore boardGamesFiltersStore;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
 
@@ -76,30 +81,35 @@ class GamesPageState extends State<GamesPage> with SingleTickerProviderStateMixi
       vsync: this,
       initialIndex: widget.viewModel.selectedTab.index,
     );
+    widget.viewModel.loadBoardGames();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.viewModel.loadDataState == LoadDataState.loaded) {
-      if (!widget.viewModel.anyBoardGamesInCollections &&
-          (widget.userStore.user?.name.isEmpty ?? true)) {
-        return const _Empty();
-      }
+    return Observer(
+      builder: (_) {
+        switch (widget.viewModel.futureLoadBoardGames?.status ?? FutureStatus.pending) {
+          case FutureStatus.pending:
+            return const LoadingIndicator();
+          case FutureStatus.rejected:
+            return const Center(child: GenericErrorMessage());
+          case FutureStatus.fulfilled:
+            if (!widget.viewModel.anyBoardGamesInCollections &&
+                (widget.userStore.user?.name.isEmpty ?? true)) {
+              return const _Empty();
+            }
 
-      return _Collection(
-        viewModel: widget.viewModel,
-        topTabController: _topTabController,
-        analyticsService: widget.analyticsService,
-        rateAndReviewService: widget.rateAndReviewService,
-      );
-    } else if (widget.viewModel.loadDataState == LoadDataState.error) {
-      return const Center(
-        child: GenericErrorMessage(),
-      );
-    }
-
-    return const LoadingIndicator();
+            return _Collection(
+              viewModel: widget.viewModel,
+              boardGamesFiltersStore: widget.boardGamesFiltersStore,
+              topTabController: _topTabController,
+              analyticsService: widget.analyticsService,
+              rateAndReviewService: widget.rateAndReviewService,
+            );
+        }
+      },
+    );
   }
 
   @override
@@ -112,6 +122,7 @@ class GamesPageState extends State<GamesPage> with SingleTickerProviderStateMixi
 class _Collection extends StatelessWidget {
   const _Collection({
     required this.viewModel,
+    required this.boardGamesFiltersStore,
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
@@ -119,6 +130,7 @@ class _Collection extends StatelessWidget {
   }) : super(key: key);
 
   final GamesViewModel viewModel;
+  final BoardGamesFiltersStore boardGamesFiltersStore;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -131,6 +143,7 @@ class _Collection extends StatelessWidget {
         slivers: <Widget>[
           _AppBar(
             viewModel: viewModel,
+            boardGamesFiltersStore: boardGamesFiltersStore,
             topTabController: topTabController,
             analyticsService: analyticsService,
             rateAndReviewService: rateAndReviewService,
@@ -180,6 +193,7 @@ class _Collection extends StatelessWidget {
 class _AppBar extends StatefulWidget {
   const _AppBar({
     required this.viewModel,
+    required this.boardGamesFiltersStore,
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
@@ -187,6 +201,7 @@ class _AppBar extends StatefulWidget {
   }) : super(key: key);
 
   final GamesViewModel viewModel;
+  final BoardGamesFiltersStore boardGamesFiltersStore;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -221,10 +236,10 @@ class _AppBarState extends State<_AppBar> {
                 );
               },
               icon: const Icon(Icons.search)),
-          Consumer<BoardGamesFiltersStore>(
-            builder: (_, boardGamesFiltersStore, __) {
+          Observer(
+            builder: (_) {
               return IconButton(
-                icon: boardGamesFiltersStore.anyFiltersApplied
+                icon: widget.boardGamesFiltersStore.anyFiltersApplied
                     ? const Icon(Icons.filter_alt_rounded, color: AppColors.accentColor)
                     : const Icon(Icons.filter_alt_outlined, color: AppColors.accentColor),
                 onPressed: widget.viewModel.anyBoardGames
@@ -278,7 +293,7 @@ class _AppBarState extends State<_AppBar> {
       ),
       context: context,
       builder: (_) {
-        return const GamesFilterPanel();
+        return GamesFilterPanel(boardGamesFiltersStore: widget.boardGamesFiltersStore);
       },
     );
   }

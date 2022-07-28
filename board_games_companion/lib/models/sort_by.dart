@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:mobx/mobx.dart';
 
 import '../common/enums/order_by.dart';
 import '../common/enums/sort_by_option.dart';
@@ -7,10 +8,13 @@ import '../common/hive_boxes.dart';
 part 'sort_by.g.dart';
 
 @HiveType(typeId: HiveBoxes.sortByTypeId)
-class SortBy {
-  SortBy({required this.sortByOption});
+class SortBy = _SortBy with _$SortBy;
+
+abstract class _SortBy with Store {
+  _SortBy({required this.sortByOption});
 
   @HiveField(0)
+  @observable
   SortByOption sortByOption;
 
   String get name {
@@ -33,7 +37,10 @@ class SortBy {
   }
 
   @HiveField(1)
+  @observable
   OrderBy orderBy = OrderBy.Ascending;
+
   @HiveField(2)
+  @observable
   bool selected = false;
 }

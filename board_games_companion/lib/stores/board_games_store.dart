@@ -2,6 +2,7 @@ import 'package:basics/basics.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 
 import '../common/hive_boxes.dart';
 import '../models/collection_import_result.dart';
@@ -13,6 +14,7 @@ import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
 import '../services/score_service.dart';
 
+@singleton
 class BoardGamesStore with ChangeNotifier {
   BoardGamesStore(
     this._boardGamesService,

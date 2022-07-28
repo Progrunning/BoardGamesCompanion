@@ -61,18 +61,14 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           final rateAndReviewService = getIt<RateAndReviewService>();
           final playersViewModel = getIt<PlayersViewModel>();
           final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
-
-          final boardGamesStore = Provider.of<BoardGamesStore>(
-            context,
-            listen: false,
-          );
-          final gamesViewModel = GamesViewModel(boardGamesStore, boardGamesFiltersStore);
+          final gamesViewModel = getIt<GamesViewModel>();
 
           return HomePage(
             analyticsService: analyticsService,
             rateAndReviewService: rateAndReviewService,
             gamesViewModel: gamesViewModel,
             playersViewModel: playersViewModel,
+            boardGamesFiltersStore: boardGamesFiltersStore,
           );
         },
         BoardGamesDetailsPage.pageRoute: (BuildContext context) {

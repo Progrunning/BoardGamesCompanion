@@ -5,6 +5,7 @@ import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/widgets/common/elevated_icon_button.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
@@ -19,7 +20,12 @@ import '../../stores/board_games_store.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 
 class GamesFilterPanel extends StatefulWidget {
-  const GamesFilterPanel({Key? key}) : super(key: key);
+  const GamesFilterPanel({
+    required this.boardGamesFiltersStore,
+    Key? key,
+  }) : super(key: key);
+
+  final BoardGamesFiltersStore boardGamesFiltersStore;
 
   @override
   GamesFilterPanelState createState() => GamesFilterPanelState();
@@ -40,40 +46,40 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BoardGamesFiltersStore>(
-      builder: (_, boardGamesFiltersStore, __) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: Dimensions.standardSpacing,
-              top: Dimensions.doubleStandardSpacing,
-              right: Dimensions.standardSpacing,
-              bottom: Dimensions.doubleStandardSpacing,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: Dimensions.standardSpacing,
+          top: Dimensions.doubleStandardSpacing,
+          right: Dimensions.standardSpacing,
+          bottom: Dimensions.doubleStandardSpacing,
+        ),
+        child: Column(
+          children: <Widget>[
+            _SortBy(boardGamesFiltersStore: widget.boardGamesFiltersStore),
+            _Filters(
+              boardGamesFiltersStore: widget.boardGamesFiltersStore,
+              boardGamesStore: boardGamesStore,
             ),
-            child: Column(
-              children: <Widget>[
-                _SortBy(boardGamesFiltersStore: boardGamesFiltersStore),
-                _Filters(
-                  boardGamesFiltersStore: boardGamesFiltersStore,
-                  boardGamesStore: boardGamesStore,
-                ),
-                const SizedBox(height: Dimensions.standardSpacing),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedIconButton(
+            const SizedBox(height: Dimensions.standardSpacing),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Observer(
+                builder: (_) {
+                  return ElevatedIconButton(
                     icon: const Icon(Icons.clear),
                     title: AppText.filterGamesPanelClearFiltersButtonText,
                     color: AppColors.accentColor,
-                    onPressed: boardGamesFiltersStore.anyFiltersApplied
-                        ? () => _clearFilters(boardGamesFiltersStore)
+                    onPressed: widget.boardGamesFiltersStore.anyFiltersApplied
+                        ? () => _clearFilters(widget.boardGamesFiltersStore)
                         : null,
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
@@ -99,15 +105,13 @@ class _SortBy extends StatelessWidget {
         const Text('Sort by', style: AppTheme.titleTextStyle),
         Wrap(
           spacing: Dimensions.standardSpacing,
-          children: List<Widget>.generate(
-            _boardGamesFiltersStore.sortBy.length,
-            (index) {
-              return _SortByChip(
-                sortBy: _boardGamesFiltersStore.sortBy[index],
+          children: [
+            for (final sortByOption in _boardGamesFiltersStore.sortByOptions)
+              _SortByChip(
+                sortBy: sortByOption,
                 boardGamesFiltersStore: _boardGamesFiltersStore,
-              );
-            },
-          ),
+              )
+          ],
         ),
         const SizedBox(height: Dimensions.doubleStandardSpacing),
       ],
@@ -127,35 +131,40 @@ class _SortByChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget orderByIcon = Container();
-    final orderByIconColor = sortBy.selected ? AppColors.defaultTextColor : AppColors.accentColor;
-    switch (sortBy.orderBy) {
-      case OrderBy.Ascending:
-        orderByIcon = Icon(Icons.arrow_drop_up, color: orderByIconColor);
-        break;
-      case OrderBy.Descending:
-        orderByIcon = Icon(Icons.arrow_drop_down, color: orderByIconColor);
-        break;
-    }
+    return Observer(
+      builder: (_) {
+        Widget orderByIcon = Container();
+        final orderByIconColor =
+            sortBy.selected ? AppColors.defaultTextColor : AppColors.accentColor;
+        switch (sortBy.orderBy) {
+          case OrderBy.Ascending:
+            orderByIcon = Icon(Icons.arrow_drop_up, color: orderByIconColor);
+            break;
+          case OrderBy.Descending:
+            orderByIcon = Icon(Icons.arrow_drop_down, color: orderByIconColor);
+            break;
+        }
 
-    return ChoiceChip(
-      labelStyle: const TextStyle(color: AppColors.defaultTextColor),
-      label: Text(
-        sortBy.name,
-        style: TextStyle(
-          color: sortBy.selected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
-        ),
-      ),
-      selected: sortBy.selected,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-      ),
-      selectedColor: AppColors.accentColor,
-      shadowColor: AppColors.shadowColor,
-      backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
-      avatar: orderByIcon,
-      onSelected: (isSelected) {
-        boardGamesFiltersStore.updateSortBySelection(sortBy);
+        return ChoiceChip(
+          labelStyle: const TextStyle(color: AppColors.defaultTextColor),
+          label: Text(
+            sortBy.name,
+            style: TextStyle(
+              color: sortBy.selected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
+            ),
+          ),
+          selected: sortBy.selected,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+          ),
+          selectedColor: AppColors.accentColor,
+          shadowColor: AppColors.shadowColor,
+          backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
+          avatar: orderByIcon,
+          onSelected: (isSelected) {
+            boardGamesFiltersStore.updateSortBySelection(sortBy);
+          },
+        );
       },
     );
   }
@@ -192,16 +201,39 @@ class _Filters extends StatelessWidget {
             ),
             child: Container(
               color: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _FilterRatingAnyValue(boardGamesFiltersStore: boardGamesFiltersStore),
-                  _FilterRatingValue(rating: 6.5, boardGamesFiltersStore: boardGamesFiltersStore),
-                  _FilterRatingValue(rating: 7.5, boardGamesFiltersStore: boardGamesFiltersStore),
-                  _FilterRatingValue(rating: 8.0, boardGamesFiltersStore: boardGamesFiltersStore),
-                  _FilterRatingValue(rating: 8.5, boardGamesFiltersStore: boardGamesFiltersStore),
-                ],
+              child: Observer(
+                builder: (_) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      _FilterRatingValue(
+                        isSelected: boardGamesFiltersStore.filterByRating == null,
+                        onRatingSelected: (double? rating) => updateFilterRating(rating),
+                      ),
+                      _FilterRatingValue(
+                        rating: 6.5,
+                        onRatingSelected: (double? rating) => updateFilterRating(rating),
+                        isSelected: boardGamesFiltersStore.filterByRating == 6.5,
+                      ),
+                      _FilterRatingValue(
+                        rating: 7.5,
+                        onRatingSelected: (double? rating) => updateFilterRating(rating),
+                        isSelected: boardGamesFiltersStore.filterByRating == 7.5,
+                      ),
+                      _FilterRatingValue(
+                        rating: 8.0,
+                        onRatingSelected: (double? rating) => updateFilterRating(rating),
+                        isSelected: boardGamesFiltersStore.filterByRating == 8.0,
+                      ),
+                      _FilterRatingValue(
+                        rating: 8.5,
+                        onRatingSelected: (double? rating) => updateFilterRating(rating),
+                        isSelected: boardGamesFiltersStore.filterByRating == 8.5,
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -219,44 +251,9 @@ class _Filters extends StatelessWidget {
       ],
     );
   }
-}
 
-class _FilterRatingAnyValue extends StatelessWidget {
-  const _FilterRatingAnyValue({
-    Key? key,
-    required BoardGamesFiltersStore boardGamesFiltersStore,
-  })  : _boardGamesFiltersStore = boardGamesFiltersStore,
-        super(key: key);
-
-  final BoardGamesFiltersStore _boardGamesFiltersStore;
-
-  @override
-  Widget build(BuildContext context) {
-    final isSelected = _boardGamesFiltersStore.filterByRating == null;
-    final anyRating = Center(
-      child: Text(
-        'Any',
-        style: TextStyle(
-          color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
-        ),
-      ),
-    );
-
-    if (isSelected) {
-      return Expanded(
-          child: ElevatedContainer(
-        backgroundColor: AppColors.accentColor,
-        child: anyRating,
-      ));
-    }
-    return Expanded(
-      child: InkWell(
-        child: anyRating,
-        onTap: () {
-          _boardGamesFiltersStore.updateFilterByRating(null);
-        },
-      ),
-    );
+  void updateFilterRating(double? rating) {
+    boardGamesFiltersStore.updateFilterByRating(rating);
   }
 }
 
@@ -336,44 +333,52 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
 class _FilterRatingValue extends StatelessWidget {
   const _FilterRatingValue({
     Key? key,
-    required double rating,
-    required BoardGamesFiltersStore boardGamesFiltersStore,
+    double? rating,
+    required bool isSelected,
+    required Function(double?) onRatingSelected,
   })  : _rating = rating,
-        _boardGamesFiltersStore = boardGamesFiltersStore,
+        _isSelected = isSelected,
+        _onRatingSelected = onRatingSelected,
         super(key: key);
 
-  final double _rating;
-  final BoardGamesFiltersStore _boardGamesFiltersStore;
+  final double? _rating;
+  final bool _isSelected;
+  final Function(double?) _onRatingSelected;
 
   @override
   Widget build(BuildContext context) {
-    final isSelected = _rating == _boardGamesFiltersStore.filterByRating;
-    final boardGameRatingHexagon = BoardGameRatingHexagon(
-      width: Dimensions.collectionFilterHexagonSize,
-      height: Dimensions.collectionFilterHexagonSize,
-      rating: _rating,
-      fontSize: Dimensions.smallFontSize,
-      hexColor: isSelected ? AppColors.primaryColor : AppColors.accentColor,
-    );
-    final centeredBoardGameRatingHexagon = Center(
-      child: boardGameRatingHexagon,
-    );
+    final boardGameRatingHexagon = _rating == null
+        ? Center(
+            child: Text(
+              'Any',
+              style: TextStyle(
+                color: _isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
+              ),
+            ),
+          )
+        : Center(
+            child: BoardGameRatingHexagon(
+              width: Dimensions.collectionFilterHexagonSize,
+              height: Dimensions.collectionFilterHexagonSize,
+              rating: _rating,
+              fontSize: Dimensions.smallFontSize,
+              hexColor: _isSelected ? AppColors.primaryColor : AppColors.accentColor,
+            ),
+          );
 
-    if (isSelected) {
-      final selectionContainer = ElevatedContainer(
-        backgroundColor: AppColors.accentColor,
-        child: centeredBoardGameRatingHexagon,
+    if (_isSelected) {
+      return Expanded(
+        child: ElevatedContainer(
+          backgroundColor: AppColors.accentColor,
+          child: boardGameRatingHexagon,
+        ),
       );
-
-      return Expanded(child: selectionContainer);
     }
 
     return Expanded(
       child: InkWell(
-        child: centeredBoardGameRatingHexagon,
-        onTap: () {
-          _boardGamesFiltersStore.updateFilterByRating(_rating);
-        },
+        child: boardGameRatingHexagon,
+        onTap: () => _onRatingSelected(_rating),
       ),
     );
   }

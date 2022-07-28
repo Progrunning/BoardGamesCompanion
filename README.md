@@ -114,12 +114,13 @@ New app version will be pushed into the *Google Play Store*.
 
 # Code generation
 
-The command to auto generate files `flutter packages pub run build_runner build -v --delete-conflicting-outputs`. The following are libraries using auto generated code:
+Use the following command to auto-generate files `flutter packages pub run build_runner build -v --delete-conflicting-outputs`. The below libraries rely on the auto generated files
 
 - hive
 - injactable
+- mobx
 
-NOTE: Adding `--delete-conflicting-outputs` parameter fixes problems with conflicting files.
+> NOTE: Adding `--delete-conflicting-outputs` parameter fixes problems with conflicting files.
 
 # App Mockups
 

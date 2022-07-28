@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
-import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -40,7 +39,6 @@ import 'services/playthroughs_service.dart';
 import 'services/preferences_service.dart';
 import 'services/score_service.dart';
 import 'services/user_service.dart';
-import 'stores/board_games_filters_store.dart';
 import 'stores/board_games_store.dart';
 import 'stores/hot_board_games_store.dart';
 import 'stores/playthrough_statistics_store.dart';
@@ -154,9 +152,6 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<PlaythroughsStore>(
           create: (context) => getIt<PlaythroughsStore>(),
         ),
-        ChangeNotifierProvider<BoardGamesFiltersStore>(
-          create: (context) => getIt<BoardGamesFiltersStore>(),
-        ),
         ChangeNotifierProvider<BoardGamesStore>(
           create: (context) {
             final BoardGamesService boardGamesService = getIt<BoardGamesService>();
@@ -178,23 +173,24 @@ class App extends StatelessWidget {
             return playthroughStatisticsStore!;
           },
         ),
-        ChangeNotifierProxyProvider2<BoardGamesFiltersStore, BoardGamesStore, GamesViewModel>(
-          create: (context) {
-            final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
-            final boardGamesStore = Provider.of<BoardGamesStore>(
-              context,
-              listen: false,
-            );
-            final gamesViewModel = GamesViewModel(boardGamesStore, boardGamesFiltersStore);
-            gamesViewModel.loadBoardGames();
+        // TODO Ensure that updates fomr board games store propagate to the games view model
+        // ChangeNotifierProxyProvider2<BoardGamesFiltersStore, BoardGamesStore, GamesViewModel>(
+        //   create: (context) {
+        //     final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
+        //     final boardGamesStore = Provider.of<BoardGamesStore>(
+        //       context,
+        //       listen: false,
+        //     );
+        //     final gamesViewModel = GamesViewModel(boardGamesStore, boardGamesFiltersStore);
+        //     gamesViewModel.loadBoardGames();
 
-            return gamesViewModel;
-          },
-          update: (_, filtersStore, boardGamesStore, gamesViewModel) {
-            gamesViewModel!.applyFilters();
-            return gamesViewModel;
-          },
-        ),
+        //     return gamesViewModel;
+        //   },
+        //   update: (_, filtersStore, boardGamesStore, gamesViewModel) {
+        //     gamesViewModel!.applyFilters();
+        //     return gamesViewModel;
+        //   },
+        // ),
       ],
       child: const BoardGamesCompanionApp(),
     );

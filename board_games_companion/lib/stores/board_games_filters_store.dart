@@ -1,25 +1,35 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
 
 import '../common/analytics.dart';
 import '../common/constants.dart';
 import '../common/enums/order_by.dart';
 import '../common/enums/sort_by_option.dart';
-import '../common/hive_boxes.dart';
 import '../models/collection_filters.dart';
 import '../models/sort_by.dart';
 import '../services/analytics_service.dart';
 import '../services/board_games_filters_service.dart';
 
+part 'board_games_filters_store.g.dart';
+
 @singleton
-class BoardGamesFiltersStore with ChangeNotifier {
-  BoardGamesFiltersStore(
+class BoardGamesFiltersStore = _BoardGamesFiltersStore with _$BoardGamesFiltersStore;
+
+abstract class _BoardGamesFiltersStore with Store {
+  _BoardGamesFiltersStore(
     this._boardGamesFiltersService,
     this._analyticsService,
   );
 
-  final List<SortBy> _sortBy = [
+  final BoardGamesFiltersService _boardGamesFiltersService;
+  final AnalyticsService _analyticsService;
+
+  @observable
+  CollectionFilters? _collectionFilters;
+
+  @observable
+  List<SortBy> sortByOptions = [
     SortBy(sortByOption: SortByOption.Name),
     SortBy(sortByOption: SortByOption.YearPublished),
     SortBy(sortByOption: SortByOption.LastUpdated)..selected = true,
@@ -28,35 +38,32 @@ class BoardGamesFiltersStore with ChangeNotifier {
     SortBy(sortByOption: SortByOption.Rating),
   ];
 
-  final BoardGamesFiltersService _boardGamesFiltersService;
-  final AnalyticsService _analyticsService;
-
-  CollectionFilters? _collectionFilters;
-
-  List<SortBy> get sortBy => _sortBy;
+  @computed
   double? get filterByRating => _collectionFilters?.filterByRating;
+
+  @computed
   int? get numberOfPlayers => _collectionFilters?.numberOfPlayers;
 
+  @computed
   bool get anyFiltersApplied => filterByRating != null || numberOfPlayers != null;
 
+  @action
   Future<void> loadFilterPreferences() async {
     _collectionFilters = await _boardGamesFiltersService.retrieveCollectionFiltersPreferences();
     if (_collectionFilters == null) {
-      notifyListeners();
       return;
     }
 
     _updateSortBy();
-
-    notifyListeners();
   }
 
+  @action
   Future<void> clearFilters() async {
     await _boardGamesFiltersService.clearFilters();
     _collectionFilters = null;
-    notifyListeners();
   }
 
+  @action
   Future<void> updateSortBySelection(SortBy sortBy) async {
     // MK If already selected, update ordering direction
     if (sortBy.selected) {
@@ -67,9 +74,10 @@ class BoardGamesFiltersStore with ChangeNotifier {
       }
     }
 
-    for (final sb in _sortBy) {
+    for (final sb in sortByOptions) {
       sb.selected = false;
     }
+
     sortBy.selected = true;
 
     _collectionFilters ??= CollectionFilters();
@@ -81,14 +89,12 @@ class BoardGamesFiltersStore with ChangeNotifier {
         Analytics.orderByParameter: sortBy.orderBy.toString()
       },
     );
-
     _collectionFilters!.sortBy = sortBy;
 
     await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
-
-    notifyListeners();
   }
 
+  @action
   Future<void> updateFilterByRating(double? filterByRating) async {
     _collectionFilters ??= CollectionFilters();
 
@@ -103,18 +109,16 @@ class BoardGamesFiltersStore with ChangeNotifier {
     );
 
     await _boardGamesFiltersService.addOrUpdateCollectionFilters(_collectionFilters);
-
-    notifyListeners();
   }
 
+  @action
   Future<void> changeNumberOfPlayers(int? numberOfPlayers) async {
     _collectionFilters ??= CollectionFilters();
 
     _collectionFilters!.numberOfPlayers = numberOfPlayers;
-
-    notifyListeners();
   }
 
+  @action
   Future<void> updateNumberOfPlayers(int? numberOfPlayers) async {
     await _analyticsService.logEvent(
       name: Analytics.filterCollection,
@@ -128,23 +132,16 @@ class BoardGamesFiltersStore with ChangeNotifier {
   }
 
   void _updateSortBy() {
-    for (final sb in _sortBy) {
+    for (final sb in sortByOptions) {
       sb.selected = false;
     }
 
     final SortBy? selectedSortBy =
-        _sortBy.firstWhereOrNull((sb) => sb.name == _collectionFilters?.sortBy?.name);
+        sortByOptions.firstWhereOrNull((sb) => sb.name == _collectionFilters?.sortBy?.name);
 
     if (selectedSortBy != null) {
       selectedSortBy.orderBy = _collectionFilters!.sortBy!.orderBy;
       selectedSortBy.selected = _collectionFilters!.sortBy!.selected;
     }
-  }
-
-  @override
-  void dispose() {
-    _boardGamesFiltersService.closeBox(HiveBoxes.collectionFilters);
-
-    super.dispose();
   }
 }

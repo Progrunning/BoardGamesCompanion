@@ -9,6 +9,7 @@ import 'package:firebase_analytics/observer.dart' as _i7;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
+import 'pages/games/games_view_model.dart' as _i25;
 import 'pages/players/players_view_model.dart' as _i10;
 import 'pages/playthroughs/playthroughs_view_model.dart' as _i22;
 import 'services/analytics_service.dart' as _i15;
@@ -16,7 +17,7 @@ import 'services/board_games_filters_service.dart' as _i3;
 import 'services/board_games_geek_service.dart' as _i17;
 import 'services/board_games_service.dart' as _i18;
 import 'services/file_service.dart' as _i5;
-import 'services/injectable_register_module.dart' as _i25;
+import 'services/injectable_register_module.dart' as _i27;
 import 'services/player_service.dart' as _i8;
 import 'services/playthroughs_service.dart' as _i19;
 import 'services/preferences_service.dart' as _i11;
@@ -24,9 +25,10 @@ import 'services/rate_and_review_service.dart' as _i12;
 import 'services/score_service.dart' as _i13;
 import 'services/user_service.dart' as _i14;
 import 'stores/board_games_filters_store.dart' as _i16;
+import 'stores/board_games_store.dart' as _i24;
 import 'stores/players_store.dart' as _i9;
 import 'stores/playthrough_statistics_store.dart' as _i20;
-import 'stores/playthrough_store.dart' as _i24;
+import 'stores/playthrough_store.dart' as _i26;
 import 'stores/playthroughs_store.dart' as _i21;
 import 'utilities/analytics_route_observer.dart' as _i23;
 import 'utilities/custom_http_client_adapter.dart'
@@ -77,14 +79,21 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i18.BoardGamesService>()));
   gh.factory<_i23.AnalyticsRouteObserver>(
       () => _i23.AnalyticsRouteObserver(get<_i15.AnalyticsService>()));
-  gh.factory<_i24.PlaythroughStore>(() => _i24.PlaythroughStore(
+  gh.singleton<_i24.BoardGamesStore>(_i24.BoardGamesStore(
+      get<_i18.BoardGamesService>(),
+      get<_i19.PlaythroughService>(),
+      get<_i13.ScoreService>(),
+      get<_i8.PlayerService>()));
+  gh.factory<_i25.GamesViewModel>(() => _i25.GamesViewModel(
+      get<_i24.BoardGamesStore>(), get<_i16.BoardGamesFiltersStore>()));
+  gh.factory<_i26.PlaythroughStore>(() => _i26.PlaythroughStore(
       get<_i8.PlayerService>(),
       get<_i13.ScoreService>(),
       get<_i21.PlaythroughsStore>()));
   return get;
 }
 
-class _$RegisterModule extends _i25.RegisterModule {
+class _$RegisterModule extends _i27.RegisterModule {
   @override
   _i6.FirebaseAnalytics get firebaseAnalytics => _i6.FirebaseAnalytics();
 }

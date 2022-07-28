@@ -8,6 +8,7 @@ import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
+import '../../stores/board_games_filters_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container_widget.dart';
@@ -23,6 +24,7 @@ class HomePage extends StatefulWidget {
     required this.rateAndReviewService,
     required this.gamesViewModel,
     required this.playersViewModel,
+    required this.boardGamesFiltersStore,
     Key? key,
   }) : super(key: key);
 
@@ -32,6 +34,7 @@ class HomePage extends StatefulWidget {
   final RateAndReviewService rateAndReviewService;
   final GamesViewModel gamesViewModel;
   final PlayersViewModel playersViewModel;
+  final BoardGamesFiltersStore boardGamesFiltersStore;
 
   static final GlobalKey<ScaffoldMessengerState> homePageGlobalKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -68,11 +71,12 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                Consumer2<GamesViewModel, UserStore>(
-                  builder: (_, viewModel, userStore, __) {
+                Consumer<UserStore>(
+                  builder: (_, userStore, __) {
                     return GamesPage(
-                      viewModel,
+                      widget.gamesViewModel,
                       userStore,
+                      widget.boardGamesFiltersStore,
                       widget.analyticsService,
                       widget.rateAndReviewService,
                     );
