@@ -33,11 +33,7 @@ import 'models/sort_by.dart';
 import 'pages/players/players_view_model.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
-import 'services/board_games_service.dart';
-import 'services/player_service.dart';
-import 'services/playthroughs_service.dart';
 import 'services/preferences_service.dart';
-import 'services/score_service.dart';
 import 'services/user_service.dart';
 import 'stores/board_games_store.dart';
 import 'stores/hot_board_games_store.dart';
@@ -151,20 +147,6 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<PlaythroughsStore>(
           create: (context) => getIt<PlaythroughsStore>(),
-        ),
-        ChangeNotifierProvider<BoardGamesStore>(
-          create: (context) {
-            final BoardGamesService boardGamesService = getIt<BoardGamesService>();
-            final PlaythroughService playthroughService = getIt<PlaythroughService>();
-            final ScoreService scoreService = getIt<ScoreService>();
-            final PlayerService playerService = getIt<PlayerService>();
-            return BoardGamesStore(
-              boardGamesService,
-              playthroughService,
-              scoreService,
-              playerService,
-            );
-          },
         ),
         ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
             PlaythroughStatisticsStore>(

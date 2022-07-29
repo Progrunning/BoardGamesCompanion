@@ -1,49 +1,33 @@
 import 'dart:math';
 
 import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/widgets/common/elevated_icon_button.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
-import '../../extensions/int_extensions.dart';
 import '../../models/sort_by.dart';
-import '../../stores/board_games_filters_store.dart';
-import '../../stores/board_games_store.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import 'games_view_model.dart';
 
 class GamesFilterPanel extends StatefulWidget {
   const GamesFilterPanel({
-    required this.boardGamesFiltersStore,
+    required this.gamesViewModel,
     Key? key,
   }) : super(key: key);
 
-  final BoardGamesFiltersStore boardGamesFiltersStore;
+  final GamesViewModel gamesViewModel;
 
   @override
   GamesFilterPanelState createState() => GamesFilterPanelState();
 }
 
 class GamesFilterPanelState extends State<GamesFilterPanel> {
-  late BoardGamesStore boardGamesStore;
-
-  @override
-  void initState() {
-    super.initState();
-
-    boardGamesStore = Provider.of<BoardGamesStore>(
-      context,
-      listen: false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -56,11 +40,8 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
         ),
         child: Column(
           children: <Widget>[
-            _SortBy(boardGamesFiltersStore: widget.boardGamesFiltersStore),
-            _Filters(
-              boardGamesFiltersStore: widget.boardGamesFiltersStore,
-              boardGamesStore: boardGamesStore,
-            ),
+            _SortBy(gamesViewModel: widget.gamesViewModel),
+            _Filters(gamesViewModel: widget.gamesViewModel),
             const SizedBox(height: Dimensions.standardSpacing),
             Align(
               alignment: Alignment.bottomRight,
@@ -70,8 +51,8 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
                     icon: const Icon(Icons.clear),
                     title: AppText.filterGamesPanelClearFiltersButtonText,
                     color: AppColors.accentColor,
-                    onPressed: widget.boardGamesFiltersStore.anyFiltersApplied
-                        ? () => _clearFilters(widget.boardGamesFiltersStore)
+                    onPressed: widget.gamesViewModel.anyFiltersApplied
+                        ? () => widget.gamesViewModel.clearFilters()
                         : null,
                   );
                 },
@@ -82,20 +63,16 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
       ),
     );
   }
-
-  Future<void> _clearFilters(BoardGamesFiltersStore boardGamesFiltersStore) async {
-    await boardGamesFiltersStore.clearFilters();
-  }
 }
 
 class _SortBy extends StatelessWidget {
   const _SortBy({
     Key? key,
-    required BoardGamesFiltersStore boardGamesFiltersStore,
-  })  : _boardGamesFiltersStore = boardGamesFiltersStore,
+    required GamesViewModel gamesViewModel,
+  })  : _gamesViewModel = gamesViewModel,
         super(key: key);
 
-  final BoardGamesFiltersStore _boardGamesFiltersStore;
+  final GamesViewModel _gamesViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +83,11 @@ class _SortBy extends StatelessWidget {
         Wrap(
           spacing: Dimensions.standardSpacing,
           children: [
-            for (final sortByOption in _boardGamesFiltersStore.sortByOptions)
+            for (final sortByOption in _gamesViewModel.sortByOptions)
               _SortByChip(
                 sortBy: sortByOption,
-                boardGamesFiltersStore: _boardGamesFiltersStore,
+                onSortByChange: (SortBy selctedSortBy) =>
+                    _gamesViewModel.updateSortBySelection(selctedSortBy),
               )
           ],
         ),
@@ -122,12 +100,12 @@ class _SortBy extends StatelessWidget {
 class _SortByChip extends StatelessWidget {
   const _SortByChip({
     required this.sortBy,
-    required this.boardGamesFiltersStore,
+    required this.onSortByChange,
     Key? key,
   }) : super(key: key);
 
   final SortBy sortBy;
-  final BoardGamesFiltersStore boardGamesFiltersStore;
+  final ValueChanged<SortBy> onSortByChange;
 
   @override
   Widget build(BuildContext context) {
@@ -161,9 +139,7 @@ class _SortByChip extends StatelessWidget {
           shadowColor: AppColors.shadowColor,
           backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
           avatar: orderByIcon,
-          onSelected: (isSelected) {
-            boardGamesFiltersStore.updateSortBySelection(sortBy);
-          },
+          onSelected: (isSelected) => onSortByChange(sortBy),
         );
       },
     );
@@ -172,13 +148,11 @@ class _SortByChip extends StatelessWidget {
 
 class _Filters extends StatelessWidget {
   const _Filters({
-    required this.boardGamesFiltersStore,
-    required this.boardGamesStore,
+    required this.gamesViewModel,
     Key? key,
   }) : super(key: key);
 
-  final BoardGamesFiltersStore boardGamesFiltersStore;
-  final BoardGamesStore boardGamesStore;
+  final GamesViewModel gamesViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -208,28 +182,28 @@ class _Filters extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       _FilterRatingValue(
-                        isSelected: boardGamesFiltersStore.filterByRating == null,
+                        isSelected: gamesViewModel.filterByRating == null,
                         onRatingSelected: (double? rating) => updateFilterRating(rating),
                       ),
                       _FilterRatingValue(
                         rating: 6.5,
                         onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: boardGamesFiltersStore.filterByRating == 6.5,
+                        isSelected: gamesViewModel.filterByRating == 6.5,
                       ),
                       _FilterRatingValue(
                         rating: 7.5,
                         onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: boardGamesFiltersStore.filterByRating == 7.5,
+                        isSelected: gamesViewModel.filterByRating == 7.5,
                       ),
                       _FilterRatingValue(
                         rating: 8.0,
                         onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: boardGamesFiltersStore.filterByRating == 8.0,
+                        isSelected: gamesViewModel.filterByRating == 8.0,
                       ),
                       _FilterRatingValue(
                         rating: 8.5,
                         onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: boardGamesFiltersStore.filterByRating == 8.5,
+                        isSelected: gamesViewModel.filterByRating == 8.5,
                       ),
                     ],
                   );
@@ -243,45 +217,32 @@ class _Filters extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text('Number of players', style: AppTheme.sectionHeaderTextStyle),
         ),
-        if (boardGamesStore.allBoardGames.isNotEmpty)
-          _FilterNumberOfPlayersSlider(
-            boardGamesFiltersStore: boardGamesFiltersStore,
-            boardGamesStore: boardGamesStore,
-          ),
+        Observer(builder: (_) {
+          if (gamesViewModel.anyBoardGames) {
+            return _FilterNumberOfPlayersSlider(gamesViewModel: gamesViewModel);
+          }
+
+          return const SizedBox.shrink();
+        }),
       ],
     );
   }
 
   void updateFilterRating(double? rating) {
-    boardGamesFiltersStore.updateFilterByRating(rating);
+    gamesViewModel.updateFilterByRating(rating);
   }
 }
 
 class _FilterNumberOfPlayersSlider extends StatelessWidget {
   const _FilterNumberOfPlayersSlider({
-    required this.boardGamesFiltersStore,
-    required this.boardGamesStore,
+    required this.gamesViewModel,
     Key? key,
   }) : super(key: key);
 
-  final BoardGamesFiltersStore boardGamesFiltersStore;
-  final BoardGamesStore boardGamesStore;
+  final GamesViewModel gamesViewModel;
 
   @override
   Widget build(BuildContext context) {
-    final minNumberOfPlayers = max(
-        boardGamesStore.allBoardGames
-            .where((boardGameDetails) => boardGameDetails.minPlayers != null)
-            .map((boardGameDetails) => boardGameDetails.minPlayers!)
-            .reduce(min),
-        Constants.minNumberOfPlayers);
-    final maxNumberOfPlayers = min(
-        boardGamesStore.allBoardGames
-            .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
-            .map((boardGameDetails) => boardGameDetails.maxPlayers!)
-            .reduce(max),
-        Constants.maxNumberOfPlayers);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -290,8 +251,10 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            const Text(AppText.gameFiltersAnyNumberOfPlayers,
-                style: TextStyle(fontSize: Dimensions.smallFontSize)),
+            const Text(
+              AppText.gameFiltersAnyNumberOfPlayers,
+              style: TextStyle(fontSize: Dimensions.smallFontSize),
+            ),
             Expanded(
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
@@ -305,24 +268,30 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
                   valueIndicatorTextStyle: const TextStyle(fontSize: Dimensions.smallFontSize),
                   showValueIndicator: ShowValueIndicator.always,
                 ),
-                child: Slider(
-                  value: min(boardGamesFiltersStore.numberOfPlayers?.toDouble() ?? 0,
-                      maxNumberOfPlayers.toDouble()),
-                  divisions: maxNumberOfPlayers,
-                  min: minNumberOfPlayers.toDouble() - 1,
-                  max: maxNumberOfPlayers.toDouble(),
-                  label: boardGamesFiltersStore.numberOfPlayers.toNumberOfPlayersFilter(),
-                  onChanged: (value) {
-                    boardGamesFiltersStore.changeNumberOfPlayers(value != 0 ? value.round() : null);
+                child: Observer(
+                  builder: (_) {
+                    return Slider(
+                      value: min(gamesViewModel.filterByNumberOfPlayers?.toDouble() ?? 0,
+                          gamesViewModel.maxNumberOfPlayers),
+                      divisions: gamesViewModel.maxNumberOfPlayers.toInt(),
+                      min: gamesViewModel.minNumberOfPlayers - 1,
+                      max: gamesViewModel.maxNumberOfPlayers,
+                      label: gamesViewModel.numberOfPlayersSliderValue,
+                      onChanged: (value) =>
+                          gamesViewModel.changeNumberOfPlayers(value != 0 ? value.round() : null),
+                      onChangeEnd: (value) => gamesViewModel.updateNumberOfPlayersFilter(),
+                      activeColor: AppColors.accentColor,
+                    );
                   },
-                  onChangeEnd: (value) {
-                    boardGamesFiltersStore.updateNumberOfPlayers(value != 0 ? value.round() : null);
-                  },
-                  activeColor: AppColors.accentColor,
                 ),
               ),
             ),
-            Text('$maxNumberOfPlayers', style: const TextStyle(fontSize: Dimensions.smallFontSize)),
+            Observer(
+              builder: (_) => Text(
+                gamesViewModel.maxNumberOfPlayers.toStringAsFixed(0),
+                style: const TextStyle(fontSize: Dimensions.smallFontSize),
+              ),
+            ),
           ],
         ),
       ],

@@ -29,14 +29,14 @@ abstract class _BoardGamesFiltersStore with Store {
   CollectionFilters? _collectionFilters;
 
   @observable
-  List<SortBy> sortByOptions = [
+  ObservableList<SortBy> sortByOptions = ObservableList.of([
     SortBy(sortByOption: SortByOption.Name),
     SortBy(sortByOption: SortByOption.YearPublished),
     SortBy(sortByOption: SortByOption.LastUpdated)..selected = true,
     SortBy(sortByOption: SortByOption.Rank),
     SortBy(sortByOption: SortByOption.Playtime),
     SortBy(sortByOption: SortByOption.Rating),
-  ];
+  ]);
 
   @computed
   double? get filterByRating => _collectionFilters?.filterByRating;
@@ -119,7 +119,7 @@ abstract class _BoardGamesFiltersStore with Store {
   }
 
   @action
-  Future<void> updateNumberOfPlayers(int? numberOfPlayers) async {
+  Future<void> updateNumberOfPlayersFilter() async {
     await _analyticsService.logEvent(
       name: Analytics.filterCollection,
       parameters: <String, dynamic>{

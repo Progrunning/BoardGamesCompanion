@@ -1,52 +1,52 @@
 import 'package:basics/basics.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
 
-import '../common/hive_boxes.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/board_game_expansion.dart';
 import '../models/import_result.dart';
 import '../services/board_games_service.dart';
-import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
-import '../services/score_service.dart';
+
+part 'board_games_store.g.dart';
 
 @singleton
-class BoardGamesStore with ChangeNotifier {
-  BoardGamesStore(
+class BoardGamesStore = _BoardGamesStore with _$BoardGamesStore;
+
+abstract class _BoardGamesStore with Store {
+  _BoardGamesStore(
     this._boardGamesService,
     this._playthroughService,
-    this._scoreService,
-    this._playerService,
   );
 
   final BoardGamesService _boardGamesService;
   final PlaythroughService _playthroughService;
-  final ScoreService _scoreService;
-  final PlayerService _playerService;
 
-  List<BoardGameDetails> _allBoardGames = [];
-  List<BoardGameDetails> get allBoardGames => _allBoardGames;
+  @observable
+  ObservableList<BoardGameDetails> allBoardGames = ObservableList.of([]);
 
+  @action
   bool isInAnyCollection(String? boardGameId) {
     if (boardGameId?.isBlank ?? true) {
       return false;
     }
 
-    return _allBoardGames.any((boardGameDetails) =>
+    return allBoardGames.any((boardGameDetails) =>
         boardGameDetails.id == boardGameId &&
         (boardGameDetails.isFriends! ||
             boardGameDetails.isOnWishlist! ||
             boardGameDetails.isOwned!));
   }
 
+  @action
   Future<void> loadBoardGames() async {
-    _allBoardGames = await _boardGamesService.retrieveBoardGames();
+    allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
   }
 
+  @action
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
     try {
       await _boardGamesService.addOrUpdateBoardGame(boardGameDetails);
@@ -57,7 +57,7 @@ class BoardGamesStore with ChangeNotifier {
 
     final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
     if (existingBoardGameDetails == null) {
-      _allBoardGames.add(boardGameDetails);
+      allBoardGames.add(boardGameDetails);
     } else {
       existingBoardGameDetails.imageUrl = boardGameDetails.imageUrl;
       existingBoardGameDetails.name = boardGameDetails.name;
@@ -86,32 +86,9 @@ class BoardGamesStore with ChangeNotifier {
       existingBoardGameDetails.settings = boardGameDetails.settings;
       _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
     }
-
-    notifyListeners();
   }
 
-  void _updateBoardGameExpansions(
-    BoardGameDetails existingBoardGameDetails,
-    BoardGameDetails boardGameDetails,
-  ) {
-    if (boardGameDetails.isExpansion ?? false) {
-      // MK If updating an expansion, find the main game and update IsInCollection flag for this expansion
-      final BoardGamesExpansion? parentBoardGameExpansion = allBoardGames
-          .expand((BoardGameDetails boardGameDetails) => boardGameDetails.expansions)
-          .firstWhereOrNull(
-            (BoardGamesExpansion boardGameExpansion) =>
-                boardGameExpansion.id == boardGameDetails.id,
-          );
-
-      if (parentBoardGameExpansion != null) {
-        parentBoardGameExpansion.isInCollection = boardGameDetails.isOwned;
-      }
-    } else {
-      // MK Update main board game expansions list
-      existingBoardGameDetails.expansions = boardGameDetails.expansions;
-    }
-  }
-
+  @action
   Future<BoardGameDetails?> refreshBoardGameDetails(String boardGameId) async {
     try {
       final boardGameDetails = await _boardGamesService.getBoardGame(boardGameId);
@@ -159,6 +136,7 @@ class BoardGamesStore with ChangeNotifier {
     );
   }
 
+  @action
   Future<void> removeBoardGame(String boardGameDetailsId) async {
     try {
       await _boardGamesService.removeBoardGame(boardGameDetailsId);
@@ -167,7 +145,7 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    final boardGameToRemove = _allBoardGames.firstWhereOrNull(
+    final boardGameToRemove = allBoardGames.firstWhereOrNull(
       (boardGame) => boardGame.id == boardGameDetailsId,
     );
 
@@ -175,54 +153,62 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    _allBoardGames.remove(boardGameToRemove);
-
-    notifyListeners();
+    allBoardGames.remove(boardGameToRemove);
   }
 
+  @action
   Future<void> removeAllBggBoardGames() async {
     try {
-      final bggSyncedBoardGames = _allBoardGames
+      final bggSyncedBoardGames = allBoardGames
           .where((boardGame) => boardGame.isBggSynced!)
           .map((boardGame) => boardGame.id)
           .toList();
       await _boardGamesService.removeBoardGames(bggSyncedBoardGames);
       await _playthroughService.deletePlaythroughsForGames(bggSyncedBoardGames);
 
-      _allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
-
-      notifyListeners();
+      allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
   }
 
+  @action
   Future<CollectionImportResult> importCollections(String username) async {
     var importResult = CollectionImportResult();
 
     try {
       importResult = await _boardGamesService.importCollections(username);
       if (importResult.isSuccess) {
-        _allBoardGames = await _boardGamesService.retrieveBoardGames();
+        allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       importResult = CollectionImportResult.failure([ImportError.exception(e, stack)]);
     }
 
-    notifyListeners();
-
     return importResult;
   }
 
-  @override
-  void dispose() {
-    _boardGamesService.closeBox(HiveBoxes.boardGames);
-    _playthroughService.closeBox(HiveBoxes.playthroughs);
-    _scoreService.closeBox(HiveBoxes.scores);
-    _playerService.closeBox(HiveBoxes.players);
+  void _updateBoardGameExpansions(
+    BoardGameDetails existingBoardGameDetails,
+    BoardGameDetails boardGameDetails,
+  ) {
+    if (boardGameDetails.isExpansion ?? false) {
+      // MK If updating an expansion, find the main game and update IsInCollection flag for this expansion
+      final BoardGamesExpansion? parentBoardGameExpansion = allBoardGames
+          .expand((BoardGameDetails boardGameDetails) => boardGameDetails.expansions)
+          .firstWhereOrNull(
+            (BoardGamesExpansion boardGameExpansion) =>
+                boardGameExpansion.id == boardGameDetails.id,
+          );
 
-    super.dispose();
+      if (parentBoardGameExpansion != null) {
+        parentBoardGameExpansion.isInCollection = boardGameDetails.isOwned;
+      }
+    } else {
+      // MK Update main board game expansions list
+      existingBoardGameDetails.expansions = boardGameDetails.expansions;
+    }
   }
 }

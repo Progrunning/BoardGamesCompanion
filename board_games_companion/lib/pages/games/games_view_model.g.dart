@@ -9,6 +9,34 @@ part of 'games_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$GamesViewModel on _GamesViewModel, Store {
+  Computed<List<SortBy>>? _$sortByOptionsComputed;
+
+  @override
+  List<SortBy> get sortByOptions => (_$sortByOptionsComputed ??=
+          Computed<List<SortBy>>(() => super.sortByOptions,
+              name: '_GamesViewModel.sortByOptions'))
+      .value;
+  Computed<SortBy?>? _$selectedSortByComputed;
+
+  @override
+  SortBy? get selectedSortBy => (_$selectedSortByComputed ??= Computed<SortBy?>(
+          () => super.selectedSortBy,
+          name: '_GamesViewModel.selectedSortBy'))
+      .value;
+  Computed<bool>? _$anyFiltersAppliedComputed;
+
+  @override
+  bool get anyFiltersApplied => (_$anyFiltersAppliedComputed ??= Computed<bool>(
+          () => super.anyFiltersApplied,
+          name: '_GamesViewModel.anyFiltersApplied'))
+      .value;
+  Computed<double?>? _$filterByRatingComputed;
+
+  @override
+  double? get filterByRating => (_$filterByRatingComputed ??= Computed<double?>(
+          () => super.filterByRating,
+          name: '_GamesViewModel.filterByRating'))
+      .value;
   Computed<Map<String, BoardGameDetails>>? _$filteredBoardGamesComputed;
 
   @override
@@ -32,6 +60,35 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
       (_$anyBoardGamesComputed ??= Computed<bool>(() => super.anyBoardGames,
               name: '_GamesViewModel.anyBoardGames'))
           .value;
+  Computed<double>? _$minNumberOfPlayersComputed;
+
+  @override
+  double get minNumberOfPlayers => (_$minNumberOfPlayersComputed ??=
+          Computed<double>(() => super.minNumberOfPlayers,
+              name: '_GamesViewModel.minNumberOfPlayers'))
+      .value;
+  Computed<int?>? _$filterByNumberOfPlayersComputed;
+
+  @override
+  int? get filterByNumberOfPlayers => (_$filterByNumberOfPlayersComputed ??=
+          Computed<int?>(() => super.filterByNumberOfPlayers,
+              name: '_GamesViewModel.filterByNumberOfPlayers'))
+      .value;
+  Computed<String>? _$numberOfPlayersSliderValueComputed;
+
+  @override
+  String get numberOfPlayersSliderValue =>
+      (_$numberOfPlayersSliderValueComputed ??= Computed<String>(
+              () => super.numberOfPlayersSliderValue,
+              name: '_GamesViewModel.numberOfPlayersSliderValue'))
+          .value;
+  Computed<double>? _$maxNumberOfPlayersComputed;
+
+  @override
+  double get maxNumberOfPlayers => (_$maxNumberOfPlayersComputed ??=
+          Computed<double>(() => super.maxNumberOfPlayers,
+              name: '_GamesViewModel.maxNumberOfPlayers'))
+      .value;
   Computed<List<BoardGameDetails>>? _$allBoardGamesComputed;
 
   @override
@@ -197,13 +254,76 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
   }
 
   @override
+  void updateSortBySelection(SortBy sortBy) {
+    final _$actionInfo = _$_GamesViewModelActionController.startAction(
+        name: '_GamesViewModel.updateSortBySelection');
+    try {
+      return super.updateSortBySelection(sortBy);
+    } finally {
+      _$_GamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<void> clearFilters() {
+    final _$actionInfo = _$_GamesViewModelActionController.startAction(
+        name: '_GamesViewModel.clearFilters');
+    try {
+      return super.clearFilters();
+    } finally {
+      _$_GamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<void> changeNumberOfPlayers(int? numberOfPlayers) {
+    final _$actionInfo = _$_GamesViewModelActionController.startAction(
+        name: '_GamesViewModel.changeNumberOfPlayers');
+    try {
+      return super.changeNumberOfPlayers(numberOfPlayers);
+    } finally {
+      _$_GamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<void> updateNumberOfPlayersFilter() {
+    final _$actionInfo = _$_GamesViewModelActionController.startAction(
+        name: '_GamesViewModel.updateNumberOfPlayersFilter');
+    try {
+      return super.updateNumberOfPlayersFilter();
+    } finally {
+      _$_GamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<void> updateFilterByRating(double? rating) {
+    final _$actionInfo = _$_GamesViewModelActionController.startAction(
+        name: '_GamesViewModel.updateFilterByRating');
+    try {
+      return super.updateFilterByRating(rating);
+    } finally {
+      _$_GamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedTab: ${selectedTab},
 futureLoadBoardGames: ${futureLoadBoardGames},
+sortByOptions: ${sortByOptions},
+selectedSortBy: ${selectedSortBy},
+anyFiltersApplied: ${anyFiltersApplied},
+filterByRating: ${filterByRating},
 filteredBoardGames: ${filteredBoardGames},
 anyBoardGamesInCollections: ${anyBoardGamesInCollections},
 anyBoardGames: ${anyBoardGames},
+minNumberOfPlayers: ${minNumberOfPlayers},
+filterByNumberOfPlayers: ${filterByNumberOfPlayers},
+numberOfPlayersSliderValue: ${numberOfPlayersSliderValue},
+maxNumberOfPlayers: ${maxNumberOfPlayers},
 allBoardGames: ${allBoardGames},
 collectionSate: ${collectionSate},
 boardGamesInSelectedCollection: ${boardGamesInSelectedCollection},

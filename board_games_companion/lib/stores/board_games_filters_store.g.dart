@@ -51,13 +51,13 @@ mixin _$BoardGamesFiltersStore on _BoardGamesFiltersStore, Store {
       Atom(name: '_BoardGamesFiltersStore.sortByOptions', context: context);
 
   @override
-  List<SortBy> get sortByOptions {
+  ObservableList<SortBy> get sortByOptions {
     _$sortByOptionsAtom.reportRead();
     return super.sortByOptions;
   }
 
   @override
-  set sortByOptions(List<SortBy> value) {
+  set sortByOptions(ObservableList<SortBy> value) {
     _$sortByOptionsAtom.reportWrite(value, super.sortByOptions, () {
       super.sortByOptions = value;
     });
@@ -111,14 +111,14 @@ mixin _$BoardGamesFiltersStore on _BoardGamesFiltersStore, Store {
         .run(() => super.changeNumberOfPlayers(numberOfPlayers));
   }
 
-  late final _$updateNumberOfPlayersAsyncAction = AsyncAction(
-      '_BoardGamesFiltersStore.updateNumberOfPlayers',
+  late final _$updateNumberOfPlayersFilterAsyncAction = AsyncAction(
+      '_BoardGamesFiltersStore.updateNumberOfPlayersFilter',
       context: context);
 
   @override
-  Future<void> updateNumberOfPlayers(int? numberOfPlayers) {
-    return _$updateNumberOfPlayersAsyncAction
-        .run(() => super.updateNumberOfPlayers(numberOfPlayers));
+  Future<void> updateNumberOfPlayersFilter() {
+    return _$updateNumberOfPlayersFilterAsyncAction
+        .run(() => super.updateNumberOfPlayersFilter());
   }
 
   @override

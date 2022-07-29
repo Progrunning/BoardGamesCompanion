@@ -80,10 +80,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i23.AnalyticsRouteObserver>(
       () => _i23.AnalyticsRouteObserver(get<_i15.AnalyticsService>()));
   gh.singleton<_i24.BoardGamesStore>(_i24.BoardGamesStore(
-      get<_i18.BoardGamesService>(),
-      get<_i19.PlaythroughService>(),
-      get<_i13.ScoreService>(),
-      get<_i8.PlayerService>()));
+      get<_i18.BoardGamesService>(), get<_i19.PlaythroughService>()));
   gh.factory<_i25.GamesViewModel>(() => _i25.GamesViewModel(
       get<_i24.BoardGamesStore>(), get<_i16.BoardGamesFiltersStore>()));
   gh.factory<_i26.PlaythroughStore>(() => _i26.PlaythroughStore(

@@ -72,7 +72,7 @@ extension IntExtensions on int? {
     return this!.compareTo(intToCompare!);
   }
 
-  String toNumberOfPlayersFilter() {
+  String toSliderValue() {
     var numberOfPlayers = this;
     numberOfPlayers ??= 0;
 
