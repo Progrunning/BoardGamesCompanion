@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../common/app_text.dart';
 import '../common/dimensions.dart';
+import '../injectable.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/user.dart';
 import '../stores/board_games_store.dart';
@@ -20,7 +21,7 @@ mixin ImportCollection {
     }
 
     final messenger = ScaffoldMessenger.of(context);
-    final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
+    final boardGamesStore = getIt<BoardGamesStore>();
     final importResult = await boardGamesStore.importCollections(username);
     if (importResult.isSuccess) {
       final user = User(name: username);

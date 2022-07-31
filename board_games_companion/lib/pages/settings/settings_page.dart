@@ -7,6 +7,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../injectable.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/about/detail_item.dart';
@@ -170,10 +171,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
-                final boardGameStore = Provider.of<BoardGamesStore>(
-                  context,
-                  listen: false,
-                );
+                final boardGameStore = getIt<BoardGamesStore>();
 
                 await userStore.removeUser(userStore.user!);
                 await boardGameStore.removeAllBggBoardGames();

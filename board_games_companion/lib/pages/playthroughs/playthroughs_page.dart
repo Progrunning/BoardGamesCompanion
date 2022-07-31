@@ -26,14 +26,12 @@ import 'playthroughs_view_model.dart';
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
     required this.viewModel,
-    required this.boardGameDetails,
     Key? key,
   }) : super(key: key);
 
   static const String pageRoute = '/playthroughs';
 
   final PlaythroughsViewModel viewModel;
-  final BoardGameDetails boardGameDetails;
 
   @override
   PlaythroughsPageState createState() => PlaythroughsPageState();
@@ -63,7 +61,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     final scaffold = Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.boardGameDetails.name, style: AppTheme.titleTextStyle),
+        title: Text(widget.viewModel.boardGame.name, style: AppTheme.titleTextStyle),
         actions: <Widget>[
           Consumer<UserStore>(
             builder: (_, store, ___) {
@@ -73,13 +71,13 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
               return IconButton(
                 icon: const Icon(Icons.download, color: AppColors.accentColor),
-                onPressed: () => _importBggPlays(store.user!.name, widget.boardGameDetails.id),
+                onPressed: () => _importBggPlays(store.user!.name, widget.viewModel.boardGame.id),
               );
             },
           ),
           IconButton(
             icon: const Icon(Icons.info, color: AppColors.accentColor),
-            onPressed: () async => _navigateToBoardGameDetails(context, widget.boardGameDetails),
+            onPressed: () async => _navigateToBoardGameDetails(context, widget.viewModel.boardGame),
           ),
         ],
       ),
@@ -87,16 +85,11 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         child: PageContainer(
           child: TabBarView(
             controller: tabController,
-            children: <Widget>[
-              PlaythroughStatistcsPage(
-                playthroughStatisticsStore: widget.viewModel.playthroughStatisticsStore,
-              ),
-              PlaythroughsHistoryPage(playthroughsStore: widget.viewModel.playthroughsStore),
-              PlaythroughsLogGamePage(
-                boardGameDetails: widget.boardGameDetails,
-                playthroughsLogGameViewModel: widget.viewModel,
-              ),
-              PlaythroughsGameSettingsPage(boardGameDetails: widget.boardGameDetails)
+            children: const <Widget>[
+              PlaythroughStatistcsPage(),
+              PlaythroughsHistoryPage(),
+              PlaythroughsLogGamePage(),
+              PlaythroughsGameSettingsPage()
             ],
           ),
         ),

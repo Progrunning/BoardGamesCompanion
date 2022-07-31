@@ -10,6 +10,7 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/preferences_service.dart';
 import '../../stores/board_games_store.dart';
@@ -87,11 +88,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
   }
 
   Future<bool> _handleOnWillPop(BuildContext context) async {
-    final boardGamesStore = Provider.of<BoardGamesStore>(
-      context,
-      listen: false,
-    );
-
+    final boardGamesStore = getIt<BoardGamesStore>();
     if (!boardGamesStore.isInAnyCollection(widget.boardGameDetailsStore.boardGameDetails?.id) &&
         widget.navigatingFromType == PlaythroughsPage) {
       Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));

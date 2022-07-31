@@ -19,7 +19,7 @@ import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../playthroughs/playthroughs_page.dart';
-import 'edit_playthrouhg_view_model.dart';
+import 'edit_playthrough_view_model.dart';
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
@@ -39,9 +39,7 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return _handleOnWillPop(context);
-      },
+      onWillPop: () async => _handleOnWillPop(context),
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -84,19 +82,12 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
                     },
                   ),
                 ),
-                ChangeNotifierProvider<EditPlaythoughViewModel>.value(
-                  value: widget.viewModel,
-                  child: Consumer<EditPlaythoughViewModel>(
-                    builder: (_, viewModel, __) {
-                      return _ActionButtons(
-                        viewModel: viewModel,
-                        onSave: () async => _save(),
-                        onStop: () async => _stopPlaythrough(),
-                        onDelete: () async => _showDeletePlaythroughDialog(context),
-                      );
-                    },
-                  ),
-                ),
+                _ActionButtons(
+                  viewModel: widget.viewModel,
+                  onSave: () async => _save(),
+                  onStop: () async => _stopPlaythrough(),
+                  onDelete: () async => _showDeletePlaythroughDialog(context),
+                )
               ],
             ),
           ),
@@ -221,18 +212,11 @@ class _ScoresSectionState extends State<_ScoresSection> {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () => widget.onItemTapped(widget.viewModel.playerScores[index]),
-          child: ChangeNotifierProvider<EditPlaythoughViewModel>.value(
-            value: widget.viewModel,
-            child: Consumer<EditPlaythoughViewModel>(
-              builder: (_, viewModel, __) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                  child: _PlayerScoreTile(
-                    playerScore: viewModel.playerScores[index],
-                    playthroughId: viewModel.playthrough.id,
-                  ),
-                );
-              },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            child: _PlayerScoreTile(
+              playerScore: widget.viewModel.playerScores[index],
+              playthroughId: widget.viewModel.playthrough.id,
             ),
           ),
         );

@@ -1,42 +1,62 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
-import 'package:board_games_companion/mixins/board_game_aware_mixin.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
-import '../common/enums/playthrough_status.dart';
-import '../extensions/scores_extensions.dart';
-import '../models/board_game_statistics.dart';
-import '../models/hive/player.dart';
-import '../models/hive/playthrough.dart';
-import '../models/hive/score.dart';
-import '../models/player_score.dart';
-import '../models/player_statistics.dart';
-import '../services/player_service.dart';
-import '../services/playthroughs_service.dart';
-import '../services/score_service.dart';
+import '../../common/enums/playthrough_status.dart';
+import '../../extensions/scores_extensions.dart';
+import '../../models/board_game_statistics.dart';
+import '../../models/hive/board_game_details.dart';
+import '../../models/hive/player.dart';
+import '../../models/hive/playthrough.dart';
+import '../../models/hive/score.dart';
+import '../../models/player_score.dart';
+import '../../models/player_statistics.dart';
+import '../../services/player_service.dart';
+import '../../services/playthroughs_service.dart';
+import '../../services/score_service.dart';
+
+part 'playthrough_statistics_view_model.g.dart';
 
 @singleton
-class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
-  PlaythroughStatisticsStore(
+class PlaythroughStatisticsViewModel = _PlaythroughStatisticsViewModel
+    with _$PlaythroughStatisticsViewModel;
+
+abstract class _PlaythroughStatisticsViewModel with Store {
+  _PlaythroughStatisticsViewModel(
     this._playerService,
     this._scoreService,
     this._playthroughService,
+    this._playthroughsStore,
   );
 
   final PlayerService _playerService;
   final ScoreService _scoreService;
   final PlaythroughService _playthroughService;
+  final PlaythroughsStore _playthroughsStore;
 
   static const int _maxNumberOfTopScoresToDisplay = 5;
 
   BoardGameStatistics boardGameStatistics = BoardGameStatistics();
 
-  Future<void> loadBoardGamesStatistics() async {
-    final boardGameId = boardGame!.id;
-    final gameWinningCondition =
-        boardGame!.settings?.winningCondition ?? GameWinningCondition.HighestScore;
+  @observable
+  ObservableFuture<void>? futureLoadBoardGamesStatistics;
+
+  @computed
+  BoardGameDetails get boardGame => _playthroughsStore.boardGame;
+
+  @action
+  void loadBoardGamesStatistics() =>
+      futureLoadBoardGamesStatistics = ObservableFuture<void>(_loadBoardGamesStatistics());
+
+  Future<void> _loadBoardGamesStatistics() async {
+    final boardGameId = _playthroughsStore.boardGame.id;
+    final gameWinningCondition = _playthroughsStore.boardGame.settings?.winningCondition ??
+        GameWinningCondition.HighestScore;
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
@@ -68,7 +88,6 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
     );
 
     if (finishedPlaythroughs.isEmpty) {
-      notifyListeners();
       return;
     }
 
@@ -79,7 +98,6 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
         boardGameStatistics.numberOfGamesPlayed!;
 
     if (!playthroughScoresByBoardGameId.containsKey(boardGameId)) {
-      notifyListeners();
       return;
     }
 
@@ -125,8 +143,6 @@ class PlaythroughStatisticsStore with ChangeNotifier, BoardGameAware {
     boardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
         .map((Playthrough p) => p.endDate!.difference(p.startDate).inSeconds)
         .reduce((a, b) => a + b);
-
-    notifyListeners();
   }
 
   void _updateLastPlayedAndWinner(

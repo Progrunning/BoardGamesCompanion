@@ -57,7 +57,7 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
         _analtyicsService.logEvent(
           name: Analytics.editPlaythrough,
           parameters: <String, String>{
-            Analytics.boardGameIdParameter: arguments.playthroughStore.playthrough.boardGameId,
+            Analytics.boardGameIdParameter: arguments.playthroughViewModel.playthrough.boardGameId,
           },
         );
         break;

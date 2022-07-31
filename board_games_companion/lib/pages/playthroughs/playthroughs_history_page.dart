@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -9,10 +11,7 @@ import '../../extensions/int_extensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
-import '../../stores/playthrough_store.dart';
-import '../../stores/playthroughs_store.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
-import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
@@ -23,128 +22,132 @@ import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/player_score_rank_avatar.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
+import 'playthrough_view_model.dart';
+import 'playthroughs_history_view_model.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
-  const PlaythroughsHistoryPage({
-    required this.playthroughsStore,
-    Key? key,
-  }) : super(key: key);
-
-  final PlaythroughsStore playthroughsStore;
+  const PlaythroughsHistoryPage({Key? key}) : super(key: key);
 
   @override
   PlaythroughsHistoryPageState createState() => PlaythroughsHistoryPageState();
 }
 
 class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
+  late PlaythroughsHistoryViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = getIt<PlaythroughsHistoryViewModel>();
+    viewModel.loadPlaythroughs();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Expanded(
-          child: ConsumerFutureBuilder<List<Playthrough>, PlaythroughsStore>(
-            future: widget.playthroughsStore.loadPlaythroughs(),
-            success: (_, PlaythroughsStore store) {
-              final hasPlaythroughs = store.playthroughs?.isNotEmpty ?? false;
-              if (hasPlaythroughs) {
-                store.playthroughs!.sort((a, b) => b.startDate.compareTo(a.startDate));
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-                  itemBuilder: (_, index) {
-                    final playthroughStore = getIt<PlaythroughStore>();
-                    final _Playthrough playthough = _Playthrough(
-                      playthroughsStore: widget.playthroughsStore,
-                      playthroughStore: playthroughStore,
-                      playthrough: store.playthroughs![index],
-                      playthroughNumber: store.playthroughs!.length - index,
-                    );
-
-                    // Last playthrough
-                    if (index == store.playthroughs!.length - 1) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: Dimensions.bottomTabTopHeight),
-                        child: playthough,
-                      );
-                    }
-                    return playthough;
-                  },
-                  separatorBuilder: (_, index) {
-                    return const SizedBox(height: Dimensions.doubleStandardSpacing);
-                  },
-                  itemCount: store.playthroughs!.length,
-                );
-              }
-
+    return Observer(
+      builder: (_) {
+        switch (viewModel.futureloadPlaythroughs?.status ?? FutureStatus.pending) {
+          case FutureStatus.pending:
+            return const LoadingIndicator();
+          case FutureStatus.fulfilled:
+            if (!viewModel.hasAnyPlaythroughs) {
               return const Padding(
                 padding: EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
                 child: Center(
-                  child: Text(
-                    "It looks like you haven't played this game yet",
-                  ),
+                  child: Text("It looks like you haven't played this game yet"),
                 ),
               );
-            },
-          ),
-        ),
-      ],
+            }
+
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+              itemBuilder: (_, index) {
+                return _Playthrough(
+                  playthrough: viewModel.playthroughs[index],
+                  playthroughNumber: viewModel.playthroughs.length - index,
+                  isLast: index == viewModel.playthroughs.length - 1,
+                );
+              },
+              separatorBuilder: (_, index) {
+                return const SizedBox(height: Dimensions.doubleStandardSpacing);
+              },
+              itemCount: viewModel.playthroughs.length,
+            );
+          default:
+            return const SizedBox.shrink();
+        }
+      },
     );
   }
 }
 
-class _Playthrough extends StatelessWidget {
+class _Playthrough extends StatefulWidget {
   const _Playthrough({
-    required this.playthroughsStore,
-    required this.playthroughStore,
     required this.playthrough,
+    required this.isLast,
     this.playthroughNumber,
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsStore playthroughsStore;
-  final PlaythroughStore playthroughStore;
   final Playthrough playthrough;
   final int? playthroughNumber;
+  final bool isLast;
 
   static const double _maxPlaythroughItemHeight = 240;
 
   @override
+  State<_Playthrough> createState() => _PlaythroughState();
+}
+
+class _PlaythroughState extends State<_Playthrough> {
+  late PlaythroughViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = getIt<PlaythroughViewModel>();
+    viewModel.loadPlaythrough(widget.playthrough);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      padding: EdgeInsets.only(
+        left: Dimensions.standardSpacing,
+        right: Dimensions.standardSpacing,
+        bottom: widget.isLast ? Dimensions.bottomTabTopHeight : 0,
+      ),
       child: PanelContainer(
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: math.max(_maxPlaythroughItemHeight, MediaQuery.of(context).size.height / 3),
+            maxHeight: math.max(
+                _Playthrough._maxPlaythroughItemHeight, MediaQuery.of(context).size.height / 3),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(
-              Dimensions.standardSpacing,
-            ),
-            child: FutureBuilder<void>(
-              future: playthroughStore.loadPlaythrough(playthrough),
-              builder: (_, AsyncSnapshot<void> snapshot) {
-                if (snapshot.hasError) {
-                  return const Center(child: GenericErrorMessage());
-                }
+            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            child: Observer(
+              builder: (_) {
+                switch (viewModel.futureLoadPlaythrough?.status ?? FutureStatus.pending) {
+                  case FutureStatus.pending:
+                    return const LoadingIndicator();
 
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _PlaythroughGameStats(
-                        playthroughStore: playthroughStore,
-                        playthroughNumber: playthroughNumber,
-                        playthrough: playthroughStore.playthrough,
-                      ),
-                      const SizedBox(width: Dimensions.doubleStandardSpacing),
-                      Expanded(child: _PlaythroughPlayersStats(playthroughStore: playthroughStore)),
-                    ],
-                  );
-                }
+                  case FutureStatus.rejected:
+                    return const Center(child: GenericErrorMessage());
 
-                return const LoadingIndicator();
+                  case FutureStatus.fulfilled:
+                    return Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _PlaythroughGameStats(
+                          playthroughViewModel: viewModel,
+                          playthroughNumber: widget.playthroughNumber,
+                        ),
+                        const SizedBox(width: Dimensions.doubleStandardSpacing),
+                        Expanded(child: _PlaythroughPlayersStats(playthroughViewModel: viewModel)),
+                      ],
+                    );
+                }
               },
             ),
           ),
@@ -157,17 +160,17 @@ class _Playthrough extends StatelessWidget {
 class _PlaythroughPlayersStats extends StatelessWidget {
   const _PlaythroughPlayersStats({
     Key? key,
-    required this.playthroughStore,
+    required this.playthroughViewModel,
   }) : super(key: key);
 
-  final PlaythroughStore playthroughStore;
+  final PlaythroughViewModel playthroughViewModel;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Expanded(child: _PlaythroughPlayerList(playthroughStore: playthroughStore)),
+        Expanded(child: _PlaythroughPlayerList(playthroughViewModel: playthroughViewModel)),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -178,7 +181,7 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               onPressed: () => Navigator.pushNamed(
                 context,
                 EditPlaythoughPage.pageRoute,
-                arguments: EditPlaythroughPageArguments(playthroughStore),
+                arguments: EditPlaythroughPageArguments(playthroughViewModel),
               ),
             ),
           ],
@@ -191,11 +194,11 @@ class _PlaythroughPlayersStats extends StatelessWidget {
 class _PlaythroughPlayerList extends StatelessWidget {
   const _PlaythroughPlayerList({
     Key? key,
-    required PlaythroughStore playthroughStore,
-  })  : _playthroughStore = playthroughStore,
+    required PlaythroughViewModel playthroughViewModel,
+  })  : _playthroughStore = playthroughViewModel,
         super(key: key);
 
-  final PlaythroughStore _playthroughStore;
+  final PlaythroughViewModel _playthroughStore;
 
   @override
   Widget build(BuildContext context) {
@@ -220,14 +223,12 @@ class _PlaythroughPlayerList extends StatelessWidget {
 class _PlaythroughGameStats extends StatelessWidget {
   const _PlaythroughGameStats({
     Key? key,
-    required this.playthroughStore,
+    required this.playthroughViewModel,
     required this.playthroughNumber,
-    required this.playthrough,
   }) : super(key: key);
 
-  final PlaythroughStore playthroughStore;
+  final PlaythroughViewModel playthroughViewModel;
   final int? playthroughNumber;
-  final Playthrough playthrough;
 
   @override
   Widget build(BuildContext context) {
@@ -235,25 +236,25 @@ class _PlaythroughGameStats extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        CalendarCard(playthroughStore.playthrough.startDate),
+        CalendarCard(playthroughViewModel.playthrough.startDate),
         _PlaythroughItemDetail(
-          playthroughStore.daysSinceStart?.toString(),
+          playthroughViewModel.daysSinceStart?.toString(),
           'day(s) ago',
         ),
         _PlaythroughItemDetail(
           '$playthroughNumber${playthroughNumber.toOrdinalAbbreviations()}',
           'game',
         ),
-        _PlaythroughDuration(playthroughStore: playthroughStore),
+        _PlaythroughDuration(playthroughViewModel: playthroughViewModel),
       ],
     );
   }
 }
 
 class _PlaythroughDuration extends StatefulWidget {
-  const _PlaythroughDuration({required this.playthroughStore});
+  const _PlaythroughDuration({required this.playthroughViewModel});
 
-  final PlaythroughStore playthroughStore;
+  final PlaythroughViewModel playthroughViewModel;
 
   @override
   _PlaythroughDurationState createState() => _PlaythroughDurationState();
@@ -278,7 +279,7 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
   @override
   Widget build(BuildContext context) {
     return _PlaythroughItemDetail(
-      widget.playthroughStore.duration.inSeconds.toPlaytimeDuration(),
+      widget.playthroughViewModel.duration.inSeconds.toPlaytimeDuration(),
       'duration',
     );
   }

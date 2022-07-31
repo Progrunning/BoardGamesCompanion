@@ -35,10 +35,7 @@ import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
 import 'services/user_service.dart';
-import 'stores/board_games_store.dart';
 import 'stores/hot_board_games_store.dart';
-import 'stores/playthrough_statistics_store.dart';
-import 'stores/playthroughs_store.dart';
 import 'stores/search_bar_board_games_store.dart';
 import 'stores/search_board_games_store.dart';
 import 'stores/user_store.dart';
@@ -145,16 +142,14 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<PlayersViewModel>(
           create: (context) => getIt<PlayersViewModel>(),
         ),
-        ChangeNotifierProvider<PlaythroughsStore>(
-          create: (context) => getIt<PlaythroughsStore>(),
-        ),
-        ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
-            PlaythroughStatisticsStore>(
-          create: (context) => getIt<PlaythroughStatisticsStore>(),
-          update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
-            return playthroughStatisticsStore!;
-          },
-        ),
+        // TODO Ensure that updates fomr board games store propagate to the games view model
+        // ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
+        //     PlaythroughStatisticsStore>(
+        //   create: (context) => getIt<PlaythroughStatisticsStore>(),
+        //   update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
+        //     return playthroughStatisticsStore!;
+        //   },
+        // ),
         // TODO Ensure that updates fomr board games store propagate to the games view model
         // ChangeNotifierProxyProvider2<BoardGamesFiltersStore, BoardGamesStore, GamesViewModel>(
         //   create: (context) {

@@ -1,12 +1,14 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/import_result.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
-import '../../mixins/board_game_aware_mixin.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/player.dart';
@@ -17,117 +19,36 @@ import '../../models/playthrough_player.dart';
 import '../../services/analytics_service.dart';
 import '../../services/board_games_service.dart';
 import '../../stores/players_store.dart';
-import '../../stores/playthrough_statistics_store.dart';
-import '../../stores/playthroughs_store.dart';
-import 'playthroughs_log_game_page.dart';
+
+part 'playthroughs_view_model.g.dart';
 
 @injectable
-class PlaythroughsViewModel with ChangeNotifier, BoardGameAware {
-  PlaythroughsViewModel(
-    this.playthroughsStore,
-    this.playthroughStatisticsStore,
+class PlaythroughsViewModel = _PlaythroughsViewModel with _$PlaythroughsViewModel;
+
+abstract class _PlaythroughsViewModel with Store {
+  _PlaythroughsViewModel(
+    this._playthroughsStore,
     this._playersStore,
     this._analyticsService,
     this._boardGamesService,
   );
 
   final PlayersStore _playersStore;
-  final PlaythroughsStore playthroughsStore;
+  final PlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
-  final PlaythroughStatisticsStore playthroughStatisticsStore;
   final BoardGamesService _boardGamesService;
 
   List<PlaythroughPlayer>? _playthroughPlayers;
   List<PlaythroughPlayer>? get playthroughPlayers => _playthroughPlayers;
 
-  List<PlaythroughPlayer> get selectedPlaythroughPlayers =>
-      playthroughPlayers!.where((player) => player.isChecked).toList();
-
-  final Map<String, PlayerScore> _playerScores = {};
-  Map<String, PlayerScore> get playerScores => _playerScores;
-
-  DateTime playthroughDate = DateTime.now();
-  PlaythroughStartTime playthroughStartTime = PlaythroughStartTime.now;
-  Duration playthroughDuration = const Duration();
   BggPlaysImportRaport? bggPlaysImportRaport;
 
-  int _logGameStep = 0;
-  int get logGameStep => _logGameStep;
+  @computed
+  BoardGameDetails get boardGame => _playthroughsStore.boardGame;
 
-  set logGameStep(int value) {
-    if (_logGameStep != value) {
-      _logGameStep = value;
-      notifyListeners();
-    }
-  }
-
-  bool get anyPlayerSelected => playthroughPlayers!.any((player) => player.isChecked);
-
-  @override
+  @action
   void setBoardGame(BoardGameDetails boardGame) {
-    super.setBoardGame(boardGame);
-    playthroughsStore.setBoardGame(boardGame);
-    playthroughStatisticsStore.setBoardGame(boardGame);
-  }
-
-  Future<List<PlaythroughPlayer>> loadPlaythroughPlayers() async {
-    final players = await _playersStore.loadPlayers();
-
-    _playthroughPlayers = players
-        .map(
-          (p) => PlaythroughPlayer(p),
-        )
-        .toList();
-
-    return _playthroughPlayers ?? <PlaythroughPlayer>[];
-  }
-
-  Future<Playthrough?> createPlaythrough(String boardGameId) async {
-    final Playthrough? newPlaythrough = await playthroughsStore.createPlaythrough(
-      boardGameId,
-      selectedPlaythroughPlayers,
-      playerScores,
-      playthroughStartTime == PlaythroughStartTime.now ? DateTime.now() : playthroughDate,
-      playthroughStartTime == PlaythroughStartTime.inThePast ? playthroughDuration : null,
-    );
-
-    await _analyticsService.logEvent(
-      name: Analytics.logPlaythrough,
-      parameters: <String, String>{
-        Analytics.boardGameIdParameter: boardGameId,
-        Analytics.logPlaythroughNumberOfPlayers: selectedPlaythroughPlayers.length.toString(),
-        Analytics.logPlaythroughStarTime: playthroughStartTime.toString(),
-        Analytics.logPlaythroughDuration: playthroughDuration.toString(),
-      },
-    );
-
-    logGameStep = 0;
-    playthroughDate = DateTime.now();
-    playthroughStartTime = PlaythroughStartTime.now;
-    playthroughDuration = const Duration();
-    playerScores.clear();
-
-    await loadPlaythroughPlayers();
-
-    return newPlaythrough;
-  }
-
-  void selectPlayer(PlaythroughPlayer playthroughPlayer, String boardGameId) {
-    final playerScore = Score(
-      id: const Uuid().v4(),
-      playerId: playthroughPlayer.player.id,
-      boardGameId: boardGameId,
-    );
-
-    playthroughPlayer.isChecked = true;
-    playerScores[playthroughPlayer.player.id] = PlayerScore(playthroughPlayer.player, playerScore);
-  }
-
-  void deselectPlayer(PlaythroughPlayer playthroughPlayer) {
-    playthroughPlayer.isChecked = false;
-    if (playerScores.containsKey(playthroughPlayer.player.id)) {
-      playerScores.remove(playthroughPlayer.player.id);
-    }
+    _playthroughsStore.setBoardGame(boardGame);
   }
 
   Future<void> importPlays(String username, String boardGameId) async {
@@ -157,9 +78,8 @@ class PlaythroughsViewModel with ChangeNotifier, BoardGameAware {
 
     // TODO Consider using isolates to parse and iterate over the results
     for (final bggPlay in bggPlaysImportResult.data!) {
-      final bggPlayExists = playthroughsStore.playthroughs
-              ?.any((Playthrough playthrough) => playthrough.bggPlayId == bggPlay.id) ??
-          false;
+      final bggPlayExists = _playthroughsStore.playthroughs
+          .any((Playthrough playthrough) => playthrough.bggPlayId == bggPlay.id);
       if (bggPlayExists) {
         continue;
       }
@@ -203,7 +123,7 @@ class PlaythroughsViewModel with ChangeNotifier, BoardGameAware {
         }
       }
 
-      final newPlaythrough = await playthroughsStore.createPlaythrough(
+      final newPlaythrough = await _playthroughsStore.createPlaythrough(
         bggPlay.boardGameId,
         playthroughPlayers,
         playerScores,

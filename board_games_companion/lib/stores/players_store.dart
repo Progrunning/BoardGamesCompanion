@@ -1,33 +1,39 @@
-import 'package:board_games_companion/common/hive_boxes.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
+
+part 'players_store.g.dart';
 
 @singleton
-class PlayersStore with ChangeNotifier {
-  PlayersStore(this._playerService);
+class PlayersStore = _PlayersStore with _$PlayersStore;
+
+abstract class _PlayersStore with Store {
+  _PlayersStore(this._playerService);
 
   final PlayerService _playerService;
 
-  List<Player> players = [];
+  @observable
+  ObservableList<Player> players = ObservableList.of([]);
 
-  Future<List<Player>> loadPlayers() async {
+  @action
+  Future<void> loadPlayers() async {
     if (players.isNotEmpty) {
-      return players;
+      return;
     }
 
     try {
-      players = await _playerService.retrievePlayers();
+      players = ObservableList.of(await _playerService.retrievePlayers());
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
-
-    return players;
   }
 
+  @action
   Future<bool> createOrUpdatePlayer(Player player) async {
     try {
       final existingPlayer = players.firstWhereOrNull(
@@ -44,8 +50,6 @@ class PlayersStore with ChangeNotifier {
           existingPlayer.name = player.name;
           existingPlayer.bggName = player.bggName;
         }
-
-        notifyListeners();
       }
 
       return addOrUpdateSucceeded;
@@ -56,12 +60,12 @@ class PlayersStore with ChangeNotifier {
     return false;
   }
 
+  @action
   Future<bool> deletePlayer(String playerId) async {
     try {
       final deleteSucceeded = await _playerService.deletePlayer(playerId);
       if (deleteSucceeded) {
         players.removeWhere((p) => p.id == playerId);
-        notifyListeners();
       }
 
       return deleteSucceeded;
@@ -70,12 +74,5 @@ class PlayersStore with ChangeNotifier {
     }
 
     return false;
-  }
-
-  @override
-  void dispose() {
-    _playerService.closeBox(HiveBoxes.players);
-
-    super.dispose();
   }
 }

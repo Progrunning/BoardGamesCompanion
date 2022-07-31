@@ -1,7 +1,6 @@
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'common/app_theme.dart';
 import 'injectable.dart';
@@ -13,7 +12,7 @@ import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
 import 'pages/board_game_details/board_game_details_view_model.dart';
 import 'pages/edit_playthrough/edit_playthrough_page.dart';
-import 'pages/edit_playthrough/edit_playthrouhg_view_model.dart';
+import 'pages/edit_playthrough/edit_playthrough_view_model.dart';
 import 'pages/home/home_page.dart';
 import 'pages/players/player_page.dart';
 import 'pages/players/players_view_model.dart';
@@ -76,15 +75,11 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             );
 
           case BoardGamesDetailsPage.pageRoute:
-            final arguments =
-                ModalRoute.of(context)!.settings.arguments as BoardGameDetailsPageArguments;
+            final arguments = routeSettings.arguments as BoardGameDetailsPageArguments;
 
             final analytics = getIt<AnalyticsService>();
             final preferencesService = getIt<PreferencesService>();
-            final boardGamesStore = Provider.of<BoardGamesStore>(
-              context,
-              listen: false,
-            );
+            final boardGamesStore = getIt<BoardGamesStore>();
             final boardGameDetailsStore = BoardGameDetailsViewModel(boardGamesStore, analytics);
 
             return MaterialPageRoute<dynamic>(
@@ -99,41 +94,38 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             );
 
           case PlayerPage.pageRoute:
-            final arguments = ModalRoute.of(context)!.settings.arguments as PlayerPageArguments;
+            final arguments = routeSettings.arguments as PlayerPageArguments;
             final playersViewModel = getIt<PlayersViewModel>();
 
             playersViewModel.setPlayer(player: arguments.player);
 
             return MaterialPageRoute<dynamic>(
-                settings: routeSettings,
-                builder: (BuildContext context) => PlayerPage(playersViewModel: playersViewModel));
+              settings: routeSettings,
+              builder: (BuildContext context) => PlayerPage(playersViewModel: playersViewModel),
+            );
 
           case PlaythroughsPage.pageRoute:
-            final arguments =
-                ModalRoute.of(context)!.settings.arguments as PlaythroughsPageArguments;
+            final arguments = routeSettings.arguments as PlaythroughsPageArguments;
 
             final viewModel = getIt<PlaythroughsViewModel>();
             viewModel.setBoardGame(arguments.boardGameDetails);
 
             return MaterialPageRoute<dynamic>(
-                settings: routeSettings,
-                builder: (BuildContext context) => PlaythroughsPage(
-                      viewModel: viewModel,
-                      boardGameDetails: arguments.boardGameDetails,
-                    ));
+              settings: routeSettings,
+              builder: (BuildContext context) => PlaythroughsPage(viewModel: viewModel),
+            );
 
           case EditPlaythoughPage.pageRoute:
-            final arguments =
-                ModalRoute.of(context)!.settings.arguments as EditPlaythroughPageArguments;
+            final arguments = routeSettings.arguments as EditPlaythroughPageArguments;
 
-            final PlaythroughsStore playthroughsStore = getIt<PlaythroughsStore>();
+            // MK Need to create view model manually (i.e. without DI) because the passed in playthroughViewModel
+            //    needs to be exactly the same as the one on the history page to ensure it's updated once navigated back
+            final viewModel =
+                EditPlaythoughViewModel(arguments.playthroughViewModel, getIt<PlaythroughsStore>());
 
             return MaterialPageRoute<dynamic>(
                 settings: routeSettings,
-                builder: (BuildContext context) => EditPlaythoughPage(
-                      viewModel:
-                          EditPlaythoughViewModel(arguments.playthroughStore, playthroughsStore),
-                    ));
+                builder: (BuildContext context) => EditPlaythoughPage(viewModel: viewModel));
 
           case AboutPage.pageRoute:
             return MaterialPageRoute<dynamic>(
