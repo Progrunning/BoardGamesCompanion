@@ -1,3 +1,6 @@
+// ! TODO Ensure that deleting playthgouths works fie
+// ! TODO Ensure that when deleting the stats are correct
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
