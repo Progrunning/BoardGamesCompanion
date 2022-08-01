@@ -9,6 +9,16 @@ part of 'board_games_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$BoardGamesStore on _BoardGamesStore, Store {
+  Computed<ObservableMap<String, BoardGameDetails>>? _$allBoardGamesMapComputed;
+
+  @override
+  ObservableMap<String, BoardGameDetails> get allBoardGamesMap =>
+      (_$allBoardGamesMapComputed ??=
+              Computed<ObservableMap<String, BoardGameDetails>>(
+                  () => super.allBoardGamesMap,
+                  name: '_BoardGamesStore.allBoardGamesMap'))
+          .value;
+
   late final _$allBoardGamesAtom =
       Atom(name: '_BoardGamesStore.allBoardGames', context: context);
 
@@ -95,7 +105,8 @@ mixin _$BoardGamesStore on _BoardGamesStore, Store {
   @override
   String toString() {
     return '''
-allBoardGames: ${allBoardGames}
+allBoardGames: ${allBoardGames},
+allBoardGamesMap: ${allBoardGamesMap}
     ''';
   }
 }

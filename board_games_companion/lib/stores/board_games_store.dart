@@ -30,6 +30,10 @@ abstract class _BoardGamesStore with Store {
   @observable
   ObservableList<BoardGameDetails> allBoardGames = ObservableList.of([]);
 
+  @computed
+  ObservableMap<String, BoardGameDetails> get allBoardGamesMap =>
+      ObservableMap.of({for (var boardGame in allBoardGames) boardGame.id: boardGame});
+
   @action
   bool isInAnyCollection(String? boardGameId) {
     if (boardGameId?.isBlank ?? true) {

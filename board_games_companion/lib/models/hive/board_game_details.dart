@@ -1,7 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:io';
 
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:hive/hive.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../common/constants.dart';
 import '../../common/hive_boxes.dart';
@@ -16,8 +19,10 @@ import 'board_game_rank.dart';
 part 'board_game_details.g.dart';
 
 @HiveType(typeId: HiveBoxes.boardGamesDetailsTypeId)
-class BoardGameDetails extends BaseBoardGame {
-  BoardGameDetails({required String id, required String name}) : super(id: id, name: name);
+class BoardGameDetails = _BoardGameDetails with _$BoardGameDetails;
+
+abstract class _BoardGameDetails extends BaseBoardGame with Store {
+  _BoardGameDetails({required String id, required String name}) : super(id: id, name: name);
 
   final RegExp onlyLettersOrNumbersRegex = RegExp(r'[a-zA-Z0-9\-]+');
   final Set<String> bggNotUsedUrlEncodedNameParts = {
@@ -62,8 +67,10 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(7)
   List<BoardGameCategory>? categories = <BoardGameCategory>[];
 
+  @observable
   double? _rating;
   @HiveField(8)
+  @computed
   double? get rating => _rating;
   @HiveField(8)
   set rating(double? value) {
@@ -73,8 +80,10 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  @observable
   int? _votes;
   @HiveField(9)
+  @computed
   int? get votes => _votes;
   @HiveField(9)
   set votes(int? value) {
@@ -139,8 +148,10 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  @observable
   num? _avgWeight;
   @HiveField(15)
+  @computed
   num? get avgWeight => _avgWeight;
   @HiveField(15)
   set avgWeight(num? value) {
@@ -159,8 +170,10 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(18)
   List<BoardGameDesigner> desingers = <BoardGameDesigner>[];
 
+  @observable
   int? _commentsNumber;
   @HiveField(19)
+  @computed
   int? get commentsNumber => _commentsNumber;
   @HiveField(19)
   set commentsNumber(int? value) {
@@ -185,6 +198,7 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   @HiveField(22)
+  @observable
   List<BoardGamesExpansion> expansions = <BoardGamesExpansion>[];
 
   int get expansionsOwned {
@@ -239,8 +253,10 @@ class BoardGameDetails extends BaseBoardGame {
 
   // MK Flag to indicate that the board game got synced from BGG
   //    This is important when removing BGG's user account (only these games will be removed)
+  @observable
   bool? _isBggSynced;
   @HiveField(27)
+  @computed
   bool? get isBggSynced => _isBggSynced ?? false;
   @HiveField(27)
   set isBggSynced(bool? value) {
@@ -272,6 +288,7 @@ class BoardGameDetails extends BaseBoardGame {
     return null;
   }
 
+  @computed
   bool get hasIncompleteDetails =>
       (isBggSynced ?? false) &&
       (avgWeight == null || rating == null || commentsNumber == null || votes == null);

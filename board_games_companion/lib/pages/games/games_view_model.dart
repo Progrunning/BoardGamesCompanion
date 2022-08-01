@@ -40,7 +40,9 @@ abstract class _GamesViewModel with Store {
   final BoardGamesStore _boardGamesStore;
   final BoardGamesFiltersStore _boardGamesFiltersStore;
 
-  final Map<String, BoardGameDetails> _mainBoardGameByExpansionId = {};
+  @observable
+  // ignore: prefer_final_fields
+  ObservableMap<String, BoardGameDetails> _mainBoardGameByExpansionId = ObservableMap.of({});
 
   @computed
   List<SortBy> get sortByOptions => _boardGamesFiltersStore.sortByOptions;
@@ -235,9 +237,11 @@ abstract class _GamesViewModel with Store {
   @action
   void setSelectedTab(GamesTab newlySelectedTab) => selectedTab = newlySelectedTab;
 
+  @computed
   List<BoardGameDetails> get _allExpansions =>
       allBoardGames.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
+  @computed
   List<BoardGameDetails> get _expansionsInSelectedCollection =>
       boardGamesInSelectedCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
@@ -246,12 +250,6 @@ abstract class _GamesViewModel with Store {
 
   @action
   void loadBoardGames() => futureLoadBoardGames = ObservableFuture<void>(_loadBoardGames());
-
-  @action
-  Future<void> refreshBoardGameDetails(String boardGameId) async {
-    await _boardGamesStore.refreshBoardGameDetails(boardGameId);
-    _updateCachedBoardGameDetails();
-  }
 
   @action
   void updateSortBySelection(SortBy sortBy) =>

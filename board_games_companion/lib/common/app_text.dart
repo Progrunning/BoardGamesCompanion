@@ -124,8 +124,8 @@ class AppText {
   static const gamesPageSearchResultPlaytimeGameStatFormat = '%s min';
   static const gamesPageSearchResultComplexityGameStatFormat = '%s (complexity rating)';
   static const gamesPageSearchResultRefreshDetails =
-      'Games imported from the BGG are missing some details (e.g. complexity or expansions). Refresh the data to get the latest information.';
-  static const gamesPageSearchResultExpansionsSectionTitle = 'Expansions';
+      'Games imported from the BGG collections are missing some details (e.g. complexity or expansions). Refresh the data to get the latest information.';
+  static const gamesPageSearchResultExpansionsSectionTitleFormat = 'Expansions (%i)';
 
   static const aboutPageTitle = 'About';
   static const collectionsPageTitle = 'Collections';

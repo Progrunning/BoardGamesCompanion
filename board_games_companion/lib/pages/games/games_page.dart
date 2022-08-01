@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/injectable.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
@@ -38,12 +39,12 @@ import '../../widgets/common/rating_hexagon.dart';
 import '../../widgets/elevated_container.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../playthroughs/playthroughs_page.dart';
+import 'collection_search_result_view_model.dart';
 import 'games_filter_panel.dart';
 
 enum BoardGameResultActionType {
   details,
   playthroughs,
-  update,
 }
 
 typedef BoardGameResultAction = void Function(
@@ -233,9 +234,9 @@ class _AppBarState extends State<_AppBar> {
                 await showSearch(
                   context: context,
                   delegate: _CollectionsSearch(
-                    boardGames: widget.viewModel.allBoardGames,
-                    expansionsGroupedByMainGame: widget.viewModel.expansionsGroupedByMainGame,
-                    onResultAction: _handleSearchResultAction,
+                    viewModel: widget.viewModel,
+                    onResultAction: (boardGame, actionType) async =>
+                        _handleSearchResultAction(boardGame, actionType),
                   ),
                 );
               },
@@ -305,9 +306,6 @@ class _AppBarState extends State<_AppBar> {
   Future<void> _handleSearchResultAction(
       BoardGameDetails boardGame, BoardGameResultActionType actionType) async {
     switch (actionType) {
-      case BoardGameResultActionType.update:
-        await widget.viewModel.refreshBoardGameDetails(boardGame.id);
-        break;
       case BoardGameResultActionType.details:
         unawaited(Navigator.pushNamed(
           context,
@@ -594,13 +592,11 @@ class _TopTab extends StatelessWidget {
 
 class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   _CollectionsSearch({
-    required this.boardGames,
-    required this.expansionsGroupedByMainGame,
+    required this.viewModel,
     required this.onResultAction,
   });
 
-  final List<BoardGameDetails> boardGames;
-  Map<BoardGameDetails, List<BoardGameDetails>> expansionsGroupedByMainGame;
+  final GamesViewModel viewModel;
   final BoardGameResultAction onResultAction;
 
   @override
@@ -646,11 +642,7 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
       return _NoSearchResults(query: query, onClear: () => query = '');
     }
 
-    return _SearchResults(
-      filteredGames: filteredGames,
-      expansionsGroupedByMainGame: expansionsGroupedByMainGame,
-      onResultAction: onResultAction,
-    );
+    return _SearchResults(filteredGames: filteredGames, onResultAction: onResultAction);
   }
 
   @override
@@ -681,7 +673,7 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
 
   List<BoardGameDetails> _filterGames(String query) {
     final queryLowercased = query.toLowerCase();
-    return boardGames
+    return viewModel.allBoardGames
         .where(
             (BoardGameDetails boardGame) => boardGame.name.toLowerCase().contains(queryLowercased))
         .toList();
@@ -692,12 +684,10 @@ class _SearchResults extends StatelessWidget {
   const _SearchResults({
     Key? key,
     required this.filteredGames,
-    required this.expansionsGroupedByMainGame,
     required this.onResultAction,
   }) : super(key: key);
 
   final List<BoardGameDetails> filteredGames;
-  final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGroupedByMainGame;
   final BoardGameResultAction onResultAction;
 
   @override
@@ -707,12 +697,21 @@ class _SearchResults extends StatelessWidget {
       separatorBuilder: (_, index) => const SizedBox(height: Dimensions.standardSpacing),
       itemBuilder: (_, index) {
         final boardGame = filteredGames[index];
-        return _SearchResultGame(
-            boardGame: boardGame,
-            expansions: expansionsGroupedByMainGame[boardGame],
-            isFirstItem: index == 0,
-            isLastItem: index == filteredGames.length - 1,
-            onResultAction: onResultAction);
+        final viewModel = getIt<CollectionSearchResultViewModel>();
+        viewModel.setBoardGameId(boardGame.id);
+
+        return Observer(
+          builder: (_) {
+            return _SearchResultGame(
+              boardGame: viewModel.boardGame!,
+              expansions: viewModel.expansions,
+              isFirstItem: index == 0,
+              isLastItem: index == filteredGames.length - 1,
+              onResultAction: onResultAction,
+              onRefresh: () => viewModel.refreshBoardGameDetails(),
+            );
+          },
+        );
       },
     );
   }
@@ -726,6 +725,7 @@ class _SearchResultGame extends StatelessWidget {
     required this.isFirstItem,
     required this.isLastItem,
     required this.onResultAction,
+    required this.onRefresh,
   }) : super(key: key);
 
   final BoardGameDetails boardGame;
@@ -733,6 +733,7 @@ class _SearchResultGame extends StatelessWidget {
   final bool isFirstItem;
   final bool isLastItem;
   final BoardGameResultAction onResultAction;
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -749,48 +750,38 @@ class _SearchResultGame extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(AppStyles.defaultCornerRadius)),
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: ChangeNotifierProvider.value(
-            value: boardGame,
-            child: Consumer<BoardGameDetails>(builder: (_, boardGameDetails, __) {
-              return Column(
-                children: [
-                  IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: Dimensions.collectionSearchResultBoardGameImageHeight,
-                          width: Dimensions.collectionSearchResultBoardGameImageWidth,
-                          child: BoardGameTile(
-                            id: boardGameDetails.id,
-                            imageUrl: boardGameDetails.thumbnailUrl ?? '',
-                            heroTag: AnimationTags.boardGameHeroTag,
-                          ),
-                        ),
-                        const SizedBox(width: Dimensions.standardSpacing),
-                        Expanded(child: _SearchResultGameDetails(boardGame: boardGameDetails)),
-                        _SearchResultGameActions(
-                          boardGame: boardGameDetails,
-                          onResultAction: onResultAction,
-                        ),
-                      ],
+          child: Column(
+            children: [
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                      width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                      child: BoardGameTile(
+                        id: boardGame.id,
+                        imageUrl: boardGame.thumbnailUrl ?? '',
+                        heroTag: AnimationTags.boardGameHeroTag,
+                      ),
                     ),
-                  ),
-                  if (boardGameDetails.hasIncompleteDetails)
-                    _SearchResultGameRefreshData(
-                      boardGame: boardGame,
-                      onResultAction: onResultAction,
-                    ),
-                  // TODO MK This section should be updated when the refresh of data had happened
-                  //      The problem might be with the fact that expansions are not updated after the refresh
-                  if (expansions?.isNotEmpty ?? false)
-                    _SearchResultGameExpansions(
-                      expansions: expansions!,
-                      onResultAction: onResultAction,
-                    ),
-                ],
-              );
-            }),
+                    const SizedBox(width: Dimensions.standardSpacing),
+                    Expanded(child: _SearchResultGameDetails(boardGame: boardGame)),
+                    _SearchResultGameActions(boardGame: boardGame, onResultAction: onResultAction),
+                  ],
+                ),
+              ),
+              if (boardGame.hasIncompleteDetails)
+                _SearchResultGameRefreshData(
+                  boardGame: boardGame,
+                  onRefresh: onRefresh,
+                ),
+              if (expansions?.isNotEmpty ?? false)
+                _SearchResultGameExpansions(
+                  expansions: expansions!,
+                  onResultAction: onResultAction,
+                ),
+            ],
           ),
         ),
       ),
@@ -818,7 +809,7 @@ class _SearchResultGameExpansions extends StatelessWidget {
         const Divider(),
         const SizedBox(height: Dimensions.standardSpacing),
         Text(
-          AppText.gamesPageSearchResultExpansionsSectionTitle,
+          sprintf(AppText.gamesPageSearchResultExpansionsSectionTitleFormat, [expansions.length]),
           style: AppTheme.theme.textTheme.subtitle1,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
@@ -835,7 +826,7 @@ class _SearchResultGameExpansions extends StatelessWidget {
                 height: Dimensions.collectionSearchResultExpansionsImageHeight,
                 width: Dimensions.collectionSearchResultExpansionsImageWidth,
                 child: BoardGameTile(
-                  id: expansion.id,
+                  id: '${expansion.id}-exp',
                   name: expansion.name,
                   nameFontSize: Dimensions.extraSmallFontSize,
                   imageUrl: expansion.thumbnailUrl ?? '',
@@ -854,12 +845,12 @@ class _SearchResultGameExpansions extends StatelessWidget {
 class _SearchResultGameRefreshData extends StatefulWidget {
   const _SearchResultGameRefreshData({
     required this.boardGame,
-    required this.onResultAction,
+    required this.onRefresh,
     Key? key,
   }) : super(key: key);
 
   final BoardGameDetails boardGame;
-  final BoardGameResultAction onResultAction;
+  final VoidCallback onRefresh;
 
   @override
   State<_SearchResultGameRefreshData> createState() => _SearchResultGameRefreshDataState();
@@ -909,7 +900,7 @@ class _SearchResultGameRefreshDataState extends State<_SearchResultGameRefreshDa
                 icon: const Icon(Icons.refresh),
                 onPressed: () async {
                   _controller.repeat();
-                  widget.onResultAction(widget.boardGame, BoardGameResultActionType.update);
+                  widget.onRefresh();
                 },
               ),
             ),

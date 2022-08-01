@@ -185,6 +185,40 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
               name:
                   '_GamesViewModel.expansionsInSelectedCollectionGroupedByMainGame'))
           .value;
+  Computed<List<BoardGameDetails>>? _$_allExpansionsComputed;
+
+  @override
+  List<BoardGameDetails> get _allExpansions => (_$_allExpansionsComputed ??=
+          Computed<List<BoardGameDetails>>(() => super._allExpansions,
+              name: '_GamesViewModel._allExpansions'))
+      .value;
+  Computed<List<BoardGameDetails>>? _$_expansionsInSelectedCollectionComputed;
+
+  @override
+  List<BoardGameDetails> get _expansionsInSelectedCollection =>
+      (_$_expansionsInSelectedCollectionComputed ??=
+              Computed<List<BoardGameDetails>>(
+                  () => super._expansionsInSelectedCollection,
+                  name: '_GamesViewModel._expansionsInSelectedCollection'))
+          .value;
+
+  late final _$_mainBoardGameByExpansionIdAtom = Atom(
+      name: '_GamesViewModel._mainBoardGameByExpansionId', context: context);
+
+  @override
+  ObservableMap<String, BoardGameDetails> get _mainBoardGameByExpansionId {
+    _$_mainBoardGameByExpansionIdAtom.reportRead();
+    return super._mainBoardGameByExpansionId;
+  }
+
+  @override
+  set _mainBoardGameByExpansionId(
+      ObservableMap<String, BoardGameDetails> value) {
+    _$_mainBoardGameByExpansionIdAtom
+        .reportWrite(value, super._mainBoardGameByExpansionId, () {
+      super._mainBoardGameByExpansionId = value;
+    });
+  }
 
   late final _$selectedTabAtom =
       Atom(name: '_GamesViewModel.selectedTab', context: context);
@@ -217,15 +251,6 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
         () {
       super.futureLoadBoardGames = value;
     });
-  }
-
-  late final _$refreshBoardGameDetailsAsyncAction =
-      AsyncAction('_GamesViewModel.refreshBoardGameDetails', context: context);
-
-  @override
-  Future<void> refreshBoardGameDetails(String boardGameId) {
-    return _$refreshBoardGameDetailsAsyncAction
-        .run(() => super.refreshBoardGameDetails(boardGameId));
   }
 
   late final _$_GamesViewModelActionController =
