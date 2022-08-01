@@ -48,6 +48,9 @@ abstract class _PlaythroughViewModel with Store {
     return playthroughEndDate.difference(playthrough.startDate);
   }
 
+  @computed
+  bool get playthoughEnded => playthrough.status == PlaythroughStatus.Finished;
+
   @observable
   ObservableList<Score>? scores;
 

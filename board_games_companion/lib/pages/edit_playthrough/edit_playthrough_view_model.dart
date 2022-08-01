@@ -19,10 +19,7 @@ abstract class _EditPlaythoughViewModel with Store {
   final PlaythroughViewModel _playthroughViewModel;
   final PlaythroughsStore _playthroughsStore;
 
-  @computed
-  Playthrough get playthrough => _playthroughViewModel.playthrough;
-
-  // MK Doing a copy of player scores to prevent data from being updated without saving
+// MK Doing a copy of player scores to prevent data from being updated without saving
   List<PlayerScore>? _playerScores;
   List<PlayerScore> get playerScores {
     if (_playerScores == null) {
@@ -43,6 +40,12 @@ abstract class _EditPlaythoughViewModel with Store {
 
     return _playerScores!;
   }
+
+  @computed
+  Playthrough get playthrough => _playthroughViewModel.playthrough;
+
+  @computed
+  DateTime get playthroughStartTime => playthrough.startDate;
 
   @computed
   bool get playthoughEnded => playthrough.status == PlaythroughStatus.Finished;
@@ -73,15 +76,19 @@ abstract class _EditPlaythoughViewModel with Store {
   @action
   Future<void> stopPlaythrough() async {
     await _playthroughViewModel.stopPlaythrough();
-
-    // ! Ensure editing disabled before it stops
-    // Force refresh when next time getting the playthough
-    // _playthrough = null;
   }
 
   @action
   Future<void> saveChanges() async {
     await _playthroughViewModel.updatePlaythrough(playthrough, playerScores);
+  }
+
+  @action
+  void updateStartDate(DateTime newStartDate) {
+    final Duration playthroughDuration = playthoughDuration;
+    playthrough.startDate = newStartDate;
+    playthrough.status = PlaythroughStatus.Finished;
+    playthrough.endDate = newStartDate.add(playthroughDuration);
   }
 
   @action

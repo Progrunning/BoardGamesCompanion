@@ -16,6 +16,13 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
       (_$playthroughComputed ??= Computed<Playthrough>(() => super.playthrough,
               name: '_EditPlaythoughViewModel.playthrough'))
           .value;
+  Computed<DateTime>? _$playthroughStartTimeComputed;
+
+  @override
+  DateTime get playthroughStartTime => (_$playthroughStartTimeComputed ??=
+          Computed<DateTime>(() => super.playthroughStartTime,
+              name: '_EditPlaythoughViewModel.playthroughStartTime'))
+      .value;
   Computed<bool>? _$playthoughEndedComputed;
 
   @override
@@ -60,6 +67,17 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
       ActionController(name: '_EditPlaythoughViewModel', context: context);
 
   @override
+  void updateStartDate(DateTime newStartDate) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.updateStartDate');
+    try {
+      return super.updateStartDate(newStartDate);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void updateDuration(int hoursPlayed, int minutesPlyed) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
         name: '_EditPlaythoughViewModel.updateDuration');
@@ -74,6 +92,7 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   String toString() {
     return '''
 playthrough: ${playthrough},
+playthroughStartTime: ${playthroughStartTime},
 playthoughEnded: ${playthoughEnded},
 playthoughDuration: ${playthoughDuration}
     ''';

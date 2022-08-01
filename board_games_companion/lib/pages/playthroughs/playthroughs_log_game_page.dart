@@ -278,6 +278,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        margin: Dimensions.snackbarMargin,
         behavior: SnackBarBehavior.floating,
         content: Text('You need to select at least one player'),
       ),
@@ -300,6 +301,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        margin: Dimensions.snackbarMargin,
         behavior: SnackBarBehavior.floating,
         content: Text(AppText.logGameSuccessConfirmationSnackbarText),
       ),
@@ -310,6 +312,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        margin: Dimensions.snackbarMargin,
         behavior: SnackBarBehavior.floating,
         content: Text(AppText.logGameFailureConfirmationSnackbarText),
       ),

@@ -1,6 +1,3 @@
-// ! TODO Ensure that deleting playthgouths works fie
-// ! TODO Ensure that when deleting the stats are correct
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -12,7 +9,6 @@ import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../injectable.dart';
-import '../../models/hive/playthrough.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/default_icon.dart';
@@ -62,19 +58,26 @@ class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
               );
             }
 
-            return ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-              itemBuilder: (_, index) {
-                return _Playthrough(
-                  playthrough: viewModel.playthroughs[index],
-                  playthroughNumber: viewModel.playthroughs.length - index,
-                  isLast: index == viewModel.playthroughs.length - 1,
+            return Observer(
+              builder: (_) {
+                return ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+                  itemBuilder: (_, index) {
+                    final playthroughViewModel = getIt<PlaythroughViewModel>();
+                    playthroughViewModel.loadPlaythrough(viewModel.playthroughs[index]);
+
+                    return _Playthrough(
+                      viewModel: playthroughViewModel,
+                      playthroughNumber: viewModel.playthroughs.length - index,
+                      isLast: index == viewModel.playthroughs.length - 1,
+                    );
+                  },
+                  separatorBuilder: (_, index) {
+                    return const SizedBox(height: Dimensions.doubleStandardSpacing);
+                  },
+                  itemCount: viewModel.playthroughs.length,
                 );
               },
-              separatorBuilder: (_, index) {
-                return const SizedBox(height: Dimensions.doubleStandardSpacing);
-              },
-              itemCount: viewModel.playthroughs.length,
             );
           default:
             return const SizedBox.shrink();
@@ -86,13 +89,13 @@ class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
 
 class _Playthrough extends StatefulWidget {
   const _Playthrough({
-    required this.playthrough,
+    required this.viewModel,
     required this.isLast,
     this.playthroughNumber,
     Key? key,
   }) : super(key: key);
 
-  final Playthrough playthrough;
+  final PlaythroughViewModel viewModel;
   final int? playthroughNumber;
   final bool isLast;
 
@@ -103,15 +106,6 @@ class _Playthrough extends StatefulWidget {
 }
 
 class _PlaythroughState extends State<_Playthrough> {
-  late PlaythroughViewModel viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel = getIt<PlaythroughViewModel>();
-    viewModel.loadPlaythrough(widget.playthrough);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -130,7 +124,7 @@ class _PlaythroughState extends State<_Playthrough> {
             padding: const EdgeInsets.all(Dimensions.standardSpacing),
             child: Observer(
               builder: (_) {
-                switch (viewModel.futureLoadPlaythrough?.status ?? FutureStatus.pending) {
+                switch (widget.viewModel.futureLoadPlaythrough?.status ?? FutureStatus.pending) {
                   case FutureStatus.pending:
                     return const LoadingIndicator();
 
@@ -143,11 +137,13 @@ class _PlaythroughState extends State<_Playthrough> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         _PlaythroughGameStats(
-                          playthroughViewModel: viewModel,
+                          playthroughViewModel: widget.viewModel,
                           playthroughNumber: widget.playthroughNumber,
                         ),
                         const SizedBox(width: Dimensions.doubleStandardSpacing),
-                        Expanded(child: _PlaythroughPlayersStats(playthroughViewModel: viewModel)),
+                        Expanded(
+                          child: _PlaythroughPlayersStats(playthroughViewModel: widget.viewModel),
+                        ),
                       ],
                     );
                 }
@@ -248,16 +244,19 @@ class _PlaythroughGameStats extends StatelessWidget {
           '$playthroughNumber${playthroughNumber.toOrdinalAbbreviations()}',
           'game',
         ),
-        _PlaythroughDuration(playthroughViewModel: playthroughViewModel),
+        _PlaythroughDuration(viewModel: playthroughViewModel),
       ],
     );
   }
 }
 
 class _PlaythroughDuration extends StatefulWidget {
-  const _PlaythroughDuration({required this.playthroughViewModel});
+  const _PlaythroughDuration({
+    required this.viewModel,
+    Key? key,
+  }) : super(key: key);
 
-  final PlaythroughViewModel playthroughViewModel;
+  final PlaythroughViewModel viewModel;
 
   @override
   _PlaythroughDurationState createState() => _PlaythroughDurationState();
@@ -269,20 +268,26 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
 
   @override
   void initState() {
-    periodicBroadcastStream.stream.listen(_updateDuration);
     super.initState();
+
+    if (!widget.viewModel.playthoughEnded) {
+      periodicBroadcastStream.stream.listen(_updateDuration);
+    }
   }
 
   @override
   void dispose() {
-    periodicBroadcastStream.dispose();
+    if (!widget.viewModel.playthoughEnded) {
+      periodicBroadcastStream.dispose();
+    }
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return _PlaythroughItemDetail(
-      widget.playthroughViewModel.duration.inSeconds.toPlaytimeDuration(),
+      widget.viewModel.duration.inSeconds.toPlaytimeDuration(),
       'duration',
     );
   }

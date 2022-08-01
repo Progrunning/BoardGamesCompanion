@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
@@ -308,7 +309,6 @@ class _Duration extends StatefulWidget {
 class _DurationState extends State<_Duration> {
   static const int _maxHours = 99;
 
-  late DateTime startDateTime;
   late Duration playthroughDuration;
   int? playthroughDurationInSeconds;
   late int hoursPlayed;
@@ -323,7 +323,6 @@ class _DurationState extends State<_Duration> {
   void initState() {
     super.initState();
 
-    startDateTime = widget.viewModel.playthrough.startDate;
     playthroughDuration = widget.viewModel.playthoughDuration;
     playthroughDurationInSeconds = playthroughDuration.inSeconds;
     hoursPlayed = playthroughDuration.inHours;
@@ -338,9 +337,13 @@ class _DurationState extends State<_Duration> {
       child: Row(
         children: [
           Center(
-            child: CalendarCard(
-              widget.viewModel.playthrough.startDate,
-              onTap: () async => _pickStartDate(),
+            child: Observer(
+              builder: (_) {
+                return CalendarCard(
+                  widget.viewModel.playthroughStartTime,
+                  onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
+                );
+              },
             ),
           ),
           const Expanded(child: SizedBox.shrink()),
@@ -359,10 +362,7 @@ class _DurationState extends State<_Duration> {
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text(
-                  'h',
-                  style: AppTheme.theme.textTheme.bodyText2,
-                ),
+                Text('h', style: AppTheme.theme.textTheme.bodyText2),
                 const SizedBox(width: Dimensions.halfStandardSpacing),
                 NumberPicker(
                   value: minutesPlyed,
@@ -376,10 +376,7 @@ class _DurationState extends State<_Duration> {
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text(
-                  'min ',
-                  style: AppTheme.theme.textTheme.bodyText2,
-                ),
+                Text('min ', style: AppTheme.theme.textTheme.bodyText2),
               ],
             ),
           )
@@ -406,7 +403,7 @@ class _DurationState extends State<_Duration> {
     final DateTime now = DateTime.now();
     final DateTime? newStartDate = await showDatePicker(
       context: context,
-      initialDate: startDateTime,
+      initialDate: widget.viewModel.playthroughStartTime,
       firstDate: now.add(const Duration(days: -Constants.daysInTenYears)),
       lastDate: now,
       currentDate: now,
@@ -427,11 +424,7 @@ class _DurationState extends State<_Duration> {
       return;
     }
 
-    setState(() {
-      final Duration playthroughDuration = widget.viewModel.playthoughDuration;
-      widget.viewModel.playthrough.startDate = startDateTime = newStartDate;
-      widget.viewModel.playthrough.endDate = newStartDate.add(playthroughDuration);
-    });
+    widget.viewModel.updateStartDate(newStartDate);
   }
 
   void _setHourseAndMinutesRange() {
@@ -460,32 +453,36 @@ class _ActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(Dimensions.standardSpacing),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          ElevatedIconButton(
-            title: 'Delete',
-            icon: const DefaultIcon(Icons.delete),
-            color: AppColors.redColor,
-            onPressed: onDelete,
-          ),
-          const Expanded(child: SizedBox.shrink()),
-          if (!viewModel.playthoughEnded) ...[
-            ElevatedIconButton(
-              title: AppText.stop,
-              icon: const DefaultIcon(Icons.stop),
-              color: AppColors.blueColor,
-              onPressed: onStop,
-            ),
-            const SizedBox(width: Dimensions.standardSpacing),
-          ],
-          ElevatedIconButton(
-            title: 'Save',
-            icon: const DefaultIcon(Icons.save),
-            color: AppColors.accentColor,
-            onPressed: onSave,
-          ),
-        ],
+      child: Observer(
+        builder: (_) {
+          return Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              ElevatedIconButton(
+                title: 'Delete',
+                icon: const DefaultIcon(Icons.delete),
+                color: AppColors.redColor,
+                onPressed: onDelete,
+              ),
+              const Expanded(child: SizedBox.shrink()),
+              if (!viewModel.playthoughEnded) ...[
+                ElevatedIconButton(
+                  title: AppText.stop,
+                  icon: const DefaultIcon(Icons.stop),
+                  color: AppColors.blueColor,
+                  onPressed: onStop,
+                ),
+                const SizedBox(width: Dimensions.standardSpacing),
+              ],
+              ElevatedIconButton(
+                title: 'Save',
+                icon: const DefaultIcon(Icons.save),
+                color: AppColors.accentColor,
+                onPressed: onSave,
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -9,11 +9,11 @@ part of 'playthroughs_history_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
-  Computed<List<Playthrough>>? _$playthroughsComputed;
+  Computed<ObservableList<Playthrough>>? _$playthroughsComputed;
 
   @override
-  List<Playthrough> get playthroughs => (_$playthroughsComputed ??=
-          Computed<List<Playthrough>>(() => super.playthroughs,
+  ObservableList<Playthrough> get playthroughs => (_$playthroughsComputed ??=
+          Computed<ObservableList<Playthrough>>(() => super.playthroughs,
               name: '_PlaythroughsHistoryViewModel.playthroughs'))
       .value;
   Computed<bool>? _$hasAnyPlaythroughsComputed;

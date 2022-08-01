@@ -16,6 +16,13 @@ mixin _$PlaythroughViewModel on _PlaythroughViewModel, Store {
       (_$playthroughComputed ??= Computed<Playthrough>(() => super.playthrough,
               name: '_PlaythroughViewModel.playthrough'))
           .value;
+  Computed<bool>? _$playthoughEndedComputed;
+
+  @override
+  bool get playthoughEnded =>
+      (_$playthoughEndedComputed ??= Computed<bool>(() => super.playthoughEnded,
+              name: '_PlaythroughViewModel.playthoughEnded'))
+          .value;
 
   late final _$_playthroughAtom =
       Atom(name: '_PlaythroughViewModel._playthrough', context: context);
@@ -119,7 +126,8 @@ scores: ${scores},
 players: ${players},
 playerScores: ${playerScores},
 futureLoadPlaythrough: ${futureLoadPlaythrough},
-playthrough: ${playthrough}
+playthrough: ${playthrough},
+playthoughEnded: ${playthoughEnded}
     ''';
   }
 }
