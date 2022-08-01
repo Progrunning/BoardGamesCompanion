@@ -64,6 +64,8 @@ class BoardGameDetailsViewModel with ChangeNotifier {
         break;
     }
 
+    // ! MK If a game is an expansion and the main board game has been sync'd with BGG and lacks details then need to fetch details
+
     await _boardGamesStore.addOrUpdateBoardGame(_boardGameDetails!);
   }
 }

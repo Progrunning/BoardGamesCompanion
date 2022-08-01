@@ -158,6 +158,27 @@ mixin _$BoardGameDetails on _BoardGameDetails, Store {
       (_$commentsNumberComputed ??= Computed<int?>(() => super.commentsNumber,
               name: '_BoardGameDetails.commentsNumber'))
           .value;
+  Computed<bool?>? _$isOwnedComputed;
+
+  @override
+  bool? get isOwned =>
+      (_$isOwnedComputed ??= Computed<bool?>(() => super.isOwned,
+              name: '_BoardGameDetails.isOwned'))
+          .value;
+  Computed<bool?>? _$isOnWishlistComputed;
+
+  @override
+  bool? get isOnWishlist =>
+      (_$isOnWishlistComputed ??= Computed<bool?>(() => super.isOnWishlist,
+              name: '_BoardGameDetails.isOnWishlist'))
+          .value;
+  Computed<bool?>? _$isFriendsComputed;
+
+  @override
+  bool? get isFriends =>
+      (_$isFriendsComputed ??= Computed<bool?>(() => super.isFriends,
+              name: '_BoardGameDetails.isFriends'))
+          .value;
   Computed<bool?>? _$isBggSyncedComputed;
 
   @override
@@ -253,6 +274,54 @@ mixin _$BoardGameDetails on _BoardGameDetails, Store {
     });
   }
 
+  late final _$_isOwnedAtom =
+      Atom(name: '_BoardGameDetails._isOwned', context: context);
+
+  @override
+  bool? get _isOwned {
+    _$_isOwnedAtom.reportRead();
+    return super._isOwned;
+  }
+
+  @override
+  set _isOwned(bool? value) {
+    _$_isOwnedAtom.reportWrite(value, super._isOwned, () {
+      super._isOwned = value;
+    });
+  }
+
+  late final _$_isOnWishlistAtom =
+      Atom(name: '_BoardGameDetails._isOnWishlist', context: context);
+
+  @override
+  bool? get _isOnWishlist {
+    _$_isOnWishlistAtom.reportRead();
+    return super._isOnWishlist;
+  }
+
+  @override
+  set _isOnWishlist(bool? value) {
+    _$_isOnWishlistAtom.reportWrite(value, super._isOnWishlist, () {
+      super._isOnWishlist = value;
+    });
+  }
+
+  late final _$_isFriendsAtom =
+      Atom(name: '_BoardGameDetails._isFriends', context: context);
+
+  @override
+  bool? get _isFriends {
+    _$_isFriendsAtom.reportRead();
+    return super._isFriends;
+  }
+
+  @override
+  set _isFriends(bool? value) {
+    _$_isFriendsAtom.reportWrite(value, super._isFriends, () {
+      super._isFriends = value;
+    });
+  }
+
   late final _$_isBggSyncedAtom =
       Atom(name: '_BoardGameDetails._isBggSynced', context: context);
 
@@ -277,6 +346,9 @@ rating: ${rating},
 votes: ${votes},
 avgWeight: ${avgWeight},
 commentsNumber: ${commentsNumber},
+isOwned: ${isOwned},
+isOnWishlist: ${isOnWishlist},
+isFriends: ${isFriends},
 isBggSynced: ${isBggSynced},
 hasIncompleteDetails: ${hasIncompleteDetails}
     ''';

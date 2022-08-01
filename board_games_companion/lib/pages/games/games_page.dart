@@ -103,11 +103,22 @@ class GamesPageState extends State<GamesPage>
               return const _Empty();
             }
 
-            return _Collection(
-              viewModel: widget.viewModel,
-              topTabController: _topTabController,
-              analyticsService: widget.analyticsService,
-              rateAndReviewService: widget.rateAndReviewService,
+            return Observer(
+              builder: (_) {
+                return _Collection(
+                  viewModel: widget.viewModel,
+                  isCollectionEmpty: widget.viewModel.isCollectionEmpty,
+                  hasMainGames: widget.viewModel.anyMainGamesInCollection,
+                  mainGames: widget.viewModel.mainGamesInCollection,
+                  totalMainGames: widget.viewModel.totalMainGamesInCollection,
+                  hasExpansions: widget.viewModel.anyExpansionsInCollection,
+                  expansionsMap: widget.viewModel.expansionsInCollectionGroupedByMainGame,
+                  selectedTab: widget.viewModel.selectedTab,
+                  topTabController: _topTabController,
+                  analyticsService: widget.analyticsService,
+                  rateAndReviewService: widget.rateAndReviewService,
+                );
+              },
             );
         }
       },
@@ -130,6 +141,13 @@ class GamesPageState extends State<GamesPage>
 class _Collection extends StatelessWidget {
   const _Collection({
     required this.viewModel,
+    required this.isCollectionEmpty,
+    required this.hasMainGames,
+    required this.mainGames,
+    required this.totalMainGames,
+    required this.hasExpansions,
+    required this.expansionsMap,
+    required this.selectedTab,
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
@@ -137,62 +155,59 @@ class _Collection extends StatelessWidget {
   }) : super(key: key);
 
   final GamesViewModel viewModel;
+  final bool isCollectionEmpty;
+  final bool hasMainGames;
+  final List<BoardGameDetails> mainGames;
+  final int totalMainGames;
+  final bool hasExpansions;
+  final Map<BoardGameDetails, List<BoardGameDetails>> expansionsMap;
+  final GamesTab selectedTab;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Observer(builder: (_) {
-        return CustomScrollView(
-          slivers: <Widget>[
-            _AppBar(
-              viewModel: viewModel,
-              topTabController: topTabController,
-              analyticsService: analyticsService,
-              rateAndReviewService: rateAndReviewService,
+    return CustomScrollView(
+      slivers: <Widget>[
+        _AppBar(
+          viewModel: viewModel,
+          topTabController: topTabController,
+          analyticsService: analyticsService,
+          rateAndReviewService: rateAndReviewService,
+        ),
+        if (isCollectionEmpty) _EmptyCollection(selectedTab: selectedTab),
+        if (!isCollectionEmpty) ...[
+          if (hasMainGames) ...[
+            SliverPersistentHeader(
+              delegate: BgcSliverHeaderDelegate(
+                title: sprintf(
+                  AppText.gamesPageMainGamesSliverSectionTitleFormat,
+                  [totalMainGames],
+                ),
+              ),
             ),
-            if (viewModel.collectionSate == CollectionState.emptyCollection)
-              _EmptyCollection(gamesViewModel: viewModel),
-            if (viewModel.collectionSate == CollectionState.collection) ...[
-              if (viewModel.hasAnyMainGameInSelectedCollection) ...[
-                SliverPersistentHeader(
-                  delegate: BgcSliverHeaderDelegate(
-                    title: sprintf(
-                      AppText.gamesPageMainGamesSliverSectionTitleFormat,
-                      [viewModel.totalMainGamesInCollections],
-                    ),
-                  ),
-                ),
-                _Grid(
-                  boardGames: viewModel.mainGamesInCollections,
-                  analyticsService: analyticsService,
-                ),
-              ],
-              if (viewModel.hasAnyExpansionsInSelectedCollection) ...[
-                for (var expansionsMapEntry
-                    in viewModel.expansionsInSelectedCollectionGroupedByMainGame.entries) ...[
-                  SliverPersistentHeader(
-                    delegate: BgcSliverHeaderDelegate(
-                      title: sprintf(
-                        AppText.gamesPageExpansionsSliverSectionTitleFormat,
-                        [expansionsMapEntry.key.name, expansionsMapEntry.value.length],
-                      ),
-                    ),
-                  ),
-                  _Grid(
-                    boardGames: expansionsMapEntry.value,
-                    analyticsService: analyticsService,
-                  ),
-                ]
-              ]
-            ],
-            const SliverPadding(padding: EdgeInsets.all(8.0)),
+            _Grid(boardGames: mainGames, analyticsService: analyticsService),
           ],
-        );
-      }),
+          if (hasExpansions) ...[
+            for (var expansionsMapEntry in expansionsMap.entries) ...[
+              SliverPersistentHeader(
+                delegate: BgcSliverHeaderDelegate(
+                  title: sprintf(
+                    AppText.gamesPageExpansionsSliverSectionTitleFormat,
+                    [expansionsMapEntry.key.name, expansionsMapEntry.value.length],
+                  ),
+                ),
+              ),
+              _Grid(
+                boardGames: expansionsMapEntry.value,
+                analyticsService: analyticsService,
+              ),
+            ]
+          ]
+        ],
+        const SliverPadding(padding: EdgeInsets.all(8.0)),
+      ],
     );
   }
 }
@@ -260,30 +275,30 @@ class _AppBarState extends State<_AppBar> {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(74),
-          child: TabBar(
-            onTap: (int index) {
-              widget.viewModel.selectedTab = index.toGamesTab();
-            },
-            controller: widget.topTabController,
-            tabs: <Widget>[
-              _TopTab(
-                'Owned',
-                Icons.grid_on,
-                isSelected: widget.viewModel.selectedTab == GamesTab.owned,
-              ),
-              _TopTab(
-                'Friends',
-                Icons.group,
-                isSelected: widget.viewModel.selectedTab == GamesTab.friends,
-              ),
-              _TopTab(
-                'Wishlist',
-                Icons.card_giftcard,
-                isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
-              ),
-            ],
-            indicatorColor: AppColors.accentColor,
-          ),
+          child: Observer(builder: (_) {
+            return TabBar(
+              onTap: (int index) => widget.viewModel.selectedTab = index.toGamesTab(),
+              controller: widget.topTabController,
+              tabs: <Widget>[
+                _TopTab(
+                  'Owned',
+                  Icons.grid_on,
+                  isSelected: widget.viewModel.selectedTab == GamesTab.owned,
+                ),
+                _TopTab(
+                  'Friends',
+                  Icons.group,
+                  isSelected: widget.viewModel.selectedTab == GamesTab.friends,
+                ),
+                _TopTab(
+                  'Wishlist',
+                  Icons.card_giftcard,
+                  isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
+                ),
+              ],
+              indicatorColor: AppColors.accentColor,
+            );
+          }),
         ),
       );
 
@@ -474,10 +489,10 @@ class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
 class _EmptyCollection extends StatelessWidget {
   const _EmptyCollection({
     Key? key,
-    required this.gamesViewModel,
+    required this.selectedTab,
   }) : super(key: key);
 
-  final GamesViewModel gamesViewModel;
+  final GamesTab selectedTab;
 
   @override
   Widget build(BuildContext context) {
@@ -501,13 +516,11 @@ class _EmptyCollection extends StatelessWidget {
                                 text: "It looks like you don't have any board games in your ",
                               ),
                               TextSpan(
-                                text: gamesViewModel.selectedTab
-                                    .toCollectionType()
-                                    .toHumandReadableText(),
+                                text: selectedTab.toCollectionType().toHumandReadableText(),
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               const TextSpan(text: ' collection yet.'),
-                              if (gamesViewModel.selectedTab == GamesTab.wishlist &&
+                              if (selectedTab == GamesTab.wishlist &&
                                   (userStore.user?.name.isNotEmpty ?? false)) ...[
                                 const TextSpan(
                                     text: "\n\nIf you want to see board games from BGG's  "),
@@ -531,7 +544,7 @@ class _EmptyCollection extends StatelessWidget {
                           ),
                           textAlign: TextAlign.justify,
                         ),
-                        if (gamesViewModel.selectedTab == GamesTab.wishlist &&
+                        if (selectedTab == GamesTab.wishlist &&
                             (userStore.user?.name.isNotEmpty ?? false)) ...[
                           const SizedBox(height: Dimensions.doubleStandardSpacing),
                           Align(

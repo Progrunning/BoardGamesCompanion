@@ -9,6 +9,23 @@ part of 'games_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$GamesViewModel on _GamesViewModel, Store {
+  Computed<List<BoardGameDetails>>? _$allMainGamesComputed;
+
+  @override
+  List<BoardGameDetails> get allMainGames => (_$allMainGamesComputed ??=
+          Computed<List<BoardGameDetails>>(() => super.allMainGames,
+              name: '_GamesViewModel.allMainGames'))
+      .value;
+  Computed<ObservableMap<String, BoardGameDetails>>?
+      _$_mainBoardGameByExpansionIdComputed;
+
+  @override
+  ObservableMap<String, BoardGameDetails> get _mainBoardGameByExpansionId =>
+      (_$_mainBoardGameByExpansionIdComputed ??=
+              Computed<ObservableMap<String, BoardGameDetails>>(
+                  () => super._mainBoardGameByExpansionId,
+                  name: '_GamesViewModel._mainBoardGameByExpansionId'))
+          .value;
   Computed<List<SortBy>>? _$sortByOptionsComputed;
 
   @override
@@ -37,13 +54,14 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
           () => super.filterByRating,
           name: '_GamesViewModel.filterByRating'))
       .value;
-  Computed<Map<String, BoardGameDetails>>? _$filteredBoardGamesComputed;
+  Computed<ObservableList<BoardGameDetails>>? _$filteredBoardGamesComputed;
 
   @override
-  Map<String, BoardGameDetails> get filteredBoardGames =>
-      (_$filteredBoardGamesComputed ??= Computed<Map<String, BoardGameDetails>>(
-              () => super.filteredBoardGames,
-              name: '_GamesViewModel.filteredBoardGames'))
+  ObservableList<BoardGameDetails> get filteredBoardGames =>
+      (_$filteredBoardGamesComputed ??=
+              Computed<ObservableList<BoardGameDetails>>(
+                  () => super.filteredBoardGames,
+                  name: '_GamesViewModel.filteredBoardGames'))
           .value;
   Computed<bool>? _$anyBoardGamesInCollectionsComputed;
 
@@ -96,94 +114,79 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
           Computed<List<BoardGameDetails>>(() => super.allBoardGames,
               name: '_GamesViewModel.allBoardGames'))
       .value;
-  Computed<CollectionState>? _$collectionSateComputed;
+  Computed<List<BoardGameDetails>>? _$boardGamesInCollectionComputed;
 
   @override
-  CollectionState get collectionSate => (_$collectionSateComputed ??=
-          Computed<CollectionState>(() => super.collectionSate,
-              name: '_GamesViewModel.collectionSate'))
+  List<BoardGameDetails> get boardGamesInCollection =>
+      (_$boardGamesInCollectionComputed ??= Computed<List<BoardGameDetails>>(
+              () => super.boardGamesInCollection,
+              name: '_GamesViewModel.boardGamesInCollection'))
+          .value;
+  Computed<bool>? _$isCollectionEmptyComputed;
+
+  @override
+  bool get isCollectionEmpty => (_$isCollectionEmptyComputed ??= Computed<bool>(
+          () => super.isCollectionEmpty,
+          name: '_GamesViewModel.isCollectionEmpty'))
       .value;
-  Computed<List<BoardGameDetails>>? _$boardGamesInSelectedCollectionComputed;
+  Computed<List<BoardGameDetails>>? _$mainGamesInCollectionComputed;
 
   @override
-  List<BoardGameDetails> get boardGamesInSelectedCollection =>
-      (_$boardGamesInSelectedCollectionComputed ??=
-              Computed<List<BoardGameDetails>>(
-                  () => super.boardGamesInSelectedCollection,
-                  name: '_GamesViewModel.boardGamesInSelectedCollection'))
+  List<BoardGameDetails> get mainGamesInCollection =>
+      (_$mainGamesInCollectionComputed ??= Computed<List<BoardGameDetails>>(
+              () => super.mainGamesInCollection,
+              name: '_GamesViewModel.mainGamesInCollection'))
           .value;
-  Computed<bool>? _$anyBoardGamesInSelectedCollectionComputed;
+  Computed<List<BoardGameDetails>>? _$expansionsInCollectionComputed;
 
   @override
-  bool get anyBoardGamesInSelectedCollection =>
-      (_$anyBoardGamesInSelectedCollectionComputed ??= Computed<bool>(
-              () => super.anyBoardGamesInSelectedCollection,
-              name: '_GamesViewModel.anyBoardGamesInSelectedCollection'))
+  List<BoardGameDetails> get expansionsInCollection =>
+      (_$expansionsInCollectionComputed ??= Computed<List<BoardGameDetails>>(
+              () => super.expansionsInCollection,
+              name: '_GamesViewModel.expansionsInCollection'))
           .value;
-  Computed<List<BoardGameDetails>>? _$mainGamesInCollectionsComputed;
+  Computed<bool>? _$anyMainGamesInCollectionComputed;
 
   @override
-  List<BoardGameDetails> get mainGamesInCollections =>
-      (_$mainGamesInCollectionsComputed ??= Computed<List<BoardGameDetails>>(
-              () => super.mainGamesInCollections,
-              name: '_GamesViewModel.mainGamesInCollections'))
-          .value;
-  Computed<bool>? _$hasAnyMainGameInSelectedCollectionComputed;
+  bool get anyMainGamesInCollection => (_$anyMainGamesInCollectionComputed ??=
+          Computed<bool>(() => super.anyMainGamesInCollection,
+              name: '_GamesViewModel.anyMainGamesInCollection'))
+      .value;
+  Computed<int>? _$totalMainGamesInCollectionComputed;
 
   @override
-  bool get hasAnyMainGameInSelectedCollection =>
-      (_$hasAnyMainGameInSelectedCollectionComputed ??= Computed<bool>(
-              () => super.hasAnyMainGameInSelectedCollection,
-              name: '_GamesViewModel.hasAnyMainGameInSelectedCollection'))
+  int get totalMainGamesInCollection =>
+      (_$totalMainGamesInCollectionComputed ??= Computed<int>(
+              () => super.totalMainGamesInCollection,
+              name: '_GamesViewModel.totalMainGamesInCollection'))
           .value;
-  Computed<int>? _$totalMainGamesInCollectionsComputed;
+  Computed<int>? _$totalExpansionsInCollectionComputed;
 
   @override
-  int get totalMainGamesInCollections =>
-      (_$totalMainGamesInCollectionsComputed ??= Computed<int>(
-              () => super.totalMainGamesInCollections,
-              name: '_GamesViewModel.totalMainGamesInCollections'))
+  int get totalExpansionsInCollection =>
+      (_$totalExpansionsInCollectionComputed ??= Computed<int>(
+              () => super.totalExpansionsInCollection,
+              name: '_GamesViewModel.totalExpansionsInCollection'))
           .value;
-  Computed<int>? _$totalExpansionsInCollectionsComputed;
+  Computed<bool>? _$anyExpansionsInCollectionComputed;
 
   @override
-  int get totalExpansionsInCollections =>
-      (_$totalExpansionsInCollectionsComputed ??= Computed<int>(
-              () => super.totalExpansionsInCollections,
-              name: '_GamesViewModel.totalExpansionsInCollections'))
-          .value;
-  Computed<bool>? _$hasAnyExpansionsInSelectedCollectionComputed;
-
-  @override
-  bool get hasAnyExpansionsInSelectedCollection =>
-      (_$hasAnyExpansionsInSelectedCollectionComputed ??= Computed<bool>(
-              () => super.hasAnyExpansionsInSelectedCollection,
-              name: '_GamesViewModel.hasAnyExpansionsInSelectedCollection'))
-          .value;
+  bool get anyExpansionsInCollection => (_$anyExpansionsInCollectionComputed ??=
+          Computed<bool>(() => super.anyExpansionsInCollection,
+              name: '_GamesViewModel.anyExpansionsInCollection'))
+      .value;
   Computed<Map<BoardGameDetails, List<BoardGameDetails>>>?
-      _$expansionsGroupedByMainGameComputed;
-
-  @override
-  Map<BoardGameDetails, List<BoardGameDetails>>
-      get expansionsGroupedByMainGame =>
-          (_$expansionsGroupedByMainGameComputed ??=
-                  Computed<Map<BoardGameDetails, List<BoardGameDetails>>>(
-                      () => super.expansionsGroupedByMainGame,
-                      name: '_GamesViewModel.expansionsGroupedByMainGame'))
-              .value;
-  Computed<Map<BoardGameDetails, List<BoardGameDetails>>>?
-      _$expansionsInSelectedCollectionGroupedByMainGameComputed;
+      _$expansionsInCollectionGroupedByMainGameComputed;
 
   @override
   Map<
       BoardGameDetails,
       List<
-          BoardGameDetails>> get expansionsInSelectedCollectionGroupedByMainGame =>
-      (_$expansionsInSelectedCollectionGroupedByMainGameComputed ??= Computed<
+          BoardGameDetails>> get expansionsInCollectionGroupedByMainGame =>
+      (_$expansionsInCollectionGroupedByMainGameComputed ??= Computed<
                   Map<BoardGameDetails, List<BoardGameDetails>>>(
-              () => super.expansionsInSelectedCollectionGroupedByMainGame,
-              name:
-                  '_GamesViewModel.expansionsInSelectedCollectionGroupedByMainGame'))
+              () => super.expansionsInCollectionGroupedByMainGame,
+              name: '_GamesViewModel.expansionsInCollectionGroupedByMainGame'))
           .value;
   Computed<List<BoardGameDetails>>? _$_allExpansionsComputed;
 
@@ -192,33 +195,6 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
           Computed<List<BoardGameDetails>>(() => super._allExpansions,
               name: '_GamesViewModel._allExpansions'))
       .value;
-  Computed<List<BoardGameDetails>>? _$_expansionsInSelectedCollectionComputed;
-
-  @override
-  List<BoardGameDetails> get _expansionsInSelectedCollection =>
-      (_$_expansionsInSelectedCollectionComputed ??=
-              Computed<List<BoardGameDetails>>(
-                  () => super._expansionsInSelectedCollection,
-                  name: '_GamesViewModel._expansionsInSelectedCollection'))
-          .value;
-
-  late final _$_mainBoardGameByExpansionIdAtom = Atom(
-      name: '_GamesViewModel._mainBoardGameByExpansionId', context: context);
-
-  @override
-  ObservableMap<String, BoardGameDetails> get _mainBoardGameByExpansionId {
-    _$_mainBoardGameByExpansionIdAtom.reportRead();
-    return super._mainBoardGameByExpansionId;
-  }
-
-  @override
-  set _mainBoardGameByExpansionId(
-      ObservableMap<String, BoardGameDetails> value) {
-    _$_mainBoardGameByExpansionIdAtom
-        .reportWrite(value, super._mainBoardGameByExpansionId, () {
-      super._mainBoardGameByExpansionId = value;
-    });
-  }
 
   late final _$selectedTabAtom =
       Atom(name: '_GamesViewModel.selectedTab', context: context);
@@ -338,6 +314,7 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
     return '''
 selectedTab: ${selectedTab},
 futureLoadBoardGames: ${futureLoadBoardGames},
+allMainGames: ${allMainGames},
 sortByOptions: ${sortByOptions},
 selectedSortBy: ${selectedSortBy},
 anyFiltersApplied: ${anyFiltersApplied},
@@ -350,16 +327,15 @@ filterByNumberOfPlayers: ${filterByNumberOfPlayers},
 numberOfPlayersSliderValue: ${numberOfPlayersSliderValue},
 maxNumberOfPlayers: ${maxNumberOfPlayers},
 allBoardGames: ${allBoardGames},
-collectionSate: ${collectionSate},
-boardGamesInSelectedCollection: ${boardGamesInSelectedCollection},
-anyBoardGamesInSelectedCollection: ${anyBoardGamesInSelectedCollection},
-mainGamesInCollections: ${mainGamesInCollections},
-hasAnyMainGameInSelectedCollection: ${hasAnyMainGameInSelectedCollection},
-totalMainGamesInCollections: ${totalMainGamesInCollections},
-totalExpansionsInCollections: ${totalExpansionsInCollections},
-hasAnyExpansionsInSelectedCollection: ${hasAnyExpansionsInSelectedCollection},
-expansionsGroupedByMainGame: ${expansionsGroupedByMainGame},
-expansionsInSelectedCollectionGroupedByMainGame: ${expansionsInSelectedCollectionGroupedByMainGame}
+boardGamesInCollection: ${boardGamesInCollection},
+isCollectionEmpty: ${isCollectionEmpty},
+mainGamesInCollection: ${mainGamesInCollection},
+expansionsInCollection: ${expansionsInCollection},
+anyMainGamesInCollection: ${anyMainGamesInCollection},
+totalMainGamesInCollection: ${totalMainGamesInCollection},
+totalExpansionsInCollection: ${totalExpansionsInCollection},
+anyExpansionsInCollection: ${anyExpansionsInCollection},
+expansionsInCollectionGroupedByMainGame: ${expansionsInCollectionGroupedByMainGame}
     ''';
   }
 }

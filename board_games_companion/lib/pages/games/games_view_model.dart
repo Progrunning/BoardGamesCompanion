@@ -23,11 +23,6 @@ import '../../stores/board_games_store.dart';
 
 part 'games_view_model.g.dart';
 
-enum CollectionState {
-  emptyCollection,
-  collection,
-}
-
 @injectable
 class GamesViewModel = _GamesViewModel with _$GamesViewModel;
 
@@ -40,9 +35,21 @@ abstract class _GamesViewModel with Store {
   final BoardGamesStore _boardGamesStore;
   final BoardGamesFiltersStore _boardGamesFiltersStore;
 
-  @observable
-  // ignore: prefer_final_fields
-  ObservableMap<String, BoardGameDetails> _mainBoardGameByExpansionId = ObservableMap.of({});
+  @computed
+  List<BoardGameDetails> get allMainGames =>
+      allBoardGames.where((BoardGameDetails boardGame) => boardGame.isMainGame).toList();
+
+  @computed
+  ObservableMap<String, BoardGameDetails> get _mainBoardGameByExpansionId {
+    final mainBoardGameMap = <String, BoardGameDetails>{};
+    for (final mainBoardGame in allMainGames) {
+      for (final expansion in mainBoardGame.expansions) {
+        mainBoardGameMap[expansion.id] = mainBoardGame;
+      }
+    }
+
+    return ObservableMap.of(mainBoardGameMap);
+  }
 
   @computed
   List<SortBy> get sortByOptions => _boardGamesFiltersStore.sortByOptions;
@@ -59,27 +66,25 @@ abstract class _GamesViewModel with Store {
   double? get filterByRating => _boardGamesFiltersStore.filterByRating;
 
   @computed
-  Map<String, BoardGameDetails> get filteredBoardGames {
+  ObservableList<BoardGameDetails> get filteredBoardGames {
     final sortBy = selectedSortBy;
 
-    final filteredBoardGamesMap = {
-      for (var boardGameDetails in _boardGamesStore.allBoardGames.where((boardGame) =>
-          (_boardGamesFiltersStore.filterByRating == null ||
-              boardGame.rating! >= _boardGamesFiltersStore.filterByRating!) &&
-          (_boardGamesFiltersStore.numberOfPlayers == null ||
-              (boardGame.maxPlayers != null &&
-                  boardGame.minPlayers != null &&
-                  (boardGame.maxPlayers! >= _boardGamesFiltersStore.numberOfPlayers! &&
-                      boardGame.minPlayers! <= _boardGamesFiltersStore.numberOfPlayers!)))))
-        boardGameDetails.id: boardGameDetails
-    };
+    final filteredBoardGames = allBoardGames
+        .where((BoardGameDetails boardGame) =>
+            (_boardGamesFiltersStore.filterByRating == null ||
+                boardGame.rating! >= _boardGamesFiltersStore.filterByRating!) &&
+            (_boardGamesFiltersStore.numberOfPlayers == null ||
+                (boardGame.maxPlayers != null &&
+                    boardGame.minPlayers != null &&
+                    (boardGame.maxPlayers! >= _boardGamesFiltersStore.numberOfPlayers! &&
+                        boardGame.minPlayers! <= _boardGamesFiltersStore.numberOfPlayers!))))
+        .toList();
 
     if (sortBy == null) {
-      return filteredBoardGamesMap;
+      return ObservableList.of(filteredBoardGames);
     }
 
-    final sortedFilteredBoardGames = List.of(filteredBoardGamesMap.values);
-    sortedFilteredBoardGames.sort((boardGame, otherBoardGame) {
+    filteredBoardGames.sort((boardGame, otherBoardGame) {
       if (sortBy.orderBy == OrderBy.Descending) {
         final buffer = boardGame;
         boardGame = otherBoardGame;
@@ -110,9 +115,7 @@ abstract class _GamesViewModel with Store {
       }
     });
 
-    return {
-      for (var boardGameDetails in sortedFilteredBoardGames) boardGameDetails.id: boardGameDetails
-    };
+    return ObservableList.of(filteredBoardGames);
   }
 
   @computed
@@ -152,70 +155,44 @@ abstract class _GamesViewModel with Store {
   List<BoardGameDetails> get allBoardGames => _boardGamesStore.allBoardGames;
 
   @computed
-  CollectionState get collectionSate {
-    if (!anyBoardGamesInSelectedCollection) {
-      return CollectionState.emptyCollection;
-    }
-
-    return CollectionState.collection;
-  }
-
-  @computed
-  List<BoardGameDetails> get boardGamesInSelectedCollection {
+  List<BoardGameDetails> get boardGamesInCollection {
     switch (selectedTab) {
       case GamesTab.owned:
-        return filteredBoardGames.values.where((boardGame) => boardGame.isOwned!).toList();
+        return filteredBoardGames.where((boardGame) => boardGame.isOwned!).toList();
       case GamesTab.friends:
-        return filteredBoardGames.values.where((boardGame) => boardGame.isFriends!).toList();
+        return filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
       case GamesTab.wishlist:
-        return filteredBoardGames.values.where((boardGame) => boardGame.isOnWishlist!).toList();
+        return filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
     }
   }
 
   @computed
-  bool get anyBoardGamesInSelectedCollection => boardGamesInSelectedCollection.isNotEmpty;
+  bool get isCollectionEmpty => boardGamesInCollection.isEmpty;
 
   @computed
-  List<BoardGameDetails> get mainGamesInCollections => boardGamesInSelectedCollection
-      .where((boardGame) => !(boardGame.isExpansion ?? false))
-      .toList();
+  List<BoardGameDetails> get mainGamesInCollection =>
+      boardGamesInCollection.where((boardGame) => boardGame.isMainGame).toList();
 
   @computed
-  bool get hasAnyMainGameInSelectedCollection => mainGamesInCollections.isNotEmpty;
+  List<BoardGameDetails> get expansionsInCollection =>
+      boardGamesInCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
   @computed
-  int get totalMainGamesInCollections => mainGamesInCollections.length;
+  bool get anyMainGamesInCollection => mainGamesInCollection.isNotEmpty;
 
   @computed
-  int get totalExpansionsInCollections => _expansionsInSelectedCollection.length;
+  int get totalMainGamesInCollection => mainGamesInCollection.length;
 
   @computed
-  bool get hasAnyExpansionsInSelectedCollection => _expansionsInSelectedCollection.isNotEmpty;
+  int get totalExpansionsInCollection => expansionsInCollection.length;
 
   @computed
-  Map<BoardGameDetails, List<BoardGameDetails>> get expansionsGroupedByMainGame {
+  bool get anyExpansionsInCollection => expansionsInCollection.isNotEmpty;
+
+  @computed
+  Map<BoardGameDetails, List<BoardGameDetails>> get expansionsInCollectionGroupedByMainGame {
     final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGrouped = {};
-    for (final expansion in _allExpansions) {
-      final mainGame = _mainBoardGameByExpansionId[expansion.id];
-      if (mainGame == null) {
-        continue;
-      }
-
-      if (!expansionsGrouped.containsKey(mainGame)) {
-        expansionsGrouped[mainGame] = [];
-      }
-
-      expansionsGrouped[mainGame]!.add(expansion);
-    }
-
-    return expansionsGrouped;
-  }
-
-  @computed
-  Map<BoardGameDetails, List<BoardGameDetails>>
-      get expansionsInSelectedCollectionGroupedByMainGame {
-    final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGrouped = {};
-    for (final expansion in _expansionsInSelectedCollection) {
+    for (final expansion in expansionsInCollection) {
       final mainGame = _mainBoardGameByExpansionId[expansion.id];
       if (mainGame == null) {
         continue;
@@ -240,10 +217,6 @@ abstract class _GamesViewModel with Store {
   @computed
   List<BoardGameDetails> get _allExpansions =>
       allBoardGames.where((boardGame) => boardGame.isExpansion ?? false).toList();
-
-  @computed
-  List<BoardGameDetails> get _expansionsInSelectedCollection =>
-      boardGamesInSelectedCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
   @observable
   ObservableFuture<void>? futureLoadBoardGames;
@@ -273,22 +246,9 @@ abstract class _GamesViewModel with Store {
   Future<void> _loadBoardGames() async {
     try {
       await _boardGamesStore.loadBoardGames();
-      _updateCachedBoardGameDetails();
-
       await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
-    }
-  }
-
-  void _updateCachedBoardGameDetails() {
-    for (final boardGameDetails in _boardGamesStore.allBoardGames) {
-      filteredBoardGames[boardGameDetails.id] = boardGameDetails;
-      if (boardGameDetails.isMainGame) {
-        for (final boardGameExpansion in boardGameDetails.expansions) {
-          _mainBoardGameByExpansionId[boardGameExpansion.id] = boardGameDetails;
-        }
-      }
     }
   }
 }

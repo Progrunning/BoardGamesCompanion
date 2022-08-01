@@ -218,8 +218,10 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
 
   bool get isMainGame => !(isExpansion ?? false);
 
+  @observable
   bool? _isOwned;
   @HiveField(24)
+  @computed
   bool? get isOwned => _isOwned ?? false;
   @HiveField(24)
   set isOwned(bool? value) {
@@ -229,8 +231,10 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
     }
   }
 
+  @observable
   bool? _isOnWishlist;
   @HiveField(25)
+  @computed
   bool? get isOnWishlist => _isOnWishlist ?? false;
   @HiveField(25)
   set isOnWishlist(bool? value) {
@@ -240,8 +244,10 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
     }
   }
 
+  @observable
   bool? _isFriends;
   @HiveField(26)
+  @computed
   bool? get isFriends => _isFriends ?? false;
   @HiveField(26)
   set isFriends(bool? value) {
