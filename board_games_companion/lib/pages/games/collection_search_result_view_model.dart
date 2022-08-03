@@ -18,20 +18,23 @@ abstract class _CollectionSearchResultViewModel with Store {
   String? _boardGameId;
 
   @computed
-  BoardGameDetails? get boardGame => _boardGamesStore.allBoardGamesMap[_boardGameId];
+  BoardGameDetails? get boardGame => _boardGamesStore.allBoardGamesInCollectionsMap[_boardGameId];
 
   @computed
   bool get isExpansion => boardGame?.isExpansion ?? false;
 
   @computed
+  bool get isMainGame => boardGame?.isMainGame ?? false;
+
+  @computed
   List<BoardGameDetails> get expansions {
-    if (isExpansion) {
+    if (!isMainGame) {
       return [];
     }
 
     final boardGameExpensions = <BoardGameDetails>[];
     for (final boardGameId in boardGame?.expansions.map((e) => e.id).toList() ?? <String>[]) {
-      if (_boardGamesStore.allBoardGamesMap.containsKey(boardGameId)) {
+      if (_boardGamesStore.allBoardGamesInCollectionsMap.containsKey(boardGameId)) {
         boardGameExpensions.add(_boardGamesStore.allBoardGamesMap[boardGameId]!);
       }
     }

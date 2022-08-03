@@ -201,10 +201,6 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
   @observable
   List<BoardGamesExpansion> expansions = <BoardGamesExpansion>[];
 
-  int get expansionsOwned {
-    return expansions.where((expansion) => expansion.isInCollection ?? false).length;
-  }
-
   bool? _isExpansion;
   @HiveField(23)
   bool? get isExpansion => _isExpansion;

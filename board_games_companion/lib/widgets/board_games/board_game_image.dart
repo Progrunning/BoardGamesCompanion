@@ -2,33 +2,35 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
-import '../../models/hive/board_game_details.dart';
 import '../common/loading_indicator_widget.dart';
 
 class BoardGameImage extends StatelessWidget {
-  const BoardGameImage(
-    BoardGameDetails? boardGameDetails, {
-    Key? key,
+  const BoardGameImage({
+    required String id,
+    required String? url,
     this.minImageHeight = 300,
     this.heroTag = AnimationTags.boardGameHeroTag,
-  })  : _boardGameDetails = boardGameDetails,
+    Key? key,
+  })  : _id = id,
+        _url = url,
         super(key: key);
 
   final double minImageHeight;
   final String heroTag;
 
-  final BoardGameDetails? _boardGameDetails;
+  final String _id;
+  final String? _url;
 
   @override
   Widget build(BuildContext context) {
-    if (_boardGameDetails == null) {
+    if (_id == null) {
       return Container();
     }
 
     return Hero(
-      tag: '$heroTag${_boardGameDetails!.id}',
+      tag: '$heroTag$_id',
       child: CachedNetworkImage(
-        imageUrl: _boardGameDetails!.imageUrl ?? '',
+        imageUrl: _url ?? '',
         imageBuilder: (context, imageProvider) => ConstrainedBox(
           constraints: BoxConstraints(minHeight: minImageHeight),
           child: Container(
@@ -38,14 +40,11 @@ class BoardGameImage extends StatelessWidget {
           ),
         ),
         fit: BoxFit.fitWidth,
-        placeholder: (context, url) => const LoadingIndicator(),
-        errorWidget: (context, url, dynamic error) {
+        placeholder: (_, __) => const LoadingIndicator(),
+        errorWidget: (_, __, dynamic ___) {
           return ConstrainedBox(
             constraints: BoxConstraints(minHeight: minImageHeight),
-            child: Image.asset(
-              'assets/icons/logo.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/icons/logo.png', fit: BoxFit.cover),
           );
         },
       ),

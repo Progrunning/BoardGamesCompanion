@@ -34,6 +34,16 @@ abstract class _BoardGamesStore with Store {
   ObservableMap<String, BoardGameDetails> get allBoardGamesMap =>
       ObservableMap.of({for (var boardGame in allBoardGames) boardGame.id: boardGame});
 
+  @computed
+  List<BoardGameDetails> get allBoardGamesInCollections => allBoardGames
+      .where((BoardGameDetails boardGame) =>
+          boardGame.isOwned! || boardGame.isFriends! || boardGame.isOnWishlist!)
+      .toList();
+
+  @computed
+  ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap =>
+      ObservableMap.of({for (var boardGame in allBoardGamesInCollections) boardGame.id: boardGame});
+
   @action
   bool isInAnyCollection(String? boardGameId) {
     if (boardGameId?.isBlank ?? true) {
@@ -61,7 +71,7 @@ abstract class _BoardGamesStore with Store {
       return;
     }
 
-    final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
+    final existingBoardGameDetails = _retrieveBoardGame(boardGameDetails.id);
     if (existingBoardGameDetails == null) {
       allBoardGames.add(boardGameDetails);
     } else {
@@ -119,7 +129,7 @@ abstract class _BoardGamesStore with Store {
         }
       }
 
-      final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
+      final existingBoardGameDetails = _retrieveBoardGame(boardGameDetails.id);
       if (existingBoardGameDetails != null) {
         boardGameDetails.isFriends = existingBoardGameDetails.isFriends;
         boardGameDetails.isOnWishlist = existingBoardGameDetails.isOnWishlist;
@@ -134,12 +144,6 @@ abstract class _BoardGamesStore with Store {
     }
 
     return null;
-  }
-
-  BoardGameDetails? retrieveBoardGame(String boardGameId) {
-    return allBoardGames.firstWhereOrNull(
-      (BoardGameDetails boardGameDetails) => boardGameDetails.id == boardGameId,
-    );
   }
 
   @action
@@ -216,5 +220,11 @@ abstract class _BoardGamesStore with Store {
       // MK Update main board game expansions list
       existingBoardGameDetails.expansions = boardGameDetails.expansions;
     }
+  }
+
+  BoardGameDetails? _retrieveBoardGame(String boardGameId) {
+    return allBoardGames.firstWhereOrNull(
+      (BoardGameDetails boardGameDetails) => boardGameDetails.id == boardGameId,
+    );
   }
 }

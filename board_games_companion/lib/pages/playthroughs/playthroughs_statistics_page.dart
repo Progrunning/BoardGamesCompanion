@@ -60,7 +60,8 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                     collapseMode: CollapseMode.parallax,
                     centerTitle: true,
                     background: BoardGameImage(
-                      viewModel.boardGame,
+                      id: viewModel.boardGame.id,
+                      url: viewModel.boardGame.imageUrl,
                       minImageHeight: Constants.boardGameDetailsImageHeight,
                     ),
                   ),

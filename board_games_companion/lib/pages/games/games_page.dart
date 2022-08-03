@@ -325,7 +325,7 @@ class _AppBarState extends State<_AppBar> {
         unawaited(Navigator.pushNamed(
           context,
           BoardGamesDetailsPage.pageRoute,
-          arguments: BoardGameDetailsPageArguments(boardGame.id, boardGame.name, GamesPage),
+          arguments: BoardGameDetailsPageArguments(boardGame.id, GamesPage),
         ));
         break;
       case BoardGameResultActionType.playthroughs:
@@ -1052,30 +1052,33 @@ class _NoSearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text.rich(
-          TextSpan(
-            children: [
-              const TextSpan(text: AppText.gamesPageSearchNoSearchResults),
-              TextSpan(
-                text: query,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text.rich(
+            TextSpan(
+              children: [
+                const TextSpan(text: AppText.gamesPageSearchNoSearchResults),
+                TextSpan(
+                  text: query,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            textAlign: TextAlign.justify,
           ),
-          textAlign: TextAlign.justify,
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        Center(
-          child: ElevatedIconButton(
-            title: AppText.gamesPageSearchClearSaerch,
-            icon: const DefaultIcon(Icons.clear),
-            onPressed: onClear,
+          const SizedBox(height: Dimensions.standardSpacing),
+          Center(
+            child: ElevatedIconButton(
+              title: AppText.gamesPageSearchClearSaerch,
+              icon: const DefaultIcon(Icons.clear),
+              onPressed: onClear,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

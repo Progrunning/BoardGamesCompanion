@@ -1,11 +1,6 @@
 class BoardGameDetailsPageArguments {
-  const BoardGameDetailsPageArguments(
-    this.boardGameId,
-    this.boardGameName,
-    this.navigatingFromType,
-  );
+  const BoardGameDetailsPageArguments(this.boardGameId, this.navigatingFromType);
 
   final String boardGameId;
-  final String boardGameName;
   final Type navigatingFromType;
 }

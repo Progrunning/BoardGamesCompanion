@@ -1,7 +1,8 @@
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html_unescape/html_unescape.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
@@ -31,16 +32,12 @@ import 'board_game_details_view_model.dart';
 class BoardGamesDetailsPage extends StatefulWidget {
   const BoardGamesDetailsPage({
     Key? key,
-    required this.boardGameDetailsStore,
-    required this.boardGameId,
-    required this.boardGameName,
+    required this.viewModel,
     required this.navigatingFromType,
     required this.preferencesService,
   }) : super(key: key);
 
-  final String boardGameId;
-  final String boardGameName;
-  final BoardGameDetailsViewModel boardGameDetailsStore;
+  final BoardGameDetailsViewModel viewModel;
   final Type navigatingFromType;
   final PreferencesService preferencesService;
 
@@ -51,6 +48,12 @@ class BoardGamesDetailsPage extends StatefulWidget {
 }
 
 class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.loadBoardGameDetails();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -64,18 +67,22 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
           child: PageContainer(
             child: CustomScrollView(
               slivers: <Widget>[
-                _Header(
-                  viewModel: widget.boardGameDetailsStore,
-                  boardGameName: widget.boardGameName,
+                // ! MK Move the load of the data up to this level - will require UI code refactoring
+                Observer(
+                  builder: (_) {
+                    return _Header(
+                      boardGameId: widget.viewModel.boardGameId,
+                      boardGameName: widget.viewModel.boardGameName,
+                      boardGameImageUrl: widget.viewModel.boardGameImageUrl,
+                    );
+                  },
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.only(
                     bottom: Dimensions.halfFloatingActionButtonBottomSpacing,
                   ),
                   sliver: _Body(
-                    boardGameId: widget.boardGameId,
-                    boardGameName: widget.boardGameName,
-                    boardGameDetailsStore: widget.boardGameDetailsStore,
+                    viewModel: widget.viewModel,
                     preferencesService: widget.preferencesService,
                   ),
                 ),
@@ -89,7 +96,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 
   Future<bool> _handleOnWillPop(BuildContext context) async {
     final boardGamesStore = getIt<BoardGamesStore>();
-    if (!boardGamesStore.isInAnyCollection(widget.boardGameDetailsStore.boardGameDetails?.id) &&
+    if (!boardGamesStore.isInAnyCollection(widget.viewModel.boardGame.id) &&
         widget.navigatingFromType == PlaythroughsPage) {
       Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
       return false;
@@ -102,14 +109,17 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 class _Header extends StatelessWidget {
   const _Header({
     Key? key,
-    required BoardGameDetailsViewModel viewModel,
+    required String boardGameId,
     required String boardGameName,
-  })  : _viewModel = viewModel,
+    required String? boardGameImageUrl,
+  })  : _boardGameId = boardGameId,
         _boardGameName = boardGameName,
+        _boardGameImageUrl = boardGameImageUrl,
         super(key: key);
 
   final String _boardGameName;
-  final BoardGameDetailsViewModel _viewModel;
+  final String _boardGameId;
+  final String? _boardGameImageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -128,9 +138,7 @@ class _Header extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(
-              Dimensions.halfStandardSpacing,
-            ),
+            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
             child: Text(
               _boardGameName,
               textAlign: TextAlign.center,
@@ -142,16 +150,10 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        background: ChangeNotifierProvider<BoardGameDetailsViewModel>.value(
-          value: _viewModel,
-          child: Consumer<BoardGameDetailsViewModel>(
-            builder: (_, store, __) {
-              return BoardGameImage(
-                _viewModel.boardGameDetails,
-                minImageHeight: Constants.boardGameDetailsImageHeight,
-              );
-            },
-          ),
+        background: BoardGameImage(
+          id: _boardGameId,
+          url: _boardGameImageUrl,
+          minImageHeight: Constants.boardGameDetailsImageHeight,
         ),
       ),
     );
@@ -161,15 +163,11 @@ class _Header extends StatelessWidget {
 class _Body extends StatelessWidget {
   const _Body({
     Key? key,
-    required this.boardGameId,
-    required this.boardGameName,
-    required this.boardGameDetailsStore,
+    required this.viewModel,
     required this.preferencesService,
   }) : super(key: key);
 
-  final String boardGameId;
-  final String boardGameName;
-  final BoardGameDetailsViewModel boardGameDetailsStore;
+  final BoardGameDetailsViewModel viewModel;
   final PreferencesService preferencesService;
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
@@ -177,158 +175,106 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final htmlUnescape = HtmlUnescape();
-    return FutureBuilder(
-      future: boardGameDetailsStore.loadBoardGameDetails(boardGameId),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (!snapshot.hasData) {
+    return Observer(
+      builder: (_) {
+        switch (viewModel.futureLoadBoardGameDetails?.status ?? FutureStatus.pending) {
+          case FutureStatus.pending:
+            return const SliverFillRemaining(child: LoadingIndicator());
+
+          case FutureStatus.rejected:
             return SliverFillRemaining(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(
-                    Dimensions.doubleStandardSpacing,
-                  ),
-                  child: Text(
-                    '''
-Sorry, we couldn't retrieve $boardGameName's details. Check your Internet connectivity and try again. If the problem persists, please contact support at feedback@progrunning.net''',
-                    textAlign: TextAlign.justify,
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.all(Dimensions.standardSpacing),
+                      child: Center(
+                        child: Text(
+                          '''
+We couldn't retrieve any board games. Check your Internet connectivity and try again.''',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: Dimensions.standardSpacing,
+                    ),
+                    ElevatedIconButton(
+                        title: 'Refresh',
+                        icon: const DefaultIcon(Icons.refresh),
+                        onPressed: () => viewModel.loadBoardGameDetails()),
+                  ],
                 ),
               ),
             );
-          }
 
-          return ChangeNotifierProvider<BoardGameDetailsViewModel>.value(
-            value: boardGameDetailsStore,
-            child: Consumer<BoardGameDetailsViewModel>(
-              builder: (_, store, __) {
-                return SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Dimensions.standardSpacing,
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                      <Widget>[
-                        const _BodySectionHeader(title: 'Stats', secondaryTitle: 'Collections'),
-                        _StatsAndCollections(boardGameDetailsStore: boardGameDetailsStore),
-                        const SizedBox(height: _spacingBetweenSecions),
-                        const _BodySectionHeader(title: 'General'),
-                        _FirstRowGeneralInfoPanels(
-                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
-                        ),
-                        const SizedBox(height: _spacingBetweenSecions),
-                        _SecondRowGeneralInfoPanels(
-                          boardGameDetails: boardGameDetailsStore.boardGameDetails,
-                        ),
-                        const SizedBox(height: _spacingBetweenSecions),
-                        const _BodySectionHeader(title: 'Links'),
-                        _Links(boardGameDetailsStore: boardGameDetailsStore),
-                        const SizedBox(height: _halfSpacingBetweenSecions),
-                        const _BodySectionHeader(title: 'Credits'),
-                        _Credits(boardGameDetails: boardGameDetailsStore.boardGameDetails),
-                        const SizedBox(height: _halfSpacingBetweenSecions),
-                        const _BodySectionHeader(title: 'Categories'),
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                          child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: Dimensions.standardSpacing,
-                            alignment: WrapAlignment.spaceEvenly,
-                            children: [
-                              for (var category
-                                  in boardGameDetailsStore.boardGameDetails!.categories!)
-                                Chip(
-                                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                                  backgroundColor: AppColors.primaryColor.withAlpha(
-                                    AppStyles.opacity80Percent,
-                                  ),
-                                  label: Text(
-                                    category.name,
-                                    style: const TextStyle(color: AppColors.defaultTextColor),
-                                  ),
-                                )
-                            ],
-                          ),
-                        ),
-                        if (!store.boardGameDetails!.isExpansion! &&
-                            store.boardGameDetails!.expansions.isNotEmpty)
-                          BoardGameDetailsExpansions(
-                            boardGameDetailsStore: store,
-                            spacingBetweenSecions: _spacingBetweenSecions,
-                            preferencesService: preferencesService,
-                          ),
-                        const SizedBox(
-                          height: _spacingBetweenSecions,
-                        ),
-                        const _BodySectionHeader(
-                          title: 'Description',
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.standardSpacing,
-                          ),
-                          child: Text(
-                            htmlUnescape.convert(store.boardGameDetails!.description!),
-                            textAlign: TextAlign.justify,
-                            style: const TextStyle(fontSize: Dimensions.mediumFontSize),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return SliverFillRemaining(
-            child: Padding(
-              padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.all(Dimensions.standardSpacing),
-                    child: Center(
-                      child: Text(
-                        '''
-We couldn't retrieve any board games. Check your Internet connectivity and try again.''',
+          case FutureStatus.fulfilled:
+            return SliverPadding(
+              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate.fixed(
+                  <Widget>[
+                    const _BodySectionHeader(title: 'Stats', secondaryTitle: 'Collections'),
+                    _StatsAndCollections(boardGameDetailsStore: viewModel),
+                    const SizedBox(height: _spacingBetweenSecions),
+                    const _BodySectionHeader(title: 'General'),
+                    _FirstRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame),
+                    const SizedBox(height: _spacingBetweenSecions),
+                    _SecondRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame),
+                    const SizedBox(height: _spacingBetweenSecions),
+                    const _BodySectionHeader(title: 'Links'),
+                    _Links(boardGameDetailsStore: viewModel),
+                    const SizedBox(height: _halfSpacingBetweenSecions),
+                    const _BodySectionHeader(title: 'Credits'),
+                    _Credits(boardGameDetails: viewModel.boardGame),
+                    const SizedBox(height: _halfSpacingBetweenSecions),
+                    const _BodySectionHeader(title: 'Categories'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: Dimensions.standardSpacing,
+                        alignment: WrapAlignment.spaceEvenly,
+                        children: [
+                          for (var category in viewModel.boardGame.categories!)
+                            Chip(
+                              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                              backgroundColor: AppColors.primaryColor.withAlpha(
+                                AppStyles.opacity80Percent,
+                              ),
+                              label: Text(
+                                category.name,
+                                style: const TextStyle(color: AppColors.defaultTextColor),
+                              ),
+                            )
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: Dimensions.standardSpacing,
-                  ),
-                  ElevatedIconButton(
-                    title: 'Refresh',
-                    icon: const DefaultIcon(
-                      Icons.refresh,
-                    ),
-                    onPressed: () => _refreshBoardGameDetails(
-                      boardGameId,
-                      boardGameDetailsStore,
-                    ),
-                  )
-                ],
+                    if (viewModel.isMainGame && viewModel.hasExpansions)
+                      BoardGameDetailsExpansions(
+                        expansions: viewModel.expansions,
+                        totalExpansionsOwned: viewModel.totalExpansionsOwned,
+                        spacingBetweenSecions: _spacingBetweenSecions,
+                        preferencesService: preferencesService,
+                      ),
+                    const SizedBox(height: _spacingBetweenSecions),
+                    const _BodySectionHeader(title: 'Description'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                      child: Text(
+                        viewModel.unescapedDescription,
+                        textAlign: TextAlign.justify,
+                        style: const TextStyle(fontSize: Dimensions.mediumFontSize),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
+            );
         }
-
-        return const SliverFillRemaining(
-          child: LoadingIndicator(),
-        );
       },
     );
-  }
-
-  Future<void> _refreshBoardGameDetails(
-    String boardGameDetailsId,
-    BoardGameDetailsViewModel boardGameDetailsStore,
-  ) async {
-    await boardGameDetailsStore.loadBoardGameDetails(boardGameDetailsId);
   }
 }
 
@@ -353,7 +299,7 @@ class _Links extends StatelessWidget {
             onPressed: () async {
               await LauncherHelper.launchUri(
                 context,
-                _boardGameDetailsStore.boardGameDetails!.bggOverviewUrl,
+                _boardGameDetailsStore.boardGame.bggOverviewUrl,
               );
             }),
         const SizedBox(
@@ -366,7 +312,7 @@ class _Links extends StatelessWidget {
           onPressed: () async {
             await LauncherHelper.launchUri(
               context,
-              _boardGameDetailsStore.boardGameDetails!.bggHotVideosUrl,
+              _boardGameDetailsStore.boardGame.bggHotVideosUrl,
             );
           },
         ),
@@ -380,7 +326,7 @@ class _Links extends StatelessWidget {
           onPressed: () async {
             await LauncherHelper.launchUri(
               context,
-              _boardGameDetailsStore.boardGameDetails!.bggHotForumUrl,
+              _boardGameDetailsStore.boardGame.bggHotForumUrl,
             );
           },
         ),
@@ -605,7 +551,7 @@ class _StatsAndCollections extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Center(
-            child: BoardGameRatingHexagon(rating: boardGameDetailsStore.boardGameDetails?.rating),
+            child: BoardGameRatingHexagon(rating: boardGameDetailsStore.boardGame.rating),
           ),
           const SizedBox(
             width: Dimensions.standardSpacing,
@@ -617,24 +563,24 @@ class _StatsAndCollections extends StatelessWidget {
               children: <Widget>[
                 _DetailsNumbersItem(
                   title: 'Rank',
-                  detail: boardGameDetailsStore.boardGameDetails?.rankFormatted,
+                  detail: boardGameDetailsStore.boardGame.rankFormatted,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Ratings',
-                  detail: '${boardGameDetailsStore.boardGameDetails?.votes}',
+                  detail: '${boardGameDetailsStore.boardGame.votes}',
                   format: true,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Comments',
-                  detail: '${boardGameDetailsStore.boardGameDetails?.commentsNumber}',
+                  detail: '${boardGameDetailsStore.boardGame.commentsNumber}',
                   format: true,
                 ),
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 _DetailsNumbersItem(
                   title: 'Published',
-                  detail: '${boardGameDetailsStore.boardGameDetails?.yearPublished}',
+                  detail: '${boardGameDetailsStore.boardGame.yearPublished}',
                 ),
               ],
             ),
@@ -659,7 +605,7 @@ class _CollectionFlags extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: boardGameDetailsStore.boardGameDetails,
+      value: boardGameDetailsStore.boardGame,
       child: Consumer<BoardGameDetails>(
         builder: (_, BoardGameDetails boardGameDetailsProvider, __) {
           return Column(

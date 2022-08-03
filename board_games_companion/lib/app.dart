@@ -23,7 +23,6 @@ import 'services/analytics_service.dart';
 import 'services/preferences_service.dart';
 import 'services/rate_and_review_service.dart';
 import 'stores/board_games_filters_store.dart';
-import 'stores/board_games_store.dart';
 import 'stores/playthroughs_store.dart';
 import 'utilities/analytics_route_observer.dart';
 
@@ -77,17 +76,14 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           case BoardGamesDetailsPage.pageRoute:
             final arguments = routeSettings.arguments as BoardGameDetailsPageArguments;
 
-            final analytics = getIt<AnalyticsService>();
             final preferencesService = getIt<PreferencesService>();
-            final boardGamesStore = getIt<BoardGamesStore>();
-            final boardGameDetailsStore = BoardGameDetailsViewModel(boardGamesStore, analytics);
+            final viewModel = getIt<BoardGameDetailsViewModel>();
+            viewModel.setBoardGameId(arguments.boardGameId);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
               builder: (BuildContext context) => BoardGamesDetailsPage(
-                boardGameId: arguments.boardGameId,
-                boardGameName: arguments.boardGameName,
-                boardGameDetailsStore: boardGameDetailsStore,
+                viewModel: viewModel,
                 navigatingFromType: arguments.navigatingFromType,
                 preferencesService: preferencesService,
               ),

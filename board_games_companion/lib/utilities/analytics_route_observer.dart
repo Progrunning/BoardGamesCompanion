@@ -36,10 +36,7 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
         final arguments = route.settings.arguments as BoardGameDetailsPageArguments;
         _analtyicsService.logEvent(
           name: Analytics.viewGameDetails,
-          parameters: <String, String>{
-            Analytics.boardGameIdParameter: arguments.boardGameId,
-            Analytics.boardGameNameParameter: arguments.boardGameName,
-          },
+          parameters: <String, String>{Analytics.boardGameIdParameter: arguments.boardGameId},
         );
         break;
       case PlaythroughsPage.pageRoute:

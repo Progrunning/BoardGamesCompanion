@@ -152,7 +152,7 @@ abstract class _GamesViewModel with Store {
       .toDouble();
 
   @computed
-  List<BoardGameDetails> get allBoardGames => _boardGamesStore.allBoardGames;
+  List<BoardGameDetails> get allBoardGames => _boardGamesStore.allBoardGamesInCollections;
 
   @computed
   List<BoardGameDetails> get boardGamesInCollection {

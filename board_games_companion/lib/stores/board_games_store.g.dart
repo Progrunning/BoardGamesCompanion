@@ -18,6 +18,25 @@ mixin _$BoardGamesStore on _BoardGamesStore, Store {
                   () => super.allBoardGamesMap,
                   name: '_BoardGamesStore.allBoardGamesMap'))
           .value;
+  Computed<List<BoardGameDetails>>? _$allBoardGamesInCollectionsComputed;
+
+  @override
+  List<BoardGameDetails> get allBoardGamesInCollections =>
+      (_$allBoardGamesInCollectionsComputed ??=
+              Computed<List<BoardGameDetails>>(
+                  () => super.allBoardGamesInCollections,
+                  name: '_BoardGamesStore.allBoardGamesInCollections'))
+          .value;
+  Computed<ObservableMap<String, BoardGameDetails>>?
+      _$allBoardGamesInCollectionsMapComputed;
+
+  @override
+  ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap =>
+      (_$allBoardGamesInCollectionsMapComputed ??=
+              Computed<ObservableMap<String, BoardGameDetails>>(
+                  () => super.allBoardGamesInCollectionsMap,
+                  name: '_BoardGamesStore.allBoardGamesInCollectionsMap'))
+          .value;
 
   late final _$allBoardGamesAtom =
       Atom(name: '_BoardGamesStore.allBoardGames', context: context);
@@ -106,7 +125,9 @@ mixin _$BoardGamesStore on _BoardGamesStore, Store {
   String toString() {
     return '''
 allBoardGames: ${allBoardGames},
-allBoardGamesMap: ${allBoardGamesMap}
+allBoardGamesMap: ${allBoardGamesMap},
+allBoardGamesInCollections: ${allBoardGamesInCollections},
+allBoardGamesInCollectionsMap: ${allBoardGamesInCollectionsMap}
     ''';
   }
 }

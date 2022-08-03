@@ -81,11 +81,7 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
     await Navigator.pushNamed(
       context,
       BoardGamesDetailsPage.pageRoute,
-      arguments: BoardGameDetailsPageArguments(
-        boardGame.id,
-        boardGame.name,
-        SearchBoardGamesPage,
-      ),
+      arguments: BoardGameDetailsPageArguments(boardGame.id, SearchBoardGamesPage),
     );
   }
 }
