@@ -135,32 +135,6 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<PlayersViewModel>(
           create: (context) => getIt<PlayersViewModel>(),
         ),
-        // TODO Ensure that updates fomr board games store propagate to the games view model
-        // ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
-        //     PlaythroughStatisticsStore>(
-        //   create: (context) => getIt<PlaythroughStatisticsStore>(),
-        //   update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
-        //     return playthroughStatisticsStore!;
-        //   },
-        // ),
-        // TODO Ensure that updates fomr board games store propagate to the games view model
-        // ChangeNotifierProxyProvider2<BoardGamesFiltersStore, BoardGamesStore, GamesViewModel>(
-        //   create: (context) {
-        //     final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
-        //     final boardGamesStore = Provider.of<BoardGamesStore>(
-        //       context,
-        //       listen: false,
-        //     );
-        //     final gamesViewModel = GamesViewModel(boardGamesStore, boardGamesFiltersStore);
-        //     gamesViewModel.loadBoardGames();
-
-        //     return gamesViewModel;
-        //   },
-        //   update: (_, filtersStore, boardGamesStore, gamesViewModel) {
-        //     gamesViewModel!.applyFilters();
-        //     return gamesViewModel;
-        //   },
-        // ),
       ],
       child: const BoardGamesCompanionApp(),
     );

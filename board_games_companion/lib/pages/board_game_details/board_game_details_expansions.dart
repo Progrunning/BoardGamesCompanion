@@ -16,7 +16,7 @@ class BoardGameDetailsExpansions extends StatefulWidget {
     required this.expansions,
     required this.totalExpansionsOwned,
     required this.spacingBetweenSecions,
-    // TODO MK Pass in requier preferences data and or handle the events outside of this widget
+    // TODO MK Pass in requier preferences data (instead of entire service) and or handle the events outside of this widget
     required this.preferencesService,
   }) : super(key: key);
 
