@@ -11,6 +11,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../common/constants.dart';
 import '../../common/enums/games_tab.dart';
@@ -190,19 +191,16 @@ abstract class _GamesViewModel with Store {
   bool get anyExpansionsInCollection => expansionsInCollection.isNotEmpty;
 
   @computed
-  Map<BoardGameDetails, List<BoardGameDetails>> get expansionsInCollectionGroupedByMainGame {
-    final Map<BoardGameDetails, List<BoardGameDetails>> expansionsGrouped = {};
+  Map<Tuple2<String, String>, List<BoardGameDetails>> get expansionsInCollectionMap {
+    final Map<Tuple2<String, String>, List<BoardGameDetails>> expansionsGrouped = {};
     for (final expansion in expansionsInCollection) {
       final mainGame = _mainBoardGameByExpansionId[expansion.id];
-      if (mainGame == null) {
-        continue;
+      final key = Tuple2<String, String>(mainGame?.id ?? '', mainGame?.name ?? 'Other');
+      if (!expansionsGrouped.containsKey(key)) {
+        expansionsGrouped[key] = [];
       }
 
-      if (!expansionsGrouped.containsKey(mainGame)) {
-        expansionsGrouped[mainGame] = [];
-      }
-
-      expansionsGrouped[mainGame]!.add(expansion);
+      expansionsGrouped[key]!.add(expansion);
     }
 
     return expansionsGrouped;

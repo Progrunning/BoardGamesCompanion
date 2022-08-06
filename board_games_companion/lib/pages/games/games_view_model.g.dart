@@ -175,18 +175,15 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
           Computed<bool>(() => super.anyExpansionsInCollection,
               name: '_GamesViewModel.anyExpansionsInCollection'))
       .value;
-  Computed<Map<BoardGameDetails, List<BoardGameDetails>>>?
-      _$expansionsInCollectionGroupedByMainGameComputed;
+  Computed<Map<Tuple2<String, String>, List<BoardGameDetails>>>?
+      _$expansionsInCollectionMapComputed;
 
   @override
-  Map<
-      BoardGameDetails,
-      List<
-          BoardGameDetails>> get expansionsInCollectionGroupedByMainGame =>
-      (_$expansionsInCollectionGroupedByMainGameComputed ??= Computed<
-                  Map<BoardGameDetails, List<BoardGameDetails>>>(
-              () => super.expansionsInCollectionGroupedByMainGame,
-              name: '_GamesViewModel.expansionsInCollectionGroupedByMainGame'))
+  Map<Tuple2<String, String>, List<BoardGameDetails>>
+      get expansionsInCollectionMap => (_$expansionsInCollectionMapComputed ??=
+              Computed<Map<Tuple2<String, String>, List<BoardGameDetails>>>(
+                  () => super.expansionsInCollectionMap,
+                  name: '_GamesViewModel.expansionsInCollectionMap'))
           .value;
   Computed<List<BoardGameDetails>>? _$_allExpansionsComputed;
 
@@ -335,7 +332,7 @@ anyMainGamesInCollection: ${anyMainGamesInCollection},
 totalMainGamesInCollection: ${totalMainGamesInCollection},
 totalExpansionsInCollection: ${totalExpansionsInCollection},
 anyExpansionsInCollection: ${anyExpansionsInCollection},
-expansionsInCollectionGroupedByMainGame: ${expansionsInCollectionGroupedByMainGame}
+expansionsInCollectionMap: ${expansionsInCollectionMap}
     ''';
   }
 }

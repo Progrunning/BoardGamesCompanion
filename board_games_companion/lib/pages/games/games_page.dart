@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
@@ -112,7 +113,7 @@ class GamesPageState extends State<GamesPage>
                   mainGames: widget.viewModel.mainGamesInCollection,
                   totalMainGames: widget.viewModel.totalMainGamesInCollection,
                   hasExpansions: widget.viewModel.anyExpansionsInCollection,
-                  expansionsMap: widget.viewModel.expansionsInCollectionGroupedByMainGame,
+                  expansionsMap: widget.viewModel.expansionsInCollectionMap,
                   selectedTab: widget.viewModel.selectedTab,
                   topTabController: _topTabController,
                   analyticsService: widget.analyticsService,
@@ -160,7 +161,7 @@ class _Collection extends StatelessWidget {
   final List<BoardGameDetails> mainGames;
   final int totalMainGames;
   final bool hasExpansions;
-  final Map<BoardGameDetails, List<BoardGameDetails>> expansionsMap;
+  final Map<Tuple2<String, String>, List<BoardGameDetails>> expansionsMap;
   final GamesTab selectedTab;
   final TabController topTabController;
   final AnalyticsService analyticsService;
@@ -195,7 +196,7 @@ class _Collection extends StatelessWidget {
                 delegate: BgcSliverHeaderDelegate(
                   title: sprintf(
                     AppText.gamesPageExpansionsSliverSectionTitleFormat,
-                    [expansionsMapEntry.key.name, expansionsMapEntry.value.length],
+                    [expansionsMapEntry.key.item2, expansionsMapEntry.value.length],
                   ),
                 ),
               ),
