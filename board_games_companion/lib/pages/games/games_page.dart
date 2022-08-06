@@ -306,6 +306,7 @@ class _AppBarState extends State<_AppBar> {
   Future<void> _openFiltersPanel(BuildContext context) async {
     await showModalBottomSheet<Widget>(
       backgroundColor: AppColors.primaryColor,
+      elevation: Dimensions.defaultElevation,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
@@ -724,6 +725,7 @@ class _SearchResults extends StatelessWidget {
             return _SearchResultGame(
               boardGame: viewModel.boardGame!,
               expansions: viewModel.expansions,
+              hasIncompleteDetails: viewModel.boardGame!.hasIncompleteDetails,
               isFirstItem: index == 0,
               isLastItem: index == filteredGames.length - 1,
               onResultAction: onResultAction,
@@ -741,6 +743,7 @@ class _SearchResultGame extends StatelessWidget {
     Key? key,
     required this.boardGame,
     required this.expansions,
+    required this.hasIncompleteDetails,
     required this.isFirstItem,
     required this.isLastItem,
     required this.onResultAction,
@@ -749,6 +752,7 @@ class _SearchResultGame extends StatelessWidget {
 
   final BoardGameDetails boardGame;
   final List<BoardGameDetails>? expansions;
+  final bool hasIncompleteDetails;
   final bool isFirstItem;
   final bool isLastItem;
   final BoardGameResultAction onResultAction;

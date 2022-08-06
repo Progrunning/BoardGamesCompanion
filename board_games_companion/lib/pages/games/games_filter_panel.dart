@@ -32,11 +32,9 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(
-          left: Dimensions.standardSpacing,
-          top: Dimensions.doubleStandardSpacing,
-          right: Dimensions.standardSpacing,
-          bottom: Dimensions.doubleStandardSpacing,
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.standardSpacing,
+          vertical: Dimensions.doubleStandardSpacing,
         ),
         child: Column(
           children: <Widget>[
