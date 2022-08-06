@@ -18,6 +18,7 @@ import 'pages/players/player_page.dart';
 import 'pages/players/players_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
+import 'pages/search_board_games/search_board_games_view_model.dart';
 import 'pages/settings/settings_page.dart';
 import 'services/analytics_service.dart';
 import 'services/preferences_service.dart';
@@ -61,6 +62,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             final playersViewModel = getIt<PlayersViewModel>();
             final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
             final gamesViewModel = getIt<GamesViewModel>();
+            final searchViewModel = getIt<SearchBoardGamesViewModel>();
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
@@ -69,6 +71,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
                 rateAndReviewService: rateAndReviewService,
                 gamesViewModel: gamesViewModel,
                 playersViewModel: playersViewModel,
+                searchViewModel: searchViewModel,
                 boardGamesFiltersStore: boardGamesFiltersStore,
               ),
             );

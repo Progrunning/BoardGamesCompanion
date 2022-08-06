@@ -1,5 +1,6 @@
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/pages/players/players_view_model.dart';
+import 'package:board_games_companion/pages/search_board_games/search_board_games_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class HomePage extends StatefulWidget {
     required this.rateAndReviewService,
     required this.gamesViewModel,
     required this.playersViewModel,
+    required this.searchViewModel,
     required this.boardGamesFiltersStore,
     Key? key,
   }) : super(key: key);
@@ -34,6 +36,7 @@ class HomePage extends StatefulWidget {
   final RateAndReviewService rateAndReviewService;
   final GamesViewModel gamesViewModel;
   final PlayersViewModel playersViewModel;
+  final SearchBoardGamesViewModel searchViewModel;
   final BoardGamesFiltersStore boardGamesFiltersStore;
 
   static final GlobalKey<ScaffoldMessengerState> homePageGlobalKey =
@@ -82,7 +85,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                     );
                   },
                 ),
-                SearchBoardGamesPage(analyticsService: widget.analyticsService),
+                SearchBoardGamesPage(viewModel: widget.searchViewModel),
                 PlayersPage(playersViewModel: widget.playersViewModel),
               ],
             ),

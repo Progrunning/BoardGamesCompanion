@@ -2,9 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
-import '../../common/analytics.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
@@ -13,8 +14,6 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../models/board_game.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
-import '../../services/analytics_service.dart';
-import '../../stores/hot_board_games_store.dart';
 import '../../stores/search_bar_board_games_store.dart';
 import '../../stores/search_board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
@@ -26,14 +25,15 @@ import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../board_game_details/board_game_details_page.dart';
+import 'search_board_games_view_model.dart';
 
 class SearchBoardGamesPage extends StatefulWidget {
   const SearchBoardGamesPage({
-    required this.analyticsService,
+    required this.viewModel,
     Key? key,
   }) : super(key: key);
 
-  final AnalyticsService analyticsService;
+  final SearchBoardGamesViewModel viewModel;
 
   @override
   SearchBoardGamesPageState createState() => SearchBoardGamesPageState();
@@ -45,6 +45,7 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
   @override
   void initState() {
     super.initState();
+    widget.viewModel.loadHotBoardGames();
     searchFocusNode = FocusNode();
   }
 
@@ -68,7 +69,7 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
             delegate: BgcSliverHeaderDelegate(title: AppText.hotBoardGamesSliverSectionTitle),
           ),
           _HotBoardGames(
-            analyticsService: widget.analyticsService,
+            viewModel: widget.viewModel,
             onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
           ),
         ],
@@ -85,6 +86,7 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
         boardGame.id,
         boardGame.name,
         SearchBoardGamesPage,
+        boardGameImageUrl: widget.viewModel.getHotBoardGameDetails(boardGame.id)?.imageUrl,
       ),
     );
   }
@@ -413,97 +415,88 @@ class _NoResults extends StatelessWidget {
 
 class _HotBoardGames extends StatelessWidget {
   const _HotBoardGames({
-    required this.analyticsService,
+    required this.viewModel,
     required this.onBoardGameTapped,
     Key? key,
   }) : super(key: key);
 
-  final AnalyticsService analyticsService;
+  final SearchBoardGamesViewModel viewModel;
   final void Function(BoardGame) onBoardGameTapped;
 
   @override
   Widget build(BuildContext context) {
-    final hotBoardGamesStore = Provider.of<HotBoardGamesStore>(context);
-
-    return FutureBuilder(
-      future: hotBoardGamesStore.load(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final boardGames = snapshot.data as List<BoardGame>;
-          if (boardGames != null && boardGames.isNotEmpty) {
-            return SliverPadding(
-              padding: const EdgeInsets.only(
-                left: Dimensions.standardSpacing,
-                top: Dimensions.standardSpacing,
-                right: Dimensions.standardSpacing,
-                bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
-              ),
-              sliver: SliverGrid.extent(
-                crossAxisSpacing: Dimensions.standardSpacing,
-                mainAxisSpacing: Dimensions.standardSpacing,
-                maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
-                children: [
-                  for (final boardGame in boardGames)
-                    BoardGameTile(
-                      id: boardGame.id,
-                      name: boardGame.name,
-                      imageUrl: boardGame.thumbnailUrl ?? '',
-                      rank: boardGame.rank,
-                      elevation: AppStyles.defaultElevation,
-                      onTap: () async => _navigateToBoardGameDetails(boardGame, context),
-                    ),
-                ],
+    return Observer(
+      builder: (_) {
+        switch (viewModel.futureLoadHotBoardGames?.status ?? FutureStatus.pending) {
+          case FutureStatus.pending:
+            return const SliverFillRemaining(child: LoadingIndicator());
+          case FutureStatus.rejected:
+            return const SliverFillRemaining(
+              child: Padding(
+                padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                child: Center(child: GenericErrorMessage()),
               ),
             );
-          }
+          case FutureStatus.fulfilled:
+            if (viewModel.hasAnyHotBoardGames) {
+              return SliverPadding(
+                padding: const EdgeInsets.only(
+                  left: Dimensions.standardSpacing,
+                  top: Dimensions.standardSpacing,
+                  right: Dimensions.standardSpacing,
+                  bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
+                ),
+                sliver: SliverGrid.extent(
+                  crossAxisSpacing: Dimensions.standardSpacing,
+                  mainAxisSpacing: Dimensions.standardSpacing,
+                  maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
+                  children: [
+                    for (final hotBoardGame in viewModel.hotBoardGames!)
+                      BoardGameTile(
+                        id: hotBoardGame.id,
+                        name: hotBoardGame.name,
+                        imageUrl: hotBoardGame.thumbnailUrl ?? '',
+                        rank: hotBoardGame.rank,
+                        elevation: AppStyles.defaultElevation,
+                        onTap: () async => _navigateToBoardGameDetails(hotBoardGame, context),
+                      ),
+                  ],
+                ),
+              );
+            }
 
-          return SliverFillRemaining(
-            child: Padding(
-              padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  const Text(
-                    AppText.searchBoardGamesPageHotBoardGamesErrorPartOne,
-                    textAlign: TextAlign.justify,
-                  ),
-                  const SizedBox(height: Dimensions.standardSpacing),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedIconButton(
-                      icon: const DefaultIcon(Icons.refresh),
-                      title: AppText.searchBoardGamesPageHotBoardGamesErrorRetryButtonText,
-                      onPressed: () => hotBoardGamesStore.refresh(),
+            return SliverFillRemaining(
+              child: Padding(
+                padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    const Text(
+                      AppText.searchBoardGamesPageHotBoardGamesErrorPartOne,
+                      textAlign: TextAlign.justify,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: Dimensions.standardSpacing),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedIconButton(
+                        icon: const DefaultIcon(Icons.refresh),
+                        title: AppText.searchBoardGamesPageHotBoardGamesErrorRetryButtonText,
+                        onPressed: () => viewModel.refresh(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return const SliverFillRemaining(
-            child: Padding(
-              padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
-              child: Center(child: GenericErrorMessage()),
-            ),
-          );
+            );
         }
-
-        return const SliverFillRemaining(child: LoadingIndicator());
       },
     );
   }
 
-  Future _navigateToBoardGameDetails(BoardGame boardGame, BuildContext context) async {
-    await analyticsService.logEvent(
-      name: Analytics.viewHotBoardGame,
-      parameters: <String, String?>{
-        Analytics.boardGameIdParameter: boardGame.id,
-        Analytics.boardGameNameParameter: boardGame.name,
-      },
-    );
+  void _navigateToBoardGameDetails(BoardGame boardGame, BuildContext context) {
+    viewModel.trackViewHotBoardGame(boardGame);
 
     onBoardGameTapped(boardGame);
   }

@@ -35,7 +35,6 @@ import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
 import 'services/user_service.dart';
-import 'stores/hot_board_games_store.dart';
 import 'stores/search_bar_board_games_store.dart';
 import 'stores/search_board_games_store.dart';
 import 'stores/user_store.dart';
@@ -114,12 +113,6 @@ class App extends StatelessWidget {
             preferencesService.setAppLaunchDate();
             userStore.loadUser();
             return userStore;
-          },
-        ),
-        ChangeNotifierProvider<HotBoardGamesStore>(
-          create: (context) {
-            final BoardGamesGeekService boardGamesGeekService = getIt<BoardGamesGeekService>();
-            return HotBoardGamesStore(boardGamesGeekService);
           },
         ),
         ChangeNotifierProvider<SearchBarBoardGamesStore>(
