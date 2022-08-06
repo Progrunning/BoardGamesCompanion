@@ -45,72 +45,69 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        switch (viewModel.futureLoadBoardGamesStatistics?.status ?? FutureStatus.pending) {
-          case FutureStatus.pending:
-          case FutureStatus.rejected:
-            return const SizedBox.shrink();
-          case FutureStatus.fulfilled:
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  floating: false,
-                  expandedHeight: Constants.boardGameDetailsImageHeight,
-                  flexibleSpace: FlexibleSpaceBar(
-                    collapseMode: CollapseMode.parallax,
-                    centerTitle: true,
-                    background: BoardGameImage(
-                      id: viewModel.boardGame.id,
-                      url: viewModel.boardGame.imageUrl,
-                      minImageHeight: Constants.boardGameDetailsImageHeight,
-                    ),
+        return CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              floating: false,
+              expandedHeight: Constants.boardGameDetailsImageHeight,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.parallax,
+                centerTitle: true,
+                background: BoardGameImage(
+                  id: viewModel.boardGame.id,
+                  url: viewModel.boardGame.imageUrl,
+                  minImageHeight: Constants.boardGameDetailsImageHeight,
+                ),
+              ),
+            ),
+            if (viewModel.futureLoadBoardGamesStatistics?.status == FutureStatus.fulfilled) ...[
+              _SliverSectionWrapper(
+                  child: _LastWinnerSection(boardGameStatistics: viewModel.boardGameStatistics)),
+              _SliverSectionWrapper(
+                child: _OverallStatsSection(boardGameStatistics: viewModel.boardGameStatistics),
+              ),
+              if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false)
+                _SliverSectionWrapper(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const ItemPropertyTitle(
+                          AppText.playthroughsStatisticsPageTopFiveSectionTitle),
+                      const SizedBox(height: Dimensions.halfStandardSpacing),
+                      _TopScores(boardGameStatistics: viewModel.boardGameStatistics),
+                    ],
                   ),
                 ),
+              if ((viewModel.boardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
+                  (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false))
                 _SliverSectionWrapper(
-                    child: _LastWinnerSection(boardGameStatistics: viewModel.boardGameStatistics)),
-                _SliverSectionWrapper(
-                  child: _OverallStatsSection(boardGameStatistics: viewModel.boardGameStatistics),
+                  child: _PlayerCharts(boardGameStatistics: viewModel.boardGameStatistics),
                 ),
-                if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false)
-                  _SliverSectionWrapper(
+              if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const ItemPropertyTitle(
-                            AppText.playthroughsStatisticsPageTopFiveSectionTitle),
-                        const SizedBox(height: Dimensions.halfStandardSpacing),
-                        _TopScores(boardGameStatistics: viewModel.boardGameStatistics),
+                      children: const <Widget>[
+                        ItemPropertyTitle(
+                            AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
+                        SizedBox(height: Dimensions.halfStandardSpacing),
                       ],
                     ),
                   ),
-                if ((viewModel.boardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
-                    (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false))
-                  _SliverSectionWrapper(
-                    child: _PlayerCharts(boardGameStatistics: viewModel.boardGameStatistics),
-                  ),
-                if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ??
-                    false) ...<Widget>[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const <Widget>[
-                          ItemPropertyTitle(
-                              AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
-                          SizedBox(height: Dimensions.halfStandardSpacing),
-                        ],
-                      ),
-                    ),
-                  ),
-                  _PlayersStatisticsSection(boardGameStatistics: viewModel.boardGameStatistics),
-                ],
-                const SliverPadding(
-                    padding: EdgeInsets.only(
-                        bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight)),
+                ),
+                _PlayersStatisticsSection(boardGameStatistics: viewModel.boardGameStatistics),
               ],
-            );
-        }
+              const SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
+                ),
+              ),
+            ],
+          ],
+        );
       },
     );
   }

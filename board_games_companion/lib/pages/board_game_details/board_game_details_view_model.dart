@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -27,20 +28,33 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   late HtmlUnescape _htmlUnescape;
   late String _boardGameId;
+  late String _boardGameName;
+  String? _boardGameImageUrl;
 
   @computed
   BoardGameDetails get boardGame => _boardGamesStore.allBoardGames.firstWhere(
         (BoardGameDetails boardGame) => boardGame.id == _boardGameId,
       );
 
-  @computed
-  String get boardGameName => boardGame.name;
+  String get boardGameName => _boardGameName;
+
+  String get boardGameId => _boardGameId;
 
   @computed
-  String get boardGameId => boardGame.id;
+  String? get boardGameImageUrl {
+    if (_boardGameImageUrl.isNotNullOrBlank) {
+      return _boardGameImageUrl;
+    }
 
-  @computed
-  String? get boardGameImageUrl => boardGame.imageUrl;
+    switch (futureLoadBoardGameDetails?.status ?? FutureStatus.pending) {
+      case FutureStatus.pending:
+        return null;
+      case FutureStatus.rejected:
+        return '';
+      case FutureStatus.fulfilled:
+        return boardGame.imageUrl;
+    }
+  }
 
   @computed
   bool get isMainGame => boardGame.isMainGame;
@@ -69,6 +83,10 @@ abstract class _BoardGameDetailsViewModel with Store {
       futureLoadBoardGameDetails = ObservableFuture(_loadBoardGameDetails());
 
   void setBoardGameId(String boardGameId) => _boardGameId = boardGameId;
+
+  void setBoardGameName(String boardGameName) => _boardGameName = boardGameName;
+
+  void setBoardGameImageUrl(String? boardGameImageUrl) => _boardGameImageUrl = boardGameImageUrl;
 
   Future<void> captureLinkAnalytics(String linkName) async {
     await _analyticsService.logEvent(
@@ -101,8 +119,6 @@ abstract class _BoardGameDetailsViewModel with Store {
         boardGame.isOnWishlist = !boardGame.isOnWishlist!;
         break;
     }
-
-    // ! MK If a game is an expansion and the main board game has been sync'd with BGG and lacks details then need to fetch details
 
     await _boardGamesStore.addOrUpdateBoardGame(boardGame);
   }

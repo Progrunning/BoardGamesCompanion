@@ -140,6 +140,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
         boardGameDetails.id,
+        boardGameDetails.name,
         PlaythroughsPage,
       ),
     );

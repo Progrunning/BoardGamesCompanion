@@ -75,7 +75,7 @@ mixin _$BoardGamesStore on _BoardGamesStore, Store {
       AsyncAction('_BoardGamesStore.refreshBoardGameDetails', context: context);
 
   @override
-  Future<BoardGameDetails?> refreshBoardGameDetails(String boardGameId) {
+  Future<void> refreshBoardGameDetails(String boardGameId) {
     return _$refreshBoardGameDetailsAsyncAction
         .run(() => super.refreshBoardGameDetails(boardGameId));
   }
@@ -105,20 +105,6 @@ mixin _$BoardGamesStore on _BoardGamesStore, Store {
   Future<CollectionImportResult> importCollections(String username) {
     return _$importCollectionsAsyncAction
         .run(() => super.importCollections(username));
-  }
-
-  late final _$_BoardGamesStoreActionController =
-      ActionController(name: '_BoardGamesStore', context: context);
-
-  @override
-  bool isInAnyCollection(String? boardGameId) {
-    final _$actionInfo = _$_BoardGamesStoreActionController.startAction(
-        name: '_BoardGamesStore.isInAnyCollection');
-    try {
-      return super.isInAnyCollection(boardGameId);
-    } finally {
-      _$_BoardGamesStoreActionController.endAction(_$actionInfo);
-    }
   }
 
   @override

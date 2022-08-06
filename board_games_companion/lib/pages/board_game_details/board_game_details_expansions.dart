@@ -143,7 +143,11 @@ class _Expansion extends StatelessWidget {
         await Navigator.pushNamed(
           context,
           BoardGamesDetailsPage.pageRoute,
-          arguments: BoardGameDetailsPageArguments(_boardGameExpansion.id, BoardGamesDetailsPage),
+          arguments: BoardGameDetailsPageArguments(
+            _boardGameExpansion.id,
+            _boardGameExpansion.name,
+            BoardGamesDetailsPage,
+          ),
         );
       },
     );

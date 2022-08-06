@@ -16,20 +16,6 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
       (_$boardGameComputed ??= Computed<BoardGameDetails>(() => super.boardGame,
               name: '_BoardGameDetailsViewModel.boardGame'))
           .value;
-  Computed<String>? _$boardGameNameComputed;
-
-  @override
-  String get boardGameName =>
-      (_$boardGameNameComputed ??= Computed<String>(() => super.boardGameName,
-              name: '_BoardGameDetailsViewModel.boardGameName'))
-          .value;
-  Computed<String>? _$boardGameIdComputed;
-
-  @override
-  String get boardGameId =>
-      (_$boardGameIdComputed ??= Computed<String>(() => super.boardGameId,
-              name: '_BoardGameDetailsViewModel.boardGameId'))
-          .value;
   Computed<String?>? _$boardGameImageUrlComputed;
 
   @override
@@ -117,8 +103,6 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
     return '''
 futureLoadBoardGameDetails: ${futureLoadBoardGameDetails},
 boardGame: ${boardGame},
-boardGameName: ${boardGameName},
-boardGameId: ${boardGameId},
 boardGameImageUrl: ${boardGameImageUrl},
 isMainGame: ${isMainGame},
 isExpansion: ${isExpansion},

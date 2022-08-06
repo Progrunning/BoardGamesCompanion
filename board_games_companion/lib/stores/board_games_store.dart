@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:basics/basics.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -43,19 +42,6 @@ abstract class _BoardGamesStore with Store {
   @computed
   ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap =>
       ObservableMap.of({for (var boardGame in allBoardGamesInCollections) boardGame.id: boardGame});
-
-  @action
-  bool isInAnyCollection(String? boardGameId) {
-    if (boardGameId?.isBlank ?? true) {
-      return false;
-    }
-
-    return allBoardGames.any((boardGameDetails) =>
-        boardGameDetails.id == boardGameId &&
-        (boardGameDetails.isFriends! ||
-            boardGameDetails.isOnWishlist! ||
-            boardGameDetails.isOwned!));
-  }
 
   @action
   Future<void> loadBoardGames() async {
@@ -105,11 +91,11 @@ abstract class _BoardGamesStore with Store {
   }
 
   @action
-  Future<BoardGameDetails?> refreshBoardGameDetails(String boardGameId) async {
+  Future<void> refreshBoardGameDetails(String boardGameId) async {
     try {
       final boardGameDetails = await _boardGamesService.getBoardGame(boardGameId);
       if (boardGameDetails == null) {
-        return null;
+        return;
       }
 
       if (!(boardGameDetails.isExpansion ?? true)) {
@@ -137,13 +123,9 @@ abstract class _BoardGamesStore with Store {
       }
 
       await addOrUpdateBoardGame(boardGameDetails);
-
-      return boardGameDetails;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
-
-    return null;
   }
 
   @action

@@ -325,7 +325,12 @@ class _AppBarState extends State<_AppBar> {
         unawaited(Navigator.pushNamed(
           context,
           BoardGamesDetailsPage.pageRoute,
-          arguments: BoardGameDetailsPageArguments(boardGame.id, GamesPage),
+          arguments: BoardGameDetailsPageArguments(
+            boardGame.id,
+            boardGame.name,
+            GamesPage,
+            boardGameImageUrl: boardGame.imageUrl,
+          ),
         ));
         break;
       case BoardGameResultActionType.playthroughs:
@@ -837,7 +842,7 @@ class _SearchResultGameExpansions extends StatelessWidget {
               return SizedBox(
                 height: Dimensions.collectionSearchResultExpansionsImageHeight,
                 width: Dimensions.collectionSearchResultExpansionsImageWidth,
-                // ! MK Need to fix hero animation if the expansion is shown in the main game results and as well as a regular search result
+                // TODO MK Need to fix hero animation if the expansion is shown in the main game results and as well as a regular search result
                 child: BoardGameTile(
                   id: '${expansion.id}-exp',
                   name: expansion.name,

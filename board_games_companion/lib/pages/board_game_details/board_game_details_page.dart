@@ -67,7 +67,6 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
           child: PageContainer(
             child: CustomScrollView(
               slivers: <Widget>[
-                // ! MK Move the load of the data up to this level - will require UI code refactoring
                 Observer(
                   builder: (_) {
                     return _Header(
@@ -81,10 +80,14 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
                   padding: const EdgeInsets.only(
                     bottom: Dimensions.halfFloatingActionButtonBottomSpacing,
                   ),
-                  sliver: _Body(
-                    viewModel: widget.viewModel,
-                    preferencesService: widget.preferencesService,
-                  ),
+                  sliver: Observer(builder: (_) {
+                    return _Body(
+                      viewModel: widget.viewModel,
+                      futureStatus: widget.viewModel.futureLoadBoardGameDetails?.status ??
+                          FutureStatus.pending,
+                      preferencesService: widget.preferencesService,
+                    );
+                  }),
                 ),
               ],
             ),
@@ -96,7 +99,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 
   Future<bool> _handleOnWillPop(BuildContext context) async {
     final boardGamesStore = getIt<BoardGamesStore>();
-    if (!boardGamesStore.isInAnyCollection(widget.viewModel.boardGame.id) &&
+    if (!boardGamesStore.allBoardGamesInCollectionsMap.containsKey(widget.viewModel.boardGame.id) &&
         widget.navigatingFromType == PlaythroughsPage) {
       Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
       return false;
@@ -150,11 +153,13 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        background: BoardGameImage(
-          id: _boardGameId,
-          url: _boardGameImageUrl,
-          minImageHeight: Constants.boardGameDetailsImageHeight,
-        ),
+        background: _boardGameImageUrl == null
+            ? const LoadingIndicator()
+            : BoardGameImage(
+                id: _boardGameId,
+                url: _boardGameImageUrl,
+                minImageHeight: Constants.boardGameDetailsImageHeight,
+              ),
       ),
     );
   }
@@ -164,10 +169,12 @@ class _Body extends StatelessWidget {
   const _Body({
     Key? key,
     required this.viewModel,
+    required this.futureStatus,
     required this.preferencesService,
   }) : super(key: key);
 
   final BoardGameDetailsViewModel viewModel;
+  final FutureStatus futureStatus;
   final PreferencesService preferencesService;
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
@@ -175,9 +182,9 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
+    return Builder(
       builder: (_) {
-        switch (viewModel.futureLoadBoardGameDetails?.status ?? FutureStatus.pending) {
+        switch (futureStatus) {
           case FutureStatus.pending:
             return const SliverFillRemaining(child: LoadingIndicator());
 
