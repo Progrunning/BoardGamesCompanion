@@ -965,10 +965,7 @@ class _SearchResultGameDetails extends StatelessWidget {
         const SizedBox(height: Dimensions.standardSpacing),
         _SearchResultGameGeneralStats(
           icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
-          statistic: sprintf(
-            AppText.gamesPageSearchResultPlaytimeGameStatFormat,
-            [boardGame.playtimeFormatted],
-          ),
+          statistic: boardGame.playtimeFormatted,
         ),
         if (boardGame.avgWeight != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
