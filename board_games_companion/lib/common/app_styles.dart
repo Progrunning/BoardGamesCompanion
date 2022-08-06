@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Styles {
+class AppStyles {
   static const double _maxOpacityDecimal = 255;
   static const double _hundredPercent = 100;
 
@@ -32,4 +32,6 @@ class Styles {
     fontWeight: FontWeight.bold,
     fontSize: 32,
   );
+
+  static const double defaultElevation = 4;
 }

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
-import 'package:board_games_companion/pages/games/games_view_model.dart';
+import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -33,23 +33,14 @@ import 'models/sort_by.dart';
 import 'pages/players/players_view_model.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
-import 'services/board_games_service.dart';
-import 'services/player_service.dart';
-import 'services/playthroughs_service.dart';
 import 'services/preferences_service.dart';
-import 'services/score_service.dart';
 import 'services/user_service.dart';
-import 'stores/board_games_filters_store.dart';
-import 'stores/board_games_store.dart';
-import 'stores/hot_board_games_store.dart';
-import 'stores/playthrough_statistics_store.dart';
-import 'stores/playthroughs_store.dart';
 import 'stores/search_bar_board_games_store.dart';
 import 'stores/search_board_games_store.dart';
 import 'stores/user_store.dart';
 
 Future<void> main() async {
-  configureDependencies();
+  Fimber.plantTree(DebugTree());
 
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -75,6 +66,8 @@ Future<void> main() async {
       ..registerAdapter(CollectionFiltersAdapter())
       ..registerAdapter(GameWinningConditionAdapter())
       ..registerAdapter(BoardGameSettingsAdapter());
+
+    configureDependencies();
 
     final PreferencesService preferencesService = getIt<PreferencesService>();
     await preferencesService.initialize();
@@ -122,12 +115,6 @@ class App extends StatelessWidget {
             return userStore;
           },
         ),
-        ChangeNotifierProvider<HotBoardGamesStore>(
-          create: (context) {
-            final BoardGamesGeekService boardGamesGeekService = getIt<BoardGamesGeekService>();
-            return HotBoardGamesStore(boardGamesGeekService);
-          },
-        ),
         ChangeNotifierProvider<SearchBarBoardGamesStore>(
           create: (context) => SearchBarBoardGamesStore(),
         ),
@@ -147,50 +134,6 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider<PlayersViewModel>(
           create: (context) => getIt<PlayersViewModel>(),
-        ),
-        ChangeNotifierProvider<PlaythroughsStore>(
-          create: (context) => getIt<PlaythroughsStore>(),
-        ),
-        ChangeNotifierProvider<BoardGamesFiltersStore>(
-          create: (context) => getIt<BoardGamesFiltersStore>(),
-        ),
-        ChangeNotifierProvider<BoardGamesStore>(
-          create: (context) {
-            final BoardGamesService boardGamesService = getIt<BoardGamesService>();
-            final PlaythroughService playthroughService = getIt<PlaythroughService>();
-            final ScoreService scoreService = getIt<ScoreService>();
-            final PlayerService playerService = getIt<PlayerService>();
-            return BoardGamesStore(
-              boardGamesService,
-              playthroughService,
-              scoreService,
-              playerService,
-            );
-          },
-        ),
-        ChangeNotifierProxyProvider2<BoardGamesStore, PlaythroughsStore,
-            PlaythroughStatisticsStore>(
-          create: (context) => getIt<PlaythroughStatisticsStore>(),
-          update: (_, boardGameStore, playthroughsStore, playthroughStatisticsStore) {
-            return playthroughStatisticsStore!;
-          },
-        ),
-        ChangeNotifierProxyProvider2<BoardGamesFiltersStore, BoardGamesStore, GamesViewModel>(
-          create: (context) {
-            final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
-            final boardGamesStore = Provider.of<BoardGamesStore>(
-              context,
-              listen: false,
-            );
-            final gamesViewModel = GamesViewModel(boardGamesStore, boardGamesFiltersStore);
-            gamesViewModel.loadBoardGames();
-
-            return gamesViewModel;
-          },
-          update: (_, filtersStore, boardGamesStore, gamesViewModel) {
-            gamesViewModel!.applyFilters();
-            return gamesViewModel;
-          },
         ),
       ],
       child: const BoardGamesCompanionApp(),

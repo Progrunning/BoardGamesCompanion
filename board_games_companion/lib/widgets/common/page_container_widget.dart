@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 
 class PageContainer extends StatelessWidget {
   const PageContainer({
@@ -18,8 +18,8 @@ class PageContainer extends StatelessWidget {
           begin: Alignment(0.5, 0),
           end: Alignment(0.5, 1),
           colors: [
-            AppTheme.startDefaultPageBackgroundColorGradient,
-            AppTheme.endDefaultPageBackgroundColorGradient,
+            AppColors.startDefaultPageBackgroundColorGradient,
+            AppColors.endDefaultPageBackgroundColorGradient,
           ],
           tileMode: TileMode.clamp,
         ),

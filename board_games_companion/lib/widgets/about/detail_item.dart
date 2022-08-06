@@ -1,10 +1,11 @@
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../utilities/launcher_helper.dart';
-import '../common/shadow_box.dart';
 
 class DetailsItem extends StatelessWidget {
   const DetailsItem({
@@ -29,7 +30,7 @@ class DetailsItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        splashColor: AppTheme.accentColor,
+        splashColor: AppColors.accentColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: Dimensions.standardSpacing,
@@ -41,9 +42,10 @@ class DetailsItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 if (iconUri?.isNotEmpty ?? false)
-                  ShadowBox(
+                  ElevatedContainer(
+                    elevation: AppStyles.defaultElevation,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                      borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
                       child: Image(
                         height: _size,
                         width: _size,

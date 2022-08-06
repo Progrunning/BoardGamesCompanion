@@ -5,4 +5,10 @@
              Flutter draws its first frame -->
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
+    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <!-- The "normal theme" draws the background behind your Flutter experience. 
+             That background is typically seen for a brief moment just before the first Flutter frame renders. 
+             The "normal theme" also controls Android's status bar and navigation bar visual properties for the duration of your Flutter experience. -->
+        <item name="android:windowBackground">@drawable/after_splash_before_first_frame_background</item>
+    </style>
 </resources>

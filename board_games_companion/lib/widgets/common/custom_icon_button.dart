@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 
 class CustomIconButton extends StatelessWidget {
   const CustomIconButton(
@@ -17,24 +17,24 @@ class CustomIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(
           Dimensions.halfStandardSpacing,
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(
-            Radius.circular(Styles.defaultCornerRadius),
+            Radius.circular(AppStyles.defaultCornerRadius),
           ),
           child: Container(
             padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
             decoration: BoxDecoration(
-              color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+              color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
             ),
             child: icon,
           ),
         ),
       ),
-      onTap: onTap,
     );
   }
 }

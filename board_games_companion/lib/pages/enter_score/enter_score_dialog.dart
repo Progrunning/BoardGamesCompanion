@@ -1,16 +1,18 @@
 import 'dart:math';
 
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/double_extensions.dart';
 import '../../widgets/common/elevated_icon_button.dart';
-import '../../widgets/rounded_container.dart';
 import 'enter_score_view_model.dart';
 
 class EnterScoreDialog extends StatelessWidget {
@@ -34,61 +36,63 @@ class EnterScoreDialog extends StatelessWidget {
       value: viewModel,
       builder: (_, __) {
         return Center(
-          child: RoundedContainer(
+          child: SizedBox(
             width: enterScoreDialogWidth,
-            backgroundColor: AppTheme.primaryColorLight,
-            addShadow: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.doubleStandardSpacing,
-                vertical: Dimensions.standardSpacing,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  _Score(playerName: viewModel.playerName),
-                  const _ScoreHistory(),
-                  const SizedBox(height: Dimensions.trippleStandardSpacing),
-                  _CircularNumberPicker(
-                    strokeWidth: 50,
-                    thumbSize: 50,
-                    onEnded: (int partialScore) {
-                      viewModel.updateScore(partialScore);
-                    },
-                  ),
-                  const SizedBox(height: Dimensions.doubleStandardSpacing),
-                  Consumer<EnterScoreViewModel>(
-                    builder: (_, viewModel, __) {
-                      return _InstantScorePanel(
-                        operation: viewModel.operation,
-                        onOperationChange: (EnterScoreOperation operation) {
-                          viewModel.updateOperation(operation);
-                        },
-                        onScoreChange: (int partialScore) async {
-                          if (viewModel.operation == EnterScoreOperation.subtract) {
-                            partialScore = -partialScore;
-                          }
+            child: ElevatedContainer(
+              backgroundColor: AppColors.primaryColorLight,
+              elevation: AppStyles.defaultElevation,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Dimensions.doubleStandardSpacing,
+                  vertical: Dimensions.standardSpacing,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    _Score(playerName: viewModel.playerName),
+                    const _ScoreHistory(),
+                    const SizedBox(height: Dimensions.trippleStandardSpacing),
+                    _CircularNumberPicker(
+                      strokeWidth: 50,
+                      thumbSize: 50,
+                      onEnded: (int partialScore) {
+                        viewModel.updateScore(partialScore);
+                      },
+                    ),
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
+                    Consumer<EnterScoreViewModel>(
+                      builder: (_, viewModel, __) {
+                        return _InstantScorePanel(
+                          operation: viewModel.operation,
+                          onOperationChange: (EnterScoreOperation operation) {
+                            viewModel.updateOperation(operation);
+                          },
+                          onScoreChange: (int partialScore) async {
+                            if (viewModel.operation == EnterScoreOperation.subtract) {
+                              partialScore = -partialScore;
+                            }
 
-                          viewModel.updateScore(partialScore);
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(height: Dimensions.trippleStandardSpacing),
-                  _ActionButtons(
-                    onUndo: () => viewModel.undo(),
-                    onDone: () {
-                      // MK In case score was not entered assume 0 was the score
-                      if (viewModel.score == 0) {
-                        viewModel.scoreZero();
-                      }
+                            viewModel.updateScore(partialScore);
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: Dimensions.trippleStandardSpacing),
+                    _ActionButtons(
+                      onUndo: () => viewModel.undo(),
+                      onDone: () {
+                        // MK In case score was not entered assume 0 was the score
+                        if (viewModel.score == 0) {
+                          viewModel.scoreZero();
+                        }
 
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -164,7 +168,7 @@ class _Score extends StatelessWidget {
               ' ${viewModel.score} ',
               style: AppTheme.theme.textTheme.headline1!.copyWith(
                 fontSize: Dimensions.doubleExtraLargeFontSize,
-                color: AppTheme.accentColor,
+                color: AppColors.accentColor,
               ),
             );
           },
@@ -194,9 +198,9 @@ class _InstantScorePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        RoundedContainer(
-          backgroundColor: AppTheme.primaryColor,
-          addShadow: true,
+        ElevatedContainer(
+          backgroundColor: AppColors.primaryColor,
+          elevation: AppStyles.defaultElevation,
           child: Column(
             children: [
               _InstantScoreOperationTile(
@@ -243,17 +247,19 @@ class _InstantScoreOperationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
+    return SizedBox(
       width: 44,
       height: 44,
-      backgroundColor: isActive ? AppTheme.accentColor : Colors.transparent,
-      splashColor: isActive ? null : AppTheme.accentColor,
-      onTap: () => onOperationChange(operation),
-      child: Center(
-          child: Text(
-        symbol,
-        style: AppTheme.theme.textTheme.headline1,
-      )),
+      child: ElevatedContainer(
+        backgroundColor: isActive ? AppColors.accentColor : Colors.transparent,
+        splashColor: isActive ? AppColors.primaryColor : AppColors.accentColor,
+        onTap: () => onOperationChange(operation),
+        child: Center(
+            child: Text(
+          symbol,
+          style: AppTheme.theme.textTheme.headline1,
+        )),
+      ),
     );
   }
 }
@@ -270,16 +276,20 @@ class _InstantScoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
-      addShadow: true,
-      onTap: onTap,
+    return SizedBox(
       width: 52,
       height: 52,
-      child: Center(
-        child: Text(
-          text,
-          style: AppTheme.theme.textTheme.headline3!,
-          textAlign: TextAlign.center,
+      child: ElevatedContainer(
+        backgroundColor: AppColors.accentColor,
+        elevation: AppStyles.defaultElevation,
+        splashColor: AppColors.primaryColor,
+        onTap: onTap,
+        child: Center(
+          child: Text(
+            text,
+            style: AppTheme.theme.textTheme.headline3!,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
@@ -305,7 +315,7 @@ class _ActionButtons extends StatelessWidget {
             return ElevatedIconButton(
               title: AppText.enterScoreDialogUndoButtonText,
               icon: const Icon(Icons.undo),
-              color: AppTheme.blueColor,
+              color: AppColors.blueColor,
               onPressed: viewModel.canUndo ? onUndo : null,
             );
           },
@@ -314,7 +324,7 @@ class _ActionButtons extends StatelessWidget {
         ElevatedIconButton(
           title: AppText.enterScoreDialogDoneButtonText,
           icon: const Icon(Icons.done),
-          color: AppTheme.accentColor,
+          color: AppColors.accentColor,
           onPressed: onDone,
         ),
       ],
@@ -325,18 +335,10 @@ class _ActionButtons extends StatelessWidget {
 class _CircularNumberPicker extends StatefulWidget {
   const _CircularNumberPicker({
     Key? key,
-    this.onChanged,
     this.onEnded,
-    this.size = const Size(280, 280),
     this.strokeWidth = 30,
     this.thumbSize = 30,
-    this.highestNumberInSingleSpin = 12,
   }) : super(key: key);
-
-  /// Called during a drag when the user is selecting a color.
-  ///
-  /// This callback called with latest color that user selected.
-  final ValueChanged<int>? onChanged;
 
   /// Called when drag ended.
   ///
@@ -348,7 +350,7 @@ class _CircularNumberPicker extends StatefulWidget {
   /// so circle is smaller than the size.
   ///
   /// Default value is 280 x 280.
-  final Size size;
+  Size get size => const Size(280, 280);
 
   /// The width of circle border.
   ///
@@ -360,7 +362,7 @@ class _CircularNumberPicker extends StatefulWidget {
   /// Default value is 32.
   final double thumbSize;
 
-  final int highestNumberInSingleSpin;
+  int get highestNumberInSingleSpin => 12;
 
   @override
   _CircularNumberPickerState createState() => _CircularNumberPickerState();
@@ -437,8 +439,6 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
       if (multiplier < 0) {
         _number--;
       }
-
-      widget.onChanged?.call(_number);
     });
   }
 
@@ -447,7 +447,6 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
     setState(() {
       _angle = 0;
       _numberOpacity = 0;
-      widget.onChanged?.call(0);
     });
   }
 }
@@ -531,7 +530,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
               Positioned(
                 left: offset.dx,
                 top: offset.dy,
-                child: _Thumb(size: widget.thumbSize, color: AppTheme.accentColor),
+                child: _Thumb(size: widget.thumbSize, color: AppColors.accentColor),
               ),
             if (_numberPickedAngle != null && _isInitState)
               TweenAnimationBuilder<Offset>(
@@ -550,7 +549,7 @@ class _NumberPickerState extends State<_NumberPicker> with TickerProviderStateMi
                   return Positioned(
                     left: offset.dx,
                     top: offset.dy,
-                    child: _Thumb(size: widget.thumbSize, color: AppTheme.accentColor),
+                    child: _Thumb(size: widget.thumbSize, color: AppColors.accentColor),
                   );
                 },
               ),
@@ -682,7 +681,7 @@ class _CirclePickerPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth
-        ..color = AppTheme.primaryColor.withOpacity(0.3),
+        ..color = AppColors.primaryColor.withOpacity(0.3),
     );
   }
 

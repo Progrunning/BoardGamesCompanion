@@ -1,100 +1,133 @@
-import 'package:collection/collection.dart' show IterableExtension;
+// ignore_for_file: library_private_types_in_public_api
+
+import 'package:basics/basics.dart';
+import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
+import 'package:html_unescape/html_unescape.dart';
+import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../common/analytics.dart';
 import '../../common/enums/collection_type.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/analytics_service.dart';
-import '../../services/board_games_geek_service.dart';
 import '../../stores/board_games_store.dart';
 
-class BoardGameDetailsViewModel with ChangeNotifier {
-  BoardGameDetailsViewModel(
-    this._boardGameGeekService,
-    this._boardGamesStore,
-    this._analyticsService,
-  );
+part 'board_game_details_view_model.g.dart';
 
-  final BoardGamesGeekService _boardGameGeekService;
+@injectable
+class BoardGameDetailsViewModel = _BoardGameDetailsViewModel with _$BoardGameDetailsViewModel;
+
+abstract class _BoardGameDetailsViewModel with Store {
+  _BoardGameDetailsViewModel(this._boardGamesStore, this._analyticsService) {
+    _htmlUnescape = HtmlUnescape();
+  }
+
   final BoardGamesStore _boardGamesStore;
   final AnalyticsService _analyticsService;
 
-  BoardGameDetails? _boardGameDetails;
+  late HtmlUnescape _htmlUnescape;
+  late String _boardGameId;
+  late String _boardGameName;
+  String? _boardGameImageUrl;
 
-  BoardGameDetails? get boardGameDetails => _boardGameDetails;
+  @computed
+  BoardGameDetails get boardGame => _boardGamesStore.allBoardGames.firstWhere(
+        (BoardGameDetails boardGame) => boardGame.id == _boardGameId,
+      );
 
-  Future<BoardGameDetails?> loadBoardGameDetails(String boardGameId) async {
-    try {
-      // TODO MK Think about retrieving the data from Hive and updating with the HTTP call
-      //         Alternatively set cache expiration (~a week?) and then retrieve data to update
-      final boardGameDetails = await _boardGameGeekService.getDetails(boardGameId);
-      if (boardGameDetails == null) {
-        return _boardGameDetails!;
-      }
-      for (final boardGameExpansion in boardGameDetails.expansions) {
-        final boardGameExpansionDetails = _boardGamesStore.allBoardGames.firstWhereOrNull(
-          (boardGame) => boardGame.id == boardGameExpansion.id,
-        );
+  String get boardGameName => _boardGameName;
 
-        if (boardGameExpansionDetails != null &&
-            (boardGameExpansionDetails.isExpansion ?? false) &&
-            boardGameExpansionDetails.isOwned!) {
-          boardGameExpansion.isInCollection = true;
-        }
-      }
+  String get boardGameId => _boardGameId;
 
-      final existingBoardGameDetails = _boardGamesStore.retrieveBoardGame(boardGameId);
-      if (existingBoardGameDetails != null) {
-        boardGameDetails.isFriends = existingBoardGameDetails.isFriends;
-        boardGameDetails.isOnWishlist = existingBoardGameDetails.isOnWishlist;
-        boardGameDetails.isOwned = existingBoardGameDetails.isOwned;
-      }
-
-      await _boardGamesStore.updateDetails(boardGameDetails);
-
-      _boardGameDetails = boardGameDetails;
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
+  @computed
+  String? get boardGameImageUrl {
+    if (_boardGameImageUrl.isNotNullOrBlank) {
+      return _boardGameImageUrl;
     }
 
-    notifyListeners();
-
-    return _boardGameDetails;
+    switch (futureLoadBoardGameDetails?.status ?? FutureStatus.pending) {
+      case FutureStatus.pending:
+        return null;
+      case FutureStatus.rejected:
+        return '';
+      case FutureStatus.fulfilled:
+        return boardGame.imageUrl;
+    }
   }
+
+  @computed
+  bool get isMainGame => boardGame.isMainGame;
+
+  @computed
+  bool get isExpansion => boardGame.isExpansion ?? false;
+
+  @computed
+  List<BoardGamesExpansion> get expansions => boardGame.expansions;
+
+  @computed
+  bool get hasExpansions => boardGame.expansions.isNotEmpty;
+
+  @computed
+  int get totalExpansionsOwned =>
+      expansions.where((expansion) => expansion.isInCollection ?? false).length;
+
+  @computed
+  String get unescapedDescription => _htmlUnescape.convert(boardGame.description ?? '');
+
+  @observable
+  ObservableFuture<void>? futureLoadBoardGameDetails;
+
+  @action
+  void loadBoardGameDetails() =>
+      futureLoadBoardGameDetails = ObservableFuture(_loadBoardGameDetails());
+
+  void setBoardGameId(String boardGameId) => _boardGameId = boardGameId;
+
+  void setBoardGameName(String boardGameName) => _boardGameName = boardGameName;
+
+  void setBoardGameImageUrl(String? boardGameImageUrl) => _boardGameImageUrl = boardGameImageUrl;
 
   Future<void> captureLinkAnalytics(String linkName) async {
     await _analyticsService.logEvent(
-      name: Analytics.BoardGameDetailsLinks,
+      name: Analytics.boardGameDetailsLinks,
       parameters: <String, String>{
-        Analytics.BoardGameDetailsLinksName: linkName,
+        Analytics.boardGameDetailsLinksName: linkName,
       },
     );
   }
 
   Future<void> toggleCollection(CollectionType collectionType) async {
     switch (collectionType) {
-      case CollectionType.Owned:
-        _boardGameDetails!.isOwned = !_boardGameDetails!.isOwned!;
-        if (_boardGameDetails!.isOwned!) {
-          _boardGameDetails!.isOnWishlist = false;
-          _boardGameDetails!.isFriends = false;
+      case CollectionType.owned:
+        boardGame.isOwned = !boardGame.isOwned!;
+        if (boardGame.isOwned!) {
+          boardGame.isOnWishlist = false;
+          boardGame.isFriends = false;
         }
         break;
-      case CollectionType.Friends:
-        if (_boardGameDetails!.isOwned!) {
-          _boardGameDetails!.isOwned = false;
+      case CollectionType.friends:
+        if (boardGame.isOwned!) {
+          boardGame.isOwned = false;
         }
-        _boardGameDetails!.isFriends = !_boardGameDetails!.isFriends!;
+        boardGame.isFriends = !boardGame.isFriends!;
         break;
-      case CollectionType.Wishlist:
-        if (_boardGameDetails!.isOwned!) {
-          _boardGameDetails!.isOwned = false;
+      case CollectionType.wishlist:
+        if (boardGame.isOwned!) {
+          boardGame.isOwned = false;
         }
-        _boardGameDetails!.isOnWishlist = !_boardGameDetails!.isOnWishlist!;
+        boardGame.isOnWishlist = !boardGame.isOnWishlist!;
         break;
     }
 
-    await _boardGamesStore.updateDetails(_boardGameDetails!);
+    await _boardGamesStore.addOrUpdateBoardGame(boardGame);
+  }
+
+  Future<void> _loadBoardGameDetails() async {
+    try {
+      await _boardGamesStore.refreshBoardGameDetails(_boardGameId);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
   }
 }

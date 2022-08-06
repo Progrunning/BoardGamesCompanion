@@ -1,7 +1,7 @@
-import '../../stores/playthrough_store.dart';
+import 'package:board_games_companion/pages/playthroughs/playthrough_view_model.dart';
 
 class EditPlaythroughPageArguments {
-  const EditPlaythroughPageArguments(this.playthroughStore);
+  const EditPlaythroughPageArguments(this.playthroughViewModel);
 
-  final PlaythroughStore playthroughStore;
+  final PlaythroughViewModel playthroughViewModel;
 }

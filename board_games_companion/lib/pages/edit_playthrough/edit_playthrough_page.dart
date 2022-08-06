@@ -2,14 +2,16 @@ import 'dart:math' as math;
 
 import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/default_icon.dart';
@@ -18,7 +20,7 @@ import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../playthroughs/playthroughs_page.dart';
-import 'edit_playthrouhg_view_model.dart';
+import 'edit_playthrough_view_model.dart';
 
 class EditPlaythoughPage extends StatefulWidget {
   const EditPlaythoughPage({
@@ -31,16 +33,14 @@ class EditPlaythoughPage extends StatefulWidget {
   final EditPlaythoughViewModel viewModel;
 
   @override
-  _EditPlaythoughPageState createState() => _EditPlaythoughPageState();
+  EditPlaythoughPageState createState() => EditPlaythoughPageState();
 }
 
-class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
+class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return _handleOnWillPop(context);
-      },
+      onWillPop: () async => _handleOnWillPop(context),
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -83,19 +83,12 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
                     },
                   ),
                 ),
-                ChangeNotifierProvider<EditPlaythoughViewModel>.value(
-                  value: widget.viewModel,
-                  child: Consumer<EditPlaythoughViewModel>(
-                    builder: (_, viewModel, __) {
-                      return _ActionButtons(
-                        viewModel: viewModel,
-                        onSave: () async => _save(),
-                        onStop: () async => _stopPlaythrough(),
-                        onDelete: () async => _showDeletePlaythroughDialog(context),
-                      );
-                    },
-                  ),
-                ),
+                _ActionButtons(
+                  viewModel: widget.viewModel,
+                  onSave: () async => _save(),
+                  onStop: () async => _stopPlaythrough(),
+                  onDelete: () async => _showDeletePlaythroughDialog(context),
+                )
               ],
             ),
           ),
@@ -106,6 +99,10 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
 
   Future<void> _save() async {
     await widget.viewModel.saveChanges();
+    if (!mounted) {
+      return;
+    }
+
     Navigator.pop(context);
   }
 
@@ -129,18 +126,23 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.cancel, style: TextStyle(color: AppTheme.accentColor)),
+              child: const Text(AppText.cancel, style: TextStyle(color: AppColors.accentColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(AppText.delete, style: TextStyle(color: AppTheme.defaultTextColor)),
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
+              child:
+                  const Text(AppText.delete, style: TextStyle(color: AppColors.defaultTextColor)),
             ),
           ],
         );
@@ -162,20 +164,20 @@ class _EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScore
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
-              child: const Text(AppText.cancel, style: TextStyle(color: AppTheme.accentColor)),
+              child: const Text(AppText.cancel, style: TextStyle(color: AppColors.accentColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(
-                AppText.editPlaythroughPageUnsavedChangesActionButtonText,
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
               },
+              child: const Text(
+                AppText.editPlaythroughPageUnsavedChangesActionButtonText,
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
             ),
           ],
         );
@@ -211,18 +213,11 @@ class _ScoresSectionState extends State<_ScoresSection> {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () => widget.onItemTapped(widget.viewModel.playerScores[index]),
-          child: ChangeNotifierProvider<EditPlaythoughViewModel>.value(
-            value: widget.viewModel,
-            child: Consumer<EditPlaythoughViewModel>(
-              builder: (_, viewModel, __) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                  child: _PlayerScoreTile(
-                    playerScore: viewModel.playerScores[index],
-                    playthroughId: viewModel.playthrough.id,
-                  ),
-                );
-              },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            child: _PlayerScoreTile(
+              playerScore: widget.viewModel.playerScores[index],
+              playthroughId: widget.viewModel.playthrough.id,
             ),
           ),
         );
@@ -285,7 +280,7 @@ class _PlayerScore extends StatelessWidget {
                 builder: (_, playerScore, __) {
                   return Text(
                     playerScore.score.value ?? '-',
-                    style: Styles.playerScoreTextStyle,
+                    style: AppStyles.playerScoreTextStyle,
                   );
                 },
               ),
@@ -314,7 +309,6 @@ class _Duration extends StatefulWidget {
 class _DurationState extends State<_Duration> {
   static const int _maxHours = 99;
 
-  late DateTime startDateTime;
   late Duration playthroughDuration;
   int? playthroughDurationInSeconds;
   late int hoursPlayed;
@@ -329,7 +323,6 @@ class _DurationState extends State<_Duration> {
   void initState() {
     super.initState();
 
-    startDateTime = widget.viewModel.playthrough.startDate;
     playthroughDuration = widget.viewModel.playthoughDuration;
     playthroughDurationInSeconds = playthroughDuration.inSeconds;
     hoursPlayed = playthroughDuration.inHours;
@@ -344,9 +337,13 @@ class _DurationState extends State<_Duration> {
       child: Row(
         children: [
           Center(
-            child: CalendarCard(
-              widget.viewModel.playthrough.startDate,
-              onTap: () async => _pickStartDate(),
+            child: Observer(
+              builder: (_) {
+                return CalendarCard(
+                  widget.viewModel.playthroughStartTime,
+                  onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
+                );
+              },
             ),
           ),
           const Expanded(child: SizedBox.shrink()),
@@ -361,14 +358,11 @@ class _DurationState extends State<_Duration> {
                   onChanged: (num value) => _updateDurationHours(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text(
-                  'h',
-                  style: AppTheme.theme.textTheme.bodyText2,
-                ),
+                Text('h', style: AppTheme.theme.textTheme.bodyText2),
                 const SizedBox(width: Dimensions.halfStandardSpacing),
                 NumberPicker(
                   value: minutesPlyed,
@@ -378,14 +372,11 @@ class _DurationState extends State<_Duration> {
                   onChanged: (num value) => _updateDurationMinutes(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text(
-                  'min ',
-                  style: AppTheme.theme.textTheme.bodyText2,
-                ),
+                Text('min ', style: AppTheme.theme.textTheme.bodyText2),
               ],
             ),
           )
@@ -412,8 +403,8 @@ class _DurationState extends State<_Duration> {
     final DateTime now = DateTime.now();
     final DateTime? newStartDate = await showDatePicker(
       context: context,
-      initialDate: startDateTime,
-      firstDate: now.add(const Duration(days: -Constants.DaysInTenYears)),
+      initialDate: widget.viewModel.playthroughStartTime,
+      firstDate: now.add(const Duration(days: -Constants.daysInTenYears)),
       lastDate: now,
       currentDate: now,
       helpText: 'Pick a playthrough date',
@@ -421,7 +412,7 @@ class _DurationState extends State<_Duration> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppTheme.accentColor,
+                  primary: AppColors.accentColor,
                 ),
           ),
           child: child!,
@@ -433,11 +424,7 @@ class _DurationState extends State<_Duration> {
       return;
     }
 
-    setState(() {
-      final Duration playthroughDuration = widget.viewModel.playthoughDuration;
-      widget.viewModel.playthrough.startDate = startDateTime = newStartDate;
-      widget.viewModel.playthrough.endDate = newStartDate.add(playthroughDuration);
-    });
+    widget.viewModel.updateStartDate(newStartDate);
   }
 
   void _setHourseAndMinutesRange() {
@@ -466,32 +453,36 @@ class _ActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(Dimensions.standardSpacing),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          ElevatedIconButton(
-            title: 'Delete',
-            icon: const DefaultIcon(Icons.delete),
-            color: AppTheme.redColor,
-            onPressed: onDelete,
-          ),
-          const Expanded(child: SizedBox.shrink()),
-          if (!viewModel.playthoughEnded) ...[
-            ElevatedIconButton(
-              title: AppText.stop,
-              icon: const DefaultIcon(Icons.stop),
-              color: AppTheme.blueColor,
-              onPressed: onStop,
-            ),
-            const SizedBox(width: Dimensions.standardSpacing),
-          ],
-          ElevatedIconButton(
-            title: 'Save',
-            icon: const DefaultIcon(Icons.save),
-            color: AppTheme.accentColor,
-            onPressed: onSave,
-          ),
-        ],
+      child: Observer(
+        builder: (_) {
+          return Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              ElevatedIconButton(
+                title: 'Delete',
+                icon: const DefaultIcon(Icons.delete),
+                color: AppColors.redColor,
+                onPressed: onDelete,
+              ),
+              const Expanded(child: SizedBox.shrink()),
+              if (!viewModel.playthoughEnded) ...[
+                ElevatedIconButton(
+                  title: AppText.stop,
+                  icon: const DefaultIcon(Icons.stop),
+                  color: AppColors.blueColor,
+                  onPressed: onStop,
+                ),
+                const SizedBox(width: Dimensions.standardSpacing),
+              ],
+              ElevatedIconButton(
+                title: 'Save',
+                icon: const DefaultIcon(Icons.save),
+                color: AppColors.accentColor,
+                onPressed: onSave,
+              ),
+            ],
+          );
+        },
       ),
     );
   }

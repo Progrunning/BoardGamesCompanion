@@ -3,10 +3,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/collection_type.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
@@ -26,22 +26,18 @@ import 'playthroughs_view_model.dart';
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
     required this.viewModel,
-    required this.boardGameDetails,
-    required this.collectionType,
     Key? key,
   }) : super(key: key);
 
   static const String pageRoute = '/playthroughs';
 
   final PlaythroughsViewModel viewModel;
-  final BoardGameDetails boardGameDetails;
-  final CollectionType collectionType;
 
   @override
-  _PlaythroughsPageState createState() => _PlaythroughsPageState();
+  PlaythroughsPageState createState() => PlaythroughsPageState();
 }
 
-class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
+class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   static const int _initialTabIndex = 0;
@@ -65,7 +61,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     final scaffold = Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.boardGameDetails.name, style: AppTheme.titleTextStyle),
+        title: Text(widget.viewModel.boardGame.name, style: AppTheme.titleTextStyle),
         actions: <Widget>[
           Consumer<UserStore>(
             builder: (_, store, ___) {
@@ -74,14 +70,14 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
               }
 
               return IconButton(
-                icon: const Icon(Icons.download, color: AppTheme.accentColor),
-                onPressed: () => _importBggPlays(store.user!.name, widget.boardGameDetails.id),
+                icon: const Icon(Icons.download, color: AppColors.accentColor),
+                onPressed: () => _importBggPlays(store.user!.name, widget.viewModel.boardGame.id),
               );
             },
           ),
           IconButton(
-            icon: const Icon(Icons.info, color: AppTheme.accentColor),
-            onPressed: () async => _navigateToBoardGameDetails(context, widget.boardGameDetails),
+            icon: const Icon(Icons.info, color: AppColors.accentColor),
+            onPressed: () async => _navigateToBoardGameDetails(context, widget.viewModel.boardGame),
           ),
         ],
       ),
@@ -89,24 +85,18 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         child: PageContainer(
           child: TabBarView(
             controller: tabController,
-            children: <Widget>[
-              PlaythroughStatistcsPage(
-                playthroughStatisticsStore: widget.viewModel.playthroughStatisticsStore,
-                collectionType: widget.collectionType,
-              ),
-              PlaythroughsHistoryPage(playthroughsStore: widget.viewModel.playthroughsStore),
-              PlaythroughsLogGamePage(
-                boardGameDetails: widget.boardGameDetails,
-                playthroughsLogGameViewModel: widget.viewModel,
-              ),
-              PlaythroughsGameSettingsPage(boardGameDetails: widget.boardGameDetails)
+            children: const <Widget>[
+              PlaythroughStatistcsPage(),
+              PlaythroughsHistoryPage(),
+              PlaythroughsLogGamePage(),
+              PlaythroughsGameSettingsPage()
             ],
           ),
         ),
       ),
       bottomNavigationBar: ConvexAppBar(
         controller: tabController,
-        backgroundColor: AppTheme.bottomTabBackgroundColor,
+        backgroundColor: AppColors.bottomTabBackgroundColor,
         top: -Dimensions.bottomTabTopHeight,
         items: const <TabItem>[
           TabItem<BottomTabIcon>(
@@ -131,13 +121,13 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           ),
         ],
         initialActiveIndex: _initialTabIndex,
-        activeColor: AppTheme.accentColor,
-        color: AppTheme.inactiveBottomTabColor,
+        activeColor: AppColors.accentColor,
+        color: AppColors.inactiveBottomTabColor,
       ),
     );
 
     if (_showImportGamesLoadingIndicator) {
-      return LoadingOverlay(child: scaffold, title: AppText.importPlaysLoadingIndicator);
+      return LoadingOverlay(title: AppText.importPlaysLoadingIndicator, child: scaffold);
     }
 
     return scaffold;
@@ -163,6 +153,10 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       });
       await widget.viewModel.importPlays(username, boardGameId);
       if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
+        if (!mounted) {
+          return;
+        }
+
         await _showImportPlaysReportDialog(
           context,
           username,
@@ -203,7 +197,7 @@ class _PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     String boardGameId,
     BggPlaysImportRaport bggPlaysImportRaport,
   ) async {
-    showGeneralDialog<void>(
+    await showGeneralDialog<void>(
       context: context,
       pageBuilder: (_, __, ___) {
         return BggPlaysImportReportDialog(

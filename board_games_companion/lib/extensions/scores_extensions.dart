@@ -29,29 +29,29 @@ extension ScoresExtesions on List<Score>? {
         }
 
         if (score.value == null && otherScore.value == null) {
-          return Constants.LeaveAsIs;
+          return Constants.leaveAsIs;
         }
 
         if (score.value == null) {
-          return Constants.MoveBelow;
+          return Constants.moveBelow;
         }
 
         if (otherScore.value == null) {
-          return Constants.MoveAbove;
+          return Constants.moveAbove;
         }
 
         final num? aNumber = num.tryParse(score.value!);
         final num? bNumber = num.tryParse(otherScore.value!);
         if (aNumber == null && bNumber == null) {
-          return Constants.LeaveAsIs;
+          return Constants.leaveAsIs;
         }
 
         if (aNumber == null) {
-          return Constants.MoveBelow;
+          return Constants.moveBelow;
         }
 
         if (bNumber == null) {
-          return Constants.MoveAbove;
+          return Constants.moveAbove;
         }
 
         return bNumber.compareTo(aNumber);

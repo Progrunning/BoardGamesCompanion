@@ -1,35 +1,35 @@
 import 'collection_type.dart';
 
 enum GamesTab {
-  Owned,
-  Friends,
-  Wishlist,
+  owned,
+  friends,
+  wishlist,
 }
 
 extension ToGamesTab on int {
   GamesTab toGamesTab() {
     switch (this) {
       case 0:
-        return GamesTab.Owned;
+        return GamesTab.owned;
       case 1:
-        return GamesTab.Friends;
+        return GamesTab.friends;
       case 2:
-        return GamesTab.Wishlist;
+        return GamesTab.wishlist;
     }
 
-    return GamesTab.Owned;
+    return GamesTab.owned;
   }
 }
 
 extension ToCollectionType on GamesTab {
   CollectionType toCollectionType() {
     switch (this) {
-      case GamesTab.Owned:
-        return CollectionType.Owned;
-      case GamesTab.Friends:
-        return CollectionType.Friends;
-      case GamesTab.Wishlist:
-        return CollectionType.Wishlist;
+      case GamesTab.owned:
+        return CollectionType.owned;
+      case GamesTab.friends:
+        return CollectionType.friends;
+      case GamesTab.wishlist:
+        return CollectionType.wishlist;
     }
   }
 }

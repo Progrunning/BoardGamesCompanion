@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/constants.dart';
-import '../../common/styles.dart';
 
 class PlayerImage extends StatelessWidget {
   const PlayerImage({
@@ -19,16 +19,16 @@ class PlayerImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+      borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
       child: Stack(
         children: [
           const _Placeholder(),
           Builder(
             builder: (_) {
-              if ((imageUri?.isEmpty ?? true) || imageUri == Constants.DefaultAvatartAssetsPath) {
+              if ((imageUri?.isEmpty ?? true) || imageUri == Constants.defaultAvatartAssetsPath) {
                 return Positioned.fill(
                   child: Image.asset(
-                    Constants.DefaultAvatartAssetsPath,
+                    Constants.defaultAvatartAssetsPath,
                     fit: BoxFit.cover,
                     frameBuilder: (BuildContext context, Widget child, int? frame,
                         bool wasSynchronouslyLoaded) {
@@ -94,8 +94,8 @@ class _Placeholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.primaryColor,
-        borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
       ),
     );
   }

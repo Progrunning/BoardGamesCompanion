@@ -1,7 +1,7 @@
 import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/app_colors.dart';
 import '../../mixins/import_collection.dart';
 import 'default_icon.dart';
 import 'elevated_icon_button.dart';
@@ -19,10 +19,10 @@ class ImportCollectionsButton extends StatefulWidget {
   final bool? _triggerImport;
 
   @override
-  _ImportCollectionsButtonState createState() => _ImportCollectionsButtonState();
+  ImportCollectionsButtonState createState() => ImportCollectionsButtonState();
 }
 
-class _ImportCollectionsButtonState extends State<ImportCollectionsButton>
+class ImportCollectionsButtonState extends State<ImportCollectionsButton>
     with TickerProviderStateMixin, ImportCollection {
   late AnimationController _fadeInAnimationController;
   late AnimationController _sizeAnimationController;
@@ -117,7 +117,7 @@ class _AnimatedButton extends AnimatedWidget {
             alignment: Alignment.centerRight,
             child: FadeTransition(
               opacity: _fadeInAnimationController,
-              child: const CircularProgressIndicator(color: AppTheme.accentColor),
+              child: const CircularProgressIndicator(color: AppColors.accentColor),
             ),
           ),
         ),

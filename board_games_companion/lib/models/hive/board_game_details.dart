@@ -1,7 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:io';
 
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:hive/hive.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../common/constants.dart';
 import '../../common/hive_boxes.dart';
@@ -15,9 +18,11 @@ import 'board_game_rank.dart';
 
 part 'board_game_details.g.dart';
 
-@HiveType(typeId: HiveBoxes.BoardGamesDetailsTypeId)
-class BoardGameDetails extends BaseBoardGame {
-  BoardGameDetails({required String id, required String name}) : super(id: id, name: name);
+@HiveType(typeId: HiveBoxes.boardGamesDetailsTypeId)
+class BoardGameDetails = _BoardGameDetails with _$BoardGameDetails;
+
+abstract class _BoardGameDetails extends BaseBoardGame with Store {
+  _BoardGameDetails({required String id, required String name}) : super(id: id, name: name);
 
   final RegExp onlyLettersOrNumbersRegex = RegExp(r'[a-zA-Z0-9\-]+');
   final Set<String> bggNotUsedUrlEncodedNameParts = {
@@ -62,8 +67,10 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(7)
   List<BoardGameCategory>? categories = <BoardGameCategory>[];
 
+  @observable
   double? _rating;
   @HiveField(8)
+  @computed
   double? get rating => _rating;
   @HiveField(8)
   set rating(double? value) {
@@ -73,8 +80,10 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  @observable
   int? _votes;
   @HiveField(9)
+  @computed
   int? get votes => _votes;
   @HiveField(9)
   set votes(int? value) {
@@ -139,8 +148,10 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  @observable
   num? _avgWeight;
   @HiveField(15)
+  @computed
   num? get avgWeight => _avgWeight;
   @HiveField(15)
   set avgWeight(num? value) {
@@ -159,8 +170,10 @@ class BoardGameDetails extends BaseBoardGame {
   @HiveField(18)
   List<BoardGameDesigner> desingers = <BoardGameDesigner>[];
 
+  @observable
   int? _commentsNumber;
   @HiveField(19)
+  @computed
   int? get commentsNumber => _commentsNumber;
   @HiveField(19)
   set commentsNumber(int? value) {
@@ -185,11 +198,8 @@ class BoardGameDetails extends BaseBoardGame {
   }
 
   @HiveField(22)
+  @observable
   List<BoardGamesExpansion> expansions = <BoardGamesExpansion>[];
-
-  int get expansionsOwned {
-    return expansions.where((expansion) => expansion.isInCollection ?? false).length;
-  }
 
   bool? _isExpansion;
   @HiveField(23)
@@ -204,8 +214,10 @@ class BoardGameDetails extends BaseBoardGame {
 
   bool get isMainGame => !(isExpansion ?? false);
 
+  @observable
   bool? _isOwned;
   @HiveField(24)
+  @computed
   bool? get isOwned => _isOwned ?? false;
   @HiveField(24)
   set isOwned(bool? value) {
@@ -215,8 +227,10 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  @observable
   bool? _isOnWishlist;
   @HiveField(25)
+  @computed
   bool? get isOnWishlist => _isOnWishlist ?? false;
   @HiveField(25)
   set isOnWishlist(bool? value) {
@@ -226,8 +240,10 @@ class BoardGameDetails extends BaseBoardGame {
     }
   }
 
+  @observable
   bool? _isFriends;
   @HiveField(26)
+  @computed
   bool? get isFriends => _isFriends ?? false;
   @HiveField(26)
   set isFriends(bool? value) {
@@ -239,8 +255,10 @@ class BoardGameDetails extends BaseBoardGame {
 
   // MK Flag to indicate that the board game got synced from BGG
   //    This is important when removing BGG's user account (only these games will be removed)
+  @observable
   bool? _isBggSynced;
   @HiveField(27)
+  @computed
   bool? get isBggSynced => _isBggSynced ?? false;
   @HiveField(27)
   set isBggSynced(bool? value) {
@@ -272,6 +290,11 @@ class BoardGameDetails extends BaseBoardGame {
     return null;
   }
 
+  @computed
+  bool get hasIncompleteDetails =>
+      (isBggSynced ?? false) &&
+      (avgWeight == null || rating == null || commentsNumber == null || votes == null);
+
   String get bggOverviewUrl => '$_baseBggBoardGameUrl/$id/$_bggUrlEncodedName';
 
   String get bggHotVideosUrl => '$bggOverviewUrl/videos/all?sort=hot';
@@ -280,15 +303,15 @@ class BoardGameDetails extends BaseBoardGame {
 
   String get boardGameOraclePriceUrl {
     final String currentCulture = Platform.localeName.replaceFirst('_', '-');
-    if (!Constants.BoardGameOracleSupportedCultureNames.contains(currentCulture) ||
-        currentCulture == Constants.BoardGameOracleUsaCultureName) {
-      return '${Constants.BoardGameOracleBaseUrl}boardgame/price/$_boardGameOracleUrlEncodedName';
+    if (!Constants.boardGameOracleSupportedCultureNames.contains(currentCulture) ||
+        currentCulture == Constants.boardGameOracleUsaCultureName) {
+      return '${Constants.boardGameOracleBaseUrl}boardgame/price/$_boardGameOracleUrlEncodedName';
     }
 
-    return '${Constants.BoardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
+    return '${Constants.boardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
   }
 
-  String get _baseBggBoardGameUrl => '${Constants.BoardGameGeekBaseUrl}boardgame';
+  String get _baseBggBoardGameUrl => '${Constants.boardGameGeekBaseUrl}boardgame';
 
   String get _bggUrlEncodedName {
     final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');

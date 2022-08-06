@@ -8,8 +8,13 @@ class LauncherHelper {
       return;
     }
 
-    if (await canLaunch(uri)) {
-      await launch(uri);
+    final Uri? parsedUri = Uri.tryParse(uri);
+    if (parsedUri == null) {
+      return;
+    }
+
+    if (await canLaunchUrl(parsedUri)) {
+      await launchUrl(parsedUri);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

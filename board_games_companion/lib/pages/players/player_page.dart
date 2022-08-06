@@ -1,13 +1,15 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../models/hive/player.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
@@ -29,10 +31,10 @@ class PlayerPage extends StatefulWidget {
   final PlayersViewModel playersViewModel;
 
   @override
-  _PlayerPageState createState() => _PlayerPageState();
+  PlayerPageState createState() => PlayerPageState();
 }
 
-class _PlayerPageState extends BasePageState<PlayerPage> {
+class PlayerPageState extends BasePageState<PlayerPage> {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final nameFocusNode = FocusNode();
@@ -65,18 +67,18 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
       value: player,
       child: Consumer<Player>(
         builder: (_, player, __) {
-          final _hasName = nameController.text.isNotEmpty;
+          final hasName = nameController.text.isNotEmpty;
 
           return WillPopScope(
             onWillPop: () async {
-              return _handleOnWillPop(
-                context,
-                player,
-              );
+              return _handleOnWillPop(context, player);
             },
             child: Scaffold(
               appBar: AppBar(
-                title: Text(_hasName ? player.name! : 'New Player'),
+                title: Text(
+                  hasName ? nameController.text : AppText.newPlayerPageTitle,
+                  style: AppTheme.titleTextStyle,
+                ),
               ),
               body: SafeArea(
                 child: PageContainer(
@@ -89,14 +91,14 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Center(
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(boxShadow: [AppTheme.defaultBoxShadow]),
-                              child: SizedBox(
-                                height: 220,
-                                width: 190,
+                            child: SizedBox(
+                              height: 220,
+                              width: 190,
+                              child: ElevatedContainer(
+                                elevation: AppStyles.defaultElevation,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(Styles.defaultCornerRadius),
+                                  borderRadius:
+                                      BorderRadius.circular(AppStyles.defaultCornerRadius),
                                   child: Stack(
                                     children: <Widget>[
                                       Hero(
@@ -111,7 +113,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                                             CustomIconButton(
                                               const Icon(
                                                 Icons.filter,
-                                                color: AppTheme.defaultTextColor,
+                                                color: AppColors.defaultTextColor,
                                               ),
                                               onTap: () => _handleImagePicking(player),
                                             ),
@@ -121,7 +123,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                                             CustomIconButton(
                                               const Icon(
                                                 Icons.camera,
-                                                color: AppTheme.defaultTextColor,
+                                                color: AppColors.defaultTextColor,
                                               ),
                                               onTap: () => _handleTakingPicture(player),
                                             ),
@@ -234,11 +236,7 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                   },
                 ),
                 TextButton(
-                  child: const Text(
-                    'Navigate away',
-                    style: TextStyle(color: AppTheme.defaultTextColor),
-                  ),
-                  style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+                  style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
                   onPressed: () async {
                     widget.playersViewModel.player!.avatarImageUri =
                         widget.playersViewModel.player!.avatarImageUri;
@@ -248,6 +246,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
                     // MK Go back
                     Navigator.of(context).pop();
                   },
+                  child: const Text(
+                    'Navigate away',
+                    style: TextStyle(color: AppColors.defaultTextColor),
+                  ),
                 ),
               ],
             );
@@ -268,6 +270,10 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
 
     final playerUpdatedSuccess = await widget.playersViewModel.createOrUpdatePlayer(player);
     if (playerUpdatedSuccess) {
+      if (!mounted) {
+        return;
+      }
+
       _showPlayerUpdatedSnackbar(context, player, isEditMode: isEditMode);
       nameFocusNode.unfocus();
       setState(() {
@@ -292,15 +298,19 @@ class _PlayerPageState extends BasePageState<PlayerPage> {
               },
             ),
             TextButton(
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.playersViewModel.deletePlayers([player.id]);
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
               },
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
             ),
           ],
         );
@@ -313,30 +323,28 @@ void _showPlayerUpdatedSnackbar(
   BuildContext context,
   Player playerToAddOrUpdate, {
   required bool isEditMode,
-}) {
-  final String actionText = isEditMode ? 'updated' : 'created';
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text.rich(
-        TextSpan(
-          children: [
-            const TextSpan(text: 'Player '),
-            TextSpan(
-              text: '${playerToAddOrUpdate.name} ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: 'has been $actionText successfully'),
-          ],
+}) =>
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text.rich(
+          TextSpan(
+            children: [
+              const TextSpan(text: 'Player '),
+              TextSpan(
+                text: '${playerToAddOrUpdate.name} ',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: 'has been ${isEditMode ? 'updated' : 'created'} successfully'),
+            ],
+          ),
+        ),
+        action: SnackBarAction(
+          label: AppText.goBack,
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      action: SnackBarAction(
-        label: 'Go Back',
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    ),
-  );
-}
+    );
 
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({

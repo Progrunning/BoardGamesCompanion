@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 
 class ElevatedIconButton extends StatelessWidget {
   const ElevatedIconButton({
     required this.icon,
     this.title,
-    this.color = AppTheme.accentColor,
+    this.color = AppColors.accentColor,
     required this.onPressed,
     Key? key,
   }) : super(key: key);
@@ -38,14 +38,14 @@ class ElevatedIconButton extends StatelessWidget {
         foregroundColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
-              return AppTheme.darkGreyColor.withOpacity(0.4);
+              return AppColors.darkGreyColor.withOpacity(0.4);
             }
 
-            return AppTheme.defaultTextColor;
+            return AppColors.defaultTextColor;
           },
         ),
         textStyle: MaterialStateProperty.all(
-          const TextStyle(color: AppTheme.defaultTextColor, fontWeight: FontWeight.bold),
+          const TextStyle(color: AppColors.defaultTextColor, fontWeight: FontWeight.bold),
         ),
       ),
       onPressed: onPressed,

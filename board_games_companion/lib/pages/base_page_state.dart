@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../common/app_colors.dart';
 import '../common/app_text.dart';
-import '../common/app_theme.dart';
 import '../common/dimensions.dart';
 import '../injectable.dart';
 import '../services/rate_and_review_service.dart';
@@ -15,7 +15,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
     rateAndReviewService = getIt<RateAndReviewService>();
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!rateAndReviewService.showRateAndReviewDialog) {
         return;
       }
@@ -23,6 +23,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       // MK Wait for all of the animations to finish before showing the dialog
       await Future<dynamic>.delayed(const Duration(seconds: 1));
 
+      // ignore: use_build_context_synchronously
       await _showRateAndReviewDialog(context);
     });
   }
@@ -51,7 +52,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               child: const Text(
                 AppText.aontAskAgain,
                 style: TextStyle(
-                  color: AppTheme.accentColor,
+                  color: AppColors.accentColor,
                 ),
               ),
               onPressed: () async {
@@ -64,7 +65,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               child: const Text(
                 AppText.askMeLater,
                 style: TextStyle(
-                  color: AppTheme.accentColor,
+                  color: AppColors.accentColor,
                 ),
               ),
               onPressed: () async {
@@ -74,18 +75,18 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               },
             ),
             TextButton(
-              child: const Text(
-                AppText.rate,
-                style: TextStyle(
-                  color: AppTheme.defaultTextColor,
-                ),
-              ),
-              style: TextButton.styleFrom(backgroundColor: AppTheme.accentColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.accentColor),
               onPressed: () async {
                 Navigator.of(context).pop();
 
                 await rateAndReviewService.requestReview();
               },
+              child: const Text(
+                AppText.rate,
+                style: TextStyle(
+                  color: AppColors.defaultTextColor,
+                ),
+              ),
             ),
           ],
         );

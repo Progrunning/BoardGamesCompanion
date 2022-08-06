@@ -1,44 +1,44 @@
 class Constants {
-  static const BoardGameRatingNumberOfDecimalPlaces = 1;
+  static const boardGameRatingNumberOfDecimalPlaces = 1;
 
-  static const ShortMonthDateFormat = 'MMM';
-  static const ShortWeekDayDateFormat = 'E';
+  static const shortMonthDateFormat = 'MMM';
+  static const shortWeekDayDateFormat = 'E';
 
-  static const Top100 = 100;
-  static const double BoardGameDetailsImageHeight = 300;
+  static const top100 = 100;
+  static const double boardGameDetailsImageHeight = 300;
 
-  static const FeedbackEmailAddress = 'feedback@progrunning.net';
-  static const BoardGameGeekBaseUrl = 'https://www.boardgamegeek.com/';
-  static const BoardGameGeekBaseApiUrl = BoardGameGeekBaseUrl;
+  static const feedbackEmailAddress = 'feedback@progrunning.net';
+  static const boardGameGeekBaseUrl = 'https://www.boardgamegeek.com/';
+  static const boardGameGeekBaseApiUrl = boardGameGeekBaseUrl;
 
-  static const BoardGameGeekLastModifiedDateTimeFormat = 'yyyy-mm-dd HH:MM:ss';
+  static const boardGameGeekLastModifiedDateTimeFormat = 'yyyy-mm-dd HH:MM:ss';
 
-  static const BoardGameOracleBaseUrl = 'https://www.boardgameoracle.com/';
-  static const BoardGameOracleUsaCultureName = 'en-US';
-  static const BoardGameOracleNewZealandCultureName = 'en-NZ';
-  static const BoardGameOracleAustraliaCultureName = 'en-AU';
-  static const BoardGameOracleCanadaCultureName = 'en-CA';
-  static const Set<String> BoardGameOracleSupportedCultureNames = {
-    BoardGameOracleUsaCultureName,
-    BoardGameOracleNewZealandCultureName,
-    BoardGameOracleAustraliaCultureName,
-    BoardGameOracleCanadaCultureName
+  static const boardGameOracleBaseUrl = 'https://www.boardgameoracle.com/';
+  static const boardGameOracleUsaCultureName = 'en-US';
+  static const boardGameOracleNewZealandCultureName = 'en-NZ';
+  static const boardGameOracleAustraliaCultureName = 'en-AU';
+  static const boardGameOracleCanadaCultureName = 'en-CA';
+  static const Set<String> boardGameOracleSupportedCultureNames = {
+    boardGameOracleUsaCultureName,
+    boardGameOracleNewZealandCultureName,
+    boardGameOracleAustraliaCultureName,
+    boardGameOracleCanadaCultureName
   };
 
-  static const UsaCountryCode = 'US';
+  static const usaCountryCode = 'US';
 
-  static const LeaveAsIs = 0;
-  static const MoveBelow = 1;
-  static const MoveAbove = -1;
+  static const leaveAsIs = 0;
+  static const moveBelow = 1;
+  static const moveAbove = -1;
 
-  static const DefaultAvatartAssetsPath = 'assets/default_avatar.png';
+  static const defaultAvatartAssetsPath = 'assets/default_avatar.png';
 
-  static const FilterByAny = 'any';
+  static const filterByAny = 'any';
 
-  static const AppleAppId = '1506458832';
+  static const appleAppId = '1506458832';
 
-  static const DaysInYear = 365;
-  static const DaysInTenYears = DaysInYear * 10;
+  static const daysInYear = 365;
+  static const daysInTenYears = daysInYear * 10;
 
   static const maxNumberOfPlayers = 20;
   static const minNumberOfPlayers = 1;
@@ -47,5 +47,5 @@ class Constants {
 
   static const appReleaseNotesUrl = 'https://github.com/Progrunning/BoardGamesCompanion/releases';
   static const appWikiFeaturesUrl =
-      'https://github.com/Progrunning/BoardGamesCompanion/wiki/Features';  
+      'https://github.com/Progrunning/BoardGamesCompanion/wiki/Features';
 }

@@ -1,50 +1,54 @@
-import 'package:basics/basics.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
 
-import '../common/hive_boxes.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/board_game_expansion.dart';
 import '../models/import_result.dart';
 import '../services/board_games_service.dart';
-import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
-import '../services/score_service.dart';
 
-class BoardGamesStore with ChangeNotifier {
-  BoardGamesStore(
+part 'board_games_store.g.dart';
+
+@singleton
+class BoardGamesStore = _BoardGamesStore with _$BoardGamesStore;
+
+abstract class _BoardGamesStore with Store {
+  _BoardGamesStore(
     this._boardGamesService,
     this._playthroughService,
-    this._scoreService,
-    this._playerService,
   );
 
   final BoardGamesService _boardGamesService;
   final PlaythroughService _playthroughService;
-  final ScoreService _scoreService;
-  final PlayerService _playerService;
 
-  List<BoardGameDetails> _allBoardGames = [];
-  List<BoardGameDetails> get allBoardGames => _allBoardGames;
+  @observable
+  ObservableList<BoardGameDetails> allBoardGames = ObservableList.of([]);
 
-  bool isInAnyCollection(String? boardGameId) {
-    if (boardGameId?.isBlank ?? true) {
-      return false;
-    }
+  @computed
+  ObservableMap<String, BoardGameDetails> get allBoardGamesMap =>
+      ObservableMap.of({for (var boardGame in allBoardGames) boardGame.id: boardGame});
 
-    return _allBoardGames.any((boardGameDetails) =>
-        boardGameDetails.id == boardGameId &&
-        (boardGameDetails.isFriends! ||
-            boardGameDetails.isOnWishlist! ||
-            boardGameDetails.isOwned!));
-  }
+  @computed
+  List<BoardGameDetails> get allBoardGamesInCollections => allBoardGames
+      .where((BoardGameDetails boardGame) =>
+          boardGame.isOwned! || boardGame.isFriends! || boardGame.isOnWishlist!)
+      .toList();
 
+  @computed
+  ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap =>
+      ObservableMap.of({for (var boardGame in allBoardGamesInCollections) boardGame.id: boardGame});
+
+  @action
   Future<void> loadBoardGames() async {
-    _allBoardGames = await _boardGamesService.retrieveBoardGames();
+    allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
   }
 
+  @action
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
     try {
       await _boardGamesService.addOrUpdateBoardGame(boardGameDetails);
@@ -53,9 +57,9 @@ class BoardGamesStore with ChangeNotifier {
       return;
     }
 
-    final existingBoardGameDetails = retrieveBoardGame(boardGameDetails.id);
+    final existingBoardGameDetails = _retrieveBoardGame(boardGameDetails.id);
     if (existingBoardGameDetails == null) {
-      _allBoardGames.add(boardGameDetails);
+      allBoardGames.add(boardGameDetails);
     } else {
       existingBoardGameDetails.imageUrl = boardGameDetails.imageUrl;
       existingBoardGameDetails.name = boardGameDetails.name;
@@ -84,8 +88,98 @@ class BoardGamesStore with ChangeNotifier {
       existingBoardGameDetails.settings = boardGameDetails.settings;
       _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
     }
+  }
 
-    notifyListeners();
+  @action
+  Future<void> refreshBoardGameDetails(String boardGameId) async {
+    try {
+      final boardGameDetails = await _boardGamesService.getBoardGame(boardGameId);
+      if (boardGameDetails == null) {
+        return;
+      }
+
+      if (!(boardGameDetails.isExpansion ?? true)) {
+        for (final boardGameExpansion in boardGameDetails.expansions) {
+          final boardGameExpansionDetails = allBoardGames.firstWhereOrNull(
+            (boardGame) => boardGame.id == boardGameExpansion.id,
+          );
+
+          if (boardGameExpansionDetails != null) {
+            boardGameExpansionDetails.isExpansion = true;
+            if (boardGameExpansionDetails.isOwned!) {
+              // TODO MK Think why does the isInCollection flag exists
+              //         When determining if a board extension is in collection we should look at the collections and check if board game id of an expansion exists in it
+              boardGameExpansion.isInCollection = true;
+            }
+          }
+        }
+      }
+
+      final existingBoardGameDetails = _retrieveBoardGame(boardGameDetails.id);
+      if (existingBoardGameDetails != null) {
+        boardGameDetails.isFriends = existingBoardGameDetails.isFriends;
+        boardGameDetails.isOnWishlist = existingBoardGameDetails.isOnWishlist;
+        boardGameDetails.isOwned = existingBoardGameDetails.isOwned;
+      }
+
+      await addOrUpdateBoardGame(boardGameDetails);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+  }
+
+  @action
+  Future<void> removeBoardGame(String boardGameDetailsId) async {
+    try {
+      await _boardGamesService.removeBoardGame(boardGameDetailsId);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      return;
+    }
+
+    final boardGameToRemove = allBoardGames.firstWhereOrNull(
+      (boardGame) => boardGame.id == boardGameDetailsId,
+    );
+
+    if (boardGameToRemove == null) {
+      return;
+    }
+
+    allBoardGames.remove(boardGameToRemove);
+  }
+
+  @action
+  Future<void> removeAllBggBoardGames() async {
+    try {
+      final bggSyncedBoardGames = allBoardGames
+          .where((boardGame) => boardGame.isBggSynced!)
+          .map((boardGame) => boardGame.id)
+          .toList();
+      await _boardGamesService.removeBoardGames(bggSyncedBoardGames);
+      await _playthroughService.deletePlaythroughsForGames(bggSyncedBoardGames);
+
+      allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      return;
+    }
+  }
+
+  @action
+  Future<CollectionImportResult> importCollections(String username) async {
+    var importResult = CollectionImportResult();
+
+    try {
+      importResult = await _boardGamesService.importCollections(username);
+      if (importResult.isSuccess) {
+        allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
+      }
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      importResult = CollectionImportResult.failure([ImportError.exception(e, stack)]);
+    }
+
+    return importResult;
   }
 
   void _updateBoardGameExpansions(
@@ -110,85 +204,9 @@ class BoardGamesStore with ChangeNotifier {
     }
   }
 
-  Future<void> updateDetails(BoardGameDetails boardGameDetails) async {
-    try {
-      await addOrUpdateBoardGame(boardGameDetails);
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      return;
-    }
-  }
-
-  BoardGameDetails? retrieveBoardGame(String boardGameId) {
+  BoardGameDetails? _retrieveBoardGame(String boardGameId) {
     return allBoardGames.firstWhereOrNull(
       (BoardGameDetails boardGameDetails) => boardGameDetails.id == boardGameId,
     );
-  }
-
-  Future<void> removeBoardGame(String boardGameDetailsId) async {
-    try {
-      await _boardGamesService.removeBoardGame(boardGameDetailsId);
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      return;
-    }
-
-    final boardGameToRemove = _allBoardGames.firstWhereOrNull(
-      (boardGame) => boardGame.id == boardGameDetailsId,
-    );
-
-    if (boardGameToRemove == null) {
-      return;
-    }
-
-    _allBoardGames.remove(boardGameToRemove);
-
-    notifyListeners();
-  }
-
-  Future<void> removeAllBggBoardGames() async {
-    try {
-      final bggSyncedBoardGames = _allBoardGames
-          .where((boardGame) => boardGame.isBggSynced!)
-          .map((boardGame) => boardGame.id)
-          .toList();
-      await _boardGamesService.removeBoardGames(bggSyncedBoardGames);
-      await _playthroughService.deletePlaythroughsForGames(bggSyncedBoardGames);
-
-      _allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
-
-      notifyListeners();
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      return;
-    }
-  }
-
-  Future<CollectionImportResult> importCollections(String username) async {
-    var importResult = CollectionImportResult();
-
-    try {
-      importResult = await _boardGamesService.importCollections(username);
-      if (importResult.isSuccess) {
-        _allBoardGames = await _boardGamesService.retrieveBoardGames();
-      }
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      importResult = CollectionImportResult.failure([ImportError.exception(e, stack)]);
-    }
-
-    notifyListeners();
-
-    return importResult;
-  }
-
-  @override
-  void dispose() {
-    _boardGamesService.closeBox(HiveBoxes.BoardGames);
-    _playthroughService.closeBox(HiveBoxes.Playthroughs);
-    _scoreService.closeBox(HiveBoxes.Scores);
-    _playerService.closeBox(HiveBoxes.Players);
-
-    super.dispose();
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../common/app_text.dart';
 import '../common/dimensions.dart';
+import '../injectable.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/user.dart';
 import '../stores/board_games_store.dart';
@@ -19,25 +20,26 @@ mixin ImportCollection {
       return CollectionImportResult();
     }
 
-    final boardGamesStore = Provider.of<BoardGamesStore>(context, listen: false);
+    final messenger = ScaffoldMessenger.of(context);
+    final boardGamesStore = getIt<BoardGamesStore>();
     final importResult = await boardGamesStore.importCollections(username);
     if (importResult.isSuccess) {
       final user = User(name: username);
       await userStore.addOrUpdateUser(user);
 
-      _showSuccessSnackBar(context);
+      _showSuccessSnackBar(messenger);
     } else {
-      _showFailureSnackBar(context);
+      _showFailureSnackBar(messenger);
     }
 
     return importResult;
   }
 }
 
-void _showSuccessSnackBar(BuildContext context) {
+void _showSuccessSnackBar(ScaffoldMessengerState messenger) {
   // TODO MK Consider using a "global context" to show a snackbar in case a user switches between pages
   // https://stackoverflow.com/a/65607336/510627
-  ScaffoldMessenger.of(context).showSnackBar(
+  messenger.showSnackBar(
     const SnackBar(
       margin: Dimensions.snackbarMargin,
       behavior: SnackBarBehavior.floating,
@@ -46,8 +48,8 @@ void _showSuccessSnackBar(BuildContext context) {
   );
 }
 
-void _showFailureSnackBar(BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(
+void _showFailureSnackBar(ScaffoldMessengerState messenger) {
+  messenger.showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: Dimensions.snackbarMargin,
@@ -56,7 +58,7 @@ void _showFailureSnackBar(BuildContext context) {
       action: SnackBarAction(
         label: AppText.ok,
         onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+          messenger.hideCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
         },
       ),
     ),

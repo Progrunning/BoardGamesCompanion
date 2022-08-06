@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 
@@ -19,11 +20,11 @@ class ExpanionsBannerPainter extends CustomPainter {
   ExpanionsBannerPainter({
     required this.message,
     required this.location,
-    this.color = AppTheme.accentColor,
+    this.color = AppColors.accentColor,
   })  : assert(message != null),
         assert(location != null),
         assert(color != null),
-        super(repaint: PaintingBinding.instance!.systemFonts);
+        super(repaint: PaintingBinding.instance.systemFonts);
 
   /// The message to show in the banner.
   final String message;
@@ -45,7 +46,7 @@ class ExpanionsBannerPainter extends CustomPainter {
     _textPainter = TextPainter(
       text: TextSpan(
           style: AppTheme.subTitleTextStyle.copyWith(
-            color: AppTheme.defaultTextColor,
+            color: AppColors.defaultTextColor,
             fontSize: Dimensions.extraSmallFontSize,
           ),
           text: message),

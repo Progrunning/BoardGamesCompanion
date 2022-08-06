@@ -2,21 +2,23 @@ import 'dart:math' as math;
 
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../extensions/date_time_extensions.dart';
+import '../../injectable.dart';
 import '../../mixins/enter_score_dialog.dart';
-import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
-import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
@@ -24,40 +26,37 @@ import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../enter_score/enter_score_view_model.dart';
 import '../players/player_page.dart';
-import '../players/players_view_model.dart';
-import 'playthroughs_view_model.dart';
+import 'playthroughs_log_game_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
-  const PlaythroughsLogGamePage({
-    required this.boardGameDetails,
-    required this.playthroughsLogGameViewModel,
-    Key? key,
-  }) : super(key: key);
-
-  final BoardGameDetails boardGameDetails;
-  final PlaythroughsViewModel playthroughsLogGameViewModel;
+  const PlaythroughsLogGamePage({Key? key}) : super(key: key);
 
   @override
-  _PlaythroughsLogGamePageState createState() => _PlaythroughsLogGamePageState();
+  PlaythroughsLogGamePageState createState() => PlaythroughsLogGamePageState();
 }
 
-class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
+class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
+  late PlaythroughsLogGameViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = getIt<PlaythroughsLogGameViewModel>();
+    viewModel.loadPlaythroughPlayers();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: widget.playthroughsLogGameViewModel,
-      child: Consumer<PlayersViewModel>(
-        builder: (_, __, ___) =>
-            ConsumerFutureBuilder<List<PlaythroughPlayer>, PlaythroughsViewModel>(
-          future: widget.playthroughsLogGameViewModel.loadPlaythroughPlayers(),
-          success: (_, PlaythroughsViewModel viewModel) {
-            return _LogPlaythroughStepper(
-              viewModel: viewModel,
-              boardGameDetails: widget.boardGameDetails,
-            );
-          },
-        ),
-      ),
+    return Observer(
+      builder: (_) {
+        switch (viewModel.futureLoadPlaythroughPlayers?.status ?? FutureStatus.pending) {
+          case FutureStatus.pending:
+          case FutureStatus.rejected:
+            return const SizedBox.shrink();
+          case FutureStatus.fulfilled:
+            return _LogPlaythroughStepper(viewModel: viewModel);
+        }
+      },
     );
   }
 }
@@ -65,12 +64,10 @@ class _PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
 class _LogPlaythroughStepper extends StatefulWidget {
   const _LogPlaythroughStepper({
     required this.viewModel,
-    required this.boardGameDetails,
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsViewModel viewModel;
-  final BoardGameDetails boardGameDetails;
+  final PlaythroughsLogGameViewModel viewModel;
 
   @override
   _LogPlaythroughStepperState createState() => _LogPlaythroughStepperState();
@@ -101,7 +98,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         Expanded(
           child: Theme(
             data: AppTheme.theme.copyWith(
-              colorScheme: AppTheme.theme.colorScheme.copyWith(primary: AppTheme.accentColor),
+              colorScheme: AppTheme.theme.colorScheme.copyWith(primary: AppColors.accentColor),
             ),
             child: Stepper(
               currentStep: widget.viewModel.logGameStep,
@@ -138,11 +135,14 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                       : completedSteps > selectPlayersStep
                           ? StepState.complete
                           : StepState.indexed,
-                  content: _SelectPlayersStep(
-                    playthroughPlayers: widget.viewModel.playthroughPlayers,
-                    boardGameDetails: widget.boardGameDetails,
-                    onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
-                        _togglePlayerSelection(isSelected, player, widget.boardGameDetails.id),
+                  content: Observer(
+                    builder: (_) {
+                      return _SelectPlayersStep(
+                        playthroughPlayers: widget.viewModel.playthroughPlayers,
+                        onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
+                            _togglePlayerSelection(isSelected, player),
+                      );
+                    },
                   ),
                 ),
                 Step(
@@ -243,7 +243,11 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       });
     } else {
       final Playthrough? newPlaythrough =
-          await widget.viewModel.createPlaythrough(widget.boardGameDetails.id);
+          await widget.viewModel.createPlaythrough(widget.viewModel.boardGame.id);
+      if (!mounted) {
+        return;
+      }
+
       if (newPlaythrough == null) {
         _showFailureSnackbar(context);
       } else {
@@ -274,19 +278,20 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        margin: Dimensions.snackbarMargin,
         behavior: SnackBarBehavior.floating,
         content: Text('You need to select at least one player'),
       ),
     );
   }
 
-  void _togglePlayerSelection(bool? isSelected, PlaythroughPlayer player, String boardGameId) {
+  void _togglePlayerSelection(bool? isSelected, PlaythroughPlayer player) {
     if (isSelected == null) {
       return;
     }
 
     if (isSelected) {
-      widget.viewModel.selectPlayer(player, boardGameId);
+      widget.viewModel.selectPlayer(player);
     } else {
       widget.viewModel.deselectPlayer(player);
     }
@@ -296,6 +301,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        margin: Dimensions.snackbarMargin,
         behavior: SnackBarBehavior.floating,
         content: Text(AppText.logGameSuccessConfirmationSnackbarText),
       ),
@@ -306,6 +312,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        margin: Dimensions.snackbarMargin,
         behavior: SnackBarBehavior.floating,
         content: Text(AppText.logGameFailureConfirmationSnackbarText),
       ),
@@ -319,7 +326,7 @@ class _PlayerScoresStep extends StatelessWidget with EnterScoreDialogMixin {
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsViewModel viewModel;
+  final PlaythroughsLogGameViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +358,7 @@ class _PlayingOrPlayedStep extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsViewModel viewModel;
+  final PlaythroughsLogGameViewModel viewModel;
   final Function(PlaythroughStartTime) onSelectionChanged;
 
   @override
@@ -383,7 +390,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                 Radio<PlaythroughStartTime>(
                   value: PlaythroughStartTime.now,
                   groupValue: widget.viewModel.playthroughStartTime,
-                  activeColor: AppTheme.accentColor,
+                  activeColor: AppColors.accentColor,
                   onChanged: (PlaythroughStartTime? value) {
                     if (value != null) {
                       _updatePlaythroughStartTimeSelection(value);
@@ -404,7 +411,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                 Radio<PlaythroughStartTime>(
                   value: PlaythroughStartTime.inThePast,
                   groupValue: widget.viewModel.playthroughStartTime,
-                  activeColor: AppTheme.accentColor,
+                  activeColor: AppColors.accentColor,
                   onChanged: (PlaythroughStartTime? value) {
                     if (value == null) {
                       return;
@@ -434,7 +441,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   onChanged: (num value) => _updateDurationHours(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
@@ -451,7 +458,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   onChanged: (num value) => _updateDurationMinutes(value),
                   itemWidth: 46,
                   selectedTextStyle: const TextStyle(
-                    color: AppTheme.accentColor,
+                    color: AppColors.accentColor,
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
@@ -492,12 +499,10 @@ class _SelectPlayersStep extends StatelessWidget {
   const _SelectPlayersStep({
     Key? key,
     required this.playthroughPlayers,
-    required this.boardGameDetails,
     required this.onPlayerSelectionChanged,
   }) : super(key: key);
 
   final List<PlaythroughPlayer>? playthroughPlayers;
-  final BoardGameDetails boardGameDetails;
   final Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
 
   @override
@@ -512,7 +517,6 @@ class _SelectPlayersStep extends StatelessWidget {
         builder: (_) {
           return _Players(
             playthroughPlayers: playthroughPlayers,
-            boardGameDetails: boardGameDetails,
             onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
                 onPlayerSelectionChanged(isSelected, player),
           );
@@ -569,7 +573,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
     final DateTime? newPlaythroughDate = await showDatePicker(
       context: context,
       initialDate: playthroughDate,
-      firstDate: playthroughDate.add(const Duration(days: -Constants.DaysInTenYears)),
+      firstDate: playthroughDate.add(const Duration(days: -Constants.daysInTenYears)),
       lastDate: DateTime.now(),
       currentDate: playthroughDate,
       helpText: 'Pick a playthrough date',
@@ -577,7 +581,7 @@ class _SelectDateStepState extends State<_SelectDateStep> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppTheme.accentColor,
+                  primary: AppColors.accentColor,
                 ),
           ),
           child: child!,
@@ -600,13 +604,11 @@ class _Players extends StatelessWidget {
   const _Players({
     Key? key,
     required this.playthroughPlayers,
-    required this.boardGameDetails,
     required this.onPlayerSelectionChanged,
   }) : super(key: key);
 
   int get _numberOfPlayerColumns => 3;
   final List<PlaythroughPlayer>? playthroughPlayers;
-  final BoardGameDetails boardGameDetails;
   final Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
 
   @override
@@ -635,8 +637,8 @@ class _Players extends StatelessWidget {
                         height: 34,
                         width: 34,
                         child: Checkbox(
-                          checkColor: AppTheme.accentColor,
-                          activeColor: AppTheme.primaryColor.withOpacity(0.7),
+                          checkColor: AppColors.accentColor,
+                          activeColor: AppColors.primaryColor.withOpacity(0.7),
                           value: playthroughPlayer.isChecked,
                           onChanged: (bool? isChecked) =>
                               onPlayerSelectionChanged(isChecked, playthroughPlayer),
@@ -659,32 +661,30 @@ class _NoPlayers extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Text(
-          'To log a game, you need to create players first',
-          style: AppTheme.theme.textTheme.bodyText1,
-        ),
-        const SizedBox(
-          height: Dimensions.halfStandardSpacing,
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: ElevatedIconButton(
-            title: 'Create Player',
-            icon: const DefaultIcon(Icons.add),
-            onPressed: () => Navigator.pushNamed(
-              context,
-              PlayerPage.pageRoute,
-              arguments: const PlayerPageArguments(),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            'To log a game, you need to create players first',
+            style: AppTheme.theme.textTheme.bodyText1,
+          ),
+          const SizedBox(
+            height: Dimensions.halfStandardSpacing,
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: ElevatedIconButton(
+              title: 'Create Player',
+              icon: const DefaultIcon(Icons.add),
+              onPressed: () => Navigator.pushNamed(
+                context,
+                PlayerPage.pageRoute,
+                arguments: const PlayerPageArguments(),
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 class _PlayerScore extends StatelessWidget {
@@ -717,7 +717,7 @@ class _PlayerScore extends StatelessWidget {
                   builder: (_, PlayerScore playerScore, __) {
                     return Text(
                       '${playerScore.score.valueInt}',
-                      style: Styles.playerScoreTextStyle,
+                      style: AppStyles.playerScoreTextStyle,
                     );
                   },
                 ),

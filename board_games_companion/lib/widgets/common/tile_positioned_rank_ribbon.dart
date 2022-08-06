@@ -21,7 +21,7 @@ class PositionedTileRankRibbon extends StatelessWidget {
         padding: const EdgeInsets.only(
           right: Dimensions.halfStandardSpacing,
         ),
-        child: RankRibbon(rank),
+        child: RankRibbon(rank: rank),
       ),
     );
   }

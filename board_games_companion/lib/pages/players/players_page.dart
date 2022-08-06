@@ -1,7 +1,10 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/app_styles.dart';
+import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -10,7 +13,6 @@ import '../../models/navigation/player_page_arguments.dart';
 import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
-import '../../widgets/common/shadow_box.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/player/player_image.dart';
@@ -29,10 +31,10 @@ class PlayersPage extends StatefulWidget {
   final PlayersViewModel playersViewModel;
 
   @override
-  _PlayersPageState createState() => _PlayersPageState();
+  PlayersPageState createState() => PlayersPageState();
 }
 
-class _PlayersPageState extends State<PlayersPage> {
+class PlayersPageState extends State<PlayersPage> {
   @override
   Widget build(BuildContext context) {
     return ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
@@ -57,7 +59,7 @@ class _PlayersPageState extends State<PlayersPage> {
                 ] else ...[
                   const SliverAppBar(
                     pinned: true,
-                    foregroundColor: AppTheme.accentColor,
+                    foregroundColor: AppColors.accentColor,
                   ),
                   const _NoPlayers(),
                 ]
@@ -70,7 +72,7 @@ class _PlayersPageState extends State<PlayersPage> {
                   ? ElevatedIconButton(
                       title: AppText.playersPageDeletePlayersButtonText,
                       icon: const DefaultIcon(Icons.delete),
-                      color: AppTheme.redColor,
+                      color: AppColors.redColor,
                       onPressed: () async {
                         if (await _showDeletePlayersDialog(context) ?? false) {
                           setState(() {});
@@ -134,15 +136,19 @@ class _PlayersPageState extends State<PlayersPage> {
               },
             ),
             TextButton(
-              child: const Text(
-                AppText.playersPageConfirmationDialogDeletePlayersButtonText,
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.playersViewModel.deleteSelectedPlayers();
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.of(context).pop(true);
               },
+              child: const Text(
+                AppText.playersPageConfirmationDialogDeletePlayersButtonText,
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
             ),
           ],
         );
@@ -169,15 +175,15 @@ class _AppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       titleSpacing: Dimensions.standardSpacing,
-      foregroundColor: AppTheme.accentColor,
+      foregroundColor: AppColors.accentColor,
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.edit, color: AppTheme.accentColor),
+          icon: const Icon(Icons.edit, color: AppColors.accentColor),
           onPressed: onToggleEditModeTap,
         ),
         IconButton(
-          icon: const Icon(Icons.search, color: AppTheme.accentColor),
+          icon: const Icon(Icons.search, color: AppColors.accentColor),
           onPressed: () async {
             await showSearch(
               context: context,
@@ -214,7 +220,7 @@ class _NoPlayers extends StatelessWidget {
             Icon(
               Icons.sentiment_dissatisfied_sharp,
               size: 80,
-              color: AppTheme.primaryColor,
+              color: AppColors.primaryColor,
             ),
             SizedBox(height: Dimensions.doubleStandardSpacing),
             Text(
@@ -296,8 +302,8 @@ class _PlayerState extends State<_Player> {
               height: 34,
               width: 34,
               child: Checkbox(
-                checkColor: AppTheme.accentColor,
-                activeColor: AppTheme.primaryColor.withOpacity(0.7),
+                checkColor: AppColors.accentColor,
+                activeColor: AppColors.primaryColor.withOpacity(0.7),
                 value: isChecked,
                 onChanged: (_) => _onTap(),
               ),
@@ -362,13 +368,12 @@ class _PlayersSerach extends SearchDelegate<Player?> {
       return ListView();
     }
 
-    final filterPlayers = _filterPlayers(query);
-
-    if (filterPlayers.isEmpty) {
+    final filteredPlayers = _filterPlayers(query);
+    if (filteredPlayers.isEmpty) {
       return _NoSearchResults(query: query, onClear: () => query = '');
     }
 
-    return _SearchResults(filterPlayers: filterPlayers, onResultTap: onResultTap);
+    return _SearchResults(filteredPlayers: filteredPlayers, onResultTap: onResultTap);
   }
 
   @override
@@ -377,15 +382,15 @@ class _PlayersSerach extends SearchDelegate<Player?> {
       return ListView();
     }
 
-    final filterPlayers = _filterPlayers(query);
-    if (filterPlayers.isEmpty) {
+    final filteredPlayers = _filterPlayers(query);
+    if (filteredPlayers.isEmpty) {
       return ListView();
     }
 
     return ListView.builder(
-      itemCount: filterPlayers.length,
+      itemCount: filteredPlayers.length,
       itemBuilder: (_, index) {
-        final player = filterPlayers[index];
+        final player = filteredPlayers[index];
         return ListTile(
           title: Text(player.name!),
           subtitle: player.bggName != null ? Text(player.bggName!) : const SizedBox.shrink(),
@@ -401,7 +406,7 @@ class _PlayersSerach extends SearchDelegate<Player?> {
   List<Player> _filterPlayers(String query) {
     final queryLowercased = query.toLowerCase();
     return players
-        .where((player) =>
+        .where((Player player) =>
             (player.name?.toLowerCase().contains(queryLowercased) ?? false) ||
             (player.bggName?.toLowerCase().contains(queryLowercased) ?? false))
         .toList();
@@ -411,42 +416,45 @@ class _PlayersSerach extends SearchDelegate<Player?> {
 class _SearchResults extends StatelessWidget {
   const _SearchResults({
     Key? key,
-    required this.filterPlayers,
+    required this.filteredPlayers,
     required this.onResultTap,
   }) : super(key: key);
 
-  final List<Player> filterPlayers;
+  final List<Player> filteredPlayers;
   final PlayerSearchResultTapped onResultTap;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: filterPlayers.length,
+      itemCount: filteredPlayers.length,
       separatorBuilder: (_, index) => const SizedBox(height: Dimensions.doubleStandardSpacing),
       itemBuilder: (_, index) {
-        final player = filterPlayers[index];
+        final player = filteredPlayers[index];
         // TODO Fix the ripple effect when tapped to show on top of the player image and clip the corners
         return Padding(
           padding: EdgeInsets.only(
             top: index == 0 ? Dimensions.standardSpacing : 0,
-            bottom: index == filterPlayers.length - 1 ? Dimensions.standardSpacing : 0,
+            bottom: index == filteredPlayers.length - 1 ? Dimensions.standardSpacing : 0,
             left: Dimensions.standardSpacing,
             right: Dimensions.standardSpacing,
           ),
           child: InkWell(
             onTap: () => onResultTap(player),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(AppStyles.defaultCornerRadius),
+              bottomLeft: Radius.circular(AppStyles.defaultCornerRadius),
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: Dimensions.searchResultsPlayerAvatarSize,
                   width: Dimensions.searchResultsPlayerAvatarSize,
-                  child: Ink(
-                    child: ShadowBox(
-                      child: Hero(
-                        tag: '${AnimationTags.playerImageHeroTag}${player.id}',
-                        child: PlayerImage(imageUri: player.avatarImageUri),
-                      ),
+                  child: ElevatedContainer(
+                    elevation: AppStyles.defaultElevation,
+                    child: Hero(
+                      tag: '${AnimationTags.playerImageHeroTag}${player.id}',
+                      child: PlayerImage(imageUri: player.avatarImageUri),
                     ),
                   ),
                 ),

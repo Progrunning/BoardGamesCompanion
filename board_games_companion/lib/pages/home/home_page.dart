@@ -1,13 +1,15 @@
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/pages/players/players_view_model.dart';
+import 'package:board_games_companion/pages/search_board_games/search_board_games_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
+import '../../stores/board_games_filters_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container_widget.dart';
@@ -23,6 +25,8 @@ class HomePage extends StatefulWidget {
     required this.rateAndReviewService,
     required this.gamesViewModel,
     required this.playersViewModel,
+    required this.searchViewModel,
+    required this.boardGamesFiltersStore,
     Key? key,
   }) : super(key: key);
 
@@ -32,15 +36,17 @@ class HomePage extends StatefulWidget {
   final RateAndReviewService rateAndReviewService;
   final GamesViewModel gamesViewModel;
   final PlayersViewModel playersViewModel;
+  final SearchBoardGamesViewModel searchViewModel;
+  final BoardGamesFiltersStore boardGamesFiltersStore;
 
   static final GlobalKey<ScaffoldMessengerState> homePageGlobalKey =
       GlobalKey<ScaffoldMessengerState>();
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
+class HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
   late final TabController tabController;
 
   static const int _numberOfTabs = 3;
@@ -68,17 +74,18 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                Consumer2<GamesViewModel, UserStore>(
-                  builder: (_, viewModel, userStore, __) {
+                Consumer<UserStore>(
+                  builder: (_, userStore, __) {
                     return GamesPage(
-                      viewModel,
+                      widget.gamesViewModel,
                       userStore,
+                      widget.boardGamesFiltersStore,
                       widget.analyticsService,
                       widget.rateAndReviewService,
                     );
                   },
                 ),
-                SearchBoardGamesPage(analyticsService: widget.analyticsService),
+                SearchBoardGamesPage(viewModel: widget.searchViewModel),
                 PlayersPage(playersViewModel: widget.playersViewModel),
               ],
             ),
@@ -86,7 +93,7 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
         ),
         bottomNavigationBar: ConvexAppBar(
           controller: tabController,
-          backgroundColor: AppTheme.bottomTabBackgroundColor,
+          backgroundColor: AppColors.bottomTabBackgroundColor,
           top: -Dimensions.bottomTabTopHeight,
           items: const <TabItem>[
             TabItem<BottomTabIcon>(
@@ -106,8 +113,8 @@ class _HomePageState extends BasePageState<HomePage> with SingleTickerProviderSt
             ),
           ],
           initialActiveIndex: _initialTabIndex,
-          activeColor: AppTheme.accentColor,
-          color: AppTheme.inactiveBottomTabColor,
+          activeColor: AppColors.accentColor,
+          color: AppColors.inactiveBottomTabColor,
         ),
       ),
     );

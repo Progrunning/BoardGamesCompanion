@@ -123,3 +123,234 @@ class BoardGameDetailsAdapter extends TypeAdapter<BoardGameDetails> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// StoreGenerator
+// **************************************************************************
+
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
+
+mixin _$BoardGameDetails on _BoardGameDetails, Store {
+  Computed<double?>? _$ratingComputed;
+
+  @override
+  double? get rating =>
+      (_$ratingComputed ??= Computed<double?>(() => super.rating,
+              name: '_BoardGameDetails.rating'))
+          .value;
+  Computed<int?>? _$votesComputed;
+
+  @override
+  int? get votes => (_$votesComputed ??=
+          Computed<int?>(() => super.votes, name: '_BoardGameDetails.votes'))
+      .value;
+  Computed<num?>? _$avgWeightComputed;
+
+  @override
+  num? get avgWeight =>
+      (_$avgWeightComputed ??= Computed<num?>(() => super.avgWeight,
+              name: '_BoardGameDetails.avgWeight'))
+          .value;
+  Computed<int?>? _$commentsNumberComputed;
+
+  @override
+  int? get commentsNumber =>
+      (_$commentsNumberComputed ??= Computed<int?>(() => super.commentsNumber,
+              name: '_BoardGameDetails.commentsNumber'))
+          .value;
+  Computed<bool?>? _$isOwnedComputed;
+
+  @override
+  bool? get isOwned =>
+      (_$isOwnedComputed ??= Computed<bool?>(() => super.isOwned,
+              name: '_BoardGameDetails.isOwned'))
+          .value;
+  Computed<bool?>? _$isOnWishlistComputed;
+
+  @override
+  bool? get isOnWishlist =>
+      (_$isOnWishlistComputed ??= Computed<bool?>(() => super.isOnWishlist,
+              name: '_BoardGameDetails.isOnWishlist'))
+          .value;
+  Computed<bool?>? _$isFriendsComputed;
+
+  @override
+  bool? get isFriends =>
+      (_$isFriendsComputed ??= Computed<bool?>(() => super.isFriends,
+              name: '_BoardGameDetails.isFriends'))
+          .value;
+  Computed<bool?>? _$isBggSyncedComputed;
+
+  @override
+  bool? get isBggSynced =>
+      (_$isBggSyncedComputed ??= Computed<bool?>(() => super.isBggSynced,
+              name: '_BoardGameDetails.isBggSynced'))
+          .value;
+  Computed<bool>? _$hasIncompleteDetailsComputed;
+
+  @override
+  bool get hasIncompleteDetails => (_$hasIncompleteDetailsComputed ??=
+          Computed<bool>(() => super.hasIncompleteDetails,
+              name: '_BoardGameDetails.hasIncompleteDetails'))
+      .value;
+
+  late final _$_ratingAtom =
+      Atom(name: '_BoardGameDetails._rating', context: context);
+
+  @override
+  double? get _rating {
+    _$_ratingAtom.reportRead();
+    return super._rating;
+  }
+
+  @override
+  set _rating(double? value) {
+    _$_ratingAtom.reportWrite(value, super._rating, () {
+      super._rating = value;
+    });
+  }
+
+  late final _$_votesAtom =
+      Atom(name: '_BoardGameDetails._votes', context: context);
+
+  @override
+  int? get _votes {
+    _$_votesAtom.reportRead();
+    return super._votes;
+  }
+
+  @override
+  set _votes(int? value) {
+    _$_votesAtom.reportWrite(value, super._votes, () {
+      super._votes = value;
+    });
+  }
+
+  late final _$_avgWeightAtom =
+      Atom(name: '_BoardGameDetails._avgWeight', context: context);
+
+  @override
+  num? get _avgWeight {
+    _$_avgWeightAtom.reportRead();
+    return super._avgWeight;
+  }
+
+  @override
+  set _avgWeight(num? value) {
+    _$_avgWeightAtom.reportWrite(value, super._avgWeight, () {
+      super._avgWeight = value;
+    });
+  }
+
+  late final _$_commentsNumberAtom =
+      Atom(name: '_BoardGameDetails._commentsNumber', context: context);
+
+  @override
+  int? get _commentsNumber {
+    _$_commentsNumberAtom.reportRead();
+    return super._commentsNumber;
+  }
+
+  @override
+  set _commentsNumber(int? value) {
+    _$_commentsNumberAtom.reportWrite(value, super._commentsNumber, () {
+      super._commentsNumber = value;
+    });
+  }
+
+  late final _$expansionsAtom =
+      Atom(name: '_BoardGameDetails.expansions', context: context);
+
+  @override
+  List<BoardGamesExpansion> get expansions {
+    _$expansionsAtom.reportRead();
+    return super.expansions;
+  }
+
+  @override
+  set expansions(List<BoardGamesExpansion> value) {
+    _$expansionsAtom.reportWrite(value, super.expansions, () {
+      super.expansions = value;
+    });
+  }
+
+  late final _$_isOwnedAtom =
+      Atom(name: '_BoardGameDetails._isOwned', context: context);
+
+  @override
+  bool? get _isOwned {
+    _$_isOwnedAtom.reportRead();
+    return super._isOwned;
+  }
+
+  @override
+  set _isOwned(bool? value) {
+    _$_isOwnedAtom.reportWrite(value, super._isOwned, () {
+      super._isOwned = value;
+    });
+  }
+
+  late final _$_isOnWishlistAtom =
+      Atom(name: '_BoardGameDetails._isOnWishlist', context: context);
+
+  @override
+  bool? get _isOnWishlist {
+    _$_isOnWishlistAtom.reportRead();
+    return super._isOnWishlist;
+  }
+
+  @override
+  set _isOnWishlist(bool? value) {
+    _$_isOnWishlistAtom.reportWrite(value, super._isOnWishlist, () {
+      super._isOnWishlist = value;
+    });
+  }
+
+  late final _$_isFriendsAtom =
+      Atom(name: '_BoardGameDetails._isFriends', context: context);
+
+  @override
+  bool? get _isFriends {
+    _$_isFriendsAtom.reportRead();
+    return super._isFriends;
+  }
+
+  @override
+  set _isFriends(bool? value) {
+    _$_isFriendsAtom.reportWrite(value, super._isFriends, () {
+      super._isFriends = value;
+    });
+  }
+
+  late final _$_isBggSyncedAtom =
+      Atom(name: '_BoardGameDetails._isBggSynced', context: context);
+
+  @override
+  bool? get _isBggSynced {
+    _$_isBggSyncedAtom.reportRead();
+    return super._isBggSynced;
+  }
+
+  @override
+  set _isBggSynced(bool? value) {
+    _$_isBggSyncedAtom.reportWrite(value, super._isBggSynced, () {
+      super._isBggSynced = value;
+    });
+  }
+
+  @override
+  String toString() {
+    return '''
+expansions: ${expansions},
+rating: ${rating},
+votes: ${votes},
+avgWeight: ${avgWeight},
+commentsNumber: ${commentsNumber},
+isOwned: ${isOwned},
+isOnWishlist: ${isOnWishlist},
+isFriends: ${isFriends},
+isBggSynced: ${isBggSynced},
+hasIncompleteDetails: ${hasIncompleteDetails}
+    ''';
+  }
+}

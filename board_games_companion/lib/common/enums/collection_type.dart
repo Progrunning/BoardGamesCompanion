@@ -1,7 +1,7 @@
 enum CollectionType {
-  Owned,
-  Friends,
-  Wishlist,
+  owned,
+  friends,
+  wishlist,
 }
 
 extension ToString on CollectionType {
@@ -13,11 +13,11 @@ extension ToString on CollectionType {
 extension ToInt on CollectionType {
   int toInt() {
     switch (this) {
-      case CollectionType.Owned:
+      case CollectionType.owned:
         return 1;
-      case CollectionType.Friends:
+      case CollectionType.friends:
         return 2;
-      case CollectionType.Wishlist:
+      case CollectionType.wishlist:
         return 3;
       default:
         return 0;

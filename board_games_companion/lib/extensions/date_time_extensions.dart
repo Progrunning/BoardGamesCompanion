@@ -8,7 +8,7 @@ extension DateTimeExtensions on DateTime? {
       return fallbackValue ?? '';
     }
 
-    return DateFormat(Constants.ShortMonthDateFormat).format(this!);
+    return DateFormat(Constants.shortMonthDateFormat).format(this!);
   }
 
   String toShortWeek([String? fallbackValue]) {
@@ -16,7 +16,7 @@ extension DateTimeExtensions on DateTime? {
       return fallbackValue ?? '';
     }
 
-    return DateFormat(Constants.ShortWeekDayDateFormat).format(this!);
+    return DateFormat(Constants.shortWeekDayDateFormat).format(this!);
   }
 
   String toDaysAgo() {
@@ -42,15 +42,15 @@ extension DateTimeExtensions on DateTime? {
 
   int safeCompareTo(DateTime? dateTimeToCompare) {
     if (this == null && dateTimeToCompare == null) {
-      return Constants.LeaveAsIs;
+      return Constants.leaveAsIs;
     }
 
     if (this != null && dateTimeToCompare == null) {
-      return Constants.MoveAbove;
+      return Constants.moveAbove;
     }
 
     if (this == null && dateTimeToCompare != null) {
-      return Constants.MoveBelow;
+      return Constants.moveBelow;
     }
 
     return this!.compareTo(dateTimeToCompare!);

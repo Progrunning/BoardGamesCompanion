@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../common/app_theme.dart';
+import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/dimensions.dart';
-import '../../common/styles.dart';
 import '../../models/hive/player.dart';
 
 class PlayerAvatarSubtitle extends StatelessWidget {
@@ -24,9 +24,9 @@ class PlayerAvatarSubtitle extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(
-              Radius.circular(Styles.defaultCornerRadius),
+              Radius.circular(AppStyles.defaultCornerRadius),
             ),
-            color: AppTheme.accentColor.withAlpha(Styles.opacity70Percent),
+            color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
           ),
           child: Padding(
             padding: const EdgeInsets.all(
@@ -35,7 +35,7 @@ class PlayerAvatarSubtitle extends StatelessWidget {
             child: Text(
               player.name ?? '',
               style: const TextStyle(
-                color: AppTheme.defaultTextColor,
+                color: AppColors.defaultTextColor,
               ),
             ),
           ),

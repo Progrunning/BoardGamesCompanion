@@ -13,7 +13,7 @@ class ScoreService extends BaseHiveService<Score> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.Scores)) {
+    if (!await ensureBoxOpen(HiveBoxes.scores)) {
       return false;
     }
 
@@ -23,7 +23,7 @@ class ScoreService extends BaseHiveService<Score> {
   }
 
   Future<List<Score>> retrieveScores(Iterable<String> playthroughIds) async {
-    if ((playthroughIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.Scores)) {
+    if ((playthroughIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.scores)) {
       return <Score>[];
     }
 

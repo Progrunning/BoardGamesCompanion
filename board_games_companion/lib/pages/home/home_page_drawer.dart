@@ -4,6 +4,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
@@ -21,7 +22,7 @@ class HomePageDrawer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
-            color: AppTheme.primaryColor,
+            color: AppColors.primaryColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.doubleStandardSpacing,
@@ -60,7 +61,7 @@ class HomePageDrawer extends StatelessWidget {
             icon: Icons.star,
             title: AppText.rateAndReview,
             onTap: () async => InAppReview.instance.openStoreListing(
-              appStoreId: Constants.AppleAppId,
+              appStoreId: Constants.appleAppId,
             ),
           ),
           const SizedBox(height: Dimensions.standardSpacing),
@@ -68,7 +69,7 @@ class HomePageDrawer extends StatelessWidget {
             icon: Icons.settings,
             title: AppText.settingsPageTitle,
             onTap: () async => Navigator.pushNamed(context, SettingsPage.pageRoute),
-          ),      
+          ),
           const Expanded(child: SizedBox.shrink()),
           const Divider(),
           const _Footer(),
@@ -93,7 +94,7 @@ class _MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppTheme.accentColor),
+      leading: Icon(icon, color: AppColors.accentColor),
       title: Text(
         title,
         style: AppTheme.theme.textTheme.bodyText1!,

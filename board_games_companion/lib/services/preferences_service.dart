@@ -14,7 +14,7 @@ class PreferencesService extends BaseHiveService<dynamic> {
   static const String _migratedToMultipleCollectionsKey = 'migratedToMultipleCollections';
 
   Future<void> initialize() async {
-    await ensureBoxOpen(HiveBoxes.Preferences);
+    await ensureBoxOpen(HiveBoxes.preferences);
   }
 
   Future<void> setAppLaunchDate() async {

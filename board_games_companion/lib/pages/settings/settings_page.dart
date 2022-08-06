@@ -2,10 +2,12 @@ import 'package:board_games_companion/widgets/common/page_container_widget.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../injectable.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/about/detail_item.dart';
@@ -20,12 +22,12 @@ class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  SettingsPageState createState() => SettingsPageState();
 
   static const String pageRoute = '/settings';
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +120,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
               DetailsItem(
                 title: userStore.user?.name ?? '',
                 subtitle: 'BGG profile page',
-                uri: '${Constants.BoardGameGeekBaseApiUrl}user/${userStore.user?.name}',
+                uri: '${Constants.boardGameGeekBaseApiUrl}user/${userStore.user?.name}',
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
@@ -129,7 +131,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                     ElevatedIconButton(
                       title: 'Remove',
                       icon: const DefaultIcon(Icons.remove_circle_outline),
-                      color: AppTheme.redColor,
+                      color: AppColors.redColor,
                       onPressed: () async => _showRemoveBggUserDialog(context, userStore),
                     ),
                     const SizedBox(width: Dimensions.standardSpacing),
@@ -160,29 +162,30 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
             TextButton(
               child: const Text(
                 AppText.cancel,
-                style: TextStyle(color: AppTheme.accentColor),
+                style: TextStyle(color: AppColors.accentColor),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(
-                'Remove',
-                style: TextStyle(color: AppTheme.defaultTextColor),
-              ),
-              style: TextButton.styleFrom(backgroundColor: AppTheme.redColor),
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
-                final boardGameStore = Provider.of<BoardGamesStore>(
-                  context,
-                  listen: false,
-                );
+                final boardGameStore = getIt<BoardGamesStore>();
 
                 await userStore.removeUser(userStore.user!);
                 await boardGameStore.removeAllBggBoardGames();
 
+                if (!mounted) {
+                  return;
+                }
+
                 Navigator.of(context).pop();
               },
+              child: const Text(
+                'Remove',
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
             ),
           ],
         );

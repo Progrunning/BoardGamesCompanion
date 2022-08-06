@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_expansion.dart';
@@ -8,42 +9,41 @@ import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/preferences_service.dart';
 import '../../widgets/common/expansions_banner_widget.dart';
 import 'board_game_details_page.dart';
-import 'board_game_details_view_model.dart';
 
 class BoardGameDetailsExpansions extends StatefulWidget {
   const BoardGameDetailsExpansions({
     Key? key,
-    required this.boardGameDetailsStore,
+    required this.expansions,
+    required this.totalExpansionsOwned,
     required this.spacingBetweenSecions,
+    // TODO MK Pass in requier preferences data (instead of entire service) and or handle the events outside of this widget
     required this.preferencesService,
   }) : super(key: key);
 
-  final BoardGameDetailsViewModel boardGameDetailsStore;
+  final List<BoardGamesExpansion> expansions;
+  final int totalExpansionsOwned;
   final double spacingBetweenSecions;
   final PreferencesService? preferencesService;
 
   @override
-  _BoardGameDetailsExpansionsState createState() => _BoardGameDetailsExpansionsState();
+  BoardGameDetailsExpansionsState createState() => BoardGameDetailsExpansionsState();
 }
 
-class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> {
+class BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> {
   bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SizedBox(
-          height: widget.spacingBetweenSecions,
-        ),
+        SizedBox(height: widget.spacingBetweenSecions),
         Material(
           color: Colors.transparent,
           child: Theme(
-            data: AppTheme.theme.copyWith(
-              unselectedWidgetColor: AppTheme.accentColor,
-            ),
+            data: AppTheme.theme.copyWith(unselectedWidgetColor: AppColors.accentColor),
             child: _Expansions(
-              boardGameDetailsStore: widget.boardGameDetailsStore,
+              expansions: widget.expansions,
+              totalExpansionsOwned: widget.totalExpansionsOwned,
               preferencesService: widget.preferencesService!,
               initiallyExpanded: widget.preferencesService!.getExpansionsPanelExpandedState(),
             ),
@@ -57,12 +57,14 @@ class _BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions>
 class _Expansions extends StatelessWidget {
   const _Expansions({
     Key? key,
-    required this.boardGameDetailsStore,
+    required this.expansions,
+    required this.totalExpansionsOwned,
     required this.preferencesService,
     required this.initiallyExpanded,
   }) : super(key: key);
 
-  final BoardGameDetailsViewModel boardGameDetailsStore;
+  final List<BoardGamesExpansion> expansions;
+  final int totalExpansionsOwned;
   final PreferencesService preferencesService;
   final bool? initiallyExpanded;
 
@@ -72,19 +74,19 @@ class _Expansions extends StatelessWidget {
       data: AppTheme.theme.copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(
-          'Expansions (${boardGameDetailsStore.boardGameDetails!.expansions.length})',
+          'Expansions (${expansions.length})',
           style: const TextStyle(fontSize: Dimensions.standardFontSize),
         ),
-        textColor: AppTheme.accentColor,
-        collapsedTextColor: AppTheme.secondaryTextColor,
-        iconColor: AppTheme.accentColor,
-        collapsedIconColor: AppTheme.accentColor,
+        textColor: AppColors.accentColor,
+        collapsedTextColor: AppColors.secondaryTextColor,
+        iconColor: AppColors.accentColor,
+        collapsedIconColor: AppColors.accentColor,
         subtitle: Text(
-          boardGameDetailsStore.boardGameDetails!.expansionsOwned == 0
+          totalExpansionsOwned == 0
               ? "You don't own any expansions"
-              : 'You own ${boardGameDetailsStore.boardGameDetails!.expansionsOwned} expansion(s)',
+              : 'You own $totalExpansionsOwned expansion(s)',
           style: const TextStyle(
-            color: AppTheme.defaultTextColor,
+            color: AppColors.defaultTextColor,
             fontSize: Dimensions.smallFontSize,
           ),
         ),
@@ -93,8 +95,7 @@ class _Expansions extends StatelessWidget {
         onExpansionChanged: (bool isExpanded) async =>
             preferencesService.setExpansionsPanelExpandedState(isExpanded),
         children: [
-          for (final BoardGamesExpansion expansion
-              in boardGameDetailsStore.boardGameDetails!.expansions)
+          for (final BoardGamesExpansion expansion in expansions)
             ChangeNotifierProvider<BoardGamesExpansion>.value(
               value: expansion,
               child: Consumer<BoardGamesExpansion>(
@@ -119,7 +120,7 @@ class _Expansion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget expansionItem = InkWell(
-      splashColor: AppTheme.accentColor,
+      splashColor: AppColors.accentColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: Dimensions.doubleStandardSpacing,
@@ -134,7 +135,7 @@ class _Expansion extends StatelessWidget {
                 style: AppTheme.theme.textTheme.headline3,
               ),
             ),
-            const Icon(Icons.navigate_next, color: AppTheme.accentColor),
+            const Icon(Icons.navigate_next, color: AppColors.accentColor),
           ],
         ),
       ),
@@ -156,7 +157,7 @@ class _Expansion extends StatelessWidget {
         child: CustomPaint(
           foregroundPainter: ExpanionsBannerPainter(
             location: BannerLocation.topStart,
-            color: AppTheme.accentColor,
+            color: AppColors.accentColor,
             message: 'own',
           ),
           child: expansionItem,

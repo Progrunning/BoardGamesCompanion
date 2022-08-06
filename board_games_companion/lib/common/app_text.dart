@@ -13,6 +13,8 @@ class AppText {
   static const edit = 'Edit';
   static const ok = 'OK';
 
+  static const goBack = 'Go Back';
+
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
   static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle =
@@ -114,9 +116,21 @@ class AppText {
       '''It looks there's no players that match the search phrase ''';
   static const playerPageSearchHintText = 'Search for players...';
 
-  static const aboutPageTitle = 'About';
+  static const collectionsSearchHintText = 'Search your collection...';
+  static const gamesPageSearchNoSearchResults =
+      '''It looks there's no games in your collections that match the search phrase ''';
+  static const gamesPageSearchClearSaerch = 'Clear search';
+  static const gamesPageSearchResultPlayersNumberGameStatFormat = '%i - %i players';
+  static const gamesPageSearchResultPlaytimeGameStatFormat = '%s min';
+  static const gamesPageSearchResultComplexityGameStatFormat = '%s (complexity rating)';
+  static const gamesPageSearchResultRefreshDetails =
+      'Games imported from the BGG collections are missing some details (e.g. complexity or expansions). Refresh the data to get the latest information.';
+  static const gamesPageSearchResultExpansionsSectionTitleFormat = 'Expansions (%i)';
 
+  static const aboutPageTitle = 'About';
+  static const collectionsPageTitle = 'Collections';
   static const settingsPageTitle = 'Settings';
+  static const newPlayerPageTitle = 'New Player';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';

@@ -47,10 +47,10 @@ class NavigatorTransitions {
           page(context, animation, secondaryAnimation),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return SharedAxisTransition(
-          child: child,
           animation: animation,
           secondaryAnimation: secondaryAnimation,
           transitionType: type,
+          child: child,
         );
       },
     );

@@ -1,37 +1,46 @@
-import 'package:board_games_companion/mixins/board_game_aware_mixin.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
 
-import '../common/hive_boxes.dart';
+import '../models/hive/board_game_details.dart';
 import '../models/hive/playthrough.dart';
 import '../models/playthrough_player.dart';
 import '../services/playthroughs_service.dart';
 
+part 'playthroughs_store.g.dart';
+
 @singleton
-class PlaythroughsStore with ChangeNotifier, BoardGameAware {
-  PlaythroughsStore(this._playthroughService);
+class PlaythroughsStore = _PlaythroughsStore with _$PlaythroughsStore;
+
+abstract class _PlaythroughsStore with Store {
+  _PlaythroughsStore(this._playthroughService);
 
   final PlaythroughService _playthroughService;
 
-  List<Playthrough> _playthroughs = <Playthrough>[];
+  late BoardGameDetails boardGame;
 
-  List<Playthrough>? get playthroughs => _playthroughs;
+  @observable
+  ObservableList<Playthrough> playthroughs = ObservableList.of([]);
 
-  Future<List<Playthrough>> loadPlaythroughs() async {
+  @action
+  Future<void> loadPlaythroughs() async {
     if (boardGame == null) {
-      return <Playthrough>[];
+      return;
     }
 
     try {
-      _playthroughs = await _playthroughService.retrievePlaythroughs([boardGame!.id]);
+      playthroughs =
+          ObservableList.of(await _playthroughService.retrievePlaythroughs([boardGame.id]));
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
-
-    return _playthroughs;
   }
+
+  @action
+  void setBoardGame(BoardGameDetails boardGame) => this.boardGame = boardGame;
 
   Future<Playthrough?> createPlaythrough(
     String boardGameId,
@@ -58,8 +67,7 @@ class PlaythroughsStore with ChangeNotifier, BoardGameAware {
       return null;
     }
 
-    _playthroughs.add(newPlaythrough);
-    notifyListeners();
+    playthroughs.add(newPlaythrough);
 
     return newPlaythrough;
   }
@@ -72,8 +80,7 @@ class PlaythroughsStore with ChangeNotifier, BoardGameAware {
     try {
       final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough!);
       if (updateSuceeded) {
-        await loadPlaythroughs();
-        notifyListeners();
+        loadPlaythroughs();
         return true;
       }
     } catch (e, stack) {
@@ -87,8 +94,7 @@ class PlaythroughsStore with ChangeNotifier, BoardGameAware {
     try {
       final deleteSucceeded = await _playthroughService.deletePlaythrough(playthroughId);
       if (deleteSucceeded) {
-        _playthroughs.removeWhere((p) => p.id == playthroughId);
-        notifyListeners();
+        playthroughs.removeWhere((p) => p.id == playthroughId);
       }
 
       return deleteSucceeded;
@@ -97,11 +103,5 @@ class PlaythroughsStore with ChangeNotifier, BoardGameAware {
     }
 
     return false;
-  }
-
-  @override
-  void dispose() {
-    _playthroughService.closeBox(HiveBoxes.Playthroughs);
-    super.dispose();
   }
 }

@@ -27,37 +27,34 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
     }
 
     _analtyicsService.logEvent(
-      name: Analytics.ViewPage,
-      parameters: <String, String>{Analytics.RouteName: routeName!},
+      name: Analytics.viewPage,
+      parameters: <String, String>{Analytics.routeName: routeName!},
     );
 
     switch (routeName) {
       case BoardGamesDetailsPage.pageRoute:
-        final _arguments = route.settings.arguments as BoardGameDetailsPageArguments;
+        final arguments = route.settings.arguments as BoardGameDetailsPageArguments;
         _analtyicsService.logEvent(
-          name: Analytics.ViewGameDetails,
-          parameters: <String, String>{
-            Analytics.BoardGameIdParameter: _arguments.boardGameId,
-            Analytics.BoardGameNameParameter: _arguments.boardGameName,
-          },
+          name: Analytics.viewGameDetails,
+          parameters: <String, String>{Analytics.boardGameIdParameter: arguments.boardGameId},
         );
         break;
       case PlaythroughsPage.pageRoute:
-        final _arguments = route.settings.arguments as PlaythroughsPageArguments;
+        final arguments = route.settings.arguments as PlaythroughsPageArguments;
         _analtyicsService.logEvent(
-          name: Analytics.ViewGameStats,
+          name: Analytics.viewGameStats,
           parameters: <String, String?>{
-            Analytics.BoardGameIdParameter: _arguments.boardGameDetails.id,
-            Analytics.BoardGameNameParameter: _arguments.boardGameDetails.name,
+            Analytics.boardGameIdParameter: arguments.boardGameDetails.id,
+            Analytics.boardGameNameParameter: arguments.boardGameDetails.name,
           },
         );
         break;
       case EditPlaythoughPage.pageRoute:
-        final _arguments = route.settings.arguments as EditPlaythroughPageArguments;
+        final arguments = route.settings.arguments as EditPlaythroughPageArguments;
         _analtyicsService.logEvent(
-          name: Analytics.EditPlaythrough,
+          name: Analytics.editPlaythrough,
           parameters: <String, String>{
-            Analytics.BoardGameIdParameter: _arguments.playthroughStore.playthrough.boardGameId,
+            Analytics.boardGameIdParameter: arguments.playthroughViewModel.playthrough.boardGameId,
           },
         );
         break;
