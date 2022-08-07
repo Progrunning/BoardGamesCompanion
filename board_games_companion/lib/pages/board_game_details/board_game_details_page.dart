@@ -738,7 +738,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
             const SizedBox(width: Dimensions.standardSpacing),
             Flexible(
               child: _InfoPanel(
-                title: '${boardGameDetails!.playtimeFormatted} Min',
+                title: boardGameDetails!.playtimeFormatted,
                 subtitle: 'Playing Time',
               ),
             ),

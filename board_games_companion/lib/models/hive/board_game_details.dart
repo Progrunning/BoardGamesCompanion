@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sprintf/sprintf.dart';
 
+import '../../common/app_text.dart';
 import '../../common/constants.dart';
 import '../../common/hive_boxes.dart';
 import 'base_board_game.dart';
@@ -272,11 +274,22 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
   BoardGameSettings? settings;
 
   String get playtimeFormatted {
+    var playtimeRange = '';
     if (_minPlaytime == _maxPlaytime) {
-      return '$minPlaytime';
+      if (_minPlaytime == 0) {
+        return '-';
+      } else {
+        playtimeRange = '$minPlaytime';
+      }
+    } else {
+      if (_maxPlaytime == 0) {
+        playtimeRange = '$minPlaytime';
+      } else {
+        playtimeRange = '$minPlaytime - $maxPlaytime';
+      }
     }
 
-    return '$minPlaytime - $maxPlaytime';
+    return sprintf(AppText.gamePlaytimeStatFormat, [playtimeRange]);
   }
 
   String? get rankFormatted {
