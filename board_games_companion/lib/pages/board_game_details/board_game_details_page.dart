@@ -730,11 +730,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Flexible(
-              child: _InfoPanel(
-                title: '${boardGameDetails!.minPlayers} - ${boardGameDetails!.maxPlayers} Players',
-              ),
-            ),
+            Flexible(child: _InfoPanel(title: boardGameDetails!.playersFormatted)),
             const SizedBox(width: Dimensions.standardSpacing),
             Flexible(
               child: _InfoPanel(

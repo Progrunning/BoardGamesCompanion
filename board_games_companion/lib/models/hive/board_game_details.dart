@@ -289,7 +289,19 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
       }
     }
 
-    return sprintf(AppText.gamePlaytimeStatFormat, [playtimeRange]);
+    return sprintf(AppText.gamePlaytimeFormat, [playtimeRange]);
+  }
+
+  String get playersFormatted {
+    if (_minPlayers == _maxPlayers || _maxPlayers == null) {
+      if (_minPlayers == 1) {
+        return sprintf(AppText.gamePlayersSingularFormat, [_minPlayers]);
+      }
+
+      return sprintf(AppText.gamePlayersPluralFormat, [_minPlayers]);
+    }
+
+    return sprintf(AppText.gamePlayersRangeFormat, [_minPlayers, _maxPlayers]);
   }
 
   String? get rankFormatted {
