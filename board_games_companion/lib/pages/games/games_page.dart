@@ -957,10 +957,7 @@ class _SearchResultGameDetails extends StatelessWidget {
         const SizedBox(height: Dimensions.standardSpacing),
         _SearchResultGameGeneralStats(
           icon: const Icon(Icons.people, size: _gameStatIconSize),
-          statistic: sprintf(
-            AppText.gamesPageSearchResultPlayersNumberGameStatFormat,
-            [boardGame.minPlayers, boardGame.maxPlayers],
-          ),
+          statistic: boardGame.playersFormatted,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
         _SearchResultGameGeneralStats(

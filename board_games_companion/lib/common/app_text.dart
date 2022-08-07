@@ -120,13 +120,15 @@ class AppText {
   static const gamesPageSearchNoSearchResults =
       '''It looks there's no games in your collections that match the search phrase ''';
   static const gamesPageSearchClearSaerch = 'Clear search';
-  static const gamesPageSearchResultPlayersNumberGameStatFormat = '%i - %i players';
   static const gamesPageSearchResultComplexityGameStatFormat = '%s (complexity rating)';
   static const gamesPageSearchResultRefreshDetails =
       'Games imported from the BGG collections are missing some details (e.g. complexity or expansions). Refresh the data to get the latest information.';
   static const gamesPageSearchResultExpansionsSectionTitleFormat = 'Expansions (%i)';
 
-  static const gamePlaytimeStatFormat = '%s min';
+  static const gamePlaytimeFormat = '%s min';
+  static const gamePlayersSingularFormat = '%i players';
+  static const gamePlayersPluralFormat = '%i players';
+  static const gamePlayersRangeFormat = '%i - %i players';
 
   static const aboutPageTitle = 'About';
   static const collectionsPageTitle = 'Collections';
