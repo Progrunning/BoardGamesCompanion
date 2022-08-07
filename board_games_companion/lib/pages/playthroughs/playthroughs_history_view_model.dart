@@ -22,7 +22,7 @@ abstract class _PlaythroughsHistoryViewModel with Store {
   @computed
   ObservableList<Playthrough> get playthroughs {
     final sortedPlaythrough = List.of(_playthroughsStore.playthroughs, growable: false);
-    return ObservableList.of(sortedPlaythrough..sort((a, b) => a.startDate.compareTo(b.startDate)));
+    return ObservableList.of(sortedPlaythrough..sort((a, b) => b.startDate.compareTo(a.startDate)));
   }
 
   @computed
