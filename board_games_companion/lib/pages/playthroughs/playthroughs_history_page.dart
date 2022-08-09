@@ -293,7 +293,9 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
   }
 
   void _updateDuration(void _) {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 }
 
