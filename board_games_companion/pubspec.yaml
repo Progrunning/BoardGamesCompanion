@@ -35,6 +35,7 @@ dependencies:
   fl_chart: ^0.55.0  
   flutter_mobx: ^2.0.6+1
   flutter_polygon: ^0.2.0
+  flutter_slidable: ^2.0.0
   flutter_svg: ^0.22.0
   font_awesome_flutter: ^10.1.0
   google_fonts: ^3.0.1
@@ -54,6 +55,7 @@ dependencies:
   provider: ^6.0.1
   package_info: ^2.0.2
   retry: ^3.1.0
+  share_plus: ^4.0.10+1
   sprintf: ^6.0.0
   tuple: ^2.0.0
   url_launcher: ^6.0.12

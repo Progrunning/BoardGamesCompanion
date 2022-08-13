@@ -430,9 +430,7 @@ class _BodySectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.standardSpacing,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[

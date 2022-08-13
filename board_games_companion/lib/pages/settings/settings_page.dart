@@ -2,6 +2,7 @@ import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
@@ -286,39 +287,59 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
               },
             ),
           ),
-          Observer(
-            builder: (_) {
-              switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
-                case FutureStatus.fulfilled:
-                  return Column(
-                    // crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (final backupFile in widget.viewModel.backupFiles)
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: const FaIcon(
-                            FontAwesomeIcons.boxArchive,
-                            color: AppColors.whiteColor,
+          Material(
+            child: Observer(
+              builder: (_) {
+                switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
+                  case FutureStatus.fulfilled:
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (widget.viewModel.hasAnyBackupFiles)
+                          const Text(
+                            AppText.settingsPageBackupsListTitle,
+                            style: AppTheme.sectionHeaderTextStyle,
                           ),
-                          title: Text(
-                            backupFile.name,
-                            style: const TextStyle(color: AppColors.whiteColor),
-                          ),
-                          subtitle:
-                              Text('${backupFile.size}', style: AppTheme.theme.textTheme.subtitle1),
-                          trailing: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.download),
-                            color: AppColors.accentColor,
-                          ),
-                        )
-                    ],
-                  );
-                case FutureStatus.pending:
-                case FutureStatus.rejected:
-                  return const SizedBox.shrink();
-              }
-            },
+                        for (final backupFile in widget.viewModel.backupFiles)
+                          Slidable(
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  icon: Icons.delete,
+                                  onPressed: (_) => widget.viewModel.deleteBackup(backupFile),
+                                  backgroundColor: AppColors.redColor,
+                                ),
+                              ],
+                            ),
+                            // ! MK Fix layout (icon + text)
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: const FaIcon(
+                                FontAwesomeIcons.boxArchive,
+                                color: AppColors.whiteColor,
+                              ),
+                              title: Text(
+                                backupFile.name,
+                                style: const TextStyle(color: AppColors.whiteColor),
+                              ),
+                              subtitle: Text(backupFile.readableFileSize,
+                                  style: AppTheme.theme.textTheme.subtitle1),
+                              trailing: IconButton(
+                                onPressed: () => widget.viewModel.shareBackupFile(backupFile),
+                                icon: const Icon(Icons.share),
+                                color: AppColors.accentColor,
+                              ),
+                            ),
+                          )
+                      ],
+                    );
+                  case FutureStatus.pending:
+                  case FutureStatus.rejected:
+                    return const SizedBox.shrink();
+                }
+              },
+            ),
           ),
         ],
       ),

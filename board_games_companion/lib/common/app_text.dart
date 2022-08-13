@@ -130,6 +130,7 @@ class AppText {
   static const settingsPageBackupAndRestoreSectionTitle = 'Backup & Restore';
   static const settingsPageBackupButtonText = 'Backup';
   static const settingsPageRestireButtonText = 'Restore';
+  static const settingsPageBackupsListTitle = 'Backups';
 
   static const gamePlaytimeFormat = '%s min';
   static const gamePlayersSingularFormat = '%i players';

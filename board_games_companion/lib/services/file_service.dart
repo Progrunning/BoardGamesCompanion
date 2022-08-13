@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart';
@@ -12,6 +12,9 @@ import '../models/backup_file.dart';
 
 @singleton
 class FileService {
+  static const String backupDirectoryName = 'backups';
+  static const Set<String> backupFileExtensions = {'.jpg', '.hive'};
+
   Future<File?> saveToDocumentsDirectory(
     String fileName,
     XFile pickedFile, {
@@ -71,30 +74,54 @@ class FileService {
     return '${documentsDirectory.path}/$fileName';
   }
 
-  Future<UnmodifiableListView<BackupFile>> getBackups() async {
+  Future<List<BackupFile>> getBackups() async {
     final appBackupsDirectory = await _getBackupDirectory();
     final backups = <BackupFile>[];
     await for (final FileSystemEntity fileSystemEntity in appBackupsDirectory.list()) {
       final fileStats = await fileSystemEntity.stat();
       backups.add(BackupFile(
-        name: basename(fileSystemEntity.path),
+        path: fileSystemEntity.path,
         size: fileStats.size,
         changed: fileStats.changed,
       ));
     }
 
-    return UnmodifiableListView(backups);
+    return backups;
   }
 
-  // ! MK Ensure the backup directory is not backed up
-  Future<void> backupAppsData() async {
+  Future<void> backupAppData() async {
+    final appDirectory = await path_provider.getApplicationDocumentsDirectory();
     final appBackupsDirectory = await _getBackupDirectory();
 
+    return compute(archiveAppData, _ArchiveAppDataModel(appDirectory, appBackupsDirectory));
+  }
+
+  // MK This method is completely redundant from the "clean" code point of view but because dart is retarted when it comes to Isolated,
+  //    there was a need for a "top" level method that has a parameter - so here you go dart lords...you won
+  // ignore: library_private_types_in_public_api
+  Future<void> archiveAppData(_ArchiveAppDataModel archiveAppDataModel) async {
     final zipEncored = ZipFileEncoder();
-    zipEncored.zipDirectory(
-      appBackupsDirectory,
-      filename: '${appBackupsDirectory.path}/BGC Backup ${DateTime.now().toIso8601String()}.zip',
-    );
+    zipEncored.create(
+        '${archiveAppDataModel.appBackupsDirectory.path}/BGC Backup ${DateTime.now().toIso8601String()}.zip');
+
+    await for (final FileSystemEntity fileSystemEntity in archiveAppDataModel.appDirectory.list()) {
+      final fileStats = await fileSystemEntity.stat();
+      final fileName = basename(fileSystemEntity.path);
+      final fileExtension = extension(fileSystemEntity.path);
+      if (!backupFileExtensions.contains(fileExtension)) {
+        continue;
+      }
+
+      final fileStream = InputFileStream(fileSystemEntity.path);
+      final archiveFile = ArchiveFile.stream(fileName, fileStats.size, fileStream);
+      archiveFile.mode = fileStats.mode;
+      archiveFile.lastModTime = fileStats.modified.millisecondsSinceEpoch ~/ 1000;
+
+      zipEncored.addArchiveFile(archiveFile);
+      await fileStream.close();
+    }
+
+    zipEncored.close();
   }
 
   Future<File> _retrieveDocumentsFile(String fileName) async {
@@ -104,7 +131,14 @@ class FileService {
 
   Future<Directory> _getBackupDirectory() async {
     final appDirectory = await path_provider.getApplicationDocumentsDirectory();
-    final appBackupDirectory = Directory('${appDirectory.path}/backups');
+    final appBackupDirectory = Directory('${appDirectory.path}/$backupDirectoryName');
     return appBackupDirectory.create();
   }
+}
+
+class _ArchiveAppDataModel {
+  _ArchiveAppDataModel(this.appDirectory, this.appBackupsDirectory);
+
+  Directory appDirectory;
+  Directory appBackupsDirectory;
 }

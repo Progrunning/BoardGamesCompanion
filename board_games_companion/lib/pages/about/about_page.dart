@@ -153,12 +153,8 @@ class AboutPageState extends BasePageState<AboutPage> {
                               title: 'Url Launcher',
                               subtitle: "Launching Uri's",
                               uri: 'https://pub.dev/packages/url_launcher'),
-                          Divider(
-                            color: AppColors.accentColor,
-                          ),
-                          SectionTitle(
-                            title: 'Licenses',
-                          ),
+                          Divider(color: AppColors.accentColor),
+                          SectionTitle(title: 'Licenses'),
                           _LicensePageDetailsItem(),
                         ],
                       ),
