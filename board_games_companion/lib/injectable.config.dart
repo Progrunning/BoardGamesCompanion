@@ -67,8 +67,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i3.BoardGamesFiltersService>(), get<_i15.AnalyticsService>()));
   gh.singleton<_i17.BoardGamesGeekService>(
       _i17.BoardGamesGeekService(get<_i4.CustomHttpClientAdapter>()));
-  gh.singleton<_i18.BoardGamesService>(_i18.BoardGamesService(
-      get<_i17.BoardGamesGeekService>(), get<_i11.PreferencesService>()));
+  gh.singleton<_i18.BoardGamesService>(
+      _i18.BoardGamesService(get<_i17.BoardGamesGeekService>()));
   gh.singleton<_i19.PlaythroughService>(
       _i19.PlaythroughService(get<_i13.ScoreService>()));
   gh.singleton<_i20.PlaythroughsStore>(
