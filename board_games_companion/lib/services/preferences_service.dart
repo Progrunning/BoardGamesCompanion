@@ -11,7 +11,6 @@ class PreferencesService extends BaseHiveService<dynamic> {
   static const String _numberOfSignificantActionsKey = 'numberOfSignificantActions';
   static const String _rateAndReviewDialogSeenKey = 'rateAndReviewDialogSeen';
   static const String _expansionsPanelExpandedStateKey = 'expansionsPanelExpandedState';
-  static const String _migratedToMultipleCollectionsKey = 'migratedToMultipleCollections';
 
   Future<void> initialize() async {
     await ensureBoxOpen(HiveBoxes.preferences);
@@ -70,21 +69,6 @@ class PreferencesService extends BaseHiveService<dynamic> {
       _numberOfSignificantActionsKey,
       defaultValue: 0,
     )!;
-  }
-
-  bool getMigratedToMultipleCollections() {
-    return _getValue(
-      _migratedToMultipleCollectionsKey,
-      defaultValue: false,
-    )!;
-  }
-
-  Future<void> setMigratedToMultipleCollections(
-      {required bool migratedToMultipleCollections}) async {
-    await _setValue(
-      _migratedToMultipleCollectionsKey,
-      migratedToMultipleCollections,
-    );
   }
 
   Future<void> setNumberOfSignificantActions(int numberOfSignificantActions) async {

@@ -7,14 +7,12 @@ import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
 import 'board_games_geek_service.dart';
 import 'hive_base_service.dart';
-import 'preferences_service.dart';
 
 @singleton
 class BoardGamesService extends BaseHiveService<BoardGameDetails> {
-  BoardGamesService(this._boardGameGeekService, this._preferenceService);
+  BoardGamesService(this._boardGameGeekService);
 
   final BoardGamesGeekService _boardGameGeekService;
-  final PreferencesService _preferenceService;
 
   static const int _maxNumberOfImportedPlaysPerPage = 100;
 
@@ -23,12 +21,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return <BoardGameDetails>[];
     }
 
-    final List<BoardGameDetails> boardGames = storageBox.values.toList();
-    if (!_preferenceService.getMigratedToMultipleCollections()) {
-      await _migrateToMultipleCollections(boardGames);
-    }
-
-    return boardGames;
+    return storageBox.values.toList();
   }
 
   Future<BoardGameDetails?> getBoardGame(String boardGameId) =>
@@ -157,15 +150,5 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
     }
 
     return collectionImportResult;
-  }
-
-  Future<void> _migrateToMultipleCollections(List<BoardGameDetails> boardGames) async {
-    for (final boardGame in boardGames.where(
-        (boardGame) => !boardGame.isOwned! && !boardGame.isOnWishlist! && !boardGame.isFriends!)) {
-      boardGame.isOwned = true;
-      await addOrUpdateBoardGame(boardGame);
-    }
-
-    await _preferenceService.setMigratedToMultipleCollections(migratedToMultipleCollections: true);
   }
 }
