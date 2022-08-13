@@ -1,4 +1,5 @@
 import 'package:board_games_companion/pages/games/games_view_model.dart';
+import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
@@ -133,8 +134,12 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
                 settings: routeSettings, builder: (BuildContext context) => const AboutPage());
 
           case SettingsPage.pageRoute:
+            final viewModel = getIt<SettingsViewModel>();
+
             return MaterialPageRoute<dynamic>(
-                settings: routeSettings, builder: (BuildContext context) => const SettingsPage());
+              settings: routeSettings,
+              builder: (BuildContext context) => SettingsPage(viewModel: viewModel),
+            );
 
           default:
             return null;

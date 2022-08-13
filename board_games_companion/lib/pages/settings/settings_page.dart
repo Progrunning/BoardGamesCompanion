@@ -1,5 +1,9 @@
+import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
@@ -19,7 +23,12 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/import_collections_button.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({
+    required this.viewModel,
+    Key? key,
+  }) : super(key: key);
+
+  final SettingsViewModel viewModel;
 
   @override
   SettingsPageState createState() => SettingsPageState();
@@ -38,13 +47,22 @@ class SettingsPageState extends State<SettingsPage> {
             children: <Widget>[
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: const <Widget>[
-                      SizedBox(height: Dimensions.standardFontSize),
-                      _UserDetailsPanel(),
-                    ],
+                  child: Theme(
+                    data: AppTheme.theme.copyWith(
+                      dividerTheme: AppTheme.theme.dividerTheme.copyWith(
+                        space: Dimensions.doubleStandardSpacing,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        const SizedBox(height: Dimensions.standardFontSize),
+                        const _UserDetailsPanel(),
+                        const Divider(color: AppColors.accentColor),
+                        _BackupSection(viewModel: widget.viewModel),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -190,6 +208,120 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
           ],
         );
       },
+    );
+  }
+}
+
+class _BackupSection extends StatefulWidget {
+  const _BackupSection({
+    required this.viewModel,
+    Key? key,
+  }) : super(key: key);
+
+  final SettingsViewModel viewModel;
+
+  @override
+  State<_BackupSection> createState() => _BackupSectionState();
+}
+
+class _BackupSectionState extends State<_BackupSection> with TickerProviderStateMixin {
+  late AnimationController _fadeInAnimationController;
+  late AnimationController _sizeAnimationController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.viewModel.loadBackups();
+
+    _fadeInAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(microseconds: 500),
+    );
+    _sizeAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+      value: 1,
+    );
+  }
+
+  @override
+  void dispose() {
+    _fadeInAnimationController.dispose();
+    _sizeAnimationController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionTitle(
+            title: AppText.settingsPageBackupAndRestoreSectionTitle,
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          const Text(
+            AppText.settingsPageBackupAndRestoreSectionBody,
+            style: TextStyle(fontSize: Dimensions.mediumFontSize),
+          ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: AnimatedButton(
+              text: AppText.settingsPageBackupButtonText,
+              icon: const DefaultIcon(Icons.archive),
+              sizeAnimationController: _sizeAnimationController,
+              fadeInAnimationController: _fadeInAnimationController,
+              onPressed: () async {
+                await widget.viewModel.backupAppsData();
+                if (mounted) {
+                  _sizeAnimationController.forward();
+                  _fadeInAnimationController.reverse();
+                }
+              },
+            ),
+          ),
+          Observer(
+            builder: (_) {
+              switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
+                case FutureStatus.fulfilled:
+                  return Column(
+                    // crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (final backupFile in widget.viewModel.backupFiles)
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const FaIcon(
+                            FontAwesomeIcons.boxArchive,
+                            color: AppColors.whiteColor,
+                          ),
+                          title: Text(
+                            backupFile.name,
+                            style: const TextStyle(color: AppColors.whiteColor),
+                          ),
+                          subtitle:
+                              Text('${backupFile.size}', style: AppTheme.theme.textTheme.subtitle1),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.download),
+                            color: AppColors.accentColor,
+                          ),
+                        )
+                    ],
+                  );
+                case FutureStatus.pending:
+                case FutureStatus.rejected:
+                  return const SizedBox.shrink();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

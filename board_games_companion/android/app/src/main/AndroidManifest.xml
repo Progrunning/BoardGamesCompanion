@@ -11,7 +11,7 @@
         </intent>
     </queries>
 
-    <application android:name="${applicationName}" android:label="Board Games Companion" android:icon="@mipmap/ic_launcher">
+    <application android:name="${applicationName}" android:label="Board Games Companion" android:icon="@mipmap/ic_launcher" android:allowBackup="false">
         <activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

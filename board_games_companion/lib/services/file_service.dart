@@ -1,9 +1,14 @@
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+
+import '../models/backup_file.dart';
 
 @singleton
 class FileService {
@@ -66,8 +71,40 @@ class FileService {
     return '${documentsDirectory.path}/$fileName';
   }
 
+  Future<UnmodifiableListView<BackupFile>> getBackups() async {
+    final appBackupsDirectory = await _getBackupDirectory();
+    final backups = <BackupFile>[];
+    await for (final FileSystemEntity fileSystemEntity in appBackupsDirectory.list()) {
+      final fileStats = await fileSystemEntity.stat();
+      backups.add(BackupFile(
+        name: basename(fileSystemEntity.path),
+        size: fileStats.size,
+        changed: fileStats.changed,
+      ));
+    }
+
+    return UnmodifiableListView(backups);
+  }
+
+  // ! MK Ensure the backup directory is not backed up
+  Future<void> backupAppsData() async {
+    final appBackupsDirectory = await _getBackupDirectory();
+
+    final zipEncored = ZipFileEncoder();
+    zipEncored.zipDirectory(
+      appBackupsDirectory,
+      filename: '${appBackupsDirectory.path}/BGC Backup ${DateTime.now().toIso8601String()}.zip',
+    );
+  }
+
   Future<File> _retrieveDocumentsFile(String fileName) async {
     final documentsFilePath = await createDocumentsFilePath(fileName);
     return File(documentsFilePath);
+  }
+
+  Future<Directory> _getBackupDirectory() async {
+    final appDirectory = await path_provider.getApplicationDocumentsDirectory();
+    final appBackupDirectory = Directory('${appDirectory.path}/backups');
+    return appBackupDirectory.create();
   }
 }

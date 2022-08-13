@@ -18,6 +18,7 @@ environment:
 
 dependencies:
   animations: ^2.0.1
+  archive: ^3.3.1
   async: ^2.8.2
   basics: ^0.9.0
   cached_network_image: ^3.2.1
@@ -48,6 +49,7 @@ dependencies:
   logger: ^1.1.0
   mobx: ^2.0.7+4
   numberpicker: ^2.1.1
+  path: ^1.8.0
   path_provider: ^2.0.5
   provider: ^6.0.1
   package_info: ^2.0.2
