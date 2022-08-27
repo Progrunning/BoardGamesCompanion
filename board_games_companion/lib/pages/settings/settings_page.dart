@@ -256,93 +256,115 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionTitle(
-            title: AppText.settingsPageBackupAndRestoreSectionTitle,
-            padding: EdgeInsets.zero,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SectionTitle(
+                title: AppText.settingsPageBackupAndRestoreSectionTitle,
+                padding: EdgeInsets.zero,
+              ),
+              const SizedBox(height: Dimensions.standardSpacing),
+              const Text(
+                AppText.settingsPageBackupAndRestoreSectionBody,
+                style: TextStyle(fontSize: Dimensions.mediumFontSize),
+              ),
+              const SizedBox(height: Dimensions.standardSpacing),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: AnimatedButton(
+                  text: AppText.settingsPageBackupButtonText,
+                  icon: const DefaultIcon(Icons.archive),
+                  sizeAnimationController: _sizeAnimationController,
+                  fadeInAnimationController: _fadeInAnimationController,
+                  onPressed: () async {
+                    await widget.viewModel.backupAppsData();
+                    if (mounted) {
+                      _sizeAnimationController.forward();
+                      _fadeInAnimationController.reverse();
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          const Text(
-            AppText.settingsPageBackupAndRestoreSectionBody,
-            style: TextStyle(fontSize: Dimensions.mediumFontSize),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: AnimatedButton(
-              text: AppText.settingsPageBackupButtonText,
-              icon: const DefaultIcon(Icons.archive),
-              sizeAnimationController: _sizeAnimationController,
-              fadeInAnimationController: _fadeInAnimationController,
-              onPressed: () async {
-                await widget.viewModel.backupAppsData();
-                if (mounted) {
-                  _sizeAnimationController.forward();
-                  _fadeInAnimationController.reverse();
-                }
-              },
-            ),
-          ),
-          Material(
-            child: Observer(
-              builder: (_) {
-                switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
-                  case FutureStatus.fulfilled:
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (widget.viewModel.hasAnyBackupFiles)
-                          const Text(
-                            AppText.settingsPageBackupsListTitle,
-                            style: AppTheme.sectionHeaderTextStyle,
-                          ),
-                        for (final backupFile in widget.viewModel.backupFiles)
-                          Slidable(
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  icon: Icons.delete,
-                                  onPressed: (_) => widget.viewModel.deleteBackup(backupFile),
-                                  backgroundColor: AppColors.redColor,
-                                ),
-                              ],
+        ),
+        Observer(
+          builder: (_) {
+            switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
+              case FutureStatus.fulfilled:
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.viewModel.hasAnyBackupFiles) ...[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                        child: Text(
+                          AppText.settingsPageBackupsListTitle,
+                          style: AppTheme.sectionHeaderTextStyle,
+                        ),
+                      ),
+                      const SizedBox(height: Dimensions.halfStandardSpacing),
+                    ],
+                    for (final backupFile in widget.viewModel.backupFiles)
+                      Slidable(
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              icon: Icons.delete,
+                              onPressed: (_) => widget.viewModel.deleteBackup(backupFile),
+                              backgroundColor: AppColors.redColor,
                             ),
-                            // ! MK Fix layout (icon + text)
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              leading: const FaIcon(
+                          ],
+                        ),
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                          child: Row(
+                            children: [
+                              const FaIcon(
                                 FontAwesomeIcons.boxArchive,
                                 color: AppColors.whiteColor,
                               ),
-                              title: Text(
-                                backupFile.name,
-                                style: const TextStyle(color: AppColors.whiteColor),
+                              const SizedBox(width: Dimensions.standardSpacing),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    backupFile.name,
+                                    style: const TextStyle(color: AppColors.whiteColor),
+                                  ),
+                                  const SizedBox(height: Dimensions.halfStandardSpacing),
+                                  Text(
+                                    backupFile.readableFileSize,
+                                    style: AppTheme.theme.textTheme.subtitle1,
+                                  ),
+                                ],
                               ),
-                              subtitle: Text(backupFile.readableFileSize,
-                                  style: AppTheme.theme.textTheme.subtitle1),
-                              trailing: IconButton(
+                              const Expanded(child: SizedBox.shrink()),
+                              IconButton(
                                 onPressed: () => widget.viewModel.shareBackupFile(backupFile),
                                 icon: const Icon(Icons.share),
                                 color: AppColors.accentColor,
                               ),
-                            ),
-                          )
-                      ],
-                    );
-                  case FutureStatus.pending:
-                  case FutureStatus.rejected:
-                    return const SizedBox.shrink();
-                }
-              },
-            ),
-          ),
-        ],
-      ),
+                            ],
+                          ),
+                        ),
+                      )
+                  ],
+                );
+              case FutureStatus.pending:
+              case FutureStatus.rejected:
+                return const SizedBox.shrink();
+            }
+          },
+        ),
+      ],
     );
   }
 }
