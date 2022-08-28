@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,7 @@ import '../models/backup_file.dart';
 class FileService {
   static const String backupDirectoryName = 'backups';
   static const Set<String> backupFileExtensions = {'.jpg', '.hive'};
+  static const String backupFileExtension = 'zip';
 
   Future<File?> saveToDocumentsDirectory(
     String fileName,
@@ -96,12 +98,12 @@ class FileService {
     return compute(archiveAppData, _ArchiveAppDataModel(appDirectory, appBackupsDirectory));
   }
 
-  // MK This method is completely redundant from the "clean" code point of view but because dart is retarted when it comes to Isolated,
+  // MK This method is completely redundant from the "clean" code point of view but because dart is retarted when it comes to Isolates,
   //    there was a need for a "top" level method that has a parameter - so here you go dart lords...you won
   // ignore: library_private_types_in_public_api
   Future<void> archiveAppData(_ArchiveAppDataModel archiveAppDataModel) async {
-    final zipEncored = ZipFileEncoder();
-    zipEncored.create(
+    final zipEncoder = ZipFileEncoder();
+    zipEncoder.create(
         '${archiveAppDataModel.appBackupsDirectory.path}/BGC Backup ${DateTime.now().toIso8601String()}.zip');
 
     await for (final FileSystemEntity fileSystemEntity in archiveAppDataModel.appDirectory.list()) {
@@ -117,11 +119,42 @@ class FileService {
       archiveFile.mode = fileStats.mode;
       archiveFile.lastModTime = fileStats.modified.millisecondsSinceEpoch ~/ 1000;
 
-      zipEncored.addArchiveFile(archiveFile);
+      zipEncoder.addArchiveFile(archiveFile);
       await fileStream.close();
     }
 
-    zipEncored.close();
+    zipEncoder.close();
+  }
+
+  Future<File?> restoreAppData() async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [backupFileExtension],
+    );
+
+    if (result == null) {
+      // User canceled the picker
+      return null;
+    }
+
+    final documentsDirectory = await path_provider.getApplicationDocumentsDirectory();
+    await extractFileToDisk(result.files.single.path!, documentsDirectory.path, asyncWrite: true);
+
+    return null;
+
+    // final inputStream = InputFileStream(result.files.single.path!);
+    // final archive = ZipDecoder().decodeBuffer(inputStream);
+    // for (var file in archive.files) {
+
+    //   // If it's a file and not a directory
+    //  final output = File(filePath);
+    //   final f = await output.create(recursive: true);
+    //   final fp = await f.open(mode: FileMode.write);
+    //   final bytes = file.content as List<int>;
+    //   await fp.writeFrom(bytes);
+    //   file.clear();
+    //   futures.add(fp.close());
+    // }
   }
 
   Future<File> _retrieveDocumentsFile(String fileName) async {

@@ -51,4 +51,9 @@ abstract class _SettingsViewModel with Store {
     await _fileService.backupAppData();
     await _loadBackups();
   }
+
+  @action
+  Future<void> restoreAppData() async {
+    await _fileService.restoreAppData();
+  }
 }

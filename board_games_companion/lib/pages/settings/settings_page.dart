@@ -274,21 +274,29 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
                 style: TextStyle(fontSize: Dimensions.mediumFontSize),
               ),
               const SizedBox(height: Dimensions.standardSpacing),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: AnimatedButton(
-                  text: AppText.settingsPageBackupButtonText,
-                  icon: const DefaultIcon(Icons.archive),
-                  sizeAnimationController: _sizeAnimationController,
-                  fadeInAnimationController: _fadeInAnimationController,
-                  onPressed: () async {
-                    await widget.viewModel.backupAppsData();
-                    if (mounted) {
-                      _sizeAnimationController.forward();
-                      _fadeInAnimationController.reverse();
-                    }
-                  },
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedIconButton(
+                    icon: const Icon(Icons.settings_backup_restore),
+                    title: AppText.settingsPageRestireButtonText,
+                    onPressed: () async => widget.viewModel.restoreAppData(),
+                  ),
+                  const SizedBox(width: Dimensions.standardSpacing),
+                  AnimatedButton(
+                    text: AppText.settingsPageBackupButtonText,
+                    icon: const DefaultIcon(Icons.archive),
+                    sizeAnimationController: _sizeAnimationController,
+                    fadeInAnimationController: _fadeInAnimationController,
+                    onPressed: () async {
+                      await widget.viewModel.backupAppsData();
+                      if (mounted) {
+                        _sizeAnimationController.forward();
+                        _fadeInAnimationController.reverse();
+                      }
+                    },
+                  ),
+                ],
               ),
             ],
           ),
