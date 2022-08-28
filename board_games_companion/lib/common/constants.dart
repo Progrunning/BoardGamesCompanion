@@ -4,6 +4,8 @@ class Constants {
   static const shortMonthDateFormat = 'MMM';
   static const shortWeekDayDateFormat = 'E';
 
+  static const appDataBackupDateFormat = 'y-MM-dd HH:mm:ss';
+
   static const top100 = 100;
   static const double boardGameDetailsImageHeight = 300;
 

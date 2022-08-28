@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:board_games_companion/common/constants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
@@ -16,6 +18,8 @@ class FileService {
   static const String backupDirectoryName = 'backups';
   static const Set<String> backupFileExtensions = {'.jpg', '.hive'};
   static const String backupFileExtension = 'zip';
+
+  static DateFormat backupDateFormat = DateFormat(Constants.appDataBackupDateFormat);
 
   Future<File?> saveToDocumentsDirectory(
     String fileName,
@@ -104,7 +108,7 @@ class FileService {
   Future<void> archiveAppData(_ArchiveAppDataModel archiveAppDataModel) async {
     final zipEncoder = ZipFileEncoder();
     zipEncoder.create(
-        '${archiveAppDataModel.appBackupsDirectory.path}/BGC Backup ${DateTime.now().toIso8601String()}.zip');
+        '${archiveAppDataModel.appBackupsDirectory.path}/BGC Backup ${backupDateFormat.format(DateTime.now())}.zip');
 
     await for (final FileSystemEntity fileSystemEntity in archiveAppDataModel.appDirectory.list()) {
       final fileStats = await fileSystemEntity.stat();

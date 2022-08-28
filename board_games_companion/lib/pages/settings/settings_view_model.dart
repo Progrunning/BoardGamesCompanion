@@ -1,11 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/services/file_service.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../models/backup_file.dart';
+import 'settings_page_visual_states.dart';
 
 part 'settings_view_model.g.dart';
 
@@ -20,6 +22,9 @@ abstract class _SettingsViewModel with Store {
   @observable
   ObservableList<BackupFile> backupFiles = ObservableList.of([]);
 
+  @observable
+  SettingsPageVisualState visualState = const SettingsPageVisualState.initial();
+
   @computed
   bool get hasAnyBackupFiles => backupFiles.isNotEmpty;
 
@@ -29,9 +34,11 @@ abstract class _SettingsViewModel with Store {
   @action
   void loadBackups() => futureLoadBackups = ObservableFuture(_loadBackups());
 
-  Future<void> shareBackupFile(BackupFile backupFile) async => Share.shareFiles(
+  Future<void> shareBackupFile(BackupFile backupFile, {Rect? sharePositionOrigin}) async =>
+      Share.shareFiles(
         [backupFile.path],
         mimeTypes: ['application/zip'],
+        sharePositionOrigin: sharePositionOrigin,
       );
 
   @action
@@ -54,6 +61,14 @@ abstract class _SettingsViewModel with Store {
 
   @action
   Future<void> restoreAppData() async {
-    await _fileService.restoreAppData();
+    // ! MK Refresh Hive
+    try {
+      visualState = const SettingsPageVisualState.restoring();
+      await _fileService.restoreAppData();
+    } on Exception {
+      visualState = const SettingsPageVisualState.restoringFailure();
+    }
+
+    visualState = const SettingsPageVisualState.restoringSuccess();
   }
 }

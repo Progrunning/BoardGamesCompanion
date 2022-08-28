@@ -33,6 +33,22 @@ mixin _$SettingsViewModel on _SettingsViewModel, Store {
     });
   }
 
+  late final _$visualStateAtom =
+      Atom(name: '_SettingsViewModel.visualState', context: context);
+
+  @override
+  SettingsPageVisualState get visualState {
+    _$visualStateAtom.reportRead();
+    return super.visualState;
+  }
+
+  @override
+  set visualState(SettingsPageVisualState value) {
+    _$visualStateAtom.reportWrite(value, super.visualState, () {
+      super.visualState = value;
+    });
+  }
+
   late final _$futureLoadBackupsAtom =
       Atom(name: '_SettingsViewModel.futureLoadBackups', context: context);
 
@@ -65,6 +81,14 @@ mixin _$SettingsViewModel on _SettingsViewModel, Store {
     return _$backupAppsDataAsyncAction.run(() => super.backupAppsData());
   }
 
+  late final _$restoreAppDataAsyncAction =
+      AsyncAction('_SettingsViewModel.restoreAppData', context: context);
+
+  @override
+  Future<void> restoreAppData() {
+    return _$restoreAppDataAsyncAction.run(() => super.restoreAppData());
+  }
+
   late final _$_SettingsViewModelActionController =
       ActionController(name: '_SettingsViewModel', context: context);
 
@@ -83,6 +107,7 @@ mixin _$SettingsViewModel on _SettingsViewModel, Store {
   String toString() {
     return '''
 backupFiles: ${backupFiles},
+visualState: ${visualState},
 futureLoadBackups: ${futureLoadBackups},
 hasAnyBackupFiles: ${hasAnyBackupFiles}
     ''';

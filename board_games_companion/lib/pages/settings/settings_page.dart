@@ -1,4 +1,9 @@
+import 'dart:io' show Platform;
+
+import 'package:board_games_companion/models/backup_file.dart';
+import 'package:board_games_companion/pages/settings/settings_page_visual_states.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
+import 'package:board_games_companion/widgets/common/loading_overlay.dart';
 import 'package:board_games_companion/widgets/common/page_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -40,37 +45,54 @@ class SettingsPage extends StatefulWidget {
 class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text(AppText.settingsPageTitle, style: AppTheme.titleTextStyle)),
-      body: SafeArea(
-        child: PageContainer(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Theme(
-                    data: AppTheme.theme.copyWith(
-                      dividerTheme: AppTheme.theme.dividerTheme.copyWith(
-                        space: Dimensions.doubleStandardSpacing,
+    return Observer(
+      builder: (_) {
+        // widget.viewModel.visualState.when(
+        //   initial: initial,
+        //   restoring: restoring,
+        //   restoringSuccess: restoringSuccess,
+        //   restoringFailure: restoringFailure,
+        // );
+        final scaffold = Scaffold(
+          appBar:
+              AppBar(title: const Text(AppText.settingsPageTitle, style: AppTheme.titleTextStyle)),
+          body: SafeArea(
+            child: PageContainer(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Theme(
+                        data: AppTheme.theme.copyWith(
+                          dividerTheme: AppTheme.theme.dividerTheme.copyWith(
+                            space: Dimensions.doubleStandardSpacing,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            const SizedBox(height: Dimensions.standardFontSize),
+                            const _UserDetailsPanel(),
+                            const Divider(color: AppColors.accentColor),
+                            _BackupSection(viewModel: widget.viewModel),
+                          ],
+                        ),
                       ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const SizedBox(height: Dimensions.standardFontSize),
-                        const _UserDetailsPanel(),
-                        const Divider(color: AppColors.accentColor),
-                        _BackupSection(viewModel: widget.viewModel),
-                      ],
-                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+
+        if (widget.viewModel.visualState == const SettingsPageVisualState.restoring()) {
+          return LoadingOverlay(child: scaffold);
+        }
+
+        return scaffold;
+      },
     );
   }
 }
@@ -302,7 +324,7 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
           ),
         ),
         Observer(
-          builder: (_) {
+          builder: (BuildContext context) {
             switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
               case FutureStatus.fulfilled:
                 return Column(
@@ -319,51 +341,13 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
                       const SizedBox(height: Dimensions.halfStandardSpacing),
                     ],
                     for (final backupFile in widget.viewModel.backupFiles)
-                      Slidable(
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              icon: Icons.delete,
-                              onPressed: (_) => widget.viewModel.deleteBackup(backupFile),
-                              backgroundColor: AppColors.redColor,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                          child: Row(
-                            children: [
-                              const FaIcon(
-                                FontAwesomeIcons.boxArchive,
-                                color: AppColors.whiteColor,
-                              ),
-                              const SizedBox(width: Dimensions.standardSpacing),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    backupFile.name,
-                                    style: const TextStyle(color: AppColors.whiteColor),
-                                  ),
-                                  const SizedBox(height: Dimensions.halfStandardSpacing),
-                                  Text(
-                                    backupFile.readableFileSize,
-                                    style: AppTheme.theme.textTheme.subtitle1,
-                                  ),
-                                ],
-                              ),
-                              const Expanded(child: SizedBox.shrink()),
-                              IconButton(
-                                onPressed: () => widget.viewModel.shareBackupFile(backupFile),
-                                icon: const Icon(Icons.share),
-                                color: AppColors.accentColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
+                      _BackupFile(
+                        backupFile: backupFile,
+                        onDeleteBackup: (BackupFile backupFile) =>
+                            widget.viewModel.deleteBackup(backupFile),
+                        onShareBackup: (BackupFile backupFile) async =>
+                            _shareBackup(context, backupFile),
+                      ),
                   ],
                 );
               case FutureStatus.pending:
@@ -373,6 +357,83 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
           },
         ),
       ],
+    );
+  }
+
+  Future<void> _shareBackup(BuildContext context, BackupFile backupFile) async {
+    Rect? sharePositionOrigin;
+    if (Platform.isIOS) {
+      // MK https://pub.dev/packages/share_plus#known-issues
+      final box = context.findRenderObject() as RenderBox?;
+      if (box != null) {
+        sharePositionOrigin = box.localToGlobal(Offset.zero) & box.size;
+      }
+    }
+
+    await widget.viewModel.shareBackupFile(
+      backupFile,
+      sharePositionOrigin: sharePositionOrigin,
+    );
+  }
+}
+
+class _BackupFile extends StatelessWidget {
+  const _BackupFile({
+    Key? key,
+    required this.backupFile,
+    required this.onDeleteBackup,
+    required this.onShareBackup,
+  }) : super(key: key);
+
+  final BackupFile backupFile;
+  final Function(BackupFile) onDeleteBackup;
+  final Function(BackupFile) onShareBackup;
+
+  @override
+  Widget build(BuildContext context) {
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            icon: Icons.delete,
+            onPressed: (_) => onDeleteBackup(backupFile),
+            backgroundColor: AppColors.redColor,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+        child: Row(
+          children: [
+            const FaIcon(
+              FontAwesomeIcons.boxArchive,
+              color: AppColors.whiteColor,
+            ),
+            const SizedBox(width: Dimensions.standardSpacing),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  backupFile.name,
+                  style: const TextStyle(color: AppColors.whiteColor),
+                ),
+                const SizedBox(height: Dimensions.halfStandardSpacing),
+                Text(
+                  backupFile.readableFileSize,
+                  style: AppTheme.theme.textTheme.subtitle1,
+                ),
+              ],
+            ),
+            const Expanded(child: SizedBox.shrink()),
+            IconButton(
+              onPressed: () => onShareBackup,
+              icon: const Icon(Icons.share),
+              color: AppColors.accentColor,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
