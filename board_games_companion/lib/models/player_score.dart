@@ -12,4 +12,8 @@ abstract class PlayerScore with _$PlayerScore {
     required Score score,
     int? place,
   }) = _PlayerScore;
+
+  const PlayerScore._();
+
+  String? get id => player?.id;
 }

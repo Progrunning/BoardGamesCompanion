@@ -23,11 +23,11 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
       (_$playthroughComputed ??= Computed<Playthrough>(() => super.playthrough,
               name: '_EditPlaythoughViewModel.playthrough'))
           .value;
-  Computed<List<PlayerScore>>? _$playerScoresComputed;
+  Computed<ObservableList<PlayerScore>>? _$playerScoresComputed;
 
   @override
-  List<PlayerScore> get playerScores => (_$playerScoresComputed ??=
-          Computed<List<PlayerScore>>(() => super.playerScores,
+  ObservableList<PlayerScore> get playerScores => (_$playerScoresComputed ??=
+          Computed<ObservableList<PlayerScore>>(() => super.playerScores,
               name: '_EditPlaythoughViewModel.playerScores'))
       .value;
   Computed<DateTime>? _$playthroughStartTimeComputed;
@@ -108,6 +108,17 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
         name: '_EditPlaythoughViewModel.updateDuration');
     try {
       return super.updateDuration(hoursPlayed, minutesPlyed);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updatePlayerScore(PlayerScore playerScore) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.updatePlayerScore');
+    try {
+      return super.updatePlayerScore(playerScore);
     } finally {
       _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
     }

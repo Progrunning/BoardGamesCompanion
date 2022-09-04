@@ -78,7 +78,11 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                   child: _ScoresSection(
                     viewModel: widget.viewModel,
                     onItemTapped: (PlayerScore playerScore) async {
-                      await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
+                      final viewModel = EnterScoreViewModel(playerScore);
+                      await showEnterScoreDialog(context, viewModel);
+                      // ! MK I think that PlayerScore needs to be observable and update score inside of it
+                      widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
+                      return viewModel.score.toString();
                     },
                   ),
                 ),
@@ -187,7 +191,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 }
 
-class _ScoresSection extends StatefulWidget {
+class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
     Key? key,
     required this.viewModel,
@@ -195,62 +199,82 @@ class _ScoresSection extends StatefulWidget {
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
-  final void Function(PlayerScore) onItemTapped;
+  final Future<String?> Function(PlayerScore) onItemTapped;
 
-  @override
-  State<_ScoresSection> createState() => _ScoresSectionState();
-}
-
-class _ScoresSectionState extends State<_ScoresSection> {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: widget.viewModel.playerScores.length,
+      itemCount: viewModel.playerScores.length,
       separatorBuilder: (context, index) {
         return const SizedBox(height: Dimensions.doubleStandardSpacing);
       },
       itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () => widget.onItemTapped(widget.viewModel.playerScores[index]),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-            child: _PlayerScoreTile(
-              playerScore: widget.viewModel.playerScores[index],
-              playthroughId: widget.viewModel.playthroughDetails.id,
-            ),
-          ),
+        return _PlayerScoreTile(
+          playerScore: viewModel.playerScores[index],
+          playthroughId: viewModel.playthroughDetails.id,
+          onItemTapped: onItemTapped,
         );
       },
     );
   }
 }
 
-class _PlayerScoreTile extends StatelessWidget {
+class _PlayerScoreTile extends StatefulWidget {
   const _PlayerScoreTile({
     Key? key,
     required this.playerScore,
     required this.playthroughId,
+    required this.onItemTapped,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String playthroughId;
+  final Future<String?> Function(PlayerScore) onItemTapped;
+
+  @override
+  State<_PlayerScoreTile> createState() => _PlayerScoreTileState();
+}
+
+class _PlayerScoreTileState extends State<_PlayerScoreTile> {
+  late String? score;
+
+  @override
+  void initState() {
+    super.initState();
+
+    score = widget.playerScore.score.value;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: Dimensions.smallPlayerAvatarSize,
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            height: Dimensions.smallPlayerAvatarSize,
-            width: Dimensions.smallPlayerAvatarSize,
-            child: PlayerAvatar(playerScore.player, playerHeroIdSuffix: playthroughId),
+    return InkWell(
+      onTap: () async {
+        final newScore = await widget.onItemTapped(widget.playerScore);
+        setState(() {
+          score = newScore;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+        child: SizedBox(
+          height: Dimensions.smallPlayerAvatarSize,
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                height: Dimensions.smallPlayerAvatarSize,
+                width: Dimensions.smallPlayerAvatarSize,
+                child: PlayerAvatar(
+                  widget.playerScore.player,
+                  playerHeroIdSuffix: widget.playthroughId,
+                ),
+              ),
+              const SizedBox(width: Dimensions.standardSpacing),
+              Expanded(
+                child: _PlayerScore(score: score),
+              ),
+            ],
           ),
-          const SizedBox(width: Dimensions.standardSpacing),
-          Expanded(
-            child: _PlayerScore(playerScore: playerScore),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -259,10 +283,10 @@ class _PlayerScoreTile extends StatelessWidget {
 class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
     Key? key,
-    required this.playerScore,
+    required this.score,
   }) : super(key: key);
 
-  final PlayerScore playerScore;
+  final String? score;
 
   @override
   Widget build(BuildContext context) {
@@ -274,7 +298,7 @@ class _PlayerScore extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              playerScore.score.value ?? '-',
+              score ?? '-',
               style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),
