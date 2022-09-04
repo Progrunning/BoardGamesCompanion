@@ -1,104 +1,96 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/player_score.dart';
+import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/playthrough_status.dart';
-import '../../models/hive/playthrough.dart';
-import '../../models/hive/score.dart';
-import '../../models/player_score.dart';
-import '../playthroughs/playthrough_view_model.dart';
 
 part 'edit_playthrough_view_model.g.dart';
 
+@injectable
 class EditPlaythoughViewModel = _EditPlaythoughViewModel with _$EditPlaythoughViewModel;
 
 abstract class _EditPlaythoughViewModel with Store {
-  _EditPlaythoughViewModel(this._playthroughViewModel, this._playthroughsStore);
+  _EditPlaythoughViewModel(this._playthroughsStore);
 
-  final PlaythroughViewModel _playthroughViewModel;
+  late final String _playthroughId;
   final PlaythroughsStore _playthroughsStore;
 
-// MK Doing a copy of player scores to prevent data from being updated without saving
-  List<PlayerScore>? _playerScores;
-  List<PlayerScore> get playerScores {
-    if (_playerScores == null) {
-      _playerScores = <PlayerScore>[];
-      for (final PlayerScore playerScore in _playthroughViewModel.playerScores!) {
-        final score = Score(
-          id: playerScore.score.id,
-          playerId: playerScore.score.playerId,
-          boardGameId: playerScore.score.boardGameId,
-        );
-
-        score.value = playerScore.score.value;
-        score.playthroughId = playerScore.score.playthroughId;
-
-        _playerScores!.add(PlayerScore(playerScore.player, score));
-      }
-    }
-
-    return _playerScores!;
-  }
+  late PlaythroughDetails _updatedPlaythroughDetails;
+  PlaythroughDetails get updatedPlaythroughDetails => _updatedPlaythroughDetails;
 
   @computed
-  Playthrough get playthrough => _playthroughViewModel.playthrough;
+  PlaythroughDetails get playthroughDetails =>
+      _playthroughsStore.playthroughs.firstWhere((pd) => pd.id == _playthroughId);
 
   @computed
-  DateTime get playthroughStartTime => playthrough.startDate;
+  Playthrough get playthrough => updatedPlaythroughDetails.playthrough;
 
   @computed
-  bool get playthoughEnded => playthrough.status == PlaythroughStatus.Finished;
+  List<PlayerScore> get playerScores => updatedPlaythroughDetails.playerScores;
 
   @computed
-  Duration get playthoughDuration =>
-      (playthrough.endDate ?? DateTime.now()).difference(playthrough.startDate);
+  DateTime get playthroughStartTime => updatedPlaythroughDetails.startDate;
 
-  bool isDirty() {
-    bool playerScoresUpdated = false;
-    final Map<String, Score?> playerScoresMap = {
-      for (final PlayerScore playerScore in _playthroughViewModel.playerScores!)
-        playerScore.player!.id: playerScore.score
-    };
+  @computed
+  bool get playthoughEnded => updatedPlaythroughDetails.playthoughEnded;
 
-    for (final PlayerScore playerScore in playerScores) {
-      if (playerScoresMap[playerScore.player!.id]!.value != playerScore.score.value) {
-        playerScoresUpdated = true;
-        break;
-      }
-    }
+  @computed
+  Duration get playthoughDuration => (updatedPlaythroughDetails.endDate ?? DateTime.now())
+      .difference(updatedPlaythroughDetails.startDate);
 
-    return playerScoresUpdated ||
-        _playthroughViewModel.playthrough.startDate != playthrough.startDate ||
-        _playthroughViewModel.playthrough.endDate != playthrough.endDate;
+  // ! MK Make sure that all properties of PlaythrougDetails are Freezed so comparison works https://stackoverflow.com/questions/60383178/combine-freezed-hive
+  bool get isDirty => updatedPlaythroughDetails == playthroughDetails;
+
+  @action
+  void setPlaythroughId(String playthroughId) {
+    _playthroughId = playthroughId;
+    _updatedPlaythroughDetails = playthroughDetails.copyWith();
   }
 
   @action
   Future<void> stopPlaythrough() async {
-    await _playthroughViewModel.stopPlaythrough();
+    await _playthroughsStore.updatePlaythrough(updatedPlaythroughDetails.copyWith(
+        playthrough: playthrough.copyWith(
+      status: PlaythroughStatus.Finished,
+      endDate: DateTime.now().toUtc(),
+    )));
   }
 
   @action
   Future<void> saveChanges() async {
-    await _playthroughViewModel.updatePlaythrough(playthrough, playerScores);
+    if (isDirty) {
+      await _playthroughsStore.updatePlaythrough(updatedPlaythroughDetails);
+    }
   }
 
   @action
   void updateStartDate(DateTime newStartDate) {
-    final Duration playthroughDuration = playthoughDuration;
-    playthrough.startDate = newStartDate;
-    playthrough.status = PlaythroughStatus.Finished;
-    playthrough.endDate = newStartDate.add(playthroughDuration);
+    final updatedPlaythrough = playthrough.copyWith(
+      startDate: newStartDate,
+      status: PlaythroughStatus.Finished,
+      endDate: newStartDate.add(playthoughDuration),
+    );
+    _updatedPlaythroughDetails =
+        _updatedPlaythroughDetails.copyWith(playthrough: updatedPlaythrough);
   }
 
   @action
   void updateDuration(int hoursPlayed, int minutesPlyed) {
-    playthrough.endDate =
-        playthrough.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed));
+    final updatedPlaythrough = playthrough.copyWith(
+        endDate:
+            playthroughDetails.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed)));
+
+    _updatedPlaythroughDetails =
+        _updatedPlaythroughDetails.copyWith(playthrough: updatedPlaythrough);
   }
 
   @action
   Future<void> deletePlaythrough() async {
-    await _playthroughsStore.deletePlaythrough(playthrough.id);
+    await _playthroughsStore.deletePlaythrough(playthroughDetails.id);
   }
 }

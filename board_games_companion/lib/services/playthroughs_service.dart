@@ -54,7 +54,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return null;
     }
 
-    final newPlaythrough = Playthrough(
+    var newPlaythrough = Playthrough(
       id: uuid.v4(),
       boardGameId: boardGameId,
       playerIds: playthroughPlayerIds,
@@ -64,17 +64,19 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     );
 
     if (duration == null) {
-      newPlaythrough.status = PlaythroughStatus.Started;
+      newPlaythrough = newPlaythrough.copyWith(status: PlaythroughStatus.Started);
     } else {
-      newPlaythrough.status = PlaythroughStatus.Finished;
-      newPlaythrough.endDate = startDate.add(duration);
+      newPlaythrough.copyWith(
+        status: PlaythroughStatus.Finished,
+        endDate: startDate.add(duration),
+      );
     }
 
     try {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playthroughPlayerId in playthroughPlayerIds) {
-        Score playerScore = Score(
+        var playerScore = Score(
           id: uuid.v4(),
           playerId: playthroughPlayerId,
           boardGameId: boardGameId,
@@ -127,9 +129,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    playthroughToDelete.isDeleted = true;
-
-    await storageBox.put(playthroughId, playthroughToDelete);
+    await storageBox.put(playthroughId, playthroughToDelete.copyWith(isDeleted: true));
 
     return true;
   }
@@ -146,13 +146,9 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    for (final playthroughToDelete in playthroughsToDelete) {
-      playthroughToDelete.isDeleted = true;
-    }
-
     final Map<String, Playthrough> mappedPlaythroughs = {
       for (final playthroughToDelete in playthroughsToDelete)
-        playthroughToDelete.id: playthroughToDelete
+        playthroughToDelete.id: playthroughToDelete.copyWith(isDeleted: true)
     };
 
     await storageBox.putAll(mappedPlaythroughs);
@@ -170,12 +166,9 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    for (final playthrough in playthroughs) {
-      playthrough.isDeleted = true;
-    }
-
     await storageBox.putAll(<String, Playthrough>{
-      for (Playthrough playthrough in playthroughs) playthrough.id: playthrough
+      for (Playthrough playthrough in playthroughs)
+        playthrough.id: playthrough.copyWith(isDeleted: true)
     });
 
     return true;

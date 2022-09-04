@@ -9,6 +9,13 @@ part of 'edit_playthrough_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
+  Computed<PlaythroughDetails>? _$playthroughDetailsComputed;
+
+  @override
+  PlaythroughDetails get playthroughDetails => (_$playthroughDetailsComputed ??=
+          Computed<PlaythroughDetails>(() => super.playthroughDetails,
+              name: '_EditPlaythoughViewModel.playthroughDetails'))
+      .value;
   Computed<Playthrough>? _$playthroughComputed;
 
   @override
@@ -16,6 +23,13 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
       (_$playthroughComputed ??= Computed<Playthrough>(() => super.playthrough,
               name: '_EditPlaythoughViewModel.playthrough'))
           .value;
+  Computed<List<PlayerScore>>? _$playerScoresComputed;
+
+  @override
+  List<PlayerScore> get playerScores => (_$playerScoresComputed ??=
+          Computed<List<PlayerScore>>(() => super.playerScores,
+              name: '_EditPlaythoughViewModel.playerScores'))
+      .value;
   Computed<DateTime>? _$playthroughStartTimeComputed;
 
   @override
@@ -67,6 +81,17 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
       ActionController(name: '_EditPlaythoughViewModel', context: context);
 
   @override
+  void setPlaythroughId(String playthroughId) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.setPlaythroughId');
+    try {
+      return super.setPlaythroughId(playthroughId);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void updateStartDate(DateTime newStartDate) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
         name: '_EditPlaythoughViewModel.updateStartDate');
@@ -91,7 +116,9 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   @override
   String toString() {
     return '''
+playthroughDetails: ${playthroughDetails},
 playthrough: ${playthrough},
+playerScores: ${playerScores},
 playthroughStartTime: ${playthroughStartTime},
 playthoughEnded: ${playthoughEnded},
 playthoughDuration: ${playthoughDuration}

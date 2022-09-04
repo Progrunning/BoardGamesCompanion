@@ -22,8 +22,8 @@ import '../../widgets/playthrough/calendar_card.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'edit_playthrough_view_model.dart';
 
-class EditPlaythoughPage extends StatefulWidget {
-  const EditPlaythoughPage({
+class EditPlaythroughPage extends StatefulWidget {
+  const EditPlaythroughPage({
     required this.viewModel,
     Key? key,
   }) : super(key: key);
@@ -33,10 +33,10 @@ class EditPlaythoughPage extends StatefulWidget {
   final EditPlaythoughViewModel viewModel;
 
   @override
-  EditPlaythoughPageState createState() => EditPlaythoughPageState();
+  EditPlaythroughPageState createState() => EditPlaythroughPageState();
 }
 
-class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
+class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScoreDialogMixin {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -151,7 +151,7 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
   }
 
   Future<bool> _handleOnWillPop(BuildContext context) async {
-    if (!widget.viewModel.isDirty()) {
+    if (!widget.viewModel.isDirty) {
       return true;
     }
 
@@ -217,7 +217,7 @@ class _ScoresSectionState extends State<_ScoresSection> {
             padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
             child: _PlayerScoreTile(
               playerScore: widget.viewModel.playerScores[index],
-              playthroughId: widget.viewModel.playthrough.id,
+              playthroughId: widget.viewModel.playthroughDetails.id,
             ),
           ),
         );

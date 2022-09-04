@@ -123,7 +123,7 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
       context: context);
 
   @override
-  Future<Playthrough?> createPlaythrough(String boardGameId) {
+  Future<PlaythroughDetails?> createPlaythrough(String boardGameId) {
     return _$createPlaythroughAsyncAction
         .run(() => super.createPlaythrough(boardGameId));
   }

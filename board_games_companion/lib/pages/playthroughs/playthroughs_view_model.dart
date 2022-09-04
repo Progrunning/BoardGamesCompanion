@@ -2,6 +2,7 @@
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/import_result.dart';
+import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:injectable/injectable.dart';
@@ -12,7 +13,6 @@ import '../../common/analytics.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/player.dart';
-import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
@@ -79,7 +79,7 @@ abstract class _PlaythroughsViewModel with Store {
     // TODO Consider using isolates to parse and iterate over the results
     for (final bggPlay in bggPlaysImportResult.data!) {
       final bggPlayExists = _playthroughsStore.playthroughs
-          .any((Playthrough playthrough) => playthrough.bggPlayId == bggPlay.id);
+          .any((PlaythroughDetails playthrough) => playthrough.bggPlayId == bggPlay.id);
       if (bggPlayExists) {
         continue;
       }

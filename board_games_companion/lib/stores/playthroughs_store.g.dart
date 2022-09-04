@@ -13,13 +13,13 @@ mixin _$PlaythroughsStore on _PlaythroughsStore, Store {
       Atom(name: '_PlaythroughsStore.playthroughs', context: context);
 
   @override
-  ObservableList<Playthrough> get playthroughs {
+  ObservableList<PlaythroughDetails> get playthroughs {
     _$playthroughsAtom.reportRead();
     return super.playthroughs;
   }
 
   @override
-  set playthroughs(ObservableList<Playthrough> value) {
+  set playthroughs(ObservableList<PlaythroughDetails> value) {
     _$playthroughsAtom.reportWrite(value, super.playthroughs, () {
       super.playthroughs = value;
     });

@@ -8,9 +8,9 @@ import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
 import '../../models/hive/board_game_details.dart';
-import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
+import '../../models/playthrough_details.dart';
 import '../../models/playthrough_player.dart';
 import '../../services/analytics_service.dart';
 import 'playthroughs_log_game_page.dart';
@@ -92,8 +92,8 @@ abstract class _PlaythroughsLogGameViewModel with Store {
       futureLoadPlaythroughPlayers = ObservableFuture<void>(_loadPlaythroughPlayers());
 
   @action
-  Future<Playthrough?> createPlaythrough(String boardGameId) async {
-    final Playthrough? newPlaythrough = await _playthroughsStore.createPlaythrough(
+  Future<PlaythroughDetails?> createPlaythrough(String boardGameId) async {
+    final PlaythroughDetails? newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
       _selectedPlaythroughPlayers,
       playerScores,

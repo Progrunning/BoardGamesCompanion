@@ -49,12 +49,12 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
           },
         );
         break;
-      case EditPlaythoughPage.pageRoute:
+      case EditPlaythroughPage.pageRoute:
         final arguments = route.settings.arguments as EditPlaythroughPageArguments;
         _analtyicsService.logEvent(
           name: Analytics.editPlaythrough,
           parameters: <String, String>{
-            Analytics.boardGameIdParameter: arguments.playthroughViewModel.playthrough.boardGameId,
+            Analytics.boardGameIdParameter: arguments.boardGameId,
           },
         );
         break;

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -13,7 +14,6 @@ import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
-import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container_widget.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
@@ -21,7 +21,6 @@ import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/player_score_rank_avatar.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
-import 'playthrough_view_model.dart';
 import 'playthroughs_history_view_model.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
@@ -58,27 +57,21 @@ class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
               );
             }
 
-            return Observer(
-              builder: (_) {
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-                  itemBuilder: (_, index) {
-                    final playthroughViewModel = getIt<PlaythroughViewModel>();
-                    playthroughViewModel.loadPlaythrough(viewModel.playthroughs[index]);
-
-                    return _Playthrough(
-                      viewModel: playthroughViewModel,
-                      playthroughNumber: viewModel.playthroughs.length - index,
-                      isLast: index == viewModel.playthroughs.length - 1,
-                    );
-                  },
-                  separatorBuilder: (_, index) {
-                    return const SizedBox(height: Dimensions.doubleStandardSpacing);
-                  },
-                  itemCount: viewModel.playthroughs.length,
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+              itemBuilder: (_, index) {
+                return _Playthrough(
+                  playthroughDetails: viewModel.playthroughs[index],
+                  playthroughNumber: viewModel.playthroughs.length - index,
+                  isLast: index == viewModel.playthroughs.length - 1,
                 );
               },
+              separatorBuilder: (_, index) {
+                return const SizedBox(height: Dimensions.doubleStandardSpacing);
+              },
+              itemCount: viewModel.playthroughs.length,
             );
+
           default:
             return const SizedBox.shrink();
         }
@@ -89,13 +82,13 @@ class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
 
 class _Playthrough extends StatefulWidget {
   const _Playthrough({
-    required this.viewModel,
+    required this.playthroughDetails,
     required this.isLast,
     this.playthroughNumber,
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughViewModel viewModel;
+  final PlaythroughDetails playthroughDetails;
   final int? playthroughNumber;
   final bool isLast;
 
@@ -122,32 +115,19 @@ class _PlaythroughState extends State<_Playthrough> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(Dimensions.standardSpacing),
-            child: Observer(
-              builder: (_) {
-                switch (widget.viewModel.futureLoadPlaythrough?.status ?? FutureStatus.pending) {
-                  case FutureStatus.pending:
-                    return const LoadingIndicator();
-
-                  case FutureStatus.rejected:
-                    return const Center(child: GenericErrorMessage());
-
-                  case FutureStatus.fulfilled:
-                    return Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _PlaythroughGameStats(
-                          playthroughViewModel: widget.viewModel,
-                          playthroughNumber: widget.playthroughNumber,
-                        ),
-                        const SizedBox(width: Dimensions.doubleStandardSpacing),
-                        Expanded(
-                          child: _PlaythroughPlayersStats(playthroughViewModel: widget.viewModel),
-                        ),
-                      ],
-                    );
-                }
-              },
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _PlaythroughGameStats(
+                  playthroughDetails: widget.playthroughDetails,
+                  playthroughNumber: widget.playthroughNumber,
+                ),
+                const SizedBox(width: Dimensions.doubleStandardSpacing),
+                Expanded(
+                  child: _PlaythroughPlayersStats(playthroughDetails: widget.playthroughDetails),
+                ),
+              ],
             ),
           ),
         ),
@@ -159,17 +139,17 @@ class _PlaythroughState extends State<_Playthrough> {
 class _PlaythroughPlayersStats extends StatelessWidget {
   const _PlaythroughPlayersStats({
     Key? key,
-    required this.playthroughViewModel,
+    required this.playthroughDetails,
   }) : super(key: key);
 
-  final PlaythroughViewModel playthroughViewModel;
+  final PlaythroughDetails playthroughDetails;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Expanded(child: _PlaythroughPlayerList(playthroughViewModel: playthroughViewModel)),
+        Expanded(child: _PlaythroughPlayerList(playthroughDetails: playthroughDetails)),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -179,8 +159,11 @@ class _PlaythroughPlayersStats extends StatelessWidget {
               color: AppColors.accentColor,
               onPressed: () => Navigator.pushNamed(
                 context,
-                EditPlaythoughPage.pageRoute,
-                arguments: EditPlaythroughPageArguments(playthroughViewModel),
+                EditPlaythroughPage.pageRoute,
+                arguments: EditPlaythroughPageArguments(
+                  playthroughDetails.id,
+                  playthroughDetails.boardGameId,
+                ),
               ),
             ),
           ],
@@ -193,26 +176,26 @@ class _PlaythroughPlayersStats extends StatelessWidget {
 class _PlaythroughPlayerList extends StatelessWidget {
   const _PlaythroughPlayerList({
     Key? key,
-    required PlaythroughViewModel playthroughViewModel,
-  })  : _playthroughStore = playthroughViewModel,
+    required PlaythroughDetails playthroughDetails,
+  })  : _playthroughDetails = playthroughDetails,
         super(key: key);
 
-  final PlaythroughViewModel _playthroughStore;
+  final PlaythroughDetails _playthroughDetails;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      itemCount: _playthroughStore.playerScores?.length ?? 0,
+      itemCount: _playthroughDetails.playerScores.length,
       separatorBuilder: (context, index) {
         return const SizedBox(width: Dimensions.doubleStandardSpacing);
       },
       itemBuilder: (context, index) {
         return PlayerScoreRankAvatar(
-          player: _playthroughStore.playerScores![index].player,
-          playerHeroIdSuffix: _playthroughStore.playthrough.id,
-          rank: _playthroughStore.playerScores![index].place,
-          score: _playthroughStore.playerScores![index].score.value,
+          player: _playthroughDetails.playerScores[index].player,
+          playerHeroIdSuffix: _playthroughDetails.id,
+          rank: _playthroughDetails.playerScores[index].place,
+          score: _playthroughDetails.playerScores[index].score.value,
         );
       },
     );
@@ -222,11 +205,11 @@ class _PlaythroughPlayerList extends StatelessWidget {
 class _PlaythroughGameStats extends StatelessWidget {
   const _PlaythroughGameStats({
     Key? key,
-    required this.playthroughViewModel,
+    required this.playthroughDetails,
     required this.playthroughNumber,
   }) : super(key: key);
 
-  final PlaythroughViewModel playthroughViewModel;
+  final PlaythroughDetails playthroughDetails;
   final int? playthroughNumber;
 
   @override
@@ -235,16 +218,16 @@ class _PlaythroughGameStats extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        CalendarCard(playthroughViewModel.playthrough.startDate),
+        CalendarCard(playthroughDetails.startDate),
         _PlaythroughItemDetail(
-          playthroughViewModel.daysSinceStart?.toString(),
+          playthroughDetails.daysSinceStart?.toString(),
           'day(s) ago',
         ),
         _PlaythroughItemDetail(
           '$playthroughNumber${playthroughNumber.toOrdinalAbbreviations()}',
           'game',
         ),
-        _PlaythroughDuration(viewModel: playthroughViewModel),
+        _PlaythroughDuration(playthroughDetails: playthroughDetails),
       ],
     );
   }
@@ -252,11 +235,11 @@ class _PlaythroughGameStats extends StatelessWidget {
 
 class _PlaythroughDuration extends StatefulWidget {
   const _PlaythroughDuration({
-    required this.viewModel,
+    required this.playthroughDetails,
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughViewModel viewModel;
+  final PlaythroughDetails playthroughDetails;
 
   @override
   _PlaythroughDurationState createState() => _PlaythroughDurationState();
@@ -270,14 +253,14 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
   void initState() {
     super.initState();
 
-    if (!widget.viewModel.playthoughEnded) {
+    if (!widget.playthroughDetails.playthoughEnded) {
       periodicBroadcastStream.stream.listen(_updateDuration);
     }
   }
 
   @override
   void dispose() {
-    if (!widget.viewModel.playthoughEnded) {
+    if (!widget.playthroughDetails.playthoughEnded) {
       periodicBroadcastStream.dispose();
     }
 
@@ -287,7 +270,7 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
   @override
   Widget build(BuildContext context) {
     return _PlaythroughItemDetail(
-      widget.viewModel.duration.inSeconds.toPlaytimeDuration(),
+      widget.playthroughDetails.duration.inSeconds.toPlaytimeDuration(),
       'duration',
     );
   }
