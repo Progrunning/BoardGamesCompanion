@@ -35,8 +35,8 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
       playthroughPlayers.where((player) => player.isChecked).toList();
 
-  final Map<String, PlayerScore> _playerScores = {};
-  Map<String, PlayerScore> get playerScores => _playerScores;
+  @observable
+  ObservableMap<String, PlayerScore> playerScores = ObservableMap.of({});
 
   @observable
   DateTime playthroughDate = DateTime.now();
@@ -69,14 +69,17 @@ abstract class _PlaythroughsLogGameViewModel with Store {
 
   @action
   void selectPlayer(PlaythroughPlayer playthroughPlayer) {
-    final playerScore = Score(
+    final score = Score(
       id: const Uuid().v4(),
       playerId: playthroughPlayer.player.id,
       boardGameId: _playthroughsStore.boardGame.id,
     );
 
     playthroughPlayer.isChecked = true;
-    playerScores[playthroughPlayer.player.id] = PlayerScore(playthroughPlayer.player, playerScore);
+    playerScores[playthroughPlayer.player.id] = PlayerScore(
+      player: playthroughPlayer.player,
+      score: score,
+    );
   }
 
   @action

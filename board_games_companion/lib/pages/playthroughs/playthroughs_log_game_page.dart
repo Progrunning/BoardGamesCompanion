@@ -711,16 +711,9 @@ class _PlayerScore extends StatelessWidget {
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           Column(
             children: <Widget>[
-              ChangeNotifierProvider<PlayerScore>.value(
-                value: playerScore,
-                child: Consumer<PlayerScore>(
-                  builder: (_, PlayerScore playerScore, __) {
-                    return Text(
-                      '${playerScore.score.valueInt}',
-                      style: AppStyles.playerScoreTextStyle,
-                    );
-                  },
-                ),
+              Text(
+                '${playerScore.score.valueInt}',
+                style: AppStyles.playerScoreTextStyle,
               ),
               const SizedBox(height: Dimensions.halfStandardSpacing),
               Text('points', style: AppTheme.theme.textTheme.bodyText2),

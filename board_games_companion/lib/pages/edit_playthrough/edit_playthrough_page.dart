@@ -4,7 +4,6 @@ import 'package:board_games_companion/pages/enter_score/enter_score_view_model.d
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -274,16 +273,9 @@ class _PlayerScore extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ChangeNotifierProvider<PlayerScore>.value(
-              value: playerScore,
-              child: Consumer<PlayerScore>(
-                builder: (_, playerScore, __) {
-                  return Text(
-                    playerScore.score.value ?? '-',
-                    style: AppStyles.playerScoreTextStyle,
-                  );
-                },
-              ),
+            Text(
+              playerScore.score.value ?? '-',
+              style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),
             Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyText2),

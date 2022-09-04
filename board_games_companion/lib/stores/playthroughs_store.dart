@@ -132,13 +132,11 @@ abstract class _PlaythroughsStore with Store {
 
     final playerScores = scores.mapIndexed((int index, Score score) {
       final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
-      return PlayerScore.withPlace(player, score, index + 1);
+      return PlayerScore(player: player, score: score, place: index + 1);
     }).toList();
 
     return PlaythroughDetails(
       playthrough: hivePlaythrough,
-      scores: scores,
-      players: players,
       playerScores: playerScores,
     );
   }

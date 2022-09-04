@@ -1,9 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../common/enums/playthrough_status.dart';
-import 'hive/player.dart';
 import 'hive/playthrough.dart';
-import 'hive/score.dart';
 import 'player_score.dart';
 
 part 'playthrough_details.freezed.dart';
@@ -12,8 +10,6 @@ part 'playthrough_details.freezed.dart';
 class PlaythroughDetails with _$PlaythroughDetails {
   const factory PlaythroughDetails({
     required Playthrough playthrough,
-    required List<Score> scores,
-    required List<Player> players,
     required List<PlayerScore> playerScores,
   }) = _PlaythroughDetails;
 

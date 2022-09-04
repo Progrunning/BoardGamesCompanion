@@ -17,8 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PlaythroughDetails {
   Playthrough get playthrough => throw _privateConstructorUsedError;
-  List<Score> get scores => throw _privateConstructorUsedError;
-  List<Player> get players => throw _privateConstructorUsedError;
   List<PlayerScore> get playerScores => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,11 +29,7 @@ abstract class $PlaythroughDetailsCopyWith<$Res> {
   factory $PlaythroughDetailsCopyWith(
           PlaythroughDetails value, $Res Function(PlaythroughDetails) then) =
       _$PlaythroughDetailsCopyWithImpl<$Res>;
-  $Res call(
-      {Playthrough playthrough,
-      List<Score> scores,
-      List<Player> players,
-      List<PlayerScore> playerScores});
+  $Res call({Playthrough playthrough, List<PlayerScore> playerScores});
 
   $PlaythroughCopyWith<$Res> get playthrough;
 }
@@ -52,8 +46,6 @@ class _$PlaythroughDetailsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? playthrough = freezed,
-    Object? scores = freezed,
-    Object? players = freezed,
     Object? playerScores = freezed,
   }) {
     return _then(_value.copyWith(
@@ -61,14 +53,6 @@ class _$PlaythroughDetailsCopyWithImpl<$Res>
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
               as Playthrough,
-      scores: scores == freezed
-          ? _value.scores
-          : scores // ignore: cast_nullable_to_non_nullable
-              as List<Score>,
-      players: players == freezed
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
       playerScores: playerScores == freezed
           ? _value.playerScores
           : playerScores // ignore: cast_nullable_to_non_nullable
@@ -91,11 +75,7 @@ abstract class _$$_PlaythroughDetailsCopyWith<$Res>
           $Res Function(_$_PlaythroughDetails) then) =
       __$$_PlaythroughDetailsCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {Playthrough playthrough,
-      List<Score> scores,
-      List<Player> players,
-      List<PlayerScore> playerScores});
+  $Res call({Playthrough playthrough, List<PlayerScore> playerScores});
 
   @override
   $PlaythroughCopyWith<$Res> get playthrough;
@@ -115,8 +95,6 @@ class __$$_PlaythroughDetailsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? playthrough = freezed,
-    Object? scores = freezed,
-    Object? players = freezed,
     Object? playerScores = freezed,
   }) {
     return _then(_$_PlaythroughDetails(
@@ -124,14 +102,6 @@ class __$$_PlaythroughDetailsCopyWithImpl<$Res>
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
               as Playthrough,
-      scores: scores == freezed
-          ? _value._scores
-          : scores // ignore: cast_nullable_to_non_nullable
-              as List<Score>,
-      players: players == freezed
-          ? _value._players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
       playerScores: playerScores == freezed
           ? _value._playerScores
           : playerScores // ignore: cast_nullable_to_non_nullable
@@ -145,30 +115,12 @@ class __$$_PlaythroughDetailsCopyWithImpl<$Res>
 class _$_PlaythroughDetails extends _PlaythroughDetails {
   const _$_PlaythroughDetails(
       {required this.playthrough,
-      required final List<Score> scores,
-      required final List<Player> players,
       required final List<PlayerScore> playerScores})
-      : _scores = scores,
-        _players = players,
-        _playerScores = playerScores,
+      : _playerScores = playerScores,
         super._();
 
   @override
   final Playthrough playthrough;
-  final List<Score> _scores;
-  @override
-  List<Score> get scores {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_scores);
-  }
-
-  final List<Player> _players;
-  @override
-  List<Player> get players {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_players);
-  }
-
   final List<PlayerScore> _playerScores;
   @override
   List<PlayerScore> get playerScores {
@@ -178,7 +130,7 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
 
   @override
   String toString() {
-    return 'PlaythroughDetails(playthrough: $playthrough, scores: $scores, players: $players, playerScores: $playerScores)';
+    return 'PlaythroughDetails(playthrough: $playthrough, playerScores: $playerScores)';
   }
 
   @override
@@ -188,8 +140,6 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
             other is _$_PlaythroughDetails &&
             const DeepCollectionEquality()
                 .equals(other.playthrough, playthrough) &&
-            const DeepCollectionEquality().equals(other._scores, _scores) &&
-            const DeepCollectionEquality().equals(other._players, _players) &&
             const DeepCollectionEquality()
                 .equals(other._playerScores, _playerScores));
   }
@@ -198,8 +148,6 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(playthrough),
-      const DeepCollectionEquality().hash(_scores),
-      const DeepCollectionEquality().hash(_players),
       const DeepCollectionEquality().hash(_playerScores));
 
   @JsonKey(ignore: true)
@@ -212,17 +160,11 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
 abstract class _PlaythroughDetails extends PlaythroughDetails {
   const factory _PlaythroughDetails(
       {required final Playthrough playthrough,
-      required final List<Score> scores,
-      required final List<Player> players,
       required final List<PlayerScore> playerScores}) = _$_PlaythroughDetails;
   const _PlaythroughDetails._() : super._();
 
   @override
   Playthrough get playthrough;
-  @override
-  List<Score> get scores;
-  @override
-  List<Player> get players;
   @override
   List<PlayerScore> get playerScores;
   @override

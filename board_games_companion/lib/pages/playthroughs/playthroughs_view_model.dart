@@ -119,7 +119,7 @@ abstract class _PlaythroughsViewModel with Store {
             boardGameId: boardGameId,
             value: bggPlayer.playerScore.toString(),
           );
-          playerScores[player.id] = PlayerScore(player, playerScore);
+          playerScores[player.id] = PlayerScore(player: player, score: playerScore);
         }
       }
 
