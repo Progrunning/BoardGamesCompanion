@@ -31,7 +31,8 @@ abstract class _EditPlaythoughViewModel with Store {
   Playthrough get playthrough => updatedPlaythroughDetails.playthrough;
 
   @computed
-  List<PlayerScore> get playerScores => updatedPlaythroughDetails.playerScores;
+  ObservableList<PlayerScore> get playerScores =>
+      updatedPlaythroughDetails.playerScores.asObservable();
 
   @computed
   DateTime get playthroughStartTime => updatedPlaythroughDetails.startDate;
@@ -88,6 +89,26 @@ abstract class _EditPlaythoughViewModel with Store {
     _updatedPlaythroughDetails =
         _updatedPlaythroughDetails.copyWith(playthrough: updatedPlaythrough);
   }
+
+  // ! MK Update the scores on save
+  @action
+  void updatePlayerScore(PlayerScore playerScore, int newScore) {
+    if (playerScore.score.valueInt == newScore) {
+      return;
+    }
+
+    final updatedPlayerScore =
+        playerScore.copyWith(score: playerScore.score.copyWith(value: newScore.toString()));
+  }
+  //   final currentPlayerScore = _updatedPlaythroughDetails.playerScores
+  //       .firstWhere((element) => element.player?.id == playerScore.player?.id);
+  //   if (currentPlayerScore == null) {
+  //     return;
+  //   }
+
+  //   _updatedPlaythroughDetails =
+  //       _updatedPlaythroughDetails.copyWith(playerScores: updatedPlaythrough);
+  // }
 
   @action
   Future<void> deletePlaythrough() async {
