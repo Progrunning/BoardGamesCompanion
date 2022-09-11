@@ -80,7 +80,6 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     onItemTapped: (PlayerScore playerScore) async {
                       final viewModel = EnterScoreViewModel(playerScore);
                       await showEnterScoreDialog(context, viewModel);
-                      // ! MK I think that PlayerScore needs to be observable and update score inside of it
                       widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
                       return viewModel.score.toString();
                     },

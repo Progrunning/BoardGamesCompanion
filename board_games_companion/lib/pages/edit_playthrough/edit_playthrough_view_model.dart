@@ -91,7 +91,6 @@ abstract class _EditPlaythoughViewModel with Store {
         _updatedPlaythroughDetails?.copyWith(playthrough: updatedPlaythrough);
   }
 
-  // ! MK Update the scores on save
   @action
   void updatePlayerScore(PlayerScore playerScore, int newScore) {
     if (playerScore.score.valueInt == newScore) {
@@ -105,15 +104,6 @@ abstract class _EditPlaythoughViewModel with Store {
 
     _updatedPlaythroughDetails = updatedPlaythroughDetails.copyWith(playerScores: playerScores);
   }
-  //   final currentPlayerScore = _updatedPlaythroughDetails.playerScores
-  //       .firstWhere((element) => element.player?.id == playerScore.player?.id);
-  //   if (currentPlayerScore == null) {
-  //     return;
-  //   }
-
-  //   _updatedPlaythroughDetails =
-  //       _updatedPlaythroughDetails.copyWith(playerScores: updatedPlaythrough);
-  // }
 
   @action
   Future<void> deletePlaythrough() async {

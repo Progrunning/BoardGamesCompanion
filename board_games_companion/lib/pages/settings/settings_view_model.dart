@@ -61,7 +61,7 @@ abstract class _SettingsViewModel with Store {
 
   @action
   Future<void> restoreAppData() async {
-    // ! MK Refresh Hive
+    // ! MK Refresh Hive after restoring
     try {
       visualState = const SettingsPageVisualState.restoring();
       await _fileService.restoreAppData();
