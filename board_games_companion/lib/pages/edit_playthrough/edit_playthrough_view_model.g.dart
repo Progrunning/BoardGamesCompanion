@@ -52,6 +52,24 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
               name: '_EditPlaythoughViewModel.playthoughDuration'))
       .value;
 
+  late final _$_updatedPlaythroughDetailsAtom = Atom(
+      name: '_EditPlaythoughViewModel._updatedPlaythroughDetails',
+      context: context);
+
+  @override
+  PlaythroughDetails? get _updatedPlaythroughDetails {
+    _$_updatedPlaythroughDetailsAtom.reportRead();
+    return super._updatedPlaythroughDetails;
+  }
+
+  @override
+  set _updatedPlaythroughDetails(PlaythroughDetails? value) {
+    _$_updatedPlaythroughDetailsAtom
+        .reportWrite(value, super._updatedPlaythroughDetails, () {
+      super._updatedPlaythroughDetails = value;
+    });
+  }
+
   late final _$stopPlaythroughAsyncAction =
       AsyncAction('_EditPlaythoughViewModel.stopPlaythrough', context: context);
 
@@ -114,11 +132,11 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
-  void updatePlayerScore(PlayerScore playerScore) {
+  void updatePlayerScore(PlayerScore playerScore, int newScore) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
         name: '_EditPlaythoughViewModel.updatePlayerScore');
     try {
-      return super.updatePlayerScore(playerScore);
+      return super.updatePlayerScore(playerScore, newScore);
     } finally {
       _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
     }

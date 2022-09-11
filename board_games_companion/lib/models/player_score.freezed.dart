@@ -121,8 +121,9 @@ class __$$_PlayerScoreCopyWithImpl<$Res> extends _$PlayerScoreCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PlayerScore implements _PlayerScore {
-  const _$_PlayerScore({required this.player, required this.score, this.place});
+class _$_PlayerScore extends _PlayerScore {
+  const _$_PlayerScore({required this.player, required this.score, this.place})
+      : super._();
 
   @override
   final Player? player;
@@ -159,11 +160,12 @@ class _$_PlayerScore implements _PlayerScore {
       __$$_PlayerScoreCopyWithImpl<_$_PlayerScore>(this, _$identity);
 }
 
-abstract class _PlayerScore implements PlayerScore {
+abstract class _PlayerScore extends PlayerScore {
   const factory _PlayerScore(
       {required final Player? player,
       required final Score score,
       final int? place}) = _$_PlayerScore;
+  const _PlayerScore._() : super._();
 
   @override
   Player? get player;

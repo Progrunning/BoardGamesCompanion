@@ -20,8 +20,10 @@ abstract class _EditPlaythoughViewModel with Store {
   late final String _playthroughId;
   final PlaythroughsStore _playthroughsStore;
 
-  late PlaythroughDetails _updatedPlaythroughDetails;
-  PlaythroughDetails get updatedPlaythroughDetails => _updatedPlaythroughDetails;
+  @observable
+  PlaythroughDetails? _updatedPlaythroughDetails;
+
+  PlaythroughDetails get updatedPlaythroughDetails => _updatedPlaythroughDetails!;
 
   @computed
   PlaythroughDetails get playthroughDetails =>
@@ -44,8 +46,7 @@ abstract class _EditPlaythoughViewModel with Store {
   Duration get playthoughDuration => (updatedPlaythroughDetails.endDate ?? DateTime.now())
       .difference(updatedPlaythroughDetails.startDate);
 
-  // ! MK Make sure that all properties of PlaythrougDetails are Freezed so comparison works https://stackoverflow.com/questions/60383178/combine-freezed-hive
-  bool get isDirty => updatedPlaythroughDetails == playthroughDetails;
+  bool get isDirty => updatedPlaythroughDetails != playthroughDetails;
 
   @action
   void setPlaythroughId(String playthroughId) {
@@ -77,7 +78,7 @@ abstract class _EditPlaythoughViewModel with Store {
       endDate: newStartDate.add(playthoughDuration),
     );
     _updatedPlaythroughDetails =
-        _updatedPlaythroughDetails.copyWith(playthrough: updatedPlaythrough);
+        _updatedPlaythroughDetails?.copyWith(playthrough: updatedPlaythrough);
   }
 
   @action
@@ -87,7 +88,7 @@ abstract class _EditPlaythoughViewModel with Store {
             playthroughDetails.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed)));
 
     _updatedPlaythroughDetails =
-        _updatedPlaythroughDetails.copyWith(playthrough: updatedPlaythrough);
+        _updatedPlaythroughDetails?.copyWith(playthrough: updatedPlaythrough);
   }
 
   // ! MK Update the scores on save
@@ -99,6 +100,10 @@ abstract class _EditPlaythoughViewModel with Store {
 
     final updatedPlayerScore =
         playerScore.copyWith(score: playerScore.score.copyWith(value: newScore.toString()));
+    final playerScoreIndex = playerScores.indexOf(playerScore);
+    playerScores[playerScoreIndex] = updatedPlayerScore;
+
+    _updatedPlaythroughDetails = updatedPlaythroughDetails.copyWith(playerScores: playerScores);
   }
   //   final currentPlayerScore = _updatedPlaythroughDetails.playerScores
   //       .firstWhere((element) => element.player?.id == playerScore.player?.id);

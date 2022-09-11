@@ -76,20 +76,24 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playthroughPlayerId in playthroughPlayerIds) {
-        final playerScore = playerScores[playthroughPlayerId]?.score ??
+        var playerScore = playerScores[playthroughPlayerId]?.score ??
             Score(
               id: uuid.v4(),
               playerId: playthroughPlayerId,
               boardGameId: boardGameId,
               playthroughId: newPlaythrough.id,
             );
+        if (playerScore.playthroughId == null) {
+          playerScore = playerScore.copyWith(playthroughId: newPlaythrough.id);
+        }
 
         if (!await scoreService.addOrUpdateScore(playerScore)) {
           FirebaseCrashlytics.instance.log(
             'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId',
           );
         } else {
-          newPlaythrough.scoreIds.add(playerScore.id);
+          newPlaythrough = newPlaythrough.copyWith(
+              scoreIds: newPlaythrough.scoreIds.toList()..add(playerScore.id));
         }
       }
 

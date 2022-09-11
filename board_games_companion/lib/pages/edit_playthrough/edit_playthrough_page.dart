@@ -203,16 +203,20 @@ class _ScoresSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: viewModel.playerScores.length,
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: Dimensions.doubleStandardSpacing);
-      },
-      itemBuilder: (context, index) {
-        return _PlayerScoreTile(
-          playerScore: viewModel.playerScores[index],
-          playthroughId: viewModel.playthroughDetails.id,
-          onItemTapped: onItemTapped,
+    return Observer(
+      builder: (_) {
+        return ListView.separated(
+          itemCount: viewModel.playerScores.length,
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: Dimensions.doubleStandardSpacing);
+          },
+          itemBuilder: (context, index) {
+            return _PlayerScoreTile(
+              playerScore: viewModel.playerScores[index],
+              playthroughId: viewModel.playthroughDetails.id,
+              onItemTapped: onItemTapped,
+            );
+          },
         );
       },
     );
