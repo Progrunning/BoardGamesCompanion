@@ -278,85 +278,87 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SectionTitle(
-                title: AppText.settingsPageBackupAndRestoreSectionTitle,
-                padding: EdgeInsets.zero,
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
-              const Text(
-                AppText.settingsPageBackupAndRestoreSectionBody,
-                style: TextStyle(fontSize: Dimensions.mediumFontSize),
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedIconButton(
-                    icon: const Icon(Icons.settings_backup_restore),
-                    title: AppText.settingsPageRestireButtonText,
-                    onPressed: () async => widget.viewModel.restoreAppData(),
-                  ),
-                  const SizedBox(width: Dimensions.standardSpacing),
-                  AnimatedButton(
-                    text: AppText.settingsPageBackupButtonText,
-                    icon: const DefaultIcon(Icons.archive),
-                    sizeAnimationController: _sizeAnimationController,
-                    fadeInAnimationController: _fadeInAnimationController,
-                    onPressed: () async {
-                      await widget.viewModel.backupAppsData();
-                      if (mounted) {
-                        _sizeAnimationController.forward();
-                        _fadeInAnimationController.reverse();
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Observer(
-          builder: (BuildContext context) {
-            switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
-              case FutureStatus.fulfilled:
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return Material(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SectionTitle(
+                  title: AppText.settingsPageBackupAndRestoreSectionTitle,
+                  padding: EdgeInsets.zero,
+                ),
+                const SizedBox(height: Dimensions.standardSpacing),
+                const Text(
+                  AppText.settingsPageBackupAndRestoreSectionBody,
+                  style: TextStyle(fontSize: Dimensions.mediumFontSize),
+                ),
+                const SizedBox(height: Dimensions.standardSpacing),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (widget.viewModel.hasAnyBackupFiles) ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                        child: Text(
-                          AppText.settingsPageBackupsListTitle,
-                          style: AppTheme.sectionHeaderTextStyle,
-                        ),
-                      ),
-                      const SizedBox(height: Dimensions.halfStandardSpacing),
-                    ],
-                    for (final backupFile in widget.viewModel.backupFiles)
-                      _BackupFile(
-                        backupFile: backupFile,
-                        onDeleteBackup: (BackupFile backupFile) =>
-                            widget.viewModel.deleteBackup(backupFile),
-                        onShareBackup: (BackupFile backupFile) async =>
-                            _shareBackup(context, backupFile),
-                      ),
+                    ElevatedIconButton(
+                      icon: const Icon(Icons.settings_backup_restore),
+                      title: AppText.settingsPageRestireButtonText,
+                      onPressed: () async => widget.viewModel.restoreAppData(),
+                    ),
+                    const SizedBox(width: Dimensions.standardSpacing),
+                    AnimatedButton(
+                      text: AppText.settingsPageBackupButtonText,
+                      icon: const DefaultIcon(Icons.archive),
+                      sizeAnimationController: _sizeAnimationController,
+                      fadeInAnimationController: _fadeInAnimationController,
+                      onPressed: () async {
+                        await widget.viewModel.backupAppsData();
+                        if (mounted) {
+                          _sizeAnimationController.forward();
+                          _fadeInAnimationController.reverse();
+                        }
+                      },
+                    ),
                   ],
-                );
-              case FutureStatus.pending:
-              case FutureStatus.rejected:
-                return const SizedBox.shrink();
-            }
-          },
-        ),
-      ],
+                ),
+              ],
+            ),
+          ),
+          Observer(
+            builder: (BuildContext context) {
+              switch (widget.viewModel.futureLoadBackups?.status ?? FutureStatus.pending) {
+                case FutureStatus.fulfilled:
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.viewModel.hasAnyBackupFiles) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                          child: Text(
+                            AppText.settingsPageBackupsListTitle,
+                            style: AppTheme.sectionHeaderTextStyle,
+                          ),
+                        ),
+                        const SizedBox(height: Dimensions.halfStandardSpacing),
+                      ],
+                      for (final backupFile in widget.viewModel.backupFiles)
+                        _BackupFile(
+                          backupFile: backupFile,
+                          onDeleteBackup: (BackupFile backupFile) =>
+                              widget.viewModel.deleteBackup(backupFile),
+                          onShareBackup: (BackupFile backupFile) async =>
+                              _shareBackup(context, backupFile),
+                        ),
+                    ],
+                  );
+                case FutureStatus.pending:
+                case FutureStatus.rejected:
+                  return const SizedBox.shrink();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -427,7 +429,7 @@ class _BackupFile extends StatelessWidget {
             ),
             const Expanded(child: SizedBox.shrink()),
             IconButton(
-              onPressed: () => onShareBackup,
+              onPressed: () => onShareBackup(backupFile),
               icon: const Icon(Icons.share),
               color: AppColors.accentColor,
             ),
