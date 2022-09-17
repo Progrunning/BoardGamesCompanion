@@ -1,15 +1,15 @@
 import 'package:injectable/injectable.dart';
 
-import '../common/hive_boxes.dart';
 import '../models/collection_filters.dart';
 import 'hive_base_service.dart';
 
 @singleton
-class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
+class BoardGamesFiltersService
+    extends BaseHiveService<CollectionFilters, BoardGamesFiltersService> {
   static const String _collectionFiltersPreferenceKey = 'collectionFilters';
 
   Future<CollectionFilters?> retrieveCollectionFiltersPreferences() async {
-    if (!await ensureBoxOpen(HiveBoxes.collectionFilters)) {
+    if (!await ensureBoxOpen()) {
       return null;
     }
 
@@ -25,7 +25,7 @@ class BoardGamesFiltersService extends BaseHiveService<CollectionFilters> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.collectionFilters)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 

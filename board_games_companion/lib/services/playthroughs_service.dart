@@ -3,7 +3,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/enums/playthrough_status.dart';
-import '../common/hive_boxes.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
 import '../models/playthrough_player.dart';
@@ -11,7 +10,7 @@ import 'hive_base_service.dart';
 import 'score_service.dart';
 
 @singleton
-class PlaythroughService extends BaseHiveService<Playthrough> {
+class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService> {
   PlaythroughService(this.scoreService);
 
   final ScoreService scoreService;
@@ -24,7 +23,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return <Playthrough>[];
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if (!await ensureBoxOpen()) {
       return <Playthrough>[];
     }
 
@@ -50,7 +49,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     }
 
     final playthroughPlayerIds = playthoughPlayers.map((p) => p.player.id).toList();
-    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if (!await ensureBoxOpen()) {
       return null;
     }
 
@@ -106,7 +105,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> updatePlaythrough(Playthrough playthrough) async {
-    if ((playthrough.id.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if ((playthrough.id.isEmpty) || !await ensureBoxOpen()) {
       return false;
     }
 
@@ -121,7 +120,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deletePlaythrough(String playthroughId) async {
-    if ((playthroughId.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if ((playthroughId.isEmpty) || !await ensureBoxOpen()) {
       return false;
     }
 
@@ -136,7 +135,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deletePlaythroughsForGames(List<String?> boardGameIds) async {
-    if ((boardGameIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if ((boardGameIds.isEmpty) || !await ensureBoxOpen()) {
       return false;
     }
 
@@ -158,7 +157,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deleteAllPlaythrough() async {
-    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 

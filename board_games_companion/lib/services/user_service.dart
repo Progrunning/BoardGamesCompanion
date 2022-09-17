@@ -1,13 +1,12 @@
 import 'package:injectable/injectable.dart';
 
-import '../common/hive_boxes.dart';
 import '../models/hive/user.dart';
 import 'hive_base_service.dart';
 
 @singleton
-class UserService extends BaseHiveService<User> {
+class UserService extends BaseHiveService<User, UserService> {
   Future<User?> retrieveUser() async {
-    if (!await ensureBoxOpen(HiveBoxes.user)) {
+    if (!await ensureBoxOpen()) {
       return null;
     }
 
@@ -23,7 +22,7 @@ class UserService extends BaseHiveService<User> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.user)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 
@@ -37,7 +36,7 @@ class UserService extends BaseHiveService<User> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.user)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 

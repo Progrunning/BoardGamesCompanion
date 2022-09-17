@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/services/board_games_filters_service.dart';
 import 'package:board_games_companion/services/file_service.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -7,6 +8,7 @@ import 'package:mobx/mobx.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../models/backup_file.dart';
+import '../../services/board_games_service.dart';
 import 'settings_page_visual_states.dart';
 
 part 'settings_view_model.g.dart';
@@ -15,9 +17,15 @@ part 'settings_view_model.g.dart';
 class SettingsViewModel = _SettingsViewModel with _$SettingsViewModel;
 
 abstract class _SettingsViewModel with Store {
-  _SettingsViewModel(this._fileService);
+  _SettingsViewModel(
+    this._fileService,
+    this._boardGamesService,
+    this._boardGamesFilterService,
+  );
 
   final FileService _fileService;
+  final BoardGamesService _boardGamesService;
+  final BoardGamesFiltersService _boardGamesFilterService;
 
   @observable
   ObservableList<BackupFile> backupFiles = ObservableList.of([]);
@@ -64,7 +72,15 @@ abstract class _SettingsViewModel with Store {
     // ! MK Refresh Hive after restoring
     try {
       visualState = const SettingsPageVisualState.restoring();
+
+      // MK Close all hive boxes
+      _boardGamesService.closeBox();
+      _boardGamesFilterService.closeBox();
+
+      // MK Restore files
       await _fileService.restoreAppData();
+
+      // ! MK Trigger mobx update on Games, Players and Settings page (create a store that all of these pages will listen to and have reaction to reload data when data restored)
     } on Exception {
       visualState = const SettingsPageVisualState.restoringFailure();
     }

@@ -1,10 +1,9 @@
 import 'package:injectable/injectable.dart';
 
-import '../common/hive_boxes.dart';
 import 'hive_base_service.dart';
 
 @singleton
-class PreferencesService extends BaseHiveService<dynamic> {
+class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
   static const String _firstTimeAppLaunchDateKey = 'firstTimeLaunchDate';
   static const String _appLaunchDateKey = 'applaunchDate';
   static const String _remindMeLaterDateKey = 'remindMeLater';
@@ -13,7 +12,7 @@ class PreferencesService extends BaseHiveService<dynamic> {
   static const String _expansionsPanelExpandedStateKey = 'expansionsPanelExpandedState';
 
   Future<void> initialize() async {
-    await ensureBoxOpen(HiveBoxes.preferences);
+    await ensureBoxOpen();
   }
 
   Future<void> setAppLaunchDate() async {

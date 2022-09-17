@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart' show Uuid;
 
-import '../common/hive_boxes.dart' show HiveBoxes;
 import '../models/hive/player.dart';
 import 'file_service.dart';
 import 'hive_base_service.dart';
 
 @singleton
-class PlayerService extends BaseHiveService<Player> {
+class PlayerService extends BaseHiveService<Player, PlayerService> {
   PlayerService(this.fileService);
 
   final RegExp _fileExtensionRegex = RegExp(r'\.[0-9a-z]+$', caseSensitive: false);
@@ -20,7 +19,7 @@ class PlayerService extends BaseHiveService<Player> {
     List<String>? playerIds,
     bool includeDeleted = false,
   }) async {
-    if (!await ensureBoxOpen(HiveBoxes.players)) {
+    if (!await ensureBoxOpen()) {
       return <Player>[];
     }
 
@@ -42,7 +41,7 @@ class PlayerService extends BaseHiveService<Player> {
   }
 
   Future<bool> addOrUpdatePlayer(Player player) async {
-    if ((player.name?.isEmpty ?? true) || !await ensureBoxOpen(HiveBoxes.players)) {
+    if ((player.name?.isEmpty ?? true) || !await ensureBoxOpen()) {
       return false;
     }
 
@@ -74,7 +73,7 @@ class PlayerService extends BaseHiveService<Player> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.players)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 

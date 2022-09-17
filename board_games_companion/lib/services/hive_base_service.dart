@@ -1,24 +1,32 @@
+import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
-class BaseHiveService<T> {
+class BaseHiveService<TBox, TService> {
   @protected
   final uuid = const Uuid();
 
-  late Box<T> storageBox;
+  late Box<TBox> storageBox;
 
-  void closeBox(String boxName) {
-    if (boxName.isEmpty) {
+  String? get _boxName => HiveBoxes.boxesNamesMap[TService];
+
+  void closeBox() {
+    if (_boxName.isNullOrBlank) {
       return;
     }
 
-    Hive.box<T>(boxName).close();
+    Hive.box<TBox>(_boxName!).close();
   }
 
-  Future<bool> ensureBoxOpen(String boxName) async {
-    if (!Hive.isBoxOpen(boxName)) {
-      storageBox = await Hive.openBox<T>(boxName);
+  Future<bool> ensureBoxOpen() async {
+    if (_boxName.isNullOrBlank) {
+      return false;
+    }
+
+    if (!Hive.isBoxOpen(_boxName!)) {
+      storageBox = await Hive.openBox<TBox>(_boxName!);
     }
 
     return storageBox != null;

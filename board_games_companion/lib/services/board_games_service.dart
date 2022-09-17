@@ -2,14 +2,13 @@ import 'package:board_games_companion/models/bgg/bgg_import_plays.dart';
 import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
 import 'package:injectable/injectable.dart';
 
-import '../common/hive_boxes.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
 import 'board_games_geek_service.dart';
 import 'hive_base_service.dart';
 
 @singleton
-class BoardGamesService extends BaseHiveService<BoardGameDetails> {
+class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesService> {
   BoardGamesService(this._boardGameGeekService);
 
   final BoardGamesGeekService _boardGameGeekService;
@@ -17,7 +16,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   static const int _maxNumberOfImportedPlaysPerPage = 100;
 
   Future<List<BoardGameDetails>> retrieveBoardGames() async {
-    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
+    if (!await ensureBoxOpen()) {
       return <BoardGameDetails>[];
     }
 
@@ -32,7 +31,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
+    if (!await ensureBoxOpen()) {
       return;
     }
 
@@ -44,7 +43,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 
@@ -56,7 +55,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
+    if (!await ensureBoxOpen()) {
       return;
     }
 
@@ -68,7 +67,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
       return;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
+    if (!await ensureBoxOpen()) {
       return;
     }
 
@@ -76,7 +75,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<void> removeAllBoardGames() async {
-    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
+    if (!await ensureBoxOpen()) {
       return;
     }
 
@@ -107,7 +106,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails> {
   }
 
   Future<CollectionImportResult> importCollections(String username) async {
-    if (!await ensureBoxOpen(HiveBoxes.boardGames)) {
+    if (!await ensureBoxOpen()) {
       return CollectionImportResult();
     }
 

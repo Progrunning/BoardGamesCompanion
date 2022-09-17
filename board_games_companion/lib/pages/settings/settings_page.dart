@@ -47,12 +47,6 @@ class SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        // widget.viewModel.visualState.when(
-        //   initial: initial,
-        //   restoring: restoring,
-        //   restoringSuccess: restoringSuccess,
-        //   restoringFailure: restoringFailure,
-        // );
         final scaffold = Scaffold(
           appBar:
               AppBar(title: const Text(AppText.settingsPageTitle, style: AppTheme.titleTextStyle)),
@@ -279,6 +273,7 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
