@@ -99,7 +99,7 @@ abstract class _PlaythroughsStore with Store {
           await _scoreService.addOrUpdateScore(playerScore.score);
         }
 
-        loadPlaythroughs();
+        await loadPlaythroughs();
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

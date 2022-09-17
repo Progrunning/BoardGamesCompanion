@@ -56,11 +56,13 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @action
   Future<void> stopPlaythrough() async {
-    await _playthroughsStore.updatePlaythrough(updatedPlaythroughDetails.copyWith(
-        playthrough: playthrough.copyWith(
+    final updatedPlaythrough = playthrough.copyWith(
       status: PlaythroughStatus.Finished,
       endDate: DateTime.now().toUtc(),
-    )));
+    );
+    _updatedPlaythroughDetails =
+        _updatedPlaythroughDetails?.copyWith(playthrough: updatedPlaythrough);
+    await _playthroughsStore.updatePlaythrough(_updatedPlaythroughDetails);
   }
 
   @action
