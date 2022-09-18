@@ -10,16 +10,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../injectable.dart';
-import '../../stores/board_games_store.dart';
-import '../../stores/user_store.dart';
 import '../../widgets/about/detail_item.dart';
 import '../../widgets/about/section_title.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
@@ -67,7 +63,7 @@ class SettingsPageState extends State<SettingsPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             const SizedBox(height: Dimensions.standardFontSize),
-                            const _UserDetailsPanel(),
+                            _UserDetailsPanel(viewModel: widget.viewModel),
                             const Divider(color: AppColors.accentColor),
                             _BackupSection(viewModel: widget.viewModel),
                           ],
@@ -93,8 +89,11 @@ class SettingsPageState extends State<SettingsPage> {
 
 class _UserDetailsPanel extends StatefulWidget {
   const _UserDetailsPanel({
+    required this.viewModel,
     Key? key,
   }) : super(key: key);
+
+  final SettingsViewModel viewModel;
 
   @override
   State<_UserDetailsPanel> createState() => _UserDetailsPanelState();
@@ -118,44 +117,18 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
   }
 
   @override
-  Widget build(BuildContext context) => Consumer<UserStore>(
-        builder: (_, userStore, __) {
-          if (userStore.user?.name.isEmpty ?? true) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const SectionTitle(title: 'BGG Username', padding: EdgeInsets.zero),
-                  const SizedBox(height: Dimensions.standardSpacing),
-                  const BggCommunityMemberText(),
-                  BggCommunityMemberUserNameTextField(
-                    controller: _bggUserNameController,
-                    onSubmit: () => setState(() {
-                      _triggerImport = true;
-                    }),
-                  ),
-                  const SizedBox(height: Dimensions.standardSpacing),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ImportCollectionsButton(
-                      usernameCallback: () => _bggUserNameController.text,
-                      triggerImport: _triggerImport ?? false,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return Column(
+  Widget build(BuildContext context) {
+    return Observer(
+      builder: (_) {
+        return widget.viewModel.userVisualState.when(
+          user: () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SectionTitle(title: 'User'),
               DetailsItem(
-                title: userStore.user?.name ?? '',
+                title: widget.viewModel.userName!,
                 subtitle: 'BGG profile page',
-                uri: '${Constants.boardGameGeekBaseApiUrl}user/${userStore.user?.name}',
+                uri: '${Constants.boardGameGeekBaseApiUrl}user/${widget.viewModel.userName!}',
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
@@ -167,20 +140,52 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                       title: 'Remove',
                       icon: const DefaultIcon(Icons.remove_circle_outline),
                       color: AppColors.redColor,
-                      onPressed: () async => _showRemoveBggUserDialog(context, userStore),
+                      onPressed: () async {
+                        final shouldRemoveUser = await _showRemoveBggUserDialog(context);
+                        if (shouldRemoveUser ?? false) {
+                          widget.viewModel.removeUser();
+                        }
+                      },
                     ),
                     const SizedBox(width: Dimensions.standardSpacing),
-                    ImportCollectionsButton(usernameCallback: () => userStore.user!.name),
+                    ImportCollectionsButton(usernameCallback: () => widget.viewModel.userName!),
                   ],
                 ),
               ),
             ],
-          );
-        },
-      );
+          ),
+          noUser: () => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SectionTitle(title: 'BGG Username', padding: EdgeInsets.zero),
+                const SizedBox(height: Dimensions.standardSpacing),
+                const BggCommunityMemberText(),
+                BggCommunityMemberUserNameTextField(
+                  controller: _bggUserNameController,
+                  onSubmit: () => setState(() {
+                    _triggerImport = true;
+                  }),
+                ),
+                const SizedBox(height: Dimensions.standardSpacing),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ImportCollectionsButton(
+                    usernameCallback: () => _bggUserNameController.text,
+                    triggerImport: _triggerImport ?? false,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-  Future<void> _showRemoveBggUserDialog(BuildContext context, UserStore userStore) async {
-    await showDialog<AlertDialog>(
+  Future<bool?> _showRemoveBggUserDialog(BuildContext context) async {
+    return showDialog<bool?>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -199,24 +204,11 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
                 AppText.cancel,
                 style: TextStyle(color: AppColors.accentColor),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
-              onPressed: () async {
-                final boardGameStore = getIt<BoardGamesStore>();
-
-                await userStore.removeUser(userStore.user!);
-                await boardGameStore.removeAllBggBoardGames();
-
-                if (!mounted) {
-                  return;
-                }
-
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(true),
               child: const Text(
                 'Remove',
                 style: TextStyle(color: AppColors.defaultTextColor),

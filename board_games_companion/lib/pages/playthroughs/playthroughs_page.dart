@@ -1,7 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -10,7 +10,6 @@ import '../../common/dimensions.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
-import '../../stores/user_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/common/page_container_widget.dart';
@@ -63,15 +62,16 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       appBar: AppBar(
         title: Text(widget.viewModel.boardGame.name, style: AppTheme.titleTextStyle),
         actions: <Widget>[
-          Consumer<UserStore>(
-            builder: (_, store, ___) {
-              if (store.user?.name.isEmpty ?? true) {
+          Observer(
+            builder: (_) {
+              if (!widget.viewModel.hasUser) {
                 return const SizedBox.shrink();
               }
 
               return IconButton(
                 icon: const Icon(Icons.download, color: AppColors.accentColor),
-                onPressed: () => _importBggPlays(store.user!.name, widget.viewModel.boardGame.id),
+                onPressed: () =>
+                    _importBggPlays(widget.viewModel.userName!, widget.viewModel.boardGame.id),
               );
             },
           ),

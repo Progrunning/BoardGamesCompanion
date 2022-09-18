@@ -18,7 +18,10 @@ class SearchBoardGamesViewModel = _SearchBoardGamesViewModel with _$SearchBoardG
 
 abstract class _SearchBoardGamesViewModel with Store {
   _SearchBoardGamesViewModel(
-      this._boardGamesStore, this._boardGameGeekService, this._analyticsService);
+    this._boardGamesStore,
+    this._boardGameGeekService,
+    this._analyticsService,
+  );
 
   final BoardGamesStore _boardGamesStore;
   final BoardGamesGeekService _boardGameGeekService;

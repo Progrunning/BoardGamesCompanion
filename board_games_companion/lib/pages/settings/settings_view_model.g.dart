@@ -9,6 +9,21 @@ part of 'settings_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SettingsViewModel on _SettingsViewModel, Store {
+  Computed<SettingsPageUserVisualState>? _$userVisualStateComputed;
+
+  @override
+  SettingsPageUserVisualState get userVisualState =>
+      (_$userVisualStateComputed ??= Computed<SettingsPageUserVisualState>(
+              () => super.userVisualState,
+              name: '_SettingsViewModel.userVisualState'))
+          .value;
+  Computed<String?>? _$userNameComputed;
+
+  @override
+  String? get userName =>
+      (_$userNameComputed ??= Computed<String?>(() => super.userName,
+              name: '_SettingsViewModel.userName'))
+          .value;
   Computed<bool>? _$hasAnyBackupFilesComputed;
 
   @override
@@ -73,6 +88,14 @@ mixin _$SettingsViewModel on _SettingsViewModel, Store {
     return _$deleteBackupAsyncAction.run(() => super.deleteBackup(backupFile));
   }
 
+  late final _$removeUserAsyncAction =
+      AsyncAction('_SettingsViewModel.removeUser', context: context);
+
+  @override
+  Future<void> removeUser() {
+    return _$removeUserAsyncAction.run(() => super.removeUser());
+  }
+
   late final _$backupAppsDataAsyncAction =
       AsyncAction('_SettingsViewModel.backupAppsData', context: context);
 
@@ -109,6 +132,8 @@ mixin _$SettingsViewModel on _SettingsViewModel, Store {
 backupFiles: ${backupFiles},
 visualState: ${visualState},
 futureLoadBackups: ${futureLoadBackups},
+userVisualState: ${userVisualState},
+userName: ${userName},
 hasAnyBackupFiles: ${hasAnyBackupFiles}
     ''';
   }

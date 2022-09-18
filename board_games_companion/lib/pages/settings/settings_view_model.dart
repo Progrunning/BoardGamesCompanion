@@ -2,6 +2,10 @@
 
 import 'package:board_games_companion/services/board_games_filters_service.dart';
 import 'package:board_games_companion/services/file_service.dart';
+import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/stores/app_store.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/stores/user_store.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -9,6 +13,11 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../models/backup_file.dart';
 import '../../services/board_games_service.dart';
+import '../../services/playthroughs_service.dart';
+import '../../services/preferences_service.dart';
+import '../../services/score_service.dart';
+import '../../services/user_service.dart';
+import 'settings_page_user_visual_states.dart';
 import 'settings_page_visual_states.dart';
 
 part 'settings_view_model.g.dart';
@@ -21,11 +30,27 @@ abstract class _SettingsViewModel with Store {
     this._fileService,
     this._boardGamesService,
     this._boardGamesFilterService,
+    this._playerService,
+    this._userService,
+    this._playthroughService,
+    this._scoreService,
+    this._preferencesService,
+    this._appStore,
+    this._userStore,
+    this._boardGamesStore,
   );
 
   final FileService _fileService;
   final BoardGamesService _boardGamesService;
   final BoardGamesFiltersService _boardGamesFilterService;
+  final PlayerService _playerService;
+  final UserService _userService;
+  final PlaythroughService _playthroughService;
+  final ScoreService _scoreService;
+  final PreferencesService _preferencesService;
+  final AppStore _appStore;
+  final UserStore _userStore;
+  final BoardGamesStore _boardGamesStore;
 
   @observable
   ObservableList<BackupFile> backupFiles = ObservableList.of([]);
@@ -34,10 +59,18 @@ abstract class _SettingsViewModel with Store {
   SettingsPageVisualState visualState = const SettingsPageVisualState.initial();
 
   @computed
-  bool get hasAnyBackupFiles => backupFiles.isNotEmpty;
+  SettingsPageUserVisualState get userVisualState => _userStore.hasUser
+      ? const SettingsPageUserVisualState.user()
+      : const SettingsPageUserVisualState.noUser();
+
+  @computed
+  String? get userName => _userStore.userName;
 
   @observable
   ObservableFuture<void>? futureLoadBackups;
+
+  @computed
+  bool get hasAnyBackupFiles => backupFiles.isNotEmpty;
 
   @action
   void loadBackups() => futureLoadBackups = ObservableFuture(_loadBackups());
@@ -56,10 +89,11 @@ abstract class _SettingsViewModel with Store {
     backupFiles.remove(backupFile);
   }
 
-  Future<void> _loadBackups() async =>
-      backupFiles = ObservableList.of(await _fileService.getBackups()
-        ..sort((BackupFile backupFile, BackupFile otherBackupFile) =>
-            otherBackupFile.changed.compareTo(backupFile.changed)));
+  @action
+  Future<void> removeUser() async {
+    await _userStore.removeUser();
+    await _boardGamesStore.removeAllBggBoardGames();
+  }
 
   @action
   Future<void> backupAppsData() async {
@@ -69,22 +103,33 @@ abstract class _SettingsViewModel with Store {
 
   @action
   Future<void> restoreAppData() async {
-    // ! MK Refresh Hive after restoring
     try {
+      _appStore.setBackupRestore(false);
+
       visualState = const SettingsPageVisualState.restoring();
 
-      // MK Close all hive boxes
       _boardGamesService.closeBox();
       _boardGamesFilterService.closeBox();
+      _playerService.closeBox();
+      _userService.closeBox();
+      _playthroughService.closeBox();
+      _scoreService.closeBox();
+      _preferencesService.closeBox();
 
       // MK Restore files
       await _fileService.restoreAppData();
 
-      // ! MK Trigger mobx update on Games, Players and Settings page (create a store that all of these pages will listen to and have reaction to reload data when data restored)
+      await _preferencesService.initialize();
+      _appStore.setBackupRestore(true);
     } on Exception {
       visualState = const SettingsPageVisualState.restoringFailure();
     }
 
     visualState = const SettingsPageVisualState.restoringSuccess();
   }
+
+  Future<void> _loadBackups() async =>
+      backupFiles = ObservableList.of(await _fileService.getBackups()
+        ..sort((BackupFile backupFile, BackupFile otherBackupFile) =>
+            otherBackupFile.changed.compareTo(backupFile.changed)));
 }

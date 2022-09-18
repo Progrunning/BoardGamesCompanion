@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
-class BaseHiveService<TBox, TService> {
+abstract class BaseHiveService<TBox, TService> {
   @protected
   final uuid = const Uuid();
 
@@ -12,8 +12,10 @@ class BaseHiveService<TBox, TService> {
 
   String? get _boxName => HiveBoxes.boxesNamesMap[TService];
 
+  bool get _isBoxOpen => Hive.isBoxOpen(_boxName!);
+
   void closeBox() {
-    if (_boxName.isNullOrBlank) {
+    if (_boxName.isNullOrBlank || !_isBoxOpen) {
       return;
     }
 
@@ -25,7 +27,7 @@ class BaseHiveService<TBox, TService> {
       return false;
     }
 
-    if (!Hive.isBoxOpen(_boxName!)) {
+    if (!_isBoxOpen) {
       storageBox = await Hive.openBox<TBox>(_boxName!);
     }
 

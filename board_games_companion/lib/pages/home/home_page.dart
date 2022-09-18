@@ -3,14 +3,12 @@ import 'package:board_games_companion/pages/players/players_view_model.dart';
 import 'package:board_games_companion/pages/search_board_games/search_board_games_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
-import '../../stores/user_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container_widget.dart';
 import '../base_page_state.dart';
@@ -74,16 +72,11 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                Consumer<UserStore>(
-                  builder: (_, userStore, __) {
-                    return GamesPage(
-                      widget.gamesViewModel,
-                      userStore,
-                      widget.boardGamesFiltersStore,
-                      widget.analyticsService,
-                      widget.rateAndReviewService,
-                    );
-                  },
+                GamesPage(
+                  widget.gamesViewModel,
+                  widget.boardGamesFiltersStore,
+                  widget.analyticsService,
+                  widget.rateAndReviewService,
                 ),
                 SearchBoardGamesPage(viewModel: widget.searchViewModel),
                 PlayersPage(playersViewModel: widget.playersViewModel),

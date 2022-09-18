@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../common/app_text.dart';
 import '../common/dimensions.dart';
@@ -11,14 +10,11 @@ import '../stores/user_store.dart';
 
 mixin ImportCollection {
   Future<CollectionImportResult> importCollections(BuildContext context, String username) async {
-    final userStore = Provider.of<UserStore>(
-      context,
-      listen: false,
-    );
-
     if (username.isEmpty) {
       return CollectionImportResult();
     }
+
+    final userStore = getIt<UserStore>();
 
     final messenger = ScaffoldMessenger.of(context);
     final boardGamesStore = getIt<BoardGamesStore>();

@@ -16,7 +16,7 @@ class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
   }
 
   Future<void> setAppLaunchDate() async {
-    final DateTime nowUtc = DateTime.now().toUtc();
+    final nowUtc = DateTime.now().toUtc();
     if (_isFirstTimeAppLaunch()) {
       await _setValue(_firstTimeAppLaunchDateKey, nowUtc);
     }

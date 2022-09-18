@@ -34,10 +34,8 @@ import 'pages/players/players_view_model.dart';
 import 'services/analytics_service.dart';
 import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
-import 'services/user_service.dart';
 import 'stores/search_bar_board_games_store.dart';
 import 'stores/search_board_games_store.dart';
-import 'stores/user_store.dart';
 
 Future<void> main() async {
   Fimber.plantTree(DebugTree());
@@ -69,7 +67,7 @@ Future<void> main() async {
 
     configureDependencies();
 
-    final PreferencesService preferencesService = getIt<PreferencesService>();
+    final preferencesService = getIt<PreferencesService>();
     await preferencesService.initialize();
 
     LicenseRegistry.addLicense(() async* {
@@ -103,18 +101,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    preferencesService.setAppLaunchDate();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<UserStore>(
-          create: (context) {
-            final UserService userService = getIt<UserService>();
-            final userStore = UserStore(userService);
-
-            preferencesService.setAppLaunchDate();
-            userStore.loadUser();
-            return userStore;
-          },
-        ),
         ChangeNotifierProvider<SearchBarBoardGamesStore>(
           create: (context) => SearchBarBoardGamesStore(),
         ),

@@ -2,11 +2,13 @@
 
 import 'dart:math';
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/extensions/string_extensions.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
+import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -29,10 +31,12 @@ class GamesViewModel = _GamesViewModel with _$GamesViewModel;
 
 abstract class _GamesViewModel with Store {
   _GamesViewModel(
+    this._userStore,
     this._boardGamesStore,
     this._boardGamesFiltersStore,
   );
 
+  final UserStore _userStore;
   final BoardGamesStore _boardGamesStore;
   final BoardGamesFiltersStore _boardGamesFiltersStore;
 
@@ -209,15 +213,21 @@ abstract class _GamesViewModel with Store {
   @observable
   GamesTab selectedTab = GamesTab.owned;
 
-  @action
-  void setSelectedTab(GamesTab newlySelectedTab) => selectedTab = newlySelectedTab;
+  @observable
+  ObservableFuture<void>? futureLoadBoardGames;
 
   @computed
   List<BoardGameDetails> get _allExpansions =>
       allBoardGames.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
-  @observable
-  ObservableFuture<void>? futureLoadBoardGames;
+  @computed
+  String? get userName => _userStore.user?.name;
+
+  @computed
+  bool get isUserNameEmpty => userName.isNullOrBlank;
+
+  @action
+  void setSelectedTab(GamesTab newlySelectedTab) => selectedTab = newlySelectedTab;
 
   @action
   void loadBoardGames() => futureLoadBoardGames = ObservableFuture<void>(_loadBoardGames());
@@ -243,6 +253,7 @@ abstract class _GamesViewModel with Store {
 
   Future<void> _loadBoardGames() async {
     try {
+      await _userStore.loadUser();
       await _boardGamesStore.loadBoardGames();
       await _boardGamesFiltersStore.loadFilterPreferences();
     } catch (e, stack) {
