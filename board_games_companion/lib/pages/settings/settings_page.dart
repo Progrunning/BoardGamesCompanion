@@ -195,7 +195,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
             ],
           ),
           content: const Text(
-            'This will delete your synchronized board games collection, including the history of gameplays',
+            'This will delete your imported board games collection, including the history of gameplays',
           ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
@@ -382,6 +382,7 @@ class _BackupFile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Slidable(
       endActionPane: ActionPane(
+        extentRatio: 0.25,
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
