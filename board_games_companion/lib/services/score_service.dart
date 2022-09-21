@@ -1,11 +1,10 @@
 import 'package:injectable/injectable.dart';
 
-import '../common/hive_boxes.dart';
 import '../models/hive/score.dart';
 import 'hive_base_service.dart';
 
 @singleton
-class ScoreService extends BaseHiveService<Score> {
+class ScoreService extends BaseHiveService<Score, ScoreService> {
   Future<bool> addOrUpdateScore(Score score) async {
     if ((score.playthroughId?.isEmpty ?? true) ||
         (score.playerId.isEmpty) ||
@@ -13,7 +12,7 @@ class ScoreService extends BaseHiveService<Score> {
       return false;
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.scores)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 
@@ -23,7 +22,7 @@ class ScoreService extends BaseHiveService<Score> {
   }
 
   Future<List<Score>> retrieveScores(Iterable<String> playthroughIds) async {
-    if ((playthroughIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.scores)) {
+    if ((playthroughIds.isEmpty) || !await ensureBoxOpen()) {
       return <Score>[];
     }
 

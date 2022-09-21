@@ -61,7 +61,9 @@ class ImportCollectionsButtonState extends State<ImportCollectionsButton>
 
   @override
   Widget build(BuildContext context) {
-    return _AnimatedButton(
+    return AnimatedButton(
+      text: AppText.importCollectionsButtonText,
+      icon: const DefaultIcon(Icons.download),
       sizeAnimationController: _sizeAnimationController,
       fadeInAnimationController: _fadeInAnimationController,
       onPressed: () => _import(context),
@@ -69,9 +71,6 @@ class ImportCollectionsButtonState extends State<ImportCollectionsButton>
   }
 
   Future<void> _import(BuildContext context) async {
-    _fadeInAnimationController.forward();
-    _sizeAnimationController.reverse();
-
     await importCollections(context, widget._usernameCallback());
 
     if (mounted) {
@@ -81,13 +80,17 @@ class ImportCollectionsButtonState extends State<ImportCollectionsButton>
   }
 }
 
-class _AnimatedButton extends AnimatedWidget {
-  const _AnimatedButton({
-    Key? key,
+class AnimatedButton extends AnimatedWidget {
+  const AnimatedButton({
+    required String text,
+    required Widget icon,
     required AnimationController sizeAnimationController,
     required AnimationController fadeInAnimationController,
-    required VoidCallback onPressed,
-  })  : _sizeAnimationController = sizeAnimationController,
+    required Future<void> Function() onPressed,
+    Key? key,
+  })  : _text = text,
+        _icon = icon,
+        _sizeAnimationController = sizeAnimationController,
         _fadeInAnimationController = fadeInAnimationController,
         _onPressed = onPressed,
         super(
@@ -95,10 +98,12 @@ class _AnimatedButton extends AnimatedWidget {
           listenable: sizeAnimationController,
         );
 
+  final String _text;
+  final Widget _icon;
   final AnimationController _sizeAnimationController;
   final AnimationController _fadeInAnimationController;
 
-  final VoidCallback _onPressed;
+  final Future<void> Function() _onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +112,14 @@ class _AnimatedButton extends AnimatedWidget {
         Transform.scale(
           scale: _sizeAnimationController.value,
           child: ElevatedIconButton(
-            title: AppText.importCollectionsButtonText,
-            icon: const DefaultIcon(Icons.download),
-            onPressed: _onPressed,
+            title: _text,
+            icon: _icon,
+            onPressed: () async {
+              _fadeInAnimationController.forward();
+              _sizeAnimationController.reverse();
+
+              await _onPressed();
+            },
           ),
         ),
         Positioned.fill(

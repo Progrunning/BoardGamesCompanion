@@ -1,9 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../models/playthrough_details.dart';
 
 part 'playthroughs_history_view_model.g.dart';
 
@@ -20,7 +21,7 @@ abstract class _PlaythroughsHistoryViewModel with Store {
   ObservableFuture<void>? futureloadPlaythroughs;
 
   @computed
-  ObservableList<Playthrough> get playthroughs {
+  ObservableList<PlaythroughDetails> get playthroughs {
     final sortedPlaythrough = List.of(_playthroughsStore.playthroughs, growable: false);
     return ObservableList.of(sortedPlaythrough..sort((a, b) => b.startDate.compareTo(a.startDate)));
   }

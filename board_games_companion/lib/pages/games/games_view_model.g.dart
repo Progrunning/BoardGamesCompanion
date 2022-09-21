@@ -192,6 +192,20 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
           Computed<List<BoardGameDetails>>(() => super._allExpansions,
               name: '_GamesViewModel._allExpansions'))
       .value;
+  Computed<String?>? _$userNameComputed;
+
+  @override
+  String? get userName =>
+      (_$userNameComputed ??= Computed<String?>(() => super.userName,
+              name: '_GamesViewModel.userName'))
+          .value;
+  Computed<bool>? _$isUserNameEmptyComputed;
+
+  @override
+  bool get isUserNameEmpty =>
+      (_$isUserNameEmptyComputed ??= Computed<bool>(() => super.isUserNameEmpty,
+              name: '_GamesViewModel.isUserNameEmpty'))
+          .value;
 
   late final _$selectedTabAtom =
       Atom(name: '_GamesViewModel.selectedTab', context: context);
@@ -332,7 +346,9 @@ anyMainGamesInCollection: ${anyMainGamesInCollection},
 totalMainGamesInCollection: ${totalMainGamesInCollection},
 totalExpansionsInCollection: ${totalExpansionsInCollection},
 anyExpansionsInCollection: ${anyExpansionsInCollection},
-expansionsInCollectionMap: ${expansionsInCollectionMap}
+expansionsInCollectionMap: ${expansionsInCollectionMap},
+userName: ${userName},
+isUserNameEmpty: ${isUserNameEmpty}
     ''';
   }
 }

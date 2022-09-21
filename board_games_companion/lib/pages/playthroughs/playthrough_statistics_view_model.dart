@@ -178,8 +178,8 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     }
 
     boardGameStatistics.lastWinner = PlayerScore(
-      playersById[lastPlaythroughBestScore.playerId],
-      lastPlaythroughBestScore,
+      player: playersById[lastPlaythroughBestScore.playerId],
+      score: lastPlaythroughBestScore,
     );
   }
 

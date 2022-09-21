@@ -1,24 +1,22 @@
 import 'package:injectable/injectable.dart';
 
-import '../common/hive_boxes.dart';
 import 'hive_base_service.dart';
 
 @singleton
-class PreferencesService extends BaseHiveService<dynamic> {
+class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
   static const String _firstTimeAppLaunchDateKey = 'firstTimeLaunchDate';
   static const String _appLaunchDateKey = 'applaunchDate';
   static const String _remindMeLaterDateKey = 'remindMeLater';
   static const String _numberOfSignificantActionsKey = 'numberOfSignificantActions';
   static const String _rateAndReviewDialogSeenKey = 'rateAndReviewDialogSeen';
   static const String _expansionsPanelExpandedStateKey = 'expansionsPanelExpandedState';
-  static const String _migratedToMultipleCollectionsKey = 'migratedToMultipleCollections';
 
   Future<void> initialize() async {
-    await ensureBoxOpen(HiveBoxes.preferences);
+    await ensureBoxOpen();
   }
 
   Future<void> setAppLaunchDate() async {
-    final DateTime nowUtc = DateTime.now().toUtc();
+    final nowUtc = DateTime.now().toUtc();
     if (_isFirstTimeAppLaunch()) {
       await _setValue(_firstTimeAppLaunchDateKey, nowUtc);
     }
@@ -70,21 +68,6 @@ class PreferencesService extends BaseHiveService<dynamic> {
       _numberOfSignificantActionsKey,
       defaultValue: 0,
     )!;
-  }
-
-  bool getMigratedToMultipleCollections() {
-    return _getValue(
-      _migratedToMultipleCollectionsKey,
-      defaultValue: false,
-    )!;
-  }
-
-  Future<void> setMigratedToMultipleCollections(
-      {required bool migratedToMultipleCollections}) async {
-    await _setValue(
-      _migratedToMultipleCollectionsKey,
-      migratedToMultipleCollections,
-    );
   }
 
   Future<void> setNumberOfSignificantActions(int numberOfSignificantActions) async {

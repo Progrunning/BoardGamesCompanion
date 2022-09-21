@@ -1,32 +1,19 @@
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'hive/player.dart';
 import 'hive/score.dart';
 
-class PlayerScore with ChangeNotifier {
-  PlayerScore(this._player, this._score);
+part 'player_score.freezed.dart';
 
-  PlayerScore.withPlace(this._player, this._score, this._place);
+@freezed
+abstract class PlayerScore with _$PlayerScore {
+  const factory PlayerScore({
+    required Player? player,
+    required Score score,
+    int? place,
+  }) = _PlayerScore;
 
-  final Player? _player;
+  const PlayerScore._();
 
-  Player? get player => _player;
-
-  final Score _score;
-  Score get score => _score;
-
-  int? _place;
-  int? get place => _place;
-
-  bool updatePlayerScore(String score) {
-    if (score.isEmpty) {
-      return false;
-    }
-
-    _score.value = score;
-
-    notifyListeners();
-
-    return true;
-  }
+  String? get id => player?.id;
 }

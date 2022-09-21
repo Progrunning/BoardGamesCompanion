@@ -125,6 +125,13 @@ class AppText {
       'Games imported from the BGG collections are missing some details (e.g. complexity or expansions). Refresh the data to get the latest information.';
   static const gamesPageSearchResultExpansionsSectionTitleFormat = 'Expansions (%i)';
 
+  static const settingsPageBackupAndRestoreSectionBody =
+      "Backup app's data to a *.zip archive in case you want to migrate your data to a new/other device.";
+  static const settingsPageBackupAndRestoreSectionTitle = 'Backup & Restore';
+  static const settingsPageBackupButtonText = 'Backup';
+  static const settingsPageRestireButtonText = 'Restore';
+  static const settingsPageBackupsListTitle = 'Backups';
+
   static const gamePlaytimeFormat = '%s min';
   static const gamePlayersSingularFormat = '%i players';
   static const gamePlayersPluralFormat = '%i players';

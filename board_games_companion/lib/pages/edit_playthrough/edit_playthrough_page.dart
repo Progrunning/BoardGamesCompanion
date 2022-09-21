@@ -4,7 +4,6 @@ import 'package:board_games_companion/pages/enter_score/enter_score_view_model.d
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -22,8 +21,8 @@ import '../../widgets/playthrough/calendar_card.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'edit_playthrough_view_model.dart';
 
-class EditPlaythoughPage extends StatefulWidget {
-  const EditPlaythoughPage({
+class EditPlaythroughPage extends StatefulWidget {
+  const EditPlaythroughPage({
     required this.viewModel,
     Key? key,
   }) : super(key: key);
@@ -33,10 +32,10 @@ class EditPlaythoughPage extends StatefulWidget {
   final EditPlaythoughViewModel viewModel;
 
   @override
-  EditPlaythoughPageState createState() => EditPlaythoughPageState();
+  EditPlaythroughPageState createState() => EditPlaythroughPageState();
 }
 
-class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreDialogMixin {
+class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScoreDialogMixin {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -79,7 +78,10 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
                   child: _ScoresSection(
                     viewModel: widget.viewModel,
                     onItemTapped: (PlayerScore playerScore) async {
-                      await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
+                      final viewModel = EnterScoreViewModel(playerScore);
+                      await showEnterScoreDialog(context, viewModel);
+                      widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
+                      return viewModel.score.toString();
                     },
                   ),
                 ),
@@ -151,7 +153,7 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
   }
 
   Future<bool> _handleOnWillPop(BuildContext context) async {
-    if (!widget.viewModel.isDirty()) {
+    if (!widget.viewModel.isDirty) {
       return true;
     }
 
@@ -188,7 +190,7 @@ class EditPlaythoughPageState extends State<EditPlaythoughPage> with EnterScoreD
   }
 }
 
-class _ScoresSection extends StatefulWidget {
+class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
     Key? key,
     required this.viewModel,
@@ -196,62 +198,86 @@ class _ScoresSection extends StatefulWidget {
   }) : super(key: key);
 
   final EditPlaythoughViewModel viewModel;
-  final void Function(PlayerScore) onItemTapped;
+  final Future<String?> Function(PlayerScore) onItemTapped;
 
-  @override
-  State<_ScoresSection> createState() => _ScoresSectionState();
-}
-
-class _ScoresSectionState extends State<_ScoresSection> {
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: widget.viewModel.playerScores.length,
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: Dimensions.doubleStandardSpacing);
-      },
-      itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () => widget.onItemTapped(widget.viewModel.playerScores[index]),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-            child: _PlayerScoreTile(
-              playerScore: widget.viewModel.playerScores[index],
-              playthroughId: widget.viewModel.playthrough.id,
-            ),
-          ),
+    return Observer(
+      builder: (_) {
+        return ListView.separated(
+          itemCount: viewModel.playerScores.length,
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: Dimensions.doubleStandardSpacing);
+          },
+          itemBuilder: (context, index) {
+            return _PlayerScoreTile(
+              playerScore: viewModel.playerScores[index],
+              playthroughId: viewModel.playthroughDetails.id,
+              onItemTapped: onItemTapped,
+            );
+          },
         );
       },
     );
   }
 }
 
-class _PlayerScoreTile extends StatelessWidget {
+class _PlayerScoreTile extends StatefulWidget {
   const _PlayerScoreTile({
     Key? key,
     required this.playerScore,
     required this.playthroughId,
+    required this.onItemTapped,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String playthroughId;
+  final Future<String?> Function(PlayerScore) onItemTapped;
+
+  @override
+  State<_PlayerScoreTile> createState() => _PlayerScoreTileState();
+}
+
+class _PlayerScoreTileState extends State<_PlayerScoreTile> {
+  late String? score;
+
+  @override
+  void initState() {
+    super.initState();
+
+    score = widget.playerScore.score.value;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: Dimensions.smallPlayerAvatarSize,
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            height: Dimensions.smallPlayerAvatarSize,
-            width: Dimensions.smallPlayerAvatarSize,
-            child: PlayerAvatar(playerScore.player, playerHeroIdSuffix: playthroughId),
+    return InkWell(
+      onTap: () async {
+        final newScore = await widget.onItemTapped(widget.playerScore);
+        setState(() {
+          score = newScore;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+        child: SizedBox(
+          height: Dimensions.smallPlayerAvatarSize,
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                height: Dimensions.smallPlayerAvatarSize,
+                width: Dimensions.smallPlayerAvatarSize,
+                child: PlayerAvatar(
+                  widget.playerScore.player,
+                  playerHeroIdSuffix: widget.playthroughId,
+                ),
+              ),
+              const SizedBox(width: Dimensions.standardSpacing),
+              Expanded(
+                child: _PlayerScore(score: score),
+              ),
+            ],
           ),
-          const SizedBox(width: Dimensions.standardSpacing),
-          Expanded(
-            child: _PlayerScore(playerScore: playerScore),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -260,10 +286,10 @@ class _PlayerScoreTile extends StatelessWidget {
 class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
     Key? key,
-    required this.playerScore,
+    required this.score,
   }) : super(key: key);
 
-  final PlayerScore playerScore;
+  final String? score;
 
   @override
   Widget build(BuildContext context) {
@@ -274,16 +300,9 @@ class _PlayerScore extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ChangeNotifierProvider<PlayerScore>.value(
-              value: playerScore,
-              child: Consumer<PlayerScore>(
-                builder: (_, playerScore, __) {
-                  return Text(
-                    playerScore.score.value ?? '-',
-                    style: AppStyles.playerScoreTextStyle,
-                  );
-                },
-              ),
+            Text(
+              score ?? '-',
+              style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),
             Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyText2),

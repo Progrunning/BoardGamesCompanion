@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/injectable.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:tuple/tuple.dart';
 
@@ -27,7 +27,6 @@ import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
-import '../../stores/user_store.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
@@ -56,7 +55,6 @@ typedef BoardGameResultAction = void Function(
 class GamesPage extends StatefulWidget {
   const GamesPage(
     this.viewModel,
-    this.userStore,
     this.boardGamesFiltersStore,
     this.analyticsService,
     this.rateAndReviewService, {
@@ -64,7 +62,6 @@ class GamesPage extends StatefulWidget {
   }) : super(key: key);
 
   final GamesViewModel viewModel;
-  final UserStore userStore;
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -100,7 +97,7 @@ class GamesPageState extends State<GamesPage>
             return const Center(child: GenericErrorMessage());
           case FutureStatus.fulfilled:
             if (!widget.viewModel.anyBoardGamesInCollections &&
-                (widget.userStore.user?.name.isEmpty ?? true)) {
+                (widget.viewModel.isUserNameEmpty)) {
               return const _Empty();
             }
 
@@ -177,7 +174,15 @@ class _Collection extends StatelessWidget {
           analyticsService: analyticsService,
           rateAndReviewService: rateAndReviewService,
         ),
-        if (isCollectionEmpty) _EmptyCollection(selectedTab: selectedTab),
+        if (isCollectionEmpty)
+          Observer(
+            builder: (_) {
+              return _EmptyCollection(
+                selectedTab: selectedTab,
+                userName: viewModel.userName,
+              );
+            },
+          ),
         if (!isCollectionEmpty) ...[
           if (hasMainGames) ...[
             SliverPersistentHeader(
@@ -497,9 +502,11 @@ class _EmptyCollection extends StatelessWidget {
   const _EmptyCollection({
     Key? key,
     required this.selectedTab,
+    required this.userName,
   }) : super(key: key);
 
   final GamesTab selectedTab;
+  final String? userName;
 
   @override
   Widget build(BuildContext context) {
@@ -509,60 +516,52 @@ class _EmptyCollection extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Consumer<UserStore>(
-              builder: (_, userStore, __) {
-                return Observer(
-                  builder: (_) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text.rich(
+            Observer(
+              builder: (_) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: "It looks like you don't have any board games in your ",
+                          ),
                           TextSpan(
-                            children: [
-                              const TextSpan(
-                                text: "It looks like you don't have any board games in your ",
-                              ),
-                              TextSpan(
-                                text: selectedTab.toCollectionType().toHumandReadableText(),
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              const TextSpan(text: ' collection yet.'),
-                              if (selectedTab == GamesTab.wishlist &&
-                                  (userStore.user?.name.isNotEmpty ?? false)) ...[
-                                const TextSpan(
-                                    text: "\n\nIf you want to see board games from BGG's  "),
-                                const TextSpan(
-                                  text: 'Wishlist ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const TextSpan(text: 'or '),
-                                const TextSpan(
-                                  text: 'Want to Buy ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const TextSpan(text: 'collections then tap the below  '),
-                                const TextSpan(
-                                  text: '${AppText.importCollectionsButtonText} ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const TextSpan(text: 'button.'),
-                              ]
-                            ],
+                            text: selectedTab.toCollectionType().toHumandReadableText(),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          textAlign: TextAlign.justify,
-                        ),
-                        if (selectedTab == GamesTab.wishlist &&
-                            (userStore.user?.name.isNotEmpty ?? false)) ...[
-                          const SizedBox(height: Dimensions.doubleStandardSpacing),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: ImportCollectionsButton(
-                                usernameCallback: () => userStore.user!.name),
-                          ),
-                        ]
-                      ],
-                    );
-                  },
+                          const TextSpan(text: ' collection yet.'),
+                          if (selectedTab == GamesTab.wishlist && (userName.isNotNullOrBlank)) ...[
+                            const TextSpan(text: "\n\nIf you want to see board games from BGG's  "),
+                            const TextSpan(
+                              text: 'Wishlist ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(text: 'or '),
+                            const TextSpan(
+                              text: 'Want to Buy ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(text: 'collections then tap the below  '),
+                            const TextSpan(
+                              text: '${AppText.importCollectionsButtonText} ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(text: 'button.'),
+                          ]
+                        ],
+                      ),
+                      textAlign: TextAlign.justify,
+                    ),
+                    if (selectedTab == GamesTab.wishlist && (userName.isNotNullOrBlank)) ...[
+                      const SizedBox(height: Dimensions.doubleStandardSpacing),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: ImportCollectionsButton(usernameCallback: () => userName!),
+                      ),
+                    ]
+                  ],
                 );
               },
             ),

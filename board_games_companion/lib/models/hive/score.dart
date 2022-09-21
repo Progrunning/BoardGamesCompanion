@@ -1,30 +1,23 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 import '../../common/hive_boxes.dart';
 
+part 'score.freezed.dart';
 part 'score.g.dart';
 
-@HiveType(typeId: HiveBoxes.scoreTypeId)
-class Score {
-  Score({
-    required this.id,
-    required this.playerId,
-    required this.boardGameId,
-    this.value,
-  });
+@freezed
+abstract class Score with _$Score {
+  @HiveType(typeId: HiveBoxes.scoreTypeId, adapterName: 'ScoreAdapter')
+  const factory Score({
+    @HiveField(0) required String id,
+    @HiveField(2) required String playerId,
+    @HiveField(3) required String boardGameId,
+    @HiveField(4) String? value,
+    @HiveField(1) String? playthroughId,
+  }) = _Score;
 
-  @HiveField(0)
-  String id;
-
-  @HiveField(1)
-  String? playthroughId;
-  @HiveField(2)
-  String playerId;
-  @HiveField(3)
-  String boardGameId;
-
-  @HiveField(4)
-  String? value;
+  const Score._();
 
   int get valueInt => int.tryParse(value ?? '0') ?? 0;
 }

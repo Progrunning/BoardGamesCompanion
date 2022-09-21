@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -242,7 +242,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         completedSteps = widget.viewModel.logGameStep;
       });
     } else {
-      final Playthrough? newPlaythrough =
+      final PlaythroughDetails? newPlaythrough =
           await widget.viewModel.createPlaythrough(widget.viewModel.boardGame.id);
       if (!mounted) {
         return;
@@ -711,16 +711,9 @@ class _PlayerScore extends StatelessWidget {
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           Column(
             children: <Widget>[
-              ChangeNotifierProvider<PlayerScore>.value(
-                value: playerScore,
-                child: Consumer<PlayerScore>(
-                  builder: (_, PlayerScore playerScore, __) {
-                    return Text(
-                      '${playerScore.score.valueInt}',
-                      style: AppStyles.playerScoreTextStyle,
-                    );
-                  },
-                ),
+              Text(
+                '${playerScore.score.valueInt}',
+                style: AppStyles.playerScoreTextStyle,
               ),
               const SizedBox(height: Dimensions.halfStandardSpacing),
               Text('points', style: AppTheme.theme.textTheme.bodyText2),

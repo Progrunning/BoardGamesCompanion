@@ -1,4 +1,5 @@
 import 'package:board_games_companion/pages/games/games_view_model.dart';
+import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,6 @@ import 'services/analytics_service.dart';
 import 'services/preferences_service.dart';
 import 'services/rate_and_review_service.dart';
 import 'stores/board_games_filters_store.dart';
-import 'stores/playthroughs_store.dart';
 import 'utilities/analytics_route_observer.dart';
 
 class BoardGamesCompanionApp extends StatefulWidget {
@@ -116,25 +116,26 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
               builder: (BuildContext context) => PlaythroughsPage(viewModel: viewModel),
             );
 
-          case EditPlaythoughPage.pageRoute:
+          case EditPlaythroughPage.pageRoute:
             final arguments = routeSettings.arguments as EditPlaythroughPageArguments;
-
-            // MK Need to create view model manually (i.e. without DI) because the passed in playthroughViewModel
-            //    needs to be exactly the same as the one on the history page to ensure it's updated once navigated back
-            final viewModel =
-                EditPlaythoughViewModel(arguments.playthroughViewModel, getIt<PlaythroughsStore>());
+            final viewModel = getIt<EditPlaythoughViewModel>();
+            viewModel.setPlaythroughId(arguments.playthroughId);
 
             return MaterialPageRoute<dynamic>(
                 settings: routeSettings,
-                builder: (BuildContext context) => EditPlaythoughPage(viewModel: viewModel));
+                builder: (BuildContext context) => EditPlaythroughPage(viewModel: viewModel));
 
           case AboutPage.pageRoute:
             return MaterialPageRoute<dynamic>(
                 settings: routeSettings, builder: (BuildContext context) => const AboutPage());
 
           case SettingsPage.pageRoute:
+            final viewModel = getIt<SettingsViewModel>();
+
             return MaterialPageRoute<dynamic>(
-                settings: routeSettings, builder: (BuildContext context) => const SettingsPage());
+              settings: routeSettings,
+              builder: (BuildContext context) => SettingsPage(viewModel: viewModel),
+            );
 
           default:
             return null;

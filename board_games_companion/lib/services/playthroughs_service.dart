@@ -3,7 +3,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/enums/playthrough_status.dart';
-import '../common/hive_boxes.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
 import '../models/playthrough_player.dart';
@@ -11,7 +10,7 @@ import 'hive_base_service.dart';
 import 'score_service.dart';
 
 @singleton
-class PlaythroughService extends BaseHiveService<Playthrough> {
+class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService> {
   PlaythroughService(this.scoreService);
 
   final ScoreService scoreService;
@@ -24,7 +23,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return <Playthrough>[];
     }
 
-    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if (!await ensureBoxOpen()) {
       return <Playthrough>[];
     }
 
@@ -50,11 +49,11 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     }
 
     final playthroughPlayerIds = playthoughPlayers.map((p) => p.player.id).toList();
-    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if (!await ensureBoxOpen()) {
       return null;
     }
 
-    final newPlaythrough = Playthrough(
+    var newPlaythrough = Playthrough(
       id: uuid.v4(),
       boardGameId: boardGameId,
       playerIds: playthroughPlayerIds,
@@ -64,33 +63,36 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
     );
 
     if (duration == null) {
-      newPlaythrough.status = PlaythroughStatus.Started;
+      newPlaythrough = newPlaythrough.copyWith(status: PlaythroughStatus.Started);
     } else {
-      newPlaythrough.status = PlaythroughStatus.Finished;
-      newPlaythrough.endDate = startDate.add(duration);
+      newPlaythrough.copyWith(
+        status: PlaythroughStatus.Finished,
+        endDate: startDate.add(duration),
+      );
     }
 
     try {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playthroughPlayerId in playthroughPlayerIds) {
-        Score playerScore = Score(
-          id: uuid.v4(),
-          playerId: playthroughPlayerId,
-          boardGameId: boardGameId,
-        );
-
-        if (playerScores.containsKey(playthroughPlayerId)) {
-          playerScore = playerScores[playthroughPlayerId]!.score;
+        var playerScore = playerScores[playthroughPlayerId]?.score ??
+            Score(
+              id: uuid.v4(),
+              playerId: playthroughPlayerId,
+              boardGameId: boardGameId,
+              playthroughId: newPlaythrough.id,
+            );
+        if (playerScore.playthroughId == null) {
+          playerScore = playerScore.copyWith(playthroughId: newPlaythrough.id);
         }
-        playerScore.playthroughId = newPlaythrough.id;
 
         if (!await scoreService.addOrUpdateScore(playerScore)) {
           FirebaseCrashlytics.instance.log(
             'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId',
           );
         } else {
-          newPlaythrough.scoreIds.add(playerScore.id);
+          newPlaythrough = newPlaythrough.copyWith(
+              scoreIds: newPlaythrough.scoreIds.toList()..add(playerScore.id));
         }
       }
 
@@ -103,7 +105,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> updatePlaythrough(Playthrough playthrough) async {
-    if ((playthrough.id.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if ((playthrough.id.isEmpty) || !await ensureBoxOpen()) {
       return false;
     }
 
@@ -118,7 +120,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deletePlaythrough(String playthroughId) async {
-    if ((playthroughId.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if ((playthroughId.isEmpty) || !await ensureBoxOpen()) {
       return false;
     }
 
@@ -127,15 +129,13 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    playthroughToDelete.isDeleted = true;
-
-    await storageBox.put(playthroughId, playthroughToDelete);
+    await storageBox.put(playthroughId, playthroughToDelete.copyWith(isDeleted: true));
 
     return true;
   }
 
   Future<bool> deletePlaythroughsForGames(List<String?> boardGameIds) async {
-    if ((boardGameIds.isEmpty) || !await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if ((boardGameIds.isEmpty) || !await ensureBoxOpen()) {
       return false;
     }
 
@@ -146,13 +146,9 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    for (final playthroughToDelete in playthroughsToDelete) {
-      playthroughToDelete.isDeleted = true;
-    }
-
     final Map<String, Playthrough> mappedPlaythroughs = {
       for (final playthroughToDelete in playthroughsToDelete)
-        playthroughToDelete.id: playthroughToDelete
+        playthroughToDelete.id: playthroughToDelete.copyWith(isDeleted: true)
     };
 
     await storageBox.putAll(mappedPlaythroughs);
@@ -161,7 +157,7 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
   }
 
   Future<bool> deleteAllPlaythrough() async {
-    if (!await ensureBoxOpen(HiveBoxes.playthroughs)) {
+    if (!await ensureBoxOpen()) {
       return false;
     }
 
@@ -170,12 +166,9 @@ class PlaythroughService extends BaseHiveService<Playthrough> {
       return false;
     }
 
-    for (final playthrough in playthroughs) {
-      playthrough.isDeleted = true;
-    }
-
     await storageBox.putAll(<String, Playthrough>{
-      for (Playthrough playthrough in playthroughs) playthrough.id: playthrough
+      for (Playthrough playthrough in playthroughs)
+        playthrough.id: playthrough.copyWith(isDeleted: true)
     });
 
     return true;

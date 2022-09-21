@@ -1,66 +1,75 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: library_private_types_in_public_api
+
+import 'package:mobx/mobx.dart';
 
 import '../../models/player_score.dart';
+
+part 'enter_score_view_model.g.dart';
 
 enum EnterScoreOperation {
   add,
   subtract,
 }
 
-class EnterScoreViewModel with ChangeNotifier {
-  EnterScoreViewModel(this._playerScore) : _initialScore = _playerScore.score.valueInt;
+class EnterScoreViewModel = _EnterScoreViewModel with _$EnterScoreViewModel;
+
+abstract class _EnterScoreViewModel with Store {
+  _EnterScoreViewModel(this._playerScore) : _initialScore = _playerScore.score.valueInt;
 
   final int _initialScore;
-  final PlayerScore _playerScore;
 
-  int? _score;
-  int get score {
-    _score ??= _playerScore.score.valueInt;
-    return _score!;
-  }
+  @observable
+  PlayerScore _playerScore;
 
+  @observable
+  EnterScoreOperation operation = EnterScoreOperation.add;
+
+  @observable
+  ObservableList<int> partialScores = <int>[].asObservable();
+
+  @computed
+  int get score => _playerScore.score.valueInt;
+
+  @computed
   String? get playerName => _playerScore.player?.name;
 
-  EnterScoreOperation _operation = EnterScoreOperation.add;
-  EnterScoreOperation get operation => _operation;
-
+  @computed
   bool get canUndo => partialScores.isNotEmpty;
 
+  @computed
   bool get hasUnsavedChanged => partialScores.isNotEmpty;
 
-  List<int> partialScores = <int>[];
+  @action
+  void updateOperation(EnterScoreOperation operation) => this.operation = operation;
 
-  void updateOperation(EnterScoreOperation operation) {
-    _operation = operation;
-    notifyListeners();
-  }
-
+  @action
   void updateScore(int partialScore) {
-    _score = score + partialScore;
-    partialScores.add(partialScore);
+    final newScore = score + partialScore;
+    partialScores = ObservableList.of(partialScores..add(partialScore));
 
-    _playerScore.updatePlayerScore(_score.toString());
-
-    notifyListeners();
+    _updatePlayerScore(newScore);
   }
 
+  @action
   void scoreZero() {
-    _playerScore.updatePlayerScore(0.toString());
-
-    notifyListeners();
+    _updatePlayerScore(0);
   }
 
+  @action
   void undo() {
     if (!canUndo) {
       return;
     }
 
-    partialScores.removeLast();
+    partialScores = ObservableList.of(partialScores..removeLast());
 
-    _score = _initialScore + _partialScoresSum;
-    _playerScore.updatePlayerScore(_score.toString());
+    final newScore = _initialScore + _partialScoresSum;
+    _updatePlayerScore(newScore);
+  }
 
-    notifyListeners();
+  void _updatePlayerScore(int? score) {
+    _playerScore =
+        _playerScore.copyWith(score: _playerScore.score.copyWith(value: score.toString()));
   }
 
   int get _partialScoresSum {

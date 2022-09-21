@@ -7,7 +7,7 @@ import '../pages/enter_score/enter_score_dialog.dart';
 
 mixin EnterScoreDialogMixin {
   Future<void> showEnterScoreDialog(BuildContext context, EnterScoreViewModel viewModel) async {
-    showGeneralDialog<void>(
+    await showGeneralDialog<void>(
       context: context,
       pageBuilder: (_, __, ___) {
         return EnterScoreDialog(viewModel: viewModel);

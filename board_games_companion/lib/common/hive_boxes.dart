@@ -1,10 +1,30 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
+import 'package:board_games_companion/services/board_games_service.dart';
+import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/services/user_service.dart';
+
+import '../services/board_games_filters_service.dart';
+import '../services/playthroughs_service.dart';
+import '../services/preferences_service.dart';
+
 class HiveBoxes {
+  static Map<Type, String> boxesNamesMap = {
+    BoardGamesService: boardGames,
+    PlayerService: players,
+    UserService: user,
+    PlaythroughService: playthroughs,
+    ScoreService: scores,
+    BoardGamesFiltersService: collectionFilters,
+    PreferencesService: preferences,
+  };
+
   static const boardGames = 'boardGames';
   static const players = 'players';
   static const user = 'user';
   static const playthroughs = 'playthroughs';
   static const scores = 'scores';
-  static const sortBy = 'sortBy';
   static const collectionFilters = 'collectionFilters';
   static const preferences = 'preferences';
   static const dioCache = 'dioCache';

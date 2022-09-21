@@ -70,9 +70,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
           final hasName = nameController.text.isNotEmpty;
 
           return WillPopScope(
-            onWillPop: () async {
-              return _handleOnWillPop(context, player);
-            },
+            onWillPop: () async => _handleOnWillPop(context, player),
             child: Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -117,9 +115,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                                               ),
                                               onTap: () => _handleImagePicking(player),
                                             ),
-                                            const Divider(
-                                              indent: Dimensions.halfStandardSpacing,
-                                            ),
+                                            const Divider(indent: Dimensions.halfStandardSpacing),
                                             CustomIconButton(
                                               const Icon(
                                                 Icons.camera,
@@ -165,9 +161,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                               style: AppTheme.defaultTextFieldStyle,
                             ),
                           ],
-                          const Expanded(
-                            child: SizedBox.shrink(),
-                          ),
+                          const Expanded(child: SizedBox.shrink()),
                           _ActionButtons(
                             isEditMode: isEditMode,
                             onCreate: (BuildContext context) => _createOrUpdatePlayer(context),

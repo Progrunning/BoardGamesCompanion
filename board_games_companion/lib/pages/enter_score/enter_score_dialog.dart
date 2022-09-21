@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
@@ -32,55 +32,60 @@ class EnterScoreDialog extends StatelessWidget {
     final enterScoreDialogWidth =
         max(_minWidth, min(width - 2 * Dimensions.doubleStandardSpacing, _maxWidth));
 
-    return ChangeNotifierProvider<EnterScoreViewModel>.value(
-      value: viewModel,
-      builder: (_, __) {
-        return Center(
-          child: SizedBox(
-            width: enterScoreDialogWidth,
-            child: ElevatedContainer(
-              backgroundColor: AppColors.primaryColorLight,
-              elevation: AppStyles.defaultElevation,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.doubleStandardSpacing,
-                  vertical: Dimensions.standardSpacing,
+    return Center(
+      child: SizedBox(
+        width: enterScoreDialogWidth,
+        child: ElevatedContainer(
+          backgroundColor: AppColors.primaryColorLight,
+          elevation: AppStyles.defaultElevation,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.doubleStandardSpacing,
+              vertical: Dimensions.standardSpacing,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Observer(
+                  builder: (_) {
+                    return _Score(playerName: viewModel.playerName, score: viewModel.score);
+                  },
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    _Score(playerName: viewModel.playerName),
-                    const _ScoreHistory(),
-                    const SizedBox(height: Dimensions.trippleStandardSpacing),
-                    _CircularNumberPicker(
-                      strokeWidth: 50,
-                      thumbSize: 50,
-                      onEnded: (int partialScore) {
+                Observer(
+                  builder: (_) {
+                    return _ScoreHistory(partialScores: viewModel.partialScores);
+                  },
+                ),
+                const SizedBox(height: Dimensions.trippleStandardSpacing),
+                _CircularNumberPicker(
+                  strokeWidth: 50,
+                  thumbSize: 50,
+                  onEnded: (int partialScore) => viewModel.updateScore(partialScore),
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                Observer(
+                  builder: (_) {
+                    return _InstantScorePanel(
+                      operation: viewModel.operation,
+                      onOperationChange: (EnterScoreOperation operation) =>
+                          viewModel.updateOperation(operation),
+                      onScoreChange: (int partialScore) {
+                        if (viewModel.operation == EnterScoreOperation.subtract) {
+                          partialScore = -partialScore;
+                        }
+
                         viewModel.updateScore(partialScore);
                       },
-                    ),
-                    const SizedBox(height: Dimensions.doubleStandardSpacing),
-                    Consumer<EnterScoreViewModel>(
-                      builder: (_, viewModel, __) {
-                        return _InstantScorePanel(
-                          operation: viewModel.operation,
-                          onOperationChange: (EnterScoreOperation operation) {
-                            viewModel.updateOperation(operation);
-                          },
-                          onScoreChange: (int partialScore) async {
-                            if (viewModel.operation == EnterScoreOperation.subtract) {
-                              partialScore = -partialScore;
-                            }
-
-                            viewModel.updateScore(partialScore);
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(height: Dimensions.trippleStandardSpacing),
-                    _ActionButtons(
+                    );
+                  },
+                ),
+                const SizedBox(height: Dimensions.trippleStandardSpacing),
+                Observer(
+                  builder: (_) {
+                    return _ActionButtons(
+                      canUndo: viewModel.canUndo,
                       onUndo: () => viewModel.undo(),
                       onDone: () {
                         // MK In case score was not entered assume 0 was the score
@@ -90,64 +95,65 @@ class EnterScoreDialog extends StatelessWidget {
 
                         Navigator.pop(context);
                       },
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
 
 class _ScoreHistory extends StatelessWidget {
   const _ScoreHistory({
+    required this.partialScores,
     Key? key,
   }) : super(key: key);
 
   static const double _height = 20;
 
+  final List<int> partialScores;
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<EnterScoreViewModel>(builder: (_, viewModel, __) {
-      if (viewModel.partialScores.isEmpty) {
-        return const SizedBox(height: _height);
-      }
+    if (partialScores.isEmpty) {
+      return const SizedBox(height: _height);
+    }
 
-      return SizedBox(
-        height: _height,
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            Text('(', style: AppTheme.theme.textTheme.bodyText1),
-            for (var i = 0; i < viewModel.partialScores.length; i++) ...[
-              Text(
-                viewModel.partialScores[i] > 0
-                    ? '+${viewModel.partialScores[i]}'
-                    : '${viewModel.partialScores[i]}',
-                style: AppTheme.theme.textTheme.bodyText1,
-              ),
-              if (i != viewModel.partialScores.length - 1) ...[
-                Text(', ', style: AppTheme.theme.textTheme.bodyText1),
-              ]
-            ],
-            Text(')', style: AppTheme.theme.textTheme.bodyText1),
+    return SizedBox(
+      height: _height,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        children: [
+          Text('(', style: AppTheme.theme.textTheme.bodyText1),
+          for (var i = 0; i < partialScores.length; i++) ...[
+            Text(
+              partialScores[i] > 0 ? '+${partialScores[i]}' : '${partialScores[i]}',
+              style: AppTheme.theme.textTheme.bodyText1,
+            ),
+            if (i != partialScores.length - 1) ...[
+              Text(', ', style: AppTheme.theme.textTheme.bodyText1),
+            ]
           ],
-        ),
-      );
-    });
+          Text(')', style: AppTheme.theme.textTheme.bodyText1),
+        ],
+      ),
+    );
   }
 }
 
 class _Score extends StatelessWidget {
   const _Score({
     required this.playerName,
+    required this.score,
     Key? key,
   }) : super(key: key);
 
   final String? playerName;
+  final int score;
 
   @override
   Widget build(BuildContext context) {
@@ -162,16 +168,12 @@ class _Score extends StatelessWidget {
           sprintf(AppText.editPlaythroughPlayerScored, [playerName]),
           style: AppTheme.theme.textTheme.headline1!.copyWith(fontWeight: FontWeight.normal),
         ),
-        Consumer<EnterScoreViewModel>(
-          builder: (_, viewModel, __) {
-            return Text(
-              ' ${viewModel.score} ',
-              style: AppTheme.theme.textTheme.headline1!.copyWith(
-                fontSize: Dimensions.doubleExtraLargeFontSize,
-                color: AppColors.accentColor,
-              ),
-            );
-          },
+        Text(
+          ' $score ',
+          style: AppTheme.theme.textTheme.headline1!.copyWith(
+            fontSize: Dimensions.doubleExtraLargeFontSize,
+            color: AppColors.accentColor,
+          ),
         ),
         Text(
           AppText.editPlaythroughScorePoints,
@@ -298,11 +300,13 @@ class _InstantScoreTile extends StatelessWidget {
 
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
+    required this.canUndo,
     required this.onUndo,
     required this.onDone,
     Key? key,
   }) : super(key: key);
 
+  final bool canUndo;
   final VoidCallback onUndo;
   final VoidCallback onDone;
 
@@ -310,15 +314,11 @@ class _ActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Consumer<EnterScoreViewModel>(
-          builder: (_, viewModel, __) {
-            return ElevatedIconButton(
-              title: AppText.enterScoreDialogUndoButtonText,
-              icon: const Icon(Icons.undo),
-              color: AppColors.blueColor,
-              onPressed: viewModel.canUndo ? onUndo : null,
-            );
-          },
+        ElevatedIconButton(
+          title: AppText.enterScoreDialogUndoButtonText,
+          icon: const Icon(Icons.undo),
+          color: AppColors.blueColor,
+          onPressed: canUndo ? onUndo : null,
         ),
         const Expanded(child: SizedBox.shrink()),
         ElevatedIconButton(

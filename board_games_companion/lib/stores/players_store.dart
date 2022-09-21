@@ -2,6 +2,7 @@
 
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
+import 'package:board_games_companion/stores/app_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -13,9 +14,20 @@ part 'players_store.g.dart';
 class PlayersStore = _PlayersStore with _$PlayersStore;
 
 abstract class _PlayersStore with Store {
-  _PlayersStore(this._playerService);
+  _PlayersStore(
+    this._playerService,
+    this._appStore,
+  ) {
+    // MK When restoring a backup, reload players
+    reaction((_) => _appStore.backupRestored, (bool? backupRestored) async {
+      if (backupRestored ?? false) {
+        await loadPlayers();
+      }
+    });
+  }
 
   final PlayerService _playerService;
+  final AppStore _appStore;
 
   @observable
   ObservableList<Player> players = ObservableList.of([]);

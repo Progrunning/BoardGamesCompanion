@@ -2,7 +2,9 @@
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/import_result.dart';
+import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -12,7 +14,6 @@ import '../../common/analytics.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/player.dart';
-import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
@@ -31,12 +32,14 @@ abstract class _PlaythroughsViewModel with Store {
     this._playersStore,
     this._analyticsService,
     this._boardGamesService,
+    this._userStore,
   );
 
   final PlayersStore _playersStore;
   final PlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
   final BoardGamesService _boardGamesService;
+  final UserStore _userStore;
 
   List<PlaythroughPlayer>? _playthroughPlayers;
   List<PlaythroughPlayer>? get playthroughPlayers => _playthroughPlayers;
@@ -45,6 +48,12 @@ abstract class _PlaythroughsViewModel with Store {
 
   @computed
   BoardGameDetails get boardGame => _playthroughsStore.boardGame;
+
+  @computed
+  bool get hasUser => _userStore.hasUser;
+
+  @computed
+  String? get userName => _userStore.userName;
 
   @action
   void setBoardGame(BoardGameDetails boardGame) {
@@ -79,7 +88,7 @@ abstract class _PlaythroughsViewModel with Store {
     // TODO Consider using isolates to parse and iterate over the results
     for (final bggPlay in bggPlaysImportResult.data!) {
       final bggPlayExists = _playthroughsStore.playthroughs
-          .any((Playthrough playthrough) => playthrough.bggPlayId == bggPlay.id);
+          .any((PlaythroughDetails playthrough) => playthrough.bggPlayId == bggPlay.id);
       if (bggPlayExists) {
         continue;
       }
@@ -119,7 +128,7 @@ abstract class _PlaythroughsViewModel with Store {
             boardGameId: boardGameId,
             value: bggPlayer.playerScore.toString(),
           );
-          playerScores[player.id] = PlayerScore(player, playerScore);
+          playerScores[player.id] = PlayerScore(player: player, score: playerScore);
         }
       }
 
