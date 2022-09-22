@@ -1,0 +1,17 @@
+# search_for_a_game.yaml
+
+appId: com.progrunning.boardgamescompanion
+---
+- launchApp
+- assertVisible:
+    text: Search
+- tapOn:
+    text: Search
+- assertVisible:
+    text: Hot Board Games
+- tapOn:
+    text: Search...
+- inputText: "Gloomhaven"
+- pressKey: Enter
+- assertNotVisible:
+    text: Hot Board Games

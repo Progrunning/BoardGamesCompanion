@@ -1,0 +1,20 @@
+# add_a_player.yaml
+
+appId: com.progrunning.boardgamescompanion
+---
+- launchApp
+- assertVisible:
+    text: Players
+- tapOn:
+    text: Players
+- assertVisible:
+    text: Create Player
+- tapOn:
+    text: Create Player
+- tapOn:
+    text: Name
+- inputText: "Player1"
+- pressKey: Enter
+- tapOn:
+    text: Create
+- back
