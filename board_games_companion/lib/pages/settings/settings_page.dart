@@ -236,10 +236,21 @@ class _BackupSection extends StatefulWidget {
 class _BackupSectionState extends State<_BackupSection> with TickerProviderStateMixin {
   late AnimationController _fadeInAnimationController;
   late AnimationController _sizeAnimationController;
+  late ReactionDisposer _restoreSuccessReactionDisposer;
 
   @override
   void initState() {
     super.initState();
+
+    _restoreSuccessReactionDisposer =
+        reaction((_) => widget.viewModel.visualState, (SettingsPageVisualState visualState) {
+      final messenger = ScaffoldMessenger.of(context);
+      visualState.when(
+          restoringFailure: (errorMessage) => _showRestoreFailureSnackbar(messenger),
+          initial: () {},
+          restoring: () {},
+          restoringSuccess: () => _showRestoreSuceededSnackbar(messenger));
+    });
 
     widget.viewModel.loadBackups();
 
@@ -258,6 +269,7 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
   void dispose() {
     _fadeInAnimationController.dispose();
     _sizeAnimationController.dispose();
+    _restoreSuccessReactionDisposer();
 
     super.dispose();
   }
@@ -362,6 +374,31 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
     await widget.viewModel.shareBackupFile(
       backupFile,
       sharePositionOrigin: sharePositionOrigin,
+    );
+  }
+
+  Future<void> _showRestoreSuceededSnackbar(ScaffoldMessengerState messenger) async {
+    messenger.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: Dimensions.snackbarMargin,
+        content: const Text(AppText.settingsPageRestoreSucceededMessage),
+        action: SnackBarAction(
+          label: AppText.ok,
+          onPressed: () => messenger.hideCurrentSnackBar(reason: SnackBarClosedReason.dismiss),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showRestoreFailureSnackbar(ScaffoldMessengerState messenger) async {
+    messenger.showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: Dimensions.snackbarMargin,
+        content: Text(AppText.settingsPageRestoreFailedMessage),
+        duration: Duration(seconds: 10),
+      ),
     );
   }
 }

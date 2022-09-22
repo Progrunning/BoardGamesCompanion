@@ -131,6 +131,9 @@ class AppText {
   static const settingsPageBackupButtonText = 'Backup';
   static const settingsPageRestireButtonText = 'Restore';
   static const settingsPageBackupsListTitle = 'Backups';
+  static const settingsPageRestoreSucceededMessage = 'Your data has been successfully restored.';
+  static const settingsPageRestoreFailedMessage =
+      'Unfortunately we ran into a problem with restoring your data. Please try again or contact support at feedback@progrunning.net';
 
   static const gamePlaytimeFormat = '%s min';
   static const gamePlayersSingularFormat = '%i players';

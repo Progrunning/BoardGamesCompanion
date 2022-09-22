@@ -20,23 +20,20 @@ class PlayerAvatarSubtitle extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(
           bottom: Dimensions.halfStandardSpacing,
+          left: Dimensions.halfStandardSpacing,
+          right: Dimensions.halfStandardSpacing,
         ),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(AppStyles.defaultCornerRadius),
-            ),
+            borderRadius: const BorderRadius.all(Radius.circular(AppStyles.defaultCornerRadius)),
             color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(
-              Dimensions.halfStandardSpacing,
-            ),
+            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
             child: Text(
               player.name ?? '',
-              style: const TextStyle(
-                color: AppColors.defaultTextColor,
-              ),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: AppColors.defaultTextColor),
             ),
           ),
         ),

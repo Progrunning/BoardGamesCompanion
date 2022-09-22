@@ -131,9 +131,7 @@ class PlayersPageState extends State<PlayersPage> {
           actions: <Widget>[
             TextButton(
               child: const Text(AppText.cancel),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
