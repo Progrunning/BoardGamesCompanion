@@ -249,6 +249,7 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
           restoringFailure: (errorMessage) => _showRestoreFailureSnackbar(messenger),
           initial: () {},
           restoring: () {},
+          restoringCancelled: () {},
           restoringSuccess: () => _showRestoreSuceededSnackbar(messenger));
     });
 
