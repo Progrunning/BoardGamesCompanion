@@ -20,6 +20,7 @@ mixin _$SettingsPageVisualState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() restoring,
+    required TResult Function() restoringCancelled,
     required TResult Function() restoringSuccess,
     required TResult Function(String? message) restoringFailure,
   }) =>
@@ -28,6 +29,7 @@ mixin _$SettingsPageVisualState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
   }) =>
@@ -36,6 +38,7 @@ mixin _$SettingsPageVisualState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
     required TResult orElse(),
@@ -45,6 +48,7 @@ mixin _$SettingsPageVisualState {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Restoring value) restoring,
+    required TResult Function(RestoringCancelled value) restoringCancelled,
     required TResult Function(RestoringSucceeded value) restoringSuccess,
     required TResult Function(RestoringFailed value) restoringFailure,
   }) =>
@@ -53,6 +57,7 @@ mixin _$SettingsPageVisualState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
   }) =>
@@ -61,6 +66,7 @@ mixin _$SettingsPageVisualState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
     required TResult orElse(),
@@ -126,6 +132,7 @@ class _$Initial implements Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() restoring,
+    required TResult Function() restoringCancelled,
     required TResult Function() restoringSuccess,
     required TResult Function(String? message) restoringFailure,
   }) {
@@ -137,6 +144,7 @@ class _$Initial implements Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
   }) {
@@ -148,6 +156,7 @@ class _$Initial implements Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
     required TResult orElse(),
@@ -163,6 +172,7 @@ class _$Initial implements Initial {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Restoring value) restoring,
+    required TResult Function(RestoringCancelled value) restoringCancelled,
     required TResult Function(RestoringSucceeded value) restoringSuccess,
     required TResult Function(RestoringFailed value) restoringFailure,
   }) {
@@ -174,6 +184,7 @@ class _$Initial implements Initial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
   }) {
@@ -185,6 +196,7 @@ class _$Initial implements Initial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
     required TResult orElse(),
@@ -243,6 +255,7 @@ class _$Restoring implements Restoring {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() restoring,
+    required TResult Function() restoringCancelled,
     required TResult Function() restoringSuccess,
     required TResult Function(String? message) restoringFailure,
   }) {
@@ -254,6 +267,7 @@ class _$Restoring implements Restoring {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
   }) {
@@ -265,6 +279,7 @@ class _$Restoring implements Restoring {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
     required TResult orElse(),
@@ -280,6 +295,7 @@ class _$Restoring implements Restoring {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Restoring value) restoring,
+    required TResult Function(RestoringCancelled value) restoringCancelled,
     required TResult Function(RestoringSucceeded value) restoringSuccess,
     required TResult Function(RestoringFailed value) restoringFailure,
   }) {
@@ -291,6 +307,7 @@ class _$Restoring implements Restoring {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
   }) {
@@ -302,6 +319,7 @@ class _$Restoring implements Restoring {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
     required TResult orElse(),
@@ -315,6 +333,129 @@ class _$Restoring implements Restoring {
 
 abstract class Restoring implements SettingsPageVisualState {
   const factory Restoring() = _$Restoring;
+}
+
+/// @nodoc
+abstract class _$$RestoringCancelledCopyWith<$Res> {
+  factory _$$RestoringCancelledCopyWith(_$RestoringCancelled value,
+          $Res Function(_$RestoringCancelled) then) =
+      __$$RestoringCancelledCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$RestoringCancelledCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res>
+    implements _$$RestoringCancelledCopyWith<$Res> {
+  __$$RestoringCancelledCopyWithImpl(
+      _$RestoringCancelled _value, $Res Function(_$RestoringCancelled) _then)
+      : super(_value, (v) => _then(v as _$RestoringCancelled));
+
+  @override
+  _$RestoringCancelled get _value => super._value as _$RestoringCancelled;
+}
+
+/// @nodoc
+
+class _$RestoringCancelled implements RestoringCancelled {
+  const _$RestoringCancelled();
+
+  @override
+  String toString() {
+    return 'SettingsPageVisualState.restoringCancelled()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$RestoringCancelled);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() restoring,
+    required TResult Function() restoringCancelled,
+    required TResult Function() restoringSuccess,
+    required TResult Function(String? message) restoringFailure,
+  }) {
+    return restoringCancelled();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
+    TResult Function()? restoringSuccess,
+    TResult Function(String? message)? restoringFailure,
+  }) {
+    return restoringCancelled?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
+    TResult Function()? restoringSuccess,
+    TResult Function(String? message)? restoringFailure,
+    required TResult orElse(),
+  }) {
+    if (restoringCancelled != null) {
+      return restoringCancelled();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Initial value) initial,
+    required TResult Function(Restoring value) restoring,
+    required TResult Function(RestoringCancelled value) restoringCancelled,
+    required TResult Function(RestoringSucceeded value) restoringSuccess,
+    required TResult Function(RestoringFailed value) restoringFailure,
+  }) {
+    return restoringCancelled(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(Initial value)? initial,
+    TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
+    TResult Function(RestoringSucceeded value)? restoringSuccess,
+    TResult Function(RestoringFailed value)? restoringFailure,
+  }) {
+    return restoringCancelled?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Initial value)? initial,
+    TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
+    TResult Function(RestoringSucceeded value)? restoringSuccess,
+    TResult Function(RestoringFailed value)? restoringFailure,
+    required TResult orElse(),
+  }) {
+    if (restoringCancelled != null) {
+      return restoringCancelled(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RestoringCancelled implements SettingsPageVisualState {
+  const factory RestoringCancelled() = _$RestoringCancelled;
 }
 
 /// @nodoc
@@ -360,6 +501,7 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() restoring,
+    required TResult Function() restoringCancelled,
     required TResult Function() restoringSuccess,
     required TResult Function(String? message) restoringFailure,
   }) {
@@ -371,6 +513,7 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
   }) {
@@ -382,6 +525,7 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
     required TResult orElse(),
@@ -397,6 +541,7 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Restoring value) restoring,
+    required TResult Function(RestoringCancelled value) restoringCancelled,
     required TResult Function(RestoringSucceeded value) restoringSuccess,
     required TResult Function(RestoringFailed value) restoringFailure,
   }) {
@@ -408,6 +553,7 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
   }) {
@@ -419,6 +565,7 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
     required TResult orElse(),
@@ -501,6 +648,7 @@ class _$RestoringFailed implements RestoringFailed {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() restoring,
+    required TResult Function() restoringCancelled,
     required TResult Function() restoringSuccess,
     required TResult Function(String? message) restoringFailure,
   }) {
@@ -512,6 +660,7 @@ class _$RestoringFailed implements RestoringFailed {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
   }) {
@@ -523,6 +672,7 @@ class _$RestoringFailed implements RestoringFailed {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? restoring,
+    TResult Function()? restoringCancelled,
     TResult Function()? restoringSuccess,
     TResult Function(String? message)? restoringFailure,
     required TResult orElse(),
@@ -538,6 +688,7 @@ class _$RestoringFailed implements RestoringFailed {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Restoring value) restoring,
+    required TResult Function(RestoringCancelled value) restoringCancelled,
     required TResult Function(RestoringSucceeded value) restoringSuccess,
     required TResult Function(RestoringFailed value) restoringFailure,
   }) {
@@ -549,6 +700,7 @@ class _$RestoringFailed implements RestoringFailed {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
   }) {
@@ -560,6 +712,7 @@ class _$RestoringFailed implements RestoringFailed {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Restoring value)? restoring,
+    TResult Function(RestoringCancelled value)? restoringCancelled,
     TResult Function(RestoringSucceeded value)? restoringSuccess,
     TResult Function(RestoringFailed value)? restoringFailure,
     required TResult orElse(),

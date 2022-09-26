@@ -130,7 +130,7 @@ class FileService {
     zipEncoder.close();
   }
 
-  Future<void> restoreAppData() async {
+  Future<bool> restoreAppData() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: [backupFileExtension],
@@ -138,13 +138,13 @@ class FileService {
 
     if (result == null) {
       // User canceled the picker
-      return;
+      return true;
     }
 
     final documentsDirectory = await path_provider.getApplicationDocumentsDirectory();
     await extractFileToDisk(result.files.single.path!, documentsDirectory.path, asyncWrite: true);
 
-    return;
+    return false;
   }
 
   Future<File> _retrieveDocumentsFile(String fileName) async {

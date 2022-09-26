@@ -117,7 +117,11 @@ abstract class _SettingsViewModel with Store {
       _preferencesService.closeBox();
 
       // MK Restore files
-      await _fileService.restoreAppData();
+      final userCancelled = await _fileService.restoreAppData();
+      if (userCancelled) {
+        visualState = const SettingsPageVisualState.restoringCancelled();
+        return;
+      }
 
       await _preferencesService.initialize();
       _appStore.setBackupRestore(true);
