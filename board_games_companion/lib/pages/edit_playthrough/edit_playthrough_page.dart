@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../../common/app_colors.dart';
@@ -13,8 +15,6 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
-import '../../widgets/common/default_icon.dart';
-import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -85,15 +85,52 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     },
                   ),
                 ),
-                _ActionButtons(
-                  viewModel: widget.viewModel,
-                  onSave: () async => _save(),
-                  onStop: () async => _stopPlaythrough(),
-                  onDelete: () async => _showDeletePlaythroughDialog(context),
-                )
               ],
             ),
           ),
+        ),
+        floatingActionButton: SpeedDial(
+          icon: Icons.menu,
+          overlayColor: AppColors.dialogBackgroundColor,
+          activeIcon: Icons.close,
+          openCloseDial: widget.viewModel.isSpeedDialOpen,
+          onPress: () =>
+              widget.viewModel.isSpeedDialOpen.value = !widget.viewModel.isSpeedDialOpen.value,
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.save),
+              backgroundColor: AppColors.accentColor,
+              foregroundColor: Colors.white,
+              label: AppText.save,
+              labelBackgroundColor: AppColors.accentColor,
+              onTap: () async => _save(),
+            ),
+            if (!widget.viewModel.playthoughEnded)
+              SpeedDialChild(
+                child: const Icon(Icons.stop),
+                backgroundColor: AppColors.blueColor,
+                foregroundColor: Colors.white,
+                label: AppText.stop,
+                labelBackgroundColor: AppColors.blueColor,
+                onTap: () async => _stopPlaythrough(),
+              ),
+            SpeedDialChild(
+              child: const Icon(Icons.note_add),
+              backgroundColor: AppColors.greenColor,
+              foregroundColor: Colors.white,
+              label: AppText.editPlaythroughAddNote,
+              labelBackgroundColor: AppColors.greenColor,
+              onTap: () async => _addNote(),
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.delete),
+              backgroundColor: AppColors.redColor,
+              foregroundColor: Colors.white,
+              label: AppText.delete,
+              labelBackgroundColor: AppColors.redColor,
+              onTap: () async => _showDeletePlaythroughDialog(context),
+            ),
+          ],
         ),
       ),
     );
@@ -187,6 +224,10 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
     );
 
     return false;
+  }
+
+  Future<void> _addNote() async {
+    Navigator.of(context).pushNamed(PlaythroughNotePage.pageRoute);
   }
 }
 
@@ -451,58 +492,5 @@ class _DurationState extends State<_Duration> {
     maxHours = _maxHours;
     minMinutes = 0;
     maxMinutes = Duration.minutesPerHour - 1;
-  }
-}
-
-class _ActionButtons extends StatelessWidget {
-  const _ActionButtons({
-    required this.viewModel,
-    this.onSave,
-    this.onStop,
-    this.onDelete,
-    Key? key,
-  }) : super(key: key);
-
-  final EditPlaythoughViewModel viewModel;
-  final VoidCallback? onSave;
-  final VoidCallback? onStop;
-  final VoidCallback? onDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(Dimensions.standardSpacing),
-      child: Observer(
-        builder: (_) {
-          return Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              ElevatedIconButton(
-                title: 'Delete',
-                icon: const DefaultIcon(Icons.delete),
-                color: AppColors.redColor,
-                onPressed: onDelete,
-              ),
-              const Expanded(child: SizedBox.shrink()),
-              if (!viewModel.playthoughEnded) ...[
-                ElevatedIconButton(
-                  title: AppText.stop,
-                  icon: const DefaultIcon(Icons.stop),
-                  color: AppColors.blueColor,
-                  onPressed: onStop,
-                ),
-                const SizedBox(width: Dimensions.standardSpacing),
-              ],
-              ElevatedIconButton(
-                title: 'Save',
-                icon: const DefaultIcon(Icons.save),
-                color: AppColors.accentColor,
-                onPressed: onSave,
-              ),
-            ],
-          );
-        },
-      ),
-    );
   }
 }

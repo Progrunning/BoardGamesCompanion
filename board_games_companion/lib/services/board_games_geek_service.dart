@@ -95,7 +95,7 @@ class BoardGamesGeekService {
             if (requestOptions.uri.toString().contains(_hotBoardGamesUrl) &&
                 DateTime.now().difference(cachedResponse.responseDate).inHours <
                     _hotBoardGamesCacheExpirationInHours) {
-              Fimber.d('Getting hor board games from cache');
+              Fimber.d('Getting hot board games from cache');
               return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
             }
 

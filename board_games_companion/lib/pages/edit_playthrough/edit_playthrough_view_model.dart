@@ -4,6 +4,7 @@ import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
@@ -19,6 +20,8 @@ abstract class _EditPlaythoughViewModel with Store {
 
   late final String _playthroughId;
   final PlaythroughsStore _playthroughsStore;
+
+  ValueNotifier<bool> isSpeedDialOpen = ValueNotifier(false);
 
   @observable
   PlaythroughDetails? _updatedPlaythroughDetails;
