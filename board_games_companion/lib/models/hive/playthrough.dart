@@ -22,5 +22,6 @@ abstract class Playthrough with _$Playthrough {
     @HiveField(6) PlaythroughStatus? status,
     @Default(false) @HiveField(7) bool? isDeleted,
     @HiveField(8) int? bggPlayId,
+    @HiveField(9) List<String>? notes,
   }) = _Playthrough;
 }

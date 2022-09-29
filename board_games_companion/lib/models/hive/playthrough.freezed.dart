@@ -34,6 +34,8 @@ mixin _$Playthrough {
   bool? get isDeleted => throw _privateConstructorUsedError;
   @HiveField(8)
   int? get bggPlayId => throw _privateConstructorUsedError;
+  @HiveField(9)
+  List<String>? get notes => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlaythroughCopyWith<Playthrough> get copyWith =>
@@ -54,7 +56,8 @@ abstract class $PlaythroughCopyWith<$Res> {
       @HiveField(5) DateTime? endDate,
       @HiveField(6) PlaythroughStatus? status,
       @HiveField(7) bool? isDeleted,
-      @HiveField(8) int? bggPlayId});
+      @HiveField(8) int? bggPlayId,
+      @HiveField(9) List<String>? notes});
 }
 
 /// @nodoc
@@ -76,6 +79,7 @@ class _$PlaythroughCopyWithImpl<$Res> implements $PlaythroughCopyWith<$Res> {
     Object? status = freezed,
     Object? isDeleted = freezed,
     Object? bggPlayId = freezed,
+    Object? notes = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -114,6 +118,10 @@ class _$PlaythroughCopyWithImpl<$Res> implements $PlaythroughCopyWith<$Res> {
           ? _value.bggPlayId
           : bggPlayId // ignore: cast_nullable_to_non_nullable
               as int?,
+      notes: notes == freezed
+          ? _value.notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -134,7 +142,8 @@ abstract class _$$_PlaythroughCopyWith<$Res>
       @HiveField(5) DateTime? endDate,
       @HiveField(6) PlaythroughStatus? status,
       @HiveField(7) bool? isDeleted,
-      @HiveField(8) int? bggPlayId});
+      @HiveField(8) int? bggPlayId,
+      @HiveField(9) List<String>? notes});
 }
 
 /// @nodoc
@@ -158,6 +167,7 @@ class __$$_PlaythroughCopyWithImpl<$Res> extends _$PlaythroughCopyWithImpl<$Res>
     Object? status = freezed,
     Object? isDeleted = freezed,
     Object? bggPlayId = freezed,
+    Object? notes = freezed,
   }) {
     return _then(_$_Playthrough(
       id: id == freezed
@@ -196,6 +206,10 @@ class __$$_PlaythroughCopyWithImpl<$Res> extends _$PlaythroughCopyWithImpl<$Res>
           ? _value.bggPlayId
           : bggPlayId // ignore: cast_nullable_to_non_nullable
               as int?,
+      notes: notes == freezed
+          ? _value._notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -214,9 +228,11 @@ class _$_Playthrough implements _Playthrough {
       @HiveField(5) this.endDate,
       @HiveField(6) this.status,
       @HiveField(7) this.isDeleted = false,
-      @HiveField(8) this.bggPlayId})
+      @HiveField(8) this.bggPlayId,
+      @HiveField(9) final List<String>? notes})
       : _playerIds = playerIds,
-        _scoreIds = scoreIds;
+        _scoreIds = scoreIds,
+        _notes = notes;
 
   @override
   @HiveField(0)
@@ -256,10 +272,19 @@ class _$_Playthrough implements _Playthrough {
   @override
   @HiveField(8)
   final int? bggPlayId;
+  final List<String>? _notes;
+  @override
+  @HiveField(9)
+  List<String>? get notes {
+    final value = _notes;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'Playthrough(id: $id, boardGameId: $boardGameId, playerIds: $playerIds, scoreIds: $scoreIds, startDate: $startDate, endDate: $endDate, status: $status, isDeleted: $isDeleted, bggPlayId: $bggPlayId)';
+    return 'Playthrough(id: $id, boardGameId: $boardGameId, playerIds: $playerIds, scoreIds: $scoreIds, startDate: $startDate, endDate: $endDate, status: $status, isDeleted: $isDeleted, bggPlayId: $bggPlayId, notes: $notes)';
   }
 
   @override
@@ -277,7 +302,8 @@ class _$_Playthrough implements _Playthrough {
             const DeepCollectionEquality().equals(other.endDate, endDate) &&
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality().equals(other.isDeleted, isDeleted) &&
-            const DeepCollectionEquality().equals(other.bggPlayId, bggPlayId));
+            const DeepCollectionEquality().equals(other.bggPlayId, bggPlayId) &&
+            const DeepCollectionEquality().equals(other._notes, _notes));
   }
 
   @override
@@ -291,7 +317,8 @@ class _$_Playthrough implements _Playthrough {
       const DeepCollectionEquality().hash(endDate),
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(isDeleted),
-      const DeepCollectionEquality().hash(bggPlayId));
+      const DeepCollectionEquality().hash(bggPlayId),
+      const DeepCollectionEquality().hash(_notes));
 
   @JsonKey(ignore: true)
   @override
@@ -309,7 +336,8 @@ abstract class _Playthrough implements Playthrough {
       @HiveField(5) final DateTime? endDate,
       @HiveField(6) final PlaythroughStatus? status,
       @HiveField(7) final bool? isDeleted,
-      @HiveField(8) final int? bggPlayId}) = _$_Playthrough;
+      @HiveField(8) final int? bggPlayId,
+      @HiveField(9) final List<String>? notes}) = _$_Playthrough;
 
   @override
   @HiveField(0)
@@ -338,6 +366,9 @@ abstract class _Playthrough implements Playthrough {
   @override
   @HiveField(8)
   int? get bggPlayId;
+  @override
+  @HiveField(9)
+  List<String>? get notes;
   @override
   @JsonKey(ignore: true)
   _$$_PlaythroughCopyWith<_$_Playthrough> get copyWith =>

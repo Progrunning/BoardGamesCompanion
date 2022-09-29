@@ -29,6 +29,7 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _controller.text = widget.viewModel.note ?? '';
   }
 
   @override
@@ -37,7 +38,7 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: const Text(AppText.addPlaythroughNotePageTitle),
+        title: const Text(AppText.playthroughNotePageTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.close),
@@ -50,11 +51,19 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
           Padding(
             padding: const EdgeInsets.all(Dimensions.standardSpacing),
             child: TextField(
+              autofocus: true,
               controller: _controller,
-              style: AppTheme.defaultTextFieldStyle,
+              style: AppTheme.defaultTextFieldStyle.copyWith(
+                fontSize: Dimensions.largeFontSize,
+              ),
               maxLines: 5,
-              decoration: const InputDecoration(
-                hintText: 'Enter your game play note here...',
+              decoration: InputDecoration(
+                labelText: AppText.playthroughNoteTextBoxLabel,
+                labelStyle: AppTheme.defaultTextFieldLabelStyle,
+                hintText: AppText.playthroughNoteTextBoxHint,
+                hintStyle: AppTheme.theme.inputDecorationTheme.hintStyle?.copyWith(
+                  fontSize: Dimensions.largeFontSize,
+                ),
               ),
               onSubmitted: (note) {
                 // TODO Handle saving a note
@@ -67,7 +76,7 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
             child: Align(
               alignment: Alignment.bottomRight,
               child: ElevatedIconButton(
-                title: AppText.save,
+                title: AppText.playthroughNotePageAddNoteButtonText,
                 icon: const DefaultIcon(Icons.save),
                 color: AppColors.accentColor,
                 onPressed: () {

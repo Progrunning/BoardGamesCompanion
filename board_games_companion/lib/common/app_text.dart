@@ -99,7 +99,10 @@ class AppText {
       'Are you sure you want to navigate away?';
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
 
-  static const addPlaythroughNotePageTitle = 'Add Note';
+  static const playthroughNotePageTitle = 'Game Note';
+  static const playthroughNotePageAddNoteButtonText = 'Add note';
+  static const playthroughNoteTextBoxLabel = 'Note';
+  static const playthroughNoteTextBoxHint = 'Enter your game notes...';
 
   static const playerPagePlayerNameTitle = 'Name';
   static const playerPagePlayerBggNameTitle = 'BGG Username';
