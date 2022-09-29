@@ -125,5 +125,16 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     return newPlaythrough;
   }
 
+  @action
+  void updatePlayerScore(PlayerScore playerScore, int newScore) {
+    if (playerScore.score.valueInt == newScore || playerScore.player == null) {
+      return;
+    }
+
+    final updatedPlayerScore =
+        playerScore.copyWith(score: playerScore.score.copyWith(value: newScore.toString()));
+    playerScores[playerScore.player!.id] = updatedPlayerScore;
+  }
+
   Future<void> _loadPlaythroughPlayers() async => _playersStore.loadPlayers();
 }
