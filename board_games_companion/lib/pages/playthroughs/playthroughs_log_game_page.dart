@@ -333,21 +333,25 @@ class _PlayerScoresStep extends StatelessWidget with EnterScoreDialogMixin {
     return SizedBox(
       height: MediaQuery.of(context).size.height / 3,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            for (var playerScore in viewModel.playerScores.values) ...[
-              _PlayerScore(
-                playerScore: playerScore,
-                onTap: (PlayerScore playerScore) async {
-                  final enterScoreViewModel = EnterScoreViewModel(playerScore);
-                  await showEnterScoreDialog(context, enterScoreViewModel);
-                  viewModel.updatePlayerScore(playerScore, enterScoreViewModel.score);
-                  return enterScoreViewModel.score.toString();
-                },
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
-            ]
-          ],
+        child: Observer(
+          builder: (_) {
+            return Column(
+              children: [
+                for (var playerScore in viewModel.playerScores.values) ...[
+                  _PlayerScore(
+                    playerScore: playerScore,
+                    onTap: (PlayerScore playerScore) async {
+                      final enterScoreViewModel = EnterScoreViewModel(playerScore);
+                      await showEnterScoreDialog(context, enterScoreViewModel);
+                      viewModel.updatePlayerScore(playerScore, enterScoreViewModel.score);
+                      return enterScoreViewModel.score.toString();
+                    },
+                  ),
+                  const SizedBox(height: Dimensions.standardSpacing),
+                ]
+              ],
+            );
+          },
         ),
       ),
     );
@@ -734,7 +738,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
           Column(
             children: <Widget>[
               Text(
-                '$score',
+                score ?? '-',
                 style: AppStyles.playerScoreTextStyle,
               ),
               const SizedBox(height: Dimensions.halfStandardSpacing),
