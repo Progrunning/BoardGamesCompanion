@@ -333,18 +333,25 @@ class _PlayerScoresStep extends StatelessWidget with EnterScoreDialogMixin {
     return SizedBox(
       height: MediaQuery.of(context).size.height / 3,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            for (var playerScore in viewModel.playerScores.values) ...[
-              _PlayerScore(
-                playerScore: playerScore,
-                onTap: (PlayerScore playerScore) async {
-                  await showEnterScoreDialog(context, EnterScoreViewModel(playerScore));
-                },
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
-            ]
-          ],
+        child: Observer(
+          builder: (_) {
+            return Column(
+              children: [
+                for (var playerScore in viewModel.playerScores.values) ...[
+                  _PlayerScore(
+                    playerScore: playerScore,
+                    onTap: (PlayerScore playerScore) async {
+                      final enterScoreViewModel = EnterScoreViewModel(playerScore);
+                      await showEnterScoreDialog(context, enterScoreViewModel);
+                      viewModel.updatePlayerScore(playerScore, enterScoreViewModel.score);
+                      return enterScoreViewModel.score.toString();
+                    },
+                  ),
+                  const SizedBox(height: Dimensions.standardSpacing),
+                ]
+              ],
+            );
+          },
         ),
       ),
     );
@@ -687,7 +694,7 @@ class _NoPlayers extends StatelessWidget {
       );
 }
 
-class _PlayerScore extends StatelessWidget {
+class _PlayerScore extends StatefulWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
@@ -695,24 +702,43 @@ class _PlayerScore extends StatelessWidget {
   }) : super(key: key);
 
   final PlayerScore playerScore;
-  final void Function(PlayerScore) onTap;
+  final Future<String?> Function(PlayerScore) onTap;
+
+  @override
+  State<_PlayerScore> createState() => _PlayerScoreState();
+}
+
+class _PlayerScoreState extends State<_PlayerScore> {
+  late String? score;
+
+  @override
+  void initState() {
+    super.initState();
+
+    score = widget.playerScore.score.value;
+  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => onTap(playerScore),
+      onTap: () async {
+        final newScore = await widget.onTap(widget.playerScore);
+        setState(() {
+          score = newScore;
+        });
+      },
       child: Row(
         children: <Widget>[
           SizedBox(
             height: Dimensions.smallPlayerAvatarSize,
             width: Dimensions.smallPlayerAvatarSize,
-            child: PlayerAvatar(playerScore.player),
+            child: PlayerAvatar(widget.playerScore.player),
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           Column(
             children: <Widget>[
               Text(
-                '${playerScore.score.valueInt}',
+                score ?? '-',
                 style: AppStyles.playerScoreTextStyle,
               ),
               const SizedBox(height: Dimensions.halfStandardSpacing),
