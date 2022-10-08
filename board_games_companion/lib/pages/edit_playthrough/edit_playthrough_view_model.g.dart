@@ -51,22 +51,36 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
           Computed<Duration>(() => super.playthoughDuration,
               name: '_EditPlaythoughViewModel.playthoughDuration'))
       .value;
+  Computed<bool>? _$hasNotesComputed;
 
-  late final _$_updatedPlaythroughDetailsAtom = Atom(
-      name: '_EditPlaythoughViewModel._updatedPlaythroughDetails',
+  @override
+  bool get hasNotes =>
+      (_$hasNotesComputed ??= Computed<bool>(() => super.hasNotes,
+              name: '_EditPlaythoughViewModel.hasNotes'))
+          .value;
+  Computed<ObservableList<PlaythroughNote>?>? _$notesComputed;
+
+  @override
+  ObservableList<PlaythroughNote>? get notes => (_$notesComputed ??=
+          Computed<ObservableList<PlaythroughNote>?>(() => super.notes,
+              name: '_EditPlaythoughViewModel.notes'))
+      .value;
+
+  late final _$_playthroughDetailsWorkingCopyAtom = Atom(
+      name: '_EditPlaythoughViewModel._playthroughDetailsWorkingCopy',
       context: context);
 
   @override
-  PlaythroughDetails? get _updatedPlaythroughDetails {
-    _$_updatedPlaythroughDetailsAtom.reportRead();
-    return super._updatedPlaythroughDetails;
+  PlaythroughDetails? get _playthroughDetailsWorkingCopy {
+    _$_playthroughDetailsWorkingCopyAtom.reportRead();
+    return super._playthroughDetailsWorkingCopy;
   }
 
   @override
-  set _updatedPlaythroughDetails(PlaythroughDetails? value) {
-    _$_updatedPlaythroughDetailsAtom
-        .reportWrite(value, super._updatedPlaythroughDetails, () {
-      super._updatedPlaythroughDetails = value;
+  set _playthroughDetailsWorkingCopy(PlaythroughDetails? value) {
+    _$_playthroughDetailsWorkingCopyAtom
+        .reportWrite(value, super._playthroughDetailsWorkingCopy, () {
+      super._playthroughDetailsWorkingCopy = value;
     });
   }
 
@@ -143,6 +157,28 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
+  void refreshNotes() {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.refreshNotes');
+    try {
+      return super.refreshNotes();
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deletePlaythroughNote(PlaythroughNote note) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.deletePlaythroughNote');
+    try {
+      return super.deletePlaythroughNote(note);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 playthroughDetails: ${playthroughDetails},
@@ -150,7 +186,9 @@ playthrough: ${playthrough},
 playerScores: ${playerScores},
 playthroughStartTime: ${playthroughStartTime},
 playthoughEnded: ${playthoughEnded},
-playthoughDuration: ${playthoughDuration}
+playthoughDuration: ${playthoughDuration},
+hasNotes: ${hasNotes},
+notes: ${notes}
     ''';
   }
 }

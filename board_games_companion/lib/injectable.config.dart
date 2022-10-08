@@ -9,24 +9,25 @@ import 'package:firebase_analytics/observer.dart' as _i8;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import 'pages/board_game_details/board_game_details_view_model.dart' as _i35;
+import 'pages/board_game_details/board_game_details_view_model.dart' as _i36;
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart' as _i27;
+import 'pages/edit_playthrough/playthrough_note_view_model.dart' as _i29;
 import 'pages/games/collection_search_result_view_model.dart' as _i26;
 import 'pages/games/games_view_model.dart' as _i28;
 import 'pages/players/players_view_model.dart' as _i11;
-import 'pages/playthroughs/playthrough_statistics_view_model.dart' as _i29;
-import 'pages/playthroughs/playthroughs_game_settings_view_model.dart' as _i30;
-import 'pages/playthroughs/playthroughs_history_view_model.dart' as _i31;
-import 'pages/playthroughs/playthroughs_log_game_view_model.dart' as _i32;
+import 'pages/playthroughs/playthrough_statistics_view_model.dart' as _i30;
+import 'pages/playthroughs/playthroughs_game_settings_view_model.dart' as _i31;
+import 'pages/playthroughs/playthroughs_history_view_model.dart' as _i32;
+import 'pages/playthroughs/playthroughs_log_game_view_model.dart' as _i33;
 import 'pages/playthroughs/playthroughs_view_model.dart' as _i23;
-import 'pages/search_board_games/search_board_games_view_model.dart' as _i33;
-import 'pages/settings/settings_view_model.dart' as _i34;
+import 'pages/search_board_games/search_board_games_view_model.dart' as _i34;
+import 'pages/settings/settings_view_model.dart' as _i35;
 import 'services/analytics_service.dart' as _i17;
 import 'services/board_games_filters_service.dart' as _i4;
 import 'services/board_games_geek_service.dart' as _i19;
 import 'services/board_games_service.dart' as _i20;
 import 'services/file_service.dart' as _i6;
-import 'services/injectable_register_module.dart' as _i36;
+import 'services/injectable_register_module.dart' as _i37;
 import 'services/player_service.dart' as _i9;
 import 'services/playthroughs_service.dart' as _i21;
 import 'services/preferences_service.dart' as _i12;
@@ -102,25 +103,27 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i16.UserStore>(),
       get<_i25.BoardGamesStore>(),
       get<_i18.BoardGamesFiltersStore>()));
-  gh.singleton<_i29.PlaythroughStatisticsViewModel>(
-      _i29.PlaythroughStatisticsViewModel(
+  gh.factory<_i29.PlaythroughNoteViewModel>(
+      () => _i29.PlaythroughNoteViewModel(get<_i22.PlaythroughsStore>()));
+  gh.singleton<_i30.PlaythroughStatisticsViewModel>(
+      _i30.PlaythroughStatisticsViewModel(
           get<_i9.PlayerService>(),
           get<_i14.ScoreService>(),
           get<_i21.PlaythroughService>(),
           get<_i22.PlaythroughsStore>()));
-  gh.factory<_i30.PlaythroughsGameSettingsViewModel>(() =>
-      _i30.PlaythroughsGameSettingsViewModel(
+  gh.factory<_i31.PlaythroughsGameSettingsViewModel>(() =>
+      _i31.PlaythroughsGameSettingsViewModel(
           get<_i25.BoardGamesStore>(), get<_i22.PlaythroughsStore>()));
-  gh.factory<_i31.PlaythroughsHistoryViewModel>(
-      () => _i31.PlaythroughsHistoryViewModel(get<_i22.PlaythroughsStore>()));
-  gh.factory<_i32.PlaythroughsLogGameViewModel>(() =>
-      _i32.PlaythroughsLogGameViewModel(get<_i10.PlayersStore>(),
+  gh.factory<_i32.PlaythroughsHistoryViewModel>(
+      () => _i32.PlaythroughsHistoryViewModel(get<_i22.PlaythroughsStore>()));
+  gh.factory<_i33.PlaythroughsLogGameViewModel>(() =>
+      _i33.PlaythroughsLogGameViewModel(get<_i10.PlayersStore>(),
           get<_i22.PlaythroughsStore>(), get<_i17.AnalyticsService>()));
-  gh.singleton<_i33.SearchBoardGamesViewModel>(_i33.SearchBoardGamesViewModel(
+  gh.singleton<_i34.SearchBoardGamesViewModel>(_i34.SearchBoardGamesViewModel(
       get<_i25.BoardGamesStore>(),
       get<_i19.BoardGamesGeekService>(),
       get<_i17.AnalyticsService>()));
-  gh.singleton<_i34.SettingsViewModel>(_i34.SettingsViewModel(
+  gh.singleton<_i35.SettingsViewModel>(_i35.SettingsViewModel(
       get<_i6.FileService>(),
       get<_i20.BoardGamesService>(),
       get<_i4.BoardGamesFiltersService>(),
@@ -132,13 +135,13 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i3.AppStore>(),
       get<_i16.UserStore>(),
       get<_i25.BoardGamesStore>()));
-  gh.factory<_i35.BoardGameDetailsViewModel>(() =>
-      _i35.BoardGameDetailsViewModel(
+  gh.factory<_i36.BoardGameDetailsViewModel>(() =>
+      _i36.BoardGameDetailsViewModel(
           get<_i25.BoardGamesStore>(), get<_i17.AnalyticsService>()));
   return get;
 }
 
-class _$RegisterModule extends _i36.RegisterModule {
+class _$RegisterModule extends _i37.RegisterModule {
   @override
   _i7.FirebaseAnalytics get firebaseAnalytics => _i7.FirebaseAnalytics();
 }

@@ -193,6 +193,17 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
   }
 
   @override
+  void updatePlayerScore(PlayerScore playerScore, int newScore) {
+    final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
+        .startAction(name: '_PlaythroughsLogGameViewModel.updatePlayerScore');
+    try {
+      return super.updatePlayerScore(playerScore, newScore);
+    } finally {
+      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 playerScores: ${playerScores},

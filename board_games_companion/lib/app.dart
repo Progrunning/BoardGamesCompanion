@@ -1,3 +1,4 @@
+import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -8,12 +9,14 @@ import 'injectable.dart';
 import 'models/navigation/board_game_details_page_arguments.dart';
 import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
+import 'models/navigation/playthough_note_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
 import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
 import 'pages/board_game_details/board_game_details_view_model.dart';
 import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart';
+import 'pages/edit_playthrough/playthrough_note_view_model.dart';
 import 'pages/home/home_page.dart';
 import 'pages/players/player_page.dart';
 import 'pages/players/players_view_model.dart';
@@ -51,6 +54,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Board Games Companion',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       navigatorObservers: [_analyticsObserver, _analyticsRouteObserver],
       initialRoute: HomePage.pageRoute,
@@ -135,6 +139,17 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
               builder: (BuildContext context) => SettingsPage(viewModel: viewModel),
+            );
+
+          case PlaythroughNotePage.pageRoute:
+            final arguments = routeSettings.arguments as PlaythroughNotePageArguments;
+            final viewModel = getIt<PlaythroughNoteViewModel>();
+            viewModel.setPlaythrough(arguments.playthrough);
+            viewModel.setNoteId(arguments.noteId);
+
+            return MaterialPageRoute<dynamic>(
+              settings: routeSettings,
+              builder: (BuildContext context) => PlaythroughNotePage(viewModel: viewModel),
             );
 
           default:

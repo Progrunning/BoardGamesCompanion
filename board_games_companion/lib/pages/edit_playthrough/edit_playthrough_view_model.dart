@@ -1,9 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
@@ -20,38 +23,52 @@ abstract class _EditPlaythoughViewModel with Store {
   late final String _playthroughId;
   final PlaythroughsStore _playthroughsStore;
 
-  @observable
-  PlaythroughDetails? _updatedPlaythroughDetails;
+  ValueNotifier<bool> isSpeedDialContextMenuOpen = ValueNotifier(false);
 
-  PlaythroughDetails get updatedPlaythroughDetails => _updatedPlaythroughDetails!;
+  @observable
+  PlaythroughDetails? _playthroughDetailsWorkingCopy;
+
+  PlaythroughDetails get playthroughDetailsWorkingCopy => _playthroughDetailsWorkingCopy!;
 
   @computed
   PlaythroughDetails get playthroughDetails =>
-      _playthroughsStore.playthroughs.firstWhere((pd) => pd.id == _playthroughId);
+      _playthroughsStore.playthroughsDetails.firstWhere((pd) => pd.id == _playthroughId);
 
   @computed
-  Playthrough get playthrough => updatedPlaythroughDetails.playthrough;
+  Playthrough get playthrough => playthroughDetailsWorkingCopy.playthrough;
 
   @computed
   ObservableList<PlayerScore> get playerScores =>
-      updatedPlaythroughDetails.playerScores.asObservable();
+      playthroughDetailsWorkingCopy.playerScores.asObservable();
 
   @computed
-  DateTime get playthroughStartTime => updatedPlaythroughDetails.startDate;
+  DateTime get playthroughStartTime => playthroughDetailsWorkingCopy.startDate;
 
   @computed
-  bool get playthoughEnded => updatedPlaythroughDetails.playthoughEnded;
+  bool get playthoughEnded => playthroughDetailsWorkingCopy.playthoughEnded;
 
   @computed
-  Duration get playthoughDuration => (updatedPlaythroughDetails.endDate ?? DateTime.now())
-      .difference(updatedPlaythroughDetails.startDate);
+  Duration get playthoughDuration => (playthroughDetailsWorkingCopy.endDate ?? DateTime.now())
+      .difference(playthroughDetailsWorkingCopy.startDate);
 
-  bool get isDirty => updatedPlaythroughDetails != playthroughDetails;
+  @computed
+  bool get hasNotes => playthroughDetailsWorkingCopy.notes?.isNotEmpty ?? false;
+
+  @computed
+  ObservableList<PlaythroughNote>? get notes {
+    final playthroughNotes =
+        List<PlaythroughNote>.from(playthroughDetailsWorkingCopy.notes ?? <PlaythroughNote>[]);
+
+    return ObservableList.of(
+        playthroughNotes..sort((noteA, noteB) => noteA.createdAt.compareTo(noteB.createdAt)));
+  }
+
+  bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
 
   @action
   void setPlaythroughId(String playthroughId) {
     _playthroughId = playthroughId;
-    _updatedPlaythroughDetails = playthroughDetails.copyWith();
+    _playthroughDetailsWorkingCopy = playthroughDetails.copyWith();
   }
 
   @action
@@ -60,15 +77,15 @@ abstract class _EditPlaythoughViewModel with Store {
       status: PlaythroughStatus.Finished,
       endDate: DateTime.now().toUtc(),
     );
-    _updatedPlaythroughDetails =
-        _updatedPlaythroughDetails?.copyWith(playthrough: updatedPlaythrough);
-    await _playthroughsStore.updatePlaythrough(_updatedPlaythroughDetails);
+    _playthroughDetailsWorkingCopy =
+        _playthroughDetailsWorkingCopy?.copyWith(playthrough: updatedPlaythrough);
+    await _playthroughsStore.updatePlaythrough(_playthroughDetailsWorkingCopy);
   }
 
   @action
   Future<void> saveChanges() async {
     if (isDirty) {
-      await _playthroughsStore.updatePlaythrough(updatedPlaythroughDetails);
+      await _playthroughsStore.updatePlaythrough(playthroughDetailsWorkingCopy);
     }
   }
 
@@ -79,8 +96,8 @@ abstract class _EditPlaythoughViewModel with Store {
       status: PlaythroughStatus.Finished,
       endDate: newStartDate.add(playthoughDuration),
     );
-    _updatedPlaythroughDetails =
-        _updatedPlaythroughDetails?.copyWith(playthrough: updatedPlaythrough);
+    _playthroughDetailsWorkingCopy =
+        _playthroughDetailsWorkingCopy?.copyWith(playthrough: updatedPlaythrough);
   }
 
   @action
@@ -89,8 +106,8 @@ abstract class _EditPlaythoughViewModel with Store {
         endDate:
             playthroughDetails.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed)));
 
-    _updatedPlaythroughDetails =
-        _updatedPlaythroughDetails?.copyWith(playthrough: updatedPlaythrough);
+    _playthroughDetailsWorkingCopy =
+        _playthroughDetailsWorkingCopy?.copyWith(playthrough: updatedPlaythrough);
   }
 
   @action
@@ -104,11 +121,29 @@ abstract class _EditPlaythoughViewModel with Store {
     final playerScoreIndex = playerScores.indexOf(playerScore);
     playerScores[playerScoreIndex] = updatedPlayerScore;
 
-    _updatedPlaythroughDetails = updatedPlaythroughDetails.copyWith(playerScores: playerScores);
+    _playthroughDetailsWorkingCopy =
+        playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
+  }
+
+  /// After adding/editing a note to the [PlaythroughDetails] refresh the working copy with the latest data
+  @action
+  void refreshNotes() {
+    _playthroughDetailsWorkingCopy = _playthroughDetailsWorkingCopy!.copyWith(
+        playthrough:
+            _playthroughDetailsWorkingCopy!.playthrough.copyWith(notes: playthroughDetails.notes));
   }
 
   @action
   Future<void> deletePlaythrough() async {
     await _playthroughsStore.deletePlaythrough(playthroughDetails.id);
+  }
+
+  @action
+  void deletePlaythroughNote(PlaythroughNote note) {
+    final updatedPlaythroughNotes =
+        List<PlaythroughNote>.from(_playthroughDetailsWorkingCopy!.notes!)..remove(note);
+    _playthroughDetailsWorkingCopy = _playthroughDetailsWorkingCopy!.copyWith(
+        playthrough:
+            _playthroughDetailsWorkingCopy!.playthrough.copyWith(notes: updatedPlaythroughNotes));
   }
 }

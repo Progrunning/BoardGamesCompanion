@@ -26,6 +26,8 @@ class AppColors {
 
   static const Color invertedTextColor = blackColor;
 
+  static const Color dialogBackgroundColor = Color(0x80000000);
+
   static const Color bottomTabBackgroundColor = primaryColorLight;
   static const Color selectedTabIconColor = accentColor;
   static const Color deselectedTabIconColor = Color(0x46FFFFFF);

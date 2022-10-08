@@ -9,6 +9,7 @@ class AppText {
 
   static const cancel = 'Cancel';
   static const stop = 'Stop';
+  static const save = 'Save';
   static const delete = 'Delete';
   static const edit = 'Edit';
   static const ok = 'OK';
@@ -52,9 +53,6 @@ class AppText {
   static const playtimeDurationHoursFormat = '%ih %imin';
   static const playtimeDurationDaysFormat = '%i day%s %ih';
 
-  static const editPlaythroughScorePoints = 'points';
-  static const editPlaythroughPlayerScored = 'scored';
-
   static const enterScoreDialogUndoButtonText = 'Undo';
   static const enterScoreDialogDoneButtonText = 'Done';
 
@@ -86,7 +84,14 @@ class AppText {
   static const playthroughPageLogGameBottomTabTitle = 'Log Game';
   static const playthroughPageGameSettingsLogGameBottomTabTitle = 'Settings';
 
+  static const editPlaythroughScorePoints = 'points';
+  static const editPlaythroughPlayerScored = 'scored';
+  static const editPlaythroughAddNote = 'Add note';
+
   static const editPlaythroughPageTitle = 'Edit Playthrough';
+  static const editPlaythroughDateAndDurationHeaderTitle = 'Date & Duration';
+  static const editPlaythroughScoresHeaderTitle = 'Scores';
+  static const editPlaythroughNotesHeaderTitle = 'Notes';
   static const editPlaythroughPagePlayedOnSectionTitle = 'Played on';
   static const editPlaythroughPageDurationSectionTitle = 'Duration';
   static const editPlaythroughPageScoresSectionTitle = 'Scores';
@@ -96,6 +101,12 @@ class AppText {
   static const editPlaythroughPageUnsavedChangesDialogContent =
       'Are you sure you want to navigate away?';
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
+
+  static const playthroughNotePageTitle = 'Game Note';
+  static const playthroughNotePageAddNoteButtonText = 'Add note';
+  static const playthroughNotePageUpdateNoteButtonText = 'Update note';
+  static const playthroughNoteTextBoxLabel = 'Note';
+  static const playthroughNoteTextBoxHint = 'Enter your game notes...';
 
   static const playerPagePlayerNameTitle = 'Name';
   static const playerPagePlayerBggNameTitle = 'BGG Username';

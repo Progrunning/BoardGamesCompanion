@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -63,7 +64,8 @@ Future<void> main() async {
       ..registerAdapter(OrderByAdapter())
       ..registerAdapter(CollectionFiltersAdapter())
       ..registerAdapter(GameWinningConditionAdapter())
-      ..registerAdapter(BoardGameSettingsAdapter());
+      ..registerAdapter(BoardGameSettingsAdapter())
+      ..registerAdapter(PlaythroughNoteAdapter());
 
     configureDependencies();
 

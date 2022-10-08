@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../common/enums/playthrough_status.dart';
@@ -6,6 +7,9 @@ import 'player_score.dart';
 
 part 'playthrough_details.freezed.dart';
 
+/// Model that contains the [Playthrough] and [PlayerScore] details
+///
+/// NOTE: This model was created becuase the [Playthrough] model only has player and score ids, rather than objects
 @freezed
 class PlaythroughDetails with _$PlaythroughDetails {
   const factory PlaythroughDetails({
@@ -36,4 +40,6 @@ class PlaythroughDetails with _$PlaythroughDetails {
   DateTime get startDate => playthrough.startDate;
 
   DateTime? get endDate => playthrough.endDate;
+
+  List<PlaythroughNote>? get notes => playthrough.notes;
 }

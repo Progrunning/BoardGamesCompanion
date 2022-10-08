@@ -26,13 +26,14 @@ class PlaythroughAdapter extends TypeAdapter<_$_Playthrough> {
       status: fields[6] as PlaythroughStatus?,
       isDeleted: fields[7] as bool?,
       bggPlayId: fields[8] as int?,
+      notes: (fields[9] as List?)?.cast<PlaythroughNote>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_Playthrough obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class PlaythroughAdapter extends TypeAdapter<_$_Playthrough> {
       ..writeByte(2)
       ..write(obj.playerIds)
       ..writeByte(3)
-      ..write(obj.scoreIds);
+      ..write(obj.scoreIds)
+      ..writeByte(9)
+      ..write(obj.notes);
   }
 
   @override

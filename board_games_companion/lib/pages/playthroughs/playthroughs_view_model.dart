@@ -87,7 +87,7 @@ abstract class _PlaythroughsViewModel with Store {
 
     // TODO Consider using isolates to parse and iterate over the results
     for (final bggPlay in bggPlaysImportResult.data!) {
-      final bggPlayExists = _playthroughsStore.playthroughs
+      final bggPlayExists = _playthroughsStore.playthroughsDetails
           .any((PlaythroughDetails playthrough) => playthrough.bggPlayId == bggPlay.id);
       if (bggPlayExists) {
         continue;

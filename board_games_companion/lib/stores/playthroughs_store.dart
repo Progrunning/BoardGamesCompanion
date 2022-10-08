@@ -33,7 +33,7 @@ abstract class _PlaythroughsStore with Store {
   late BoardGameDetails boardGame;
 
   @observable
-  ObservableList<PlaythroughDetails> playthroughs = ObservableList.of([]);
+  ObservableList<PlaythroughDetails> playthroughsDetails = ObservableList.of([]);
 
   @action
   Future<void> loadPlaythroughs() async {
@@ -41,14 +41,15 @@ abstract class _PlaythroughsStore with Store {
       return;
     }
 
-    playthroughs.clear();
-
     try {
-      final hivePlaythrough = await _playthroughService.retrievePlaythroughs([boardGame.id]);
-      for (final hivePlaythrough in hivePlaythrough) {
-        final playthrough = await createPlaythroughDetails(hivePlaythrough);
-        playthroughs.add(playthrough);
+      final loadedPlaythroughDetails = <PlaythroughDetails>[];
+      final playthroughs = await _playthroughService.retrievePlaythroughs([boardGame.id]);
+      for (final playthrough in playthroughs) {
+        final playthroughDetails = await createPlaythroughDetails(playthrough);
+        loadedPlaythroughDetails.add(playthroughDetails);
       }
+
+      playthroughsDetails = loadedPlaythroughDetails.asObservable();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -83,19 +84,20 @@ abstract class _PlaythroughsStore with Store {
     }
 
     final playthrough = await createPlaythroughDetails(newHivePlaythrough);
-    playthroughs.add(playthrough);
+    playthroughsDetails.add(playthrough);
     return playthrough;
   }
 
-  Future<void> updatePlaythrough(PlaythroughDetails? playthrough) async {
-    if (playthrough?.id.isEmpty ?? true) {
+  Future<void> updatePlaythrough(PlaythroughDetails? playthroughDetails) async {
+    if (playthroughDetails?.id.isEmpty ?? true) {
       return;
     }
 
     try {
-      final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough!.playthrough);
+      final updateSuceeded =
+          await _playthroughService.updatePlaythrough(playthroughDetails!.playthrough);
       if (updateSuceeded) {
-        for (final PlayerScore playerScore in playthrough.playerScores) {
+        for (final PlayerScore playerScore in playthroughDetails.playerScores) {
           await _scoreService.addOrUpdateScore(playerScore.score);
         }
 
@@ -110,7 +112,7 @@ abstract class _PlaythroughsStore with Store {
     try {
       final deleteSucceeded = await _playthroughService.deletePlaythrough(playthroughId);
       if (deleteSucceeded) {
-        playthroughs.removeWhere((p) => p.playthrough.id == playthroughId);
+        playthroughsDetails.removeWhere((p) => p.playthrough.id == playthroughId);
       }
 
       return deleteSucceeded;
