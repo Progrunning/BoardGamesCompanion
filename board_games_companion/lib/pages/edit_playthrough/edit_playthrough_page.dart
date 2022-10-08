@@ -81,6 +81,13 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                   onTap: (note) => _editNote(note.id),
                   onDelete: (note) => _deleteNote(note),
                 ),
+                // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
+                const SliverPadding(
+                  padding: EdgeInsets.only(
+                    bottom:
+                        Dimensions.floatingActionButtonBottomSpacing + Dimensions.standardSpacing,
+                  ),
+                ),
               ]
             ],
           );
