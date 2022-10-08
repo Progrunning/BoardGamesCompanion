@@ -55,7 +55,13 @@ abstract class _EditPlaythoughViewModel with Store {
   bool get hasNotes => playthroughDetailsWorkingCopy.notes?.isNotEmpty ?? false;
 
   @computed
-  ObservableList<PlaythroughNote>? get notes => playthroughDetailsWorkingCopy.notes?.asObservable();
+  ObservableList<PlaythroughNote>? get notes {
+    final playthroughNotes =
+        List<PlaythroughNote>.from(playthroughDetailsWorkingCopy.notes ?? <PlaythroughNote>[]);
+
+    return ObservableList.of(
+        playthroughNotes..sort((noteA, noteB) => noteA.createdAt.compareTo(noteB.createdAt)));
+  }
 
   bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
 
