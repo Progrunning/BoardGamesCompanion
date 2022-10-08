@@ -88,15 +88,16 @@ abstract class _PlaythroughsStore with Store {
     return playthrough;
   }
 
-  Future<void> updatePlaythrough(PlaythroughDetails? playthrough) async {
-    if (playthrough?.id.isEmpty ?? true) {
+  Future<void> updatePlaythrough(PlaythroughDetails? playthroughDetails) async {
+    if (playthroughDetails?.id.isEmpty ?? true) {
       return;
     }
 
     try {
-      final updateSuceeded = await _playthroughService.updatePlaythrough(playthrough!.playthrough);
+      final updateSuceeded =
+          await _playthroughService.updatePlaythrough(playthroughDetails!.playthrough);
       if (updateSuceeded) {
-        for (final PlayerScore playerScore in playthrough.playerScores) {
+        for (final PlayerScore playerScore in playthroughDetails.playerScores) {
           await _scoreService.addOrUpdateScore(playerScore.score);
         }
 

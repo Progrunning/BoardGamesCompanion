@@ -168,6 +168,17 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
+  void deletePlaythroughNote(PlaythroughNote note) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.deletePlaythroughNote');
+    try {
+      return super.deletePlaythroughNote(note);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 playthroughDetails: ${playthroughDetails},

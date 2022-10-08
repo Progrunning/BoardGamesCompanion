@@ -6,6 +6,7 @@ import 'package:board_games_companion/models/navigation/playthough_note_page_arg
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -77,6 +78,8 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 ),
                 _NotesSection(
                   notes: widget.viewModel.notes!,
+                  onTap: (note) => _editNote(note.id),
+                  onDelete: (note) => _deleteNote(note),
                 ),
               ]
             ],
@@ -235,6 +238,18 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
     );
     widget.viewModel.refreshNotes();
   }
+
+  Future<void> _editNote(String noteId) async {
+    await Navigator.of(context).pushNamed(
+      PlaythroughNotePage.pageRoute,
+      arguments: PlaythroughNotePageArguments(widget.viewModel.playthrough, noteId: noteId),
+    );
+    widget.viewModel.refreshNotes();
+  }
+
+  Future<void> _deleteNote(PlaythroughNote note) async {
+    widget.viewModel.deletePlaythroughNote(note);
+  }
 }
 
 class _ScoresSection extends StatelessWidget {
@@ -279,32 +294,54 @@ class _ScoresSection extends StatelessWidget {
 class _NotesSection extends StatelessWidget {
   const _NotesSection({
     required this.notes,
+    required this.onTap,
+    required this.onDelete,
     Key? key,
   }) : super(key: key);
 
   final List<PlaythroughNote> notes;
+  final void Function(PlaythroughNote) onTap;
+  final void Function(PlaythroughNote) onDelete;
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.all(Dimensions.standardSpacing),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, index) {
-            final int itemIndex = index ~/ 2;
-            if (index.isEven) {
-              return Text(notes[itemIndex].text);
-              // return _PlayerScoreTile(
-              //   playerScore: viewModel.playerScores[index],
-              //   playthroughId: viewModel.playthroughDetails.id,
-              //   onItemTapped: onItemTapped,
-              // );
-            }
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (_, index) {
+          final int itemIndex = index ~/ 2;
+          final note = notes[itemIndex];
+          if (index.isEven) {
+            return InkWell(
+              onTap: () => onTap(note),
+              child: Slidable(
+                endActionPane: ActionPane(
+                  extentRatio: 0.25,
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      icon: Icons.delete,
+                      onPressed: (_) => onDelete(note),
+                      backgroundColor: AppColors.redColor,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                        child: Text(note.text, textAlign: TextAlign.justify),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
 
-            return const SizedBox(height: Dimensions.doubleStandardSpacing);
-          },
-          childCount: max(0, notes.length * 2 - 1),
-        ),
+          return const SizedBox(height: Dimensions.standardSpacing);
+        },
+        childCount: max(0, notes.length * 2 - 1),
       ),
     );
   }

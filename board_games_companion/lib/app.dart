@@ -144,8 +144,8 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           case PlaythroughNotePage.pageRoute:
             final arguments = routeSettings.arguments as PlaythroughNotePageArguments;
             final viewModel = getIt<PlaythroughNoteViewModel>();
-            viewModel.setNoteId(arguments.noteId);
             viewModel.setPlaythrough(arguments.playthrough);
+            viewModel.setNoteId(arguments.noteId);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,

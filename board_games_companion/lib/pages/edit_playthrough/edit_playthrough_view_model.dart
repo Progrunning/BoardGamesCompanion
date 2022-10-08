@@ -52,10 +52,10 @@ abstract class _EditPlaythoughViewModel with Store {
       .difference(playthroughDetailsWorkingCopy.startDate);
 
   @computed
-  bool get hasNotes => playthroughDetails.notes?.isNotEmpty ?? false;
+  bool get hasNotes => playthroughDetailsWorkingCopy.notes?.isNotEmpty ?? false;
 
   @computed
-  ObservableList<PlaythroughNote>? get notes => playthroughDetails.notes?.asObservable();
+  ObservableList<PlaythroughNote>? get notes => playthroughDetailsWorkingCopy.notes?.asObservable();
 
   bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
 
@@ -130,5 +130,14 @@ abstract class _EditPlaythoughViewModel with Store {
   @action
   Future<void> deletePlaythrough() async {
     await _playthroughsStore.deletePlaythrough(playthroughDetails.id);
+  }
+
+  @action
+  void deletePlaythroughNote(PlaythroughNote note) {
+    final updatedPlaythroughNotes =
+        List<PlaythroughNote>.from(_playthroughDetailsWorkingCopy!.notes!)..remove(note);
+    _playthroughDetailsWorkingCopy = _playthroughDetailsWorkingCopy!.copyWith(
+        playthrough:
+            _playthroughDetailsWorkingCopy!.playthrough.copyWith(notes: updatedPlaythroughNotes));
   }
 }

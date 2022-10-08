@@ -71,19 +71,18 @@ abstract class _PlaythroughNoteViewModel with Store {
   Future<void> saveNote(String text) async {
     updateNote(text);
 
+    final playthroughNotes = List<PlaythroughNote>.from(_playthrough!.notes ?? <PlaythroughNote>[]);
     visualState.maybeWhen(
       add: () {
-        final updatedNotes = List<PlaythroughNote>.from(_playthrough!.notes ?? <PlaythroughNote>[]);
-        updatedNotes.add(note!);
-
-        _playthrough = _playthrough!.copyWith(notes: updatedNotes);
+        playthroughNotes.add(note!);
       },
       orElse: () {
-        final noteToUpdateIndex = _playthrough!.notes!.indexWhere((n) => n.id == _noteId);
-        _playthrough!.notes![noteToUpdateIndex] = note!;
+        final noteToUpdateIndex = playthroughNotes.indexWhere((n) => n.id == _noteId);
+        playthroughNotes[noteToUpdateIndex] = note!.copyWith(modifiedAt: DateTime.now().toUtc());
       },
     );
 
+    _playthrough = _playthrough!.copyWith(notes: playthroughNotes);
     final updatedPlaythroughDetails = _playthroughDetails.copyWith(playthrough: _playthrough!);
     await _playthroughsStore.updatePlaythrough(updatedPlaythroughDetails);
   }
