@@ -35,7 +35,7 @@ mixin _$Playthrough {
   @HiveField(8)
   int? get bggPlayId => throw _privateConstructorUsedError;
   @HiveField(9)
-  List<String>? get notes => throw _privateConstructorUsedError;
+  List<PlaythroughNote>? get notes => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlaythroughCopyWith<Playthrough> get copyWith =>
@@ -57,7 +57,7 @@ abstract class $PlaythroughCopyWith<$Res> {
       @HiveField(6) PlaythroughStatus? status,
       @HiveField(7) bool? isDeleted,
       @HiveField(8) int? bggPlayId,
-      @HiveField(9) List<String>? notes});
+      @HiveField(9) List<PlaythroughNote>? notes});
 }
 
 /// @nodoc
@@ -121,7 +121,7 @@ class _$PlaythroughCopyWithImpl<$Res> implements $PlaythroughCopyWith<$Res> {
       notes: notes == freezed
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<PlaythroughNote>?,
     ));
   }
 }
@@ -143,7 +143,7 @@ abstract class _$$_PlaythroughCopyWith<$Res>
       @HiveField(6) PlaythroughStatus? status,
       @HiveField(7) bool? isDeleted,
       @HiveField(8) int? bggPlayId,
-      @HiveField(9) List<String>? notes});
+      @HiveField(9) List<PlaythroughNote>? notes});
 }
 
 /// @nodoc
@@ -209,7 +209,7 @@ class __$$_PlaythroughCopyWithImpl<$Res> extends _$PlaythroughCopyWithImpl<$Res>
       notes: notes == freezed
           ? _value._notes
           : notes // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<PlaythroughNote>?,
     ));
   }
 }
@@ -229,7 +229,7 @@ class _$_Playthrough implements _Playthrough {
       @HiveField(6) this.status,
       @HiveField(7) this.isDeleted = false,
       @HiveField(8) this.bggPlayId,
-      @HiveField(9) final List<String>? notes})
+      @HiveField(9) final List<PlaythroughNote>? notes})
       : _playerIds = playerIds,
         _scoreIds = scoreIds,
         _notes = notes;
@@ -272,10 +272,10 @@ class _$_Playthrough implements _Playthrough {
   @override
   @HiveField(8)
   final int? bggPlayId;
-  final List<String>? _notes;
+  final List<PlaythroughNote>? _notes;
   @override
   @HiveField(9)
-  List<String>? get notes {
+  List<PlaythroughNote>? get notes {
     final value = _notes;
     if (value == null) return null;
     // ignore: implicit_dynamic_type
@@ -337,7 +337,7 @@ abstract class _Playthrough implements Playthrough {
       @HiveField(6) final PlaythroughStatus? status,
       @HiveField(7) final bool? isDeleted,
       @HiveField(8) final int? bggPlayId,
-      @HiveField(9) final List<String>? notes}) = _$_Playthrough;
+      @HiveField(9) final List<PlaythroughNote>? notes}) = _$_Playthrough;
 
   @override
   @HiveField(0)
@@ -368,7 +368,7 @@ abstract class _Playthrough implements Playthrough {
   int? get bggPlayId;
   @override
   @HiveField(9)
-  List<String>? get notes;
+  List<PlaythroughNote>? get notes;
   @override
   @JsonKey(ignore: true)
   _$$_PlaythroughCopyWith<_$_Playthrough> get copyWith =>

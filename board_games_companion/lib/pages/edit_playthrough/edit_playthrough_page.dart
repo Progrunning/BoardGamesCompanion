@@ -1,7 +1,9 @@
 import 'dart:math' as math;
+import 'dart:math';
 
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
+import 'package:board_games_companion/models/navigation/playthough_note_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
-import 'package:board_games_companion/pages/enter_score/enter_score_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -15,9 +17,10 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
-import '../../widgets/common/text/item_property_title_widget.dart';
+import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../enter_score/enter_score_view_model.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'edit_playthrough_view_model.dart';
 
@@ -42,6 +45,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
       onWillPop: () async => _handleOnWillPop(context),
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           automaticallyImplyLeading: false,
           centerTitle: true,
           title: const Text(AppText.editPlaythroughPageTitle),
@@ -49,53 +53,42 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
             IconButton(icon: const Icon(Icons.close), onPressed: () => _close(context)),
           ],
         ),
-        body: Form(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                  child: Row(
-                    children: const <Widget>[
-                      ItemPropertyTitle(AppText.editPlaythroughPagePlayedOnSectionTitle),
-                      Expanded(child: SizedBox.shrink()),
-                      ItemPropertyTitle(AppText.editPlaythroughPageDurationSectionTitle),
-                    ],
-                  ),
+        body: Observer(builder: (_) {
+          return CustomScrollView(
+            slivers: [
+              SliverPersistentHeader(
+                delegate: BgcSliverHeaderDelegate(
+                    title: AppText.editPlaythroughDateAndDurationHeaderTitle),
+              ),
+              _PlayDateTimeSection(viewModel: widget.viewModel),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: BgcSliverHeaderDelegate(title: AppText.editPlaythroughScoresHeaderTitle),
+              ),
+              _ScoresSection(
+                viewModel: widget.viewModel,
+                onItemTapped: (PlayerScore playerScore) async =>
+                    _editPlayerScore(playerScore, context),
+              ),
+              if (widget.viewModel.hasNotes) ...[
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: BgcSliverHeaderDelegate(title: AppText.editPlaythroughNotesHeaderTitle),
                 ),
-                const SizedBox(height: Dimensions.halfStandardSpacing),
-                _Duration(viewModel: widget.viewModel),
-                const SizedBox(height: Dimensions.standardSpacing),
-                const SizedBox(height: Dimensions.standardSpacing),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                  child: ItemPropertyTitle(AppText.editPlaythroughPageScoresSectionTitle),
+                _NotesSection(
+                  notes: widget.viewModel.notes!,
                 ),
-                const SizedBox(height: Dimensions.halfStandardSpacing),
-                Expanded(
-                  child: _ScoresSection(
-                    viewModel: widget.viewModel,
-                    onItemTapped: (PlayerScore playerScore) async {
-                      final viewModel = EnterScoreViewModel(playerScore);
-                      await showEnterScoreDialog(context, viewModel);
-                      widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
-                      return viewModel.score.toString();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ]
+            ],
+          );
+        }),
         floatingActionButton: SpeedDial(
           icon: Icons.menu,
           overlayColor: AppColors.dialogBackgroundColor,
           activeIcon: Icons.close,
-          openCloseDial: widget.viewModel.isSpeedDialOpen,
-          onPress: () =>
-              widget.viewModel.isSpeedDialOpen.value = !widget.viewModel.isSpeedDialOpen.value,
+          openCloseDial: widget.viewModel.isSpeedDialContextMenuOpen,
+          onPress: () => widget.viewModel.isSpeedDialContextMenuOpen.value =
+              !widget.viewModel.isSpeedDialContextMenuOpen.value,
           children: [
             SpeedDialChild(
               child: const Icon(Icons.save),
@@ -134,6 +127,13 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
         ),
       ),
     );
+  }
+
+  Future<String> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
+    final viewModel = EnterScoreViewModel(playerScore);
+    await showEnterScoreDialog(context, viewModel);
+    widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
+    return viewModel.score.toString();
   }
 
   Future<void> _save() async {
@@ -227,7 +227,13 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _addNote() async {
-    Navigator.of(context).pushNamed(PlaythroughNotePage.pageRoute);
+    await Navigator.of(context).pushNamed(
+      PlaythroughNotePage.pageRoute,
+      arguments: PlaythroughNotePageArguments(
+        widget.viewModel.playthrough,
+      ),
+    );
+    widget.viewModel.refreshNotes();
   }
 }
 
@@ -245,20 +251,61 @@ class _ScoresSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        return ListView.separated(
-          itemCount: viewModel.playerScores.length,
-          separatorBuilder: (context, index) {
-            return const SizedBox(height: Dimensions.doubleStandardSpacing);
-          },
-          itemBuilder: (context, index) {
-            return _PlayerScoreTile(
-              playerScore: viewModel.playerScores[index],
-              playthroughId: viewModel.playthroughDetails.id,
-              onItemTapped: onItemTapped,
-            );
-          },
+        return SliverPadding(
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (_, index) {
+                final int itemIndex = index ~/ 2;
+                if (index.isEven) {
+                  return _PlayerScoreTile(
+                    playerScore: viewModel.playerScores[itemIndex],
+                    playthroughId: viewModel.playthroughDetails.id,
+                    onItemTapped: onItemTapped,
+                  );
+                }
+
+                return const SizedBox(height: Dimensions.doubleStandardSpacing);
+              },
+              childCount: max(0, viewModel.playerScores.length * 2 - 1),
+            ),
+          ),
         );
       },
+    );
+  }
+}
+
+class _NotesSection extends StatelessWidget {
+  const _NotesSection({
+    required this.notes,
+    Key? key,
+  }) : super(key: key);
+
+  final List<PlaythroughNote> notes;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (_, index) {
+            final int itemIndex = index ~/ 2;
+            if (index.isEven) {
+              return Text(notes[itemIndex].text);
+              // return _PlayerScoreTile(
+              //   playerScore: viewModel.playerScores[index],
+              //   playthroughId: viewModel.playthroughDetails.id,
+              //   onItemTapped: onItemTapped,
+              // );
+            }
+
+            return const SizedBox(height: Dimensions.doubleStandardSpacing);
+          },
+          childCount: max(0, notes.length * 2 - 1),
+        ),
+      ),
     );
   }
 }
@@ -354,8 +401,8 @@ class _PlayerScore extends StatelessWidget {
   }
 }
 
-class _Duration extends StatefulWidget {
-  const _Duration({
+class _PlayDateTimeSection extends StatefulWidget {
+  const _PlayDateTimeSection({
     required this.viewModel,
     Key? key,
   }) : super(key: key);
@@ -363,10 +410,10 @@ class _Duration extends StatefulWidget {
   final EditPlaythoughViewModel viewModel;
 
   @override
-  _DurationState createState() => _DurationState();
+  _PlayDateTimeSectionState createState() => _PlayDateTimeSectionState();
 }
 
-class _DurationState extends State<_Duration> {
+class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
   static const int _maxHours = 99;
 
   late Duration playthroughDuration;
@@ -392,55 +439,57 @@ class _DurationState extends State<_Duration> {
   @override
   Widget build(BuildContext context) {
     _setHourseAndMinutesRange();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-      child: Row(
-        children: [
-          Center(
-            child: Observer(
-              builder: (_) {
-                return CalendarCard(
-                  widget.viewModel.playthroughStartTime,
-                  onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
-                );
-              },
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+        child: Row(
+          children: [
+            Center(
+              child: Observer(
+                builder: (_) {
+                  return CalendarCard(
+                    widget.viewModel.playthroughStartTime,
+                    onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
+                  );
+                },
+              ),
             ),
-          ),
-          const Expanded(child: SizedBox.shrink()),
-          AbsorbPointer(
-            absorbing: !widget.viewModel.playthoughEnded,
-            child: Row(
-              children: <Widget>[
-                NumberPicker(
-                  value: math.min(hoursPlayed, _maxHours),
-                  minValue: minHours,
-                  maxValue: maxHours,
-                  onChanged: (num value) => _updateDurationHours(value),
-                  itemWidth: 46,
-                  selectedTextStyle: const TextStyle(
-                    color: AppColors.accentColor,
-                    fontSize: Dimensions.doubleExtraLargeFontSize,
+            const Expanded(child: SizedBox.shrink()),
+            AbsorbPointer(
+              absorbing: !widget.viewModel.playthoughEnded,
+              child: Row(
+                children: <Widget>[
+                  NumberPicker(
+                    value: math.min(hoursPlayed, _maxHours),
+                    minValue: minHours,
+                    maxValue: maxHours,
+                    onChanged: (num value) => _updateDurationHours(value),
+                    itemWidth: 46,
+                    selectedTextStyle: const TextStyle(
+                      color: AppColors.accentColor,
+                      fontSize: Dimensions.doubleExtraLargeFontSize,
+                    ),
                   ),
-                ),
-                Text('h', style: AppTheme.theme.textTheme.bodyText2),
-                const SizedBox(width: Dimensions.halfStandardSpacing),
-                NumberPicker(
-                  value: minutesPlyed,
-                  infiniteLoop: true,
-                  minValue: minMinutes,
-                  maxValue: maxMinutes,
-                  onChanged: (num value) => _updateDurationMinutes(value),
-                  itemWidth: 46,
-                  selectedTextStyle: const TextStyle(
-                    color: AppColors.accentColor,
-                    fontSize: Dimensions.doubleExtraLargeFontSize,
+                  Text('h', style: AppTheme.theme.textTheme.bodyText2),
+                  const SizedBox(width: Dimensions.halfStandardSpacing),
+                  NumberPicker(
+                    value: minutesPlyed,
+                    infiniteLoop: true,
+                    minValue: minMinutes,
+                    maxValue: maxMinutes,
+                    onChanged: (num value) => _updateDurationMinutes(value),
+                    itemWidth: 46,
+                    selectedTextStyle: const TextStyle(
+                      color: AppColors.accentColor,
+                      fontSize: Dimensions.doubleExtraLargeFontSize,
+                    ),
                   ),
-                ),
-                Text('min ', style: AppTheme.theme.textTheme.bodyText2),
-              ],
-            ),
-          )
-        ],
+                  Text('min ', style: AppTheme.theme.textTheme.bodyText2),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

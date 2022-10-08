@@ -104,7 +104,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i25.BoardGamesStore>(),
       get<_i18.BoardGamesFiltersStore>()));
   gh.factory<_i29.PlaythroughNoteViewModel>(
-      () => _i29.PlaythroughNoteViewModel(get<_i21.PlaythroughService>()));
+      () => _i29.PlaythroughNoteViewModel(get<_i22.PlaythroughsStore>()));
   gh.singleton<_i30.PlaythroughStatisticsViewModel>(
       _i30.PlaythroughStatisticsViewModel(
           get<_i9.PlayerService>(),

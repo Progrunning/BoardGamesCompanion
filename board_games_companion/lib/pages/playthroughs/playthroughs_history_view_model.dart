@@ -22,12 +22,12 @@ abstract class _PlaythroughsHistoryViewModel with Store {
 
   @computed
   ObservableList<PlaythroughDetails> get playthroughs {
-    final sortedPlaythrough = List.of(_playthroughsStore.playthroughs, growable: false);
+    final sortedPlaythrough = List.of(_playthroughsStore.playthroughsDetails, growable: false);
     return ObservableList.of(sortedPlaythrough..sort((a, b) => b.startDate.compareTo(a.startDate)));
   }
 
   @computed
-  bool get hasAnyPlaythroughs => _playthroughsStore.playthroughs.isNotEmpty;
+  bool get hasAnyPlaythroughs => _playthroughsStore.playthroughsDetails.isNotEmpty;
 
   @action
   void loadPlaythroughs() => futureloadPlaythroughs = ObservableFuture<void>(_loadPlaythroughs());

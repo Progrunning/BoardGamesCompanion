@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 
 import '../../common/enums/playthrough_status.dart';
 import '../../common/hive_boxes.dart';
+import 'playthrough_note.dart';
 
 part 'playthrough.freezed.dart';
 part 'playthrough.g.dart';
@@ -22,6 +23,6 @@ abstract class Playthrough with _$Playthrough {
     @HiveField(6) PlaythroughStatus? status,
     @Default(false) @HiveField(7) bool? isDeleted,
     @HiveField(8) int? bggPlayId,
-    @HiveField(9) List<String>? notes,
+    @HiveField(9) List<PlaythroughNote>? notes,
   }) = _Playthrough;
 }

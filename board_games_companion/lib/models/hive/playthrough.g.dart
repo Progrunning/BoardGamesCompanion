@@ -26,7 +26,7 @@ class PlaythroughAdapter extends TypeAdapter<_$_Playthrough> {
       status: fields[6] as PlaythroughStatus?,
       isDeleted: fields[7] as bool?,
       bggPlayId: fields[8] as int?,
-      notes: (fields[9] as List?)?.cast<String>(),
+      notes: (fields[9] as List?)?.cast<PlaythroughNote>(),
     );
   }
 

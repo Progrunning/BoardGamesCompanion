@@ -1,5 +1,6 @@
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -29,7 +30,10 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _controller.text = widget.viewModel.note ?? '';
+    widget.viewModel.visualState.maybeWhen(
+      edit: (note) => _controller.text = note.text,
+      orElse: () {},
+    );
   }
 
   @override
@@ -65,9 +69,7 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
                   fontSize: Dimensions.largeFontSize,
                 ),
               ),
-              onSubmitted: (note) {
-                // TODO Handle saving a note
-              },
+              onChanged: (note) async => _updateNote(note),
             ),
           ),
           const Expanded(child: SizedBox.shrink()),
@@ -75,12 +77,16 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
             padding: const EdgeInsets.all(Dimensions.standardSpacing),
             child: Align(
               alignment: Alignment.bottomRight,
-              child: ElevatedIconButton(
-                title: AppText.playthroughNotePageAddNoteButtonText,
-                icon: const DefaultIcon(Icons.save),
-                color: AppColors.accentColor,
-                onPressed: () {
-                  // TODO Handle saving a note
+              child: Observer(
+                builder: (_) {
+                  return ElevatedIconButton(
+                    title: widget.viewModel.isNewNote
+                        ? AppText.playthroughNotePageAddNoteButtonText
+                        : AppText.playthroughNotePageUpdateNoteButtonText,
+                    icon: const DefaultIcon(Icons.save),
+                    color: AppColors.accentColor,
+                    onPressed: widget.viewModel.isNoteEmpty ? null : () async => _saveNote(),
+                  );
                 },
               ),
             ),
@@ -89,4 +95,12 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
       ),
     );
   }
+
+  Future<void> _saveNote() async {
+    final navigatorState = Navigator.of(context);
+    await widget.viewModel.saveNote(_controller.text);
+    navigatorState.pop();
+  }
+
+  void _updateNote(String note) => widget.viewModel.updateNote(note);
 }

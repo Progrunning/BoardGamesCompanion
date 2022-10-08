@@ -9,6 +9,7 @@ import 'injectable.dart';
 import 'models/navigation/board_game_details_page_arguments.dart';
 import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
+import 'models/navigation/playthough_note_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
 import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
@@ -141,7 +142,10 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             );
 
           case PlaythroughNotePage.pageRoute:
+            final arguments = routeSettings.arguments as PlaythroughNotePageArguments;
             final viewModel = getIt<PlaythroughNoteViewModel>();
+            viewModel.setNoteId(arguments.noteId);
+            viewModel.setPlaythrough(arguments.playthrough);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
