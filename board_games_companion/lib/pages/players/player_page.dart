@@ -14,7 +14,7 @@ import '../../models/hive/player.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
-import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/page_container.dart';
 import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
 import '../home/home_page.dart';

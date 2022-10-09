@@ -21,7 +21,7 @@ import '../../widgets/board_games/board_game_rating_hexagon.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
-import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/page_container.dart';
 import '../../widgets/common/ripple_effect.dart';
 import '../base_page_state.dart';
 import '../home/home_page.dart';

@@ -15,7 +15,7 @@ import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
-import '../../widgets/common/panel_container_widget.dart';
+import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/playthrough/calendar_card.dart';

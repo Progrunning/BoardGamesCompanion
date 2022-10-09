@@ -12,7 +12,7 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/loading_overlay.dart';
-import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/page_container.dart';
 import '../base_page_state.dart';
 import '../board_game_details/board_game_details_page.dart';
 import 'bgg_plays_import_report_dialog.dart';

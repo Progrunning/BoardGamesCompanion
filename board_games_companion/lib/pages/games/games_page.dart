@@ -4,6 +4,7 @@ import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/injectable.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
+import 'package:board_games_companion/widgets/common/panel_container.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -35,8 +36,8 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
+import '../../widgets/common/page_container.dart';
 import '../../widgets/common/rating_hexagon.dart';
-import '../../widgets/elevated_container.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'collection_search_result_view_model.dart';
@@ -653,15 +654,17 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   @override
   Widget buildResults(BuildContext context) {
     if (query.isEmpty) {
-      return ListView();
+      return PageContainer(child: ListView());
     }
 
     final filteredGames = _filterGames(query);
     if (filteredGames.isEmpty) {
-      return _NoSearchResults(query: query, onClear: () => query = '');
+      return PageContainer(child: _NoSearchResults(query: query, onClear: () => query = ''));
     }
 
-    return _SearchResults(filteredGames: filteredGames, onResultAction: onResultAction);
+    return PageContainer(
+      child: _SearchResults(filteredGames: filteredGames, onResultAction: onResultAction),
+    );
   }
 
   @override
@@ -766,10 +769,7 @@ class _SearchResultGame extends StatelessWidget {
         left: Dimensions.standardSpacing,
         right: Dimensions.standardSpacing,
       ),
-      child: ElevatedContainer(
-        backgroundColor: AppColors.primaryColor,
-        elevation: AppStyles.defaultElevation,
-        borderRadius: const BorderRadius.all(Radius.circular(AppStyles.defaultCornerRadius)),
+      child: PanelContainer(
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
           child: Column(
@@ -1036,7 +1036,7 @@ class _SearchResultGameGeneralStats extends StatelessWidget {
         Text(
           statistic,
           overflow: TextOverflow.ellipsis,
-          style: AppTheme.subTitleTextStyle,
+          style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
         ),
       ],
     );
