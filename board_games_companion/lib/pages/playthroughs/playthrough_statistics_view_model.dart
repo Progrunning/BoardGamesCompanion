@@ -3,6 +3,7 @@
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:collection/collection.dart';
+import 'package:fimber/fimber.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
@@ -54,6 +55,8 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       futureLoadBoardGamesStatistics = ObservableFuture<void>(_loadBoardGamesStatistics());
 
   Future<void> _loadBoardGamesStatistics() async {
+    Fimber.d(
+        'Loading stats for game ${_playthroughsStore.boardGame.name} [${_playthroughsStore.boardGame.id}]');
     final boardGameId = _playthroughsStore.boardGame.id;
     final gameWinningCondition = _playthroughsStore.boardGame.settings?.winningCondition ??
         GameWinningCondition.HighestScore;
@@ -88,6 +91,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     );
 
     if (finishedPlaythroughs.isEmpty) {
+      boardGameStatistics = BoardGameStatistics();
       return;
     }
 
