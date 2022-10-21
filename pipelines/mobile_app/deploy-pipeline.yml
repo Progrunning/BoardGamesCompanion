@@ -32,6 +32,7 @@ stages:
   - stage: CdBuildAndroid
     jobs:
       - job: BuildAndroid
+        condition: eq(0, 1)
         timeoutInMinutes: 20
         pool:
           vmImage: "macOS-12"
@@ -111,6 +112,7 @@ stages:
     condition: succeeded('CdBuildAndroid')
     jobs:
       - job: PublishAndroid
+        condition: eq(0, 1)
         timeoutInMinutes: 5
         pool:
           vmImage: "macOS-latest"
