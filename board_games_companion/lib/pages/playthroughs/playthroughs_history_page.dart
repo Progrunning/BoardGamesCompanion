@@ -151,8 +151,26 @@ class _PlaythroughPlayersStats extends StatelessWidget {
       children: <Widget>[
         Expanded(child: _PlaythroughPlayerList(playthroughDetails: playthroughDetails)),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            if (playthroughDetails.hasNotes)
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.sticky_note_2_outlined, color: AppColors.accentColor),
+                    const SizedBox(width: Dimensions.standardSpacing),
+                    Expanded(
+                      child: Text(
+                        playthroughDetails.latestNote!.text,
+                        style: const TextStyle(overflow: TextOverflow.ellipsis),
+                      ),
+                    ),
+                    const SizedBox(width: Dimensions.standardSpacing),
+                  ],
+                ),
+              ),
+            if (!playthroughDetails.hasNotes) const Spacer(),
             ElevatedIconButton(
               title: AppText.edit,
               icon: const DefaultIcon(Icons.edit),
