@@ -14,6 +14,14 @@ parameters:
     displayName: App version
     type: string
     default: ""
+  - name: publishAndroid
+    displayName: Publish to Google Play
+    type: boolean
+    default: true
+  - name: publishIos
+    displayName: Publish to Apple Store
+    type: boolean
+    default: true
 
 variables:
   - name: appVersion
@@ -32,7 +40,7 @@ stages:
   - stage: CdBuildAndroid
     jobs:
       - job: BuildAndroid
-        condition: eq(0, 1)
+        condition: or(eq('${{ parameters.publishAndroid }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 20
         pool:
           vmImage: "macOS-12"
@@ -111,11 +119,10 @@ stages:
     dependsOn: CdBuildAndroid
     condition: succeeded('CdBuildAndroid')
     jobs:
-      - job: PublishAndroid
-        condition: eq(0, 1)
+      - job: PublishAndroid        
         timeoutInMinutes: 5
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: DownloadPipelineArtifact@2
@@ -143,9 +150,10 @@ stages:
   - stage: CdBuildiOS
     jobs:
       - job: BuildiOS
+        condition: or(eq('${{ parameters.publishIos }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 30
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: FlutterInstall@0
@@ -213,7 +221,7 @@ stages:
       - job: PublishiOS
         timeoutInMinutes: 20
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: DownloadPipelineArtifact@2
