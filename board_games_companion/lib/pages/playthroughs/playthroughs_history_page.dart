@@ -15,7 +15,7 @@ import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
-import '../../widgets/common/panel_container_widget.dart';
+import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -151,8 +151,26 @@ class _PlaythroughPlayersStats extends StatelessWidget {
       children: <Widget>[
         Expanded(child: _PlaythroughPlayerList(playthroughDetails: playthroughDetails)),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            if (playthroughDetails.hasNotes)
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.sticky_note_2_outlined, color: AppColors.accentColor),
+                    const SizedBox(width: Dimensions.standardSpacing),
+                    Expanded(
+                      child: Text(
+                        playthroughDetails.latestNote!.text,
+                        style: const TextStyle(overflow: TextOverflow.ellipsis),
+                      ),
+                    ),
+                    const SizedBox(width: Dimensions.standardSpacing),
+                  ],
+                ),
+              ),
+            if (!playthroughDetails.hasNotes) const Spacer(),
             ElevatedIconButton(
               title: AppText.edit,
               icon: const DefaultIcon(Icons.edit),

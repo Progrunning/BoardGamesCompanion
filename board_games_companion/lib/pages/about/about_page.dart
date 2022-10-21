@@ -11,7 +11,7 @@ import '../../widgets/about/detail_item.dart';
 import '../../widgets/about/section_text.dart';
 import '../../widgets/about/section_title.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
-import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/page_container.dart';
 import '../base_page_state.dart';
 
 class AboutPage extends StatefulWidget {

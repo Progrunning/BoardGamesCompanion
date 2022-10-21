@@ -22,7 +22,7 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
-import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../board_game_details/board_game_details_page.dart';
 import 'search_board_games_view_model.dart';

@@ -23,11 +23,13 @@ class PanelContainer extends StatelessWidget {
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment(0.5, 0),
-            end: Alignment(0.5, 1),
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.2, 0.5, 0.9],
             colors: [
-              AppColors.startDefaultPageElementBackgroundColorGradient,
-              AppColors.endDefaultPageElementBackgroundColorGradient,
+              AppColors.endDefaultPageBackgroundColorGradient,
+              AppColors.startDefaultPageBackgroundColorGradient,
+              AppColors.endDefaultPageBackgroundColorGradient,
             ],
           ),
           borderRadius: AppTheme.defaultBoxRadius,

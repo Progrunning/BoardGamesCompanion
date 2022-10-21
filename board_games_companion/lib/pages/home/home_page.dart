@@ -10,7 +10,7 @@ import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
-import '../../widgets/common/page_container_widget.dart';
+import '../../widgets/common/page_container.dart';
 import '../base_page_state.dart';
 import '../games/games_page.dart';
 import '../players/players_page.dart';

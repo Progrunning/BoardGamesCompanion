@@ -4,7 +4,7 @@ import 'package:board_games_companion/models/backup_file.dart';
 import 'package:board_games_companion/pages/settings/settings_page_visual_states.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:board_games_companion/widgets/common/loading_overlay.dart';
-import 'package:board_games_companion/widgets/common/page_container_widget.dart';
+import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

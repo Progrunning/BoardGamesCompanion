@@ -1,4 +1,5 @@
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../common/enums/playthrough_status.dart';
@@ -42,4 +43,8 @@ class PlaythroughDetails with _$PlaythroughDetails {
   DateTime? get endDate => playthrough.endDate;
 
   List<PlaythroughNote>? get notes => playthrough.notes;
+
+  bool get hasNotes => notes?.isNotEmpty ?? false;
+
+  PlaythroughNote? get latestNote => notes?.sortedBy((element) => element.createdAt).last;
 }

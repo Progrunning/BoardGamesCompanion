@@ -18,6 +18,7 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/player_score.dart';
+import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -54,44 +55,50 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
             IconButton(icon: const Icon(Icons.close), onPressed: () => _close(context)),
           ],
         ),
-        body: Observer(builder: (_) {
-          return CustomScrollView(
-            slivers: [
-              SliverPersistentHeader(
-                delegate: BgcSliverHeaderDelegate(
-                    title: AppText.editPlaythroughDateAndDurationHeaderTitle),
-              ),
-              _PlayDateTimeSection(viewModel: widget.viewModel),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: BgcSliverHeaderDelegate(title: AppText.editPlaythroughScoresHeaderTitle),
-              ),
-              _ScoresSection(
-                viewModel: widget.viewModel,
-                onItemTapped: (PlayerScore playerScore) async =>
-                    _editPlayerScore(playerScore, context),
-              ),
-              if (widget.viewModel.hasNotes) ...[
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: BgcSliverHeaderDelegate(title: AppText.editPlaythroughNotesHeaderTitle),
-                ),
-                _NotesSection(
-                  notes: widget.viewModel.notes!,
-                  onTap: (note) => _editNote(note.id),
-                  onDelete: (note) => _deleteNote(note),
-                ),
-                // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
-                const SliverPadding(
-                  padding: EdgeInsets.only(
-                    bottom:
-                        Dimensions.floatingActionButtonBottomSpacing + Dimensions.standardSpacing,
+        body: SafeArea(
+          child: PageContainer(
+            child: Observer(builder: (_) {
+              return CustomScrollView(
+                slivers: [
+                  SliverPersistentHeader(
+                    delegate: BgcSliverHeaderDelegate(
+                        title: AppText.editPlaythroughDateAndDurationHeaderTitle),
                   ),
-                ),
-              ]
-            ],
-          );
-        }),
+                  _PlayDateTimeSection(viewModel: widget.viewModel),
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate:
+                        BgcSliverHeaderDelegate(title: AppText.editPlaythroughScoresHeaderTitle),
+                  ),
+                  _ScoresSection(
+                    viewModel: widget.viewModel,
+                    onItemTapped: (PlayerScore playerScore) async =>
+                        _editPlayerScore(playerScore, context),
+                  ),
+                  if (widget.viewModel.hasNotes) ...[
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate:
+                          BgcSliverHeaderDelegate(title: AppText.editPlaythroughNotesHeaderTitle),
+                    ),
+                    _NotesSection(
+                      notes: widget.viewModel.notes!,
+                      onTap: (note) => _editNote(note.id),
+                      onDelete: (note) => _deleteNote(note),
+                    ),
+                    // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
+                    const SliverPadding(
+                      padding: EdgeInsets.only(
+                        bottom: Dimensions.floatingActionButtonBottomSpacing +
+                            Dimensions.standardSpacing,
+                      ),
+                    ),
+                  ]
+                ],
+              );
+            }),
+          ),
+        ),
         floatingActionButton: SpeedDial(
           icon: Icons.menu,
           overlayColor: AppColors.dialogBackgroundColor,
