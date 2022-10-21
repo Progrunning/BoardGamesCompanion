@@ -34,7 +34,7 @@ stages:
       - job: BuildAndroid
         timeoutInMinutes: 20
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: JavaToolInstaller@0
