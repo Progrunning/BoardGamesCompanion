@@ -18,7 +18,7 @@ parameters:
     displayName: Publish to Google Play
     type: boolean
     default: true
-  - name: publishIos
+  - name: publishIOS
     displayName: Publish to Apple Store
     type: boolean
     default: true
@@ -117,7 +117,7 @@ stages:
 
   - stage: CdPublishAndroid
     dependsOn: CdBuildAndroid
-    condition: succeeded('CdBuildAndroid')
+    condition: in(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')    
     jobs:
       - job: PublishAndroid        
         timeoutInMinutes: 5
@@ -150,7 +150,7 @@ stages:
   - stage: CdBuildiOS
     jobs:
       - job: BuildiOS
-        condition: or(eq('${{ parameters.publishIos }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
+        condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 30
         pool:
           vmImage: "macOS-12"
@@ -216,7 +216,7 @@ stages:
 
   - stage: CdPublishiOS
     dependsOn: CdBuildiOS
-    condition: succeeded('CdBuildiOS')
+    condition: in(stageDependencies.CdBuildiOS.BuildiOS.result, 'Succeeded')    
     jobs:
       - job: PublishiOS
         timeoutInMinutes: 20
