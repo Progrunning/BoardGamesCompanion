@@ -148,6 +148,7 @@ stages:
                 fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(appPackageName) --skip_upload_apk true
 
   - stage: CdBuildiOS
+    dependsOn: []
     jobs:
       - job: BuildiOS
         condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
