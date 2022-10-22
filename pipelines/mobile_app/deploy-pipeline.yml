@@ -14,6 +14,14 @@ parameters:
     displayName: App version
     type: string
     default: ""
+  - name: publishAndroid
+    displayName: Publish to Google Play
+    type: boolean
+    default: true
+  - name: publishIOS
+    displayName: Publish to Apple Store
+    type: boolean
+    default: true
 
 variables:
   - name: appVersion
@@ -32,9 +40,10 @@ stages:
   - stage: CdBuildAndroid
     jobs:
       - job: BuildAndroid
+        condition: or(eq('${{ parameters.publishAndroid }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 20
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: JavaToolInstaller@0
@@ -108,12 +117,12 @@ stages:
 
   - stage: CdPublishAndroid
     dependsOn: CdBuildAndroid
-    condition: succeeded('CdBuildAndroid')
     jobs:
-      - job: PublishAndroid
+      - job: PublishAndroid        
+        condition: eq(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')    
         timeoutInMinutes: 5
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: DownloadPipelineArtifact@2
@@ -139,11 +148,13 @@ stages:
                 fastlane supply --aab app-release.aab --json_key $(serviceAccAuthJson.secureFilePath) --track beta --rollout 1.0 --package_name $(appPackageName) --skip_upload_apk true
 
   - stage: CdBuildiOS
+    dependsOn: []
     jobs:
       - job: BuildiOS
+        condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 30
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: FlutterInstall@0
@@ -206,12 +217,12 @@ stages:
 
   - stage: CdPublishiOS
     dependsOn: CdBuildiOS
-    condition: succeeded('CdBuildiOS')
     jobs:
       - job: PublishiOS
+        condition: eq(stageDependencies.CdBuildiOS.BuildiOS.result, 'Succeeded')
         timeoutInMinutes: 20
         pool:
-          vmImage: "macOS-latest"
+          vmImage: "macOS-12"
 
         steps:
           - task: DownloadPipelineArtifact@2
