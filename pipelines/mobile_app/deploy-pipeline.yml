@@ -117,9 +117,9 @@ stages:
 
   - stage: CdPublishAndroid
     dependsOn: CdBuildAndroid
-    condition: in(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')    
     jobs:
       - job: PublishAndroid        
+        condition: eq(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')    
         timeoutInMinutes: 5
         pool:
           vmImage: "macOS-12"
@@ -217,9 +217,9 @@ stages:
 
   - stage: CdPublishiOS
     dependsOn: CdBuildiOS
-    condition: in(stageDependencies.CdBuildiOS.BuildiOS.result, 'Succeeded')    
     jobs:
       - job: PublishiOS
+        condition: eq(stageDependencies.CdBuildiOS.BuildiOS.result, 'Succeeded')
         timeoutInMinutes: 20
         pool:
           vmImage: "macOS-12"
