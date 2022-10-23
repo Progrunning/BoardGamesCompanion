@@ -9,9 +9,9 @@ import '../../common/dimensions.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/about/detail_item.dart';
 import '../../widgets/about/section_text.dart';
-import '../../widgets/about/section_title.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container.dart';
+import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../base_page_state.dart';
 
 class AboutPage extends StatefulWidget {
@@ -24,13 +24,12 @@ class AboutPage extends StatefulWidget {
 }
 
 class AboutPageState extends BasePageState<AboutPage> {
-  static const String privactyPolicyUrl =
-      'https://progrunning.net/board-games-companion-privacy-policy/';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(AppText.aboutPageTitle, style: AppTheme.titleTextStyle)),
+      appBar: AppBar(
+        title: const Text(AppText.aboutPageTitle, style: AppTheme.titleTextStyle),
+      ),
       body: SafeArea(
         child: Theme(
           data: AppTheme.theme.copyWith(
@@ -42,162 +41,387 @@ class AboutPageState extends BasePageState<AboutPage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: const <Widget>[
-                          SectionTitle(title: 'Author'),
-                          DetailsItem(
-                            title: 'Mikolaj Kieres',
-                            subtitle: Constants.feedbackEmailAddress,
-                            uri: 'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
-                            iconUri: 'assets/mikolaj_profile_picture.jpg',
-                          ),
-                          Divider(color: AppColors.accentColor),
-                          SectionTitle(title: 'Design & Art'),
-                          DetailsItem(
-                            title: 'Alicja Adamkiewicz',
-                            subtitle: 'instagram.com/adamkiewicz_art',
-                            uri: 'https://www.instagram.com/adamkiewicz_art',
-                            iconUri: 'assets/adamkiewiczart_logo.png',
-                          ),
-                          Divider(color: AppColors.accentColor),
-                          SectionTitle(title: 'Content & Data'),
-                          SectionText(
-                            text:
-                                "The board games data shown in the app is a courtesy of the publicly available BoardGameGeek's XML API.",
-                          ),
-                          SectionText(text: 'See below links for more details:'),
-                          DetailsItem(
-                              title: 'BGG',
-                              subtitle: 'boardgamegeek.com',
-                              uri: Constants.boardGameGeekBaseApiUrl),
-                          DetailsItem(
-                              title: 'XML API',
-                              subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
-                              uri: 'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
-                          DetailsItem(
-                              title: 'Terms of Service',
-                              subtitle: 'boardgamegeek.com/terms',
-                              uri: 'https://www.boardgamegeek.com/terms'),
-                          Divider(color: AppColors.accentColor),
-                          SectionTitle(title: 'Plugins & Libraries'),
-                          SectionText(
-                            text:
-                                'The below is a list of the plugins and libraries that helped in building this app:',
-                          ),
-                          DetailsItem(
-                              title: 'Lato Font',
-                              subtitle: 'Powered by Google Fonts',
-                              uri: 'https://pub.dev/packages/google_fonts'),
-                          DetailsItem(
-                              title: 'Logging',
-                              subtitle: 'Handles in app logs',
-                              uri: 'https://pub.dev/packages/logging'),
-                          DetailsItem(
-                              title: 'Dio Http Cache',
-                              subtitle: 'SQLite like cache of http responses',
-                              uri: 'https://pub.dev/packages/dio_http_cache'),
-                          DetailsItem(
-                              title: 'Dio Http2 Adapter',
-                              subtitle: 'Provides the ability to create custom http adapters',
-                              uri: 'https://pub.dev/packages/dio_http2_adapter'),
-                          DetailsItem(
-                              title: 'Cached Network Image',
-                              subtitle: 'Caching network images',
-                              uri: 'https://pub.dev/packages/cached_network_image'),
-                          DetailsItem(
-                              title: 'Firebase Crashlytics',
-                              subtitle: 'Captures app crash analytics',
-                              uri: 'https://pub.dev/packages/firebase_crashlytics'),
-                          DetailsItem(
-                              title: 'Hive',
-                              subtitle: 'NoSQL Database',
-                              uri: 'https://pub.dev/packages/hive'),
-                          DetailsItem(
-                              title: 'Path Provider',
-                              subtitle: 'Helps with filesystem paths',
-                              uri: 'https://pub.dev/packages/path_provider'),
-                          DetailsItem(
-                              title: 'Polygon Clipper',
-                              subtitle: 'Draws polygon shapes',
-                              uri: 'https://pub.dev/packages/polygon_clipper'),
-                          DetailsItem(
-                              title: 'Carousel Slider',
-                              subtitle: 'Helps with carousels',
-                              uri: 'https://pub.dev/packages/carousel_slider'),
-                          DetailsItem(
-                              title: 'Image Picker',
-                              subtitle: 'Picking images and taking photos with camera',
-                              uri: 'https://pub.dev/packages/image_picker'),
-                          DetailsItem(
-                              title: 'Image Picker',
-                              subtitle: 'Picking images and taking photos with camera',
-                              uri: 'https://pub.dev/packages/image_picker'),
-                          DetailsItem(
-                              title: 'XML',
-                              subtitle: 'Parsing XML API responses',
-                              uri: 'https://pub.dev/packages/xml'),
-                          DetailsItem(
-                              title: 'Provider',
-                              subtitle: 'DI & state management',
-                              uri: 'https://pub.dev/packages/provider'),
-                          DetailsItem(
-                              title: 'Animations',
-                              subtitle: 'Navigation animations',
-                              uri: 'https://pub.dev/packages/animations'),
-                          DetailsItem(
-                              title: 'Url Launcher',
-                              subtitle: "Launching Uri's",
-                              uri: 'https://pub.dev/packages/url_launcher'),
-                          Divider(color: AppColors.accentColor),
-                          SectionTitle(title: 'Licenses'),
-                          _LicensePageDetailsItem(),
-                        ],
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverPersistentHeader(
+                        delegate: BgcSliverHeaderDelegate(
+                          title: AppText.aboutPageAuthorSectionTitle,
+                        ),
                       ),
-                    ),
+                      const SliverToBoxAdapter(
+                        child: DetailsItem(
+                          title: 'Mikolaj Kieres',
+                          subtitle: Constants.feedbackEmailAddress,
+                          uri: 'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
+                          iconUri: 'assets/mikolaj_profile_picture.jpg',
+                        ),
+                      ),
+                      SliverPersistentHeader(
+                        delegate: BgcSliverHeaderDelegate(
+                          title: AppText.aboutPageDesignAndArtSectionTitle,
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: DetailsItem(
+                          title: 'Alicja Adamkiewicz',
+                          subtitle: 'instagram.com/adamkiewicz_art',
+                          uri: 'https://www.instagram.com/adamkiewicz_art',
+                          iconUri: 'assets/adamkiewiczart_logo.png',
+                        ),
+                      ),
+                      SliverPersistentHeader(
+                        delegate: BgcSliverHeaderDelegate(
+                          title: AppText.aboutPageContentAndDataSectionTitle,
+                        ),
+                      ),
+                      const _ContentAndDataSection(),
+                      SliverPersistentHeader(
+                        delegate: BgcSliverHeaderDelegate(
+                          title: AppText.aboutPagePluginsAndLibrariesSectionTitle,
+                        ),
+                      ),
+                      const _PluginsAndLibrariesSection(),
+                      SliverPersistentHeader(
+                        delegate: BgcSliverHeaderDelegate(
+                          title: AppText.aboutPageLicensesSectionTitle,
+                        ),
+                      ),
+                      const _LicensePageDetailsItem(),
+                    ],
+                    // Column(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //   children: const <Widget>[
+                    //     SectionTitle(title: 'Author'),
+                    //     DetailsItem(
+                    //       title: 'Mikolaj Kieres',
+                    //       subtitle: Constants.feedbackEmailAddress,
+                    //       uri: 'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
+                    //       iconUri: 'assets/mikolaj_profile_picture.jpg',
+                    //     ),
+                    //     Divider(color: AppColors.accentColor),
+                    //     SectionTitle(title: 'Design & Art'),
+                    //     DetailsItem(
+                    //       title: 'Alicja Adamkiewicz',
+                    //       subtitle: 'instagram.com/adamkiewicz_art',
+                    //       uri: 'https://www.instagram.com/adamkiewicz_art',
+                    //       iconUri: 'assets/adamkiewiczart_logo.png',
+                    //     ),
+                    //     Divider(color: AppColors.accentColor),
+                    //     SectionTitle(title: 'Content & Data'),
+                    //     SectionText(
+                    //       text:
+                    //           "The board games data shown in the app is a courtesy of the publicly available BoardGameGeek's XML API.",
+                    //     ),
+                    //     SectionText(text: 'See below links for more details:'),
+                    //     DetailsItem(
+                    //         title: 'BGG',
+                    //         subtitle: 'boardgamegeek.com',
+                    //         uri: Constants.boardGameGeekBaseApiUrl),
+                    //     DetailsItem(
+                    //         title: 'XML API',
+                    //         subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
+                    //         uri: 'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
+                    //     DetailsItem(
+                    //         title: 'Terms of Service',
+                    //         subtitle: 'boardgamegeek.com/terms',
+                    //         uri: 'https://www.boardgamegeek.com/terms'),
+                    //     Divider(color: AppColors.accentColor),
+                    //     SectionTitle(title: 'Plugins & Libraries'),
+                    //     SectionText(
+                    //       text:
+                    //           'The below is a list of the plugins and libraries that helped in building this app:',
+                    //     ),
+                    //     DetailsItem(
+                    //         title: 'Lato Font',
+                    //         subtitle: 'Powered by Google Fonts',
+                    //         uri: 'https://pub.dev/packages/google_fonts'),
+                    //     DetailsItem(
+                    //         title: 'Logging',
+                    //         subtitle: 'Handles in app logs',
+                    //         uri: 'https://pub.dev/packages/logging'),
+                    //     DetailsItem(
+                    //         title: 'Dio Http Cache',
+                    //         subtitle: 'SQLite like cache of http responses',
+                    //         uri: 'https://pub.dev/packages/dio_http_cache'),
+                    //     DetailsItem(
+                    //         title: 'Dio Http2 Adapter',
+                    //         subtitle: 'Provides the ability to create custom http adapters',
+                    //         uri: 'https://pub.dev/packages/dio_http2_adapter'),
+                    //     DetailsItem(
+                    //         title: 'Cached Network Image',
+                    //         subtitle: 'Caching network images',
+                    //         uri: 'https://pub.dev/packages/cached_network_image'),
+                    //     DetailsItem(
+                    //         title: 'Firebase Crashlytics',
+                    //         subtitle: 'Captures app crash analytics',
+                    //         uri: 'https://pub.dev/packages/firebase_crashlytics'),
+                    //     DetailsItem(
+                    //         title: 'Hive',
+                    //         subtitle: 'NoSQL Database',
+                    //         uri: 'https://pub.dev/packages/hive'),
+                    //     DetailsItem(
+                    //         title: 'Path Provider',
+                    //         subtitle: 'Helps with filesystem paths',
+                    //         uri: 'https://pub.dev/packages/path_provider'),
+                    //     DetailsItem(
+                    //         title: 'Polygon Clipper',
+                    //         subtitle: 'Draws polygon shapes',
+                    //         uri: 'https://pub.dev/packages/polygon_clipper'),
+                    //     DetailsItem(
+                    //         title: 'Carousel Slider',
+                    //         subtitle: 'Helps with carousels',
+                    //         uri: 'https://pub.dev/packages/carousel_slider'),
+                    //     DetailsItem(
+                    //         title: 'Image Picker',
+                    //         subtitle: 'Picking images and taking photos with camera',
+                    //         uri: 'https://pub.dev/packages/image_picker'),
+                    //     DetailsItem(
+                    //         title: 'Image Picker',
+                    //         subtitle: 'Picking images and taking photos with camera',
+                    //         uri: 'https://pub.dev/packages/image_picker'),
+                    //     DetailsItem(
+                    //         title: 'XML',
+                    //         subtitle: 'Parsing XML API responses',
+                    //         uri: 'https://pub.dev/packages/xml'),
+                    //     DetailsItem(
+                    //         title: 'Provider',
+                    //         subtitle: 'DI & state management',
+                    //         uri: 'https://pub.dev/packages/provider'),
+                    //     DetailsItem(
+                    //         title: 'Animations',
+                    //         subtitle: 'Navigation animations',
+                    //         uri: 'https://pub.dev/packages/animations'),
+                    //     DetailsItem(
+                    //         title: 'Url Launcher',
+                    //         subtitle: "Launching Uri's",
+                    //         uri: 'https://pub.dev/packages/url_launcher'),
+                    //     Divider(color: AppColors.accentColor),
+                    //     SectionTitle(title: 'Licenses'),
+                    //     _LicensePageDetailsItem(),
+                    //   ],
+                    // ),
                   ),
                 ),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    splashColor: AppColors.accentColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.doubleStandardSpacing,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: const <Widget>[
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Privacy Policy',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: () async {
-                      await LauncherHelper.launchUri(
-                        context,
-                        privactyPolicyUrl,
-                      );
-                    },
-                  ),
-                ),
+                const _PrivacyPolicyFooter(),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ContentAndDataSection extends StatelessWidget {
+  const _ContentAndDataSection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverList(
+      delegate: SliverChildListDelegate.fixed(
+        [
+          SectionText(text: AppText.aboutPageContentAndDataBggXmlApiTitle),
+          SectionText(text: AppText.aboutPageContentAndDataBggXmlApiSubtitle),
+          DetailsItem(
+              title: 'BGG', subtitle: 'boardgamegeek.com', uri: Constants.boardGameGeekBaseApiUrl),
+          DetailsItem(
+              title: 'XML API',
+              subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
+              uri: 'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
+          DetailsItem(
+              title: 'Terms of Service',
+              subtitle: 'boardgamegeek.com/terms',
+              uri: 'https://www.boardgamegeek.com/terms'),
+        ],
+      ),
+    );
+  }
+}
+
+class _PluginsAndLibrariesSection extends StatelessWidget {
+  const _PluginsAndLibrariesSection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverList(
+      delegate: SliverChildListDelegate.fixed(
+        [
+          SectionText(text: AppText.aboutPagePluginsAndLibrariesSubtitle),
+          DetailsItem(
+            title: 'Animations',
+            subtitle: 'Pre-built animations for Flutter',
+            uri: 'https://pub.dev/packages/animations',
+          ),
+          DetailsItem(
+            title: 'Archive',
+            subtitle: 'Dart library that compresses files',
+            uri: 'https://pub.dev/packages/archive',
+          ),
+          DetailsItem(
+            title: 'Async',
+            subtitle: 'Utilies for asynchronous code',
+            uri: 'https://pub.dev/packages/async',
+          ),
+          DetailsItem(
+            title: 'Basics',
+            subtitle: 'Collection of useful extension methods on built-in objects in Dart',
+            uri: 'https://pub.dev/packages/basics',
+          ),
+          DetailsItem(
+            title: 'Cached Network Image',
+            subtitle: 'Caching network images',
+            uri: 'https://pub.dev/packages/cached_network_image',
+          ),
+          DetailsItem(
+            title: 'Collection',
+            subtitle: 'Utilites to make working with collections easier',
+            uri: 'https://pub.dev/packages/collection',
+          ),
+          DetailsItem(
+            title: 'Convex BottomAppBar',
+            subtitle: 'Prettier bottom app bar',
+            uri: 'https://pub.dev/packages/convex_bottom_bar',
+          ),
+          DetailsItem(
+            title: 'Dio',
+            subtitle: 'Http client',
+            uri: 'https://pub.dev/packages/dio',
+          ),
+          DetailsItem(
+            title: 'File picker',
+            subtitle: 'Native file explorer to pick files',
+            uri: 'https://pub.dev/packages/file_picker',
+          ),
+          DetailsItem(
+            title: 'Fimber',
+            subtitle: 'Handles in app logs',
+            uri: 'https://pub.dev/packages/fimber',
+          ),
+          DetailsItem(
+            title: 'Firebase Crashlytics',
+            subtitle: 'Captures app crash analytics',
+            uri: 'https://pub.dev/packages/firebase_crashlytics',
+          ),
+          DetailsItem(
+            title: 'FL Chart',
+            subtitle: 'Chart library',
+            uri: 'https://pub.dev/packages/fl_chart',
+          ),
+          DetailsItem(
+            title: 'Mobx',
+            subtitle: 'State management library',
+            uri: 'https://pub.dev/packages/flutter_mobx',
+          ),
+          DetailsItem(
+            title: 'Ploygon',
+            subtitle: 'Helps with creating polygon shapes',
+            uri: 'https://pub.dev/packages/flutter_polygon',
+          ),
+          DetailsItem(
+            title: 'Slidable',
+            subtitle: 'Adds ability to slide and action list items',
+            uri: 'https://pub.dev/packages/flutter_slidable',
+          ),
+          DetailsItem(
+            title: 'Speed dial',
+            subtitle: 'Speed dial context menu',
+            uri: 'https://pub.dev/packages/flutter_speed_dial',
+          ),
+          DetailsItem(
+            title: 'SVG',
+            subtitle: 'Draws SVG files',
+            uri: 'https://pub.dev/packages/flutter_svg',
+          ),
+          DetailsItem(
+            title: 'Freezed',
+            subtitle: 'Data models code generator',
+            uri: 'https://pub.dev/packages/freezed',
+          ),
+          DetailsItem(
+            title: 'Get it',
+            subtitle: 'Dependency injection',
+            uri: 'https://pub.dev/packages/get_it',
+          ),
+          DetailsItem(
+            title: 'Hive',
+            subtitle: 'NoSQL Database',
+            uri: 'https://pub.dev/packages/hive',
+          ),
+          DetailsItem(
+            title: 'Path Provider',
+            subtitle: 'Helps with filesystem paths',
+            uri: 'https://pub.dev/packages/path_provider',
+          ),
+          DetailsItem(
+            title: 'Image Picker',
+            subtitle: 'Picking images and taking photos with camera',
+            uri: 'https://pub.dev/packages/image_picker',
+          ),
+          DetailsItem(
+            title: 'XML',
+            subtitle: 'Parsing XML API responses',
+            uri: 'https://pub.dev/packages/xml',
+          ),
+          DetailsItem(
+            title: 'Url Launcher',
+            subtitle: "Launching Uri's",
+            uri: 'https://pub.dev/packages/url_launcher',
+          ),
+          DetailsItem(
+            title: 'Lato Font',
+            subtitle: 'Font used across the entire app',
+            uri: 'https://pub.dev/packages/google_fonts',
+          ),
+          DetailsItem(
+            title: 'Font Awesome',
+            subtitle: 'Icons pack',
+            uri: 'https://pub.dev/packages/font_awesome_flutter',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PrivacyPolicyFooter extends StatelessWidget {
+  const _PrivacyPolicyFooter({
+    Key? key,
+  }) : super(key: key);
+
+  static const String privactyPolicyUrl =
+      'https://progrunning.net/board-games-companion-privacy-policy/';
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        splashColor: AppColors.accentColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Dimensions.doubleStandardSpacing,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: const <Widget>[
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Privacy Policy',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTap: () async => LauncherHelper.launchUri(context, privactyPolicyUrl),
       ),
     );
   }
@@ -210,52 +434,54 @@ class _LicensePageDetailsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: PackageInfo.fromPlatform(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData &&
-            snapshot.data is PackageInfo) {
-          return Stack(
-            children: <Widget>[
-              DetailsItem(
-                title: "Board Game Companion's licenses",
-                subtitle: "App's components licenses",
-                onTap: () {
-                  showLicensePage(
-                    context: context,
-                    applicationName: AppText.appTitle,
-                    applicationIcon: Padding(
-                      padding: const EdgeInsets.all(
-                        Dimensions.doubleStandardSpacing,
+    return SliverToBoxAdapter(
+      child: FutureBuilder(
+        future: PackageInfo.fromPlatform(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData &&
+              snapshot.data is PackageInfo) {
+            return Stack(
+              children: <Widget>[
+                DetailsItem(
+                  title: "Board Game Companion's licenses",
+                  subtitle: "App's components licenses",
+                  onTap: () {
+                    showLicensePage(
+                      context: context,
+                      applicationName: AppText.appTitle,
+                      applicationIcon: Padding(
+                        padding: const EdgeInsets.all(
+                          Dimensions.doubleStandardSpacing,
+                        ),
+                        child: Image.asset(
+                          'assets/icons/logo_transparent.png',
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
-                      child: Image.asset(
-                        'assets/icons/logo_transparent.png',
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
-                      ),
+                      applicationVersion: (snapshot.data as PackageInfo).version,
+                    );
+                  },
+                ),
+                const Positioned.fill(
+                  right: Dimensions.standardSpacing,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.navigate_next,
+                      color: AppColors.accentColor,
                     ),
-                    applicationVersion: (snapshot.data as PackageInfo).version,
-                  );
-                },
-              ),
-              const Positioned.fill(
-                right: Dimensions.standardSpacing,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(
-                    Icons.navigate_next,
-                    color: AppColors.accentColor,
                   ),
                 ),
-              ),
-            ],
-          );
-        }
+              ],
+            );
+          }
 
-        return const LoadingIndicator();
-      },
+          return const LoadingIndicator();
+        },
+      ),
     );
   }
 }

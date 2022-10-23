@@ -47,7 +47,6 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
       onWillPop: () async => _handleOnWillPop(context),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
           automaticallyImplyLeading: false,
           centerTitle: true,
           title: const Text(AppText.editPlaythroughPageTitle),
@@ -62,7 +61,8 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 slivers: [
                   SliverPersistentHeader(
                     delegate: BgcSliverHeaderDelegate(
-                        title: AppText.editPlaythroughDateAndDurationHeaderTitle),
+                      title: AppText.editPlaythroughDateAndDurationHeaderTitle,
+                    ),
                   ),
                   _PlayDateTimeSection(viewModel: widget.viewModel),
                   SliverPersistentHeader(
