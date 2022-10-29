@@ -21,9 +21,13 @@ Welcome to the official **Board Games Companion** Github repository - an open so
 
 For more information about the application and its features please visit our [Wiki pages](https://github.com/Progrunning/BoardGamesCompanion/wiki).
 
+# Discussion
+
+If you have an idea about how the app could be improved, you ran into a problem or maybe you want to check what's currently in the works then join the  [Discord](https://discord.gg/t9dTVXxnvC) server to chat with the development team and other BGC users.
+
 # Contributing
 
-The mobile applications (iOS and Android) are written in [Dart language](https://dart.dev/) and using [Flutter cross-platform framework](https://flutter.dev/). This means that in order to contribute to the project one needs to have working Flutter environemnt on their machines.
+The iOS and Android mobile applications are written in [Dart language](https://dart.dev/), using a cross-platform framework [Flutter](https://flutter.dev/). In order to contribute to the project one needs to have working Flutter environemnt on their machines.
 
 ## Getting Started
 
