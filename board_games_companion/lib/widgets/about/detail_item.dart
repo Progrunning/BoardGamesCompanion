@@ -1,5 +1,7 @@
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -11,19 +13,19 @@ class DetailsItem extends StatelessWidget {
   const DetailsItem({
     required this.title,
     required this.subtitle,
-    this.iconUri,
+    this.assetIconUri,
     this.onTap,
     this.uri,
+    this.isSvg = false,
     Key? key,
   }) : super(key: key);
 
   final String title;
   final String subtitle;
-  final String? iconUri;
+  final String? assetIconUri;
   final VoidCallback? onTap;
   final String? uri;
-
-  static const double _size = 60;
+  final bool isSvg;
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +39,31 @@ class DetailsItem extends StatelessWidget {
             horizontal: Dimensions.standardSpacing,
           ),
           child: SizedBox(
-            height: (iconUri?.isNotEmpty ?? false) ? _size : null,
+            height: (assetIconUri.isNotNullOrBlank) ? Dimensions.detailsItemHeight : null,
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                if (iconUri?.isNotEmpty ?? false)
+                if (assetIconUri.isNotNullOrBlank)
                   ElevatedContainer(
                     elevation: AppStyles.defaultElevation,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-                      child: Image(
-                        height: _size,
-                        width: _size,
-                        image: AssetImage(iconUri!),
-                        fit: BoxFit.cover,
-                      ),
+                      child: isSvg
+                          ? SvgPicture.asset(
+                              assetIconUri!,
+                              height: Dimensions.detailsItemHeight,
+                              width: Dimensions.detailsItemHeight,
+                            )
+                          : Image(
+                              height: Dimensions.detailsItemHeight,
+                              width: Dimensions.detailsItemHeight,
+                              image: AssetImage(assetIconUri!),
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
-                if (iconUri?.isNotEmpty ?? false)
-                  const SizedBox(
-                    width: Dimensions.standardSpacing,
-                  ),
+                if (assetIconUri?.isNotEmpty ?? false)
+                  const SizedBox(width: Dimensions.standardSpacing),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -69,13 +75,8 @@ class DetailsItem extends StatelessWidget {
                           fontWeight: FontWeight.normal,
                         ),
                       ),
-                      const SizedBox(
-                        height: Dimensions.halfStandardSpacing,
-                      ),
-                      Text(
-                        subtitle,
-                        style: AppTheme.theme.textTheme.subtitle1,
-                      ),
+                      const SizedBox(height: Dimensions.halfStandardSpacing),
+                      Text(subtitle, style: AppTheme.theme.textTheme.subtitle1),
                     ],
                   ),
                 ),
@@ -92,10 +93,7 @@ class DetailsItem extends StatelessWidget {
             return;
           }
 
-          await LauncherHelper.launchUri(
-            context,
-            uri!,
-          );
+          await LauncherHelper.launchUri(context, uri!);
         },
       ),
     );

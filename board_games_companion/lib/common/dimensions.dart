@@ -55,6 +55,8 @@ class Dimensions {
 
   static const double bottomTabTopHeight = 20;
 
+  static const double detailsItemHeight = 60;
+
   static const EdgeInsets snackbarMargin = EdgeInsets.only(
     left: Dimensions.standardSpacing,
     right: Dimensions.standardSpacing,

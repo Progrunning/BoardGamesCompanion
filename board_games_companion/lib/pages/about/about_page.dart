@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:package_info/package_info.dart';
 
 import '../../common/app_colors.dart';
@@ -53,7 +54,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                           title: 'Mikolaj Kieres',
                           subtitle: Constants.feedbackEmailAddress,
                           uri: 'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
-                          iconUri: 'assets/mikolaj_profile_picture.jpg',
+                          assetIconUri: 'assets/mikolaj_profile_picture.jpg',
                         ),
                       ),
                       SliverPersistentHeader(
@@ -66,9 +67,15 @@ class AboutPageState extends BasePageState<AboutPage> {
                           title: 'Alicja Adamkiewicz',
                           subtitle: 'instagram.com/adamkiewicz_art',
                           uri: 'https://www.instagram.com/adamkiewicz_art',
-                          iconUri: 'assets/adamkiewiczart_logo.png',
+                          assetIconUri: 'assets/adamkiewiczart_logo.png',
                         ),
                       ),
+                      SliverPersistentHeader(
+                        delegate: BgcSliverHeaderDelegate(
+                          title: AppText.aboutPageCommunityTitle,
+                        ),
+                      ),
+                      const _CommunitySection(),
                       SliverPersistentHeader(
                         delegate: BgcSliverHeaderDelegate(
                           title: AppText.aboutPageContentAndDataSectionTitle,
@@ -88,119 +95,6 @@ class AboutPageState extends BasePageState<AboutPage> {
                       ),
                       const _LicensePageDetailsItem(),
                     ],
-                    // Column(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //   children: const <Widget>[
-                    //     SectionTitle(title: 'Author'),
-                    //     DetailsItem(
-                    //       title: 'Mikolaj Kieres',
-                    //       subtitle: Constants.feedbackEmailAddress,
-                    //       uri: 'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
-                    //       iconUri: 'assets/mikolaj_profile_picture.jpg',
-                    //     ),
-                    //     Divider(color: AppColors.accentColor),
-                    //     SectionTitle(title: 'Design & Art'),
-                    //     DetailsItem(
-                    //       title: 'Alicja Adamkiewicz',
-                    //       subtitle: 'instagram.com/adamkiewicz_art',
-                    //       uri: 'https://www.instagram.com/adamkiewicz_art',
-                    //       iconUri: 'assets/adamkiewiczart_logo.png',
-                    //     ),
-                    //     Divider(color: AppColors.accentColor),
-                    //     SectionTitle(title: 'Content & Data'),
-                    //     SectionText(
-                    //       text:
-                    //           "The board games data shown in the app is a courtesy of the publicly available BoardGameGeek's XML API.",
-                    //     ),
-                    //     SectionText(text: 'See below links for more details:'),
-                    //     DetailsItem(
-                    //         title: 'BGG',
-                    //         subtitle: 'boardgamegeek.com',
-                    //         uri: Constants.boardGameGeekBaseApiUrl),
-                    //     DetailsItem(
-                    //         title: 'XML API',
-                    //         subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
-                    //         uri: 'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
-                    //     DetailsItem(
-                    //         title: 'Terms of Service',
-                    //         subtitle: 'boardgamegeek.com/terms',
-                    //         uri: 'https://www.boardgamegeek.com/terms'),
-                    //     Divider(color: AppColors.accentColor),
-                    //     SectionTitle(title: 'Plugins & Libraries'),
-                    //     SectionText(
-                    //       text:
-                    //           'The below is a list of the plugins and libraries that helped in building this app:',
-                    //     ),
-                    //     DetailsItem(
-                    //         title: 'Lato Font',
-                    //         subtitle: 'Powered by Google Fonts',
-                    //         uri: 'https://pub.dev/packages/google_fonts'),
-                    //     DetailsItem(
-                    //         title: 'Logging',
-                    //         subtitle: 'Handles in app logs',
-                    //         uri: 'https://pub.dev/packages/logging'),
-                    //     DetailsItem(
-                    //         title: 'Dio Http Cache',
-                    //         subtitle: 'SQLite like cache of http responses',
-                    //         uri: 'https://pub.dev/packages/dio_http_cache'),
-                    //     DetailsItem(
-                    //         title: 'Dio Http2 Adapter',
-                    //         subtitle: 'Provides the ability to create custom http adapters',
-                    //         uri: 'https://pub.dev/packages/dio_http2_adapter'),
-                    //     DetailsItem(
-                    //         title: 'Cached Network Image',
-                    //         subtitle: 'Caching network images',
-                    //         uri: 'https://pub.dev/packages/cached_network_image'),
-                    //     DetailsItem(
-                    //         title: 'Firebase Crashlytics',
-                    //         subtitle: 'Captures app crash analytics',
-                    //         uri: 'https://pub.dev/packages/firebase_crashlytics'),
-                    //     DetailsItem(
-                    //         title: 'Hive',
-                    //         subtitle: 'NoSQL Database',
-                    //         uri: 'https://pub.dev/packages/hive'),
-                    //     DetailsItem(
-                    //         title: 'Path Provider',
-                    //         subtitle: 'Helps with filesystem paths',
-                    //         uri: 'https://pub.dev/packages/path_provider'),
-                    //     DetailsItem(
-                    //         title: 'Polygon Clipper',
-                    //         subtitle: 'Draws polygon shapes',
-                    //         uri: 'https://pub.dev/packages/polygon_clipper'),
-                    //     DetailsItem(
-                    //         title: 'Carousel Slider',
-                    //         subtitle: 'Helps with carousels',
-                    //         uri: 'https://pub.dev/packages/carousel_slider'),
-                    //     DetailsItem(
-                    //         title: 'Image Picker',
-                    //         subtitle: 'Picking images and taking photos with camera',
-                    //         uri: 'https://pub.dev/packages/image_picker'),
-                    //     DetailsItem(
-                    //         title: 'Image Picker',
-                    //         subtitle: 'Picking images and taking photos with camera',
-                    //         uri: 'https://pub.dev/packages/image_picker'),
-                    //     DetailsItem(
-                    //         title: 'XML',
-                    //         subtitle: 'Parsing XML API responses',
-                    //         uri: 'https://pub.dev/packages/xml'),
-                    //     DetailsItem(
-                    //         title: 'Provider',
-                    //         subtitle: 'DI & state management',
-                    //         uri: 'https://pub.dev/packages/provider'),
-                    //     DetailsItem(
-                    //         title: 'Animations',
-                    //         subtitle: 'Navigation animations',
-                    //         uri: 'https://pub.dev/packages/animations'),
-                    //     DetailsItem(
-                    //         title: 'Url Launcher',
-                    //         subtitle: "Launching Uri's",
-                    //         uri: 'https://pub.dev/packages/url_launcher'),
-                    //     Divider(color: AppColors.accentColor),
-                    //     SectionTitle(title: 'Licenses'),
-                    //     _LicensePageDetailsItem(),
-                    //   ],
-                    // ),
                   ),
                 ),
                 const _PrivacyPolicyFooter(),
@@ -208,6 +102,41 @@ class AboutPageState extends BasePageState<AboutPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CommunitySection extends StatelessWidget {
+  const _CommunitySection({
+    Key? key,
+  }) : super(key: key);
+
+  static const String discordInviteUrl = 'https://discord.gg/t9dTVXxnvC';
+  static const String discordLogoUri = 'assets/discord-logo-blue.svg';
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate.fixed(
+        [
+          const SectionText(text: AppText.aboutPageCommunitySubtitle),
+          const SectionText(text: AppText.aboutPageCommunityJoinDiscord),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => LauncherHelper.launchUri(context, discordInviteUrl),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                child: SvgPicture.asset(
+                  discordLogoUri,
+                  height: Dimensions.detailsItemHeight,
+                  alignment: Alignment.topLeft,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

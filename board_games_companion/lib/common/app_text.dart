@@ -19,6 +19,7 @@ class AppText {
   static const aboutPageAuthorSectionTitle = 'Author';
   static const aboutPageDesignAndArtSectionTitle = 'Design & Art';
   static const aboutPageContentAndDataSectionTitle = 'Content & Data';
+  static const aboutPageCommunityTitle = 'Community';
   static const aboutPagePluginsAndLibrariesSectionTitle = 'Plugins & Libraries';
   static const aboutPageLicensesSectionTitle = 'Licenses';
   static const aboutPageContentAndDataBggXmlApiTitle =
@@ -26,6 +27,10 @@ class AppText {
   static const aboutPageContentAndDataBggXmlApiSubtitle = 'See below links for more details:';
   static const aboutPagePluginsAndLibrariesSubtitle =
       'The below is a list of the plugins and libraries that helped in building this app:';
+  static const aboutPageCommunitySubtitle =
+      "If you need help with the app, have an idea for a new feature or you want to see what we are currently working on then then feel free to join BGC's discord server to chat about it with developers and other app users.";
+  static const aboutPageCommunityJoinDiscord =
+      "Tap on the below logo to join the BGC's Discord server.";
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
