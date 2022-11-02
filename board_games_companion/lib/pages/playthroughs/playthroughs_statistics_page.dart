@@ -18,6 +18,7 @@ import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
 import '../../models/player_statistics.dart';
 import '../../widgets/board_games/board_game_image.dart';
+import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -62,40 +63,47 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
               ),
             ),
             if (viewModel.futureLoadBoardGamesStatistics?.status == FutureStatus.fulfilled) ...[
+              SliverPersistentHeader(
+                delegate: BgcSliverHeaderDelegate(
+                  title: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
+                ),
+              ),
               _SliverSectionWrapper(
-                  child: _LastWinnerSection(boardGameStatistics: viewModel.boardGameStatistics)),
+                child: _LastWinnerSection(boardGameStatistics: viewModel.boardGameStatistics),
+              ),
+              SliverPersistentHeader(
+                delegate: BgcSliverHeaderDelegate(
+                  title: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
+                ),
+              ),
               _SliverSectionWrapper(
                 child: _OverallStatsSection(boardGameStatistics: viewModel.boardGameStatistics),
               ),
-              if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false)
-                _SliverSectionWrapper(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ItemPropertyTitle(
-                          AppText.playthroughsStatisticsPageTopFiveSectionTitle),
-                      const SizedBox(height: Dimensions.halfStandardSpacing),
-                      _TopScores(boardGameStatistics: viewModel.boardGameStatistics),
-                    ],
+              if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    title: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
                   ),
                 ),
+                _SliverSectionWrapper(
+                  child: _TopScores(boardGameStatistics: viewModel.boardGameStatistics),
+                ),
+              ],
               if ((viewModel.boardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
-                  (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false))
+                  (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false)) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    title: AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionTitle,
+                  ),
+                ),
                 _SliverSectionWrapper(
                   child: _PlayerCharts(boardGameStatistics: viewModel.boardGameStatistics),
                 ),
-              if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
-                        ItemPropertyTitle(
-                            AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
-                        SizedBox(height: Dimensions.halfStandardSpacing),
-                      ],
-                    ),
+              ],
+              if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    title: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
                   ),
                 ),
                 _PlayersStatisticsSection(boardGameStatistics: viewModel.boardGameStatistics),
@@ -124,7 +132,11 @@ class _PlayersStatisticsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      padding: const EdgeInsets.only(
+        top: Dimensions.standardSpacing,
+        left: Dimensions.standardSpacing,
+        right: Dimensions.standardSpacing,
+      ),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, index) {
@@ -223,8 +235,6 @@ class _LastWinnerSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const ItemPropertyTitle(AppText.playthroughsStatisticsPageLastWinnerSectionTitle),
-        const SizedBox(height: Dimensions.halfStandardSpacing),
         SingleChildScrollView(
           clipBehavior: Clip.none,
           scrollDirection: Axis.horizontal,
@@ -288,6 +298,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        // TODO MK Think how to improve UX for these chart headers
         Row(
           children: const <Widget>[
             ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayerCountPercentageSectionTitle),
@@ -512,8 +523,6 @@ class _OverallStatsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ItemPropertyTitle(AppText.playthroughsStatisticsPageOverallStatsSectionTitle),
-        const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
           children: <Widget>[
             Column(
@@ -667,7 +676,7 @@ class _SliverSectionWrapper extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.only(
         left: Dimensions.standardSpacing,
-        top: Dimensions.halfStandardSpacing,
+        top: Dimensions.standardSpacing,
         right: Dimensions.standardSpacing,
         bottom: Dimensions.doubleStandardSpacing,
       ),

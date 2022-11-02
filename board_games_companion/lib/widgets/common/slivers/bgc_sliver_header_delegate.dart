@@ -14,7 +14,7 @@ class BgcSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Material(
-      elevation: 4,
+      elevation: Dimensions.defaultElevation,
       child: Container(
         color: AppColors.primaryColor,
         padding: const EdgeInsets.all(Dimensions.standardSpacing),

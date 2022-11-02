@@ -33,7 +33,9 @@ class AppText {
       "Tap on the below logo to join the BGC's Discord server.";
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
-  static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
+  static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5 scores';
+  static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionTitle =
+      'Games played and won';
   static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle =
       'Games played by player count';
   static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle = 'Games won by a player';
