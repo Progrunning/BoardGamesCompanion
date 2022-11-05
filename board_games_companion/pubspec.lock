@@ -364,7 +364,7 @@ packages:
       name: fl_chart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.55.0"
+    version: "0.55.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -1098,7 +1098,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.5"
+    version: "6.1.6"
   url_launcher_android:
     dependency: transitive
     description:

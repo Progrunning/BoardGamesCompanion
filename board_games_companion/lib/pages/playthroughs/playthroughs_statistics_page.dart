@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/injectable.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
 import '../../models/player_statistics.dart';
 import '../../widgets/board_games/board_game_image.dart';
+import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -62,40 +64,50 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
               ),
             ),
             if (viewModel.futureLoadBoardGamesStatistics?.status == FutureStatus.fulfilled) ...[
+              SliverPersistentHeader(
+                delegate: BgcSliverHeaderDelegate(
+                  primaryTitle: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
+                ),
+              ),
               _SliverSectionWrapper(
-                  child: _LastWinnerSection(boardGameStatistics: viewModel.boardGameStatistics)),
+                child: _LastWinnerSection(boardGameStatistics: viewModel.boardGameStatistics),
+              ),
+              SliverPersistentHeader(
+                delegate: BgcSliverHeaderDelegate(
+                  primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
+                ),
+              ),
               _SliverSectionWrapper(
                 child: _OverallStatsSection(boardGameStatistics: viewModel.boardGameStatistics),
               ),
-              if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false)
-                _SliverSectionWrapper(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ItemPropertyTitle(
-                          AppText.playthroughsStatisticsPageTopFiveSectionTitle),
-                      const SizedBox(height: Dimensions.halfStandardSpacing),
-                      _TopScores(boardGameStatistics: viewModel.boardGameStatistics),
-                    ],
+              if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    primaryTitle: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
                   ),
                 ),
+                _SliverSectionWrapper(
+                  child: _TopScores(boardGameStatistics: viewModel.boardGameStatistics),
+                ),
+              ],
               if ((viewModel.boardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
-                  (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false))
+                  (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false)) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    primaryTitle: AppText
+                        .playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
+                    secondaryTitle: AppText
+                        .playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle,
+                  ),
+                ),
                 _SliverSectionWrapper(
                   child: _PlayerCharts(boardGameStatistics: viewModel.boardGameStatistics),
                 ),
-              if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...<Widget>[
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
-                        ItemPropertyTitle(
-                            AppText.playthroughsStatisticsPagePlayersStatsSectionTitle),
-                        SizedBox(height: Dimensions.halfStandardSpacing),
-                      ],
-                    ),
+              ],
+              if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...[
+                SliverPersistentHeader(
+                  delegate: BgcSliverHeaderDelegate(
+                    primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
                   ),
                 ),
                 _PlayersStatisticsSection(boardGameStatistics: viewModel.boardGameStatistics),
@@ -124,7 +136,11 @@ class _PlayersStatisticsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      padding: const EdgeInsets.only(
+        top: Dimensions.standardSpacing,
+        left: Dimensions.standardSpacing,
+        right: Dimensions.standardSpacing,
+      ),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, index) {
@@ -223,8 +239,6 @@ class _LastWinnerSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const ItemPropertyTitle(AppText.playthroughsStatisticsPageLastWinnerSectionTitle),
-        const SizedBox(height: Dimensions.halfStandardSpacing),
         SingleChildScrollView(
           clipBehavior: Clip.none,
           scrollDirection: Axis.horizontal,
@@ -273,28 +287,21 @@ class _PlayerChartsState extends State<_PlayerCharts> {
     playerCountChartColors = {};
     playerWinsChartColors = {};
     int i = 0;
-    for (final MapEntry<int, double> playeCountPercentage
-        in widget.boardGameStatistics.playerCountPercentage!.entries) {
-      playerCountChartColors[playeCountPercentage.key] =
+    for (final PlayerCountStatistics playeCountStatistics
+        in widget.boardGameStatistics.playerCountPercentage!) {
+      playerCountChartColors[playeCountStatistics.numberOfPlayers] =
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
     i = 0;
-    for (final MapEntry<Player, double> playerWinsPercentage
-        in widget.boardGameStatistics.playerWinsPercentage!.entries) {
-      playerWinsChartColors[playerWinsPercentage.key] =
+    for (final PlayerWinsStatistics playerWinsStatistics
+        in widget.boardGameStatistics.playerWinsPercentage!) {
+      playerWinsChartColors[playerWinsStatistics.player] =
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
-          children: const <Widget>[
-            ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayerCountPercentageSectionTitle),
-            Expanded(child: SizedBox.shrink()),
-            ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayerWinsPercentageSectionTitle),
-          ],
-        ),
         const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
           children: <Widget>[
@@ -304,12 +311,12 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               child: PieChart(
                 PieChartData(
                   sections: <PieChartSectionData>[
-                    for (final MapEntry<int, double> playeCountPercentage
-                        in widget.boardGameStatistics.playerCountPercentage!.entries)
+                    for (final PlayerCountStatistics playeCountStatistics
+                        in widget.boardGameStatistics.playerCountPercentage!)
                       PieChartSectionData(
-                        value: playeCountPercentage.value,
-                        title: '${(playeCountPercentage.value * 100).toStringAsFixed(0)}%',
-                        color: playerCountChartColors[playeCountPercentage.key],
+                        value: playeCountStatistics.gamesPlayedPercentage,
+                        title: '${playeCountStatistics.numberOfGamesPlayed}',
+                        color: playerCountChartColors[playeCountStatistics.numberOfPlayers],
                       ),
                   ],
                 ),
@@ -322,12 +329,12 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               child: PieChart(
                 PieChartData(
                   sections: <PieChartSectionData>[
-                    for (final MapEntry<Player, double> playeWinsPercentage
-                        in widget.boardGameStatistics.playerWinsPercentage!.entries)
+                    for (final PlayerWinsStatistics playeWinsStatistics
+                        in widget.boardGameStatistics.playerWinsPercentage!)
                       PieChartSectionData(
-                        value: playeWinsPercentage.value,
-                        title: '${(playeWinsPercentage.value * 100).toStringAsFixed(0)}%',
-                        color: playerWinsChartColors[playeWinsPercentage.key],
+                        value: playeWinsStatistics.winsPercentage,
+                        title: '${playeWinsStatistics.numberOfWins}',
+                        color: playerWinsChartColors[playeWinsStatistics.player],
                       ),
                   ],
                 ),
@@ -344,20 +351,35 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                for (final MapEntry<int, double> playeCountPercentage
-                    in widget.boardGameStatistics.playerCountPercentage!.entries)
+                for (final PlayerCountStatistics playeCountStatistics
+                    in widget.boardGameStatistics.playerCountPercentage!)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
                       children: <Widget>[
-                        _ChartLegendBox(color: playerCountChartColors[playeCountPercentage.key]!),
+                        _ChartLegendBox(
+                            color: playerCountChartColors[playeCountStatistics.numberOfPlayers]!),
                         const SizedBox(width: Dimensions.halfStandardSpacing),
-                        Text(
-                          sprintf(
-                            AppText.playthroughsStatisticsPagePlayerCountChartLegendFormat,
-                            [
-                              playeCountPercentage.key,
-                              if (playeCountPercentage.key > 1) 's' else ''
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: sprintf(
+                                  playeCountStatistics.numberOfPlayers > 1
+                                      ? AppText
+                                          .playthroughsStatisticsPagePlayerCountChartLegendFormatPlural
+                                      : AppText
+                                          .playthroughsStatisticsPagePlayerCountChartLegendFormatSingular,
+                                  [
+                                    playeCountStatistics.numberOfPlayers,
+                                  ],
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    ' [${(playeCountStatistics.gamesPlayedPercentage * 100).toStringAsFixed(0)}%]',
+                                style: AppTheme.theme.textTheme.subtitle1,
+                              ),
                             ],
                           ),
                         ),
@@ -372,15 +394,26 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                for (final MapEntry<Player, double> playerWinsPercentage
-                    in widget.boardGameStatistics.playerWinsPercentage!.entries)
+                for (final PlayerWinsStatistics playerWinsStatistics
+                    in widget.boardGameStatistics.playerWinsPercentage!)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
                       children: <Widget>[
-                        Text('${playerWinsPercentage.key.name}'),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(text: '${playerWinsStatistics.player.name} '),
+                              TextSpan(
+                                text:
+                                    '[${(playerWinsStatistics.winsPercentage * 100).toStringAsFixed(0)}%]',
+                                style: AppTheme.theme.textTheme.subtitle1,
+                              ),
+                            ],
+                          ),
+                        ),
                         const SizedBox(width: Dimensions.halfStandardSpacing),
-                        _ChartLegendBox(color: playerWinsChartColors[playerWinsPercentage.key]!),
+                        _ChartLegendBox(color: playerWinsChartColors[playerWinsStatistics.player]!),
                       ],
                     ),
                   ),
@@ -512,8 +545,6 @@ class _OverallStatsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ItemPropertyTitle(AppText.playthroughsStatisticsPageOverallStatsSectionTitle),
-        const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
           children: <Widget>[
             Column(
@@ -667,7 +698,7 @@ class _SliverSectionWrapper extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.only(
         left: Dimensions.standardSpacing,
-        top: Dimensions.halfStandardSpacing,
+        top: Dimensions.standardSpacing,
         right: Dimensions.standardSpacing,
         bottom: Dimensions.doubleStandardSpacing,
       ),

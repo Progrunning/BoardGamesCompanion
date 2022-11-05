@@ -19,6 +19,7 @@ class AppText {
   static const aboutPageAuthorSectionTitle = 'Author';
   static const aboutPageDesignAndArtSectionTitle = 'Design & Art';
   static const aboutPageContentAndDataSectionTitle = 'Content & Data';
+  static const aboutPageCommunityTitle = 'Community';
   static const aboutPagePluginsAndLibrariesSectionTitle = 'Plugins & Libraries';
   static const aboutPageLicensesSectionTitle = 'Licenses';
   static const aboutPageContentAndDataBggXmlApiTitle =
@@ -26,12 +27,16 @@ class AppText {
   static const aboutPageContentAndDataBggXmlApiSubtitle = 'See below links for more details:';
   static const aboutPagePluginsAndLibrariesSubtitle =
       'The below is a list of the plugins and libraries that helped in building this app:';
+  static const aboutPageCommunitySubtitle =
+      "If you need help with the app, have an idea for a new feature or you want to see what we are currently working on then then feel free to join BGC's discord server to chat about it with developers and other app users.";
+  static const aboutPageCommunityJoinDiscord =
+      "Tap on the below logo to join the BGC's Discord server.";
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
-  static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5';
-  static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle =
-      'Games played by player count';
-  static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle = 'Games won by a player';
+  static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5 scores';
+  static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle =
+      'Games played';
+  static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle = 'Games won';
   static const playthroughsStatisticsPageOverallStatsSectionTitle = 'Overall stats';
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
   static const playthroughsStatisticsPageOverallStatsTotalPlaytime = 'Total playtime';
@@ -45,7 +50,8 @@ class AppText {
       playthroughsStatisticsPageOverallStatsAvgScore;
   static const playthroughsStatisticsPagePlayersStatsPlayedGames =
       playthroughsStatisticsPageOverallStatsAvgPlayedGames;
-  static const playthroughsStatisticsPagePlayerCountChartLegendFormat = '%s player%s';
+  static const playthroughsStatisticsPagePlayerCountChartLegendFormatSingular = '%i player';
+  static const playthroughsStatisticsPagePlayerCountChartLegendFormatPlural = '%i players';
 
   static const playthroughsGameSettingsWinningConditionSectionTitle = 'Winning Condition';
   static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest score';
@@ -69,6 +75,7 @@ class AppText {
 
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 
+  static const playthroughsLogGamePageHeader = 'Log a game';
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
 
   static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';

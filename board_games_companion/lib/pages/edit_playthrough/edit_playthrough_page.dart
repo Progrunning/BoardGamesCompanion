@@ -61,14 +61,14 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 slivers: [
                   SliverPersistentHeader(
                     delegate: BgcSliverHeaderDelegate(
-                      title: AppText.editPlaythroughDateAndDurationHeaderTitle,
+                      primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
                     ),
                   ),
                   _PlayDateTimeSection(viewModel: widget.viewModel),
                   SliverPersistentHeader(
                     pinned: true,
-                    delegate:
-                        BgcSliverHeaderDelegate(title: AppText.editPlaythroughScoresHeaderTitle),
+                    delegate: BgcSliverHeaderDelegate(
+                        primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
                   ),
                   _ScoresSection(
                     viewModel: widget.viewModel,
@@ -78,8 +78,8 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                   if (widget.viewModel.hasNotes) ...[
                     SliverPersistentHeader(
                       pinned: true,
-                      delegate:
-                          BgcSliverHeaderDelegate(title: AppText.editPlaythroughNotesHeaderTitle),
+                      delegate: BgcSliverHeaderDelegate(
+                          primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
                     ),
                     _NotesSection(
                       notes: widget.viewModel.notes!,

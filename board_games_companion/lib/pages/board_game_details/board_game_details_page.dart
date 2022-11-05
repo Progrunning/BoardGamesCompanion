@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -307,6 +308,7 @@ class _Links extends StatelessWidget {
               await LauncherHelper.launchUri(
                 context,
                 _boardGameDetailsStore.boardGame.bggOverviewUrl,
+                launchMode: LaunchMode.externalApplication,
               );
             }),
         const SizedBox(
@@ -320,6 +322,7 @@ class _Links extends StatelessWidget {
             await LauncherHelper.launchUri(
               context,
               _boardGameDetailsStore.boardGame.bggHotVideosUrl,
+              launchMode: LaunchMode.externalApplication,
             );
           },
         ),
@@ -334,6 +337,7 @@ class _Links extends StatelessWidget {
             await LauncherHelper.launchUri(
               context,
               _boardGameDetailsStore.boardGame.bggHotForumUrl,
+              launchMode: LaunchMode.externalApplication,
             );
           },
         ),

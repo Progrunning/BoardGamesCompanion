@@ -191,14 +191,21 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     List<Playthrough> finishedPlaythroughs,
     BoardGameStatistics boardGameStatistics,
   ) {
-    boardGameStatistics.playerCountPercentage = groupBy(
-            finishedPlaythroughs
-                .map((Playthrough playthrough) => playthrough.playerIds.length)
-                .toList()
-              ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
-                  numberOfPlayers.compareTo(otherNumberOfPlayers)),
-            (int numberOfPlayers) => numberOfPlayers)
-        .map((key, value) => MapEntry(key, value.length / finishedPlaythroughs.length));
+    boardGameStatistics.playerCountPercentage = [];
+    final numberOfPlayersInPlaythroughs = finishedPlaythroughs
+        .map((Playthrough playthrough) => playthrough.playerIds.length)
+        .toList()
+      ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
+          numberOfPlayers.compareTo(otherNumberOfPlayers));
+    groupBy(numberOfPlayersInPlaythroughs, (int numberOfPlayers) => numberOfPlayers).forEach(
+      (numberOfPlayers, playthroughs) => boardGameStatistics.playerCountPercentage!.add(
+        PlayerCountStatistics(
+          numberOfPlayers: numberOfPlayers,
+          numberOfGamesPlayed: playthroughs.length,
+          gamesPlayedPercentage: playthroughs.length / finishedPlaythroughs.length,
+        ),
+      ),
+    );
   }
 
   void _updatePlayerWinsPercentage(
@@ -228,10 +235,13 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       }
     }
 
-    boardGameStatistics.playerWinsPercentage = {};
+    boardGameStatistics.playerWinsPercentage = [];
     for (final MapEntry<Player, int> playerWin in playerWins.entries) {
-      boardGameStatistics.playerWinsPercentage![playerWin.key] =
-          playerWin.value / finishedPlaythroughs.length;
+      boardGameStatistics.playerWinsPercentage!.add(PlayerWinsStatistics(
+        player: playerWin.key,
+        numberOfWins: playerWin.value,
+        winsPercentage: playerWin.value / finishedPlaythroughs.length,
+      ));
     }
   }
 }

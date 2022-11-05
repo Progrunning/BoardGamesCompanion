@@ -1,14 +1,15 @@
+import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
-import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/loading_overlay.dart';
@@ -62,6 +63,10 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       appBar: AppBar(
         title: Text(widget.viewModel.boardGame.name, style: AppTheme.titleTextStyle),
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.music_note, color: AppColors.accentColor),
+            onPressed: () async => _openGamesMusicPlaylist(context),
+          ),
           Observer(
             builder: (_) {
               if (!widget.viewModel.hasUser) {
@@ -70,14 +75,13 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
               return IconButton(
                 icon: const Icon(Icons.download, color: AppColors.accentColor),
-                onPressed: () =>
-                    _importBggPlays(widget.viewModel.userName!, widget.viewModel.boardGame.id),
+                onPressed: () => _importBggPlays(),
               );
             },
           ),
           IconButton(
             icon: const Icon(Icons.info, color: AppColors.accentColor),
-            onPressed: () async => _navigateToBoardGameDetails(context, widget.viewModel.boardGame),
+            onPressed: () => _navigateToBoardGameDetails(context),
           ),
         ],
       ),
@@ -133,25 +137,32 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     return scaffold;
   }
 
-  Future<void> _navigateToBoardGameDetails(
-      BuildContext context, BoardGameDetails boardGameDetails) async {
+  Future<void> _navigateToBoardGameDetails(BuildContext context) async {
     await Navigator.pushNamed(
       context,
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
-        boardGameDetails.id,
-        boardGameDetails.name,
+        widget.viewModel.boardGame.id,
+        widget.viewModel.boardGame.name,
         PlaythroughsPage,
       ),
     );
   }
 
-  Future<void> _importBggPlays(String username, String boardGameId) async {
+  Future<void> _openGamesMusicPlaylist(BuildContext context) async {
+    await LauncherHelper.launchUri(
+      context,
+      widget.viewModel.gamePlaylistUrl,
+      launchMode: LaunchMode.externalApplication,
+    );
+  }
+
+  Future<void> _importBggPlays() async {
     try {
       setState(() {
         _showImportGamesLoadingIndicator = true;
       });
-      await widget.viewModel.importPlays(username, boardGameId);
+      await widget.viewModel.importPlays(widget.viewModel.userName!, widget.viewModel.boardGame.id);
       if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
         if (!mounted) {
           return;
@@ -159,8 +170,8 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
         await _showImportPlaysReportDialog(
           context,
-          username,
-          boardGameId,
+          widget.viewModel.userName!,
+          widget.viewModel.boardGame.id,
           widget.viewModel.bggPlaysImportRaport!,
         );
       } else {

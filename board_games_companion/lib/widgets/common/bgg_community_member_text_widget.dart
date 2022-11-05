@@ -24,10 +24,7 @@ class BggCommunityMemberText extends StatelessWidget {
             style: const TextStyle(decoration: TextDecoration.underline),
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
-                await LauncherHelper.launchUri(
-                  context,
-                  Constants.boardGameGeekBaseApiUrl,
-                );
+                await LauncherHelper.launchUri(context, Constants.boardGameGeekBaseApiUrl);
               },
           ),
           const TextSpan(text: ' community, then you can enter your '),
