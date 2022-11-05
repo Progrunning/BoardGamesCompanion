@@ -3,7 +3,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class LauncherHelper {
-  static Future<void> launchUri(BuildContext context, String uri) async {
+  static Future<void> launchUri(
+    BuildContext context,
+    String uri, {
+    LaunchMode launchMode = LaunchMode.platformDefault,
+  }) async {
     if (context == null || uri.isEmpty) {
       return;
     }
@@ -14,7 +18,7 @@ class LauncherHelper {
     }
 
     if (await canLaunchUrl(parsedUri)) {
-      await launchUrl(parsedUri);
+      await launchUrl(parsedUri, mode: launchMode);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

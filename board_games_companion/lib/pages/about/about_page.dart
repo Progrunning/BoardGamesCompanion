@@ -267,9 +267,19 @@ class _PluginsAndLibrariesSection extends StatelessWidget {
             uri: 'https://pub.dev/packages/flutter_svg',
           ),
           DetailsItem(
+            title: 'Font Awesome',
+            subtitle: 'Icons pack',
+            uri: 'https://pub.dev/packages/font_awesome_flutter',
+          ),
+          DetailsItem(
             title: 'Freezed',
             subtitle: 'Data models code generator',
             uri: 'https://pub.dev/packages/freezed',
+          ),
+          DetailsItem(
+            title: 'Google Fonts - Lato Font',
+            subtitle: 'Font used across the entire app',
+            uri: 'https://pub.dev/packages/google_fonts',
           ),
           DetailsItem(
             title: 'Get it',
@@ -280,6 +290,11 @@ class _PluginsAndLibrariesSection extends StatelessWidget {
             title: 'Hive',
             subtitle: 'NoSQL Database',
             uri: 'https://pub.dev/packages/hive',
+          ),
+          DetailsItem(
+            title: 'Html Unespace',
+            subtitle: 'Helps unescaping HTML-encoded strings',
+            uri: 'https://pub.dev/packages/html_unescape',
           ),
           DetailsItem(
             title: 'Path Provider',
@@ -300,16 +315,6 @@ class _PluginsAndLibrariesSection extends StatelessWidget {
             title: 'Url Launcher',
             subtitle: "Launching Uri's",
             uri: 'https://pub.dev/packages/url_launcher',
-          ),
-          DetailsItem(
-            title: 'Lato Font',
-            subtitle: 'Font used across the entire app',
-            uri: 'https://pub.dev/packages/google_fonts',
-          ),
-          DetailsItem(
-            title: 'Font Awesome',
-            subtitle: 'Icons pack',
-            uri: 'https://pub.dev/packages/font_awesome_flutter',
           ),
         ],
       ),

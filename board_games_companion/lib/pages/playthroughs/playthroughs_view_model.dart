@@ -35,6 +35,9 @@ abstract class _PlaythroughsViewModel with Store {
     this._userStore,
   );
 
+  static const baseMelodiceUrl = 'https://melodice.org';
+  static const melodicePlaylistUrl = '$baseMelodiceUrl/playlist';
+
   final PlayersStore _playersStore;
   final PlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
@@ -54,6 +57,9 @@ abstract class _PlaythroughsViewModel with Store {
 
   @computed
   String? get userName => _userStore.userName;
+
+  @computed
+  String get gamePlaylistUrl => '$melodicePlaylistUrl/${boardGame.id}';
 
   @action
   void setBoardGame(BoardGameDetails boardGame) {
