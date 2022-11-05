@@ -172,3 +172,170 @@ abstract class _PlayerWinsStatistics implements PlayerWinsStatistics {
   _$$_PlayerWinsStatisticsCopyWith<_$_PlayerWinsStatistics> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$PlayerCountStatistics {
+  int get numberOfPlayers => throw _privateConstructorUsedError;
+  int get numberOfGamesPlayed => throw _privateConstructorUsedError;
+  double get gamesPlayedPercentage => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $PlayerCountStatisticsCopyWith<PlayerCountStatistics> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PlayerCountStatisticsCopyWith<$Res> {
+  factory $PlayerCountStatisticsCopyWith(PlayerCountStatistics value,
+          $Res Function(PlayerCountStatistics) then) =
+      _$PlayerCountStatisticsCopyWithImpl<$Res>;
+  $Res call(
+      {int numberOfPlayers,
+      int numberOfGamesPlayed,
+      double gamesPlayedPercentage});
+}
+
+/// @nodoc
+class _$PlayerCountStatisticsCopyWithImpl<$Res>
+    implements $PlayerCountStatisticsCopyWith<$Res> {
+  _$PlayerCountStatisticsCopyWithImpl(this._value, this._then);
+
+  final PlayerCountStatistics _value;
+  // ignore: unused_field
+  final $Res Function(PlayerCountStatistics) _then;
+
+  @override
+  $Res call({
+    Object? numberOfPlayers = freezed,
+    Object? numberOfGamesPlayed = freezed,
+    Object? gamesPlayedPercentage = freezed,
+  }) {
+    return _then(_value.copyWith(
+      numberOfPlayers: numberOfPlayers == freezed
+          ? _value.numberOfPlayers
+          : numberOfPlayers // ignore: cast_nullable_to_non_nullable
+              as int,
+      numberOfGamesPlayed: numberOfGamesPlayed == freezed
+          ? _value.numberOfGamesPlayed
+          : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int,
+      gamesPlayedPercentage: gamesPlayedPercentage == freezed
+          ? _value.gamesPlayedPercentage
+          : gamesPlayedPercentage // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_PlayerCountStatisticsCopyWith<$Res>
+    implements $PlayerCountStatisticsCopyWith<$Res> {
+  factory _$$_PlayerCountStatisticsCopyWith(_$_PlayerCountStatistics value,
+          $Res Function(_$_PlayerCountStatistics) then) =
+      __$$_PlayerCountStatisticsCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {int numberOfPlayers,
+      int numberOfGamesPlayed,
+      double gamesPlayedPercentage});
+}
+
+/// @nodoc
+class __$$_PlayerCountStatisticsCopyWithImpl<$Res>
+    extends _$PlayerCountStatisticsCopyWithImpl<$Res>
+    implements _$$_PlayerCountStatisticsCopyWith<$Res> {
+  __$$_PlayerCountStatisticsCopyWithImpl(_$_PlayerCountStatistics _value,
+      $Res Function(_$_PlayerCountStatistics) _then)
+      : super(_value, (v) => _then(v as _$_PlayerCountStatistics));
+
+  @override
+  _$_PlayerCountStatistics get _value =>
+      super._value as _$_PlayerCountStatistics;
+
+  @override
+  $Res call({
+    Object? numberOfPlayers = freezed,
+    Object? numberOfGamesPlayed = freezed,
+    Object? gamesPlayedPercentage = freezed,
+  }) {
+    return _then(_$_PlayerCountStatistics(
+      numberOfPlayers: numberOfPlayers == freezed
+          ? _value.numberOfPlayers
+          : numberOfPlayers // ignore: cast_nullable_to_non_nullable
+              as int,
+      numberOfGamesPlayed: numberOfGamesPlayed == freezed
+          ? _value.numberOfGamesPlayed
+          : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int,
+      gamesPlayedPercentage: gamesPlayedPercentage == freezed
+          ? _value.gamesPlayedPercentage
+          : gamesPlayedPercentage // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_PlayerCountStatistics implements _PlayerCountStatistics {
+  const _$_PlayerCountStatistics(
+      {required this.numberOfPlayers,
+      required this.numberOfGamesPlayed,
+      required this.gamesPlayedPercentage});
+
+  @override
+  final int numberOfPlayers;
+  @override
+  final int numberOfGamesPlayed;
+  @override
+  final double gamesPlayedPercentage;
+
+  @override
+  String toString() {
+    return 'PlayerCountStatistics(numberOfPlayers: $numberOfPlayers, numberOfGamesPlayed: $numberOfGamesPlayed, gamesPlayedPercentage: $gamesPlayedPercentage)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_PlayerCountStatistics &&
+            const DeepCollectionEquality()
+                .equals(other.numberOfPlayers, numberOfPlayers) &&
+            const DeepCollectionEquality()
+                .equals(other.numberOfGamesPlayed, numberOfGamesPlayed) &&
+            const DeepCollectionEquality()
+                .equals(other.gamesPlayedPercentage, gamesPlayedPercentage));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(numberOfPlayers),
+      const DeepCollectionEquality().hash(numberOfGamesPlayed),
+      const DeepCollectionEquality().hash(gamesPlayedPercentage));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_PlayerCountStatisticsCopyWith<_$_PlayerCountStatistics> get copyWith =>
+      __$$_PlayerCountStatisticsCopyWithImpl<_$_PlayerCountStatistics>(
+          this, _$identity);
+}
+
+abstract class _PlayerCountStatistics implements PlayerCountStatistics {
+  const factory _PlayerCountStatistics(
+      {required final int numberOfPlayers,
+      required final int numberOfGamesPlayed,
+      required final double gamesPlayedPercentage}) = _$_PlayerCountStatistics;
+
+  @override
+  int get numberOfPlayers;
+  @override
+  int get numberOfGamesPlayed;
+  @override
+  double get gamesPlayedPercentage;
+  @override
+  @JsonKey(ignore: true)
+  _$$_PlayerCountStatisticsCopyWith<_$_PlayerCountStatistics> get copyWith =>
+      throw _privateConstructorUsedError;
+}

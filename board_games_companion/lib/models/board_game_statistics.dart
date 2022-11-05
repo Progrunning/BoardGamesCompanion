@@ -34,7 +34,7 @@ class BoardGameStatistics {
 
   List<PlayerStatistics>? playersStatistics;
 
-  Map<int, double>? playerCountPercentage;
+  List<PlayerCountStatistics>? playerCountPercentage;
 
   List<PlayerWinsStatistics>? playerWinsPercentage;
 
@@ -48,4 +48,13 @@ abstract class PlayerWinsStatistics with _$PlayerWinsStatistics {
     required int numberOfWins,
     required double winsPercentage,
   }) = _PlayerWinsStatistics;
+}
+
+@freezed
+abstract class PlayerCountStatistics with _$PlayerCountStatistics {
+  const factory PlayerCountStatistics({
+    required int numberOfPlayers,
+    required int numberOfGamesPlayed,
+    required double gamesPlayedPercentage,
+  }) = _PlayerCountStatistics;
 }

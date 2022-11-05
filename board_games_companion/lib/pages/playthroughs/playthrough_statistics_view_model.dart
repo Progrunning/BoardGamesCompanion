@@ -191,14 +191,21 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     List<Playthrough> finishedPlaythroughs,
     BoardGameStatistics boardGameStatistics,
   ) {
-    boardGameStatistics.playerCountPercentage = groupBy(
-            finishedPlaythroughs
-                .map((Playthrough playthrough) => playthrough.playerIds.length)
-                .toList()
-              ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
-                  numberOfPlayers.compareTo(otherNumberOfPlayers)),
-            (int numberOfPlayers) => numberOfPlayers)
-        .map((key, value) => MapEntry(key, value.length / finishedPlaythroughs.length));
+    boardGameStatistics.playerCountPercentage = [];
+    final numberOfPlayersInPlaythroughs = finishedPlaythroughs
+        .map((Playthrough playthrough) => playthrough.playerIds.length)
+        .toList()
+      ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
+          numberOfPlayers.compareTo(otherNumberOfPlayers));
+    groupBy(numberOfPlayersInPlaythroughs, (int numberOfPlayers) => numberOfPlayers).forEach(
+      (numberOfPlayers, playthroughs) => boardGameStatistics.playerCountPercentage!.add(
+        PlayerCountStatistics(
+          numberOfPlayers: numberOfPlayers,
+          numberOfGamesPlayed: playthroughs.length,
+          gamesPlayedPercentage: playthroughs.length / finishedPlaythroughs.length,
+        ),
+      ),
+    );
   }
 
   void _updatePlayerWinsPercentage(

@@ -50,7 +50,8 @@ class AppText {
       playthroughsStatisticsPageOverallStatsAvgScore;
   static const playthroughsStatisticsPagePlayersStatsPlayedGames =
       playthroughsStatisticsPageOverallStatsAvgPlayedGames;
-  static const playthroughsStatisticsPagePlayerCountChartLegendFormat = '%s player%s';
+  static const playthroughsStatisticsPagePlayerCountChartLegendFormatSingular = '%i player';
+  static const playthroughsStatisticsPagePlayerCountChartLegendFormatPlural = '%i players';
 
   static const playthroughsGameSettingsWinningConditionSectionTitle = 'Winning Condition';
   static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest score';

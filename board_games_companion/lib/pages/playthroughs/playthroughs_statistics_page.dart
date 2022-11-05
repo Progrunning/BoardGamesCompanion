@@ -287,9 +287,9 @@ class _PlayerChartsState extends State<_PlayerCharts> {
     playerCountChartColors = {};
     playerWinsChartColors = {};
     int i = 0;
-    for (final MapEntry<int, double> playeCountPercentage
-        in widget.boardGameStatistics.playerCountPercentage!.entries) {
-      playerCountChartColors[playeCountPercentage.key] =
+    for (final PlayerCountStatistics playeCountStatistics
+        in widget.boardGameStatistics.playerCountPercentage!) {
+      playerCountChartColors[playeCountStatistics.numberOfPlayers] =
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
     i = 0;
@@ -311,12 +311,12 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               child: PieChart(
                 PieChartData(
                   sections: <PieChartSectionData>[
-                    for (final MapEntry<int, double> playeCountPercentage
-                        in widget.boardGameStatistics.playerCountPercentage!.entries)
+                    for (final PlayerCountStatistics playeCountStatistics
+                        in widget.boardGameStatistics.playerCountPercentage!)
                       PieChartSectionData(
-                        value: playeCountPercentage.value,
-                        title: '${(playeCountPercentage.value * 100).toStringAsFixed(0)}%',
-                        color: playerCountChartColors[playeCountPercentage.key],
+                        value: playeCountStatistics.gamesPlayedPercentage,
+                        title: '${playeCountStatistics.numberOfGamesPlayed}',
+                        color: playerCountChartColors[playeCountStatistics.numberOfPlayers],
                       ),
                   ],
                 ),
@@ -351,20 +351,35 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                for (final MapEntry<int, double> playeCountPercentage
-                    in widget.boardGameStatistics.playerCountPercentage!.entries)
+                for (final PlayerCountStatistics playeCountStatistics
+                    in widget.boardGameStatistics.playerCountPercentage!)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
                       children: <Widget>[
-                        _ChartLegendBox(color: playerCountChartColors[playeCountPercentage.key]!),
+                        _ChartLegendBox(
+                            color: playerCountChartColors[playeCountStatistics.numberOfPlayers]!),
                         const SizedBox(width: Dimensions.halfStandardSpacing),
-                        Text(
-                          sprintf(
-                            AppText.playthroughsStatisticsPagePlayerCountChartLegendFormat,
-                            [
-                              playeCountPercentage.key,
-                              if (playeCountPercentage.key > 1) 's' else ''
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: sprintf(
+                                  playeCountStatistics.numberOfPlayers > 1
+                                      ? AppText
+                                          .playthroughsStatisticsPagePlayerCountChartLegendFormatPlural
+                                      : AppText
+                                          .playthroughsStatisticsPagePlayerCountChartLegendFormatSingular,
+                                  [
+                                    playeCountStatistics.numberOfPlayers,
+                                  ],
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    ' [${(playeCountStatistics.gamesPlayedPercentage * 100).toStringAsFixed(0)}%]',
+                                style: AppTheme.theme.textTheme.subtitle1,
+                              ),
                             ],
                           ),
                         ),
