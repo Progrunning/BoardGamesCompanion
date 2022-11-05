@@ -47,7 +47,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                     slivers: [
                       SliverPersistentHeader(
                         delegate: BgcSliverHeaderDelegate(
-                          title: AppText.aboutPageAuthorSectionTitle,
+                          primaryTitle: AppText.aboutPageAuthorSectionTitle,
                         ),
                       ),
                       const SliverToBoxAdapter(
@@ -60,7 +60,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                       ),
                       SliverPersistentHeader(
                         delegate: BgcSliverHeaderDelegate(
-                          title: AppText.aboutPageDesignAndArtSectionTitle,
+                          primaryTitle: AppText.aboutPageDesignAndArtSectionTitle,
                         ),
                       ),
                       const SliverToBoxAdapter(
@@ -73,25 +73,25 @@ class AboutPageState extends BasePageState<AboutPage> {
                       ),
                       SliverPersistentHeader(
                         delegate: BgcSliverHeaderDelegate(
-                          title: AppText.aboutPageCommunityTitle,
+                          primaryTitle: AppText.aboutPageCommunityTitle,
                         ),
                       ),
                       const _CommunitySection(),
                       SliverPersistentHeader(
                         delegate: BgcSliverHeaderDelegate(
-                          title: AppText.aboutPageContentAndDataSectionTitle,
+                          primaryTitle: AppText.aboutPageContentAndDataSectionTitle,
                         ),
                       ),
                       const _ContentAndDataSection(),
                       SliverPersistentHeader(
                         delegate: BgcSliverHeaderDelegate(
-                          title: AppText.aboutPagePluginsAndLibrariesSectionTitle,
+                          primaryTitle: AppText.aboutPagePluginsAndLibrariesSectionTitle,
                         ),
                       ),
                       const _PluginsAndLibrariesSection(),
                       SliverPersistentHeader(
                         delegate: BgcSliverHeaderDelegate(
-                          title: AppText.aboutPageLicensesSectionTitle,
+                          primaryTitle: AppText.aboutPageLicensesSectionTitle,
                         ),
                       ),
                       const _LicensePageDetailsItem(),

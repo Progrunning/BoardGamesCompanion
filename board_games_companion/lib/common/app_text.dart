@@ -34,11 +34,9 @@ class AppText {
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5 scores';
-  static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionTitle =
-      'Games played and won';
-  static const playthroughsStatisticsPagePlayerCountPercentageSectionTitle =
-      'Games played by player count';
-  static const playthroughsStatisticsPagePlayerWinsPercentageSectionTitle = 'Games won by a player';
+  static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle =
+      'Games played';
+  static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle = 'Games won';
   static const playthroughsStatisticsPageOverallStatsSectionTitle = 'Overall stats';
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
   static const playthroughsStatisticsPageOverallStatsTotalPlaytime = 'Total playtime';
@@ -76,6 +74,7 @@ class AppText {
 
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 
+  static const playthroughsLogGamePageHeader = 'Log a game';
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
 
   static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';

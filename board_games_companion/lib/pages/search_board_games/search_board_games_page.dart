@@ -66,7 +66,8 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
           ),
           SliverPersistentHeader(
             pinned: true,
-            delegate: BgcSliverHeaderDelegate(title: AppText.hotBoardGamesSliverSectionTitle),
+            delegate:
+                BgcSliverHeaderDelegate(primaryTitle: AppText.hotBoardGamesSliverSectionTitle),
           ),
           _HotBoardGames(
             viewModel: widget.viewModel,

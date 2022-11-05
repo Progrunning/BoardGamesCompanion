@@ -65,7 +65,7 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
             if (viewModel.futureLoadBoardGamesStatistics?.status == FutureStatus.fulfilled) ...[
               SliverPersistentHeader(
                 delegate: BgcSliverHeaderDelegate(
-                  title: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
+                  primaryTitle: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
                 ),
               ),
               _SliverSectionWrapper(
@@ -73,7 +73,7 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
               ),
               SliverPersistentHeader(
                 delegate: BgcSliverHeaderDelegate(
-                  title: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
+                  primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
                 ),
               ),
               _SliverSectionWrapper(
@@ -82,7 +82,7 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
               if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
                 SliverPersistentHeader(
                   delegate: BgcSliverHeaderDelegate(
-                    title: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
+                    primaryTitle: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
                   ),
                 ),
                 _SliverSectionWrapper(
@@ -93,7 +93,10 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                   (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false)) ...[
                 SliverPersistentHeader(
                   delegate: BgcSliverHeaderDelegate(
-                    title: AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionTitle,
+                    primaryTitle: AppText
+                        .playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
+                    secondaryTitle: AppText
+                        .playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle,
                   ),
                 ),
                 _SliverSectionWrapper(
@@ -103,7 +106,7 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
               if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...[
                 SliverPersistentHeader(
                   delegate: BgcSliverHeaderDelegate(
-                    title: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
+                    primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
                   ),
                 ),
                 _PlayersStatisticsSection(boardGameStatistics: viewModel.boardGameStatistics),
@@ -298,14 +301,6 @@ class _PlayerChartsState extends State<_PlayerCharts> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // TODO MK Think how to improve UX for these chart headers
-        Row(
-          children: const <Widget>[
-            ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayerCountPercentageSectionTitle),
-            Expanded(child: SizedBox.shrink()),
-            ItemPropertyTitle(AppText.playthroughsStatisticsPagePlayerWinsPercentageSectionTitle),
-          ],
-        ),
         const SizedBox(height: Dimensions.halfStandardSpacing),
         Row(
           children: <Widget>[

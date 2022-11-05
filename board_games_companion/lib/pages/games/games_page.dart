@@ -188,7 +188,7 @@ class _Collection extends StatelessWidget {
           if (hasMainGames) ...[
             SliverPersistentHeader(
               delegate: BgcSliverHeaderDelegate(
-                title: sprintf(
+                primaryTitle: sprintf(
                   AppText.gamesPageMainGamesSliverSectionTitleFormat,
                   [totalMainGames],
                 ),
@@ -200,7 +200,7 @@ class _Collection extends StatelessWidget {
             for (var expansionsMapEntry in expansionsMap.entries) ...[
               SliverPersistentHeader(
                 delegate: BgcSliverHeaderDelegate(
-                  title: sprintf(
+                  primaryTitle: sprintf(
                     AppText.gamesPageExpansionsSliverSectionTitleFormat,
                     [expansionsMapEntry.key.item2, expansionsMapEntry.value.length],
                   ),

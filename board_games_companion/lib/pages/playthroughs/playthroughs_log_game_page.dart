@@ -21,6 +21,7 @@ import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
+import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -88,14 +89,14 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Text('Log a game', style: AppTheme.theme.textTheme.headline2),
+    return CustomScrollView(
+      slivers: [
+        SliverPersistentHeader(
+          delegate: BgcSliverHeaderDelegate(
+            primaryTitle: AppText.playthroughsLogGamePageHeader,
+          ),
         ),
-        Expanded(
+        SliverFillRemaining(
           child: Theme(
             data: AppTheme.theme.copyWith(
               colorScheme: AppTheme.theme.colorScheme.copyWith(primary: AppColors.accentColor),

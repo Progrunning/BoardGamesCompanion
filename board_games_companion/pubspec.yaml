@@ -33,7 +33,7 @@ dependencies:
   firebase_core: ^1.7.0
   firebase_crashlytics: ^2.2.2
   firebase_analytics: ^8.3.3
-  fl_chart: ^0.55.0  
+  fl_chart: ^0.55.2  
   flutter_mobx: ^2.0.6+1
   flutter_polygon: ^0.2.0
   flutter_slidable: ^2.0.0

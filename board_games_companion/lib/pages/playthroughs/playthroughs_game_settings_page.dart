@@ -30,7 +30,7 @@ class _PlaythroughsGameSettingsPageState extends State<PlaythroughsGameSettingsP
         slivers: [
           SliverPersistentHeader(
             delegate: BgcSliverHeaderDelegate(
-              title: AppText.playthroughsGameSettingsWinningConditionSectionTitle,
+              primaryTitle: AppText.playthroughsGameSettingsWinningConditionSectionTitle,
             ),
           ),
           _WinningConditionSection(
