@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -125,7 +126,11 @@ class _CommunitySection extends StatelessWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () => LauncherHelper.launchUri(context, discordInviteUrl),
+              onTap: () => LauncherHelper.launchUri(
+                context,
+                discordInviteUrl,
+                launchMode: LaunchMode.externalApplication,
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                 child: SvgPicture.asset(
