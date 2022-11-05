@@ -228,10 +228,13 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       }
     }
 
-    boardGameStatistics.playerWinsPercentage = {};
+    boardGameStatistics.playerWinsPercentage = [];
     for (final MapEntry<Player, int> playerWin in playerWins.entries) {
-      boardGameStatistics.playerWinsPercentage![playerWin.key] =
-          playerWin.value / finishedPlaythroughs.length;
+      boardGameStatistics.playerWinsPercentage!.add(PlayerWinsStatistics(
+        player: playerWin.key,
+        numberOfWins: playerWin.value,
+        winsPercentage: playerWin.value / finishedPlaythroughs.length,
+      ));
     }
   }
 }

@@ -1,8 +1,11 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tuple/tuple.dart';
 
 import 'hive/player.dart';
 import 'player_score.dart';
 import 'player_statistics.dart';
+
+part 'board_game_statistics.freezed.dart';
 
 class BoardGameStatistics {
   DateTime? lastPlayed;
@@ -33,7 +36,16 @@ class BoardGameStatistics {
 
   Map<int, double>? playerCountPercentage;
 
-  Map<Player, double>? playerWinsPercentage;
+  List<PlayerWinsStatistics>? playerWinsPercentage;
 
   Map<Player, int>? playerWins;
+}
+
+@freezed
+abstract class PlayerWinsStatistics with _$PlayerWinsStatistics {
+  const factory PlayerWinsStatistics({
+    required Player player,
+    required int numberOfWins,
+    required double winsPercentage,
+  }) = _PlayerWinsStatistics;
 }

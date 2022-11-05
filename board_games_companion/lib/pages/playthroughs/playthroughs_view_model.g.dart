@@ -29,6 +29,13 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
       (_$userNameComputed ??= Computed<String?>(() => super.userName,
               name: '_PlaythroughsViewModel.userName'))
           .value;
+  Computed<String>? _$gamePlaylistUrlComputed;
+
+  @override
+  String get gamePlaylistUrl => (_$gamePlaylistUrlComputed ??= Computed<String>(
+          () => super.gamePlaylistUrl,
+          name: '_PlaythroughsViewModel.gamePlaylistUrl'))
+      .value;
 
   late final _$_PlaythroughsViewModelActionController =
       ActionController(name: '_PlaythroughsViewModel', context: context);
@@ -49,7 +56,8 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
     return '''
 boardGame: ${boardGame},
 hasUser: ${hasUser},
-userName: ${userName}
+userName: ${userName},
+gamePlaylistUrl: ${gamePlaylistUrl}
     ''';
   }
 }

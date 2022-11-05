@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/injectable.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -292,9 +293,9 @@ class _PlayerChartsState extends State<_PlayerCharts> {
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
     i = 0;
-    for (final MapEntry<Player, double> playerWinsPercentage
-        in widget.boardGameStatistics.playerWinsPercentage!.entries) {
-      playerWinsChartColors[playerWinsPercentage.key] =
+    for (final PlayerWinsStatistics playerWinsStatistics
+        in widget.boardGameStatistics.playerWinsPercentage!) {
+      playerWinsChartColors[playerWinsStatistics.player] =
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
 
@@ -328,12 +329,12 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               child: PieChart(
                 PieChartData(
                   sections: <PieChartSectionData>[
-                    for (final MapEntry<Player, double> playeWinsPercentage
-                        in widget.boardGameStatistics.playerWinsPercentage!.entries)
+                    for (final PlayerWinsStatistics playeWinsStatistics
+                        in widget.boardGameStatistics.playerWinsPercentage!)
                       PieChartSectionData(
-                        value: playeWinsPercentage.value,
-                        title: '${(playeWinsPercentage.value * 100).toStringAsFixed(0)}%',
-                        color: playerWinsChartColors[playeWinsPercentage.key],
+                        value: playeWinsStatistics.winsPercentage,
+                        title: '${playeWinsStatistics.numberOfWins}',
+                        color: playerWinsChartColors[playeWinsStatistics.player],
                       ),
                   ],
                 ),
@@ -378,15 +379,26 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                for (final MapEntry<Player, double> playerWinsPercentage
-                    in widget.boardGameStatistics.playerWinsPercentage!.entries)
+                for (final PlayerWinsStatistics playerWinsStatistics
+                    in widget.boardGameStatistics.playerWinsPercentage!)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
                       children: <Widget>[
-                        Text('${playerWinsPercentage.key.name}'),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(text: '${playerWinsStatistics.player.name} '),
+                              TextSpan(
+                                text:
+                                    '[${(playerWinsStatistics.winsPercentage * 100).toStringAsFixed(0)}%]',
+                                style: AppTheme.theme.textTheme.subtitle1,
+                              ),
+                            ],
+                          ),
+                        ),
                         const SizedBox(width: Dimensions.halfStandardSpacing),
-                        _ChartLegendBox(color: playerWinsChartColors[playerWinsPercentage.key]!),
+                        _ChartLegendBox(color: playerWinsChartColors[playerWinsStatistics.player]!),
                       ],
                     ),
                   ),
