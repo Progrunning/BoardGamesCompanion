@@ -75,14 +75,14 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
               onPressed: () async => _openGamesMusicPlaylist(context),
             ),
             Observer(
-              builder: (_) {
+              builder: (BuildContext context) {
                 if (!widget.viewModel.hasUser) {
                   return const SizedBox.shrink();
                 }
 
                 return IconButton(
                   icon: const Icon(Icons.download, color: AppColors.accentColor),
-                  onPressed: () => _importBggPlays(),
+                  onPressed: () => _importBggPlays(context),
                 );
               },
             ),
@@ -168,7 +168,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     );
   }
 
-  Future<void> _importBggPlays() async {
+  Future<void> _importBggPlays(BuildContext context) async {
     try {
       setState(() {
         _showImportGamesLoadingIndicator = true;
@@ -186,7 +186,9 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           widget.viewModel.bggPlaysImportRaport!,
         );
       } else {
-        _showNoPlaysToImportDialog();
+        if (mounted) {
+          _showNoPlaysToImportDialog(context);
+        }
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
@@ -197,7 +199,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     }
   }
 
-  void _showNoPlaysToImportDialog() {
+  void _showNoPlaysToImportDialog(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
