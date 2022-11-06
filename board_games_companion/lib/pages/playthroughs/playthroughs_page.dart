@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -133,6 +135,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           initialActiveIndex: _initialTabIndex,
           activeColor: AppColors.accentColor,
           color: AppColors.inactiveBottomTabColor,
+          onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
         ),
       ),
     );
@@ -157,6 +160,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   }
 
   Future<void> _openGamesMusicPlaylist(BuildContext context) async {
+    unawaited(widget.viewModel.trackOpenGamesPlaylist());
     await LauncherHelper.launchUri(
       context,
       widget.viewModel.gamePlaylistUrl,
