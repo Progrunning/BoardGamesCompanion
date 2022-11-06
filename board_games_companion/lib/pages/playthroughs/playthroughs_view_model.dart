@@ -8,6 +8,7 @@ import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
@@ -37,6 +38,13 @@ abstract class _PlaythroughsViewModel with Store {
 
   static const baseMelodiceUrl = 'https://melodice.org';
   static const melodicePlaylistUrl = '$baseMelodiceUrl/playlist';
+
+  static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
+    0: Tuple2<String, String>('Statistics', 'PlaythroughStatistcsPage'),
+    1: Tuple2<String, String>('History', 'PlaythroughsHistoryPage'),
+    2: Tuple2<String, String>('Log Games', 'PlaythroughsLogGamePage'),
+    3: Tuple2<String, String>('Settings', 'PlaythroughsGameSettingsPage'),
+  };
 
   final PlayersStore _playersStore;
   final PlaythroughsStore _playthroughsStore;
@@ -151,5 +159,22 @@ abstract class _PlaythroughsViewModel with Store {
         bggPlaysImportRaport!.errors.add(ImportError('Failed to import a play [${bggPlay.id}]'));
       }
     }
+  }
+
+  Future<void> trackOpenGamesPlaylist() async {
+    await _analyticsService.logEvent(
+      name: Analytics.openGamesPlaylist,
+      parameters: <String, String>{
+        Analytics.boardGameIdParameter: boardGame.id,
+        Analytics.boardGameNameParameter: boardGame.name,
+      },
+    );
+  }
+
+  Future<void> trackTabChange(int tabIndex) async {
+    await _analyticsService.logScreenView(
+      screenName: _screenViewByTabIndex[tabIndex]!.item1,
+      screenClass: _screenViewByTabIndex[tabIndex]!.item2,
+    );
   }
 }

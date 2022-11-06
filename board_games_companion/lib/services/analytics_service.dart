@@ -17,4 +17,15 @@ class AnalyticsService {
     await _firebaseAnalytics.logEvent(name: name, parameters: parameters);
     await _rateAndReviewService.increaseNumberOfSignificantActions();
   }
+
+  Future<void> logScreenView({
+    required String screenName,
+    required String screenClass,
+  }) async {
+    await _firebaseAnalytics.setCurrentScreen(
+      screenName: screenName,
+      screenClassOverride: screenClass,
+    );
+    await _rateAndReviewService.increaseNumberOfSignificantActions();
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
-import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -18,16 +17,13 @@ import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart';
 import 'pages/edit_playthrough/playthrough_note_view_model.dart';
 import 'pages/home/home_page.dart';
+import 'pages/home/home_view_model.dart';
 import 'pages/players/player_page.dart';
 import 'pages/players/players_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
-import 'pages/search_board_games/search_board_games_view_model.dart';
 import 'pages/settings/settings_page.dart';
-import 'services/analytics_service.dart';
 import 'services/preferences_service.dart';
-import 'services/rate_and_review_service.dart';
-import 'stores/board_games_filters_store.dart';
 import 'utilities/analytics_route_observer.dart';
 
 class BoardGamesCompanionApp extends StatefulWidget {
@@ -61,23 +57,11 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
       onGenerateRoute: (RouteSettings routeSettings) {
         switch (routeSettings.name) {
           case HomePage.pageRoute:
-            final analyticsService = getIt<AnalyticsService>();
-            final rateAndReviewService = getIt<RateAndReviewService>();
-            final playersViewModel = getIt<PlayersViewModel>();
-            final boardGamesFiltersStore = getIt<BoardGamesFiltersStore>();
-            final gamesViewModel = getIt<GamesViewModel>();
-            final searchViewModel = getIt<SearchBoardGamesViewModel>();
+            final viewModel = getIt<HomeViewModel>();
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
-              builder: (_) => HomePage(
-                analyticsService: analyticsService,
-                rateAndReviewService: rateAndReviewService,
-                gamesViewModel: gamesViewModel,
-                playersViewModel: playersViewModel,
-                searchViewModel: searchViewModel,
-                boardGamesFiltersStore: boardGamesFiltersStore,
-              ),
+              builder: (_) => HomePage(viewModel: viewModel),
             );
 
           case BoardGamesDetailsPage.pageRoute:

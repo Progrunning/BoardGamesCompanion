@@ -1,4 +1,5 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/extensions/route_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
@@ -18,6 +19,17 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
   final AnalyticsService _analtyicsService;
 
   @override
+  void didPop(Route route, Route? previousRoute) {
+    super.didPop(route, previousRoute);
+
+    // MK Manually logging a screen view as per https://firebase.google.com/docs/analytics/screenviews#dart
+    _analtyicsService.logScreenView(
+      screenName: route.toScreenName(),
+      screenClass: route.toScreenClassName(),
+    );
+  }
+
+  @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
 
@@ -26,9 +38,10 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
       return;
     }
 
-    _analtyicsService.logEvent(
-      name: Analytics.viewPage,
-      parameters: <String, String>{Analytics.routeName: routeName!},
+    // MK Manually logging a screen view as per https://firebase.google.com/docs/analytics/screenviews#dart
+    _analtyicsService.logScreenView(
+      screenName: route.toScreenName(),
+      screenClass: route.toScreenClassName(),
     );
 
     switch (routeName) {

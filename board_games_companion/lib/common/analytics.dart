@@ -1,7 +1,6 @@
 class Analytics {
   static const String filterCollection = 'filter_collection';
   static const String sortCollection = 'sort_collection';
-  static const String viewPage = 'view_page';
   static const String viewGameStats = 'view_game_stats';
   static const String viewGameDetails = 'view_game_details';
   static const String viewHotBoardGame = 'view_hot_board_game';
@@ -10,6 +9,7 @@ class Analytics {
   static const String editPlaythrough = 'edit_playthough';
   static const String logPlaythrough = 'log_playthough';
   static const String importBggPlays = 'import_bgg_plays';
+  static const String openGamesPlaylist = 'open_games_playlist';
 
   static const String routeName = 'route_name';
 

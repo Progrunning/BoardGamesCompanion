@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -45,6 +47,9 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
   bool _showImportGamesLoadingIndicator = false;
 
+  static final GlobalKey<ScaffoldMessengerState> playthroughsPageGlobalKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
@@ -58,75 +63,80 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
 
   @override
   Widget build(BuildContext context) {
-    final scaffold = Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(widget.viewModel.boardGame.name, style: AppTheme.titleTextStyle),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.music_note, color: AppColors.accentColor),
-            onPressed: () async => _openGamesMusicPlaylist(context),
-          ),
-          Observer(
-            builder: (_) {
-              if (!widget.viewModel.hasUser) {
-                return const SizedBox.shrink();
-              }
+    final scaffold = ScaffoldMessenger(
+      key: playthroughsPageGlobalKey,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(widget.viewModel.boardGame.name, style: AppTheme.titleTextStyle),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.music_note, color: AppColors.accentColor),
+              onPressed: () async => _openGamesMusicPlaylist(context),
+            ),
+            Observer(
+              builder: (_) {
+                if (!widget.viewModel.hasUser) {
+                  return const SizedBox.shrink();
+                }
 
-              return IconButton(
-                icon: const Icon(Icons.download, color: AppColors.accentColor),
-                onPressed: () => _importBggPlays(),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.info, color: AppColors.accentColor),
-            onPressed: () => _navigateToBoardGameDetails(context),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: PageContainer(
-          child: TabBarView(
-            controller: tabController,
-            children: const <Widget>[
-              PlaythroughStatistcsPage(),
-              PlaythroughsHistoryPage(),
-              PlaythroughsLogGamePage(),
-              PlaythroughsGameSettingsPage()
-            ],
+                return IconButton(
+                  icon: const Icon(Icons.download, color: AppColors.accentColor),
+                  onPressed: () => _importBggPlays(),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.info, color: AppColors.accentColor),
+              onPressed: () => _navigateToBoardGameDetails(context),
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: PageContainer(
+            child: TabBarView(
+              controller: tabController,
+              children: const <Widget>[
+                PlaythroughStatistcsPage(),
+                PlaythroughsHistoryPage(),
+                PlaythroughsLogGamePage(),
+                PlaythroughsGameSettingsPage()
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        controller: tabController,
-        backgroundColor: AppColors.bottomTabBackgroundColor,
-        top: -Dimensions.bottomTabTopHeight,
-        items: const <TabItem>[
-          TabItem<BottomTabIcon>(
-            title: AppText.playthroughPageStatsBottomTabTitle,
-            icon: BottomTabIcon(iconData: Icons.multiline_chart),
-            activeIcon: BottomTabIcon(iconData: Icons.multiline_chart, isActive: true),
-          ),
-          TabItem<BottomTabIcon>(
-            title: AppText.playthroughPageHistoryBottomTabTitle,
-            icon: BottomTabIcon(iconData: Icons.history),
-            activeIcon: BottomTabIcon(iconData: Icons.history, isActive: true),
-          ),
-          TabItem<BottomTabIcon>(
-            title: AppText.playthroughPageLogGameBottomTabTitle,
-            icon: BottomTabIcon(iconData: Icons.casino),
-            activeIcon: BottomTabIcon(iconData: Icons.casino, isActive: true),
-          ),
-          TabItem<BottomTabIcon>(
-            title: AppText.playthroughPageGameSettingsLogGameBottomTabTitle,
-            icon: BottomTabIcon(iconData: Icons.settings_applications_sharp),
-            activeIcon: BottomTabIcon(iconData: Icons.settings_applications_sharp, isActive: true),
-          ),
-        ],
-        initialActiveIndex: _initialTabIndex,
-        activeColor: AppColors.accentColor,
-        color: AppColors.inactiveBottomTabColor,
+        bottomNavigationBar: ConvexAppBar(
+          controller: tabController,
+          backgroundColor: AppColors.bottomTabBackgroundColor,
+          top: -Dimensions.bottomTabTopHeight,
+          items: const <TabItem>[
+            TabItem<BottomTabIcon>(
+              title: AppText.playthroughPageStatsBottomTabTitle,
+              icon: BottomTabIcon(iconData: Icons.multiline_chart),
+              activeIcon: BottomTabIcon(iconData: Icons.multiline_chart, isActive: true),
+            ),
+            TabItem<BottomTabIcon>(
+              title: AppText.playthroughPageHistoryBottomTabTitle,
+              icon: BottomTabIcon(iconData: Icons.history),
+              activeIcon: BottomTabIcon(iconData: Icons.history, isActive: true),
+            ),
+            TabItem<BottomTabIcon>(
+              title: AppText.playthroughPageLogGameBottomTabTitle,
+              icon: BottomTabIcon(iconData: Icons.casino),
+              activeIcon: BottomTabIcon(iconData: Icons.casino, isActive: true),
+            ),
+            TabItem<BottomTabIcon>(
+              title: AppText.playthroughPageGameSettingsLogGameBottomTabTitle,
+              icon: BottomTabIcon(iconData: Icons.settings_applications_sharp),
+              activeIcon:
+                  BottomTabIcon(iconData: Icons.settings_applications_sharp, isActive: true),
+            ),
+          ],
+          initialActiveIndex: _initialTabIndex,
+          activeColor: AppColors.accentColor,
+          color: AppColors.inactiveBottomTabColor,
+          onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
+        ),
       ),
     );
 
@@ -150,6 +160,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   }
 
   Future<void> _openGamesMusicPlaylist(BuildContext context) async {
+    unawaited(widget.viewModel.trackOpenGamesPlaylist());
     await LauncherHelper.launchUri(
       context,
       widget.viewModel.gamePlaylistUrl,

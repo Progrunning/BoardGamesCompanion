@@ -1,14 +1,9 @@
-import 'package:board_games_companion/pages/games/games_view_model.dart';
-import 'package:board_games_companion/pages/players/players_view_model.dart';
-import 'package:board_games_companion/pages/search_board_games/search_board_games_view_model.dart';
+import 'package:board_games_companion/pages/home/home_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
-import '../../services/analytics_service.dart';
-import '../../services/rate_and_review_service.dart';
-import '../../stores/board_games_filters_store.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container.dart';
 import '../base_page_state.dart';
@@ -19,23 +14,13 @@ import 'home_page_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
-    required this.analyticsService,
-    required this.rateAndReviewService,
-    required this.gamesViewModel,
-    required this.playersViewModel,
-    required this.searchViewModel,
-    required this.boardGamesFiltersStore,
+    required this.viewModel,
     Key? key,
   }) : super(key: key);
 
   static const String pageRoute = '/home';
 
-  final AnalyticsService analyticsService;
-  final RateAndReviewService rateAndReviewService;
-  final GamesViewModel gamesViewModel;
-  final PlayersViewModel playersViewModel;
-  final SearchBoardGamesViewModel searchViewModel;
-  final BoardGamesFiltersStore boardGamesFiltersStore;
+  final HomeViewModel viewModel;
 
   static final GlobalKey<ScaffoldMessengerState> homePageGlobalKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -73,13 +58,13 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
               controller: tabController,
               children: <Widget>[
                 GamesPage(
-                  widget.gamesViewModel,
-                  widget.boardGamesFiltersStore,
-                  widget.analyticsService,
-                  widget.rateAndReviewService,
+                  widget.viewModel.gamesViewModel,
+                  widget.viewModel.boardGamesFiltersStore,
+                  widget.viewModel.analyticsService,
+                  widget.viewModel.rateAndReviewService,
                 ),
-                SearchBoardGamesPage(viewModel: widget.searchViewModel),
-                PlayersPage(playersViewModel: widget.playersViewModel),
+                SearchBoardGamesPage(viewModel: widget.viewModel.searchBoardGamesViewModel),
+                PlayersPage(playersViewModel: widget.viewModel.playersViewModel),
               ],
             ),
           ),
@@ -108,6 +93,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
           initialActiveIndex: _initialTabIndex,
           activeColor: AppColors.accentColor,
           color: AppColors.inactiveBottomTabColor,
+          onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
         ),
       ),
     );

@@ -51,5 +51,7 @@
     <false />
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>FirebaseAutomaticScreenReportingEnabled</key>
+	<false/>
 </dict>
 </plist>
