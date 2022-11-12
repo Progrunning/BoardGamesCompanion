@@ -324,9 +324,9 @@ class BoardGamesGeekService {
     return null;
   }
 
-  Future<List<BoardGame>?> search(String? searchPhrase) async {
+  Future<List<BoardGame>> search(String? searchPhrase) async {
     if (searchPhrase?.isEmpty ?? true) {
-      return null;
+      return [];
     }
 
     final searchResultsXml = await _dio.get<String>(

@@ -16,6 +16,13 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
           Computed<bool>(() => super.hasAnyHotBoardGames,
               name: '_SearchBoardGamesViewModel.hasAnyHotBoardGames'))
       .value;
+  Computed<bool>? _$isSearchPhraseEmptyComputed;
+
+  @override
+  bool get isSearchPhraseEmpty => (_$isSearchPhraseEmptyComputed ??=
+          Computed<bool>(() => super.isSearchPhraseEmpty,
+              name: '_SearchBoardGamesViewModel.isSearchPhraseEmpty'))
+      .value;
 
   late final _$hotBoardGamesAtom =
       Atom(name: '_SearchBoardGamesViewModel.hotBoardGames', context: context);
@@ -30,6 +37,22 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
   set hotBoardGames(ObservableList<BoardGame>? value) {
     _$hotBoardGamesAtom.reportWrite(value, super.hotBoardGames, () {
       super.hotBoardGames = value;
+    });
+  }
+
+  late final _$searchResultsAtom =
+      Atom(name: '_SearchBoardGamesViewModel.searchResults', context: context);
+
+  @override
+  SearchResults get searchResults {
+    _$searchResultsAtom.reportRead();
+    return super.searchResults;
+  }
+
+  @override
+  set searchResults(SearchResults value) {
+    _$searchResultsAtom.reportWrite(value, super.searchResults, () {
+      super.searchResults = value;
     });
   }
 
@@ -51,12 +74,97 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
     });
   }
 
+  late final _$futureSearchBoardGamesAtom = Atom(
+      name: '_SearchBoardGamesViewModel.futureSearchBoardGames',
+      context: context);
+
+  @override
+  ObservableFuture<void>? get futureSearchBoardGames {
+    _$futureSearchBoardGamesAtom.reportRead();
+    return super.futureSearchBoardGames;
+  }
+
+  @override
+  set futureSearchBoardGames(ObservableFuture<void>? value) {
+    _$futureSearchBoardGamesAtom
+        .reportWrite(value, super.futureSearchBoardGames, () {
+      super.futureSearchBoardGames = value;
+    });
+  }
+
+  late final _$searchPhraseAtom =
+      Atom(name: '_SearchBoardGamesViewModel.searchPhrase', context: context);
+
+  @override
+  String? get searchPhrase {
+    _$searchPhraseAtom.reportRead();
+    return super.searchPhrase;
+  }
+
+  @override
+  set searchPhrase(String? value) {
+    _$searchPhraseAtom.reportWrite(value, super.searchPhrase, () {
+      super.searchPhrase = value;
+    });
+  }
+
+  late final _$_SearchBoardGamesViewModelActionController =
+      ActionController(name: '_SearchBoardGamesViewModel', context: context);
+
+  @override
+  void loadHotBoardGames() {
+    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
+        .startAction(name: '_SearchBoardGamesViewModel.loadHotBoardGames');
+    try {
+      return super.loadHotBoardGames();
+    } finally {
+      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void searchBoardGames() {
+    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
+        .startAction(name: '_SearchBoardGamesViewModel.searchBoardGames');
+    try {
+      return super.searchBoardGames();
+    } finally {
+      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSearchPhrase(String? searchPhrase) {
+    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
+        .startAction(name: '_SearchBoardGamesViewModel.setSearchPhrase');
+    try {
+      return super.setSearchPhrase(searchPhrase);
+    } finally {
+      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearSearchResults() {
+    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
+        .startAction(name: '_SearchBoardGamesViewModel.clearSearchResults');
+    try {
+      return super.clearSearchResults();
+    } finally {
+      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 hotBoardGames: ${hotBoardGames},
+searchResults: ${searchResults},
 futureLoadHotBoardGames: ${futureLoadHotBoardGames},
-hasAnyHotBoardGames: ${hasAnyHotBoardGames}
+futureSearchBoardGames: ${futureSearchBoardGames},
+searchPhrase: ${searchPhrase},
+hasAnyHotBoardGames: ${hasAnyHotBoardGames},
+isSearchPhraseEmpty: ${isSearchPhraseEmpty}
     ''';
   }
 }
