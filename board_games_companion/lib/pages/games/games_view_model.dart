@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
-import 'package:board_games_companion/extensions/string_extensions.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';

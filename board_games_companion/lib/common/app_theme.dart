@@ -121,7 +121,7 @@ class AppTheme {
           ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          primary: AppColors.accentColor,
+          foregroundColor: AppColors.accentColor,
         ),
       ),
       textTheme: originalTextTheme.copyWith(
