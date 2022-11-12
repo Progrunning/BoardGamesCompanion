@@ -7,7 +7,7 @@ part 'score.freezed.dart';
 part 'score.g.dart';
 
 @freezed
-abstract class Score with _$Score {
+class Score with _$Score {
   @HiveType(typeId: HiveBoxes.scoreTypeId, adapterName: 'ScoreAdapter')
   const factory Score({
     @HiveField(0) required String id,

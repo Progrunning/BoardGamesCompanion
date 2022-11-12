@@ -26,7 +26,7 @@ import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../enter_score/enter_score_view_model.dart';
-import '../players/player_page.dart';
+import '../player/player_page.dart';
 import 'playthroughs_log_game_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {

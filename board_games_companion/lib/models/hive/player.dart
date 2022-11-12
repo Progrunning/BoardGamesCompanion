@@ -1,65 +1,23 @@
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../common/constants.dart';
 import '../../common/hive_boxes.dart';
 
+part 'player.freezed.dart';
 part 'player.g.dart';
 
-@HiveType(typeId: HiveBoxes.playersTypeId)
-class Player with ChangeNotifier {
-  Player({required this.id});
-
-  @HiveField(0)
-  String id;
-
-  @HiveField(1)
-  String? _name;
-  @HiveField(2)
-  @Deprecated(
-      'Use avatarImageUri instead. The path to the image should be created at runtime, based on the avatarFileName and the path to the Documents folder.')
-  String? _imageUri;
-  @HiveField(3)
-  bool? _isDeleted;
-  @HiveField(4)
-  String? _avatarFileName;
-  @HiveField(5)
-  String? bggName;
-
-  String? _avatarImageUri;
-
-  String? get name => _name;
-  String get avatarImageUri => _avatarImageUri ?? _imageUri ?? Constants.defaultAvatartAssetsPath;
-  String? get avatarFileName => _avatarFileName;
-  bool? get isDeleted => _isDeleted;
-
-  XFile? avatarFileToSave;
-
-  set name(String? value) {
-    if (_name != value) {
-      _name = value;
-      notifyListeners();
-    }
-  }
-
-  set avatarImageUri(String? value) {
-    if (_avatarImageUri != value) {
-      _avatarImageUri = value;
-      notifyListeners();
-    }
-  }
-
-  set avatarFileName(String? value) {
-    if (_avatarFileName != value) {
-      _avatarFileName = value;
-    }
-  }
-
-  set isDeleted(bool? value) {
-    if (_isDeleted != value) {
-      _isDeleted = value;
-      notifyListeners();
-    }
-  }
+@freezed
+class Player with _$Player {
+  @HiveType(typeId: HiveBoxes.playersTypeId, adapterName: 'PlayerAdapter')
+  const factory Player({
+    @HiveField(0) required String id,
+    @HiveField(1) String? name,
+    @HiveField(3) bool? isDeleted,
+    @HiveField(4) String? avatarFileName,
+    @HiveField(5) String? bggName,
+    @Default(Constants.defaultAvatartAssetsPath) String avatarImageUri,
+    XFile? avatarFileToSave,
+  }) = _Player;
 }

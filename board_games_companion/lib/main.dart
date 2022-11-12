@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:provider/provider.dart';
 
 import 'app.dart';
 import 'common/enums/order_by.dart';
@@ -31,7 +30,6 @@ import 'models/hive/playthrough.dart';
 import 'models/hive/score.dart';
 import 'models/hive/user.dart';
 import 'models/sort_by.dart';
-import 'pages/players/players_view_model.dart';
 import 'services/preferences_service.dart';
 
 Future<void> main() async {
@@ -100,13 +98,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     preferencesService.setAppLaunchDate();
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<PlayersViewModel>(
-          create: (context) => getIt<PlayersViewModel>(),
-        ),
-      ],
-      child: const BoardGamesCompanionApp(),
-    );
+    return const BoardGamesCompanionApp();
   }
 }

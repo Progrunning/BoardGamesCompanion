@@ -3,7 +3,6 @@
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/stores/app_store.dart';
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -48,19 +47,13 @@ abstract class _PlayersStore with Store {
   @action
   Future<bool> createOrUpdatePlayer(Player player) async {
     try {
-      final existingPlayer = players.firstWhereOrNull(
-        (p) => p.id == player.id,
-      );
+      final existingPlayerIndex = players.indexWhere((p) => p.id == player.id);
       final addOrUpdateSucceeded = await _playerService.addOrUpdatePlayer(player);
       if (addOrUpdateSucceeded) {
-        if (existingPlayer == null) {
+        if (existingPlayerIndex == -1) {
           players.add(player);
         } else {
-          existingPlayer.id = player.id;
-          existingPlayer.avatarFileName = player.avatarFileName;
-          existingPlayer.avatarImageUri = player.avatarImageUri;
-          existingPlayer.name = player.name;
-          existingPlayer.bggName = player.bggName;
+          players[existingPlayerIndex] = player;
         }
       }
 

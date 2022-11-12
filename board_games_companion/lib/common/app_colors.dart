@@ -32,6 +32,9 @@ class AppColors {
   static const Color selectedTabIconColor = accentColor;
   static const Color deselectedTabIconColor = Color(0x46FFFFFF);
 
+  static const Color enabledIconIconColor = accentColor;
+  static const Color disabledIconIconColor = Color(0x46FFFFFF);
+
   static const Color startDefaultPageBackgroundColorGradient = primaryColorLight;
   static const Color endDefaultPageBackgroundColorGradient = primaryColor;
 

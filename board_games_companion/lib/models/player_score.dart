@@ -6,7 +6,7 @@ import 'hive/score.dart';
 part 'player_score.freezed.dart';
 
 @freezed
-abstract class PlayerScore with _$PlayerScore {
+class PlayerScore with _$PlayerScore {
   const factory PlayerScore({
     required Player? player,
     required Score score,

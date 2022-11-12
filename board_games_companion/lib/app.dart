@@ -18,8 +18,8 @@ import 'pages/edit_playthrough/edit_playthrough_view_model.dart';
 import 'pages/edit_playthrough/playthrough_note_view_model.dart';
 import 'pages/home/home_page.dart';
 import 'pages/home/home_view_model.dart';
-import 'pages/players/player_page.dart';
-import 'pages/players/players_view_model.dart';
+import 'pages/player/player_page.dart';
+import 'pages/player/player_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
 import 'pages/settings/settings_page.dart';
@@ -84,13 +84,13 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
 
           case PlayerPage.pageRoute:
             final arguments = routeSettings.arguments as PlayerPageArguments;
-            final playersViewModel = getIt<PlayersViewModel>();
+            final playersViewModel = getIt<PlayerViewModel>();
 
-            playersViewModel.setPlayer(player: arguments.player);
+            playersViewModel.setPlayer(arguments.player);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
-              builder: (BuildContext context) => PlayerPage(playersViewModel: playersViewModel),
+              builder: (BuildContext context) => PlayerPage(viewModel: playersViewModel),
             );
 
           case PlaythroughsPage.pageRoute:

@@ -5,7 +5,7 @@ import '../pages/board_game_details/board_game_details_page.dart';
 import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../pages/edit_playthrough/playthrough_note_page.dart';
 import '../pages/home/home_page.dart';
-import '../pages/players/player_page.dart';
+import '../pages/player/player_page.dart';
 import '../pages/playthroughs/playthroughs_page.dart';
 import '../pages/settings/settings_page.dart';
 

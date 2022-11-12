@@ -31,6 +31,8 @@ abstract class $PlayerWinsStatisticsCopyWith<$Res> {
           $Res Function(PlayerWinsStatistics) then) =
       _$PlayerWinsStatisticsCopyWithImpl<$Res>;
   $Res call({Player player, int numberOfWins, double winsPercentage});
+
+  $PlayerCopyWith<$Res> get player;
 }
 
 /// @nodoc
@@ -63,6 +65,13 @@ class _$PlayerWinsStatisticsCopyWithImpl<$Res>
               as double,
     ));
   }
+
+  @override
+  $PlayerCopyWith<$Res> get player {
+    return $PlayerCopyWith<$Res>(_value.player, (value) {
+      return _then(_value.copyWith(player: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -73,6 +82,9 @@ abstract class _$$_PlayerWinsStatisticsCopyWith<$Res>
       __$$_PlayerWinsStatisticsCopyWithImpl<$Res>;
   @override
   $Res call({Player player, int numberOfWins, double winsPercentage});
+
+  @override
+  $PlayerCopyWith<$Res> get player;
 }
 
 /// @nodoc

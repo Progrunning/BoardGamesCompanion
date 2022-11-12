@@ -125,9 +125,11 @@ abstract class _PlaythroughsViewModel with Store {
 
         final bool newPlayer =
             _playersStore.players.firstWhereOrNull((p) => p.id == playerId) != null;
-        final Player player = Player(id: playerId)
-          ..name = bggPlayer.playerName
-          ..bggName = bggPlayer.playerBggName;
+        final Player player = Player(
+          id: playerId,
+          name: bggPlayer.playerName,
+          bggName: bggPlayer.playerBggName,
+        );
 
         if (await _playersStore.createOrUpdatePlayer(player)) {
           if (!newPlayer &&
