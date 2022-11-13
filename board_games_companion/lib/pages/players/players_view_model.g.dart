@@ -40,6 +40,22 @@ mixin _$PlayersViewModel on _PlayersViewModel, Store {
     });
   }
 
+  late final _$isEditModeAtom =
+      Atom(name: '_PlayersViewModel.isEditMode', context: context);
+
+  @override
+  bool get isEditMode {
+    _$isEditModeAtom.reportRead();
+    return super.isEditMode;
+  }
+
+  @override
+  set isEditMode(bool value) {
+    _$isEditModeAtom.reportWrite(value, super.isEditMode, () {
+      super.isEditMode = value;
+    });
+  }
+
   late final _$_PlayersViewModelActionController =
       ActionController(name: '_PlayersViewModel', context: context);
 
@@ -55,9 +71,21 @@ mixin _$PlayersViewModel on _PlayersViewModel, Store {
   }
 
   @override
+  void toggleEditMode() {
+    final _$actionInfo = _$_PlayersViewModelActionController.startAction(
+        name: '_PlayersViewModel.toggleEditMode');
+    try {
+      return super.toggleEditMode();
+    } finally {
+      _$_PlayersViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 futureLoadPlayers: ${futureLoadPlayers},
+isEditMode: ${isEditMode},
 players: ${players},
 hasAnyPlayers: ${hasAnyPlayers}
     ''';

@@ -19,6 +19,12 @@ abstract class _PlayersViewModel with Store {
 
   final List<Player> _selectedPlayers = <Player>[];
 
+  @observable
+  ObservableFuture<void>? futureLoadPlayers;
+
+  @observable
+  bool isEditMode = false;
+
   @computed
   ObservableList<Player> get players => _playersStore.players;
 
@@ -30,21 +36,11 @@ abstract class _PlayersViewModel with Store {
   // TODO Update these flags to proper visual states using Freezed and Mobx
   bool get isSearching => searchPhrase?.isNotEmpty ?? false;
 
-  bool _isEditMode = false;
-  bool get isEditMode => _isEditMode;
-  set isEditMode(bool value) {
-    if (_isEditMode == value) {
-      return;
-    }
-
-    _isEditMode = value;
-  }
-
-  @observable
-  ObservableFuture<void>? futureLoadPlayers;
-
   @action
   void loadPlayers() => futureLoadPlayers = ObservableFuture<void>(_loadPlayers());
+
+  @action
+  void toggleEditMode() => isEditMode = !isEditMode;
 
   Future<void> deletePlayers(List<String> playerIds) async {
     try {

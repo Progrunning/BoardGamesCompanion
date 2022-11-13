@@ -54,9 +54,7 @@ class PlayersPageState extends State<PlayersPage> {
             return const CustomScrollView(
               slivers: [
                 _AppBar(players: []),
-                SliverFillRemaining(
-                  child: LoadingIndicator(),
-                ),
+                SliverFillRemaining(child: LoadingIndicator()),
               ],
             );
           case FutureStatus.fulfilled:
@@ -69,7 +67,7 @@ class PlayersPageState extends State<PlayersPage> {
                         players: widget.viewModel.players,
                         onSearchResultTap: (Player player) =>
                             _navigateToPlayerPage(context, player),
-                        onToggleEditModeTap: () => _toggleEditMode(),
+                        onToggleEditModeTap: () => widget.viewModel.toggleEditMode(),
                       ),
                       Observer(
                         builder: (_) {
@@ -137,10 +135,6 @@ class PlayersPageState extends State<PlayersPage> {
     } else {
       playersViewModel.deselectPlayer(player);
     }
-  }
-
-  void _toggleEditMode() {
-    widget.viewModel.isEditMode = !widget.viewModel.isEditMode;
   }
 
   Future<bool?> _showDeletePlayersDialog(BuildContext context) async {
