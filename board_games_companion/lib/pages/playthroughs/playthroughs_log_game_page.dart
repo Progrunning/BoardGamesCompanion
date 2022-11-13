@@ -243,7 +243,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       });
     } else {
       final PlaythroughDetails? newPlaythrough =
-          await widget.viewModel.createPlaythrough(widget.viewModel.boardGame.id);
+          await widget.viewModel.createPlaythrough(widget.viewModel.boardGameId);
       if (!mounted) {
         return;
       }

@@ -89,7 +89,6 @@ abstract class _BoardGamesStore with Store {
         return;
       }
 
-      // TODO Test if this is working correctly
       if (boardGameDetails.isMainGame) {
         for (final boardGameExpansion in boardGameDetails.expansions) {
           final existingBoardGameExpansionDetails = _retrieveBoardGame(boardGameExpansion.id);

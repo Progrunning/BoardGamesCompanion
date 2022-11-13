@@ -11,7 +11,6 @@ import 'package:tuple/tuple.dart';
 import '../../common/enums/playthrough_status.dart';
 import '../../extensions/scores_extensions.dart';
 import '../../models/board_game_statistics.dart';
-import '../../models/hive/board_game_details.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';

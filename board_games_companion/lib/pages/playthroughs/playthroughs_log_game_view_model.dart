@@ -7,7 +7,6 @@ import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
-import '../../models/hive/board_game_details.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
