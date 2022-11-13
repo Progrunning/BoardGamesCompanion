@@ -137,7 +137,7 @@ abstract class _PlaythroughsViewModel with Store {
             bggPlaysImportRaport!.createdPlayers.add(player.name ?? player.bggName ?? '');
           }
 
-          playthroughPlayers.add(PlaythroughPlayer(player));
+          playthroughPlayers.add(PlaythroughPlayer(player: player));
           final Score playerScore = Score(
             id: const Uuid().v4(),
             playerId: player.id,

@@ -1,18 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'hive/player.dart';
 
-class PlaythroughPlayer with ChangeNotifier {
-  PlaythroughPlayer(this.player);
+part 'playthrough_player.freezed.dart';
 
-  Player player;
-  bool _isChecked = false;
-  bool get isChecked => _isChecked;
-
-  set isChecked(bool checked) {
-    if (_isChecked != checked) {
-      _isChecked = checked;
-      notifyListeners();
-    }
-  }
+@freezed
+class PlaythroughPlayer with _$PlaythroughPlayer {
+  const factory PlaythroughPlayer({
+    required Player player,
+    @Default(false) bool isChecked,
+  }) = _PlaythroughPlayer;
 }

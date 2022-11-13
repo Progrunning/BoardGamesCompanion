@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -139,7 +138,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                   content: Observer(
                     builder: (_) {
                       return _SelectPlayersStep(
-                        playthroughPlayers: widget.viewModel.playthroughPlayers,
+                        playthroughPlayers: widget.viewModel.playthroughPlayers.toList(),
                         onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
                             _togglePlayerSelection(isSelected, player),
                       );
@@ -521,14 +520,10 @@ class _SelectPlayersStep extends StatelessWidget {
 
     return SizedBox(
       height: MediaQuery.of(context).size.height / 3,
-      child: Builder(
-        builder: (_) {
-          return _Players(
-            playthroughPlayers: playthroughPlayers,
-            onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
-                onPlayerSelectionChanged(isSelected, player),
-          );
-        },
+      child: _Players(
+        playthroughPlayers: playthroughPlayers,
+        onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
+            onPlayerSelectionChanged(isSelected, player),
       ),
     );
   }
@@ -637,23 +632,20 @@ class _Players extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.topRight,
-                child: ChangeNotifierProvider.value(
-                  value: playthroughPlayer,
-                  child: Consumer<PlaythroughPlayer>(
-                    builder: (_, store, __) {
-                      return SizedBox(
-                        height: 34,
-                        width: 34,
-                        child: Checkbox(
-                          checkColor: AppColors.accentColor,
-                          activeColor: AppColors.primaryColor.withOpacity(0.7),
-                          value: playthroughPlayer.isChecked,
-                          onChanged: (bool? isChecked) =>
-                              onPlayerSelectionChanged(isChecked, playthroughPlayer),
-                        ),
-                      );
-                    },
-                  ),
+                child: Observer(
+                  builder: (_) {
+                    return SizedBox(
+                      height: 34,
+                      width: 34,
+                      child: Checkbox(
+                        checkColor: AppColors.accentColor,
+                        activeColor: AppColors.primaryColor.withOpacity(0.7),
+                        value: playthroughPlayer.isChecked,
+                        onChanged: (bool? isChecked) =>
+                            onPlayerSelectionChanged(isChecked, playthroughPlayer),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

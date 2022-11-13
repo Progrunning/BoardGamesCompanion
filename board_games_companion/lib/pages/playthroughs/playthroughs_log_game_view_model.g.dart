@@ -9,15 +9,6 @@ part of 'playthroughs_log_game_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
-  Computed<ObservableList<PlaythroughPlayer>>? _$playthroughPlayersComputed;
-
-  @override
-  ObservableList<PlaythroughPlayer> get playthroughPlayers =>
-      (_$playthroughPlayersComputed ??=
-              Computed<ObservableList<PlaythroughPlayer>>(
-                  () => super.playthroughPlayers,
-                  name: '_PlaythroughsLogGameViewModel.playthroughPlayers'))
-          .value;
   Computed<BoardGameDetails>? _$boardGameComputed;
 
   @override
@@ -32,6 +23,16 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
           () => super.anyPlayerSelected,
           name: '_PlaythroughsLogGameViewModel.anyPlayerSelected'))
       .value;
+  Computed<List<PlaythroughPlayer>>? _$_selectedPlaythroughPlayersComputed;
+
+  @override
+  List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
+      (_$_selectedPlaythroughPlayersComputed ??= Computed<
+                  List<PlaythroughPlayer>>(
+              () => super._selectedPlaythroughPlayers,
+              name:
+                  '_PlaythroughsLogGameViewModel._selectedPlaythroughPlayers'))
+          .value;
 
   late final _$playerScoresAtom = Atom(
       name: '_PlaythroughsLogGameViewModel.playerScores', context: context);
@@ -131,6 +132,23 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
     _$futureLoadPlaythroughPlayersAtom
         .reportWrite(value, super.futureLoadPlaythroughPlayers, () {
       super.futureLoadPlaythroughPlayers = value;
+    });
+  }
+
+  late final _$playthroughPlayersAtom = Atom(
+      name: '_PlaythroughsLogGameViewModel.playthroughPlayers',
+      context: context);
+
+  @override
+  ObservableList<PlaythroughPlayer> get playthroughPlayers {
+    _$playthroughPlayersAtom.reportRead();
+    return super.playthroughPlayers;
+  }
+
+  @override
+  set playthroughPlayers(ObservableList<PlaythroughPlayer> value) {
+    _$playthroughPlayersAtom.reportWrite(value, super.playthroughPlayers, () {
+      super.playthroughPlayers = value;
     });
   }
 

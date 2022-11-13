@@ -395,7 +395,6 @@ class _NoResults extends StatelessWidget {
               ),
             ),
             const SizedBox(height: Dimensions.doubleStandardSpacing),
-            // TODO Test
             Center(
               child: ElevatedIconButton(
                 title: AppText.searchBoardGamesSearchRetry,
