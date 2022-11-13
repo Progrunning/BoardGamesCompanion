@@ -11,7 +11,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../models/board_game.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
@@ -63,7 +63,8 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
           ),
           _Search(
             viewModel: widget.viewModel,
-            onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+            onBoardGameTapped: (BoardGameDetails boardGame) =>
+                _navigateToBoardGameDetails(boardGame),
           ),
           SliverPersistentHeader(
             pinned: true,
@@ -72,14 +73,15 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
           ),
           _HotBoardGames(
             viewModel: widget.viewModel,
-            onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+            onBoardGameTapped: (BoardGameDetails boardGame) =>
+                _navigateToBoardGameDetails(boardGame),
           ),
         ],
       ),
     );
   }
 
-  Future<void> _navigateToBoardGameDetails(BoardGame boardGame) async {
+  Future<void> _navigateToBoardGameDetails(BoardGameDetails boardGame) async {
     searchFocusNode.unfocus();
     await Navigator.pushNamed(
       context,
@@ -192,7 +194,7 @@ class _Search extends StatefulWidget {
   }) : super(key: key);
 
   final SearchBoardGamesViewModel viewModel;
-  final void Function(BoardGame) onBoardGameTapped;
+  final void Function(BoardGameDetails) onBoardGameTapped;
 
   @override
   _SearchState createState() => _SearchState();
@@ -262,8 +264,8 @@ class _SearchResultsSliver extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final List<BoardGame> searchResults;
-  final void Function(BoardGame) onTap;
+  final List<BoardGameDetails> searchResults;
+  final void Function(BoardGameDetails) onTap;
 
   @override
   Widget build(BuildContext context) => SliverPadding(
@@ -417,7 +419,7 @@ class _HotBoardGames extends StatelessWidget {
   }) : super(key: key);
 
   final SearchBoardGamesViewModel viewModel;
-  final void Function(BoardGame) onBoardGameTapped;
+  final void Function(BoardGameDetails) onBoardGameTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -491,7 +493,7 @@ class _HotBoardGames extends StatelessWidget {
     );
   }
 
-  void _navigateToBoardGameDetails(BoardGame boardGame, BuildContext context) {
+  void _navigateToBoardGameDetails(BoardGameDetails boardGame, BuildContext context) {
     viewModel.trackViewHotBoardGame(boardGame);
 
     onBoardGameTapped(boardGame);

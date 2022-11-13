@@ -23,7 +23,8 @@ class PlaythroughsGameSettingsViewModel {
     final boardGameSettings = _playthroughsStore.boardGame.settings ?? BoardGameSettings();
     boardGameSettings.winningCondition = winningCondition;
 
-    _playthroughsStore.boardGame.settings = boardGameSettings;
-    await _boardGamesStore.addOrUpdateBoardGame(_playthroughsStore.boardGame);
+    // TODO Test if this updates setting correctly
+    await _boardGamesStore
+        .addOrUpdateBoardGame(_playthroughsStore.boardGame.copyWith(settings: boardGameSettings));
   }
 }

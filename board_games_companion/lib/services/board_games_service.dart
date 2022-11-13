@@ -115,36 +115,24 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesServ
       return collectionImportResult;
     }
 
-    final importedCollectionMap = <String, BoardGameDetails>{
-      for (final BoardGameDetails boardGameDetails in collectionImportResult.data!)
-        boardGameDetails.id: boardGameDetails
-    };
-
     final existingCollectionMap = <String, BoardGameDetails>{
       for (final BoardGameDetails boardGameDetails in storageBox.values)
         boardGameDetails.id: boardGameDetails
     };
 
-    final List<BoardGameDetails> boardGamesToRemove = storageBox.values
-        .where((boardGameDetails) =>
-            boardGameDetails.isBggSynced! &&
-            !importedCollectionMap.containsKey(boardGameDetails.id))
-        .toList();
-
-    // Remove
-    for (final boardGameToRemove in boardGamesToRemove) {
-      await storageBox.delete(boardGameToRemove.id);
-    }
-
     // Add & Update
-    for (final importedBoardGame in collectionImportResult.data!) {
+    for (var importedBoardGame in collectionImportResult.data!) {
       // Take local collection settings over the BGG
       if (existingCollectionMap.containsKey(importedBoardGame.id)) {
+        // TODO Test if multiple calls to sync BGG collection works
         final existingBoardGame = existingCollectionMap[importedBoardGame.id]!;
-        importedBoardGame.isOnWishlist = existingBoardGame.isOnWishlist;
-        importedBoardGame.isOwned = existingBoardGame.isOwned;
-        importedBoardGame.isFriends = existingBoardGame.isFriends;
+        importedBoardGame = importedBoardGame.copyWith(
+          isOnWishlist: existingBoardGame.isOnWishlist,
+          isOwned: existingBoardGame.isOwned,
+          isFriends: existingBoardGame.isFriends,
+        );
       }
+
       await storageBox.put(importedBoardGame.id, importedBoardGame);
     }
 

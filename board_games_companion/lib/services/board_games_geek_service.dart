@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -22,7 +23,6 @@ import '../models/bgg/bgg_import_plays.dart';
 import '../models/bgg/bgg_play.dart';
 import '../models/bgg/bgg_play_player.dart';
 import '../models/bgg/bgg_plays_import_result.dart';
-import '../models/board_game.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_artist.dart';
 import '../models/hive/board_game_category.dart';
@@ -148,8 +148,8 @@ class BoardGamesGeekService {
   final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
 
-  Future<List<BoardGame>> getHot({int retryCount = 0}) async {
-    final hotBoardGames = <BoardGame>[];
+  Future<List<BoardGameDetails>> getHot({int retryCount = 0}) async {
+    final hotBoardGames = <BoardGameDetails>[];
 
     // MK Apply exponential backoff when retrying
     if (retryCount > 0) {
@@ -184,16 +184,16 @@ class BoardGamesGeekService {
           continue;
         }
 
-        final newHotBoardGame = BoardGame(id: hotBoardGameId, name: hotBoardGameName);
-        newHotBoardGame.rank =
-            int.tryParse(hotBoardGameItem.getAttribute(_xmlRankAttributeName) ?? '');
-
-        newHotBoardGame.thumbnailUrl = hotBoardGameItem.firstOrDefaultElementsAttribute(
-            _xmlThumbnailElementName, _xmlValueAttributeName);
-        newHotBoardGame.yearPublished = int.tryParse(
-            hotBoardGameItem.firstOrDefaultElementsAttribute(
-                    _xmlYearPublishedElementName, _xmlValueAttributeName) ??
-                '');
+        final newHotBoardGame = BoardGameDetails(
+          id: hotBoardGameId,
+          name: hotBoardGameName,
+          rank: int.tryParse(hotBoardGameItem.getAttribute(_xmlRankAttributeName) ?? ''),
+          thumbnailUrl: hotBoardGameItem.firstOrDefaultElementsAttribute(
+              _xmlThumbnailElementName, _xmlValueAttributeName),
+          yearPublished: int.tryParse(hotBoardGameItem.firstOrDefaultElementsAttribute(
+                  _xmlYearPublishedElementName, _xmlValueAttributeName) ??
+              ''),
+        );
 
         hotBoardGames.add(newHotBoardGame);
       }
@@ -241,82 +241,115 @@ class BoardGamesGeekService {
         return null;
       }
 
-      final boardGameDetails = BoardGameDetails(id: id, name: boardGameDetailName!);
-
       final boardGameType =
           boardGameDetailsItem.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
-      boardGameDetails.isExpansion = boardGameType == _boardGameExpansionType;
+      final isExpansion = boardGameType == _boardGameExpansionType;
 
-      boardGameDetails.description =
-          boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
+      final description = boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
 
-      boardGameDetails.minPlayers = int.tryParse(boardGameDetailsItem
+      final minPlayers = int.tryParse(boardGameDetailsItem
               .firstOrDefault(_xmlMinPlayersElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.maxPlayers = int.tryParse(boardGameDetailsItem
+      final maxPlayers = int.tryParse(boardGameDetailsItem
               .firstOrDefault(_xmlMaxPlayersElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.minPlaytime = int.tryParse(boardGameDetailsItem
+      final minPlaytime = int.tryParse(boardGameDetailsItem
               .firstOrDefault(_xmlMinPlaytimeElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.maxPlaytime = int.tryParse(boardGameDetailsItem
+      final maxPlaytime = int.tryParse(boardGameDetailsItem
               .firstOrDefault(_xmlMaxPlaytimeElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.minAge = int.tryParse(boardGameDetailsItem
+      final minAge = int.tryParse(boardGameDetailsItem
               .firstOrDefault(_xmlMinAgeElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.imageUrl = boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
+      final imageUrl = boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
 
-      boardGameDetails.thumbnailUrl =
-          boardGameDetailsItem.firstOrDefault(_xmlThumbnailElementName)?.text;
+      final thumbnailUrl = boardGameDetailsItem.firstOrDefault(_xmlThumbnailElementName)?.text;
 
-      boardGameDetails.yearPublished = int.tryParse(boardGameDetailsItem
+      final yearPublished = int.tryParse(boardGameDetailsItem
               .firstOrDefault(_xmlYearPublishedElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
+      final List<BoardGameCategory> categories = [];
+      final List<BoardGameDesigner> desingers = [];
+      final List<BoardGamePublisher> publishers = [];
+      final List<BoardGameArtist> artists = [];
+      final List<BoardGameExpansion> expansions = [];
       final boardGameLinks = boardGameDetailsItem.findElements(_xmlLinkElementName);
-      _extractBoardGameLinks(boardGameLinks, boardGameDetails);
+      _extractBoardGameLinks(
+        boardGameLinks,
+        categories,
+        desingers,
+        publishers,
+        artists,
+        expansions,
+      );
 
       final boardGameDetailStatistics =
           boardGameDetailsItem.firstOrDefault(_xmlStatisticsElementName)!;
-
       final boardGameDetailsRatings =
           boardGameDetailStatistics.firstOrDefault(_xmlRatingsElementName)!;
 
-      boardGameDetails.rating = double.tryParse(boardGameDetailsRatings
+      final rating = double.tryParse(boardGameDetailsRatings
               .firstOrDefault(_xmlAverageElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.votes = int.tryParse(boardGameDetailsRatings
+      final votes = int.tryParse(boardGameDetailsRatings
               .firstOrDefault(_xmlUsersRatedElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.commentsNumber = int.tryParse(boardGameDetailsRatings
+      final commentsNumber = int.tryParse(boardGameDetailsRatings
               .firstOrDefault(_xmlNumCommentsElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      boardGameDetails.avgWeight = num.tryParse(boardGameDetailsRatings
+      final avgWeight = num.tryParse(boardGameDetailsRatings
               .firstOrDefault(_xmlAverageWeightElementName)
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
-      _extractBoardGameRanks(boardGameDetailsRatings, boardGameDetails);
+      final List<BoardGameRank> ranks = _extractBoardGameRanks(boardGameDetailsRatings);
+      final int? boardGameRank =
+          ranks.firstWhereOrNull((element) => element.name == 'boardgame')?.rank?.toInt();
 
-      return boardGameDetails;
+      return BoardGameDetails(
+        id: id,
+        name: boardGameDetailName!,
+        isExpansion: isExpansion,
+        description: description,
+        minPlayers: minPlayers,
+        maxPlayers: maxPlayers,
+        minPlaytime: minPlaytime,
+        maxPlaytime: maxPlaytime,
+        minAge: minAge,
+        imageUrl: imageUrl,
+        thumbnailUrl: thumbnailUrl,
+        yearPublished: yearPublished,
+        categories: categories,
+        desingers: desingers,
+        publishers: publishers,
+        artists: artists,
+        expansions: expansions,
+        rating: rating,
+        votes: votes,
+        commentsNumber: commentsNumber,
+        avgWeight: avgWeight,
+        rank: boardGameRank,
+        ranks: ranks,
+      );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -324,7 +357,7 @@ class BoardGamesGeekService {
     return null;
   }
 
-  Future<List<BoardGame>> search(String? searchPhrase) async {
+  Future<List<BoardGameDetails>> search(String? searchPhrase) async {
     if (searchPhrase?.isEmpty ?? true) {
       return [];
     }
@@ -337,7 +370,7 @@ class BoardGamesGeekService {
       },
     );
 
-    final boardGames = <BoardGame>[];
+    final boardGames = <BoardGameDetails>[];
     final xmlDocument = _retrieveXmlDocument(searchResultsXml);
     if (xmlDocument == null) {
       return boardGames;
@@ -355,9 +388,11 @@ class BoardGamesGeekService {
       final boardGameYearPublished = searchResult.firstOrDefaultElementsAttribute(
           _xmlYearPublishedElementName, _xmlValueAttributeName);
 
-      final boardGame = BoardGame(id: boardGameId, name: boardGameName);
-      boardGame.yearPublished = int.tryParse(boardGameYearPublished ?? '');
-      boardGames.add(boardGame);
+      boardGames.add(BoardGameDetails(
+        id: boardGameId,
+        name: boardGameName,
+        yearPublished: int.tryParse(boardGameYearPublished ?? ''),
+      ));
     }
 
     return boardGames;
@@ -568,33 +603,44 @@ CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments)
       continue;
     }
 
-    final boardGame = BoardGameDetails(id: boardGameId!, name: boardGameName!);
-    boardGame.yearPublished =
-        int.tryParse(collectionElement.firstOrDefault(_xmlYearPublishedElementName)?.text ?? '');
-    boardGame.imageUrl = collectionElement.firstOrDefault(_xmlImageElementName)?.text;
-    boardGame.thumbnailUrl = collectionElement.firstOrDefault(_xmlThumbnailElementName)?.text;
-    final lastModifiedString = collectionElement.firstOrDefaultElementsAttribute(
-        _xmlStatusElementName, _xmlLastModifiedAttributeTypeName);
-    if (lastModifiedString?.isNotEmpty ?? false) {
-      boardGame.lastModified = DateTime.tryParse(lastModifiedString!);
-    }
+    final boardGameDetailsStats = collectionElement.firstOrDefault(_xmlStatsElementName);
+    final boardGameDetailsRating = boardGameDetailsStats?.firstOrDefault(_xmlRatingElementName)!;
+    final ranks = _extractBoardGameRanks(boardGameDetailsRating);
 
-    _extractBoardGameCollectionItemStats(collectionElement, boardGame);
+    final boardGameDetails = BoardGameDetails(
+      id: boardGameId!,
+      name: boardGameName!,
+      yearPublished:
+          int.tryParse(collectionElement.firstOrDefault(_xmlYearPublishedElementName)?.text ?? ''),
+      imageUrl: collectionElement.firstOrDefault(_xmlImageElementName)?.text,
+      thumbnailUrl: collectionElement.firstOrDefault(_xmlThumbnailElementName)?.text,
+      lastModified: DateTime.tryParse(collectionElement.firstOrDefaultElementsAttribute(
+              _xmlStatusElementName, _xmlLastModifiedAttributeTypeName) ??
+          ''),
+      minPlayers: int.tryParse(
+          boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMinPlayersElementName) ?? ''),
+      maxPlayers: int.tryParse(
+          boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMaxPlayersElementName) ?? ''),
+      minPlaytime: int.tryParse(
+          boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMinPlaytimeElementName) ?? ''),
+      maxPlaytime: int.tryParse(
+          boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMaxPlaytimeElementName) ?? ''),
+      rating: double.tryParse(boardGameDetailsRating
+              ?.firstOrDefault(_xmlAverageElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          ''),
+      votes: int.tryParse(boardGameDetailsRating
+              ?.firstOrDefault(_xmlUsersRatedElementName)
+              ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
+          ''),
+      isBggSynced: true,
+      isOwned: arguments.collectionType == CollectionType.owned,
+      isOnWishlist: arguments.collectionType == CollectionType.wishlist,
+      ranks: ranks,
+      rank: ranks.firstWhereOrNull((element) => element.name == 'boardgame')?.rank?.toInt(),
+    );
 
-    boardGame.isBggSynced = true;
-
-    switch (arguments.collectionType) {
-      case CollectionType.owned:
-        boardGame.isOwned = true;
-        break;
-      case CollectionType.friends:
-        break;
-      case CollectionType.wishlist:
-        boardGame.isOnWishlist = true;
-        break;
-    }
-
-    boardGames.add(boardGame);
+    boardGames.add(boardGameDetails);
   }
 
   return CollectionImportResult()
@@ -621,39 +667,13 @@ bool _hasErrors(xml.XmlDocument xmlDocument) {
   return true;
 }
 
-void _extractBoardGameCollectionItemStats(
-  xml.XmlElement collectionItem,
-  BoardGameDetails boardGameDetails,
-) {
-  final boardGameDetailsStats = collectionItem.firstOrDefault(_xmlStatsElementName);
-
-  boardGameDetails.minPlayers = int.tryParse(
-      boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMinPlayersElementName) ?? '');
-  boardGameDetails.maxPlayers = int.tryParse(
-      boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMaxPlayersElementName) ?? '');
-  boardGameDetails.minPlaytime = int.tryParse(
-      boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMinPlaytimeElementName) ?? '');
-  boardGameDetails.maxPlaytime = int.tryParse(
-      boardGameDetailsStats?.firstOrDefaultAttributeValue(_xmlMaxPlaytimeElementName) ?? '');
-
-  final boardGameDetailsRating = boardGameDetailsStats?.firstOrDefault(_xmlRatingElementName)!;
-
-  boardGameDetails.rating = double.tryParse(boardGameDetailsRating
-          ?.firstOrDefault(_xmlAverageElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
-      '');
-
-  boardGameDetails.votes = int.tryParse(boardGameDetailsRating
-          ?.firstOrDefault(_xmlUsersRatedElementName)
-          ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
-      '');
-
-  _extractBoardGameRanks(boardGameDetailsRating, boardGameDetails);
-}
-
 void _extractBoardGameLinks(
   Iterable<xml.XmlElement> boardGameLinks,
-  BoardGameDetails boardGameDetails,
+  List<BoardGameCategory> categories,
+  List<BoardGameDesigner> desingers,
+  List<BoardGamePublisher> publishers,
+  List<BoardGameArtist> artists,
+  List<BoardGameExpansion> expansions,
 ) {
   for (final boardGameLink in boardGameLinks) {
     if (boardGameLink.attributes.isEmpty) {
@@ -670,36 +690,29 @@ void _extractBoardGameLinks(
 
     switch (type) {
       case _xmlCategoryAttributeTypeName:
-        final boardGameCategory = BoardGameCategory(id: id!, name: value!);
-        boardGameDetails.categories!.add(boardGameCategory);
+        categories.add(BoardGameCategory(id: id!, name: value!));
         break;
       case _xmlDesignerAttributeTypeName:
-        final boardGameDesigner = BoardGameDesigner(id: id!, name: value!);
-        boardGameDetails.desingers.add(boardGameDesigner);
+        desingers.add(BoardGameDesigner(id: id!, name: value!));
         break;
       case _xmlPublisherAttributeTypeName:
-        final boardGamePublisher = BoardGamePublisher(id: id!, name: value!);
-        boardGameDetails.publishers.add(boardGamePublisher);
+        publishers.add(BoardGamePublisher(id: id!, name: value!));
         break;
       case _xmlArtistAttributeTypeName:
-        final boardGameArtist = BoardGameArtist(id: id!, name: value!);
-        boardGameDetails.artists.add(boardGameArtist);
+        artists.add(BoardGameArtist(id: id!, name: value!));
         break;
       case _xmlExpansionAttributeTypeName:
-        final boardGameArtist = BoardGamesExpansion(id: id!, name: value!);
-        boardGameDetails.expansions.add(boardGameArtist);
+        expansions.add(BoardGameExpansion(id: id!, name: value!));
         break;
       default:
     }
   }
 }
 
-void _extractBoardGameRanks(
-  xml.XmlElement? boardGameDetailsRatings,
-  BoardGameDetails boardGameDetails,
-) {
-  if (boardGameDetailsRatings == null || boardGameDetails == null) {
-    return;
+List<BoardGameRank> _extractBoardGameRanks(xml.XmlElement? boardGameDetailsRatings) {
+  final List<BoardGameRank> ranks = [];
+  if (boardGameDetailsRatings == null) {
+    return ranks;
   }
 
   final Iterable<XmlElement> boardGameDetailsRanks = boardGameDetailsRatings
@@ -730,10 +743,8 @@ void _extractBoardGameRanks(
       rank: rankRank,
     );
 
-    if (rank.name == 'boardgame') {
-      boardGameDetails.rank = rank.rank?.toInt();
-    }
-
-    boardGameDetails.ranks.add(rank);
+    ranks.add(rank);
   }
+
+  return ranks;
 }

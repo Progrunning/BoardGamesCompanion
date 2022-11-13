@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SearchResults {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<BoardGame> boardGames) results,
+    required TResult Function(List<BoardGameDetails> boardGames) results,
     required TResult Function(String searchPhrase) searching,
     required TResult Function() failure,
     required TResult Function() init,
@@ -26,7 +26,7 @@ mixin _$SearchResults {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -34,7 +34,7 @@ mixin _$SearchResults {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -90,7 +90,7 @@ abstract class _$$_ResultsCopyWith<$Res> {
   factory _$$_ResultsCopyWith(
           _$_Results value, $Res Function(_$_Results) then) =
       __$$_ResultsCopyWithImpl<$Res>;
-  $Res call({List<BoardGame> boardGames});
+  $Res call({List<BoardGameDetails> boardGames});
 }
 
 /// @nodoc
@@ -110,7 +110,7 @@ class __$$_ResultsCopyWithImpl<$Res> extends _$SearchResultsCopyWithImpl<$Res>
       boardGames == freezed
           ? _value._boardGames
           : boardGames // ignore: cast_nullable_to_non_nullable
-              as List<BoardGame>,
+              as List<BoardGameDetails>,
     ));
   }
 }
@@ -118,11 +118,12 @@ class __$$_ResultsCopyWithImpl<$Res> extends _$SearchResultsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Results implements _Results {
-  const _$_Results(final List<BoardGame> boardGames) : _boardGames = boardGames;
+  const _$_Results(final List<BoardGameDetails> boardGames)
+      : _boardGames = boardGames;
 
-  final List<BoardGame> _boardGames;
+  final List<BoardGameDetails> _boardGames;
   @override
-  List<BoardGame> get boardGames {
+  List<BoardGameDetails> get boardGames {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_boardGames);
   }
@@ -153,7 +154,7 @@ class _$_Results implements _Results {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<BoardGame> boardGames) results,
+    required TResult Function(List<BoardGameDetails> boardGames) results,
     required TResult Function(String searchPhrase) searching,
     required TResult Function() failure,
     required TResult Function() init,
@@ -164,7 +165,7 @@ class _$_Results implements _Results {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -175,7 +176,7 @@ class _$_Results implements _Results {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -226,9 +227,9 @@ class _$_Results implements _Results {
 }
 
 abstract class _Results implements SearchResults {
-  const factory _Results(final List<BoardGame> boardGames) = _$_Results;
+  const factory _Results(final List<BoardGameDetails> boardGames) = _$_Results;
 
-  List<BoardGame> get boardGames;
+  List<BoardGameDetails> get boardGames;
   @JsonKey(ignore: true)
   _$$_ResultsCopyWith<_$_Results> get copyWith =>
       throw _privateConstructorUsedError;
@@ -299,7 +300,7 @@ class _$_Searching implements _Searching {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<BoardGame> boardGames) results,
+    required TResult Function(List<BoardGameDetails> boardGames) results,
     required TResult Function(String searchPhrase) searching,
     required TResult Function() failure,
     required TResult Function() init,
@@ -310,7 +311,7 @@ class _$_Searching implements _Searching {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -321,7 +322,7 @@ class _$_Searching implements _Searching {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -419,7 +420,7 @@ class _$_Failure implements _Failure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<BoardGame> boardGames) results,
+    required TResult Function(List<BoardGameDetails> boardGames) results,
     required TResult Function(String searchPhrase) searching,
     required TResult Function() failure,
     required TResult Function() init,
@@ -430,7 +431,7 @@ class _$_Failure implements _Failure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -441,7 +442,7 @@ class _$_Failure implements _Failure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -533,7 +534,7 @@ class _$_Init implements _Init {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<BoardGame> boardGames) results,
+    required TResult Function(List<BoardGameDetails> boardGames) results,
     required TResult Function(String searchPhrase) searching,
     required TResult Function() failure,
     required TResult Function() init,
@@ -544,7 +545,7 @@ class _$_Init implements _Init {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,
@@ -555,7 +556,7 @@ class _$_Init implements _Init {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<BoardGame> boardGames)? results,
+    TResult Function(List<BoardGameDetails> boardGames)? results,
     TResult Function(String searchPhrase)? searching,
     TResult Function()? failure,
     TResult Function()? init,

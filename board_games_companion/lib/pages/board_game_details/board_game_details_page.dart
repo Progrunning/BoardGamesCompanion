@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_colors.dart';
@@ -562,9 +561,7 @@ class _StatsAndCollections extends StatelessWidget {
           Center(
             child: BoardGameRatingHexagon(rating: boardGameDetailsStore.boardGame.rating),
           ),
-          const SizedBox(
-            width: Dimensions.standardSpacing,
-          ),
+          const SizedBox(width: Dimensions.standardSpacing),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -594,8 +591,16 @@ class _StatsAndCollections extends StatelessWidget {
               ],
             ),
           ),
-          _CollectionFlags(
-            boardGameDetailsStore: boardGameDetailsStore,
+          Observer(
+            builder: (_) {
+              return _CollectionFlags(
+                isOwned: boardGameDetailsStore.boardGame.isOwned!,
+                isOnWishlist: boardGameDetailsStore.boardGame.isOnWishlist!,
+                isOnFriendsList: boardGameDetailsStore.boardGame.isFriends!,
+                onToggleCollection: (collection) async =>
+                    boardGameDetailsStore.toggleCollection(collection),
+              );
+            },
           ),
         ],
       ),
@@ -605,71 +610,63 @@ class _StatsAndCollections extends StatelessWidget {
 
 class _CollectionFlags extends StatelessWidget {
   const _CollectionFlags({
-    required this.boardGameDetailsStore,
+    required this.isOwned,
+    required this.isOnWishlist,
+    required this.isOnFriendsList,
+    required this.onToggleCollection,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameDetailsViewModel boardGameDetailsStore;
+  final bool isOwned;
+  final bool isOnWishlist;
+  final bool isOnFriendsList;
+  final void Function(CollectionType) onToggleCollection;
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: boardGameDetailsStore.boardGame,
-      child: Consumer<BoardGameDetails>(
-        builder: (_, BoardGameDetails boardGameDetailsProvider, __) {
-          return Column(
-            children: [
-              ToggleButtons(
-                splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
-                fillColor: Colors.transparent,
-                selectedColor: Colors.white,
-                selectedBorderColor: Colors.transparent,
-                disabledBorderColor: Colors.transparent,
-                borderColor: Colors.transparent,
-                isSelected: [
-                  boardGameDetailsProvider.isFriends!,
-                  boardGameDetailsProvider.isOnWishlist!
-                ],
-                children: <Widget>[
-                  _CollectionFlag(
-                    icon: Icons.group,
-                    title: 'Friends',
-                    isSelected: boardGameDetailsProvider.isFriends!,
-                  ),
-                  _CollectionFlag(
-                    icon: Icons.card_giftcard,
-                    title: 'Wishlist',
-                    isSelected: boardGameDetailsProvider.isOnWishlist!,
-                  ),
-                ],
-                onPressed: (int index) async {
-                  await boardGameDetailsStore.toggleCollection(
-                    index == 0 ? CollectionType.friends : CollectionType.wishlist,
-                  );
-                },
-              ),
-              ToggleButtons(
-                splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
-                fillColor: Colors.transparent,
-                selectedColor: Colors.white,
-                selectedBorderColor: Colors.transparent,
-                borderColor: Colors.transparent,
-                isSelected: [boardGameDetailsProvider.isOwned!],
-                children: <Widget>[
-                  _CollectionFlag(
-                    icon: Icons.grid_on,
-                    title: 'Owned',
-                    isSelected: boardGameDetailsProvider.isOwned!,
-                  ),
-                ],
-                onPressed: (int index) async {
-                  await boardGameDetailsStore.toggleCollection(CollectionType.owned);
-                },
-              ),
-            ],
-          );
-        },
-      ),
+    return Column(
+      children: [
+        ToggleButtons(
+          splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
+          fillColor: Colors.transparent,
+          selectedColor: Colors.white,
+          selectedBorderColor: Colors.transparent,
+          disabledBorderColor: Colors.transparent,
+          borderColor: Colors.transparent,
+          isSelected: [isOnFriendsList, isOnWishlist],
+          children: <Widget>[
+            _CollectionFlag(
+              icon: Icons.group,
+              title: 'Friends',
+              isSelected: isOnFriendsList,
+            ),
+            _CollectionFlag(
+              icon: Icons.card_giftcard,
+              title: 'Wishlist',
+              isSelected: isOnWishlist,
+            ),
+          ],
+          onPressed: (int index) => onToggleCollection(
+            index == 0 ? CollectionType.friends : CollectionType.wishlist,
+          ),
+        ),
+        ToggleButtons(
+          splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
+          fillColor: Colors.transparent,
+          selectedColor: Colors.white,
+          selectedBorderColor: Colors.transparent,
+          borderColor: Colors.transparent,
+          isSelected: [isOwned],
+          children: <Widget>[
+            _CollectionFlag(
+              icon: Icons.grid_on,
+              title: 'Owned',
+              isSelected: isOwned,
+            ),
+          ],
+          onPressed: (int index) => onToggleCollection(CollectionType.owned),
+        ),
+      ],
     );
   }
 }

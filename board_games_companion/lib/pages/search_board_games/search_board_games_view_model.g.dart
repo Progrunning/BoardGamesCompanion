@@ -28,13 +28,13 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
       Atom(name: '_SearchBoardGamesViewModel.hotBoardGames', context: context);
 
   @override
-  ObservableList<BoardGame>? get hotBoardGames {
+  ObservableList<BoardGameDetails>? get hotBoardGames {
     _$hotBoardGamesAtom.reportRead();
     return super.hotBoardGames;
   }
 
   @override
-  set hotBoardGames(ObservableList<BoardGame>? value) {
+  set hotBoardGames(ObservableList<BoardGameDetails>? value) {
     _$hotBoardGamesAtom.reportWrite(value, super.hotBoardGames, () {
       super.hotBoardGames = value;
     });

@@ -37,11 +37,11 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
       (_$isExpansionComputed ??= Computed<bool>(() => super.isExpansion,
               name: '_BoardGameDetailsViewModel.isExpansion'))
           .value;
-  Computed<List<BoardGamesExpansion>>? _$expansionsComputed;
+  Computed<List<BoardGameExpansion>>? _$expansionsComputed;
 
   @override
-  List<BoardGamesExpansion> get expansions => (_$expansionsComputed ??=
-          Computed<List<BoardGamesExpansion>>(() => super.expansions,
+  List<BoardGameExpansion> get expansions => (_$expansionsComputed ??=
+          Computed<List<BoardGameExpansion>>(() => super.expansions,
               name: '_BoardGameDetailsViewModel.expansions'))
       .value;
   Computed<bool>? _$hasExpansionsComputed;
@@ -82,6 +82,16 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
         .reportWrite(value, super.futureLoadBoardGameDetails, () {
       super.futureLoadBoardGameDetails = value;
     });
+  }
+
+  late final _$toggleCollectionAsyncAction = AsyncAction(
+      '_BoardGameDetailsViewModel.toggleCollection',
+      context: context);
+
+  @override
+  Future<void> toggleCollection(CollectionType collectionType) {
+    return _$toggleCollectionAsyncAction
+        .run(() => super.toggleCollection(collectionType));
   }
 
   late final _$_BoardGameDetailsViewModelActionController =

@@ -9,7 +9,6 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/analytics.dart';
-import '../../models/board_game.dart';
 import '../../services/analytics_service.dart';
 import '../../services/board_games_geek_service.dart';
 
@@ -32,7 +31,7 @@ abstract class _SearchBoardGamesViewModel with Store {
   int _refreshRetryCount = 0;
 
   @observable
-  ObservableList<BoardGame>? hotBoardGames;
+  ObservableList<BoardGameDetails>? hotBoardGames;
 
   @observable
   SearchResults searchResults = const SearchResults.init();
@@ -65,7 +64,7 @@ abstract class _SearchBoardGamesViewModel with Store {
   BoardGameDetails? getHotBoardGameDetails(String boardGameId) =>
       _boardGamesStore.allBoardGamesMap[boardGameId];
 
-  void trackViewHotBoardGame(BoardGame boardGame) {
+  void trackViewHotBoardGame(BoardGameDetails boardGame) {
     _analyticsService.logEvent(
       name: Analytics.viewHotBoardGame,
       parameters: <String, String?>{

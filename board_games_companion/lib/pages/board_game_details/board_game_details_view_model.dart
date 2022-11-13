@@ -63,14 +63,22 @@ abstract class _BoardGameDetailsViewModel with Store {
   bool get isExpansion => boardGame.isExpansion ?? false;
 
   @computed
-  List<BoardGamesExpansion> get expansions => boardGame.expansions;
+  List<BoardGameExpansion> get expansions => boardGame.expansions;
 
   @computed
   bool get hasExpansions => boardGame.expansions.isNotEmpty;
 
+  // TODO Test if this shows correct value
   @computed
-  int get totalExpansionsOwned =>
-      expansions.where((expansion) => expansion.isInCollection ?? false).length;
+  int get totalExpansionsOwned {
+    final expansionIds = expansions.map((expansion) => expansion.id);
+    return _boardGamesStore.allBoardGames
+        .where((boardGame) =>
+            !boardGame.isMainGame &&
+            expansionIds.contains(boardGame.id) &&
+            (boardGame.isOwned ?? false))
+        .length;
+  }
 
   @computed
   String get unescapedDescription => _htmlUnescape.convert(boardGame.description ?? '');
@@ -81,6 +89,30 @@ abstract class _BoardGameDetailsViewModel with Store {
   @action
   void loadBoardGameDetails() =>
       futureLoadBoardGameDetails = ObservableFuture(_loadBoardGameDetails());
+
+  @action
+  Future<void> toggleCollection(CollectionType collectionType) async {
+    late BoardGameDetails updatedBoardGame;
+    switch (collectionType) {
+      case CollectionType.owned:
+        updatedBoardGame = boardGame.copyWith(isOwned: !boardGame.isOwned!);
+        if (updatedBoardGame.isOwned!) {
+          updatedBoardGame = updatedBoardGame.copyWith(isOnWishlist: false);
+        }
+        break;
+      case CollectionType.friends:
+        updatedBoardGame = boardGame.copyWith(isFriends: !boardGame.isFriends!);
+        break;
+      case CollectionType.wishlist:
+        updatedBoardGame = boardGame.copyWith(
+          isOnWishlist: !boardGame.isOnWishlist!,
+          isOwned: false,
+        );
+        break;
+    }
+
+    await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
+  }
 
   void setBoardGameId(String boardGameId) => _boardGameId = boardGameId;
 
@@ -95,32 +127,6 @@ abstract class _BoardGameDetailsViewModel with Store {
         Analytics.boardGameDetailsLinksName: linkName,
       },
     );
-  }
-
-  Future<void> toggleCollection(CollectionType collectionType) async {
-    switch (collectionType) {
-      case CollectionType.owned:
-        boardGame.isOwned = !boardGame.isOwned!;
-        if (boardGame.isOwned!) {
-          boardGame.isOnWishlist = false;
-          boardGame.isFriends = false;
-        }
-        break;
-      case CollectionType.friends:
-        if (boardGame.isOwned!) {
-          boardGame.isOwned = false;
-        }
-        boardGame.isFriends = !boardGame.isFriends!;
-        break;
-      case CollectionType.wishlist:
-        if (boardGame.isOwned!) {
-          boardGame.isOwned = false;
-        }
-        boardGame.isOnWishlist = !boardGame.isOnWishlist!;
-        break;
-    }
-
-    await _boardGamesStore.addOrUpdateBoardGame(boardGame);
   }
 
   Future<void> _loadBoardGameDetails() async {
