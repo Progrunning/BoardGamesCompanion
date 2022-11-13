@@ -7,7 +7,7 @@ import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
-import '../../models/hive/board_game_details.dart';
+import '../../models/hive/player.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_details.dart';
@@ -32,9 +32,6 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   final PlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
 
-  List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
-      playthroughPlayers.where((player) => player.isChecked).toList();
-
   @observable
   ObservableMap<String, PlayerScore> playerScores = ObservableMap.of({});
 
@@ -53,38 +50,43 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   @observable
   ObservableFuture<void>? futureLoadPlaythroughPlayers;
 
-  @computed
-  ObservableList<PlaythroughPlayer> get playthroughPlayers {
-    return ObservableList.of(_playersStore.players.map((p) => PlaythroughPlayer(p)).toList());
-  }
+  @observable
+  ObservableList<PlaythroughPlayer> playthroughPlayers = ObservableList.of([]);
 
   @computed
-  BoardGameDetails get boardGame => _playthroughsStore.boardGame;
+  String get boardGameId => _playthroughsStore.boardGameId;
 
   @computed
   bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
+
+  @computed
+  List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
+      playthroughPlayers.where((player) => player.isChecked).toList();
 
   @action
   void setLogGameStep(int value) => logGameStep = value;
 
   @action
   void selectPlayer(PlaythroughPlayer playthroughPlayer) {
-    final score = Score(
-      id: const Uuid().v4(),
-      playerId: playthroughPlayer.player.id,
-      boardGameId: _playthroughsStore.boardGame.id,
-    );
-
-    playthroughPlayer.isChecked = true;
+    final indexOfPlaythroughPlayer =
+        playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
+    playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: true);
+    playthroughPlayers = ObservableList.of(playthroughPlayers);
     playerScores[playthroughPlayer.player.id] = PlayerScore(
       player: playthroughPlayer.player,
-      score: score,
+      score: Score(
+        id: const Uuid().v4(),
+        playerId: playthroughPlayer.player.id,
+        boardGameId: _playthroughsStore.boardGameId,
+      ),
     );
   }
 
   @action
   void deselectPlayer(PlaythroughPlayer playthroughPlayer) {
-    playthroughPlayer.isChecked = false;
+    final indexOfPlaythroughPlayer =
+        playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
+    playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: false);
     if (playerScores.containsKey(playthroughPlayer.player.id)) {
       playerScores.remove(playthroughPlayer.player.id);
     }
@@ -136,5 +138,10 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     playerScores[playerScore.player!.id] = updatedPlayerScore;
   }
 
-  Future<void> _loadPlaythroughPlayers() async => _playersStore.loadPlayers();
+  Future<void> _loadPlaythroughPlayers() async {
+    await _playersStore.loadPlayers();
+    playthroughPlayers = ObservableList.of(
+      _playersStore.players.map((Player player) => PlaythroughPlayer(player: player)).toList(),
+    );
+  }
 }

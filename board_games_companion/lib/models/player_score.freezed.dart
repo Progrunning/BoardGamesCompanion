@@ -32,6 +32,7 @@ abstract class $PlayerScoreCopyWith<$Res> {
       _$PlayerScoreCopyWithImpl<$Res>;
   $Res call({Player? player, Score score, int? place});
 
+  $PlayerCopyWith<$Res>? get player;
   $ScoreCopyWith<$Res> get score;
 }
 
@@ -66,6 +67,17 @@ class _$PlayerScoreCopyWithImpl<$Res> implements $PlayerScoreCopyWith<$Res> {
   }
 
   @override
+  $PlayerCopyWith<$Res>? get player {
+    if (_value.player == null) {
+      return null;
+    }
+
+    return $PlayerCopyWith<$Res>(_value.player!, (value) {
+      return _then(_value.copyWith(player: value));
+    });
+  }
+
+  @override
   $ScoreCopyWith<$Res> get score {
     return $ScoreCopyWith<$Res>(_value.score, (value) {
       return _then(_value.copyWith(score: value));
@@ -82,6 +94,8 @@ abstract class _$$_PlayerScoreCopyWith<$Res>
   @override
   $Res call({Player? player, Score score, int? place});
 
+  @override
+  $PlayerCopyWith<$Res>? get player;
   @override
   $ScoreCopyWith<$Res> get score;
 }

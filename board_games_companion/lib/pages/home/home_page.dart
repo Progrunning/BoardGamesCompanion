@@ -64,7 +64,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                   widget.viewModel.rateAndReviewService,
                 ),
                 SearchBoardGamesPage(viewModel: widget.viewModel.searchBoardGamesViewModel),
-                PlayersPage(playersViewModel: widget.viewModel.playersViewModel),
+                PlayersPage(viewModel: widget.viewModel.playersViewModel),
               ],
             ),
           ),

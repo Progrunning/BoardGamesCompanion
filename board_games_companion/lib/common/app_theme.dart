@@ -120,9 +120,7 @@ class AppTheme {
             buttonColor: AppColors.accentColor,
           ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: AppColors.accentColor,
-        ),
+        style: TextButton.styleFrom(foregroundColor: AppColors.accentColor),
       ),
       textTheme: originalTextTheme.copyWith(
         bodyText1: originalBodyText1.copyWith(

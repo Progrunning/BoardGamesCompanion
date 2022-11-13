@@ -31,9 +31,12 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
             (includeDeleted || !(player.isDeleted ?? false)))
         .toList();
 
-    for (final Player player in players) {
-      if (player.avatarFileName?.isNotEmpty ?? false) {
-        player.avatarImageUri = await fileService.createDocumentsFilePath(player.avatarFileName!);
+    for (var i = 0; i < players.length; i++) {
+      final hasAvatarFileName = players[i].avatarFileName?.isNotEmpty ?? false;
+      if (hasAvatarFileName) {
+        final avatarImageUri =
+            await fileService.createDocumentsFilePath(players[i].avatarFileName!);
+        players[i] = players[i].copyWith(avatarImageUri: avatarImageUri);
       }
     }
 
@@ -46,7 +49,7 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
     }
 
     if (player.id.isEmpty) {
-      player.id = uuid.v4();
+      player = player.copyWith(id: uuid.v4());
     }
 
     if (player.avatarFileToSave != null) {
@@ -82,9 +85,7 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
       return false;
     }
 
-    playerToDelete.isDeleted = true;
-
-    await storageBox.put(playerId, playerToDelete);
+    await storageBox.put(playerId, playerToDelete.copyWith(isDeleted: true));
 
     return true;
   }
@@ -101,7 +102,7 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
           _fileExtensionRegex.firstMatch(player.avatarFileToSave!.path)!.group(0);
     }
 
-    player.avatarFileName = '$avatarImageName$avatarImageNameFileExtension';
+    player = player.copyWith(avatarFileName: '$avatarImageName$avatarImageNameFileExtension');
 
     return fileService.saveToDocumentsDirectory(player.avatarFileName!, player.avatarFileToSave!);
   }

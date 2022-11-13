@@ -123,8 +123,8 @@ abstract class _GamesViewModel with Store {
   }
 
   @computed
-  bool get anyBoardGamesInCollections => _boardGamesStore.allBoardGames
-      .any((boardGame) => boardGame.isOwned! || boardGame.isOnWishlist! || boardGame.isFriends!);
+  bool get anyBoardGamesInCollections =>
+      _boardGamesStore.allBoardGames.any((boardGame) => boardGame.isInAnyCollection);
 
   @computed
   bool get anyBoardGames => _boardGamesStore.allBoardGames.isNotEmpty;
@@ -162,11 +162,11 @@ abstract class _GamesViewModel with Store {
   List<BoardGameDetails> get boardGamesInCollection {
     switch (selectedTab) {
       case GamesTab.owned:
-        return filteredBoardGames.where((boardGame) => boardGame.isOwned!).toList();
+        return filteredBoardGames.where((boardGame) => boardGame.isOwned ?? false).toList();
       case GamesTab.friends:
-        return filteredBoardGames.where((boardGame) => boardGame.isFriends!).toList();
+        return filteredBoardGames.where((boardGame) => boardGame.isFriends ?? false).toList();
       case GamesTab.wishlist:
-        return filteredBoardGames.where((boardGame) => boardGame.isOnWishlist!).toList();
+        return filteredBoardGames.where((boardGame) => boardGame.isOnWishlist ?? false).toList();
     }
   }
 

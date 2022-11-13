@@ -115,36 +115,32 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesServ
       return collectionImportResult;
     }
 
-    final importedCollectionMap = <String, BoardGameDetails>{
-      for (final BoardGameDetails boardGameDetails in collectionImportResult.data!)
-        boardGameDetails.id: boardGameDetails
-    };
-
     final existingCollectionMap = <String, BoardGameDetails>{
       for (final BoardGameDetails boardGameDetails in storageBox.values)
         boardGameDetails.id: boardGameDetails
     };
 
-    final List<BoardGameDetails> boardGamesToRemove = storageBox.values
-        .where((boardGameDetails) =>
-            boardGameDetails.isBggSynced! &&
-            !importedCollectionMap.containsKey(boardGameDetails.id))
-        .toList();
-
-    // Remove
-    for (final boardGameToRemove in boardGamesToRemove) {
-      await storageBox.delete(boardGameToRemove.id);
-    }
-
     // Add & Update
-    for (final importedBoardGame in collectionImportResult.data!) {
-      // Take local collection settings over the BGG
+    for (var importedBoardGame in collectionImportResult.data!) {
+      // Ensure that we don't lose some of the game details if we have more than the import can provide
+      // (e.g. expansions)
       if (existingCollectionMap.containsKey(importedBoardGame.id)) {
         final existingBoardGame = existingCollectionMap[importedBoardGame.id]!;
-        importedBoardGame.isOnWishlist = existingBoardGame.isOnWishlist;
-        importedBoardGame.isOwned = existingBoardGame.isOwned;
-        importedBoardGame.isFriends = existingBoardGame.isFriends;
+        importedBoardGame = importedBoardGame.copyWith(
+          isOnWishlist: existingBoardGame.isOnWishlist,
+          isOwned: existingBoardGame.isOwned,
+          isFriends: existingBoardGame.isFriends,
+          isExpansion: existingBoardGame.isExpansion,
+          avgWeight: existingBoardGame.avgWeight,
+          commentsNumber: existingBoardGame.commentsNumber,
+          expansions: existingBoardGame.expansions,
+          artists: existingBoardGame.artists,
+          publishers: existingBoardGame.publishers,
+          desingers: existingBoardGame.desingers,
+          minAge: existingBoardGame.minAge,
+        );
       }
+
       await storageBox.put(importedBoardGame.id, importedBoardGame);
     }
 

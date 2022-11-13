@@ -30,20 +30,30 @@ abstract class _PlaythroughsStore with Store {
   final ScoreService _scoreService;
   final PlayerService _playerService;
 
-  late BoardGameDetails boardGame;
+  @observable
+  BoardGameDetails? _boardGame;
 
   @observable
   ObservableList<PlaythroughDetails> playthroughsDetails = ObservableList.of([]);
 
+  @computed
+  String get boardGameName => _boardGame!.name;
+
+  @computed
+  String get boardGameId => _boardGame!.id;
+
+  @computed
+  String? get boardGameImageUrl => _boardGame!.imageUrl;
+
+  @computed
+  GameWinningCondition get gameWinningCondition =>
+      _boardGame!.settings?.winningCondition ?? GameWinningCondition.HighestScore;
+
   @action
   Future<void> loadPlaythroughs() async {
-    if (boardGame == null) {
-      return;
-    }
-
     try {
       final loadedPlaythroughDetails = <PlaythroughDetails>[];
-      final playthroughs = await _playthroughService.retrievePlaythroughs([boardGame.id]);
+      final playthroughs = await _playthroughService.retrievePlaythroughs([boardGameId]);
       for (final playthrough in playthroughs) {
         final playthroughDetails = await createPlaythroughDetails(playthrough);
         loadedPlaythroughDetails.add(playthroughDetails);
@@ -56,7 +66,7 @@ abstract class _PlaythroughsStore with Store {
   }
 
   @action
-  void setBoardGame(BoardGameDetails boardGame) => this.boardGame = boardGame;
+  void setBoardGame(BoardGameDetails boardGame) => _boardGame = boardGame;
 
   Future<PlaythroughDetails?> createPlaythrough(
     String boardGameId,
@@ -125,7 +135,7 @@ abstract class _PlaythroughsStore with Store {
 
   Future<PlaythroughDetails> createPlaythroughDetails(Playthrough hivePlaythrough) async {
     final scores = (await _scoreService.retrieveScores([hivePlaythrough.id]))
-      ..sortByScore(boardGame.settings?.winningCondition ?? GameWinningCondition.HighestScore)
+      ..sortByScore(gameWinningCondition)
       ..toList();
     final players = await _playerService.retrievePlayers(
       playerIds: hivePlaythrough.playerIds,
@@ -137,9 +147,6 @@ abstract class _PlaythroughsStore with Store {
       return PlayerScore(player: player, score: score, place: index + 1);
     }).toList();
 
-    return PlaythroughDetails(
-      playthrough: hivePlaythrough,
-      playerScores: playerScores,
-    );
+    return PlaythroughDetails(playthrough: hivePlaythrough, playerScores: playerScores);
   }
 }

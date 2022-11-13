@@ -58,7 +58,10 @@ abstract class _PlaythroughsViewModel with Store {
   BggPlaysImportRaport? bggPlaysImportRaport;
 
   @computed
-  BoardGameDetails get boardGame => _playthroughsStore.boardGame;
+  String get boardGameId => _playthroughsStore.boardGameId;
+
+  @computed
+  String get boardGameName => _playthroughsStore.boardGameName;
 
   @computed
   bool get hasUser => _userStore.hasUser;
@@ -67,7 +70,7 @@ abstract class _PlaythroughsViewModel with Store {
   String? get userName => _userStore.userName;
 
   @computed
-  String get gamePlaylistUrl => '$melodicePlaylistUrl/${boardGame.id}';
+  String get gamePlaylistUrl => '$melodicePlaylistUrl/$boardGameId';
 
   @action
   void setBoardGame(BoardGameDetails boardGame) {
@@ -125,9 +128,11 @@ abstract class _PlaythroughsViewModel with Store {
 
         final bool newPlayer =
             _playersStore.players.firstWhereOrNull((p) => p.id == playerId) != null;
-        final Player player = Player(id: playerId)
-          ..name = bggPlayer.playerName
-          ..bggName = bggPlayer.playerBggName;
+        final Player player = Player(
+          id: playerId,
+          name: bggPlayer.playerName,
+          bggName: bggPlayer.playerBggName,
+        );
 
         if (await _playersStore.createOrUpdatePlayer(player)) {
           if (!newPlayer &&
@@ -135,7 +140,7 @@ abstract class _PlaythroughsViewModel with Store {
             bggPlaysImportRaport!.createdPlayers.add(player.name ?? player.bggName ?? '');
           }
 
-          playthroughPlayers.add(PlaythroughPlayer(player));
+          playthroughPlayers.add(PlaythroughPlayer(player: player));
           final Score playerScore = Score(
             id: const Uuid().v4(),
             playerId: player.id,
@@ -165,8 +170,8 @@ abstract class _PlaythroughsViewModel with Store {
     await _analyticsService.logEvent(
       name: Analytics.openGamesPlaylist,
       parameters: <String, String>{
-        Analytics.boardGameIdParameter: boardGame.id,
-        Analytics.boardGameNameParameter: boardGame.name,
+        Analytics.boardGameIdParameter: boardGameId,
+        Analytics.boardGameNameParameter: boardGameName,
       },
     );
   }

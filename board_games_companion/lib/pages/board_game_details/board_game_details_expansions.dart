@@ -1,5 +1,5 @@
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
@@ -14,13 +14,15 @@ class BoardGameDetailsExpansions extends StatefulWidget {
   const BoardGameDetailsExpansions({
     Key? key,
     required this.expansions,
+    required this.ownedExpansionsById,
     required this.totalExpansionsOwned,
     required this.spacingBetweenSecions,
     // TODO MK Pass in requier preferences data (instead of entire service) and or handle the events outside of this widget
     required this.preferencesService,
   }) : super(key: key);
 
-  final List<BoardGamesExpansion> expansions;
+  final List<BoardGameExpansion> expansions;
+  final Map<String, BoardGameDetails> ownedExpansionsById;
   final int totalExpansionsOwned;
   final double spacingBetweenSecions;
   final PreferencesService? preferencesService;
@@ -43,6 +45,7 @@ class BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> 
             data: AppTheme.theme.copyWith(unselectedWidgetColor: AppColors.accentColor),
             child: _Expansions(
               expansions: widget.expansions,
+              ownedExpansionsById: widget.ownedExpansionsById,
               totalExpansionsOwned: widget.totalExpansionsOwned,
               preferencesService: widget.preferencesService!,
               initiallyExpanded: widget.preferencesService!.getExpansionsPanelExpandedState(),
@@ -58,12 +61,14 @@ class _Expansions extends StatelessWidget {
   const _Expansions({
     Key? key,
     required this.expansions,
+    required this.ownedExpansionsById,
     required this.totalExpansionsOwned,
     required this.preferencesService,
     required this.initiallyExpanded,
   }) : super(key: key);
 
-  final List<BoardGamesExpansion> expansions;
+  final List<BoardGameExpansion> expansions;
+  final Map<String, BoardGameDetails> ownedExpansionsById;
   final int totalExpansionsOwned;
   final PreferencesService preferencesService;
   final bool? initiallyExpanded;
@@ -95,12 +100,10 @@ class _Expansions extends StatelessWidget {
         onExpansionChanged: (bool isExpanded) async =>
             preferencesService.setExpansionsPanelExpandedState(isExpanded),
         children: [
-          for (final BoardGamesExpansion expansion in expansions)
-            ChangeNotifierProvider<BoardGamesExpansion>.value(
-              value: expansion,
-              child: Consumer<BoardGamesExpansion>(
-                builder: (_, store, __) => _Expansion(boardGamesExpansion: expansion),
-              ),
+          for (final BoardGameExpansion expansion in expansions)
+            _Expansion(
+              boardGamesExpansion: expansion,
+              ownsExpansion: ownedExpansionsById.containsKey(expansion.id),
             ),
         ],
       ),
@@ -111,11 +114,14 @@ class _Expansions extends StatelessWidget {
 class _Expansion extends StatelessWidget {
   const _Expansion({
     Key? key,
-    required BoardGamesExpansion boardGamesExpansion,
+    required BoardGameExpansion boardGamesExpansion,
+    required bool ownsExpansion,
   })  : _boardGameExpansion = boardGamesExpansion,
+        _ownsExpansion = ownsExpansion,
         super(key: key);
 
-  final BoardGamesExpansion _boardGameExpansion;
+  final BoardGameExpansion _boardGameExpansion;
+  final bool _ownsExpansion;
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +158,7 @@ class _Expansion extends StatelessWidget {
       },
     );
 
-    if (_boardGameExpansion.isInCollection ?? false) {
+    if (_ownsExpansion) {
       expansionItem = ClipRect(
         child: CustomPaint(
           foregroundPainter: ExpanionsBannerPainter(
@@ -165,9 +171,6 @@ class _Expansion extends StatelessWidget {
       );
     }
 
-    return Material(
-      color: Colors.transparent,
-      child: expansionItem,
-    );
+    return Material(color: Colors.transparent, child: expansionItem);
   }
 }

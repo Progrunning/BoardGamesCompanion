@@ -42,7 +42,7 @@ class BoardGameStatistics {
 }
 
 @freezed
-abstract class PlayerWinsStatistics with _$PlayerWinsStatistics {
+class PlayerWinsStatistics with _$PlayerWinsStatistics {
   const factory PlayerWinsStatistics({
     required Player player,
     required int numberOfWins,
@@ -51,7 +51,7 @@ abstract class PlayerWinsStatistics with _$PlayerWinsStatistics {
 }
 
 @freezed
-abstract class PlayerCountStatistics with _$PlayerCountStatistics {
+class PlayerCountStatistics with _$PlayerCountStatistics {
   const factory PlayerCountStatistics({
     required int numberOfPlayers,
     required int numberOfGamesPlayed,

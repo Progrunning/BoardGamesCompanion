@@ -1,7 +1,10 @@
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/app_styles.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
@@ -10,13 +13,12 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/player.dart';
 import '../../models/navigation/player_page_arguments.dart';
-import '../../widgets/common/cunsumer_future_builder_widget.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/player/player_image.dart';
-import 'player_page.dart';
+import '../player/player_page.dart';
 import 'players_view_model.dart';
 
 typedef PlayerTapped = void Function(Player player, bool isChecked);
@@ -24,11 +26,11 @@ typedef PlayerSearchResultTapped = void Function(Player player);
 
 class PlayersPage extends StatefulWidget {
   const PlayersPage({
-    required this.playersViewModel,
+    required this.viewModel,
     Key? key,
   }) : super(key: key);
 
-  final PlayersViewModel playersViewModel;
+  final PlayersViewModel viewModel;
 
   @override
   PlayersPageState createState() => PlayersPageState();
@@ -36,61 +38,80 @@ class PlayersPage extends StatefulWidget {
 
 class PlayersPageState extends State<PlayersPage> {
   @override
+  void initState() {
+    super.initState();
+
+    widget.viewModel.loadPlayers();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ConsumerFutureBuilder<List<Player>, PlayersViewModel>(
-      future: widget.playersViewModel.loadPlayers(),
-      success: (context, PlayersViewModel viewModel) {
-        return Stack(
-          children: [
-            CustomScrollView(
+    return Observer(
+      builder: (context) {
+        switch (widget.viewModel.futureLoadPlayers?.status ?? FutureStatus.pending) {
+          case FutureStatus.pending:
+          case FutureStatus.rejected:
+            return const CustomScrollView(
               slivers: [
-                if (viewModel.players.isNotEmpty) ...[
-                  _AppBar(
-                    players: viewModel.players,
-                    onSearchResultTap: (Player player) => _navigateToPlayerPage(context, player),
-                    onToggleEditModeTap: () => _toggleEditMode(),
-                  ),
-                  _Players(
-                    players: viewModel.players,
-                    isEditMode: viewModel.isEditMode,
-                    onPlayerTap: (Player player, bool isChecked) =>
-                        _playerTapped(viewModel, player, isChecked),
-                  ),
-                ] else ...[
-                  const SliverAppBar(
-                    pinned: true,
-                    foregroundColor: AppColors.accentColor,
-                  ),
-                  const _NoPlayers(),
-                ]
+                _AppBar(players: []),
+                SliverFillRemaining(child: LoadingIndicator()),
               ],
-            ),
-            Positioned(
-              bottom: Dimensions.bottomTabTopHeight,
-              right: Dimensions.standardSpacing,
-              child: viewModel.isEditMode
-                  ? ElevatedIconButton(
-                      title: AppText.playersPageDeletePlayersButtonText,
-                      icon: const DefaultIcon(Icons.delete),
-                      color: AppColors.redColor,
-                      onPressed: () async {
-                        if (await _showDeletePlayersDialog(context) ?? false) {
-                          setState(() {});
-                        }
-                      },
-                    )
-                  : ElevatedIconButton(
-                      title: AppText.playersPageCreatePlayerButtonText,
-                      icon: const DefaultIcon(Icons.add),
-                      onPressed: () => Navigator.pushNamed(
-                        context,
-                        PlayerPage.pageRoute,
-                        arguments: const PlayerPageArguments(),
+            );
+          case FutureStatus.fulfilled:
+            return Stack(
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    if (widget.viewModel.players.isNotEmpty) ...[
+                      _AppBar(
+                        players: widget.viewModel.players,
+                        onSearchResultTap: (Player player) =>
+                            _navigateToPlayerPage(context, player),
+                        onToggleEditModeTap: () => widget.viewModel.toggleEditMode(),
                       ),
-                    ),
-            ),
-          ],
-        );
+                      Observer(
+                        builder: (_) {
+                          return _Players(
+                            players: widget.viewModel.players,
+                            isEditMode: widget.viewModel.isEditMode,
+                            onPlayerTap: (Player player, bool isChecked) =>
+                                _playerTapped(widget.viewModel, player, isChecked),
+                          );
+                        },
+                      ),
+                    ] else ...[
+                      const _AppBar(players: []),
+                      const _NoPlayers(),
+                    ]
+                  ],
+                ),
+                Positioned(
+                  bottom: Dimensions.bottomTabTopHeight,
+                  right: Dimensions.standardSpacing,
+                  child: widget.viewModel.isEditMode
+                      ? ElevatedIconButton(
+                          title: AppText.playersPageDeletePlayersButtonText,
+                          icon: const DefaultIcon(Icons.delete),
+                          color: AppColors.redColor,
+                          onPressed: () async {
+                            if (await _showDeletePlayersDialog(context) ?? false) {
+                              setState(() {});
+                            }
+                          },
+                        )
+                      : ElevatedIconButton(
+                          title: AppText.playersPageCreatePlayerButtonText,
+                          icon: const DefaultIcon(Icons.add),
+                          onPressed: () => Navigator.pushNamed(
+                            context,
+                            PlayerPage.pageRoute,
+                            arguments: const PlayerPageArguments(player: null),
+                          ),
+                        ),
+                ),
+              ],
+            );
+        }
       },
     );
   }
@@ -116,10 +137,6 @@ class PlayersPageState extends State<PlayersPage> {
     }
   }
 
-  void _toggleEditMode() {
-    widget.playersViewModel.isEditMode = !widget.playersViewModel.isEditMode;
-  }
-
   Future<bool?> _showDeletePlayersDialog(BuildContext context) async {
     return showDialog<bool>(
       context: context,
@@ -136,7 +153,7 @@ class PlayersPageState extends State<PlayersPage> {
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
-                await widget.playersViewModel.deleteSelectedPlayers();
+                await widget.viewModel.deleteSelectedPlayers();
                 if (!mounted) {
                   return;
                 }
@@ -159,13 +176,13 @@ class _AppBar extends StatelessWidget {
   const _AppBar({
     Key? key,
     required this.players,
-    required this.onSearchResultTap,
-    required this.onToggleEditModeTap,
+    this.onSearchResultTap,
+    this.onToggleEditModeTap,
   }) : super(key: key);
 
   final List<Player> players;
-  final PlayerSearchResultTapped onSearchResultTap;
-  final VoidCallback onToggleEditModeTap;
+  final PlayerSearchResultTapped? onSearchResultTap;
+  final VoidCallback? onToggleEditModeTap;
 
   @override
   Widget build(BuildContext context) {
@@ -177,20 +194,32 @@ class _AppBar extends StatelessWidget {
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.edit, color: AppColors.accentColor),
-          onPressed: onToggleEditModeTap,
+          icon: Icon(
+            Icons.edit,
+            color: onSearchResultTap == null
+                ? AppColors.disabledIconIconColor
+                : AppColors.enabledIconIconColor,
+          ),
+          onPressed: onToggleEditModeTap == null ? null : () => onToggleEditModeTap?.call(),
         ),
         IconButton(
-          icon: const Icon(Icons.search, color: AppColors.accentColor),
-          onPressed: () async {
-            await showSearch(
-              context: context,
-              delegate: _PlayersSerach(
-                players: players,
-                onResultTap: onSearchResultTap,
-              ),
-            );
-          },
+          icon: Icon(
+            Icons.search,
+            color: onSearchResultTap == null
+                ? AppColors.disabledIconIconColor
+                : AppColors.enabledIconIconColor,
+          ),
+          onPressed: onSearchResultTap == null
+              ? null
+              : () async {
+                  await showSearch(
+                    context: context,
+                    delegate: _PlayersSerach(
+                      players: players,
+                      onResultTap: (player) => onSearchResultTap?.call(player),
+                    ),
+                  );
+                },
         ),
       ],
     );
@@ -289,10 +318,7 @@ class _PlayerState extends State<_Player> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        PlayerAvatar(
-          widget.player,
-          onTap: () => _onTap(),
-        ),
+        PlayerAvatar(widget.player, onTap: () => _onTap()),
         if (widget.isEditMode)
           Align(
             alignment: Alignment.topRight,

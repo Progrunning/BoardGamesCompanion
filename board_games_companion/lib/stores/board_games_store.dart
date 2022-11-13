@@ -7,7 +7,6 @@ import 'package:mobx/mobx.dart';
 
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
-import '../models/hive/board_game_expansion.dart';
 import '../models/import_result.dart';
 import '../services/board_games_service.dart';
 import '../services/playthroughs_service.dart';
@@ -40,23 +39,28 @@ abstract class _BoardGamesStore with Store {
   ObservableList<BoardGameDetails> allBoardGames = ObservableList.of([]);
 
   @computed
+  List<BoardGameDetails> get expansions =>
+      allBoardGames.where((boardGame) => !boardGame.isMainGame).toList();
+
+  @computed
+  List<BoardGameDetails> get ownedExpansions =>
+      expansions.where((boardGame) => boardGame.isOwned ?? false).toList();
+
+  @computed
   ObservableMap<String, BoardGameDetails> get allBoardGamesMap =>
       ObservableMap.of({for (var boardGame in allBoardGames) boardGame.id: boardGame});
 
   @computed
-  List<BoardGameDetails> get allBoardGamesInCollections => allBoardGames
-      .where((BoardGameDetails boardGame) =>
-          boardGame.isOwned! || boardGame.isFriends! || boardGame.isOnWishlist!)
-      .toList();
+  List<BoardGameDetails> get allBoardGamesInCollections =>
+      allBoardGames.where((BoardGameDetails boardGame) => boardGame.isInAnyCollection).toList();
 
   @computed
   ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap =>
       ObservableMap.of({for (var boardGame in allBoardGamesInCollections) boardGame.id: boardGame});
 
   @action
-  Future<void> loadBoardGames() async {
-    allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
-  }
+  Future<void> loadBoardGames() async =>
+      allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
 
   @action
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {
@@ -67,69 +71,42 @@ abstract class _BoardGamesStore with Store {
       return;
     }
 
-    final existingBoardGameDetails = _retrieveBoardGame(boardGameDetails.id);
-    if (existingBoardGameDetails == null) {
+    final existingBoardGameDetailsIndex =
+        allBoardGames.indexWhere((bgd) => bgd.id == boardGameDetails.id);
+
+    if (existingBoardGameDetailsIndex == -1) {
       allBoardGames.add(boardGameDetails);
     } else {
-      existingBoardGameDetails.imageUrl = boardGameDetails.imageUrl;
-      existingBoardGameDetails.name = boardGameDetails.name;
-      existingBoardGameDetails.rank = boardGameDetails.rank;
-      existingBoardGameDetails.rating = boardGameDetails.rating;
-      existingBoardGameDetails.votes = boardGameDetails.votes;
-      existingBoardGameDetails.yearPublished = boardGameDetails.yearPublished;
-      existingBoardGameDetails.categories = boardGameDetails.categories;
-      existingBoardGameDetails.description = boardGameDetails.description;
-      existingBoardGameDetails.minPlayers = boardGameDetails.minPlayers;
-      existingBoardGameDetails.maxPlayers = boardGameDetails.maxPlayers;
-      existingBoardGameDetails.minPlaytime = boardGameDetails.minPlaytime;
-      existingBoardGameDetails.maxPlaytime = boardGameDetails.maxPlaytime;
-      existingBoardGameDetails.minAge = boardGameDetails.minAge;
-      existingBoardGameDetails.avgWeight = boardGameDetails.avgWeight;
-      existingBoardGameDetails.publishers = boardGameDetails.publishers;
-      existingBoardGameDetails.artists = boardGameDetails.artists;
-      existingBoardGameDetails.desingers = boardGameDetails.desingers;
-      existingBoardGameDetails.commentsNumber = boardGameDetails.commentsNumber;
-      existingBoardGameDetails.ranks = boardGameDetails.ranks;
-      existingBoardGameDetails.lastModified = boardGameDetails.lastModified;
-      existingBoardGameDetails.isExpansion = boardGameDetails.isExpansion;
-      existingBoardGameDetails.isFriends = boardGameDetails.isFriends;
-      existingBoardGameDetails.isOnWishlist = boardGameDetails.isOnWishlist;
-      existingBoardGameDetails.isOwned = boardGameDetails.isOwned;
-      existingBoardGameDetails.settings = boardGameDetails.settings;
-      _updateBoardGameExpansions(existingBoardGameDetails, boardGameDetails);
+      allBoardGames[existingBoardGameDetailsIndex] = boardGameDetails;
     }
   }
 
   @action
   Future<void> refreshBoardGameDetails(String boardGameId) async {
     try {
-      final boardGameDetails = await _boardGamesService.getBoardGame(boardGameId);
+      var boardGameDetails = await _boardGamesService.getBoardGame(boardGameId);
       if (boardGameDetails == null) {
         return;
       }
 
-      if (!(boardGameDetails.isExpansion ?? true)) {
+      if (boardGameDetails.isMainGame) {
         for (final boardGameExpansion in boardGameDetails.expansions) {
-          final boardGameExpansionDetails = allBoardGames.firstWhereOrNull(
-            (boardGame) => boardGame.id == boardGameExpansion.id,
-          );
-
-          if (boardGameExpansionDetails != null) {
-            boardGameExpansionDetails.isExpansion = true;
-            if (boardGameExpansionDetails.isOwned!) {
-              // TODO MK Think why does the isInCollection flag exists
-              //         When determining if a board extension is in collection we should look at the collections and check if board game id of an expansion exists in it
-              boardGameExpansion.isInCollection = true;
-            }
+          final existingBoardGameExpansionDetails = _retrieveBoardGame(boardGameExpansion.id);
+          if (existingBoardGameExpansionDetails != null) {
+            await addOrUpdateBoardGame(
+              existingBoardGameExpansionDetails.copyWith(isExpansion: true),
+            );
           }
         }
       }
 
       final existingBoardGameDetails = _retrieveBoardGame(boardGameDetails.id);
       if (existingBoardGameDetails != null) {
-        boardGameDetails.isFriends = existingBoardGameDetails.isFriends;
-        boardGameDetails.isOnWishlist = existingBoardGameDetails.isOnWishlist;
-        boardGameDetails.isOwned = existingBoardGameDetails.isOwned;
+        boardGameDetails = boardGameDetails.copyWith(
+          isFriends: existingBoardGameDetails.isFriends,
+          isOnWishlist: existingBoardGameDetails.isOnWishlist,
+          isOwned: existingBoardGameDetails.isOwned,
+        );
       }
 
       await addOrUpdateBoardGame(boardGameDetails);
@@ -190,28 +167,6 @@ abstract class _BoardGamesStore with Store {
     }
 
     return importResult;
-  }
-
-  void _updateBoardGameExpansions(
-    BoardGameDetails existingBoardGameDetails,
-    BoardGameDetails boardGameDetails,
-  ) {
-    if (boardGameDetails.isExpansion ?? false) {
-      // MK If updating an expansion, find the main game and update IsInCollection flag for this expansion
-      final BoardGamesExpansion? parentBoardGameExpansion = allBoardGames
-          .expand((BoardGameDetails boardGameDetails) => boardGameDetails.expansions)
-          .firstWhereOrNull(
-            (BoardGamesExpansion boardGameExpansion) =>
-                boardGameExpansion.id == boardGameDetails.id,
-          );
-
-      if (parentBoardGameExpansion != null) {
-        parentBoardGameExpansion.isInCollection = boardGameDetails.isOwned;
-      }
-    } else {
-      // MK Update main board game expansions list
-      existingBoardGameDetails.expansions = boardGameDetails.expansions;
-    }
   }
 
   BoardGameDetails? _retrieveBoardGame(String boardGameId) {

@@ -4,7 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -12,10 +11,8 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../models/board_game.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
-import '../../stores/search_bar_board_games_store.dart';
-import '../../stores/search_board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
@@ -60,9 +57,14 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
     return PageContainer(
       child: CustomScrollView(
         slivers: <Widget>[
-          _SearchBar(searchFocusNode: searchFocusNode),
-          _SearchResults(
-            onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+          _SearchBar(
+            viewModel: widget.viewModel,
+            searchFocusNode: searchFocusNode,
+          ),
+          _Search(
+            viewModel: widget.viewModel,
+            onBoardGameTapped: (BoardGameDetails boardGame) =>
+                _navigateToBoardGameDetails(boardGame),
           ),
           SliverPersistentHeader(
             pinned: true,
@@ -71,14 +73,15 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
           ),
           _HotBoardGames(
             viewModel: widget.viewModel,
-            onBoardGameTapped: (BoardGame boardGame) => _navigateToBoardGameDetails(boardGame),
+            onBoardGameTapped: (BoardGameDetails boardGame) =>
+                _navigateToBoardGameDetails(boardGame),
           ),
         ],
       ),
     );
   }
 
-  Future<void> _navigateToBoardGameDetails(BoardGame boardGame) async {
+  Future<void> _navigateToBoardGameDetails(BoardGameDetails boardGame) async {
     searchFocusNode.unfocus();
     await Navigator.pushNamed(
       context,
@@ -95,10 +98,12 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
 
 class _SearchBar extends StatefulWidget {
   const _SearchBar({
+    required this.viewModel,
     required this.searchFocusNode,
     Key? key,
   }) : super(key: key);
 
+  final SearchBoardGamesViewModel viewModel;
   final FocusNode searchFocusNode;
 
   @override
@@ -107,16 +112,11 @@ class _SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<_SearchBar> {
   late TextEditingController searchController;
-  late SearchBoardGamesStore searchBoardGamesStore;
 
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
-    searchBoardGamesStore = Provider.of<SearchBoardGamesStore>(
-      context,
-      listen: false,
-    );
   }
 
   @override
@@ -130,179 +130,188 @@ class _SearchBarState extends State<_SearchBar> {
     return SliverAppBar(
       titleSpacing: 0,
       foregroundColor: AppColors.accentColor,
-      title: Consumer<SearchBarBoardGamesStore>(
-        builder: (_, store, __) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.standardSpacing,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.standardSpacing,
+        ),
+        child: TextField(
+          controller: searchController,
+          style: AppTheme.defaultTextFieldStyle,
+          focusNode: widget.searchFocusNode,
+          textInputAction: TextInputAction.search,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            hintText: AppText.searchBoardGamesSearchBarHint,
+            suffixIcon: Observer(
+              builder: (_) {
+                return _SearchIcon(
+                  isSearchPhraseEmpty: widget.viewModel.isSearchPhraseEmpty,
+                  onClear: () {
+                    searchController.text = '';
+                    widget.viewModel.clearSearchResults();
+                  },
+                );
+              },
             ),
-            child: TextField(
-              controller: searchController,
-              style: AppTheme.defaultTextFieldStyle,
-              focusNode: widget.searchFocusNode,
-              textInputAction: TextInputAction.search,
-              textAlignVertical: TextAlignVertical.center,
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                suffixIcon: retrieveSearchBarSuffixIcon(store, searchBoardGamesStore),
-              ),
-              onChanged: (searchPhrase) => store.searchPhrase = searchPhrase,
-              onSubmitted: (searchPhrase) => searchBoardGamesStore.updateSearchResults(),
-            ),
-          );
-        },
+          ),
+          onChanged: (searchPhrase) => widget.viewModel.setSearchPhrase(searchPhrase),
+          onSubmitted: (searchPhrase) => widget.viewModel.searchBoardGames(),
+        ),
       ),
     );
   }
-
-  Widget retrieveSearchBarSuffixIcon(
-    SearchBarBoardGamesStore searchBarBoardGamesStore,
-    SearchBoardGamesStore searchBoardGamesStore,
-  ) {
-    if (searchBarBoardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-      return IconButton(
-        icon: const Icon(
-          Icons.clear,
-        ),
-        color: AppColors.accentColor,
-        onPressed: () {
-          searchController.text = '';
-          searchBarBoardGamesStore.searchPhrase = null;
-          searchBoardGamesStore.updateSearchResults();
-        },
-      );
-    }
-
-    return const Icon(
-      Icons.search,
-      color: AppColors.accentColor,
-    );
-  }
 }
 
-class _SearchResults extends StatefulWidget {
-  const _SearchResults({
+class _SearchIcon extends StatelessWidget {
+  const _SearchIcon({
     Key? key,
-    required this.onBoardGameTapped,
+    required this.isSearchPhraseEmpty,
+    required this.onClear,
   }) : super(key: key);
 
-  final void Function(BoardGame) onBoardGameTapped;
-
-  @override
-  _SearchResultsState createState() => _SearchResultsState();
-}
-
-class _SearchResultsState extends State<_SearchResults> {
-  late SearchBarBoardGamesStore searchBarBoardGamesStore;
-
-  @override
-  void initState() {
-    super.initState();
-    searchBarBoardGamesStore = Provider.of<SearchBarBoardGamesStore>(context, listen: false);
-  }
+  final bool isSearchPhraseEmpty;
+  final VoidCallback onClear;
 
   @override
   Widget build(BuildContext context) {
-    final searchBoardGamesStore = Provider.of<SearchBoardGamesStore>(context);
-    return FutureBuilder(
-      future: searchBoardGamesStore.search(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final searchResults = snapshot.data as List<BoardGame>?;
-          if (searchResults?.isNotEmpty ?? false) {
-            return SliverPadding(
-              padding: const EdgeInsets.all(Dimensions.standardSpacing),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, index) {
-                    final int itemIndex = index ~/ 2;
-                    if (index.isEven) {
-                      return Material(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-                        elevation: 4,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-                          onTap: () =>
-                              _navigateToBoardGameDetails(searchResults!, itemIndex, context),
-                          child: Padding(
-                            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Text(
-                                  searchResults![itemIndex].name,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTheme.titleTextStyle,
-                                ),
-                                if (searchResults[itemIndex].yearPublished != null)
-                                  Text(
-                                    searchResults[itemIndex].yearPublished.toString(),
-                                    style: AppTheme.subTitleTextStyle,
-                                  ),
-                                const SizedBox(height: Dimensions.halfStandardSpacing),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }
+    if (isSearchPhraseEmpty) {
+      return const Icon(Icons.search, color: AppColors.accentColor);
+    }
 
-                    return const SizedBox(height: Dimensions.standardSpacing);
-                  },
-                  childCount: math.max(0, searchResults!.length * 2 - 1),
-                ),
-              ),
-            );
-          }
-
-          if (searchBarBoardGamesStore.searchPhrase?.isNotEmpty ?? false) {
-            return _NoResults(
-              searchBarBoardGamesStore: searchBarBoardGamesStore,
-              searchBoardGamesStore: searchBoardGamesStore,
-            );
-          }
-
-          return const SliverPersistentHeader(
-            delegate: _SearchResultsTemplate(
-              child: Text(
-                AppText.searchBoardGamesPageSearchInstructions,
-                textAlign: TextAlign.justify,
-              ),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return const SliverPersistentHeader(
-            delegate: _SearchResultsTemplate(
-              child: Padding(
-                padding: EdgeInsets.all(
-                  Dimensions.doubleStandardSpacing,
-                ),
-                child: Center(
-                  child: GenericErrorMessage(),
-                ),
-              ),
-            ),
-          );
-        }
-
-        return const SliverPersistentHeader(
-          delegate: _SearchResultsTemplate(
-            child: LoadingIndicator(),
-          ),
-        );
-      },
+    return IconButton(
+      icon: const Icon(Icons.clear),
+      color: AppColors.accentColor,
+      onPressed: () => onClear(),
     );
   }
+}
 
-  Future _navigateToBoardGameDetails(
-    List<BoardGame> searchResults,
-    int itemIndex,
-    BuildContext context,
-  ) async {
-    final boardGame = searchResults[itemIndex];
-    widget.onBoardGameTapped(boardGame);
+class _Search extends StatefulWidget {
+  const _Search({
+    Key? key,
+    required this.viewModel,
+    required this.onBoardGameTapped,
+  }) : super(key: key);
+
+  final SearchBoardGamesViewModel viewModel;
+  final void Function(BoardGameDetails) onBoardGameTapped;
+
+  @override
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<_Search> {
+  @override
+  void initState() {
+    super.initState();
+
+    widget.viewModel.searchBoardGames();
   }
+
+  @override
+  Widget build(BuildContext context) => Observer(
+        builder: (_) {
+          return widget.viewModel.searchResults.when(
+            results: (searchResults) {
+              if (searchResults.isEmpty) {
+                return _NoResults(
+                  searchPhrase: widget.viewModel.searchPhrase!,
+                  onRetry: () => widget.viewModel.searchBoardGames(),
+                );
+              }
+
+              return _SearchResultsSliver(
+                searchResults: searchResults,
+                onTap: (boardGame) => widget.onBoardGameTapped(boardGame),
+              );
+            },
+            searching: (searchPhrase) {
+              return const SliverPersistentHeader(
+                delegate: _SearchResultsTemplate(
+                  child: LoadingIndicator(),
+                ),
+              );
+            },
+            init: () {
+              return const SliverPersistentHeader(
+                delegate: _SearchResultsTemplate(
+                  child: Text(
+                    AppText.searchBoardGamesPageSearchInstructions,
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+              );
+            },
+            failure: () {
+              return const SliverPersistentHeader(
+                delegate: _SearchResultsTemplate(
+                  child: Padding(
+                    padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                    child: Center(child: GenericErrorMessage()),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+}
+
+class _SearchResultsSliver extends StatelessWidget {
+  const _SearchResultsSliver({
+    required this.searchResults,
+    required this.onTap,
+    Key? key,
+  }) : super(key: key);
+
+  final List<BoardGameDetails> searchResults;
+  final void Function(BoardGameDetails) onTap;
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+        padding: const EdgeInsets.all(Dimensions.standardSpacing),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, index) {
+              final int itemIndex = index ~/ 2;
+              final boardGame = searchResults[itemIndex];
+              if (index.isEven) {
+                return Material(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+                  elevation: 4,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+                    onTap: () => onTap(boardGame),
+                    child: Padding(
+                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Text(
+                            boardGame.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTheme.titleTextStyle,
+                          ),
+                          if (boardGame.yearPublished != null)
+                            Text(
+                              boardGame.yearPublished.toString(),
+                              style: AppTheme.subTitleTextStyle,
+                            ),
+                          const SizedBox(height: Dimensions.halfStandardSpacing),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return const SizedBox(height: Dimensions.standardSpacing);
+            },
+            childCount: math.max(0, searchResults.length * 2 - 1),
+          ),
+        ),
+      );
 }
 
 class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
@@ -315,12 +324,8 @@ class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Padding(
-      padding: const EdgeInsets.all(
-        Dimensions.doubleStandardSpacing,
-      ),
-      child: Center(
-        child: child,
-      ),
+      padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+      child: Center(child: child),
     );
   }
 
@@ -331,20 +336,18 @@ class _SearchResultsTemplate extends SliverPersistentHeaderDelegate {
   double get minExtent => defaultHeight;
 
   @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 }
 
 class _NoResults extends StatelessWidget {
   const _NoResults({
     Key? key,
-    required this.searchBarBoardGamesStore,
-    required this.searchBoardGamesStore,
+    required this.searchPhrase,
+    required this.onRetry,
   }) : super(key: key);
 
-  final SearchBarBoardGamesStore searchBarBoardGamesStore;
-  final SearchBoardGamesStore searchBoardGamesStore;
+  final String searchPhrase;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -363,17 +366,13 @@ class _NoResults extends StatelessWidget {
                     text: '''Sorry, we couldn't find any results for the search phrase ''',
                   ),
                   TextSpan(
-                    text: '${searchBarBoardGamesStore.searchPhrase}.',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    text: '$searchPhrase.',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: Dimensions.standardSpacing,
-            ),
+            const SizedBox(height: Dimensions.standardSpacing),
             Text.rich(
               TextSpan(
                 children: [
@@ -400,11 +399,9 @@ class _NoResults extends StatelessWidget {
             const SizedBox(height: Dimensions.doubleStandardSpacing),
             Center(
               child: ElevatedIconButton(
-                title: 'Retry',
+                title: AppText.searchBoardGamesSearchRetry,
                 icon: const DefaultIcon(Icons.refresh),
-                onPressed: () {
-                  searchBoardGamesStore.updateSearchResults();
-                },
+                onPressed: () => onRetry(),
               ),
             ),
           ],
@@ -422,7 +419,7 @@ class _HotBoardGames extends StatelessWidget {
   }) : super(key: key);
 
   final SearchBoardGamesViewModel viewModel;
-  final void Function(BoardGame) onBoardGameTapped;
+  final void Function(BoardGameDetails) onBoardGameTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -496,7 +493,7 @@ class _HotBoardGames extends StatelessWidget {
     );
   }
 
-  void _navigateToBoardGameDetails(BoardGame boardGame, BuildContext context) {
+  void _navigateToBoardGameDetails(BoardGameDetails boardGame, BuildContext context) {
     viewModel.trackViewHotBoardGame(boardGame);
 
     onBoardGameTapped(boardGame);

@@ -1,7 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../hive/player.dart';
 
-class PlayerPageArguments {
-  const PlayerPageArguments({this.player});
+part 'player_page_arguments.freezed.dart';
 
-  final Player? player;
+@freezed
+class PlayerPageArguments with _$PlayerPageArguments {
+  const factory PlayerPageArguments({
+    Player? player,
+  }) = _PlayerPageArguments;
 }

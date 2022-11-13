@@ -6,32 +6,30 @@ part of 'board_game_expansion.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class BoardGamesExpansionAdapter extends TypeAdapter<BoardGamesExpansion> {
+class BoardGamesExpansionAdapter extends TypeAdapter<_$_BoardGameExpansion> {
   @override
   final int typeId = 15;
 
   @override
-  BoardGamesExpansion read(BinaryReader reader) {
+  _$_BoardGameExpansion read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BoardGamesExpansion(
+    return _$_BoardGameExpansion(
       id: fields[0] as String,
       name: fields[1] as String,
-    )..isInCollection = fields[2] as bool?;
+    );
   }
 
   @override
-  void write(BinaryWriter writer, BoardGamesExpansion obj) {
+  void write(BinaryWriter writer, _$_BoardGameExpansion obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name)
-      ..writeByte(2)
-      ..write(obj.isInCollection);
+      ..write(obj.name);
   }
 
   @override

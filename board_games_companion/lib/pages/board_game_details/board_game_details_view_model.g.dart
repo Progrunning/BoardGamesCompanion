@@ -37,13 +37,22 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
       (_$isExpansionComputed ??= Computed<bool>(() => super.isExpansion,
               name: '_BoardGameDetailsViewModel.isExpansion'))
           .value;
-  Computed<List<BoardGamesExpansion>>? _$expansionsComputed;
+  Computed<List<BoardGameExpansion>>? _$expansionsComputed;
 
   @override
-  List<BoardGamesExpansion> get expansions => (_$expansionsComputed ??=
-          Computed<List<BoardGamesExpansion>>(() => super.expansions,
+  List<BoardGameExpansion> get expansions => (_$expansionsComputed ??=
+          Computed<List<BoardGameExpansion>>(() => super.expansions,
               name: '_BoardGameDetailsViewModel.expansions'))
       .value;
+  Computed<Map<String, BoardGameDetails>>? _$expansionsOwnedByIdComputed;
+
+  @override
+  Map<String, BoardGameDetails> get expansionsOwnedById =>
+      (_$expansionsOwnedByIdComputed ??=
+              Computed<Map<String, BoardGameDetails>>(
+                  () => super.expansionsOwnedById,
+                  name: '_BoardGameDetailsViewModel.expansionsOwnedById'))
+          .value;
   Computed<bool>? _$hasExpansionsComputed;
 
   @override
@@ -84,6 +93,16 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
     });
   }
 
+  late final _$toggleCollectionAsyncAction = AsyncAction(
+      '_BoardGameDetailsViewModel.toggleCollection',
+      context: context);
+
+  @override
+  Future<void> toggleCollection(CollectionType collectionType) {
+    return _$toggleCollectionAsyncAction
+        .run(() => super.toggleCollection(collectionType));
+  }
+
   late final _$_BoardGameDetailsViewModelActionController =
       ActionController(name: '_BoardGameDetailsViewModel', context: context);
 
@@ -107,6 +126,7 @@ boardGameImageUrl: ${boardGameImageUrl},
 isMainGame: ${isMainGame},
 isExpansion: ${isExpansion},
 expansions: ${expansions},
+expansionsOwnedById: ${expansionsOwnedById},
 hasExpansions: ${hasExpansions},
 totalExpansionsOwned: ${totalExpansionsOwned},
 unescapedDescription: ${unescapedDescription}

@@ -11,7 +11,7 @@ part 'playthrough.freezed.dart';
 part 'playthrough.g.dart';
 
 @freezed
-abstract class Playthrough with _$Playthrough {
+class Playthrough with _$Playthrough {
   @HiveType(typeId: HiveBoxes.playthroughTypeId, adapterName: 'PlaythroughAdapter')
   const factory Playthrough({
     @HiveField(0) required String id,

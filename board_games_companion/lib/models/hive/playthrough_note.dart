@@ -7,7 +7,7 @@ part 'playthrough_note.freezed.dart';
 part 'playthrough_note.g.dart';
 
 @freezed
-abstract class PlaythroughNote with _$PlaythroughNote {
+class PlaythroughNote with _$PlaythroughNote {
   @HiveType(typeId: HiveBoxes.playthroughNoteId, adapterName: 'PlaythroughNoteAdapter')
   const factory PlaythroughNote({
     @HiveField(0) required String id,

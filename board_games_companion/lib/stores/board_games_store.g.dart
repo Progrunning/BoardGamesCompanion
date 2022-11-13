@@ -9,6 +9,20 @@ part of 'board_games_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$BoardGamesStore on _BoardGamesStore, Store {
+  Computed<List<BoardGameDetails>>? _$expansionsComputed;
+
+  @override
+  List<BoardGameDetails> get expansions => (_$expansionsComputed ??=
+          Computed<List<BoardGameDetails>>(() => super.expansions,
+              name: '_BoardGamesStore.expansions'))
+      .value;
+  Computed<List<BoardGameDetails>>? _$ownedExpansionsComputed;
+
+  @override
+  List<BoardGameDetails> get ownedExpansions => (_$ownedExpansionsComputed ??=
+          Computed<List<BoardGameDetails>>(() => super.ownedExpansions,
+              name: '_BoardGamesStore.ownedExpansions'))
+      .value;
   Computed<ObservableMap<String, BoardGameDetails>>? _$allBoardGamesMapComputed;
 
   @override
@@ -111,6 +125,8 @@ mixin _$BoardGamesStore on _BoardGamesStore, Store {
   String toString() {
     return '''
 allBoardGames: ${allBoardGames},
+expansions: ${expansions},
+ownedExpansions: ${ownedExpansions},
 allBoardGamesMap: ${allBoardGamesMap},
 allBoardGamesInCollections: ${allBoardGamesInCollections},
 allBoardGamesInCollectionsMap: ${allBoardGamesInCollectionsMap}

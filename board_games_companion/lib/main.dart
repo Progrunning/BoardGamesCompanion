@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:provider/provider.dart';
 
 import 'app.dart';
 import 'common/enums/order_by.dart';
@@ -31,12 +30,7 @@ import 'models/hive/playthrough.dart';
 import 'models/hive/score.dart';
 import 'models/hive/user.dart';
 import 'models/sort_by.dart';
-import 'pages/players/players_view_model.dart';
-import 'services/analytics_service.dart';
-import 'services/board_games_geek_service.dart';
 import 'services/preferences_service.dart';
-import 'stores/search_bar_board_games_store.dart';
-import 'stores/search_board_games_store.dart';
 
 Future<void> main() async {
   Fimber.plantTree(DebugTree());
@@ -104,30 +98,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     preferencesService.setAppLaunchDate();
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<SearchBarBoardGamesStore>(
-          create: (context) => SearchBarBoardGamesStore(),
-        ),
-        ChangeNotifierProvider<SearchBoardGamesStore>(
-          create: (context) {
-            final BoardGamesGeekService boardGamesGeekService = getIt<BoardGamesGeekService>();
-            final AnalyticsService analyticsService = getIt<AnalyticsService>();
-            return SearchBoardGamesStore(
-              boardGamesGeekService,
-              Provider.of<SearchBarBoardGamesStore>(
-                context,
-                listen: false,
-              ),
-              analyticsService,
-            );
-          },
-        ),
-        ChangeNotifierProvider<PlayersViewModel>(
-          create: (context) => getIt<PlayersViewModel>(),
-        ),
-      ],
-      child: const BoardGamesCompanionApp(),
-    );
+    return const BoardGamesCompanionApp();
   }
 }

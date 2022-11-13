@@ -2,32 +2,63 @@
 
 import 'dart:io';
 
-import 'package:board_games_companion/models/hive/board_game_settings.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:mobx/mobx.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_text.dart';
 import '../../common/constants.dart';
 import '../../common/hive_boxes.dart';
-import 'base_board_game.dart';
 import 'board_game_artist.dart';
 import 'board_game_category.dart';
 import 'board_game_designer.dart';
 import 'board_game_expansion.dart';
 import 'board_game_publisher.dart';
 import 'board_game_rank.dart';
+import 'board_game_settings.dart';
 
+part 'board_game_details.freezed.dart';
 part 'board_game_details.g.dart';
 
-@HiveType(typeId: HiveBoxes.boardGamesDetailsTypeId)
-class BoardGameDetails = _BoardGameDetails with _$BoardGameDetails;
+@freezed
+class BoardGameDetails with _$BoardGameDetails {
+  @HiveType(typeId: HiveBoxes.boardGamesDetailsTypeId, adapterName: 'BoardGameDetailsAdapter')
+  const factory BoardGameDetails({
+    @HiveField(0) required String id,
+    @HiveField(1) required String name,
+    @HiveField(2) String? thumbnailUrl,
+    @HiveField(3) int? rank,
+    @HiveField(4) int? yearPublished,
+    @HiveField(5) String? imageUrl,
+    @HiveField(6) String? description,
+    @Default(<BoardGameCategory>[]) @HiveField(7) List<BoardGameCategory>? categories,
+    @HiveField(8) double? rating,
+    @HiveField(9) int? votes,
+    @HiveField(10) int? minPlayers,
+    @HiveField(11) int? minPlaytime,
+    @HiveField(12) int? maxPlayers,
+    @HiveField(13) int? maxPlaytime,
+    @HiveField(14) int? minAge,
+    @HiveField(15) num? avgWeight,
+    @Default(<BoardGamePublisher>[]) @HiveField(16) List<BoardGamePublisher> publishers,
+    @Default(<BoardGameArtist>[]) @HiveField(17) List<BoardGameArtist> artists,
+    @Default(<BoardGameDesigner>[]) @HiveField(18) List<BoardGameDesigner> desingers,
+    @HiveField(19) int? commentsNumber,
+    @Default(<BoardGameRank>[]) @HiveField(20) List<BoardGameRank> ranks,
+    @HiveField(21) DateTime? lastModified,
+    @Default(<BoardGameExpansion>[]) @HiveField(22) List<BoardGameExpansion> expansions,
+    @HiveField(23) bool? isExpansion,
+    @HiveField(24) bool? isOwned,
+    @HiveField(25) bool? isOnWishlist,
+    @HiveField(26) bool? isFriends,
+    @HiveField(27) bool? isBggSynced,
+    @HiveField(28) BoardGameSettings? settings,
+  }) = _BoardGameDetails;
 
-abstract class _BoardGameDetails extends BaseBoardGame with Store {
-  _BoardGameDetails({required String id, required String name}) : super(id: id, name: name);
+  const BoardGameDetails._();
 
-  final RegExp onlyLettersOrNumbersRegex = RegExp(r'[a-zA-Z0-9\-]+');
-  final Set<String> bggNotUsedUrlEncodedNameParts = {
+  RegExp get onlyLettersOrNumbersRegex => RegExp(r'[a-zA-Z0-9\-]+');
+  static const Set<String> bggNotUsedUrlEncodedNameParts = {
     'the',
     'of',
     'for',
@@ -44,245 +75,21 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
     'up',
   };
 
-  String? _imageUrl;
-  @HiveField(5)
-  String? get imageUrl => _imageUrl;
-  @HiveField(5)
-  set imageUrl(String? value) {
-    if (_imageUrl != value) {
-      _imageUrl = value;
-      notifyListeners();
-    }
-  }
-
-  String? _description;
-  @HiveField(6)
-  String? get description => _description;
-  @HiveField(6)
-  set description(String? value) {
-    if (_description != value) {
-      _description = value;
-      notifyListeners();
-    }
-  }
-
-  @HiveField(7)
-  List<BoardGameCategory>? categories = <BoardGameCategory>[];
-
-  @observable
-  double? _rating;
-  @HiveField(8)
-  @computed
-  double? get rating => _rating;
-  @HiveField(8)
-  set rating(double? value) {
-    if (_rating != value) {
-      _rating = value;
-      notifyListeners();
-    }
-  }
-
-  @observable
-  int? _votes;
-  @HiveField(9)
-  @computed
-  int? get votes => _votes;
-  @HiveField(9)
-  set votes(int? value) {
-    if (_votes != value) {
-      _votes = value;
-      notifyListeners();
-    }
-  }
-
-  int? _minPlayers;
-  @HiveField(10)
-  int? get minPlayers => _minPlayers;
-  @HiveField(10)
-  set minPlayers(int? value) {
-    if (_minPlayers != value) {
-      _minPlayers = value;
-      notifyListeners();
-    }
-  }
-
-  int? _minPlaytime;
-  @HiveField(11)
-  int? get minPlaytime => _minPlaytime;
-  @HiveField(11)
-  set minPlaytime(int? value) {
-    if (_minPlaytime != value) {
-      _minPlaytime = value;
-      notifyListeners();
-    }
-  }
-
-  int? _maxPlayers;
-  @HiveField(12)
-  int? get maxPlayers => _maxPlayers;
-  @HiveField(12)
-  set maxPlayers(int? value) {
-    if (_maxPlayers != value) {
-      _maxPlayers = value;
-      notifyListeners();
-    }
-  }
-
-  int? _maxPlaytime;
-  @HiveField(13)
-  int? get maxPlaytime => _maxPlaytime;
-  @HiveField(13)
-  set maxPlaytime(int? value) {
-    if (_maxPlaytime != value) {
-      _maxPlaytime = value;
-      notifyListeners();
-    }
-  }
-
-  int? _minAge;
-  @HiveField(14)
-  int? get minAge => _minAge;
-  @HiveField(14)
-  set minAge(int? value) {
-    if (_minAge != value) {
-      _minAge = value;
-      notifyListeners();
-    }
-  }
-
-  @observable
-  num? _avgWeight;
-  @HiveField(15)
-  @computed
-  num? get avgWeight => _avgWeight;
-  @HiveField(15)
-  set avgWeight(num? value) {
-    if (_avgWeight != value) {
-      _avgWeight = value;
-      notifyListeners();
-    }
-  }
-
-  @HiveField(16)
-  List<BoardGamePublisher> publishers = <BoardGamePublisher>[];
-
-  @HiveField(17)
-  List<BoardGameArtist> artists = <BoardGameArtist>[];
-
-  @HiveField(18)
-  List<BoardGameDesigner> desingers = <BoardGameDesigner>[];
-
-  @observable
-  int? _commentsNumber;
-  @HiveField(19)
-  @computed
-  int? get commentsNumber => _commentsNumber;
-  @HiveField(19)
-  set commentsNumber(int? value) {
-    if (_commentsNumber != value) {
-      _commentsNumber = value;
-      notifyListeners();
-    }
-  }
-
-  @HiveField(20)
-  List<BoardGameRank> ranks = <BoardGameRank>[];
-
-  DateTime? _lastModified;
-  @HiveField(21)
-  DateTime? get lastModified => _lastModified;
-  @HiveField(21)
-  set lastModified(DateTime? value) {
-    if (_lastModified != value) {
-      _lastModified = value;
-      notifyListeners();
-    }
-  }
-
-  @HiveField(22)
-  @observable
-  List<BoardGamesExpansion> expansions = <BoardGamesExpansion>[];
-
-  bool? _isExpansion;
-  @HiveField(23)
-  bool? get isExpansion => _isExpansion;
-  @HiveField(23)
-  set isExpansion(bool? value) {
-    if (_isExpansion != value) {
-      _isExpansion = value;
-      notifyListeners();
-    }
-  }
-
   bool get isMainGame => !(isExpansion ?? false);
 
-  @observable
-  bool? _isOwned;
-  @HiveField(24)
-  @computed
-  bool? get isOwned => _isOwned ?? false;
-  @HiveField(24)
-  set isOwned(bool? value) {
-    if (_isOwned != value) {
-      _isOwned = value;
-      notifyListeners();
-    }
-  }
-
-  @observable
-  bool? _isOnWishlist;
-  @HiveField(25)
-  @computed
-  bool? get isOnWishlist => _isOnWishlist ?? false;
-  @HiveField(25)
-  set isOnWishlist(bool? value) {
-    if (_isOnWishlist != value) {
-      _isOnWishlist = value;
-      notifyListeners();
-    }
-  }
-
-  @observable
-  bool? _isFriends;
-  @HiveField(26)
-  @computed
-  bool? get isFriends => _isFriends ?? false;
-  @HiveField(26)
-  set isFriends(bool? value) {
-    if (_isFriends != value) {
-      _isFriends = value;
-      notifyListeners();
-    }
-  }
-
-  // MK Flag to indicate that the board game got synced from BGG
-  //    This is important when removing BGG's user account (only these games will be removed)
-  @observable
-  bool? _isBggSynced;
-  @HiveField(27)
-  @computed
-  bool? get isBggSynced => _isBggSynced ?? false;
-  @HiveField(27)
-  set isBggSynced(bool? value) {
-    if (_isBggSynced != value) {
-      _isBggSynced = value;
-      notifyListeners();
-    }
-  }
-
-  @HiveField(28)
-  BoardGameSettings? settings;
+  bool get isInAnyCollection =>
+      (isOwned ?? false) || (isFriends ?? false) || (isOnWishlist ?? false);
 
   String get playtimeFormatted {
     var playtimeRange = '';
-    if (_minPlaytime == _maxPlaytime) {
-      if (_minPlaytime == 0) {
+    if (minPlaytime == maxPlaytime) {
+      if (minPlaytime == 0) {
         return '-';
       } else {
         playtimeRange = '$minPlaytime';
       }
     } else {
-      if (_maxPlaytime == 0) {
+      if (maxPlaytime == 0) {
         playtimeRange = '$minPlaytime';
       } else {
         playtimeRange = '$minPlaytime - $maxPlaytime';
@@ -293,15 +100,15 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
   }
 
   String get playersFormatted {
-    if (_minPlayers == _maxPlayers || _maxPlayers == null) {
-      if (_minPlayers == 1) {
-        return sprintf(AppText.gamePlayersSingularFormat, [_minPlayers]);
+    if (minPlayers == maxPlayers || maxPlayers == null) {
+      if (minPlayers == 1) {
+        return sprintf(AppText.gamePlayersSingularFormat, [minPlayers]);
       }
 
-      return sprintf(AppText.gamePlayersPluralFormat, [_minPlayers]);
+      return sprintf(AppText.gamePlayersPluralFormat, [minPlayers]);
     }
 
-    return sprintf(AppText.gamePlayersRangeFormat, [_minPlayers, _maxPlayers]);
+    return sprintf(AppText.gamePlayersRangeFormat, [minPlayers, maxPlayers]);
   }
 
   String? get rankFormatted {
@@ -315,7 +122,6 @@ abstract class _BoardGameDetails extends BaseBoardGame with Store {
     return null;
   }
 
-  @computed
   bool get hasIncompleteDetails =>
       (isBggSynced ?? false) &&
       (avgWeight == null || rating == null || commentsNumber == null || votes == null);
