@@ -68,7 +68,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(widget.viewModel.boardGame.name, style: AppTheme.titleTextStyle),
+          title: Text(widget.viewModel.boardGameName, style: AppTheme.titleTextStyle),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.music_note, color: AppColors.accentColor),
@@ -152,8 +152,8 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       context,
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
-        widget.viewModel.boardGame.id,
-        widget.viewModel.boardGame.name,
+        widget.viewModel.boardGameId,
+        widget.viewModel.boardGameName,
         PlaythroughsPage,
       ),
     );
@@ -173,7 +173,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       setState(() {
         _showImportGamesLoadingIndicator = true;
       });
-      await widget.viewModel.importPlays(widget.viewModel.userName!, widget.viewModel.boardGame.id);
+      await widget.viewModel.importPlays(widget.viewModel.userName!, widget.viewModel.boardGameId);
       if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
         if (!mounted) {
           return;
@@ -182,7 +182,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         await _showImportPlaysReportDialog(
           context,
           widget.viewModel.userName!,
-          widget.viewModel.boardGame.id,
+          widget.viewModel.boardGameId,
           widget.viewModel.bggPlaysImportRaport!,
         );
       } else {

@@ -48,7 +48,13 @@ abstract class _PlaythroughStatisticsViewModel with Store {
   ObservableFuture<void>? futureLoadBoardGamesStatistics;
 
   @computed
-  BoardGameDetails get boardGame => _playthroughsStore.boardGame;
+  String get boardGameId => _playthroughsStore.boardGameId;
+
+  @computed
+  String? get boardGameImageUrl => _playthroughsStore.boardGameImageUrl;
+
+  @computed
+  String get boardGameName => _playthroughsStore.boardGameName;
 
   @action
   void loadBoardGamesStatistics() =>
@@ -56,10 +62,9 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
   Future<void> _loadBoardGamesStatistics() async {
     Fimber.d(
-        'Loading stats for game ${_playthroughsStore.boardGame.name} [${_playthroughsStore.boardGame.id}]');
-    final boardGameId = _playthroughsStore.boardGame.id;
-    final gameWinningCondition = _playthroughsStore.boardGame.settings?.winningCondition ??
-        GameWinningCondition.HighestScore;
+        'Loading stats for game ${_playthroughsStore.boardGameName} [${_playthroughsStore.boardGameId}]');
+    final boardGameId = _playthroughsStore.boardGameId;
+    final gameWinningCondition = _playthroughsStore.gameWinningCondition;
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 

@@ -58,7 +58,10 @@ abstract class _PlaythroughsViewModel with Store {
   BggPlaysImportRaport? bggPlaysImportRaport;
 
   @computed
-  BoardGameDetails get boardGame => _playthroughsStore.boardGame;
+  String get boardGameId => _playthroughsStore.boardGameId;
+
+  @computed
+  String get boardGameName => _playthroughsStore.boardGameName;
 
   @computed
   bool get hasUser => _userStore.hasUser;
@@ -67,7 +70,7 @@ abstract class _PlaythroughsViewModel with Store {
   String? get userName => _userStore.userName;
 
   @computed
-  String get gamePlaylistUrl => '$melodicePlaylistUrl/${boardGame.id}';
+  String get gamePlaylistUrl => '$melodicePlaylistUrl/$boardGameId';
 
   @action
   void setBoardGame(BoardGameDetails boardGame) {
@@ -167,8 +170,8 @@ abstract class _PlaythroughsViewModel with Store {
     await _analyticsService.logEvent(
       name: Analytics.openGamesPlaylist,
       parameters: <String, String>{
-        Analytics.boardGameIdParameter: boardGame.id,
-        Analytics.boardGameNameParameter: boardGame.name,
+        Analytics.boardGameIdParameter: boardGameId,
+        Analytics.boardGameNameParameter: boardGameName,
       },
     );
   }

@@ -10,12 +10,26 @@ part of 'playthrough_statistics_view_model.dart';
 
 mixin _$PlaythroughStatisticsViewModel
     on _PlaythroughStatisticsViewModel, Store {
-  Computed<BoardGameDetails>? _$boardGameComputed;
+  Computed<String>? _$boardGameIdComputed;
 
   @override
-  BoardGameDetails get boardGame =>
-      (_$boardGameComputed ??= Computed<BoardGameDetails>(() => super.boardGame,
-              name: '_PlaythroughStatisticsViewModel.boardGame'))
+  String get boardGameId =>
+      (_$boardGameIdComputed ??= Computed<String>(() => super.boardGameId,
+              name: '_PlaythroughStatisticsViewModel.boardGameId'))
+          .value;
+  Computed<String?>? _$boardGameImageUrlComputed;
+
+  @override
+  String? get boardGameImageUrl => (_$boardGameImageUrlComputed ??=
+          Computed<String?>(() => super.boardGameImageUrl,
+              name: '_PlaythroughStatisticsViewModel.boardGameImageUrl'))
+      .value;
+  Computed<String>? _$boardGameNameComputed;
+
+  @override
+  String get boardGameName =>
+      (_$boardGameNameComputed ??= Computed<String>(() => super.boardGameName,
+              name: '_PlaythroughStatisticsViewModel.boardGameName'))
           .value;
 
   late final _$futureLoadBoardGamesStatisticsAtom = Atom(
@@ -56,7 +70,9 @@ mixin _$PlaythroughStatisticsViewModel
   String toString() {
     return '''
 futureLoadBoardGamesStatistics: ${futureLoadBoardGamesStatistics},
-boardGame: ${boardGame}
+boardGameId: ${boardGameId},
+boardGameImageUrl: ${boardGameImageUrl},
+boardGameName: ${boardGameName}
     ''';
   }
 }

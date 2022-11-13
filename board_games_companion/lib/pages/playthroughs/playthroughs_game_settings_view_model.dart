@@ -12,19 +12,16 @@ class PlaythroughsGameSettingsViewModel {
   final BoardGamesStore _boardGamesStore;
   final PlaythroughsStore _playthroughsStore;
 
-  GameWinningCondition get winningCondition =>
-      _playthroughsStore.boardGame.settings?.winningCondition ?? GameWinningCondition.HighestScore;
+  GameWinningCondition get winningCondition => _playthroughsStore.gameWinningCondition;
 
   Future<void> updateWinningCondition(GameWinningCondition winningCondition) async {
-    if (_playthroughsStore.boardGame == null) {
-      return;
-    }
+    final boardGame =
+        _boardGamesStore.allBoardGames.firstWhere((bg) => bg.id == _playthroughsStore.boardGameId);
 
-    final boardGameSettings = _playthroughsStore.boardGame.settings ?? BoardGameSettings();
-    boardGameSettings.winningCondition = winningCondition;
-
-    // TODO Test if this updates setting correctly
-    await _boardGamesStore
-        .addOrUpdateBoardGame(_playthroughsStore.boardGame.copyWith(settings: boardGameSettings));
+    final updatedBoardGame = boardGame.copyWith(
+        settings: (boardGame.settings ?? const BoardGameSettings())
+            .copyWith(winningCondition: winningCondition));
+    await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
+    _playthroughsStore.setBoardGame(updatedBoardGame);
   }
 }

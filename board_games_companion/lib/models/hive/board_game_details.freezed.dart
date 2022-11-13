@@ -115,6 +115,8 @@ abstract class $BoardGameDetailsCopyWith<$Res> {
       @HiveField(26) bool? isFriends,
       @HiveField(27) bool? isBggSynced,
       @HiveField(28) BoardGameSettings? settings});
+
+  $BoardGameSettingsCopyWith<$Res>? get settings;
 }
 
 /// @nodoc
@@ -277,6 +279,17 @@ class _$BoardGameDetailsCopyWithImpl<$Res>
               as BoardGameSettings?,
     ));
   }
+
+  @override
+  $BoardGameSettingsCopyWith<$Res>? get settings {
+    if (_value.settings == null) {
+      return null;
+    }
+
+    return $BoardGameSettingsCopyWith<$Res>(_value.settings!, (value) {
+      return _then(_value.copyWith(settings: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -316,6 +329,9 @@ abstract class _$$_BoardGameDetailsCopyWith<$Res>
       @HiveField(26) bool? isFriends,
       @HiveField(27) bool? isBggSynced,
       @HiveField(28) BoardGameSettings? settings});
+
+  @override
+  $BoardGameSettingsCopyWith<$Res>? get settings;
 }
 
 /// @nodoc

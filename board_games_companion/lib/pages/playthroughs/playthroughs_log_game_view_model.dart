@@ -55,7 +55,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   ObservableList<PlaythroughPlayer> playthroughPlayers = ObservableList.of([]);
 
   @computed
-  BoardGameDetails get boardGame => _playthroughsStore.boardGame;
+  String get boardGameId => _playthroughsStore.boardGameId;
 
   @computed
   bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
@@ -78,7 +78,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
       score: Score(
         id: const Uuid().v4(),
         playerId: playthroughPlayer.player.id,
-        boardGameId: _playthroughsStore.boardGame.id,
+        boardGameId: _playthroughsStore.boardGameId,
       ),
     );
   }

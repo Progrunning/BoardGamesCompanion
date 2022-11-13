@@ -9,12 +9,12 @@ part of 'playthroughs_log_game_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
-  Computed<BoardGameDetails>? _$boardGameComputed;
+  Computed<String>? _$boardGameIdComputed;
 
   @override
-  BoardGameDetails get boardGame =>
-      (_$boardGameComputed ??= Computed<BoardGameDetails>(() => super.boardGame,
-              name: '_PlaythroughsLogGameViewModel.boardGame'))
+  String get boardGameId =>
+      (_$boardGameIdComputed ??= Computed<String>(() => super.boardGameId,
+              name: '_PlaythroughsLogGameViewModel.boardGameId'))
           .value;
   Computed<bool>? _$anyPlayerSelectedComputed;
 
@@ -231,7 +231,7 @@ playthroughStartTime: ${playthroughStartTime},
 logGameStep: ${logGameStep},
 futureLoadPlaythroughPlayers: ${futureLoadPlaythroughPlayers},
 playthroughPlayers: ${playthroughPlayers},
-boardGame: ${boardGame},
+boardGameId: ${boardGameId},
 anyPlayerSelected: ${anyPlayerSelected}
     ''';
   }
