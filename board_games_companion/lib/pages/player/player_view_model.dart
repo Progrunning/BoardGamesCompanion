@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -17,19 +18,36 @@ abstract class _PlayerViewModel with Store {
 
   final PlayersStore _playersStore;
 
-  late Player playerWorkingCopy;
+  @observable
+  Player? _player;
 
   @observable
-  Player? player;
+  Player? playerWorkingCopy;
 
   @computed
-  bool get isEditMode => player?.name?.isNotEmpty ?? false;
+  String? get playerName => playerWorkingCopy?.name;
+
+  @computed
+  String? get playerAvatarImageUri => playerWorkingCopy?.avatarImageUri;
+
+  @computed
+  bool get playerHasName => playerName.isNotNullOrBlank;
+
+  @computed
+  bool get isEditMode => _player?.name?.isNotNullOrBlank ?? false;
+
+  @computed
+  bool get hasUnsavedChanges =>
+      playerAvatarImageUri != _player?.avatarImageUri || playerName != _player?.name;
 
   @action
   void setPlayer(Player? player) {
-    this.player = player ?? Player(id: const Uuid().v4());
-    playerWorkingCopy = this.player!.copyWith();
+    _player = player ?? Player(id: const Uuid().v4());
+    playerWorkingCopy = _player!.copyWith();
   }
+
+  @action
+  void updatePlayerWorkingCopy(Player player) => playerWorkingCopy = player;
 
   // TODO Split this method into create and update (i.e. detect when updating or when creating a player)
   @action
@@ -37,7 +55,7 @@ abstract class _PlayerViewModel with Store {
     try {
       final addOrUpdateSucceeded = await _playersStore.createOrUpdatePlayer(playerToCreateOrUpdate);
       if (addOrUpdateSucceeded) {
-        player = playerToCreateOrUpdate;
+        _player = playerToCreateOrUpdate;
       }
 
       return addOrUpdateSucceeded;
@@ -51,7 +69,7 @@ abstract class _PlayerViewModel with Store {
   @action
   Future<void> deletePlayer() async {
     try {
-      await _playersStore.deletePlayer(player!.id);
+      await _playersStore.deletePlayer(_player!.id);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
