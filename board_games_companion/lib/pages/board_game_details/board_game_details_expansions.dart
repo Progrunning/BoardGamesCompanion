@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
@@ -6,12 +7,14 @@ import '../../common/dimensions.dart';
 import '../../models/hive/board_game_expansion.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/preferences_service.dart';
+import '../../widgets/common/expansions_banner_widget.dart';
 import 'board_game_details_page.dart';
 
 class BoardGameDetailsExpansions extends StatefulWidget {
   const BoardGameDetailsExpansions({
     Key? key,
     required this.expansions,
+    required this.ownedExpansionsById,
     required this.totalExpansionsOwned,
     required this.spacingBetweenSecions,
     // TODO MK Pass in requier preferences data (instead of entire service) and or handle the events outside of this widget
@@ -19,6 +22,7 @@ class BoardGameDetailsExpansions extends StatefulWidget {
   }) : super(key: key);
 
   final List<BoardGameExpansion> expansions;
+  final Map<String, BoardGameDetails> ownedExpansionsById;
   final int totalExpansionsOwned;
   final double spacingBetweenSecions;
   final PreferencesService? preferencesService;
@@ -41,6 +45,7 @@ class BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> 
             data: AppTheme.theme.copyWith(unselectedWidgetColor: AppColors.accentColor),
             child: _Expansions(
               expansions: widget.expansions,
+              ownedExpansionsById: widget.ownedExpansionsById,
               totalExpansionsOwned: widget.totalExpansionsOwned,
               preferencesService: widget.preferencesService!,
               initiallyExpanded: widget.preferencesService!.getExpansionsPanelExpandedState(),
@@ -56,12 +61,14 @@ class _Expansions extends StatelessWidget {
   const _Expansions({
     Key? key,
     required this.expansions,
+    required this.ownedExpansionsById,
     required this.totalExpansionsOwned,
     required this.preferencesService,
     required this.initiallyExpanded,
   }) : super(key: key);
 
   final List<BoardGameExpansion> expansions;
+  final Map<String, BoardGameDetails> ownedExpansionsById;
   final int totalExpansionsOwned;
   final PreferencesService preferencesService;
   final bool? initiallyExpanded;
@@ -94,8 +101,10 @@ class _Expansions extends StatelessWidget {
             preferencesService.setExpansionsPanelExpandedState(isExpanded),
         children: [
           for (final BoardGameExpansion expansion in expansions)
-            // TODO Test if updates propertly
-            _Expansion(boardGamesExpansion: expansion),
+            _Expansion(
+              boardGamesExpansion: expansion,
+              ownsExpansion: ownedExpansionsById.containsKey(expansion.id),
+            ),
         ],
       ),
     );
@@ -106,14 +115,17 @@ class _Expansion extends StatelessWidget {
   const _Expansion({
     Key? key,
     required BoardGameExpansion boardGamesExpansion,
+    required bool ownsExpansion,
   })  : _boardGameExpansion = boardGamesExpansion,
+        _ownsExpansion = ownsExpansion,
         super(key: key);
 
   final BoardGameExpansion _boardGameExpansion;
+  final bool _ownsExpansion;
 
   @override
   Widget build(BuildContext context) {
-    final Widget expansionItem = InkWell(
+    Widget expansionItem = InkWell(
       splashColor: AppColors.accentColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -146,23 +158,19 @@ class _Expansion extends StatelessWidget {
       },
     );
 
-    // TODO Fix the isInCollection
-    // if (_boardGameExpansion.isInCollection ?? false) {
-    //   expansionItem = ClipRect(
-    //     child: CustomPaint(
-    //       foregroundPainter: ExpanionsBannerPainter(
-    //         location: BannerLocation.topStart,
-    //         color: AppColors.accentColor,
-    //         message: 'own',
-    //       ),
-    //       child: expansionItem,
-    //     ),
-    //   );
-    // }
+    if (_ownsExpansion) {
+      expansionItem = ClipRect(
+        child: CustomPaint(
+          foregroundPainter: ExpanionsBannerPainter(
+            location: BannerLocation.topStart,
+            color: AppColors.accentColor,
+            message: 'own',
+          ),
+          child: expansionItem,
+        ),
+      );
+    }
 
-    return Material(
-      color: Colors.transparent,
-      child: expansionItem,
-    );
+    return Material(color: Colors.transparent, child: expansionItem);
   }
 }

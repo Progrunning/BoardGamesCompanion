@@ -66,9 +66,12 @@ abstract class _BoardGameDetailsViewModel with Store {
   List<BoardGameExpansion> get expansions => boardGame.expansions;
 
   @computed
+  Map<String, BoardGameDetails> get expansionsOwnedById =>
+      {for (final expansion in _boardGamesStore.ownedExpansions) expansion.id: expansion};
+
+  @computed
   bool get hasExpansions => boardGame.expansions.isNotEmpty;
 
-  // TODO Test if this shows correct value
   @computed
   int get totalExpansionsOwned {
     final expansionIds = expansions.map((expansion) => expansion.id);
@@ -95,17 +98,17 @@ abstract class _BoardGameDetailsViewModel with Store {
     late BoardGameDetails updatedBoardGame;
     switch (collectionType) {
       case CollectionType.owned:
-        updatedBoardGame = boardGame.copyWith(isOwned: !boardGame.isOwned!);
-        if (updatedBoardGame.isOwned!) {
+        updatedBoardGame = boardGame.copyWith(isOwned: !(boardGame.isOwned ?? false));
+        if (updatedBoardGame.isOwned ?? false) {
           updatedBoardGame = updatedBoardGame.copyWith(isOnWishlist: false);
         }
         break;
       case CollectionType.friends:
-        updatedBoardGame = boardGame.copyWith(isFriends: !boardGame.isFriends!);
+        updatedBoardGame = boardGame.copyWith(isFriends: !(boardGame.isFriends ?? false));
         break;
       case CollectionType.wishlist:
         updatedBoardGame = boardGame.copyWith(
-          isOnWishlist: !boardGame.isOnWishlist!,
+          isOnWishlist: !(boardGame.isOnWishlist ?? false),
           isOwned: false,
         );
         break;

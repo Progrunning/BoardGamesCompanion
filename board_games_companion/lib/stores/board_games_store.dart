@@ -39,23 +39,28 @@ abstract class _BoardGamesStore with Store {
   ObservableList<BoardGameDetails> allBoardGames = ObservableList.of([]);
 
   @computed
+  List<BoardGameDetails> get expansions =>
+      allBoardGames.where((boardGame) => !boardGame.isMainGame).toList();
+  
+  @computed
+  List<BoardGameDetails> get ownedExpansions =>
+      expansions.where((boardGame) => boardGame.isOwned ?? false).toList();
+
+  @computed
   ObservableMap<String, BoardGameDetails> get allBoardGamesMap =>
       ObservableMap.of({for (var boardGame in allBoardGames) boardGame.id: boardGame});
 
   @computed
-  List<BoardGameDetails> get allBoardGamesInCollections => allBoardGames
-      .where((BoardGameDetails boardGame) =>
-          boardGame.isOwned! || boardGame.isFriends! || boardGame.isOnWishlist!)
-      .toList();
+  List<BoardGameDetails> get allBoardGamesInCollections =>
+      allBoardGames.where((BoardGameDetails boardGame) => boardGame.isInAnyCollection).toList();
 
   @computed
   ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap =>
       ObservableMap.of({for (var boardGame in allBoardGamesInCollections) boardGame.id: boardGame});
 
   @action
-  Future<void> loadBoardGames() async {
-    allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
-  }
+  Future<void> loadBoardGames() async =>
+      allBoardGames = ObservableList.of(await _boardGamesService.retrieveBoardGames());
 
   @action
   Future<void> addOrUpdateBoardGame(BoardGameDetails boardGameDetails) async {

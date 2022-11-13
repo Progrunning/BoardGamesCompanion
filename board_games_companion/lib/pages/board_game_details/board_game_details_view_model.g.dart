@@ -44,6 +44,15 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
           Computed<List<BoardGameExpansion>>(() => super.expansions,
               name: '_BoardGameDetailsViewModel.expansions'))
       .value;
+  Computed<Map<String, BoardGameDetails>>? _$expansionsOwnedByIdComputed;
+
+  @override
+  Map<String, BoardGameDetails> get expansionsOwnedById =>
+      (_$expansionsOwnedByIdComputed ??=
+              Computed<Map<String, BoardGameDetails>>(
+                  () => super.expansionsOwnedById,
+                  name: '_BoardGameDetailsViewModel.expansionsOwnedById'))
+          .value;
   Computed<bool>? _$hasExpansionsComputed;
 
   @override
@@ -117,6 +126,7 @@ boardGameImageUrl: ${boardGameImageUrl},
 isMainGame: ${isMainGame},
 isExpansion: ${isExpansion},
 expansions: ${expansions},
+expansionsOwnedById: ${expansionsOwnedById},
 hasExpansions: ${hasExpansions},
 totalExpansionsOwned: ${totalExpansionsOwned},
 unescapedDescription: ${unescapedDescription}

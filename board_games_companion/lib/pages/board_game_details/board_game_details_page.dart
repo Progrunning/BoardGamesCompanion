@@ -259,12 +259,15 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                       ),
                     ),
                     if (viewModel.isMainGame && viewModel.hasExpansions)
-                      BoardGameDetailsExpansions(
-                        expansions: viewModel.expansions,
-                        totalExpansionsOwned: viewModel.totalExpansionsOwned,
-                        spacingBetweenSecions: _spacingBetweenSecions,
-                        preferencesService: preferencesService,
-                      ),
+                      Observer(builder: (_) {
+                        return BoardGameDetailsExpansions(
+                          expansions: viewModel.expansions,
+                          ownedExpansionsById: viewModel.expansionsOwnedById,
+                          totalExpansionsOwned: viewModel.totalExpansionsOwned,
+                          spacingBetweenSecions: _spacingBetweenSecions,
+                          preferencesService: preferencesService,
+                        );
+                      }),
                     const SizedBox(height: _spacingBetweenSecions),
                     const _BodySectionHeader(title: 'Description'),
                     Padding(
@@ -594,9 +597,9 @@ class _StatsAndCollections extends StatelessWidget {
           Observer(
             builder: (_) {
               return _CollectionFlags(
-                isOwned: boardGameDetailsStore.boardGame.isOwned!,
-                isOnWishlist: boardGameDetailsStore.boardGame.isOnWishlist!,
-                isOnFriendsList: boardGameDetailsStore.boardGame.isFriends!,
+                isOwned: boardGameDetailsStore.boardGame.isOwned ?? false,
+                isOnWishlist: boardGameDetailsStore.boardGame.isOnWishlist ?? false,
+                isOnFriendsList: boardGameDetailsStore.boardGame.isFriends ?? false,
                 onToggleCollection: (collection) async =>
                     boardGameDetailsStore.toggleCollection(collection),
               );

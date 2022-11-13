@@ -77,6 +77,9 @@ class BoardGameDetails with _$BoardGameDetails {
 
   bool get isMainGame => !(isExpansion ?? false);
 
+  bool get isInAnyCollection =>
+      (isOwned ?? false) || (isFriends ?? false) || (isOnWishlist ?? false);
+
   String get playtimeFormatted {
     var playtimeRange = '';
     if (minPlaytime == maxPlaytime) {
