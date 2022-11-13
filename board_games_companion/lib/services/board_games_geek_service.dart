@@ -322,7 +322,7 @@ class BoardGamesGeekService {
           '');
 
       final List<BoardGameRank> ranks = _extractBoardGameRanks(boardGameDetailsRatings);
-      final int? boardGameRank =
+      final int? rank =
           ranks.firstWhereOrNull((element) => element.name == 'boardgame')?.rank?.toInt();
 
       return BoardGameDetails(
@@ -347,7 +347,7 @@ class BoardGamesGeekService {
         votes: votes,
         commentsNumber: commentsNumber,
         avgWeight: avgWeight,
-        rank: boardGameRank,
+        rank: rank,
         ranks: ranks,
       );
     } catch (e, stack) {

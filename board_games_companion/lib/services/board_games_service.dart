@@ -122,14 +122,22 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesServ
 
     // Add & Update
     for (var importedBoardGame in collectionImportResult.data!) {
-      // Take local collection settings over the BGG
+      // Ensure that we don't lose some of the game details if we have more than the import can provide
+      // (e.g. expansions)
       if (existingCollectionMap.containsKey(importedBoardGame.id)) {
-        // TODO Test if multiple calls to sync BGG collection works
         final existingBoardGame = existingCollectionMap[importedBoardGame.id]!;
         importedBoardGame = importedBoardGame.copyWith(
           isOnWishlist: existingBoardGame.isOnWishlist,
           isOwned: existingBoardGame.isOwned,
           isFriends: existingBoardGame.isFriends,
+          isExpansion: existingBoardGame.isExpansion,
+          avgWeight: existingBoardGame.avgWeight,
+          commentsNumber: existingBoardGame.commentsNumber,
+          expansions: existingBoardGame.expansions,
+          artists: existingBoardGame.artists,
+          publishers: existingBoardGame.publishers,
+          desingers: existingBoardGame.desingers,
+          minAge: existingBoardGame.minAge,
         );
       }
 
