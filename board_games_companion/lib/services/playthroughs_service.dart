@@ -65,7 +65,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     if (duration == null) {
       newPlaythrough = newPlaythrough.copyWith(status: PlaythroughStatus.Started);
     } else {
-      newPlaythrough.copyWith(
+      newPlaythrough = newPlaythrough.copyWith(
         status: PlaythroughStatus.Finished,
         endDate: startDate.add(duration),
       );
