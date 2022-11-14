@@ -15,7 +15,19 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
 
   final ScoreService scoreService;
 
-  Future<List<Playthrough>> retrievePlaythroughs(
+  Future<List<Playthrough>> retrievePlaythroughs() async {
+    if (!await ensureBoxOpen()) {
+      return <Playthrough>[];
+    }
+
+    return storageBox
+        .toMap()
+        .values
+        .where((playthrough) => !(playthrough.isDeleted ?? false))
+        .toList();
+  }
+
+  Future<List<Playthrough>> retrieveGamePlaythroughs(
     List<String> boardGameIds, {
     bool includeDeleted = false,
   }) async {

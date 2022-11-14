@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/stores/game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -29,7 +29,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   );
 
   final PlayersStore _playersStore;
-  final PlaythroughsStore _playthroughsStore;
+  final GamePlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
 
   @observable

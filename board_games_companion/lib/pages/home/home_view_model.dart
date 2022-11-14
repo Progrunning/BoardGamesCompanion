@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/pages/playthroughs_history/playthroughs_history_view_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
@@ -24,6 +25,7 @@ abstract class _HomeViewModelBase with Store {
     this.boardGamesFiltersStore,
     this.gamesViewModel,
     this.searchBoardGamesViewModel,
+    this.playthroughsHistoryViewModel,
   );
 
   final AnalyticsService analyticsService;
@@ -32,11 +34,13 @@ abstract class _HomeViewModelBase with Store {
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final GamesViewModel gamesViewModel;
   final SearchBoardGamesViewModel searchBoardGamesViewModel;
+  final PlaythroughsHistoryViewModel playthroughsHistoryViewModel;
 
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
     0: Tuple2<String, String>('Games', 'GamesPage'),
     1: Tuple2<String, String>('Search', 'SearchBoardGamesPage'),
-    2: Tuple2<String, String>('Players', 'PlayersPage'),
+    2: Tuple2<String, String>('Games History', 'PlaythroughsHistoryPage'),
+    3: Tuple2<String, String>('Players', 'PlayersPage'),
   };
 
   Future<void> trackTabChange(int tabIndex) async {

@@ -16,6 +16,11 @@ class AppText {
 
   static const goBack = 'Go Back';
 
+  static const homePageGamesTabTitle = 'Games';
+  static const homePageSearchTabTitle = 'Search';
+  static const homePageGamesHistoryTabTitle = 'Play History';
+  static const homePageGamesPlayersTabTitle = 'Players';
+
   static const aboutPageAuthorSectionTitle = 'Author';
   static const aboutPageDesignAndArtSectionTitle = 'Design & Art';
   static const aboutPageContentAndDataSectionTitle = 'Content & Data';
@@ -181,6 +186,7 @@ class AppText {
   static const collectionsPageTitle = 'Collections';
   static const settingsPageTitle = 'Settings';
   static const newPlayerPageTitle = 'New Player';
+  static const playHistoryPageTitle = 'Play History';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';

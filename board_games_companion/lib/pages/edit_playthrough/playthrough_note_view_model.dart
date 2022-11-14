@@ -3,7 +3,7 @@
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/game_playthroughs_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -19,7 +19,7 @@ class PlaythroughNoteViewModel = _PlaythroughNoteViewModel with _$PlaythroughNot
 abstract class _PlaythroughNoteViewModel with Store {
   _PlaythroughNoteViewModel(this._playthroughsStore);
 
-  final PlaythroughsStore _playthroughsStore;
+  final GamePlaythroughsStore _playthroughsStore;
 
   PlaythroughDetails get _playthroughDetails => _playthroughsStore.playthroughsDetails
       .firstWhere((playthroughDetails) => playthroughDetails.id == _playthrough!.id);

@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/game_playthroughs_store.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:injectable/injectable.dart';
@@ -37,7 +37,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
   final PlayerService _playerService;
   final ScoreService _scoreService;
   final PlaythroughService _playthroughService;
-  final PlaythroughsStore _playthroughsStore;
+  final GamePlaythroughsStore _playthroughsStore;
 
   static const int _maxNumberOfTopScoresToDisplay = 5;
 
@@ -67,7 +67,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
-    final boardGamePlaythroughs = await _playthroughService.retrievePlaythroughs([boardGameId]);
+    final boardGamePlaythroughs = await _playthroughService.retrieveGamePlaythroughs([boardGameId]);
     if (boardGamePlaythroughs.isEmpty) {
       boardGameStatistics = BoardGameStatistics();
       return;

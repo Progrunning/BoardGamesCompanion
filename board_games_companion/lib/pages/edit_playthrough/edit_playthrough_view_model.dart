@@ -4,7 +4,7 @@ import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/game_playthroughs_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
@@ -21,7 +21,7 @@ abstract class _EditPlaythoughViewModel with Store {
   _EditPlaythoughViewModel(this._playthroughsStore);
 
   late final String _playthroughId;
-  final PlaythroughsStore _playthroughsStore;
+  final GamePlaythroughsStore _playthroughsStore;
 
   ValueNotifier<bool> isSpeedDialContextMenuOpen = ValueNotifier(false);
 

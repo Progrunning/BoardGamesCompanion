@@ -3,7 +3,7 @@
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/import_result.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:injectable/injectable.dart';
@@ -47,7 +47,7 @@ abstract class _PlaythroughsViewModel with Store {
   };
 
   final PlayersStore _playersStore;
-  final PlaythroughsStore _playthroughsStore;
+  final GamePlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
   final BoardGamesService _boardGamesService;
   final UserStore _userStore;
