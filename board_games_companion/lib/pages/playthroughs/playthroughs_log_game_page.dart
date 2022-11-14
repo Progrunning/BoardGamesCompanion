@@ -104,14 +104,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
               currentStep: widget.viewModel.logGameStep,
               steps: [
                 Step(
-                  title: const Text('Playing or played'),
+                  title: const Text(AppText.playthroughsLogGamePlayingPlayedHeaderTitle),
                   state:
                       completedSteps > playingOrPlayedStep ? StepState.complete : StepState.indexed,
                   content: _PlayingOrPlayedStep(
-                    viewModel: widget.viewModel,
-                    onSelectionChanged: (PlaythroughStartTime playthroughStartTime) =>
-                        setState(() {}),
-                  ),
+                      viewModel: widget.viewModel,
+                      onSelectionChanged: (PlaythroughStartTime playthroughStartTime) =>
+                          setState(() {})),
                 ),
                 Step(
                   title: const Text('Select date'),
@@ -141,6 +140,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                         playthroughPlayers: widget.viewModel.playthroughPlayers.toList(),
                         onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
                             _togglePlayerSelection(isSelected, player),
+                        onCreatePlayer: () async => _handleCreatePlayer(),
                       );
                     },
                   ),
@@ -285,6 +285,16 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
     );
   }
 
+  Future<void> _handleCreatePlayer() async {
+    await Navigator.pushNamed(
+      context,
+      PlayerPage.pageRoute,
+      arguments: const PlayerPageArguments(),
+    );
+    // MK Reload players after getting back from players page
+    widget.viewModel.loadPlaythroughPlayers();
+  }
+
   void _togglePlayerSelection(bool? isSelected, PlaythroughPlayer player) {
     if (isSelected == null) {
       return;
@@ -405,7 +415,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   },
                 ),
                 Text(
-                  'Playing now',
+                  AppText.playthroughsLogGamePlayingNowOption,
                   style: AppTheme.theme.textTheme.bodyText1,
                 ),
               ],
@@ -428,7 +438,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                   },
                 ),
                 Text(
-                  'Played some time ago',
+                  AppText.playthroughsLogGamePlayedOption,
                   style: AppTheme.theme.textTheme.bodyText1,
                 ),
               ],
@@ -452,10 +462,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text(
-                  'h',
-                  style: AppTheme.theme.textTheme.bodyText2,
-                ),
+                Text('h', style: AppTheme.theme.textTheme.bodyText2),
                 const SizedBox(width: Dimensions.halfStandardSpacing),
                 NumberPicker(
                   value: math.min(Duration.minutesPerHour - 1, minutesPlyed),
@@ -469,10 +476,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text(
-                  'min ',
-                  style: AppTheme.theme.textTheme.bodyText2,
-                ),
+                Text('min ', style: AppTheme.theme.textTheme.bodyText2),
               ],
             ),
         ],
@@ -507,15 +511,17 @@ class _SelectPlayersStep extends StatelessWidget {
     Key? key,
     required this.playthroughPlayers,
     required this.onPlayerSelectionChanged,
+    required this.onCreatePlayer,
   }) : super(key: key);
 
   final List<PlaythroughPlayer>? playthroughPlayers;
-  final Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
+  final void Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
+  final VoidCallback onCreatePlayer;
 
   @override
   Widget build(BuildContext context) {
     if (playthroughPlayers?.isEmpty ?? true) {
-      return const _NoPlayers();
+      return _NoPlayers(onCreatePlayer: () => onCreatePlayer());
     }
 
     return SizedBox(
@@ -657,30 +663,27 @@ class _Players extends StatelessWidget {
 
 class _NoPlayers extends StatelessWidget {
   const _NoPlayers({
+    required this.onCreatePlayer,
     Key? key,
   }) : super(key: key);
+
+  final VoidCallback onCreatePlayer;
 
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(
-            'To log a game, you need to create players first',
+            AppText.playthroughsLogGamePageCreatePlayerTitle,
             style: AppTheme.theme.textTheme.bodyText1,
           ),
-          const SizedBox(
-            height: Dimensions.halfStandardSpacing,
-          ),
+          const SizedBox(height: Dimensions.halfStandardSpacing),
           Align(
             alignment: Alignment.topRight,
             child: ElevatedIconButton(
-              title: 'Create Player',
+              title: AppText.playthroughsLogGamePageCreatePlayerButtonText,
               icon: const DefaultIcon(Icons.add),
-              onPressed: () => Navigator.pushNamed(
-                context,
-                PlayerPage.pageRoute,
-                arguments: const PlayerPageArguments(),
-              ),
+              onPressed: () => onCreatePlayer(),
             ),
           ),
         ],

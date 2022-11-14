@@ -71,7 +71,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     final indexOfPlaythroughPlayer =
         playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
     playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: true);
-    playthroughPlayers = ObservableList.of(playthroughPlayers);
+    // playthroughPlayers = ObservableList.of(playthroughPlayers);
     playerScores[playthroughPlayer.player.id] = PlayerScore(
       player: playthroughPlayer.player,
       score: Score(

@@ -78,7 +78,13 @@ class AppText {
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 
   static const playthroughsLogGamePageHeader = 'Log a game';
+  static const playthroughsLogGamePlayingPlayedHeaderTitle = 'Playing or played';
+  static const playthroughsLogGamePlayingNowOption = 'Playing now';
+  static const playthroughsLogGamePlayedOption = 'Played some time ago';
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
+  static const playthroughsLogGamePageCreatePlayerButtonText = 'Create Player';
+  static const playthroughsLogGamePageCreatePlayerTitle =
+      'To log a game, you need to create players first';
 
   static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';
   static const importCollectionsButtonText = 'Import';
