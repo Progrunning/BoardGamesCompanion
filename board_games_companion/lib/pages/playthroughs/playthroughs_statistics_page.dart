@@ -586,16 +586,18 @@ class _OverallStatsSection extends StatelessWidget {
             Column(
               children: <Widget>[
                 _StatisticsItem(
-                  value:
-                      boardGameStatistics?.averagePlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
+                  value: boardGameStatistics?.averagePlaytimeInSeconds
+                          ?.toPlaytimeDuration(fallbackValue: '-') ??
+                      '-',
                   icon: Icons.av_timer,
                   iconColor: AppColors.averagePlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value:
-                      boardGameStatistics?.totalPlaytimeInSeconds?.toPlaytimeDuration('-') ?? '-',
+                  value: boardGameStatistics?.totalPlaytimeInSeconds
+                          ?.toPlaytimeDuration(fallbackValue: '-') ??
+                      '-',
                   icon: Icons.timelapse,
                   iconColor: AppColors.totalPlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,

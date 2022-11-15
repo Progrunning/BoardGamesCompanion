@@ -9,14 +9,16 @@ part of 'playthroughs_history_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
-  Computed<Map<DateTime, BoardGamePlaythrough>>? _$finishedPlaythroughsComputed;
+  Computed<List<GroupedBoardGamePlaythroughs>>?
+      _$finishedBoardGamePlaythroughsComputed;
 
   @override
-  Map<DateTime, BoardGamePlaythrough> get finishedPlaythroughs =>
-      (_$finishedPlaythroughsComputed ??=
-              Computed<Map<DateTime, BoardGamePlaythrough>>(
-                  () => super.finishedPlaythroughs,
-                  name: '_PlaythroughsHistoryViewModel.finishedPlaythroughs'))
+  List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs =>
+      (_$finishedBoardGamePlaythroughsComputed ??= Computed<
+                  List<GroupedBoardGamePlaythroughs>>(
+              () => super.finishedBoardGamePlaythroughs,
+              name:
+                  '_PlaythroughsHistoryViewModel.finishedBoardGamePlaythroughs'))
           .value;
 
   late final _$futureLoadGamesPlaythroughsAtom = Atom(
@@ -56,7 +58,7 @@ mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
   String toString() {
     return '''
 futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
-finishedPlaythroughs: ${finishedPlaythroughs}
+finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs}
     ''';
   }
 }

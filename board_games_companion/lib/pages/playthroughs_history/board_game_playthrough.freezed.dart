@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BoardGamePlaythrough {
-  Playthrough get playthrough => throw _privateConstructorUsedError;
+  PlaythroughDetails get playthrough => throw _privateConstructorUsedError;
   BoardGameDetails get boardGameDetails => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,9 +29,10 @@ abstract class $BoardGamePlaythroughCopyWith<$Res> {
   factory $BoardGamePlaythroughCopyWith(BoardGamePlaythrough value,
           $Res Function(BoardGamePlaythrough) then) =
       _$BoardGamePlaythroughCopyWithImpl<$Res>;
-  $Res call({Playthrough playthrough, BoardGameDetails boardGameDetails});
+  $Res call(
+      {PlaythroughDetails playthrough, BoardGameDetails boardGameDetails});
 
-  $PlaythroughCopyWith<$Res> get playthrough;
+  $PlaythroughDetailsCopyWith<$Res> get playthrough;
   $BoardGameDetailsCopyWith<$Res> get boardGameDetails;
 }
 
@@ -53,7 +54,7 @@ class _$BoardGamePlaythroughCopyWithImpl<$Res>
       playthrough: playthrough == freezed
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
-              as Playthrough,
+              as PlaythroughDetails,
       boardGameDetails: boardGameDetails == freezed
           ? _value.boardGameDetails
           : boardGameDetails // ignore: cast_nullable_to_non_nullable
@@ -62,8 +63,8 @@ class _$BoardGamePlaythroughCopyWithImpl<$Res>
   }
 
   @override
-  $PlaythroughCopyWith<$Res> get playthrough {
-    return $PlaythroughCopyWith<$Res>(_value.playthrough, (value) {
+  $PlaythroughDetailsCopyWith<$Res> get playthrough {
+    return $PlaythroughDetailsCopyWith<$Res>(_value.playthrough, (value) {
       return _then(_value.copyWith(playthrough: value));
     });
   }
@@ -83,10 +84,11 @@ abstract class _$$_BoardGamePlaythroughCopyWith<$Res>
           $Res Function(_$_BoardGamePlaythrough) then) =
       __$$_BoardGamePlaythroughCopyWithImpl<$Res>;
   @override
-  $Res call({Playthrough playthrough, BoardGameDetails boardGameDetails});
+  $Res call(
+      {PlaythroughDetails playthrough, BoardGameDetails boardGameDetails});
 
   @override
-  $PlaythroughCopyWith<$Res> get playthrough;
+  $PlaythroughDetailsCopyWith<$Res> get playthrough;
   @override
   $BoardGameDetailsCopyWith<$Res> get boardGameDetails;
 }
@@ -111,7 +113,7 @@ class __$$_BoardGamePlaythroughCopyWithImpl<$Res>
       playthrough: playthrough == freezed
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
-              as Playthrough,
+              as PlaythroughDetails,
       boardGameDetails: boardGameDetails == freezed
           ? _value.boardGameDetails
           : boardGameDetails // ignore: cast_nullable_to_non_nullable
@@ -127,7 +129,7 @@ class _$_BoardGamePlaythrough implements _BoardGamePlaythrough {
       {required this.playthrough, required this.boardGameDetails});
 
   @override
-  final Playthrough playthrough;
+  final PlaythroughDetails playthrough;
   @override
   final BoardGameDetails boardGameDetails;
 
@@ -162,12 +164,12 @@ class _$_BoardGamePlaythrough implements _BoardGamePlaythrough {
 
 abstract class _BoardGamePlaythrough implements BoardGamePlaythrough {
   const factory _BoardGamePlaythrough(
-          {required final Playthrough playthrough,
+          {required final PlaythroughDetails playthrough,
           required final BoardGameDetails boardGameDetails}) =
       _$_BoardGamePlaythrough;
 
   @override
-  Playthrough get playthrough;
+  PlaythroughDetails get playthrough;
   @override
   BoardGameDetails get boardGameDetails;
   @override

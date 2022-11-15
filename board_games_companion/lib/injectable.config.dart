@@ -19,11 +19,11 @@ import 'pages/player/player_view_model.dart' as _i21;
 import 'pages/players/players_view_model.dart' as _i11;
 import 'pages/playthroughs/playthrough_statistics_view_model.dart' as _i30;
 import 'pages/playthroughs/playthroughs_game_settings_view_model.dart' as _i31;
-import 'pages/playthroughs/playthroughs_history_view_model.dart' as _i32;
+import 'pages/playthroughs/playthroughs_history_view_model.dart' as _i33;
 import 'pages/playthroughs/playthroughs_log_game_view_model.dart' as _i34;
 import 'pages/playthroughs/playthroughs_view_model.dart' as _i35;
 import 'pages/playthroughs_history/playthroughs_history_view_model.dart'
-    as _i33;
+    as _i32;
 import 'pages/search_board_games/search_board_games_view_model.dart' as _i36;
 import 'pages/settings/settings_view_model.dart' as _i37;
 import 'services/analytics_service.dart' as _i17;
@@ -116,10 +116,10 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       _i31.PlaythroughsGameSettingsViewModel(
           get<_i25.BoardGamesStore>(), get<_i27.GamePlaythroughsStore>()));
   gh.factory<_i32.PlaythroughsHistoryViewModel>(() =>
-      _i32.PlaythroughsHistoryViewModel(get<_i27.GamePlaythroughsStore>()));
+      _i32.PlaythroughsHistoryViewModel(get<_i23.PlaythroughsStore>(),
+          get<_i25.BoardGamesStore>(), get<_i10.PlayersStore>()));
   gh.factory<_i33.PlaythroughsHistoryViewModel>(() =>
-      _i33.PlaythroughsHistoryViewModel(
-          get<_i23.PlaythroughsStore>(), get<_i25.BoardGamesStore>()));
+      _i33.PlaythroughsHistoryViewModel(get<_i27.GamePlaythroughsStore>()));
   gh.factory<_i34.PlaythroughsLogGameViewModel>(() =>
       _i34.PlaythroughsLogGameViewModel(get<_i10.PlayersStore>(),
           get<_i27.GamePlaythroughsStore>(), get<_i17.AnalyticsService>()));
@@ -157,7 +157,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i18.BoardGamesFiltersStore>(),
       get<_i28.GamesViewModel>(),
       get<_i36.SearchBoardGamesViewModel>(),
-      get<_i33.PlaythroughsHistoryViewModel>()));
+      get<_i32.PlaythroughsHistoryViewModel>()));
   return get;
 }
 

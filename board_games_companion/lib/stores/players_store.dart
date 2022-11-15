@@ -31,6 +31,9 @@ abstract class _PlayersStore with Store {
   @observable
   ObservableList<Player> players = ObservableList.of([]);
 
+  @computed
+  Map<String, Player> get playersById => {for (final player in players) player.id: player};
+
   @action
   Future<void> loadPlayers() async {
     if (players.isNotEmpty) {

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:board_games_companion/common/enums/playthrough_status.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';

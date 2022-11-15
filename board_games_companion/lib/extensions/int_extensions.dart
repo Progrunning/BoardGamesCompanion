@@ -28,7 +28,7 @@ extension IntExtensions on int? {
     }
   }
 
-  String toPlaytimeDuration([String? fallbackValue, bool showSeconds = true]) {
+  String toPlaytimeDuration({String? fallbackValue, bool showSeconds = true}) {
     if (this == null) {
       return fallbackValue ?? '';
     }
