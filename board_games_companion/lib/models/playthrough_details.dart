@@ -1,9 +1,9 @@
-import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../common/enums/playthrough_status.dart';
 import 'hive/playthrough.dart';
+import 'hive/playthrough_note.dart';
 import 'player_score.dart';
 
 part 'playthrough_details.freezed.dart';

@@ -52,10 +52,14 @@ abstract class _PlaythroughsViewModel with Store {
   final BoardGamesService _boardGamesService;
   final UserStore _userStore;
 
+  late String _boardGameImageHeroId;
+
   List<PlaythroughPlayer>? _playthroughPlayers;
   List<PlaythroughPlayer>? get playthroughPlayers => _playthroughPlayers;
 
   BggPlaysImportRaport? bggPlaysImportRaport;
+
+  String get boardGameImageHeroId => _boardGameImageHeroId;
 
   @computed
   String get boardGameId => _playthroughsStore.boardGameId;
@@ -73,9 +77,10 @@ abstract class _PlaythroughsViewModel with Store {
   String get gamePlaylistUrl => '$melodicePlaylistUrl/$boardGameId';
 
   @action
-  void setBoardGame(BoardGameDetails boardGame) {
-    _playthroughsStore.setBoardGame(boardGame);
-  }
+  void setBoardGame(BoardGameDetails boardGame) => _playthroughsStore.setBoardGame(boardGame);
+
+  void setBoardGameImageHeroId(String boardGameImageHeroId) =>
+      _boardGameImageHeroId = boardGameImageHeroId;
 
   Future<void> importPlays(String username, String boardGameId) async {
     await _analyticsService.logEvent(

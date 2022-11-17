@@ -27,7 +27,12 @@ import '../../widgets/playthrough/player_score_rank_avatar.dart';
 import 'playthrough_statistics_view_model.dart';
 
 class PlaythroughStatistcsPage extends StatefulWidget {
-  const PlaythroughStatistcsPage({Key? key}) : super(key: key);
+  const PlaythroughStatistcsPage({
+    required this.boardGameImageHeroId,
+    Key? key,
+  }) : super(key: key);
+
+  final String boardGameImageHeroId;
 
   @override
   PlaythroughStatistcsPageState createState() => PlaythroughStatistcsPageState();
@@ -57,7 +62,7 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                 collapseMode: CollapseMode.parallax,
                 centerTitle: true,
                 background: BoardGameImage(
-                  id: viewModel.boardGameId,
+                  id: widget.boardGameImageHeroId,
                   url: viewModel.boardGameImageUrl,
                   minImageHeight: Constants.boardGameDetailsImageHeight,
                 ),

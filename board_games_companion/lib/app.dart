@@ -72,6 +72,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             viewModel.setBoardGameId(arguments.boardGameId);
             viewModel.setBoardGameName(arguments.boardGameName);
             viewModel.setBoardGameImageUrl(arguments.boardGameImageUrl);
+            viewModel.setBoardGameImageHeroId(arguments.boardGameImageHeroId);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
@@ -98,6 +99,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
 
             final viewModel = getIt<PlaythroughsViewModel>();
             viewModel.setBoardGame(arguments.boardGameDetails);
+            viewModel.setBoardGameImageHeroId(arguments.boardGameImageHeroId);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,

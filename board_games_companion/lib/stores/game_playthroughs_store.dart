@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/extensions/scores_extensions.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:collection/collection.dart';

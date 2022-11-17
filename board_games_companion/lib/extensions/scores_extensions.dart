@@ -5,6 +5,12 @@ import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 
 import '../models/hive/score.dart';
 
+extension ScoreExtesions on Score {
+  String toMapKey() {
+    return '$playthroughId$playerId';
+  }
+}
+
 extension ScoresExtesions on List<Score>? {
   List<Score> onlyScoresWithValue() {
     return this
@@ -16,45 +22,7 @@ extension ScoresExtesions on List<Score>? {
   List<Score>? sortByScore(GameWinningCondition winningCondition) {
     return this
       ?..sort((Score score, Score otherScore) {
-        switch (winningCondition) {
-          case GameWinningCondition.LowestScore:
-            // MK Swap scores around
-            final buffer = otherScore;
-            otherScore = score;
-            score = buffer;
-            break;
-          case GameWinningCondition.HighestScore:
-            // MK No swapping needed
-            break;
-        }
-
-        if (score.value == null && otherScore.value == null) {
-          return Constants.leaveAsIs;
-        }
-
-        if (score.value == null) {
-          return Constants.moveBelow;
-        }
-
-        if (otherScore.value == null) {
-          return Constants.moveAbove;
-        }
-
-        final num? aNumber = num.tryParse(score.value!);
-        final num? bNumber = num.tryParse(otherScore.value!);
-        if (aNumber == null && bNumber == null) {
-          return Constants.leaveAsIs;
-        }
-
-        if (aNumber == null) {
-          return Constants.moveBelow;
-        }
-
-        if (bNumber == null) {
-          return Constants.moveAbove;
-        }
-
-        return bNumber.compareTo(aNumber);
+        return compareScores(score, otherScore, winningCondition);
       });
   }
 
@@ -83,4 +51,46 @@ extension ScoresExtesions on List<Score>? {
 
     return scores.reduce((a, b) => a + b) / scores.length;
   }
+}
+
+int compareScores(Score score, Score otherScore, GameWinningCondition winningCondition) {
+  switch (winningCondition) {
+    case GameWinningCondition.LowestScore:
+      // MK Swap scores around
+      final buffer = otherScore;
+      otherScore = score;
+      score = buffer;
+      break;
+    case GameWinningCondition.HighestScore:
+      // MK No swapping needed
+      break;
+  }
+
+  if (score.value == null && otherScore.value == null) {
+    return Constants.leaveAsIs;
+  }
+
+  if (score.value == null) {
+    return Constants.moveBelow;
+  }
+
+  if (otherScore.value == null) {
+    return Constants.moveAbove;
+  }
+
+  final num? aNumber = num.tryParse(score.value!);
+  final num? bNumber = num.tryParse(otherScore.value!);
+  if (aNumber == null && bNumber == null) {
+    return Constants.leaveAsIs;
+  }
+
+  if (aNumber == null) {
+    return Constants.moveBelow;
+  }
+
+  if (bNumber == null) {
+    return Constants.moveAbove;
+  }
+
+  return bNumber.compareTo(aNumber);
 }

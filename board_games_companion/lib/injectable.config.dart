@@ -116,8 +116,11 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       _i31.PlaythroughsGameSettingsViewModel(
           get<_i25.BoardGamesStore>(), get<_i27.GamePlaythroughsStore>()));
   gh.factory<_i32.PlaythroughsHistoryViewModel>(() =>
-      _i32.PlaythroughsHistoryViewModel(get<_i23.PlaythroughsStore>(),
-          get<_i25.BoardGamesStore>(), get<_i10.PlayersStore>()));
+      _i32.PlaythroughsHistoryViewModel(
+          get<_i23.PlaythroughsStore>(),
+          get<_i25.BoardGamesStore>(),
+          get<_i10.PlayersStore>(),
+          get<_i14.ScoreService>()));
   gh.factory<_i33.PlaythroughsHistoryViewModel>(() =>
       _i33.PlaythroughsHistoryViewModel(get<_i27.GamePlaythroughsStore>()));
   gh.factory<_i34.PlaythroughsLogGameViewModel>(() =>

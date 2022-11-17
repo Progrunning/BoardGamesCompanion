@@ -150,9 +150,10 @@ class _Expansion extends StatelessWidget {
           context,
           BoardGamesDetailsPage.pageRoute,
           arguments: BoardGameDetailsPageArguments(
-            _boardGameExpansion.id,
-            _boardGameExpansion.name,
-            BoardGamesDetailsPage,
+            boardGameId: _boardGameExpansion.id,
+            boardGameImageHeroId: _boardGameExpansion.id,
+            boardGameName: _boardGameExpansion.name,
+            navigatingFromType: BoardGamesDetailsPage,
           ),
         );
       },

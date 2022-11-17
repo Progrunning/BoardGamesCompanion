@@ -124,9 +124,10 @@ class __$$_BoardGamePlaythroughCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BoardGamePlaythrough implements _BoardGamePlaythrough {
+class _$_BoardGamePlaythrough extends _BoardGamePlaythrough {
   const _$_BoardGamePlaythrough(
-      {required this.playthrough, required this.boardGameDetails});
+      {required this.playthrough, required this.boardGameDetails})
+      : super._();
 
   @override
   final PlaythroughDetails playthrough;
@@ -162,11 +163,12 @@ class _$_BoardGamePlaythrough implements _BoardGamePlaythrough {
           this, _$identity);
 }
 
-abstract class _BoardGamePlaythrough implements BoardGamePlaythrough {
+abstract class _BoardGamePlaythrough extends BoardGamePlaythrough {
   const factory _BoardGamePlaythrough(
           {required final PlaythroughDetails playthrough,
           required final BoardGameDetails boardGameDetails}) =
       _$_BoardGamePlaythrough;
+  const _BoardGamePlaythrough._() : super._();
 
   @override
   PlaythroughDetails get playthrough;

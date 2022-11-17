@@ -1,18 +1,24 @@
 import 'package:board_games_companion/extensions/int_extensions.dart';
+import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
+import 'package:board_games_companion/pages/playthroughs_history/board_game_playthrough.dart';
 import 'package:board_games_companion/pages/playthroughs_history/grouped_board_game_playthroughs.dart';
 import 'package:board_games_companion/pages/playthroughs_history/playthroughs_history_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
+import '../../models/navigation/board_game_details_page_arguments.dart';
+import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import '../board_game_details/board_game_details_page.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
   const PlaythroughsHistoryPage({
@@ -76,6 +82,7 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
   final GroupedBoardGamePlaythroughs groupedBoardGamePlaythroughs;
 
   static const double _playthroughStatsIconSize = 16;
+  static const double _playthroughStatsFontAwesomeIconSize = _playthroughStatsIconSize - 4;
 
   @override
   Widget build(BuildContext context) {
@@ -103,32 +110,48 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
                             height: Dimensions.collectionSearchResultBoardGameImageHeight,
                             width: Dimensions.collectionSearchResultBoardGameImageWidth,
                             child: BoardGameTile(
-                              id: boardGamePlaythrough.boardGameDetails.id,
+                              id: boardGamePlaythrough.id,
                               imageUrl: boardGamePlaythrough.boardGameDetails.thumbnailUrl ?? '',
                             ),
                           ),
                           const SizedBox(width: Dimensions.standardSpacing),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                boardGamePlaythrough.boardGameDetails.name,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTheme.theme.textTheme.bodyLarge,
-                              ),
-                              const SizedBox(height: Dimensions.standardSpacing),
-                              _PlaythroughGeneralStats(
-                                icon: const Icon(Icons.people, size: _playthroughStatsIconSize),
-                                statistic:
-                                    '${boardGamePlaythrough.playthrough.playerScores.length} players',
-                              ),
-                              _PlaythroughGeneralStats(
-                                icon: const Icon(Icons.hourglass_bottom,
-                                    size: _playthroughStatsIconSize),
-                                statistic: boardGamePlaythrough.playthrough.duration.inSeconds
-                                    .toPlaytimeDuration(showSeconds: false),
-                              ),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  boardGamePlaythrough.boardGameDetails.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTheme.theme.textTheme.bodyLarge,
+                                ),
+                                const SizedBox(height: Dimensions.standardSpacing),
+                                _PlaythroughGeneralStats(
+                                  icon: const Icon(
+                                    FontAwesomeIcons.trophy,
+                                    size: _playthroughStatsFontAwesomeIconSize,
+                                  ),
+                                  statistic:
+                                      '${boardGamePlaythrough.winner.player?.name ?? ''} (${boardGamePlaythrough.winner.score.valueInt} points)',
+                                ),
+                                _PlaythroughGeneralStats(
+                                  icon: const Icon(Icons.people, size: _playthroughStatsIconSize),
+                                  statistic:
+                                      '${boardGamePlaythrough.playthrough.playerScores.length} players',
+                                ),
+                                _PlaythroughGeneralStats(
+                                  icon: const Icon(Icons.hourglass_bottom,
+                                      size: _playthroughStatsIconSize),
+                                  statistic: boardGamePlaythrough.playthrough.duration.inSeconds
+                                      .toPlaytimeDuration(showSeconds: false),
+                                ),
+                              ],
+                            ),
+                          ),
+                          _PlaythroughActions(
+                            onTapBoardGameDetails: () =>
+                                _navigateToBoardGameDetails(context, boardGamePlaythrough),
+                            onTapPlaythroughs: () =>
+                                _navigateToPlaythrough(context, boardGamePlaythrough),
                           ),
                         ],
                       ),
@@ -140,6 +163,35 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
           );
         },
         childCount: groupedBoardGamePlaythroughs.boardGamePlaythroughs.length,
+      ),
+    );
+  }
+
+  Future<void> _navigateToPlaythrough(
+    BuildContext context,
+    BoardGamePlaythrough boardGamePlaythrough,
+  ) =>
+      Navigator.pushNamed(
+        context,
+        PlaythroughsPage.pageRoute,
+        arguments: PlaythroughsPageArguments(
+          boardGameDetails: boardGamePlaythrough.boardGameDetails,
+          boardGameImageHeroId: boardGamePlaythrough.id,
+        ),
+      );
+
+  void _navigateToBoardGameDetails(
+    BuildContext context,
+    BoardGamePlaythrough boardGamePlaythrough,
+  ) {
+    Navigator.pushNamed(
+      context,
+      BoardGamesDetailsPage.pageRoute,
+      arguments: BoardGameDetailsPageArguments(
+        boardGameId: boardGamePlaythrough.boardGameDetails.id,
+        boardGameName: boardGamePlaythrough.boardGameDetails.name,
+        boardGameImageHeroId: boardGamePlaythrough.id,
+        navigatingFromType: PlaythroughsHistoryPage,
       ),
     );
   }
@@ -168,6 +220,34 @@ class _PlaythroughGeneralStats extends StatelessWidget {
           statistic,
           overflow: TextOverflow.ellipsis,
           style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
+        ),
+      ],
+    );
+  }
+}
+
+class _PlaythroughActions extends StatelessWidget {
+  const _PlaythroughActions({
+    Key? key,
+    required this.onTapBoardGameDetails,
+    required this.onTapPlaythroughs,
+  }) : super(key: key);
+
+  final VoidCallback onTapBoardGameDetails;
+  final VoidCallback onTapPlaythroughs;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.info),
+          onPressed: () => onTapBoardGameDetails(),
+        ),
+        const Expanded(child: SizedBox.shrink()),
+        IconButton(
+          icon: const FaIcon(FontAwesomeIcons.dice),
+          onPressed: () => onTapPlaythroughs(),
         ),
       ],
     );

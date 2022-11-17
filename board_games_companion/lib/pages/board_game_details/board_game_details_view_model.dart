@@ -29,6 +29,7 @@ abstract class _BoardGameDetailsViewModel with Store {
   late HtmlUnescape _htmlUnescape;
   late String _boardGameId;
   late String _boardGameName;
+  late String _boardGameImageHeroId;
   String? _boardGameImageUrl;
 
   @computed
@@ -39,6 +40,8 @@ abstract class _BoardGameDetailsViewModel with Store {
   String get boardGameName => _boardGameName;
 
   String get boardGameId => _boardGameId;
+
+  String get boardGameImageHeroId => _boardGameImageHeroId;
 
   @computed
   String? get boardGameImageUrl {
@@ -122,6 +125,9 @@ abstract class _BoardGameDetailsViewModel with Store {
   void setBoardGameName(String boardGameName) => _boardGameName = boardGameName;
 
   void setBoardGameImageUrl(String? boardGameImageUrl) => _boardGameImageUrl = boardGameImageUrl;
+
+  void setBoardGameImageHeroId(String boardGameImageHeroId) =>
+      _boardGameImageHeroId = boardGameImageHeroId;
 
   Future<void> captureLinkAnalytics(String linkName) async {
     await _analyticsService.logEvent(

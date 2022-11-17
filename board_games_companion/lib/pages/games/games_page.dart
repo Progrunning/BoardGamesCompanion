@@ -194,7 +194,7 @@ class _Collection extends StatelessWidget {
                 ),
               ),
             ),
-            _Grid(boardGames: mainGames, analyticsService: analyticsService),
+            _Grid(boardGamesDetails: mainGames, analyticsService: analyticsService),
           ],
           if (hasExpansions) ...[
             for (var expansionsMapEntry in expansionsMap.entries) ...[
@@ -207,7 +207,7 @@ class _Collection extends StatelessWidget {
                 ),
               ),
               _Grid(
-                boardGames: expansionsMapEntry.value,
+                boardGamesDetails: expansionsMapEntry.value,
                 analyticsService: analyticsService,
               ),
             ]
@@ -327,17 +327,20 @@ class _AppBarState extends State<_AppBar> {
   }
 
   Future<void> _handleSearchResultAction(
-      BoardGameDetails boardGame, BoardGameResultActionType actionType) async {
+    BoardGameDetails boardGameDetails,
+    BoardGameResultActionType actionType,
+  ) async {
     switch (actionType) {
       case BoardGameResultActionType.details:
         unawaited(Navigator.pushNamed(
           context,
           BoardGamesDetailsPage.pageRoute,
           arguments: BoardGameDetailsPageArguments(
-            boardGame.id,
-            boardGame.name,
-            GamesPage,
-            boardGameImageUrl: boardGame.imageUrl,
+            boardGameId: boardGameDetails.id,
+            boardGameName: boardGameDetails.name,
+            boardGameImageHeroId: boardGameDetails.id,
+            navigatingFromType: GamesPage,
+            boardGameImageUrl: boardGameDetails.imageUrl,
           ),
         ));
         break;
@@ -345,7 +348,10 @@ class _AppBarState extends State<_AppBar> {
         unawaited(Navigator.pushNamed(
           context,
           PlaythroughsPage.pageRoute,
-          arguments: PlaythroughsPageArguments(boardGame),
+          arguments: PlaythroughsPageArguments(
+            boardGameDetails: boardGameDetails,
+            boardGameImageHeroId: boardGameDetails.id,
+          ),
         ));
         break;
     }
@@ -355,11 +361,11 @@ class _AppBarState extends State<_AppBar> {
 class _Grid extends StatelessWidget {
   const _Grid({
     Key? key,
-    required this.boardGames,
+    required this.boardGamesDetails,
     required this.analyticsService,
   }) : super(key: key);
 
-  final List<BoardGameDetails> boardGames;
+  final List<BoardGameDetails> boardGamesDetails;
   final AnalyticsService analyticsService;
 
   @override
@@ -371,17 +377,20 @@ class _Grid extends StatelessWidget {
         mainAxisSpacing: Dimensions.standardSpacing,
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
         children: [
-          for (var boardGame in boardGames)
+          for (var boardGameDetails in boardGamesDetails)
             BoardGameTile(
-              id: boardGame.id,
-              name: boardGame.name,
-              imageUrl: boardGame.thumbnailUrl ?? '',
-              rank: boardGame.rank,
+              id: boardGameDetails.id,
+              name: boardGameDetails.name,
+              imageUrl: boardGameDetails.thumbnailUrl ?? '',
+              rank: boardGameDetails.rank,
               elevation: AppStyles.defaultElevation,
               onTap: () => Navigator.pushNamed(
                 context,
                 PlaythroughsPage.pageRoute,
-                arguments: PlaythroughsPageArguments(boardGame),
+                arguments: PlaythroughsPageArguments(
+                  boardGameDetails: boardGameDetails,
+                  boardGameImageHeroId: boardGameDetails.id,
+                ),
               ),
               heroTag: AnimationTags.boardGameHeroTag,
             )

@@ -3,6 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'hive/player.dart';
 import 'hive/score.dart';
 
+export '../extensions/player_score_extensions.dart';
+
 part 'player_score.freezed.dart';
 
 @freezed

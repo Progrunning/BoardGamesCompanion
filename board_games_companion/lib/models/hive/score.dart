@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 
 import '../../common/hive_boxes.dart';
 
+export '../../extensions/scores_extensions.dart';
+
 part 'score.freezed.dart';
 part 'score.g.dart';
 

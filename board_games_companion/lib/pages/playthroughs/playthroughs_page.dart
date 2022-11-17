@@ -96,11 +96,13 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           child: PageContainer(
             child: TabBarView(
               controller: tabController,
-              children: const <Widget>[
-                PlaythroughStatistcsPage(),
-                PlaythroughsHistoryPage(),
-                PlaythroughsLogGamePage(),
-                PlaythroughsGameSettingsPage()
+              children: <Widget>[
+                PlaythroughStatistcsPage(
+                  boardGameImageHeroId: widget.viewModel.boardGameImageHeroId,
+                ),
+                const PlaythroughsHistoryPage(),
+                const PlaythroughsLogGamePage(),
+                const PlaythroughsGameSettingsPage()
               ],
             ),
           ),
@@ -152,9 +154,10 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       context,
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
-        widget.viewModel.boardGameId,
-        widget.viewModel.boardGameName,
-        PlaythroughsPage,
+        boardGameId: widget.viewModel.boardGameId,
+        boardGameImageHeroId: widget.viewModel.boardGameId,
+        boardGameName: widget.viewModel.boardGameName,
+        navigatingFromType: PlaythroughsPage,
       ),
     );
   }

@@ -1,7 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
+import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:collection/collection.dart';
@@ -9,6 +12,7 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../models/hive/score.dart';
 import '../../stores/playthroughs_store.dart';
 import 'board_game_playthrough.dart';
 import 'grouped_board_game_playthroughs.dart';
@@ -24,22 +28,36 @@ abstract class _PlaythroughsHistoryViewModel with Store {
     this._playthroughsStore,
     this._boardGamesStore,
     this._playersStore,
+    this._scoreService,
   );
+
+  // An arbitrary number that should fulfil the below conditions
+  //  1. Satisfy users with showing enough finished playthroughs to browse through
+  //  2. Avoid loading too much data into memory
+  //  3. Avoid complexity of infinite loading of data
+  static const int _numberOfPlaythroughsToShow = 500;
 
   final PlaythroughsStore _playthroughsStore;
   final BoardGamesStore _boardGamesStore;
   final PlayersStore _playersStore;
+  final ScoreService _scoreService;
 
-  final DateFormat playthroughGroupingDateFormat = DateFormat.yMd();
+  final DateFormat playthroughGroupingDateFormat = DateFormat('d MMMM y');
+
+  late Map<String, Score> _scores;
 
   @observable
   ObservableFuture<void>? futureLoadGamesPlaythroughs;
 
   @computed
+  List<Playthrough> get finishedPlaythroughs =>
+      _playthroughsStore.finishedPlaythroughs.take(_numberOfPlaythroughsToShow).toList();
+
+  @computed
   List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs {
     final result = <GroupedBoardGamePlaythroughs>[];
     final finishedPlaythroughsGrouped = groupBy(
-        _playthroughsStore.finishedPlaythroughs
+        finishedPlaythroughs
           ..sort((playthroughA, playthroughB) =>
               playthroughB.endDate!.compareTo(playthroughA.endDate!)),
         (Playthrough playthrough) => playthroughGroupingDateFormat.format(playthrough.endDate!));
@@ -52,11 +70,17 @@ abstract class _PlaythroughsHistoryViewModel with Store {
               .map((playthrough) => BoardGamePlaythrough(
                     playthrough: PlaythroughDetails(
                       playthrough: playthrough,
-                      // TODO Need to get scores
-                      // TODO Need to do a load on scroll
                       playerScores: [
-                        // for (final playerId in playthrough.playerIds)
-                        //   _playersStore.playersById[playerId]
+                        for (final playerId in playthrough.playerIds)
+                          PlayerScore(
+                            player: _playersStore.playersById[playerId],
+                            score: _scores['${playthrough.id}$playerId'] ??
+                                Score(
+                                  id: '',
+                                  playerId: playerId,
+                                  boardGameId: playthrough.boardGameId,
+                                ),
+                          )
                       ],
                     ),
                     boardGameDetails:
@@ -76,5 +100,13 @@ abstract class _PlaythroughsHistoryViewModel with Store {
 
   Future<void> _loadGamesPlaythroughs() async {
     await _playthroughsStore.loadPlaythroughs();
+    await _playersStore.loadPlayers();
+
+    final scores = await _scoreService
+        .retrieveScores(finishedPlaythroughs.map((playthrough) => playthrough.id));
+    _scores = {
+      for (final Score score in scores.where((Score score) => score.playthroughId.isNotNullOrBlank))
+        score.toMapKey(): score
+    };
   }
 }

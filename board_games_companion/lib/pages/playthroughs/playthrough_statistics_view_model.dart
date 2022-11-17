@@ -9,7 +9,6 @@ import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../common/enums/playthrough_status.dart';
-import '../../extensions/scores_extensions.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/playthrough.dart';
