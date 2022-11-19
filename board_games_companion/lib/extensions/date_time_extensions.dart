@@ -1,4 +1,6 @@
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:intl/intl.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../common/constants.dart';
 
@@ -20,24 +22,47 @@ extension DateTimeExtensions on DateTime? {
   }
 
   String toDaysAgo() {
-    const String daysAgoText = 'days ago';
     if (this == null) {
-      return '- $daysAgoText';
+      return sprintf(AppText.daysAgoFormat, ['-']);
     }
 
+    if (isToday) {
+      return AppText.today;
+    }
+    if (isYesterday) {
+      return AppText.yesteday;
+    }
+    if (isDayBeforeYesterday) {
+      return AppText.dayBeforeYesteday;
+    }
+
+    return sprintf(AppText.daysAgoFormat, [daysAgo]);
+  }
+
+  int get daysAgo {
+    final nowUtc = DateTime.now().toUtc();
+    return nowUtc.difference(this!).inDays;
+  }
+
+  bool get isToday {
     final nowUtc = DateTime.now().toUtc();
     final daysAgo = nowUtc.difference(this!).inDays;
-    if (daysAgo == 0) {
-      return 'today';
-    }
-    if (daysAgo == 1) {
-      return 'yesterday';
-    }
-    if (daysAgo == 2) {
-      return 'day before yesterday';
-    }
 
-    return '$daysAgo $daysAgoText';
+    return daysAgo == 0;
+  }
+
+  bool get isYesterday {
+    final nowUtc = DateTime.now().toUtc();
+    final daysAgo = nowUtc.difference(this!).inDays;
+
+    return daysAgo == 1;
+  }
+
+  bool get isDayBeforeYesterday {
+    final nowUtc = DateTime.now().toUtc();
+    final daysAgo = nowUtc.difference(this!).inDays;
+
+    return daysAgo == 2;
   }
 
   int safeCompareTo(DateTime? dateTimeToCompare) {

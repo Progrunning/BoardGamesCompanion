@@ -9,6 +9,13 @@ part of 'playthroughs_history_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
+  Computed<Map<String, Score>>? _$_scoresComputed;
+
+  @override
+  Map<String, Score> get _scores =>
+      (_$_scoresComputed ??= Computed<Map<String, Score>>(() => super._scores,
+              name: '_PlaythroughsHistoryViewModel._scores'))
+          .value;
   Computed<List<Playthrough>>? _$finishedPlaythroughsComputed;
 
   @override

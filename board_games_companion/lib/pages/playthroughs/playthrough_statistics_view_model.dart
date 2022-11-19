@@ -2,13 +2,13 @@
 
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/stores/game_playthroughs_store.dart';
+import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../common/enums/playthrough_status.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/playthrough.dart';
@@ -16,8 +16,6 @@ import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/player_statistics.dart';
 import '../../services/player_service.dart';
-import '../../services/playthroughs_service.dart';
-import '../../services/score_service.dart';
 
 part 'playthrough_statistics_view_model.g.dart';
 
@@ -28,15 +26,13 @@ class PlaythroughStatisticsViewModel = _PlaythroughStatisticsViewModel
 abstract class _PlaythroughStatisticsViewModel with Store {
   _PlaythroughStatisticsViewModel(
     this._playerService,
-    this._scoreService,
-    this._playthroughService,
-    this._playthroughsStore,
+    this._scoresStore,
+    this._gamePlaythroughsStore,
   );
 
   final PlayerService _playerService;
-  final ScoreService _scoreService;
-  final PlaythroughService _playthroughService;
-  final GamePlaythroughsStore _playthroughsStore;
+  final ScoresStore _scoresStore;
+  final GamePlaythroughsStore _gamePlaythroughsStore;
 
   static const int _maxNumberOfTopScoresToDisplay = 5;
 
@@ -46,13 +42,21 @@ abstract class _PlaythroughStatisticsViewModel with Store {
   ObservableFuture<void>? futureLoadBoardGamesStatistics;
 
   @computed
-  String get boardGameId => _playthroughsStore.boardGameId;
+  List<String> get _playthroughIds =>
+      _gamePlaythroughsStore.playthroughs.map((playthrough) => playthrough.id).toList();
 
   @computed
-  String? get boardGameImageUrl => _playthroughsStore.boardGameImageUrl;
+  List<Score> get _playthroughsScores =>
+      _scoresStore.scores.where((score) => _playthroughIds.contains(score.playthroughId)).toList();
 
   @computed
-  String get boardGameName => _playthroughsStore.boardGameName;
+  String get boardGameId => _gamePlaythroughsStore.boardGameId;
+
+  @computed
+  String? get boardGameImageUrl => _gamePlaythroughsStore.boardGameImageUrl;
+
+  @computed
+  String get boardGameName => _gamePlaythroughsStore.boardGameName;
 
   @action
   void loadBoardGamesStatistics() =>
@@ -60,31 +64,24 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
   Future<void> _loadBoardGamesStatistics() async {
     Fimber.d(
-        'Loading stats for game ${_playthroughsStore.boardGameName} [${_playthroughsStore.boardGameId}]');
-    final boardGameId = _playthroughsStore.boardGameId;
-    final gameWinningCondition = _playthroughsStore.gameWinningCondition;
+        'Loading stats for game ${_gamePlaythroughsStore.boardGameName} [${_gamePlaythroughsStore.boardGameId}]');
+    final boardGameId = _gamePlaythroughsStore.boardGameId;
+    final gameWinningCondition = _gamePlaythroughsStore.gameWinningCondition;
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
-    final boardGamePlaythroughs = await _playthroughService.retrieveGamePlaythroughs([boardGameId]);
-    if (boardGamePlaythroughs.isEmpty) {
+    if (_gamePlaythroughsStore.playthroughs.isEmpty) {
       boardGameStatistics = BoardGameStatistics();
       return;
     }
 
-    // MK Retrieve scores
-    final Iterable<String> playthroughIds = boardGamePlaythroughs.map((p) => p.id);
-    final List<Score> playthroughsScores = await _scoreService.retrieveScores(playthroughIds);
     final Map<String, List<Score>> playthroughScoresByPlaythroughId =
-        groupBy(playthroughsScores, (s) => s.playthroughId!);
+        groupBy(_playthroughsScores, (s) => s.playthroughId!);
     final Map<String, List<Score>> playthroughScoresByBoardGameId =
-        groupBy(playthroughsScores, (s) => s.boardGameId);
+        groupBy(_playthroughsScores, (s) => s.boardGameId);
 
-    final List<Playthrough> finishedPlaythroughs = boardGamePlaythroughs
-        .where((p) => p.status == PlaythroughStatus.Finished && p.endDate != null)
-        .toList();
-    finishedPlaythroughs.sort((a, b) => b.startDate.compareTo(a.startDate));
-
+    // MK Creating a local variable of finished playthroughs to avoid multitude of retrievals with a getter
+    final finishedPlaythroughs = _gamePlaythroughsStore.finishedPlaythroughs;
     _updateLastPlayedAndWinner(
       finishedPlaythroughs,
       boardGameStatistics,
@@ -221,7 +218,8 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
       final List<Score> playthroughScores = playthroughScoresByPlaythroughId[finishedPlaythrough.id]
-          .sortByScore(gameWinningCondition)!;
+              .sortByScore(gameWinningCondition) ??
+          [];
       if (playthroughScores.isEmpty) {
         continue;
       }

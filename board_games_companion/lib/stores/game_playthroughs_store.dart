@@ -1,7 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -15,7 +16,6 @@ import '../models/hive/score.dart';
 import '../models/playthrough_details.dart';
 import '../models/playthrough_player.dart';
 import '../services/player_service.dart';
-import '../services/playthroughs_service.dart';
 
 part 'game_playthroughs_store.g.dart';
 
@@ -23,10 +23,10 @@ part 'game_playthroughs_store.g.dart';
 class GamePlaythroughsStore = _GamePlaythroughsStore with _$GamePlaythroughsStore;
 
 abstract class _GamePlaythroughsStore with Store {
-  _GamePlaythroughsStore(this._playthroughService, this._scoreService, this._playerService);
+  _GamePlaythroughsStore(this._playthroughsStore, this._scoresStore, this._playerService);
 
-  final PlaythroughService _playthroughService;
-  final ScoreService _scoreService;
+  final PlaythroughsStore _playthroughsStore;
+  final ScoresStore _scoresStore;
   final PlayerService _playerService;
 
   @observable
@@ -34,6 +34,18 @@ abstract class _GamePlaythroughsStore with Store {
 
   @observable
   ObservableList<PlaythroughDetails> playthroughsDetails = ObservableList.of([]);
+
+  @computed
+  List<Playthrough> get playthroughs => _playthroughsStore.playthroughs
+      .where((playthrough) => playthrough.boardGameId == boardGameId)
+      .toList();
+
+  @computed
+  List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs
+      .where((playthrough) => playthrough.boardGameId == boardGameId)
+      .toList()
+    ..sort((playthrough, otherPlaythrough) =>
+        otherPlaythrough.startDate.compareTo(playthrough.startDate));
 
   @computed
   String get boardGameName => _boardGame!.name;
@@ -52,7 +64,7 @@ abstract class _GamePlaythroughsStore with Store {
   Future<void> loadPlaythroughs() async {
     try {
       final loadedPlaythroughDetails = <PlaythroughDetails>[];
-      final playthroughs = await _playthroughService.retrieveGamePlaythroughs([boardGameId]);
+      await _playthroughsStore.loadPlaythroughs();
       for (final playthrough in playthroughs) {
         final playthroughDetails = await createPlaythroughDetails(playthrough);
         loadedPlaythroughDetails.add(playthroughDetails);
@@ -75,7 +87,7 @@ abstract class _GamePlaythroughsStore with Store {
     Duration? duration, {
     int? bggPlayId,
   }) async {
-    final newHivePlaythrough = await _playthroughService.createPlaythrough(
+    final newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
       playthoughPlayers,
       playerScores,
@@ -84,17 +96,13 @@ abstract class _GamePlaythroughsStore with Store {
       bggPlayId: bggPlayId,
     );
 
-    if (newHivePlaythrough == null) {
-      FirebaseCrashlytics.instance.log(
-        'Faild to new playthrough for a board game $boardGameId with ${playthoughPlayers.length} players',
-      );
-
+    if (newPlaythrough == null) {
       return null;
     }
 
-    final playthrough = await createPlaythroughDetails(newHivePlaythrough);
-    playthroughsDetails.add(playthrough);
-    return playthrough;
+    final newPlaythroughDetails = await createPlaythroughDetails(newPlaythrough);
+    playthroughsDetails.add(newPlaythroughDetails);
+    return newPlaythroughDetails;
   }
 
   Future<void> updatePlaythrough(PlaythroughDetails? playthroughDetails) async {
@@ -104,10 +112,10 @@ abstract class _GamePlaythroughsStore with Store {
 
     try {
       final updateSuceeded =
-          await _playthroughService.updatePlaythrough(playthroughDetails!.playthrough);
+          await _playthroughsStore.updatePlaythrough(playthroughDetails!.playthrough);
       if (updateSuceeded) {
         for (final PlayerScore playerScore in playthroughDetails.playerScores) {
-          await _scoreService.addOrUpdateScore(playerScore.score);
+          await _scoresStore.addOrUpdateScore(playerScore.score);
         }
 
         await loadPlaythroughs();
@@ -119,7 +127,7 @@ abstract class _GamePlaythroughsStore with Store {
 
   Future<bool> deletePlaythrough(String playthroughId) async {
     try {
-      final deleteSucceeded = await _playthroughService.deletePlaythrough(playthroughId);
+      final deleteSucceeded = await _playthroughsStore.deletePlaythrough(playthroughId);
       if (deleteSucceeded) {
         playthroughsDetails.removeWhere((p) => p.playthrough.id == playthroughId);
       }
@@ -132,12 +140,13 @@ abstract class _GamePlaythroughsStore with Store {
     return false;
   }
 
-  Future<PlaythroughDetails> createPlaythroughDetails(Playthrough hivePlaythrough) async {
-    final scores = (await _scoreService.retrieveScores([hivePlaythrough.id]))
-      ..sortByScore(gameWinningCondition)
-      ..toList();
+  Future<PlaythroughDetails> createPlaythroughDetails(Playthrough playthrough) async {
+    final scores =
+        _scoresStore.scores.where((score) => score.playthroughId == playthrough.id).toList()
+          ..sortByScore(gameWinningCondition)
+          ..toList();
     final players = await _playerService.retrievePlayers(
-      playerIds: hivePlaythrough.playerIds,
+      playerIds: playthrough.playerIds,
       includeDeleted: true,
     );
 
@@ -146,6 +155,6 @@ abstract class _GamePlaythroughsStore with Store {
       return PlayerScore(player: player, score: score, place: index + 1);
     }).toList();
 
-    return PlaythroughDetails(playthrough: hivePlaythrough, playerScores: playerScores);
+    return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores);
   }
 }

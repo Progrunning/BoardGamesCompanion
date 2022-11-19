@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:injectable/injectable.dart';
 
 import '../models/hive/score.dart';
@@ -21,15 +22,23 @@ class ScoreService extends BaseHiveService<Score, ScoreService> {
     return true;
   }
 
-  Future<List<Score>> retrieveScores(Iterable<String> playthroughIds) async {
-    if ((playthroughIds.isEmpty) || !await ensureBoxOpen()) {
+  Future<List<Score>> retrieveScores() async {
+    if (!await ensureBoxOpen()) {
+      return <Score>[];
+    }
+
+    return storageBox.toMap().values.toList();
+  }
+
+  Future<List<Score>> retrieveScoresForPlaythrough(String playthroughId) async {
+    if (playthroughId.isNullOrBlank || !await ensureBoxOpen()) {
       return <Score>[];
     }
 
     return storageBox
         .toMap()
         .values
-        .where((score) => playthroughIds.contains(score.playthroughId))
+        .where((score) => playthroughId == score.playthroughId)
         .toList();
   }
 }

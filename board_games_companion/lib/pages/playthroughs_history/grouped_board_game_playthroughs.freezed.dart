@@ -105,11 +105,12 @@ class __$$_GroupedBoardGamePlaythroughsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_GroupedBoardGamePlaythroughs implements _GroupedBoardGamePlaythroughs {
+class _$_GroupedBoardGamePlaythroughs extends _GroupedBoardGamePlaythroughs {
   const _$_GroupedBoardGamePlaythroughs(
       {required this.date,
       required final List<BoardGamePlaythrough> boardGamePlaythroughs})
-      : _boardGamePlaythroughs = boardGamePlaythroughs;
+      : _boardGamePlaythroughs = boardGamePlaythroughs,
+        super._();
 
   @override
   final DateTime date;
@@ -149,11 +150,12 @@ class _$_GroupedBoardGamePlaythroughs implements _GroupedBoardGamePlaythroughs {
 }
 
 abstract class _GroupedBoardGamePlaythroughs
-    implements GroupedBoardGamePlaythroughs {
+    extends GroupedBoardGamePlaythroughs {
   const factory _GroupedBoardGamePlaythroughs(
           {required final DateTime date,
           required final List<BoardGamePlaythrough> boardGamePlaythroughs}) =
       _$_GroupedBoardGamePlaythroughs;
+  const _GroupedBoardGamePlaythroughs._() : super._();
 
   @override
   DateTime get date;

@@ -16,4 +16,12 @@ extension StringExtensions on String? {
 
     return this!.compareTo(stringToCompare!);
   }
+
+  String toCapitalized() {
+    if (this == null) {
+      return '';
+    }
+
+    return this!.isNotEmpty ? '${this![0].toUpperCase()}${this!.substring(1).toLowerCase()}' : '';
+  }
 }

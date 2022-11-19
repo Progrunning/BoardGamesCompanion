@@ -9,6 +9,21 @@ part of 'game_playthroughs_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$GamePlaythroughsStore on _GamePlaythroughsStore, Store {
+  Computed<List<Playthrough>>? _$playthroughsComputed;
+
+  @override
+  List<Playthrough> get playthroughs => (_$playthroughsComputed ??=
+          Computed<List<Playthrough>>(() => super.playthroughs,
+              name: '_GamePlaythroughsStore.playthroughs'))
+      .value;
+  Computed<List<Playthrough>>? _$finishedPlaythroughsComputed;
+
+  @override
+  List<Playthrough> get finishedPlaythroughs =>
+      (_$finishedPlaythroughsComputed ??= Computed<List<Playthrough>>(
+              () => super.finishedPlaythroughs,
+              name: '_GamePlaythroughsStore.finishedPlaythroughs'))
+          .value;
   Computed<String>? _$boardGameNameComputed;
 
   @override
@@ -97,6 +112,8 @@ mixin _$GamePlaythroughsStore on _GamePlaythroughsStore, Store {
   String toString() {
     return '''
 playthroughsDetails: ${playthroughsDetails},
+playthroughs: ${playthroughs},
+finishedPlaythroughs: ${finishedPlaythroughs},
 boardGameName: ${boardGameName},
 boardGameId: ${boardGameId},
 boardGameImageUrl: ${boardGameImageUrl},

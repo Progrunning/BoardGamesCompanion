@@ -81,9 +81,6 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
 
   final GroupedBoardGamePlaythroughs groupedBoardGamePlaythroughs;
 
-  static const double _playthroughStatsIconSize = 16;
-  static const double _playthroughStatsFontAwesomeIconSize = _playthroughStatsIconSize - 4;
-
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -116,36 +113,7 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
                           ),
                           const SizedBox(width: Dimensions.standardSpacing),
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  boardGamePlaythrough.boardGameDetails.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTheme.theme.textTheme.bodyLarge,
-                                ),
-                                const SizedBox(height: Dimensions.standardSpacing),
-                                _PlaythroughGeneralStats(
-                                  icon: const Icon(
-                                    FontAwesomeIcons.trophy,
-                                    size: _playthroughStatsFontAwesomeIconSize,
-                                  ),
-                                  statistic:
-                                      '${boardGamePlaythrough.winner.player?.name ?? ''} (${boardGamePlaythrough.winner.score.valueInt} points)',
-                                ),
-                                _PlaythroughGeneralStats(
-                                  icon: const Icon(Icons.people, size: _playthroughStatsIconSize),
-                                  statistic:
-                                      '${boardGamePlaythrough.playthrough.playerScores.length} players',
-                                ),
-                                _PlaythroughGeneralStats(
-                                  icon: const Icon(Icons.hourglass_bottom,
-                                      size: _playthroughStatsIconSize),
-                                  statistic: boardGamePlaythrough.playthrough.duration.inSeconds
-                                      .toPlaytimeDuration(showSeconds: false),
-                                ),
-                              ],
-                            ),
+                            child: _PlaythroughDetails(boardGamePlaythrough: boardGamePlaythrough),
                           ),
                           _PlaythroughActions(
                             onTapBoardGameDetails: () =>
@@ -193,6 +161,50 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
         boardGameImageHeroId: boardGamePlaythrough.id,
         navigatingFromType: PlaythroughsHistoryPage,
       ),
+    );
+  }
+}
+
+class _PlaythroughDetails extends StatelessWidget {
+  const _PlaythroughDetails({
+    Key? key,
+    required this.boardGamePlaythrough,
+  }) : super(key: key);
+
+  static const double _playthroughStatsIconSize = 16;
+  static const double _playthroughStatsFontAwesomeIconSize = _playthroughStatsIconSize - 4;
+
+  final BoardGamePlaythrough boardGamePlaythrough;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          boardGamePlaythrough.boardGameDetails.name,
+          overflow: TextOverflow.ellipsis,
+          style: AppTheme.theme.textTheme.bodyLarge,
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        _PlaythroughGeneralStats(
+          icon: const Icon(
+            FontAwesomeIcons.trophy,
+            size: _playthroughStatsFontAwesomeIconSize,
+          ),
+          statistic:
+              '${boardGamePlaythrough.winner.player?.name ?? ''} (${boardGamePlaythrough.winner.score.valueInt} points)',
+        ),
+        _PlaythroughGeneralStats(
+          icon: const Icon(Icons.people, size: _playthroughStatsIconSize),
+          statistic: '${boardGamePlaythrough.playthrough.playerScores.length} players',
+        ),
+        _PlaythroughGeneralStats(
+          icon: const Icon(Icons.hourglass_bottom, size: _playthroughStatsIconSize),
+          statistic: boardGamePlaythrough.playthrough.duration.inSeconds
+              .toPlaytimeDuration(showSeconds: false),
+        ),
+      ],
     );
   }
 }
@@ -267,10 +279,7 @@ class _PlaythroughGroupHeaderSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
-      delegate: BgcSliverHeaderDelegate(
-        primaryTitle: widget.viewModel.playthroughGroupingDateFormat
-            .format(groupedBoardGamePlaythroughs.date),
-      ),
+      delegate: BgcSliverHeaderDelegate(primaryTitle: groupedBoardGamePlaythroughs.dateFormtted),
     );
   }
 }

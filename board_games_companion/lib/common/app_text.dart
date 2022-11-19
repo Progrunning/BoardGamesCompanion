@@ -16,6 +16,11 @@ class AppText {
 
   static const goBack = 'Go Back';
 
+  static const today = 'today';
+  static const yesteday = 'yesterday';
+  static const dayBeforeYesteday = 'day before yesterday';
+  static const daysAgoFormat = '%s days ago';
+
   static const homePageGamesTabTitle = 'Games';
   static const homePageSearchTabTitle = 'Search';
   static const homePageGamesHistoryTabTitle = 'Play History';

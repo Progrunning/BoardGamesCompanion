@@ -4,12 +4,11 @@ import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
-import 'package:board_games_companion/services/score_service.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
+import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
-import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../models/hive/score.dart';
@@ -28,7 +27,7 @@ abstract class _PlaythroughsHistoryViewModel with Store {
     this._playthroughsStore,
     this._boardGamesStore,
     this._playersStore,
-    this._scoreService,
+    this._scoreStore,
   );
 
   // An arbitrary number that should fulfil the below conditions
@@ -40,11 +39,16 @@ abstract class _PlaythroughsHistoryViewModel with Store {
   final PlaythroughsStore _playthroughsStore;
   final BoardGamesStore _boardGamesStore;
   final PlayersStore _playersStore;
-  final ScoreService _scoreService;
+  final ScoresStore _scoreStore;
 
-  final DateFormat playthroughGroupingDateFormat = DateFormat('d MMMM y');
-
-  late Map<String, Score> _scores;
+  @computed
+  Map<String, Score> get _scores {
+    return {
+      for (final Score score
+          in _scoreStore.scores.where((Score score) => score.playthroughId.isNotNullOrBlank))
+        score.toMapKey(): score
+    };
+  }
 
   @observable
   ObservableFuture<void>? futureLoadGamesPlaythroughs;
@@ -101,12 +105,6 @@ abstract class _PlaythroughsHistoryViewModel with Store {
   Future<void> _loadGamesPlaythroughs() async {
     await _playthroughsStore.loadPlaythroughs();
     await _playersStore.loadPlayers();
-
-    final scores = await _scoreService
-        .retrieveScores(finishedPlaythroughs.map((playthrough) => playthrough.id));
-    _scores = {
-      for (final Score score in scores.where((Score score) => score.playthroughId.isNotNullOrBlank))
-        score.toMapKey(): score
-    };
+    await _scoreStore.loadScores();
   }
 }

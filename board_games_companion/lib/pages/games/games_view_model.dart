@@ -7,6 +7,8 @@ import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
+import 'package:board_games_companion/stores/playthroughs_store.dart';
+import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -33,11 +35,15 @@ abstract class _GamesViewModel with Store {
     this._userStore,
     this._boardGamesStore,
     this._boardGamesFiltersStore,
+    this._scoresStore,
+    this._playthroughsStore,
   );
 
   final UserStore _userStore;
   final BoardGamesStore _boardGamesStore;
   final BoardGamesFiltersStore _boardGamesFiltersStore;
+  final ScoresStore _scoresStore;
+  final PlaythroughsStore _playthroughsStore;
 
   @computed
   List<BoardGameDetails> get allMainGames =>
@@ -252,9 +258,12 @@ abstract class _GamesViewModel with Store {
 
   Future<void> _loadBoardGames() async {
     try {
+      // TODO MK Think about if we could potentially load all of the data once and then use it across the app
       await _userStore.loadUser();
       await _boardGamesStore.loadBoardGames();
       await _boardGamesFiltersStore.loadFilterPreferences();
+      await _playthroughsStore.loadPlaythroughs();
+      await _scoresStore.loadScores();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
