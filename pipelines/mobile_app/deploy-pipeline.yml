@@ -43,11 +43,11 @@ stages:
         condition: or(eq('${{ parameters.publishAndroid }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 20
         pool:
-          vmImage: "macOS-12"
+          vmImage: "ubuntu-22.04"
 
         steps:
           - task: JavaToolInstaller@0
-            displayName: Java Installer
+            displayName: "Install Java 11"
             inputs:
               versionSpec: "11"
               jdkArchitectureOption: x64
@@ -86,7 +86,7 @@ stages:
               TargetFolder: "$(Build.SourcesDirectory)/$(appDirectoryName)/android/app"
 
           - task: FlutterBuild@0
-            displayName: "Build Android"
+            displayName: Build Android
             inputs:
               target: "aab"
               projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
@@ -94,14 +94,14 @@ stages:
               buildName: "$(appVersion)"
 
           - task: DeleteFiles@1
-            displayName: "Deleting key.properties file"
+            displayName: Deleting key.properties file
             condition: always()
             inputs:
               SourceFolder: "$(Build.SourcesDirectory)/android/"
               Contents: "$(keyPropertiesFileName)"
 
           - task: DeleteFiles@1
-            displayName: "Deleting keystore file"
+            displayName: Deleting keystore file
             condition: always()
             inputs:
               SourceFolder: "$(Build.SourcesDirectory)/$(appDirectoryName)/android/app"
@@ -109,7 +109,7 @@ stages:
 
           - task: PublishPipelineArtifact@1
             condition: always()
-            displayName: "Publishing aab artifacts"
+            displayName: Publishing aab artifacts
             inputs:
               targetPath: "$(Build.SourcesDirectory)/$(appDirectoryName)/build/app/outputs/bundle/release/app-release.aab"
               artifact: "drop-droid"
@@ -122,10 +122,11 @@ stages:
         condition: eq(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')    
         timeoutInMinutes: 5
         pool:
-          vmImage: "macOS-12"
+          vmImage: "ubuntu-22.04"
 
         steps:
           - task: DownloadPipelineArtifact@2
+            displayName: "Download pipeline artifacts"
             inputs:
               buildType: "current"
               artifactName: "drop-droid"
