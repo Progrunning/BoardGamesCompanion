@@ -312,10 +312,6 @@ class _NoPlaythroughsSliver extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
-                    TextSpan(
-                      text: AppText.playHistoryPageEmptyTextPartOne,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
                     TextSpan(text: AppText.playHistoryPageEmptyTextPartTwo),
                   ],
                 ),
