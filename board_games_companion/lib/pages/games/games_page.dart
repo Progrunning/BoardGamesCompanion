@@ -414,7 +414,7 @@ class _Empty extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: const <Widget>[
-                SizedBox(height: 40),
+                SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
                 Center(
                   child: Text(
                     'Your games collection is empty',
@@ -424,7 +424,7 @@ class _Empty extends StatelessWidget {
                 SizedBox(height: Dimensions.doubleStandardSpacing),
                 Icon(
                   Icons.sentiment_dissatisfied_sharp,
-                  size: 80,
+                  size: Dimensions.emptyPageTitleIconSize,
                   color: AppColors.primaryColor,
                 ),
                 SizedBox(height: Dimensions.doubleStandardSpacing),

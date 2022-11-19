@@ -35,6 +35,14 @@ mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
               name:
                   '_PlaythroughsHistoryViewModel.finishedBoardGamePlaythroughs'))
           .value;
+  Computed<bool>? _$hasAnyFinishedPlaythroughsComputed;
+
+  @override
+  bool get hasAnyFinishedPlaythroughs =>
+      (_$hasAnyFinishedPlaythroughsComputed ??= Computed<bool>(
+              () => super.hasAnyFinishedPlaythroughs,
+              name: '_PlaythroughsHistoryViewModel.hasAnyFinishedPlaythroughs'))
+          .value;
 
   late final _$futureLoadGamesPlaythroughsAtom = Atom(
       name: '_PlaythroughsHistoryViewModel.futureLoadGamesPlaythroughs',
@@ -74,7 +82,8 @@ mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
     return '''
 futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
 finishedPlaythroughs: ${finishedPlaythroughs},
-finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs}
+finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
+hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs}
     ''';
   }
 }

@@ -56,6 +56,7 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
               return CustomScrollView(
                 slivers: [
                   const _AppBar(),
+                  if (!widget.viewModel.hasAnyFinishedPlaythroughs) const _NoPlaythroughsSliver(),
                   for (final groupedBoardGamePlaythroughs
                       in widget.viewModel.finishedBoardGamePlaythroughs) ...[
                     _PlaythroughGroupHeaderSliver(
@@ -282,6 +283,49 @@ class _PlaythroughGroupHeaderSliver extends StatelessWidget {
       delegate: BgcSliverHeaderDelegate(primaryTitle: groupedBoardGamePlaythroughs.dateFormtted),
     );
   }
+}
+
+class _NoPlaythroughsSliver extends StatelessWidget {
+  const _NoPlaythroughsSliver({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+        padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+        sliver: SliverToBoxAdapter(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const <Widget>[
+              SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+              Center(
+                child: Text(
+                  AppText.playHistoryPageEmptyTitle,
+                  style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                ),
+              ),
+              SizedBox(height: Dimensions.doubleStandardSpacing),
+              FaIcon(
+                FontAwesomeIcons.dice,
+                size: Dimensions.emptyPageTitleIconSize,
+                color: AppColors.primaryColor,
+              ),
+              SizedBox(height: Dimensions.doubleStandardSpacing),
+              Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: AppText.playHistoryPageEmptyTextPartOne,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: AppText.playHistoryPageEmptyTextPartTwo),
+                  ],
+                ),
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: Dimensions.mediumFontSize),
+              ),
+            ],
+          ),
+        ),
+      );
 }
 
 class _AppBar extends StatelessWidget {

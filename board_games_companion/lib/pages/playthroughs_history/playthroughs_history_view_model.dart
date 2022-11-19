@@ -30,12 +30,6 @@ abstract class _PlaythroughsHistoryViewModel with Store {
     this._scoreStore,
   );
 
-  // An arbitrary number that should fulfil the below conditions
-  //  1. Satisfy users with showing enough finished playthroughs to browse through
-  //  2. Avoid loading too much data into memory
-  //  3. Avoid complexity of infinite loading of data
-  static const int _numberOfPlaythroughsToShow = 500;
-
   final PlaythroughsStore _playthroughsStore;
   final BoardGamesStore _boardGamesStore;
   final PlayersStore _playersStore;
@@ -54,8 +48,7 @@ abstract class _PlaythroughsHistoryViewModel with Store {
   ObservableFuture<void>? futureLoadGamesPlaythroughs;
 
   @computed
-  List<Playthrough> get finishedPlaythroughs =>
-      _playthroughsStore.finishedPlaythroughs.take(_numberOfPlaythroughsToShow).toList();
+  List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs.toList();
 
   @computed
   List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs {
@@ -97,6 +90,9 @@ abstract class _PlaythroughsHistoryViewModel with Store {
 
     return result;
   }
+
+  @computed
+  bool get hasAnyFinishedPlaythroughs => finishedPlaythroughs.isNotEmpty;
 
   @action
   void loadGamesPlaythroughs() =>

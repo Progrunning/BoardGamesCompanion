@@ -182,6 +182,11 @@ class AppText {
   static const settingsPageRestoreFailedMessage =
       'Unfortunately we ran into a problem with restoring your data. Please try again or contact support at feedback@progrunning.net';
 
+  static const playHistoryPageEmptyTitle = "You haven't played any games yet";
+  static const playHistoryPageEmptyTextPartOne = 'Nothing to worry about though! ';
+  static const playHistoryPageEmptyTextPartTwo =
+      'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
+
   static const gamePlaytimeFormat = '%s min';
   static const gamePlayersSingularFormat = '%i players';
   static const gamePlayersPluralFormat = '%i players';

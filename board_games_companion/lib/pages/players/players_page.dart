@@ -236,7 +236,7 @@ class _NoPlayers extends StatelessWidget {
         padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
         child: Column(
           children: const <Widget>[
-            SizedBox(height: 40),
+            SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
             Center(
               child: Text(
                 AppText.playersPageNoPlayersTitle,
@@ -245,8 +245,8 @@ class _NoPlayers extends StatelessWidget {
             ),
             SizedBox(height: Dimensions.doubleStandardSpacing),
             Icon(
-              Icons.sentiment_dissatisfied_sharp,
-              size: 80,
+              Icons.people,
+              size: Dimensions.emptyPageTitleIconSize,
               color: AppColors.primaryColor,
             ),
             SizedBox(height: Dimensions.doubleStandardSpacing),
