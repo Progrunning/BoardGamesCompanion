@@ -10,6 +10,20 @@ part of 'playthrough_statistics_view_model.dart';
 
 mixin _$PlaythroughStatisticsViewModel
     on _PlaythroughStatisticsViewModel, Store {
+  Computed<List<String>>? _$_playthroughIdsComputed;
+
+  @override
+  List<String> get _playthroughIds => (_$_playthroughIdsComputed ??=
+          Computed<List<String>>(() => super._playthroughIds,
+              name: '_PlaythroughStatisticsViewModel._playthroughIds'))
+      .value;
+  Computed<List<Score>>? _$_playthroughsScoresComputed;
+
+  @override
+  List<Score> get _playthroughsScores => (_$_playthroughsScoresComputed ??=
+          Computed<List<Score>>(() => super._playthroughsScores,
+              name: '_PlaythroughStatisticsViewModel._playthroughsScores'))
+      .value;
   Computed<String>? _$boardGameIdComputed;
 
   @override

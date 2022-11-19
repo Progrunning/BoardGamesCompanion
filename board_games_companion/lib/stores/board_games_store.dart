@@ -139,7 +139,7 @@ abstract class _BoardGamesStore with Store {
   Future<void> removeAllBggBoardGames() async {
     try {
       final bggSyncedBoardGames = allBoardGames
-          .where((boardGame) => boardGame.isBggSynced!)
+          .where((boardGame) => boardGame.isBggSynced ?? false)
           .map((boardGame) => boardGame.id)
           .toList();
       await _boardGamesService.removeBoardGames(bggSyncedBoardGames);

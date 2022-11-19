@@ -9,6 +9,9 @@ class Dimensions {
 
   static const double boardGameDetailsImageHeight = 80;
 
+  static const double emptyPageTitleTopSpacing = 40;
+  static const double emptyPageTitleIconSize = 80;
+
   static const double extraSmallFontSize = 10;
   static const double smallFontSize = 12;
   static const double standardFontSize = 14;

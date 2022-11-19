@@ -87,9 +87,10 @@ class SearchBoardGamesPageState extends State<SearchBoardGamesPage> {
       context,
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
-        boardGame.id,
-        boardGame.name,
-        SearchBoardGamesPage,
+        boardGameId: boardGame.id,
+        boardGameImageHeroId: boardGame.id,
+        boardGameName: boardGame.name,
+        navigatingFromType: SearchBoardGamesPage,
         boardGameImageUrl: widget.viewModel.getHotBoardGameDetails(boardGame.id)?.imageUrl,
       ),
     );

@@ -70,7 +70,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
                 Observer(
                   builder: (_) {
                     return _Header(
-                      boardGameId: widget.viewModel.boardGameId,
+                      boardGameImageHeroId: widget.viewModel.boardGameImageHeroId,
                       boardGameName: widget.viewModel.boardGameName,
                       boardGameImageUrl: widget.viewModel.boardGameImageUrl,
                     );
@@ -112,16 +112,16 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 class _Header extends StatelessWidget {
   const _Header({
     Key? key,
-    required String boardGameId,
+    required String boardGameImageHeroId,
     required String boardGameName,
     required String? boardGameImageUrl,
-  })  : _boardGameId = boardGameId,
+  })  : _boardGameImageHeroId = boardGameImageHeroId,
         _boardGameName = boardGameName,
         _boardGameImageUrl = boardGameImageUrl,
         super(key: key);
 
   final String _boardGameName;
-  final String _boardGameId;
+  final String _boardGameImageHeroId;
   final String? _boardGameImageUrl;
 
   @override
@@ -156,7 +156,7 @@ class _Header extends StatelessWidget {
         background: _boardGameImageUrl == null
             ? const LoadingIndicator()
             : BoardGameImage(
-                id: _boardGameId,
+                id: _boardGameImageHeroId,
                 url: _boardGameImageUrl,
                 minImageHeight: Constants.boardGameDetailsImageHeight,
               ),

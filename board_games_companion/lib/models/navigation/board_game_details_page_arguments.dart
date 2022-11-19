@@ -1,13 +1,14 @@
-class BoardGameDetailsPageArguments {
-  const BoardGameDetailsPageArguments(
-    this.boardGameId,
-    this.boardGameName,
-    this.navigatingFromType, {
-    this.boardGameImageUrl,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String boardGameId;
-  final String boardGameName;
-  final String? boardGameImageUrl;
-  final Type navigatingFromType;
+part 'board_game_details_page_arguments.freezed.dart';
+
+@freezed
+class BoardGameDetailsPageArguments with _$BoardGameDetailsPageArguments {
+  const factory BoardGameDetailsPageArguments({
+    required String boardGameId,
+    required String boardGameName,
+    required Type navigatingFromType,
+    required String boardGameImageHeroId,
+    String? boardGameImageUrl,
+  }) = _BoardGameDetailsPageArguments;
 }

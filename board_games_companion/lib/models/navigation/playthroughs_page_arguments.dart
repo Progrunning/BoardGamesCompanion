@@ -1,7 +1,13 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../hive/board_game_details.dart';
 
-class PlaythroughsPageArguments {
-  const PlaythroughsPageArguments(this.boardGameDetails);
+part 'playthroughs_page_arguments.freezed.dart';
 
-  final BoardGameDetails boardGameDetails;
+@freezed
+class PlaythroughsPageArguments with _$PlaythroughsPageArguments {
+  const factory PlaythroughsPageArguments({
+    required BoardGameDetails boardGameDetails,
+    required String boardGameImageHeroId,
+  }) = _PlaythroughsPageArguments;
 }

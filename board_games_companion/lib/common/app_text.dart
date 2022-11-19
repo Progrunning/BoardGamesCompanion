@@ -16,6 +16,16 @@ class AppText {
 
   static const goBack = 'Go Back';
 
+  static const today = 'today';
+  static const yesteday = 'yesterday';
+  static const dayBeforeYesteday = 'day before yesterday';
+  static const daysAgoFormat = '%s days ago';
+
+  static const homePageGamesTabTitle = 'Games';
+  static const homePageSearchTabTitle = 'Search';
+  static const homePageGamesHistoryTabTitle = 'Play History';
+  static const homePageGamesPlayersTabTitle = 'Players';
+
   static const aboutPageAuthorSectionTitle = 'Author';
   static const aboutPageDesignAndArtSectionTitle = 'Design & Art';
   static const aboutPageContentAndDataSectionTitle = 'Content & Data';
@@ -172,6 +182,11 @@ class AppText {
   static const settingsPageRestoreFailedMessage =
       'Unfortunately we ran into a problem with restoring your data. Please try again or contact support at feedback@progrunning.net';
 
+  static const playHistoryPageEmptyTitle = "You haven't played any games yet";
+  static const playHistoryPageEmptyTextPartOne = 'Nothing to worry about though! ';
+  static const playHistoryPageEmptyTextPartTwo =
+      'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
+
   static const gamePlaytimeFormat = '%s min';
   static const gamePlayersSingularFormat = '%i players';
   static const gamePlayersPluralFormat = '%i players';
@@ -181,6 +196,7 @@ class AppText {
   static const collectionsPageTitle = 'Collections';
   static const settingsPageTitle = 'Settings';
   static const newPlayerPageTitle = 'New Player';
+  static const playHistoryPageTitle = 'Play History';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';

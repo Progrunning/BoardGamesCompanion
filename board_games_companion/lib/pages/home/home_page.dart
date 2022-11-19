@@ -1,4 +1,6 @@
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/home/home_view_model.dart';
+import 'package:board_games_companion/pages/playthroughs_history/playthroughs_history_page.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +34,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
   late final TabController tabController;
 
-  static const int _numberOfTabs = 3;
+  static const int _numberOfTabs = 4;
   static const int _initialTabIndex = 0;
 
   @override
@@ -64,6 +66,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                   widget.viewModel.rateAndReviewService,
                 ),
                 SearchBoardGamesPage(viewModel: widget.viewModel.searchBoardGamesViewModel),
+                PlaythroughsHistoryPage(viewModel: widget.viewModel.playthroughsHistoryViewModel),
                 PlayersPage(viewModel: widget.viewModel.playersViewModel),
               ],
             ),
@@ -75,17 +78,22 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
           top: -Dimensions.bottomTabTopHeight,
           items: const <TabItem>[
             TabItem<BottomTabIcon>(
-              title: 'Games',
+              title: AppText.homePageGamesTabTitle,
               icon: BottomTabIcon(iconData: Icons.video_library),
               activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
             ),
             TabItem<BottomTabIcon>(
-              title: 'Search',
+              title: AppText.homePageSearchTabTitle,
               icon: BottomTabIcon(iconData: Icons.search),
               activeIcon: BottomTabIcon(iconData: Icons.search, isActive: true),
             ),
             TabItem<BottomTabIcon>(
-              title: 'Players',
+              title: AppText.homePageGamesHistoryTabTitle,
+              icon: BottomTabIcon(iconData: Icons.history),
+              activeIcon: BottomTabIcon(iconData: Icons.history, isActive: true),
+            ),
+            TabItem<BottomTabIcon>(
+              title: AppText.homePageGamesPlayersTabTitle,
               icon: BottomTabIcon(iconData: Icons.group),
               activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
             ),

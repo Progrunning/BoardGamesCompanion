@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/stores/game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -24,12 +24,12 @@ class PlaythroughsLogGameViewModel = _PlaythroughsLogGameViewModel
 abstract class _PlaythroughsLogGameViewModel with Store {
   _PlaythroughsLogGameViewModel(
     this._playersStore,
-    this._playthroughsStore,
+    this._gamePlaythroughsStore,
     this._analyticsService,
   );
 
   final PlayersStore _playersStore;
-  final PlaythroughsStore _playthroughsStore;
+  final GamePlaythroughsStore _gamePlaythroughsStore;
   final AnalyticsService _analyticsService;
 
   @observable
@@ -54,7 +54,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   ObservableList<PlaythroughPlayer> playthroughPlayers = ObservableList.of([]);
 
   @computed
-  String get boardGameId => _playthroughsStore.boardGameId;
+  String get boardGameId => _gamePlaythroughsStore.boardGameId;
 
   @computed
   bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
@@ -77,7 +77,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
       score: Score(
         id: const Uuid().v4(),
         playerId: playthroughPlayer.player.id,
-        boardGameId: _playthroughsStore.boardGameId,
+        boardGameId: _gamePlaythroughsStore.boardGameId,
       ),
     );
   }
@@ -98,7 +98,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
 
   @action
   Future<PlaythroughDetails?> createPlaythrough(String boardGameId) async {
-    final PlaythroughDetails? newPlaythrough = await _playthroughsStore.createPlaythrough(
+    final PlaythroughDetails? newPlaythrough = await _gamePlaythroughsStore.createPlaythrough(
       boardGameId,
       _selectedPlaythroughPlayers,
       playerScores,
