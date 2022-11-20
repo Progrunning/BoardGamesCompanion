@@ -8,7 +8,7 @@ import '../elevated_container.dart';
 class PanelContainer extends StatelessWidget {
   const PanelContainer({
     required this.child,
-    this.borderRadius = AppStyles.defaultCornerRadius * 3,
+    this.borderRadius = AppStyles.panelContainerCornerRadius,
     Key? key,
   }) : super(key: key);
 

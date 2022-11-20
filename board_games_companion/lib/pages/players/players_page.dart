@@ -189,6 +189,8 @@ class _AppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       floating: true,
+      forceElevated: true,
+      elevation: Dimensions.defaultElevation,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppColors.accentColor,
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),

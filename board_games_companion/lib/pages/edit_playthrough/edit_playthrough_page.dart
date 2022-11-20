@@ -23,18 +23,19 @@ import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../enter_score/enter_score_view_model.dart';
-import '../playthroughs/playthroughs_page.dart';
 import 'edit_playthrough_view_model.dart';
 
 class EditPlaythroughPage extends StatefulWidget {
   const EditPlaythroughPage({
     required this.viewModel,
+    required this.goBackPageRoute,
     Key? key,
   }) : super(key: key);
 
   static const String pageRoute = '/editPlaythrough';
 
   final EditPlaythoughViewModel viewModel;
+  final String goBackPageRoute;
 
   @override
   EditPlaythroughPageState createState() => EditPlaythroughPageState();
@@ -183,9 +184,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
           actions: <Widget>[
             TextButton(
               child: const Text(AppText.cancel, style: TextStyle(color: AppColors.accentColor)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
@@ -195,7 +194,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                   return;
                 }
 
-                Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
+                Navigator.of(context).popUntil(ModalRoute.withName(widget.goBackPageRoute));
               },
               child:
                   const Text(AppText.delete, style: TextStyle(color: AppColors.defaultTextColor)),
@@ -221,14 +220,12 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
           actions: <Widget>[
             TextButton(
               child: const Text(AppText.cancel, style: TextStyle(color: AppColors.accentColor)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
-                Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute));
+                Navigator.of(context).popUntil(ModalRoute.withName(widget.goBackPageRoute));
               },
               child: const Text(
                 AppText.editPlaythroughPageUnsavedChangesActionButtonText,
@@ -246,9 +243,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   Future<void> _addNote() async {
     await Navigator.of(context).pushNamed(
       PlaythroughNotePage.pageRoute,
-      arguments: PlaythroughNotePageArguments(
-        widget.viewModel.playthrough,
-      ),
+      arguments: PlaythroughNotePageArguments(widget.viewModel.playthrough),
     );
     widget.viewModel.refreshNotes();
   }

@@ -15,19 +15,22 @@ import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
 import '../models/playthrough_details.dart';
 import '../models/playthrough_player.dart';
-import '../services/player_service.dart';
+import 'players_store.dart';
 
-part 'game_playthroughs_store.g.dart';
+part 'game_playthroughs_details_store.g.dart';
 
+/// Store that loads [PlaythroughDetails] for a particular [BoardGameDetails].
+/// [Playthrough]s are retrieved using [PlaythroughsStore] and filtered by board game id.
 @singleton
-class GamePlaythroughsStore = _GamePlaythroughsStore with _$GamePlaythroughsStore;
+class GamePlaythroughsDetailsStore = _GamePlaythroughsDetailsStore
+    with _$GamePlaythroughsDetailsStore;
 
-abstract class _GamePlaythroughsStore with Store {
-  _GamePlaythroughsStore(this._playthroughsStore, this._scoresStore, this._playerService);
+abstract class _GamePlaythroughsDetailsStore with Store {
+  _GamePlaythroughsDetailsStore(this._playthroughsStore, this._scoresStore, this._playerStore);
 
   final PlaythroughsStore _playthroughsStore;
   final ScoresStore _scoresStore;
-  final PlayerService _playerService;
+  final PlayersStore _playerStore;
 
   @observable
   BoardGameDetails? _boardGame;
@@ -60,13 +63,13 @@ abstract class _GamePlaythroughsStore with Store {
   GameWinningCondition get gameWinningCondition =>
       _boardGame!.settings?.winningCondition ?? GameWinningCondition.HighestScore;
 
+  /// Ensure that [setBoardGame] is called before loading playthoughs details and that [Playthrough]s in the [PlaythroughsStore] are loaded as well.
   @action
-  Future<void> loadPlaythroughs() async {
+  void loadPlaythroughsDetails() {
     try {
       final loadedPlaythroughDetails = <PlaythroughDetails>[];
-      await _playthroughsStore.loadPlaythroughs();
       for (final playthrough in playthroughs) {
-        final playthroughDetails = await createPlaythroughDetails(playthrough);
+        final playthroughDetails = createPlaythroughDetails(playthrough);
         loadedPlaythroughDetails.add(playthroughDetails);
       }
 
@@ -100,7 +103,7 @@ abstract class _GamePlaythroughsStore with Store {
       return null;
     }
 
-    final newPlaythroughDetails = await createPlaythroughDetails(newPlaythrough);
+    final newPlaythroughDetails = createPlaythroughDetails(newPlaythrough);
     playthroughsDetails.add(newPlaythroughDetails);
     return newPlaythroughDetails;
   }
@@ -118,7 +121,7 @@ abstract class _GamePlaythroughsStore with Store {
           await _scoresStore.addOrUpdateScore(playerScore.score);
         }
 
-        await loadPlaythroughs();
+        loadPlaythroughsDetails();
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
@@ -140,15 +143,13 @@ abstract class _GamePlaythroughsStore with Store {
     return false;
   }
 
-  Future<PlaythroughDetails> createPlaythroughDetails(Playthrough playthrough) async {
+  PlaythroughDetails createPlaythroughDetails(Playthrough playthrough) {
     final scores =
         _scoresStore.scores.where((score) => score.playthroughId == playthrough.id).toList()
           ..sortByScore(gameWinningCondition)
           ..toList();
-    final players = await _playerService.retrievePlayers(
-      playerIds: playthrough.playerIds,
-      includeDeleted: true,
-    );
+    final players =
+        _playerStore.players.where((player) => playthrough.playerIds.contains(player.id)).toList();
 
     final playerScores = scores.mapIndexed((int index, Score score) {
       final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);

@@ -35,7 +35,7 @@ abstract class _PlaythroughsStore with Store {
 
   Future<void> loadPlaythroughs() async {
     try {
-      playthroughs = ObservableList.of(await _playthroughService.retrievePlaythroughs());
+      playthroughs = (await _playthroughService.retrievePlaythroughs()).asObservable();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

@@ -109,11 +109,16 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           case EditPlaythroughPage.pageRoute:
             final arguments = routeSettings.arguments as EditPlaythroughPageArguments;
             final viewModel = getIt<EditPlaythoughViewModel>();
+            viewModel.setBoardGameId(arguments.boardGameId);
             viewModel.setPlaythroughId(arguments.playthroughId);
 
             return MaterialPageRoute<dynamic>(
-                settings: routeSettings,
-                builder: (BuildContext context) => EditPlaythroughPage(viewModel: viewModel));
+              settings: routeSettings,
+              builder: (BuildContext context) => EditPlaythroughPage(
+                viewModel: viewModel,
+                goBackPageRoute: arguments.goBackPageRoute,
+              ),
+            );
 
           case AboutPage.pageRoute:
             return MaterialPageRoute<dynamic>(
