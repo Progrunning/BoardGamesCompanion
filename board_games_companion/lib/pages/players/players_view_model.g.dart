@@ -9,13 +9,13 @@ part of 'players_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlayersViewModel on _PlayersViewModel, Store {
-  Computed<ObservableList<Player>>? _$playersComputed;
+  Computed<List<Player>>? _$playersComputed;
 
   @override
-  ObservableList<Player> get players => (_$playersComputed ??=
-          Computed<ObservableList<Player>>(() => super.players,
+  List<Player> get players =>
+      (_$playersComputed ??= Computed<List<Player>>(() => super.players,
               name: '_PlayersViewModel.players'))
-      .value;
+          .value;
   Computed<bool>? _$hasAnyPlayersComputed;
 
   @override

@@ -124,6 +124,17 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
+  void setBoardGameId(String boardGameId) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.setBoardGameId');
+    try {
+      return super.setBoardGameId(boardGameId);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void updateStartDate(DateTime newStartDate) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
         name: '_EditPlaythoughViewModel.updateStartDate');

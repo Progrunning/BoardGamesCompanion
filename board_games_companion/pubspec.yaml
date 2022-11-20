@@ -37,7 +37,7 @@ dependencies:
   flutter_mobx: ^2.0.6+1
   flutter_polygon: ^0.2.0
   flutter_slidable: ^2.0.0
-  flutter_speed_dial: 6.0.0
+  flutter_speed_dial: 6.2.0
   flutter_svg: ^0.22.0
   font_awesome_flutter: ^10.2.1
   freezed: ^2.1.0+1

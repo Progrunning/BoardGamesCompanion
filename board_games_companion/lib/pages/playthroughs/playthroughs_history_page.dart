@@ -22,6 +22,7 @@ import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/player_score_rank_avatar.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
 import 'playthroughs_history_view_model.dart';
+import 'playthroughs_page.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
   const PlaythroughsHistoryPage({Key? key}) : super(key: key);
@@ -179,8 +180,9 @@ class _PlaythroughPlayersStats extends StatelessWidget {
                 context,
                 EditPlaythroughPage.pageRoute,
                 arguments: EditPlaythroughPageArguments(
-                  playthroughDetails.id,
-                  playthroughDetails.boardGameId,
+                  boardGameId: playthroughDetails.boardGameId,
+                  playthroughId: playthroughDetails.id,
+                  goBackPageRoute: PlaythroughsPage.pageRoute,
                 ),
               ),
             ),

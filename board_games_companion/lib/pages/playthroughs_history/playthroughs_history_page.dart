@@ -1,4 +1,5 @@
 import 'package:board_games_companion/extensions/int_extensions.dart';
+import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:board_games_companion/pages/playthroughs_history/board_game_playthrough.dart';
 import 'package:board_games_companion/pages/playthroughs_history/grouped_board_game_playthroughs.dart';
@@ -9,16 +10,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
+import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../board_game_details/board_game_details_page.dart';
+import '../home/home_page.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
   const PlaythroughsHistoryPage({
@@ -66,6 +70,11 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                     _PlaythroughGroupListSliver(
                       groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
                     ),
+                    if (groupedBoardGamePlaythroughs ==
+                        widget.viewModel.finishedBoardGamePlaythroughs.last)
+                      const SliverToBoxAdapter(
+                        child: SizedBox(height: Dimensions.bottomTabTopHeight),
+                      ),
                   ]
                 ],
               );
@@ -88,44 +97,58 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (_, index) {
           final boardGamePlaythrough = groupedBoardGamePlaythroughs.boardGamePlaythroughs[index];
+          final isFirst = index == 0;
           return Padding(
-            padding: const EdgeInsets.only(
-              top: Dimensions.standardSpacing,
+            padding: EdgeInsets.only(
+              top: isFirst ? Dimensions.standardSpacing : 0,
               bottom: Dimensions.standardSpacing,
               left: Dimensions.standardSpacing,
               right: Dimensions.standardSpacing,
             ),
             child: PanelContainer(
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            height: Dimensions.collectionSearchResultBoardGameImageHeight,
-                            width: Dimensions.collectionSearchResultBoardGameImageWidth,
-                            child: BoardGameTile(
-                              id: boardGamePlaythrough.id,
-                              imageUrl: boardGamePlaythrough.boardGameDetails.thumbnailUrl ?? '',
-                            ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(AppStyles.panelContainerCornerRadius),
+                  onTap: () => _navigateToEditPlaythrough(
+                    context,
+                    boardGamePlaythrough.boardGameDetails.id,
+                    boardGamePlaythrough.playthrough.id,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                                width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                                child: BoardGameTile(
+                                  id: boardGamePlaythrough.id,
+                                  imageUrl:
+                                      boardGamePlaythrough.boardGameDetails.thumbnailUrl ?? '',
+                                ),
+                              ),
+                              const SizedBox(width: Dimensions.standardSpacing),
+                              Expanded(
+                                child:
+                                    _PlaythroughDetails(boardGamePlaythrough: boardGamePlaythrough),
+                              ),
+                              _PlaythroughActions(
+                                onTapBoardGameDetails: () =>
+                                    _navigateToBoardGameDetails(context, boardGamePlaythrough),
+                                onTapPlaythroughs: () =>
+                                    _navigateToPlaythrough(context, boardGamePlaythrough),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: Dimensions.standardSpacing),
-                          Expanded(
-                            child: _PlaythroughDetails(boardGamePlaythrough: boardGamePlaythrough),
-                          ),
-                          _PlaythroughActions(
-                            onTapBoardGameDetails: () =>
-                                _navigateToBoardGameDetails(context, boardGamePlaythrough),
-                            onTapPlaythroughs: () =>
-                                _navigateToPlaythrough(context, boardGamePlaythrough),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -161,6 +184,22 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
         boardGameName: boardGamePlaythrough.boardGameDetails.name,
         boardGameImageHeroId: boardGamePlaythrough.id,
         navigatingFromType: PlaythroughsHistoryPage,
+      ),
+    );
+  }
+
+  void _navigateToEditPlaythrough(
+    BuildContext context,
+    String boardGameId,
+    String playthroughId,
+  ) {
+    Navigator.pushNamed(
+      context,
+      EditPlaythroughPage.pageRoute,
+      arguments: EditPlaythroughPageArguments(
+        boardGameId: boardGameId,
+        playthroughId: playthroughId,
+        goBackPageRoute: HomePage.pageRoute,
       ),
     );
   }
@@ -332,6 +371,7 @@ class _AppBar extends StatelessWidget {
     return const SliverAppBar(
       pinned: true,
       floating: true,
+      forceElevated: true,
       elevation: Dimensions.defaultElevation,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppColors.accentColor,

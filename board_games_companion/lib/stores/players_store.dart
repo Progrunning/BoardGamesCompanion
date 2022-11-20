@@ -32,6 +32,10 @@ abstract class _PlayersStore with Store {
   ObservableList<Player> players = ObservableList.of([]);
 
   @computed
+  List<Player> get activePlayers =>
+      players.where((player) => !(player.isDeleted ?? false)).toList();
+
+  @computed
   Map<String, Player> get playersById => {for (final player in players) player.id: player};
 
   @action
@@ -41,7 +45,7 @@ abstract class _PlayersStore with Store {
     }
 
     try {
-      players = ObservableList.of(await _playerService.retrievePlayers());
+      players = ObservableList.of(await _playerService.retrievePlayers(includeDeleted: true));
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

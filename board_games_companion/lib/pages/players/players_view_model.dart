@@ -26,7 +26,7 @@ abstract class _PlayersViewModel with Store {
   bool isEditMode = false;
 
   @computed
-  ObservableList<Player> get players => _playersStore.players;
+  List<Player> get players => _playersStore.activePlayers;
 
   @computed
   bool get hasAnyPlayers => players.isNotEmpty;

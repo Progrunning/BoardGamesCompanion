@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
-import 'package:board_games_companion/stores/game_playthroughs_store.dart';
+import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
@@ -32,7 +32,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
   final PlayerService _playerService;
   final ScoresStore _scoresStore;
-  final GamePlaythroughsStore _gamePlaythroughsStore;
+  final GamePlaythroughsDetailsStore _gamePlaythroughsStore;
 
   static const int _maxNumberOfTopScoresToDisplay = 5;
 

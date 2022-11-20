@@ -3,7 +3,7 @@
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
-import 'package:board_games_companion/stores/game_playthroughs_store.dart';
+import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -17,11 +17,11 @@ part 'playthrough_note_view_model.g.dart';
 class PlaythroughNoteViewModel = _PlaythroughNoteViewModel with _$PlaythroughNoteViewModel;
 
 abstract class _PlaythroughNoteViewModel with Store {
-  _PlaythroughNoteViewModel(this._playthroughsStore);
+  _PlaythroughNoteViewModel(this._gamePlaythroughsDetailsStore);
 
-  final GamePlaythroughsStore _playthroughsStore;
+  final GamePlaythroughsDetailsStore _gamePlaythroughsDetailsStore;
 
-  PlaythroughDetails get _playthroughDetails => _playthroughsStore.playthroughsDetails
+  PlaythroughDetails get _playthroughDetails => _gamePlaythroughsDetailsStore.playthroughsDetails
       .firstWhere((playthroughDetails) => playthroughDetails.id == _playthrough!.id);
 
   String? _noteId;
@@ -84,6 +84,6 @@ abstract class _PlaythroughNoteViewModel with Store {
 
     _playthrough = _playthrough!.copyWith(notes: playthroughNotes);
     final updatedPlaythroughDetails = _playthroughDetails.copyWith(playthrough: _playthrough!);
-    await _playthroughsStore.updatePlaythrough(updatedPlaythroughDetails);
+    await _gamePlaythroughsDetailsStore.updatePlaythrough(updatedPlaythroughDetails);
   }
 }

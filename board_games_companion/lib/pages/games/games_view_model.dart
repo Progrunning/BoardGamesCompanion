@@ -24,6 +24,7 @@ import '../../extensions/int_extensions.dart';
 import '../../extensions/string_extensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../stores/board_games_store.dart';
+import '../../stores/players_store.dart';
 
 part 'games_view_model.g.dart';
 
@@ -37,6 +38,7 @@ abstract class _GamesViewModel with Store {
     this._boardGamesFiltersStore,
     this._scoresStore,
     this._playthroughsStore,
+    this._playersStore,
   );
 
   final UserStore _userStore;
@@ -44,6 +46,7 @@ abstract class _GamesViewModel with Store {
   final BoardGamesFiltersStore _boardGamesFiltersStore;
   final ScoresStore _scoresStore;
   final PlaythroughsStore _playthroughsStore;
+  final PlayersStore _playersStore;
 
   @computed
   List<BoardGameDetails> get allMainGames =>
@@ -259,11 +262,13 @@ abstract class _GamesViewModel with Store {
   Future<void> _loadBoardGames() async {
     try {
       // TODO MK Think about if we could potentially load all of the data once and then use it across the app
+      //      What impact on the startup time and memory usage would it have?
       await _userStore.loadUser();
       await _boardGamesStore.loadBoardGames();
       await _boardGamesFiltersStore.loadFilterPreferences();
       await _playthroughsStore.loadPlaythroughs();
       await _scoresStore.loadScores();
+      await _playersStore.loadPlayers();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

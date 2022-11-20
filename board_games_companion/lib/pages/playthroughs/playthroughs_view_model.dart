@@ -2,8 +2,6 @@
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/import_result.dart';
-import 'package:board_games_companion/models/playthrough_details.dart';
-import 'package:board_games_companion/stores/game_playthroughs_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:injectable/injectable.dart';
@@ -20,6 +18,7 @@ import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
 import '../../services/analytics_service.dart';
 import '../../services/board_games_service.dart';
+import '../../stores/game_playthroughs_details_store.dart';
 import '../../stores/players_store.dart';
 
 part 'playthroughs_view_model.g.dart';
@@ -29,7 +28,7 @@ class PlaythroughsViewModel = _PlaythroughsViewModel with _$PlaythroughsViewMode
 
 abstract class _PlaythroughsViewModel with Store {
   _PlaythroughsViewModel(
-    this._playthroughsStore,
+    this._gamePlaythroughsDetailsStore,
     this._playersStore,
     this._analyticsService,
     this._boardGamesService,
@@ -47,11 +46,12 @@ abstract class _PlaythroughsViewModel with Store {
   };
 
   final PlayersStore _playersStore;
-  final GamePlaythroughsStore _playthroughsStore;
   final AnalyticsService _analyticsService;
   final BoardGamesService _boardGamesService;
   final UserStore _userStore;
+  final GamePlaythroughsDetailsStore _gamePlaythroughsDetailsStore;
 
+  late final BoardGameDetails _boardGameDetails;
   late String _boardGameImageHeroId;
 
   List<PlaythroughPlayer>? _playthroughPlayers;
@@ -62,10 +62,10 @@ abstract class _PlaythroughsViewModel with Store {
   String get boardGameImageHeroId => _boardGameImageHeroId;
 
   @computed
-  String get boardGameId => _playthroughsStore.boardGameId;
+  String get boardGameId => _boardGameDetails.id;
 
   @computed
-  String get boardGameName => _playthroughsStore.boardGameName;
+  String get boardGameName => _boardGameDetails.name;
 
   @computed
   bool get hasUser => _userStore.hasUser;
@@ -77,7 +77,10 @@ abstract class _PlaythroughsViewModel with Store {
   String get gamePlaylistUrl => '$melodicePlaylistUrl/$boardGameId';
 
   @action
-  void setBoardGame(BoardGameDetails boardGame) => _playthroughsStore.setBoardGame(boardGame);
+  void setBoardGame(BoardGameDetails boardGame) {
+    _boardGameDetails = boardGame;
+    _gamePlaythroughsDetailsStore.setBoardGame(boardGame);
+  }
 
   void setBoardGameImageHeroId(String boardGameImageHeroId) =>
       _boardGameImageHeroId = boardGameImageHeroId;
@@ -109,30 +112,27 @@ abstract class _PlaythroughsViewModel with Store {
 
     // TODO Consider using isolates to parse and iterate over the results
     for (final bggPlay in bggPlaysImportResult.data!) {
-      final bggPlayExists = _playthroughsStore.playthroughsDetails
-          .any((PlaythroughDetails playthrough) => playthrough.bggPlayId == bggPlay.id);
+      final bggPlayExists = _gamePlaythroughsDetailsStore.playthroughs
+          .any((playthrough) => playthrough.bggPlayId == bggPlay.id);
       if (bggPlayExists) {
         continue;
       }
-
-      // TODO MK Players should be loaded by the time this method is called.
-      //         This is to fix a bug in production that casues duplicate players to be created because players are not populated.
-      await _playersStore.loadPlayers();
 
       final List<PlaythroughPlayer> playthroughPlayers = [];
       final Map<String, PlayerScore> playerScores = {};
       for (final bggPlayer in bggPlay.players) {
         String playerId;
         if (bggPlayer.playerBggUserId == null) {
-          playerId =
-              _playersStore.players.firstWhereOrNull((p) => p.name == bggPlayer.playerName)?.id ??
-                  const Uuid().v4();
+          playerId = _playersStore.activePlayers
+                  .firstWhereOrNull((p) => p.name == bggPlayer.playerName)
+                  ?.id ??
+              const Uuid().v4();
         } else {
           playerId = bggPlayer.playerBggUserId.toString();
         }
 
         final bool newPlayer =
-            _playersStore.players.firstWhereOrNull((p) => p.id == playerId) != null;
+            _playersStore.activePlayers.firstWhereOrNull((p) => p.id == playerId) != null;
         final Player player = Player(
           id: playerId,
           name: bggPlayer.playerName,
@@ -156,7 +156,7 @@ abstract class _PlaythroughsViewModel with Store {
         }
       }
 
-      final newPlaythrough = await _playthroughsStore.createPlaythrough(
+      final newPlaythrough = await _gamePlaythroughsDetailsStore.createPlaythrough(
         bggPlay.boardGameId,
         playthroughPlayers,
         playerScores,

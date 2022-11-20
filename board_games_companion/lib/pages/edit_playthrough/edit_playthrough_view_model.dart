@@ -4,13 +4,14 @@ import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
-import 'package:board_games_companion/stores/game_playthroughs_store.dart';
+import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/playthrough_status.dart';
+import '../../stores/board_games_store.dart';
 
 part 'edit_playthrough_view_model.g.dart';
 
@@ -18,10 +19,12 @@ part 'edit_playthrough_view_model.g.dart';
 class EditPlaythoughViewModel = _EditPlaythoughViewModel with _$EditPlaythoughViewModel;
 
 abstract class _EditPlaythoughViewModel with Store {
-  _EditPlaythoughViewModel(this._playthroughsStore);
+  _EditPlaythoughViewModel(this._gamePlaythroughsDetailsStore, this._boardGamesStore);
+
+  final GamePlaythroughsDetailsStore _gamePlaythroughsDetailsStore;
+  final BoardGamesStore _boardGamesStore;
 
   late final String _playthroughId;
-  final GamePlaythroughsStore _playthroughsStore;
 
   ValueNotifier<bool> isSpeedDialContextMenuOpen = ValueNotifier(false);
 
@@ -32,7 +35,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @computed
   PlaythroughDetails get playthroughDetails =>
-      _playthroughsStore.playthroughsDetails.firstWhere((pd) => pd.id == _playthroughId);
+      _gamePlaythroughsDetailsStore.playthroughsDetails.firstWhere((pd) => pd.id == _playthroughId);
 
   @computed
   Playthrough get playthrough => playthroughDetailsWorkingCopy.playthrough;
@@ -72,6 +75,13 @@ abstract class _EditPlaythoughViewModel with Store {
   }
 
   @action
+  void setBoardGameId(String boardGameId) {
+    _gamePlaythroughsDetailsStore.setBoardGame(
+        _boardGamesStore.allBoardGames.firstWhere((element) => element.id == boardGameId));
+    _gamePlaythroughsDetailsStore.loadPlaythroughsDetails();
+  }
+
+  @action
   Future<void> stopPlaythrough() async {
     final updatedPlaythrough = playthrough.copyWith(
       status: PlaythroughStatus.Finished,
@@ -79,13 +89,13 @@ abstract class _EditPlaythoughViewModel with Store {
     );
     _playthroughDetailsWorkingCopy =
         _playthroughDetailsWorkingCopy?.copyWith(playthrough: updatedPlaythrough);
-    await _playthroughsStore.updatePlaythrough(_playthroughDetailsWorkingCopy);
+    await _gamePlaythroughsDetailsStore.updatePlaythrough(_playthroughDetailsWorkingCopy);
   }
 
   @action
   Future<void> saveChanges() async {
     if (isDirty) {
-      await _playthroughsStore.updatePlaythrough(playthroughDetailsWorkingCopy);
+      await _gamePlaythroughsDetailsStore.updatePlaythrough(playthroughDetailsWorkingCopy);
     }
   }
 
@@ -135,7 +145,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @action
   Future<void> deletePlaythrough() async {
-    await _playthroughsStore.deletePlaythrough(playthroughDetails.id);
+    await _gamePlaythroughsDetailsStore.deletePlaythrough(playthroughDetails.id);
   }
 
   @action

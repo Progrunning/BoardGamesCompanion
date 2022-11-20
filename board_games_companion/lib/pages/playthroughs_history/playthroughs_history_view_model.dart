@@ -99,8 +99,8 @@ abstract class _PlaythroughsHistoryViewModel with Store {
       futureLoadGamesPlaythroughs = ObservableFuture<void>(_loadGamesPlaythroughs());
 
   Future<void> _loadGamesPlaythroughs() async {
-    await _playthroughsStore.loadPlaythroughs();
-    await _playersStore.loadPlayers();
     await _scoreStore.loadScores();
+    await _playersStore.loadPlayers();
+    await _playthroughsStore.loadPlaythroughs();
   }
 }

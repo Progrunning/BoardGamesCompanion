@@ -240,9 +240,10 @@ class _AppBar extends StatefulWidget {
 class _AppBarState extends State<_AppBar> {
   @override
   Widget build(BuildContext context) => SliverAppBar(
-        pinned: false,
+        pinned: true,
         floating: true,
-        elevation: 0,
+        forceElevated: true,
+        elevation: Dimensions.defaultElevation,
         titleSpacing: Dimensions.standardSpacing,
         foregroundColor: AppColors.accentColor,
         title: const Text(

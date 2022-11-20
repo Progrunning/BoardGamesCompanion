@@ -7,6 +7,7 @@ export '../extensions/player_score_extensions.dart';
 
 part 'player_score.freezed.dart';
 
+/// Model containing [Player] and their [Score]
 @freezed
 class PlayerScore with _$PlayerScore {
   const factory PlayerScore({

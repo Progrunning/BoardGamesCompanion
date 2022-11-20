@@ -130,6 +130,8 @@ class _SearchBarState extends State<_SearchBar> {
   Widget build(BuildContext context) {
     return SliverAppBar(
       titleSpacing: 0,
+      forceElevated: true,
+      elevation: Dimensions.defaultElevation,
       foregroundColor: AppColors.accentColor,
       title: Padding(
         padding: const EdgeInsets.symmetric(
