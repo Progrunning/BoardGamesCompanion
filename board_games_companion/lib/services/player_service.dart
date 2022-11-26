@@ -53,10 +53,7 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
     }
 
     if (player.avatarFileToSave != null) {
-      final File? savedAvatarImage = await saveAvatar(player);
-      if (savedAvatarImage == null) {
-        return false;
-      }
+      player = await saveAvatar(player);
     }
 
     final existingPlayer = storageBox.get(player.id);
@@ -90,9 +87,9 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
     return true;
   }
 
-  Future<File?> saveAvatar(Player player) async {
+  Future<Player> saveAvatar(Player player) async {
     if (player.avatarFileToSave == null) {
-      return null;
+      return player;
     }
 
     final avatarImageName = const Uuid().v4();
@@ -102,9 +99,17 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
           _fileExtensionRegex.firstMatch(player.avatarFileToSave!.path)!.group(0);
     }
 
-    player = player.copyWith(avatarFileName: '$avatarImageName$avatarImageNameFileExtension');
+    final avatarFileName = '$avatarImageName$avatarImageNameFileExtension';
+    final File? savedAvatarImage = await fileService.saveToDocumentsDirectory(
+      avatarFileName,
+      player.avatarFileToSave!,
+    );
 
-    return fileService.saveToDocumentsDirectory(player.avatarFileName!, player.avatarFileToSave!);
+    if (savedAvatarImage == null) {
+      return player;
+    }
+
+    return player.copyWith(avatarFileName: avatarFileName);
   }
 
   Future<bool> deleteAvatar(String avatarFileName) async {
