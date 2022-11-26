@@ -28,6 +28,7 @@ import 'models/hive/board_game_rank.dart';
 import 'models/hive/player.dart';
 import 'models/hive/playthrough.dart';
 import 'models/hive/score.dart';
+import 'models/hive/search_history_entry.dart';
 import 'models/hive/user.dart';
 import 'models/sort_by.dart';
 import 'services/preferences_service.dart';
@@ -59,7 +60,8 @@ Future<void> main() async {
       ..registerAdapter(CollectionFiltersAdapter())
       ..registerAdapter(GameWinningConditionAdapter())
       ..registerAdapter(BoardGameSettingsAdapter())
-      ..registerAdapter(PlaythroughNoteAdapter());
+      ..registerAdapter(PlaythroughNoteAdapter())
+      ..registerAdapter(SearchHistoryEntryAdapter());
 
     configureDependencies();
 
