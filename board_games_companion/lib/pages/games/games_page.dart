@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/injectable.dart';
+import 'package:board_games_companion/models/hive/search_history_entry.dart';
 import 'package:board_games_companion/pages/games/games_view_model.dart';
 import 'package:board_games_companion/widgets/common/panel_container.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -42,6 +43,7 @@ import '../board_game_details/board_game_details_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'collection_search_result_view_model.dart';
 import 'games_filter_panel.dart';
+import 'search_suggestion.dart';
 
 enum BoardGameResultActionType {
   details,
@@ -52,6 +54,8 @@ typedef BoardGameResultAction = void Function(
   BoardGameDetails boardGame,
   BoardGameResultActionType actionType,
 );
+
+typedef SearchCallback = Future<List<BoardGameDetails>> Function(String query);
 
 class GamesPage extends StatefulWidget {
   const GamesPage(
@@ -260,6 +264,7 @@ class _AppBarState extends State<_AppBar> {
                     viewModel: widget.viewModel,
                     onResultAction: (boardGame, actionType) async =>
                         _handleSearchResultAction(boardGame, actionType),
+                    onSearch: (query) => widget.viewModel.search(query),
                   ),
                 );
               },
@@ -624,10 +629,14 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   _CollectionsSearch({
     required this.viewModel,
     required this.onResultAction,
+    required this.onSearch,
   });
+
+  static const int _maxSearchHistoryEntriesToShow = 10;
 
   final GamesViewModel viewModel;
   final BoardGameResultAction onResultAction;
+  final SearchCallback onSearch;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -667,13 +676,32 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
       return PageContainer(child: ListView());
     }
 
-    final filteredGames = _filterGames(query);
-    if (filteredGames.isEmpty) {
-      return PageContainer(child: _NoSearchResults(query: query, onClear: () => query = ''));
-    }
+    return FutureBuilder(
+      future: onSearch(query),
+      builder: (context, AsyncSnapshot<List<BoardGameDetails>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+          case ConnectionState.active:
+            break;
+          case ConnectionState.done:
+            final filteredGames = snapshot.data;
+            if (filteredGames?.isEmpty ?? true) {
+              return PageContainer(
+                child: _NoSearchResults(
+                  query: query,
+                  onClear: () => query = '',
+                ),
+              );
+            }
 
-    return PageContainer(
-      child: _SearchResults(filteredGames: filteredGames, onResultAction: onResultAction),
+            return PageContainer(
+              child: _SearchResults(filteredGames: filteredGames!, onResultAction: onResultAction),
+            );
+        }
+
+        return const SizedBox.shrink();
+      },
     );
   }
 
@@ -683,19 +711,23 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
       return ListView();
     }
 
-    final filteredGames = _filterGames(query);
-    if (filteredGames.isEmpty) {
+    final suggestions = _findSuggestions(query);
+    if (suggestions.isEmpty) {
       return ListView();
     }
 
     return ListView.builder(
-      itemCount: filteredGames.length,
+      itemCount: suggestions.length,
       itemBuilder: (_, index) {
-        final boardGame = filteredGames[index];
+        final suggestion = suggestions[index];
         return ListTile(
-          title: Text(boardGame.name),
+          leading: Icon(
+            suggestion.type == SuggestionType.boardGame ? Icons.search : Icons.history,
+            color: AppColors.whiteColor,
+          ),
+          title: Text(suggestion.suggestion),
           onTap: () {
-            query = boardGame.name;
+            query = suggestion.suggestion;
             showResults(context);
           },
         );
@@ -703,12 +735,32 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
     );
   }
 
-  List<BoardGameDetails> _filterGames(String query) {
+  List<SearchSuggestion> _findSuggestions(String query) {
+    final suggestions = <SearchSuggestion>[];
     final queryLowercased = query.toLowerCase();
-    return viewModel.allBoardGames
-        .where(
-            (BoardGameDetails boardGame) => boardGame.name.toLowerCase().contains(queryLowercased))
-        .toList();
+
+    suggestions.addAll(
+      viewModel.searchHistory
+          .where((SearchHistoryEntry entry) => entry.query.toLowerCase().contains(queryLowercased))
+          .take(_maxSearchHistoryEntriesToShow)
+          .map((SearchHistoryEntry entry) => SearchSuggestion(
+                suggestion: entry.query,
+                type: SuggestionType.historicalSearch,
+              ))
+          .toList(),
+    );
+    suggestions.addAll(
+      viewModel.allBoardGames
+          .where((BoardGameDetails boardGame) =>
+              boardGame.name.toLowerCase().contains(queryLowercased))
+          .map((BoardGameDetails boardGame) => SearchSuggestion(
+                suggestion: boardGame.name,
+                type: SuggestionType.boardGame,
+              ))
+          .toList(),
+    );
+
+    return suggestions;
   }
 }
 

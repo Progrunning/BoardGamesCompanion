@@ -3,6 +3,7 @@
 import 'package:board_games_companion/services/board_games_service.dart';
 import 'package:board_games_companion/services/player_service.dart';
 import 'package:board_games_companion/services/score_service.dart';
+import 'package:board_games_companion/services/search_service.dart';
 import 'package:board_games_companion/services/user_service.dart';
 
 import '../services/board_games_filters_service.dart';
@@ -18,6 +19,7 @@ class HiveBoxes {
     ScoreService: scores,
     BoardGamesFiltersService: collectionFilters,
     PreferencesService: preferences,
+    SearchService: search,
   };
 
   static const boardGames = 'boardGames';
@@ -27,6 +29,7 @@ class HiveBoxes {
   static const scores = 'scores';
   static const collectionFilters = 'collectionFilters';
   static const preferences = 'preferences';
+  static const search = 'search';
   static const dioCache = 'dioCache';
 
   static const boardGamesDetailsTypeId = 0;
@@ -48,4 +51,5 @@ class HiveBoxes {
   static const winningConditionTypeId = 16;
   static const boardGameSettingsTypeId = 17;
   static const playthroughNoteId = 18;
+  static const searchHistoryEntryId = 19;
 }
