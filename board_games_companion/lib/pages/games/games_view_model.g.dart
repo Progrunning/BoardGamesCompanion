@@ -23,6 +23,13 @@ mixin _$GamesViewModel on _GamesViewModel, Store {
           Computed<List<BoardGameDetails>>(() => super.allMainGames,
               name: '_GamesViewModel.allMainGames'))
       .value;
+  Computed<List<PurchaseDetails>>? _$inAppPurchesesComputed;
+
+  @override
+  List<PurchaseDetails> get inAppPurcheses => (_$inAppPurchesesComputed ??=
+          Computed<List<PurchaseDetails>>(() => super.inAppPurcheses,
+              name: '_GamesViewModel.inAppPurcheses'))
+      .value;
   Computed<ObservableMap<String, BoardGameDetails>>?
       _$_mainBoardGameByExpansionIdComputed;
 
@@ -342,6 +349,7 @@ selectedTab: ${selectedTab},
 futureLoadBoardGames: ${futureLoadBoardGames},
 searchHistory: ${searchHistory},
 allMainGames: ${allMainGames},
+inAppPurcheses: ${inAppPurcheses},
 sortByOptions: ${sortByOptions},
 selectedSortBy: ${selectedSortBy},
 anyFiltersApplied: ${anyFiltersApplied},

@@ -9,46 +9,47 @@ import 'package:firebase_analytics/observer.dart' as _i8;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import 'pages/board_game_details/board_game_details_view_model.dart' as _i41;
-import 'pages/edit_playthrough/edit_playthrough_view_model.dart' as _i42;
-import 'pages/edit_playthrough/playthrough_note_view_model.dart' as _i32;
-import 'pages/games/collection_search_result_view_model.dart' as _i29;
-import 'pages/games/games_view_model.dart' as _i31;
-import 'pages/home/home_view_model.dart' as _i43;
-import 'pages/player/player_view_model.dart' as _i24;
-import 'pages/players/players_view_model.dart' as _i11;
-import 'pages/playthroughs/playthrough_statistics_view_model.dart' as _i33;
-import 'pages/playthroughs/playthroughs_game_settings_view_model.dart' as _i34;
+import 'pages/board_game_details/board_game_details_view_model.dart' as _i42;
+import 'pages/edit_playthrough/edit_playthrough_view_model.dart' as _i43;
+import 'pages/edit_playthrough/playthrough_note_view_model.dart' as _i33;
+import 'pages/games/collection_search_result_view_model.dart' as _i30;
+import 'pages/games/games_view_model.dart' as _i32;
+import 'pages/home/home_view_model.dart' as _i44;
+import 'pages/player/player_view_model.dart' as _i25;
+import 'pages/players/players_view_model.dart' as _i12;
+import 'pages/playthroughs/playthrough_statistics_view_model.dart' as _i34;
+import 'pages/playthroughs/playthroughs_game_settings_view_model.dart' as _i35;
 import 'pages/playthroughs/playthroughs_history_view_model.dart' as _i36;
-import 'pages/playthroughs/playthroughs_log_game_view_model.dart' as _i37;
-import 'pages/playthroughs/playthroughs_view_model.dart' as _i38;
+import 'pages/playthroughs/playthroughs_log_game_view_model.dart' as _i38;
+import 'pages/playthroughs/playthroughs_view_model.dart' as _i39;
 import 'pages/playthroughs_history/playthroughs_history_view_model.dart'
-    as _i35;
-import 'pages/search_board_games/search_board_games_view_model.dart' as _i39;
-import 'pages/settings/settings_view_model.dart' as _i40;
-import 'services/analytics_service.dart' as _i20;
+    as _i37;
+import 'pages/search_board_games/search_board_games_view_model.dart' as _i40;
+import 'pages/settings/settings_view_model.dart' as _i41;
+import 'services/analytics_service.dart' as _i21;
 import 'services/board_games_filters_service.dart' as _i4;
-import 'services/board_games_geek_service.dart' as _i22;
-import 'services/board_games_service.dart' as _i23;
+import 'services/board_games_geek_service.dart' as _i23;
+import 'services/board_games_service.dart' as _i24;
 import 'services/file_service.dart' as _i6;
-import 'services/injectable_register_module.dart' as _i44;
-import 'services/player_service.dart' as _i9;
-import 'services/playthroughs_service.dart' as _i25;
-import 'services/preferences_service.dart' as _i12;
-import 'services/rate_and_review_service.dart' as _i13;
-import 'services/score_service.dart' as _i14;
-import 'services/search_service.dart' as _i16;
-import 'services/user_service.dart' as _i18;
+import 'services/injectable_register_module.dart' as _i45;
+import 'services/player_service.dart' as _i10;
+import 'services/playthroughs_service.dart' as _i26;
+import 'services/preferences_service.dart' as _i13;
+import 'services/rate_and_review_service.dart' as _i14;
+import 'services/score_service.dart' as _i15;
+import 'services/search_service.dart' as _i17;
+import 'services/user_service.dart' as _i19;
 import 'stores/app_store.dart' as _i3;
-import 'stores/board_games_filters_store.dart' as _i21;
-import 'stores/board_games_store.dart' as _i28;
-import 'stores/game_playthroughs_details_store.dart' as _i30;
-import 'stores/players_store.dart' as _i10;
-import 'stores/playthroughs_store.dart' as _i26;
-import 'stores/scores_store.dart' as _i15;
-import 'stores/search_store.dart' as _i17;
-import 'stores/user_store.dart' as _i19;
-import 'utilities/analytics_route_observer.dart' as _i27;
+import 'stores/board_games_filters_store.dart' as _i22;
+import 'stores/board_games_store.dart' as _i29;
+import 'stores/game_playthroughs_details_store.dart' as _i31;
+import 'stores/in_app_purchase_store.dart' as _i9;
+import 'stores/players_store.dart' as _i11;
+import 'stores/playthroughs_store.dart' as _i27;
+import 'stores/scores_store.dart' as _i16;
+import 'stores/search_store.dart' as _i18;
+import 'stores/user_store.dart' as _i20;
+import 'utilities/analytics_route_observer.dart' as _i28;
 import 'utilities/custom_http_client_adapter.dart'
     as _i5; // ignore_for_file: unnecessary_lambdas
 
@@ -65,116 +66,118 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i7.FirebaseAnalytics>(registerModule.firebaseAnalytics);
   gh.singleton<_i8.FirebaseAnalyticsObserver>(
       registerModule.firebaseAnalyticsObserver);
-  gh.singleton<_i9.PlayerService>(_i9.PlayerService(get<_i6.FileService>()));
-  gh.singleton<_i10.PlayersStore>(
-      _i10.PlayersStore(get<_i9.PlayerService>(), get<_i3.AppStore>()));
-  gh.factory<_i11.PlayersViewModel>(
-      () => _i11.PlayersViewModel(get<_i10.PlayersStore>()));
-  gh.singleton<_i12.PreferencesService>(_i12.PreferencesService());
-  gh.singleton<_i13.RateAndReviewService>(
-      _i13.RateAndReviewService(get<_i12.PreferencesService>()));
-  gh.singleton<_i14.ScoreService>(_i14.ScoreService());
-  gh.singleton<_i15.ScoresStore>(_i15.ScoresStore(get<_i14.ScoreService>()));
-  gh.singleton<_i16.SearchService>(_i16.SearchService());
-  gh.singleton<_i17.SearchStore>(_i17.SearchStore(get<_i16.SearchService>()));
-  gh.singleton<_i18.UserService>(_i18.UserService());
-  gh.singleton<_i19.UserStore>(
-      _i19.UserStore(get<_i18.UserService>(), get<_i3.AppStore>()));
-  gh.singleton<_i20.AnalyticsService>(_i20.AnalyticsService(
-      get<_i7.FirebaseAnalytics>(), get<_i13.RateAndReviewService>()));
-  gh.singleton<_i21.BoardGamesFiltersStore>(_i21.BoardGamesFiltersStore(
-      get<_i4.BoardGamesFiltersService>(), get<_i20.AnalyticsService>()));
-  gh.singleton<_i22.BoardGamesGeekService>(
-      _i22.BoardGamesGeekService(get<_i5.CustomHttpClientAdapter>()));
-  gh.singleton<_i23.BoardGamesService>(
-      _i23.BoardGamesService(get<_i22.BoardGamesGeekService>()));
-  gh.factory<_i24.PlayerViewModel>(
-      () => _i24.PlayerViewModel(get<_i10.PlayersStore>()));
-  gh.singleton<_i25.PlaythroughService>(
-      _i25.PlaythroughService(get<_i14.ScoreService>()));
-  gh.singleton<_i26.PlaythroughsStore>(_i26.PlaythroughsStore(
-      get<_i25.PlaythroughService>(), get<_i15.ScoresStore>()));
-  gh.factory<_i27.AnalyticsRouteObserver>(
-      () => _i27.AnalyticsRouteObserver(get<_i20.AnalyticsService>()));
-  gh.singleton<_i28.BoardGamesStore>(_i28.BoardGamesStore(
-      get<_i23.BoardGamesService>(),
-      get<_i25.PlaythroughService>(),
+  gh.singleton<_i9.InAppPurchaseStore>(_i9.InAppPurchaseStore());
+  gh.singleton<_i10.PlayerService>(_i10.PlayerService(get<_i6.FileService>()));
+  gh.singleton<_i11.PlayersStore>(
+      _i11.PlayersStore(get<_i10.PlayerService>(), get<_i3.AppStore>()));
+  gh.factory<_i12.PlayersViewModel>(
+      () => _i12.PlayersViewModel(get<_i11.PlayersStore>()));
+  gh.singleton<_i13.PreferencesService>(_i13.PreferencesService());
+  gh.singleton<_i14.RateAndReviewService>(
+      _i14.RateAndReviewService(get<_i13.PreferencesService>()));
+  gh.singleton<_i15.ScoreService>(_i15.ScoreService());
+  gh.singleton<_i16.ScoresStore>(_i16.ScoresStore(get<_i15.ScoreService>()));
+  gh.singleton<_i17.SearchService>(_i17.SearchService());
+  gh.singleton<_i18.SearchStore>(_i18.SearchStore(get<_i17.SearchService>()));
+  gh.singleton<_i19.UserService>(_i19.UserService());
+  gh.singleton<_i20.UserStore>(
+      _i20.UserStore(get<_i19.UserService>(), get<_i3.AppStore>()));
+  gh.singleton<_i21.AnalyticsService>(_i21.AnalyticsService(
+      get<_i7.FirebaseAnalytics>(), get<_i14.RateAndReviewService>()));
+  gh.singleton<_i22.BoardGamesFiltersStore>(_i22.BoardGamesFiltersStore(
+      get<_i4.BoardGamesFiltersService>(), get<_i21.AnalyticsService>()));
+  gh.singleton<_i23.BoardGamesGeekService>(
+      _i23.BoardGamesGeekService(get<_i5.CustomHttpClientAdapter>()));
+  gh.singleton<_i24.BoardGamesService>(
+      _i24.BoardGamesService(get<_i23.BoardGamesGeekService>()));
+  gh.factory<_i25.PlayerViewModel>(
+      () => _i25.PlayerViewModel(get<_i11.PlayersStore>()));
+  gh.singleton<_i26.PlaythroughService>(
+      _i26.PlaythroughService(get<_i15.ScoreService>()));
+  gh.singleton<_i27.PlaythroughsStore>(_i27.PlaythroughsStore(
+      get<_i26.PlaythroughService>(), get<_i16.ScoresStore>()));
+  gh.factory<_i28.AnalyticsRouteObserver>(
+      () => _i28.AnalyticsRouteObserver(get<_i21.AnalyticsService>()));
+  gh.singleton<_i29.BoardGamesStore>(_i29.BoardGamesStore(
+      get<_i24.BoardGamesService>(),
+      get<_i26.PlaythroughService>(),
       get<_i3.AppStore>()));
-  gh.factory<_i29.CollectionSearchResultViewModel>(
-      () => _i29.CollectionSearchResultViewModel(get<_i28.BoardGamesStore>()));
-  gh.singleton<_i30.GamePlaythroughsDetailsStore>(
-      _i30.GamePlaythroughsDetailsStore(get<_i26.PlaythroughsStore>(),
-          get<_i15.ScoresStore>(), get<_i10.PlayersStore>()));
-  gh.factory<_i31.GamesViewModel>(() => _i31.GamesViewModel(
-      get<_i19.UserStore>(),
-      get<_i28.BoardGamesStore>(),
-      get<_i21.BoardGamesFiltersStore>(),
-      get<_i15.ScoresStore>(),
-      get<_i26.PlaythroughsStore>(),
-      get<_i10.PlayersStore>(),
-      get<_i17.SearchStore>(),
-      get<_i20.AnalyticsService>()));
-  gh.factory<_i32.PlaythroughNoteViewModel>(() =>
-      _i32.PlaythroughNoteViewModel(get<_i30.GamePlaythroughsDetailsStore>()));
-  gh.singleton<_i33.PlaythroughStatisticsViewModel>(
-      _i33.PlaythroughStatisticsViewModel(get<_i9.PlayerService>(),
-          get<_i15.ScoresStore>(), get<_i30.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i34.PlaythroughsGameSettingsViewModel>(() =>
-      _i34.PlaythroughsGameSettingsViewModel(get<_i28.BoardGamesStore>(),
-          get<_i30.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i35.PlaythroughsHistoryViewModel>(() =>
-      _i35.PlaythroughsHistoryViewModel(
-          get<_i26.PlaythroughsStore>(),
-          get<_i28.BoardGamesStore>(),
-          get<_i10.PlayersStore>(),
-          get<_i15.ScoresStore>()));
+  gh.factory<_i30.CollectionSearchResultViewModel>(
+      () => _i30.CollectionSearchResultViewModel(get<_i29.BoardGamesStore>()));
+  gh.singleton<_i31.GamePlaythroughsDetailsStore>(
+      _i31.GamePlaythroughsDetailsStore(get<_i27.PlaythroughsStore>(),
+          get<_i16.ScoresStore>(), get<_i11.PlayersStore>()));
+  gh.factory<_i32.GamesViewModel>(() => _i32.GamesViewModel(
+      get<_i20.UserStore>(),
+      get<_i29.BoardGamesStore>(),
+      get<_i22.BoardGamesFiltersStore>(),
+      get<_i16.ScoresStore>(),
+      get<_i27.PlaythroughsStore>(),
+      get<_i11.PlayersStore>(),
+      get<_i18.SearchStore>(),
+      get<_i9.InAppPurchaseStore>(),
+      get<_i21.AnalyticsService>()));
+  gh.factory<_i33.PlaythroughNoteViewModel>(() =>
+      _i33.PlaythroughNoteViewModel(get<_i31.GamePlaythroughsDetailsStore>()));
+  gh.singleton<_i34.PlaythroughStatisticsViewModel>(
+      _i34.PlaythroughStatisticsViewModel(get<_i10.PlayerService>(),
+          get<_i16.ScoresStore>(), get<_i31.GamePlaythroughsDetailsStore>()));
+  gh.factory<_i35.PlaythroughsGameSettingsViewModel>(() =>
+      _i35.PlaythroughsGameSettingsViewModel(get<_i29.BoardGamesStore>(),
+          get<_i31.GamePlaythroughsDetailsStore>()));
   gh.factory<_i36.PlaythroughsHistoryViewModel>(() =>
       _i36.PlaythroughsHistoryViewModel(
-          get<_i30.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i37.PlaythroughsLogGameViewModel>(() =>
-      _i37.PlaythroughsLogGameViewModel(
-          get<_i10.PlayersStore>(),
-          get<_i30.GamePlaythroughsDetailsStore>(),
-          get<_i20.AnalyticsService>()));
-  gh.factory<_i38.PlaythroughsViewModel>(() => _i38.PlaythroughsViewModel(
-      get<_i30.GamePlaythroughsDetailsStore>(),
-      get<_i10.PlayersStore>(),
-      get<_i20.AnalyticsService>(),
-      get<_i23.BoardGamesService>(),
-      get<_i19.UserStore>()));
-  gh.singleton<_i39.SearchBoardGamesViewModel>(_i39.SearchBoardGamesViewModel(
-      get<_i28.BoardGamesStore>(),
-      get<_i22.BoardGamesGeekService>(),
-      get<_i20.AnalyticsService>()));
-  gh.singleton<_i40.SettingsViewModel>(_i40.SettingsViewModel(
+          get<_i31.GamePlaythroughsDetailsStore>()));
+  gh.factory<_i37.PlaythroughsHistoryViewModel>(() =>
+      _i37.PlaythroughsHistoryViewModel(
+          get<_i27.PlaythroughsStore>(),
+          get<_i29.BoardGamesStore>(),
+          get<_i11.PlayersStore>(),
+          get<_i16.ScoresStore>()));
+  gh.factory<_i38.PlaythroughsLogGameViewModel>(() =>
+      _i38.PlaythroughsLogGameViewModel(
+          get<_i11.PlayersStore>(),
+          get<_i31.GamePlaythroughsDetailsStore>(),
+          get<_i21.AnalyticsService>()));
+  gh.factory<_i39.PlaythroughsViewModel>(() => _i39.PlaythroughsViewModel(
+      get<_i31.GamePlaythroughsDetailsStore>(),
+      get<_i11.PlayersStore>(),
+      get<_i21.AnalyticsService>(),
+      get<_i24.BoardGamesService>(),
+      get<_i20.UserStore>()));
+  gh.singleton<_i40.SearchBoardGamesViewModel>(_i40.SearchBoardGamesViewModel(
+      get<_i29.BoardGamesStore>(),
+      get<_i23.BoardGamesGeekService>(),
+      get<_i21.AnalyticsService>()));
+  gh.singleton<_i41.SettingsViewModel>(_i41.SettingsViewModel(
       get<_i6.FileService>(),
-      get<_i23.BoardGamesService>(),
+      get<_i24.BoardGamesService>(),
       get<_i4.BoardGamesFiltersService>(),
-      get<_i9.PlayerService>(),
-      get<_i18.UserService>(),
-      get<_i25.PlaythroughService>(),
-      get<_i14.ScoreService>(),
-      get<_i12.PreferencesService>(),
+      get<_i10.PlayerService>(),
+      get<_i19.UserService>(),
+      get<_i26.PlaythroughService>(),
+      get<_i15.ScoreService>(),
+      get<_i13.PreferencesService>(),
       get<_i3.AppStore>(),
-      get<_i19.UserStore>(),
-      get<_i28.BoardGamesStore>()));
-  gh.factory<_i41.BoardGameDetailsViewModel>(() =>
-      _i41.BoardGameDetailsViewModel(
-          get<_i28.BoardGamesStore>(), get<_i20.AnalyticsService>()));
-  gh.factory<_i42.EditPlaythoughViewModel>(() => _i42.EditPlaythoughViewModel(
-      get<_i30.GamePlaythroughsDetailsStore>(), get<_i28.BoardGamesStore>()));
-  gh.factory<_i43.HomeViewModel>(() => _i43.HomeViewModel(
-      get<_i20.AnalyticsService>(),
-      get<_i13.RateAndReviewService>(),
-      get<_i11.PlayersViewModel>(),
-      get<_i21.BoardGamesFiltersStore>(),
-      get<_i31.GamesViewModel>(),
-      get<_i39.SearchBoardGamesViewModel>(),
-      get<_i35.PlaythroughsHistoryViewModel>()));
+      get<_i20.UserStore>(),
+      get<_i29.BoardGamesStore>()));
+  gh.factory<_i42.BoardGameDetailsViewModel>(() =>
+      _i42.BoardGameDetailsViewModel(
+          get<_i29.BoardGamesStore>(), get<_i21.AnalyticsService>()));
+  gh.factory<_i43.EditPlaythoughViewModel>(() => _i43.EditPlaythoughViewModel(
+      get<_i31.GamePlaythroughsDetailsStore>(), get<_i29.BoardGamesStore>()));
+  gh.factory<_i44.HomeViewModel>(() => _i44.HomeViewModel(
+      get<_i21.AnalyticsService>(),
+      get<_i14.RateAndReviewService>(),
+      get<_i12.PlayersViewModel>(),
+      get<_i22.BoardGamesFiltersStore>(),
+      get<_i32.GamesViewModel>(),
+      get<_i40.SearchBoardGamesViewModel>(),
+      get<_i37.PlaythroughsHistoryViewModel>()));
   return get;
 }
 
-class _$RegisterModule extends _i44.RegisterModule {
+class _$RegisterModule extends _i45.RegisterModule {
   @override
   _i7.FirebaseAnalytics get firebaseAnalytics => _i7.FirebaseAnalytics();
 }

@@ -5,6 +5,6 @@ part 'playthrough_note_page_visual_states.freezed.dart';
 
 @freezed
 class PlaythroughNotePageVisualState with _$PlaythroughNotePageVisualState {
-  const factory PlaythroughNotePageVisualState.add() = Add;
-  const factory PlaythroughNotePageVisualState.edit(PlaythroughNote note) = Edit;
+  const factory PlaythroughNotePageVisualState.add() = _add;
+  const factory PlaythroughNotePageVisualState.edit(PlaythroughNote note) = _edit;
 }

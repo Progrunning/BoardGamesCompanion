@@ -10,12 +10,14 @@ import 'package:board_games_companion/models/hive/search_history_entry.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/services/analytics_service.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
+import 'package:board_games_companion/stores/in_app_purchase_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:board_games_companion/stores/search_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
@@ -45,6 +47,7 @@ abstract class _GamesViewModel with Store {
     this._playthroughsStore,
     this._playersStore,
     this._searchStore,
+    this._inAppPurchaseStore,
     this._analyticsService,
   );
 
@@ -55,6 +58,7 @@ abstract class _GamesViewModel with Store {
   final PlaythroughsStore _playthroughsStore;
   final PlayersStore _playersStore;
   final SearchStore _searchStore;
+  final InAppPurchaseStore _inAppPurchaseStore;
   final AnalyticsService _analyticsService;
 
   @observable
@@ -71,6 +75,9 @@ abstract class _GamesViewModel with Store {
   @computed
   List<BoardGameDetails> get allMainGames =>
       allBoardGames.where((BoardGameDetails boardGame) => boardGame.isMainGame).toList();
+
+  @computed
+  List<PurchaseDetails> get inAppPurcheses => _inAppPurchaseStore.purchasProducts;
 
   @computed
   ObservableMap<String, BoardGameDetails> get _mainBoardGameByExpansionId {

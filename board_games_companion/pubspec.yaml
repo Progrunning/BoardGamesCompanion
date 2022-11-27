@@ -47,6 +47,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   html_unescape: ^2.0.0
+  in_app_purchase: ^3.0.8
   in_app_review: ^2.0.3
   injectable: ^1.5.3
   intl: ^0.17.0

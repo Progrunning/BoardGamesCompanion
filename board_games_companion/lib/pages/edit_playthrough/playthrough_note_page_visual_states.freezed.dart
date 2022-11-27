@@ -37,20 +37,20 @@ mixin _$PlaythroughNotePageVisualState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Add value) add,
-    required TResult Function(Edit value) edit,
+    required TResult Function(_add value) add,
+    required TResult Function(_edit value) edit,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Add value)? add,
-    TResult Function(Edit value)? edit,
+    TResult Function(_add value)? add,
+    TResult Function(_edit value)? edit,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Add value)? add,
-    TResult Function(Edit value)? edit,
+    TResult Function(_add value)? add,
+    TResult Function(_edit value)? edit,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -75,26 +75,26 @@ class _$PlaythroughNotePageVisualStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$$AddCopyWith<$Res> {
-  factory _$$AddCopyWith(_$Add value, $Res Function(_$Add) then) =
-      __$$AddCopyWithImpl<$Res>;
+abstract class _$$_addCopyWith<$Res> {
+  factory _$$_addCopyWith(_$_add value, $Res Function(_$_add) then) =
+      __$$_addCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddCopyWithImpl<$Res>
+class __$$_addCopyWithImpl<$Res>
     extends _$PlaythroughNotePageVisualStateCopyWithImpl<$Res>
-    implements _$$AddCopyWith<$Res> {
-  __$$AddCopyWithImpl(_$Add _value, $Res Function(_$Add) _then)
-      : super(_value, (v) => _then(v as _$Add));
+    implements _$$_addCopyWith<$Res> {
+  __$$_addCopyWithImpl(_$_add _value, $Res Function(_$_add) _then)
+      : super(_value, (v) => _then(v as _$_add));
 
   @override
-  _$Add get _value => super._value as _$Add;
+  _$_add get _value => super._value as _$_add;
 }
 
 /// @nodoc
 
-class _$Add implements Add {
-  const _$Add();
+class _$_add implements _add {
+  const _$_add();
 
   @override
   String toString() {
@@ -104,7 +104,7 @@ class _$Add implements Add {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Add);
+        (other.runtimeType == runtimeType && other is _$_add);
   }
 
   @override
@@ -144,8 +144,8 @@ class _$Add implements Add {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Add value) add,
-    required TResult Function(Edit value) edit,
+    required TResult Function(_add value) add,
+    required TResult Function(_edit value) edit,
   }) {
     return add(this);
   }
@@ -153,8 +153,8 @@ class _$Add implements Add {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Add value)? add,
-    TResult Function(Edit value)? edit,
+    TResult Function(_add value)? add,
+    TResult Function(_edit value)? edit,
   }) {
     return add?.call(this);
   }
@@ -162,8 +162,8 @@ class _$Add implements Add {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Add value)? add,
-    TResult Function(Edit value)? edit,
+    TResult Function(_add value)? add,
+    TResult Function(_edit value)? edit,
     required TResult orElse(),
   }) {
     if (add != null) {
@@ -173,34 +173,34 @@ class _$Add implements Add {
   }
 }
 
-abstract class Add implements PlaythroughNotePageVisualState {
-  const factory Add() = _$Add;
+abstract class _add implements PlaythroughNotePageVisualState {
+  const factory _add() = _$_add;
 }
 
 /// @nodoc
-abstract class _$$EditCopyWith<$Res> {
-  factory _$$EditCopyWith(_$Edit value, $Res Function(_$Edit) then) =
-      __$$EditCopyWithImpl<$Res>;
+abstract class _$$_editCopyWith<$Res> {
+  factory _$$_editCopyWith(_$_edit value, $Res Function(_$_edit) then) =
+      __$$_editCopyWithImpl<$Res>;
   $Res call({PlaythroughNote note});
 
   $PlaythroughNoteCopyWith<$Res> get note;
 }
 
 /// @nodoc
-class __$$EditCopyWithImpl<$Res>
+class __$$_editCopyWithImpl<$Res>
     extends _$PlaythroughNotePageVisualStateCopyWithImpl<$Res>
-    implements _$$EditCopyWith<$Res> {
-  __$$EditCopyWithImpl(_$Edit _value, $Res Function(_$Edit) _then)
-      : super(_value, (v) => _then(v as _$Edit));
+    implements _$$_editCopyWith<$Res> {
+  __$$_editCopyWithImpl(_$_edit _value, $Res Function(_$_edit) _then)
+      : super(_value, (v) => _then(v as _$_edit));
 
   @override
-  _$Edit get _value => super._value as _$Edit;
+  _$_edit get _value => super._value as _$_edit;
 
   @override
   $Res call({
     Object? note = freezed,
   }) {
-    return _then(_$Edit(
+    return _then(_$_edit(
       note == freezed
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -218,8 +218,8 @@ class __$$EditCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Edit implements Edit {
-  const _$Edit(this.note);
+class _$_edit implements _edit {
+  const _$_edit(this.note);
 
   @override
   final PlaythroughNote note;
@@ -233,7 +233,7 @@ class _$Edit implements Edit {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Edit &&
+            other is _$_edit &&
             const DeepCollectionEquality().equals(other.note, note));
   }
 
@@ -243,8 +243,8 @@ class _$Edit implements Edit {
 
   @JsonKey(ignore: true)
   @override
-  _$$EditCopyWith<_$Edit> get copyWith =>
-      __$$EditCopyWithImpl<_$Edit>(this, _$identity);
+  _$$_editCopyWith<_$_edit> get copyWith =>
+      __$$_editCopyWithImpl<_$_edit>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -280,8 +280,8 @@ class _$Edit implements Edit {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Add value) add,
-    required TResult Function(Edit value) edit,
+    required TResult Function(_add value) add,
+    required TResult Function(_edit value) edit,
   }) {
     return edit(this);
   }
@@ -289,8 +289,8 @@ class _$Edit implements Edit {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Add value)? add,
-    TResult Function(Edit value)? edit,
+    TResult Function(_add value)? add,
+    TResult Function(_edit value)? edit,
   }) {
     return edit?.call(this);
   }
@@ -298,8 +298,8 @@ class _$Edit implements Edit {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Add value)? add,
-    TResult Function(Edit value)? edit,
+    TResult Function(_add value)? add,
+    TResult Function(_edit value)? edit,
     required TResult orElse(),
   }) {
     if (edit != null) {
@@ -309,10 +309,10 @@ class _$Edit implements Edit {
   }
 }
 
-abstract class Edit implements PlaythroughNotePageVisualState {
-  const factory Edit(final PlaythroughNote note) = _$Edit;
+abstract class _edit implements PlaythroughNotePageVisualState {
+  const factory _edit(final PlaythroughNote note) = _$_edit;
 
   PlaythroughNote get note;
   @JsonKey(ignore: true)
-  _$$EditCopyWith<_$Edit> get copyWith => throw _privateConstructorUsedError;
+  _$$_editCopyWith<_$_edit> get copyWith => throw _privateConstructorUsedError;
 }
