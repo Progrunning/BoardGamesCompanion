@@ -145,13 +145,13 @@ abstract class _BoardGamesStore with Store {
       await _boardGamesService.removeBoardGames(bggSyncedBoardGames);
       await _playthroughService.deletePlaythroughsForGames(bggSyncedBoardGames);
 
-      allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced!);
+      allBoardGames.removeWhere((boardGame) => boardGame.isBggSynced ?? false);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       return;
     }
   }
-
+ś
   @action
   Future<CollectionImportResult> importCollections(String username) async {
     var importResult = CollectionImportResult();
