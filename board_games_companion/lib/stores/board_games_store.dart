@@ -151,7 +151,7 @@ abstract class _BoardGamesStore with Store {
       return;
     }
   }
-ś
+
   @action
   Future<CollectionImportResult> importCollections(String username) async {
     var importResult = CollectionImportResult();
