@@ -4,7 +4,7 @@ import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/injectable.dart';
 import 'package:board_games_companion/models/hive/search_history_entry.dart';
-import 'package:board_games_companion/pages/games/games_view_model.dart';
+import 'package:board_games_companion/pages/collections/collections_view_model.dart';
 import 'package:board_games_companion/widgets/common/panel_container.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +42,7 @@ import '../../widgets/common/rating_hexagon.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'collection_search_result_view_model.dart';
-import 'games_filter_panel.dart';
+import 'collections_filter_panel.dart';
 import 'search_suggestion.dart';
 
 enum BoardGameResultActionType {
@@ -57,8 +57,8 @@ typedef BoardGameResultAction = void Function(
 
 typedef SearchCallback = Future<List<BoardGameDetails>> Function(String query);
 
-class GamesPage extends StatefulWidget {
-  const GamesPage(
+class CollectionsPage extends StatefulWidget {
+  const CollectionsPage(
     this.viewModel,
     this.boardGamesFiltersStore,
     this.analyticsService,
@@ -66,16 +66,16 @@ class GamesPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
 
   @override
-  GamesPageState createState() => GamesPageState();
+  CollectionsPageState createState() => CollectionsPageState();
 }
 
-class GamesPageState extends State<GamesPage>
+class CollectionsPageState extends State<CollectionsPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _topTabController;
 
@@ -157,7 +157,7 @@ class _Collection extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final bool isCollectionEmpty;
   final bool hasMainGames;
   final List<BoardGameDetails> mainGames;
@@ -232,7 +232,7 @@ class _AppBar extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -327,7 +327,7 @@ class _AppBarState extends State<_AppBar> {
       ),
       context: context,
       builder: (_) {
-        return GamesFilterPanel(gamesViewModel: widget.viewModel);
+        return CollectionsFilterPanel(viewModel: widget.viewModel);
       },
     );
   }
@@ -345,7 +345,7 @@ class _AppBarState extends State<_AppBar> {
             boardGameId: boardGameDetails.id,
             boardGameName: boardGameDetails.name,
             boardGameImageHeroId: boardGameDetails.id,
-            navigatingFromType: GamesPage,
+            navigatingFromType: CollectionsPage,
             boardGameImageUrl: boardGameDetails.imageUrl,
           ),
         ));
@@ -634,7 +634,7 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
 
   static const int _maxSearchHistoryEntriesToShow = 10;
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final BoardGameResultAction onResultAction;
   final SearchCallback onSearch;
 

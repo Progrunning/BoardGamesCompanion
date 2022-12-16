@@ -9,7 +9,7 @@ import '../../common/dimensions.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container.dart';
 import '../base_page_state.dart';
-import '../games/games_page.dart';
+import '../collections/collections_page.dart';
 import '../players/players_page.dart';
 import '../search_board_games/search_board_games_page.dart';
 import 'home_page_drawer.dart';
@@ -59,8 +59,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             child: TabBarView(
               controller: tabController,
               children: <Widget>[
-                GamesPage(
-                  widget.viewModel.gamesViewModel,
+                CollectionsPage(
+                  widget.viewModel.collectionsViewModel,
                   widget.viewModel.boardGamesFiltersStore,
                   widget.viewModel.analyticsService,
                   widget.viewModel.rateAndReviewService,

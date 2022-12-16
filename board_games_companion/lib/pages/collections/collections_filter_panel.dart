@@ -13,21 +13,21 @@ import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
 import '../../models/sort_by.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
-import 'games_view_model.dart';
+import 'collections_view_model.dart';
 
-class GamesFilterPanel extends StatefulWidget {
-  const GamesFilterPanel({
-    required this.gamesViewModel,
+class CollectionsFilterPanel extends StatefulWidget {
+  const CollectionsFilterPanel({
+    required this.viewModel,
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel gamesViewModel;
+  final CollectionsViewModel viewModel;
 
   @override
-  GamesFilterPanelState createState() => GamesFilterPanelState();
+  CollectionsFilterPanelState createState() => CollectionsFilterPanelState();
 }
 
-class GamesFilterPanelState extends State<GamesFilterPanel> {
+class CollectionsFilterPanelState extends State<CollectionsFilterPanel> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -38,8 +38,8 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
         ),
         child: Column(
           children: <Widget>[
-            _SortBy(gamesViewModel: widget.gamesViewModel),
-            _Filters(gamesViewModel: widget.gamesViewModel),
+            _SortBy(gamesViewModel: widget.viewModel),
+            _Filters(gamesViewModel: widget.viewModel),
             const SizedBox(height: Dimensions.standardSpacing),
             Align(
               alignment: Alignment.bottomRight,
@@ -49,8 +49,8 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
                     icon: const Icon(Icons.clear),
                     title: AppText.filterGamesPanelClearFiltersButtonText,
                     color: AppColors.accentColor,
-                    onPressed: widget.gamesViewModel.anyFiltersApplied
-                        ? () => widget.gamesViewModel.clearFilters()
+                    onPressed: widget.viewModel.anyFiltersApplied
+                        ? () => widget.viewModel.clearFilters()
                         : null,
                   );
                 },
@@ -66,11 +66,11 @@ class GamesFilterPanelState extends State<GamesFilterPanel> {
 class _SortBy extends StatelessWidget {
   const _SortBy({
     Key? key,
-    required GamesViewModel gamesViewModel,
+    required CollectionsViewModel gamesViewModel,
   })  : _gamesViewModel = gamesViewModel,
         super(key: key);
 
-  final GamesViewModel _gamesViewModel;
+  final CollectionsViewModel _gamesViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +150,7 @@ class _Filters extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel gamesViewModel;
+  final CollectionsViewModel gamesViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +237,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel gamesViewModel;
+  final CollectionsViewModel gamesViewModel;
 
   @override
   Widget build(BuildContext context) {
