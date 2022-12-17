@@ -78,7 +78,10 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             ),
           ),
           if (widget.name.isNotNullOrBlank)
-            BoardGameName(name: widget.name!, fontSize: widget.nameFontSize),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: BoardGameName(name: widget.name!, fontSize: widget.nameFontSize),
+            ),
           if (widget.rank != null && widget.rank! < Constants.top100)
             Positioned(top: 0, right: 12, child: RankRibbon(rank: widget.rank!)),
           Positioned.fill(

@@ -1,6 +1,5 @@
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/home/home_view_model.dart';
-import 'package:board_games_companion/pages/playthroughs_history/playthroughs_history_page.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,7 @@ import '../../widgets/common/page_container.dart';
 import '../base_page_state.dart';
 import '../collections/collections_page.dart';
 import '../players/players_page.dart';
+import '../plays/plays_page.dart';
 import '../search_board_games/search_board_games_page.dart';
 import 'home_page_drawer.dart';
 
@@ -66,7 +66,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                   widget.viewModel.rateAndReviewService,
                 ),
                 SearchBoardGamesPage(viewModel: widget.viewModel.searchBoardGamesViewModel),
-                PlaythroughsHistoryPage(viewModel: widget.viewModel.playthroughsHistoryViewModel),
+                PlaysPage(viewModel: widget.viewModel.playthroughsHistoryViewModel),
                 PlayersPage(viewModel: widget.viewModel.playersViewModel),
               ],
             ),

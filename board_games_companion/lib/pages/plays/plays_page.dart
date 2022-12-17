@@ -1,14 +1,17 @@
+import 'dart:math';
+
+import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
+import 'package:board_games_companion/pages/plays/plays_page_visual_states.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
-import 'package:board_games_companion/pages/playthroughs_history/board_game_playthrough.dart';
-import 'package:board_games_companion/pages/playthroughs_history/grouped_board_game_playthroughs.dart';
-import 'package:board_games_companion/pages/playthroughs_history/playthroughs_history_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -20,30 +23,53 @@ import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
+import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../home/home_page.dart';
+import 'board_game_playthrough.dart';
+import 'grouped_board_game_playthroughs.dart';
+import 'plays_view_model.dart';
 
-class PlaythroughsHistoryPage extends StatefulWidget {
-  const PlaythroughsHistoryPage({
+class PlaysPage extends StatefulWidget {
+  const PlaysPage({
     required this.viewModel,
     Key? key,
   }) : super(key: key);
 
-  final PlaythroughsHistoryViewModel viewModel;
+  final PlaysViewModel viewModel;
 
   @override
-  State<PlaythroughsHistoryPage> createState() => _PlaythroughsHistoryPageState();
+  State<PlaysPage> createState() => _PlaysPageState();
 }
 
-class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
+class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  late FixedExtentScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
 
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: 0,
+    );
+    _tabController
+        .addListener(() => widget.viewModel.setSelectTab(_tabController.index.toPlaysTab()));
+
+    _scrollController = FixedExtentScrollController();
+
     widget.viewModel.loadGamesPlaythroughs();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -52,34 +78,92 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
           switch (widget.viewModel.futureLoadGamesPlaythroughs?.status ?? FutureStatus.pending) {
             case FutureStatus.pending:
             case FutureStatus.rejected:
-              return const CustomScrollView(
+              return CustomScrollView(
                 slivers: [
-                  _AppBar(),
-                  SliverFillRemaining(child: LoadingIndicator()),
+                  Observer(
+                    builder: (_) {
+                      return _AppBar(
+                        tabVisualState: widget.viewModel.visualState,
+                        tabController: _tabController,
+                      );
+                    },
+                  ),
+                  const SliverFillRemaining(child: LoadingIndicator()),
                 ],
               );
             case FutureStatus.fulfilled:
               return CustomScrollView(
                 slivers: [
-                  const _AppBar(),
-                  if (widget.viewModel.hasAnyFinishedPlaythroughs)
-                    SliverToBoxAdapter(child: _GameSpinner(widget: widget)),
-                  // if (!widget.viewModel.hasAnyFinishedPlaythroughs) const _NoPlaythroughsSliver(),
-                  for (final groupedBoardGamePlaythroughs
-                      in widget.viewModel.finishedBoardGamePlaythroughs) ...[
-                    _PlaythroughGroupHeaderSliver(
-                      widget: widget,
-                      groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
-                    ),
-                    _PlaythroughGroupListSliver(
-                      groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
-                    ),
-                    if (groupedBoardGamePlaythroughs ==
-                        widget.viewModel.finishedBoardGamePlaythroughs.last)
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: Dimensions.bottomTabTopHeight),
-                      ),
-                  ]
+                  Observer(
+                    builder: (_) {
+                      return _AppBar(
+                        tabVisualState: widget.viewModel.visualState,
+                        tabController: _tabController,
+                      );
+                    },
+                  ),
+                  Observer(builder: (_) {
+                    return widget.viewModel.visualState?.when(
+                          history: (tab, finishedPlaythroughs) {
+                            return MultiSliver(
+                              children: [
+                                if (!widget.viewModel.hasAnyFinishedPlaythroughs)
+                                  const _NoPlaythroughsSliver(),
+                                if (widget.viewModel.hasAnyFinishedPlaythroughs) ...[
+                                  for (final groupedBoardGamePlaythroughs
+                                      in widget.viewModel.finishedBoardGamePlaythroughs) ...[
+                                    _PlaythroughGroupHeaderSliver(
+                                      widget: widget,
+                                      groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
+                                    ),
+                                    _PlaythroughGroupListSliver(
+                                      groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
+                                    ),
+                                    if (groupedBoardGamePlaythroughs ==
+                                        widget.viewModel.finishedBoardGamePlaythroughs.last)
+                                      const SliverToBoxAdapter(
+                                        child: SizedBox(height: Dimensions.bottomTabTopHeight),
+                                      ),
+                                  ]
+                                ]
+                              ],
+                            );
+                          },
+                          statistics: (tab) => const SliverToBoxAdapter(),
+                          selectGame: (tab, shuffledBoardGames) {
+                            return MultiSliver(
+                              children: [
+                                _GameSpinnerSliver(
+                                  scrollController: _scrollController,
+                                  shuffledBoardGames: shuffledBoardGames,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Spin the wheel to find a game to play',
+                                        style: AppTheme.theme.textTheme.bodyLarge,
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.shuffle),
+                                        onPressed: () {
+                                          _scrollController.animateToItem(
+                                            Random().nextInt(shuffledBoardGames.length),
+                                            duration: const Duration(milliseconds: 1500),
+                                            curve: Curves.elasticInOut,
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ) ??
+                        const SliverToBoxAdapter();
+                  }),
                 ],
               );
           }
@@ -87,60 +171,87 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
       );
 }
 
-class _GameSpinner extends StatelessWidget {
-  const _GameSpinner({
+class _GameSpinnerSliver extends StatelessWidget {
+  const _GameSpinnerSliver({
     Key? key,
-    required this.widget,
+    required this.scrollController,
+    required this.shuffledBoardGames,
   }) : super(key: key);
 
-  final PlaythroughsHistoryPage widget;
+  final ScrollController scrollController;
+  final List<BoardGameDetails> shuffledBoardGames;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: ListWheelScrollView.useDelegate(
-        itemExtent: 100,
-        squeeze: 1.2,
-        perspective: 0.003,
-        childDelegate: ListWheelChildLoopingListDelegate(
-          children: [
-            for (final boardGame in widget.viewModel.boardGames) ...[
-              Stack(
-                children: [
-                  CachedNetworkImage(
-                    // TODO Update this number for different screen sizes (iPad)
-                    maxHeightDiskCache: 400,
-                    fadeInDuration: const Duration(seconds: 0),
-                    imageUrl: boardGame.imageUrl ?? '',
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius: AppTheme.defaultBoxRadius,
-                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                      ),
-                    ),
-                    fit: BoxFit.fitWidth,
-                    placeholder: (context, url) => Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          stops: [0.2, 0.5, 0.9],
-                          colors: [
-                            AppColors.endDefaultPageBackgroundColorGradient,
-                            AppColors.startDefaultPageBackgroundColorGradient,
-                            AppColors.endDefaultPageBackgroundColorGradient,
-                          ],
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(Dimensions.standardSpacing),
+        child: SizedBox(
+          height: 300,
+          child: ListWheelScrollView.useDelegate(
+            controller: scrollController,
+            itemExtent: 80,
+            squeeze: 1.2,
+            perspective: 0.004,
+            childDelegate: ListWheelChildLoopingListDelegate(
+              children: [
+                for (final boardGame in shuffledBoardGames) ...[
+                  Stack(
+                    children: [
+                      _GameSpinnerItem(boardGame: boardGame),
+                      Center(
+                        child: BoardGameName(
+                          name: boardGame.name,
+                          fontSize: Dimensions.mediumFontSize,
                         ),
-                        borderRadius: AppTheme.defaultBoxRadius,
                       ),
-                    ),
+                    ],
                   ),
-                  Center(child: BoardGameName(name: boardGame.name)),
                 ],
-              ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GameSpinnerItem extends StatelessWidget {
+  const _GameSpinnerItem({
+    Key? key,
+    required this.boardGame,
+  }) : super(key: key);
+
+  final BoardGameDetails boardGame;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      // TODO Update this number for different screen sizes (iPad)
+      maxHeightDiskCache: 400,
+      imageUrl: boardGame.imageUrl ?? '',
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          borderRadius: AppTheme.defaultBoxRadius,
+          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        ),
+      ),
+      fit: BoxFit.fitWidth,
+      placeholder: (context, url) => Container(
+        // TODO Reuse this decoration
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.2, 0.5, 0.9],
+            colors: [
+              AppColors.endDefaultPageBackgroundColorGradient,
+              AppColors.startDefaultPageBackgroundColorGradient,
+              AppColors.endDefaultPageBackgroundColorGradient,
             ],
-          ],
+          ),
+          borderRadius: AppTheme.defaultBoxRadius,
         ),
       ),
     );
@@ -247,7 +358,7 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
         boardGameId: boardGamePlaythrough.boardGameDetails.id,
         boardGameName: boardGamePlaythrough.boardGameDetails.name,
         boardGameImageHeroId: boardGamePlaythrough.id,
-        navigatingFromType: PlaythroughsHistoryPage,
+        navigatingFromType: PlaysPage,
       ),
     );
   }
@@ -377,7 +488,7 @@ class _PlaythroughGroupHeaderSliver extends StatelessWidget {
     required this.groupedBoardGamePlaythroughs,
   }) : super(key: key);
 
-  final PlaythroughsHistoryPage widget;
+  final PlaysPage widget;
   final GroupedBoardGamePlaythroughs groupedBoardGamePlaythroughs;
 
   @override
@@ -428,18 +539,50 @@ class _NoPlaythroughsSliver extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget {
-  const _AppBar({Key? key}) : super(key: key);
+  const _AppBar({
+    required this.tabVisualState,
+    required this.tabController,
+    Key? key,
+  }) : super(key: key);
+
+  final PlaysPageVisualState? tabVisualState;
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context) {
-    return const SliverAppBar(
+    return SliverAppBar(
       pinned: true,
       floating: true,
       forceElevated: true,
       elevation: Dimensions.defaultElevation,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppColors.accentColor,
-      title: Text(AppText.playHistoryPageTitle, style: AppTheme.titleTextStyle),
+      title: const Text(AppText.playsPageTitle, style: AppTheme.titleTextStyle),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(74),
+        child: TabBar(
+          overlayColor: MaterialStateColor.resolveWith((states) => AppColors.accentColor),
+          controller: tabController,
+          tabs: <Widget>[
+            AppBarBottomTab(
+              AppText.playsPageHistoryTabTitle,
+              Icons.history,
+              isSelected: tabVisualState?.playsTab == PlaysTab.history,
+            ),
+            AppBarBottomTab(
+              AppText.playsPageStatisticsTabTitle,
+              Icons.multiline_chart,
+              isSelected: tabVisualState?.playsTab == PlaysTab.statistics,
+            ),
+            AppBarBottomTab(
+              AppText.playsPageSelectGameTabTitle,
+              Icons.shuffle,
+              isSelected: tabVisualState?.playsTab == PlaysTab.selectGame,
+            ),
+          ],
+          indicatorColor: AppColors.accentColor,
+        ),
+      ),
     );
   }
 }

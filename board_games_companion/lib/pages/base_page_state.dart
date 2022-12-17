@@ -47,7 +47,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
             ],
           ),
           elevation: Dimensions.defaultElevation,
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: const Text(
                 AppText.aontAskAgain,

@@ -43,13 +43,14 @@ mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
               () => super.hasAnyFinishedPlaythroughs,
               name: '_PlaythroughsHistoryViewModel.hasAnyFinishedPlaythroughs'))
           .value;
-  Computed<List<BoardGameDetails>>? _$boardGamesComputed;
+  Computed<List<BoardGameDetails>>? _$shuffledBoardGamesComputed;
 
   @override
-  List<BoardGameDetails> get boardGames => (_$boardGamesComputed ??=
-          Computed<List<BoardGameDetails>>(() => super.boardGames,
-              name: '_PlaythroughsHistoryViewModel.boardGames'))
-      .value;
+  List<BoardGameDetails> get shuffledBoardGames =>
+      (_$shuffledBoardGamesComputed ??= Computed<List<BoardGameDetails>>(
+              () => super.shuffledBoardGames,
+              name: '_PlaythroughsHistoryViewModel.shuffledBoardGames'))
+          .value;
 
   late final _$futureLoadGamesPlaythroughsAtom = Atom(
       name: '_PlaythroughsHistoryViewModel.futureLoadGamesPlaythroughs',
@@ -91,7 +92,7 @@ futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
 finishedPlaythroughs: ${finishedPlaythroughs},
 finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},
-boardGames: ${boardGames}
+shuffledBoardGames: ${shuffledBoardGames}
     ''';
   }
 }

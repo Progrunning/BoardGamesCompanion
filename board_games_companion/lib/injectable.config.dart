@@ -13,17 +13,16 @@ import 'pages/board_game_details/board_game_details_view_model.dart' as _i41;
 import 'pages/collections/collection_search_result_view_model.dart' as _i29;
 import 'pages/collections/collections_view_model.dart' as _i30;
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart' as _i42;
-import 'pages/edit_playthrough/playthrough_note_view_model.dart' as _i32;
+import 'pages/edit_playthrough/playthrough_note_view_model.dart' as _i33;
 import 'pages/home/home_view_model.dart' as _i43;
 import 'pages/player/player_view_model.dart' as _i24;
 import 'pages/players/players_view_model.dart' as _i11;
-import 'pages/playthroughs/playthrough_statistics_view_model.dart' as _i33;
-import 'pages/playthroughs/playthroughs_game_settings_view_model.dart' as _i34;
+import 'pages/plays/plays_view_model.dart' as _i32;
+import 'pages/playthroughs/playthrough_statistics_view_model.dart' as _i34;
+import 'pages/playthroughs/playthroughs_game_settings_view_model.dart' as _i35;
 import 'pages/playthroughs/playthroughs_history_view_model.dart' as _i36;
 import 'pages/playthroughs/playthroughs_log_game_view_model.dart' as _i37;
 import 'pages/playthroughs/playthroughs_view_model.dart' as _i38;
-import 'pages/playthroughs_history/playthroughs_history_view_model.dart'
-    as _i35;
 import 'pages/search_board_games/search_board_games_view_model.dart' as _i39;
 import 'pages/settings/settings_view_model.dart' as _i40;
 import 'services/analytics_service.dart' as _i20;
@@ -114,20 +113,19 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i31.GamePlaythroughsDetailsStore>(
       _i31.GamePlaythroughsDetailsStore(get<_i26.PlaythroughsStore>(),
           get<_i15.ScoresStore>(), get<_i10.PlayersStore>()));
-  gh.factory<_i32.PlaythroughNoteViewModel>(() =>
-      _i32.PlaythroughNoteViewModel(get<_i31.GamePlaythroughsDetailsStore>()));
-  gh.singleton<_i33.PlaythroughStatisticsViewModel>(
-      _i33.PlaythroughStatisticsViewModel(get<_i9.PlayerService>(),
+  gh.factory<_i32.PlaysViewModel>(() => _i32.PlaysViewModel(
+      get<_i26.PlaythroughsStore>(),
+      get<_i28.BoardGamesStore>(),
+      get<_i10.PlayersStore>(),
+      get<_i15.ScoresStore>()));
+  gh.factory<_i33.PlaythroughNoteViewModel>(() =>
+      _i33.PlaythroughNoteViewModel(get<_i31.GamePlaythroughsDetailsStore>()));
+  gh.singleton<_i34.PlaythroughStatisticsViewModel>(
+      _i34.PlaythroughStatisticsViewModel(get<_i9.PlayerService>(),
           get<_i15.ScoresStore>(), get<_i31.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i34.PlaythroughsGameSettingsViewModel>(() =>
-      _i34.PlaythroughsGameSettingsViewModel(get<_i28.BoardGamesStore>(),
+  gh.factory<_i35.PlaythroughsGameSettingsViewModel>(() =>
+      _i35.PlaythroughsGameSettingsViewModel(get<_i28.BoardGamesStore>(),
           get<_i31.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i35.PlaythroughsHistoryViewModel>(() =>
-      _i35.PlaythroughsHistoryViewModel(
-          get<_i26.PlaythroughsStore>(),
-          get<_i28.BoardGamesStore>(),
-          get<_i10.PlayersStore>(),
-          get<_i15.ScoresStore>()));
   gh.factory<_i36.PlaythroughsHistoryViewModel>(() =>
       _i36.PlaythroughsHistoryViewModel(
           get<_i31.GamePlaythroughsDetailsStore>()));
@@ -170,7 +168,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i21.BoardGamesFiltersStore>(),
       get<_i30.CollectionsViewModel>(),
       get<_i39.SearchBoardGamesViewModel>(),
-      get<_i35.PlaythroughsHistoryViewModel>()));
+      get<_i32.PlaysViewModel>()));
   return get;
 }
 

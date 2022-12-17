@@ -195,7 +195,11 @@ class AppText {
   static const collectionsPageTitle = 'Collections';
   static const settingsPageTitle = 'Settings';
   static const newPlayerPageTitle = 'New Player';
-  static const playHistoryPageTitle = 'Play History';
+  static const playsPageTitle = 'Plays';
+
+  static const playsPageHistoryTabTitle = 'History';
+  static const playsPageStatisticsTabTitle = 'Stats';
+  static const playsPageSelectGameTabTitle = 'Select Game';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';

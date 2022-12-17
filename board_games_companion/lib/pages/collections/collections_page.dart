@@ -30,6 +30,7 @@ import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../widgets/board_games/board_game_tile.dart';
+import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
 import '../../widgets/common/default_icon.dart';
@@ -290,20 +291,20 @@ class _AppBarState extends State<_AppBar> {
           preferredSize: const Size.fromHeight(74),
           child: Observer(builder: (_) {
             return TabBar(
-              onTap: (int index) => widget.viewModel.selectedTab = index.toGamesTab(),
+              onTap: (int index) => widget.viewModel.selectedTab = index.toCollectionsTab(),
               controller: widget.topTabController,
               tabs: <Widget>[
-                _TopTab(
+                AppBarBottomTab(
                   'Owned',
                   Icons.grid_on,
                   isSelected: widget.viewModel.selectedTab == GamesTab.owned,
                 ),
-                _TopTab(
+                AppBarBottomTab(
                   'Friends',
                   Icons.group,
                   isSelected: widget.viewModel.selectedTab == GamesTab.friends,
                 ),
-                _TopTab(
+                AppBarBottomTab(
                   'Wishlist',
                   Icons.card_giftcard,
                   isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
@@ -584,43 +585,6 @@ class _EmptyCollection extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _TopTab extends StatelessWidget {
-  const _TopTab(
-    this.title,
-    this.icon, {
-    this.isSelected = true,
-    Key? key,
-  }) : super(key: key);
-
-  final String title;
-  final IconData icon;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Tab(
-          icon: Icon(
-            icon,
-            color: isSelected ? AppColors.selectedTabIconColor : AppColors.deselectedTabIconColor,
-          ),
-          iconMargin: const EdgeInsets.only(
-            bottom: Dimensions.halfStandardSpacing,
-          ),
-          child: Text(
-            title,
-            style: AppTheme.titleTextStyle.copyWith(
-              fontSize: Dimensions.standardFontSize,
-              color: isSelected ? AppColors.defaultTextColor : AppColors.deselectedTabIconColor,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
