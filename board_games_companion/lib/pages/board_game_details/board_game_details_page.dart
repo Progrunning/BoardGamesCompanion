@@ -692,7 +692,9 @@ class _CollectionFlag extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.standardSpacing, vertical: Dimensions.halfStandardSpacing),
+            horizontal: Dimensions.standardSpacing,
+            vertical: Dimensions.halfStandardSpacing,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

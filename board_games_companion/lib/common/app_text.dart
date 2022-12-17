@@ -200,6 +200,7 @@ class AppText {
   static const playsPageHistoryTabTitle = 'History';
   static const playsPageStatisticsTabTitle = 'Stats';
   static const playsPageSelectGameTabTitle = 'Select Game';
+  static const playsPageGameSpinnerFilterSectionTitle = 'Filters';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';

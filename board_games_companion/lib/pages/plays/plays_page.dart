@@ -137,6 +137,11 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                   scrollController: _scrollController,
                                   shuffledBoardGames: shuffledBoardGames,
                                 ),
+                                SliverPersistentHeader(
+                                  delegate: BgcSliverHeaderDelegate(
+                                    primaryTitle: AppText.playsPageGameSpinnerFilterSectionTitle,
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(Dimensions.standardSpacing),
                                   child: Row(
