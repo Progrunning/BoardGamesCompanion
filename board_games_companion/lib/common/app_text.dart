@@ -21,9 +21,9 @@ class AppText {
   static const dayBeforeYesteday = 'day before yesterday';
   static const daysAgoFormat = '%s days ago';
 
-  static const homePageGamesTabTitle = 'Games';
+  static const homePageCollectionsTabTitle = 'Collections';
   static const homePageSearchTabTitle = 'Search';
-  static const homePageGamesHistoryTabTitle = 'Play History';
+  static const homePagePlaysTabTitle = 'Plays';
   static const homePageGamesPlayersTabTitle = 'Players';
 
   static const aboutPageAuthorSectionTitle = 'Author';

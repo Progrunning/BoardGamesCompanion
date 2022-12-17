@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthrough_details.dart';
@@ -93,6 +94,9 @@ abstract class _PlaythroughsHistoryViewModel with Store {
 
   @computed
   bool get hasAnyFinishedPlaythroughs => finishedPlaythroughs.isNotEmpty;
+
+  @computed
+  List<BoardGameDetails> get boardGames => _boardGamesStore.allBoardGamesInCollections;
 
   @action
   void loadGamesPlaythroughs() =>

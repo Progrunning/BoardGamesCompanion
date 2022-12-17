@@ -4,6 +4,7 @@ import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart'
 import 'package:board_games_companion/pages/playthroughs_history/board_game_playthrough.dart';
 import 'package:board_games_companion/pages/playthroughs_history/grouped_board_game_playthroughs.dart';
 import 'package:board_games_companion/pages/playthroughs_history/playthroughs_history_view_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,6 +18,7 @@ import '../../common/dimensions.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
+import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
@@ -60,7 +62,9 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
               return CustomScrollView(
                 slivers: [
                   const _AppBar(),
-                  if (!widget.viewModel.hasAnyFinishedPlaythroughs) const _NoPlaythroughsSliver(),
+                  if (widget.viewModel.hasAnyFinishedPlaythroughs)
+                    SliverToBoxAdapter(child: _GameSpinner(widget: widget)),
+                  // if (!widget.viewModel.hasAnyFinishedPlaythroughs) const _NoPlaythroughsSliver(),
                   for (final groupedBoardGamePlaythroughs
                       in widget.viewModel.finishedBoardGamePlaythroughs) ...[
                     _PlaythroughGroupHeaderSliver(
@@ -81,6 +85,66 @@ class _PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
           }
         },
       );
+}
+
+class _GameSpinner extends StatelessWidget {
+  const _GameSpinner({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final PlaythroughsHistoryPage widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 200,
+      child: ListWheelScrollView.useDelegate(
+        itemExtent: 100,
+        squeeze: 1.2,
+        perspective: 0.003,
+        childDelegate: ListWheelChildLoopingListDelegate(
+          children: [
+            for (final boardGame in widget.viewModel.boardGames) ...[
+              Stack(
+                children: [
+                  CachedNetworkImage(
+                    // TODO Update this number for different screen sizes (iPad)
+                    maxHeightDiskCache: 400,
+                    fadeInDuration: const Duration(seconds: 0),
+                    imageUrl: boardGame.imageUrl ?? '',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: AppTheme.defaultBoxRadius,
+                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    fit: BoxFit.fitWidth,
+                    placeholder: (context, url) => Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          stops: [0.2, 0.5, 0.9],
+                          colors: [
+                            AppColors.endDefaultPageBackgroundColorGradient,
+                            AppColors.startDefaultPageBackgroundColorGradient,
+                            AppColors.endDefaultPageBackgroundColorGradient,
+                          ],
+                        ),
+                        borderRadius: AppTheme.defaultBoxRadius,
+                      ),
+                    ),
+                  ),
+                  Center(child: BoardGameName(name: boardGame.name)),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _PlaythroughGroupListSliver extends StatelessWidget {

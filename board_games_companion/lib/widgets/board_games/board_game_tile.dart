@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
-import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../common/rank_ribbon.dart';
 import '../common/ripple_effect.dart';
+import 'board_game_name.dart';
 
 class BoardGameTile extends StatefulWidget {
   const BoardGameTile({
@@ -49,6 +49,8 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
           Hero(
             tag: '${widget.heroTag}${widget.id}',
             child: CachedNetworkImage(
+              memCacheWidth: 200,
+              height: 200,
               imageUrl: widget.imageUrl,
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
@@ -76,64 +78,13 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
             ),
           ),
           if (widget.name.isNotNullOrBlank)
-            _Name(
-              name: widget.name!,
-              fontSize: widget.nameFontSize,
-            ),
+            BoardGameName(name: widget.name!, fontSize: widget.nameFontSize),
           if (widget.rank != null && widget.rank! < Constants.top100)
-            Positioned(
-              top: 0,
-              right: 12,
-              child: RankRibbon(rank: widget.rank!),
-            ),
+            Positioned(top: 0, right: 12, child: RankRibbon(rank: widget.rank!)),
           Positioned.fill(
             child: RippleEffect(borderRadius: AppTheme.defaultBoxRadius, onTap: widget.onTap),
           )
         ],
-      ),
-    );
-  }
-}
-
-class _Name extends StatelessWidget {
-  const _Name({
-    Key? key,
-    required this.name,
-    required this.fontSize,
-  }) : super(key: key);
-
-  final String name;
-  final double fontSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        bottom: Dimensions.standardSpacing,
-        left: Dimensions.halfStandardSpacing,
-        right: Dimensions.standardSpacing,
-      ),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(AppStyles.defaultCornerRadius),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-            child: Text(
-              name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppColors.defaultTextColor,
-                fontSize: fontSize,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

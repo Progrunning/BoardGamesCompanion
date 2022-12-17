@@ -78,9 +78,9 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
           top: -Dimensions.bottomTabTopHeight,
           items: const <TabItem>[
             TabItem<BottomTabIcon>(
-              title: AppText.homePageGamesTabTitle,
-              icon: BottomTabIcon(iconData: Icons.video_library),
-              activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
+              title: AppText.homePageCollectionsTabTitle,
+              icon: BottomTabIcon(iconData: Icons.grid_on),
+              activeIcon: BottomTabIcon(iconData: Icons.grid_on, isActive: true),
             ),
             TabItem<BottomTabIcon>(
               title: AppText.homePageSearchTabTitle,
@@ -88,9 +88,9 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
               activeIcon: BottomTabIcon(iconData: Icons.search, isActive: true),
             ),
             TabItem<BottomTabIcon>(
-              title: AppText.homePageGamesHistoryTabTitle,
-              icon: BottomTabIcon(iconData: Icons.history),
-              activeIcon: BottomTabIcon(iconData: Icons.history, isActive: true),
+              title: AppText.homePagePlaysTabTitle,
+              icon: BottomTabIcon(iconData: Icons.video_library),
+              activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
             ),
             TabItem<BottomTabIcon>(
               title: AppText.homePageGamesPlayersTabTitle,
