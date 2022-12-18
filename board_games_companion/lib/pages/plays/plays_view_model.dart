@@ -66,7 +66,10 @@ abstract class _PlaysViewModel with Store {
   }
 
   @computed
-  List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs.toList();
+  List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs
+      .where((playthrough) =>
+          _boardGamesStore.allBoardGamesInCollectionsMap.containsKey(playthrough.boardGameId))
+      .toList();
 
   @computed
   List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs {
