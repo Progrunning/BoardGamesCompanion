@@ -1,3 +1,4 @@
+import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,7 @@ import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import '../../widgets/common/collection_toggle_button.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
@@ -630,22 +632,16 @@ class _CollectionFlags extends StatelessWidget {
     return Column(
       children: [
         ToggleButtons(
-          splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
-          fillColor: Colors.transparent,
-          selectedColor: Colors.white,
-          selectedBorderColor: Colors.transparent,
-          disabledBorderColor: Colors.transparent,
-          borderColor: Colors.transparent,
           isSelected: [isOnFriendsList, isOnWishlist],
           children: <Widget>[
-            _CollectionFlag(
+            CollectionToggleButton(
               icon: Icons.group,
-              title: 'Friends',
+              title: AppText.friendsCollectionToggleButtonText,
               isSelected: isOnFriendsList,
             ),
-            _CollectionFlag(
+            CollectionToggleButton(
               icon: Icons.card_giftcard,
-              title: 'Wishlist',
+              title: AppText.whishlistCollectionToggleButtonText,
               isSelected: isOnWishlist,
             ),
           ],
@@ -654,63 +650,15 @@ class _CollectionFlags extends StatelessWidget {
           ),
         ),
         ToggleButtons(
-          splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
-          fillColor: Colors.transparent,
-          selectedColor: Colors.white,
-          selectedBorderColor: Colors.transparent,
-          borderColor: Colors.transparent,
           isSelected: [isOwned],
           children: <Widget>[
-            _CollectionFlag(
+            CollectionToggleButton(
               icon: Icons.grid_on,
-              title: 'Owned',
+              title: AppText.ownedCollectionToggleButtonText,
               isSelected: isOwned,
             ),
           ],
           onPressed: (int index) => onToggleCollection(CollectionType.owned),
-        ),
-      ],
-    );
-  }
-}
-
-class _CollectionFlag extends StatelessWidget {
-  const _CollectionFlag({
-    required this.icon,
-    required this.title,
-    required this.isSelected,
-    Key? key,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String title;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.standardSpacing,
-            vertical: Dimensions.halfStandardSpacing,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: isSelected ? AppColors.accentColor : AppColors.deselectedTabIconColor,
-              ),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: Dimensions.smallFontSize,
-                  color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
-                ),
-              ),
-            ],
-          ),
         ),
       ],
     );

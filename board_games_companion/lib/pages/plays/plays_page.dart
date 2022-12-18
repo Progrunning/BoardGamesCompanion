@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:board_games_companion/pages/plays/plays_page_visual_states.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
+import 'package:board_games_companion/widgets/common/collection_toggle_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -54,7 +56,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
     super.initState();
 
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
       initialIndex: 0,
     );
@@ -142,26 +144,8 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                     primaryTitle: AppText.playsPageGameSpinnerFilterSectionTitle,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Spin the wheel to find a game to play',
-                                        style: AppTheme.theme.textTheme.bodyLarge,
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.shuffle),
-                                        onPressed: () {
-                                          _scrollController.animateToItem(
-                                            Random().nextInt(shuffledBoardGames.length),
-                                            duration: const Duration(milliseconds: 1500),
-                                            curve: Curves.elasticInOut,
-                                          );
-                                        },
-                                      )
-                                    ],
-                                  ),
+                                _GameSpinnerFilters(
+                                  onCollectionToggled: (collectionTyp) {},
                                 ),
                               ],
                             );
@@ -176,12 +160,61 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
       );
 }
 
+class _GameSpinnerFilters extends StatelessWidget {
+  const _GameSpinnerFilters({
+    required this.onCollectionToggled,
+    Key? key,
+  }) : super(key: key);
+
+  final void Function(CollectionType collectionTyp) onCollectionToggled;
+
+  static const Map<int, CollectionType> collectionsMap = <int, CollectionType>{
+    0: CollectionType.owned,
+    1: CollectionType.friends,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text('Collections', style: AppTheme.theme.textTheme.bodyMedium),
+              const Expanded(child: SizedBox.shrink()),
+              ToggleButtons(
+                isSelected: const [true, false],
+                onPressed: (int index) => onCollectionToggled(collectionsMap[index]!),
+                children: const [
+                  CollectionToggleButton(
+                    icon: Icons.grid_on,
+                    title: AppText.ownedCollectionToggleButtonText,
+                    isSelected: false,
+                  ),
+                  CollectionToggleButton(
+                    icon: Icons.group,
+                    title: AppText.friendsCollectionToggleButtonText,
+                    isSelected: false,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _GameSpinnerSliver extends StatelessWidget {
   const _GameSpinnerSliver({
     Key? key,
     required this.scrollController,
     required this.shuffledBoardGames,
   }) : super(key: key);
+
+  static const int _spinAnimationTimeInMilliseconds = 1500;
 
   final ScrollController scrollController;
   final List<BoardGameDetails> shuffledBoardGames;
@@ -193,31 +226,60 @@ class _GameSpinnerSliver extends StatelessWidget {
         padding: const EdgeInsets.all(Dimensions.standardSpacing),
         child: SizedBox(
           height: 300,
-          child: ListWheelScrollView.useDelegate(
-            controller: scrollController,
-            itemExtent: 80,
-            squeeze: 1.2,
-            perspective: 0.004,
-            childDelegate: ListWheelChildLoopingListDelegate(
-              children: [
-                for (final boardGame in shuffledBoardGames) ...[
-                  Stack(
+          child: Row(
+            children: [
+              Expanded(
+                child: ListWheelScrollView.useDelegate(
+                  controller: scrollController,
+                  itemExtent: 80,
+                  squeeze: 1.2,
+                  perspective: 0.004,
+                  childDelegate: ListWheelChildLoopingListDelegate(
                     children: [
-                      _GameSpinnerItem(boardGame: boardGame),
-                      Center(
-                        child: BoardGameName(
-                          name: boardGame.name,
-                          fontSize: Dimensions.mediumFontSize,
+                      for (final boardGame in shuffledBoardGames) ...[
+                        Stack(
+                          children: [
+                            _GameSpinnerItem(boardGame: boardGame),
+                            Center(
+                              child: BoardGameName(
+                                name: boardGame.name,
+                                fontSize: Dimensions.mediumFontSize,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                      ],
                     ],
                   ),
-                ],
-              ],
-            ),
+                ),
+              ),
+              const SizedBox(width: Dimensions.standardSpacing),
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => _spin(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [FaIcon(FontAwesomeIcons.arrowsSpin), Text('Spin')],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  void _spin() {
+    (scrollController as FixedExtentScrollController).animateToItem(
+      Random().nextInt(shuffledBoardGames.length),
+      duration: const Duration(milliseconds: _spinAnimationTimeInMilliseconds),
+      curve: Curves.elasticInOut,
     );
   }
 }
@@ -574,11 +636,12 @@ class _AppBar extends StatelessWidget {
               Icons.history,
               isSelected: tabVisualState?.playsTab == PlaysTab.history,
             ),
-            AppBarBottomTab(
-              AppText.playsPageStatisticsTabTitle,
-              Icons.multiline_chart,
-              isSelected: tabVisualState?.playsTab == PlaysTab.statistics,
-            ),
+            // TODO Add stats page
+            // AppBarBottomTab(
+            //   AppText.playsPageStatisticsTabTitle,
+            //   Icons.multiline_chart,
+            //   isSelected: tabVisualState?.playsTab == PlaysTab.statistics,
+            // ),
             AppBarBottomTab(
               AppText.playsPageSelectGameTabTitle,
               Icons.shuffle,

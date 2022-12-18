@@ -21,6 +21,10 @@ class AppText {
   static const dayBeforeYesteday = 'day before yesterday';
   static const daysAgoFormat = '%s days ago';
 
+  static const ownedCollectionToggleButtonText = 'Owned';
+  static const friendsCollectionToggleButtonText = 'Friends';
+  static const whishlistCollectionToggleButtonText = 'Whishlist';
+
   static const homePageCollectionsTabTitle = 'Collections';
   static const homePageSearchTabTitle = 'Search';
   static const homePagePlaysTabTitle = 'Plays';

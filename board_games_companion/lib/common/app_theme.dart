@@ -119,6 +119,27 @@ class AppTheme {
       buttonTheme: ThemeData.light().buttonTheme.copyWith(
             buttonColor: AppColors.accentColor,
           ),
+      toggleButtonsTheme: ThemeData.light().toggleButtonsTheme.copyWith(
+            selectedColor: AppColors.accentColor,
+            color: AppColors.deselectedTabIconColor,
+            splashColor: AppColors.accentColor.withAlpha(AppStyles.opacity30Percent),
+            fillColor: Colors.transparent,
+            selectedBorderColor: Colors.transparent,
+            disabledBorderColor: Colors.transparent,
+            borderColor: Colors.transparent,
+            textStyle: TextStyle(
+              fontSize: Dimensions.smallFontSize,
+              color: MaterialStateColor.resolveWith(
+                (states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return AppColors.accentColor;
+                  }
+
+                  return AppColors.deselectedTabIconColor;
+                },
+              ),
+            ),
+          ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: AppColors.accentColor),
       ),
