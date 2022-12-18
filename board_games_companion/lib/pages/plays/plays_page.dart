@@ -5,6 +5,7 @@ import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
+import 'package:board_games_companion/pages/plays/game_spinner_filters.dart';
 import 'package:board_games_companion/pages/plays/plays_page_visual_states.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:board_games_companion/widgets/common/collection_toggle_button.dart';
@@ -104,55 +105,63 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                       );
                     },
                   ),
-                  Observer(builder: (_) {
-                    return widget.viewModel.visualState?.when(
-                          history: (tab, finishedPlaythroughs) {
-                            return MultiSliver(
-                              children: [
-                                if (!widget.viewModel.hasAnyFinishedPlaythroughs)
-                                  const _NoPlaythroughsSliver(),
-                                if (widget.viewModel.hasAnyFinishedPlaythroughs) ...[
-                                  for (final groupedBoardGamePlaythroughs
-                                      in widget.viewModel.finishedBoardGamePlaythroughs) ...[
-                                    _PlaythroughGroupHeaderSliver(
-                                      widget: widget,
-                                      groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
-                                    ),
-                                    _PlaythroughGroupListSliver(
-                                      groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
-                                    ),
-                                    if (groupedBoardGamePlaythroughs ==
-                                        widget.viewModel.finishedBoardGamePlaythroughs.last)
-                                      const SliverToBoxAdapter(
-                                        child: SizedBox(height: Dimensions.bottomTabTopHeight),
+                  Observer(
+                    builder: (_) {
+                      return widget.viewModel.visualState?.when(
+                            history: (tab, finishedPlaythroughs) {
+                              return MultiSliver(
+                                children: [
+                                  if (!widget.viewModel.hasAnyFinishedPlaythroughs)
+                                    const _NoPlaythroughsSliver(),
+                                  if (widget.viewModel.hasAnyFinishedPlaythroughs) ...[
+                                    for (final groupedBoardGamePlaythroughs
+                                        in widget.viewModel.finishedBoardGamePlaythroughs) ...[
+                                      _PlaythroughGroupHeaderSliver(
+                                        widget: widget,
+                                        groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
                                       ),
+                                      _PlaythroughGroupListSliver(
+                                        groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
+                                      ),
+                                      if (groupedBoardGamePlaythroughs ==
+                                          widget.viewModel.finishedBoardGamePlaythroughs.last)
+                                        const SliverToBoxAdapter(
+                                          child: SizedBox(height: Dimensions.bottomTabTopHeight),
+                                        ),
+                                    ]
                                   ]
-                                ]
-                              ],
-                            );
-                          },
-                          statistics: (tab) => const SliverToBoxAdapter(),
-                          selectGame: (tab, shuffledBoardGames) {
-                            return MultiSliver(
-                              children: [
-                                _GameSpinnerSliver(
-                                  scrollController: _scrollController,
-                                  shuffledBoardGames: shuffledBoardGames,
-                                ),
-                                SliverPersistentHeader(
-                                  delegate: BgcSliverHeaderDelegate(
-                                    primaryTitle: AppText.playsPageGameSpinnerFilterSectionTitle,
+                                ],
+                              );
+                            },
+                            statistics: (tab) => const SliverToBoxAdapter(),
+                            selectGame: (tab, shuffledBoardGames) {
+                              return MultiSliver(
+                                children: [
+                                  _GameSpinnerSliver(
+                                    scrollController: _scrollController,
+                                    shuffledBoardGames: shuffledBoardGames,
                                   ),
-                                ),
-                                _GameSpinnerFilters(
-                                  onCollectionToggled: (collectionTyp) {},
-                                ),
-                              ],
-                            );
-                          },
-                        ) ??
-                        const SliverToBoxAdapter();
-                  }),
+                                  SliverPersistentHeader(
+                                    delegate: BgcSliverHeaderDelegate(
+                                      primaryTitle: AppText.playsPageGameSpinnerFilterSectionTitle,
+                                    ),
+                                  ),
+                                  Observer(
+                                    builder: (_) {
+                                      return _GameSpinnerFilters(
+                                        gameSpinnerFilters: widget.viewModel.gameSpinnerFilters,
+                                        onCollectionToggled: (collectionTyp) => widget.viewModel
+                                            .toggleGameSpinnerCollectionFilter(collectionTyp),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ) ??
+                          const SliverToBoxAdapter();
+                    },
+                  ),
                 ],
               );
           }
@@ -162,10 +171,12 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
 
 class _GameSpinnerFilters extends StatelessWidget {
   const _GameSpinnerFilters({
+    required this.gameSpinnerFilters,
     required this.onCollectionToggled,
     Key? key,
   }) : super(key: key);
 
+  final GameSpinnerFilters gameSpinnerFilters;
   final void Function(CollectionType collectionTyp) onCollectionToggled;
 
   static const Map<int, CollectionType> collectionsMap = <int, CollectionType>{
@@ -174,37 +185,41 @@ class _GameSpinnerFilters extends StatelessWidget {
   };
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(Dimensions.standardSpacing),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text('Collections', style: AppTheme.theme.textTheme.bodyMedium),
-              const Expanded(child: SizedBox.shrink()),
-              ToggleButtons(
-                isSelected: const [true, false],
-                onPressed: (int index) => onCollectionToggled(collectionsMap[index]!),
-                children: const [
-                  CollectionToggleButton(
-                    icon: Icons.grid_on,
-                    title: AppText.ownedCollectionToggleButtonText,
-                    isSelected: false,
-                  ),
-                  CollectionToggleButton(
-                    icon: Icons.group,
-                    title: AppText.friendsCollectionToggleButtonText,
-                    isSelected: false,
-                  ),
-                ],
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(Dimensions.standardSpacing),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  AppText.playsPageGameSpinnerCollectionsFilter,
+                  style: AppTheme.theme.textTheme.bodyMedium,
+                ),
+                const Expanded(child: SizedBox.shrink()),
+                ToggleButtons(
+                  isSelected: [
+                    gameSpinnerFilters.hasOwnedCollection,
+                    gameSpinnerFilters.hasFriendsCollection,
+                  ],
+                  onPressed: (int index) => onCollectionToggled(collectionsMap[index]!),
+                  children: [
+                    CollectionToggleButton(
+                      icon: Icons.grid_on,
+                      title: AppText.ownedCollectionToggleButtonText,
+                      isSelected: gameSpinnerFilters.hasOwnedCollection,
+                    ),
+                    CollectionToggleButton(
+                      icon: Icons.group,
+                      title: AppText.friendsCollectionToggleButtonText,
+                      isSelected: gameSpinnerFilters.hasFriendsCollection,
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      );
 }
 
 class _GameSpinnerSliver extends StatelessWidget {

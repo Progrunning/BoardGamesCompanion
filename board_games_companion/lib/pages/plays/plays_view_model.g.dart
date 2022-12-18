@@ -100,6 +100,22 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
     });
   }
 
+  late final _$gameSpinnerFiltersAtom =
+      Atom(name: '_PlaysViewModel.gameSpinnerFilters', context: context);
+
+  @override
+  GameSpinnerFilters get gameSpinnerFilters {
+    _$gameSpinnerFiltersAtom.reportRead();
+    return super.gameSpinnerFilters;
+  }
+
+  @override
+  set gameSpinnerFilters(GameSpinnerFilters value) {
+    _$gameSpinnerFiltersAtom.reportWrite(value, super.gameSpinnerFilters, () {
+      super.gameSpinnerFilters = value;
+    });
+  }
+
   late final _$_PlaysViewModelActionController =
       ActionController(name: '_PlaysViewModel', context: context);
 
@@ -126,10 +142,22 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   }
 
   @override
+  void toggleGameSpinnerCollectionFilter(CollectionType collectionToggled) {
+    final _$actionInfo = _$_PlaysViewModelActionController.startAction(
+        name: '_PlaysViewModel.toggleGameSpinnerCollectionFilter');
+    try {
+      return super.toggleGameSpinnerCollectionFilter(collectionToggled);
+    } finally {
+      _$_PlaysViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
 visualState: ${visualState},
+gameSpinnerFilters: ${gameSpinnerFilters},
 finishedPlaythroughs: ${finishedPlaythroughs},
 finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},

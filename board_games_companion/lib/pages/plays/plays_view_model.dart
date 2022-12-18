@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
@@ -16,6 +17,7 @@ import 'package:mobx/mobx.dart';
 import '../../models/hive/score.dart';
 import '../../stores/playthroughs_store.dart';
 import 'board_game_playthrough.dart';
+import 'game_spinner_filters.dart';
 import 'grouped_board_game_playthroughs.dart';
 import 'plays_page_visual_states.dart';
 
@@ -45,6 +47,14 @@ abstract class _PlaysViewModel with Store {
 
   @observable
   PlaysPageVisualState? visualState;
+
+  @observable
+  GameSpinnerFilters gameSpinnerFilters = const GameSpinnerFilters(
+    collections: <CollectionType>{
+      CollectionType.owned,
+      CollectionType.friends,
+    },
+  );
 
   @computed
   Map<String, Score> get _scores {
@@ -104,7 +114,11 @@ abstract class _PlaysViewModel with Store {
 
   @computed
   List<BoardGameDetails> get shuffledBoardGames => _shuffledBoardGames
-      .where((boardGame) => (boardGame.isFriends ?? false) || (boardGame.isOwned ?? false))
+      .where((boardGame) =>
+          (gameSpinnerFilters.collections.contains(CollectionType.friends) &&
+              (boardGame.isFriends ?? false)) ||
+          (gameSpinnerFilters.collections.contains(CollectionType.owned) &&
+              (boardGame.isOwned ?? false)))
       .toList();
 
   @action
@@ -128,6 +142,23 @@ abstract class _PlaysViewModel with Store {
 
       default:
     }
+  }
+
+  @action
+  void toggleGameSpinnerCollectionFilter(CollectionType collectionToggled) {
+    // MK Remove collection filter only if other filter is active (i.e. if we remove both collection there won't be any games to pick from)
+    if (gameSpinnerFilters.collections.contains(collectionToggled) &&
+        gameSpinnerFilters.collections.length > 1) {
+      gameSpinnerFilters = gameSpinnerFilters.copyWith(
+        collections: Set.from(gameSpinnerFilters.collections)..remove(collectionToggled),
+      );
+    } else {
+      gameSpinnerFilters = gameSpinnerFilters.copyWith(
+        collections: Set.from(gameSpinnerFilters.collections)..add(collectionToggled),
+      );
+    }
+
+    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
   }
 
   Future<void> _loadGamesPlaythroughs() async {

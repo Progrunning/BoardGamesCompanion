@@ -29,7 +29,7 @@ class CollectionToggleButton extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: isSelected ? AppColors.accentColor : AppColors.deselectedTabIconColor,
+              color: isSelected ? AppColors.whiteColor : AppColors.deselectedTabIconColor,
             ),
           ),
         ],
