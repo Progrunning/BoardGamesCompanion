@@ -17,6 +17,8 @@ import 'board_game_publisher.dart';
 import 'board_game_rank.dart';
 import 'board_game_settings.dart';
 
+export '../../extensions/board_game_extentions.dart';
+
 part 'board_game_details.freezed.dart';
 part 'board_game_details.g.dart';
 

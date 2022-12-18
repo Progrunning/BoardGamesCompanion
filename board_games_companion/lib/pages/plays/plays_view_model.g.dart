@@ -42,6 +42,13 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
               () => super.hasAnyFinishedPlaythroughs,
               name: '_PlaysViewModel.hasAnyFinishedPlaythroughs'))
           .value;
+  Computed<bool>? _$hasAnyBoardGamesComputed;
+
+  @override
+  bool get hasAnyBoardGames => (_$hasAnyBoardGamesComputed ??= Computed<bool>(
+          () => super.hasAnyBoardGames,
+          name: '_PlaysViewModel.hasAnyBoardGames'))
+      .value;
   Computed<List<BoardGameDetails>>? _$shuffledBoardGamesComputed;
 
   @override
@@ -161,6 +168,7 @@ gameSpinnerFilters: ${gameSpinnerFilters},
 finishedPlaythroughs: ${finishedPlaythroughs},
 finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},
+hasAnyBoardGames: ${hasAnyBoardGames},
 shuffledBoardGames: ${shuffledBoardGames}
     ''';
   }

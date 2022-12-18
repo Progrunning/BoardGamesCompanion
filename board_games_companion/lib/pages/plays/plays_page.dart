@@ -109,38 +109,49 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                     builder: (_) {
                       return widget.viewModel.visualState?.when(
                             history: (tab, finishedPlaythroughs) {
-                              return MultiSliver(
-                                children: [
-                                  if (!widget.viewModel.hasAnyFinishedPlaythroughs)
-                                    const _NoPlaythroughsSliver(),
-                                  if (widget.viewModel.hasAnyFinishedPlaythroughs) ...[
-                                    for (final groupedBoardGamePlaythroughs
-                                        in widget.viewModel.finishedBoardGamePlaythroughs) ...[
-                                      _PlaythroughGroupHeaderSliver(
-                                        widget: widget,
-                                        groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
-                                      ),
-                                      _PlaythroughGroupListSliver(
-                                        groupedBoardGamePlaythroughs: groupedBoardGamePlaythroughs,
-                                      ),
-                                      if (groupedBoardGamePlaythroughs ==
-                                          widget.viewModel.finishedBoardGamePlaythroughs.last)
-                                        const SliverToBoxAdapter(
-                                          child: SizedBox(height: Dimensions.bottomTabTopHeight),
+                              if (!widget.viewModel.hasAnyFinishedPlaythroughs) {
+                                return const _NoPlaythroughsSliver();
+                              } else {
+                                return MultiSliver(
+                                  children: [
+                                    if (widget.viewModel.hasAnyFinishedPlaythroughs) ...[
+                                      for (final groupedBoardGamePlaythroughs
+                                          in widget.viewModel.finishedBoardGamePlaythroughs) ...[
+                                        _PlaythroughGroupHeaderSliver(
+                                          widget: widget,
+                                          groupedBoardGamePlaythroughs:
+                                              groupedBoardGamePlaythroughs,
                                         ),
+                                        _PlaythroughGroupListSliver(
+                                          groupedBoardGamePlaythroughs:
+                                              groupedBoardGamePlaythroughs,
+                                        ),
+                                        if (groupedBoardGamePlaythroughs ==
+                                            widget.viewModel.finishedBoardGamePlaythroughs.last)
+                                          const SliverToBoxAdapter(
+                                            child: SizedBox(height: Dimensions.bottomTabTopHeight),
+                                          ),
+                                      ]
                                     ]
-                                  ]
-                                ],
-                              );
+                                  ],
+                                );
+                              }
                             },
                             statistics: (tab) => const SliverToBoxAdapter(),
                             selectGame: (tab, shuffledBoardGames) {
+                              if (!widget.viewModel.hasAnyBoardGames) {
+                                return const _NoBoardGamesSliver();
+                              }
+
                               return MultiSliver(
                                 children: [
-                                  _GameSpinnerSliver(
-                                    scrollController: _scrollController,
-                                    shuffledBoardGames: shuffledBoardGames,
-                                  ),
+                                  if (!widget.viewModel.hasAnyBoardGamesToShuffle)
+                                    const _NoBoardGamesToShuffleSliver(),
+                                  if (widget.viewModel.hasAnyBoardGamesToShuffle)
+                                    _GameSpinnerSliver(
+                                      scrollController: _scrollController,
+                                      shuffledBoardGames: shuffledBoardGames,
+                                    ),
                                   SliverPersistentHeader(
                                     delegate: BgcSliverHeaderDelegate(
                                       primaryTitle: AppText.playsPageGameSpinnerFilterSectionTitle,
@@ -229,7 +240,10 @@ class _GameSpinnerSliver extends StatelessWidget {
     required this.shuffledBoardGames,
   }) : super(key: key);
 
-  static const int _spinAnimationTimeInMilliseconds = 1500;
+  static const int _spinAnimationTimeInMilliseconds = 3000;
+  static const double _gameSpinnerHeight = 300;
+  static const double _gameSpinnerItemHeight = 80;
+  static const double _gameSpinnerItemSqueeze = 1.2;
 
   final ScrollController scrollController;
   final List<BoardGameDetails> shuffledBoardGames;
@@ -240,15 +254,15 @@ class _GameSpinnerSliver extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(Dimensions.standardSpacing),
         child: SizedBox(
-          height: 300,
+          height: _gameSpinnerHeight,
           child: Row(
             children: [
               Expanded(
                 child: ListWheelScrollView.useDelegate(
                   controller: scrollController,
-                  itemExtent: 80,
-                  squeeze: 1.2,
-                  perspective: 0.004,
+                  itemExtent: _gameSpinnerItemHeight,
+                  squeeze: _gameSpinnerItemSqueeze,
+                  perspective: 0.0035,
                   childDelegate: ListWheelChildLoopingListDelegate(
                     children: [
                       for (final boardGame in shuffledBoardGames) ...[
@@ -278,7 +292,10 @@ class _GameSpinnerSliver extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [FaIcon(FontAwesomeIcons.arrowsSpin), Text('Spin')],
+                      children: const [
+                        FaIcon(FontAwesomeIcons.arrowsSpin),
+                        Text(AppText.playsPageGameSpinnerSpinButtonText),
+                      ],
                     ),
                   ),
                 ),
@@ -594,7 +611,7 @@ class _NoPlaythroughsSliver extends StatelessWidget {
               SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
               Center(
                 child: Text(
-                  AppText.playHistoryPageEmptyTitle,
+                  AppText.playsPageHistoryTabEmptyTitle,
                   style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
                 ),
               ),
@@ -608,13 +625,98 @@ class _NoPlaythroughsSliver extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
-                    TextSpan(text: AppText.playHistoryPageEmptyTextPartTwo),
+                    TextSpan(text: AppText.playPageHistoryTabEmptySubtitle),
                   ],
                 ),
                 textAlign: TextAlign.justify,
                 style: TextStyle(fontSize: Dimensions.mediumFontSize),
               ),
             ],
+          ),
+        ),
+      );
+}
+
+class _NoBoardGamesSliver extends StatelessWidget {
+  const _NoBoardGamesSliver({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+        padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+        sliver: SliverToBoxAdapter(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const <Widget>[
+              SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+              Center(
+                child: Text(
+                  AppText.playsPageSelectGameTabEmptyTitle,
+                  style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                ),
+              ),
+              SizedBox(height: Dimensions.doubleStandardSpacing),
+              FaIcon(
+                Icons.grid_on,
+                size: Dimensions.emptyPageTitleIconSize,
+                color: AppColors.primaryColor,
+              ),
+              SizedBox(height: Dimensions.doubleStandardSpacing),
+              Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(text: AppText.playsPageSelectGameTabEmptySubtitle),
+                  ],
+                ),
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: Dimensions.mediumFontSize),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+class _NoBoardGamesToShuffleSliver extends StatelessWidget {
+  const _NoBoardGamesToShuffleSliver({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.doubleStandardSpacing,
+          vertical: Dimensions.standardSpacing,
+        ),
+        sliver: SliverToBoxAdapter(
+          child: SizedBox(
+            height: 300,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const <Widget>[
+                  Center(
+                    child: Text(
+                      AppText.playsPageSelectGameNoBoardGamesToShuffleTitle,
+                      style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                    ),
+                  ),
+                  SizedBox(height: Dimensions.doubleStandardSpacing),
+                  FaIcon(
+                    FontAwesomeIcons.arrowsSpin,
+                    size: Dimensions.emptyPageTitleIconSize,
+                    color: AppColors.primaryColor,
+                  ),
+                  SizedBox(height: Dimensions.doubleStandardSpacing),
+                  Text.rich(
+                    TextSpan(
+                      children: <InlineSpan>[
+                        TextSpan(text: AppText.playsPageSelectGameNoBoardGamesToShuffleSubtitle),
+                      ],
+                    ),
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(fontSize: Dimensions.mediumFontSize),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       );

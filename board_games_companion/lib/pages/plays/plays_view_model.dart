@@ -50,10 +50,7 @@ abstract class _PlaysViewModel with Store {
 
   @observable
   GameSpinnerFilters gameSpinnerFilters = const GameSpinnerFilters(
-    collections: <CollectionType>{
-      CollectionType.owned,
-      CollectionType.friends,
-    },
+    collections: <CollectionType>{},
   );
 
   @computed
@@ -116,13 +113,23 @@ abstract class _PlaysViewModel with Store {
   bool get hasAnyFinishedPlaythroughs => finishedPlaythroughs.isNotEmpty;
 
   @computed
-  List<BoardGameDetails> get shuffledBoardGames => _shuffledBoardGames
-      .where((boardGame) =>
-          (gameSpinnerFilters.collections.contains(CollectionType.friends) &&
-              (boardGame.isFriends ?? false)) ||
-          (gameSpinnerFilters.collections.contains(CollectionType.owned) &&
-              (boardGame.isOwned ?? false)))
-      .toList();
+  bool get hasAnyBoardGames => _boardGamesStore.allBoardGamesInCollections.isNotEmpty;
+
+  @computed
+  bool get hasAnyBoardGamesToShuffle => shuffledBoardGames.isNotEmpty;
+
+  @computed
+  List<BoardGameDetails> get shuffledBoardGames {
+    final filteredShuffledBoardGames = <BoardGameDetails>[];
+    if (gameSpinnerFilters.hasOwnedCollection) {
+      filteredShuffledBoardGames.addAll(_shuffledBoardGames.inCollection(CollectionType.owned));
+    }
+    if (gameSpinnerFilters.hasFriendsCollection) {
+      filteredShuffledBoardGames.addAll(_shuffledBoardGames.inCollection(CollectionType.friends));
+    }
+
+    return filteredShuffledBoardGames;
+  }
 
   @action
   void loadGamesPlaythroughs() =>
@@ -148,16 +155,16 @@ abstract class _PlaysViewModel with Store {
   }
 
   @action
-  void toggleGameSpinnerCollectionFilter(CollectionType collectionToggled) {
+  void toggleGameSpinnerCollectionFilter(CollectionType collectionTypeToggled) {
     // MK Remove collection filter only if other filter is active (i.e. if we remove both collection there won't be any games to pick from)
-    if (gameSpinnerFilters.collections.contains(collectionToggled) &&
+    if (gameSpinnerFilters.collections.contains(collectionTypeToggled) &&
         gameSpinnerFilters.collections.length > 1) {
       gameSpinnerFilters = gameSpinnerFilters.copyWith(
-        collections: Set.from(gameSpinnerFilters.collections)..remove(collectionToggled),
+        collections: Set.from(gameSpinnerFilters.collections)..remove(collectionTypeToggled),
       );
     } else {
       gameSpinnerFilters = gameSpinnerFilters.copyWith(
-        collections: Set.from(gameSpinnerFilters.collections)..add(collectionToggled),
+        collections: Set.from(gameSpinnerFilters.collections)..add(collectionTypeToggled),
       );
     }
 
@@ -170,9 +177,23 @@ abstract class _PlaysViewModel with Store {
     await _playthroughsStore.loadPlaythroughs();
 
     _shuffledBoardGames = _boardGamesStore.allBoardGames..shuffle();
+    _setupGameSpinnerFilters();
     visualState = PlaysPageVisualState.history(
       PlaysTab.history,
       finishedBoardGamePlaythroughs,
+    );
+  }
+
+  void _setupGameSpinnerFilters() {
+    final filterCollections = <CollectionType>{};
+    if (_shuffledBoardGames.inCollection(CollectionType.owned).isNotEmpty) {
+      filterCollections.add(CollectionType.owned);
+    }
+    if (!_shuffledBoardGames.inCollection(CollectionType.friends).isNotEmpty) {
+      filterCollections.add(CollectionType.friends);
+    }
+    gameSpinnerFilters = gameSpinnerFilters.copyWith(
+      collections: filterCollections,
     );
   }
 }
