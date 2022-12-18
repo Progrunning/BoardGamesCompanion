@@ -33,6 +33,7 @@ import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
+import '../../widgets/common/board_game/board_game_property.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
@@ -968,6 +969,7 @@ class _SearchResultGameDetails extends StatelessWidget {
   final BoardGameDetails boardGame;
 
   static const double _gameStatIconSize = 16;
+  static const double _gamePropertyIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -980,20 +982,23 @@ class _SearchResultGameDetails extends StatelessWidget {
           style: AppTheme.theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
-        _SearchResultGameGeneralStats(
+        BoardGameProperty(
           icon: const Icon(Icons.people, size: _gameStatIconSize),
-          statistic: boardGame.playersFormatted,
+          iconWidth: _gamePropertyIconSize,
+          propertyName: boardGame.playersFormatted,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
-        _SearchResultGameGeneralStats(
+        BoardGameProperty(
           icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
-          statistic: boardGame.playtimeFormatted,
+          iconWidth: _gamePropertyIconSize,
+          propertyName: boardGame.playtimeFormatted,
         ),
         if (boardGame.avgWeight != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
-          _SearchResultGameGeneralStats(
+          BoardGameProperty(
             icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced, size: _gameStatIconSize),
-            statistic: sprintf(
+            iconWidth: _gamePropertyIconSize,
+            propertyName: sprintf(
               AppText.gamesPageSearchResultComplexityGameStatFormat,
               [boardGame.avgWeight!.toStringAsFixed(2)],
             ),
@@ -1001,9 +1006,10 @@ class _SearchResultGameDetails extends StatelessWidget {
         ],
         if (boardGame.rating != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
-          _SearchResultGameGeneralStats(
+          BoardGameProperty(
             icon: const RatingHexagon(width: _gameStatIconSize, height: _gameStatIconSize),
-            statistic:
+            iconWidth: _gamePropertyIconSize,
+            propertyName:
                 boardGame.rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
           ),
         ]
@@ -1034,35 +1040,6 @@ class _SearchResultGameActions extends StatelessWidget {
         IconButton(
           icon: const FaIcon(FontAwesomeIcons.dice),
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.playthroughs),
-        ),
-      ],
-    );
-  }
-}
-
-class _SearchResultGameGeneralStats extends StatelessWidget {
-  const _SearchResultGameGeneralStats({
-    Key? key,
-    required this.icon,
-    required this.statistic,
-  }) : super(key: key);
-
-  final Widget icon;
-  final String statistic;
-
-  static const double _uniformedIconSize = 20;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(width: _uniformedIconSize, child: Center(child: icon)),
-        const SizedBox(width: Dimensions.standardSpacing),
-        Text(
-          statistic,
-          overflow: TextOverflow.ellipsis,
-          style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
         ),
       ],
     );

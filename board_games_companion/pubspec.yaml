@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   animations: ^2.0.1
@@ -23,6 +23,7 @@ dependencies:
   basics: ^0.9.0
   cached_network_image: ^3.2.1
   collection: ^1.15.0
+  confetti: ^0.7.0
   convex_bottom_bar: ^3.0.0
   dio: ^4.0.6
   dio_cache_interceptor: ^3.3.0

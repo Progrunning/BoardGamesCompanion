@@ -26,10 +26,10 @@ class CalendarCard extends StatelessWidget {
       width: _width,
       child: ElevatedContainer(
         elevation: AppStyles.defaultElevation,
-        borderRadius: AppTheme.defaultBoxRadius,
+        borderRadius: AppTheme.defaultBorderRadius,
         child: RippleEffect(
           backgroundColor: AppColors.whiteColor,
-          borderRadius: AppTheme.defaultBoxRadius,
+          borderRadius: AppTheme.defaultBorderRadius,
           onTap: onTap,
           child: Column(
             mainAxisSize: MainAxisSize.min,

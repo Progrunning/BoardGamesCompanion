@@ -49,6 +49,13 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
           () => super.hasAnyBoardGames,
           name: '_PlaysViewModel.hasAnyBoardGames'))
       .value;
+  Computed<bool>? _$hasAnyBoardGamesToShuffleComputed;
+
+  @override
+  bool get hasAnyBoardGamesToShuffle => (_$hasAnyBoardGamesToShuffleComputed ??=
+          Computed<bool>(() => super.hasAnyBoardGamesToShuffle,
+              name: '_PlaysViewModel.hasAnyBoardGamesToShuffle'))
+      .value;
   Computed<List<BoardGameDetails>>? _$shuffledBoardGamesComputed;
 
   @override
@@ -56,6 +63,13 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
       (_$shuffledBoardGamesComputed ??= Computed<List<BoardGameDetails>>(
               () => super.shuffledBoardGames,
               name: '_PlaysViewModel.shuffledBoardGames'))
+          .value;
+  Computed<int>? _$randomItemIndexComputed;
+
+  @override
+  int get randomItemIndex =>
+      (_$randomItemIndexComputed ??= Computed<int>(() => super.randomItemIndex,
+              name: '_PlaysViewModel.randomItemIndex'))
           .value;
 
   late final _$_shuffledBoardGamesAtom =
@@ -149,11 +163,11 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   }
 
   @override
-  void toggleGameSpinnerCollectionFilter(CollectionType collectionToggled) {
+  void toggleGameSpinnerCollectionFilter(CollectionType collectionTypeToggled) {
     final _$actionInfo = _$_PlaysViewModelActionController.startAction(
         name: '_PlaysViewModel.toggleGameSpinnerCollectionFilter');
     try {
-      return super.toggleGameSpinnerCollectionFilter(collectionToggled);
+      return super.toggleGameSpinnerCollectionFilter(collectionTypeToggled);
     } finally {
       _$_PlaysViewModelActionController.endAction(_$actionInfo);
     }
@@ -169,7 +183,9 @@ finishedPlaythroughs: ${finishedPlaythroughs},
 finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},
 hasAnyBoardGames: ${hasAnyBoardGames},
-shuffledBoardGames: ${shuffledBoardGames}
+hasAnyBoardGamesToShuffle: ${hasAnyBoardGamesToShuffle},
+shuffledBoardGames: ${shuffledBoardGames},
+randomItemIndex: ${randomItemIndex}
     ''';
   }
 }

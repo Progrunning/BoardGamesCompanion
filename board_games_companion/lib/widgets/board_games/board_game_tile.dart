@@ -1,10 +1,10 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
-import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../common/rank_ribbon.dart';
@@ -22,6 +22,7 @@ class BoardGameTile extends StatefulWidget {
     this.onTap,
     this.heroTag = AnimationTags.boardGameHeroTag,
     this.elevation,
+    this.borderRadius = AppTheme.defaultBorderRadius,
   }) : super(key: key);
 
   final String id;
@@ -32,44 +33,43 @@ class BoardGameTile extends StatefulWidget {
   final Future<void> Function()? onTap;
   final String heroTag;
   final double? elevation;
+  final BorderRadiusGeometry borderRadius;
 
   @override
-  State<StatefulWidget> createState() => _BoardGameSearchItemWidget();
+  State<StatefulWidget> createState() => _BoardGameTileState();
 }
 
-class _BoardGameSearchItemWidget extends State<BoardGameTile> {
+class _BoardGameTileState extends State<BoardGameTile> {
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: widget.elevation ?? 0,
-      borderRadius: AppTheme.defaultBoxRadius,
+      borderRadius: widget.borderRadius,
       shadowColor: AppColors.primaryColor,
       child: Stack(
         children: <Widget>[
           Hero(
             tag: '${widget.heroTag}${widget.id}',
             child: CachedNetworkImage(
-              memCacheWidth: 200,
-              height: 200,
               imageUrl: widget.imageUrl,
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
-                  borderRadius: AppTheme.defaultBoxRadius,
+                  borderRadius: widget.borderRadius,
                   image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
               fit: BoxFit.fitWidth,
               placeholder: (context, url) => Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.primaryColor,
-                  borderRadius: AppTheme.defaultBoxRadius,
+                  borderRadius: widget.borderRadius,
                 ),
               ),
               errorWidget: (context, url, dynamic error) => Container(
-                decoration: const BoxDecoration(
-                  borderRadius: AppTheme.defaultBoxRadius,
+                decoration: BoxDecoration(
+                  borderRadius: widget.borderRadius,
                   color: AppColors.primaryColor,
-                  image: DecorationImage(
+                  image: const DecorationImage(
                     alignment: Alignment.center,
                     image: AssetImage('assets/icons/logo.png'),
                   ),
@@ -85,7 +85,8 @@ class _BoardGameSearchItemWidget extends State<BoardGameTile> {
           if (widget.rank != null && widget.rank! < Constants.top100)
             Positioned(top: 0, right: 12, child: RankRibbon(rank: widget.rank!)),
           Positioned.fill(
-            child: RippleEffect(borderRadius: AppTheme.defaultBoxRadius, onTap: widget.onTap),
+            child:
+                RippleEffect(borderRadius: widget.borderRadius.resolve(null), onTap: widget.onTap),
           )
         ],
       ),

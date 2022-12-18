@@ -22,7 +22,7 @@ class AppTheme {
     color: AppColors.secondaryTextColor,
   );
 
-  static const BorderRadius defaultBoxRadius = BorderRadius.all(
+  static const BorderRadius defaultBorderRadius = BorderRadius.all(
     Radius.circular(AppStyles.boardGameTileImageCircularRadius),
   );
 

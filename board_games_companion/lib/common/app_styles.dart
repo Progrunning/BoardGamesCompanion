@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+import 'app_theme.dart';
+
 class AppStyles {
   static const double _maxOpacityDecimal = 255;
   static const double _hundredPercent = 100;
@@ -35,4 +38,18 @@ class AppStyles {
   );
 
   static const double panelContainerCornerRadius = defaultCornerRadius * 3;
+
+  static const BoxDecoration tileGradientBoxDecoration = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      stops: [0.2, 0.5, 0.9],
+      colors: [
+        AppColors.endDefaultPageBackgroundColorGradient,
+        AppColors.startDefaultPageBackgroundColorGradient,
+        AppColors.endDefaultPageBackgroundColorGradient,
+      ],
+    ),
+    borderRadius: AppTheme.defaultBorderRadius,
+  );
 }

@@ -26,6 +26,8 @@ class Dimensions {
   static const double collectionSearchResultBoardGameImageHeight = 100;
   static const double collectionSearchResultBoardGameImageWidth = 100;
 
+  static const double gameSpinnerSelectedGameImageHeight = 200;
+
   static const double collectionSearchResultExpansionsImageHeight = 80;
   static const double collectionSearchResultExpansionsImageWidth = 80;
 
@@ -59,6 +61,10 @@ class Dimensions {
   static const double bottomTabTopHeight = 20;
 
   static const double detailsItemHeight = 60;
+
+  static const double gameSpinnerHeight = 300;
+
+  static const double boardGameTileHeight = 200;
 
   static const EdgeInsets snackbarMargin = EdgeInsets.only(
     left: Dimensions.standardSpacing,

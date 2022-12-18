@@ -215,6 +215,8 @@ class AppText {
   static const playsPageGameSpinnerFilterSectionTitle = 'Filters';
   static const playsPageGameSpinnerCollectionsFilter = 'Collections';
   static const playsPageGameSpinnerSpinButtonText = 'Spin';
+  static const playsPageGameSpinnerSelectedGamePlayButtonText = 'Play';
+  static const playsPageGameSpinnerSelectedGameSpinAgainButtonText = 'Spin Again';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';

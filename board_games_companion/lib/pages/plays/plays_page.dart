@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:board_games_companion/pages/plays/game_spinner_filters.dart';
+import 'package:board_games_companion/pages/plays/game_spinner_game_selected_dialog.dart';
 import 'package:board_games_companion/pages/plays/plays_page_visual_states.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:board_games_companion/widgets/common/collection_toggle_button.dart';
@@ -16,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
+import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
@@ -49,6 +49,8 @@ class PlaysPage extends StatefulWidget {
 }
 
 class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMixin {
+  static const int _spinAnimationTimeInMilliseconds = 3000;
+
   late TabController _tabController;
   late FixedExtentScrollController _scrollController;
 
@@ -72,6 +74,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -151,6 +154,8 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                     _GameSpinnerSliver(
                                       scrollController: _scrollController,
                                       shuffledBoardGames: shuffledBoardGames,
+                                      onSpin: () => _spin(),
+                                      onGameSelected: () => _selectGame(),
                                     ),
                                   SliverPersistentHeader(
                                     delegate: BgcSliverHeaderDelegate(
@@ -178,6 +183,27 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
           }
         },
       );
+
+  Future<void> _spin() async {
+    await _scrollController.animateToItem(
+      widget.viewModel.randomItemIndex,
+      duration: const Duration(milliseconds: _spinAnimationTimeInMilliseconds),
+      curve: Curves.elasticInOut,
+    );
+  }
+
+  Future<void> _selectGame() async {
+    final selectedBoardGame = widget.viewModel.shuffledBoardGames[
+        _scrollController.selectedItem % widget.viewModel.shuffledBoardGames.length];
+    await showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      pageBuilder: (_, __, ___) {
+        return GameSpinnerGameSelectedDialog(selectedBoardGame: selectedBoardGame);
+      },
+    );
+  }
 }
 
 class _GameSpinnerFilters extends StatelessWidget {
@@ -238,15 +264,17 @@ class _GameSpinnerSliver extends StatelessWidget {
     Key? key,
     required this.scrollController,
     required this.shuffledBoardGames,
+    required this.onSpin,
+    required this.onGameSelected,
   }) : super(key: key);
 
-  static const int _spinAnimationTimeInMilliseconds = 3000;
-  static const double _gameSpinnerHeight = 300;
   static const double _gameSpinnerItemHeight = 80;
   static const double _gameSpinnerItemSqueeze = 1.2;
 
   final ScrollController scrollController;
   final List<BoardGameDetails> shuffledBoardGames;
+  final VoidCallback onSpin;
+  final VoidCallback onGameSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -254,31 +282,40 @@ class _GameSpinnerSliver extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(Dimensions.standardSpacing),
         child: SizedBox(
-          height: _gameSpinnerHeight,
+          height: Dimensions.gameSpinnerHeight,
           child: Row(
             children: [
               Expanded(
-                child: ListWheelScrollView.useDelegate(
-                  controller: scrollController,
-                  itemExtent: _gameSpinnerItemHeight,
-                  squeeze: _gameSpinnerItemSqueeze,
-                  perspective: 0.0035,
-                  childDelegate: ListWheelChildLoopingListDelegate(
-                    children: [
-                      for (final boardGame in shuffledBoardGames) ...[
-                        Stack(
-                          children: [
-                            _GameSpinnerItem(boardGame: boardGame),
-                            Center(
-                              child: BoardGameName(
-                                name: boardGame.name,
-                                fontSize: Dimensions.mediumFontSize,
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (scrollNotification) {
+                    if (scrollNotification is ScrollEndNotification) {
+                      onGameSelected();
+                    }
+
+                    return false;
+                  },
+                  child: ListWheelScrollView.useDelegate(
+                    controller: scrollController,
+                    itemExtent: _gameSpinnerItemHeight,
+                    squeeze: _gameSpinnerItemSqueeze,
+                    perspective: 0.0035,
+                    childDelegate: ListWheelChildLoopingListDelegate(
+                      children: [
+                        for (final boardGame in shuffledBoardGames) ...[
+                          Stack(
+                            children: [
+                              _GameSpinnerItem(boardGame: boardGame),
+                              Center(
+                                child: BoardGameName(
+                                  name: boardGame.name,
+                                  fontSize: Dimensions.mediumFontSize,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -286,7 +323,7 @@ class _GameSpinnerSliver extends StatelessWidget {
               Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () => _spin(),
+                  onTap: () => onSpin(),
                   child: Padding(
                     padding: const EdgeInsets.all(Dimensions.standardSpacing),
                     child: Column(
@@ -306,14 +343,6 @@ class _GameSpinnerSliver extends StatelessWidget {
       ),
     );
   }
-
-  void _spin() {
-    (scrollController as FixedExtentScrollController).animateToItem(
-      Random().nextInt(shuffledBoardGames.length),
-      duration: const Duration(milliseconds: _spinAnimationTimeInMilliseconds),
-      curve: Curves.elasticInOut,
-    );
-  }
 }
 
 class _GameSpinnerItem extends StatelessWidget {
@@ -326,32 +355,20 @@ class _GameSpinnerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      // TODO Update this number for different screen sizes (iPad)
-      maxHeightDiskCache: 400,
-      imageUrl: boardGame.imageUrl ?? '',
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          borderRadius: AppTheme.defaultBoxRadius,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-        ),
-      ),
-      fit: BoxFit.fitWidth,
-      placeholder: (context, url) => Container(
-        // TODO Reuse this decoration
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0.2, 0.5, 0.9],
-            colors: [
-              AppColors.endDefaultPageBackgroundColorGradient,
-              AppColors.startDefaultPageBackgroundColorGradient,
-              AppColors.endDefaultPageBackgroundColorGradient,
-            ],
+    return Hero(
+      tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}${boardGame.id}',
+      child: CachedNetworkImage(
+        // TODO Update this number for different screen sizes (iPad)
+        maxHeightDiskCache: 400,
+        imageUrl: boardGame.imageUrl ?? '',
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            borderRadius: AppTheme.defaultBorderRadius,
+            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
           ),
-          borderRadius: AppTheme.defaultBoxRadius,
         ),
+        fit: BoxFit.fitWidth,
+        placeholder: (context, url) => Container(decoration: AppStyles.tileGradientBoxDecoration),
       ),
     );
   }
@@ -687,7 +704,7 @@ class _NoBoardGamesToShuffleSliver extends StatelessWidget {
         ),
         sliver: SliverToBoxAdapter(
           child: SizedBox(
-            height: 300,
+            height: Dimensions.gameSpinnerHeight,
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

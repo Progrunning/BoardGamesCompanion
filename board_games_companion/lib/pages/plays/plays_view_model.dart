@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:math';
+
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
@@ -33,6 +35,8 @@ abstract class _PlaysViewModel with Store {
     this._playersStore,
     this._scoreStore,
   );
+
+  static const int _numberOfTimesSpinnerCanTurn = 3;
 
   final PlaythroughsStore _playthroughsStore;
   final BoardGamesStore _boardGamesStore;
@@ -131,6 +135,14 @@ abstract class _PlaysViewModel with Store {
     return filteredShuffledBoardGames;
   }
 
+  /// Picking a pseudo-random item index based on the number of shuffled board games
+  /// multipled by an arbitrary number of how many times the wheel could spin (added for better effect).
+  ///
+  /// NOTE: The list will spin in a loop so it's safe to go over the actual board games collection size.
+  @computed
+  int get randomItemIndex =>
+      Random().nextInt(shuffledBoardGames.length * _numberOfTimesSpinnerCanTurn);
+
   @action
   void loadGamesPlaythroughs() =>
       futureLoadGamesPlaythroughs = ObservableFuture<void>(_loadGamesPlaythroughs());
@@ -189,7 +201,7 @@ abstract class _PlaysViewModel with Store {
     if (_shuffledBoardGames.inCollection(CollectionType.owned).isNotEmpty) {
       filterCollections.add(CollectionType.owned);
     }
-    if (!_shuffledBoardGames.inCollection(CollectionType.friends).isNotEmpty) {
+    if (_shuffledBoardGames.inCollection(CollectionType.friends).isNotEmpty) {
       filterCollections.add(CollectionType.friends);
     }
     gameSpinnerFilters = gameSpinnerFilters.copyWith(
