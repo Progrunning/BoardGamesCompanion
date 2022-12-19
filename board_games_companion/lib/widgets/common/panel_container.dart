@@ -21,7 +21,10 @@ class PanelContainer extends StatelessWidget {
       borderRadius: AppTheme.defaultBorderRadius,
       child: Container(
         decoration: AppStyles.tileGradientBoxDecoration,
-        child: child,
+        child: Material(
+          color: Colors.transparent,
+          child: child,
+        ),
       ),
     );
   }
