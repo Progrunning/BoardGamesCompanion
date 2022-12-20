@@ -63,6 +63,7 @@ class Dimensions {
   static const double detailsItemHeight = 60;
 
   static const double gameSpinnerHeight = 300;
+  static const double gameSpinnerMaxWidth = 800;
 
   static const double boardGameTileHeight = 200;
 

@@ -49,7 +49,7 @@ class PlaysPage extends StatefulWidget {
 }
 
 class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMixin {
-  static const int _spinAnimationTimeInMilliseconds = 3000;
+  static const int _spinAnimationTimeInMilliseconds = 2000;
 
   late TabController _tabController;
   late FixedExtentScrollController _scrollController;
@@ -302,16 +302,23 @@ class _GameSpinnerSliver extends StatelessWidget {
                     childDelegate: ListWheelChildLoopingListDelegate(
                       children: [
                         for (final boardGame in shuffledBoardGames) ...[
-                          Stack(
-                            children: [
-                              _GameSpinnerItem(boardGame: boardGame),
-                              Center(
-                                child: BoardGameName(
-                                  name: boardGame.name,
-                                  fontSize: Dimensions.mediumFontSize,
-                                ),
+                          Center(
+                            child: Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: Dimensions.gameSpinnerMaxWidth,
                               ),
-                            ],
+                              child: Stack(
+                                children: [
+                                  _GameSpinnerItem(boardGame: boardGame),
+                                  Center(
+                                    child: BoardGameName(
+                                      name: boardGame.name,
+                                      fontSize: Dimensions.mediumFontSize,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ],
@@ -357,18 +364,23 @@ class _GameSpinnerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}${boardGame.id}',
-      child: CachedNetworkImage(
-        // TODO Update this number for different screen sizes (iPad)
-        maxHeightDiskCache: 400,
-        imageUrl: boardGame.imageUrl ?? '',
-        imageBuilder: (context, imageProvider) => Container(
-          decoration: BoxDecoration(
-            borderRadius: AppTheme.defaultBorderRadius,
-            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-          ),
-        ),
-        fit: BoxFit.fitWidth,
-        placeholder: (context, url) => Container(decoration: AppStyles.tileGradientBoxDecoration),
+      child: LayoutBuilder(
+        builder: (_, BoxConstraints boxConstraints) {
+          return CachedNetworkImage(
+            maxHeightDiskCache: boxConstraints.maxWidth.toInt(),
+            imageUrl: boardGame.imageUrl ?? '',
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                borderRadius: AppTheme.defaultBorderRadius,
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              ),
+            ),
+            fit: BoxFit.fitWidth,
+            placeholder: (context, url) => Container(
+              decoration: AppStyles.tileGradientBoxDecoration,
+            ),
+          );
+        },
       ),
     );
   }
