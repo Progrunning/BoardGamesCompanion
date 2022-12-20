@@ -7,7 +7,7 @@ enum GamesTab {
 }
 
 extension ToGamesTab on int {
-  GamesTab toGamesTab() {
+  GamesTab toCollectionsTab() {
     switch (this) {
       case 0:
         return GamesTab.owned;

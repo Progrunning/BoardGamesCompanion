@@ -19,9 +19,7 @@ class CustomIconButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(
-          Dimensions.halfStandardSpacing,
-        ),
+        padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
         child: ClipRRect(
           borderRadius: const BorderRadius.all(
             Radius.circular(AppStyles.defaultCornerRadius),

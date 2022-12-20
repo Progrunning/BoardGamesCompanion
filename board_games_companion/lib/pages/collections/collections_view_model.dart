@@ -31,13 +31,13 @@ import '../../models/hive/board_game_details.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/players_store.dart';
 
-part 'games_view_model.g.dart';
+part 'collections_view_model.g.dart';
 
 @injectable
-class GamesViewModel = _GamesViewModel with _$GamesViewModel;
+class CollectionsViewModel = _CollectionsViewModel with _$CollectionsViewModel;
 
-abstract class _GamesViewModel with Store {
-  _GamesViewModel(
+abstract class _CollectionsViewModel with Store {
+  _CollectionsViewModel(
     this._userStore,
     this._boardGamesStore,
     this._boardGamesFiltersStore,

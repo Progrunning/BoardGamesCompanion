@@ -4,7 +4,7 @@ import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/injectable.dart';
 import 'package:board_games_companion/models/hive/search_history_entry.dart';
-import 'package:board_games_companion/pages/games/games_view_model.dart';
+import 'package:board_games_companion/pages/collections/collections_view_model.dart';
 import 'package:board_games_companion/widgets/common/panel_container.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +30,10 @@ import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../widgets/board_games/board_game_tile.dart';
+import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
+import '../../widgets/common/board_game/board_game_property.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
@@ -42,7 +44,7 @@ import '../../widgets/common/rating_hexagon.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'collection_search_result_view_model.dart';
-import 'games_filter_panel.dart';
+import 'collections_filter_panel.dart';
 import 'search_suggestion.dart';
 
 enum BoardGameResultActionType {
@@ -57,8 +59,8 @@ typedef BoardGameResultAction = void Function(
 
 typedef SearchCallback = Future<List<BoardGameDetails>> Function(String query);
 
-class GamesPage extends StatefulWidget {
-  const GamesPage(
+class CollectionsPage extends StatefulWidget {
+  const CollectionsPage(
     this.viewModel,
     this.boardGamesFiltersStore,
     this.analyticsService,
@@ -66,16 +68,16 @@ class GamesPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
 
   @override
-  GamesPageState createState() => GamesPageState();
+  CollectionsPageState createState() => CollectionsPageState();
 }
 
-class GamesPageState extends State<GamesPage>
+class CollectionsPageState extends State<CollectionsPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _topTabController;
 
@@ -157,7 +159,7 @@ class _Collection extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final bool isCollectionEmpty;
   final bool hasMainGames;
   final List<BoardGameDetails> mainGames;
@@ -232,7 +234,7 @@ class _AppBar extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -290,20 +292,20 @@ class _AppBarState extends State<_AppBar> {
           preferredSize: const Size.fromHeight(74),
           child: Observer(builder: (_) {
             return TabBar(
-              onTap: (int index) => widget.viewModel.selectedTab = index.toGamesTab(),
+              onTap: (int index) => widget.viewModel.selectedTab = index.toCollectionsTab(),
               controller: widget.topTabController,
               tabs: <Widget>[
-                _TopTab(
+                AppBarBottomTab(
                   'Owned',
                   Icons.grid_on,
                   isSelected: widget.viewModel.selectedTab == GamesTab.owned,
                 ),
-                _TopTab(
+                AppBarBottomTab(
                   'Friends',
                   Icons.group,
                   isSelected: widget.viewModel.selectedTab == GamesTab.friends,
                 ),
-                _TopTab(
+                AppBarBottomTab(
                   'Wishlist',
                   Icons.card_giftcard,
                   isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
@@ -327,7 +329,7 @@ class _AppBarState extends State<_AppBar> {
       ),
       context: context,
       builder: (_) {
-        return GamesFilterPanel(gamesViewModel: widget.viewModel);
+        return CollectionsFilterPanel(viewModel: widget.viewModel);
       },
     );
   }
@@ -345,7 +347,7 @@ class _AppBarState extends State<_AppBar> {
             boardGameId: boardGameDetails.id,
             boardGameName: boardGameDetails.name,
             boardGameImageHeroId: boardGameDetails.id,
-            navigatingFromType: GamesPage,
+            navigatingFromType: CollectionsPage,
             boardGameImageUrl: boardGameDetails.imageUrl,
           ),
         ));
@@ -588,43 +590,6 @@ class _EmptyCollection extends StatelessWidget {
   }
 }
 
-class _TopTab extends StatelessWidget {
-  const _TopTab(
-    this.title,
-    this.icon, {
-    this.isSelected = true,
-    Key? key,
-  }) : super(key: key);
-
-  final String title;
-  final IconData icon;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Tab(
-          icon: Icon(
-            icon,
-            color: isSelected ? AppColors.selectedTabIconColor : AppColors.deselectedTabIconColor,
-          ),
-          iconMargin: const EdgeInsets.only(
-            bottom: Dimensions.halfStandardSpacing,
-          ),
-          child: Text(
-            title,
-            style: AppTheme.titleTextStyle.copyWith(
-              fontSize: Dimensions.standardFontSize,
-              color: isSelected ? AppColors.defaultTextColor : AppColors.deselectedTabIconColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   _CollectionsSearch({
     required this.viewModel,
@@ -634,7 +599,7 @@ class _CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
 
   static const int _maxSearchHistoryEntriesToShow = 10;
 
-  final GamesViewModel viewModel;
+  final CollectionsViewModel viewModel;
   final BoardGameResultAction onResultAction;
   final SearchCallback onSearch;
 
@@ -1004,6 +969,7 @@ class _SearchResultGameDetails extends StatelessWidget {
   final BoardGameDetails boardGame;
 
   static const double _gameStatIconSize = 16;
+  static const double _gamePropertyIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -1016,20 +982,23 @@ class _SearchResultGameDetails extends StatelessWidget {
           style: AppTheme.theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
-        _SearchResultGameGeneralStats(
+        BoardGameProperty(
           icon: const Icon(Icons.people, size: _gameStatIconSize),
-          statistic: boardGame.playersFormatted,
+          iconWidth: _gamePropertyIconSize,
+          propertyName: boardGame.playersFormatted,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
-        _SearchResultGameGeneralStats(
+        BoardGameProperty(
           icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
-          statistic: boardGame.playtimeFormatted,
+          iconWidth: _gamePropertyIconSize,
+          propertyName: boardGame.playtimeFormatted,
         ),
         if (boardGame.avgWeight != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
-          _SearchResultGameGeneralStats(
+          BoardGameProperty(
             icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced, size: _gameStatIconSize),
-            statistic: sprintf(
+            iconWidth: _gamePropertyIconSize,
+            propertyName: sprintf(
               AppText.gamesPageSearchResultComplexityGameStatFormat,
               [boardGame.avgWeight!.toStringAsFixed(2)],
             ),
@@ -1037,9 +1006,10 @@ class _SearchResultGameDetails extends StatelessWidget {
         ],
         if (boardGame.rating != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
-          _SearchResultGameGeneralStats(
+          BoardGameProperty(
             icon: const RatingHexagon(width: _gameStatIconSize, height: _gameStatIconSize),
-            statistic:
+            iconWidth: _gamePropertyIconSize,
+            propertyName:
                 boardGame.rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
           ),
         ]
@@ -1070,35 +1040,6 @@ class _SearchResultGameActions extends StatelessWidget {
         IconButton(
           icon: const FaIcon(FontAwesomeIcons.dice),
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.playthroughs),
-        ),
-      ],
-    );
-  }
-}
-
-class _SearchResultGameGeneralStats extends StatelessWidget {
-  const _SearchResultGameGeneralStats({
-    Key? key,
-    required this.icon,
-    required this.statistic,
-  }) : super(key: key);
-
-  final Widget icon;
-  final String statistic;
-
-  static const double _uniformedIconSize = 20;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(width: _uniformedIconSize, child: Center(child: icon)),
-        const SizedBox(width: Dimensions.standardSpacing),
-        Text(
-          statistic,
-          overflow: TextOverflow.ellipsis,
-          style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
         ),
       ],
     );

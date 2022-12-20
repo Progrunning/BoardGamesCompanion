@@ -21,9 +21,13 @@ class AppText {
   static const dayBeforeYesteday = 'day before yesterday';
   static const daysAgoFormat = '%s days ago';
 
-  static const homePageGamesTabTitle = 'Games';
+  static const ownedCollectionToggleButtonText = 'Owned';
+  static const friendsCollectionToggleButtonText = 'Friends';
+  static const whishlistCollectionToggleButtonText = 'Whishlist';
+
+  static const homePageCollectionsTabTitle = 'Collections';
   static const homePageSearchTabTitle = 'Search';
-  static const homePageGamesHistoryTabTitle = 'Play History';
+  static const homePagePlaysTabTitle = 'Plays';
   static const homePageGamesPlayersTabTitle = 'Players';
 
   static const aboutPageAuthorSectionTitle = 'Author';
@@ -182,10 +186,6 @@ class AppText {
   static const settingsPageRestoreFailedMessage =
       'Unfortunately we ran into a problem with restoring your data. Please try again or contact support at feedback@progrunning.net';
 
-  static const playHistoryPageEmptyTitle = "You haven't played any games yet";
-  static const playHistoryPageEmptyTextPartTwo =
-      'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
-
   static const gamePlaytimeFormat = '%s min';
   static const gamePlayersSingularFormat = '%i players';
   static const gamePlayersPluralFormat = '%i players';
@@ -195,7 +195,28 @@ class AppText {
   static const collectionsPageTitle = 'Collections';
   static const settingsPageTitle = 'Settings';
   static const newPlayerPageTitle = 'New Player';
-  static const playHistoryPageTitle = 'Play History';
+  static const playsPageTitle = 'Plays';
+
+  static const playsPageHistoryTabEmptyTitle = "You haven't played any games yet";
+  static const playPageHistoryTabEmptySubtitle =
+      'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
+
+  static const playsPageSelectGameTabEmptyTitle = 'Your collections are empty';
+  static const playsPageSelectGameTabEmptySubtitle =
+      'Add board games to your collection(s) by searching for them or by importing them from your BGG collection(s).';
+
+  static const playsPageSelectGameNoBoardGamesToShuffleTitle = "There's no games to select from";
+  static const playsPageSelectGameNoBoardGamesToShuffleSubtitle =
+      "There's no matches for the filters you picked. Refine them to spin the wheel.";
+
+  static const playsPageHistoryTabTitle = 'History';
+  static const playsPageStatisticsTabTitle = 'Stats';
+  static const playsPageSelectGameTabTitle = 'Select Game';
+  static const playsPageGameSpinnerFilterSectionTitle = 'Filters';
+  static const playsPageGameSpinnerCollectionsFilter = 'Collections';
+  static const playsPageGameSpinnerSpinButtonText = 'Spin';
+  static const playsPageGameSpinnerSelectedGamePlayButtonText = 'Play';
+  static const playsPageGameSpinnerSelectedGameSpinAgainButtonText = 'Spin Again';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';
