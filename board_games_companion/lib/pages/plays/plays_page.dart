@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
@@ -259,7 +261,7 @@ class _GameSpinnerFilters extends StatelessWidget {
       );
 }
 
-class _GameSpinnerSliver extends StatelessWidget {
+class _GameSpinnerSliver extends StatefulWidget {
   const _GameSpinnerSliver({
     Key? key,
     required this.scrollController,
@@ -277,6 +279,21 @@ class _GameSpinnerSliver extends StatelessWidget {
   final VoidCallback onGameSelected;
 
   @override
+  State<_GameSpinnerSliver> createState() => _GameSpinnerSliverState();
+}
+
+class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
+  static const int _debounceSpinnerThresholdInMilliseconds = 300;
+
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
@@ -288,20 +305,29 @@ class _GameSpinnerSliver extends StatelessWidget {
               Expanded(
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
+                    // Fimber.d(scrollNotification.runtimeType.toString());
+                    if (scrollNotification is ScrollStartNotification &&
+                        (_debounce?.isActive ?? false)) {
+                      _debounce!.cancel();
+                    }
+
                     if (scrollNotification is ScrollEndNotification) {
-                      onGameSelected();
+                      _debounce = Timer(
+                        const Duration(milliseconds: _debounceSpinnerThresholdInMilliseconds),
+                        () => widget.onGameSelected(),
+                      );
                     }
 
                     return false;
                   },
                   child: ListWheelScrollView.useDelegate(
-                    controller: scrollController,
-                    itemExtent: _gameSpinnerItemHeight,
-                    squeeze: _gameSpinnerItemSqueeze,
+                    controller: widget.scrollController,
+                    itemExtent: _GameSpinnerSliver._gameSpinnerItemHeight,
+                    squeeze: _GameSpinnerSliver._gameSpinnerItemSqueeze,
                     perspective: 0.0035,
                     childDelegate: ListWheelChildLoopingListDelegate(
                       children: [
-                        for (final boardGame in shuffledBoardGames) ...[
+                        for (final boardGame in widget.shuffledBoardGames) ...[
                           Center(
                             child: Container(
                               constraints: const BoxConstraints(
@@ -330,7 +356,7 @@ class _GameSpinnerSliver extends StatelessWidget {
               Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () => onSpin(),
+                  onTap: () => widget.onSpin(),
                   child: Padding(
                     padding: const EdgeInsets.all(Dimensions.standardSpacing),
                     child: Column(
