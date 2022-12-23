@@ -93,6 +93,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                       return _AppBar(
                         tabVisualState: widget.viewModel.visualState,
                         tabController: _tabController,
+                        onTabSelected: (tabIndex) => widget.viewModel.trackTabChange(tabIndex),
                       );
                     },
                   ),
@@ -107,6 +108,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                       return _AppBar(
                         tabVisualState: widget.viewModel.visualState,
                         tabController: _tabController,
+                        onTabSelected: (tabIndex) => widget.viewModel.trackTabChange(tabIndex),
                       );
                     },
                   ),
@@ -305,7 +307,6 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
               Expanded(
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
-                    // Fimber.d(scrollNotification.runtimeType.toString());
                     if (scrollNotification is ScrollStartNotification &&
                         (_debounce?.isActive ?? false)) {
                       _debounce!.cancel();
@@ -781,11 +782,13 @@ class _AppBar extends StatelessWidget {
   const _AppBar({
     required this.tabVisualState,
     required this.tabController,
+    required this.onTabSelected,
     Key? key,
   }) : super(key: key);
 
   final PlaysPageVisualState? tabVisualState;
   final TabController tabController;
+  final void Function(int tabIndex) onTabSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -821,6 +824,7 @@ class _AppBar extends StatelessWidget {
             ),
           ],
           indicatorColor: AppColors.accentColor,
+          onTap: (int tabIndex) => onTabSelected(tabIndex),
         ),
       ),
     );

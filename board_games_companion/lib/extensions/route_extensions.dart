@@ -29,7 +29,7 @@ extension RouteExtensions on Route {
       case SettingsPage.pageRoute:
         return 'Settings';
       default:
-        return 'Undefined';
+        return settings.name ?? 'Undefined';
     }
   }
 
@@ -52,7 +52,7 @@ extension RouteExtensions on Route {
       case SettingsPage.pageRoute:
         return 'SettingsPage';
       default:
-        return 'Undefined';
+        return settings.name ?? 'Undefined';
     }
   }
 }

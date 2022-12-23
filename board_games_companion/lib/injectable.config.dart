@@ -117,7 +117,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i26.PlaythroughsStore>(),
       get<_i28.BoardGamesStore>(),
       get<_i10.PlayersStore>(),
-      get<_i15.ScoresStore>()));
+      get<_i15.ScoresStore>(),
+      get<_i20.AnalyticsService>()));
   gh.factory<_i33.PlaythroughNoteViewModel>(() =>
       _i33.PlaythroughNoteViewModel(get<_i31.GamePlaythroughsDetailsStore>()));
   gh.singleton<_i34.PlaythroughStatisticsViewModel>(
