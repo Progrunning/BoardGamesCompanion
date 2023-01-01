@@ -48,35 +48,31 @@ class _BoardGameTileState extends State<BoardGameTile> {
       shadowColor: AppColors.primaryColor,
       child: Stack(
         children: <Widget>[
-          Hero(
-            tag: '${widget.heroTag}${widget.id}',
-            child: CachedNetworkImage(
-              imageUrl: widget.imageUrl,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: widget.borderRadius,
-                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                ),
-              ),
-              fit: BoxFit.fitWidth,
-              placeholder: (context, url) => Container(
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: widget.borderRadius,
-                ),
-              ),
-              errorWidget: (context, url, dynamic error) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: widget.borderRadius,
-                  color: AppColors.primaryColor,
-                  image: const DecorationImage(
-                    alignment: Alignment.center,
-                    image: AssetImage('assets/icons/logo.png'),
+          if (widget.imageUrl.isNullOrBlank)
+            _NoImage(borderRadius: widget.borderRadius)
+          else
+            Hero(
+              tag: '${widget.heroTag}${widget.id}',
+              child: CachedNetworkImage(
+                imageUrl: widget.imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: widget.borderRadius,
+                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                   ),
+                ),
+                fit: BoxFit.fitWidth,
+                placeholder: (context, url) => Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    borderRadius: widget.borderRadius,
+                  ),
+                ),
+                errorWidget: (context, url, dynamic error) => _NoImage(
+                  borderRadius: widget.borderRadius,
                 ),
               ),
             ),
-          ),
           if (widget.name.isNotNullOrBlank)
             Align(
               alignment: Alignment.bottomCenter,
@@ -89,6 +85,29 @@ class _BoardGameTileState extends State<BoardGameTile> {
                 RippleEffect(borderRadius: widget.borderRadius.resolve(null), onTap: widget.onTap),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _NoImage extends StatelessWidget {
+  const _NoImage({
+    Key? key,
+    required this.borderRadius,
+  }) : super(key: key);
+
+  final BorderRadiusGeometry borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: borderRadius,
+        color: AppColors.primaryColor,
+        image: const DecorationImage(
+          alignment: Alignment.center,
+          image: AssetImage('assets/icons/logo.png'),
+        ),
       ),
     );
   }
