@@ -124,11 +124,11 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesServ
     for (var importedBoardGame in collectionImportResult.data!) {
       // Ensure that we don't lose some of the game details if we have more than the import can provide
       // (e.g. expansions)
+      //
+      // IMPORTANT: Do not override isOwn or isWhislist properties because BGG import should be the source of truth
       if (existingCollectionMap.containsKey(importedBoardGame.id)) {
         final existingBoardGame = existingCollectionMap[importedBoardGame.id]!;
         importedBoardGame = importedBoardGame.copyWith(
-          isOnWishlist: existingBoardGame.isOnWishlist,
-          isOwned: existingBoardGame.isOwned,
           isFriends: existingBoardGame.isFriends,
           isExpansion: existingBoardGame.isExpansion,
           avgWeight: existingBoardGame.avgWeight,
