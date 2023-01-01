@@ -8,6 +8,7 @@ part 'game_spinner_filters.freezed.dart';
 class GameSpinnerFilters with _$GameSpinnerFilters {
   const factory GameSpinnerFilters({
     required Set<CollectionType> collections,
+    required bool includeExpansions,
   }) = _GameSpinnerFilters;
 
   const GameSpinnerFilters._();

@@ -30,6 +30,7 @@ import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
+import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -173,6 +174,8 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                         gameSpinnerFilters: widget.viewModel.gameSpinnerFilters,
                                         onCollectionToggled: (collectionTyp) => widget.viewModel
                                             .toggleGameSpinnerCollectionFilter(collectionTyp),
+                                        onIncludeExpansionsToggled: (isChecked) => widget.viewModel
+                                            .toggleIncludeExpansionsFilter(isChecked),
                                       );
                                     },
                                   ),
@@ -198,6 +201,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
   }
 
   Future<void> _selectGame() async {
+    unawaited(widget.viewModel.trackGameSelected());
     final selectedBoardGame = widget.viewModel.shuffledBoardGames[
         _scrollController.selectedItem % widget.viewModel.shuffledBoardGames.length];
     await showGeneralDialog<void>(
@@ -215,11 +219,13 @@ class _GameSpinnerFilters extends StatelessWidget {
   const _GameSpinnerFilters({
     required this.gameSpinnerFilters,
     required this.onCollectionToggled,
+    required this.onIncludeExpansionsToggled,
     Key? key,
   }) : super(key: key);
 
   final GameSpinnerFilters gameSpinnerFilters;
   final void Function(CollectionType collectionTyp) onCollectionToggled;
+  final void Function(bool? isChecked) onIncludeExpansionsToggled;
 
   static const Map<int, CollectionType> collectionsMap = <int, CollectionType>{
     0: CollectionType.owned,
@@ -259,6 +265,20 @@ class _GameSpinnerFilters extends StatelessWidget {
                 )
               ],
             ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            Row(
+              children: [
+                Text(
+                  AppText.playsPageGameSpinnerExpansionsFilter,
+                  style: AppTheme.theme.textTheme.bodyMedium,
+                ),
+                const Expanded(child: SizedBox.shrink()),
+                BgcCheckbox(
+                  isChecked: gameSpinnerFilters.includeExpansions,
+                  onChanged: (isChecked) => onIncludeExpansionsToggled(isChecked),
+                ),
+              ],
+            )
           ],
         ),
       );

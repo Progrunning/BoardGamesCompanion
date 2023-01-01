@@ -18,6 +18,7 @@ import '../../mixins/enter_score_dialog.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
+import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -638,16 +639,9 @@ class _Players extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.topRight,
-                child: SizedBox(
-                  height: 34,
-                  width: 34,
-                  child: Checkbox(
-                    checkColor: AppColors.accentColor,
-                    activeColor: AppColors.primaryColor.withOpacity(0.7),
-                    value: playthroughPlayer.isChecked,
-                    onChanged: (bool? isChecked) =>
-                        onPlayerSelectionChanged(isChecked, playthroughPlayer),
-                  ),
+                child: BgcCheckbox(
+                  isChecked: playthroughPlayer.isChecked,
+                  onChanged: (isChecked) => onPlayerSelectionChanged(isChecked, playthroughPlayer),
                 ),
               ),
             ],

@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/analytics.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
@@ -64,6 +65,7 @@ abstract class _PlaysViewModel with Store {
   @observable
   GameSpinnerFilters gameSpinnerFilters = const GameSpinnerFilters(
     collections: <CollectionType>{},
+    includeExpansions: true,
   );
 
   @computed
@@ -141,6 +143,10 @@ abstract class _PlaysViewModel with Store {
       filteredShuffledBoardGames.addAll(_shuffledBoardGames.inCollection(CollectionType.friends));
     }
 
+    if (!gameSpinnerFilters.includeExpansions) {
+      filteredShuffledBoardGames.removeWhere((boardGame) => boardGame.isExpansion ?? false);
+    }
+
     return filteredShuffledBoardGames;
   }
 
@@ -192,6 +198,13 @@ abstract class _PlaysViewModel with Store {
     visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
   }
 
+  @action
+  void toggleIncludeExpansionsFilter(bool? includeExpansions) {
+    gameSpinnerFilters = gameSpinnerFilters.copyWith(includeExpansions: includeExpansions ?? false);
+
+    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+  }
+
   Future<void> trackTabChange(int tabIndex) async {
     await _analyticsService.logScreenView(
       screenName: _screenViewByTabIndex[tabIndex]!.item1,
@@ -199,12 +212,8 @@ abstract class _PlaysViewModel with Store {
     );
   }
 
-  Future<void> trackWheelSpan(int tabIndex) async {
-    await _analyticsService.logScreenView(
-      screenName: _screenViewByTabIndex[tabIndex]!.item1,
-      screenClass: _screenViewByTabIndex[tabIndex]!.item2,
-    );
-  }
+  Future<void> trackGameSelected() async =>
+      _analyticsService.logEvent(name: Analytics.selectRandomGame);
 
   Future<void> _loadGamesPlaythroughs() async {
     await _scoreStore.loadScores();

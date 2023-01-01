@@ -174,6 +174,17 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   }
 
   @override
+  void toggleIncludeExpansionsFilter(bool? includeExpansions) {
+    final _$actionInfo = _$_PlaysViewModelActionController.startAction(
+        name: '_PlaysViewModel.toggleIncludeExpansionsFilter');
+    try {
+      return super.toggleIncludeExpansionsFilter(includeExpansions);
+    } finally {
+      _$_PlaysViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
