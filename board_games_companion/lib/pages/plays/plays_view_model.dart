@@ -199,6 +199,13 @@ abstract class _PlaysViewModel with Store {
     );
   }
 
+  Future<void> trackWheelSpan(int tabIndex) async {
+    await _analyticsService.logScreenView(
+      screenName: _screenViewByTabIndex[tabIndex]!.item1,
+      screenClass: _screenViewByTabIndex[tabIndex]!.item2,
+    );
+  }
+
   Future<void> _loadGamesPlaythroughs() async {
     await _scoreStore.loadScores();
     await _playersStore.loadPlayers();

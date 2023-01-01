@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
@@ -336,7 +337,13 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
                               ),
                               child: Stack(
                                 children: [
-                                  _GameSpinnerItem(boardGame: boardGame),
+                                  if (boardGame.imageUrl.isNotNullOrBlank)
+                                    _GameSpinnerItem(
+                                      boardGameId: boardGame.id,
+                                      boardGameImageUrl: boardGame.imageUrl!,
+                                    ),
+                                  if (boardGame.imageUrl.isNullOrBlank)
+                                    Container(decoration: AppStyles.tileGradientBoxDecoration),
                                   Center(
                                     child: BoardGameName(
                                       name: boardGame.name,
@@ -382,20 +389,22 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
 class _GameSpinnerItem extends StatelessWidget {
   const _GameSpinnerItem({
     Key? key,
-    required this.boardGame,
+    required this.boardGameId,
+    required this.boardGameImageUrl,
   }) : super(key: key);
 
-  final BoardGameDetails boardGame;
+  final String boardGameId;
+  final String boardGameImageUrl;
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}${boardGame.id}',
+      tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}$boardGameId',
       child: LayoutBuilder(
         builder: (_, BoxConstraints boxConstraints) {
           return CachedNetworkImage(
             maxHeightDiskCache: boxConstraints.maxWidth.toInt(),
-            imageUrl: boardGame.imageUrl ?? '',
+            imageUrl: boardGameImageUrl,
             imageBuilder: (context, imageProvider) => Container(
               decoration: BoxDecoration(
                 borderRadius: AppTheme.defaultBorderRadius,
