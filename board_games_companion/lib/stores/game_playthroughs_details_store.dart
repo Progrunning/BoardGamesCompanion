@@ -63,6 +63,9 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   GameWinningCondition get gameWinningCondition =>
       _boardGame!.settings?.winningCondition ?? GameWinningCondition.HighestScore;
 
+  @computed
+  int get averageScorePrecision => _boardGame!.settings?.averageScorePrecision ?? 0;
+
   /// Ensure that [setBoardGame] is called before loading playthoughs details and that [Playthrough]s in the [PlaythroughsStore] are loaded as well.
   @action
   void loadPlaythroughsDetails() {

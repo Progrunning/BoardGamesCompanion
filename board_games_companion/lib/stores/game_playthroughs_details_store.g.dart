@@ -53,6 +53,13 @@ mixin _$GamePlaythroughsDetailsStore on _GamePlaythroughsDetailsStore, Store {
               () => super.gameWinningCondition,
               name: '_GamePlaythroughsDetailsStore.gameWinningCondition'))
           .value;
+  Computed<int>? _$averageScorePrecisionComputed;
+
+  @override
+  int get averageScorePrecision => (_$averageScorePrecisionComputed ??=
+          Computed<int>(() => super.averageScorePrecision,
+              name: '_GamePlaythroughsDetailsStore.averageScorePrecision'))
+      .value;
 
   late final _$_boardGameAtom =
       Atom(name: '_GamePlaythroughsDetailsStore._boardGame', context: context);
@@ -122,7 +129,8 @@ finishedPlaythroughs: ${finishedPlaythroughs},
 boardGameName: ${boardGameName},
 boardGameId: ${boardGameId},
 boardGameImageUrl: ${boardGameImageUrl},
-gameWinningCondition: ${gameWinningCondition}
+gameWinningCondition: ${gameWinningCondition},
+averageScorePrecision: ${averageScorePrecision}
     ''';
   }
 }

@@ -18,15 +18,18 @@ class BoardGameSettingsAdapter extends TypeAdapter<_$_BoardGameSettings> {
     };
     return _$_BoardGameSettings(
       winningCondition: fields[1] as GameWinningCondition,
+      averageScorePrecision: fields[2] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_BoardGameSettings obj) {
     writer
+      ..writeByte(2)
       ..writeByte(1)
-      ..writeByte(1)
-      ..write(obj.winningCondition);
+      ..write(obj.winningCondition)
+      ..writeByte(2)
+      ..write(obj.averageScorePrecision);
   }
 
   @override

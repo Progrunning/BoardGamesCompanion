@@ -136,6 +136,12 @@ class _PlayersStatisticsSection extends StatelessWidget {
     required this.boardGameStatistics,
   }) : super(key: key);
 
+  static const double _statsItemIconSize = 32;
+  static const TextStyle _statsItemTextStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: Dimensions.largeFontSize,
+  );
+
   final BoardGameStatistics boardGameStatistics;
 
   @override
@@ -173,13 +179,10 @@ class _PlayersStatisticsSection extends StatelessWidget {
                       Center(
                         child: _StatisticsItem(
                           value: playerStatistics.personalBestScore.toString(),
-                          valueTextStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: Dimensions.extraLargeFontSize,
-                          ),
+                          valueTextStyle: _statsItemTextStyle,
                           icon: Icons.show_chart,
                           iconColor: AppColors.highscoreStatColor,
-                          iconSize: 38,
+                          iconSize: _statsItemIconSize,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsPersonalBest,
                         ),
                       ),
@@ -188,14 +191,12 @@ class _PlayersStatisticsSection extends StatelessWidget {
                     if (playerStatistics.averageScore != null) ...<Widget>[
                       Center(
                         child: _StatisticsItem(
-                          value: playerStatistics.averageScore!.toStringAsFixed(0),
-                          valueTextStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: Dimensions.extraLargeFontSize,
-                          ),
+                          value: playerStatistics.averageScore!
+                              .toStringAsFixed(boardGameStatistics.averageScorePrecision),
+                          valueTextStyle: _statsItemTextStyle,
                           icon: Icons.calculate,
                           iconColor: AppColors.averageScoreStatColor,
-                          iconSize: 38,
+                          iconSize: _statsItemIconSize,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsAvgScore,
                         ),
                       ),
@@ -205,13 +206,10 @@ class _PlayersStatisticsSection extends StatelessWidget {
                       Center(
                         child: _StatisticsItem(
                           value: playerStatistics.numberOfGamesPlayed.toString(),
-                          valueTextStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: Dimensions.extraLargeFontSize,
-                          ),
+                          valueTextStyle: _statsItemTextStyle,
                           icon: Icons.casino,
                           iconColor: AppColors.playedGamesStatColor,
-                          iconSize: 38,
+                          iconSize: _statsItemIconSize,
                           subtitle: AppText.playthroughsStatisticsPagePlayersStatsPlayedGames,
                         ),
                       ),
@@ -585,7 +583,9 @@ class _OverallStatsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value: boardGameStatistics?.averageScore?.toStringAsFixed(0) ?? '-',
+                  value: boardGameStatistics?.averageScore
+                          ?.toStringAsFixed(boardGameStatistics!.averageScorePrecision) ??
+                      '-',
                   icon: Icons.calculate,
                   iconColor: AppColors.averageScoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgScore,
