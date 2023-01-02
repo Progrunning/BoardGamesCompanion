@@ -154,17 +154,18 @@ class _PlayersStatisticsSection extends StatelessWidget {
               final PlayerStatistics playerStatistics =
                   boardGameStatistics.playersStatistics![itemIndex];
               return SizedBox(
-                height: Dimensions.smallPlayerAvatarSize,
+                height: Dimensions.smallPlayerAvatarSize.height,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     SizedBox(
-                      height: Dimensions.smallPlayerAvatarSize,
-                      width: Dimensions.smallPlayerAvatarSize,
+                      height: Dimensions.smallPlayerAvatarSize.height,
+                      width: Dimensions.smallPlayerAvatarSize.width,
                       child: PlayerAvatar(
-                        playerStatistics.player,
+                        player: playerStatistics.player,
                         useHeroAnimation: false,
+                        avatarImageSize: Dimensions.smallPlayerAvatarSize,
                       ),
                     ),
                     const Expanded(child: SizedBox.shrink()),
@@ -504,9 +505,13 @@ class _LastWinnerAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Dimensions.smallPlayerAvatarSize,
-      width: Dimensions.smallPlayerAvatarSize,
-      child: PlayerAvatar(boardGameStatistics?.lastWinner?.player, useHeroAnimation: false),
+      height: Dimensions.smallPlayerAvatarSize.height,
+      width: Dimensions.smallPlayerAvatarSize.width,
+      child: PlayerAvatar(
+        player: boardGameStatistics?.lastWinner?.player,
+        avatarImageSize: Dimensions.smallPlayerAvatarSize,
+        useHeroAnimation: false,
+      ),
     );
   }
 }

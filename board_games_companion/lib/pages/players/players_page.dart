@@ -282,6 +282,8 @@ class _Players extends StatelessWidget {
   Widget build(BuildContext context) {
     players.sort((a, b) => a.name!.compareTo(b.name!));
 
+    final playerAvatarSize = MediaQuery.of(context).size.width / _numberOfPlayerColumns;
+
     return SliverPadding(
       padding: const EdgeInsets.all(Dimensions.standardSpacing),
       sliver: SliverGrid.count(
@@ -290,7 +292,12 @@ class _Players extends StatelessWidget {
         mainAxisSpacing: Dimensions.standardSpacing,
         children: [
           for (var player in players)
-            _Player(player: player, onPlayerTap: onPlayerTap, isEditMode: isEditMode),
+            _Player(
+              player: player,
+              onPlayerTap: onPlayerTap,
+              isEditMode: isEditMode,
+              avatarImageSize: Size(playerAvatarSize, playerAvatarSize),
+            ),
         ],
       ),
     );
@@ -303,11 +310,14 @@ class _Player extends StatefulWidget {
     required this.player,
     required this.onPlayerTap,
     required this.isEditMode,
+    required this.avatarImageSize,
   }) : super(key: key);
 
   final Player player;
   final PlayerTapped onPlayerTap;
   final bool isEditMode;
+
+  final Size avatarImageSize;
 
   @override
   State<_Player> createState() => _PlayerState();
@@ -320,7 +330,11 @@ class _PlayerState extends State<_Player> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        PlayerAvatar(widget.player, onTap: () => _onTap()),
+        PlayerAvatar(
+          player: widget.player,
+          avatarImageSize: widget.avatarImageSize,
+          onTap: () => _onTap(),
+        ),
         if (widget.isEditMode)
           Align(
             alignment: Alignment.topRight,

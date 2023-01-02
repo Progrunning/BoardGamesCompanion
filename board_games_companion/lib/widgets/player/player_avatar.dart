@@ -9,8 +9,9 @@ import 'player_avatar_subtitle_widget.dart';
 import 'player_image.dart';
 
 class PlayerAvatar extends StatelessWidget {
-  const PlayerAvatar(
-    this.player, {
+  const PlayerAvatar({
+    required this.player,
+    required this.avatarImageSize,
     this.onTap,
     this.useHeroAnimation = true,
     this.playerHeroIdSuffix = '',
@@ -22,6 +23,8 @@ class PlayerAvatar extends StatelessWidget {
   final bool useHeroAnimation;
   final String playerHeroIdSuffix;
 
+  final Size avatarImageSize;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedContainer(
@@ -31,10 +34,16 @@ class PlayerAvatar extends StatelessWidget {
           if (useHeroAnimation)
             Hero(
               tag: '${AnimationTags.playerImageHeroTag}${player?.id}$playerHeroIdSuffix',
-              child: PlayerImage(imageUri: player?.avatarImageUri),
+              child: PlayerImage(
+                imageUri: player?.avatarImageUri,
+                avatarImageSize: avatarImageSize,
+              ),
             )
           else
-            PlayerImage(imageUri: player?.avatarImageUri),
+            PlayerImage(
+              imageUri: player?.avatarImageUri,
+              avatarImageSize: avatarImageSize,
+            ),
           if (player?.name?.isNotEmpty ?? false) PlayerAvatarSubtitle(player: player!),
           Positioned.fill(
             child: RippleEffect(

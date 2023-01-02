@@ -276,6 +276,7 @@ class _GameSpinnerFilters extends StatelessWidget {
                 BgcCheckbox(
                   isChecked: gameSpinnerFilters.includeExpansions,
                   onChanged: (isChecked) => onIncludeExpansionsToggled(isChecked),
+                  borderColor: AppColors.accentColor,
                 ),
               ],
             )

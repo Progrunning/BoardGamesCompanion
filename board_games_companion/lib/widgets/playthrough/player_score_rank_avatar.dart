@@ -27,12 +27,13 @@ class PlayerScoreRankAvatar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          height: Dimensions.smallPlayerAvatarSize,
-          width: Dimensions.smallPlayerAvatarSize,
+          height: Dimensions.smallPlayerAvatarSize.height,
+          width: Dimensions.smallPlayerAvatarSize.width,
           child: Stack(
             children: [
               PlayerAvatar(
-                player,
+                player: player,
+                avatarImageSize: Dimensions.smallPlayerAvatarSize,
                 playerHeroIdSuffix: playerHeroIdSuffix,
                 useHeroAnimation: useHeroAnimation,
               ),

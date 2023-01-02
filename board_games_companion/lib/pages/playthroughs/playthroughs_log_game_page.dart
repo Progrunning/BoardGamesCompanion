@@ -623,6 +623,8 @@ class _Players extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerAvatarSize = MediaQuery.of(context).size.width / _numberOfPlayerColumns;
+
     return GridView.count(
       crossAxisCount: _numberOfPlayerColumns,
       padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
@@ -633,7 +635,8 @@ class _Players extends StatelessWidget {
           Stack(
             children: <Widget>[
               PlayerAvatar(
-                playthroughPlayer.player,
+                player: playthroughPlayer.player,
+                avatarImageSize: Size(playerAvatarSize, playerAvatarSize),
                 onTap: () =>
                     onPlayerSelectionChanged(!playthroughPlayer.isChecked, playthroughPlayer),
               ),
@@ -716,9 +719,12 @@ class _PlayerScoreState extends State<_PlayerScore> {
       child: Row(
         children: <Widget>[
           SizedBox(
-            height: Dimensions.smallPlayerAvatarSize,
-            width: Dimensions.smallPlayerAvatarSize,
-            child: PlayerAvatar(widget.playerScore.player),
+            height: Dimensions.smallPlayerAvatarSize.height,
+            width: Dimensions.smallPlayerAvatarSize.width,
+            child: PlayerAvatar(
+              player: widget.playerScore.player,
+              avatarImageSize: Dimensions.smallPlayerAvatarSize,
+            ),
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           Column(
