@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/analytics.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
@@ -15,8 +16,10 @@ import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../models/hive/score.dart';
+import '../../services/analytics_service.dart';
 import '../../stores/playthroughs_store.dart';
 import 'board_game_playthrough.dart';
 import 'game_spinner_filters.dart';
@@ -34,7 +37,13 @@ abstract class _PlaysViewModel with Store {
     this._boardGamesStore,
     this._playersStore,
     this._scoreStore,
+    this._analyticsService,
   );
+
+  static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
+    1: Tuple2<String, String>('History', 'PlaysHistoryPage'),
+    0: Tuple2<String, String>('SelectGame', 'PlaysSelectGamePage'),
+  };
 
   static const int _numberOfTimesSpinnerCanTurn = 3;
 
@@ -42,6 +51,7 @@ abstract class _PlaysViewModel with Store {
   final BoardGamesStore _boardGamesStore;
   final PlayersStore _playersStore;
   final ScoresStore _scoreStore;
+  final AnalyticsService _analyticsService;
 
   @observable
   List<BoardGameDetails> _shuffledBoardGames = [];
@@ -55,6 +65,7 @@ abstract class _PlaysViewModel with Store {
   @observable
   GameSpinnerFilters gameSpinnerFilters = const GameSpinnerFilters(
     collections: <CollectionType>{},
+    includeExpansions: true,
   );
 
   @computed
@@ -132,6 +143,10 @@ abstract class _PlaysViewModel with Store {
       filteredShuffledBoardGames.addAll(_shuffledBoardGames.inCollection(CollectionType.friends));
     }
 
+    if (!gameSpinnerFilters.includeExpansions) {
+      filteredShuffledBoardGames.removeWhere((boardGame) => boardGame.isExpansion ?? false);
+    }
+
     return filteredShuffledBoardGames;
   }
 
@@ -182,6 +197,23 @@ abstract class _PlaysViewModel with Store {
 
     visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
   }
+
+  @action
+  void toggleIncludeExpansionsFilter(bool? includeExpansions) {
+    gameSpinnerFilters = gameSpinnerFilters.copyWith(includeExpansions: includeExpansions ?? false);
+
+    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+  }
+
+  Future<void> trackTabChange(int tabIndex) async {
+    await _analyticsService.logScreenView(
+      screenName: _screenViewByTabIndex[tabIndex]!.item1,
+      screenClass: _screenViewByTabIndex[tabIndex]!.item2,
+    );
+  }
+
+  Future<void> trackGameSelected() async =>
+      _analyticsService.logEvent(name: Analytics.selectRandomGame);
 
   Future<void> _loadGamesPlaythroughs() async {
     await _scoreStore.loadScores();

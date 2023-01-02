@@ -394,14 +394,15 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
         child: SizedBox(
-          height: Dimensions.smallPlayerAvatarSize,
+          height: Dimensions.smallPlayerAvatarSize.height,
           child: Row(
             children: <Widget>[
               SizedBox(
-                height: Dimensions.smallPlayerAvatarSize,
-                width: Dimensions.smallPlayerAvatarSize,
+                height: Dimensions.smallPlayerAvatarSize.height,
+                width: Dimensions.smallPlayerAvatarSize.width,
                 child: PlayerAvatar(
-                  widget.playerScore.player,
+                  player: widget.playerScore.player,
+                  avatarImageSize: Dimensions.smallPlayerAvatarSize,
                   playerHeroIdSuffix: widget.playthroughId,
                 ),
               ),

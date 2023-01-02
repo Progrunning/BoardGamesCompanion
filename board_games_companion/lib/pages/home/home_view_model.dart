@@ -37,9 +37,9 @@ abstract class _HomeViewModelBase with Store {
   final PlaysViewModel playthroughsHistoryViewModel;
 
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
-    0: Tuple2<String, String>('Games', 'GamesPage'),
+    0: Tuple2<String, String>('Collections', 'CollectionsPage'),
     1: Tuple2<String, String>('Search', 'SearchBoardGamesPage'),
-    2: Tuple2<String, String>('Games History', 'PlaythroughsHistoryPage'),
+    2: Tuple2<String, String>('Plays', 'PlaysPage'),
     3: Tuple2<String, String>('Players', 'PlayersPage'),
   };
 

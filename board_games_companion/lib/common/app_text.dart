@@ -68,6 +68,7 @@ class AppText {
   static const playthroughsStatisticsPagePlayerCountChartLegendFormatPlural = '%i players';
 
   static const playthroughsGameSettingsWinningConditionSectionTitle = 'Winning Condition';
+  static const playthroughsGameSettingsScoreSectionTitle = 'Score';
   static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest score';
   static const playthroughsGameSettingsWinningConditionLowestScore = 'Lowest score';
 
@@ -134,7 +135,8 @@ class AppText {
   static const editPlaythroughNotesHeaderTitle = 'Notes';
   static const editPlaythroughPagePlayedOnSectionTitle = 'Played on';
   static const editPlaythroughPageDurationSectionTitle = 'Duration';
-  static const editPlaythroughPageScoresSectionTitle = 'Scores';
+  static const editPlaythroughPageScoreSectionTitle = 'Score';
+  static const editPlaythroughPageScoreSectionAverageScorePrecisionText = 'Average score precision';
   static const editPlaythroughPageDeleteConfirmationDialogTitle =
       'Are you sure you want to delete this playthrough?';
   static const editPlaythroughPageUnsavedChangesDialogTitle = "You didn't save your changes.";
@@ -214,6 +216,7 @@ class AppText {
   static const playsPageSelectGameTabTitle = 'Select Game';
   static const playsPageGameSpinnerFilterSectionTitle = 'Filters';
   static const playsPageGameSpinnerCollectionsFilter = 'Collections';
+  static const playsPageGameSpinnerExpansionsFilter = 'Include expansions?';
   static const playsPageGameSpinnerSpinButtonText = 'Spin';
   static const playsPageGameSpinnerSelectedGamePlayButtonText = 'Play';
   static const playsPageGameSpinnerSelectedGameSpinAgainButtonText = 'Spin Again';

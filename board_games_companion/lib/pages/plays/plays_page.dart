@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
@@ -29,6 +30,7 @@ import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
+import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -93,6 +95,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                       return _AppBar(
                         tabVisualState: widget.viewModel.visualState,
                         tabController: _tabController,
+                        onTabSelected: (tabIndex) => widget.viewModel.trackTabChange(tabIndex),
                       );
                     },
                   ),
@@ -107,6 +110,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                       return _AppBar(
                         tabVisualState: widget.viewModel.visualState,
                         tabController: _tabController,
+                        onTabSelected: (tabIndex) => widget.viewModel.trackTabChange(tabIndex),
                       );
                     },
                   ),
@@ -170,6 +174,8 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                         gameSpinnerFilters: widget.viewModel.gameSpinnerFilters,
                                         onCollectionToggled: (collectionTyp) => widget.viewModel
                                             .toggleGameSpinnerCollectionFilter(collectionTyp),
+                                        onIncludeExpansionsToggled: (isChecked) => widget.viewModel
+                                            .toggleIncludeExpansionsFilter(isChecked),
                                       );
                                     },
                                   ),
@@ -195,6 +201,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
   }
 
   Future<void> _selectGame() async {
+    unawaited(widget.viewModel.trackGameSelected());
     final selectedBoardGame = widget.viewModel.shuffledBoardGames[
         _scrollController.selectedItem % widget.viewModel.shuffledBoardGames.length];
     await showGeneralDialog<void>(
@@ -212,11 +219,13 @@ class _GameSpinnerFilters extends StatelessWidget {
   const _GameSpinnerFilters({
     required this.gameSpinnerFilters,
     required this.onCollectionToggled,
+    required this.onIncludeExpansionsToggled,
     Key? key,
   }) : super(key: key);
 
   final GameSpinnerFilters gameSpinnerFilters;
   final void Function(CollectionType collectionTyp) onCollectionToggled;
+  final void Function(bool? isChecked) onIncludeExpansionsToggled;
 
   static const Map<int, CollectionType> collectionsMap = <int, CollectionType>{
     0: CollectionType.owned,
@@ -256,6 +265,21 @@ class _GameSpinnerFilters extends StatelessWidget {
                 )
               ],
             ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            Row(
+              children: [
+                Text(
+                  AppText.playsPageGameSpinnerExpansionsFilter,
+                  style: AppTheme.theme.textTheme.bodyMedium,
+                ),
+                const Expanded(child: SizedBox.shrink()),
+                BgcCheckbox(
+                  isChecked: gameSpinnerFilters.includeExpansions,
+                  onChanged: (isChecked) => onIncludeExpansionsToggled(isChecked),
+                  borderColor: AppColors.accentColor,
+                ),
+              ],
+            )
           ],
         ),
       );
@@ -305,7 +329,6 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
               Expanded(
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
-                    // Fimber.d(scrollNotification.runtimeType.toString());
                     if (scrollNotification is ScrollStartNotification &&
                         (_debounce?.isActive ?? false)) {
                       _debounce!.cancel();
@@ -335,7 +358,13 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
                               ),
                               child: Stack(
                                 children: [
-                                  _GameSpinnerItem(boardGame: boardGame),
+                                  if (boardGame.imageUrl.isNotNullOrBlank)
+                                    _GameSpinnerItem(
+                                      boardGameId: boardGame.id,
+                                      boardGameImageUrl: boardGame.imageUrl!,
+                                    ),
+                                  if (boardGame.imageUrl.isNullOrBlank)
+                                    Container(decoration: AppStyles.tileGradientBoxDecoration),
                                   Center(
                                     child: BoardGameName(
                                       name: boardGame.name,
@@ -381,20 +410,22 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
 class _GameSpinnerItem extends StatelessWidget {
   const _GameSpinnerItem({
     Key? key,
-    required this.boardGame,
+    required this.boardGameId,
+    required this.boardGameImageUrl,
   }) : super(key: key);
 
-  final BoardGameDetails boardGame;
+  final String boardGameId;
+  final String boardGameImageUrl;
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}${boardGame.id}',
+      tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}$boardGameId',
       child: LayoutBuilder(
         builder: (_, BoxConstraints boxConstraints) {
           return CachedNetworkImage(
             maxHeightDiskCache: boxConstraints.maxWidth.toInt(),
-            imageUrl: boardGame.imageUrl ?? '',
+            imageUrl: boardGameImageUrl,
             imageBuilder: (context, imageProvider) => Container(
               decoration: BoxDecoration(
                 borderRadius: AppTheme.defaultBorderRadius,
@@ -781,11 +812,13 @@ class _AppBar extends StatelessWidget {
   const _AppBar({
     required this.tabVisualState,
     required this.tabController,
+    required this.onTabSelected,
     Key? key,
   }) : super(key: key);
 
   final PlaysPageVisualState? tabVisualState;
   final TabController tabController;
+  final void Function(int tabIndex) onTabSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -821,6 +854,7 @@ class _AppBar extends StatelessWidget {
             ),
           ],
           indicatorColor: AppColors.accentColor,
+          onTap: (int tabIndex) => onTabSelected(tabIndex),
         ),
       ),
     );

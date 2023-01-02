@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$GameSpinnerFilters {
   Set<CollectionType> get collections => throw _privateConstructorUsedError;
+  bool get includeExpansions => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameSpinnerFiltersCopyWith<GameSpinnerFilters> get copyWith =>
@@ -28,7 +29,7 @@ abstract class $GameSpinnerFiltersCopyWith<$Res> {
   factory $GameSpinnerFiltersCopyWith(
           GameSpinnerFilters value, $Res Function(GameSpinnerFilters) then) =
       _$GameSpinnerFiltersCopyWithImpl<$Res>;
-  $Res call({Set<CollectionType> collections});
+  $Res call({Set<CollectionType> collections, bool includeExpansions});
 }
 
 /// @nodoc
@@ -43,12 +44,17 @@ class _$GameSpinnerFiltersCopyWithImpl<$Res>
   @override
   $Res call({
     Object? collections = freezed,
+    Object? includeExpansions = freezed,
   }) {
     return _then(_value.copyWith(
       collections: collections == freezed
           ? _value.collections
           : collections // ignore: cast_nullable_to_non_nullable
               as Set<CollectionType>,
+      includeExpansions: includeExpansions == freezed
+          ? _value.includeExpansions
+          : includeExpansions // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -60,7 +66,7 @@ abstract class _$$_GameSpinnerFiltersCopyWith<$Res>
           $Res Function(_$_GameSpinnerFilters) then) =
       __$$_GameSpinnerFiltersCopyWithImpl<$Res>;
   @override
-  $Res call({Set<CollectionType> collections});
+  $Res call({Set<CollectionType> collections, bool includeExpansions});
 }
 
 /// @nodoc
@@ -77,12 +83,17 @@ class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
   @override
   $Res call({
     Object? collections = freezed,
+    Object? includeExpansions = freezed,
   }) {
     return _then(_$_GameSpinnerFilters(
       collections: collections == freezed
           ? _value._collections
           : collections // ignore: cast_nullable_to_non_nullable
               as Set<CollectionType>,
+      includeExpansions: includeExpansions == freezed
+          ? _value.includeExpansions
+          : includeExpansions // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -90,7 +101,9 @@ class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_GameSpinnerFilters extends _GameSpinnerFilters {
-  const _$_GameSpinnerFilters({required final Set<CollectionType> collections})
+  const _$_GameSpinnerFilters(
+      {required final Set<CollectionType> collections,
+      required this.includeExpansions})
       : _collections = collections,
         super._();
 
@@ -102,8 +115,11 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
   }
 
   @override
+  final bool includeExpansions;
+
+  @override
   String toString() {
-    return 'GameSpinnerFilters(collections: $collections)';
+    return 'GameSpinnerFilters(collections: $collections, includeExpansions: $includeExpansions)';
   }
 
   @override
@@ -112,12 +128,16 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
         (other.runtimeType == runtimeType &&
             other is _$_GameSpinnerFilters &&
             const DeepCollectionEquality()
-                .equals(other._collections, _collections));
+                .equals(other._collections, _collections) &&
+            const DeepCollectionEquality()
+                .equals(other.includeExpansions, includeExpansions));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_collections));
+      runtimeType,
+      const DeepCollectionEquality().hash(_collections),
+      const DeepCollectionEquality().hash(includeExpansions));
 
   @JsonKey(ignore: true)
   @override
@@ -128,11 +148,14 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
 
 abstract class _GameSpinnerFilters extends GameSpinnerFilters {
   const factory _GameSpinnerFilters(
-      {required final Set<CollectionType> collections}) = _$_GameSpinnerFilters;
+      {required final Set<CollectionType> collections,
+      required final bool includeExpansions}) = _$_GameSpinnerFilters;
   const _GameSpinnerFilters._() : super._();
 
   @override
   Set<CollectionType> get collections;
+  @override
+  bool get includeExpansions;
   @override
   @JsonKey(ignore: true)
   _$$_GameSpinnerFiltersCopyWith<_$_GameSpinnerFilters> get copyWith =>

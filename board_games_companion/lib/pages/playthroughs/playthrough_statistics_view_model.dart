@@ -144,6 +144,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       gameWinningCondition,
     );
 
+    boardGameStatistics.averageScorePrecision = _gamePlaythroughsStore.averageScorePrecision;
     boardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
         .map((Playthrough p) => p.endDate!.difference(p.startDate).inSeconds)
         .reduce((a, b) => a + b);

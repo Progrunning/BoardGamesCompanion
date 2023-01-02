@@ -10,6 +10,7 @@ class Analytics {
   static const String logPlaythrough = 'log_playthough';
   static const String importBggPlays = 'import_bgg_plays';
   static const String openGamesPlaylist = 'open_games_playlist';
+  static const String selectRandomGame = 'select_random_game';
 
   static const String routeName = 'route_name';
 

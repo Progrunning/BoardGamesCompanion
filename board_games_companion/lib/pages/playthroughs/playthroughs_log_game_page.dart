@@ -18,6 +18,7 @@ import '../../mixins/enter_score_dialog.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthrough_player.dart';
+import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -622,6 +623,8 @@ class _Players extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerAvatarSize = MediaQuery.of(context).size.width / _numberOfPlayerColumns;
+
     return GridView.count(
       crossAxisCount: _numberOfPlayerColumns,
       padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
@@ -632,22 +635,16 @@ class _Players extends StatelessWidget {
           Stack(
             children: <Widget>[
               PlayerAvatar(
-                playthroughPlayer.player,
+                player: playthroughPlayer.player,
+                avatarImageSize: Size(playerAvatarSize, playerAvatarSize),
                 onTap: () =>
                     onPlayerSelectionChanged(!playthroughPlayer.isChecked, playthroughPlayer),
               ),
               Align(
                 alignment: Alignment.topRight,
-                child: SizedBox(
-                  height: 34,
-                  width: 34,
-                  child: Checkbox(
-                    checkColor: AppColors.accentColor,
-                    activeColor: AppColors.primaryColor.withOpacity(0.7),
-                    value: playthroughPlayer.isChecked,
-                    onChanged: (bool? isChecked) =>
-                        onPlayerSelectionChanged(isChecked, playthroughPlayer),
-                  ),
+                child: BgcCheckbox(
+                  isChecked: playthroughPlayer.isChecked,
+                  onChanged: (isChecked) => onPlayerSelectionChanged(isChecked, playthroughPlayer),
                 ),
               ),
             ],
@@ -722,9 +719,12 @@ class _PlayerScoreState extends State<_PlayerScore> {
       child: Row(
         children: <Widget>[
           SizedBox(
-            height: Dimensions.smallPlayerAvatarSize,
-            width: Dimensions.smallPlayerAvatarSize,
-            child: PlayerAvatar(widget.playerScore.player),
+            height: Dimensions.smallPlayerAvatarSize.height,
+            width: Dimensions.smallPlayerAvatarSize.width,
+            child: PlayerAvatar(
+              player: widget.playerScore.player,
+              avatarImageSize: Dimensions.smallPlayerAvatarSize,
+            ),
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           Column(

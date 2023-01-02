@@ -28,6 +28,8 @@ class BoardGameStatistics {
 
   double? averageScore;
 
+  int averageScorePrecision = 0;
+
   double? averageNumberOfPlayers;
 
   List<Tuple2<Player, String>>? topScoreres;
