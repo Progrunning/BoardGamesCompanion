@@ -15,6 +15,6 @@ class BoardGameSettings with _$BoardGameSettings {
   @HiveType(typeId: HiveBoxes.boardGameSettingsTypeId, adapterName: 'BoardGameSettingsAdapter')
   const factory BoardGameSettings({
     @Default(GameWinningCondition.HighestScore) @HiveField(1) GameWinningCondition winningCondition,
-    @Default(0) @HiveField(2) int averageScorePrecision,
+    @Default(0) @HiveField(2, defaultValue: 0) int averageScorePrecision,
   }) = _BoardGameSettings;
 }
