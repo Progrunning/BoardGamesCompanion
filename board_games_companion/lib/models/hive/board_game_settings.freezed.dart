@@ -19,7 +19,7 @@ mixin _$BoardGameSettings {
   @HiveField(1)
   GameWinningCondition get winningCondition =>
       throw _privateConstructorUsedError;
-  @HiveField(2)
+  @HiveField(2, defaultValue: 0)
   int get averageScorePrecision => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $BoardGameSettingsCopyWith<$Res> {
       _$BoardGameSettingsCopyWithImpl<$Res>;
   $Res call(
       {@HiveField(1) GameWinningCondition winningCondition,
-      @HiveField(2) int averageScorePrecision});
+      @HiveField(2, defaultValue: 0) int averageScorePrecision});
 }
 
 /// @nodoc
@@ -73,7 +73,7 @@ abstract class _$$_BoardGameSettingsCopyWith<$Res>
   @override
   $Res call(
       {@HiveField(1) GameWinningCondition winningCondition,
-      @HiveField(2) int averageScorePrecision});
+      @HiveField(2, defaultValue: 0) int averageScorePrecision});
 }
 
 /// @nodoc
@@ -113,7 +113,7 @@ class __$$_BoardGameSettingsCopyWithImpl<$Res>
 class _$_BoardGameSettings implements _BoardGameSettings {
   const _$_BoardGameSettings(
       {@HiveField(1) this.winningCondition = GameWinningCondition.HighestScore,
-      @HiveField(2) this.averageScorePrecision = 0});
+      @HiveField(2, defaultValue: 0) this.averageScorePrecision = 0});
 
   @override
   @JsonKey()
@@ -121,7 +121,7 @@ class _$_BoardGameSettings implements _BoardGameSettings {
   final GameWinningCondition winningCondition;
   @override
   @JsonKey()
-  @HiveField(2)
+  @HiveField(2, defaultValue: 0)
   final int averageScorePrecision;
 
   @override
@@ -155,14 +155,15 @@ class _$_BoardGameSettings implements _BoardGameSettings {
 
 abstract class _BoardGameSettings implements BoardGameSettings {
   const factory _BoardGameSettings(
-      {@HiveField(1) final GameWinningCondition winningCondition,
-      @HiveField(2) final int averageScorePrecision}) = _$_BoardGameSettings;
+          {@HiveField(1) final GameWinningCondition winningCondition,
+          @HiveField(2, defaultValue: 0) final int averageScorePrecision}) =
+      _$_BoardGameSettings;
 
   @override
   @HiveField(1)
   GameWinningCondition get winningCondition;
   @override
-  @HiveField(2)
+  @HiveField(2, defaultValue: 0)
   int get averageScorePrecision;
   @override
   @JsonKey(ignore: true)

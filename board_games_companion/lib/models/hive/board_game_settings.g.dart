@@ -18,7 +18,7 @@ class BoardGameSettingsAdapter extends TypeAdapter<_$_BoardGameSettings> {
     };
     return _$_BoardGameSettings(
       winningCondition: fields[1] as GameWinningCondition,
-      averageScorePrecision: fields[2] as int,
+      averageScorePrecision: fields[2] == null ? 0 : fields[2] as int,
     );
   }
 
