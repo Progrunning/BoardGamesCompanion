@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
@@ -42,6 +43,8 @@ abstract class _HomeViewModelBase with Store {
     2: Tuple2<String, String>('Plays', 'PlaysPage'),
     3: Tuple2<String, String>('Players', 'PlayersPage'),
   };
+
+  ValueNotifier<bool> isSpeedDialContextMenuOpen = ValueNotifier(false);
 
   Future<void> trackTabChange(int tabIndex) async {
     await analyticsService.logScreenView(

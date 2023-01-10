@@ -29,6 +29,8 @@ class AppText {
   static const homePageSearchTabTitle = 'Search';
   static const homePagePlaysTabTitle = 'Plays';
   static const homePageGamesPlayersTabTitle = 'Players';
+  static const homePageSearchCollectionsDialOptionText = 'Search collections';
+  static const homePageSearchOnlineDialOptionText = 'Search online';
 
   static const aboutPageAuthorSectionTitle = 'Author';
   static const aboutPageDesignAndArtSectionTitle = 'Design & Art';

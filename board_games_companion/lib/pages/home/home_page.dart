@@ -2,6 +2,8 @@ import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/home/home_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
@@ -35,6 +37,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
   late final TabController tabController;
 
   static const int _numberOfTabs = 4;
+  static const int _collectionsTabIndex = 0;
   static const int _initialTabIndex = 0;
 
   @override
@@ -46,64 +49,102 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       length: _numberOfTabs,
       vsync: this,
     );
+    tabController.addListener(() {
+      // MK Force redraw to update FOB
+      setState(() {});
+    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ScaffoldMessenger(
-      key: HomePage.homePageGlobalKey,
-      child: Scaffold(
-        drawer: const Drawer(child: HomePageDrawer()),
-        body: SafeArea(
-          child: PageContainer(
-            child: TabBarView(
-              controller: tabController,
-              children: <Widget>[
-                CollectionsPage(
-                  widget.viewModel.collectionsViewModel,
-                  widget.viewModel.boardGamesFiltersStore,
-                  widget.viewModel.analyticsService,
-                  widget.viewModel.rateAndReviewService,
-                ),
-                SearchBoardGamesPage(viewModel: widget.viewModel.searchBoardGamesViewModel),
-                PlaysPage(viewModel: widget.viewModel.playthroughsHistoryViewModel),
-                PlayersPage(viewModel: widget.viewModel.playersViewModel),
-              ],
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => ScaffoldMessenger(
+        key: HomePage.homePageGlobalKey,
+        child: Scaffold(
+          drawer: const Drawer(child: HomePageDrawer()),
+          body: SafeArea(
+            child: PageContainer(
+              child: TabBarView(
+                controller: tabController,
+                children: <Widget>[
+                  CollectionsPage(
+                    widget.viewModel.collectionsViewModel,
+                    widget.viewModel.boardGamesFiltersStore,
+                    widget.viewModel.analyticsService,
+                    widget.viewModel.rateAndReviewService,
+                  ),
+                  SearchBoardGamesPage(viewModel: widget.viewModel.searchBoardGamesViewModel),
+                  PlaysPage(viewModel: widget.viewModel.playthroughsHistoryViewModel),
+                  PlayersPage(viewModel: widget.viewModel.playersViewModel),
+                ],
+              ),
             ),
           ),
+          bottomNavigationBar: ConvexAppBar(
+            controller: tabController,
+            backgroundColor: AppColors.bottomTabBackgroundColor,
+            top: -Dimensions.bottomTabTopHeight,
+            items: const <TabItem>[
+              TabItem<BottomTabIcon>(
+                title: AppText.homePageCollectionsTabTitle,
+                icon: BottomTabIcon(iconData: Icons.grid_on),
+                activeIcon: BottomTabIcon(iconData: Icons.grid_on, isActive: true),
+              ),
+              TabItem<BottomTabIcon>(
+                title: AppText.homePageSearchTabTitle,
+                icon: BottomTabIcon(iconData: Icons.search),
+                activeIcon: BottomTabIcon(iconData: Icons.search, isActive: true),
+              ),
+              TabItem<BottomTabIcon>(
+                title: AppText.homePagePlaysTabTitle,
+                icon: BottomTabIcon(iconData: Icons.video_library),
+                activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
+              ),
+              TabItem<BottomTabIcon>(
+                title: AppText.homePageGamesPlayersTabTitle,
+                icon: BottomTabIcon(iconData: Icons.group),
+                activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
+              ),
+            ],
+            initialActiveIndex: _initialTabIndex,
+            activeColor: AppColors.accentColor,
+            color: AppColors.inactiveBottomTabColor,
+            onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
+          ),
+          floatingActionButton: tabController.index == _collectionsTabIndex
+              ? SpeedDial(
+                  icon: Icons.search,
+                  overlayColor: AppColors.dialogBackgroundColor,
+                  activeIcon: Icons.close,
+                  openCloseDial: widget.viewModel.isSpeedDialContextMenuOpen,
+                  onPress: () => widget.viewModel.isSpeedDialContextMenuOpen.value =
+                      !widget.viewModel.isSpeedDialContextMenuOpen.value,
+                  children: [
+                    SpeedDialChild(
+                      child: const Icon(Icons.grid_on),
+                      backgroundColor: AppColors.accentColor,
+                      foregroundColor: Colors.white,
+                      label: AppText.homePageSearchCollectionsDialOptionText,
+                      labelBackgroundColor: AppColors.accentColor,
+                      // TODO Show search collection experience
+                      onTap: () async {},
+                    ),
+                    SpeedDialChild(
+                      child: const FaIcon(FontAwesomeIcons.globe),
+                      backgroundColor: AppColors.greenColor,
+                      foregroundColor: Colors.white,
+                      label: AppText.homePageSearchOnlineDialOptionText,
+                      labelBackgroundColor: AppColors.greenColor,
+                      // TODO Show search internet experience
+                      onTap: () async {},
+                    )
+                  ],
+                )
+              : null,
         ),
-        bottomNavigationBar: ConvexAppBar(
-          controller: tabController,
-          backgroundColor: AppColors.bottomTabBackgroundColor,
-          top: -Dimensions.bottomTabTopHeight,
-          items: const <TabItem>[
-            TabItem<BottomTabIcon>(
-              title: AppText.homePageCollectionsTabTitle,
-              icon: BottomTabIcon(iconData: Icons.grid_on),
-              activeIcon: BottomTabIcon(iconData: Icons.grid_on, isActive: true),
-            ),
-            TabItem<BottomTabIcon>(
-              title: AppText.homePageSearchTabTitle,
-              icon: BottomTabIcon(iconData: Icons.search),
-              activeIcon: BottomTabIcon(iconData: Icons.search, isActive: true),
-            ),
-            TabItem<BottomTabIcon>(
-              title: AppText.homePagePlaysTabTitle,
-              icon: BottomTabIcon(iconData: Icons.video_library),
-              activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
-            ),
-            TabItem<BottomTabIcon>(
-              title: AppText.homePageGamesPlayersTabTitle,
-              icon: BottomTabIcon(iconData: Icons.group),
-              activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
-            ),
-          ],
-          initialActiveIndex: _initialTabIndex,
-          activeColor: AppColors.accentColor,
-          color: AppColors.inactiveBottomTabColor,
-          onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
-        ),
-      ),
-    );
-  }
+      );
 }
