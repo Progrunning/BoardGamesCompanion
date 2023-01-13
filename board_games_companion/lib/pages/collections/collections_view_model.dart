@@ -6,14 +6,10 @@ import 'dart:math';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/enums/order_by.dart';
 import 'package:board_games_companion/common/enums/sort_by_option.dart';
-import 'package:board_games_companion/models/hive/search_history_entry.dart';
 import 'package:board_games_companion/models/sort_by.dart';
-import 'package:board_games_companion/services/analytics_service.dart';
-import 'package:board_games_companion/stores/app_store.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
-import 'package:board_games_companion/stores/search_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -21,7 +17,6 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../common/analytics.dart';
 import '../../common/constants.dart';
 import '../../common/enums/games_tab.dart';
 import '../../extensions/date_time_extensions.dart';
@@ -45,17 +40,7 @@ abstract class _CollectionsViewModel with Store {
     this._scoresStore,
     this._playthroughsStore,
     this._playersStore,
-    this._searchStore,
-    this._analyticsService,
-    this._appStore,
-  ) {
-    // MK When restoring a backup, reload all of the data
-    reaction((_) => _appStore.backupRestored, (bool? backupRestored) {
-      if (backupRestored ?? false) {
-        loadBoardGames();
-      }
-    });
-  }
+  );
 
   final UserStore _userStore;
   final BoardGamesStore _boardGamesStore;
@@ -63,20 +48,12 @@ abstract class _CollectionsViewModel with Store {
   final ScoresStore _scoresStore;
   final PlaythroughsStore _playthroughsStore;
   final PlayersStore _playersStore;
-  final SearchStore _searchStore;
-  final AnalyticsService _analyticsService;
-  final AppStore _appStore;
 
   @observable
   GamesTab selectedTab = GamesTab.owned;
 
   @observable
   ObservableFuture<void>? futureLoadBoardGames;
-
-  @computed
-  List<SearchHistoryEntry> get searchHistory => _searchStore.searchHistory
-    ..sort((entry, otherEntry) => otherEntry.dateTime.compareTo(entry.dateTime))
-    ..toList();
 
   @computed
   List<BoardGameDetails> get allMainGames =>
@@ -283,39 +260,17 @@ abstract class _CollectionsViewModel with Store {
   Future<void> updateFilterByRating(double? rating) =>
       _boardGamesFiltersStore.updateFilterByRating(rating);
 
-  @action
-  Future<List<BoardGameDetails>> search(String query) async {
-    // MK Intentionally unawaiting capturing of an analytic event
-    unawaited(_analyticsService.logEvent(
-      name: Analytics.searchBoardGames,
-      parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: query},
-    ));
-
-    await _searchStore.addOrUpdateScore(
-      SearchHistoryEntry(
-        query: query,
-        dateTime: DateTime.now().toUtc(),
-      ),
-    );
-
-    final queryLowercased = query.toLowerCase();
-    return allBoardGames
-        .where(
-            (BoardGameDetails boardGame) => boardGame.name.toLowerCase().contains(queryLowercased))
-        .toList();
-  }
-
   Future<void> _loadBoardGames() async {
     try {
       // TODO MK Think about if we could potentially load all of the data once and then use it across the app
       //      What impact on the startup time and memory usage would it have?
+      // NOTE: Could be better if this was in the HomeViewModel
       await _userStore.loadUser();
       await _boardGamesStore.loadBoardGames();
       await _boardGamesFiltersStore.loadFilterPreferences();
       await _playthroughsStore.loadPlaythroughs();
       await _scoresStore.loadScores();
       await _playersStore.loadPlayers();
-      await _searchStore.loadSearchHistory();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

@@ -1,10 +1,18 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:async';
+
+import 'package:board_games_companion/stores/app_store.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
+import 'package:board_games_companion/stores/search_store.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../common/analytics.dart';
+import '../../models/hive/board_game_details.dart';
+import '../../models/hive/search_history_entry.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
@@ -27,7 +35,17 @@ abstract class _HomeViewModelBase with Store {
     this.collectionsViewModel,
     this.searchBoardGamesViewModel,
     this.playthroughsHistoryViewModel,
-  );
+    this._appStore,
+    this._searchStore,
+    this._boardGamesStore,
+  ) {
+    // MK When restoring a backup, reload all of the data
+    reaction((_) => _appStore.backupRestored, (bool? backupRestored) {
+      if (backupRestored ?? false) {
+        loadData();
+      }
+    });
+  }
 
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -36,6 +54,9 @@ abstract class _HomeViewModelBase with Store {
   final CollectionsViewModel collectionsViewModel;
   final SearchBoardGamesViewModel searchBoardGamesViewModel;
   final PlaysViewModel playthroughsHistoryViewModel;
+  final AppStore _appStore;
+  final BoardGamesStore _boardGamesStore;
+  final SearchStore _searchStore;
 
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
     0: Tuple2<String, String>('Collections', 'CollectionsPage'),
@@ -48,10 +69,41 @@ abstract class _HomeViewModelBase with Store {
   ObservableFuture<void>? futureloadData;
 
   @computed
-  bool get anyBoardGamesInCollections => collectionsViewModel.anyBoardGamesInCollections;
+  List<BoardGameDetails> get allBoardGames => _boardGamesStore.allBoardGamesInCollections;
+
+  @computed
+  bool get anyBoardGamesInCollections =>
+      allBoardGames.any((boardGame) => boardGame.isInAnyCollection);
+
+  @computed
+  List<SearchHistoryEntry> get searchHistory => _searchStore.searchHistory
+    ..sort((entry, otherEntry) => otherEntry.dateTime.compareTo(entry.dateTime))
+    ..toList();
 
   @action
   void loadData() => futureloadData = ObservableFuture<void>(_loadData());
+
+  @action
+  Future<List<BoardGameDetails>> search(String query) async {
+    // MK Intentionally unawaiting capturing of an analytic event
+    unawaited(analyticsService.logEvent(
+      name: Analytics.searchBoardGames,
+      parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: query},
+    ));
+
+    await _searchStore.addOrUpdateScore(
+      SearchHistoryEntry(
+        query: query,
+        dateTime: DateTime.now().toUtc(),
+      ),
+    );
+
+    final queryLowercased = query.toLowerCase();
+    return allBoardGames
+        .where(
+            (BoardGameDetails boardGame) => boardGame.name.toLowerCase().contains(queryLowercased))
+        .toList();
+  }
 
   ValueNotifier<bool> isSearchDialContextMenuOpen = ValueNotifier(false);
 
@@ -64,5 +116,6 @@ abstract class _HomeViewModelBase with Store {
 
   Future<void> _loadData() async {
     collectionsViewModel.loadBoardGames();
+    await _searchStore.loadSearchHistory();
   }
 }

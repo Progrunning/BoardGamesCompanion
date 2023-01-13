@@ -103,10 +103,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i21.BoardGamesFiltersStore>(),
       get<_i15.ScoresStore>(),
       get<_i26.PlaythroughsStore>(),
-      get<_i10.PlayersStore>(),
-      get<_i17.SearchStore>(),
-      get<_i20.AnalyticsService>(),
-      get<_i3.AppStore>()));
+      get<_i10.PlayersStore>()));
   gh.singleton<_i31.GamePlaythroughsDetailsStore>(
       _i31.GamePlaythroughsDetailsStore(get<_i26.PlaythroughsStore>(),
           get<_i15.ScoresStore>(), get<_i10.PlayersStore>()));
@@ -166,7 +163,10 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i21.BoardGamesFiltersStore>(),
       get<_i30.CollectionsViewModel>(),
       get<_i39.SearchBoardGamesViewModel>(),
-      get<_i32.PlaysViewModel>()));
+      get<_i32.PlaysViewModel>(),
+      get<_i3.AppStore>(),
+      get<_i17.SearchStore>(),
+      get<_i28.BoardGamesStore>()));
   return get;
 }
 
