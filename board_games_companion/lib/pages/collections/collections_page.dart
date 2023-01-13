@@ -388,11 +388,11 @@ class _Empty extends StatelessWidget {
                         text:
                             'Follow the below instructions to fill up this screen with board games.\n\n',
                       ),
-                      TextSpan(text: 'Use the bottom '),
-                      TextSpan(text: 'Search', style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: 'Use the '),
+                      TextSpan(text: 'search', style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(
                         text:
-                            ' tab to check out current TOP 50 hot board games or look up any title and start adding them to your collections.\n',
+                            ' icon in the bottom right corner to look up any title and start adding them to your collections.\n',
                       ),
                     ],
                   ),
