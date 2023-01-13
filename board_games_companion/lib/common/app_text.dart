@@ -26,7 +26,7 @@ class AppText {
   static const whishlistCollectionToggleButtonText = 'Whishlist';
 
   static const homePageCollectionsTabTitle = 'Collections';
-  static const homePageSearchTabTitle = 'Search';
+  static const homePageHotBoardGamesTabTitle = 'Hot';
   static const homePagePlaysTabTitle = 'Plays';
   static const homePageGamesPlayersTabTitle = 'Players';
   static const homePageSearchCollectionsDialOptionText = 'Search collections';
@@ -47,6 +47,8 @@ class AppText {
       "If you need help with the app, have an idea for a new feature or you want to see what we are currently working on then then feel free to join BGC's discord server to chat about it with developers and other app users.";
   static const aboutPageCommunityJoinDiscord =
       "Tap on the below logo to join the BGC's Discord server.";
+
+  static const hotBoardGamesPageTitle = 'Hot Board Games';
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5 scores';
@@ -81,7 +83,6 @@ class AppText {
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
   static const searchBoardGamesSearchBarHint = 'Search...';
   static const searchBoardGamesSearchRetry = 'Retry';
-  static const hotBoardGamesSliverSectionTitle = 'Hot Board Games';
 
   static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';

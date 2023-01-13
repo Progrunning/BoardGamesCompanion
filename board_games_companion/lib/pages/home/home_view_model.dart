@@ -17,9 +17,9 @@ import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../collections/collections_view_model.dart';
+import '../hot_board_games/search_board_games_view_model.dart';
 import '../players/players_view_model.dart';
 import '../plays/plays_view_model.dart';
-import '../search_board_games/search_board_games_view_model.dart';
 
 part 'home_view_model.g.dart';
 
@@ -33,7 +33,7 @@ abstract class _HomeViewModelBase with Store {
     this.playersViewModel,
     this.boardGamesFiltersStore,
     this.collectionsViewModel,
-    this.searchBoardGamesViewModel,
+    this.hotBoardGamesViewModel,
     this.playthroughsHistoryViewModel,
     this._appStore,
     this._searchStore,
@@ -52,7 +52,7 @@ abstract class _HomeViewModelBase with Store {
   final PlayersViewModel playersViewModel;
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final CollectionsViewModel collectionsViewModel;
-  final SearchBoardGamesViewModel searchBoardGamesViewModel;
+  final HotBoardGamesViewModel hotBoardGamesViewModel;
   final PlaysViewModel playthroughsHistoryViewModel;
   final AppStore _appStore;
   final BoardGamesStore _boardGamesStore;
@@ -60,9 +60,9 @@ abstract class _HomeViewModelBase with Store {
 
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
     0: Tuple2<String, String>('Collections', 'CollectionsPage'),
-    1: Tuple2<String, String>('Search', 'SearchBoardGamesPage'),
-    2: Tuple2<String, String>('Plays', 'PlaysPage'),
-    3: Tuple2<String, String>('Players', 'PlayersPage'),
+    1: Tuple2<String, String>('Plays', 'PlaysPage'),
+    2: Tuple2<String, String>('Players', 'PlayersPage'),
+    3: Tuple2<String, String>('Hot', 'HotBoardGamesPage'),
   };
 
   @observable

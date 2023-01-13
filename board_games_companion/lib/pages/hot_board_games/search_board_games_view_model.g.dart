@@ -8,24 +8,24 @@ part of 'search_board_games_view_model.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
+mixin _$HotBoardGamesViewModel on _HotBoardGamesViewModel, Store {
   Computed<bool>? _$hasAnyHotBoardGamesComputed;
 
   @override
   bool get hasAnyHotBoardGames => (_$hasAnyHotBoardGamesComputed ??=
           Computed<bool>(() => super.hasAnyHotBoardGames,
-              name: '_SearchBoardGamesViewModel.hasAnyHotBoardGames'))
+              name: '_HotBoardGamesViewModel.hasAnyHotBoardGames'))
       .value;
   Computed<bool>? _$isSearchPhraseEmptyComputed;
 
   @override
   bool get isSearchPhraseEmpty => (_$isSearchPhraseEmptyComputed ??=
           Computed<bool>(() => super.isSearchPhraseEmpty,
-              name: '_SearchBoardGamesViewModel.isSearchPhraseEmpty'))
+              name: '_HotBoardGamesViewModel.isSearchPhraseEmpty'))
       .value;
 
   late final _$hotBoardGamesAtom =
-      Atom(name: '_SearchBoardGamesViewModel.hotBoardGames', context: context);
+      Atom(name: '_HotBoardGamesViewModel.hotBoardGames', context: context);
 
   @override
   ObservableList<BoardGameDetails>? get hotBoardGames {
@@ -40,24 +40,8 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
     });
   }
 
-  late final _$searchResultsAtom =
-      Atom(name: '_SearchBoardGamesViewModel.searchResults', context: context);
-
-  @override
-  SearchResults get searchResults {
-    _$searchResultsAtom.reportRead();
-    return super.searchResults;
-  }
-
-  @override
-  set searchResults(SearchResults value) {
-    _$searchResultsAtom.reportWrite(value, super.searchResults, () {
-      super.searchResults = value;
-    });
-  }
-
   late final _$futureLoadHotBoardGamesAtom = Atom(
-      name: '_SearchBoardGamesViewModel.futureLoadHotBoardGames',
+      name: '_HotBoardGamesViewModel.futureLoadHotBoardGames',
       context: context);
 
   @override
@@ -75,8 +59,7 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
   }
 
   late final _$futureSearchBoardGamesAtom = Atom(
-      name: '_SearchBoardGamesViewModel.futureSearchBoardGames',
-      context: context);
+      name: '_HotBoardGamesViewModel.futureSearchBoardGames', context: context);
 
   @override
   ObservableFuture<void>? get futureSearchBoardGames {
@@ -93,7 +76,7 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
   }
 
   late final _$searchPhraseAtom =
-      Atom(name: '_SearchBoardGamesViewModel.searchPhrase', context: context);
+      Atom(name: '_HotBoardGamesViewModel.searchPhrase', context: context);
 
   @override
   String? get searchPhrase {
@@ -108,50 +91,28 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
     });
   }
 
-  late final _$_SearchBoardGamesViewModelActionController =
-      ActionController(name: '_SearchBoardGamesViewModel', context: context);
+  late final _$_HotBoardGamesViewModelActionController =
+      ActionController(name: '_HotBoardGamesViewModel', context: context);
 
   @override
   void loadHotBoardGames() {
-    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
-        .startAction(name: '_SearchBoardGamesViewModel.loadHotBoardGames');
+    final _$actionInfo = _$_HotBoardGamesViewModelActionController.startAction(
+        name: '_HotBoardGamesViewModel.loadHotBoardGames');
     try {
       return super.loadHotBoardGames();
     } finally {
-      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void searchBoardGames() {
-    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
-        .startAction(name: '_SearchBoardGamesViewModel.searchBoardGames');
-    try {
-      return super.searchBoardGames();
-    } finally {
-      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
+      _$_HotBoardGamesViewModelActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setSearchPhrase(String? searchPhrase) {
-    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
-        .startAction(name: '_SearchBoardGamesViewModel.setSearchPhrase');
+    final _$actionInfo = _$_HotBoardGamesViewModelActionController.startAction(
+        name: '_HotBoardGamesViewModel.setSearchPhrase');
     try {
       return super.setSearchPhrase(searchPhrase);
     } finally {
-      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void clearSearchResults() {
-    final _$actionInfo = _$_SearchBoardGamesViewModelActionController
-        .startAction(name: '_SearchBoardGamesViewModel.clearSearchResults');
-    try {
-      return super.clearSearchResults();
-    } finally {
-      _$_SearchBoardGamesViewModelActionController.endAction(_$actionInfo);
+      _$_HotBoardGamesViewModelActionController.endAction(_$actionInfo);
     }
   }
 
@@ -159,7 +120,6 @@ mixin _$SearchBoardGamesViewModel on _SearchBoardGamesViewModel, Store {
   String toString() {
     return '''
 hotBoardGames: ${hotBoardGames},
-searchResults: ${searchResults},
 futureLoadHotBoardGames: ${futureLoadHotBoardGames},
 futureSearchBoardGames: ${futureSearchBoardGames},
 searchPhrase: ${searchPhrase},

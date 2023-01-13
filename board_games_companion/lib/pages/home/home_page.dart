@@ -19,10 +19,10 @@ import '../../widgets/search/collections_search.dart';
 import '../base_page_state.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../collections/collections_page.dart';
+import '../hot_board_games/hot_board_games_page.dart';
 import '../players/players_page.dart';
 import '../plays/plays_page.dart';
 import '../playthroughs/playthroughs_page.dart';
-import '../search_board_games/search_board_games_page.dart';
 import 'home_page_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -88,9 +88,9 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                     widget.viewModel.analyticsService,
                     widget.viewModel.rateAndReviewService,
                   ),
-                  SearchBoardGamesPage(viewModel: widget.viewModel.searchBoardGamesViewModel),
                   PlaysPage(viewModel: widget.viewModel.playthroughsHistoryViewModel),
                   PlayersPage(viewModel: widget.viewModel.playersViewModel),
+                  HotBoardGamesPage(viewModel: widget.viewModel.hotBoardGamesViewModel),
                 ],
               ),
             ),
@@ -106,11 +106,6 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                 activeIcon: BottomTabIcon(iconData: Icons.grid_on, isActive: true),
               ),
               TabItem<BottomTabIcon>(
-                title: AppText.homePageSearchTabTitle,
-                icon: BottomTabIcon(iconData: Icons.search),
-                activeIcon: BottomTabIcon(iconData: Icons.search, isActive: true),
-              ),
-              TabItem<BottomTabIcon>(
                 title: AppText.homePagePlaysTabTitle,
                 icon: BottomTabIcon(iconData: Icons.video_library),
                 activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
@@ -119,6 +114,14 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                 title: AppText.homePageGamesPlayersTabTitle,
                 icon: BottomTabIcon(iconData: Icons.group),
                 activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
+              ),
+              TabItem<BottomTabIcon>(
+                title: AppText.homePageHotBoardGamesTabTitle,
+                icon: BottomTabIcon(iconData: FontAwesomeIcons.fireFlameCurved),
+                activeIcon: BottomTabIcon(
+                  iconData: FontAwesomeIcons.fireFlameCurved,
+                  isActive: true,
+                ),
               ),
             ],
             initialActiveIndex: _initialTabIndex,
@@ -144,7 +147,6 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                             foregroundColor: Colors.white,
                             label: AppText.homePageSearchCollectionsDialOptionText,
                             labelBackgroundColor: AppColors.accentColor,
-                            // TODO Show search collection experience
                             onTap: () => _searchCollections(),
                           ),
                         SpeedDialChild(
@@ -172,13 +174,13 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
         allBoardGames: widget.viewModel.allBoardGames,
         searchHistory: widget.viewModel.searchHistory,
         onResultAction: (boardGame, actionType) async =>
-            _handleSearchResultAction(boardGame, actionType),
+            _handleSearchCollectionsResultAction(boardGame, actionType),
         onSearch: (query) => widget.viewModel.search(query),
       ),
     );
   }
 
-  Future<void> _handleSearchResultAction(
+  Future<void> _handleSearchCollectionsResultAction(
     BoardGameDetails boardGameDetails,
     BoardGameResultActionType actionType,
   ) async {

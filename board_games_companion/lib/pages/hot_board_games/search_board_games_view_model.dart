@@ -2,7 +2,7 @@
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/pages/search_board_games/search_results.dart';
+// import 'package:board_games_companion/pages/search_board_games/search_results.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -15,10 +15,10 @@ import '../../services/board_games_geek_service.dart';
 part 'search_board_games_view_model.g.dart';
 
 @singleton
-class SearchBoardGamesViewModel = _SearchBoardGamesViewModel with _$SearchBoardGamesViewModel;
+class HotBoardGamesViewModel = _HotBoardGamesViewModel with _$HotBoardGamesViewModel;
 
-abstract class _SearchBoardGamesViewModel with Store {
-  _SearchBoardGamesViewModel(
+abstract class _HotBoardGamesViewModel with Store {
+  _HotBoardGamesViewModel(
     this._boardGamesStore,
     this._boardGameGeekService,
     this._analyticsService,
@@ -33,8 +33,8 @@ abstract class _SearchBoardGamesViewModel with Store {
   @observable
   ObservableList<BoardGameDetails>? hotBoardGames;
 
-  @observable
-  SearchResults searchResults = const SearchResults.init();
+  // @observable
+  // SearchResults searchResults = const SearchResults.init();
 
   @observable
   ObservableFuture<void>? futureLoadHotBoardGames;
@@ -55,8 +55,8 @@ abstract class _SearchBoardGamesViewModel with Store {
   void loadHotBoardGames() =>
       futureLoadHotBoardGames = ObservableFuture<void>(_loadHotBoardGames());
 
-  @action
-  void searchBoardGames() => futureSearchBoardGames = ObservableFuture<void>(_searchBoardGames());
+  // @action
+  // void searchBoardGames() => futureSearchBoardGames = ObservableFuture<void>(_searchBoardGames());
 
   @action
   void setSearchPhrase(String? searchPhrase) => this.searchPhrase = searchPhrase;
@@ -76,31 +76,31 @@ abstract class _SearchBoardGamesViewModel with Store {
 
   void refresh() => _refreshRetryCount++;
 
-  Future<void> _searchBoardGames() async {
-    if (searchPhrase?.isEmpty ?? true) {
-      searchResults = const SearchResults.init();
-      return;
-    }
+  // Future<void> _searchBoardGames() async {
+  //   if (searchPhrase?.isEmpty ?? true) {
+  //     searchResults = const SearchResults.init();
+  //     return;
+  //   }
 
-    try {
-      searchResults = SearchResults.searching(searchPhrase!);
-      searchResults = SearchResults.results(await _boardGameGeekService.search(searchPhrase));
+  //   try {
+  //     searchResults = SearchResults.searching(searchPhrase!);
+  //     searchResults = SearchResults.results(await _boardGameGeekService.search(searchPhrase));
 
-      _analyticsService.logEvent(
-        name: Analytics.searchBoardGames,
-        parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: searchPhrase},
-      );
-    } catch (e, stack) {
-      searchResults = const SearchResults.failure();
-      FirebaseCrashlytics.instance.recordError(e, stack);
-    }
-  }
+  //     _analyticsService.logEvent(
+  //       name: Analytics.searchBoardGames,
+  //       parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: searchPhrase},
+  //     );
+  //   } catch (e, stack) {
+  //     searchResults = const SearchResults.failure();
+  //     FirebaseCrashlytics.instance.recordError(e, stack);
+  //   }
+  // }
 
-  @action
-  void clearSearchResults() {
-    searchPhrase = '';
-    searchResults = const SearchResults.init();
-  }
+  // @action
+  // void clearSearchResults() {
+  //   searchPhrase = '';
+  //   searchResults = const SearchResults.init();
+  // }
 
   Future<void> _loadHotBoardGames() async {
     try {
