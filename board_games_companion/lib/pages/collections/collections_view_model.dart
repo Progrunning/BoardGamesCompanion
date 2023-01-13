@@ -9,6 +9,7 @@ import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/models/hive/search_history_entry.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/services/analytics_service.dart';
+import 'package:board_games_companion/stores/app_store.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
@@ -46,7 +47,15 @@ abstract class _CollectionsViewModel with Store {
     this._playersStore,
     this._searchStore,
     this._analyticsService,
-  );
+    this._appStore,
+  ) {
+    // MK When restoring a backup, reload all of the data
+    reaction((_) => _appStore.backupRestored, (bool? backupRestored) {
+      if (backupRestored ?? false) {
+        loadBoardGames();
+      }
+    });
+  }
 
   final UserStore _userStore;
   final BoardGamesStore _boardGamesStore;
@@ -56,6 +65,7 @@ abstract class _CollectionsViewModel with Store {
   final PlayersStore _playersStore;
   final SearchStore _searchStore;
   final AnalyticsService _analyticsService;
+  final AppStore _appStore;
 
   @observable
   GamesTab selectedTab = GamesTab.owned;

@@ -10,7 +10,6 @@ import '../models/hive/board_game_details.dart';
 import '../models/import_result.dart';
 import '../services/board_games_service.dart';
 import '../services/playthroughs_service.dart';
-import 'app_store.dart';
 
 part 'board_games_store.g.dart';
 
@@ -18,22 +17,10 @@ part 'board_games_store.g.dart';
 class BoardGamesStore = _BoardGamesStore with _$BoardGamesStore;
 
 abstract class _BoardGamesStore with Store {
-  _BoardGamesStore(
-    this._boardGamesService,
-    this._playthroughService,
-    this._appStore,
-  ) {
-    // MK When restoring a backup, reload board games
-    reaction((_) => _appStore.backupRestored, (bool? backupRestored) async {
-      if (backupRestored ?? false) {
-        await loadBoardGames();
-      }
-    });
-  }
+  _BoardGamesStore(this._boardGamesService, this._playthroughService);
 
   final BoardGamesService _boardGamesService;
   final PlaythroughService _playthroughService;
-  final AppStore _appStore;
 
   @observable
   ObservableList<BoardGameDetails> allBoardGames = ObservableList.of([]);

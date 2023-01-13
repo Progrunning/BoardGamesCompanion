@@ -44,12 +44,25 @@ abstract class _HomeViewModelBase with Store {
     3: Tuple2<String, String>('Players', 'PlayersPage'),
   };
 
-  ValueNotifier<bool> isSpeedDialContextMenuOpen = ValueNotifier(false);
+  @observable
+  ObservableFuture<void>? futureloadData;
+
+  @computed
+  bool get anyBoardGamesInCollections => collectionsViewModel.anyBoardGamesInCollections;
+
+  @action
+  void loadData() => futureloadData = ObservableFuture<void>(_loadData());
+
+  ValueNotifier<bool> isSearchDialContextMenuOpen = ValueNotifier(false);
 
   Future<void> trackTabChange(int tabIndex) async {
     await analyticsService.logScreenView(
       screenName: _screenViewByTabIndex[tabIndex]!.item1,
       screenClass: _screenViewByTabIndex[tabIndex]!.item2,
     );
+  }
+
+  Future<void> _loadData() async {
+    collectionsViewModel.loadBoardGames();
   }
 }

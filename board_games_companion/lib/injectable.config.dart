@@ -65,8 +65,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i8.FirebaseAnalyticsObserver>(
       registerModule.firebaseAnalyticsObserver);
   gh.singleton<_i9.PlayerService>(_i9.PlayerService(get<_i6.FileService>()));
-  gh.singleton<_i10.PlayersStore>(
-      _i10.PlayersStore(get<_i9.PlayerService>(), get<_i3.AppStore>()));
+  gh.singleton<_i10.PlayersStore>(_i10.PlayersStore(get<_i9.PlayerService>()));
   gh.factory<_i11.PlayersViewModel>(
       () => _i11.PlayersViewModel(get<_i10.PlayersStore>()));
   gh.singleton<_i12.PreferencesService>(_i12.PreferencesService());
@@ -77,8 +76,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i16.SearchService>(_i16.SearchService());
   gh.singleton<_i17.SearchStore>(_i17.SearchStore(get<_i16.SearchService>()));
   gh.singleton<_i18.UserService>(_i18.UserService());
-  gh.singleton<_i19.UserStore>(
-      _i19.UserStore(get<_i18.UserService>(), get<_i3.AppStore>()));
+  gh.singleton<_i19.UserStore>(_i19.UserStore(get<_i18.UserService>()));
   gh.singleton<_i20.AnalyticsService>(_i20.AnalyticsService(
       get<_i7.FirebaseAnalytics>(), get<_i13.RateAndReviewService>()));
   gh.singleton<_i21.BoardGamesFiltersStore>(_i21.BoardGamesFiltersStore(
@@ -96,9 +94,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i27.AnalyticsRouteObserver>(
       () => _i27.AnalyticsRouteObserver(get<_i20.AnalyticsService>()));
   gh.singleton<_i28.BoardGamesStore>(_i28.BoardGamesStore(
-      get<_i23.BoardGamesService>(),
-      get<_i25.PlaythroughService>(),
-      get<_i3.AppStore>()));
+      get<_i23.BoardGamesService>(), get<_i25.PlaythroughService>()));
   gh.factory<_i29.CollectionSearchResultViewModel>(
       () => _i29.CollectionSearchResultViewModel(get<_i28.BoardGamesStore>()));
   gh.factory<_i30.CollectionsViewModel>(() => _i30.CollectionsViewModel(
@@ -109,7 +105,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i26.PlaythroughsStore>(),
       get<_i10.PlayersStore>(),
       get<_i17.SearchStore>(),
-      get<_i20.AnalyticsService>()));
+      get<_i20.AnalyticsService>(),
+      get<_i3.AppStore>()));
   gh.singleton<_i31.GamePlaythroughsDetailsStore>(
       _i31.GamePlaythroughsDetailsStore(get<_i26.PlaythroughsStore>(),
           get<_i15.ScoresStore>(), get<_i10.PlayersStore>()));

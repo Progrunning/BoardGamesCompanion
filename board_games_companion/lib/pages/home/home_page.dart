@@ -2,6 +2,7 @@ import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/home/home_view_model.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -53,6 +54,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       // MK Force redraw to update FOB
       setState(() {});
     });
+
+    widget.viewModel.loadData();
   }
 
   @override
@@ -116,33 +119,38 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
           ),
           floatingActionButton: tabController.index == _collectionsTabIndex
-              ? SpeedDial(
-                  icon: Icons.search,
-                  overlayColor: AppColors.dialogBackgroundColor,
-                  activeIcon: Icons.close,
-                  openCloseDial: widget.viewModel.isSpeedDialContextMenuOpen,
-                  onPress: () => widget.viewModel.isSpeedDialContextMenuOpen.value =
-                      !widget.viewModel.isSpeedDialContextMenuOpen.value,
-                  children: [
-                    SpeedDialChild(
-                      child: const Icon(Icons.grid_on),
-                      backgroundColor: AppColors.accentColor,
-                      foregroundColor: Colors.white,
-                      label: AppText.homePageSearchCollectionsDialOptionText,
-                      labelBackgroundColor: AppColors.accentColor,
-                      // TODO Show search collection experience
-                      onTap: () async {},
-                    ),
-                    SpeedDialChild(
-                      child: const FaIcon(FontAwesomeIcons.globe),
-                      backgroundColor: AppColors.greenColor,
-                      foregroundColor: Colors.white,
-                      label: AppText.homePageSearchOnlineDialOptionText,
-                      labelBackgroundColor: AppColors.greenColor,
-                      // TODO Show search internet experience
-                      onTap: () async {},
-                    )
-                  ],
+              ? Observer(
+                  builder: (_) {
+                    return SpeedDial(
+                      icon: Icons.search,
+                      overlayColor: AppColors.dialogBackgroundColor,
+                      activeIcon: Icons.close,
+                      openCloseDial: widget.viewModel.isSearchDialContextMenuOpen,
+                      onPress: () => widget.viewModel.isSearchDialContextMenuOpen.value =
+                          !widget.viewModel.isSearchDialContextMenuOpen.value,
+                      children: [
+                        if (widget.viewModel.anyBoardGamesInCollections)
+                          SpeedDialChild(
+                            child: const Icon(Icons.grid_on),
+                            backgroundColor: AppColors.accentColor,
+                            foregroundColor: Colors.white,
+                            label: AppText.homePageSearchCollectionsDialOptionText,
+                            labelBackgroundColor: AppColors.accentColor,
+                            // TODO Show search collection experience
+                            onTap: () async {},
+                          ),
+                        SpeedDialChild(
+                          child: const FaIcon(FontAwesomeIcons.globe),
+                          backgroundColor: AppColors.greenColor,
+                          foregroundColor: Colors.white,
+                          label: AppText.homePageSearchOnlineDialOptionText,
+                          labelBackgroundColor: AppColors.greenColor,
+                          // TODO Show search internet experience
+                          onTap: () async {},
+                        )
+                      ],
+                    );
+                  },
                 )
               : null,
         ),

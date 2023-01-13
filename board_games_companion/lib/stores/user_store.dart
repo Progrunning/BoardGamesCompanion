@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/stores/app_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -15,20 +14,9 @@ part 'user_store.g.dart';
 class UserStore = _UserStore with _$UserStore;
 
 abstract class _UserStore with Store {
-  _UserStore(
-    this._userService,
-    this._appStore,
-  ) {
-    // MK When restoring a backup, reload user data
-    reaction((_) => _appStore.backupRestored, (bool? backupRestored) async {
-      if (backupRestored ?? false) {
-        await loadUser();
-      }
-    });
-  }
+  _UserStore(this._userService);
 
   final UserService _userService;
-  final AppStore _appStore;
 
   @observable
   User? user;

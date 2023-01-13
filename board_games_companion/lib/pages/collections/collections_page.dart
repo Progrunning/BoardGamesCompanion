@@ -103,6 +103,7 @@ class CollectionsPageState extends State<CollectionsPage>
           case FutureStatus.rejected:
             return const Center(child: GenericErrorMessage());
           case FutureStatus.fulfilled:
+            // TODO Use visual states instead
             if (!widget.viewModel.anyBoardGamesInCollections &&
                 (widget.viewModel.isUserNameEmpty)) {
               return const _Empty();
