@@ -1,21 +1,19 @@
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/pages/home/home_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
-import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
-import '../../pages/collections/collection_search_result_view_model.dart';
 import '../../pages/collections/collections_page.dart';
 import '../../pages/collections/search_suggestion.dart';
-import '../../pages/home/home_page.dart';
+import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/board_game/board_game_property.dart';
 import '../../widgets/common/default_icon.dart';
@@ -24,10 +22,9 @@ import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/rating_hexagon.dart';
 
-class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
-  CollectionsSearch({
+class BggSearch extends SearchDelegate<BoardGameDetails?> {
+  BggSearch({
     required this.searchHistory,
-    required this.allBoardGames,
     required this.onResultAction,
     required this.onSearch,
   });
@@ -35,9 +32,8 @@ class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   static const int _maxSearchHistoryEntriesToShow = 10;
 
   final List<SearchHistoryEntry> searchHistory;
-  final List<BoardGameDetails> allBoardGames;
-  final BoardGameResultAction onResultAction;
   final SearchCallback onSearch;
+  final BoardGameResultAction onResultAction;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -45,7 +41,7 @@ class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
       );
 
   @override
-  String? get searchFieldLabel => AppText.collectionsSearchHintText;
+  String? get searchFieldLabel => AppText.bggSearchHintText;
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -91,7 +87,7 @@ class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
               return PageContainer(
                 child: _NoSearchResults(
                   query: query,
-                  onClear: () => query = '',
+                  onRetry: () => showResults(context),
                 ),
               );
             }
@@ -150,16 +146,6 @@ class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
               ))
           .toList(),
     );
-    suggestions.addAll(
-      allBoardGames
-          .where((BoardGameDetails boardGame) =>
-              boardGame.name.toLowerCase().contains(queryLowercased))
-          .map((BoardGameDetails boardGame) => SearchSuggestion(
-                suggestion: boardGame.name,
-                type: SuggestionType.boardGame,
-              ))
-          .toList(),
-    );
 
     return suggestions;
   }
@@ -182,21 +168,12 @@ class _SearchResults extends StatelessWidget {
       separatorBuilder: (_, index) => const SizedBox(height: Dimensions.standardSpacing),
       itemBuilder: (_, index) {
         final boardGame = filteredGames[index];
-        final viewModel = getIt<CollectionSearchResultViewModel>();
-        viewModel.setBoardGameId(boardGame.id);
 
-        return Observer(
-          builder: (_) {
-            return _SearchResultGame(
-              boardGame: viewModel.boardGame!,
-              expansions: viewModel.expansions,
-              hasIncompleteDetails: viewModel.boardGame!.hasIncompleteDetails,
-              isFirstItem: index == 0,
-              isLastItem: index == filteredGames.length - 1,
-              onResultAction: onResultAction,
-              onRefresh: () => viewModel.refreshBoardGameDetails(),
-            );
-          },
+        return _SearchResultGame(
+          boardGame: boardGame,
+          isFirstItem: index == 0,
+          isLastItem: index == filteredGames.length - 1,
+          onResultAction: onResultAction,
         );
       },
     );
@@ -207,21 +184,15 @@ class _SearchResultGame extends StatelessWidget {
   const _SearchResultGame({
     Key? key,
     required this.boardGame,
-    required this.expansions,
-    required this.hasIncompleteDetails,
     required this.isFirstItem,
     required this.isLastItem,
     required this.onResultAction,
-    required this.onRefresh,
   }) : super(key: key);
 
   final BoardGameDetails boardGame;
-  final List<BoardGameDetails>? expansions;
-  final bool hasIncompleteDetails;
   final bool isFirstItem;
   final bool isLastItem;
   final BoardGameResultAction onResultAction;
-  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -255,143 +226,10 @@ class _SearchResultGame extends StatelessWidget {
                   ],
                 ),
               ),
-              if (boardGame.hasIncompleteDetails)
-                _SearchResultGameRefreshData(
-                  boardGame: boardGame,
-                  onRefresh: onRefresh,
-                ),
-              if (expansions?.isNotEmpty ?? false)
-                _SearchResultGameExpansions(
-                  expansions: expansions!,
-                  onResultAction: onResultAction,
-                ),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SearchResultGameExpansions extends StatelessWidget {
-  const _SearchResultGameExpansions({
-    required this.expansions,
-    required this.onResultAction,
-    Key? key,
-  }) : super(key: key);
-
-  final List<BoardGameDetails> expansions;
-  final BoardGameResultAction onResultAction;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: Dimensions.doubleStandardSpacing),
-        const Divider(),
-        const SizedBox(height: Dimensions.standardSpacing),
-        Text(
-          sprintf(AppText.gamesPageSearchResultExpansionsSectionTitleFormat, [expansions.length]),
-          style: AppTheme.theme.textTheme.subtitle1,
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        SizedBox(
-          height: Dimensions.collectionSearchResultExpansionsImageHeight,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: expansions.length,
-            separatorBuilder: (context, index) =>
-                const SizedBox(width: Dimensions.doubleStandardSpacing),
-            itemBuilder: (context, index) {
-              final BoardGameDetails expansion = expansions[index];
-              return SizedBox(
-                height: Dimensions.collectionSearchResultExpansionsImageHeight,
-                width: Dimensions.collectionSearchResultExpansionsImageWidth,
-                // TODO MK Need to fix hero animation if the expansion is shown in the main game results and as well as a regular search result
-                child: BoardGameTile(
-                  id: '${expansion.id}-exp',
-                  name: expansion.name,
-                  nameFontSize: Dimensions.extraSmallFontSize,
-                  imageUrl: expansion.thumbnailUrl ?? '',
-                  elevation: AppStyles.defaultElevation,
-                  onTap: () async => onResultAction(expansion, BoardGameResultActionType.details),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _SearchResultGameRefreshData extends StatefulWidget {
-  const _SearchResultGameRefreshData({
-    required this.boardGame,
-    required this.onRefresh,
-    Key? key,
-  }) : super(key: key);
-
-  final BoardGameDetails boardGame;
-  final VoidCallback onRefresh;
-
-  @override
-  State<_SearchResultGameRefreshData> createState() => _SearchResultGameRefreshDataState();
-}
-
-class _SearchResultGameRefreshDataState extends State<_SearchResultGameRefreshData>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: Dimensions.doubleStandardSpacing),
-        const Divider(),
-        const SizedBox(height: Dimensions.standardSpacing),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(Icons.info_outlined, size: Dimensions.smallButtonIconSize),
-            const SizedBox(width: Dimensions.standardSpacing),
-            Expanded(
-              child: Text(
-                AppText.gamesPageSearchResultRefreshDetails,
-                style: AppTheme.theme.textTheme.subtitle1,
-              ),
-            ),
-            RotationTransition(
-              turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
-              child: IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () async {
-                  _controller.repeat();
-                  widget.onRefresh();
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
@@ -418,17 +256,6 @@ class _SearchResultGameDetails extends StatelessWidget {
           style: AppTheme.theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
-        BoardGameProperty(
-          icon: const Icon(Icons.people, size: _gameStatIconSize),
-          iconWidth: _gamePropertyIconSize,
-          propertyName: boardGame.playersFormatted,
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        BoardGameProperty(
-          icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
-          iconWidth: _gamePropertyIconSize,
-          propertyName: boardGame.playtimeFormatted,
-        ),
         if (boardGame.avgWeight != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
@@ -482,41 +309,71 @@ class _SearchResultGameActions extends StatelessWidget {
   }
 }
 
+// TODO MK Update to show a button to add a game manually
+// TODO MK Update copy to say that it could be because BGG failed or there's no board game like that in the BGG database
 class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({
     Key? key,
     required this.query,
-    required this.onClear,
+    required this.onRetry,
   }) : super(key: key);
 
   final String query;
-  final VoidCallback onClear;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
+      padding: const EdgeInsets.symmetric(
+        vertical: Dimensions.standardSpacing,
+        horizontal: Dimensions.doubleStandardSpacing,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text.rich(
             TextSpan(
               children: [
-                const TextSpan(text: AppText.gamesPageSearchNoSearchResults),
+                const TextSpan(
+                  text: '''Sorry, we couldn't find any results for the search phrase ''',
+                ),
                 TextSpan(
-                  text: query,
+                  text: '$query.',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            textAlign: TextAlign.justify,
           ),
           const SizedBox(height: Dimensions.standardSpacing),
+          Text.rich(
+            TextSpan(
+              children: [
+                const TextSpan(
+                  text: 'Please try again or if the problem persists please contact support ',
+                ),
+                TextSpan(
+                  text: 'feedback@progrunning.net',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      await LauncherHelper.launchUri(
+                        context,
+                        'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
+                      );
+                    },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: Dimensions.doubleStandardSpacing),
           Center(
             child: ElevatedIconButton(
-              title: AppText.gamesPageSearchClearSaerch,
-              icon: const DefaultIcon(Icons.clear),
-              onPressed: onClear,
+              title: AppText.searchBoardGamesSearchRetry,
+              icon: const DefaultIcon(Icons.refresh),
+              onPressed: () => onRetry(),
             ),
           ),
         ],

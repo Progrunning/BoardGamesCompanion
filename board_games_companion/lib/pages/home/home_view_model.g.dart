@@ -48,12 +48,21 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
     });
   }
 
-  late final _$searchAsyncAction =
-      AsyncAction('_HomeViewModelBase.search', context: context);
+  late final _$searchCollectionsAsyncAction =
+      AsyncAction('_HomeViewModelBase.searchCollections', context: context);
 
   @override
-  Future<List<BoardGameDetails>> search(String query) {
-    return _$searchAsyncAction.run(() => super.search(query));
+  Future<List<BoardGameDetails>> searchCollections(String query) {
+    return _$searchCollectionsAsyncAction
+        .run(() => super.searchCollections(query));
+  }
+
+  late final _$searchBggAsyncAction =
+      AsyncAction('_HomeViewModelBase.searchBgg', context: context);
+
+  @override
+  Future<List<BoardGameDetails>> searchBgg(String query) {
+    return _$searchBggAsyncAction.run(() => super.searchBgg(query));
   }
 
   late final _$_HomeViewModelBaseActionController =

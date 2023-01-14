@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'search_board_games_view_model.dart';
+part of 'hot_board_games_view_model.dart';
 
 // **************************************************************************
 // StoreGenerator

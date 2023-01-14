@@ -2,9 +2,11 @@
 
 import 'dart:async';
 
+import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/stores/app_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/search_store.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -17,7 +19,7 @@ import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../collections/collections_view_model.dart';
-import '../hot_board_games/search_board_games_view_model.dart';
+import '../hot_board_games/hot_board_games_view_model.dart';
 import '../players/players_view_model.dart';
 import '../plays/plays_view_model.dart';
 
@@ -38,6 +40,7 @@ abstract class _HomeViewModelBase with Store {
     this._appStore,
     this._searchStore,
     this._boardGamesStore,
+    this._boardGameGeekService,
   ) {
     // MK When restoring a backup, reload all of the data
     reaction((_) => _appStore.backupRestored, (bool? backupRestored) {
@@ -57,6 +60,7 @@ abstract class _HomeViewModelBase with Store {
   final AppStore _appStore;
   final BoardGamesStore _boardGamesStore;
   final SearchStore _searchStore;
+  final BoardGamesGeekService _boardGameGeekService;
 
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
     0: Tuple2<String, String>('Collections', 'CollectionsPage'),
@@ -84,25 +88,30 @@ abstract class _HomeViewModelBase with Store {
   void loadData() => futureloadData = ObservableFuture<void>(_loadData());
 
   @action
-  Future<List<BoardGameDetails>> search(String query) async {
-    // MK Intentionally unawaiting capturing of an analytic event
-    unawaited(analyticsService.logEvent(
-      name: Analytics.searchBoardGames,
-      parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: query},
-    ));
-
-    await _searchStore.addOrUpdateScore(
-      SearchHistoryEntry(
-        query: query,
-        dateTime: DateTime.now().toUtc(),
-      ),
-    );
+  Future<List<BoardGameDetails>> searchCollections(String query) async {
+    await _searchBase(query);
 
     final queryLowercased = query.toLowerCase();
     return allBoardGames
         .where(
             (BoardGameDetails boardGame) => boardGame.name.toLowerCase().contains(queryLowercased))
         .toList();
+  }
+
+  @action
+  Future<List<BoardGameDetails>> searchBgg(String query) async {
+    if (query.isEmpty) {
+      return [];
+    }
+
+    await _searchBase(query);
+
+    try {
+      return await _boardGameGeekService.search(query);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      rethrow;
+    }
   }
 
   ValueNotifier<bool> isSearchDialContextMenuOpen = ValueNotifier(false);
@@ -117,5 +126,20 @@ abstract class _HomeViewModelBase with Store {
   Future<void> _loadData() async {
     collectionsViewModel.loadBoardGames();
     await _searchStore.loadSearchHistory();
+  }
+
+  Future<void> _searchBase(String query) async {
+    // MK Intentionally unawaiting capturing of an analytic event
+    unawaited(analyticsService.logEvent(
+      name: Analytics.searchBoardGames,
+      parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: query},
+    ));
+
+    await _searchStore.addOrUpdateScore(
+      SearchHistoryEntry(
+        query: query,
+        dateTime: DateTime.now().toUtc(),
+      ),
+    );
   }
 }

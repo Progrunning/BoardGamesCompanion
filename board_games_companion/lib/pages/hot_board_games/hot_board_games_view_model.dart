@@ -12,7 +12,7 @@ import '../../common/analytics.dart';
 import '../../services/analytics_service.dart';
 import '../../services/board_games_geek_service.dart';
 
-part 'search_board_games_view_model.g.dart';
+part 'hot_board_games_view_model.g.dart';
 
 @singleton
 class HotBoardGamesViewModel = _HotBoardGamesViewModel with _$HotBoardGamesViewModel;
@@ -32,9 +32,6 @@ abstract class _HotBoardGamesViewModel with Store {
 
   @observable
   ObservableList<BoardGameDetails>? hotBoardGames;
-
-  // @observable
-  // SearchResults searchResults = const SearchResults.init();
 
   @observable
   ObservableFuture<void>? futureLoadHotBoardGames;
@@ -78,20 +75,20 @@ abstract class _HotBoardGamesViewModel with Store {
 
   // Future<void> _searchBoardGames() async {
   //   if (searchPhrase?.isEmpty ?? true) {
-  //     searchResults = const SearchResults.init();
+  //     onlineSearchResults = const OnlineSearchResults.init();
   //     return;
   //   }
 
   //   try {
-  //     searchResults = SearchResults.searching(searchPhrase!);
-  //     searchResults = SearchResults.results(await _boardGameGeekService.search(searchPhrase));
+  //     onlineSearchResults = OnlineSearchResults.searching(searchPhrase!);
+  //     onlineSearchResults = OnlineSearchResults.results(await _boardGameGeekService.search(searchPhrase));
 
   //     _analyticsService.logEvent(
   //       name: Analytics.searchBoardGames,
   //       parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: searchPhrase},
   //     );
   //   } catch (e, stack) {
-  //     searchResults = const SearchResults.failure();
+  //     onlineSearchResults = const OnlineSearchResults.failure();
   //     FirebaseCrashlytics.instance.recordError(e, stack);
   //   }
   // }
@@ -99,7 +96,7 @@ abstract class _HotBoardGamesViewModel with Store {
   // @action
   // void clearSearchResults() {
   //   searchPhrase = '';
-  //   searchResults = const SearchResults.init();
+  //   onlineSearchResults = const OnlineSearchResults.init();
   // }
 
   Future<void> _loadHotBoardGames() async {

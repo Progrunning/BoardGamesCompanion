@@ -37,13 +37,6 @@ enum BoardGameResultActionType {
   playthroughs,
 }
 
-typedef BoardGameResultAction = void Function(
-  BoardGameDetails boardGame,
-  BoardGameResultActionType actionType,
-);
-
-typedef SearchCallback = Future<List<BoardGameDetails>> Function(String query);
-
 class CollectionsPage extends StatefulWidget {
   const CollectionsPage(
     this.viewModel,

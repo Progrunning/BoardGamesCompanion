@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/home/home_view_model.dart';
+import 'package:board_games_companion/widgets/search/bgg_search.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -24,6 +25,13 @@ import '../players/players_page.dart';
 import '../plays/plays_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'home_page_drawer.dart';
+
+typedef SearchCallback = Future<List<BoardGameDetails>> Function(String query);
+
+typedef BoardGameResultAction = void Function(
+  BoardGameDetails boardGame,
+  BoardGameResultActionType actionType,
+);
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -155,8 +163,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                           foregroundColor: Colors.white,
                           label: AppText.homePageSearchOnlineDialOptionText,
                           labelBackgroundColor: AppColors.greenColor,
-                          // TODO Show search internet experience
-                          onTap: () async {},
+                          onTap: () => _searchBgg(),
                         )
                       ],
                     );
@@ -165,6 +172,19 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
               : null,
         ),
       );
+
+  Future<void> _searchBgg() async {
+    await widget.viewModel.rateAndReviewService.increaseNumberOfSignificantActions();
+    await showSearch(
+      context: context,
+      delegate: BggSearch(
+        searchHistory: widget.viewModel.searchHistory,
+        onResultAction: (boardGame, actionType) async =>
+            _handleBggSearchResultAction(boardGame, actionType),
+        onSearch: (query) => widget.viewModel.searchBgg(query),
+      ),
+    );
+  }
 
   Future<void> _searchCollections() async {
     await widget.viewModel.rateAndReviewService.increaseNumberOfSignificantActions();
@@ -175,7 +195,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
         searchHistory: widget.viewModel.searchHistory,
         onResultAction: (boardGame, actionType) async =>
             _handleSearchCollectionsResultAction(boardGame, actionType),
-        onSearch: (query) => widget.viewModel.search(query),
+        onSearch: (query) => widget.viewModel.searchCollections(query),
       ),
     );
   }
@@ -207,6 +227,29 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             boardGameImageHeroId: boardGameDetails.id,
           ),
         ));
+        break;
+    }
+  }
+
+  Future<void> _handleBggSearchResultAction(
+    BoardGameDetails boardGameDetails,
+    BoardGameResultActionType actionType,
+  ) async {
+    switch (actionType) {
+      case BoardGameResultActionType.details:
+        unawaited(Navigator.pushNamed(
+          context,
+          BoardGamesDetailsPage.pageRoute,
+          arguments: BoardGameDetailsPageArguments(
+            boardGameId: boardGameDetails.id,
+            boardGameName: boardGameDetails.name,
+            boardGameImageHeroId: boardGameDetails.id,
+            navigatingFromType: CollectionsPage,
+            boardGameImageUrl: boardGameDetails.imageUrl,
+          ),
+        ));
+        break;
+      case BoardGameResultActionType.playthroughs:
         break;
     }
   }

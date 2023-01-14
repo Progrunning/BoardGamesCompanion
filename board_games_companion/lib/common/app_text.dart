@@ -172,7 +172,9 @@ class AppText {
       '''It looks there's no players that match the search phrase ''';
   static const playerPageSearchHintText = 'Search for players...';
 
-  static const collectionsSearchHintText = 'Search your collection...';
+  static const collectionsSearchHintText = 'Search your collection';
+  static const bggSearchHintText = 'Search game titles online';
+
   static const gamesPageSearchNoSearchResults =
       '''It looks there's no games in your collections that match the search phrase ''';
   static const gamesPageSearchClearSaerch = 'Clear search';

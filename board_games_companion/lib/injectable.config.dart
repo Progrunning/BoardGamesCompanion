@@ -15,7 +15,7 @@ import 'pages/collections/collections_view_model.dart' as _i30;
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart' as _i42;
 import 'pages/edit_playthrough/playthrough_note_view_model.dart' as _i34;
 import 'pages/home/home_view_model.dart' as _i43;
-import 'pages/hot_board_games/search_board_games_view_model.dart' as _i32;
+import 'pages/hot_board_games/hot_board_games_view_model.dart' as _i32;
 import 'pages/player/player_view_model.dart' as _i24;
 import 'pages/players/players_view_model.dart' as _i11;
 import 'pages/plays/plays_view_model.dart' as _i33;
@@ -166,7 +166,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i33.PlaysViewModel>(),
       get<_i3.AppStore>(),
       get<_i17.SearchStore>(),
-      get<_i28.BoardGamesStore>()));
+      get<_i28.BoardGamesStore>(),
+      get<_i22.BoardGamesGeekService>()));
   return get;
 }
 
