@@ -181,7 +181,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
         searchHistory: widget.viewModel.searchHistory,
         onResultAction: (boardGame, actionType) async =>
             _handleBggSearchResultAction(boardGame, actionType),
-        onSearch: (query) => widget.viewModel.searchBgg(query),
+        onSearch: (query) async => widget.viewModel.searchBgg(query),
       ),
     );
   }

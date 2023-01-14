@@ -98,7 +98,6 @@ abstract class _HomeViewModelBase with Store {
         .toList();
   }
 
-  @action
   Future<List<BoardGameDetails>> searchBgg(String query) async {
     if (query.isEmpty) {
       return [];
