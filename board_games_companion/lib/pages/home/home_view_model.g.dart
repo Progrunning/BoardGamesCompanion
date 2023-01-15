@@ -31,6 +31,47 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
           Computed<List<SearchHistoryEntry>>(() => super.searchHistory,
               name: '_HomeViewModelBase.searchHistory'))
       .value;
+  Computed<SortBy?>? _$bggSearchSelectedSortByComputed;
+
+  @override
+  SortBy? get bggSearchSelectedSortBy => (_$bggSearchSelectedSortByComputed ??=
+          Computed<SortBy?>(() => super.bggSearchSelectedSortBy,
+              name: '_HomeViewModelBase.bggSearchSelectedSortBy'))
+      .value;
+
+  late final _$bggSearchResultsStreamAtom =
+      Atom(name: '_HomeViewModelBase.bggSearchResultsStream', context: context);
+
+  @override
+  ObservableStream<List<BoardGameDetails>> get bggSearchResultsStream {
+    _$bggSearchResultsStreamAtom.reportRead();
+    return super.bggSearchResultsStream;
+  }
+
+  @override
+  set bggSearchResultsStream(ObservableStream<List<BoardGameDetails>> value) {
+    _$bggSearchResultsStreamAtom
+        .reportWrite(value, super.bggSearchResultsStream, () {
+      super.bggSearchResultsStream = value;
+    });
+  }
+
+  late final _$bggSearchSortByOptionsAtom =
+      Atom(name: '_HomeViewModelBase.bggSearchSortByOptions', context: context);
+
+  @override
+  ObservableList<SortBy> get bggSearchSortByOptions {
+    _$bggSearchSortByOptionsAtom.reportRead();
+    return super.bggSearchSortByOptions;
+  }
+
+  @override
+  set bggSearchSortByOptions(ObservableList<SortBy> value) {
+    _$bggSearchSortByOptionsAtom
+        .reportWrite(value, super.bggSearchSortByOptions, () {
+      super.bggSearchSortByOptions = value;
+    });
+  }
 
   late final _$futureloadDataAtom =
       Atom(name: '_HomeViewModelBase.futureloadData', context: context);
@@ -57,14 +98,6 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
         .run(() => super.searchCollections(query));
   }
 
-  late final _$searchBggAsyncAction =
-      AsyncAction('_HomeViewModelBase.searchBgg', context: context);
-
-  @override
-  Future<List<BoardGameDetails>> searchBgg(String query) {
-    return _$searchBggAsyncAction.run(() => super.searchBgg(query));
-  }
-
   late final _$_HomeViewModelBaseActionController =
       ActionController(name: '_HomeViewModelBase', context: context);
 
@@ -80,12 +113,37 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
   }
 
   @override
+  void updateBggSearchSortByOption(SortBy sortBy) {
+    final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
+        name: '_HomeViewModelBase.updateBggSearchSortByOption');
+    try {
+      return super.updateBggSearchSortByOption(sortBy);
+    } finally {
+      _$_HomeViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateBggSearchQuery(String query) {
+    final _$actionInfo = _$_HomeViewModelBaseActionController.startAction(
+        name: '_HomeViewModelBase.updateBggSearchQuery');
+    try {
+      return super.updateBggSearchQuery(query);
+    } finally {
+      _$_HomeViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+bggSearchResultsStream: ${bggSearchResultsStream},
+bggSearchSortByOptions: ${bggSearchSortByOptions},
 futureloadData: ${futureloadData},
 allBoardGames: ${allBoardGames},
 anyBoardGamesInCollections: ${anyBoardGamesInCollections},
-searchHistory: ${searchHistory}
+searchHistory: ${searchHistory},
+bggSearchSelectedSortBy: ${bggSearchSelectedSortBy}
     ''';
   }
 }

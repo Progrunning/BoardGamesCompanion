@@ -4,8 +4,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/enums/order_by.dart';
-import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:board_games_companion/models/sort_by.dart';
 import 'package:board_games_companion/stores/board_games_filters_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
@@ -19,10 +17,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../common/constants.dart';
 import '../../common/enums/games_tab.dart';
-import '../../extensions/date_time_extensions.dart';
-import '../../extensions/double_extensions.dart';
 import '../../extensions/int_extensions.dart';
-import '../../extensions/string_extensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/players_store.dart';
@@ -104,36 +99,7 @@ abstract class _CollectionsViewModel with Store {
       return ObservableList.of(filteredBoardGames);
     }
 
-    filteredBoardGames.sort((boardGame, otherBoardGame) {
-      if (sortBy.orderBy == OrderBy.Descending) {
-        final buffer = boardGame;
-        boardGame = otherBoardGame;
-        otherBoardGame = buffer;
-      }
-
-      switch (sortBy.sortByOption) {
-        case SortByOption.Name:
-          return boardGame.name.safeCompareTo(otherBoardGame.name);
-        case SortByOption.YearPublished:
-          return boardGame.yearPublished.safeCompareTo(otherBoardGame.yearPublished);
-        case SortByOption.LastUpdated:
-          return boardGame.lastModified.safeCompareTo(otherBoardGame.lastModified);
-        case SortByOption.Rank:
-          return boardGame.rank.safeCompareTo(otherBoardGame.rank);
-        case SortByOption.NumberOfPlayers:
-          if (sortBy.orderBy == OrderBy.Descending) {
-            return otherBoardGame.maxPlayers.safeCompareTo(boardGame.maxPlayers);
-          }
-
-          return boardGame.minPlayers.safeCompareTo(otherBoardGame.maxPlayers);
-        case SortByOption.Playtime:
-          return boardGame.maxPlaytime.safeCompareTo(otherBoardGame.maxPlaytime);
-        case SortByOption.Rating:
-          return otherBoardGame.rating.safeCompareTo(boardGame.rating);
-        default:
-          return boardGame.lastModified.safeCompareTo(otherBoardGame.lastModified);
-      }
-    });
+    filteredBoardGames.sortBy(sortBy);
 
     return ObservableList.of(filteredBoardGames);
   }

@@ -6,6 +6,7 @@ import 'package:board_games_companion/services/board_games_geek_service.dart';
 import 'package:board_games_companion/stores/app_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/search_store.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -13,8 +14,11 @@ import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../common/analytics.dart';
+import '../../common/enums/order_by.dart';
+import '../../common/enums/sort_by_option.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
+import '../../models/sort_by.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
@@ -42,6 +46,9 @@ abstract class _HomeViewModelBase with Store {
     this._boardGamesStore,
     this._boardGameGeekService,
   ) {
+    _bggSearchResultsStreamController.onListen = () => _searchBgg();
+    bggSearchResultsStream =
+        ObservableStream<List<BoardGameDetails>>(_bggSearchResultsStreamController.stream);
     // MK When restoring a backup, reload all of the data
     reaction((_) => _appStore.backupRestored, (bool? backupRestored) {
       if (backupRestored ?? false) {
@@ -62,12 +69,32 @@ abstract class _HomeViewModelBase with Store {
   final SearchStore _searchStore;
   final BoardGamesGeekService _boardGameGeekService;
 
+  final StreamController<List<BoardGameDetails>> _bggSearchResultsStreamController =
+      StreamController<List<BoardGameDetails>>.broadcast();
+
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
     0: Tuple2<String, String>('Collections', 'CollectionsPage'),
     1: Tuple2<String, String>('Plays', 'PlaysPage'),
     2: Tuple2<String, String>('Players', 'PlayersPage'),
     3: Tuple2<String, String>('Hot', 'HotBoardGamesPage'),
   };
+
+  final List<BoardGameDetails> _bggSearchResults = [];
+
+  String? _bggSearchQuery;
+  String? _previousBggSearchQuery;
+
+  @observable
+  ObservableStream<List<BoardGameDetails>> bggSearchResultsStream =
+      ObservableStream(Stream.value([]));
+
+  @observable
+  ObservableList<SortBy> bggSearchSortByOptions = ObservableList.of([
+    SortBy(sortByOption: SortByOption.Name)
+      ..selected = true
+      ..orderBy = OrderBy.Ascending,
+    SortBy(sortByOption: SortByOption.YearPublished),
+  ]);
 
   @observable
   ObservableFuture<void>? futureloadData;
@@ -84,12 +111,20 @@ abstract class _HomeViewModelBase with Store {
     ..sort((entry, otherEntry) => otherEntry.dateTime.compareTo(entry.dateTime))
     ..toList();
 
+  @computed
+  SortBy? get bggSearchSelectedSortBy =>
+      bggSearchSortByOptions.firstWhereOrNull((sb) => sb.selected);
+
   @action
   void loadData() => futureloadData = ObservableFuture<void>(_loadData());
 
   @action
   Future<List<BoardGameDetails>> searchCollections(String query) async {
-    await _searchBase(query);
+    if (query.isEmpty) {
+      return [];
+    }
+
+    await _captureSearchDetails(query);
 
     final queryLowercased = query.toLowerCase();
     return allBoardGames
@@ -98,20 +133,28 @@ abstract class _HomeViewModelBase with Store {
         .toList();
   }
 
-  Future<List<BoardGameDetails>> searchBgg(String query) async {
-    if (query.isEmpty) {
-      return [];
+  @action
+  void updateBggSearchSortByOption(SortBy sortBy) {
+    // MK If already selected, update ordering direction
+    if (sortBy.selected) {
+      if (sortBy.orderBy == OrderBy.Ascending) {
+        sortBy.orderBy = OrderBy.Descending;
+      } else {
+        sortBy.orderBy = OrderBy.Ascending;
+      }
     }
 
-    await _searchBase(query);
-
-    try {
-      return await _boardGameGeekService.search(query);
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      rethrow;
+    for (final sb in bggSearchSortByOptions) {
+      sb.selected = false;
     }
+
+    sortBy.selected = true;
+
+    _bggSearchResultsStreamController.add(_bggSearchResults..sortBy(bggSearchSelectedSortBy));
   }
+
+  @action
+  void updateBggSearchQuery(String query) => _bggSearchQuery = query;
 
   ValueNotifier<bool> isSearchDialContextMenuOpen = ValueNotifier(false);
 
@@ -127,7 +170,40 @@ abstract class _HomeViewModelBase with Store {
     await _searchStore.loadSearchHistory();
   }
 
-  Future<void> _searchBase(String query) async {
+  Future<void> _searchBgg() async {
+    if (_bggSearchQuery?.isEmpty ?? true) {
+      return;
+    }
+
+    if (_previousBggSearchQuery == _bggSearchQuery &&
+        (bggSearchResultsStream.value?.isNotEmpty ?? false)) {
+      return;
+    }
+
+    await _captureSearchDetails(_bggSearchQuery!);
+
+    try {
+      _bggSearchResults.clear();
+      final foundBoardGames = await _boardGameGeekService.search(_bggSearchQuery);
+      for (final boardGame in foundBoardGames) {
+        // MK Enrich the game details, if available
+        if (_boardGamesStore.allBoardGamesMap.containsKey(boardGame.id)) {
+          _bggSearchResults.add(_boardGamesStore.allBoardGamesMap[boardGame.id]!);
+          continue;
+        }
+
+        _bggSearchResults.add(boardGame);
+      }
+
+      _previousBggSearchQuery = _bggSearchQuery;
+      _bggSearchResultsStreamController.add(_bggSearchResults..sortBy(bggSearchSelectedSortBy));
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      rethrow;
+    }
+  }
+
+  Future<void> _captureSearchDetails(String query) async {
     // MK Intentionally unawaiting capturing of an analytic event
     unawaited(analyticsService.logEvent(
       name: Analytics.searchBoardGames,

@@ -32,6 +32,10 @@ class AppText {
   static const homePageSearchCollectionsDialOptionText = 'Search collections';
   static const homePageSearchOnlineDialOptionText = 'Search online';
 
+  static const onlineSearchGamePublishYearFormat = 'Published in %i';
+  static const onlineSearchSortingSectionTitle = 'Sort';
+  static const onlineSearchResultsSectionTitleFormat = 'Results (%i)';
+
   static const aboutPageAuthorSectionTitle = 'Author';
   static const aboutPageDesignAndArtSectionTitle = 'Design & Art';
   static const aboutPageContentAndDataSectionTitle = 'Content & Data';

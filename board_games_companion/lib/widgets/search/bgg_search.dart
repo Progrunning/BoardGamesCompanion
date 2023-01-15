@@ -1,8 +1,10 @@
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/pages/collections/collections_page.dart';
 import 'package:board_games_companion/pages/home/home_page.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
@@ -10,6 +12,7 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
+import '../../models/sort_by.dart';
 import '../../pages/collections/search_suggestion.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
@@ -17,19 +20,29 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
+import '../common/slivers/bgc_sliver_header_delegate.dart';
+import '../common/sorting/sort_by_chip.dart';
 
+/// [SearchDelegate] for the online (i.e. BGG) search.
+/// Controller by the [HomeViewModel].
 class BggSearch extends SearchDelegate<BoardGameDetails?> {
   BggSearch({
     required this.searchHistory,
+    required this.sortByOptions,
     required this.onResultAction,
-    required this.onSearch,
+    required this.searchResultsStream,
+    required this.onSortyByUpdate,
+    required this.onQueryChanged,
   });
 
   static const int _maxSearchHistoryEntriesToShow = 10;
 
   final List<SearchHistoryEntry> searchHistory;
-  final SearchCallback onSearch;
+  final List<SortBy> sortByOptions;
+  final Stream<List<BoardGameDetails>> searchResultsStream;
   final BoardGameResultAction onResultAction;
+  final void Function(SortBy) onSortyByUpdate;
+  final void Function(String) onQueryChanged;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -48,9 +61,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
     return [
       IconButton(
         icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
+        onPressed: () => query = '',
       ),
     ];
   }
@@ -70,28 +81,53 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
     }
 
     return PageContainer(
-      child: FutureBuilder<List<BoardGameDetails>>(
-        future: onSearch(query),
+      child: StreamBuilder<List<BoardGameDetails>>(
+        stream: searchResultsStream,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-            case ConnectionState.active:
               return const LoadingIndicator();
+            case ConnectionState.active:
             case ConnectionState.done:
               if (snapshot.hasError) {
                 return _SearchError(onRetry: () => query = query);
               }
 
-              final filteredGames = snapshot.data;
-              if (filteredGames?.isEmpty ?? true) {
+              final foundGames = snapshot.data;
+              if (foundGames?.isEmpty ?? true) {
                 return _NoSearchResults(
                   query: query,
                   onRetry: () => query = query,
                 );
               }
 
-              return _SearchResults(filteredGames: filteredGames!, onResultAction: onResultAction);
+              return CustomScrollView(
+                slivers: [
+                  SliverPersistentHeader(
+                    delegate: BgcSliverHeaderDelegate(
+                      primaryTitle: AppText.onlineSearchSortingSectionTitle,
+                    ),
+                  ),
+                  _SearchFilters(
+                    sortByOptions: sortByOptions,
+                    onSortByChange: (SortBy selctedSortBy) {
+                      onSortyByUpdate(selctedSortBy);
+                      showResults(context);
+                    },
+                  ),
+                  SliverPersistentHeader(
+                    delegate: BgcSliverHeaderDelegate(
+                      primaryTitle: sprintf(
+                        AppText.onlineSearchResultsSectionTitleFormat,
+                        [foundGames!.length],
+                      ),
+                    ),
+                    pinned: true,
+                  ),
+                  _SearchResults(foundGames: foundGames, onResultAction: onResultAction),
+                ],
+              );
           }
         },
       ),
@@ -100,6 +136,8 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    onQueryChanged(query);
+
     if (query.isEmpty) {
       return ListView();
     }
@@ -121,6 +159,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
           title: Text(suggestion.suggestion),
           onTap: () {
             query = suggestion.suggestion;
+            onQueryChanged(query);
             showResults(context);
           },
         );
@@ -147,31 +186,62 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
   }
 }
 
+class _SearchFilters extends StatelessWidget {
+  const _SearchFilters({
+    required this.sortByOptions,
+    required this.onSortByChange,
+  });
+
+  final List<SortBy> sortByOptions;
+  final void Function(SortBy) onSortByChange;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+        child: Row(
+          children: [
+            for (final sortByOption in sortByOptions) ...[
+              SortByChip(
+                sortBy: sortByOption,
+                onSortByChange: (sortBy) => onSortByChange(sortBy),
+              ),
+              const SizedBox(width: Dimensions.standardSpacing),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _SearchResults extends StatelessWidget {
   const _SearchResults({
     Key? key,
-    required this.filteredGames,
+    required this.foundGames,
     required this.onResultAction,
   }) : super(key: key);
 
-  final List<BoardGameDetails> filteredGames;
+  final List<BoardGameDetails> foundGames;
   final BoardGameResultAction onResultAction;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: filteredGames.length,
-      separatorBuilder: (_, index) => const SizedBox(height: Dimensions.standardSpacing),
-      itemBuilder: (_, index) {
-        final boardGame = filteredGames[index];
-
-        return _SearchResultGame(
-          boardGame: boardGame,
-          isFirstItem: index == 0,
-          isLastItem: index == filteredGames.length - 1,
-          onResultAction: onResultAction,
-        );
-      },
+    return SliverList(
+      delegate: SliverChildListDelegate.fixed(
+        [
+          for (final boardGame in foundGames) ...[
+            _SearchResultGame(
+              boardGame: boardGame,
+              isFirstItem: foundGames.first == boardGame,
+              isLastItem: foundGames.last == boardGame,
+              onResultAction: onResultAction,
+            ),
+            const SizedBox(height: Dimensions.standardSpacing)
+          ]
+        ],
+      ),
     );
   }
 }
@@ -200,29 +270,65 @@ class _SearchResultGame extends StatelessWidget {
         right: Dimensions.standardSpacing,
       ),
       child: PanelContainer(
-        child: Padding(
-          padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Column(
-            children: [
-              IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: Dimensions.collectionSearchResultBoardGameImageHeight,
-                      width: Dimensions.collectionSearchResultBoardGameImageWidth,
-                      child: BoardGameTile(
-                        id: boardGame.id,
-                        imageUrl: boardGame.thumbnailUrl ?? '',
+        child: InkWell(
+          borderRadius: AppTheme.defaultBorderRadius,
+          onTap: () => onResultAction(boardGame, BoardGameResultActionType.details),
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            child: Column(
+              children: [
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                        width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                        child: BoardGameTile(
+                          id: boardGame.id,
+                          imageUrl: boardGame.imageUrl ?? '',
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: Dimensions.standardSpacing),
+                      Expanded(child: _SearchResultGameDetails(boardGame: boardGame)),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SearchResultGameDetails extends StatelessWidget {
+  const _SearchResultGameDetails({
+    Key? key,
+    required this.boardGame,
+  }) : super(key: key);
+
+  final BoardGameDetails boardGame;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          boardGame.name,
+          overflow: TextOverflow.ellipsis,
+          style: AppTheme.theme.textTheme.bodyLarge,
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        if (boardGame.yearPublished != null)
+          Text(
+            sprintf(AppText.onlineSearchGamePublishYearFormat, [boardGame.yearPublished]),
+            overflow: TextOverflow.ellipsis,
+            style: AppTheme.theme.textTheme.subtitle1,
+          ),
+      ],
     );
   }
 }
