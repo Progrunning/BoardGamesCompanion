@@ -2,19 +2,17 @@ import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/collections/collections_page.dart';
 import 'package:board_games_companion/pages/home/home_page.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
-import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
 import '../../models/sort_by.dart';
 import '../../pages/collections/search_suggestion.dart';
-import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
@@ -349,15 +347,23 @@ class _SearchError extends StatelessWidget {
         horizontal: Dimensions.doubleStandardSpacing,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          const SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+          const Center(
+            child: Icon(
+              FontAwesomeIcons.faceSadTear,
+              size: Dimensions.emptyPageTitleIconSize,
+              color: AppColors.primaryColor,
+            ),
+          ),
+          const SizedBox(height: Dimensions.doubleStandardSpacing),
           const Text.rich(
             TextSpan(
               children: [
                 TextSpan(
                   text:
-                      'Sorry, there was a problem when searching. Check your internet connectivity and try again.',
+                      'Sorry, we ran into a problem when searching for board games. Check your internet connectivity and try again.',
                 ),
               ],
             ),
@@ -399,13 +405,22 @@ class _NoSearchResults extends StatelessWidget {
         horizontal: Dimensions.doubleStandardSpacing,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          const SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+          const Center(
+            child: Icon(
+              FontAwesomeIcons.faceSadTear,
+              size: Dimensions.emptyPageTitleIconSize,
+              color: AppColors.primaryColor,
+            ),
+          ),
+          const SizedBox(height: Dimensions.doubleStandardSpacing),
           Text.rich(
             TextSpan(
               children: [
-                const TextSpan(text: '''Sorry, we couldn't find any results for your query '''),
+                const TextSpan(
+                    text: '''Sorry, we couldn't find any board game titles for your query: '''),
                 TextSpan(
                   text: '$query.',
                   style: const TextStyle(fontWeight: FontWeight.bold),
@@ -414,36 +429,24 @@ class _NoSearchResults extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Dimensions.standardSpacing),
-          Text.rich(
+          const Text.rich(
             TextSpan(
               children: [
-                const TextSpan(
-                  text: 'Please try again or if the problem persists please contact support ',
-                ),
                 TextSpan(
-                  text: 'feedback@progrunning.net',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
-                      await LauncherHelper.launchUri(
-                        context,
-                        'mailto:${Constants.feedbackEmailAddress}?subject=BGC%20Feedback',
-                      );
-                    },
-                ),
+                    text:
+                        '''The search is done using the BoardGamesGeek database, which is the biggest community based catalog of games but some of the titles might still be missing.'''),
               ],
             ),
           ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          const Text('You can add any missing games manually by clicking the below button.'),
           const SizedBox(height: Dimensions.doubleStandardSpacing),
           Row(
             children: [
               const Spacer(),
               ElevatedIconButton(
-                title: AppText.searchBoardGamesSearchRetry,
-                icon: const DefaultIcon(Icons.refresh),
+                title: AppText.searchBoardGamesAddMissingGame,
+                icon: const DefaultIcon(Icons.add),
                 onPressed: () => onRetry(),
               ),
             ],

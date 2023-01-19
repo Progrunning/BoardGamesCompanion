@@ -87,6 +87,7 @@ class AppText {
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
   static const searchBoardGamesSearchBarHint = 'Search...';
   static const searchBoardGamesSearchRetry = 'Retry';
+  static const searchBoardGamesAddMissingGame = 'Add game';
 
   static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
