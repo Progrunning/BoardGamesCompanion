@@ -87,7 +87,7 @@ class AppText {
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
   static const searchBoardGamesSearchBarHint = 'Search...';
   static const searchBoardGamesSearchRetry = 'Retry';
-  static const searchBoardGamesAddMissingGame = 'Add game';
+  static const searchBoardGamesCreateGame = 'Create game';
 
   static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
@@ -235,4 +235,6 @@ class AppText {
   static const drawerReleaseNotes = 'Release notes';
   static const drawerAppWiki = 'Wiki';
   static const drawerBuyMeACoffe = 'Buy Me a Coffee';
+
+  static const createNewGamePageTitle = 'Create new game';
 }

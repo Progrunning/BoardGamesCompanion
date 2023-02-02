@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/pages/create_board_game/create_board_game_page.dart';
 import 'package:board_games_companion/pages/home/home_view_model.dart';
 import 'package:board_games_companion/widgets/search/bgg_search.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -185,6 +186,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             _handleBggSearchResultAction(boardGame, actionType),
         onSortyByUpdate: (sortBy) => widget.viewModel.updateBggSearchSortByOption(sortBy),
         onQueryChanged: (query) => widget.viewModel.updateBggSearchQuery(query),
+        onCreateGame: () => _navigateToCreateNewGame(),
       ),
     );
   }
@@ -255,5 +257,9 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       case BoardGameResultActionType.playthroughs:
         break;
     }
+  }
+
+  Future<void> _navigateToCreateNewGame() async {
+    unawaited(Navigator.pushNamed(context, CreateBoardGamePage.pageRoute));
   }
 }

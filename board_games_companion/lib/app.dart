@@ -13,6 +13,8 @@ import 'models/navigation/playthroughs_page_arguments.dart';
 import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
 import 'pages/board_game_details/board_game_details_view_model.dart';
+import 'pages/create_board_game/create_board_game_page.dart';
+import 'pages/create_board_game/create_board_game_view_model.dart';
 import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart';
 import 'pages/edit_playthrough/playthrough_note_view_model.dart';
@@ -143,6 +145,13 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
               builder: (BuildContext context) => PlaythroughNotePage(viewModel: viewModel),
             );
 
+          case CreateBoardGamePage.pageRoute:
+            final viewModel = getIt<CreateBoardGameViewModel>();
+
+            return MaterialPageRoute<dynamic>(
+              settings: routeSettings,
+              builder: (BuildContext context) => CreateBoardGamePage(viewModel: viewModel),
+            );
           default:
             return null;
         }

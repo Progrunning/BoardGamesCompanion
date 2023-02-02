@@ -31,6 +31,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
     required this.searchResultsStream,
     required this.onSortyByUpdate,
     required this.onQueryChanged,
+    required this.onCreateGame,
   });
 
   static const int _maxSearchHistoryEntriesToShow = 10;
@@ -41,6 +42,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
   final BoardGameResultAction onResultAction;
   final void Function(SortBy) onSortyByUpdate;
   final void Function(String) onQueryChanged;
+  final VoidCallback onCreateGame;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -97,6 +99,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
                 return _NoSearchResults(
                   query: query,
                   onRetry: () => query = query,
+                  onCreateGame: () => onCreateGame(),
                 );
               }
 
@@ -385,17 +388,17 @@ class _SearchError extends StatelessWidget {
   }
 }
 
-// TODO MK Update to show a button to add a game manually
-// TODO MK Update copy to say that it could be because BGG failed or there's no board game like that in the BGG database
 class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({
     Key? key,
     required this.query,
     required this.onRetry,
+    required this.onCreateGame,
   }) : super(key: key);
 
   final String query;
   final VoidCallback onRetry;
+  final VoidCallback onCreateGame;
 
   @override
   Widget build(BuildContext context) {
@@ -439,15 +442,16 @@ class _NoSearchResults extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Dimensions.standardSpacing),
-          const Text('You can add any missing games manually by clicking the below button.'),
+          const Text(
+              'You can create any missing games and add them to your collections manually by clicking the below button.'),
           const SizedBox(height: Dimensions.doubleStandardSpacing),
           Row(
             children: [
               const Spacer(),
               ElevatedIconButton(
-                title: AppText.searchBoardGamesAddMissingGame,
+                title: AppText.searchBoardGamesCreateGame,
                 icon: const DefaultIcon(Icons.add),
-                onPressed: () => onRetry(),
+                onPressed: () => onCreateGame(),
               ),
             ],
           ),
