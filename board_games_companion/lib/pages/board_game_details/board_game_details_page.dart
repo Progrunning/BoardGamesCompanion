@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,6 @@ import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/collection_type.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/preferences_service.dart';
@@ -19,7 +17,7 @@ import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
-import '../../widgets/common/collection_toggle_button.dart';
+import '../../widgets/common/board_game/collection_flags.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
@@ -598,7 +596,7 @@ class _StatsAndCollections extends StatelessWidget {
           ),
           Observer(
             builder: (_) {
-              return _CollectionFlags(
+              return CollectionFlags(
                 isOwned: boardGameDetailsStore.boardGame.isOwned ?? false,
                 isOnWishlist: boardGameDetailsStore.boardGame.isOnWishlist ?? false,
                 isOnFriendsList: boardGameDetailsStore.boardGame.isFriends ?? false,
@@ -609,58 +607,6 @@ class _StatsAndCollections extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _CollectionFlags extends StatelessWidget {
-  const _CollectionFlags({
-    required this.isOwned,
-    required this.isOnWishlist,
-    required this.isOnFriendsList,
-    required this.onToggleCollection,
-    Key? key,
-  }) : super(key: key);
-
-  final bool isOwned;
-  final bool isOnWishlist;
-  final bool isOnFriendsList;
-  final void Function(CollectionType) onToggleCollection;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ToggleButtons(
-          isSelected: [isOnFriendsList, isOnWishlist],
-          children: <Widget>[
-            CollectionToggleButton(
-              icon: Icons.group,
-              title: AppText.friendsCollectionToggleButtonText,
-              isSelected: isOnFriendsList,
-            ),
-            CollectionToggleButton(
-              icon: Icons.card_giftcard,
-              title: AppText.whishlistCollectionToggleButtonText,
-              isSelected: isOnWishlist,
-            ),
-          ],
-          onPressed: (int index) => onToggleCollection(
-            index == 0 ? CollectionType.friends : CollectionType.wishlist,
-          ),
-        ),
-        ToggleButtons(
-          isSelected: [isOwned],
-          children: <Widget>[
-            CollectionToggleButton(
-              icon: Icons.grid_on,
-              title: AppText.ownedCollectionToggleButtonText,
-              isSelected: isOwned,
-            ),
-          ],
-          onPressed: (int index) => onToggleCollection(CollectionType.owned),
-        ),
-      ],
     );
   }
 }

@@ -237,4 +237,6 @@ class AppText {
   static const drawerBuyMeACoffe = 'Buy Me a Coffee';
 
   static const createNewGamePageTitle = 'Create new game';
+  static const createNewGameBoardGameName = 'Board game name';
+  static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
 }

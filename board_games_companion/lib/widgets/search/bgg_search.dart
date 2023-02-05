@@ -42,7 +42,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
   final BoardGameResultAction onResultAction;
   final void Function(SortBy) onSortyByUpdate;
   final void Function(String) onQueryChanged;
-  final VoidCallback onCreateGame;
+  final void Function(String) onCreateGame;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -99,7 +99,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
                 return _NoSearchResults(
                   query: query,
                   onRetry: () => query = query,
-                  onCreateGame: () => onCreateGame(),
+                  onCreateGame: () => onCreateGame(query),
                 );
               }
 

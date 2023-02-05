@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -146,7 +147,9 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             );
 
           case CreateBoardGamePage.pageRoute:
+            final arguments = routeSettings.arguments as CreateBoardGamePageArguments;
             final viewModel = getIt<CreateBoardGameViewModel>();
+            viewModel.setBoardGameName(arguments.boardGameName);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
