@@ -98,24 +98,7 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   @action
   Future<void> toggleCollection(CollectionType collectionType) async {
-    late BoardGameDetails updatedBoardGame;
-    switch (collectionType) {
-      case CollectionType.owned:
-        updatedBoardGame = boardGame.copyWith(isOwned: !(boardGame.isOwned ?? false));
-        if (updatedBoardGame.isOwned ?? false) {
-          updatedBoardGame = updatedBoardGame.copyWith(isOnWishlist: false);
-        }
-        break;
-      case CollectionType.friends:
-        updatedBoardGame = boardGame.copyWith(isFriends: !(boardGame.isFriends ?? false));
-        break;
-      case CollectionType.wishlist:
-        updatedBoardGame = boardGame.copyWith(
-          isOnWishlist: !(boardGame.isOnWishlist ?? false),
-          isOwned: false,
-        );
-        break;
-    }
+    final BoardGameDetails updatedBoardGame = boardGame.toggleCollection(collectionType);
 
     await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
   }

@@ -74,6 +74,8 @@ mixin _$BoardGameDetails {
   bool? get isBggSynced => throw _privateConstructorUsedError;
   @HiveField(28)
   BoardGameSettings? get settings => throw _privateConstructorUsedError;
+  @HiveField(29)
+  bool? get isCreatedByUser => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BoardGameDetailsCopyWith<BoardGameDetails> get copyWith =>
@@ -114,7 +116,8 @@ abstract class $BoardGameDetailsCopyWith<$Res> {
       @HiveField(25) bool? isOnWishlist,
       @HiveField(26) bool? isFriends,
       @HiveField(27) bool? isBggSynced,
-      @HiveField(28) BoardGameSettings? settings});
+      @HiveField(28) BoardGameSettings? settings,
+      @HiveField(29) bool? isCreatedByUser});
 
   $BoardGameSettingsCopyWith<$Res>? get settings;
 }
@@ -159,6 +162,7 @@ class _$BoardGameDetailsCopyWithImpl<$Res>
     Object? isFriends = freezed,
     Object? isBggSynced = freezed,
     Object? settings = freezed,
+    Object? isCreatedByUser = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -277,6 +281,10 @@ class _$BoardGameDetailsCopyWithImpl<$Res>
           ? _value.settings
           : settings // ignore: cast_nullable_to_non_nullable
               as BoardGameSettings?,
+      isCreatedByUser: isCreatedByUser == freezed
+          ? _value.isCreatedByUser
+          : isCreatedByUser // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 
@@ -328,7 +336,8 @@ abstract class _$$_BoardGameDetailsCopyWith<$Res>
       @HiveField(25) bool? isOnWishlist,
       @HiveField(26) bool? isFriends,
       @HiveField(27) bool? isBggSynced,
-      @HiveField(28) BoardGameSettings? settings});
+      @HiveField(28) BoardGameSettings? settings,
+      @HiveField(29) bool? isCreatedByUser});
 
   @override
   $BoardGameSettingsCopyWith<$Res>? get settings;
@@ -376,6 +385,7 @@ class __$$_BoardGameDetailsCopyWithImpl<$Res>
     Object? isFriends = freezed,
     Object? isBggSynced = freezed,
     Object? settings = freezed,
+    Object? isCreatedByUser = freezed,
   }) {
     return _then(_$_BoardGameDetails(
       id: id == freezed
@@ -494,6 +504,10 @@ class __$$_BoardGameDetailsCopyWithImpl<$Res>
           ? _value.settings
           : settings // ignore: cast_nullable_to_non_nullable
               as BoardGameSettings?,
+      isCreatedByUser: isCreatedByUser == freezed
+          ? _value.isCreatedByUser
+          : isCreatedByUser // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -565,7 +579,9 @@ class _$_BoardGameDetails extends _BoardGameDetails {
       @HiveField(27)
           this.isBggSynced,
       @HiveField(28)
-          this.settings})
+          this.settings,
+      @HiveField(29)
+          this.isCreatedByUser = false})
       : _categories = categories,
         _publishers = publishers,
         _artists = artists,
@@ -699,10 +715,14 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @override
   @HiveField(28)
   final BoardGameSettings? settings;
+  @override
+  @JsonKey()
+  @HiveField(29)
+  final bool? isCreatedByUser;
 
   @override
   String toString() {
-    return 'BoardGameDetails(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, rank: $rank, yearPublished: $yearPublished, imageUrl: $imageUrl, description: $description, categories: $categories, rating: $rating, votes: $votes, minPlayers: $minPlayers, minPlaytime: $minPlaytime, maxPlayers: $maxPlayers, maxPlaytime: $maxPlaytime, minAge: $minAge, avgWeight: $avgWeight, publishers: $publishers, artists: $artists, desingers: $desingers, commentsNumber: $commentsNumber, ranks: $ranks, lastModified: $lastModified, expansions: $expansions, isExpansion: $isExpansion, isOwned: $isOwned, isOnWishlist: $isOnWishlist, isFriends: $isFriends, isBggSynced: $isBggSynced, settings: $settings)';
+    return 'BoardGameDetails(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, rank: $rank, yearPublished: $yearPublished, imageUrl: $imageUrl, description: $description, categories: $categories, rating: $rating, votes: $votes, minPlayers: $minPlayers, minPlaytime: $minPlaytime, maxPlayers: $maxPlayers, maxPlaytime: $maxPlaytime, minAge: $minAge, avgWeight: $avgWeight, publishers: $publishers, artists: $artists, desingers: $desingers, commentsNumber: $commentsNumber, ranks: $ranks, lastModified: $lastModified, expansions: $expansions, isExpansion: $isExpansion, isOwned: $isOwned, isOnWishlist: $isOnWishlist, isFriends: $isFriends, isBggSynced: $isBggSynced, settings: $settings, isCreatedByUser: $isCreatedByUser)';
   }
 
   @override
@@ -754,7 +774,9 @@ class _$_BoardGameDetails extends _BoardGameDetails {
             const DeepCollectionEquality().equals(other.isFriends, isFriends) &&
             const DeepCollectionEquality()
                 .equals(other.isBggSynced, isBggSynced) &&
-            const DeepCollectionEquality().equals(other.settings, settings));
+            const DeepCollectionEquality().equals(other.settings, settings) &&
+            const DeepCollectionEquality()
+                .equals(other.isCreatedByUser, isCreatedByUser));
   }
 
   @override
@@ -788,7 +810,8 @@ class _$_BoardGameDetails extends _BoardGameDetails {
         const DeepCollectionEquality().hash(isOnWishlist),
         const DeepCollectionEquality().hash(isFriends),
         const DeepCollectionEquality().hash(isBggSynced),
-        const DeepCollectionEquality().hash(settings)
+        const DeepCollectionEquality().hash(settings),
+        const DeepCollectionEquality().hash(isCreatedByUser)
       ]);
 
   @JsonKey(ignore: true)
@@ -827,7 +850,8 @@ abstract class _BoardGameDetails extends BoardGameDetails {
       @HiveField(25) final bool? isOnWishlist,
       @HiveField(26) final bool? isFriends,
       @HiveField(27) final bool? isBggSynced,
-      @HiveField(28) final BoardGameSettings? settings}) = _$_BoardGameDetails;
+      @HiveField(28) final BoardGameSettings? settings,
+      @HiveField(29) final bool? isCreatedByUser}) = _$_BoardGameDetails;
   const _BoardGameDetails._() : super._();
 
   @override
@@ -917,6 +941,9 @@ abstract class _BoardGameDetails extends BoardGameDetails {
   @override
   @HiveField(28)
   BoardGameSettings? get settings;
+  @override
+  @HiveField(29)
+  bool? get isCreatedByUser;
   @override
   @JsonKey(ignore: true)
   _$$_BoardGameDetailsCopyWith<_$_BoardGameDetails> get copyWith =>

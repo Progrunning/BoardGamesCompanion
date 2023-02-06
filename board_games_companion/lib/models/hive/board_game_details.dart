@@ -55,6 +55,7 @@ class BoardGameDetails with _$BoardGameDetails {
     @HiveField(26) bool? isFriends,
     @HiveField(27) bool? isBggSynced,
     @HiveField(28) BoardGameSettings? settings,
+    @Default(false) @HiveField(29) bool? isCreatedByUser,
   }) = _BoardGameDetails;
 
   const BoardGameDetails._();
@@ -102,6 +103,10 @@ class BoardGameDetails with _$BoardGameDetails {
   }
 
   String get playersFormatted {
+    if (minPlayers == null) {
+      return AppText.gamePlayersUnknown;
+    }
+
     if (minPlayers == maxPlayers || maxPlayers == null) {
       if (minPlayers == 1) {
         return sprintf(AppText.gamePlayersSingularFormat, [minPlayers]);

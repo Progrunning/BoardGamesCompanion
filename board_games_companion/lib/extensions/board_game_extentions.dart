@@ -8,7 +8,32 @@ import '../extensions/string_extensions.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/sort_by.dart';
 
-extension BoardGameDetailsExtensions on Iterable<BoardGameDetails> {
+extension BoardGameDetailsExtensions on BoardGameDetails {
+  BoardGameDetails toggleCollection(CollectionType collectionType) {
+    late BoardGameDetails updatedBoardGame;
+    switch (collectionType) {
+      case CollectionType.owned:
+        updatedBoardGame = copyWith(isOwned: !(isOwned ?? false));
+        if (updatedBoardGame.isOwned ?? false) {
+          updatedBoardGame = updatedBoardGame.copyWith(isOnWishlist: false);
+        }
+        break;
+      case CollectionType.friends:
+        updatedBoardGame = copyWith(isFriends: !(isFriends ?? false));
+        break;
+      case CollectionType.wishlist:
+        updatedBoardGame = copyWith(
+          isOnWishlist: !(isOnWishlist ?? false),
+          isOwned: false,
+        );
+        break;
+    }
+
+    return updatedBoardGame;
+  }
+}
+
+extension BoardGameDetailsCollectionExtensions on Iterable<BoardGameDetails> {
   Iterable<BoardGameDetails> inCollection(CollectionType collectionType) {
     switch (collectionType) {
       case CollectionType.owned:

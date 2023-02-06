@@ -199,6 +199,7 @@ class AppText {
       'Unfortunately we ran into a problem with restoring your data. Please try again or contact support at feedback@progrunning.net';
 
   static const gamePlaytimeFormat = '%s min';
+  static const gamePlayersUnknown = 'unknown';
   static const gamePlayersSingularFormat = '%i players';
   static const gamePlayersPluralFormat = '%i players';
   static const gamePlayersRangeFormat = '%i - %i players';
@@ -237,6 +238,7 @@ class AppText {
   static const drawerBuyMeACoffe = 'Buy Me a Coffee';
 
   static const createNewGamePageTitle = 'Create new game';
-  static const createNewGameBoardGameName = 'Board game name';
+  static const createNewGameBoardGameName = 'Name';
+  static const createNewGameBoardGameCollections = 'Collections';
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
 }

@@ -1,3 +1,4 @@
+import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/widgets/common/board_game/collection_flags.dart';
 import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../common/enums/collection_type.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import 'create_board_game_view_model.dart';
 
@@ -32,7 +34,7 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   @override
   void initState() {
     super.initState();
-    boardGameNameController.text = widget.viewModel.boardGameName;
+    boardGameNameController.text = widget.viewModel.boardGame.name;
     boardGameNameController.addListener(() {
       widget.viewModel.setBoardGameName(boardGameNameController.text);
     });
@@ -56,19 +58,37 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
                   Observer(
                     builder: (_) {
                       return _Header(
-                        boardGameName: widget.viewModel.boardGameName,
-                        boardGameImageUri: widget.viewModel.boardGameImageUri,
+                        boardGameName: widget.viewModel.boardGame.name,
+                        boardGameImageUri: widget.viewModel.boardGame.imageUrl,
                       );
                     },
                   ),
-                  _Form(boardGameNameController: boardGameNameController),
+                  Observer(
+                    builder: (_) {
+                      return _Form(
+                        boardGame: widget.viewModel.boardGame,
+                        boardGameNameController: boardGameNameController,
+                        onToggleCollection: (collectionType) =>
+                            widget.viewModel.toggleCollection(collectionType),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.save),
-            onPressed: () => widget.viewModel.saveBoardGame(),
+          floatingActionButton: Observer(
+            builder: (_) {
+              return FloatingActionButton(
+                child: widget.viewModel.visualState.when(
+                  editGame: () => const Icon(Icons.save),
+                  saveSuccess: () => const Icon(Icons.save),
+                  saveFailure: () => const Icon(Icons.save),
+                  saving: () => const CircularProgressIndicator(color: AppColors.primaryColor),
+                ),
+                onPressed: () => widget.viewModel.saveBoardGame(),
+              );
+            },
           ),
         ),
       );
@@ -81,10 +101,14 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
 class _Form extends StatelessWidget {
   const _Form({
     Key? key,
+    required this.boardGame,
     required this.boardGameNameController,
+    required this.onToggleCollection,
   }) : super(key: key);
 
+  final BoardGameDetails boardGame;
   final TextEditingController boardGameNameController;
+  final void Function(CollectionType) onToggleCollection;
 
   @override
   Widget build(BuildContext context) {
@@ -95,15 +119,22 @@ class _Form extends StatelessWidget {
           child: Column(
             children: [
               Row(
+                children: const [
+                  Text(AppText.createNewGameBoardGameName, style: AppTheme.sectionHeaderTextStyle),
+                  Spacer(),
+                  Text(
+                    AppText.createNewGameBoardGameCollections,
+                    style: AppTheme.sectionHeaderTextStyle,
+                  ),
+                ],
+              ),
+              const SizedBox(height: Dimensions.halfStandardSpacing),
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: TextFormField(
                       controller: boardGameNameController,
-                      decoration: const InputDecoration(
-                        labelText: AppText.createNewGameBoardGameName,
-                        labelStyle: AppTheme.defaultTextFieldLabelStyle,
-                      ),
                       style: AppTheme.defaultTextFieldStyle,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -116,10 +147,10 @@ class _Form extends StatelessWidget {
                   ),
                   const SizedBox(width: Dimensions.doubleStandardSpacing),
                   CollectionFlags(
-                    isOwned: false,
-                    isOnWishlist: false,
-                    isOnFriendsList: false,
-                    onToggleCollection: (collectionType) {},
+                    isOwned: boardGame.isOwned ?? false,
+                    isOnWishlist: boardGame.isOnWishlist ?? false,
+                    isOnFriendsList: boardGame.isFriends ?? false,
+                    onToggleCollection: (collectionType) => onToggleCollection(collectionType),
                   ),
                 ],
               ),

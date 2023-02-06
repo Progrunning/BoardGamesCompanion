@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CreateBoardGamePageArguments {
   String get boardGameName => throw _privateConstructorUsedError;
+  String? get boardGameId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CreateBoardGamePageArgumentsCopyWith<CreateBoardGamePageArguments>
@@ -29,7 +30,7 @@ abstract class $CreateBoardGamePageArgumentsCopyWith<$Res> {
           CreateBoardGamePageArguments value,
           $Res Function(CreateBoardGamePageArguments) then) =
       _$CreateBoardGamePageArgumentsCopyWithImpl<$Res>;
-  $Res call({String boardGameName});
+  $Res call({String boardGameName, String? boardGameId});
 }
 
 /// @nodoc
@@ -44,12 +45,17 @@ class _$CreateBoardGamePageArgumentsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? boardGameName = freezed,
+    Object? boardGameId = freezed,
   }) {
     return _then(_value.copyWith(
       boardGameName: boardGameName == freezed
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
+      boardGameId: boardGameId == freezed
+          ? _value.boardGameId
+          : boardGameId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -62,7 +68,7 @@ abstract class _$$_CreateBoardGamePageArgumentsCopyWith<$Res>
           $Res Function(_$_CreateBoardGamePageArguments) then) =
       __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>;
   @override
-  $Res call({String boardGameName});
+  $Res call({String boardGameName, String? boardGameId});
 }
 
 /// @nodoc
@@ -81,12 +87,17 @@ class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? boardGameName = freezed,
+    Object? boardGameId = freezed,
   }) {
     return _then(_$_CreateBoardGamePageArguments(
       boardGameName: boardGameName == freezed
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
+      boardGameId: boardGameId == freezed
+          ? _value.boardGameId
+          : boardGameId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -94,15 +105,18 @@ class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
-  const _$_CreateBoardGamePageArguments({required this.boardGameName})
+  const _$_CreateBoardGamePageArguments(
+      {required this.boardGameName, this.boardGameId})
       : super._();
 
   @override
   final String boardGameName;
+  @override
+  final String? boardGameId;
 
   @override
   String toString() {
-    return 'CreateBoardGamePageArguments(boardGameName: $boardGameName)';
+    return 'CreateBoardGamePageArguments(boardGameName: $boardGameName, boardGameId: $boardGameId)';
   }
 
   @override
@@ -111,12 +125,16 @@ class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
         (other.runtimeType == runtimeType &&
             other is _$_CreateBoardGamePageArguments &&
             const DeepCollectionEquality()
-                .equals(other.boardGameName, boardGameName));
+                .equals(other.boardGameName, boardGameName) &&
+            const DeepCollectionEquality()
+                .equals(other.boardGameId, boardGameId));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(boardGameName));
+      runtimeType,
+      const DeepCollectionEquality().hash(boardGameName),
+      const DeepCollectionEquality().hash(boardGameId));
 
   @JsonKey(ignore: true)
   @override
@@ -128,11 +146,14 @@ class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
 abstract class _CreateBoardGamePageArguments
     extends CreateBoardGamePageArguments {
   const factory _CreateBoardGamePageArguments(
-      {required final String boardGameName}) = _$_CreateBoardGamePageArguments;
+      {required final String boardGameName,
+      final String? boardGameId}) = _$_CreateBoardGamePageArguments;
   const _CreateBoardGamePageArguments._() : super._();
 
   @override
   String get boardGameName;
+  @override
+  String? get boardGameId;
   @override
   @JsonKey(ignore: true)
   _$$_CreateBoardGamePageArgumentsCopyWith<_$_CreateBoardGamePageArguments>
