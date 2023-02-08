@@ -89,6 +89,9 @@ abstract class _BoardGameDetailsViewModel with Store {
   @computed
   String get unescapedDescription => _htmlUnescape.convert(boardGame.description ?? '');
 
+  @computed
+  bool get isCreatedByUser => boardGame.isCreatedByUser ?? false;
+
   @observable
   ObservableFuture<void>? futureLoadBoardGameDetails;
 
@@ -123,6 +126,10 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   Future<void> _loadBoardGameDetails() async {
     try {
+      if (isCreatedByUser) {
+        return;
+      }
+
       await _boardGamesStore.refreshBoardGameDetails(_boardGameId);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

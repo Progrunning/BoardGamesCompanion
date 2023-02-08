@@ -1,3 +1,4 @@
+import 'package:board_games_companion/pages/create_board_game/create_board_game_page.dart';
 import 'package:flutter/widgets.dart';
 
 import '../pages/about/about_page.dart';
@@ -28,6 +29,8 @@ extension RouteExtensions on Route {
         return 'Player';
       case SettingsPage.pageRoute:
         return 'Settings';
+      case CreateBoardGamePage.pageRoute:
+        return 'Create Board Game';
       default:
         return settings.name ?? 'Undefined';
     }
@@ -51,6 +54,8 @@ extension RouteExtensions on Route {
         return 'PlayerPage';
       case SettingsPage.pageRoute:
         return 'SettingsPage';
+      case CreateBoardGamePage.pageRoute:
+        return 'CreateBoardGamePage';
       default:
         return settings.name ?? 'Undefined';
     }

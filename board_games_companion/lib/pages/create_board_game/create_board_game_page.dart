@@ -176,9 +176,16 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       floating: false,
+      automaticallyImplyLeading: false,
       elevation: Dimensions.defaultElevation,
       pinned: true,
       expandedHeight: Constants.boardGameDetailsImageHeight,
+      actions: [
+        IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.close),
+        ),
+      ],
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         centerTitle: true,

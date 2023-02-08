@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
@@ -115,17 +116,23 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             viewModel.setBoardGameId(arguments.boardGameId);
             viewModel.setPlaythroughId(arguments.playthroughId);
 
-            return MaterialPageRoute<dynamic>(
+            return PageRouteBuilder<dynamic>(
               settings: routeSettings,
-              builder: (BuildContext context) => EditPlaythroughPage(
+              pageBuilder: (_, __, ___) => EditPlaythroughPage(
                 viewModel: viewModel,
                 goBackPageRoute: arguments.goBackPageRoute,
+              ),
+              transitionsBuilder: (_, animation, secondaryAnimation, child) => FadeScaleTransition(
+                animation: animation,
+                child: child,
               ),
             );
 
           case AboutPage.pageRoute:
             return MaterialPageRoute<dynamic>(
-                settings: routeSettings, builder: (BuildContext context) => const AboutPage());
+              settings: routeSettings,
+              builder: (BuildContext context) => const AboutPage(),
+            );
 
           case SettingsPage.pageRoute:
             final viewModel = getIt<SettingsViewModel>();
@@ -151,9 +158,15 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             final viewModel = getIt<CreateBoardGameViewModel>();
             viewModel.setBoardGameName(arguments.boardGameName);
 
-            return MaterialPageRoute<dynamic>(
+            return PageRouteBuilder<dynamic>(
               settings: routeSettings,
-              builder: (BuildContext context) => CreateBoardGamePage(viewModel: viewModel),
+              pageBuilder: (_, __, ___) => CreateBoardGamePage(viewModel: viewModel),
+              transitionsBuilder: (_, animation, secondaryAnimation, child) =>
+                  FadeThroughTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                child: child,
+              ),
             );
           default:
             return null;

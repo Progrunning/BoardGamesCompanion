@@ -74,6 +74,13 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
           Computed<String>(() => super.unescapedDescription,
               name: '_BoardGameDetailsViewModel.unescapedDescription'))
       .value;
+  Computed<bool>? _$isCreatedByUserComputed;
+
+  @override
+  bool get isCreatedByUser =>
+      (_$isCreatedByUserComputed ??= Computed<bool>(() => super.isCreatedByUser,
+              name: '_BoardGameDetailsViewModel.isCreatedByUser'))
+          .value;
 
   late final _$futureLoadBoardGameDetailsAtom = Atom(
       name: '_BoardGameDetailsViewModel.futureLoadBoardGameDetails',
@@ -129,7 +136,8 @@ expansions: ${expansions},
 expansionsOwnedById: ${expansionsOwnedById},
 hasExpansions: ${hasExpansions},
 totalExpansionsOwned: ${totalExpansionsOwned},
-unescapedDescription: ${unescapedDescription}
+unescapedDescription: ${unescapedDescription},
+isCreatedByUser: ${isCreatedByUser}
     ''';
   }
 }
