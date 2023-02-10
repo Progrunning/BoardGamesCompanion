@@ -23,6 +23,13 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
       (_$boardGameNameComputed ??= Computed<String>(() => super.boardGameName,
               name: '_PlaythroughsViewModel.boardGameName'))
           .value;
+  Computed<bool>? _$isCreatedByUserComputed;
+
+  @override
+  bool get isCreatedByUser =>
+      (_$isCreatedByUserComputed ??= Computed<bool>(() => super.isCreatedByUser,
+              name: '_PlaythroughsViewModel.isCreatedByUser'))
+          .value;
   Computed<bool>? _$hasUserComputed;
 
   @override
@@ -63,6 +70,7 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
     return '''
 boardGameId: ${boardGameId},
 boardGameName: ${boardGameName},
+isCreatedByUser: ${isCreatedByUser},
 hasUser: ${hasUser},
 userName: ${userName},
 gamePlaylistUrl: ${gamePlaylistUrl}

@@ -55,7 +55,7 @@ class BoardGameDetails with _$BoardGameDetails {
     @HiveField(26) bool? isFriends,
     @HiveField(27) bool? isBggSynced,
     @HiveField(28) BoardGameSettings? settings,
-    @Default(false) @HiveField(29) bool? isCreatedByUser,
+    @Default(false) @HiveField(29, defaultValue: false) bool isCreatedByUser,
   }) = _BoardGameDetails;
 
   const BoardGameDetails._();

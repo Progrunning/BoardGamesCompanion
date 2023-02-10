@@ -68,6 +68,9 @@ abstract class _PlaythroughsViewModel with Store {
   String get boardGameName => _boardGameDetails.name;
 
   @computed
+  bool get isCreatedByUser => _boardGameDetails.isCreatedByUser;
+
+  @computed
   bool get hasUser => _userStore.hasUser;
 
   @computed

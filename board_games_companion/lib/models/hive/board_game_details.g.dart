@@ -46,7 +46,7 @@ class BoardGameDetailsAdapter extends TypeAdapter<_$_BoardGameDetails> {
       isFriends: fields[26] as bool?,
       isBggSynced: fields[27] as bool?,
       settings: fields[28] as BoardGameSettings?,
-      isCreatedByUser: fields[29] as bool?,
+      isCreatedByUser: fields[29] == null ? false : fields[29] as bool,
     );
   }
 

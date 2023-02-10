@@ -1,8 +1,5 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
-// import 'package:board_games_companion/pages/search_board_games/search_results.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -52,9 +49,6 @@ abstract class _HotBoardGamesViewModel with Store {
   void loadHotBoardGames() =>
       futureLoadHotBoardGames = ObservableFuture<void>(_loadHotBoardGames());
 
-  // @action
-  // void searchBoardGames() => futureSearchBoardGames = ObservableFuture<void>(_searchBoardGames());
-
   @action
   void setSearchPhrase(String? searchPhrase) => this.searchPhrase = searchPhrase;
 
@@ -73,36 +67,19 @@ abstract class _HotBoardGamesViewModel with Store {
 
   void refresh() => _refreshRetryCount++;
 
-  // Future<void> _searchBoardGames() async {
-  //   if (searchPhrase?.isEmpty ?? true) {
-  //     onlineSearchResults = const OnlineSearchResults.init();
-  //     return;
-  //   }
-
-  //   try {
-  //     onlineSearchResults = OnlineSearchResults.searching(searchPhrase!);
-  //     onlineSearchResults = OnlineSearchResults.results(await _boardGameGeekService.search(searchPhrase));
-
-  //     _analyticsService.logEvent(
-  //       name: Analytics.searchBoardGames,
-  //       parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: searchPhrase},
-  //     );
-  //   } catch (e, stack) {
-  //     onlineSearchResults = const OnlineSearchResults.failure();
-  //     FirebaseCrashlytics.instance.recordError(e, stack);
-  //   }
-  // }
-
-  // @action
-  // void clearSearchResults() {
-  //   searchPhrase = '';
-  //   onlineSearchResults = const OnlineSearchResults.init();
-  // }
-
   Future<void> _loadHotBoardGames() async {
     try {
       hotBoardGames =
           ObservableList.of(await _boardGameGeekService.getHot(retryCount: _refreshRetryCount));
+      // MK Add hot board games to all of the games cached on the device if they are not there
+      if (hotBoardGames != null) {
+        for (final hotBoardGame in hotBoardGames!) {
+          if (!_boardGamesStore.allBoardGamesMap.containsKey(hotBoardGame.id)) {
+            await _boardGamesStore.addOrUpdateBoardGame(hotBoardGame);
+          }
+        }
+      }
+
       _refreshRetryCount = 0;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

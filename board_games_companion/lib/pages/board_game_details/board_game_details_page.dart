@@ -19,7 +19,7 @@ import '../../models/hive/board_game_details.dart';
 import '../../services/preferences_service.dart';
 import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
-import '../../widgets/board_games/board_game_image.dart';
+import '../../widgets/board_games/bgc_flexible_space_bar.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 import '../../widgets/common/board_game/collection_flags.dart';
 import '../../widgets/common/default_icon.dart';
@@ -153,36 +153,47 @@ class _Header extends StatelessWidget {
       floating: false,
       pinned: true,
       expandedHeight: Constants.boardGameDetailsImageHeight,
-      flexibleSpace: FlexibleSpaceBar(
-        collapseMode: CollapseMode.parallax,
-        centerTitle: true,
-        title: Container(
-          decoration: BoxDecoration(
-            color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(AppStyles.defaultCornerRadius),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-            child: Text(
-              _boardGameName,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppColors.defaultTextColor,
-                fontSize: Dimensions.largeFontSize,
-              ),
-            ),
-          ),
-        ),
-        background: BoardGameImage(
-          id: _boardGameImageHeroId,
-          url: _boardGameImageUrl,
-          minImageHeight: Constants.boardGameDetailsImageHeight,
-        ),
+      flexibleSpace: BgcFlexibleSpaceBar(
+        id: _boardGameImageHeroId,
+        boardGameName: _boardGameName,
+        boardGameImageUrl: _boardGameImageUrl,
       ),
     );
+    //   flexibleSpace: FlexibleSpaceBar(
+    //     collapseMode: CollapseMode.parallax,
+    //     titlePadding: const EdgeInsets.only(
+    //       left: Dimensions.standardSpacing,
+    //       right: Dimensions.standardSpacing,
+    //       bottom: Dimensions.standardSpacing,
+    //     ),
+    //     centerTitle: true,
+    //     title: Container(
+    //       decoration: BoxDecoration(
+    //         color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
+    //         borderRadius: const BorderRadius.all(
+    //           Radius.circular(AppStyles.defaultCornerRadius),
+    //         ),
+    //       ),
+    //       child: Padding(
+    //         padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+    //         child: Text(
+    //           _boardGameName,
+    //           textAlign: TextAlign.center,
+    //           overflow: TextOverflow.ellipsis,
+    //           style: const TextStyle(
+    //             color: AppColors.defaultTextColor,
+    //             fontSize: Dimensions.largeFontSize,
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //     background: BoardGameImage(
+    //       id: _boardGameImageHeroId,
+    //       url: _boardGameImageUrl,
+    //       minImageHeight: Constants.boardGameDetailsImageHeight,
+    //     ),
+    //   ),
+    // );
   }
 }
 

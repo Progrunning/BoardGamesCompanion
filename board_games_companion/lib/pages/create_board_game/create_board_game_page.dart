@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../common/app_colors.dart';
-import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
-import '../../widgets/board_games/board_game_image.dart';
+import '../../widgets/board_games/bgc_flexible_space_bar.dart';
 import 'create_board_game_view_model.dart';
 
 class CreateBoardGamePage extends StatefulWidget {
@@ -186,33 +185,9 @@ class _Header extends StatelessWidget {
           icon: const Icon(Icons.close),
         ),
       ],
-      flexibleSpace: FlexibleSpaceBar(
-        collapseMode: CollapseMode.parallax,
-        centerTitle: true,
-        title: Container(
-          decoration: BoxDecoration(
-            color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(AppStyles.defaultCornerRadius),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-            child: Text(
-              boardGameName,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppColors.defaultTextColor,
-                fontSize: Dimensions.largeFontSize,
-              ),
-            ),
-          ),
-        ),
-        background: BoardGameImage(
-          url: boardGameImageUri,
-          minImageHeight: Constants.boardGameDetailsImageHeight,
-        ),
+      flexibleSpace: BgcFlexibleSpaceBar(
+        boardGameName: boardGameName,
+        boardGameImageUrl: boardGameImageUri,
       ),
     );
   }

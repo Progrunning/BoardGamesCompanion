@@ -90,7 +90,7 @@ abstract class _BoardGameDetailsViewModel with Store {
   String get unescapedDescription => _htmlUnescape.convert(boardGame.description ?? '');
 
   @computed
-  bool get isCreatedByUser => boardGame.isCreatedByUser ?? false;
+  bool get isCreatedByUser => boardGame.isCreatedByUser;
 
   @observable
   ObservableFuture<void>? futureLoadBoardGameDetails;
