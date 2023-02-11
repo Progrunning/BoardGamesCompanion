@@ -223,9 +223,17 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                     _StatsAndCollections(viewModel: viewModel),
                     const SizedBox(height: _spacingBetweenSecions),
                     const _BodySectionHeader(title: 'General'),
-                    _FirstRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame),
+                    Observer(
+                      builder: (_) {
+                        return _FirstRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame);
+                      },
+                    ),
                     const SizedBox(height: _spacingBetweenSecions),
-                    _SecondRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame),
+                    Observer(
+                      builder: (_) {
+                        return _SecondRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame);
+                      },
+                    ),
                     const SizedBox(height: _spacingBetweenSecions),
                     if (!viewModel.isCreatedByUser) ...[
                       const _BodySectionHeader(title: 'Links'),

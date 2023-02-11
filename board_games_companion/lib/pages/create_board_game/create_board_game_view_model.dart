@@ -18,6 +18,8 @@ class CreateBoardGameViewModel = _CreateBoardGameViewModel with _$CreateBoardGam
 abstract class _CreateBoardGameViewModel with Store {
   _CreateBoardGameViewModel(this._boardGamesStore);
 
+  static const int _defaultNumberOfPlayers = 1;
+
   final BoardGamesStore _boardGamesStore;
   late BoardGameDetails _boardGame;
 
@@ -43,6 +45,12 @@ abstract class _CreateBoardGameViewModel with Store {
   @computed
   double? get rating => boardGame.rating;
 
+  @computed
+  int get minPlayers => boardGame.minPlayers ?? _defaultNumberOfPlayers;
+
+  @computed
+  int get maxPlayers => boardGame.maxPlayers ?? _defaultNumberOfPlayers;
+
   @action
   void setBoardGameId(String id) =>
       _boardGameWorkingCopy = _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
@@ -60,6 +68,10 @@ abstract class _CreateBoardGameViewModel with Store {
 
   @action
   void updateRating(double? rating) => _boardGameWorkingCopy = boardGame.copyWith(rating: rating);
+
+  @action
+  void updateNumberOfPlayers(int minPlayers, int maxPlayers) =>
+      _boardGameWorkingCopy = boardGame.copyWith(minPlayers: minPlayers, maxPlayers: maxPlayers);
 
   @action
   Future<void> saveBoardGame() async {

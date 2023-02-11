@@ -23,6 +23,27 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
           () => super.hasUnsavedChanges,
           name: '_CreateBoardGameViewModel.hasUnsavedChanges'))
       .value;
+  Computed<double?>? _$ratingComputed;
+
+  @override
+  double? get rating =>
+      (_$ratingComputed ??= Computed<double?>(() => super.rating,
+              name: '_CreateBoardGameViewModel.rating'))
+          .value;
+  Computed<int>? _$minPlayersComputed;
+
+  @override
+  int get minPlayers =>
+      (_$minPlayersComputed ??= Computed<int>(() => super.minPlayers,
+              name: '_CreateBoardGameViewModel.minPlayers'))
+          .value;
+  Computed<int>? _$maxPlayersComputed;
+
+  @override
+  int get maxPlayers =>
+      (_$maxPlayersComputed ??= Computed<int>(() => super.maxPlayers,
+              name: '_CreateBoardGameViewModel.maxPlayers'))
+          .value;
 
   late final _$visualStateAtom =
       Atom(name: '_CreateBoardGameViewModel.visualState', context: context);
@@ -130,11 +151,36 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   }
 
   @override
+  void updateRating(double? rating) {
+    final _$actionInfo = _$_CreateBoardGameViewModelActionController
+        .startAction(name: '_CreateBoardGameViewModel.updateRating');
+    try {
+      return super.updateRating(rating);
+    } finally {
+      _$_CreateBoardGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateNumberOfPlayers(int minPlayers, int maxPlayers) {
+    final _$actionInfo = _$_CreateBoardGameViewModelActionController
+        .startAction(name: '_CreateBoardGameViewModel.updateNumberOfPlayers');
+    try {
+      return super.updateNumberOfPlayers(minPlayers, maxPlayers);
+    } finally {
+      _$_CreateBoardGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 visualState: ${visualState},
 boardGame: ${boardGame},
-hasUnsavedChanges: ${hasUnsavedChanges}
+hasUnsavedChanges: ${hasUnsavedChanges},
+rating: ${rating},
+minPlayers: ${minPlayers},
+maxPlayers: ${maxPlayers}
     ''';
   }
 }

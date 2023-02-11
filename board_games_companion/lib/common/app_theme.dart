@@ -128,6 +128,7 @@ class AppTheme {
             valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
             valueIndicatorTextStyle: const TextStyle(fontSize: Dimensions.smallFontSize),
             showValueIndicator: ShowValueIndicator.always,
+            rangeValueIndicatorShape: const PaddleRangeSliderValueIndicatorShape(),
           ),
       toggleButtonsTheme: ThemeData.light().toggleButtonsTheme.copyWith(
             selectedColor: AppColors.accentColor,

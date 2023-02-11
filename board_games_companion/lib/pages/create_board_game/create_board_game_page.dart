@@ -170,6 +170,17 @@ class _Form extends StatelessWidget {
                 );
               },
             ),
+            const SectionHeader(primaryTitle: AppText.createNewGameBoardGamePlayers),
+            Observer(
+              builder: (_) {
+                return _PlayersSection(
+                  minPlayers: viewModel.minPlayers,
+                  maxPlayers: viewModel.maxPlayers,
+                  onNumberOfPlayersChanged: (minPlayers, maxPlayers) =>
+                      viewModel.updateNumberOfPlayers(minPlayers, maxPlayers),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -220,6 +231,54 @@ class _RatingSection extends StatelessWidget {
           ),
           const Text(
             AppText.createNewGameBoardGameRatingMax,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlayersSection extends StatelessWidget {
+  const _PlayersSection({
+    Key? key,
+    required this.minPlayers,
+    required this.maxPlayers,
+    required this.onNumberOfPlayersChanged,
+  }) : super(key: key);
+
+  static const double _minValue = 1;
+  static const double _maxValue = 20;
+
+  final int minPlayers;
+  final int maxPlayers;
+  final void Function(int, int) onNumberOfPlayersChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Text(
+            AppText.createNewGameBoardGamePlayersMin,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+          Expanded(
+            child: RangeSlider(
+              values: RangeValues(minPlayers.toDouble(), maxPlayers.toDouble()),
+              min: _minValue,
+              divisions: _maxValue.toInt(),
+              max: _maxValue,
+              labels: RangeLabels('$minPlayers', '$maxPlayers'),
+              onChanged: (rangeValues) =>
+                  onNumberOfPlayersChanged(rangeValues.start.toInt(), rangeValues.end.toInt()),
+              activeColor: AppColors.accentColor,
+            ),
+          ),
+          const Text(
+            AppText.createNewGameBoardGamePlayersMax,
             style: TextStyle(fontSize: Dimensions.smallFontSize),
           ),
         ],
