@@ -157,7 +157,6 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       arguments: BoardGameDetailsPageArguments(
         boardGameId: widget.viewModel.boardGameId,
         boardGameImageHeroId: widget.viewModel.boardGameId,
-        boardGameName: widget.viewModel.boardGameName,
         navigatingFromType: PlaythroughsPage,
       ),
     );

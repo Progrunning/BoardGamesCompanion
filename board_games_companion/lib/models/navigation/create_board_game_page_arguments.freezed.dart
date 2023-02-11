@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CreateBoardGamePageArguments {
-  String get boardGameName => throw _privateConstructorUsedError;
+  String? get boardGameName => throw _privateConstructorUsedError;
   String? get boardGameId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +30,7 @@ abstract class $CreateBoardGamePageArgumentsCopyWith<$Res> {
           CreateBoardGamePageArguments value,
           $Res Function(CreateBoardGamePageArguments) then) =
       _$CreateBoardGamePageArgumentsCopyWithImpl<$Res>;
-  $Res call({String boardGameName, String? boardGameId});
+  $Res call({String? boardGameName, String? boardGameId});
 }
 
 /// @nodoc
@@ -51,7 +51,7 @@ class _$CreateBoardGamePageArgumentsCopyWithImpl<$Res>
       boardGameName: boardGameName == freezed
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       boardGameId: boardGameId == freezed
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
@@ -68,7 +68,7 @@ abstract class _$$_CreateBoardGamePageArgumentsCopyWith<$Res>
           $Res Function(_$_CreateBoardGamePageArguments) then) =
       __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>;
   @override
-  $Res call({String boardGameName, String? boardGameId});
+  $Res call({String? boardGameName, String? boardGameId});
 }
 
 /// @nodoc
@@ -93,7 +93,7 @@ class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
       boardGameName: boardGameName == freezed
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       boardGameId: boardGameId == freezed
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
@@ -105,12 +105,11 @@ class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
-  const _$_CreateBoardGamePageArguments(
-      {required this.boardGameName, this.boardGameId})
+  const _$_CreateBoardGamePageArguments({this.boardGameName, this.boardGameId})
       : super._();
 
   @override
-  final String boardGameName;
+  final String? boardGameName;
   @override
   final String? boardGameId;
 
@@ -146,12 +145,12 @@ class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
 abstract class _CreateBoardGamePageArguments
     extends CreateBoardGamePageArguments {
   const factory _CreateBoardGamePageArguments(
-      {required final String boardGameName,
+      {final String? boardGameName,
       final String? boardGameId}) = _$_CreateBoardGamePageArguments;
   const _CreateBoardGamePageArguments._() : super._();
 
   @override
-  String get boardGameName;
+  String? get boardGameName;
   @override
   String? get boardGameId;
   @override

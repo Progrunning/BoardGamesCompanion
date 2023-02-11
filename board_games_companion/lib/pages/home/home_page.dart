@@ -217,10 +217,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
           BoardGamesDetailsPage.pageRoute,
           arguments: BoardGameDetailsPageArguments(
             boardGameId: boardGameDetails.id,
-            boardGameName: boardGameDetails.name,
             boardGameImageHeroId: boardGameDetails.id,
             navigatingFromType: CollectionsPage,
-            boardGameImageUrl: boardGameDetails.imageUrl,
           ),
         ));
         break;
@@ -248,10 +246,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
           BoardGamesDetailsPage.pageRoute,
           arguments: BoardGameDetailsPageArguments(
             boardGameId: boardGameDetails.id,
-            boardGameName: boardGameDetails.name,
             boardGameImageHeroId: boardGameDetails.id,
             navigatingFromType: CollectionsPage,
-            boardGameImageUrl: boardGameDetails.imageUrl,
           ),
         ));
         break;

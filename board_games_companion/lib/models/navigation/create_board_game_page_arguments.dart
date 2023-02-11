@@ -6,7 +6,7 @@ part 'create_board_game_page_arguments.freezed.dart';
 @freezed
 abstract class CreateBoardGamePageArguments with _$CreateBoardGamePageArguments {
   const factory CreateBoardGamePageArguments({
-    required String boardGameName,
+    String? boardGameName,
     String? boardGameId,
   }) = _CreateBoardGamePageArguments;
 

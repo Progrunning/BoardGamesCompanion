@@ -77,6 +77,17 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
       ActionController(name: '_CreateBoardGameViewModel', context: context);
 
   @override
+  void setBoardGameId(String id) {
+    final _$actionInfo = _$_CreateBoardGameViewModelActionController
+        .startAction(name: '_CreateBoardGameViewModel.setBoardGameId');
+    try {
+      return super.setBoardGameId(id);
+    } finally {
+      _$_CreateBoardGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setBoardGameName(String name) {
     final _$actionInfo = _$_CreateBoardGameViewModelActionController
         .startAction(name: '_CreateBoardGameViewModel.setBoardGameName');

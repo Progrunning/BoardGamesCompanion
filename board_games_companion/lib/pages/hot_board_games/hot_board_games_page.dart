@@ -60,9 +60,7 @@ class HotBoardGamesPageState extends State<HotBoardGamesPage> {
       arguments: BoardGameDetailsPageArguments(
         boardGameId: boardGame.id,
         boardGameImageHeroId: boardGame.id,
-        boardGameName: boardGame.name,
         navigatingFromType: HotBoardGamesPage,
-        boardGameImageUrl: widget.viewModel.getHotBoardGameDetails(boardGame.id)?.imageUrl,
       ),
     );
   }

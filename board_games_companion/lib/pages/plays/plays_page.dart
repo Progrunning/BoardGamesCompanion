@@ -541,7 +541,6 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
         boardGameId: boardGamePlaythrough.boardGameDetails.id,
-        boardGameName: boardGamePlaythrough.boardGameDetails.name,
         boardGameImageHeroId: boardGamePlaythrough.id,
         navigatingFromType: PlaysPage,
       ),

@@ -74,9 +74,9 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
                 Observer(
                   builder: (_) {
                     return _Header(
-                      boardGameImageHeroId: widget.viewModel.boardGameImageHeroId,
-                      boardGameName: widget.viewModel.boardGameName,
-                      boardGameImageUrl: widget.viewModel.boardGameImageUrl,
+                      boardGameImageHeroId: widget.viewModel.imageHeroId,
+                      boardGameName: widget.viewModel.name,
+                      boardGameImageUrl: widget.viewModel.imageUrl,
                     );
                   },
                 ),
@@ -124,8 +124,8 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
         context,
         CreateBoardGamePage.pageRoute,
         arguments: CreateBoardGamePageArguments(
-          boardGameId: widget.viewModel.boardGameId,
-          boardGameName: widget.viewModel.boardGameName,
+          boardGameId: widget.viewModel.id,
+          boardGameName: widget.viewModel.name,
         ),
       ),
     );
@@ -159,41 +159,6 @@ class _Header extends StatelessWidget {
         boardGameImageUrl: _boardGameImageUrl,
       ),
     );
-    //   flexibleSpace: FlexibleSpaceBar(
-    //     collapseMode: CollapseMode.parallax,
-    //     titlePadding: const EdgeInsets.only(
-    //       left: Dimensions.standardSpacing,
-    //       right: Dimensions.standardSpacing,
-    //       bottom: Dimensions.standardSpacing,
-    //     ),
-    //     centerTitle: true,
-    //     title: Container(
-    //       decoration: BoxDecoration(
-    //         color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
-    //         borderRadius: const BorderRadius.all(
-    //           Radius.circular(AppStyles.defaultCornerRadius),
-    //         ),
-    //       ),
-    //       child: Padding(
-    //         padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-    //         child: Text(
-    //           _boardGameName,
-    //           textAlign: TextAlign.center,
-    //           overflow: TextOverflow.ellipsis,
-    //           style: const TextStyle(
-    //             color: AppColors.defaultTextColor,
-    //             fontSize: Dimensions.largeFontSize,
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //     background: BoardGameImage(
-    //       id: _boardGameImageHeroId,
-    //       url: _boardGameImageUrl,
-    //       minImageHeight: Constants.boardGameDetailsImageHeight,
-    //     ),
-    //   ),
-    // );
   }
 }
 

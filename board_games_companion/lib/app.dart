@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
@@ -74,8 +75,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             final preferencesService = getIt<PreferencesService>();
             final viewModel = getIt<BoardGameDetailsViewModel>();
             viewModel.setBoardGameId(arguments.boardGameId);
-            viewModel.setBoardGameName(arguments.boardGameName);
-            viewModel.setBoardGameImageUrl(arguments.boardGameImageUrl);
+            // viewModel.setBoardGameImageUrl(arguments.boardGameImageUrl);
             viewModel.setBoardGameImageHeroId(arguments.boardGameImageHeroId);
 
             return MaterialPageRoute<dynamic>(
@@ -156,7 +156,12 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           case CreateBoardGamePage.pageRoute:
             final arguments = routeSettings.arguments as CreateBoardGamePageArguments;
             final viewModel = getIt<CreateBoardGameViewModel>();
-            viewModel.setBoardGameName(arguments.boardGameName);
+            if (arguments.boardGameId.isNotNullOrBlank) {
+              viewModel.setBoardGameId(arguments.boardGameId!);
+            }
+            if (arguments.boardGameName.isNotNullOrBlank) {
+              viewModel.setBoardGameName(arguments.boardGameName!);
+            }
 
             return PageRouteBuilder<dynamic>(
               settings: routeSettings,

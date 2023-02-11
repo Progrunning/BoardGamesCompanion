@@ -37,6 +37,9 @@ abstract class _CreateBoardGameViewModel with Store {
       );
 
   @action
+  void setBoardGameId(String id) => _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
+
+  @action
   void setBoardGameName(String name) => _boardGame = boardGame.copyWith(name: name);
 
   @action

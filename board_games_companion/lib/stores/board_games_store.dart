@@ -76,10 +76,15 @@ abstract class _BoardGamesStore with Store {
         return;
       }
 
+      // MK Add/Update expansions to the board games library
       if (boardGameDetails.isMainGame) {
         for (final boardGameExpansion in boardGameDetails.expansions) {
           final existingBoardGameExpansionDetails = _retrieveBoardGame(boardGameExpansion.id);
-          if (existingBoardGameExpansionDetails != null) {
+          if (existingBoardGameExpansionDetails == null) {
+            await addOrUpdateBoardGame(
+              BoardGameDetails(id: boardGameExpansion.id, name: boardGameExpansion.name),
+            );
+          } else {
             await addOrUpdateBoardGame(
               existingBoardGameExpansionDetails.copyWith(isExpansion: true),
             );

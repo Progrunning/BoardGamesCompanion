@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -28,36 +27,20 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   late HtmlUnescape _htmlUnescape;
   late String _boardGameId;
-  late String _boardGameName;
   late String _boardGameImageHeroId;
-  String? _boardGameImageUrl;
+
+  String get id => _boardGameId;
+
+  String get imageHeroId => _boardGameImageHeroId;
 
   @computed
-  BoardGameDetails get boardGame => _boardGamesStore.allBoardGames.firstWhere(
-        (BoardGameDetails boardGame) => boardGame.id == _boardGameId,
-      );
-
-  String get boardGameName => _boardGameName;
-
-  String get boardGameId => _boardGameId;
-
-  String get boardGameImageHeroId => _boardGameImageHeroId;
+  BoardGameDetails get boardGame => _boardGamesStore.allBoardGamesMap[_boardGameId]!;
 
   @computed
-  String? get boardGameImageUrl {
-    if (_boardGameImageUrl.isNotNullOrBlank) {
-      return _boardGameImageUrl;
-    }
+  String get name => boardGame.name;
 
-    switch (futureLoadBoardGameDetails?.status ?? FutureStatus.pending) {
-      case FutureStatus.pending:
-        return null;
-      case FutureStatus.rejected:
-        return '';
-      case FutureStatus.fulfilled:
-        return boardGame.imageUrl;
-    }
-  }
+  @computed
+  String? get imageUrl => boardGame.imageUrl;
 
   @computed
   bool get isMainGame => boardGame.isMainGame;
@@ -108,9 +91,7 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   void setBoardGameId(String boardGameId) => _boardGameId = boardGameId;
 
-  void setBoardGameName(String boardGameName) => _boardGameName = boardGameName;
-
-  void setBoardGameImageUrl(String? boardGameImageUrl) => _boardGameImageUrl = boardGameImageUrl;
+  // void setBoardGameImageUrl(String? boardGameImageUrl) => _boardGameImageUrl = boardGameImageUrl;
 
   void setBoardGameImageHeroId(String boardGameImageHeroId) =>
       _boardGameImageHeroId = boardGameImageHeroId;

@@ -85,7 +85,7 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
                   saveFailure: () => const Icon(Icons.save),
                   saving: () => const CircularProgressIndicator(color: AppColors.primaryColor),
                 ),
-                onPressed: () => widget.viewModel.saveBoardGame(),
+                onPressed: () => _saveBoardGame(),
               );
             },
           ),
@@ -94,6 +94,12 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
 
   Future<bool> _handleOnWillPop() async {
     return true;
+  }
+
+  Future<void> _saveBoardGame() async {
+    final navigatorState = Navigator.of(context);
+    await widget.viewModel.saveBoardGame();
+    navigatorState.pop();
   }
 }
 

@@ -122,7 +122,6 @@ class _GameSpinnerGameSelectedDialogState extends State<GameSpinnerGameSelectedD
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
         boardGameId: widget.selectedBoardGame.id,
-        boardGameName: widget.selectedBoardGame.name,
         navigatingFromType: GameSpinnerGameSelectedDialog,
         boardGameImageHeroId:
             '${AnimationTags.gameSpinnerBoardGameHeroTag}${widget.selectedBoardGame.id}',
