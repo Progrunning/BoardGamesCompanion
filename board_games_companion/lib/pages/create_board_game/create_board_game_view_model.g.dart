@@ -16,6 +16,13 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
       (_$boardGameComputed ??= Computed<BoardGameDetails>(() => super.boardGame,
               name: '_CreateBoardGameViewModel.boardGame'))
           .value;
+  Computed<bool>? _$hasUnsavedChangesComputed;
+
+  @override
+  bool get hasUnsavedChanges => (_$hasUnsavedChangesComputed ??= Computed<bool>(
+          () => super.hasUnsavedChanges,
+          name: '_CreateBoardGameViewModel.hasUnsavedChanges'))
+      .value;
 
   late final _$visualStateAtom =
       Atom(name: '_CreateBoardGameViewModel.visualState', context: context);
@@ -33,19 +40,21 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
     });
   }
 
-  late final _$_boardGameAtom =
-      Atom(name: '_CreateBoardGameViewModel._boardGame', context: context);
+  late final _$_boardGameWorkingCopyAtom = Atom(
+      name: '_CreateBoardGameViewModel._boardGameWorkingCopy',
+      context: context);
 
   @override
-  BoardGameDetails? get _boardGame {
-    _$_boardGameAtom.reportRead();
-    return super._boardGame;
+  BoardGameDetails? get _boardGameWorkingCopy {
+    _$_boardGameWorkingCopyAtom.reportRead();
+    return super._boardGameWorkingCopy;
   }
 
   @override
-  set _boardGame(BoardGameDetails? value) {
-    _$_boardGameAtom.reportWrite(value, super._boardGame, () {
-      super._boardGame = value;
+  set _boardGameWorkingCopy(BoardGameDetails? value) {
+    _$_boardGameWorkingCopyAtom.reportWrite(value, super._boardGameWorkingCopy,
+        () {
+      super._boardGameWorkingCopy = value;
     });
   }
 
@@ -124,7 +133,8 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   String toString() {
     return '''
 visualState: ${visualState},
-boardGame: ${boardGame}
+boardGame: ${boardGame},
+hasUnsavedChanges: ${hasUnsavedChanges}
     ''';
   }
 }

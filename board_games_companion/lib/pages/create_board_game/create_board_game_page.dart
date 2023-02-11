@@ -49,7 +49,6 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   Widget build(BuildContext context) => WillPopScope(
         onWillPop: () => _handleOnWillPop(),
         child: Scaffold(
-          // TODO What type of navigation this should be? Perhaps a popup, rather than a regular stacked page?
           body: SafeArea(
             child: PageContainer(
               child: CustomScrollView(
@@ -59,6 +58,7 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
                       return _Header(
                         boardGameName: widget.viewModel.boardGame.name,
                         boardGameImageUri: widget.viewModel.boardGame.imageUrl,
+                        onPop: () => Navigator.maybePop(context),
                       );
                     },
                   ),
@@ -93,6 +93,35 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
       );
 
   Future<bool> _handleOnWillPop() async {
+    if (widget.viewModel.hasUnsavedChanges) {
+      final shouldNavigateAway = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(AppText.createNewGameUnsavedChangesDialogTitle),
+            content: const Text(AppText.createNewGameUnsavedChangesDialogContent),
+            elevation: Dimensions.defaultElevation,
+            actions: <Widget>[
+              TextButton(
+                child: const Text(AppText.cancel),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text(
+                  AppText.navigateAway,
+                  style: TextStyle(color: AppColors.defaultTextColor),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+
+      return shouldNavigateAway ?? true;
+    }
+
     return true;
   }
 
@@ -172,10 +201,12 @@ class _Header extends StatelessWidget {
     Key? key,
     required this.boardGameName,
     required this.boardGameImageUri,
+    required this.onPop,
   }) : super(key: key);
 
   final String boardGameName;
   final String? boardGameImageUri;
+  final VoidCallback onPop;
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +218,7 @@ class _Header extends StatelessWidget {
       expandedHeight: Constants.boardGameDetailsImageHeight,
       actions: [
         IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => onPop(),
           icon: const Icon(Icons.close),
         ),
       ],

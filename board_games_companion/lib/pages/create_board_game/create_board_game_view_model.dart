@@ -19,35 +19,41 @@ abstract class _CreateBoardGameViewModel with Store {
   _CreateBoardGameViewModel(this._boardGamesStore);
 
   final BoardGamesStore _boardGamesStore;
+  late BoardGameDetails _boardGame;
 
   @observable
   CreateBoardGamePageVisualStates visualState = const CreateBoardGamePageVisualStates.editGame();
 
   @observable
-  BoardGameDetails? _boardGame;
+  BoardGameDetails? _boardGameWorkingCopy;
 
   @observable
   String? _boardGameName;
 
   @computed
-  BoardGameDetails get boardGame => _boardGame ??= BoardGameDetails(
+  BoardGameDetails get boardGame => _boardGameWorkingCopy ??= _boardGame = BoardGameDetails(
         id: const Uuid().v4(),
         name: '',
         isCreatedByUser: true,
       );
 
-  @action
-  void setBoardGameId(String id) => _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
+  @computed
+  bool get hasUnsavedChanges => boardGame != _boardGame;
 
   @action
-  void setBoardGameName(String name) => _boardGame = boardGame.copyWith(name: name);
+  void setBoardGameId(String id) =>
+      _boardGameWorkingCopy = _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
 
   @action
-  void setBoardGameImage(String imageUri) => _boardGame = boardGame.copyWith(imageUrl: imageUri);
+  void setBoardGameName(String name) => _boardGameWorkingCopy = boardGame.copyWith(name: name);
+
+  @action
+  void setBoardGameImage(String imageUri) =>
+      _boardGameWorkingCopy = boardGame.copyWith(imageUrl: imageUri);
 
   @action
   void toggleCollection(CollectionType collectionType) =>
-      _boardGame = boardGame.toggleCollection(collectionType);
+      _boardGameWorkingCopy = boardGame.toggleCollection(collectionType);
 
   @action
   Future<void> saveBoardGame() async {

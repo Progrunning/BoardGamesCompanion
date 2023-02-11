@@ -13,6 +13,7 @@ class AppText {
   static const delete = 'Delete';
   static const edit = 'Edit';
   static const ok = 'OK';
+  static const navigateAway = 'Navigate away';
 
   static const goBack = 'Go Back';
 
@@ -241,4 +242,6 @@ class AppText {
   static const createNewGameBoardGameName = 'Name';
   static const createNewGameBoardGameCollections = 'Collections';
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
+  static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";
+  static const createNewGameUnsavedChangesDialogContent = 'Are you sure you want to navigate away?';
 }
