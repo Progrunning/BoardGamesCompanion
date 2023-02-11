@@ -534,7 +534,13 @@ class _StatsAndCollections extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Center(child: BoardGameRatingHexagon(rating: viewModel.boardGame.rating)),
+          Center(
+            child: Observer(
+              builder: (_) {
+                return BoardGameRatingHexagon(rating: viewModel.boardGame.rating);
+              },
+            ),
+          ),
           const SizedBox(width: Dimensions.standardSpacing),
           if (viewModel.isCreatedByUser) const Spacer(),
           if (!viewModel.isCreatedByUser)

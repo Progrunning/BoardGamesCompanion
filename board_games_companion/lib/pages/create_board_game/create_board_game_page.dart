@@ -11,6 +11,7 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../widgets/board_games/bgc_flexible_space_bar.dart';
+import '../../widgets/common/section_header.dart';
 import 'create_board_game_view_model.dart';
 
 class CreateBoardGamePage extends StatefulWidget {
@@ -62,15 +63,11 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
                       );
                     },
                   ),
-                  Observer(
-                    builder: (_) {
-                      return _Form(
-                        boardGame: widget.viewModel.boardGame,
-                        boardGameNameController: boardGameNameController,
-                        onToggleCollection: (collectionType) =>
-                            widget.viewModel.toggleCollection(collectionType),
-                      );
-                    },
+                  _Form(
+                    viewModel: widget.viewModel,
+                    boardGameNameController: boardGameNameController,
+                    onToggleCollection: (collectionType) =>
+                        widget.viewModel.toggleCollection(collectionType),
                   ),
                 ],
               ),
@@ -135,12 +132,12 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
 class _Form extends StatelessWidget {
   const _Form({
     Key? key,
-    required this.boardGame,
+    required this.viewModel,
     required this.boardGameNameController,
     required this.onToggleCollection,
   }) : super(key: key);
 
-  final BoardGameDetails boardGame;
+  final CreateBoardGameViewModel viewModel;
   final TextEditingController boardGameNameController;
   final void Function(CollectionType) onToggleCollection;
 
@@ -148,49 +145,129 @@ class _Form extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverFillRemaining(
       child: Form(
-        child: Padding(
-          padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Column(
-            children: [
-              Row(
-                children: const [
-                  Text(AppText.createNewGameBoardGameName, style: AppTheme.sectionHeaderTextStyle),
-                  Spacer(),
-                  Text(
-                    AppText.createNewGameBoardGameCollections,
-                    style: AppTheme.sectionHeaderTextStyle,
-                  ),
-                ],
-              ),
-              const SizedBox(height: Dimensions.halfStandardSpacing),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: boardGameNameController,
-                      style: AppTheme.defaultTextFieldStyle,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return AppText.createNewGameBoardGameNameValidationError;
-                        }
-
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: Dimensions.doubleStandardSpacing),
-                  CollectionFlags(
-                    isOwned: boardGame.isOwned ?? false,
-                    isOnWishlist: boardGame.isOnWishlist ?? false,
-                    isOnFriendsList: boardGame.isFriends ?? false,
-                    onToggleCollection: (collectionType) => onToggleCollection(collectionType),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            const SectionHeader(
+              primaryTitle: AppText.createNewGameBoardGameName,
+              secondaryTitle: AppText.createNewGameBoardGameCollections,
+            ),
+            const SizedBox(height: Dimensions.halfStandardSpacing),
+            Observer(
+              builder: (_) {
+                return _NameAndCollectionsSection(
+                  boardGameNameController: boardGameNameController,
+                  boardGame: viewModel.boardGame,
+                  onToggleCollection: onToggleCollection,
+                );
+              },
+            ),
+            const SectionHeader(primaryTitle: AppText.createNewGameBoardGameRating),
+            Observer(
+              builder: (_) {
+                return _RatingSection(
+                  rating: viewModel.rating,
+                  onRatingChanged: (rating) => viewModel.updateRating(rating),
+                );
+              },
+            ),
+          ],
         ),
+      ),
+    );
+  }
+}
+
+class _RatingSection extends StatelessWidget {
+  const _RatingSection({
+    Key? key,
+    required this.rating,
+    required this.onRatingChanged,
+  }) : super(key: key);
+
+  static const double _minValue = 0;
+  static const double _maxValue = 100;
+
+  final double? rating;
+  final void Function(double?) onRatingChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Text(
+            AppText.createNewGameBoardGameRatingNotSet,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+          Expanded(
+            child: Slider(
+              value: (rating ?? 0) * 10,
+              min: _minValue,
+              divisions: _maxValue.toInt(),
+              max: _maxValue,
+              label: '${rating ?? AppText.createNewGameBoardGameRatingNotSet}',
+              onChanged: (value) {
+                if (value == 0) {
+                  onRatingChanged(null);
+                } else {
+                  onRatingChanged(value.floor() / 10);
+                }
+              },
+              activeColor: AppColors.accentColor,
+            ),
+          ),
+          const Text(
+            AppText.createNewGameBoardGameRatingMax,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NameAndCollectionsSection extends StatelessWidget {
+  const _NameAndCollectionsSection({
+    Key? key,
+    required this.boardGameNameController,
+    required this.boardGame,
+    required this.onToggleCollection,
+  }) : super(key: key);
+
+  final TextEditingController boardGameNameController;
+  final BoardGameDetails boardGame;
+  final void Function(CollectionType p1) onToggleCollection;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: boardGameNameController,
+              style: AppTheme.defaultTextFieldStyle,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return AppText.createNewGameBoardGameNameValidationError;
+                }
+
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(width: Dimensions.doubleStandardSpacing),
+          CollectionFlags(
+            isOwned: boardGame.isOwned ?? false,
+            isOnWishlist: boardGame.isOnWishlist ?? false,
+            isOnFriendsList: boardGame.isFriends ?? false,
+            onToggleCollection: (collectionType) => onToggleCollection(collectionType),
+          ),
+        ],
       ),
     );
   }

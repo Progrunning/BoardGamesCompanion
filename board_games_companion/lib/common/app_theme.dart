@@ -119,6 +119,16 @@ class AppTheme {
       buttonTheme: ThemeData.light().buttonTheme.copyWith(
             buttonColor: AppColors.accentColor,
           ),
+      sliderTheme: ThemeData.light().sliderTheme.copyWith(
+            trackHeight: 8,
+            trackShape: const RoundedRectSliderTrackShape(),
+            inactiveTrackColor: AppColors.primaryColorLight.withAlpha(AppStyles.opacity30Percent),
+            overlayShape: const RoundSliderOverlayShape(overlayRadius: 24.0),
+            tickMarkShape: const RoundSliderTickMarkShape(),
+            valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+            valueIndicatorTextStyle: const TextStyle(fontSize: Dimensions.smallFontSize),
+            showValueIndicator: ShowValueIndicator.always,
+          ),
       toggleButtonsTheme: ThemeData.light().toggleButtonsTheme.copyWith(
             selectedColor: AppColors.accentColor,
             color: AppColors.deselectedTabIconColor,

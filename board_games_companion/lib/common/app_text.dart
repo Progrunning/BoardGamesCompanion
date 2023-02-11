@@ -240,6 +240,9 @@ class AppText {
 
   static const createNewGamePageTitle = 'Create new game';
   static const createNewGameBoardGameName = 'Name';
+  static const createNewGameBoardGameRating = 'Rating';
+  static const createNewGameBoardGameRatingNotSet = 'Not set';
+  static const createNewGameBoardGameRatingMax = '10';
   static const createNewGameBoardGameCollections = 'Collections';
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
   static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";

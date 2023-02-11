@@ -40,6 +40,9 @@ abstract class _CreateBoardGameViewModel with Store {
   @computed
   bool get hasUnsavedChanges => boardGame != _boardGame;
 
+  @computed
+  double? get rating => boardGame.rating;
+
   @action
   void setBoardGameId(String id) =>
       _boardGameWorkingCopy = _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
@@ -54,6 +57,9 @@ abstract class _CreateBoardGameViewModel with Store {
   @action
   void toggleCollection(CollectionType collectionType) =>
       _boardGameWorkingCopy = boardGame.toggleCollection(collectionType);
+
+  @action
+  void updateRating(double? rating) => _boardGameWorkingCopy = boardGame.copyWith(rating: rating);
 
   @action
   Future<void> saveBoardGame() async {
