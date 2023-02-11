@@ -247,6 +247,9 @@ class AppText {
   static const createNewGameBoardGamePlayers = 'Players';
   static const createNewGameBoardGamePlayersMin = '1';
   static const createNewGameBoardGamePlayersMax = '20';
+  static const createNewGameBoardGamePlaytime = 'Playtime';
+  static const createNewGameBoardGamePlaytimeMin = '5 min';
+  static const createNewGameBoardGamePlaytimeMax = '240 min';
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
   static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";
   static const createNewGameUnsavedChangesDialogContent = 'Are you sure you want to navigate away?';

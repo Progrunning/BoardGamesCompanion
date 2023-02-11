@@ -52,24 +52,26 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
         child: Scaffold(
           body: SafeArea(
             child: PageContainer(
-              child: CustomScrollView(
-                slivers: [
-                  Observer(
-                    builder: (_) {
-                      return _Header(
-                        boardGameName: widget.viewModel.boardGame.name,
-                        boardGameImageUri: widget.viewModel.boardGame.imageUrl,
-                        onPop: () => Navigator.maybePop(context),
-                      );
-                    },
-                  ),
-                  _Form(
-                    viewModel: widget.viewModel,
-                    boardGameNameController: boardGameNameController,
-                    onToggleCollection: (collectionType) =>
-                        widget.viewModel.toggleCollection(collectionType),
-                  ),
-                ],
+              child: Form(
+                child: CustomScrollView(
+                  slivers: [
+                    Observer(
+                      builder: (_) {
+                        return _Header(
+                          boardGameName: widget.viewModel.boardGame.name,
+                          boardGameImageUri: widget.viewModel.boardGame.imageUrl,
+                          onPop: () => Navigator.maybePop(context),
+                        );
+                      },
+                    ),
+                    _Form(
+                      viewModel: widget.viewModel,
+                      boardGameNameController: boardGameNameController,
+                      onToggleCollection: (collectionType) =>
+                          widget.viewModel.toggleCollection(collectionType),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -143,46 +145,56 @@ class _Form extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
-      child: Form(
-        child: Column(
-          children: [
-            const SectionHeader(
-              primaryTitle: AppText.createNewGameBoardGameName,
-              secondaryTitle: AppText.createNewGameBoardGameCollections,
-            ),
-            const SizedBox(height: Dimensions.halfStandardSpacing),
-            Observer(
-              builder: (_) {
-                return _NameAndCollectionsSection(
-                  boardGameNameController: boardGameNameController,
-                  boardGame: viewModel.boardGame,
-                  onToggleCollection: onToggleCollection,
-                );
-              },
-            ),
-            const SectionHeader(primaryTitle: AppText.createNewGameBoardGameRating),
-            Observer(
-              builder: (_) {
-                return _RatingSection(
-                  rating: viewModel.rating,
-                  onRatingChanged: (rating) => viewModel.updateRating(rating),
-                );
-              },
-            ),
-            const SectionHeader(primaryTitle: AppText.createNewGameBoardGamePlayers),
-            Observer(
-              builder: (_) {
-                return _PlayersSection(
-                  minPlayers: viewModel.minPlayers,
-                  maxPlayers: viewModel.maxPlayers,
-                  onNumberOfPlayersChanged: (minPlayers, maxPlayers) =>
-                      viewModel.updateNumberOfPlayers(minPlayers, maxPlayers),
-                );
-              },
-            ),
-          ],
-        ),
+    return SliverList(
+      delegate: SliverChildListDelegate.fixed(
+        [
+          const SectionHeader(
+            primaryTitle: AppText.createNewGameBoardGameName,
+            secondaryTitle: AppText.createNewGameBoardGameCollections,
+          ),
+          const SizedBox(height: Dimensions.halfStandardSpacing),
+          Observer(
+            builder: (_) {
+              return _NameAndCollectionsSection(
+                boardGameNameController: boardGameNameController,
+                boardGame: viewModel.boardGame,
+                onToggleCollection: onToggleCollection,
+              );
+            },
+          ),
+          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameRating),
+          Observer(
+            builder: (_) {
+              return _RatingSection(
+                rating: viewModel.rating,
+                onRatingChanged: (rating) => viewModel.updateRating(rating),
+              );
+            },
+          ),
+          const SectionHeader(primaryTitle: AppText.createNewGameBoardGamePlayers),
+          Observer(
+            builder: (_) {
+              return _PlayersSection(
+                minPlayers: viewModel.minPlayers,
+                maxPlayers: viewModel.maxPlayers,
+                onNumberOfPlayersChanged: (minPlayers, maxPlayers) =>
+                    viewModel.updateNumberOfPlayers(minPlayers, maxPlayers),
+              );
+            },
+          ),
+          const SectionHeader(primaryTitle: AppText.createNewGameBoardGamePlaytime),
+          Observer(
+            builder: (_) {
+              return _PlaytimeSection(
+                minPlaytime: viewModel.minPlaytime,
+                maxPlaytime: viewModel.maxPlaytime,
+                onPlaytimeChanged: (minPlaytime, maxPlaytime) =>
+                    viewModel.updatePlaytime(minPlaytime, maxPlaytime),
+              );
+            },
+          ),
+          const SizedBox(height: Dimensions.floatingActionButtonBottomSpacing),
+        ],
       ),
     );
   }
@@ -269,7 +281,7 @@ class _PlayersSection extends StatelessWidget {
             child: RangeSlider(
               values: RangeValues(minPlayers.toDouble(), maxPlayers.toDouble()),
               min: _minValue,
-              divisions: _maxValue.toInt(),
+              divisions: (_maxValue - _minValue).toInt(),
               max: _maxValue,
               labels: RangeLabels('$minPlayers', '$maxPlayers'),
               onChanged: (rangeValues) =>
@@ -279,6 +291,54 @@ class _PlayersSection extends StatelessWidget {
           ),
           const Text(
             AppText.createNewGameBoardGamePlayersMax,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlaytimeSection extends StatelessWidget {
+  const _PlaytimeSection({
+    Key? key,
+    required this.minPlaytime,
+    required this.maxPlaytime,
+    required this.onPlaytimeChanged,
+  }) : super(key: key);
+
+  static const double _minValueInMinutes = 5;
+  static const double _maxValueInMinutes = 240;
+
+  final int minPlaytime;
+  final int maxPlaytime;
+  final void Function(int, int) onPlaytimeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Text(
+            AppText.createNewGameBoardGamePlaytimeMin,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+          Expanded(
+            child: RangeSlider(
+              values: RangeValues(minPlaytime.toDouble(), maxPlaytime.toDouble()),
+              min: _minValueInMinutes,
+              divisions: (_maxValueInMinutes - _minValueInMinutes).toInt(),
+              max: _maxValueInMinutes,
+              labels: RangeLabels('$minPlaytime', '$maxPlaytime'),
+              onChanged: (rangeValues) =>
+                  onPlaytimeChanged(rangeValues.start.toInt(), rangeValues.end.toInt()),
+              activeColor: AppColors.accentColor,
+            ),
+          ),
+          const Text(
+            AppText.createNewGameBoardGamePlaytimeMax,
             style: TextStyle(fontSize: Dimensions.smallFontSize),
           ),
         ],

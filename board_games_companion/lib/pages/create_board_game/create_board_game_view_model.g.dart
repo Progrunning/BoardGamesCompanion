@@ -44,6 +44,20 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
       (_$maxPlayersComputed ??= Computed<int>(() => super.maxPlayers,
               name: '_CreateBoardGameViewModel.maxPlayers'))
           .value;
+  Computed<int>? _$minPlaytimeComputed;
+
+  @override
+  int get minPlaytime =>
+      (_$minPlaytimeComputed ??= Computed<int>(() => super.minPlaytime,
+              name: '_CreateBoardGameViewModel.minPlaytime'))
+          .value;
+  Computed<int>? _$maxPlaytimeComputed;
+
+  @override
+  int get maxPlaytime =>
+      (_$maxPlaytimeComputed ??= Computed<int>(() => super.maxPlaytime,
+              name: '_CreateBoardGameViewModel.maxPlaytime'))
+          .value;
 
   late final _$visualStateAtom =
       Atom(name: '_CreateBoardGameViewModel.visualState', context: context);
@@ -173,6 +187,17 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   }
 
   @override
+  void updatePlaytime(int minPlaytime, int maxPlaytime) {
+    final _$actionInfo = _$_CreateBoardGameViewModelActionController
+        .startAction(name: '_CreateBoardGameViewModel.updatePlaytime');
+    try {
+      return super.updatePlaytime(minPlaytime, maxPlaytime);
+    } finally {
+      _$_CreateBoardGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 visualState: ${visualState},
@@ -180,7 +205,9 @@ boardGame: ${boardGame},
 hasUnsavedChanges: ${hasUnsavedChanges},
 rating: ${rating},
 minPlayers: ${minPlayers},
-maxPlayers: ${maxPlayers}
+maxPlayers: ${maxPlayers},
+minPlaytime: ${minPlaytime},
+maxPlaytime: ${maxPlaytime}
     ''';
   }
 }

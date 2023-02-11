@@ -19,6 +19,7 @@ abstract class _CreateBoardGameViewModel with Store {
   _CreateBoardGameViewModel(this._boardGamesStore);
 
   static const int _defaultNumberOfPlayers = 1;
+  static const int _defaultPlaytimeInMinutes = 30;
 
   final BoardGamesStore _boardGamesStore;
   late BoardGameDetails _boardGame;
@@ -51,6 +52,12 @@ abstract class _CreateBoardGameViewModel with Store {
   @computed
   int get maxPlayers => boardGame.maxPlayers ?? _defaultNumberOfPlayers;
 
+  @computed
+  int get minPlaytime => boardGame.minPlaytime ?? _defaultPlaytimeInMinutes;
+
+  @computed
+  int get maxPlaytime => boardGame.maxPlaytime ?? _defaultPlaytimeInMinutes;
+
   @action
   void setBoardGameId(String id) =>
       _boardGameWorkingCopy = _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
@@ -72,6 +79,10 @@ abstract class _CreateBoardGameViewModel with Store {
   @action
   void updateNumberOfPlayers(int minPlayers, int maxPlayers) =>
       _boardGameWorkingCopy = boardGame.copyWith(minPlayers: minPlayers, maxPlayers: maxPlayers);
+  
+  @action
+  void updatePlaytime(int minPlaytime, int maxPlaytime) =>
+      _boardGameWorkingCopy = boardGame.copyWith(minPlaytime: minPlaytime, maxPlaytime: maxPlaytime);
 
   @action
   Future<void> saveBoardGame() async {
