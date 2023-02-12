@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Dimensions {
+  // TODO Update variable names to spacing1x, spacing1_5x etc.
   static const double quarterStandardSpacing = standardSpacing / 4;
   static const double halfStandardSpacing = standardSpacing / 2;
   static const double standardSpacing = 8;
   static const double doubleStandardSpacing = standardSpacing * 2;
+  static const double oneAndHalfStandardSpacing = standardSpacing * 1.5;
   static const double trippleStandardSpacing = standardSpacing * 3;
 
   static const double boardGameDetailsImageHeight = 80;

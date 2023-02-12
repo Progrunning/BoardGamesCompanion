@@ -58,6 +58,9 @@ abstract class _CreateBoardGameViewModel with Store {
   @computed
   int get maxPlaytime => boardGame.maxPlaytime ?? _defaultPlaytimeInMinutes;
 
+  @computed
+  int? get minAge => boardGame.minAge;
+
   @action
   void setBoardGameId(String id) =>
       _boardGameWorkingCopy = _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
@@ -79,10 +82,13 @@ abstract class _CreateBoardGameViewModel with Store {
   @action
   void updateNumberOfPlayers(int minPlayers, int maxPlayers) =>
       _boardGameWorkingCopy = boardGame.copyWith(minPlayers: minPlayers, maxPlayers: maxPlayers);
-  
+
   @action
-  void updatePlaytime(int minPlaytime, int maxPlaytime) =>
-      _boardGameWorkingCopy = boardGame.copyWith(minPlaytime: minPlaytime, maxPlaytime: maxPlaytime);
+  void updatePlaytime(int minPlaytime, int maxPlaytime) => _boardGameWorkingCopy =
+      boardGame.copyWith(minPlaytime: minPlaytime, maxPlaytime: maxPlaytime);
+
+  @action
+  void updateMinAge(int? minAge) => _boardGameWorkingCopy = boardGame.copyWith(minAge: minAge);
 
   @action
   Future<void> saveBoardGame() async {

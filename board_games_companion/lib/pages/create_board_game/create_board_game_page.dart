@@ -193,6 +193,15 @@ class _Form extends StatelessWidget {
               );
             },
           ),
+          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameAge),
+          Observer(
+            builder: (_) {
+              return _AgeSection(
+                minAge: viewModel.minAge,
+                onMinAgeChanged: (minAge) => viewModel.updateMinAge(minAge),
+              );
+            },
+          ),
           const SizedBox(height: Dimensions.floatingActionButtonBottomSpacing),
         ],
       ),
@@ -339,6 +348,57 @@ class _PlaytimeSection extends StatelessWidget {
           ),
           const Text(
             AppText.createNewGameBoardGamePlaytimeMax,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AgeSection extends StatelessWidget {
+  const _AgeSection({
+    Key? key,
+    required this.minAge,
+    required this.onMinAgeChanged,
+  }) : super(key: key);
+
+  static const double _minValue = 0;
+  static const double _maxValue = 50;
+
+  final int? minAge;
+  final void Function(int?) onMinAgeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Text(
+            AppText.createNewGameBoardGameAgeNotSet,
+            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          ),
+          Expanded(
+            child: Slider(
+              value: minAge?.toDouble() ?? 0,
+              min: _minValue,
+              divisions: (_maxValue - _minValue).toInt(),
+              max: _maxValue,
+              label: '${minAge ?? AppText.createNewGameBoardGameAgeNotSet}',
+              onChanged: (value) {
+                if (value == 0) {
+                  onMinAgeChanged(null);
+                } else {
+                  onMinAgeChanged(value.floor());
+                }
+              },
+              activeColor: AppColors.accentColor,
+            ),
+          ),
+          const Text(
+            AppText.createNewGameBoardGameRatingMax,
             style: TextStyle(fontSize: Dimensions.smallFontSize),
           ),
         ],

@@ -201,9 +201,9 @@ class AppText {
 
   static const gamePlaytimeFormat = '%s min';
   static const gamePlayersUnknown = 'unknown';
-  static const gamePlayersSingularFormat = '%i players';
-  static const gamePlayersPluralFormat = '%i players';
-  static const gamePlayersRangeFormat = '%i - %i players';
+  static const gamePlayersSingularFormat = '%i';
+  static const gamePlayersPluralFormat = '%i';
+  static const gamePlayersRangeFormat = '%i - %i';
 
   static const aboutPageTitle = 'About';
   static const collectionsPageTitle = 'Collections';
@@ -250,6 +250,8 @@ class AppText {
   static const createNewGameBoardGamePlaytime = 'Playtime';
   static const createNewGameBoardGamePlaytimeMin = '5 min';
   static const createNewGameBoardGamePlaytimeMax = '240 min';
+  static const createNewGameBoardGameAge = 'Age';
+  static const createNewGameBoardGameAgeNotSet = 'Not set';
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
   static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";
   static const createNewGameUnsavedChangesDialogContent = 'Are you sure you want to navigate away?';

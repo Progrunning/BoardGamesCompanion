@@ -58,6 +58,12 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
       (_$maxPlaytimeComputed ??= Computed<int>(() => super.maxPlaytime,
               name: '_CreateBoardGameViewModel.maxPlaytime'))
           .value;
+  Computed<int?>? _$minAgeComputed;
+
+  @override
+  int? get minAge => (_$minAgeComputed ??= Computed<int?>(() => super.minAge,
+          name: '_CreateBoardGameViewModel.minAge'))
+      .value;
 
   late final _$visualStateAtom =
       Atom(name: '_CreateBoardGameViewModel.visualState', context: context);
@@ -198,6 +204,17 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   }
 
   @override
+  void updateMinAge(int? minAge) {
+    final _$actionInfo = _$_CreateBoardGameViewModelActionController
+        .startAction(name: '_CreateBoardGameViewModel.updateMinAge');
+    try {
+      return super.updateMinAge(minAge);
+    } finally {
+      _$_CreateBoardGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 visualState: ${visualState},
@@ -207,7 +224,8 @@ rating: ${rating},
 minPlayers: ${minPlayers},
 maxPlayers: ${maxPlayers},
 minPlaytime: ${minPlaytime},
-maxPlaytime: ${maxPlaytime}
+maxPlaytime: ${maxPlaytime},
+minAge: ${minAge}
     ''';
   }
 }

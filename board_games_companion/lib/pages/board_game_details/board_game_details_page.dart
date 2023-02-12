@@ -6,6 +6,7 @@ import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -614,12 +615,16 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Flexible(child: _InfoPanel(title: boardGameDetails!.playersFormatted)),
+            Expanded(
+                child: _InfoPanel(
+              title: boardGameDetails!.playersFormatted,
+              icon: const Icon(Icons.people),
+            )),
             const SizedBox(width: Dimensions.standardSpacing),
-            Flexible(
+            Expanded(
               child: _InfoPanel(
+                icon: const Icon(Icons.hourglass_bottom),
                 title: boardGameDetails!.playtimeFormatted,
-                subtitle: 'Playing Time',
               ),
             ),
           ],
@@ -648,16 +653,20 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
           children: <Widget>[
             Flexible(
               child: _InfoPanel(
-                title: 'Age: ${boardGameDetails!.minAge}+',
+                icon: const FaIcon(FontAwesomeIcons.users),
+                title: '${boardGameDetails!.minAge}+',
               ),
             ),
-            const SizedBox(width: Dimensions.standardSpacing),
-            Flexible(
-              child: _InfoPanel(
-                title: 'Weight: ${boardGameDetails!.avgWeight?.toStringAsFixed(2)} / 5',
-                subtitle: 'Complexity Rating',
+            if (boardGameDetails?.avgWeight != null) ...[
+              const SizedBox(width: Dimensions.standardSpacing),
+              Flexible(
+                child: _InfoPanel(
+                  icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced),
+                  title: '${boardGameDetails!.avgWeight!.toStringAsFixed(2)} / 5',
+                ),
               ),
-            ),
+            ],
+            if (boardGameDetails?.avgWeight == null) const Spacer()
           ],
         ),
       ),
@@ -668,12 +677,12 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
 class _InfoPanel extends StatelessWidget {
   const _InfoPanel({
     required this.title,
-    this.subtitle,
+    this.icon,
     Key? key,
   }) : super(key: key);
 
   final String title;
-  final String? subtitle;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -681,23 +690,19 @@ class _InfoPanel extends StatelessWidget {
       elevation: AppStyles.defaultElevation,
       backgroundColor: AppColors.primaryColor,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
+        padding: const EdgeInsets.symmetric(vertical: Dimensions.oneAndHalfStandardSpacing),
         child: Center(
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (icon != null) ...[icon!, const SizedBox(width: Dimensions.standardSpacing)],
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: AppTheme.titleTextStyle,
               ),
-              if (subtitle?.isNotEmpty ?? false)
-                Text(
-                  subtitle!,
-                  textAlign: TextAlign.center,
-                  style: AppTheme.subTitleTextStyle,
-                ),
             ],
           ),
         ),
