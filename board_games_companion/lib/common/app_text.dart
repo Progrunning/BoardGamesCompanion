@@ -250,7 +250,7 @@ class AppText {
   static const createNewGameBoardGamePlaytime = 'Playtime';
   static const createNewGameBoardGamePlaytimeMin = '5 min';
   static const createNewGameBoardGamePlaytimeMax = '240 min';
-  static const createNewGameBoardGameAge = 'Age';
+  static const createNewGameBoardGameMinAge = 'Minimum age';
   static const createNewGameBoardGameAgeNotSet = 'Not set';
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
   static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";

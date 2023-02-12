@@ -229,10 +229,22 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                         return _FirstRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame);
                       },
                     ),
-                    const SizedBox(height: _spacingBetweenSecions),
                     Observer(
                       builder: (_) {
-                        return _SecondRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame);
+                        if (viewModel.boardGame.minAge != null ||
+                            viewModel.boardGame.avgWeight != null) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: _halfSpacingBetweenSecions),
+                              _SecondRowGeneralInfoPanels(
+                                minAge: viewModel.boardGame.minAge,
+                                avgWeight: viewModel.boardGame.avgWeight,
+                              ),
+                            ],
+                          );
+                        }
+
+                        return const SizedBox.shrink();
                       },
                     ),
                     const SizedBox(height: _spacingBetweenSecions),
@@ -636,11 +648,13 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
 
 class _SecondRowGeneralInfoPanels extends StatelessWidget {
   const _SecondRowGeneralInfoPanels({
-    required this.boardGameDetails,
+    required this.minAge,
+    required this.avgWeight,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameDetails? boardGameDetails;
+  final int? minAge;
+  final num? avgWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -651,22 +665,22 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Flexible(
-              child: _InfoPanel(
-                icon: const FaIcon(FontAwesomeIcons.users),
-                title: '${boardGameDetails!.minAge}+',
-              ),
-            ),
-            if (boardGameDetails?.avgWeight != null) ...[
-              const SizedBox(width: Dimensions.standardSpacing),
-              Flexible(
+            if (minAge != null)
+              Expanded(
                 child: _InfoPanel(
-                  icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced),
-                  title: '${boardGameDetails!.avgWeight!.toStringAsFixed(2)} / 5',
+                  icon: const Icon(Icons.family_restroom),
+                  title: '$minAge+',
                 ),
               ),
-            ],
-            if (boardGameDetails?.avgWeight == null) const Spacer()
+            const SizedBox(width: Dimensions.standardSpacing),
+            if (avgWeight != null)
+              Expanded(
+                child: _InfoPanel(
+                  icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced),
+                  title: '${avgWeight!.toStringAsFixed(2)} / 5',
+                ),
+              ),
+            if (avgWeight == null) const Spacer()
           ],
         ),
       ),

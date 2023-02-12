@@ -193,7 +193,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameAge),
+          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameMinAge),
           Observer(
             builder: (_) {
               return _AgeSection(
