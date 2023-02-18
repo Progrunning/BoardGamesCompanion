@@ -3,6 +3,7 @@ import 'package:board_games_companion/widgets/common/board_game/collection_flags
 import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -11,6 +12,7 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../widgets/board_games/bgc_flexible_space_bar.dart';
+import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/section_header.dart';
 import 'create_board_game_view_model.dart';
 
@@ -30,6 +32,7 @@ class CreateBoardGamePage extends StatefulWidget {
 
 class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   final boardGameNameController = TextEditingController();
+  final imagePicker = ImagePicker();
 
   @override
   void initState() {
@@ -69,6 +72,8 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
                       boardGameNameController: boardGameNameController,
                       onToggleCollection: (collectionType) =>
                           widget.viewModel.toggleCollection(collectionType),
+                      onPickImage: (imageSource) =>
+                          _handlePickingAndSavingBoardGameImage(imageSource),
                     ),
                   ],
                 ),
@@ -78,13 +83,16 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
           floatingActionButton: Observer(
             builder: (_) {
               return FloatingActionButton(
+                onPressed: widget.viewModel.isValid ? () => _saveBoardGame() : null,
+                backgroundColor: widget.viewModel.isValid
+                    ? AppColors.accentColor
+                    : AppColors.disabledFloatinActionButtonColor,
                 child: widget.viewModel.visualState.when(
                   editGame: () => const Icon(Icons.save),
                   saveSuccess: () => const Icon(Icons.save),
                   saveFailure: () => const Icon(Icons.save),
                   saving: () => const CircularProgressIndicator(color: AppColors.primaryColor),
                 ),
-                onPressed: () => _saveBoardGame(),
               );
             },
           ),
@@ -124,6 +132,15 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
     return true;
   }
 
+  Future<void> _handlePickingAndSavingBoardGameImage(ImageSource imageSource) async {
+    final boardGameImageFile = await imagePicker.pickImage(source: imageSource);
+    if (boardGameImageFile?.path.isEmpty ?? true) {
+      return;
+    }
+
+    widget.viewModel.updateImage(boardGameImageFile!);
+  }
+
   Future<void> _saveBoardGame() async {
     final navigatorState = Navigator.of(context);
     await widget.viewModel.saveBoardGame();
@@ -137,22 +154,31 @@ class _Form extends StatelessWidget {
     required this.viewModel,
     required this.boardGameNameController,
     required this.onToggleCollection,
+    required this.onPickImage,
   }) : super(key: key);
 
   final CreateBoardGameViewModel viewModel;
   final TextEditingController boardGameNameController;
   final void Function(CollectionType) onToggleCollection;
+  final void Function(ImageSource) onPickImage;
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildListDelegate.fixed(
         [
+          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameImage),
+          Observer(
+            builder: (_) {
+              return _ImageSection(
+                onPickImage: (imageSource) => onPickImage(imageSource),
+              );
+            },
+          ),
           const SectionHeader(
             primaryTitle: AppText.createNewGameBoardGameName,
             secondaryTitle: AppText.createNewGameBoardGameCollections,
           ),
-          const SizedBox(height: Dimensions.halfStandardSpacing),
           Observer(
             builder: (_) {
               return _NameAndCollectionsSection(
@@ -203,6 +229,40 @@ class _Form extends StatelessWidget {
             },
           ),
           const SizedBox(height: Dimensions.floatingActionButtonBottomSpacing),
+        ],
+      ),
+    );
+  }
+}
+
+class _ImageSection extends StatelessWidget {
+  const _ImageSection({
+    required this.onPickImage,
+    Key? key,
+  }) : super(key: key);
+
+  static const double _iconSize = 32;
+
+  final void Function(ImageSource) onPickImage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.halfStandardSpacing,
+        vertical: Dimensions.standardSpacing,
+      ),
+      child: Row(
+        children: [
+          CustomIconButton(
+            const Icon(Icons.filter, color: AppColors.defaultTextColor, size: _iconSize),
+            onTap: () => onPickImage(ImageSource.gallery),
+          ),
+          const SizedBox(width: Dimensions.standardSpacing),
+          CustomIconButton(
+            const Icon(Icons.camera, color: AppColors.defaultTextColor, size: _iconSize),
+            onTap: () => onPickImage(ImageSource.camera),
+          ),
         ],
       ),
     );

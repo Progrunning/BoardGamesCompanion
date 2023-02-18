@@ -84,6 +84,10 @@ class BoardGameDetails with _$BoardGameDetails {
       (isOwned ?? false) || (isFriends ?? false) || (isOnWishlist ?? false);
 
   String get playtimeFormatted {
+    if (minPlaytime == null && maxPlaytime == null) {
+      return '';
+    }
+
     var playtimeRange = '';
     if (minPlaytime == maxPlaytime) {
       if (minPlaytime == 0) {
@@ -148,6 +152,9 @@ class BoardGameDetails with _$BoardGameDetails {
 
     return '${Constants.boardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
   }
+
+  bool get hasGeneralInfoDefined =>
+      minPlayers != null || minPlaytime != null || minAge != null || avgWeight != null;
 
   String get _baseBggBoardGameUrl => '${Constants.boardGameGeekBaseUrl}boardgame';
 

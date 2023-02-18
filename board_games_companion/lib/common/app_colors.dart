@@ -44,6 +44,8 @@ class AppColors {
   static const Color activeBottomTabColor = whiteColor;
   static const Color inactiveBottomTabColor = greyColor;
 
+  static const Color disabledFloatinActionButtonColor = greyColor;
+
   static const Color inactiveWinningConditionIcon = greyColor;
   static const Color activeWinningConditionIcon = accentColor;
 

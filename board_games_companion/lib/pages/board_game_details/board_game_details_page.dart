@@ -223,10 +223,20 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                     const _BodySectionHeader(title: 'Stats', secondaryTitle: 'Collections'),
                     _StatsAndCollections(viewModel: viewModel),
                     const SizedBox(height: _spacingBetweenSecions),
-                    const _BodySectionHeader(title: 'General'),
                     Observer(
                       builder: (_) {
-                        return _FirstRowGeneralInfoPanels(boardGameDetails: viewModel.boardGame);
+                        if (viewModel.boardGame.hasGeneralInfoDefined) {
+                          return const _BodySectionHeader(title: 'General');
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        return _FirstRowGeneralInfoPanels(
+                          playersFormatted: viewModel.boardGame.playersFormatted,
+                          playtimeFormatted: viewModel.boardGame.playtimeFormatted,
+                        );
                       },
                     ),
                     Observer(
@@ -243,7 +253,6 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                             ],
                           );
                         }
-
                         return const SizedBox.shrink();
                       },
                     ),
@@ -612,11 +621,13 @@ class _StatsAndCollections extends StatelessWidget {
 
 class _FirstRowGeneralInfoPanels extends StatelessWidget {
   const _FirstRowGeneralInfoPanels({
-    required this.boardGameDetails,
+    required this.playersFormatted,
+    required this.playtimeFormatted,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameDetails? boardGameDetails;
+  final String playersFormatted;
+  final String playtimeFormatted;
 
   @override
   Widget build(BuildContext context) {
@@ -628,15 +639,16 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-                child: _InfoPanel(
-              title: boardGameDetails!.playersFormatted,
-              icon: const Icon(Icons.people),
-            )),
+              child: _InfoPanel(
+                title: playersFormatted,
+                icon: const Icon(Icons.people),
+              ),
+            ),
             const SizedBox(width: Dimensions.standardSpacing),
             Expanded(
               child: _InfoPanel(
                 icon: const Icon(Icons.hourglass_bottom),
-                title: boardGameDetails!.playtimeFormatted,
+                title: playtimeFormatted,
               ),
             ),
           ],

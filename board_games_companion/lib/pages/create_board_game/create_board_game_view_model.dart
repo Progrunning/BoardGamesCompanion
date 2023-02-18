@@ -3,6 +3,7 @@
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -24,6 +25,8 @@ abstract class _CreateBoardGameViewModel with Store {
   final BoardGamesStore _boardGamesStore;
   late BoardGameDetails _boardGame;
 
+  XFile? _boardGameImageFile;
+
   @observable
   CreateBoardGamePageVisualStates visualState = const CreateBoardGamePageVisualStates.editGame();
 
@@ -38,6 +41,11 @@ abstract class _CreateBoardGameViewModel with Store {
         id: const Uuid().v4(),
         name: '',
         isCreatedByUser: true,
+        isOwned: true,
+        minPlayers: 1,
+        maxPlayers: 1,
+        minPlaytime: 30,
+        maxPlaytime: 60,
       );
 
   @computed
@@ -60,6 +68,9 @@ abstract class _CreateBoardGameViewModel with Store {
 
   @computed
   int? get minAge => boardGame.minAge;
+
+  @computed
+  bool get isValid => boardGame.name.isNotEmpty && boardGame.isInAnyCollection;
 
   @action
   void setBoardGameId(String id) =>
@@ -89,6 +100,17 @@ abstract class _CreateBoardGameViewModel with Store {
 
   @action
   void updateMinAge(int? minAge) => _boardGameWorkingCopy = boardGame.copyWith(minAge: minAge);
+
+  @action
+  void updateImage(XFile imageFile) {
+    _boardGameImageFile = imageFile;
+
+    // TODO Consider resizing the game image for the thumbnail
+    _boardGameWorkingCopy = boardGame.copyWith(
+      imageUrl: imageFile.path,
+      thumbnailUrl: imageFile.path,
+    );
+  }
 
   @action
   Future<void> saveBoardGame() async {

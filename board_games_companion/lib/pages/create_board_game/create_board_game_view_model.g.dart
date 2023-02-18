@@ -64,6 +64,12 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   int? get minAge => (_$minAgeComputed ??= Computed<int?>(() => super.minAge,
           name: '_CreateBoardGameViewModel.minAge'))
       .value;
+  Computed<bool>? _$isValidComputed;
+
+  @override
+  bool get isValid => (_$isValidComputed ??= Computed<bool>(() => super.isValid,
+          name: '_CreateBoardGameViewModel.isValid'))
+      .value;
 
   late final _$visualStateAtom =
       Atom(name: '_CreateBoardGameViewModel.visualState', context: context);
@@ -215,6 +221,17 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   }
 
   @override
+  void updateImage(XFile imageFile) {
+    final _$actionInfo = _$_CreateBoardGameViewModelActionController
+        .startAction(name: '_CreateBoardGameViewModel.updateImage');
+    try {
+      return super.updateImage(imageFile);
+    } finally {
+      _$_CreateBoardGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 visualState: ${visualState},
@@ -225,7 +242,8 @@ minPlayers: ${minPlayers},
 maxPlayers: ${maxPlayers},
 minPlaytime: ${minPlaytime},
 maxPlaytime: ${maxPlaytime},
-minAge: ${minAge}
+minAge: ${minAge},
+isValid: ${isValid}
     ''';
   }
 }

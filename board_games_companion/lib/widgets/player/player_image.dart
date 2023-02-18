@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/constants.dart';
+import '../animations/image_fade_in_animation.dart';
 
 class PlayerImage extends StatelessWidget {
   const PlayerImage({
@@ -51,7 +52,7 @@ class PlayerImage extends StatelessWidget {
                     return child;
                   }
 
-                  return _FadeInAnimation(frame: frame, child: child);
+                  return ImageFadeInAnimation(frame: frame, child: child);
                 },
               ),
             )
@@ -67,33 +68,12 @@ class PlayerImage extends StatelessWidget {
                     return child;
                   }
 
-                  return _FadeInAnimation(frame: frame, child: child);
+                  return ImageFadeInAnimation(frame: frame, child: child);
                 },
               ),
             ),
         ],
       ),
-    );
-  }
-}
-
-class _FadeInAnimation extends StatelessWidget {
-  const _FadeInAnimation({
-    required this.frame,
-    required this.child,
-    Key? key,
-  }) : super(key: key);
-
-  final int? frame;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: frame == null ? 0 : 1,
-      duration: const Duration(seconds: 1),
-      curve: Curves.easeOut,
-      child: child,
     );
   }
 }

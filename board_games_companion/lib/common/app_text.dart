@@ -240,6 +240,7 @@ class AppText {
 
   static const createNewGamePageTitle = 'Create new game';
   static const createNewGameBoardGameName = 'Name';
+  static const createNewGameBoardGameImage = 'Image';
   static const createNewGameBoardGameCollections = 'Collections';
   static const createNewGameBoardGameRating = 'Rating';
   static const createNewGameBoardGameRatingNotSet = 'Not set';

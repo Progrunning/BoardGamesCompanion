@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:basics/basics.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
+import '../../extensions/string_extensions.dart';
+import '../animations/image_fade_in_animation.dart';
 import '../common/loading_indicator_widget.dart';
 
 class BoardGameImage extends StatelessWidget {
@@ -31,25 +35,43 @@ class BoardGameImage extends StatelessWidget {
       );
     }
 
-    final image = CachedNetworkImage(
-      imageUrl: _url ?? '',
-      imageBuilder: (context, imageProvider) => ConstrainedBox(
-        constraints: BoxConstraints(minHeight: minImageHeight),
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+    late Widget image;
+
+    if (_url.isWebUrl()) {
+      image = CachedNetworkImage(
+        imageUrl: _url!,
+        imageBuilder: (context, imageProvider) => ConstrainedBox(
+          constraints: BoxConstraints(minHeight: minImageHeight),
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            ),
           ),
         ),
-      ),
-      fit: BoxFit.fitWidth,
-      placeholder: (_, __) => const LoadingIndicator(),
-      errorWidget: (_, __, dynamic ___) {
-        return ConstrainedBox(
-          constraints: BoxConstraints(minHeight: minImageHeight),
-          child: Image.asset('assets/icons/logo.png', fit: BoxFit.cover),
-        );
-      },
-    );
+        fit: BoxFit.fitWidth,
+        placeholder: (_, __) => const LoadingIndicator(),
+        errorWidget: (_, __, dynamic ___) {
+          return ConstrainedBox(
+            constraints: BoxConstraints(minHeight: minImageHeight),
+            child: Image.asset('assets/icons/logo.png', fit: BoxFit.cover),
+          );
+        },
+      );
+    } else {
+      image = Image.file(
+        File(_url!),
+        fit: BoxFit.cover,
+        cacheHeight: minImageHeight.toInt(),
+        cacheWidth: minImageHeight.toInt(),
+        frameBuilder: (_, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+          if (wasSynchronouslyLoaded) {
+            return child;
+          }
+
+          return ImageFadeInAnimation(frame: frame, child: child);
+        },
+      );
+    }
 
     if (_id.isNotNullOrBlank) {
       return Hero(tag: '$heroTag$_id', child: image);
