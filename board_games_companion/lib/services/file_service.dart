@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -23,19 +24,29 @@ class FileService {
 
   Future<File?> saveToDocumentsDirectory(
     String fileName,
-    XFile pickedFile, {
+    XFile file, {
     bool overrideExistingFile = false,
+    String? filePath,
   }) async {
     try {
-      final fileContent = await pickedFile.readAsBytes();
-      final avatarImageToSave = await _retrieveDocumentsFile(fileName);
-      if (!overrideExistingFile && avatarImageToSave.existsSync()) {
+      final fileContent = await file.readAsBytes();
+      final fileToSave = await _retrieveDocumentsFile(fileName, filePath: filePath);
+
+      if (!overrideExistingFile && fileToSave.existsSync()) {
         throw FileSystemException("Can't save file $fileName because it already exists");
       }
 
-      final savedAvatarImage = await avatarImageToSave.writeAsBytes(fileContent);
+      if (filePath.isNotNullOrBlank) {
+        final Directory filePathDirectory = Directory(filePath!);
+        if (!await filePathDirectory.exists()) {
+          // final documentsPath = await path_provider.getApplicationDocumentsDirectory();
+          // await Directory('$documentsPath/$filePath').create(recursive: true);
+          await Directory(filePath).create(recursive: true);
+        }
+      }
 
-      return savedAvatarImage;
+      final savedFile = await fileToSave.writeAsBytes(fileContent, mode: FileMode.write);
+      return savedFile;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -43,13 +54,13 @@ class FileService {
     return null;
   }
 
-  Future<bool> deleteFileFromDocumentsDirectory(String fileName) async {
+  Future<bool> deleteFileFromDocumentsDirectory(String fileName, {String? filePath}) async {
     if (fileName.isEmpty) {
       return false;
     }
 
     try {
-      final fileToDelete = await _retrieveDocumentsFile(fileName);
+      final fileToDelete = await _retrieveDocumentsFile(fileName, filePath: filePath);
       await fileToDelete.delete();
 
       return true;
@@ -75,8 +86,13 @@ class FileService {
     return false;
   }
 
-  Future<String> createDocumentsFilePath(String fileName) async {
+  Future<String> createDocumentsFilePath(String fileName, {String? filePath}) async {
     final documentsDirectory = await path_provider.getApplicationDocumentsDirectory();
+
+    if (filePath.isNotNullOrBlank) {
+      return '${documentsDirectory.path}/$filePath/$fileName';
+    }
+
     return '${documentsDirectory.path}/$fileName';
   }
 
@@ -147,8 +163,8 @@ class FileService {
     return false;
   }
 
-  Future<File> _retrieveDocumentsFile(String fileName) async {
-    final documentsFilePath = await createDocumentsFilePath(fileName);
+  Future<File> _retrieveDocumentsFile(String fileName, {String? filePath}) async {
+    final documentsFilePath = await createDocumentsFilePath(fileName, filePath: filePath);
     return File(documentsFilePath);
   }
 

@@ -105,8 +105,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i15.ScoresStore>(),
       get<_i26.PlaythroughsStore>(),
       get<_i10.PlayersStore>()));
-  gh.factory<_i31.CreateBoardGameViewModel>(
-      () => _i31.CreateBoardGameViewModel(get<_i28.BoardGamesStore>()));
+  gh.factory<_i31.CreateBoardGameViewModel>(() => _i31.CreateBoardGameViewModel(
+      get<_i28.BoardGamesStore>(), get<_i6.FileService>()));
   gh.singleton<_i32.GamePlaythroughsDetailsStore>(
       _i32.GamePlaythroughsDetailsStore(get<_i26.PlaythroughsStore>(),
           get<_i15.ScoresStore>(), get<_i10.PlayersStore>()));

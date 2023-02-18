@@ -1,5 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:io';
+
+import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -8,7 +12,9 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../common/regex_expressions.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../services/file_service.dart';
 import 'create_board_game_visual_states.dart';
 
 part 'create_board_game_view_model.g.dart';
@@ -17,12 +23,14 @@ part 'create_board_game_view_model.g.dart';
 class CreateBoardGameViewModel = _CreateBoardGameViewModel with _$CreateBoardGameViewModel;
 
 abstract class _CreateBoardGameViewModel with Store {
-  _CreateBoardGameViewModel(this._boardGamesStore);
+  _CreateBoardGameViewModel(this._boardGamesStore, this._fileService);
 
   static const int _defaultNumberOfPlayers = 1;
   static const int _defaultPlaytimeInMinutes = 30;
 
   final BoardGamesStore _boardGamesStore;
+  final FileService _fileService;
+
   late BoardGameDetails _boardGame;
 
   XFile? _boardGameImageFile;
@@ -36,6 +44,8 @@ abstract class _CreateBoardGameViewModel with Store {
   @observable
   String? _boardGameName;
 
+  /// Returns the working copy [_boardGameWorkingCopy] of a game. Created a board game with
+  /// default arbitrary values in case it hasn't been yet initialized.
   @computed
   BoardGameDetails get boardGame => _boardGameWorkingCopy ??= _boardGame = BoardGameDetails(
         id: const Uuid().v4(),
@@ -105,7 +115,6 @@ abstract class _CreateBoardGameViewModel with Store {
   void updateImage(XFile imageFile) {
     _boardGameImageFile = imageFile;
 
-    // TODO Consider resizing the game image for the thumbnail
     _boardGameWorkingCopy = boardGame.copyWith(
       imageUrl: imageFile.path,
       thumbnailUrl: imageFile.path,
@@ -116,11 +125,41 @@ abstract class _CreateBoardGameViewModel with Store {
   Future<void> saveBoardGame() async {
     try {
       visualState = const CreateBoardGamePageVisualStates.saving();
+      // TODO Delete existing image (when editing)
+      final savedImageName = await _saveBoardGameImage();
+      if (savedImageName != null) {
+        _boardGameWorkingCopy = boardGame.copyWith(
+          imageUrl: savedImageName,
+          thumbnailUrl: savedImageName,
+        );
+      }
       await _boardGamesStore.addOrUpdateBoardGame(boardGame);
       visualState = const CreateBoardGamePageVisualStates.saveSuccess();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       visualState = const CreateBoardGamePageVisualStates.saveFailure();
     }
+  }
+
+  Future<String?> _saveBoardGameImage() async {
+    if (boardGame.imageUrl.isNullOrBlank || _boardGameImageFile == null) {
+      return null;
+    }
+
+    final imageName = const Uuid().v4();
+    String? imageFileExtension = '.${Constants.jpgFileExtension}';
+    if (RegexExpressions.findFileExtensionRegex.hasMatch(_boardGameImageFile!.path)) {
+      imageFileExtension =
+          RegexExpressions.findFileExtensionRegex.firstMatch(_boardGameImageFile!.path)!.group(0);
+    }
+
+    final fileName = '$imageName$imageFileExtension';
+    final File? savedImage = await _fileService.saveToDocumentsDirectory(
+      fileName,
+      _boardGameImageFile!,
+      filePath: 'images/boardGames',
+    );
+
+    return savedImage?.uri.path;
   }
 }

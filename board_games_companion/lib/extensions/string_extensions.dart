@@ -1,4 +1,7 @@
+import 'package:basics/basics.dart';
+
 import '../common/constants.dart';
+import '../models/image_type.dart';
 
 extension StringExtensions on String? {
   int safeCompareTo(String? stringToCompare) {
@@ -33,6 +36,18 @@ extension StringExtensions on String? {
     }
 
     final uri = Uri.tryParse(this!);
-    return uri != null && uri.hasScheme && uri.host.isEmpty;
+    return uri != null && uri.hasScheme && uri.host.isNotEmpty;
+  }
+
+  ImageType toImageType() {
+    if (isNullOrBlank) {
+      return const ImageType.undefined();
+    }
+
+    if (isWebUrl()) {
+      return const ImageType.web();
+    }
+
+    return const ImageType.file();
   }
 }

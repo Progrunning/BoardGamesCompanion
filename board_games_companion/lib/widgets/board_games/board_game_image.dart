@@ -28,50 +28,47 @@ class BoardGameImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_url.isNullOrBlank) {
-      return ConstrainedBox(
-        constraints: BoxConstraints(minHeight: minImageHeight),
-        child: Image.asset('assets/icons/logo.png', fit: BoxFit.cover),
-      );
-    }
+    final image = _url.toImageType().when(
+          web: () {
+            return CachedNetworkImage(
+              imageUrl: _url!,
+              imageBuilder: (context, imageProvider) => ConstrainedBox(
+                constraints: BoxConstraints(minHeight: minImageHeight),
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+              fit: BoxFit.fitWidth,
+              placeholder: (_, __) => const LoadingIndicator(),
+              errorWidget: (_, __, dynamic ___) {
+                return ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: minImageHeight),
+                  child: Image.asset('assets/icons/logo.png', fit: BoxFit.cover),
+                );
+              },
+            );
+          },
+          file: () {
+            return Image.file(
+              File(_url!),
+              fit: BoxFit.cover,
+              cacheHeight: minImageHeight.toInt(),
+              frameBuilder: (_, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
 
-    late Widget image;
-
-    if (_url.isWebUrl()) {
-      image = CachedNetworkImage(
-        imageUrl: _url!,
-        imageBuilder: (context, imageProvider) => ConstrainedBox(
-          constraints: BoxConstraints(minHeight: minImageHeight),
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-            ),
-          ),
-        ),
-        fit: BoxFit.fitWidth,
-        placeholder: (_, __) => const LoadingIndicator(),
-        errorWidget: (_, __, dynamic ___) {
-          return ConstrainedBox(
+                return ImageFadeInAnimation(frame: frame, child: child);
+              },
+            );
+          },
+          undefined: () => ConstrainedBox(
             constraints: BoxConstraints(minHeight: minImageHeight),
             child: Image.asset('assets/icons/logo.png', fit: BoxFit.cover),
-          );
-        },
-      );
-    } else {
-      image = Image.file(
-        File(_url!),
-        fit: BoxFit.cover,
-        cacheHeight: minImageHeight.toInt(),
-        cacheWidth: minImageHeight.toInt(),
-        frameBuilder: (_, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-          if (wasSynchronouslyLoaded) {
-            return child;
-          }
-
-          return ImageFadeInAnimation(frame: frame, child: child);
-        },
-      );
-    }
+          ),
+        );
 
     if (_id.isNotNullOrBlank) {
       return Hero(tag: '$heroTag$_id', child: image);
