@@ -177,6 +177,8 @@ abstract class _HomeViewModelBase with Store {
 
     if (_previousBggSearchQuery == _bggSearchQuery &&
         (bggSearchResultsStream.value?.isNotEmpty ?? false)) {
+      // Refresh data in the stream, otherwise the [ConnectionState] won't change from waiting
+      _bggSearchResultsStreamController.add(bggSearchResultsStream.value!);
       return;
     }
 
@@ -186,10 +188,13 @@ abstract class _HomeViewModelBase with Store {
       _bggSearchResults.clear();
       final foundBoardGames = await _boardGameGeekService.search(_bggSearchQuery);
       for (final boardGame in foundBoardGames) {
-        // MK Enrich the game details, if available
+        // Enrich game details, if game details are available.
+        // Otherwise add the game to the store.
         if (_boardGamesStore.allBoardGamesMap.containsKey(boardGame.id)) {
           _bggSearchResults.add(_boardGamesStore.allBoardGamesMap[boardGame.id]!);
           continue;
+        } else {
+          await _boardGamesStore.addOrUpdateBoardGame(boardGame);
         }
 
         _bggSearchResults.add(boardGame);

@@ -91,8 +91,6 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   void setBoardGameId(String boardGameId) => _boardGameId = boardGameId;
 
-  // void setBoardGameImageUrl(String? boardGameImageUrl) => _boardGameImageUrl = boardGameImageUrl;
-
   void setBoardGameImageHeroId(String boardGameImageHeroId) =>
       _boardGameImageHeroId = boardGameImageHeroId;
 

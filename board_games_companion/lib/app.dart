@@ -76,7 +76,6 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             final preferencesService = getIt<PreferencesService>();
             final viewModel = getIt<BoardGameDetailsViewModel>();
             viewModel.setBoardGameId(arguments.boardGameId);
-            // viewModel.setBoardGameImageUrl(arguments.boardGameImageUrl);
             viewModel.setBoardGameImageHeroId(arguments.boardGameImageHeroId);
 
             return MaterialPageRoute<dynamic>(
