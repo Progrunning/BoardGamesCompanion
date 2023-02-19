@@ -87,7 +87,7 @@ abstract class _CollectionsViewModel with Store {
     final filteredBoardGames = allBoardGames
         .where((BoardGameDetails boardGame) =>
             (_boardGamesFiltersStore.filterByRating == null ||
-                boardGame.rating! >= _boardGamesFiltersStore.filterByRating!) &&
+                (boardGame.rating ?? 0) >= _boardGamesFiltersStore.filterByRating!) &&
             (_boardGamesFiltersStore.numberOfPlayers == null ||
                 (boardGame.maxPlayers != null &&
                     boardGame.minPlayers != null &&
