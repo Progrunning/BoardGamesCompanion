@@ -13,6 +13,7 @@ import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
 import 'models/navigation/playthough_note_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
+import 'models/results/board_game_creation_result.dart';
 import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
 import 'pages/board_game_details/board_game_details_view_model.dart';
@@ -163,7 +164,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
               viewModel.setBoardGameName(arguments.boardGameName!);
             }
 
-            return PageRouteBuilder<dynamic>(
+            return PageRouteBuilder<GameCreationResult>(
               settings: routeSettings,
               pageBuilder: (_, __, ___) => CreateBoardGamePage(viewModel: viewModel),
               transitionsBuilder: (_, animation, secondaryAnimation, child) =>

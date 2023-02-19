@@ -11,6 +11,7 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
+import '../../models/results/bgg_search_result.dart';
 import '../../models/sort_by.dart';
 import '../../pages/collections/search_suggestion.dart';
 import '../../widgets/board_games/board_game_tile.dart';
@@ -23,7 +24,8 @@ import '../common/sorting/sort_by_chip.dart';
 
 /// [SearchDelegate] for the online (i.e. BGG) search.
 /// Controller by the [HomeViewModel].
-class BggSearch extends SearchDelegate<BoardGameDetails?> {
+/// Returns the id of a [BoardGameDetails]
+class BggSearch extends SearchDelegate<BggSearchResult?> {
   BggSearch({
     required this.searchHistory,
     required this.sortByOptions,
@@ -31,7 +33,6 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
     required this.searchResultsStream,
     required this.onSortyByUpdate,
     required this.onQueryChanged,
-    required this.onCreateGame,
   });
 
   static const int _maxSearchHistoryEntriesToShow = 10;
@@ -42,7 +43,6 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
   final BoardGameResultAction onResultAction;
   final void Function(SortBy) onSortyByUpdate;
   final void Function(String) onQueryChanged;
-  final void Function(String) onCreateGame;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -99,7 +99,8 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
                 return _NoSearchResults(
                   query: query,
                   onRetry: () => query = query,
-                  onCreateGame: () => onCreateGame(query),
+                  onCreateGame: () =>
+                      close(context, BggSearchResult.createGame(boardGameName: query)),
                 );
               }
 
@@ -184,7 +185,7 @@ class BggSearch extends SearchDelegate<BoardGameDetails?> {
     );
 
     return suggestions;
-  }
+  }  
 }
 
 class _SearchFilters extends StatelessWidget {

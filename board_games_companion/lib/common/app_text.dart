@@ -256,4 +256,9 @@ class AppText {
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
   static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";
   static const createNewGameUnsavedChangesDialogContent = 'Are you sure you want to navigate away?';
+  static const createNewGameSavingFailedText =
+      'Saving board game detailes failed. Try again or contact support if the issue persist.';
+  static const createNewGameSuccessFormat =
+      'Game "%s" created successfully and added to your collection';
+  static const createNewGameSuccessDetailsActionText = 'Details';
 }

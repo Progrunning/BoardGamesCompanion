@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:board_games_companion/models/hive/board_game_details.dart';
+import 'package:board_games_companion/pages/create_board_game/create_board_game_visual_states.dart';
 import 'package:board_games_companion/widgets/common/board_game/collection_flags.dart';
 import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -11,6 +15,7 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../models/results/board_game_creation_result.dart';
 import '../../widgets/board_games/bgc_flexible_space_bar.dart';
 import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/section_header.dart';
@@ -34,6 +39,8 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   final boardGameNameController = TextEditingController();
   final imagePicker = ImagePicker();
 
+  late ReactionDisposer _visualStateReactionDisposer;
+
   @override
   void initState() {
     super.initState();
@@ -41,11 +48,29 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
     boardGameNameController.addListener(() {
       widget.viewModel.setBoardGameName(boardGameNameController.text);
     });
+
+    _visualStateReactionDisposer = reaction((_) => widget.viewModel.visualState,
+        (CreateBoardGamePageVisualStates visualState) {
+      final navigatorState = Navigator.of(context);
+      final messenger = ScaffoldMessenger.of(context);
+      visualState.when(
+        editGame: () {},
+        saveSuccess: () => navigatorState.pop(
+          GameCreationResult.success(
+            boardGameId: widget.viewModel.boardGame.id,
+            boardGameName: widget.viewModel.boardGame.name,
+          ),
+        ),
+        saveFailure: () => _showSaveFailureSnackbar(messenger),
+        saving: () {},
+      );
+    });
   }
 
   @override
   void dispose() {
     boardGameNameController.dispose();
+    _visualStateReactionDisposer();
     super.dispose();
   }
 
@@ -142,9 +167,18 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   }
 
   Future<void> _saveBoardGame() async {
-    final navigatorState = Navigator.of(context);
     await widget.viewModel.saveBoardGame();
-    navigatorState.pop();
+  }
+
+  Future<void> _showSaveFailureSnackbar(ScaffoldMessengerState messenger) async {
+    messenger.showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: Dimensions.snackbarMargin,
+        content: Text(AppText.createNewGameSavingFailedText),
+        duration: Duration(seconds: 10),
+      ),
+    );
   }
 }
 

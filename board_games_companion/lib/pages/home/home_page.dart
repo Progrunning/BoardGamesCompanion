@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
-import 'package:board_games_companion/pages/create_board_game/create_board_game_page.dart';
 import 'package:board_games_companion/pages/home/home_view_model.dart';
 import 'package:board_games_companion/widgets/search/bgg_search.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -10,18 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
+import '../../models/navigation/create_board_game_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
+import '../../models/results/board_game_creation_result.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/search/collections_search.dart';
 import '../base_page_state.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../collections/collections_page.dart';
+import '../create_board_game/create_board_game_page.dart';
 import '../hot_board_games/hot_board_games_page.dart';
 import '../players/players_page.dart';
 import '../plays/plays_page.dart';
@@ -176,8 +178,9 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       );
 
   Future<void> _searchBgg() async {
+    final navigatorState = Navigator.of(context);
     await widget.viewModel.rateAndReviewService.increaseNumberOfSignificantActions();
-    await showSearch(
+    final boardGameResult = await showSearch(
       context: context,
       delegate: BggSearch(
         searchHistory: widget.viewModel.searchHistory,
@@ -187,7 +190,13 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             _handleBggSearchResultAction(boardGame, actionType),
         onSortyByUpdate: (sortBy) => widget.viewModel.updateBggSearchSortByOption(sortBy),
         onQueryChanged: (query) => widget.viewModel.updateBggSearchQuery(query),
-        onCreateGame: (missingBoardGameName) => _navigateToCreateNewGame(missingBoardGameName),
+      ),
+    );
+
+    boardGameResult?.when(
+      createGame: (boardGameName) => _navigateToCreateNewGame(
+        navigatorState,
+        boardGameName,
       ),
     );
   }
@@ -256,12 +265,48 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
     }
   }
 
-  Future<void> _navigateToCreateNewGame(String missingBoardGameName) async {
-    unawaited(
-      Navigator.pushNamed(
-        context,
-        CreateBoardGamePage.pageRoute,
-        arguments: CreateBoardGamePageArguments(boardGameName: missingBoardGameName),
+  Future<void> _navigateToCreateNewGame(
+    NavigatorState navigatorState,
+    String boardGameNameNotFound,
+  ) async {
+    final gameCreationResult = await navigatorState.pushNamed<GameCreationResult>(
+      CreateBoardGamePage.pageRoute,
+      arguments: CreateBoardGamePageArguments(boardGameName: boardGameNameNotFound),
+    );
+
+    gameCreationResult?.when(
+      success: (boardGameId, boardGameName) => _showGameCreatedSnackbar(
+        navigatorState,
+        boardGameId,
+        boardGameName,
+      ),
+      cancelled: () {},
+      failure: () {},
+    );
+  }
+
+  Future<void> _showGameCreatedSnackbar(
+    NavigatorState navigatorState,
+    String boardGameId,
+    String boardGameName,
+  ) async {
+    HomePage.homePageGlobalKey.currentState?.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: Dimensions.snackbarMargin,
+        content: Text(sprintf(AppText.createNewGameSuccessFormat, [boardGameName])),
+        duration: const Duration(seconds: 10),
+        action: SnackBarAction(
+          label: AppText.createNewGameSuccessDetailsActionText,
+          onPressed: () => navigatorState.pushNamed(
+            BoardGamesDetailsPage.pageRoute,
+            arguments: BoardGameDetailsPageArguments(
+              boardGameId: boardGameId,
+              navigatingFromType: CollectionsPage,
+              boardGameImageHeroId: boardGameId,
+            ),
+          ),
+        ),
       ),
     );
   }
