@@ -77,7 +77,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
               ),
             Observer(
               builder: (BuildContext context) {
-                if (!widget.viewModel.hasUser) {
+                if (!widget.viewModel.canImportGames) {
                   return const SizedBox.shrink();
                 }
 

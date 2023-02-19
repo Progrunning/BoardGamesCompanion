@@ -77,6 +77,9 @@ abstract class _PlaythroughsViewModel with Store {
   String? get userName => _userStore.userName;
 
   @computed
+  bool get canImportGames => hasUser && !isCreatedByUser;
+
+  @computed
   String get gamePlaylistUrl => '$melodicePlaylistUrl/$boardGameId';
 
   @action
