@@ -136,7 +136,7 @@ class FileService {
             continue;
           }
 
-          // final fileName = basename(fileSystemEntity.path);
+          // Stripping away the documents path to get file name and its directory
           final fileName =
               fileSystemEntity.path.replaceFirst('${archiveAppDataModel.appDirectory.path}/', '');
           final fileStats = await fileSystemEntity.stat();
