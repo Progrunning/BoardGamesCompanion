@@ -18,6 +18,7 @@ import '../models/backup_file.dart';
 class FileService {
   static const String backupDirectoryName = 'backups';
   static const Set<String> backupFileExtensions = {'.jpg', '.hive'};
+  static const Set<String> ignoredBackupDirectoryNames = {'flutter_assets', 'backups'};
   static const String backupFileExtension = 'zip';
 
   static DateFormat backupDateFormat = DateFormat(Constants.appDataBackupDateFormat);
@@ -36,15 +37,7 @@ class FileService {
         throw FileSystemException("Can't save file $fileName because it already exists");
       }
 
-      if (filePath.isNotNullOrBlank) {
-        final Directory filePathDirectory = Directory(filePath!);
-        if (!await filePathDirectory.exists()) {
-          // final documentsPath = await path_provider.getApplicationDocumentsDirectory();
-          // await Directory('$documentsPath/$filePath').create(recursive: true);
-          await Directory(filePath).create(recursive: true);
-        }
-      }
-
+      await fileToSave.create(recursive: true);
       final savedFile = await fileToSave.writeAsBytes(fileContent, mode: FileMode.write);
       return savedFile;
     } catch (e, stack) {
@@ -126,22 +119,39 @@ class FileService {
     zipEncoder.create(
         '${archiveAppDataModel.appBackupsDirectory.path}/BGC Backup ${backupDateFormat.format(DateTime.now())}.zip');
 
-    await for (final FileSystemEntity fileSystemEntity in archiveAppDataModel.appDirectory.list()) {
-      final fileStats = await fileSystemEntity.stat();
-      final fileName = basename(fileSystemEntity.path);
-      final fileExtension = extension(fileSystemEntity.path);
-      if (!backupFileExtensions.contains(fileExtension)) {
-        continue;
+    Future<void> addDirectoryFilesToArchive(Directory directory) async {
+      await for (final FileSystemEntity fileSystemEntity in directory.list()) {
+        if (FileSystemEntity.isDirectorySync(fileSystemEntity.path)) {
+          final directoryName = basename(fileSystemEntity.path);
+          if (ignoredBackupDirectoryNames.contains(directoryName)) {
+            continue;
+          }
+
+          await addDirectoryFilesToArchive(Directory.fromUri(fileSystemEntity.uri));
+        }
+
+        if (FileSystemEntity.isFileSync(fileSystemEntity.path)) {
+          final fileExtension = extension(fileSystemEntity.path);
+          if (!backupFileExtensions.contains(fileExtension)) {
+            continue;
+          }
+
+          // final fileName = basename(fileSystemEntity.path);
+          final fileName =
+              fileSystemEntity.path.replaceFirst('${archiveAppDataModel.appDirectory.path}/', '');
+          final fileStats = await fileSystemEntity.stat();
+          final fileStream = InputFileStream(fileSystemEntity.path);
+          final archiveFile = ArchiveFile.stream(fileName, fileStats.size, fileStream);
+          archiveFile.mode = fileStats.mode;
+          archiveFile.lastModTime = fileStats.modified.millisecondsSinceEpoch ~/ 1000;
+
+          zipEncoder.addArchiveFile(archiveFile);
+          await fileStream.close();
+        }
       }
-
-      final fileStream = InputFileStream(fileSystemEntity.path);
-      final archiveFile = ArchiveFile.stream(fileName, fileStats.size, fileStream);
-      archiveFile.mode = fileStats.mode;
-      archiveFile.lastModTime = fileStats.modified.millisecondsSinceEpoch ~/ 1000;
-
-      zipEncoder.addArchiveFile(archiveFile);
-      await fileStream.close();
     }
+
+    await addDirectoryFilesToArchive(archiveAppDataModel.appDirectory);
 
     zipEncoder.close();
   }
