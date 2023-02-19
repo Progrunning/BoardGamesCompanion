@@ -274,14 +274,14 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       arguments: CreateBoardGamePageArguments(boardGameName: boardGameNameNotFound),
     );
 
-    gameCreationResult?.when(
-      success: (boardGameId, boardGameName) => _showGameCreatedSnackbar(
+    gameCreationResult?.maybeWhen(
+      saveSuccess: (boardGameId, boardGameName) => _showGameCreatedSnackbar(
         navigatorState,
         boardGameId,
         boardGameName,
       ),
-      cancelled: () {},
-      failure: () {},
+      deleteSuccess: (boardGameName) => _showGameDeletedSnackbar(boardGameName),
+      orElse: () {},
     );
   }
 
@@ -307,6 +307,16 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _showGameDeletedSnackbar(String boardGameName) async {
+    HomePage.homePageGlobalKey.currentState?.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: Dimensions.snackbarMargin,
+        content: Text(sprintf(AppText.createNewGameDeleteSucceededTextFormat, [boardGameName])),
       ),
     );
   }

@@ -261,4 +261,5 @@ class AppText {
   static const createNewGameSuccessFormat =
       'Game "%s" created successfully and added to your collection';
   static const createNewGameSuccessDetailsActionText = 'Details';
+  static const createNewGameDeleteSucceededTextFormat = 'Game "%s" was deleted successfully.';
 }

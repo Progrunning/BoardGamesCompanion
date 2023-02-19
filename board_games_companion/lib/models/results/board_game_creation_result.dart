@@ -4,10 +4,13 @@ part 'board_game_creation_result.freezed.dart';
 
 @freezed
 class GameCreationResult with _$GameCreationResult {
-  const factory GameCreationResult.success({
+  const factory GameCreationResult.saveSuccess({
     required String boardGameId,
     required String boardGameName,
-  }) = _success;
+  }) = _saveSuccess;
+  const factory GameCreationResult.deleteSuccess({
+    required String boardGameName,
+  }) = _deleteSuccess;
   const factory GameCreationResult.cancelled() = _cancelled;
   const factory GameCreationResult.failure() = _failure;
 }

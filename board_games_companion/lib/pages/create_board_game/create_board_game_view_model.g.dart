@@ -129,6 +129,15 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
     return _$saveBoardGameAsyncAction.run(() => super.saveBoardGame());
   }
 
+  late final _$deleteBoardGameAsyncAction = AsyncAction(
+      '_CreateBoardGameViewModel.deleteBoardGame',
+      context: context);
+
+  @override
+  Future<void> deleteBoardGame() {
+    return _$deleteBoardGameAsyncAction.run(() => super.deleteBoardGame());
+  }
+
   late final _$_CreateBoardGameViewModelActionController =
       ActionController(name: '_CreateBoardGameViewModel', context: context);
 

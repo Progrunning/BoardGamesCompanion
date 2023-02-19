@@ -53,16 +53,20 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
         (CreateBoardGamePageVisualStates visualState) {
       final navigatorState = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
-      visualState.when(
-        editGame: () {},
+      visualState.maybeWhen(
+        deletingSuccess: () => navigatorState.pop(
+          GameCreationResult.deleteSuccess(
+            boardGameName: widget.viewModel.boardGame.name,
+          ),
+        ),
         saveSuccess: () => navigatorState.pop(
-          GameCreationResult.success(
+          GameCreationResult.saveSuccess(
             boardGameId: widget.viewModel.boardGame.id,
             boardGameName: widget.viewModel.boardGame.name,
           ),
         ),
         saveFailure: () => _showSaveFailureSnackbar(messenger),
-        saving: () {},
+        orElse: () {},
       );
     });
   }
@@ -112,10 +116,8 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
                 backgroundColor: widget.viewModel.isValid
                     ? AppColors.accentColor
                     : AppColors.disabledFloatinActionButtonColor,
-                child: widget.viewModel.visualState.when(
-                  editGame: () => const Icon(Icons.save),
-                  saveSuccess: () => const Icon(Icons.save),
-                  saveFailure: () => const Icon(Icons.save),
+                child: widget.viewModel.visualState.maybeWhen(
+                  orElse: () => const Icon(Icons.save),
                   saving: () => const CircularProgressIndicator(color: AppColors.primaryColor),
                 ),
               );
@@ -166,7 +168,15 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
     widget.viewModel.updateImage(boardGameImageFile!);
   }
 
+  // TODO Consider splitting the logic into two separate methods
   Future<void> _saveBoardGame() async {
+    if (!widget.viewModel.isInAnyCollection) {
+      await _showRemoveGameFromAllCollectionsDialog(context);
+      // if delete
+      await widget.viewModel.deleteBoardGame();
+      return;
+    }
+
     await widget.viewModel.saveBoardGame();
   }
 
@@ -178,6 +188,43 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
         content: Text(AppText.createNewGameSavingFailedText),
         duration: Duration(seconds: 10),
       ),
+    );
+  }
+
+  // TODO Continue with the implemetation of the removal check
+  Future<void> _showRemoveGameFromAllCollectionsDialog(BuildContext context) async {
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete ${widget.viewModel.playerWorkingCopy!.name}'),
+          content: const Text('Are you sure you want to delete this player?'),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppText.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
+              onPressed: () async {
+                await widget.viewModel.deletePlayer();
+                if (!mounted) {
+                  return;
+                }
+
+                Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
+              },
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

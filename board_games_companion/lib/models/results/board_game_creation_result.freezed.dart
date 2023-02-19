@@ -18,21 +18,25 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GameCreationResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String boardGameId, String boardGameName) success,
+    required TResult Function(String boardGameId, String boardGameName)
+        saveSuccess,
+    required TResult Function(String boardGameName) deleteSuccess,
     required TResult Function() cancelled,
     required TResult Function() failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
     required TResult orElse(),
@@ -40,21 +44,24 @@ mixin _$GameCreationResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_success value) success,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_deleteSuccess value) deleteSuccess,
     required TResult Function(_cancelled value) cancelled,
     required TResult Function(_failure value) failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
     required TResult orElse(),
@@ -80,29 +87,30 @@ class _$GameCreationResultCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$$_successCopyWith<$Res> {
-  factory _$$_successCopyWith(
-          _$_success value, $Res Function(_$_success) then) =
-      __$$_successCopyWithImpl<$Res>;
+abstract class _$$_saveSuccessCopyWith<$Res> {
+  factory _$$_saveSuccessCopyWith(
+          _$_saveSuccess value, $Res Function(_$_saveSuccess) then) =
+      __$$_saveSuccessCopyWithImpl<$Res>;
   $Res call({String boardGameId, String boardGameName});
 }
 
 /// @nodoc
-class __$$_successCopyWithImpl<$Res>
+class __$$_saveSuccessCopyWithImpl<$Res>
     extends _$GameCreationResultCopyWithImpl<$Res>
-    implements _$$_successCopyWith<$Res> {
-  __$$_successCopyWithImpl(_$_success _value, $Res Function(_$_success) _then)
-      : super(_value, (v) => _then(v as _$_success));
+    implements _$$_saveSuccessCopyWith<$Res> {
+  __$$_saveSuccessCopyWithImpl(
+      _$_saveSuccess _value, $Res Function(_$_saveSuccess) _then)
+      : super(_value, (v) => _then(v as _$_saveSuccess));
 
   @override
-  _$_success get _value => super._value as _$_success;
+  _$_saveSuccess get _value => super._value as _$_saveSuccess;
 
   @override
   $Res call({
     Object? boardGameId = freezed,
     Object? boardGameName = freezed,
   }) {
-    return _then(_$_success(
+    return _then(_$_saveSuccess(
       boardGameId: boardGameId == freezed
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
@@ -117,8 +125,9 @@ class __$$_successCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_success implements _success {
-  const _$_success({required this.boardGameId, required this.boardGameName});
+class _$_saveSuccess implements _saveSuccess {
+  const _$_saveSuccess(
+      {required this.boardGameId, required this.boardGameName});
 
   @override
   final String boardGameId;
@@ -127,14 +136,14 @@ class _$_success implements _success {
 
   @override
   String toString() {
-    return 'GameCreationResult.success(boardGameId: $boardGameId, boardGameName: $boardGameName)';
+    return 'GameCreationResult.saveSuccess(boardGameId: $boardGameId, boardGameName: $boardGameName)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_success &&
+            other is _$_saveSuccess &&
             const DeepCollectionEquality()
                 .equals(other.boardGameId, boardGameId) &&
             const DeepCollectionEquality()
@@ -149,39 +158,43 @@ class _$_success implements _success {
 
   @JsonKey(ignore: true)
   @override
-  _$$_successCopyWith<_$_success> get copyWith =>
-      __$$_successCopyWithImpl<_$_success>(this, _$identity);
+  _$$_saveSuccessCopyWith<_$_saveSuccess> get copyWith =>
+      __$$_saveSuccessCopyWithImpl<_$_saveSuccess>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String boardGameId, String boardGameName) success,
+    required TResult Function(String boardGameId, String boardGameName)
+        saveSuccess,
+    required TResult Function(String boardGameName) deleteSuccess,
     required TResult Function() cancelled,
     required TResult Function() failure,
   }) {
-    return success(boardGameId, boardGameName);
+    return saveSuccess(boardGameId, boardGameName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
   }) {
-    return success?.call(boardGameId, boardGameName);
+    return saveSuccess?.call(boardGameId, boardGameName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
     required TResult orElse(),
   }) {
-    if (success != null) {
-      return success(boardGameId, boardGameName);
+    if (saveSuccess != null) {
+      return saveSuccess(boardGameId, boardGameName);
     }
     return orElse();
   }
@@ -189,47 +202,199 @@ class _$_success implements _success {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_success value) success,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_deleteSuccess value) deleteSuccess,
     required TResult Function(_cancelled value) cancelled,
     required TResult Function(_failure value) failure,
   }) {
-    return success(this);
+    return saveSuccess(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
   }) {
-    return success?.call(this);
+    return saveSuccess?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
     required TResult orElse(),
   }) {
-    if (success != null) {
-      return success(this);
+    if (saveSuccess != null) {
+      return saveSuccess(this);
     }
     return orElse();
   }
 }
 
-abstract class _success implements GameCreationResult {
-  const factory _success(
+abstract class _saveSuccess implements GameCreationResult {
+  const factory _saveSuccess(
       {required final String boardGameId,
-      required final String boardGameName}) = _$_success;
+      required final String boardGameName}) = _$_saveSuccess;
 
   String get boardGameId;
   String get boardGameName;
   @JsonKey(ignore: true)
-  _$$_successCopyWith<_$_success> get copyWith =>
+  _$$_saveSuccessCopyWith<_$_saveSuccess> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_deleteSuccessCopyWith<$Res> {
+  factory _$$_deleteSuccessCopyWith(
+          _$_deleteSuccess value, $Res Function(_$_deleteSuccess) then) =
+      __$$_deleteSuccessCopyWithImpl<$Res>;
+  $Res call({String boardGameName});
+}
+
+/// @nodoc
+class __$$_deleteSuccessCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res>
+    implements _$$_deleteSuccessCopyWith<$Res> {
+  __$$_deleteSuccessCopyWithImpl(
+      _$_deleteSuccess _value, $Res Function(_$_deleteSuccess) _then)
+      : super(_value, (v) => _then(v as _$_deleteSuccess));
+
+  @override
+  _$_deleteSuccess get _value => super._value as _$_deleteSuccess;
+
+  @override
+  $Res call({
+    Object? boardGameName = freezed,
+  }) {
+    return _then(_$_deleteSuccess(
+      boardGameName: boardGameName == freezed
+          ? _value.boardGameName
+          : boardGameName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_deleteSuccess implements _deleteSuccess {
+  const _$_deleteSuccess({required this.boardGameName});
+
+  @override
+  final String boardGameName;
+
+  @override
+  String toString() {
+    return 'GameCreationResult.deleteSuccess(boardGameName: $boardGameName)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_deleteSuccess &&
+            const DeepCollectionEquality()
+                .equals(other.boardGameName, boardGameName));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(boardGameName));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_deleteSuccessCopyWith<_$_deleteSuccess> get copyWith =>
+      __$$_deleteSuccessCopyWithImpl<_$_deleteSuccess>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String boardGameId, String boardGameName)
+        saveSuccess,
+    required TResult Function(String boardGameName) deleteSuccess,
+    required TResult Function() cancelled,
+    required TResult Function() failure,
+  }) {
+    return deleteSuccess(boardGameName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
+    TResult Function()? cancelled,
+    TResult Function()? failure,
+  }) {
+    return deleteSuccess?.call(boardGameName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
+    TResult Function()? cancelled,
+    TResult Function()? failure,
+    required TResult orElse(),
+  }) {
+    if (deleteSuccess != null) {
+      return deleteSuccess(boardGameName);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_deleteSuccess value) deleteSuccess,
+    required TResult Function(_cancelled value) cancelled,
+    required TResult Function(_failure value) failure,
+  }) {
+    return deleteSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
+    TResult Function(_cancelled value)? cancelled,
+    TResult Function(_failure value)? failure,
+  }) {
+    return deleteSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
+    TResult Function(_cancelled value)? cancelled,
+    TResult Function(_failure value)? failure,
+    required TResult orElse(),
+  }) {
+    if (deleteSuccess != null) {
+      return deleteSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _deleteSuccess implements GameCreationResult {
+  const factory _deleteSuccess({required final String boardGameName}) =
+      _$_deleteSuccess;
+
+  String get boardGameName;
+  @JsonKey(ignore: true)
+  _$$_deleteSuccessCopyWith<_$_deleteSuccess> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -274,7 +439,9 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String boardGameId, String boardGameName) success,
+    required TResult Function(String boardGameId, String boardGameName)
+        saveSuccess,
+    required TResult Function(String boardGameName) deleteSuccess,
     required TResult Function() cancelled,
     required TResult Function() failure,
   }) {
@@ -284,7 +451,8 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
   }) {
@@ -294,7 +462,8 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
     required TResult orElse(),
@@ -308,7 +477,8 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_success value) success,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_deleteSuccess value) deleteSuccess,
     required TResult Function(_cancelled value) cancelled,
     required TResult Function(_failure value) failure,
   }) {
@@ -318,7 +488,8 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
   }) {
@@ -328,7 +499,8 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
     required TResult orElse(),
@@ -384,7 +556,9 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String boardGameId, String boardGameName) success,
+    required TResult Function(String boardGameId, String boardGameName)
+        saveSuccess,
+    required TResult Function(String boardGameName) deleteSuccess,
     required TResult Function() cancelled,
     required TResult Function() failure,
   }) {
@@ -394,7 +568,8 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
   }) {
@@ -404,7 +579,8 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? success,
+    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult Function(String boardGameName)? deleteSuccess,
     TResult Function()? cancelled,
     TResult Function()? failure,
     required TResult orElse(),
@@ -418,7 +594,8 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_success value) success,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_deleteSuccess value) deleteSuccess,
     required TResult Function(_cancelled value) cancelled,
     required TResult Function(_failure value) failure,
   }) {
@@ -428,7 +605,8 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
   }) {
@@ -438,7 +616,8 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_success value)? success,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_deleteSuccess value)? deleteSuccess,
     TResult Function(_cancelled value)? cancelled,
     TResult Function(_failure value)? failure,
     required TResult orElse(),
