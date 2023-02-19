@@ -28,9 +28,13 @@ class BoardGameDetails with _$BoardGameDetails {
   const factory BoardGameDetails({
     @HiveField(0) required String id,
     @HiveField(1) required String name,
+
+    /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
     @HiveField(2) String? thumbnailUrl,
     @HiveField(3) int? rank,
     @HiveField(4) int? yearPublished,
+
+    /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
     @HiveField(5) String? imageUrl,
     @HiveField(6) String? description,
     @Default(<BoardGameCategory>[]) @HiveField(7) List<BoardGameCategory>? categories,

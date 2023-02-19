@@ -82,7 +82,7 @@ abstract class _PlaythroughsViewModel with Store {
   @action
   void setBoardGame(BoardGameDetails boardGame) {
     _boardGameDetails = boardGame;
-    _gamePlaythroughsDetailsStore.setBoardGame(boardGame);
+    _gamePlaythroughsDetailsStore.setBoardGameId(boardGame.id);
   }
 
   void setBoardGameImageHeroId(String boardGameImageHeroId) =>

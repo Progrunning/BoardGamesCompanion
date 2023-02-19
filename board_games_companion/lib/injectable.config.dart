@@ -108,8 +108,11 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i31.CreateBoardGameViewModel>(() => _i31.CreateBoardGameViewModel(
       get<_i28.BoardGamesStore>(), get<_i6.FileService>()));
   gh.singleton<_i32.GamePlaythroughsDetailsStore>(
-      _i32.GamePlaythroughsDetailsStore(get<_i26.PlaythroughsStore>(),
-          get<_i15.ScoresStore>(), get<_i10.PlayersStore>()));
+      _i32.GamePlaythroughsDetailsStore(
+          get<_i26.PlaythroughsStore>(),
+          get<_i15.ScoresStore>(),
+          get<_i10.PlayersStore>(),
+          get<_i28.BoardGamesStore>()));
   gh.singleton<_i33.HotBoardGamesViewModel>(_i33.HotBoardGamesViewModel(
       get<_i28.BoardGamesStore>(),
       get<_i22.BoardGamesGeekService>(),
@@ -157,8 +160,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i42.BoardGameDetailsViewModel>(() =>
       _i42.BoardGameDetailsViewModel(
           get<_i28.BoardGamesStore>(), get<_i20.AnalyticsService>()));
-  gh.factory<_i43.EditPlaythoughViewModel>(() => _i43.EditPlaythoughViewModel(
-      get<_i32.GamePlaythroughsDetailsStore>(), get<_i28.BoardGamesStore>()));
+  gh.factory<_i43.EditPlaythoughViewModel>(() =>
+      _i43.EditPlaythoughViewModel(get<_i32.GamePlaythroughsDetailsStore>()));
   gh.factory<_i44.HomeViewModel>(() => _i44.HomeViewModel(
       get<_i20.AnalyticsService>(),
       get<_i13.RateAndReviewService>(),

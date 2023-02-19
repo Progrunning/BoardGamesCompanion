@@ -20,12 +20,16 @@ mixin _$BoardGameDetails {
   String get id => throw _privateConstructorUsedError;
   @HiveField(1)
   String get name => throw _privateConstructorUsedError;
+
+  /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
   @HiveField(2)
   String? get thumbnailUrl => throw _privateConstructorUsedError;
   @HiveField(3)
   int? get rank => throw _privateConstructorUsedError;
   @HiveField(4)
   int? get yearPublished => throw _privateConstructorUsedError;
+
+  /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
   @HiveField(5)
   String? get imageUrl => throw _privateConstructorUsedError;
   @HiveField(6)
@@ -596,6 +600,8 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @override
   @HiveField(1)
   final String name;
+
+  /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
   @override
   @HiveField(2)
   final String? thumbnailUrl;
@@ -605,6 +611,8 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @override
   @HiveField(4)
   final int? yearPublished;
+
+  /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
   @override
   @HiveField(5)
   final String? imageUrl;
@@ -862,6 +870,8 @@ abstract class _BoardGameDetails extends BoardGameDetails {
   @HiveField(1)
   String get name;
   @override
+
+  /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
   @HiveField(2)
   String? get thumbnailUrl;
   @override
@@ -871,6 +881,8 @@ abstract class _BoardGameDetails extends BoardGameDetails {
   @HiveField(4)
   int? get yearPublished;
   @override
+
+  /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
   @HiveField(5)
   String? get imageUrl;
   @override

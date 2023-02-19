@@ -125,12 +125,16 @@ abstract class _CreateBoardGameViewModel with Store {
   Future<void> saveBoardGame() async {
     try {
       visualState = const CreateBoardGamePageVisualStates.saving();
-      // TODO Delete existing image (when editing)
-      final savedImageName = await _saveBoardGameImage();
-      if (savedImageName != null) {
+      final savedImagePath = await _saveBoardGameImage();
+      if (savedImagePath != null) {
+        // MK Delete previous image
+        if (_boardGame.imageUrl != null) {
+          await _deleteBoardGameImage(_boardGame.imageUrl!);
+        }
+
         _boardGameWorkingCopy = boardGame.copyWith(
-          imageUrl: savedImageName,
-          thumbnailUrl: savedImageName,
+          imageUrl: savedImagePath,
+          thumbnailUrl: savedImagePath,
         );
       }
       await _boardGamesStore.addOrUpdateBoardGame(boardGame);
@@ -161,5 +165,18 @@ abstract class _CreateBoardGameViewModel with Store {
     );
 
     return savedImage?.uri.path;
+  }
+
+  Future<void> _deleteBoardGameImage(String imageFilePath) async {
+    if (imageFilePath.isNullOrBlank) {
+      return;
+    }
+
+    try {
+      await _fileService.deleteFile(imageFilePath);
+    } on Exception catch (e, stack) {
+      // MK Swallow the error as deleting previous images is non essential but log an error about it.
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
   }
 }

@@ -17,7 +17,16 @@ import '../models/backup_file.dart';
 @singleton
 class FileService {
   static const String backupDirectoryName = 'backups';
-  static const Set<String> backupFileExtensions = {'.jpg', '.hive'};
+  static const Set<String> backupFileExtensions = {
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.bmp',
+    '.tif',
+    '.tiff',
+    '.hive',
+  };
   static const Set<String> ignoredBackupDirectoryNames = {'flutter_assets', 'backups'};
   static const String backupFileExtension = 'zip';
 
@@ -54,6 +63,23 @@ class FileService {
 
     try {
       final fileToDelete = await _retrieveDocumentsFile(fileName, filePath: filePath);
+      await fileToDelete.delete();
+
+      return true;
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
+
+  Future<bool> deleteFile(String filePath) async {
+    if (filePath.isNullOrBlank) {
+      return false;
+    }
+
+    try {
+      final fileToDelete = File.fromUri(Uri.file(filePath));
       await fileToDelete.delete();
 
       return true;
