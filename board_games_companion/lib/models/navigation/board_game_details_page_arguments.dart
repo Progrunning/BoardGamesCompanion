@@ -6,9 +6,7 @@ part 'board_game_details_page_arguments.freezed.dart';
 class BoardGameDetailsPageArguments with _$BoardGameDetailsPageArguments {
   const factory BoardGameDetailsPageArguments({
     required String boardGameId,
-    required String boardGameName,
     required Type navigatingFromType,
     required String boardGameImageHeroId,
-    String? boardGameImageUrl,
   }) = _BoardGameDetailsPageArguments;
 }

@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -28,36 +27,20 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   late HtmlUnescape _htmlUnescape;
   late String _boardGameId;
-  late String _boardGameName;
   late String _boardGameImageHeroId;
-  String? _boardGameImageUrl;
+
+  String get id => _boardGameId;
+
+  String get imageHeroId => _boardGameImageHeroId;
 
   @computed
-  BoardGameDetails get boardGame => _boardGamesStore.allBoardGames.firstWhere(
-        (BoardGameDetails boardGame) => boardGame.id == _boardGameId,
-      );
-
-  String get boardGameName => _boardGameName;
-
-  String get boardGameId => _boardGameId;
-
-  String get boardGameImageHeroId => _boardGameImageHeroId;
+  BoardGameDetails get boardGame => _boardGamesStore.allBoardGamesMap[_boardGameId]!;
 
   @computed
-  String? get boardGameImageUrl {
-    if (_boardGameImageUrl.isNotNullOrBlank) {
-      return _boardGameImageUrl;
-    }
+  String get name => boardGame.name;
 
-    switch (futureLoadBoardGameDetails?.status ?? FutureStatus.pending) {
-      case FutureStatus.pending:
-        return null;
-      case FutureStatus.rejected:
-        return '';
-      case FutureStatus.fulfilled:
-        return boardGame.imageUrl;
-    }
-  }
+  @computed
+  String? get imageUrl => boardGame.imageUrl;
 
   @computed
   bool get isMainGame => boardGame.isMainGame;
@@ -89,6 +72,9 @@ abstract class _BoardGameDetailsViewModel with Store {
   @computed
   String get unescapedDescription => _htmlUnescape.convert(boardGame.description ?? '');
 
+  @computed
+  bool get isCreatedByUser => boardGame.isCreatedByUser;
+
   @observable
   ObservableFuture<void>? futureLoadBoardGameDetails;
 
@@ -98,33 +84,12 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   @action
   Future<void> toggleCollection(CollectionType collectionType) async {
-    late BoardGameDetails updatedBoardGame;
-    switch (collectionType) {
-      case CollectionType.owned:
-        updatedBoardGame = boardGame.copyWith(isOwned: !(boardGame.isOwned ?? false));
-        if (updatedBoardGame.isOwned ?? false) {
-          updatedBoardGame = updatedBoardGame.copyWith(isOnWishlist: false);
-        }
-        break;
-      case CollectionType.friends:
-        updatedBoardGame = boardGame.copyWith(isFriends: !(boardGame.isFriends ?? false));
-        break;
-      case CollectionType.wishlist:
-        updatedBoardGame = boardGame.copyWith(
-          isOnWishlist: !(boardGame.isOnWishlist ?? false),
-          isOwned: false,
-        );
-        break;
-    }
+    final BoardGameDetails updatedBoardGame = boardGame.toggleCollection(collectionType);
 
     await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
   }
 
   void setBoardGameId(String boardGameId) => _boardGameId = boardGameId;
-
-  void setBoardGameName(String boardGameName) => _boardGameName = boardGameName;
-
-  void setBoardGameImageUrl(String? boardGameImageUrl) => _boardGameImageUrl = boardGameImageUrl;
 
   void setBoardGameImageHeroId(String boardGameImageHeroId) =>
       _boardGameImageHeroId = boardGameImageHeroId;
@@ -140,6 +105,10 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   Future<void> _loadBoardGameDetails() async {
     try {
+      if (isCreatedByUser) {
+        return;
+      }
+
       await _boardGamesStore.refreshBoardGameDetails(_boardGameId);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

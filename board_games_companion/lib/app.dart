@@ -1,3 +1,6 @@
+import 'package:animations/animations.dart';
+import 'package:basics/basics.dart';
+import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -10,9 +13,12 @@ import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
 import 'models/navigation/playthough_note_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
+import 'models/results/board_game_creation_result.dart';
 import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
 import 'pages/board_game_details/board_game_details_view_model.dart';
+import 'pages/create_board_game/create_board_game_page.dart';
+import 'pages/create_board_game/create_board_game_view_model.dart';
 import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart';
 import 'pages/edit_playthrough/playthrough_note_view_model.dart';
@@ -70,8 +76,6 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             final preferencesService = getIt<PreferencesService>();
             final viewModel = getIt<BoardGameDetailsViewModel>();
             viewModel.setBoardGameId(arguments.boardGameId);
-            viewModel.setBoardGameName(arguments.boardGameName);
-            viewModel.setBoardGameImageUrl(arguments.boardGameImageUrl);
             viewModel.setBoardGameImageHeroId(arguments.boardGameImageHeroId);
 
             return MaterialPageRoute<dynamic>(
@@ -112,17 +116,23 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             viewModel.setBoardGameId(arguments.boardGameId);
             viewModel.setPlaythroughId(arguments.playthroughId);
 
-            return MaterialPageRoute<dynamic>(
+            return PageRouteBuilder<dynamic>(
               settings: routeSettings,
-              builder: (BuildContext context) => EditPlaythroughPage(
+              pageBuilder: (_, __, ___) => EditPlaythroughPage(
                 viewModel: viewModel,
                 goBackPageRoute: arguments.goBackPageRoute,
+              ),
+              transitionsBuilder: (_, animation, secondaryAnimation, child) => FadeScaleTransition(
+                animation: animation,
+                child: child,
               ),
             );
 
           case AboutPage.pageRoute:
             return MaterialPageRoute<dynamic>(
-                settings: routeSettings, builder: (BuildContext context) => const AboutPage());
+              settings: routeSettings,
+              builder: (BuildContext context) => const AboutPage(),
+            );
 
           case SettingsPage.pageRoute:
             final viewModel = getIt<SettingsViewModel>();
@@ -143,6 +153,26 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
               builder: (BuildContext context) => PlaythroughNotePage(viewModel: viewModel),
             );
 
+          case CreateBoardGamePage.pageRoute:
+            final arguments = routeSettings.arguments as CreateBoardGamePageArguments;
+            final viewModel = getIt<CreateBoardGameViewModel>();
+            if (arguments.boardGameId.isNotNullOrBlank) {
+              viewModel.setBoardGameId(arguments.boardGameId!);
+            }
+            if (arguments.boardGameName.isNotNullOrBlank) {
+              viewModel.setBoardGameName(arguments.boardGameName!);
+            }
+
+            return PageRouteBuilder<GameCreationResult>(
+              settings: routeSettings,
+              pageBuilder: (_, __, ___) => CreateBoardGamePage(viewModel: viewModel),
+              transitionsBuilder: (_, animation, secondaryAnimation, child) =>
+                  FadeThroughTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                child: child,
+              ),
+            );
           default:
             return null;
         }

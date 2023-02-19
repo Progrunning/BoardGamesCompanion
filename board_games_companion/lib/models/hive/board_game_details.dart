@@ -28,9 +28,13 @@ class BoardGameDetails with _$BoardGameDetails {
   const factory BoardGameDetails({
     @HiveField(0) required String id,
     @HiveField(1) required String name,
+
+    /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
     @HiveField(2) String? thumbnailUrl,
     @HiveField(3) int? rank,
     @HiveField(4) int? yearPublished,
+
+    /// This property holds a URL to a web image or a locally saved file in case a board game [isCreatedByUser]
     @HiveField(5) String? imageUrl,
     @HiveField(6) String? description,
     @Default(<BoardGameCategory>[]) @HiveField(7) List<BoardGameCategory>? categories,
@@ -55,6 +59,7 @@ class BoardGameDetails with _$BoardGameDetails {
     @HiveField(26) bool? isFriends,
     @HiveField(27) bool? isBggSynced,
     @HiveField(28) BoardGameSettings? settings,
+    @Default(false) @HiveField(29, defaultValue: false) bool isCreatedByUser,
   }) = _BoardGameDetails;
 
   const BoardGameDetails._();
@@ -83,6 +88,10 @@ class BoardGameDetails with _$BoardGameDetails {
       (isOwned ?? false) || (isFriends ?? false) || (isOnWishlist ?? false);
 
   String get playtimeFormatted {
+    if (minPlaytime == null && maxPlaytime == null) {
+      return '';
+    }
+
     var playtimeRange = '';
     if (minPlaytime == maxPlaytime) {
       if (minPlaytime == 0) {
@@ -102,6 +111,10 @@ class BoardGameDetails with _$BoardGameDetails {
   }
 
   String get playersFormatted {
+    if (minPlayers == null) {
+      return AppText.gamePlayersUnknown;
+    }
+
     if (minPlayers == maxPlayers || maxPlayers == null) {
       if (minPlayers == 1) {
         return sprintf(AppText.gamePlayersSingularFormat, [minPlayers]);
@@ -143,6 +156,9 @@ class BoardGameDetails with _$BoardGameDetails {
 
     return '${Constants.boardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
   }
+
+  bool get hasGeneralInfoDefined =>
+      minPlayers != null || minPlaytime != null || minAge != null || avgWeight != null;
 
   String get _baseBggBoardGameUrl => '${Constants.boardGameGeekBaseUrl}boardgame';
 

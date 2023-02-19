@@ -9,6 +9,13 @@ part of 'game_playthroughs_details_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$GamePlaythroughsDetailsStore on _GamePlaythroughsDetailsStore, Store {
+  Computed<BoardGameDetails?>? _$_boardGameComputed;
+
+  @override
+  BoardGameDetails? get _boardGame => (_$_boardGameComputed ??=
+          Computed<BoardGameDetails?>(() => super._boardGame,
+              name: '_GamePlaythroughsDetailsStore._boardGame'))
+      .value;
   Computed<List<Playthrough>>? _$playthroughsComputed;
 
   @override
@@ -61,19 +68,19 @@ mixin _$GamePlaythroughsDetailsStore on _GamePlaythroughsDetailsStore, Store {
               name: '_GamePlaythroughsDetailsStore.averageScorePrecision'))
       .value;
 
-  late final _$_boardGameAtom =
-      Atom(name: '_GamePlaythroughsDetailsStore._boardGame', context: context);
+  late final _$_boardGameIdAtom = Atom(
+      name: '_GamePlaythroughsDetailsStore._boardGameId', context: context);
 
   @override
-  BoardGameDetails? get _boardGame {
-    _$_boardGameAtom.reportRead();
-    return super._boardGame;
+  String? get _boardGameId {
+    _$_boardGameIdAtom.reportRead();
+    return super._boardGameId;
   }
 
   @override
-  set _boardGame(BoardGameDetails? value) {
-    _$_boardGameAtom.reportWrite(value, super._boardGame, () {
-      super._boardGame = value;
+  set _boardGameId(String? value) {
+    _$_boardGameIdAtom.reportWrite(value, super._boardGameId, () {
+      super._boardGameId = value;
     });
   }
 
@@ -110,11 +117,11 @@ mixin _$GamePlaythroughsDetailsStore on _GamePlaythroughsDetailsStore, Store {
   }
 
   @override
-  void setBoardGame(BoardGameDetails boardGame) {
+  void setBoardGameId(String boardGameId) {
     final _$actionInfo = _$_GamePlaythroughsDetailsStoreActionController
-        .startAction(name: '_GamePlaythroughsDetailsStore.setBoardGame');
+        .startAction(name: '_GamePlaythroughsDetailsStore.setBoardGameId');
     try {
-      return super.setBoardGame(boardGame);
+      return super.setBoardGameId(boardGameId);
     } finally {
       _$_GamePlaythroughsDetailsStoreActionController.endAction(_$actionInfo);
     }

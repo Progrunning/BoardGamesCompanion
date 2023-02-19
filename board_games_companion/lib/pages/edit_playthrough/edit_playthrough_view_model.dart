@@ -11,7 +11,6 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/playthrough_status.dart';
-import '../../stores/board_games_store.dart';
 
 part 'edit_playthrough_view_model.g.dart';
 
@@ -19,10 +18,9 @@ part 'edit_playthrough_view_model.g.dart';
 class EditPlaythoughViewModel = _EditPlaythoughViewModel with _$EditPlaythoughViewModel;
 
 abstract class _EditPlaythoughViewModel with Store {
-  _EditPlaythoughViewModel(this._gamePlaythroughsDetailsStore, this._boardGamesStore);
+  _EditPlaythoughViewModel(this._gamePlaythroughsDetailsStore);
 
   final GamePlaythroughsDetailsStore _gamePlaythroughsDetailsStore;
-  final BoardGamesStore _boardGamesStore;
 
   late final String _playthroughId;
 
@@ -76,8 +74,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @action
   void setBoardGameId(String boardGameId) {
-    _gamePlaythroughsDetailsStore.setBoardGame(
-        _boardGamesStore.allBoardGames.firstWhere((element) => element.id == boardGameId));
+    _gamePlaythroughsDetailsStore.setBoardGameId(boardGameId);
     _gamePlaythroughsDetailsStore.loadPlaythroughsDetails();
   }
 

@@ -35,7 +35,6 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
         settings: (boardGame.settings ?? const BoardGameSettings())
             .copyWith(winningCondition: winningCondition));
     await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
-    _gamePlaythroughsStore.setBoardGame(updatedBoardGame);
   }
 
   @action
@@ -47,6 +46,5 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
         settings: (boardGame.settings ?? const BoardGameSettings())
             .copyWith(averageScorePrecision: averageScorePrecision));
     await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
-    _gamePlaythroughsStore.setBoardGame(updatedBoardGame);
   }
 }

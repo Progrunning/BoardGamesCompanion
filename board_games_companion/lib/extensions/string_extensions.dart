@@ -1,4 +1,7 @@
+import 'package:basics/basics.dart';
+
 import '../common/constants.dart';
+import '../models/image_type.dart';
 
 extension StringExtensions on String? {
   int safeCompareTo(String? stringToCompare) {
@@ -23,5 +26,28 @@ extension StringExtensions on String? {
     }
 
     return this!.isNotEmpty ? '${this![0].toUpperCase()}${this!.substring(1).toLowerCase()}' : '';
+  }
+
+  /// Check if [Uri] can be parsed and if it can if it has the scheme (i.e. http or https) defined.
+  /// If it doesn't it's not a web url.
+  bool isWebUrl() {
+    if (this == null) {
+      return false;
+    }
+
+    final uri = Uri.tryParse(this!);
+    return uri != null && uri.hasScheme && uri.host.isNotEmpty;
+  }
+
+  ImageType toImageType() {
+    if (isNullOrBlank) {
+      return const ImageType.undefined();
+    }
+
+    if (isWebUrl()) {
+      return const ImageType.web();
+    }
+
+    return const ImageType.file();
   }
 }

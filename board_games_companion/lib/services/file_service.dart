@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -16,26 +17,38 @@ import '../models/backup_file.dart';
 @singleton
 class FileService {
   static const String backupDirectoryName = 'backups';
-  static const Set<String> backupFileExtensions = {'.jpg', '.hive'};
+  static const Set<String> backupFileExtensions = {
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.bmp',
+    '.tif',
+    '.tiff',
+    '.hive',
+  };
+  static const Set<String> ignoredBackupDirectoryNames = {'flutter_assets', 'backups'};
   static const String backupFileExtension = 'zip';
 
   static DateFormat backupDateFormat = DateFormat(Constants.appDataBackupDateFormat);
 
   Future<File?> saveToDocumentsDirectory(
     String fileName,
-    XFile pickedFile, {
+    XFile file, {
     bool overrideExistingFile = false,
+    String? filePath,
   }) async {
     try {
-      final fileContent = await pickedFile.readAsBytes();
-      final avatarImageToSave = await _retrieveDocumentsFile(fileName);
-      if (!overrideExistingFile && avatarImageToSave.existsSync()) {
+      final fileContent = await file.readAsBytes();
+      final fileToSave = await _retrieveDocumentsFile(fileName, filePath: filePath);
+
+      if (!overrideExistingFile && fileToSave.existsSync()) {
         throw FileSystemException("Can't save file $fileName because it already exists");
       }
 
-      final savedAvatarImage = await avatarImageToSave.writeAsBytes(fileContent);
-
-      return savedAvatarImage;
+      await fileToSave.create(recursive: true);
+      final savedFile = await fileToSave.writeAsBytes(fileContent, mode: FileMode.write);
+      return savedFile;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -43,13 +56,30 @@ class FileService {
     return null;
   }
 
-  Future<bool> deleteFileFromDocumentsDirectory(String fileName) async {
+  Future<bool> deleteFileFromDocumentsDirectory(String fileName, {String? filePath}) async {
     if (fileName.isEmpty) {
       return false;
     }
 
     try {
-      final fileToDelete = await _retrieveDocumentsFile(fileName);
+      final fileToDelete = await _retrieveDocumentsFile(fileName, filePath: filePath);
+      await fileToDelete.delete();
+
+      return true;
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+
+    return false;
+  }
+
+  Future<bool> deleteFile(String filePath) async {
+    if (filePath.isNullOrBlank) {
+      return false;
+    }
+
+    try {
+      final fileToDelete = File.fromUri(Uri.file(filePath));
       await fileToDelete.delete();
 
       return true;
@@ -75,8 +105,13 @@ class FileService {
     return false;
   }
 
-  Future<String> createDocumentsFilePath(String fileName) async {
+  Future<String> createDocumentsFilePath(String fileName, {String? filePath}) async {
     final documentsDirectory = await path_provider.getApplicationDocumentsDirectory();
+
+    if (filePath.isNotNullOrBlank) {
+      return '${documentsDirectory.path}/$filePath/$fileName';
+    }
+
     return '${documentsDirectory.path}/$fileName';
   }
 
@@ -110,22 +145,39 @@ class FileService {
     zipEncoder.create(
         '${archiveAppDataModel.appBackupsDirectory.path}/BGC Backup ${backupDateFormat.format(DateTime.now())}.zip');
 
-    await for (final FileSystemEntity fileSystemEntity in archiveAppDataModel.appDirectory.list()) {
-      final fileStats = await fileSystemEntity.stat();
-      final fileName = basename(fileSystemEntity.path);
-      final fileExtension = extension(fileSystemEntity.path);
-      if (!backupFileExtensions.contains(fileExtension)) {
-        continue;
+    Future<void> addDirectoryFilesToArchive(Directory directory) async {
+      await for (final FileSystemEntity fileSystemEntity in directory.list()) {
+        if (FileSystemEntity.isDirectorySync(fileSystemEntity.path)) {
+          final directoryName = basename(fileSystemEntity.path);
+          if (ignoredBackupDirectoryNames.contains(directoryName)) {
+            continue;
+          }
+
+          await addDirectoryFilesToArchive(Directory.fromUri(fileSystemEntity.uri));
+        }
+
+        if (FileSystemEntity.isFileSync(fileSystemEntity.path)) {
+          final fileExtension = extension(fileSystemEntity.path);
+          if (!backupFileExtensions.contains(fileExtension)) {
+            continue;
+          }
+
+          // Stripping away the documents path to get file name and its directory
+          final fileName =
+              fileSystemEntity.path.replaceFirst('${archiveAppDataModel.appDirectory.path}/', '');
+          final fileStats = await fileSystemEntity.stat();
+          final fileStream = InputFileStream(fileSystemEntity.path);
+          final archiveFile = ArchiveFile.stream(fileName, fileStats.size, fileStream);
+          archiveFile.mode = fileStats.mode;
+          archiveFile.lastModTime = fileStats.modified.millisecondsSinceEpoch ~/ 1000;
+
+          zipEncoder.addArchiveFile(archiveFile);
+          await fileStream.close();
+        }
       }
-
-      final fileStream = InputFileStream(fileSystemEntity.path);
-      final archiveFile = ArchiveFile.stream(fileName, fileStats.size, fileStream);
-      archiveFile.mode = fileStats.mode;
-      archiveFile.lastModTime = fileStats.modified.millisecondsSinceEpoch ~/ 1000;
-
-      zipEncoder.addArchiveFile(archiveFile);
-      await fileStream.close();
     }
+
+    await addDirectoryFilesToArchive(archiveAppDataModel.appDirectory);
 
     zipEncoder.close();
   }
@@ -147,8 +199,8 @@ class FileService {
     return false;
   }
 
-  Future<File> _retrieveDocumentsFile(String fileName) async {
-    final documentsFilePath = await createDocumentsFilePath(fileName);
+  Future<File> _retrieveDocumentsFile(String fileName, {String? filePath}) async {
+    final documentsFilePath = await createDocumentsFilePath(fileName, filePath: filePath);
     return File(documentsFilePath);
   }
 

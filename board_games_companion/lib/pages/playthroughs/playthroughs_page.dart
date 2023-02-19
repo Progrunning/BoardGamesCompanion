@@ -70,13 +70,14 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         appBar: AppBar(
           title: Text(widget.viewModel.boardGameName, style: AppTheme.titleTextStyle),
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.music_note, color: AppColors.accentColor),
-              onPressed: () async => _openGamesMusicPlaylist(context),
-            ),
+            if (!widget.viewModel.isCreatedByUser)
+              IconButton(
+                icon: const Icon(Icons.music_note, color: AppColors.accentColor),
+                onPressed: () async => _openGamesMusicPlaylist(context),
+              ),
             Observer(
               builder: (BuildContext context) {
-                if (!widget.viewModel.hasUser) {
+                if (!widget.viewModel.canImportGames) {
                   return const SizedBox.shrink();
                 }
 
@@ -156,7 +157,6 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
       arguments: BoardGameDetailsPageArguments(
         boardGameId: widget.viewModel.boardGameId,
         boardGameImageHeroId: widget.viewModel.boardGameId,
-        boardGameName: widget.viewModel.boardGameName,
         navigatingFromType: PlaythroughsPage,
       ),
     );

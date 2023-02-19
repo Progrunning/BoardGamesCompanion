@@ -43,109 +43,107 @@ class EditPlaythroughPage extends StatefulWidget {
 
 class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScoreDialogMixin {
   @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => _handleOnWillPop(context),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: const Text(AppText.editPlaythroughPageTitle),
-          actions: [
-            IconButton(icon: const Icon(Icons.close), onPressed: () => _close(context)),
-          ],
-        ),
-        body: SafeArea(
-          child: PageContainer(
-            child: Observer(builder: (_) {
-              return CustomScrollView(
-                slivers: [
-                  SliverPersistentHeader(
-                    delegate: BgcSliverHeaderDelegate(
-                      primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
+  Widget build(BuildContext context) => WillPopScope(
+        onWillPop: () async => _handleOnWillPop(context),
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: const Text(AppText.editPlaythroughPageTitle),
+            actions: [
+              IconButton(icon: const Icon(Icons.close), onPressed: () => _close(context)),
+            ],
+          ),
+          body: SafeArea(
+            child: PageContainer(
+              child: Observer(builder: (_) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverPersistentHeader(
+                      delegate: BgcSliverHeaderDelegate(
+                        primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
+                      ),
                     ),
-                  ),
-                  _PlayDateTimeSection(viewModel: widget.viewModel),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: BgcSliverHeaderDelegate(
-                        primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
-                  ),
-                  _ScoresSection(
-                    viewModel: widget.viewModel,
-                    onItemTapped: (PlayerScore playerScore) async =>
-                        _editPlayerScore(playerScore, context),
-                  ),
-                  if (widget.viewModel.hasNotes) ...[
+                    _PlayDateTimeSection(viewModel: widget.viewModel),
                     SliverPersistentHeader(
                       pinned: true,
                       delegate: BgcSliverHeaderDelegate(
-                          primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+                          primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
                     ),
-                    _NotesSection(
-                      notes: widget.viewModel.notes!,
-                      onTap: (note) => _editNote(note.id),
-                      onDelete: (note) => _deleteNote(note),
+                    _ScoresSection(
+                      viewModel: widget.viewModel,
+                      onItemTapped: (PlayerScore playerScore) async =>
+                          _editPlayerScore(playerScore, context),
                     ),
-                    // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
-                    const SliverPadding(
-                      padding: EdgeInsets.only(
-                        bottom: Dimensions.floatingActionButtonBottomSpacing +
-                            Dimensions.standardSpacing,
+                    if (widget.viewModel.hasNotes) ...[
+                      SliverPersistentHeader(
+                        pinned: true,
+                        delegate: BgcSliverHeaderDelegate(
+                            primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
                       ),
-                    ),
-                  ]
-                ],
-              );
-            }),
+                      _NotesSection(
+                        notes: widget.viewModel.notes!,
+                        onTap: (note) => _editNote(note.id),
+                        onDelete: (note) => _deleteNote(note),
+                      ),
+                      // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
+                      const SliverPadding(
+                        padding: EdgeInsets.only(
+                          bottom: Dimensions.floatingActionButtonBottomSpacing +
+                              Dimensions.standardSpacing,
+                        ),
+                      ),
+                    ]
+                  ],
+                );
+              }),
+            ),
+          ),
+          floatingActionButton: SpeedDial(
+            icon: Icons.menu,
+            overlayColor: AppColors.dialogBackgroundColor,
+            activeIcon: Icons.close,
+            openCloseDial: widget.viewModel.isSpeedDialContextMenuOpen,
+            onPress: () => widget.viewModel.isSpeedDialContextMenuOpen.value =
+                !widget.viewModel.isSpeedDialContextMenuOpen.value,
+            children: [
+              SpeedDialChild(
+                child: const Icon(Icons.save),
+                backgroundColor: AppColors.accentColor,
+                foregroundColor: Colors.white,
+                label: AppText.save,
+                labelBackgroundColor: AppColors.accentColor,
+                onTap: () async => _save(),
+              ),
+              if (!widget.viewModel.playthoughEnded)
+                SpeedDialChild(
+                  child: const Icon(Icons.stop),
+                  backgroundColor: AppColors.blueColor,
+                  foregroundColor: Colors.white,
+                  label: AppText.stop,
+                  labelBackgroundColor: AppColors.blueColor,
+                  onTap: () async => _stopPlaythrough(),
+                ),
+              SpeedDialChild(
+                child: const Icon(Icons.note_add),
+                backgroundColor: AppColors.greenColor,
+                foregroundColor: Colors.white,
+                label: AppText.editPlaythroughAddNote,
+                labelBackgroundColor: AppColors.greenColor,
+                onTap: () async => _addNote(),
+              ),
+              SpeedDialChild(
+                child: const Icon(Icons.delete),
+                backgroundColor: AppColors.redColor,
+                foregroundColor: Colors.white,
+                label: AppText.delete,
+                labelBackgroundColor: AppColors.redColor,
+                onTap: () async => _showDeletePlaythroughDialog(context),
+              ),
+            ],
           ),
         ),
-        floatingActionButton: SpeedDial(
-          icon: Icons.menu,
-          overlayColor: AppColors.dialogBackgroundColor,
-          activeIcon: Icons.close,
-          openCloseDial: widget.viewModel.isSpeedDialContextMenuOpen,
-          onPress: () => widget.viewModel.isSpeedDialContextMenuOpen.value =
-              !widget.viewModel.isSpeedDialContextMenuOpen.value,
-          children: [
-            SpeedDialChild(
-              child: const Icon(Icons.save),
-              backgroundColor: AppColors.accentColor,
-              foregroundColor: Colors.white,
-              label: AppText.save,
-              labelBackgroundColor: AppColors.accentColor,
-              onTap: () async => _save(),
-            ),
-            if (!widget.viewModel.playthoughEnded)
-              SpeedDialChild(
-                child: const Icon(Icons.stop),
-                backgroundColor: AppColors.blueColor,
-                foregroundColor: Colors.white,
-                label: AppText.stop,
-                labelBackgroundColor: AppColors.blueColor,
-                onTap: () async => _stopPlaythrough(),
-              ),
-            SpeedDialChild(
-              child: const Icon(Icons.note_add),
-              backgroundColor: AppColors.greenColor,
-              foregroundColor: Colors.white,
-              label: AppText.editPlaythroughAddNote,
-              labelBackgroundColor: AppColors.greenColor,
-              onTap: () async => _addNote(),
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.delete),
-              backgroundColor: AppColors.redColor,
-              foregroundColor: Colors.white,
-              label: AppText.delete,
-              labelBackgroundColor: AppColors.redColor,
-              onTap: () async => _showDeletePlaythroughDialog(context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+      );
 
   Future<String> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
     final viewModel = EnterScoreViewModel(playerScore);

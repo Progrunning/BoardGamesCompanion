@@ -68,10 +68,16 @@ abstract class _PlaythroughsViewModel with Store {
   String get boardGameName => _boardGameDetails.name;
 
   @computed
+  bool get isCreatedByUser => _boardGameDetails.isCreatedByUser;
+
+  @computed
   bool get hasUser => _userStore.hasUser;
 
   @computed
   String? get userName => _userStore.userName;
+
+  @computed
+  bool get canImportGames => hasUser && !isCreatedByUser;
 
   @computed
   String get gamePlaylistUrl => '$melodicePlaylistUrl/$boardGameId';
@@ -79,7 +85,7 @@ abstract class _PlaythroughsViewModel with Store {
   @action
   void setBoardGame(BoardGameDetails boardGame) {
     _boardGameDetails = boardGame;
-    _gamePlaythroughsDetailsStore.setBoardGame(boardGame);
+    _gamePlaythroughsDetailsStore.setBoardGameId(boardGame.id);
   }
 
   void setBoardGameImageHeroId(String boardGameImageHeroId) =>

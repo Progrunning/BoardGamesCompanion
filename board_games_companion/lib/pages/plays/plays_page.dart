@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/extensions/int_extensions.dart';
+import 'package:board_games_companion/extensions/string_extensions.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:board_games_companion/pages/plays/game_spinner_filters.dart';
@@ -27,6 +29,7 @@ import '../../common/dimensions.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
+import '../../widgets/animations/image_fade_in_animation.dart';
 import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
@@ -359,9 +362,11 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
                               child: Stack(
                                 children: [
                                   if (boardGame.imageUrl.isNotNullOrBlank)
-                                    _GameSpinnerItem(
-                                      boardGameId: boardGame.id,
-                                      boardGameImageUrl: boardGame.imageUrl!,
+                                    Positioned.fill(
+                                      child: _GameSpinnerItem(
+                                        boardGameId: boardGame.id,
+                                        boardGameImageUrl: boardGame.imageUrl!,
+                                      ),
                                     ),
                                   if (boardGame.imageUrl.isNullOrBlank)
                                     Container(decoration: AppStyles.tileGradientBoxDecoration),
@@ -418,29 +423,45 @@ class _GameSpinnerItem extends StatelessWidget {
   final String boardGameImageUrl;
 
   @override
-  Widget build(BuildContext context) {
-    return Hero(
-      tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}$boardGameId',
-      child: LayoutBuilder(
-        builder: (_, BoxConstraints boxConstraints) {
-          return CachedNetworkImage(
-            maxHeightDiskCache: boxConstraints.maxWidth.toInt(),
-            imageUrl: boardGameImageUrl,
-            imageBuilder: (context, imageProvider) => Container(
-              decoration: BoxDecoration(
-                borderRadius: AppTheme.defaultBorderRadius,
-                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-              ),
-            ),
-            fit: BoxFit.fitWidth,
-            placeholder: (context, url) => Container(
-              decoration: AppStyles.tileGradientBoxDecoration,
-            ),
-          );
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Hero(
+        tag: '${AnimationTags.gameSpinnerBoardGameHeroTag}$boardGameId',
+        child: LayoutBuilder(
+          builder: (_, BoxConstraints boxConstraints) {
+            return boardGameImageUrl.toImageType().when(
+                  web: () => CachedNetworkImage(
+                    maxHeightDiskCache: boxConstraints.maxWidth.toInt(),
+                    imageUrl: boardGameImageUrl,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: AppTheme.defaultBorderRadius,
+                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    fit: BoxFit.fitWidth,
+                    placeholder: (context, url) => Container(
+                      decoration: AppStyles.tileGradientBoxDecoration,
+                    ),
+                  ),
+                  file: () => ClipRRect(
+                    borderRadius: AppTheme.defaultBorderRadius,
+                    child: Image.file(
+                      File(boardGameImageUrl),
+                      fit: BoxFit.cover,
+                      cacheHeight: boxConstraints.maxWidth.toInt(),
+                      frameBuilder: (_, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                        if (wasSynchronouslyLoaded) {
+                          return child;
+                        }
+
+                        return ImageFadeInAnimation(frame: frame, child: child);
+                      },
+                    ),
+                  ),
+                  undefined: () => const SizedBox.shrink(),
+                );
+          },
+        ),
+      );
 }
 
 class _PlaythroughGroupListSliver extends StatelessWidget {
@@ -541,7 +562,6 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
       BoardGamesDetailsPage.pageRoute,
       arguments: BoardGameDetailsPageArguments(
         boardGameId: boardGamePlaythrough.boardGameDetails.id,
-        boardGameName: boardGamePlaythrough.boardGameDetails.name,
         boardGameImageHeroId: boardGamePlaythrough.id,
         navigatingFromType: PlaysPage,
       ),

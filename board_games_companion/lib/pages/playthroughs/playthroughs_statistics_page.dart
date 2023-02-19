@@ -61,10 +61,14 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 centerTitle: true,
-                background: BoardGameImage(
-                  id: widget.boardGameImageHeroId,
-                  url: viewModel.boardGameImageUrl,
-                  minImageHeight: Constants.boardGameDetailsImageHeight,
+                background: Observer(
+                  builder: (_) {
+                    return BoardGameImage(
+                      id: widget.boardGameImageHeroId,
+                      url: viewModel.boardGameImageUrl,
+                      minImageHeight: Constants.boardGameDetailsImageHeight,
+                    );
+                  },
                 ),
               ),
             ),

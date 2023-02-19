@@ -1,5 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/extensions/route_extensions.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
@@ -27,6 +28,10 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
       screenName: route.toScreenName(),
       screenClass: route.toScreenClassName(),
     );
+
+    Fimber.d(
+      'Popped a route ${route.settings.name}. Current page is ${route.toScreenName()} with backing class ${route.toScreenClassName()}',
+    );
   }
 
   @override
@@ -42,6 +47,13 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
     _analtyicsService.logScreenView(
       screenName: route.toScreenName(),
       screenClass: route.toScreenClassName(),
+    );
+
+    Fimber.d(
+      'Pushed a route $routeName. Current page is ${route.toScreenName()} with backing class ${route.toScreenClassName()}',
+    );
+    Fimber.d(
+      'Pushed route arguments ${route.settings.arguments}',
     );
 
     switch (routeName) {

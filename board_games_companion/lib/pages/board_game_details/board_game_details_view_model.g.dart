@@ -16,13 +16,19 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
       (_$boardGameComputed ??= Computed<BoardGameDetails>(() => super.boardGame,
               name: '_BoardGameDetailsViewModel.boardGame'))
           .value;
-  Computed<String?>? _$boardGameImageUrlComputed;
+  Computed<String>? _$nameComputed;
 
   @override
-  String? get boardGameImageUrl => (_$boardGameImageUrlComputed ??=
-          Computed<String?>(() => super.boardGameImageUrl,
-              name: '_BoardGameDetailsViewModel.boardGameImageUrl'))
+  String get name => (_$nameComputed ??= Computed<String>(() => super.name,
+          name: '_BoardGameDetailsViewModel.name'))
       .value;
+  Computed<String?>? _$imageUrlComputed;
+
+  @override
+  String? get imageUrl =>
+      (_$imageUrlComputed ??= Computed<String?>(() => super.imageUrl,
+              name: '_BoardGameDetailsViewModel.imageUrl'))
+          .value;
   Computed<bool>? _$isMainGameComputed;
 
   @override
@@ -74,6 +80,13 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
           Computed<String>(() => super.unescapedDescription,
               name: '_BoardGameDetailsViewModel.unescapedDescription'))
       .value;
+  Computed<bool>? _$isCreatedByUserComputed;
+
+  @override
+  bool get isCreatedByUser =>
+      (_$isCreatedByUserComputed ??= Computed<bool>(() => super.isCreatedByUser,
+              name: '_BoardGameDetailsViewModel.isCreatedByUser'))
+          .value;
 
   late final _$futureLoadBoardGameDetailsAtom = Atom(
       name: '_BoardGameDetailsViewModel.futureLoadBoardGameDetails',
@@ -122,14 +135,16 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
     return '''
 futureLoadBoardGameDetails: ${futureLoadBoardGameDetails},
 boardGame: ${boardGame},
-boardGameImageUrl: ${boardGameImageUrl},
+name: ${name},
+imageUrl: ${imageUrl},
 isMainGame: ${isMainGame},
 isExpansion: ${isExpansion},
 expansions: ${expansions},
 expansionsOwnedById: ${expansionsOwnedById},
 hasExpansions: ${hasExpansions},
 totalExpansionsOwned: ${totalExpansionsOwned},
-unescapedDescription: ${unescapedDescription}
+unescapedDescription: ${unescapedDescription},
+isCreatedByUser: ${isCreatedByUser}
     ''';
   }
 }

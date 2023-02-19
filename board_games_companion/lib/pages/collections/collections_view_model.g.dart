@@ -9,13 +9,6 @@ part of 'collections_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CollectionsViewModel on _CollectionsViewModel, Store {
-  Computed<List<SearchHistoryEntry>>? _$searchHistoryComputed;
-
-  @override
-  List<SearchHistoryEntry> get searchHistory => (_$searchHistoryComputed ??=
-          Computed<List<SearchHistoryEntry>>(() => super.searchHistory,
-              name: '_CollectionsViewModel.searchHistory'))
-      .value;
   Computed<List<BoardGameDetails>>? _$allMainGamesComputed;
 
   @override
@@ -247,14 +240,6 @@ mixin _$CollectionsViewModel on _CollectionsViewModel, Store {
     });
   }
 
-  late final _$searchAsyncAction =
-      AsyncAction('_CollectionsViewModel.search', context: context);
-
-  @override
-  Future<List<BoardGameDetails>> search(String query) {
-    return _$searchAsyncAction.run(() => super.search(query));
-  }
-
   late final _$_CollectionsViewModelActionController =
       ActionController(name: '_CollectionsViewModel', context: context);
 
@@ -340,7 +325,6 @@ mixin _$CollectionsViewModel on _CollectionsViewModel, Store {
     return '''
 selectedTab: ${selectedTab},
 futureLoadBoardGames: ${futureLoadBoardGames},
-searchHistory: ${searchHistory},
 allMainGames: ${allMainGames},
 sortByOptions: ${sortByOptions},
 selectedSortBy: ${selectedSortBy},

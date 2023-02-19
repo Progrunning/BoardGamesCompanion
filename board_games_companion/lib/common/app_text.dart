@@ -13,6 +13,7 @@ class AppText {
   static const delete = 'Delete';
   static const edit = 'Edit';
   static const ok = 'OK';
+  static const navigateAway = 'Navigate away';
 
   static const goBack = 'Go Back';
 
@@ -26,9 +27,15 @@ class AppText {
   static const whishlistCollectionToggleButtonText = 'Whishlist';
 
   static const homePageCollectionsTabTitle = 'Collections';
-  static const homePageSearchTabTitle = 'Search';
+  static const homePageHotBoardGamesTabTitle = 'Hot';
   static const homePagePlaysTabTitle = 'Plays';
   static const homePageGamesPlayersTabTitle = 'Players';
+  static const homePageSearchCollectionsDialOptionText = 'Search collections';
+  static const homePageSearchOnlineDialOptionText = 'Search online';
+
+  static const onlineSearchGamePublishYearFormat = 'Published in %i';
+  static const onlineSearchSortingSectionTitle = 'Sort';
+  static const onlineSearchResultsSectionTitleFormat = 'Results (%i)';
 
   static const aboutPageAuthorSectionTitle = 'Author';
   static const aboutPageDesignAndArtSectionTitle = 'Design & Art';
@@ -45,6 +52,8 @@ class AppText {
       "If you need help with the app, have an idea for a new feature or you want to see what we are currently working on then then feel free to join BGC's discord server to chat about it with developers and other app users.";
   static const aboutPageCommunityJoinDiscord =
       "Tap on the below logo to join the BGC's Discord server.";
+
+  static const hotBoardGamesPageTitle = 'Hot Board Games';
 
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5 scores';
@@ -79,7 +88,7 @@ class AppText {
   static const searchBoardGamesPageHotBoardGamesErrorRetryButtonText = 'Retry';
   static const searchBoardGamesSearchBarHint = 'Search...';
   static const searchBoardGamesSearchRetry = 'Retry';
-  static const hotBoardGamesSliverSectionTitle = 'Hot Board Games';
+  static const searchBoardGamesCreateGame = 'Create game';
 
   static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
@@ -167,9 +176,11 @@ class AppText {
   static const playerPageSearchClearSaerch = 'Clear search';
   static const playerPageSearchNoSearchResults =
       '''It looks there's no players that match the search phrase ''';
-  static const playerPageSearchHintText = 'Search for players...';
+  static const playerPageSearchHintText = 'Search for players';
 
-  static const collectionsSearchHintText = 'Search your collection...';
+  static const collectionsSearchHintText = 'Search in your collections';
+  static const onlineSearchHintText = 'Search online';
+
   static const gamesPageSearchNoSearchResults =
       '''It looks there's no games in your collections that match the search phrase ''';
   static const gamesPageSearchClearSaerch = 'Clear search';
@@ -189,9 +200,10 @@ class AppText {
       'Unfortunately we ran into a problem with restoring your data. Please try again or contact support at feedback@progrunning.net';
 
   static const gamePlaytimeFormat = '%s min';
-  static const gamePlayersSingularFormat = '%i players';
-  static const gamePlayersPluralFormat = '%i players';
-  static const gamePlayersRangeFormat = '%i - %i players';
+  static const gamePlayersUnknown = 'unknown';
+  static const gamePlayersSingularFormat = '%i';
+  static const gamePlayersPluralFormat = '%i';
+  static const gamePlayersRangeFormat = '%i - %i';
 
   static const aboutPageTitle = 'About';
   static const collectionsPageTitle = 'Collections';
@@ -225,4 +237,28 @@ class AppText {
   static const drawerReleaseNotes = 'Release notes';
   static const drawerAppWiki = 'Wiki';
   static const drawerBuyMeACoffe = 'Buy Me a Coffee';
+
+  static const createNewGamePageTitle = 'Create new game';
+  static const createNewGameBoardGameName = 'Name';
+  static const createNewGameBoardGameImage = 'Image';
+  static const createNewGameBoardGameCollections = 'Collections';
+  static const createNewGameBoardGameRating = 'Rating';
+  static const createNewGameBoardGameRatingNotSet = 'Not set';
+  static const createNewGameBoardGameRatingMax = '10';
+  static const createNewGameBoardGamePlayers = 'Players';
+  static const createNewGameBoardGamePlayersMin = '1';
+  static const createNewGameBoardGamePlayersMax = '20';
+  static const createNewGameBoardGamePlaytime = 'Playtime';
+  static const createNewGameBoardGamePlaytimeMin = '5 min';
+  static const createNewGameBoardGamePlaytimeMax = '240 min';
+  static const createNewGameBoardGameMinAge = 'Minimum age';
+  static const createNewGameBoardGameAgeNotSet = 'Not set';
+  static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
+  static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";
+  static const createNewGameUnsavedChangesDialogContent = 'Are you sure you want to navigate away?';
+  static const createNewGameSavingFailedText =
+      'Saving board game detailes failed. Try again or contact support if the issue persist.';
+  static const createNewGameSuccessFormat =
+      'Game "%s" created successfully and added to your collection';
+  static const createNewGameSuccessDetailsActionText = 'Details';
 }

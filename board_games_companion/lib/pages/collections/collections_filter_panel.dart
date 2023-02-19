@@ -254,34 +254,21 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
               style: TextStyle(fontSize: Dimensions.smallFontSize),
             ),
             Expanded(
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  trackHeight: 8,
-                  trackShape: const RoundedRectSliderTrackShape(),
-                  inactiveTrackColor:
-                      AppColors.primaryColorLight.withAlpha(AppStyles.opacity30Percent),
-                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 24.0),
-                  tickMarkShape: const RoundSliderTickMarkShape(),
-                  valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
-                  valueIndicatorTextStyle: const TextStyle(fontSize: Dimensions.smallFontSize),
-                  showValueIndicator: ShowValueIndicator.always,
-                ),
-                child: Observer(
-                  builder: (_) {
-                    return Slider(
-                      value: min(gamesViewModel.filterByNumberOfPlayers?.toDouble() ?? 0,
-                          gamesViewModel.maxNumberOfPlayers),
-                      divisions: gamesViewModel.maxNumberOfPlayers.toInt(),
-                      min: gamesViewModel.minNumberOfPlayers - 1,
-                      max: gamesViewModel.maxNumberOfPlayers,
-                      label: gamesViewModel.numberOfPlayersSliderValue,
-                      onChanged: (value) =>
-                          gamesViewModel.changeNumberOfPlayers(value != 0 ? value.round() : null),
-                      onChangeEnd: (value) => gamesViewModel.updateNumberOfPlayersFilter(),
-                      activeColor: AppColors.accentColor,
-                    );
-                  },
-                ),
+              child: Observer(
+                builder: (_) {
+                  return Slider(
+                    value: min(gamesViewModel.filterByNumberOfPlayers?.toDouble() ?? 0,
+                        gamesViewModel.maxNumberOfPlayers),
+                    divisions: gamesViewModel.maxNumberOfPlayers.toInt(),
+                    min: gamesViewModel.minNumberOfPlayers - 1,
+                    max: gamesViewModel.maxNumberOfPlayers,
+                    label: gamesViewModel.numberOfPlayersSliderValue,
+                    onChanged: (value) =>
+                        gamesViewModel.changeNumberOfPlayers(value != 0 ? value.round() : null),
+                    onChangeEnd: (value) => gamesViewModel.updateNumberOfPlayersFilter(),
+                    activeColor: AppColors.accentColor,
+                  );
+                },
               ),
             ),
             Observer(

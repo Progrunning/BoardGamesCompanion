@@ -17,10 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$BoardGameDetailsPageArguments {
   String get boardGameId => throw _privateConstructorUsedError;
-  String get boardGameName => throw _privateConstructorUsedError;
   Type get navigatingFromType => throw _privateConstructorUsedError;
   String get boardGameImageHeroId => throw _privateConstructorUsedError;
-  String? get boardGameImageUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BoardGameDetailsPageArgumentsCopyWith<BoardGameDetailsPageArguments>
@@ -35,10 +33,8 @@ abstract class $BoardGameDetailsPageArgumentsCopyWith<$Res> {
       _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res>;
   $Res call(
       {String boardGameId,
-      String boardGameName,
       Type navigatingFromType,
-      String boardGameImageHeroId,
-      String? boardGameImageUrl});
+      String boardGameImageHeroId});
 }
 
 /// @nodoc
@@ -53,19 +49,13 @@ class _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? boardGameId = freezed,
-    Object? boardGameName = freezed,
     Object? navigatingFromType = freezed,
     Object? boardGameImageHeroId = freezed,
-    Object? boardGameImageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       boardGameId: boardGameId == freezed
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
-              as String,
-      boardGameName: boardGameName == freezed
-          ? _value.boardGameName
-          : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
       navigatingFromType: navigatingFromType == freezed
           ? _value.navigatingFromType
@@ -75,10 +65,6 @@ class _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
           ? _value.boardGameImageHeroId
           : boardGameImageHeroId // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameImageUrl: boardGameImageUrl == freezed
-          ? _value.boardGameImageUrl
-          : boardGameImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -93,10 +79,8 @@ abstract class _$$_BoardGameDetailsPageArgumentsCopyWith<$Res>
   @override
   $Res call(
       {String boardGameId,
-      String boardGameName,
       Type navigatingFromType,
-      String boardGameImageHeroId,
-      String? boardGameImageUrl});
+      String boardGameImageHeroId});
 }
 
 /// @nodoc
@@ -115,19 +99,13 @@ class __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? boardGameId = freezed,
-    Object? boardGameName = freezed,
     Object? navigatingFromType = freezed,
     Object? boardGameImageHeroId = freezed,
-    Object? boardGameImageUrl = freezed,
   }) {
     return _then(_$_BoardGameDetailsPageArguments(
       boardGameId: boardGameId == freezed
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
-              as String,
-      boardGameName: boardGameName == freezed
-          ? _value.boardGameName
-          : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
       navigatingFromType: navigatingFromType == freezed
           ? _value.navigatingFromType
@@ -137,10 +115,6 @@ class __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
           ? _value.boardGameImageHeroId
           : boardGameImageHeroId // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameImageUrl: boardGameImageUrl == freezed
-          ? _value.boardGameImageUrl
-          : boardGameImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -151,25 +125,19 @@ class _$_BoardGameDetailsPageArguments
     implements _BoardGameDetailsPageArguments {
   const _$_BoardGameDetailsPageArguments(
       {required this.boardGameId,
-      required this.boardGameName,
       required this.navigatingFromType,
-      required this.boardGameImageHeroId,
-      this.boardGameImageUrl});
+      required this.boardGameImageHeroId});
 
   @override
   final String boardGameId;
   @override
-  final String boardGameName;
-  @override
   final Type navigatingFromType;
   @override
   final String boardGameImageHeroId;
-  @override
-  final String? boardGameImageUrl;
 
   @override
   String toString() {
-    return 'BoardGameDetailsPageArguments(boardGameId: $boardGameId, boardGameName: $boardGameName, navigatingFromType: $navigatingFromType, boardGameImageHeroId: $boardGameImageHeroId, boardGameImageUrl: $boardGameImageUrl)';
+    return 'BoardGameDetailsPageArguments(boardGameId: $boardGameId, navigatingFromType: $navigatingFromType, boardGameImageHeroId: $boardGameImageHeroId)';
   }
 
   @override
@@ -180,23 +148,17 @@ class _$_BoardGameDetailsPageArguments
             const DeepCollectionEquality()
                 .equals(other.boardGameId, boardGameId) &&
             const DeepCollectionEquality()
-                .equals(other.boardGameName, boardGameName) &&
-            const DeepCollectionEquality()
                 .equals(other.navigatingFromType, navigatingFromType) &&
             const DeepCollectionEquality()
-                .equals(other.boardGameImageHeroId, boardGameImageHeroId) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameImageUrl, boardGameImageUrl));
+                .equals(other.boardGameImageHeroId, boardGameImageHeroId));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(boardGameId),
-      const DeepCollectionEquality().hash(boardGameName),
       const DeepCollectionEquality().hash(navigatingFromType),
-      const DeepCollectionEquality().hash(boardGameImageHeroId),
-      const DeepCollectionEquality().hash(boardGameImageUrl));
+      const DeepCollectionEquality().hash(boardGameImageHeroId));
 
   @JsonKey(ignore: true)
   @override
@@ -208,22 +170,17 @@ class _$_BoardGameDetailsPageArguments
 abstract class _BoardGameDetailsPageArguments
     implements BoardGameDetailsPageArguments {
   const factory _BoardGameDetailsPageArguments(
-      {required final String boardGameId,
-      required final String boardGameName,
-      required final Type navigatingFromType,
-      required final String boardGameImageHeroId,
-      final String? boardGameImageUrl}) = _$_BoardGameDetailsPageArguments;
+          {required final String boardGameId,
+          required final Type navigatingFromType,
+          required final String boardGameImageHeroId}) =
+      _$_BoardGameDetailsPageArguments;
 
   @override
   String get boardGameId;
   @override
-  String get boardGameName;
-  @override
   Type get navigatingFromType;
   @override
   String get boardGameImageHeroId;
-  @override
-  String? get boardGameImageUrl;
   @override
   @JsonKey(ignore: true)
   _$$_BoardGameDetailsPageArgumentsCopyWith<_$_BoardGameDetailsPageArguments>

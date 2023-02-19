@@ -23,6 +23,13 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
       (_$boardGameNameComputed ??= Computed<String>(() => super.boardGameName,
               name: '_PlaythroughsViewModel.boardGameName'))
           .value;
+  Computed<bool>? _$isCreatedByUserComputed;
+
+  @override
+  bool get isCreatedByUser =>
+      (_$isCreatedByUserComputed ??= Computed<bool>(() => super.isCreatedByUser,
+              name: '_PlaythroughsViewModel.isCreatedByUser'))
+          .value;
   Computed<bool>? _$hasUserComputed;
 
   @override
@@ -35,6 +42,13 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
   String? get userName =>
       (_$userNameComputed ??= Computed<String?>(() => super.userName,
               name: '_PlaythroughsViewModel.userName'))
+          .value;
+  Computed<bool>? _$canImportGamesComputed;
+
+  @override
+  bool get canImportGames =>
+      (_$canImportGamesComputed ??= Computed<bool>(() => super.canImportGames,
+              name: '_PlaythroughsViewModel.canImportGames'))
           .value;
   Computed<String>? _$gamePlaylistUrlComputed;
 
@@ -63,8 +77,10 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
     return '''
 boardGameId: ${boardGameId},
 boardGameName: ${boardGameName},
+isCreatedByUser: ${isCreatedByUser},
 hasUser: ${hasUser},
 userName: ${userName},
+canImportGames: ${canImportGames},
 gamePlaylistUrl: ${gamePlaylistUrl}
     ''';
   }

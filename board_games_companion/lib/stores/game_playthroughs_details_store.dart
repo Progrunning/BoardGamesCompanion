@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/models/player_score.dart';
+import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
@@ -26,14 +27,23 @@ class GamePlaythroughsDetailsStore = _GamePlaythroughsDetailsStore
     with _$GamePlaythroughsDetailsStore;
 
 abstract class _GamePlaythroughsDetailsStore with Store {
-  _GamePlaythroughsDetailsStore(this._playthroughsStore, this._scoresStore, this._playerStore);
+  _GamePlaythroughsDetailsStore(
+    this._playthroughsStore,
+    this._scoresStore,
+    this._playerStore,
+    this._boardGamesStore,
+  );
 
   final PlaythroughsStore _playthroughsStore;
   final ScoresStore _scoresStore;
   final PlayersStore _playerStore;
+  final BoardGamesStore _boardGamesStore;
 
   @observable
-  BoardGameDetails? _boardGame;
+  String? _boardGameId;
+
+  @computed
+  BoardGameDetails? get _boardGame => _boardGamesStore.allBoardGamesMap[_boardGameId];
 
   @observable
   ObservableList<PlaythroughDetails> playthroughsDetails = ObservableList.of([]);
@@ -66,7 +76,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   @computed
   int get averageScorePrecision => _boardGame!.settings?.averageScorePrecision ?? 0;
 
-  /// Ensure that [setBoardGame] is called before loading playthoughs details and that [Playthrough]s in the [PlaythroughsStore] are loaded as well.
+  /// Ensure that [setBoardGameId] is called before loading playthoughs details and that [Playthrough]s in the [PlaythroughsStore] are loaded as well.
   @action
   void loadPlaythroughsDetails() {
     try {
@@ -83,7 +93,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   }
 
   @action
-  void setBoardGame(BoardGameDetails boardGame) => _boardGame = boardGame;
+  void setBoardGameId(String boardGameId) => _boardGameId = boardGameId;
 
   Future<PlaythroughDetails?> createPlaythrough(
     String boardGameId,
