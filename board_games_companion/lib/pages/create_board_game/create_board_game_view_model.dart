@@ -163,19 +163,22 @@ abstract class _CreateBoardGameViewModel with Store {
     }
   }
 
-  Future<void> _deleteBoardGame() async {
+  @action
+  Future<void> removeBoardGame() async {
     try {
-      visualState = const CreateBoardGamePageVisualStates.deleting();
+      visualState = const CreateBoardGamePageVisualStates.removingFromCollections();
 
       await _boardGamesStore.removeBoardGame(boardGame.id);
       if (boardGame.imageUrl != null) {
         await _deleteBoardGameImage(boardGame.imageUrl!);
       }
 
-      visualState = const CreateBoardGamePageVisualStates.deletingSuccess();
+      visualState = CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(
+        boardGameName: boardGame.name,
+      );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
-      visualState = const CreateBoardGamePageVisualStates.deletingFailure();
+      visualState = const CreateBoardGamePageVisualStates.removingFromCollectionsFailed();
     }
   }
 

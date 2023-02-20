@@ -33,6 +33,8 @@ abstract class _BoardGameDetailsViewModel with Store {
 
   String get imageHeroId => _boardGameImageHeroId;
 
+  // TODO When navigating back from the page after the game gets deleted this causes null expcetion because the game doesn't exists anymore
+  //  Consider either soft delete or perhaps only removing it from the collection
   @computed
   BoardGameDetails get boardGame => _boardGamesStore.allBoardGamesMap[_boardGameId]!;
 

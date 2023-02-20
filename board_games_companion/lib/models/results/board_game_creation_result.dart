@@ -8,9 +8,9 @@ class GameCreationResult with _$GameCreationResult {
     required String boardGameId,
     required String boardGameName,
   }) = _saveSuccess;
-  const factory GameCreationResult.deleteSuccess({
+  const factory GameCreationResult.removingFromCollectionsSucceeded({
     required String boardGameName,
-  }) = _deleteSuccess;
+  }) = _removingFromCollectionsSucceeded;
   const factory GameCreationResult.cancelled() = _cancelled;
   const factory GameCreationResult.failure() = _failure;
 }

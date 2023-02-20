@@ -21,9 +21,10 @@ mixin _$CreateBoardGamePageVisualStates {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) =>
@@ -33,9 +34,9 @@ mixin _$CreateBoardGamePageVisualStates {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) =>
@@ -45,9 +46,9 @@ mixin _$CreateBoardGamePageVisualStates {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -58,9 +59,12 @@ mixin _$CreateBoardGamePageVisualStates {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) =>
@@ -70,9 +74,11 @@ mixin _$CreateBoardGamePageVisualStates {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) =>
@@ -82,9 +88,11 @@ mixin _$CreateBoardGamePageVisualStates {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -154,9 +162,10 @@ class _$_createGame implements _createGame {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -169,9 +178,9 @@ class _$_createGame implements _createGame {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -184,9 +193,9 @@ class _$_createGame implements _createGame {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -203,9 +212,12 @@ class _$_createGame implements _createGame {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -218,9 +230,11 @@ class _$_createGame implements _createGame {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -233,9 +247,11 @@ class _$_createGame implements _createGame {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -295,9 +311,10 @@ class _$_editGame implements _editGame {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -310,9 +327,9 @@ class _$_editGame implements _editGame {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -325,9 +342,9 @@ class _$_editGame implements _editGame {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -344,9 +361,12 @@ class _$_editGame implements _editGame {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -359,9 +379,11 @@ class _$_editGame implements _editGame {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -374,9 +396,11 @@ class _$_editGame implements _editGame {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -434,9 +458,10 @@ class _$_saving implements _saving {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -449,9 +474,9 @@ class _$_saving implements _saving {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -464,9 +489,9 @@ class _$_saving implements _saving {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -483,9 +508,12 @@ class _$_saving implements _saving {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -498,9 +526,11 @@ class _$_saving implements _saving {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -513,9 +543,11 @@ class _$_saving implements _saving {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -532,38 +564,40 @@ abstract class _saving implements CreateBoardGamePageVisualStates {
 }
 
 /// @nodoc
-abstract class _$$_deletingCopyWith<$Res> {
-  factory _$$_deletingCopyWith(
-          _$_deleting value, $Res Function(_$_deleting) then) =
-      __$$_deletingCopyWithImpl<$Res>;
+abstract class _$$_removingFromCollectionsCopyWith<$Res> {
+  factory _$$_removingFromCollectionsCopyWith(_$_removingFromCollections value,
+          $Res Function(_$_removingFromCollections) then) =
+      __$$_removingFromCollectionsCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_deletingCopyWithImpl<$Res>
+class __$$_removingFromCollectionsCopyWithImpl<$Res>
     extends _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
-    implements _$$_deletingCopyWith<$Res> {
-  __$$_deletingCopyWithImpl(
-      _$_deleting _value, $Res Function(_$_deleting) _then)
-      : super(_value, (v) => _then(v as _$_deleting));
+    implements _$$_removingFromCollectionsCopyWith<$Res> {
+  __$$_removingFromCollectionsCopyWithImpl(_$_removingFromCollections _value,
+      $Res Function(_$_removingFromCollections) _then)
+      : super(_value, (v) => _then(v as _$_removingFromCollections));
 
   @override
-  _$_deleting get _value => super._value as _$_deleting;
+  _$_removingFromCollections get _value =>
+      super._value as _$_removingFromCollections;
 }
 
 /// @nodoc
 
-class _$_deleting implements _deleting {
-  const _$_deleting();
+class _$_removingFromCollections implements _removingFromCollections {
+  const _$_removingFromCollections();
 
   @override
   String toString() {
-    return 'CreateBoardGamePageVisualStates.deleting()';
+    return 'CreateBoardGamePageVisualStates.removingFromCollections()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_deleting);
+        (other.runtimeType == runtimeType &&
+            other is _$_removingFromCollections);
   }
 
   @override
@@ -575,13 +609,14 @@ class _$_deleting implements _deleting {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
-    return deleting();
+    return removingFromCollections();
   }
 
   @override
@@ -590,13 +625,13 @@ class _$_deleting implements _deleting {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
-    return deleting?.call();
+    return removingFromCollections?.call();
   }
 
   @override
@@ -605,15 +640,15 @@ class _$_deleting implements _deleting {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
   }) {
-    if (deleting != null) {
-      return deleting();
+    if (removingFromCollections != null) {
+      return removingFromCollections();
     }
     return orElse();
   }
@@ -624,13 +659,16 @@ class _$_deleting implements _deleting {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
-    return deleting(this);
+    return removingFromCollections(this);
   }
 
   @override
@@ -639,13 +677,15 @@ class _$_deleting implements _deleting {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
-    return deleting?.call(this);
+    return removingFromCollections?.call(this);
   }
 
   @override
@@ -654,57 +694,254 @@ class _$_deleting implements _deleting {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
   }) {
-    if (deleting != null) {
-      return deleting(this);
+    if (removingFromCollections != null) {
+      return removingFromCollections(this);
     }
     return orElse();
   }
 }
 
-abstract class _deleting implements CreateBoardGamePageVisualStates {
-  const factory _deleting() = _$_deleting;
+abstract class _removingFromCollections
+    implements CreateBoardGamePageVisualStates {
+  const factory _removingFromCollections() = _$_removingFromCollections;
 }
 
 /// @nodoc
-abstract class _$$_deletingSuccessCopyWith<$Res> {
-  factory _$$_deletingSuccessCopyWith(
-          _$_deletingSuccess value, $Res Function(_$_deletingSuccess) then) =
-      __$$_deletingSuccessCopyWithImpl<$Res>;
+abstract class _$$_removingFromCollectionsSucceededCopyWith<$Res> {
+  factory _$$_removingFromCollectionsSucceededCopyWith(
+          _$_removingFromCollectionsSucceeded value,
+          $Res Function(_$_removingFromCollectionsSucceeded) then) =
+      __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>;
+  $Res call({String boardGameName});
 }
 
 /// @nodoc
-class __$$_deletingSuccessCopyWithImpl<$Res>
+class __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>
     extends _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
-    implements _$$_deletingSuccessCopyWith<$Res> {
-  __$$_deletingSuccessCopyWithImpl(
-      _$_deletingSuccess _value, $Res Function(_$_deletingSuccess) _then)
-      : super(_value, (v) => _then(v as _$_deletingSuccess));
+    implements _$$_removingFromCollectionsSucceededCopyWith<$Res> {
+  __$$_removingFromCollectionsSucceededCopyWithImpl(
+      _$_removingFromCollectionsSucceeded _value,
+      $Res Function(_$_removingFromCollectionsSucceeded) _then)
+      : super(_value, (v) => _then(v as _$_removingFromCollectionsSucceeded));
 
   @override
-  _$_deletingSuccess get _value => super._value as _$_deletingSuccess;
+  _$_removingFromCollectionsSucceeded get _value =>
+      super._value as _$_removingFromCollectionsSucceeded;
+
+  @override
+  $Res call({
+    Object? boardGameName = freezed,
+  }) {
+    return _then(_$_removingFromCollectionsSucceeded(
+      boardGameName: boardGameName == freezed
+          ? _value.boardGameName
+          : boardGameName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
-class _$_deletingSuccess implements _deletingSuccess {
-  const _$_deletingSuccess();
+class _$_removingFromCollectionsSucceeded
+    implements _removingFromCollectionsSucceeded {
+  const _$_removingFromCollectionsSucceeded({required this.boardGameName});
+
+  @override
+  final String boardGameName;
 
   @override
   String toString() {
-    return 'CreateBoardGamePageVisualStates.deletingSuccess()';
+    return 'CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(boardGameName: $boardGameName)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_deletingSuccess);
+        (other.runtimeType == runtimeType &&
+            other is _$_removingFromCollectionsSucceeded &&
+            const DeepCollectionEquality()
+                .equals(other.boardGameName, boardGameName));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(boardGameName));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_removingFromCollectionsSucceededCopyWith<
+          _$_removingFromCollectionsSucceeded>
+      get copyWith => __$$_removingFromCollectionsSucceededCopyWithImpl<
+          _$_removingFromCollectionsSucceeded>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
+    required TResult Function() editGame,
+    required TResult Function() saving,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
+    required TResult Function() saveSuccess,
+    required TResult Function() saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded(boardGameName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded?.call(boardGameName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (removingFromCollectionsSucceeded != null) {
+      return removingFromCollectionsSucceeded(boardGameName);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
+    required TResult Function(_editGame value) editGame,
+    required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_saveFailure value) saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (removingFromCollectionsSucceeded != null) {
+      return removingFromCollectionsSucceeded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _removingFromCollectionsSucceeded
+    implements CreateBoardGamePageVisualStates {
+  const factory _removingFromCollectionsSucceeded(
+          {required final String boardGameName}) =
+      _$_removingFromCollectionsSucceeded;
+
+  String get boardGameName;
+  @JsonKey(ignore: true)
+  _$$_removingFromCollectionsSucceededCopyWith<
+          _$_removingFromCollectionsSucceeded>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_removingFromCollectionsFailedCopyWith<$Res> {
+  factory _$$_removingFromCollectionsFailedCopyWith(
+          _$_removingFromCollectionsFailed value,
+          $Res Function(_$_removingFromCollectionsFailed) then) =
+      __$$_removingFromCollectionsFailedCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_removingFromCollectionsFailedCopyWithImpl<$Res>
+    extends _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
+    implements _$$_removingFromCollectionsFailedCopyWith<$Res> {
+  __$$_removingFromCollectionsFailedCopyWithImpl(
+      _$_removingFromCollectionsFailed _value,
+      $Res Function(_$_removingFromCollectionsFailed) _then)
+      : super(_value, (v) => _then(v as _$_removingFromCollectionsFailed));
+
+  @override
+  _$_removingFromCollectionsFailed get _value =>
+      super._value as _$_removingFromCollectionsFailed;
+}
+
+/// @nodoc
+
+class _$_removingFromCollectionsFailed
+    implements _removingFromCollectionsFailed {
+  const _$_removingFromCollectionsFailed();
+
+  @override
+  String toString() {
+    return 'CreateBoardGamePageVisualStates.removingFromCollectionsFailed()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_removingFromCollectionsFailed);
   }
 
   @override
@@ -716,13 +953,14 @@ class _$_deletingSuccess implements _deletingSuccess {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
-    return deletingSuccess();
+    return removingFromCollectionsFailed();
   }
 
   @override
@@ -731,13 +969,13 @@ class _$_deletingSuccess implements _deletingSuccess {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
-    return deletingSuccess?.call();
+    return removingFromCollectionsFailed?.call();
   }
 
   @override
@@ -746,15 +984,15 @@ class _$_deletingSuccess implements _deletingSuccess {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
   }) {
-    if (deletingSuccess != null) {
-      return deletingSuccess();
+    if (removingFromCollectionsFailed != null) {
+      return removingFromCollectionsFailed();
     }
     return orElse();
   }
@@ -765,13 +1003,16 @@ class _$_deletingSuccess implements _deletingSuccess {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
-    return deletingSuccess(this);
+    return removingFromCollectionsFailed(this);
   }
 
   @override
@@ -780,13 +1021,15 @@ class _$_deletingSuccess implements _deletingSuccess {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
-    return deletingSuccess?.call(this);
+    return removingFromCollectionsFailed?.call(this);
   }
 
   @override
@@ -795,163 +1038,26 @@ class _$_deletingSuccess implements _deletingSuccess {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
   }) {
-    if (deletingSuccess != null) {
-      return deletingSuccess(this);
+    if (removingFromCollectionsFailed != null) {
+      return removingFromCollectionsFailed(this);
     }
     return orElse();
   }
 }
 
-abstract class _deletingSuccess implements CreateBoardGamePageVisualStates {
-  const factory _deletingSuccess() = _$_deletingSuccess;
-}
-
-/// @nodoc
-abstract class _$$_deletingFailureCopyWith<$Res> {
-  factory _$$_deletingFailureCopyWith(
-          _$_deletingFailure value, $Res Function(_$_deletingFailure) then) =
-      __$$_deletingFailureCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$_deletingFailureCopyWithImpl<$Res>
-    extends _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
-    implements _$$_deletingFailureCopyWith<$Res> {
-  __$$_deletingFailureCopyWithImpl(
-      _$_deletingFailure _value, $Res Function(_$_deletingFailure) _then)
-      : super(_value, (v) => _then(v as _$_deletingFailure));
-
-  @override
-  _$_deletingFailure get _value => super._value as _$_deletingFailure;
-}
-
-/// @nodoc
-
-class _$_deletingFailure implements _deletingFailure {
-  const _$_deletingFailure();
-
-  @override
-  String toString() {
-    return 'CreateBoardGamePageVisualStates.deletingFailure()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_deletingFailure);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() createGame,
-    required TResult Function() editGame,
-    required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
-    required TResult Function() saveSuccess,
-    required TResult Function() saveFailure,
-  }) {
-    return deletingFailure();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? createGame,
-    TResult Function()? editGame,
-    TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
-    TResult Function()? saveSuccess,
-    TResult Function()? saveFailure,
-  }) {
-    return deletingFailure?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? createGame,
-    TResult Function()? editGame,
-    TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
-    TResult Function()? saveSuccess,
-    TResult Function()? saveFailure,
-    required TResult orElse(),
-  }) {
-    if (deletingFailure != null) {
-      return deletingFailure();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_createGame value) createGame,
-    required TResult Function(_editGame value) editGame,
-    required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
-    required TResult Function(_saveSuccess value) saveSuccess,
-    required TResult Function(_saveFailure value) saveFailure,
-  }) {
-    return deletingFailure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_createGame value)? createGame,
-    TResult Function(_editGame value)? editGame,
-    TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
-    TResult Function(_saveSuccess value)? saveSuccess,
-    TResult Function(_saveFailure value)? saveFailure,
-  }) {
-    return deletingFailure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_createGame value)? createGame,
-    TResult Function(_editGame value)? editGame,
-    TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
-    TResult Function(_saveSuccess value)? saveSuccess,
-    TResult Function(_saveFailure value)? saveFailure,
-    required TResult orElse(),
-  }) {
-    if (deletingFailure != null) {
-      return deletingFailure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _deletingFailure implements CreateBoardGamePageVisualStates {
-  const factory _deletingFailure() = _$_deletingFailure;
+abstract class _removingFromCollectionsFailed
+    implements CreateBoardGamePageVisualStates {
+  const factory _removingFromCollectionsFailed() =
+      _$_removingFromCollectionsFailed;
 }
 
 /// @nodoc
@@ -998,9 +1104,10 @@ class _$_saveSuccess implements _saveSuccess {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -1013,9 +1120,9 @@ class _$_saveSuccess implements _saveSuccess {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -1028,9 +1135,9 @@ class _$_saveSuccess implements _saveSuccess {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -1047,9 +1154,12 @@ class _$_saveSuccess implements _saveSuccess {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -1062,9 +1172,11 @@ class _$_saveSuccess implements _saveSuccess {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -1077,9 +1189,11 @@ class _$_saveSuccess implements _saveSuccess {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -1139,9 +1253,10 @@ class _$_saveFailure implements _saveFailure {
     required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
-    required TResult Function() deleting,
-    required TResult Function() deletingSuccess,
-    required TResult Function() deletingFailure,
+    required TResult Function() removingFromCollections,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -1154,9 +1269,9 @@ class _$_saveFailure implements _saveFailure {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -1169,9 +1284,9 @@ class _$_saveFailure implements _saveFailure {
     TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
-    TResult Function()? deleting,
-    TResult Function()? deletingSuccess,
-    TResult Function()? deletingFailure,
+    TResult Function()? removingFromCollections,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -1188,9 +1303,12 @@ class _$_saveFailure implements _saveFailure {
     required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
-    required TResult Function(_deleting value) deleting,
-    required TResult Function(_deletingSuccess value) deletingSuccess,
-    required TResult Function(_deletingFailure value) deletingFailure,
+    required TResult Function(_removingFromCollections value)
+        removingFromCollections,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -1203,9 +1321,11 @@ class _$_saveFailure implements _saveFailure {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -1218,9 +1338,11 @@ class _$_saveFailure implements _saveFailure {
     TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
-    TResult Function(_deleting value)? deleting,
-    TResult Function(_deletingSuccess value)? deletingSuccess,
-    TResult Function(_deletingFailure value)? deletingFailure,
+    TResult Function(_removingFromCollections value)? removingFromCollections,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),

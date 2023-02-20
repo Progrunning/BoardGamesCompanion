@@ -606,6 +606,7 @@ class _StatsAndCollections extends StatelessWidget {
           Observer(
             builder: (_) {
               return CollectionFlags(
+                isEditable: !viewModel.isCreatedByUser,
                 isOwned: viewModel.boardGame.isOwned ?? false,
                 isOnWishlist: viewModel.boardGame.isOnWishlist ?? false,
                 isOnFriendsList: viewModel.boardGame.isFriends ?? false,

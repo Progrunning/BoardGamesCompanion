@@ -64,6 +64,19 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   int? get minAge => (_$minAgeComputed ??= Computed<int?>(() => super.minAge,
           name: '_CreateBoardGameViewModel.minAge'))
       .value;
+  Computed<bool>? _$isInAnyCollectionComputed;
+
+  @override
+  bool get isInAnyCollection => (_$isInAnyCollectionComputed ??= Computed<bool>(
+          () => super.isInAnyCollection,
+          name: '_CreateBoardGameViewModel.isInAnyCollection'))
+      .value;
+  Computed<bool>? _$hasNameComputed;
+
+  @override
+  bool get hasName => (_$hasNameComputed ??= Computed<bool>(() => super.hasName,
+          name: '_CreateBoardGameViewModel.hasName'))
+      .value;
   Computed<bool>? _$isValidComputed;
 
   @override
@@ -129,13 +142,13 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
     return _$saveBoardGameAsyncAction.run(() => super.saveBoardGame());
   }
 
-  late final _$deleteBoardGameAsyncAction = AsyncAction(
-      '_CreateBoardGameViewModel.deleteBoardGame',
+  late final _$removeBoardGameAsyncAction = AsyncAction(
+      '_CreateBoardGameViewModel.removeBoardGame',
       context: context);
 
   @override
-  Future<void> deleteBoardGame() {
-    return _$deleteBoardGameAsyncAction.run(() => super.deleteBoardGame());
+  Future<void> removeBoardGame() {
+    return _$removeBoardGameAsyncAction.run(() => super.removeBoardGame());
   }
 
   late final _$_CreateBoardGameViewModelActionController =
@@ -252,6 +265,8 @@ maxPlayers: ${maxPlayers},
 minPlaytime: ${minPlaytime},
 maxPlaytime: ${maxPlaytime},
 minAge: ${minAge},
+isInAnyCollection: ${isInAnyCollection},
+hasName: ${hasName},
 isValid: ${isValid}
     ''';
   }

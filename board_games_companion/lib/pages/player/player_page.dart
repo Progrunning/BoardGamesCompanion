@@ -246,7 +246,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                 Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
               },
               child: const Text(
-                'Delete',
+                AppText.delete,
                 style: TextStyle(color: AppColors.defaultTextColor),
               ),
             ),
@@ -355,7 +355,7 @@ class _ActionButtons extends StatelessWidget {
       children: [
         if (isEditMode) ...[
           ElevatedIconButton(
-            title: 'Delete',
+            title: AppText.delete,
             icon: const DefaultIcon(Icons.delete),
             color: Colors.redAccent,
             onPressed: () => onDelete(context),

@@ -280,7 +280,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
         boardGameId,
         boardGameName,
       ),
-      deleteSuccess: (boardGameName) => _showGameDeletedSnackbar(boardGameName),
+      removingFromCollectionsSucceeded: (boardGameName) => _showGameDeletedSnackbar(boardGameName),
       orElse: () {},
     );
   }

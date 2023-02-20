@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/create_board_game/create_board_game_visual_states.dart';
+import 'package:board_games_companion/pages/home/home_page.dart';
 import 'package:board_games_companion/widgets/common/board_game/collection_flags.dart';
 import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -54,11 +56,8 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
       final navigatorState = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
       visualState.maybeWhen(
-        deletingSuccess: () => navigatorState.pop(
-          GameCreationResult.deleteSuccess(
-            boardGameName: widget.viewModel.boardGame.name,
-          ),
-        ),
+        removingFromCollectionsSucceeded: (boardGameName) =>
+            navigatorState.popUntil(ModalRoute.withName(HomePage.pageRoute)),
         saveSuccess: () => navigatorState.pop(
           GameCreationResult.saveSuccess(
             boardGameId: widget.viewModel.boardGame.id,
@@ -112,12 +111,14 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
           floatingActionButton: Observer(
             builder: (_) {
               return FloatingActionButton(
-                onPressed: widget.viewModel.isValid ? () => _saveBoardGame() : null,
+                onPressed: widget.viewModel.isValid ? () async => _saveBoardGame() : null,
                 backgroundColor: widget.viewModel.isValid
                     ? AppColors.accentColor
                     : AppColors.disabledFloatinActionButtonColor,
                 child: widget.viewModel.visualState.maybeWhen(
                   orElse: () => const Icon(Icons.save),
+                  removingFromCollections: () =>
+                      const CircularProgressIndicator(color: AppColors.primaryColor),
                   saving: () => const CircularProgressIndicator(color: AppColors.primaryColor),
                 ),
               );
@@ -168,12 +169,13 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
     widget.viewModel.updateImage(boardGameImageFile!);
   }
 
-  // TODO Consider splitting the logic into two separate methods
   Future<void> _saveBoardGame() async {
     if (!widget.viewModel.isInAnyCollection) {
-      await _showRemoveGameFromAllCollectionsDialog(context);
-      // if delete
-      await widget.viewModel.deleteBoardGame();
+      final shouldRemoveFromCollections = await _showRemoveGameFromAllCollectionsDialog(context);
+      if (shouldRemoveFromCollections ?? false) {
+        await widget.viewModel.removeBoardGame();
+      }
+
       return;
     }
 
@@ -191,34 +193,31 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
     );
   }
 
-  // TODO Continue with the implemetation of the removal check
-  Future<void> _showRemoveGameFromAllCollectionsDialog(BuildContext context) async {
-    await showDialog<AlertDialog>(
+  Future<bool?> _showRemoveGameFromAllCollectionsDialog(BuildContext context) async {
+    return showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Delete ${widget.viewModel.playerWorkingCopy!.name}'),
-          content: const Text('Are you sure you want to delete this player?'),
+          title: const Text(AppText.createNewGameRemoveFromCollectionConfirmationDialogTitle),
+          content: Text(
+            sprintf(
+              AppText.createNewGameRemoveFromCollectionConfirmationDialogContentFormat,
+              [
+                widget.viewModel.boardGame.name,
+              ],
+            ),
+          ),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
               child: const Text(AppText.cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
-              onPressed: () async {
-                await widget.viewModel.deletePlayer();
-                if (!mounted) {
-                  return;
-                }
-
-                Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
-              },
+              onPressed: () => Navigator.of(context).pop(true),
               child: const Text(
-                'Delete',
+                AppText.remove,
                 style: TextStyle(color: AppColors.defaultTextColor),
               ),
             ),
@@ -582,6 +581,7 @@ class _NameAndCollectionsSection extends StatelessWidget {
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           CollectionFlags(
+            isEditable: true,
             isOwned: boardGame.isOwned ?? false,
             isOnWishlist: boardGame.isOnWishlist ?? false,
             isOnFriendsList: boardGame.isFriends ?? false,
