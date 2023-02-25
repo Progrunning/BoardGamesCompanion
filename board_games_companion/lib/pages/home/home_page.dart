@@ -280,7 +280,6 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
         boardGameId,
         boardGameName,
       ),
-      removingFromCollectionsSucceeded: (boardGameName) => _showGameDeletedSnackbar(boardGameName),
       orElse: () {},
     );
   }
@@ -307,16 +306,6 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Future<void> _showGameDeletedSnackbar(String boardGameName) async {
-    HomePage.homePageGlobalKey.currentState?.showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        margin: Dimensions.snackbarMargin,
-        content: Text(sprintf(AppText.createNewGameDeleteSucceededTextFormat, [boardGameName])),
       ),
     );
   }

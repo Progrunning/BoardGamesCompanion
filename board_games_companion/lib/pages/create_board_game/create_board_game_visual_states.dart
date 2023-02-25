@@ -7,8 +7,6 @@ abstract class CreateBoardGamePageVisualStates with _$CreateBoardGamePageVisualS
   const factory CreateBoardGamePageVisualStates.createGame() = _createGame;
   const factory CreateBoardGamePageVisualStates.editGame() = _editGame;
   const factory CreateBoardGamePageVisualStates.saving() = _saving;
-  const factory CreateBoardGamePageVisualStates.removingFromCollections() =
-      _removingFromCollections;
   const factory CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(
       {required String boardGameName}) = _removingFromCollectionsSucceeded;
   const factory CreateBoardGamePageVisualStates.removingFromCollectionsFailed() =

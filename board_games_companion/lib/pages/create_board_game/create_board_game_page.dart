@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/pages/create_board_game/create_board_game_visual_states.dart';
-import 'package:board_games_companion/pages/home/home_page.dart';
 import 'package:board_games_companion/widgets/common/board_game/collection_flags.dart';
 import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +55,11 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
       final navigatorState = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
       visualState.maybeWhen(
-        removingFromCollectionsSucceeded: (boardGameName) =>
-            navigatorState.popUntil(ModalRoute.withName(HomePage.pageRoute)),
+        removingFromCollectionsSucceeded: (boardGameName) => navigatorState.pop(
+          GameCreationResult.removingFromCollectionsSucceeded(
+            boardGameName: widget.viewModel.boardGame.name,
+          ),
+        ),
         saveSuccess: () => navigatorState.pop(
           GameCreationResult.saveSuccess(
             boardGameId: widget.viewModel.boardGame.id,
@@ -117,8 +119,6 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
                     : AppColors.disabledFloatinActionButtonColor,
                 child: widget.viewModel.visualState.maybeWhen(
                   orElse: () => const Icon(Icons.save),
-                  removingFromCollections: () =>
-                      const CircularProgressIndicator(color: AppColors.primaryColor),
                   saving: () => const CircularProgressIndicator(color: AppColors.primaryColor),
                 ),
               );
@@ -172,11 +172,9 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   Future<void> _saveBoardGame() async {
     if (!widget.viewModel.isInAnyCollection) {
       final shouldRemoveFromCollections = await _showRemoveGameFromAllCollectionsDialog(context);
-      if (shouldRemoveFromCollections ?? false) {
-        await widget.viewModel.removeBoardGame();
+      if (!(shouldRemoveFromCollections ?? false)) {
+        return;
       }
-
-      return;
     }
 
     await widget.viewModel.saveBoardGame();

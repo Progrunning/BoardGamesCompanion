@@ -156,31 +156,36 @@ abstract class _CreateBoardGameViewModel with Store {
         );
       }
       await _boardGamesStore.addOrUpdateBoardGame(boardGame);
-      visualState = const CreateBoardGamePageVisualStates.saveSuccess();
+      visualState = boardGame.isInAnyCollection
+          ? const CreateBoardGamePageVisualStates.saveSuccess()
+          : CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(
+              boardGameName: boardGame.name,
+            );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       visualState = const CreateBoardGamePageVisualStates.saveFailure();
     }
   }
 
-  @action
-  Future<void> removeBoardGame() async {
-    try {
-      visualState = const CreateBoardGamePageVisualStates.removingFromCollections();
+  // TODO Use this when working on permanently removing the games from collection
+  // @action
+  // Future<void> removeBoardGame() async {
+  //   try {
+  //     visualState = const CreateBoardGamePageVisualStates.removingFromCollections();
 
-      await _boardGamesStore.removeBoardGame(boardGame.id);
-      if (boardGame.imageUrl != null) {
-        await _deleteBoardGameImage(boardGame.imageUrl!);
-      }
+  //     await _boardGamesStore.removeBoardGame(boardGame.id);
+  //     if (boardGame.imageUrl != null) {
+  //       await _deleteBoardGameImage(boardGame.imageUrl!);
+  //     }
 
-      visualState = CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(
-        boardGameName: boardGame.name,
-      );
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      visualState = const CreateBoardGamePageVisualStates.removingFromCollectionsFailed();
-    }
-  }
+  //     visualState = CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(
+  //       boardGameName: boardGame.name,
+  //     );
+  //   } catch (e, stack) {
+  //     FirebaseCrashlytics.instance.recordError(e, stack);
+  //     visualState = const CreateBoardGamePageVisualStates.removingFromCollectionsFailed();
+  //   }
+  // }
 
   Future<String?> _saveBoardGameImage() async {
     if (boardGame.imageUrl.isNullOrBlank || _boardGameImageFile == null) {
