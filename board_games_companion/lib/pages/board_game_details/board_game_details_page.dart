@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
+import 'package:board_games_companion/models/results/board_game_creation_result.dart';
 import 'package:board_games_companion/pages/create_board_game/create_board_game_page.dart';
 import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
@@ -120,14 +123,27 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
   }
 
   Future<void> _navigateToCreateBoardGamePage() async {
-    unawaited(
-      Navigator.pushNamed(
-        context,
-        CreateBoardGamePage.pageRoute,
-        arguments: CreateBoardGamePageArguments(
-          boardGameId: widget.viewModel.id,
-          boardGameName: widget.viewModel.name,
-        ),
+    final gameCreationResult = await Navigator.pushNamed<GameCreationResult>(
+      context,
+      CreateBoardGamePage.pageRoute,
+      arguments: CreateBoardGamePageArguments(
+        boardGameId: widget.viewModel.id,
+        boardGameName: widget.viewModel.name,
+      ),
+    );
+
+    gameCreationResult?.maybeWhen(
+      removingFromCollectionsSucceeded: (boardGameName) => _showGameDeletedSnackbar(boardGameName),
+      orElse: () {},
+    );
+  }
+
+  Future<void> _showGameDeletedSnackbar(String boardGameName) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: Dimensions.snackbarMargin,
+        content: Text(sprintf(AppText.createNewGameDeleteSucceededTextFormat, [boardGameName])),
       ),
     );
   }
@@ -606,6 +622,7 @@ class _StatsAndCollections extends StatelessWidget {
           Observer(
             builder: (_) {
               return CollectionFlags(
+                isEditable: !viewModel.isCreatedByUser,
                 isOwned: viewModel.boardGame.isOwned ?? false,
                 isOnWishlist: viewModel.boardGame.isOnWishlist ?? false,
                 isOnFriendsList: viewModel.boardGame.isFriends ?? false,

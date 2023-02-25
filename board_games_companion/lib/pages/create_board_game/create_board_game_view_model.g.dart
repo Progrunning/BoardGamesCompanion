@@ -64,6 +64,19 @@ mixin _$CreateBoardGameViewModel on _CreateBoardGameViewModel, Store {
   int? get minAge => (_$minAgeComputed ??= Computed<int?>(() => super.minAge,
           name: '_CreateBoardGameViewModel.minAge'))
       .value;
+  Computed<bool>? _$isInAnyCollectionComputed;
+
+  @override
+  bool get isInAnyCollection => (_$isInAnyCollectionComputed ??= Computed<bool>(
+          () => super.isInAnyCollection,
+          name: '_CreateBoardGameViewModel.isInAnyCollection'))
+      .value;
+  Computed<bool>? _$hasNameComputed;
+
+  @override
+  bool get hasName => (_$hasNameComputed ??= Computed<bool>(() => super.hasName,
+          name: '_CreateBoardGameViewModel.hasName'))
+      .value;
   Computed<bool>? _$isValidComputed;
 
   @override
@@ -243,6 +256,8 @@ maxPlayers: ${maxPlayers},
 minPlaytime: ${minPlaytime},
 maxPlaytime: ${maxPlaytime},
 minAge: ${minAge},
+isInAnyCollection: ${isInAnyCollection},
+hasName: ${hasName},
 isValid: ${isValid}
     ''';
   }

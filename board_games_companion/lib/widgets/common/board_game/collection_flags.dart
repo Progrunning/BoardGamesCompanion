@@ -6,6 +6,7 @@ import '../collection_toggle_button.dart';
 
 class CollectionFlags extends StatelessWidget {
   const CollectionFlags({
+    required this.isEditable,
     required this.isOwned,
     required this.isOnWishlist,
     required this.isOnFriendsList,
@@ -13,6 +14,7 @@ class CollectionFlags extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  final bool isEditable;
   final bool isOwned;
   final bool isOnWishlist;
   final bool isOnFriendsList;
@@ -36,9 +38,11 @@ class CollectionFlags extends StatelessWidget {
               isSelected: isOnWishlist,
             ),
           ],
-          onPressed: (int index) => onToggleCollection(
-            index == 0 ? CollectionType.friends : CollectionType.wishlist,
-          ),
+          onPressed: (int index) => isEditable
+              ? onToggleCollection(
+                  index == 0 ? CollectionType.friends : CollectionType.wishlist,
+                )
+              : null,
         ),
         ToggleButtons(
           isSelected: [isOwned],
@@ -49,7 +53,7 @@ class CollectionFlags extends StatelessWidget {
               isSelected: isOwned,
             ),
           ],
-          onPressed: (int index) => onToggleCollection(CollectionType.owned),
+          onPressed: (int index) => isEditable ? onToggleCollection(CollectionType.owned) : null,
         ),
       ],
     );

@@ -11,6 +11,7 @@ class AppText {
   static const stop = 'Stop';
   static const save = 'Save';
   static const delete = 'Delete';
+  static const remove = 'Remove';
   static const edit = 'Edit';
   static const ok = 'OK';
   static const navigateAway = 'Navigate away';
@@ -261,4 +262,10 @@ class AppText {
   static const createNewGameSuccessFormat =
       'Game "%s" created successfully and added to your collection';
   static const createNewGameSuccessDetailsActionText = 'Details';
+  static const createNewGameDeleteSucceededTextFormat =
+      'Game "%s" was removed from your collections successfully.';
+  static const createNewGameRemoveFromCollectionConfirmationDialogTitle =
+      'Remove game from collections';
+  static const createNewGameRemoveFromCollectionConfirmationDialogContentFormat =
+      'Removing game %s from all of your collections will effectively remove the game from the app.';
 }

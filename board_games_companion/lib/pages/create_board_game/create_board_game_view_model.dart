@@ -7,6 +7,7 @@ import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/enums/collection_type.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -36,7 +37,7 @@ abstract class _CreateBoardGameViewModel with Store {
   XFile? _boardGameImageFile;
 
   @observable
-  CreateBoardGamePageVisualStates visualState = const CreateBoardGamePageVisualStates.editGame();
+  CreateBoardGamePageVisualStates visualState = const CreateBoardGamePageVisualStates.createGame();
 
   @observable
   BoardGameDetails? _boardGameWorkingCopy;
@@ -80,11 +81,28 @@ abstract class _CreateBoardGameViewModel with Store {
   int? get minAge => boardGame.minAge;
 
   @computed
-  bool get isValid => boardGame.name.isNotEmpty && boardGame.isInAnyCollection;
+  bool get isInAnyCollection => boardGame.isInAnyCollection;
+
+  @computed
+  bool get hasName => boardGame.name.isNotEmpty;
+
+  /// Check if the board game form is valid to save.
+  /// [BoardGameDetails] requires a [name] in create and edit modes.
+  /// In edit mode mode it's allowed to remove the game from all of the collections, effectively deleting it from the app.
+  @computed
+  bool get isValid =>
+      hasName &&
+      (isInAnyCollection || visualState == const CreateBoardGamePageVisualStates.editGame());
+
+  ValueNotifier<bool> isContextMenuOpen = ValueNotifier(false);
 
   @action
-  void setBoardGameId(String id) =>
-      _boardGameWorkingCopy = _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
+  void setBoardGameId(String id) {
+    _boardGameWorkingCopy = _boardGame = _boardGamesStore.allBoardGamesMap[id]!;
+    if (_boardGame != null) {
+      visualState = const CreateBoardGamePageVisualStates.editGame();
+    }
+  }
 
   @action
   void setBoardGameName(String name) => _boardGameWorkingCopy = boardGame.copyWith(name: name);
@@ -138,12 +156,36 @@ abstract class _CreateBoardGameViewModel with Store {
         );
       }
       await _boardGamesStore.addOrUpdateBoardGame(boardGame);
-      visualState = const CreateBoardGamePageVisualStates.saveSuccess();
+      visualState = boardGame.isInAnyCollection
+          ? const CreateBoardGamePageVisualStates.saveSuccess()
+          : CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(
+              boardGameName: boardGame.name,
+            );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
       visualState = const CreateBoardGamePageVisualStates.saveFailure();
     }
   }
+
+  // TODO Use this when working on permanently removing the games from collection
+  // @action
+  // Future<void> removeBoardGame() async {
+  //   try {
+  //     visualState = const CreateBoardGamePageVisualStates.removingFromCollections();
+
+  //     await _boardGamesStore.removeBoardGame(boardGame.id);
+  //     if (boardGame.imageUrl != null) {
+  //       await _deleteBoardGameImage(boardGame.imageUrl!);
+  //     }
+
+  //     visualState = CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(
+  //       boardGameName: boardGame.name,
+  //     );
+  //   } catch (e, stack) {
+  //     FirebaseCrashlytics.instance.recordError(e, stack);
+  //     visualState = const CreateBoardGamePageVisualStates.removingFromCollectionsFailed();
+  //   }
+  // }
 
   Future<String?> _saveBoardGameImage() async {
     if (boardGame.imageUrl.isNullOrBlank || _boardGameImageFile == null) {

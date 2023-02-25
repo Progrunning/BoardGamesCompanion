@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
@@ -53,16 +54,20 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
         (CreateBoardGamePageVisualStates visualState) {
       final navigatorState = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
-      visualState.when(
-        editGame: () {},
+      visualState.maybeWhen(
+        removingFromCollectionsSucceeded: (boardGameName) => navigatorState.pop(
+          GameCreationResult.removingFromCollectionsSucceeded(
+            boardGameName: widget.viewModel.boardGame.name,
+          ),
+        ),
         saveSuccess: () => navigatorState.pop(
-          GameCreationResult.success(
+          GameCreationResult.saveSuccess(
             boardGameId: widget.viewModel.boardGame.id,
             boardGameName: widget.viewModel.boardGame.name,
           ),
         ),
         saveFailure: () => _showSaveFailureSnackbar(messenger),
-        saving: () {},
+        orElse: () {},
       );
     });
   }
@@ -108,14 +113,12 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
           floatingActionButton: Observer(
             builder: (_) {
               return FloatingActionButton(
-                onPressed: widget.viewModel.isValid ? () => _saveBoardGame() : null,
+                onPressed: widget.viewModel.isValid ? () async => _saveBoardGame() : null,
                 backgroundColor: widget.viewModel.isValid
                     ? AppColors.accentColor
                     : AppColors.disabledFloatinActionButtonColor,
-                child: widget.viewModel.visualState.when(
-                  editGame: () => const Icon(Icons.save),
-                  saveSuccess: () => const Icon(Icons.save),
-                  saveFailure: () => const Icon(Icons.save),
+                child: widget.viewModel.visualState.maybeWhen(
+                  orElse: () => const Icon(Icons.save),
                   saving: () => const CircularProgressIndicator(color: AppColors.primaryColor),
                 ),
               );
@@ -167,6 +170,13 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   }
 
   Future<void> _saveBoardGame() async {
+    if (!widget.viewModel.isInAnyCollection) {
+      final shouldRemoveFromCollections = await _showRemoveGameFromAllCollectionsDialog(context);
+      if (!(shouldRemoveFromCollections ?? false)) {
+        return;
+      }
+    }
+
     await widget.viewModel.saveBoardGame();
   }
 
@@ -178,6 +188,40 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
         content: Text(AppText.createNewGameSavingFailedText),
         duration: Duration(seconds: 10),
       ),
+    );
+  }
+
+  Future<bool?> _showRemoveGameFromAllCollectionsDialog(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(AppText.createNewGameRemoveFromCollectionConfirmationDialogTitle),
+          content: Text(
+            sprintf(
+              AppText.createNewGameRemoveFromCollectionConfirmationDialogContentFormat,
+              [
+                widget.viewModel.boardGame.name,
+              ],
+            ),
+          ),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppText.cancel),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text(
+                AppText.remove,
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -535,6 +579,7 @@ class _NameAndCollectionsSection extends StatelessWidget {
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           CollectionFlags(
+            isEditable: true,
             isOwned: boardGame.isOwned ?? false,
             isOnWishlist: boardGame.isOnWishlist ?? false,
             isOnFriendsList: boardGame.isFriends ?? false,

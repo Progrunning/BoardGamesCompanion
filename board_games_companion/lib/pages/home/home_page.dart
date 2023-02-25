@@ -274,14 +274,13 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       arguments: CreateBoardGamePageArguments(boardGameName: boardGameNameNotFound),
     );
 
-    gameCreationResult?.when(
-      success: (boardGameId, boardGameName) => _showGameCreatedSnackbar(
+    gameCreationResult?.maybeWhen(
+      saveSuccess: (boardGameId, boardGameName) => _showGameCreatedSnackbar(
         navigatorState,
         boardGameId,
         boardGameName,
       ),
-      cancelled: () {},
-      failure: () {},
+      orElse: () {},
     );
   }
 

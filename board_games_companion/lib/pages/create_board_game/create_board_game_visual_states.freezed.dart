@@ -18,24 +18,34 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CreateBoardGamePageVisualStates {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -43,24 +53,39 @@ mixin _$CreateBoardGamePageVisualStates {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -84,6 +109,148 @@ class _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
   final CreateBoardGamePageVisualStates _value;
   // ignore: unused_field
   final $Res Function(CreateBoardGamePageVisualStates) _then;
+}
+
+/// @nodoc
+abstract class _$$_createGameCopyWith<$Res> {
+  factory _$$_createGameCopyWith(
+          _$_createGame value, $Res Function(_$_createGame) then) =
+      __$$_createGameCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_createGameCopyWithImpl<$Res>
+    extends _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
+    implements _$$_createGameCopyWith<$Res> {
+  __$$_createGameCopyWithImpl(
+      _$_createGame _value, $Res Function(_$_createGame) _then)
+      : super(_value, (v) => _then(v as _$_createGame));
+
+  @override
+  _$_createGame get _value => super._value as _$_createGame;
+}
+
+/// @nodoc
+
+class _$_createGame implements _createGame {
+  const _$_createGame();
+
+  @override
+  String toString() {
+    return 'CreateBoardGamePageVisualStates.createGame()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_createGame);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
+    required TResult Function() editGame,
+    required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
+    required TResult Function() saveSuccess,
+    required TResult Function() saveFailure,
+  }) {
+    return createGame();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+  }) {
+    return createGame?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (createGame != null) {
+      return createGame();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
+    required TResult Function(_editGame value) editGame,
+    required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_saveFailure value) saveFailure,
+  }) {
+    return createGame(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+  }) {
+    return createGame?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (createGame != null) {
+      return createGame(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _createGame implements CreateBoardGamePageVisualStates {
+  const factory _createGame() = _$_createGame;
 }
 
 /// @nodoc
@@ -127,8 +294,12 @@ class _$_editGame implements _editGame {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -138,8 +309,11 @@ class _$_editGame implements _editGame {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -149,8 +323,11 @@ class _$_editGame implements _editGame {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -164,8 +341,13 @@ class _$_editGame implements _editGame {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -175,8 +357,13 @@ class _$_editGame implements _editGame {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -186,8 +373,13 @@ class _$_editGame implements _editGame {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -242,8 +434,12 @@ class _$_saving implements _saving {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -253,8 +449,11 @@ class _$_saving implements _saving {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -264,8 +463,11 @@ class _$_saving implements _saving {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -279,8 +481,13 @@ class _$_saving implements _saving {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -290,8 +497,13 @@ class _$_saving implements _saving {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -301,8 +513,13 @@ class _$_saving implements _saving {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -316,6 +533,337 @@ class _$_saving implements _saving {
 
 abstract class _saving implements CreateBoardGamePageVisualStates {
   const factory _saving() = _$_saving;
+}
+
+/// @nodoc
+abstract class _$$_removingFromCollectionsSucceededCopyWith<$Res> {
+  factory _$$_removingFromCollectionsSucceededCopyWith(
+          _$_removingFromCollectionsSucceeded value,
+          $Res Function(_$_removingFromCollectionsSucceeded) then) =
+      __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>;
+  $Res call({String boardGameName});
+}
+
+/// @nodoc
+class __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>
+    extends _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
+    implements _$$_removingFromCollectionsSucceededCopyWith<$Res> {
+  __$$_removingFromCollectionsSucceededCopyWithImpl(
+      _$_removingFromCollectionsSucceeded _value,
+      $Res Function(_$_removingFromCollectionsSucceeded) _then)
+      : super(_value, (v) => _then(v as _$_removingFromCollectionsSucceeded));
+
+  @override
+  _$_removingFromCollectionsSucceeded get _value =>
+      super._value as _$_removingFromCollectionsSucceeded;
+
+  @override
+  $Res call({
+    Object? boardGameName = freezed,
+  }) {
+    return _then(_$_removingFromCollectionsSucceeded(
+      boardGameName: boardGameName == freezed
+          ? _value.boardGameName
+          : boardGameName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_removingFromCollectionsSucceeded
+    implements _removingFromCollectionsSucceeded {
+  const _$_removingFromCollectionsSucceeded({required this.boardGameName});
+
+  @override
+  final String boardGameName;
+
+  @override
+  String toString() {
+    return 'CreateBoardGamePageVisualStates.removingFromCollectionsSucceeded(boardGameName: $boardGameName)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_removingFromCollectionsSucceeded &&
+            const DeepCollectionEquality()
+                .equals(other.boardGameName, boardGameName));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(boardGameName));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_removingFromCollectionsSucceededCopyWith<
+          _$_removingFromCollectionsSucceeded>
+      get copyWith => __$$_removingFromCollectionsSucceededCopyWithImpl<
+          _$_removingFromCollectionsSucceeded>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
+    required TResult Function() editGame,
+    required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
+    required TResult Function() saveSuccess,
+    required TResult Function() saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded(boardGameName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded?.call(boardGameName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (removingFromCollectionsSucceeded != null) {
+      return removingFromCollectionsSucceeded(boardGameName);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
+    required TResult Function(_editGame value) editGame,
+    required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_saveFailure value) saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+  }) {
+    return removingFromCollectionsSucceeded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (removingFromCollectionsSucceeded != null) {
+      return removingFromCollectionsSucceeded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _removingFromCollectionsSucceeded
+    implements CreateBoardGamePageVisualStates {
+  const factory _removingFromCollectionsSucceeded(
+          {required final String boardGameName}) =
+      _$_removingFromCollectionsSucceeded;
+
+  String get boardGameName;
+  @JsonKey(ignore: true)
+  _$$_removingFromCollectionsSucceededCopyWith<
+          _$_removingFromCollectionsSucceeded>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_removingFromCollectionsFailedCopyWith<$Res> {
+  factory _$$_removingFromCollectionsFailedCopyWith(
+          _$_removingFromCollectionsFailed value,
+          $Res Function(_$_removingFromCollectionsFailed) then) =
+      __$$_removingFromCollectionsFailedCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_removingFromCollectionsFailedCopyWithImpl<$Res>
+    extends _$CreateBoardGamePageVisualStatesCopyWithImpl<$Res>
+    implements _$$_removingFromCollectionsFailedCopyWith<$Res> {
+  __$$_removingFromCollectionsFailedCopyWithImpl(
+      _$_removingFromCollectionsFailed _value,
+      $Res Function(_$_removingFromCollectionsFailed) _then)
+      : super(_value, (v) => _then(v as _$_removingFromCollectionsFailed));
+
+  @override
+  _$_removingFromCollectionsFailed get _value =>
+      super._value as _$_removingFromCollectionsFailed;
+}
+
+/// @nodoc
+
+class _$_removingFromCollectionsFailed
+    implements _removingFromCollectionsFailed {
+  const _$_removingFromCollectionsFailed();
+
+  @override
+  String toString() {
+    return 'CreateBoardGamePageVisualStates.removingFromCollectionsFailed()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_removingFromCollectionsFailed);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
+    required TResult Function() editGame,
+    required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
+    required TResult Function() saveSuccess,
+    required TResult Function() saveFailure,
+  }) {
+    return removingFromCollectionsFailed();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+  }) {
+    return removingFromCollectionsFailed?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
+    TResult Function()? editGame,
+    TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
+    TResult Function()? saveSuccess,
+    TResult Function()? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (removingFromCollectionsFailed != null) {
+      return removingFromCollectionsFailed();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
+    required TResult Function(_editGame value) editGame,
+    required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
+    required TResult Function(_saveSuccess value) saveSuccess,
+    required TResult Function(_saveFailure value) saveFailure,
+  }) {
+    return removingFromCollectionsFailed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+  }) {
+    return removingFromCollectionsFailed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
+    TResult Function(_editGame value)? editGame,
+    TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
+    TResult Function(_saveSuccess value)? saveSuccess,
+    TResult Function(_saveFailure value)? saveFailure,
+    required TResult orElse(),
+  }) {
+    if (removingFromCollectionsFailed != null) {
+      return removingFromCollectionsFailed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _removingFromCollectionsFailed
+    implements CreateBoardGamePageVisualStates {
+  const factory _removingFromCollectionsFailed() =
+      _$_removingFromCollectionsFailed;
 }
 
 /// @nodoc
@@ -359,8 +907,12 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -370,8 +922,11 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -381,8 +936,11 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -396,8 +954,13 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -407,8 +970,13 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -418,8 +986,13 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
@@ -476,8 +1049,12 @@ class _$_saveFailure implements _saveFailure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() createGame,
     required TResult Function() editGame,
     required TResult Function() saving,
+    required TResult Function(String boardGameName)
+        removingFromCollectionsSucceeded,
+    required TResult Function() removingFromCollectionsFailed,
     required TResult Function() saveSuccess,
     required TResult Function() saveFailure,
   }) {
@@ -487,8 +1064,11 @@ class _$_saveFailure implements _saveFailure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
   }) {
@@ -498,8 +1078,11 @@ class _$_saveFailure implements _saveFailure {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? createGame,
     TResult Function()? editGame,
     TResult Function()? saving,
+    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult Function()? removingFromCollectionsFailed,
     TResult Function()? saveSuccess,
     TResult Function()? saveFailure,
     required TResult orElse(),
@@ -513,8 +1096,13 @@ class _$_saveFailure implements _saveFailure {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(_createGame value) createGame,
     required TResult Function(_editGame value) editGame,
     required TResult Function(_saving value) saving,
+    required TResult Function(_removingFromCollectionsSucceeded value)
+        removingFromCollectionsSucceeded,
+    required TResult Function(_removingFromCollectionsFailed value)
+        removingFromCollectionsFailed,
     required TResult Function(_saveSuccess value) saveSuccess,
     required TResult Function(_saveFailure value) saveFailure,
   }) {
@@ -524,8 +1112,13 @@ class _$_saveFailure implements _saveFailure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
   }) {
@@ -535,8 +1128,13 @@ class _$_saveFailure implements _saveFailure {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(_createGame value)? createGame,
     TResult Function(_editGame value)? editGame,
     TResult Function(_saving value)? saving,
+    TResult Function(_removingFromCollectionsSucceeded value)?
+        removingFromCollectionsSucceeded,
+    TResult Function(_removingFromCollectionsFailed value)?
+        removingFromCollectionsFailed,
     TResult Function(_saveSuccess value)? saveSuccess,
     TResult Function(_saveFailure value)? saveFailure,
     required TResult orElse(),
