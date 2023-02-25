@@ -134,10 +134,10 @@ abstract class _PlaysViewModel with Store {
   bool get hasAnyBoardGamesToShuffle => shuffledBoardGames.isNotEmpty;
 
   @computed
-  int get minNumberOfPlayers => shuffledBoardGames.minNumberOfPlayers;
+  int get minNumberOfPlayers => _shuffledBoardGames.minNumberOfPlayers;
 
   @computed
-  int get maxNumberOfPlayers => shuffledBoardGames.maxNumberOfPlayers;
+  int get maxNumberOfPlayers => _shuffledBoardGames.maxNumberOfPlayers;
 
   @computed
   List<BoardGameDetails> get shuffledBoardGames {
@@ -153,14 +153,12 @@ abstract class _PlaysViewModel with Store {
       filteredShuffledBoardGames.removeWhere((boardGame) => boardGame.isExpansion ?? false);
     }
 
-    // TODO Need to change this logic becuase currently when the slider changes (e.g. show 5+)
-    //      The number collection of games changes and it changes the slider
     gameSpinnerFilters.numberOfPlayersFilter.maybeWhen(
-      orElse: () {},
       singlePlayerOnly: () => filteredShuffledBoardGames
           .removeWhere((boardGame) => boardGame.minPlayers == null || boardGame.minPlayers! > 1),
       moreThan: (numberOfPlayers) => filteredShuffledBoardGames.removeWhere(
           (boardGame) => boardGame.maxPlayers == null || boardGame.maxPlayers! < numberOfPlayers),
+      orElse: () {},
     );
 
     return filteredShuffledBoardGames;
@@ -204,12 +202,10 @@ abstract class _PlaysViewModel with Store {
         gameSpinnerFilters.collections.length > 1) {
       gameSpinnerFilters = gameSpinnerFilters.copyWith(
         collections: Set.from(gameSpinnerFilters.collections)..remove(collectionTypeToggled),
-        numberOfPlayersFilter: const NumberOfPlayersFilter.any(),
       );
     } else {
       gameSpinnerFilters = gameSpinnerFilters.copyWith(
         collections: Set.from(gameSpinnerFilters.collections)..add(collectionTypeToggled),
-        numberOfPlayersFilter: const NumberOfPlayersFilter.any(),
       );
     }
 
@@ -220,7 +216,6 @@ abstract class _PlaysViewModel with Store {
   void toggleIncludeExpansionsFilter(bool? includeExpansions) {
     gameSpinnerFilters = gameSpinnerFilters.copyWith(
       includeExpansions: includeExpansions ?? false,
-      numberOfPlayersFilter: const NumberOfPlayersFilter.any(),
     );
 
     visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
@@ -248,7 +243,10 @@ abstract class _PlaysViewModel with Store {
     await _playersStore.loadPlayers();
     await _playthroughsStore.loadPlaythroughs();
 
-    _shuffledBoardGames = _boardGamesStore.allBoardGames..shuffle();
+    _shuffledBoardGames = _boardGamesStore.allBoardGames
+        .where((boardGame) => (boardGame.isOwned ?? false) || (boardGame.isFriends ?? false))
+        .toList()
+      ..shuffle();
     _setupGameSpinnerFilters();
     visualState = PlaysPageVisualState.history(
       PlaysTab.history,

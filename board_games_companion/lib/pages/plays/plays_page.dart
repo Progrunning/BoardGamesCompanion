@@ -323,14 +323,18 @@ class _PlayersFilter extends StatelessWidget {
   late double sliderMinValue;
   late double sliderMaxValue;
   late double sliderAnyNumberValue;
-  late double sliderSinglePlayerOnlyValue;
+  late double? sliderSinglePlayerOnlyValue;
   late double sliderValue;
   late int sliderDivisions;
+  late bool hasSoloGames;
 
   @override
   Widget build(BuildContext context) {
-    sliderMinValue = minNumberOfPlayers - 2;
-    sliderSinglePlayerOnlyValue = sliderMinValue + 1;
+    hasSoloGames = minNumberOfPlayers == 1;
+    sliderMinValue = hasSoloGames ? minNumberOfPlayers - 2 : minNumberOfPlayers - 1;
+    if (hasSoloGames) {
+      sliderSinglePlayerOnlyValue = sliderMinValue + 1;
+    }
     sliderAnyNumberValue = sliderMinValue;
     sliderMaxValue = maxNumberOfPlayers.toDouble();
     sliderDivisions = (sliderMaxValue - sliderMinValue).toInt();
@@ -368,7 +372,7 @@ class _PlayersFilter extends StatelessWidget {
   double _getSliderValue() {
     return numberOfPlayersFilter.when(
       any: () => sliderAnyNumberValue,
-      singlePlayerOnly: () => sliderSinglePlayerOnlyValue,
+      singlePlayerOnly: () => sliderSinglePlayerOnlyValue ?? 0,
       moreThan: (numberOfPlayers) => numberOfPlayers.toDouble(),
     );
   }
@@ -377,7 +381,7 @@ class _PlayersFilter extends StatelessWidget {
     late NumberOfPlayersFilter numberOfPlayersFilter;
     if (value == sliderAnyNumberValue) {
       numberOfPlayersFilter = const NumberOfPlayersFilter.any();
-    } else if (value == sliderSinglePlayerOnlyValue) {
+    } else if (hasSoloGames && value == sliderSinglePlayerOnlyValue) {
       numberOfPlayersFilter = const NumberOfPlayersFilter.singlePlayerOnly();
     } else {
       numberOfPlayersFilter = NumberOfPlayersFilter.moreThan(moreThanNumberOfPlayers: value);
