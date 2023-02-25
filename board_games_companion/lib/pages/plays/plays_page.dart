@@ -175,10 +175,15 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                     builder: (_) {
                                       return _GameSpinnerFilters(
                                         gameSpinnerFilters: widget.viewModel.gameSpinnerFilters,
+                                        minNumberOfPlayers: widget.viewModel.minNumberOfPlayers,
+                                        maxNumberOfPlayers: widget.viewModel.maxNumberOfPlayers,
                                         onCollectionToggled: (collectionTyp) => widget.viewModel
                                             .toggleGameSpinnerCollectionFilter(collectionTyp),
                                         onIncludeExpansionsToggled: (isChecked) => widget.viewModel
                                             .toggleIncludeExpansionsFilter(isChecked),
+                                        onNumberOfPlayersChanged: (numberOfPlayers) => widget
+                                            .viewModel
+                                            .updateNumberOfPlayersNumber(numberOfPlayers),
                                       );
                                     },
                                   ),
@@ -221,14 +226,20 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
 class _GameSpinnerFilters extends StatelessWidget {
   const _GameSpinnerFilters({
     required this.gameSpinnerFilters,
+    required this.minNumberOfPlayers,
+    required this.maxNumberOfPlayers,
     required this.onCollectionToggled,
     required this.onIncludeExpansionsToggled,
+    required this.onNumberOfPlayersChanged,
     Key? key,
   }) : super(key: key);
 
   final GameSpinnerFilters gameSpinnerFilters;
+  final int minNumberOfPlayers;
+  final int maxNumberOfPlayers;
   final void Function(CollectionType collectionTyp) onCollectionToggled;
   final void Function(bool? isChecked) onIncludeExpansionsToggled;
+  final void Function(NumberOfPlayersFilter numberOfPlayersFilter) onNumberOfPlayersChanged;
 
   static const Map<int, CollectionType> collectionsMap = <int, CollectionType>{
     0: CollectionType.owned,
@@ -246,7 +257,7 @@ class _GameSpinnerFilters extends StatelessWidget {
                   AppText.playsPageGameSpinnerCollectionsFilter,
                   style: AppTheme.theme.textTheme.bodyMedium,
                 ),
-                const Expanded(child: SizedBox.shrink()),
+                const Spacer(),
                 ToggleButtons(
                   isSelected: [
                     gameSpinnerFilters.hasOwnedCollection,
@@ -275,17 +286,105 @@ class _GameSpinnerFilters extends StatelessWidget {
                   AppText.playsPageGameSpinnerExpansionsFilter,
                   style: AppTheme.theme.textTheme.bodyMedium,
                 ),
-                const Expanded(child: SizedBox.shrink()),
+                const Spacer(),
                 BgcCheckbox(
                   isChecked: gameSpinnerFilters.includeExpansions,
                   onChanged: (isChecked) => onIncludeExpansionsToggled(isChecked),
                   borderColor: AppColors.accentColor,
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _PlayersFilter(
+              numberOfPlayersFilter: gameSpinnerFilters.numberOfPlayersFilter,
+              minNumberOfPlayers: minNumberOfPlayers,
+              maxNumberOfPlayers: maxNumberOfPlayers,
+              onChanged: (numberOfPlayers) => onNumberOfPlayersChanged(numberOfPlayers),
+            ),
           ],
         ),
       );
+}
+
+class _PlayersFilter extends StatelessWidget {
+  _PlayersFilter({
+    Key? key,
+    required this.numberOfPlayersFilter,
+    required this.minNumberOfPlayers,
+    required this.maxNumberOfPlayers,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final NumberOfPlayersFilter numberOfPlayersFilter;
+  final int minNumberOfPlayers;
+  final int maxNumberOfPlayers;
+  final void Function(NumberOfPlayersFilter numberOfPlayersFilter) onChanged;
+
+  late double sliderMinValue;
+  late double sliderMaxValue;
+  late double sliderAnyNumberValue;
+  late double sliderSinglePlayerOnlyValue;
+  late double sliderValue;
+  late int sliderDivisions;
+
+  @override
+  Widget build(BuildContext context) {
+    sliderMinValue = minNumberOfPlayers - 2;
+    sliderSinglePlayerOnlyValue = sliderMinValue + 1;
+    sliderAnyNumberValue = sliderMinValue;
+    sliderMaxValue = maxNumberOfPlayers.toDouble();
+    sliderDivisions = (sliderMaxValue - sliderMinValue).toInt();
+
+    return Row(
+      children: [
+        Text(
+          AppText.playsPageGameSpinnerNumberOfPlayersFilter,
+          style: AppTheme.theme.textTheme.bodyMedium,
+        ),
+        const SizedBox(width: Dimensions.standardSpacing),
+        Expanded(
+          child: Slider(
+            value: _getSliderValue(),
+            min: sliderMinValue,
+            divisions: sliderDivisions,
+            max: sliderMaxValue,
+            label: _formatSliderLabelText(),
+            onChanged: (value) => _handleOnChanged(value.round()),
+            activeColor: AppColors.accentColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatSliderLabelText() {
+    return numberOfPlayersFilter.when(
+      any: () => AppText.gameFiltersAnyNumberOfPlayers,
+      singlePlayerOnly: () => AppText.gameFiltersSinglePlayerOnly,
+      moreThan: (numberOfPlayers) => '$numberOfPlayers+',
+    );
+  }
+
+  double _getSliderValue() {
+    return numberOfPlayersFilter.when(
+      any: () => sliderAnyNumberValue,
+      singlePlayerOnly: () => sliderSinglePlayerOnlyValue,
+      moreThan: (numberOfPlayers) => numberOfPlayers.toDouble(),
+    );
+  }
+
+  void _handleOnChanged(int value) {
+    late NumberOfPlayersFilter numberOfPlayersFilter;
+    if (value == sliderAnyNumberValue) {
+      numberOfPlayersFilter = const NumberOfPlayersFilter.any();
+    } else if (value == sliderSinglePlayerOnlyValue) {
+      numberOfPlayersFilter = const NumberOfPlayersFilter.singlePlayerOnly();
+    } else {
+      numberOfPlayersFilter = NumberOfPlayersFilter.moreThan(moreThanNumberOfPlayers: value);
+    }
+
+    onChanged(numberOfPlayersFilter);
+  }
 }
 
 class _GameSpinnerSliver extends StatefulWidget {

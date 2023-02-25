@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:async';
-import 'dart:math';
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/sort_by.dart';
@@ -15,7 +14,6 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../common/constants.dart';
 import '../../common/enums/games_tab.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/hive/board_game_details.dart';
@@ -112,13 +110,7 @@ abstract class _CollectionsViewModel with Store {
   bool get anyBoardGames => _boardGamesStore.allBoardGames.isNotEmpty;
 
   @computed
-  double get minNumberOfPlayers => max(
-          allBoardGames
-              .where((boardGameDetails) => boardGameDetails.minPlayers != null)
-              .map((boardGameDetails) => boardGameDetails.minPlayers!)
-              .reduce(min),
-          Constants.minNumberOfPlayers)
-      .toDouble();
+  double get minNumberOfPlayers => allBoardGames.minNumberOfPlayers.toDouble();
 
   // MK Saved filter by number of players number might be larger than current MAX of players
   //    because a game in a different collection might have higher MAX players count
@@ -129,13 +121,7 @@ abstract class _CollectionsViewModel with Store {
   String get numberOfPlayersSliderValue => filterByNumberOfPlayers.toSliderValue();
 
   @computed
-  double get maxNumberOfPlayers => min(
-          allBoardGames
-              .where((boardGameDetails) => boardGameDetails.maxPlayers != null)
-              .map((boardGameDetails) => boardGameDetails.maxPlayers!)
-              .reduce(max),
-          Constants.maxNumberOfPlayers)
-      .toDouble();
+  double get maxNumberOfPlayers => allBoardGames.maxNumberOfPlayers.toDouble();
 
   @computed
   List<BoardGameDetails> get allBoardGames => _boardGamesStore.allBoardGamesInCollections;

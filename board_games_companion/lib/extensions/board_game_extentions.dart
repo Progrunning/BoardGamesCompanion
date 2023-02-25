@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import '../common/constants.dart';
 import '../common/enums/collection_type.dart';
 import '../common/enums/order_by.dart';
 import '../common/enums/sort_by_option.dart';
@@ -52,35 +55,51 @@ extension BoardGameDetailsListExtensions on List<BoardGameDetails> {
       return;
     }
 
-    sort((boardGame, otherBoardGame) {
-      if (sortBy.orderBy == OrderBy.Descending) {
-        final buffer = boardGame;
-        boardGame = otherBoardGame;
-        otherBoardGame = buffer;
-      }
+    sort(
+      (boardGame, otherBoardGame) {
+        if (sortBy.orderBy == OrderBy.Descending) {
+          final buffer = boardGame;
+          boardGame = otherBoardGame;
+          otherBoardGame = buffer;
+        }
 
-      switch (sortBy.sortByOption) {
-        case SortByOption.Name:
-          return boardGame.name.safeCompareTo(otherBoardGame.name);
-        case SortByOption.YearPublished:
-          return boardGame.yearPublished.safeCompareTo(otherBoardGame.yearPublished);
-        case SortByOption.LastUpdated:
-          return boardGame.lastModified.safeCompareTo(otherBoardGame.lastModified);
-        case SortByOption.Rank:
-          return boardGame.rank.safeCompareTo(otherBoardGame.rank);
-        case SortByOption.NumberOfPlayers:
-          if (sortBy.orderBy == OrderBy.Descending) {
-            return otherBoardGame.maxPlayers.safeCompareTo(boardGame.maxPlayers);
-          }
+        switch (sortBy.sortByOption) {
+          case SortByOption.Name:
+            return boardGame.name.safeCompareTo(otherBoardGame.name);
+          case SortByOption.YearPublished:
+            return boardGame.yearPublished.safeCompareTo(otherBoardGame.yearPublished);
+          case SortByOption.LastUpdated:
+            return boardGame.lastModified.safeCompareTo(otherBoardGame.lastModified);
+          case SortByOption.Rank:
+            return boardGame.rank.safeCompareTo(otherBoardGame.rank);
+          case SortByOption.NumberOfPlayers:
+            if (sortBy.orderBy == OrderBy.Descending) {
+              return otherBoardGame.maxPlayers.safeCompareTo(boardGame.maxPlayers);
+            }
 
-          return boardGame.minPlayers.safeCompareTo(otherBoardGame.maxPlayers);
-        case SortByOption.Playtime:
-          return boardGame.maxPlaytime.safeCompareTo(otherBoardGame.maxPlaytime);
-        case SortByOption.Rating:
-          return otherBoardGame.rating.safeCompareTo(boardGame.rating);
-        default:
-          return boardGame.lastModified.safeCompareTo(otherBoardGame.lastModified);
-      }
-    });
+            return boardGame.minPlayers.safeCompareTo(otherBoardGame.maxPlayers);
+          case SortByOption.Playtime:
+            return boardGame.maxPlaytime.safeCompareTo(otherBoardGame.maxPlaytime);
+          case SortByOption.Rating:
+            return otherBoardGame.rating.safeCompareTo(boardGame.rating);
+          default:
+            return boardGame.lastModified.safeCompareTo(otherBoardGame.lastModified);
+        }
+      },
+    );
   }
+
+  int get maxNumberOfPlayers => min(
+        where((boardGameDetails) => boardGameDetails.maxPlayers != null)
+            .map((boardGameDetails) => boardGameDetails.maxPlayers!)
+            .reduce(max),
+        Constants.maxNumberOfPlayers,
+      );
+
+  int get minNumberOfPlayers => max(
+        where((boardGameDetails) => boardGameDetails.minPlayers != null)
+            .map((boardGameDetails) => boardGameDetails.minPlayers!)
+            .reduce(min),
+        Constants.minNumberOfPlayers,
+      );
 }
