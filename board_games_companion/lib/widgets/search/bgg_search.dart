@@ -33,6 +33,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
     required this.searchResultsStream,
     required this.onSortyByUpdate,
     required this.onQueryChanged,
+    required this.onRefresh,
   });
 
   static const int _maxSearchHistoryEntriesToShow = 10;
@@ -43,6 +44,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
   final BoardGameResultAction onResultAction;
   final void Function(SortBy) onSortyByUpdate;
   final void Function(String) onQueryChanged;
+  final VoidCallback onRefresh;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
@@ -91,14 +93,13 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
             case ConnectionState.active:
             case ConnectionState.done:
               if (snapshot.hasError) {
-                return _SearchError(onRetry: () => query = query);
+                return const _SearchError();
               }
 
               final foundGames = snapshot.data;
               if (foundGames?.isEmpty ?? true) {
                 return _NoSearchResults(
                   query: query,
-                  onRetry: () => query = query,
                   onCreateGame: () =>
                       close(context, BggSearchResult.createGame(boardGameName: query)),
                 );
@@ -185,7 +186,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
     );
 
     return suggestions;
-  }  
+  }
 }
 
 class _SearchFilters extends StatelessWidget {
@@ -336,12 +337,7 @@ class _SearchResultGameDetails extends StatelessWidget {
 }
 
 class _SearchError extends StatelessWidget {
-  const _SearchError({
-    Key? key,
-    required this.onRetry,
-  }) : super(key: key);
-
-  final VoidCallback onRetry;
+  const _SearchError({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -352,17 +348,17 @@ class _SearchError extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
-          const Center(
+        children: const <Widget>[
+          SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+          Center(
             child: Icon(
               FontAwesomeIcons.faceSadTear,
               size: Dimensions.emptyPageTitleIconSize,
               color: AppColors.primaryColor,
             ),
           ),
-          const SizedBox(height: Dimensions.doubleStandardSpacing),
-          const Text.rich(
+          SizedBox(height: Dimensions.doubleStandardSpacing),
+          Text.rich(
             TextSpan(
               children: [
                 TextSpan(
@@ -372,17 +368,7 @@ class _SearchError extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: Dimensions.doubleStandardSpacing),
-          Row(
-            children: [
-              const Spacer(),
-              ElevatedIconButton(
-                title: AppText.searchBoardGamesSearchRetry,
-                icon: const DefaultIcon(Icons.refresh),
-                onPressed: () => onRetry(),
-              ),
-            ],
-          ),
+          SizedBox(height: Dimensions.doubleStandardSpacing),
         ],
       ),
     );
@@ -393,12 +379,10 @@ class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({
     Key? key,
     required this.query,
-    required this.onRetry,
     required this.onCreateGame,
   }) : super(key: key);
 
   final String query;
-  final VoidCallback onRetry;
   final VoidCallback onCreateGame;
 
   @override
