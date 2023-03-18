@@ -1072,10 +1072,7 @@ class _FilterPlaytime extends FilterToggleButton<PlaytimeFilter> {
           onTapped: (_) => onSelected(playtimeFilter),
           child: Center(
             child: Text(
-              playtimeFilter.when(
-                any: () => 'Any',
-                lessThan: (playtimeInMinutes) => '<${playtimeInMinutes.toStringAsFixed(0)}min',
-              ),
+              playtimeFilter.toFormattedText(),
               style: TextStyle(
                 color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
               ),

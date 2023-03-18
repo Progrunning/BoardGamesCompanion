@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../common/enums/collection_type.dart';
 
+export '../../extensions/playtime_filter_extensions.dart';
+
 part 'game_spinner_filters.freezed.dart';
 
 @freezed
