@@ -199,12 +199,23 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   }
 
   @override
-  void updateNumberOfPlayersNumber(
+  void updateNumberOfPlayersNumberFilter(
       NumberOfPlayersFilter numberOfPlayersFilter) {
     final _$actionInfo = _$_PlaysViewModelActionController.startAction(
-        name: '_PlaysViewModel.updateNumberOfPlayersNumber');
+        name: '_PlaysViewModel.updateNumberOfPlayersNumberFilter');
     try {
-      return super.updateNumberOfPlayersNumber(numberOfPlayersFilter);
+      return super.updateNumberOfPlayersNumberFilter(numberOfPlayersFilter);
+    } finally {
+      _$_PlaysViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updatePlaytimeFilter(PlaytimeFilter playtimeFilter) {
+    final _$actionInfo = _$_PlaysViewModelActionController.startAction(
+        name: '_PlaysViewModel.updatePlaytimeFilter');
+    try {
+      return super.updatePlaytimeFilter(playtimeFilter);
     } finally {
       _$_PlaysViewModelActionController.endAction(_$actionInfo);
     }

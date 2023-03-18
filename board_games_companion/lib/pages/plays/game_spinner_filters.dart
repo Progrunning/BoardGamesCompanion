@@ -10,6 +10,7 @@ class GameSpinnerFilters with _$GameSpinnerFilters {
     required Set<CollectionType> collections,
     required bool includeExpansions,
     @Default(NumberOfPlayersFilter.any()) NumberOfPlayersFilter numberOfPlayersFilter,
+    @Default(PlaytimeFilter.any()) PlaytimeFilter playtimeFilter,
   }) = _GameSpinnerFilters;
 
   const GameSpinnerFilters._();
@@ -21,7 +22,13 @@ class GameSpinnerFilters with _$GameSpinnerFilters {
 
 @freezed
 class NumberOfPlayersFilter with _$NumberOfPlayersFilter {
-  const factory NumberOfPlayersFilter.any() = _any;
+  const factory NumberOfPlayersFilter.any() = _numberOfPlayersAny;
   const factory NumberOfPlayersFilter.singlePlayerOnly() = _singlePlayerOnly;
   const factory NumberOfPlayersFilter.moreThan({required int moreThanNumberOfPlayers}) = _moreThan;
+}
+
+@freezed
+class PlaytimeFilter with _$PlaytimeFilter {
+  const factory PlaytimeFilter.any() = _playtimeAny;
+  const factory PlaytimeFilter.lessThan({required int playtimeInMinutes}) = _lessThan;
 }

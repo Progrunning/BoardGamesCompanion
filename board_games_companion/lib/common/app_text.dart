@@ -232,6 +232,7 @@ class AppText {
   static const playsPageGameSpinnerCollectionsFilter = 'Collections';
   static const playsPageGameSpinnerExpansionsFilter = 'Include expansions?';
   static const playsPageGameSpinnerNumberOfPlayersFilter = 'Players';
+  static const playsPageGameSpinnerPlaytimeFilter = 'Playtime';
   static const playsPageGameSpinnerSpinButtonText = 'Spin';
   static const playsPageGameSpinnerSelectedGamePlayButtonText = 'Play';
   static const playsPageGameSpinnerSelectedGameSpinAgainButtonText = 'Spin Again';

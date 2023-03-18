@@ -20,6 +20,7 @@ mixin _$GameSpinnerFilters {
   bool get includeExpansions => throw _privateConstructorUsedError;
   NumberOfPlayersFilter get numberOfPlayersFilter =>
       throw _privateConstructorUsedError;
+  PlaytimeFilter get playtimeFilter => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameSpinnerFiltersCopyWith<GameSpinnerFilters> get copyWith =>
@@ -34,9 +35,11 @@ abstract class $GameSpinnerFiltersCopyWith<$Res> {
   $Res call(
       {Set<CollectionType> collections,
       bool includeExpansions,
-      NumberOfPlayersFilter numberOfPlayersFilter});
+      NumberOfPlayersFilter numberOfPlayersFilter,
+      PlaytimeFilter playtimeFilter});
 
   $NumberOfPlayersFilterCopyWith<$Res> get numberOfPlayersFilter;
+  $PlaytimeFilterCopyWith<$Res> get playtimeFilter;
 }
 
 /// @nodoc
@@ -53,6 +56,7 @@ class _$GameSpinnerFiltersCopyWithImpl<$Res>
     Object? collections = freezed,
     Object? includeExpansions = freezed,
     Object? numberOfPlayersFilter = freezed,
+    Object? playtimeFilter = freezed,
   }) {
     return _then(_value.copyWith(
       collections: collections == freezed
@@ -67,6 +71,10 @@ class _$GameSpinnerFiltersCopyWithImpl<$Res>
           ? _value.numberOfPlayersFilter
           : numberOfPlayersFilter // ignore: cast_nullable_to_non_nullable
               as NumberOfPlayersFilter,
+      playtimeFilter: playtimeFilter == freezed
+          ? _value.playtimeFilter
+          : playtimeFilter // ignore: cast_nullable_to_non_nullable
+              as PlaytimeFilter,
     ));
   }
 
@@ -75,6 +83,13 @@ class _$GameSpinnerFiltersCopyWithImpl<$Res>
     return $NumberOfPlayersFilterCopyWith<$Res>(_value.numberOfPlayersFilter,
         (value) {
       return _then(_value.copyWith(numberOfPlayersFilter: value));
+    });
+  }
+
+  @override
+  $PlaytimeFilterCopyWith<$Res> get playtimeFilter {
+    return $PlaytimeFilterCopyWith<$Res>(_value.playtimeFilter, (value) {
+      return _then(_value.copyWith(playtimeFilter: value));
     });
   }
 }
@@ -89,10 +104,13 @@ abstract class _$$_GameSpinnerFiltersCopyWith<$Res>
   $Res call(
       {Set<CollectionType> collections,
       bool includeExpansions,
-      NumberOfPlayersFilter numberOfPlayersFilter});
+      NumberOfPlayersFilter numberOfPlayersFilter,
+      PlaytimeFilter playtimeFilter});
 
   @override
   $NumberOfPlayersFilterCopyWith<$Res> get numberOfPlayersFilter;
+  @override
+  $PlaytimeFilterCopyWith<$Res> get playtimeFilter;
 }
 
 /// @nodoc
@@ -111,6 +129,7 @@ class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
     Object? collections = freezed,
     Object? includeExpansions = freezed,
     Object? numberOfPlayersFilter = freezed,
+    Object? playtimeFilter = freezed,
   }) {
     return _then(_$_GameSpinnerFilters(
       collections: collections == freezed
@@ -125,6 +144,10 @@ class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
           ? _value.numberOfPlayersFilter
           : numberOfPlayersFilter // ignore: cast_nullable_to_non_nullable
               as NumberOfPlayersFilter,
+      playtimeFilter: playtimeFilter == freezed
+          ? _value.playtimeFilter
+          : playtimeFilter // ignore: cast_nullable_to_non_nullable
+              as PlaytimeFilter,
     ));
   }
 }
@@ -135,7 +158,8 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
   const _$_GameSpinnerFilters(
       {required final Set<CollectionType> collections,
       required this.includeExpansions,
-      this.numberOfPlayersFilter = const NumberOfPlayersFilter.any()})
+      this.numberOfPlayersFilter = const NumberOfPlayersFilter.any(),
+      this.playtimeFilter = const PlaytimeFilter.any()})
       : _collections = collections,
         super._();
 
@@ -151,10 +175,13 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
   @override
   @JsonKey()
   final NumberOfPlayersFilter numberOfPlayersFilter;
+  @override
+  @JsonKey()
+  final PlaytimeFilter playtimeFilter;
 
   @override
   String toString() {
-    return 'GameSpinnerFilters(collections: $collections, includeExpansions: $includeExpansions, numberOfPlayersFilter: $numberOfPlayersFilter)';
+    return 'GameSpinnerFilters(collections: $collections, includeExpansions: $includeExpansions, numberOfPlayersFilter: $numberOfPlayersFilter, playtimeFilter: $playtimeFilter)';
   }
 
   @override
@@ -167,7 +194,9 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
             const DeepCollectionEquality()
                 .equals(other.includeExpansions, includeExpansions) &&
             const DeepCollectionEquality()
-                .equals(other.numberOfPlayersFilter, numberOfPlayersFilter));
+                .equals(other.numberOfPlayersFilter, numberOfPlayersFilter) &&
+            const DeepCollectionEquality()
+                .equals(other.playtimeFilter, playtimeFilter));
   }
 
   @override
@@ -175,7 +204,8 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
       runtimeType,
       const DeepCollectionEquality().hash(_collections),
       const DeepCollectionEquality().hash(includeExpansions),
-      const DeepCollectionEquality().hash(numberOfPlayersFilter));
+      const DeepCollectionEquality().hash(numberOfPlayersFilter),
+      const DeepCollectionEquality().hash(playtimeFilter));
 
   @JsonKey(ignore: true)
   @override
@@ -186,10 +216,10 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
 
 abstract class _GameSpinnerFilters extends GameSpinnerFilters {
   const factory _GameSpinnerFilters(
-          {required final Set<CollectionType> collections,
-          required final bool includeExpansions,
-          final NumberOfPlayersFilter numberOfPlayersFilter}) =
-      _$_GameSpinnerFilters;
+      {required final Set<CollectionType> collections,
+      required final bool includeExpansions,
+      final NumberOfPlayersFilter numberOfPlayersFilter,
+      final PlaytimeFilter playtimeFilter}) = _$_GameSpinnerFilters;
   const _GameSpinnerFilters._() : super._();
 
   @override
@@ -198,6 +228,8 @@ abstract class _GameSpinnerFilters extends GameSpinnerFilters {
   bool get includeExpansions;
   @override
   NumberOfPlayersFilter get numberOfPlayersFilter;
+  @override
+  PlaytimeFilter get playtimeFilter;
   @override
   @JsonKey(ignore: true)
   _$$_GameSpinnerFiltersCopyWith<_$_GameSpinnerFilters> get copyWith =>
@@ -230,21 +262,21 @@ mixin _$NumberOfPlayersFilter {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_any value) any,
+    required TResult Function(_numberOfPlayersAny value) any,
     required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
     required TResult Function(_moreThan value) moreThan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
     required TResult orElse(),
@@ -270,26 +302,28 @@ class _$NumberOfPlayersFilterCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$$_anyCopyWith<$Res> {
-  factory _$$_anyCopyWith(_$_any value, $Res Function(_$_any) then) =
-      __$$_anyCopyWithImpl<$Res>;
+abstract class _$$_numberOfPlayersAnyCopyWith<$Res> {
+  factory _$$_numberOfPlayersAnyCopyWith(_$_numberOfPlayersAny value,
+          $Res Function(_$_numberOfPlayersAny) then) =
+      __$$_numberOfPlayersAnyCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_anyCopyWithImpl<$Res>
+class __$$_numberOfPlayersAnyCopyWithImpl<$Res>
     extends _$NumberOfPlayersFilterCopyWithImpl<$Res>
-    implements _$$_anyCopyWith<$Res> {
-  __$$_anyCopyWithImpl(_$_any _value, $Res Function(_$_any) _then)
-      : super(_value, (v) => _then(v as _$_any));
+    implements _$$_numberOfPlayersAnyCopyWith<$Res> {
+  __$$_numberOfPlayersAnyCopyWithImpl(
+      _$_numberOfPlayersAny _value, $Res Function(_$_numberOfPlayersAny) _then)
+      : super(_value, (v) => _then(v as _$_numberOfPlayersAny));
 
   @override
-  _$_any get _value => super._value as _$_any;
+  _$_numberOfPlayersAny get _value => super._value as _$_numberOfPlayersAny;
 }
 
 /// @nodoc
 
-class _$_any implements _any {
-  const _$_any();
+class _$_numberOfPlayersAny implements _numberOfPlayersAny {
+  const _$_numberOfPlayersAny();
 
   @override
   String toString() {
@@ -299,7 +333,7 @@ class _$_any implements _any {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_any);
+        (other.runtimeType == runtimeType && other is _$_numberOfPlayersAny);
   }
 
   @override
@@ -342,7 +376,7 @@ class _$_any implements _any {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_any value) any,
+    required TResult Function(_numberOfPlayersAny value) any,
     required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
     required TResult Function(_moreThan value) moreThan,
   }) {
@@ -352,7 +386,7 @@ class _$_any implements _any {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
   }) {
@@ -362,7 +396,7 @@ class _$_any implements _any {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
     required TResult orElse(),
@@ -374,8 +408,8 @@ class _$_any implements _any {
   }
 }
 
-abstract class _any implements NumberOfPlayersFilter {
-  const factory _any() = _$_any;
+abstract class _numberOfPlayersAny implements NumberOfPlayersFilter {
+  const factory _numberOfPlayersAny() = _$_numberOfPlayersAny;
 }
 
 /// @nodoc
@@ -453,7 +487,7 @@ class _$_singlePlayerOnly implements _singlePlayerOnly {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_any value) any,
+    required TResult Function(_numberOfPlayersAny value) any,
     required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
     required TResult Function(_moreThan value) moreThan,
   }) {
@@ -463,7 +497,7 @@ class _$_singlePlayerOnly implements _singlePlayerOnly {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
   }) {
@@ -473,7 +507,7 @@ class _$_singlePlayerOnly implements _singlePlayerOnly {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
     required TResult orElse(),
@@ -589,7 +623,7 @@ class _$_moreThan implements _moreThan {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_any value) any,
+    required TResult Function(_numberOfPlayersAny value) any,
     required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
     required TResult Function(_moreThan value) moreThan,
   }) {
@@ -599,7 +633,7 @@ class _$_moreThan implements _moreThan {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
   }) {
@@ -609,7 +643,7 @@ class _$_moreThan implements _moreThan {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_any value)? any,
+    TResult Function(_numberOfPlayersAny value)? any,
     TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
     TResult Function(_moreThan value)? moreThan,
     required TResult orElse(),
@@ -628,5 +662,303 @@ abstract class _moreThan implements NumberOfPlayersFilter {
   int get moreThanNumberOfPlayers;
   @JsonKey(ignore: true)
   _$$_moreThanCopyWith<_$_moreThan> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$PlaytimeFilter {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() any,
+    required TResult Function(int playtimeInMinutes) lessThan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? any,
+    TResult Function(int playtimeInMinutes)? lessThan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? any,
+    TResult Function(int playtimeInMinutes)? lessThan,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_playtimeAny value) any,
+    required TResult Function(_lessThan value) lessThan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_playtimeAny value)? any,
+    TResult Function(_lessThan value)? lessThan,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_playtimeAny value)? any,
+    TResult Function(_lessThan value)? lessThan,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PlaytimeFilterCopyWith<$Res> {
+  factory $PlaytimeFilterCopyWith(
+          PlaytimeFilter value, $Res Function(PlaytimeFilter) then) =
+      _$PlaytimeFilterCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$PlaytimeFilterCopyWithImpl<$Res>
+    implements $PlaytimeFilterCopyWith<$Res> {
+  _$PlaytimeFilterCopyWithImpl(this._value, this._then);
+
+  final PlaytimeFilter _value;
+  // ignore: unused_field
+  final $Res Function(PlaytimeFilter) _then;
+}
+
+/// @nodoc
+abstract class _$$_playtimeAnyCopyWith<$Res> {
+  factory _$$_playtimeAnyCopyWith(
+          _$_playtimeAny value, $Res Function(_$_playtimeAny) then) =
+      __$$_playtimeAnyCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_playtimeAnyCopyWithImpl<$Res>
+    extends _$PlaytimeFilterCopyWithImpl<$Res>
+    implements _$$_playtimeAnyCopyWith<$Res> {
+  __$$_playtimeAnyCopyWithImpl(
+      _$_playtimeAny _value, $Res Function(_$_playtimeAny) _then)
+      : super(_value, (v) => _then(v as _$_playtimeAny));
+
+  @override
+  _$_playtimeAny get _value => super._value as _$_playtimeAny;
+}
+
+/// @nodoc
+
+class _$_playtimeAny implements _playtimeAny {
+  const _$_playtimeAny();
+
+  @override
+  String toString() {
+    return 'PlaytimeFilter.any()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_playtimeAny);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() any,
+    required TResult Function(int playtimeInMinutes) lessThan,
+  }) {
+    return any();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? any,
+    TResult Function(int playtimeInMinutes)? lessThan,
+  }) {
+    return any?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? any,
+    TResult Function(int playtimeInMinutes)? lessThan,
+    required TResult orElse(),
+  }) {
+    if (any != null) {
+      return any();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_playtimeAny value) any,
+    required TResult Function(_lessThan value) lessThan,
+  }) {
+    return any(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_playtimeAny value)? any,
+    TResult Function(_lessThan value)? lessThan,
+  }) {
+    return any?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_playtimeAny value)? any,
+    TResult Function(_lessThan value)? lessThan,
+    required TResult orElse(),
+  }) {
+    if (any != null) {
+      return any(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _playtimeAny implements PlaytimeFilter {
+  const factory _playtimeAny() = _$_playtimeAny;
+}
+
+/// @nodoc
+abstract class _$$_lessThanCopyWith<$Res> {
+  factory _$$_lessThanCopyWith(
+          _$_lessThan value, $Res Function(_$_lessThan) then) =
+      __$$_lessThanCopyWithImpl<$Res>;
+  $Res call({int playtimeInMinutes});
+}
+
+/// @nodoc
+class __$$_lessThanCopyWithImpl<$Res> extends _$PlaytimeFilterCopyWithImpl<$Res>
+    implements _$$_lessThanCopyWith<$Res> {
+  __$$_lessThanCopyWithImpl(
+      _$_lessThan _value, $Res Function(_$_lessThan) _then)
+      : super(_value, (v) => _then(v as _$_lessThan));
+
+  @override
+  _$_lessThan get _value => super._value as _$_lessThan;
+
+  @override
+  $Res call({
+    Object? playtimeInMinutes = freezed,
+  }) {
+    return _then(_$_lessThan(
+      playtimeInMinutes: playtimeInMinutes == freezed
+          ? _value.playtimeInMinutes
+          : playtimeInMinutes // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_lessThan implements _lessThan {
+  const _$_lessThan({required this.playtimeInMinutes});
+
+  @override
+  final int playtimeInMinutes;
+
+  @override
+  String toString() {
+    return 'PlaytimeFilter.lessThan(playtimeInMinutes: $playtimeInMinutes)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_lessThan &&
+            const DeepCollectionEquality()
+                .equals(other.playtimeInMinutes, playtimeInMinutes));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(playtimeInMinutes));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_lessThanCopyWith<_$_lessThan> get copyWith =>
+      __$$_lessThanCopyWithImpl<_$_lessThan>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() any,
+    required TResult Function(int playtimeInMinutes) lessThan,
+  }) {
+    return lessThan(playtimeInMinutes);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? any,
+    TResult Function(int playtimeInMinutes)? lessThan,
+  }) {
+    return lessThan?.call(playtimeInMinutes);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? any,
+    TResult Function(int playtimeInMinutes)? lessThan,
+    required TResult orElse(),
+  }) {
+    if (lessThan != null) {
+      return lessThan(playtimeInMinutes);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_playtimeAny value) any,
+    required TResult Function(_lessThan value) lessThan,
+  }) {
+    return lessThan(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_playtimeAny value)? any,
+    TResult Function(_lessThan value)? lessThan,
+  }) {
+    return lessThan?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_playtimeAny value)? any,
+    TResult Function(_lessThan value)? lessThan,
+    required TResult orElse(),
+  }) {
+    if (lessThan != null) {
+      return lessThan(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _lessThan implements PlaytimeFilter {
+  const factory _lessThan({required final int playtimeInMinutes}) = _$_lessThan;
+
+  int get playtimeInMinutes;
+  @JsonKey(ignore: true)
+  _$$_lessThanCopyWith<_$_lessThan> get copyWith =>
       throw _privateConstructorUsedError;
 }

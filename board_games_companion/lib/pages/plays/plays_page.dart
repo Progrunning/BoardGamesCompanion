@@ -13,6 +13,7 @@ import 'package:board_games_companion/pages/plays/game_spinner_game_selected_dia
 import 'package:board_games_companion/pages/plays/plays_page_visual_states.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:board_games_companion/widgets/common/collection_toggle_button.dart';
+import 'package:board_games_companion/widgets/common/filtering/filter_toggle_buttons_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -34,6 +35,7 @@ import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgc_checkbox.dart';
+import '../../widgets/common/filtering/filter_toggle_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -183,7 +185,9 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                             .toggleIncludeExpansionsFilter(isChecked),
                                         onNumberOfPlayersChanged: (numberOfPlayers) => widget
                                             .viewModel
-                                            .updateNumberOfPlayersNumber(numberOfPlayers),
+                                            .updateNumberOfPlayersNumberFilter(numberOfPlayers),
+                                        onPlaytimeChanged: (playtime) =>
+                                            widget.viewModel.updatePlaytimeFilter(playtime),
                                       );
                                     },
                                   ),
@@ -231,6 +235,7 @@ class _GameSpinnerFilters extends StatelessWidget {
     required this.onCollectionToggled,
     required this.onIncludeExpansionsToggled,
     required this.onNumberOfPlayersChanged,
+    required this.onPlaytimeChanged,
     Key? key,
   }) : super(key: key);
 
@@ -240,6 +245,7 @@ class _GameSpinnerFilters extends StatelessWidget {
   final void Function(CollectionType collectionTyp) onCollectionToggled;
   final void Function(bool? isChecked) onIncludeExpansionsToggled;
   final void Function(NumberOfPlayersFilter numberOfPlayersFilter) onNumberOfPlayersChanged;
+  final void Function(PlaytimeFilter playtimeFilter) onPlaytimeChanged;
 
   static const Map<int, CollectionType> collectionsMap = <int, CollectionType>{
     0: CollectionType.owned,
@@ -301,6 +307,12 @@ class _GameSpinnerFilters extends StatelessWidget {
               maxNumberOfPlayers: maxNumberOfPlayers,
               onChanged: (numberOfPlayers) => onNumberOfPlayersChanged(numberOfPlayers),
             ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _PlaytimeFilter(
+              playtimeFilter: gameSpinnerFilters.playtimeFilter,
+              onChanged: (playtime) => onPlaytimeChanged(playtime),
+            ),
+            const SizedBox(height: Dimensions.bottomTabTopHeight),
           ],
         ),
       );
@@ -389,6 +401,71 @@ class _PlayersFilter extends StatelessWidget {
 
     onChanged(numberOfPlayersFilter);
   }
+}
+
+class _PlaytimeFilter extends StatelessWidget {
+  const _PlaytimeFilter({
+    required this.playtimeFilter,
+    required this.onChanged,
+  });
+
+  final PlaytimeFilter playtimeFilter;
+  final void Function(PlaytimeFilter) onChanged;
+
+  @override
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppText.playsPageGameSpinnerPlaytimeFilter,
+            style: AppTheme.theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          FilterToggleButtonsContainer(
+            height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
+            child: Row(
+              children: [
+                _FilterPlaytime.time(
+                  isSelected: playtimeFilter == const PlaytimeFilter.any(),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.any(),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 120),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 120),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
 }
 
 class _GameSpinnerSliver extends StatefulWidget {
@@ -982,4 +1059,27 @@ class _AppBar extends StatelessWidget {
       ),
     );
   }
+}
+
+class _FilterPlaytime extends FilterToggleButton<PlaytimeFilter> {
+  _FilterPlaytime.time({
+    required bool isSelected,
+    required PlaytimeFilter playtimeFilter,
+    required Function(PlaytimeFilter) onSelected,
+  }) : super(
+          value: playtimeFilter,
+          isSelected: isSelected,
+          onTapped: (_) => onSelected(playtimeFilter),
+          child: Center(
+            child: Text(
+              playtimeFilter.when(
+                any: () => 'Any',
+                lessThan: (playtimeInMinutes) => '<${playtimeInMinutes.toStringAsFixed(0)}min',
+              ),
+              style: TextStyle(
+                color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
+              ),
+            ),
+          ),
+        );
 }

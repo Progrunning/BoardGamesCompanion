@@ -161,6 +161,12 @@ abstract class _PlaysViewModel with Store {
       orElse: () {},
     );
 
+    gameSpinnerFilters.playtimeFilter.maybeWhen(
+      lessThan: (playtimeInMinutes) => filteredShuffledBoardGames.removeWhere((boardGame) =>
+          boardGame.maxPlaytime == null || playtimeInMinutes < boardGame.maxPlaytime!),
+      orElse: () {},
+    );
+
     return filteredShuffledBoardGames;
   }
 
@@ -222,8 +228,15 @@ abstract class _PlaysViewModel with Store {
   }
 
   @action
-  void updateNumberOfPlayersNumber(NumberOfPlayersFilter numberOfPlayersFilter) {
+  void updateNumberOfPlayersNumberFilter(NumberOfPlayersFilter numberOfPlayersFilter) {
     gameSpinnerFilters = gameSpinnerFilters.copyWith(numberOfPlayersFilter: numberOfPlayersFilter);
+
+    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+  }
+
+  @action
+  void updatePlaytimeFilter(PlaytimeFilter playtimeFilter) {
+    gameSpinnerFilters = gameSpinnerFilters.copyWith(playtimeFilter: playtimeFilter);
 
     visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
   }

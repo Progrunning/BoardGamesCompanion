@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/widgets/common/elevated_icon_button.dart';
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -13,6 +12,8 @@ import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
 import '../../models/sort_by.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import '../../widgets/common/filtering/filter_toggle_button.dart';
+import '../../widgets/common/filtering/filter_toggle_buttons_container.dart';
 import 'collections_view_model.dart';
 
 class CollectionsFilterPanel extends StatefulWidget {
@@ -163,51 +164,41 @@ class _Filters extends StatelessWidget {
           child: Text('Rating', style: AppTheme.sectionHeaderTextStyle),
         ),
         const SizedBox(height: Dimensions.standardSpacing),
-        SizedBox(
+        FilterToggleButtonsContainer(
           height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
-          child: Material(
-            shadowColor: AppColors.shadowColor,
-            elevation: Dimensions.defaultElevation,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-            ),
-            child: Container(
-              color: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
-              child: Observer(
-                builder: (_) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      _FilterRatingValue(
-                        isSelected: gamesViewModel.filterByRating == null,
-                        onRatingSelected: (double? rating) => updateFilterRating(rating),
-                      ),
-                      _FilterRatingValue(
-                        rating: 6.5,
-                        onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: gamesViewModel.filterByRating == 6.5,
-                      ),
-                      _FilterRatingValue(
-                        rating: 7.5,
-                        onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: gamesViewModel.filterByRating == 7.5,
-                      ),
-                      _FilterRatingValue(
-                        rating: 8.0,
-                        onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: gamesViewModel.filterByRating == 8.0,
-                      ),
-                      _FilterRatingValue(
-                        rating: 8.5,
-                        onRatingSelected: (double? rating) => updateFilterRating(rating),
-                        isSelected: gamesViewModel.filterByRating == 8.5,
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
+          child: Observer(
+            builder: (_) {
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  _FilterRatingValue.any(
+                    isSelected: gamesViewModel.filterByRating == null,
+                    onRatingSelected: (double? rating) => updateFilterRating(rating),
+                  ),
+                  _FilterRatingValue.rating(
+                    rating: 6.5,
+                    onRatingSelected: (double? rating) => updateFilterRating(rating),
+                    isSelected: gamesViewModel.filterByRating == 6.5,
+                  ),
+                  _FilterRatingValue.rating(
+                    rating: 7.5,
+                    onRatingSelected: (double? rating) => updateFilterRating(rating),
+                    isSelected: gamesViewModel.filterByRating == 7.5,
+                  ),
+                  _FilterRatingValue.rating(
+                    rating: 8.0,
+                    onRatingSelected: (double? rating) => updateFilterRating(rating),
+                    isSelected: gamesViewModel.filterByRating == 8.0,
+                  ),
+                  _FilterRatingValue.rating(
+                    rating: 8.5,
+                    onRatingSelected: (double? rating) => updateFilterRating(rating),
+                    isSelected: gamesViewModel.filterByRating == 8.5,
+                  ),
+                ],
+              );
+            },
           ),
         ),
         const SizedBox(height: Dimensions.doubleStandardSpacing * 2),
@@ -284,56 +275,39 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
   }
 }
 
-class _FilterRatingValue extends StatelessWidget {
-  const _FilterRatingValue({
-    Key? key,
-    double? rating,
+class _FilterRatingValue extends FilterToggleButton<double> {
+  _FilterRatingValue.any({
     required bool isSelected,
     required Function(double?) onRatingSelected,
-  })  : _rating = rating,
-        _isSelected = isSelected,
-        _onRatingSelected = onRatingSelected,
-        super(key: key);
-
-  final double? _rating;
-  final bool _isSelected;
-  final Function(double?) _onRatingSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final boardGameRatingHexagon = _rating == null
-        ? Center(
+  }) : super(
+          isSelected: isSelected,
+          onTapped: onRatingSelected,
+          child: Center(
             child: Text(
               'Any',
               style: TextStyle(
-                color: _isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
+                color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
               ),
             ),
-          )
-        : Center(
+          ),
+        );
+
+  _FilterRatingValue.rating({
+    required double rating,
+    required bool isSelected,
+    required Function(double?) onRatingSelected,
+  }) : super(
+          value: rating,
+          isSelected: isSelected,
+          onTapped: onRatingSelected,
+          child: Center(
             child: BoardGameRatingHexagon(
               width: Dimensions.collectionFilterHexagonSize,
               height: Dimensions.collectionFilterHexagonSize,
-              rating: _rating,
+              rating: rating,
               fontSize: Dimensions.smallFontSize,
-              hexColor: _isSelected ? AppColors.primaryColor : AppColors.accentColor,
+              hexColor: isSelected ? AppColors.primaryColor : AppColors.accentColor,
             ),
-          );
-
-    if (_isSelected) {
-      return Expanded(
-        child: ElevatedContainer(
-          backgroundColor: AppColors.accentColor,
-          child: boardGameRatingHexagon,
-        ),
-      );
-    }
-
-    return Expanded(
-      child: InkWell(
-        child: boardGameRatingHexagon,
-        onTap: () => _onRatingSelected(_rating),
-      ),
-    );
-  }
+          ),
+        );
 }
