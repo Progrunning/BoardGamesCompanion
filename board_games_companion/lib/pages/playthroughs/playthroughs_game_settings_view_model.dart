@@ -2,6 +2,7 @@
 
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
+import 'package:board_games_companion/pages/playthroughs/average_score_precision.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -24,7 +25,12 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
   GameWinningCondition get winningCondition => _gamePlaythroughsStore.gameWinningCondition;
 
   @computed
-  int get averageScorePrecision => _gamePlaythroughsStore.averageScorePrecision;
+  AverageScorePrecision get averageScorePrecision {
+    if (_gamePlaythroughsStore.averageScorePrecision == 0) {
+      return const AverageScorePrecision.none();
+    }
+    return AverageScorePrecision.value(precision: _gamePlaythroughsStore.averageScorePrecision);
+  }
 
   @action
   Future<void> updateWinningCondition(GameWinningCondition winningCondition) async {
@@ -38,13 +44,18 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
   }
 
   @action
-  Future<void> updateAverageScorePrecision(int averageScorePrecision) async {
+  Future<void> updateAverageScorePrecision(AverageScorePrecision averageScorePrecision) async {
     final boardGame = _boardGamesStore.allBoardGames
         .firstWhere((bg) => bg.id == _gamePlaythroughsStore.boardGameId);
 
     final updatedBoardGame = boardGame.copyWith(
-        settings: (boardGame.settings ?? const BoardGameSettings())
-            .copyWith(averageScorePrecision: averageScorePrecision));
+      settings: (boardGame.settings ?? const BoardGameSettings()).copyWith(
+        averageScorePrecision: averageScorePrecision.when(
+          none: () => 0,
+          value: (precision) => precision,
+        ),
+      ),
+    );
     await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
   }
 }

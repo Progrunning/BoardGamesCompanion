@@ -17,13 +17,14 @@ mixin _$PlaythroughsGameSettingsViewModel
           Computed<GameWinningCondition>(() => super.winningCondition,
               name: '_PlaythroughsGameSettingsViewModel.winningCondition'))
       .value;
-  Computed<int>? _$averageScorePrecisionComputed;
+  Computed<AverageScorePrecision>? _$averageScorePrecisionComputed;
 
   @override
-  int get averageScorePrecision => (_$averageScorePrecisionComputed ??=
-          Computed<int>(() => super.averageScorePrecision,
+  AverageScorePrecision get averageScorePrecision =>
+      (_$averageScorePrecisionComputed ??= Computed<AverageScorePrecision>(
+              () => super.averageScorePrecision,
               name: '_PlaythroughsGameSettingsViewModel.averageScorePrecision'))
-      .value;
+          .value;
 
   late final _$updateWinningConditionAsyncAction = AsyncAction(
       '_PlaythroughsGameSettingsViewModel.updateWinningCondition',
@@ -40,7 +41,8 @@ mixin _$PlaythroughsGameSettingsViewModel
       context: context);
 
   @override
-  Future<void> updateAverageScorePrecision(int averageScorePrecision) {
+  Future<void> updateAverageScorePrecision(
+      AverageScorePrecision averageScorePrecision) {
     return _$updateAverageScorePrecisionAsyncAction
         .run(() => super.updateAverageScorePrecision(averageScorePrecision));
   }
