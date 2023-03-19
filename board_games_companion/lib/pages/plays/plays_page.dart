@@ -1073,7 +1073,7 @@ class _FilterPlaytime extends FilterToggleButton<PlaytimeFilter> {
           child: Center(
             child: Text(
               playtimeFilter.toFormattedText(),
-              style: TextStyle(
+              style: AppTheme.theme.textTheme.headline4?.copyWith(
                 color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
               ),
             ),

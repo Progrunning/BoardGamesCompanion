@@ -166,6 +166,7 @@ class _Filters extends StatelessWidget {
         const SizedBox(height: Dimensions.standardSpacing),
         FilterToggleButtonsContainer(
           height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
+          backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
           child: Observer(
             builder: (_) {
               return Row(
