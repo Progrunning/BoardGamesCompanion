@@ -535,9 +535,9 @@ class _AgeSection extends StatelessWidget {
               activeColor: AppColors.accentColor,
             ),
           ),
-          const Text(
-            AppText.createNewGameBoardGameRatingMax,
-            style: TextStyle(fontSize: Dimensions.smallFontSize),
+          Text(
+            sprintf(AppText.createNewGameBoardGameAgeMaxFormat, [_maxValue.toStringAsFixed(0)]),
+            style: const TextStyle(fontSize: Dimensions.smallFontSize),
           ),
         ],
       ),

@@ -190,6 +190,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             _handleBggSearchResultAction(boardGame, actionType),
         onSortyByUpdate: (sortBy) => widget.viewModel.updateBggSearchSortByOption(sortBy),
         onQueryChanged: (query) => widget.viewModel.updateBggSearchQuery(query),
+        onRefresh: () => widget.viewModel.refreshSearchResults(),
       ),
     );
 

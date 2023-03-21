@@ -156,6 +156,10 @@ abstract class _HomeViewModelBase with Store {
   @action
   void updateBggSearchQuery(String query) => _bggSearchQuery = query;
 
+  /// Refresh the results in the stream.
+  @action
+  void refreshSearchResults() => _searchBgg();
+
   ValueNotifier<bool> isSearchDialContextMenuOpen = ValueNotifier(false);
 
   Future<void> trackTabChange(int tabIndex) async {
@@ -204,6 +208,7 @@ abstract class _HomeViewModelBase with Store {
       _bggSearchResultsStreamController.add(_bggSearchResults..sortBy(bggSearchSelectedSortBy));
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
+      _bggSearchResultsStreamController.addError(e);
       rethrow;
     }
   }

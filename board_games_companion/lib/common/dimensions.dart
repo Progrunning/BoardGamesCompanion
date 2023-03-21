@@ -37,6 +37,8 @@ class Dimensions {
 
   static const double boardGameDetailsLinkIconSize = 40;
 
+  static const double playtimeSpinnerFilterFontSize = 24;
+
   static const double boardGameDetailsHexagonFontSize = 30;
   static const double boardGameDetailsHexagonSize = 88;
   static const double boardGameHexagonSize = 40;

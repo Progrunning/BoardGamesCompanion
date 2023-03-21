@@ -129,6 +129,7 @@ class AppText {
   static const logGameFailureConfirmationSnackbarText =
       "We ran into a problem and your game wasn't logged. Please try again.";
   static const gameFiltersAnyNumberOfPlayers = 'Any';
+  static const gameFiltersSinglePlayerOnly = 'Has solo mode';
 
   static const playthroughPageStatsBottomTabTitle = 'Stats';
   static const playthroughPageHistoryBottomTabTitle = 'History';
@@ -230,9 +231,13 @@ class AppText {
   static const playsPageGameSpinnerFilterSectionTitle = 'Filters';
   static const playsPageGameSpinnerCollectionsFilter = 'Collections';
   static const playsPageGameSpinnerExpansionsFilter = 'Include expansions?';
+  static const playsPageGameSpinnerNumberOfPlayersFilter = 'Players';
+  static const playsPageGameSpinnerPlaytimeFilter = 'Playtime';
   static const playsPageGameSpinnerSpinButtonText = 'Spin';
   static const playsPageGameSpinnerSelectedGamePlayButtonText = 'Play';
   static const playsPageGameSpinnerSelectedGameSpinAgainButtonText = 'Spin Again';
+  static const playsPageGameSpinnerPlaytimeFilterAny = 'Any';
+  static const playsPageGameSpinnerPlaytimeFilterInMinutesFormat = '<%s%s';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';
@@ -254,6 +259,7 @@ class AppText {
   static const createNewGameBoardGamePlaytimeMax = '240 min';
   static const createNewGameBoardGameMinAge = 'Minimum age';
   static const createNewGameBoardGameAgeNotSet = 'Not set';
+  static const createNewGameBoardGameAgeMaxFormat = '%s';
   static const createNewGameBoardGameNameValidationError = 'A game needs to have a name';
   static const createNewGameUnsavedChangesDialogTitle = "You didn't save your changes";
   static const createNewGameUnsavedChangesDialogContent = 'Are you sure you want to navigate away?';

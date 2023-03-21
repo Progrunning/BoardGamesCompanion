@@ -134,6 +134,12 @@ abstract class _PlaysViewModel with Store {
   bool get hasAnyBoardGamesToShuffle => shuffledBoardGames.isNotEmpty;
 
   @computed
+  int get minNumberOfPlayers => _shuffledBoardGames.minNumberOfPlayers;
+
+  @computed
+  int get maxNumberOfPlayers => _shuffledBoardGames.maxNumberOfPlayers;
+
+  @computed
   List<BoardGameDetails> get shuffledBoardGames {
     final filteredShuffledBoardGames = <BoardGameDetails>[];
     if (gameSpinnerFilters.hasOwnedCollection) {
@@ -146,6 +152,20 @@ abstract class _PlaysViewModel with Store {
     if (!gameSpinnerFilters.includeExpansions) {
       filteredShuffledBoardGames.removeWhere((boardGame) => boardGame.isExpansion ?? false);
     }
+
+    gameSpinnerFilters.numberOfPlayersFilter.maybeWhen(
+      singlePlayerOnly: () => filteredShuffledBoardGames
+          .removeWhere((boardGame) => boardGame.minPlayers == null || boardGame.minPlayers! > 1),
+      moreThan: (numberOfPlayers) => filteredShuffledBoardGames.removeWhere(
+          (boardGame) => boardGame.maxPlayers == null || boardGame.maxPlayers! < numberOfPlayers),
+      orElse: () {},
+    );
+
+    gameSpinnerFilters.playtimeFilter.maybeWhen(
+      lessThan: (playtimeInMinutes) => filteredShuffledBoardGames.removeWhere((boardGame) =>
+          boardGame.maxPlaytime == null || playtimeInMinutes < boardGame.maxPlaytime!),
+      orElse: () {},
+    );
 
     return filteredShuffledBoardGames;
   }
@@ -200,7 +220,23 @@ abstract class _PlaysViewModel with Store {
 
   @action
   void toggleIncludeExpansionsFilter(bool? includeExpansions) {
-    gameSpinnerFilters = gameSpinnerFilters.copyWith(includeExpansions: includeExpansions ?? false);
+    gameSpinnerFilters = gameSpinnerFilters.copyWith(
+      includeExpansions: includeExpansions ?? false,
+    );
+
+    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+  }
+
+  @action
+  void updateNumberOfPlayersNumberFilter(NumberOfPlayersFilter numberOfPlayersFilter) {
+    gameSpinnerFilters = gameSpinnerFilters.copyWith(numberOfPlayersFilter: numberOfPlayersFilter);
+
+    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+  }
+
+  @action
+  void updatePlaytimeFilter(PlaytimeFilter playtimeFilter) {
+    gameSpinnerFilters = gameSpinnerFilters.copyWith(playtimeFilter: playtimeFilter);
 
     visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
   }
@@ -220,7 +256,10 @@ abstract class _PlaysViewModel with Store {
     await _playersStore.loadPlayers();
     await _playthroughsStore.loadPlaythroughs();
 
-    _shuffledBoardGames = _boardGamesStore.allBoardGames..shuffle();
+    _shuffledBoardGames = _boardGamesStore.allBoardGames
+        .where((boardGame) => (boardGame.isOwned ?? false) || (boardGame.isFriends ?? false))
+        .toList()
+      ..shuffle();
     _setupGameSpinnerFilters();
     visualState = PlaysPageVisualState.history(
       PlaysTab.history,

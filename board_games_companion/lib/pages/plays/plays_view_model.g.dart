@@ -56,6 +56,20 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
           Computed<bool>(() => super.hasAnyBoardGamesToShuffle,
               name: '_PlaysViewModel.hasAnyBoardGamesToShuffle'))
       .value;
+  Computed<int>? _$minNumberOfPlayersComputed;
+
+  @override
+  int get minNumberOfPlayers => (_$minNumberOfPlayersComputed ??= Computed<int>(
+          () => super.minNumberOfPlayers,
+          name: '_PlaysViewModel.minNumberOfPlayers'))
+      .value;
+  Computed<int>? _$maxNumberOfPlayersComputed;
+
+  @override
+  int get maxNumberOfPlayers => (_$maxNumberOfPlayersComputed ??= Computed<int>(
+          () => super.maxNumberOfPlayers,
+          name: '_PlaysViewModel.maxNumberOfPlayers'))
+      .value;
   Computed<List<BoardGameDetails>>? _$shuffledBoardGamesComputed;
 
   @override
@@ -185,6 +199,29 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   }
 
   @override
+  void updateNumberOfPlayersNumberFilter(
+      NumberOfPlayersFilter numberOfPlayersFilter) {
+    final _$actionInfo = _$_PlaysViewModelActionController.startAction(
+        name: '_PlaysViewModel.updateNumberOfPlayersNumberFilter');
+    try {
+      return super.updateNumberOfPlayersNumberFilter(numberOfPlayersFilter);
+    } finally {
+      _$_PlaysViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updatePlaytimeFilter(PlaytimeFilter playtimeFilter) {
+    final _$actionInfo = _$_PlaysViewModelActionController.startAction(
+        name: '_PlaysViewModel.updatePlaytimeFilter');
+    try {
+      return super.updatePlaytimeFilter(playtimeFilter);
+    } finally {
+      _$_PlaysViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
@@ -195,6 +232,8 @@ finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},
 hasAnyBoardGames: ${hasAnyBoardGames},
 hasAnyBoardGamesToShuffle: ${hasAnyBoardGamesToShuffle},
+minNumberOfPlayers: ${minNumberOfPlayers},
+maxNumberOfPlayers: ${maxNumberOfPlayers},
 shuffledBoardGames: ${shuffledBoardGames},
 randomItemIndex: ${randomItemIndex}
     ''';

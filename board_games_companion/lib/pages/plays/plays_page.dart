@@ -13,6 +13,7 @@ import 'package:board_games_companion/pages/plays/game_spinner_game_selected_dia
 import 'package:board_games_companion/pages/plays/plays_page_visual_states.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:board_games_companion/widgets/common/collection_toggle_button.dart';
+import 'package:board_games_companion/widgets/common/filtering/filter_toggle_buttons_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -34,6 +35,7 @@ import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgc_checkbox.dart';
+import '../../widgets/common/filtering/filter_toggle_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -175,10 +177,17 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                     builder: (_) {
                                       return _GameSpinnerFilters(
                                         gameSpinnerFilters: widget.viewModel.gameSpinnerFilters,
+                                        minNumberOfPlayers: widget.viewModel.minNumberOfPlayers,
+                                        maxNumberOfPlayers: widget.viewModel.maxNumberOfPlayers,
                                         onCollectionToggled: (collectionTyp) => widget.viewModel
                                             .toggleGameSpinnerCollectionFilter(collectionTyp),
                                         onIncludeExpansionsToggled: (isChecked) => widget.viewModel
                                             .toggleIncludeExpansionsFilter(isChecked),
+                                        onNumberOfPlayersChanged: (numberOfPlayers) => widget
+                                            .viewModel
+                                            .updateNumberOfPlayersNumberFilter(numberOfPlayers),
+                                        onPlaytimeChanged: (playtime) =>
+                                            widget.viewModel.updatePlaytimeFilter(playtime),
                                       );
                                     },
                                   ),
@@ -221,14 +230,22 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
 class _GameSpinnerFilters extends StatelessWidget {
   const _GameSpinnerFilters({
     required this.gameSpinnerFilters,
+    required this.minNumberOfPlayers,
+    required this.maxNumberOfPlayers,
     required this.onCollectionToggled,
     required this.onIncludeExpansionsToggled,
+    required this.onNumberOfPlayersChanged,
+    required this.onPlaytimeChanged,
     Key? key,
   }) : super(key: key);
 
   final GameSpinnerFilters gameSpinnerFilters;
+  final int minNumberOfPlayers;
+  final int maxNumberOfPlayers;
   final void Function(CollectionType collectionTyp) onCollectionToggled;
   final void Function(bool? isChecked) onIncludeExpansionsToggled;
+  final void Function(NumberOfPlayersFilter numberOfPlayersFilter) onNumberOfPlayersChanged;
+  final void Function(PlaytimeFilter playtimeFilter) onPlaytimeChanged;
 
   static const Map<int, CollectionType> collectionsMap = <int, CollectionType>{
     0: CollectionType.owned,
@@ -246,7 +263,7 @@ class _GameSpinnerFilters extends StatelessWidget {
                   AppText.playsPageGameSpinnerCollectionsFilter,
                   style: AppTheme.theme.textTheme.bodyMedium,
                 ),
-                const Expanded(child: SizedBox.shrink()),
+                const Spacer(),
                 ToggleButtons(
                   isSelected: [
                     gameSpinnerFilters.hasOwnedCollection,
@@ -275,16 +292,179 @@ class _GameSpinnerFilters extends StatelessWidget {
                   AppText.playsPageGameSpinnerExpansionsFilter,
                   style: AppTheme.theme.textTheme.bodyMedium,
                 ),
-                const Expanded(child: SizedBox.shrink()),
+                const Spacer(),
                 BgcCheckbox(
                   isChecked: gameSpinnerFilters.includeExpansions,
                   onChanged: (isChecked) => onIncludeExpansionsToggled(isChecked),
                   borderColor: AppColors.accentColor,
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _PlayersFilter(
+              numberOfPlayersFilter: gameSpinnerFilters.numberOfPlayersFilter,
+              minNumberOfPlayers: minNumberOfPlayers,
+              maxNumberOfPlayers: maxNumberOfPlayers,
+              onChanged: (numberOfPlayers) => onNumberOfPlayersChanged(numberOfPlayers),
+            ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _PlaytimeFilter(
+              playtimeFilter: gameSpinnerFilters.playtimeFilter,
+              onChanged: (playtime) => onPlaytimeChanged(playtime),
+            ),
+            const SizedBox(height: Dimensions.bottomTabTopHeight),
           ],
         ),
+      );
+}
+
+class _PlayersFilter extends StatelessWidget {
+  _PlayersFilter({
+    Key? key,
+    required this.numberOfPlayersFilter,
+    required this.minNumberOfPlayers,
+    required this.maxNumberOfPlayers,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final NumberOfPlayersFilter numberOfPlayersFilter;
+  final int minNumberOfPlayers;
+  final int maxNumberOfPlayers;
+  final void Function(NumberOfPlayersFilter numberOfPlayersFilter) onChanged;
+
+  late double sliderMinValue;
+  late double sliderMaxValue;
+  late double sliderAnyNumberValue;
+  late double? sliderSinglePlayerOnlyValue;
+  late double sliderValue;
+  late int sliderDivisions;
+  late bool hasSoloGames;
+
+  @override
+  Widget build(BuildContext context) {
+    hasSoloGames = minNumberOfPlayers == 1;
+    sliderMinValue = hasSoloGames ? minNumberOfPlayers - 2 : minNumberOfPlayers - 1;
+    if (hasSoloGames) {
+      sliderSinglePlayerOnlyValue = sliderMinValue + 1;
+    }
+    sliderAnyNumberValue = sliderMinValue;
+    sliderMaxValue = maxNumberOfPlayers.toDouble();
+    sliderDivisions = (sliderMaxValue - sliderMinValue).toInt();
+
+    return Row(
+      children: [
+        Text(
+          AppText.playsPageGameSpinnerNumberOfPlayersFilter,
+          style: AppTheme.theme.textTheme.bodyMedium,
+        ),
+        const SizedBox(width: Dimensions.standardSpacing),
+        Expanded(
+          child: Slider(
+            value: _getSliderValue(),
+            min: sliderMinValue,
+            divisions: sliderDivisions,
+            max: sliderMaxValue,
+            label: _formatSliderLabelText(),
+            onChanged: (value) => _handleOnChanged(value.round()),
+            activeColor: AppColors.accentColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatSliderLabelText() {
+    return numberOfPlayersFilter.when(
+      any: () => AppText.gameFiltersAnyNumberOfPlayers,
+      singlePlayerOnly: () => AppText.gameFiltersSinglePlayerOnly,
+      moreThan: (numberOfPlayers) => '$numberOfPlayers+',
+    );
+  }
+
+  double _getSliderValue() {
+    return numberOfPlayersFilter.when(
+      any: () => sliderAnyNumberValue,
+      singlePlayerOnly: () => sliderSinglePlayerOnlyValue ?? 0,
+      moreThan: (numberOfPlayers) => numberOfPlayers.toDouble(),
+    );
+  }
+
+  void _handleOnChanged(int value) {
+    late NumberOfPlayersFilter numberOfPlayersFilter;
+    if (value == sliderAnyNumberValue) {
+      numberOfPlayersFilter = const NumberOfPlayersFilter.any();
+    } else if (hasSoloGames && value == sliderSinglePlayerOnlyValue) {
+      numberOfPlayersFilter = const NumberOfPlayersFilter.singlePlayerOnly();
+    } else {
+      numberOfPlayersFilter = NumberOfPlayersFilter.moreThan(moreThanNumberOfPlayers: value);
+    }
+
+    onChanged(numberOfPlayersFilter);
+  }
+}
+
+class _PlaytimeFilter extends StatelessWidget {
+  const _PlaytimeFilter({
+    required this.playtimeFilter,
+    required this.onChanged,
+  });
+
+  final PlaytimeFilter playtimeFilter;
+  final void Function(PlaytimeFilter) onChanged;
+
+  @override
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppText.playsPageGameSpinnerPlaytimeFilter,
+            style: AppTheme.theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          FilterToggleButtonsContainer(
+            height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
+            child: Row(
+              children: [
+                _FilterPlaytime.time(
+                  isSelected: playtimeFilter == const PlaytimeFilter.any(),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.any(),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 120),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 120),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
+                ),
+                _FilterPlaytime.time(
+                  isSelected:
+                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
+                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
+                ),
+              ],
+            ),
+          ),
+        ],
       );
 }
 
@@ -879,4 +1059,24 @@ class _AppBar extends StatelessWidget {
       ),
     );
   }
+}
+
+class _FilterPlaytime extends FilterToggleButton<PlaytimeFilter> {
+  _FilterPlaytime.time({
+    required bool isSelected,
+    required PlaytimeFilter playtimeFilter,
+    required Function(PlaytimeFilter) onSelected,
+  }) : super(
+          value: playtimeFilter,
+          isSelected: isSelected,
+          onTapped: (_) => onSelected(playtimeFilter),
+          child: Center(
+            child: Text(
+              playtimeFilter.toFormattedText(),
+              style: AppTheme.theme.textTheme.headline4?.copyWith(
+                color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
+              ),
+            ),
+          ),
+        );
 }

@@ -69,7 +69,12 @@ abstract class _EditPlaythoughViewModel with Store {
   @action
   void setPlaythroughId(String playthroughId) {
     _playthroughId = playthroughId;
-    _playthroughDetailsWorkingCopy = playthroughDetails.copyWith();
+
+    final sortedPlayerScores = playthroughDetails.playerScores.toList()
+      ..sortByPlayerName()
+      ..sortByScore(_gamePlaythroughsDetailsStore.gameWinningCondition);
+
+    _playthroughDetailsWorkingCopy = playthroughDetails.copyWith(playerScores: sortedPlayerScores);
   }
 
   @action

@@ -2,15 +2,17 @@ import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/common/enums/game_winning_condition.dart';
+import 'package:board_games_companion/extensions/average_score_precision_extensions.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart';
+import 'package:board_games_companion/widgets/common/filtering/filter_toggle_buttons_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../common/app_colors.dart';
-import '../../common/app_styles.dart';
 import '../../injectable.dart';
+import '../../widgets/common/filtering/filter_toggle_button.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
-import '../../widgets/elevated_container.dart';
+import 'average_score_precision.dart';
 
 class PlaythroughsGameSettingsPage extends StatefulWidget {
   const PlaythroughsGameSettingsPage({Key? key}) : super(key: key);
@@ -73,8 +75,12 @@ class _ScoreSection extends StatelessWidget {
     required this.onPrecisionChanged,
   });
 
-  final int averageScorePrecision;
-  final Function(int) onPrecisionChanged;
+  static const int numberOfPrecisionOptions = 3;
+  static const double precisionContainerHeight = 40;
+  static const double precisionContainerWidth = numberOfPrecisionOptions * 52;
+
+  final AverageScorePrecision averageScorePrecision;
+  final Function(AverageScorePrecision) onPrecisionChanged;
 
   @override
   Widget build(BuildContext context) => SliverToBoxAdapter(
@@ -89,29 +95,28 @@ class _ScoreSection extends StatelessWidget {
                     AppText.editPlaythroughPageScoreSectionAverageScorePrecisionText,
                     style: AppTheme.defaultTextFieldStyle,
                   ),
-                  const Expanded(child: SizedBox.shrink()),
-                  ElevatedContainer(
-                    backgroundColor: AppColors.primaryColor,
-                    elevation: AppStyles.defaultElevation,
+                  const Spacer(),
+                  FilterToggleButtonsContainer(
+                    height: precisionContainerHeight,
+                    width: precisionContainerWidth,
                     child: Row(
                       children: [
-                        _AverageScorePrecisionTile(
-                          precision: 0,
-                          isActive: averageScorePrecision == 0,
+                        _AverageScorePrecisionTile.precision(
+                          isSelected: averageScorePrecision == const AverageScorePrecision.none(),
                           onSelected: (precision) => onPrecisionChanged(precision),
-                          text: 'None',
+                          averageScorePrecision: const AverageScorePrecision.none(),
                         ),
-                        _AverageScorePrecisionTile(
-                          precision: 1,
-                          isActive: averageScorePrecision == 1,
+                        _AverageScorePrecisionTile.precision(
+                          isSelected: averageScorePrecision ==
+                              const AverageScorePrecision.value(precision: 1),
                           onSelected: (precision) => onPrecisionChanged(precision),
-                          text: '.0',
+                          averageScorePrecision: const AverageScorePrecision.value(precision: 1),
                         ),
-                        _AverageScorePrecisionTile(
-                          precision: 2,
-                          isActive: averageScorePrecision == 2,
+                        _AverageScorePrecisionTile.precision(
+                          isSelected: averageScorePrecision ==
+                              const AverageScorePrecision.value(precision: 2),
                           onSelected: (precision) => onPrecisionChanged(precision),
-                          text: '.00',
+                          averageScorePrecision: const AverageScorePrecision.value(precision: 2),
                         ),
                       ],
                     ),
@@ -124,35 +129,22 @@ class _ScoreSection extends StatelessWidget {
       );
 }
 
-class _AverageScorePrecisionTile extends StatelessWidget {
-  const _AverageScorePrecisionTile({
-    required this.text,
-    required this.isActive,
-    required this.precision,
-    required this.onSelected,
-    Key? key,
-  }) : super(key: key);
-
-  final bool isActive;
-  final String text;
-  final int precision;
-  final Function(int) onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 52,
-      height: 40,
-      child: ElevatedContainer(
-        backgroundColor: isActive ? AppColors.accentColor : Colors.transparent,
-        splashColor: isActive ? AppColors.primaryColor : AppColors.accentColor,
-        onTap: () => onSelected(precision),
-        child: Center(
-          child: Text(text, style: AppTheme.theme.textTheme.headline3),
-        ),
-      ),
-    );
-  }
+class _AverageScorePrecisionTile extends FilterToggleButton<AverageScorePrecision> {
+  _AverageScorePrecisionTile.precision({
+    required bool isSelected,
+    required AverageScorePrecision averageScorePrecision,
+    required Function(AverageScorePrecision) onSelected,
+  }) : super(
+          value: averageScorePrecision,
+          isSelected: isSelected,
+          onTapped: (_) => onSelected(averageScorePrecision),
+          child: Center(
+            child: Text(
+              averageScorePrecision.toFormattedText(),
+              style: AppTheme.theme.textTheme.headline3,
+            ),
+          ),
+        );
 }
 
 class _WinningConditionSection extends StatefulWidget {
