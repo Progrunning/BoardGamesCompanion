@@ -312,7 +312,7 @@ class _GameSpinnerFilters extends StatelessWidget {
               playtimeFilter: gameSpinnerFilters.playtimeFilter,
               onChanged: (playtime) => onPlaytimeChanged(playtime),
             ),
-            const SizedBox(height: Dimensions.bottomTabTopHeight),
+            const SizedBox(height: Dimensions.bottomTabTopHeight + Dimensions.standardSpacing),
           ],
         ),
       );
@@ -413,55 +413,54 @@ class _PlaytimeFilter extends StatelessWidget {
   final void Function(PlaytimeFilter) onChanged;
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) => Row(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             AppText.playsPageGameSpinnerPlaytimeFilter,
             style: AppTheme.theme.textTheme.bodyMedium,
           ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          FilterToggleButtonsContainer(
-            height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
-            child: Row(
-              children: [
-                _FilterPlaytime.time(
-                  isSelected: playtimeFilter == const PlaytimeFilter.any(),
-                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
-                  playtimeFilter: const PlaytimeFilter.any(),
+          const SizedBox(width: Dimensions.doubleStandardSpacing),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: Dimensions.standardSpacing),
+              child: FilterToggleButtonsContainer(
+                height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
+                child: Row(
+                  children: [
+                    _FilterPlaytime.time(
+                      isSelected: playtimeFilter == const PlaytimeFilter.any(),
+                      onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                      playtimeFilter: const PlaytimeFilter.any(),
+                    ),
+                    _FilterPlaytime.time(
+                      isSelected:
+                          playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
+                      onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                      playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
+                    ),
+                    _FilterPlaytime.time(
+                      isSelected:
+                          playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
+                      onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                      playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
+                    ),
+                    _FilterPlaytime.time(
+                      isSelected:
+                          playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
+                      onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                      playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
+                    ),
+                    _FilterPlaytime.time(
+                      isSelected:
+                          playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
+                      onSelected: (playtimeFilter) => onChanged(playtimeFilter),
+                      playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
+                    ),
+                  ],
                 ),
-                _FilterPlaytime.time(
-                  isSelected:
-                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 120),
-                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
-                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 120),
-                ),
-                _FilterPlaytime.time(
-                  isSelected:
-                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
-                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
-                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 90),
-                ),
-                _FilterPlaytime.time(
-                  isSelected:
-                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
-                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
-                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 60),
-                ),
-                _FilterPlaytime.time(
-                  isSelected:
-                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
-                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
-                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 45),
-                ),
-                _FilterPlaytime.time(
-                  isSelected:
-                      playtimeFilter == const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
-                  onSelected: (playtimeFilter) => onChanged(playtimeFilter),
-                  playtimeFilter: const PlaytimeFilter.lessThan(playtimeInMinutes: 30),
-                ),
-              ],
+              ),
             ),
           ),
         ],
