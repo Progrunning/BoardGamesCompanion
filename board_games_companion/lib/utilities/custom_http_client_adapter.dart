@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 @injectable
-class CustomHttpClientAdapter extends HttpClientAdapter {
-  final _adapter = DefaultHttpClientAdapter();
+class CustomHttpClientAdapter implements HttpClientAdapter {
+  final _adapter = IOHttpClientAdapter();
   final log = Logger(
     printer: PrettyPrinter(),
   );
