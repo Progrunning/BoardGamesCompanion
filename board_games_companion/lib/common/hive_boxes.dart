@@ -48,8 +48,9 @@ class HiveBoxes {
   static const orderByTypeId = 13;
   static const collectionFiltersId = 14;
   static const boardGamesExpansionId = 15;
-  static const winningConditionTypeId = 16;
+  static const winConditionTypeId = 16;
   static const boardGameSettingsTypeId = 17;
   static const playthroughNoteId = 18;
   static const searchHistoryEntryId = 19;
+  static const gameModeTypeId = 20;
 }

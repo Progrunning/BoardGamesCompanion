@@ -1,11 +1,11 @@
 import 'package:board_games_companion/common/constants.dart';
 
-import '../common/enums/game_winning_condition.dart';
+import '../common/enums/game_win_condition.dart';
 import '../extensions/scores_extensions.dart';
 import '../models/player_score.dart';
 
 extension PlayerScoresExtesions on List<PlayerScore> {
-  List<PlayerScore> sortByScore(GameWinningCondition winningCondition) {
+  List<PlayerScore> sortByScore(GameWinCondition winningCondition) {
     return this
       ..sort((PlayerScore playerScore, PlayerScore otherPlayerScore) {
         return compareScores(playerScore.score, otherPlayerScore.score, winningCondition);

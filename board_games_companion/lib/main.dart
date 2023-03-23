@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:fimber/fimber.dart';
@@ -13,6 +12,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'app.dart';
+import 'common/enums/game_mode.dart';
+import 'common/enums/game_win_condition.dart';
 import 'common/enums/order_by.dart';
 import 'common/enums/playthrough_status.dart';
 import 'common/enums/sort_by_option.dart';
@@ -58,7 +59,8 @@ Future<void> main() async {
       ..registerAdapter(SortByOptionAdapter())
       ..registerAdapter(OrderByAdapter())
       ..registerAdapter(CollectionFiltersAdapter())
-      ..registerAdapter(GameWinningConditionAdapter())
+      ..registerAdapter(GameWinConditionAdapter())
+      ..registerAdapter(GameModeAdapter())
       ..registerAdapter(BoardGameSettingsAdapter())
       ..registerAdapter(PlaythroughNoteAdapter())
       ..registerAdapter(SearchHistoryEntryAdapter());

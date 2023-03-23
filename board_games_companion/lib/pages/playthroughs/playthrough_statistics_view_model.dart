@@ -1,6 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/enums/game_winning_condition.dart';
+import 'package:board_games_companion/common/enums/game_win_condition.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
@@ -66,7 +66,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     Fimber.d(
         'Loading stats for game ${_gamePlaythroughsStore.boardGameName} [${_gamePlaythroughsStore.boardGameId}]');
     final boardGameId = _gamePlaythroughsStore.boardGameId;
-    final gameWinningCondition = _gamePlaythroughsStore.gameWinningCondition;
+    final gameWinningCondition = _gamePlaythroughsStore.gameWinCondition;
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
@@ -155,7 +155,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     BoardGameStatistics boardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
-    GameWinningCondition winningCondition,
+    GameWinCondition winningCondition,
   ) {
     if (finishedPlaythroughs?.isEmpty ?? true) {
       return;
@@ -214,7 +214,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     BoardGameStatistics boardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
-    GameWinningCondition gameWinningCondition,
+    GameWinCondition gameWinningCondition,
   ) {
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {

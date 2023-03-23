@@ -52,13 +52,19 @@ mixin _$GamePlaythroughsDetailsStore on _GamePlaythroughsDetailsStore, Store {
           Computed<String?>(() => super.boardGameImageUrl,
               name: '_GamePlaythroughsDetailsStore.boardGameImageUrl'))
       .value;
-  Computed<GameWinningCondition>? _$gameWinningConditionComputed;
+  Computed<GameWinCondition>? _$gameWinConditionComputed;
 
   @override
-  GameWinningCondition get gameWinningCondition =>
-      (_$gameWinningConditionComputed ??= Computed<GameWinningCondition>(
-              () => super.gameWinningCondition,
-              name: '_GamePlaythroughsDetailsStore.gameWinningCondition'))
+  GameWinCondition get gameWinCondition => (_$gameWinConditionComputed ??=
+          Computed<GameWinCondition>(() => super.gameWinCondition,
+              name: '_GamePlaythroughsDetailsStore.gameWinCondition'))
+      .value;
+  Computed<GameMode>? _$gameModeComputed;
+
+  @override
+  GameMode get gameMode =>
+      (_$gameModeComputed ??= Computed<GameMode>(() => super.gameMode,
+              name: '_GamePlaythroughsDetailsStore.gameMode'))
           .value;
   Computed<int>? _$averageScorePrecisionComputed;
 
@@ -136,7 +142,8 @@ finishedPlaythroughs: ${finishedPlaythroughs},
 boardGameName: ${boardGameName},
 boardGameId: ${boardGameId},
 boardGameImageUrl: ${boardGameImageUrl},
-gameWinningCondition: ${gameWinningCondition},
+gameWinCondition: ${gameWinCondition},
+gameMode: ${gameMode},
 averageScorePrecision: ${averageScorePrecision}
     ''';
   }

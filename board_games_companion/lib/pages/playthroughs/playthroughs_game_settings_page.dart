@@ -1,7 +1,8 @@
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums/game_winning_condition.dart';
+import 'package:board_games_companion/common/enums/game_mode.dart';
+import 'package:board_games_companion/common/enums/game_win_condition.dart';
 import 'package:board_games_companion/extensions/average_score_precision_extensions.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart';
 import 'package:board_games_companion/widgets/common/filtering/filter_toggle_buttons_container.dart';
@@ -36,12 +37,13 @@ class _PlaythroughsGameSettingsPageState extends State<PlaythroughsGameSettingsP
         slivers: [
           SliverPersistentHeader(
             delegate: BgcSliverHeaderDelegate(
-              primaryTitle: AppText.playthroughsGameSettingsWinningConditionSectionTitle,
+              primaryTitle: AppText.playthroughsGameSettingsWinConditionSectionTitle,
             ),
           ),
-          _WinningConditionSection(
-            winningCondition: viewModel.winningCondition,
-            onChange: (GameWinningCondition? winningCondition) =>
+          _GameModeSection(
+            winCondition: viewModel.winCondition,
+            gameMode: viewModel.gameMode,
+            onChange: (GameWinCondition? winningCondition) =>
                 _winningConditionChanged(winningCondition),
           ),
           SliverPersistentHeader(
@@ -60,12 +62,12 @@ class _PlaythroughsGameSettingsPageState extends State<PlaythroughsGameSettingsP
         ],
       );
 
-  Future<void> _winningConditionChanged(GameWinningCondition? winningCondition) async {
+  Future<void> _winningConditionChanged(GameWinCondition? winningCondition) async {
     if (winningCondition == null) {
       return;
     }
 
-    await viewModel.updateWinningCondition(winningCondition);
+    await viewModel.updateWinCondition(winningCondition);
   }
 }
 
@@ -147,22 +149,25 @@ class _AverageScorePrecisionTile extends FilterToggleButton<AverageScorePrecisio
         );
 }
 
-class _WinningConditionSection extends StatefulWidget {
-  const _WinningConditionSection({
-    required this.winningCondition,
+class _GameModeSection extends StatefulWidget {
+  const _GameModeSection({
+    required this.winCondition,
+    required this.gameMode,
     required this.onChange,
     Key? key,
   }) : super(key: key);
 
-  final GameWinningCondition winningCondition;
-  final Function(GameWinningCondition?) onChange;
+  final GameWinCondition winCondition;
+  final GameMode gameMode;
+  final Function(GameWinCondition?) onChange;
 
   @override
-  State<_WinningConditionSection> createState() => _WinningConditionSectionState();
+  State<_GameModeSection> createState() => _GameModeSectionState();
 }
 
-class _WinningConditionSectionState extends State<_WinningConditionSection> {
-  late GameWinningCondition? _gameWinningCondition = widget.winningCondition;
+class _GameModeSectionState extends State<_GameModeSection> {
+  late GameWinCondition? _gameWinCondition = widget.winCondition;
+  late GameMode? _gameMode = widget.gameMode;
 
   @override
   Widget build(BuildContext context) {
@@ -171,45 +176,100 @@ class _WinningConditionSectionState extends State<_WinningConditionSection> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          RadioListTile<GameWinningCondition>(
+          RadioListTile<GameMode>(
             contentPadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
             activeColor: AppColors.accentColor,
             title: const Text(
-              AppText.playthroughsGameSettingsWinningConditionHighestScore,
+              AppText.playthroughsGameSettingsGameModeScore,
               style: AppTheme.defaultTextFieldStyle,
             ),
-            secondary: Icon(Icons.arrow_upward,
-                color: _gameWinningCondition == GameWinningCondition.HighestScore
-                    ? AppColors.activeWinningConditionIcon
-                    : AppColors.inactiveBottomTabColor),
-            value: GameWinningCondition.HighestScore,
-            groupValue: _gameWinningCondition,
-            onChanged: (GameWinningCondition? value) {
+            value: GameMode.Score,
+            groupValue: _gameMode,
+            onChanged: (GameMode? value) {
               setState(() {
-                _gameWinningCondition = value;
-                widget.onChange(_gameWinningCondition);
+                _gameMode = value;
               });
             },
           ),
-          RadioListTile<GameWinningCondition>(
+          Padding(
+            padding: const EdgeInsets.only(left: Dimensions.doubleStandardSpacing),
+            child: Column(
+              children: [
+                RadioListTile<GameWinCondition>(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  activeColor: AppColors.accentColor,
+                  title: const Text(
+                    AppText.playthroughsGameSettingsWinConditionCoop,
+                    style: AppTheme.defaultTextFieldStyle,
+                  ),
+                  value: GameWinCondition.Coop,
+                  groupValue: _gameWinCondition,
+                  onChanged: (GameWinCondition? value) {
+                    setState(() {
+                      _gameWinCondition = value;
+                      widget.onChange(_gameWinCondition);
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          RadioListTile<GameMode>(
             contentPadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
             activeColor: AppColors.accentColor,
             title: const Text(
-              AppText.playthroughsGameSettingsWinningConditionLowestScore,
+              AppText.playthroughsGameSettingsGameModeNoScore,
               style: AppTheme.defaultTextFieldStyle,
             ),
-            secondary: Icon(Icons.arrow_downward,
-                color: _gameWinningCondition == GameWinningCondition.LowestScore
-                    ? AppColors.activeWinningConditionIcon
-                    : AppColors.inactiveBottomTabColor),
-            value: GameWinningCondition.LowestScore,
-            groupValue: _gameWinningCondition,
-            onChanged: (GameWinningCondition? value) {
+            value: GameMode.NoScore,
+            groupValue: _gameMode,
+            onChanged: (GameMode? value) {
               setState(() {
-                _gameWinningCondition = value;
-                widget.onChange(_gameWinningCondition);
+                _gameMode = value;
               });
             },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: Dimensions.doubleStandardSpacing),
+            child: Column(
+              children: [
+                RadioListTile<GameWinCondition>(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  activeColor: AppColors.accentColor,
+                  title: const Text(
+                    AppText.playthroughsGameSettingsWinningConditionHighestScore,
+                    style: AppTheme.defaultTextFieldStyle,
+                  ),
+                  value: GameWinCondition.HighestScore,
+                  groupValue: _gameWinCondition,
+                  onChanged: (GameWinCondition? value) {
+                    setState(() {
+                      _gameWinCondition = value;
+                      widget.onChange(_gameWinCondition);
+                    });
+                  },
+                ),
+                RadioListTile<GameWinCondition>(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                  activeColor: AppColors.accentColor,
+                  title: const Text(
+                    AppText.playthroughsGameSettingsWinningConditionLowestScore,
+                    style: AppTheme.defaultTextFieldStyle,
+                  ),
+                  value: GameWinCondition.LowestScore,
+                  groupValue: _gameWinCondition,
+                  onChanged: (GameWinCondition? value) {
+                    setState(() {
+                      _gameWinCondition = value;
+                      widget.onChange(_gameWinCondition);
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),

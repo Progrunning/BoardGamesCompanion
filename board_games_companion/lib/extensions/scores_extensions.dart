@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/enums/game_winning_condition.dart';
+import 'package:board_games_companion/common/enums/game_win_condition.dart';
 
 import '../models/hive/score.dart';
 
@@ -19,22 +19,22 @@ extension ScoresExtesions on List<Score>? {
         <Score>[];
   }
 
-  List<Score>? sortByScore(GameWinningCondition winningCondition) {
+  List<Score>? sortByScore(GameWinCondition winningCondition) {
     return this
       ?..sort((Score score, Score otherScore) {
         return compareScores(score, otherScore, winningCondition);
       });
   }
 
-  num? toBestScore(GameWinningCondition gameWinningCondition) {
+  num? toBestScore(GameWinCondition gameWinningCondition) {
     final scores = this
             ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
             .map((Score score) => num.parse(score.value!)) ??
         [];
     switch (gameWinningCondition) {
-      case GameWinningCondition.HighestScore:
+      case GameWinCondition.HighestScore:
         return scores.reduce(max);
-      case GameWinningCondition.LowestScore:
+      case GameWinCondition.LowestScore:
         return scores.reduce(min);
     }
   }
@@ -53,15 +53,15 @@ extension ScoresExtesions on List<Score>? {
   }
 }
 
-int compareScores(Score score, Score otherScore, GameWinningCondition winningCondition) {
+int compareScores(Score score, Score otherScore, GameWinCondition winningCondition) {
   switch (winningCondition) {
-    case GameWinningCondition.LowestScore:
+    case GameWinCondition.LowestScore:
       // MK Swap scores around
       final buffer = otherScore;
       otherScore = score;
       score = buffer;
       break;
-    case GameWinningCondition.HighestScore:
+    case GameWinCondition.HighestScore:
       // MK No swapping needed
       break;
   }

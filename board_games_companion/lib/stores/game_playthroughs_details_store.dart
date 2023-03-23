@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/common/enums/game_mode.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
@@ -9,7 +10,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
-import '../common/enums/game_winning_condition.dart';
+import '../common/enums/game_win_condition.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
@@ -70,8 +71,11 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   String? get boardGameImageUrl => _boardGame!.imageUrl;
 
   @computed
-  GameWinningCondition get gameWinningCondition =>
-      _boardGame!.settings?.winningCondition ?? GameWinningCondition.HighestScore;
+  GameWinCondition get gameWinCondition =>
+      _boardGame!.settings?.winCondition ?? GameWinCondition.HighestScore;
+
+  @computed
+  GameMode get gameMode => _boardGame!.settings?.gameMode ?? GameMode.Score;
 
   @computed
   int get averageScorePrecision => _boardGame!.settings?.averageScorePrecision ?? 0;
@@ -159,7 +163,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   PlaythroughDetails createPlaythroughDetails(Playthrough playthrough) {
     final scores =
         _scoresStore.scores.where((score) => score.playthroughId == playthrough.id).toList()
-          ..sortByScore(gameWinningCondition)
+          ..sortByScore(gameWinCondition)
           ..toList();
     final players =
         _playerStore.players.where((player) => playthrough.playerIds.contains(player.id)).toList();

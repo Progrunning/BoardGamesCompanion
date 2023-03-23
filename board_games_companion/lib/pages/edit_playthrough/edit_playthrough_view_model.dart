@@ -72,7 +72,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
     final sortedPlayerScores = playthroughDetails.playerScores.toList()
       ..sortByPlayerName()
-      ..sortByScore(_gamePlaythroughsDetailsStore.gameWinningCondition);
+      ..sortByScore(_gamePlaythroughsDetailsStore.gameWinCondition);
 
     _playthroughDetailsWorkingCopy = playthroughDetails.copyWith(playerScores: sortedPlayerScores);
   }

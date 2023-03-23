@@ -10,13 +10,20 @@ part of 'playthroughs_game_settings_view_model.dart';
 
 mixin _$PlaythroughsGameSettingsViewModel
     on _PlaythroughsGameSettingsViewModel, Store {
-  Computed<GameWinningCondition>? _$winningConditionComputed;
+  Computed<GameWinCondition>? _$winConditionComputed;
 
   @override
-  GameWinningCondition get winningCondition => (_$winningConditionComputed ??=
-          Computed<GameWinningCondition>(() => super.winningCondition,
-              name: '_PlaythroughsGameSettingsViewModel.winningCondition'))
+  GameWinCondition get winCondition => (_$winConditionComputed ??=
+          Computed<GameWinCondition>(() => super.winCondition,
+              name: '_PlaythroughsGameSettingsViewModel.winCondition'))
       .value;
+  Computed<GameMode>? _$gameModeComputed;
+
+  @override
+  GameMode get gameMode =>
+      (_$gameModeComputed ??= Computed<GameMode>(() => super.gameMode,
+              name: '_PlaythroughsGameSettingsViewModel.gameMode'))
+          .value;
   Computed<AverageScorePrecision>? _$averageScorePrecisionComputed;
 
   @override
@@ -26,14 +33,14 @@ mixin _$PlaythroughsGameSettingsViewModel
               name: '_PlaythroughsGameSettingsViewModel.averageScorePrecision'))
           .value;
 
-  late final _$updateWinningConditionAsyncAction = AsyncAction(
-      '_PlaythroughsGameSettingsViewModel.updateWinningCondition',
+  late final _$updateWinConditionAsyncAction = AsyncAction(
+      '_PlaythroughsGameSettingsViewModel.updateWinCondition',
       context: context);
 
   @override
-  Future<void> updateWinningCondition(GameWinningCondition winningCondition) {
-    return _$updateWinningConditionAsyncAction
-        .run(() => super.updateWinningCondition(winningCondition));
+  Future<void> updateWinCondition(GameWinCondition winCondition) {
+    return _$updateWinConditionAsyncAction
+        .run(() => super.updateWinCondition(winCondition));
   }
 
   late final _$updateAverageScorePrecisionAsyncAction = AsyncAction(
@@ -50,7 +57,8 @@ mixin _$PlaythroughsGameSettingsViewModel
   @override
   String toString() {
     return '''
-winningCondition: ${winningCondition},
+winCondition: ${winCondition},
+gameMode: ${gameMode},
 averageScorePrecision: ${averageScorePrecision}
     ''';
   }
