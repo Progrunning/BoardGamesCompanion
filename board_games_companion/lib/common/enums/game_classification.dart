@@ -5,10 +5,10 @@ import '../hive_boxes.dart';
 
 export '../../extensions/game_mode_extensions.dart';
 
-part 'game_mode.g.dart';
+part 'game_classification.g.dart';
 
-@HiveType(typeId: HiveBoxes.gameModeTypeId)
-enum GameMode {
+@HiveType(typeId: HiveBoxes.gameClassificationTypeId)
+enum GameClassification {
   @HiveField(0)
   Score,
   @HiveField(1)

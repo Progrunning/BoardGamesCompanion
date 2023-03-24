@@ -17,9 +17,11 @@ class BoardGameSettingsAdapter extends TypeAdapter<_$_BoardGameSettings> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$_BoardGameSettings(
-      winCondition: fields[1] as GameWinCondition,
+      gameFamily: fields[1] as GameFamily,
       averageScorePrecision: fields[2] == null ? 0 : fields[2] as int,
-      gameMode: fields[3] == null ? GameMode.Score : fields[3] as GameMode,
+      gameClassification: fields[3] == null
+          ? GameClassification.Score
+          : fields[3] as GameClassification,
     );
   }
 
@@ -28,11 +30,11 @@ class BoardGameSettingsAdapter extends TypeAdapter<_$_BoardGameSettings> {
     writer
       ..writeByte(3)
       ..writeByte(1)
-      ..write(obj.winCondition)
+      ..write(obj.gameFamily)
       ..writeByte(2)
       ..write(obj.averageScorePrecision)
       ..writeByte(3)
-      ..write(obj.gameMode);
+      ..write(obj.gameClassification);
   }
 
   @override

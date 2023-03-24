@@ -19,39 +19,43 @@ mixin _$PlaythroughsGameSettingsViewModel
               name:
                   '_PlaythroughsGameSettingsViewModel._averageScorePrecision'))
           .value;
-  Computed<BoardGameModeSettings>? _$gameModeSettingsComputed;
+  Computed<BoardGameClassificationSettings>?
+      _$gameClassificationSettingsComputed;
 
   @override
-  BoardGameModeSettings get gameModeSettings => (_$gameModeSettingsComputed ??=
-          Computed<BoardGameModeSettings>(() => super.gameModeSettings,
-              name: '_PlaythroughsGameSettingsViewModel.gameModeSettings'))
-      .value;
-  Computed<GameMode>? _$gameModeComputed;
-
-  @override
-  GameMode get gameMode =>
-      (_$gameModeComputed ??= Computed<GameMode>(() => super.gameMode,
-              name: '_PlaythroughsGameSettingsViewModel.gameMode'))
+  BoardGameClassificationSettings get gameClassificationSettings =>
+      (_$gameClassificationSettingsComputed ??= Computed<
+                  BoardGameClassificationSettings>(
+              () => super.gameClassificationSettings,
+              name:
+                  '_PlaythroughsGameSettingsViewModel.gameClassificationSettings'))
           .value;
+  Computed<GameClassification>? _$gameClassificationComputed;
 
-  late final _$updateWinConditionAsyncAction = AsyncAction(
-      '_PlaythroughsGameSettingsViewModel.updateWinCondition',
+  @override
+  GameClassification get gameClassification => (_$gameClassificationComputed ??=
+          Computed<GameClassification>(() => super.gameClassification,
+              name: '_PlaythroughsGameSettingsViewModel.gameClassification'))
+      .value;
+
+  late final _$updateGameFamilyAsyncAction = AsyncAction(
+      '_PlaythroughsGameSettingsViewModel.updateGameFamily',
       context: context);
 
   @override
-  Future<void> updateWinCondition(GameWinCondition winCondition) {
-    return _$updateWinConditionAsyncAction
-        .run(() => super.updateWinCondition(winCondition));
+  Future<void> updateGameFamily(GameFamily gameFamily) {
+    return _$updateGameFamilyAsyncAction
+        .run(() => super.updateGameFamily(gameFamily));
   }
 
-  late final _$updateGameModeAsyncAction = AsyncAction(
-      '_PlaythroughsGameSettingsViewModel.updateGameMode',
+  late final _$updateGameClassificationAsyncAction = AsyncAction(
+      '_PlaythroughsGameSettingsViewModel.updateGameClassification',
       context: context);
 
   @override
-  Future<void> updateGameMode(GameMode gameMode) {
-    return _$updateGameModeAsyncAction
-        .run(() => super.updateGameMode(gameMode));
+  Future<void> updateGameClassification(GameClassification gameClassification) {
+    return _$updateGameClassificationAsyncAction
+        .run(() => super.updateGameClassification(gameClassification));
   }
 
   late final _$updateAverageScorePrecisionAsyncAction = AsyncAction(
@@ -68,8 +72,8 @@ mixin _$PlaythroughsGameSettingsViewModel
   @override
   String toString() {
     return '''
-gameModeSettings: ${gameModeSettings},
-gameMode: ${gameMode}
+gameClassificationSettings: ${gameClassificationSettings},
+gameClassification: ${gameClassification}
     ''';
   }
 }

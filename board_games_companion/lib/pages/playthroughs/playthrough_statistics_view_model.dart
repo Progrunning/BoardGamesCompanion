@@ -1,6 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/enums/game_win_condition.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
@@ -66,7 +66,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     Fimber.d(
         'Loading stats for game ${_gamePlaythroughsStore.boardGameName} [${_gamePlaythroughsStore.boardGameId}]');
     final boardGameId = _gamePlaythroughsStore.boardGameId;
-    final gameWinningCondition = _gamePlaythroughsStore.gameWinCondition;
+    final gameFamily = _gamePlaythroughsStore.gameGameFamily;
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
@@ -87,7 +87,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       boardGameStatistics,
       playthroughScoresByPlaythroughId,
       playersById,
-      gameWinningCondition,
+      gameFamily,
     );
 
     if (finishedPlaythroughs.isEmpty) {
@@ -105,13 +105,12 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       return;
     }
 
-    final List<Score> playerScoresCollection = playthroughScoresByBoardGameId[boardGameId]
-        .onlyScoresWithValue()
-      ..sortByScore(gameWinningCondition);
+    final List<Score> playerScoresCollection =
+        playthroughScoresByBoardGameId[boardGameId].onlyScoresWithValue()..sortByScore(gameFamily);
     if (playerScoresCollection.isNotEmpty) {
       final Map<String, List<Score>> playerScoresGrouped =
           groupBy(playerScoresCollection, (Score score) => score.playerId);
-      boardGameStatistics.bestScore = playerScoresCollection.toBestScore(gameWinningCondition);
+      boardGameStatistics.bestScore = playerScoresCollection.toBestScore(gameFamily);
       boardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
 
       boardGameStatistics.topScoreres = [];
@@ -141,7 +140,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       boardGameStatistics,
       playthroughScoresByPlaythroughId,
       playersById,
-      gameWinningCondition,
+      gameFamily,
     );
 
     boardGameStatistics.averageScorePrecision = _gamePlaythroughsStore.averageScorePrecision;
@@ -155,7 +154,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     BoardGameStatistics boardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
-    GameWinCondition winningCondition,
+    GameFamily gameFamily,
   ) {
     if (finishedPlaythroughs?.isEmpty ?? true) {
       return;
@@ -170,7 +169,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
     final lastPlaythroughScores = playthroughScoresByPlaythroughId[lastPlaythrough.id]
         .onlyScoresWithValue()
-      ..sortByScore(winningCondition);
+      ..sortByScore(gameFamily);
 
     if (lastPlaythroughScores.isEmpty) {
       boardGameStatistics.lastWinner = null;
@@ -214,13 +213,12 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     BoardGameStatistics boardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
-    GameWinCondition gameWinningCondition,
+    GameFamily gameFamily,
   ) {
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
-      final List<Score> playthroughScores = playthroughScoresByPlaythroughId[finishedPlaythrough.id]
-              .sortByScore(gameWinningCondition) ??
-          [];
+      final List<Score> playthroughScores =
+          playthroughScoresByPlaythroughId[finishedPlaythrough.id].sortByScore(gameFamily) ?? [];
       if (playthroughScores.isEmpty) {
         continue;
       }

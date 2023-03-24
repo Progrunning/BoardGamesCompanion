@@ -52,20 +52,20 @@ mixin _$GamePlaythroughsDetailsStore on _GamePlaythroughsDetailsStore, Store {
           Computed<String?>(() => super.boardGameImageUrl,
               name: '_GamePlaythroughsDetailsStore.boardGameImageUrl'))
       .value;
-  Computed<GameWinCondition>? _$gameWinConditionComputed;
+  Computed<GameFamily>? _$gameGameFamilyComputed;
 
   @override
-  GameWinCondition get gameWinCondition => (_$gameWinConditionComputed ??=
-          Computed<GameWinCondition>(() => super.gameWinCondition,
-              name: '_GamePlaythroughsDetailsStore.gameWinCondition'))
+  GameFamily get gameGameFamily => (_$gameGameFamilyComputed ??=
+          Computed<GameFamily>(() => super.gameGameFamily,
+              name: '_GamePlaythroughsDetailsStore.gameGameFamily'))
       .value;
-  Computed<GameMode>? _$gameModeComputed;
+  Computed<GameClassification>? _$gameClassificationComputed;
 
   @override
-  GameMode get gameMode =>
-      (_$gameModeComputed ??= Computed<GameMode>(() => super.gameMode,
-              name: '_GamePlaythroughsDetailsStore.gameMode'))
-          .value;
+  GameClassification get gameClassification => (_$gameClassificationComputed ??=
+          Computed<GameClassification>(() => super.gameClassification,
+              name: '_GamePlaythroughsDetailsStore.gameClassification'))
+      .value;
   Computed<int>? _$averageScorePrecisionComputed;
 
   @override
@@ -142,8 +142,8 @@ finishedPlaythroughs: ${finishedPlaythroughs},
 boardGameName: ${boardGameName},
 boardGameId: ${boardGameId},
 boardGameImageUrl: ${boardGameImageUrl},
-gameWinCondition: ${gameWinCondition},
-gameMode: ${gameMode},
+gameGameFamily: ${gameGameFamily},
+gameClassification: ${gameClassification},
 averageScorePrecision: ${averageScorePrecision}
     ''';
   }

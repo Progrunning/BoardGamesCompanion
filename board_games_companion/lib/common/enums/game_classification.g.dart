@@ -1,34 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'game_mode.dart';
+part of 'game_classification.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class GameModeAdapter extends TypeAdapter<GameMode> {
+class GameClassificationAdapter extends TypeAdapter<GameClassification> {
   @override
   final int typeId = 20;
 
   @override
-  GameMode read(BinaryReader reader) {
+  GameClassification read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return GameMode.Score;
+        return GameClassification.Score;
       case 1:
-        return GameMode.NoScore;
+        return GameClassification.NoScore;
       default:
-        return GameMode.Score;
+        return GameClassification.Score;
     }
   }
 
   @override
-  void write(BinaryWriter writer, GameMode obj) {
+  void write(BinaryWriter writer, GameClassification obj) {
     switch (obj) {
-      case GameMode.Score:
+      case GameClassification.Score:
         writer.writeByte(0);
         break;
-      case GameMode.NoScore:
+      case GameClassification.NoScore:
         writer.writeByte(1);
         break;
     }
@@ -40,7 +40,7 @@ class GameModeAdapter extends TypeAdapter<GameMode> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GameModeAdapter &&
+      other is GameClassificationAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -17,11 +17,12 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$BoardGameSettings {
   @HiveField(1)
-  GameWinCondition get winCondition => throw _privateConstructorUsedError;
+  GameFamily get gameFamily => throw _privateConstructorUsedError;
   @HiveField(2, defaultValue: 0)
   int get averageScorePrecision => throw _privateConstructorUsedError;
-  @HiveField(3, defaultValue: GameMode.Score)
-  GameMode get gameMode => throw _privateConstructorUsedError;
+  @HiveField(3, defaultValue: GameClassification.Score)
+  GameClassification get gameClassification =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BoardGameSettingsCopyWith<BoardGameSettings> get copyWith =>
@@ -34,9 +35,12 @@ abstract class $BoardGameSettingsCopyWith<$Res> {
           BoardGameSettings value, $Res Function(BoardGameSettings) then) =
       _$BoardGameSettingsCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(1) GameWinCondition winCondition,
-      @HiveField(2, defaultValue: 0) int averageScorePrecision,
-      @HiveField(3, defaultValue: GameMode.Score) GameMode gameMode});
+      {@HiveField(1)
+          GameFamily gameFamily,
+      @HiveField(2, defaultValue: 0)
+          int averageScorePrecision,
+      @HiveField(3, defaultValue: GameClassification.Score)
+          GameClassification gameClassification});
 }
 
 /// @nodoc
@@ -50,23 +54,23 @@ class _$BoardGameSettingsCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? winCondition = freezed,
+    Object? gameFamily = freezed,
     Object? averageScorePrecision = freezed,
-    Object? gameMode = freezed,
+    Object? gameClassification = freezed,
   }) {
     return _then(_value.copyWith(
-      winCondition: winCondition == freezed
-          ? _value.winCondition
-          : winCondition // ignore: cast_nullable_to_non_nullable
-              as GameWinCondition,
+      gameFamily: gameFamily == freezed
+          ? _value.gameFamily
+          : gameFamily // ignore: cast_nullable_to_non_nullable
+              as GameFamily,
       averageScorePrecision: averageScorePrecision == freezed
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
               as int,
-      gameMode: gameMode == freezed
-          ? _value.gameMode
-          : gameMode // ignore: cast_nullable_to_non_nullable
-              as GameMode,
+      gameClassification: gameClassification == freezed
+          ? _value.gameClassification
+          : gameClassification // ignore: cast_nullable_to_non_nullable
+              as GameClassification,
     ));
   }
 }
@@ -79,9 +83,12 @@ abstract class _$$_BoardGameSettingsCopyWith<$Res>
       __$$_BoardGameSettingsCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(1) GameWinCondition winCondition,
-      @HiveField(2, defaultValue: 0) int averageScorePrecision,
-      @HiveField(3, defaultValue: GameMode.Score) GameMode gameMode});
+      {@HiveField(1)
+          GameFamily gameFamily,
+      @HiveField(2, defaultValue: 0)
+          int averageScorePrecision,
+      @HiveField(3, defaultValue: GameClassification.Score)
+          GameClassification gameClassification});
 }
 
 /// @nodoc
@@ -97,23 +104,23 @@ class __$$_BoardGameSettingsCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? winCondition = freezed,
+    Object? gameFamily = freezed,
     Object? averageScorePrecision = freezed,
-    Object? gameMode = freezed,
+    Object? gameClassification = freezed,
   }) {
     return _then(_$_BoardGameSettings(
-      winCondition: winCondition == freezed
-          ? _value.winCondition
-          : winCondition // ignore: cast_nullable_to_non_nullable
-              as GameWinCondition,
+      gameFamily: gameFamily == freezed
+          ? _value.gameFamily
+          : gameFamily // ignore: cast_nullable_to_non_nullable
+              as GameFamily,
       averageScorePrecision: averageScorePrecision == freezed
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
               as int,
-      gameMode: gameMode == freezed
-          ? _value.gameMode
-          : gameMode // ignore: cast_nullable_to_non_nullable
-              as GameMode,
+      gameClassification: gameClassification == freezed
+          ? _value.gameClassification
+          : gameClassification // ignore: cast_nullable_to_non_nullable
+              as GameClassification,
     ));
   }
 }
@@ -126,28 +133,28 @@ class __$$_BoardGameSettingsCopyWithImpl<$Res>
 class _$_BoardGameSettings implements _BoardGameSettings {
   const _$_BoardGameSettings(
       {@HiveField(1)
-          this.winCondition = GameWinCondition.HighestScore,
+          this.gameFamily = GameFamily.HighestScore,
       @HiveField(2, defaultValue: 0)
           this.averageScorePrecision = 0,
-      @HiveField(3, defaultValue: GameMode.Score)
-          this.gameMode = GameMode.Score});
+      @HiveField(3, defaultValue: GameClassification.Score)
+          this.gameClassification = GameClassification.Score});
 
   @override
   @JsonKey()
   @HiveField(1)
-  final GameWinCondition winCondition;
+  final GameFamily gameFamily;
   @override
   @JsonKey()
   @HiveField(2, defaultValue: 0)
   final int averageScorePrecision;
   @override
   @JsonKey()
-  @HiveField(3, defaultValue: GameMode.Score)
-  final GameMode gameMode;
+  @HiveField(3, defaultValue: GameClassification.Score)
+  final GameClassification gameClassification;
 
   @override
   String toString() {
-    return 'BoardGameSettings(winCondition: $winCondition, averageScorePrecision: $averageScorePrecision, gameMode: $gameMode)';
+    return 'BoardGameSettings(gameFamily: $gameFamily, averageScorePrecision: $averageScorePrecision, gameClassification: $gameClassification)';
   }
 
   @override
@@ -156,18 +163,19 @@ class _$_BoardGameSettings implements _BoardGameSettings {
         (other.runtimeType == runtimeType &&
             other is _$_BoardGameSettings &&
             const DeepCollectionEquality()
-                .equals(other.winCondition, winCondition) &&
+                .equals(other.gameFamily, gameFamily) &&
             const DeepCollectionEquality()
                 .equals(other.averageScorePrecision, averageScorePrecision) &&
-            const DeepCollectionEquality().equals(other.gameMode, gameMode));
+            const DeepCollectionEquality()
+                .equals(other.gameClassification, gameClassification));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(winCondition),
+      const DeepCollectionEquality().hash(gameFamily),
       const DeepCollectionEquality().hash(averageScorePrecision),
-      const DeepCollectionEquality().hash(gameMode));
+      const DeepCollectionEquality().hash(gameClassification));
 
   @JsonKey(ignore: true)
   @override
@@ -179,21 +187,21 @@ class _$_BoardGameSettings implements _BoardGameSettings {
 abstract class _BoardGameSettings implements BoardGameSettings {
   const factory _BoardGameSettings(
       {@HiveField(1)
-          final GameWinCondition winCondition,
+          final GameFamily gameFamily,
       @HiveField(2, defaultValue: 0)
           final int averageScorePrecision,
-      @HiveField(3, defaultValue: GameMode.Score)
-          final GameMode gameMode}) = _$_BoardGameSettings;
+      @HiveField(3, defaultValue: GameClassification.Score)
+          final GameClassification gameClassification}) = _$_BoardGameSettings;
 
   @override
   @HiveField(1)
-  GameWinCondition get winCondition;
+  GameFamily get gameFamily;
   @override
   @HiveField(2, defaultValue: 0)
   int get averageScorePrecision;
   @override
-  @HiveField(3, defaultValue: GameMode.Score)
-  GameMode get gameMode;
+  @HiveField(3, defaultValue: GameClassification.Score)
+  GameClassification get gameClassification;
   @override
   @JsonKey(ignore: true)
   _$$_BoardGameSettingsCopyWith<_$_BoardGameSettings> get copyWith =>

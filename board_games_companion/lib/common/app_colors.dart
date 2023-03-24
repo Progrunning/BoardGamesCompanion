@@ -46,8 +46,8 @@ class AppColors {
 
   static const Color disabledFloatinActionButtonColor = greyColor;
 
-  static const Color inactiveWinningConditionIcon = greyColor;
-  static const Color activeWinningConditionIcon = accentColor;
+  static const Color inactiveGameFamilyIcon = greyColor;
+  static const Color activeGameFamilyIcon = accentColor;
 
   static Color alternativeSplashColor = primaryColorLight.withOpacity(0.7);
 

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/enums/game_win_condition.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 
 import '../models/hive/score.dart';
 
@@ -19,24 +19,24 @@ extension ScoresExtesions on List<Score>? {
         <Score>[];
   }
 
-  List<Score>? sortByScore(GameWinCondition winningCondition) {
+  List<Score>? sortByScore(GameFamily gameFamily) {
     return this
       ?..sort((Score score, Score otherScore) {
-        return compareScores(score, otherScore, winningCondition);
+        return compareScores(score, otherScore, gameFamily);
       });
   }
 
-  num? toBestScore(GameWinCondition gameWinningCondition) {
+  num? toBestScore(GameFamily gameFamily) {
     final scores = this
             ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
             .map((Score score) => num.parse(score.value!)) ??
         [];
-    switch (gameWinningCondition) {
-      case GameWinCondition.HighestScore:
+    switch (gameFamily) {
+      case GameFamily.HighestScore:
         return scores.reduce(max);
-      case GameWinCondition.LowestScore:
+      case GameFamily.LowestScore:
         return scores.reduce(min);
-      case GameWinCondition.Coop:
+      case GameFamily.Cooperative:
         break;
     }
 
@@ -57,18 +57,18 @@ extension ScoresExtesions on List<Score>? {
   }
 }
 
-int compareScores(Score score, Score otherScore, GameWinCondition winningCondition) {
-  switch (winningCondition) {
-    case GameWinCondition.LowestScore:
+int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
+  switch (gameFamily) {
+    case GameFamily.LowestScore:
       // MK Swap scores around
       final buffer = otherScore;
       otherScore = score;
       score = buffer;
       break;
-    case GameWinCondition.HighestScore:
+    case GameFamily.HighestScore:
       // MK No swapping needed
       break;
-    case GameWinCondition.Coop:
+    case GameFamily.Cooperative:
       break;
   }
 

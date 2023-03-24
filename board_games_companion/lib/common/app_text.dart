@@ -77,14 +77,14 @@ class AppText {
   static const playthroughsStatisticsPagePlayerCountChartLegendFormatSingular = '%i player';
   static const playthroughsStatisticsPagePlayerCountChartLegendFormatPlural = '%i players';
 
-  static const playthroughsGameSettingsGameModeScore = 'Score';
-  static const playthroughsGameSettingsGameModeNoScore = 'No score';
-  static const playthroughsGameSettingsWinConditionCoop = 'Co-op';
-  static const playthroughsGameSettingsGameModeSectionTitle = 'Game mode';
-  static const playthroughsGameSettingsWinConditionSectionTitle = 'Win condition';
-  static const playthroughsGameSettingsScoreSectionTitle = 'Score';
-  static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest score';
-  static const playthroughsGameSettingsWinningConditionLowestScore = 'Lowest score';
+  static const playthroughsGameSettingsGameClassificationScore = 'Score based game';
+  static const playthroughsGameSettingsGameClssificationNoScore = 'No score based game';
+  static const playthroughsGameSettingsGameClassificationSectionTitle = 'Classification';
+  static const playthroughsGameSettingsGameFamilySectionTitle = 'Family';
+  static const playthroughsGameSettingsScoreDetailsSectionTitle = 'Details';
+  static const playthroughsGameSettingsGameFamilyHighestScore = 'Highest score';
+  static const playthroughsGameSettingsGameFamilyLowestScore = 'Lowest score';
+  static const playthroughsGameSettingsGameFamilyCoop = 'Cooperative';
 
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';

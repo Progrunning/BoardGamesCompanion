@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'board_game_mode_settings.dart';
+part of 'board_game_mode_classification.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,30 +15,30 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$BoardGameModeSettings {
-  GameWinCondition get gameWinCondition => throw _privateConstructorUsedError;
+mixin _$BoardGameClassificationSettings {
+  GameFamily get gameFamily => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)
+    required TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)
         score,
-    required TResult Function(GameWinCondition gameWinCondition) noScore,
+    required TResult Function(GameFamily gameFamily) noScore,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)?
+    TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameWinCondition gameWinCondition)? noScore,
+    TResult Function(GameFamily gameFamily)? noScore,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)?
+    TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameWinCondition gameWinCondition)? noScore,
+    TResult Function(GameFamily gameFamily)? noScore,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -63,56 +63,56 @@ mixin _$BoardGameModeSettings {
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $BoardGameModeSettingsCopyWith<BoardGameModeSettings> get copyWith =>
-      throw _privateConstructorUsedError;
+  $BoardGameClassificationSettingsCopyWith<BoardGameClassificationSettings>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BoardGameModeSettingsCopyWith<$Res> {
-  factory $BoardGameModeSettingsCopyWith(BoardGameModeSettings value,
-          $Res Function(BoardGameModeSettings) then) =
-      _$BoardGameModeSettingsCopyWithImpl<$Res>;
-  $Res call({GameWinCondition gameWinCondition});
+abstract class $BoardGameClassificationSettingsCopyWith<$Res> {
+  factory $BoardGameClassificationSettingsCopyWith(
+          BoardGameClassificationSettings value,
+          $Res Function(BoardGameClassificationSettings) then) =
+      _$BoardGameClassificationSettingsCopyWithImpl<$Res>;
+  $Res call({GameFamily gameFamily});
 }
 
 /// @nodoc
-class _$BoardGameModeSettingsCopyWithImpl<$Res>
-    implements $BoardGameModeSettingsCopyWith<$Res> {
-  _$BoardGameModeSettingsCopyWithImpl(this._value, this._then);
+class _$BoardGameClassificationSettingsCopyWithImpl<$Res>
+    implements $BoardGameClassificationSettingsCopyWith<$Res> {
+  _$BoardGameClassificationSettingsCopyWithImpl(this._value, this._then);
 
-  final BoardGameModeSettings _value;
+  final BoardGameClassificationSettings _value;
   // ignore: unused_field
-  final $Res Function(BoardGameModeSettings) _then;
+  final $Res Function(BoardGameClassificationSettings) _then;
 
   @override
   $Res call({
-    Object? gameWinCondition = freezed,
+    Object? gameFamily = freezed,
   }) {
     return _then(_value.copyWith(
-      gameWinCondition: gameWinCondition == freezed
-          ? _value.gameWinCondition
-          : gameWinCondition // ignore: cast_nullable_to_non_nullable
-              as GameWinCondition,
+      gameFamily: gameFamily == freezed
+          ? _value.gameFamily
+          : gameFamily // ignore: cast_nullable_to_non_nullable
+              as GameFamily,
     ));
   }
 }
 
 /// @nodoc
 abstract class _$$_scoreCopyWith<$Res>
-    implements $BoardGameModeSettingsCopyWith<$Res> {
+    implements $BoardGameClassificationSettingsCopyWith<$Res> {
   factory _$$_scoreCopyWith(_$_score value, $Res Function(_$_score) then) =
       __$$_scoreCopyWithImpl<$Res>;
   @override
   $Res call(
-      {GameWinCondition gameWinCondition,
-      AverageScorePrecision averageScorePrecision});
+      {GameFamily gameFamily, AverageScorePrecision averageScorePrecision});
 
   $AverageScorePrecisionCopyWith<$Res> get averageScorePrecision;
 }
 
 /// @nodoc
 class __$$_scoreCopyWithImpl<$Res>
-    extends _$BoardGameModeSettingsCopyWithImpl<$Res>
+    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res>
     implements _$$_scoreCopyWith<$Res> {
   __$$_scoreCopyWithImpl(_$_score _value, $Res Function(_$_score) _then)
       : super(_value, (v) => _then(v as _$_score));
@@ -122,14 +122,14 @@ class __$$_scoreCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? gameWinCondition = freezed,
+    Object? gameFamily = freezed,
     Object? averageScorePrecision = freezed,
   }) {
     return _then(_$_score(
-      gameWinCondition: gameWinCondition == freezed
-          ? _value.gameWinCondition
-          : gameWinCondition // ignore: cast_nullable_to_non_nullable
-              as GameWinCondition,
+      gameFamily: gameFamily == freezed
+          ? _value.gameFamily
+          : gameFamily // ignore: cast_nullable_to_non_nullable
+              as GameFamily,
       averageScorePrecision: averageScorePrecision == freezed
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
@@ -150,16 +150,16 @@ class __$$_scoreCopyWithImpl<$Res>
 
 class _$_score implements _score {
   const _$_score(
-      {required this.gameWinCondition, required this.averageScorePrecision});
+      {required this.gameFamily, required this.averageScorePrecision});
 
   @override
-  final GameWinCondition gameWinCondition;
+  final GameFamily gameFamily;
   @override
   final AverageScorePrecision averageScorePrecision;
 
   @override
   String toString() {
-    return 'BoardGameModeSettings.score(gameWinCondition: $gameWinCondition, averageScorePrecision: $averageScorePrecision)';
+    return 'BoardGameClassificationSettings.score(gameFamily: $gameFamily, averageScorePrecision: $averageScorePrecision)';
   }
 
   @override
@@ -168,7 +168,7 @@ class _$_score implements _score {
         (other.runtimeType == runtimeType &&
             other is _$_score &&
             const DeepCollectionEquality()
-                .equals(other.gameWinCondition, gameWinCondition) &&
+                .equals(other.gameFamily, gameFamily) &&
             const DeepCollectionEquality()
                 .equals(other.averageScorePrecision, averageScorePrecision));
   }
@@ -176,7 +176,7 @@ class _$_score implements _score {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(gameWinCondition),
+      const DeepCollectionEquality().hash(gameFamily),
       const DeepCollectionEquality().hash(averageScorePrecision));
 
   @JsonKey(ignore: true)
@@ -187,36 +187,36 @@ class _$_score implements _score {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)
+    required TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)
         score,
-    required TResult Function(GameWinCondition gameWinCondition) noScore,
+    required TResult Function(GameFamily gameFamily) noScore,
   }) {
-    return score(gameWinCondition, averageScorePrecision);
+    return score(gameFamily, averageScorePrecision);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)?
+    TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameWinCondition gameWinCondition)? noScore,
+    TResult Function(GameFamily gameFamily)? noScore,
   }) {
-    return score?.call(gameWinCondition, averageScorePrecision);
+    return score?.call(gameFamily, averageScorePrecision);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)?
+    TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameWinCondition gameWinCondition)? noScore,
+    TResult Function(GameFamily gameFamily)? noScore,
     required TResult orElse(),
   }) {
     if (score != null) {
-      return score(gameWinCondition, averageScorePrecision);
+      return score(gameFamily, averageScorePrecision);
     }
     return orElse();
   }
@@ -253,13 +253,13 @@ class _$_score implements _score {
   }
 }
 
-abstract class _score implements BoardGameModeSettings {
+abstract class _score implements BoardGameClassificationSettings {
   const factory _score(
-      {required final GameWinCondition gameWinCondition,
+      {required final GameFamily gameFamily,
       required final AverageScorePrecision averageScorePrecision}) = _$_score;
 
   @override
-  GameWinCondition get gameWinCondition;
+  GameFamily get gameFamily;
   AverageScorePrecision get averageScorePrecision;
   @override
   @JsonKey(ignore: true)
@@ -269,17 +269,17 @@ abstract class _score implements BoardGameModeSettings {
 
 /// @nodoc
 abstract class _$$_noScoreCopyWith<$Res>
-    implements $BoardGameModeSettingsCopyWith<$Res> {
+    implements $BoardGameClassificationSettingsCopyWith<$Res> {
   factory _$$_noScoreCopyWith(
           _$_noScore value, $Res Function(_$_noScore) then) =
       __$$_noScoreCopyWithImpl<$Res>;
   @override
-  $Res call({GameWinCondition gameWinCondition});
+  $Res call({GameFamily gameFamily});
 }
 
 /// @nodoc
 class __$$_noScoreCopyWithImpl<$Res>
-    extends _$BoardGameModeSettingsCopyWithImpl<$Res>
+    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res>
     implements _$$_noScoreCopyWith<$Res> {
   __$$_noScoreCopyWithImpl(_$_noScore _value, $Res Function(_$_noScore) _then)
       : super(_value, (v) => _then(v as _$_noScore));
@@ -289,13 +289,13 @@ class __$$_noScoreCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? gameWinCondition = freezed,
+    Object? gameFamily = freezed,
   }) {
     return _then(_$_noScore(
-      gameWinCondition: gameWinCondition == freezed
-          ? _value.gameWinCondition
-          : gameWinCondition // ignore: cast_nullable_to_non_nullable
-              as GameWinCondition,
+      gameFamily: gameFamily == freezed
+          ? _value.gameFamily
+          : gameFamily // ignore: cast_nullable_to_non_nullable
+              as GameFamily,
     ));
   }
 }
@@ -303,14 +303,14 @@ class __$$_noScoreCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_noScore implements _noScore {
-  const _$_noScore({required this.gameWinCondition});
+  const _$_noScore({required this.gameFamily});
 
   @override
-  final GameWinCondition gameWinCondition;
+  final GameFamily gameFamily;
 
   @override
   String toString() {
-    return 'BoardGameModeSettings.noScore(gameWinCondition: $gameWinCondition)';
+    return 'BoardGameClassificationSettings.noScore(gameFamily: $gameFamily)';
   }
 
   @override
@@ -319,12 +319,12 @@ class _$_noScore implements _noScore {
         (other.runtimeType == runtimeType &&
             other is _$_noScore &&
             const DeepCollectionEquality()
-                .equals(other.gameWinCondition, gameWinCondition));
+                .equals(other.gameFamily, gameFamily));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(gameWinCondition));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(gameFamily));
 
   @JsonKey(ignore: true)
   @override
@@ -334,36 +334,36 @@ class _$_noScore implements _noScore {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)
+    required TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)
         score,
-    required TResult Function(GameWinCondition gameWinCondition) noScore,
+    required TResult Function(GameFamily gameFamily) noScore,
   }) {
-    return noScore(gameWinCondition);
+    return noScore(gameFamily);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)?
+    TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameWinCondition gameWinCondition)? noScore,
+    TResult Function(GameFamily gameFamily)? noScore,
   }) {
-    return noScore?.call(gameWinCondition);
+    return noScore?.call(gameFamily);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(GameWinCondition gameWinCondition,
-            AverageScorePrecision averageScorePrecision)?
+    TResult Function(
+            GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameWinCondition gameWinCondition)? noScore,
+    TResult Function(GameFamily gameFamily)? noScore,
     required TResult orElse(),
   }) {
     if (noScore != null) {
-      return noScore(gameWinCondition);
+      return noScore(gameFamily);
     }
     return orElse();
   }
@@ -400,12 +400,11 @@ class _$_noScore implements _noScore {
   }
 }
 
-abstract class _noScore implements BoardGameModeSettings {
-  const factory _noScore({required final GameWinCondition gameWinCondition}) =
-      _$_noScore;
+abstract class _noScore implements BoardGameClassificationSettings {
+  const factory _noScore({required final GameFamily gameFamily}) = _$_noScore;
 
   @override
-  GameWinCondition get gameWinCondition;
+  GameFamily get gameFamily;
   @override
   @JsonKey(ignore: true)
   _$$_noScoreCopyWith<_$_noScore> get copyWith =>

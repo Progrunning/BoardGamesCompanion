@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums/game_win_condition.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -19,7 +19,7 @@ class BoardGamePlaythrough with _$BoardGamePlaythrough {
   PlayerScore get winner {
     final sortedPlayerScores = playthrough.playerScores
         .toList()
-        .sortByScore(boardGameDetails.settings?.winCondition ?? GameWinCondition.HighestScore);
+        .sortByScore(boardGameDetails.settings?.gameFamily ?? GameFamily.HighestScore);
     return sortedPlayerScores.first;
   }
 

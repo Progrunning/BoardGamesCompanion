@@ -1,8 +1,8 @@
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums/game_mode.dart';
-import 'package:board_games_companion/common/enums/game_win_condition.dart';
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 import 'package:board_games_companion/extensions/average_score_precision_extensions.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart';
 import 'package:board_games_companion/widgets/common/filtering/filter_toggle_buttons_container.dart';
@@ -38,32 +38,33 @@ class _PlaythroughsGameSettingsPageState extends State<PlaythroughsGameSettingsP
         slivers: [
           SliverPersistentHeader(
             delegate: BgcSliverHeaderDelegate(
-              primaryTitle: AppText.playthroughsGameSettingsGameModeSectionTitle,
+              primaryTitle: AppText.playthroughsGameSettingsGameClassificationSectionTitle,
             ),
           ),
           Observer(builder: (_) {
-            return _GameModeSection(
-              gameMode: viewModel.gameMode,
-              onGameModeChanged: (GameMode? gameMode) => _handleGameModeChanged(gameMode),
+            return _GameClassificationSection(
+              gameClassification: viewModel.gameClassification,
+              onGameClassificationChanged: (GameClassification? gameClassification) =>
+                  _handleGameClassificationChange(gameClassification),
             );
           }),
           SliverPersistentHeader(
             delegate: BgcSliverHeaderDelegate(
-              primaryTitle: AppText.playthroughsGameSettingsWinConditionSectionTitle,
+              primaryTitle: AppText.playthroughsGameSettingsGameFamilySectionTitle,
             ),
           ),
           Observer(builder: (_) {
-            return viewModel.gameModeSettings.when(
-              score: (gameWinCondition, averageScorePrecision) => MultiSliver(
+            return viewModel.gameClassificationSettings.when(
+              score: (gameFamily, averageScorePrecision) => MultiSliver(
                 children: [
-                  _ScoreGameModeWinConditions(
-                    gameWinCondition: gameWinCondition,
-                    onChanged: (GameWinCondition? winningCondition) =>
-                        _handleWinConditionChanged(winningCondition),
+                  _ScoreGameFamilySection(
+                    gameFamily: gameFamily,
+                    onChanged: (GameFamily? selectedGameFamily) =>
+                        _handleGameFamilyChange(selectedGameFamily),
                   ),
                   SliverPersistentHeader(
                     delegate: BgcSliverHeaderDelegate(
-                      primaryTitle: AppText.editPlaythroughPageScoreSectionTitle,
+                      primaryTitle: AppText.playthroughsGameSettingsScoreDetailsSectionTitle,
                     ),
                   ),
                   Observer(
@@ -77,20 +78,20 @@ class _PlaythroughsGameSettingsPageState extends State<PlaythroughsGameSettingsP
                   ),
                 ],
               ),
-              noScore: (gameWinCondition) => MultiSliver(
+              noScore: (gameFamily) => MultiSliver(
                 children: [
-                  RadioListTile<GameWinCondition>(
+                  RadioListTile<GameFamily>(
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                     activeColor: AppColors.accentColor,
                     title: const Text(
-                      AppText.playthroughsGameSettingsWinConditionCoop,
+                      AppText.playthroughsGameSettingsGameFamilyCoop,
                       style: AppTheme.defaultTextFieldStyle,
                     ),
-                    value: GameWinCondition.Coop,
-                    groupValue: gameWinCondition,
-                    onChanged: (GameWinCondition? winningCondition) =>
-                        _handleWinConditionChanged(winningCondition),
+                    value: GameFamily.Cooperative,
+                    groupValue: gameFamily,
+                    onChanged: (GameFamily? selectedGameFamily) =>
+                        _handleGameFamilyChange(selectedGameFamily),
                   ),
                 ],
               ),
@@ -99,20 +100,20 @@ class _PlaythroughsGameSettingsPageState extends State<PlaythroughsGameSettingsP
         ],
       );
 
-  Future<void> _handleWinConditionChanged(GameWinCondition? winningCondition) async {
-    if (winningCondition == null) {
+  Future<void> _handleGameFamilyChange(GameFamily? gameFamily) async {
+    if (gameFamily == null) {
       return;
     }
 
-    await viewModel.updateWinCondition(winningCondition);
+    await viewModel.updateGameFamily(gameFamily);
   }
 
-  Future<void> _handleGameModeChanged(GameMode? gameMode) async {
-    if (gameMode == null || gameMode == viewModel.gameMode) {
+  Future<void> _handleGameClassificationChange(GameClassification? gameClassification) async {
+    if (gameClassification == null || gameClassification == viewModel.gameClassification) {
       return;
     }
 
-    await viewModel.updateGameMode(gameMode);
+    await viewModel.updateGameClassification(gameClassification);
   }
 }
 
@@ -194,21 +195,21 @@ class _AverageScorePrecisionTile extends FilterToggleButton<AverageScorePrecisio
         );
 }
 
-class _GameModeSection extends StatefulWidget {
-  const _GameModeSection({
-    required this.gameMode,
-    required this.onGameModeChanged,
+class _GameClassificationSection extends StatefulWidget {
+  const _GameClassificationSection({
+    required this.gameClassification,
+    required this.onGameClassificationChanged,
     Key? key,
   }) : super(key: key);
 
-  final GameMode gameMode;
-  final Function(GameMode?) onGameModeChanged;
+  final GameClassification gameClassification;
+  final Function(GameClassification?) onGameClassificationChanged;
 
   @override
-  State<_GameModeSection> createState() => _GameModeSectionState();
+  State<_GameClassificationSection> createState() => _GameClassificationSectionState();
 }
 
-class _GameModeSectionState extends State<_GameModeSection> {
+class _GameClassificationSectionState extends State<_GameClassificationSection> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -219,82 +220,82 @@ class _GameModeSectionState extends State<_GameModeSection> {
           right: Dimensions.standardSpacing,
           bottom: Dimensions.standardSpacing,
         ),
-        child: DropdownButton<GameMode>(
+        child: DropdownButton<GameClassification>(
           iconEnabledColor: AppColors.accentColor,
           iconSize: 42,
-          value: widget.gameMode,
+          value: widget.gameClassification,
           underline: const SizedBox.shrink(),
           isExpanded: true,
           items: [
-            DropdownMenuItem<GameMode>(
-              value: GameMode.Score,
+            DropdownMenuItem<GameClassification>(
+              value: GameClassification.Score,
               child: Text(
-                AppText.playthroughsGameSettingsGameModeScore,
+                AppText.playthroughsGameSettingsGameClassificationScore,
                 style: AppTheme.theme.textTheme.bodyText1!,
               ),
             ),
-            DropdownMenuItem<GameMode>(
-              value: GameMode.NoScore,
+            DropdownMenuItem<GameClassification>(
+              value: GameClassification.NoScore,
               child: Text(
-                AppText.playthroughsGameSettingsGameModeNoScore,
+                AppText.playthroughsGameSettingsGameClssificationNoScore,
                 style: AppTheme.theme.textTheme.bodyText1!,
               ),
             ),
           ],
-          onChanged: (GameMode? value) => widget.onGameModeChanged(value),
+          onChanged: (GameClassification? value) => widget.onGameClassificationChanged(value),
         ),
       ),
     );
   }
 }
 
-class _ScoreGameModeWinConditions extends StatefulWidget {
-  const _ScoreGameModeWinConditions({
-    required this.gameWinCondition,
+class _ScoreGameFamilySection extends StatefulWidget {
+  const _ScoreGameFamilySection({
+    required this.gameFamily,
     required this.onChanged,
   });
-  final GameWinCondition? gameWinCondition;
-  final Function(GameWinCondition?) onChanged;
+  final GameFamily? gameFamily;
+  final Function(GameFamily?) onChanged;
 
   @override
-  State<_ScoreGameModeWinConditions> createState() => _ScoreGameModeWinConditionsState();
+  State<_ScoreGameFamilySection> createState() => _ScoreGameFamilySectionState();
 }
 
-class _ScoreGameModeWinConditionsState extends State<_ScoreGameModeWinConditions> {
-  late GameWinCondition? _gameWinCondition = widget.gameWinCondition;
+class _ScoreGameFamilySectionState extends State<_ScoreGameFamilySection> {
+  late GameFamily? _gameFamily = widget.gameFamily;
 
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          RadioListTile<GameWinCondition>(
+          RadioListTile<GameFamily>(
             contentPadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
             activeColor: AppColors.accentColor,
             title: const Text(
-              AppText.playthroughsGameSettingsWinningConditionHighestScore,
+              AppText.playthroughsGameSettingsGameFamilyHighestScore,
               style: AppTheme.defaultTextFieldStyle,
             ),
-            value: GameWinCondition.HighestScore,
-            groupValue: _gameWinCondition,
-            onChanged: (GameWinCondition? value) {
+            value: GameFamily.HighestScore,
+            groupValue: _gameFamily,
+            onChanged: (GameFamily? value) {
               setState(() {
-                _gameWinCondition = value;
-                widget.onChanged(_gameWinCondition);
+                _gameFamily = value;
+                widget.onChanged(_gameFamily);
               });
             },
           ),
-          RadioListTile<GameWinCondition>(
+          RadioListTile<GameFamily>(
             contentPadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
             activeColor: AppColors.accentColor,
             title: const Text(
-              AppText.playthroughsGameSettingsWinningConditionLowestScore,
+              AppText.playthroughsGameSettingsGameFamilyLowestScore,
               style: AppTheme.defaultTextFieldStyle,
             ),
-            value: GameWinCondition.LowestScore,
-            groupValue: _gameWinCondition,
-            onChanged: (GameWinCondition? value) {
+            value: GameFamily.LowestScore,
+            groupValue: _gameFamily,
+            onChanged: (GameFamily? value) {
               setState(() {
-                _gameWinCondition = value;
-                widget.onChanged(_gameWinCondition);
+                _gameFamily = value;
+                widget.onChanged(_gameFamily);
               });
             },
           ),

@@ -12,8 +12,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'app.dart';
-import 'common/enums/game_mode.dart';
-import 'common/enums/game_win_condition.dart';
+import 'common/enums/game_classification.dart';
+import 'common/enums/game_family.dart';
 import 'common/enums/order_by.dart';
 import 'common/enums/playthrough_status.dart';
 import 'common/enums/sort_by_option.dart';
@@ -59,8 +59,8 @@ Future<void> main() async {
       ..registerAdapter(SortByOptionAdapter())
       ..registerAdapter(OrderByAdapter())
       ..registerAdapter(CollectionFiltersAdapter())
-      ..registerAdapter(GameWinConditionAdapter())
-      ..registerAdapter(GameModeAdapter())
+      ..registerAdapter(GameFamilyAdapter())
+      ..registerAdapter(GameClassificationAdapter())
       ..registerAdapter(BoardGameSettingsAdapter())
       ..registerAdapter(PlaythroughNoteAdapter())
       ..registerAdapter(SearchHistoryEntryAdapter());

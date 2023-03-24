@@ -1,13 +1,13 @@
-import 'package:board_games_companion/common/enums/game_mode.dart';
-import 'package:board_games_companion/common/enums/game_win_condition.dart';
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 
-extension GameModeExtensions on GameMode {
-  GameWinCondition toDefaultWinCondition() {
+extension GameClassificationExtensions on GameClassification {
+  GameFamily toDefaultGameFamily() {
     switch (this) {
-      case GameMode.Score:
-        return GameWinCondition.HighestScore;
-      case GameMode.NoScore:
-        return GameWinCondition.Coop;
+      case GameClassification.Score:
+        return GameFamily.HighestScore;
+      case GameClassification.NoScore:
+        return GameFamily.Cooperative;
     }
   }
 }
