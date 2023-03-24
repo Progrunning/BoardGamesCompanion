@@ -4,7 +4,7 @@ import 'package:board_games_companion/stores/game_playthroughs_details_store.dar
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../models/playthrough_details.dart';
+import '../../models/playthroughs/playthrough_details.dart';
 
 part 'playthroughs_history_view_model.g.dart';
 

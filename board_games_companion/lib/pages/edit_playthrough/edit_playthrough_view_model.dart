@@ -3,7 +3,6 @@
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +10,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/playthrough_status.dart';
+import '../../models/playthroughs/playthrough_details.dart';
 
 part 'edit_playthrough_view_model.g.dart';
 

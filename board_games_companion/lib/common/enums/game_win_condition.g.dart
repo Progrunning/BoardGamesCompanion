@@ -17,6 +17,8 @@ class GameWinConditionAdapter extends TypeAdapter<GameWinCondition> {
         return GameWinCondition.HighestScore;
       case 1:
         return GameWinCondition.LowestScore;
+      case 2:
+        return GameWinCondition.Coop;
       default:
         return GameWinCondition.HighestScore;
     }
@@ -30,6 +32,9 @@ class GameWinConditionAdapter extends TypeAdapter<GameWinCondition> {
         break;
       case GameWinCondition.LowestScore:
         writer.writeByte(1);
+        break;
+      case GameWinCondition.Coop:
+        writer.writeByte(2);
         break;
     }
   }

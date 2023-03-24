@@ -36,7 +36,11 @@ extension ScoresExtesions on List<Score>? {
         return scores.reduce(max);
       case GameWinCondition.LowestScore:
         return scores.reduce(min);
+      case GameWinCondition.Coop:
+        break;
     }
+
+    return null;
   }
 
   double? toAverageScore() {
@@ -63,6 +67,8 @@ int compareScores(Score score, Score otherScore, GameWinCondition winningConditi
       break;
     case GameWinCondition.HighestScore:
       // MK No swapping needed
+      break;
+    case GameWinCondition.Coop:
       break;
   }
 

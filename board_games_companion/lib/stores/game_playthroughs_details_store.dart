@@ -15,8 +15,8 @@ import '../models/hive/board_game_details.dart';
 import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
-import '../models/playthrough_details.dart';
-import '../models/playthrough_player.dart';
+import '../models/playthroughs/playthrough_details.dart';
+import '../models/playthroughs/playthrough_player.dart';
 import 'players_store.dart';
 
 part 'game_playthroughs_details_store.g.dart';

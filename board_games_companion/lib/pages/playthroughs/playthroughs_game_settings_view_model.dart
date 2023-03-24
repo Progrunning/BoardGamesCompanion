@@ -2,6 +2,7 @@
 
 import 'package:board_games_companion/common/enums/game_mode.dart';
 import 'package:board_games_companion/common/enums/game_win_condition.dart';
+import 'package:board_games_companion/models/board_game_settings/board_game_mode_settings.dart';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:board_games_companion/pages/playthroughs/average_score_precision.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
@@ -23,18 +24,30 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
   final GamePlaythroughsDetailsStore _gamePlaythroughsStore;
 
   @computed
-  GameWinCondition get winCondition => _gamePlaythroughsStore.gameWinCondition;
-
-  @computed
-  GameMode get gameMode => _gamePlaythroughsStore.gameMode;
-
-  @computed
-  AverageScorePrecision get averageScorePrecision {
+  AverageScorePrecision get _averageScorePrecision {
     if (_gamePlaythroughsStore.averageScorePrecision == 0) {
       return const AverageScorePrecision.none();
     }
     return AverageScorePrecision.value(precision: _gamePlaythroughsStore.averageScorePrecision);
   }
+
+  @computed
+  BoardGameModeSettings get gameModeSettings {
+    switch (_gamePlaythroughsStore.gameMode) {
+      case GameMode.Score:
+        return BoardGameModeSettings.score(
+          gameWinCondition: _gamePlaythroughsStore.gameWinCondition,
+          averageScorePrecision: _averageScorePrecision,
+        );
+      case GameMode.NoScore:
+        return BoardGameModeSettings.noScore(
+          gameWinCondition: _gamePlaythroughsStore.gameWinCondition,
+        );
+    }
+  }
+
+  @computed
+  GameMode get gameMode => _gamePlaythroughsStore.gameMode;
 
   @action
   Future<void> updateWinCondition(GameWinCondition winCondition) async {
@@ -44,6 +57,19 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
     final updatedBoardGame = boardGame.copyWith(
         settings:
             (boardGame.settings ?? const BoardGameSettings()).copyWith(winCondition: winCondition));
+    await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
+  }
+
+  @action
+  Future<void> updateGameMode(GameMode gameMode) async {
+    final boardGame = _boardGamesStore.allBoardGames
+        .firstWhere((bg) => bg.id == _gamePlaythroughsStore.boardGameId);
+
+    final updatedBoardGame = boardGame.copyWith(
+        settings: (boardGame.settings ?? const BoardGameSettings()).copyWith(
+      gameMode: gameMode,
+      winCondition: gameMode.toDefaultWinCondition(),
+    ));
     await _boardGamesStore.addOrUpdateBoardGame(updatedBoardGame);
   }
 

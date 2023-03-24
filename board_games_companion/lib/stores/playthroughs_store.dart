@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/player_score.dart';
-import '../models/playthrough_player.dart';
+import '../models/playthroughs/playthrough_player.dart';
 
 part 'playthroughs_store.g.dart';
 

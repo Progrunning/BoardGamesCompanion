@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -17,7 +16,8 @@ import '../../injectable.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
-import '../../models/playthrough_player.dart';
+import '../../models/playthroughs/playthrough_details.dart';
+import '../../models/playthroughs/playthrough_player.dart';
 import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';

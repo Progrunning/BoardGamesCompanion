@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import '../common/enums/playthrough_status.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
-import '../models/playthrough_player.dart';
+import '../models/playthroughs/playthrough_player.dart';
 import 'hive_base_service.dart';
 import 'score_service.dart';
 

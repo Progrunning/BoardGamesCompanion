@@ -80,10 +80,11 @@ class AppText {
   static const playthroughsGameSettingsGameModeScore = 'Score';
   static const playthroughsGameSettingsGameModeNoScore = 'No score';
   static const playthroughsGameSettingsWinConditionCoop = 'Co-op';
+  static const playthroughsGameSettingsGameModeSectionTitle = 'Game mode';
   static const playthroughsGameSettingsWinConditionSectionTitle = 'Win condition';
   static const playthroughsGameSettingsScoreSectionTitle = 'Score';
-  static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest';
-  static const playthroughsGameSettingsWinningConditionLowestScore = 'Lowest';
+  static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest score';
+  static const playthroughsGameSettingsWinningConditionLowestScore = 'Lowest score';
 
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';

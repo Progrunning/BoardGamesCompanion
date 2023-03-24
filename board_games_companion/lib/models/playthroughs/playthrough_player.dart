@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'hive/player.dart';
+import '../hive/player.dart';
 
 part 'playthrough_player.freezed.dart';
 

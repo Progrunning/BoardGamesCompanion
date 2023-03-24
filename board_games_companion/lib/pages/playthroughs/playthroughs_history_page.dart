@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -11,6 +10,7 @@ import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../injectable.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
+import '../../models/playthroughs/playthrough_details.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';

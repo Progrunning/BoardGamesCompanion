@@ -3,7 +3,7 @@ import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../models/player_score.dart';
-import '../../models/playthrough_details.dart';
+import '../../models/playthroughs/playthrough_details.dart';
 
 part 'board_game_playthrough.freezed.dart';
 
