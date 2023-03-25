@@ -28,7 +28,7 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
     if (_gamePlaythroughsStore.averageScorePrecision == 0) {
       return const AverageScorePrecision.none();
     }
-    return AverageScorePrecision.value(precision: _gamePlaythroughsStore.averageScorePrecision);
+    return AverageScorePrecision.precision(value: _gamePlaythroughsStore.averageScorePrecision);
   }
 
   @computed
@@ -82,7 +82,7 @@ abstract class _PlaythroughsGameSettingsViewModel with Store {
       settings: (boardGame.settings ?? const BoardGameSettings()).copyWith(
         averageScorePrecision: averageScorePrecision.when(
           none: () => 0,
-          value: (precision) => precision,
+          precision: (value) => value,
         ),
       ),
     );

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'score.dart';
 
@@ -34,7 +34,8 @@ mixin _$Score {
 /// @nodoc
 abstract class $ScoreCopyWith<$Res> {
   factory $ScoreCopyWith(Score value, $Res Function(Score) then) =
-      _$ScoreCopyWithImpl<$Res>;
+      _$ScoreCopyWithImpl<$Res, Score>;
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(2) String playerId,
@@ -44,43 +45,46 @@ abstract class $ScoreCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ScoreCopyWithImpl<$Res> implements $ScoreCopyWith<$Res> {
+class _$ScoreCopyWithImpl<$Res, $Val extends Score>
+    implements $ScoreCopyWith<$Res> {
   _$ScoreCopyWithImpl(this._value, this._then);
 
-  final Score _value;
   // ignore: unused_field
-  final $Res Function(Score) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? playerId = freezed,
-    Object? boardGameId = freezed,
+    Object? id = null,
+    Object? playerId = null,
+    Object? boardGameId = null,
     Object? value = freezed,
     Object? playthroughId = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      playerId: playerId == freezed
+      playerId: null == playerId
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      value: value == freezed
+      value: freezed == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
               as String?,
-      playthroughId: playthroughId == freezed
+      playthroughId: freezed == playthroughId
           ? _value.playthroughId
           : playthroughId // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -89,6 +93,7 @@ abstract class _$$_ScoreCopyWith<$Res> implements $ScoreCopyWith<$Res> {
   factory _$$_ScoreCopyWith(_$_Score value, $Res Function(_$_Score) then) =
       __$$_ScoreCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(2) String playerId,
@@ -98,40 +103,38 @@ abstract class _$$_ScoreCopyWith<$Res> implements $ScoreCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ScoreCopyWithImpl<$Res> extends _$ScoreCopyWithImpl<$Res>
+class __$$_ScoreCopyWithImpl<$Res> extends _$ScoreCopyWithImpl<$Res, _$_Score>
     implements _$$_ScoreCopyWith<$Res> {
   __$$_ScoreCopyWithImpl(_$_Score _value, $Res Function(_$_Score) _then)
-      : super(_value, (v) => _then(v as _$_Score));
+      : super(_value, _then);
 
-  @override
-  _$_Score get _value => super._value as _$_Score;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? playerId = freezed,
-    Object? boardGameId = freezed,
+    Object? id = null,
+    Object? playerId = null,
+    Object? boardGameId = null,
     Object? value = freezed,
     Object? playthroughId = freezed,
   }) {
     return _then(_$_Score(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      playerId: playerId == freezed
+      playerId: null == playerId
           ? _value.playerId
           : playerId // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      value: value == freezed
+      value: freezed == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
               as String?,
-      playthroughId: playthroughId == freezed
+      playthroughId: freezed == playthroughId
           ? _value.playthroughId
           : playthroughId // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -177,26 +180,23 @@ class _$_Score extends _Score {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Score &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.playerId, playerId) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameId, boardGameId) &&
-            const DeepCollectionEquality().equals(other.value, value) &&
-            const DeepCollectionEquality()
-                .equals(other.playthroughId, playthroughId));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.playerId, playerId) ||
+                other.playerId == playerId) &&
+            (identical(other.boardGameId, boardGameId) ||
+                other.boardGameId == boardGameId) &&
+            (identical(other.value, value) || other.value == value) &&
+            (identical(other.playthroughId, playthroughId) ||
+                other.playthroughId == playthroughId));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(playerId),
-      const DeepCollectionEquality().hash(boardGameId),
-      const DeepCollectionEquality().hash(value),
-      const DeepCollectionEquality().hash(playthroughId));
+  int get hashCode =>
+      Object.hash(runtimeType, id, playerId, boardGameId, value, playthroughId);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ScoreCopyWith<_$_Score> get copyWith =>
       __$$_ScoreCopyWithImpl<_$_Score>(this, _$identity);
 }

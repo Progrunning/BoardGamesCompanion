@@ -5,42 +5,39 @@ import 'hive/player.dart';
 import 'player_score.dart';
 import 'player_statistics.dart';
 
+export '../extensions/board_game_statistics_extensions.dart';
+
 part 'board_game_statistics.freezed.dart';
 
-class BoardGameStatistics {
-  DateTime? lastPlayed;
+@freezed
+class BoardGameStatistics with _$BoardGameStatistics {
+  const factory BoardGameStatistics.none() = _none;
+  const factory BoardGameStatistics.loading() = _loading;
+  const factory BoardGameStatistics.score({
+    required ScoreBoardGameStatistics scoreBoardGameStatistics,
+  }) = _score;
+  const factory BoardGameStatistics.noScore() = _noScore;
+}
 
-  PlayerScore? lastWinner;
+@unfreezed
+class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
+  factory ScoreBoardGameStatistics({
+    int? numberOfGamesPlayed,
+    double? averageNumberOfPlayers,
+    DateTime? lastPlayed,
+    PlayerScore? lastWinner,
+    int? totalPlaytimeInSeconds,
+    num? bestScore,
+    double? averageScore,
+    @Default(0) int averageScorePrecision,
+    List<Tuple2<Player, String>>? topScoreres,
+    List<PlayerStatistics>? playersStatistics,
+    List<PlayerCountStatistics>? playerCountPercentage,
+    List<PlayerWinsStatistics>? playerWinsPercentage,
+    Map<Player, int>? playerWins,
+  }) = _ScoreBoardGameStatistics;
 
-  int? numberOfGamesPlayed;
-
-  int? totalPlaytimeInSeconds;
-
-  int? get averagePlaytimeInSeconds {
-    if (totalPlaytimeInSeconds == null || numberOfGamesPlayed == null) {
-      return null;
-    }
-
-    return (totalPlaytimeInSeconds! / numberOfGamesPlayed!).floor();
-  }
-
-  num? bestScore;
-
-  double? averageScore;
-
-  int averageScorePrecision = 0;
-
-  double? averageNumberOfPlayers;
-
-  List<Tuple2<Player, String>>? topScoreres;
-
-  List<PlayerStatistics>? playersStatistics;
-
-  List<PlayerCountStatistics>? playerCountPercentage;
-
-  List<PlayerWinsStatistics>? playerWinsPercentage;
-
-  Map<Player, int>? playerWins;
+  ScoreBoardGameStatistics._();
 }
 
 @freezed

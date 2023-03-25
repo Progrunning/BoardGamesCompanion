@@ -620,6 +620,9 @@ class _GameSpinnerItem extends StatelessWidget {
                     placeholder: (context, url) => Container(
                       decoration: AppStyles.tileGradientBoxDecoration,
                     ),
+                    errorWidget: (context, url, dynamic error) => Container(
+                      decoration: AppStyles.tileGradientBoxDecoration,
+                    ),
                   ),
                   file: () => ClipRRect(
                     borderRadius: AppTheme.defaultBorderRadius,
@@ -1072,7 +1075,7 @@ class _FilterPlaytime extends FilterToggleButton<PlaytimeFilter> {
           child: Center(
             child: Text(
               playtimeFilter.toFormattedText(),
-              style: AppTheme.theme.textTheme.headline4?.copyWith(
+              style: AppTheme.theme.textTheme.headlineMedium?.copyWith(
                 color: isSelected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
               ),
             ),

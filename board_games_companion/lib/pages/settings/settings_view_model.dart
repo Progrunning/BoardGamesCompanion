@@ -7,6 +7,7 @@ import 'package:board_games_companion/stores/app_store.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/user_store.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:share_plus/share_plus.dart';
@@ -76,9 +77,10 @@ abstract class _SettingsViewModel with Store {
   void loadBackups() => futureLoadBackups = ObservableFuture(_loadBackups());
 
   Future<void> shareBackupFile(BackupFile backupFile, {Rect? sharePositionOrigin}) async =>
-      Share.shareFiles(
-        [backupFile.path],
-        mimeTypes: ['application/zip'],
+      Share.shareXFiles(
+        [
+          XFile(backupFile.path, mimeType: 'application/zip'),
+        ],
         sharePositionOrigin: sharePositionOrigin,
       );
 

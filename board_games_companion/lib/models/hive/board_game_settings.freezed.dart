@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'board_game_settings.dart';
 
@@ -33,7 +33,8 @@ mixin _$BoardGameSettings {
 abstract class $BoardGameSettingsCopyWith<$Res> {
   factory $BoardGameSettingsCopyWith(
           BoardGameSettings value, $Res Function(BoardGameSettings) then) =
-      _$BoardGameSettingsCopyWithImpl<$Res>;
+      _$BoardGameSettingsCopyWithImpl<$Res, BoardGameSettings>;
+  @useResult
   $Res call(
       {@HiveField(1)
           GameFamily gameFamily,
@@ -44,34 +45,36 @@ abstract class $BoardGameSettingsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoardGameSettingsCopyWithImpl<$Res>
+class _$BoardGameSettingsCopyWithImpl<$Res, $Val extends BoardGameSettings>
     implements $BoardGameSettingsCopyWith<$Res> {
   _$BoardGameSettingsCopyWithImpl(this._value, this._then);
 
-  final BoardGameSettings _value;
   // ignore: unused_field
-  final $Res Function(BoardGameSettings) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameFamily = freezed,
-    Object? averageScorePrecision = freezed,
-    Object? gameClassification = freezed,
+    Object? gameFamily = null,
+    Object? averageScorePrecision = null,
+    Object? gameClassification = null,
   }) {
     return _then(_value.copyWith(
-      gameFamily: gameFamily == freezed
+      gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
               as GameFamily,
-      averageScorePrecision: averageScorePrecision == freezed
+      averageScorePrecision: null == averageScorePrecision
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
               as int,
-      gameClassification: gameClassification == freezed
+      gameClassification: null == gameClassification
           ? _value.gameClassification
           : gameClassification // ignore: cast_nullable_to_non_nullable
               as GameClassification,
-    ));
+    ) as $Val);
   }
 }
 
@@ -82,6 +85,7 @@ abstract class _$$_BoardGameSettingsCopyWith<$Res>
           $Res Function(_$_BoardGameSettings) then) =
       __$$_BoardGameSettingsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(1)
           GameFamily gameFamily,
@@ -93,31 +97,29 @@ abstract class _$$_BoardGameSettingsCopyWith<$Res>
 
 /// @nodoc
 class __$$_BoardGameSettingsCopyWithImpl<$Res>
-    extends _$BoardGameSettingsCopyWithImpl<$Res>
+    extends _$BoardGameSettingsCopyWithImpl<$Res, _$_BoardGameSettings>
     implements _$$_BoardGameSettingsCopyWith<$Res> {
   __$$_BoardGameSettingsCopyWithImpl(
       _$_BoardGameSettings _value, $Res Function(_$_BoardGameSettings) _then)
-      : super(_value, (v) => _then(v as _$_BoardGameSettings));
+      : super(_value, _then);
 
-  @override
-  _$_BoardGameSettings get _value => super._value as _$_BoardGameSettings;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameFamily = freezed,
-    Object? averageScorePrecision = freezed,
-    Object? gameClassification = freezed,
+    Object? gameFamily = null,
+    Object? averageScorePrecision = null,
+    Object? gameClassification = null,
   }) {
     return _then(_$_BoardGameSettings(
-      gameFamily: gameFamily == freezed
+      gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
               as GameFamily,
-      averageScorePrecision: averageScorePrecision == freezed
+      averageScorePrecision: null == averageScorePrecision
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
               as int,
-      gameClassification: gameClassification == freezed
+      gameClassification: null == gameClassification
           ? _value.gameClassification
           : gameClassification // ignore: cast_nullable_to_non_nullable
               as GameClassification,
@@ -162,23 +164,21 @@ class _$_BoardGameSettings implements _BoardGameSettings {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_BoardGameSettings &&
-            const DeepCollectionEquality()
-                .equals(other.gameFamily, gameFamily) &&
-            const DeepCollectionEquality()
-                .equals(other.averageScorePrecision, averageScorePrecision) &&
-            const DeepCollectionEquality()
-                .equals(other.gameClassification, gameClassification));
+            (identical(other.gameFamily, gameFamily) ||
+                other.gameFamily == gameFamily) &&
+            (identical(other.averageScorePrecision, averageScorePrecision) ||
+                other.averageScorePrecision == averageScorePrecision) &&
+            (identical(other.gameClassification, gameClassification) ||
+                other.gameClassification == gameClassification));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(gameFamily),
-      const DeepCollectionEquality().hash(averageScorePrecision),
-      const DeepCollectionEquality().hash(gameClassification));
+      runtimeType, gameFamily, averageScorePrecision, gameClassification);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_BoardGameSettingsCopyWith<_$_BoardGameSettings> get copyWith =>
       __$$_BoardGameSettingsCopyWithImpl<_$_BoardGameSettings>(
           this, _$identity);

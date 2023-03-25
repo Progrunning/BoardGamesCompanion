@@ -438,7 +438,7 @@ class _PlayerScore extends StatelessWidget {
               style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),
-            Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyText2),
+            Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyMedium),
           ],
         ),
       ],
@@ -515,7 +515,7 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
                       fontSize: Dimensions.doubleExtraLargeFontSize,
                     ),
                   ),
-                  Text('h', style: AppTheme.theme.textTheme.bodyText2),
+                  Text('h', style: AppTheme.theme.textTheme.bodyMedium),
                   const SizedBox(width: Dimensions.halfStandardSpacing),
                   NumberPicker(
                     value: minutesPlyed,
@@ -529,7 +529,7 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
                       fontSize: Dimensions.doubleExtraLargeFontSize,
                     ),
                   ),
-                  Text('min ', style: AppTheme.theme.textTheme.bodyText2),
+                  Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
                 ],
               ),
             )

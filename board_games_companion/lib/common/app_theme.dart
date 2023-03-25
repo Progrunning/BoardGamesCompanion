@@ -41,42 +41,42 @@ class AppTheme {
     final originalTextTheme = GoogleFonts.latoTextTheme();
     const originalColorScheme = ColorScheme.light();
     final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
-    final originalBodyText1 = originalTextTheme.bodyText1!;
-    final originalBodyText2 = originalTextTheme.bodyText2!;
-    final originalHeadline5 = originalTextTheme.headline5!;
-    final originalHeadline2 = originalTextTheme.headline2!;
-    final originalSubtitle2 = originalTextTheme.subtitle2!;
+    final originalBodyLarge = originalTextTheme.bodyLarge!;
+    final originalBodyMedium = originalTextTheme.bodyMedium!;
+    final originalHeadlineSmall = originalTextTheme.headlineSmall!;
+    final originalHeadlineMedium = originalTextTheme.displayMedium!;
+    final originalSubtitleSmall = originalTextTheme.titleSmall!;
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
     final originaltimePickerTheme = ThemeData.light().timePickerTheme;
 
-    final subtitle1TextStyle = originalTextTheme.subtitle1!.copyWith(
+    final subtitleMediumTextStyle = originalTextTheme.titleMedium!.copyWith(
       fontSize: Dimensions.smallFontSize,
       color: AppColors.secondaryTextColor,
     );
 
-    final headline6TextStyle = originalTextTheme.headline6!.copyWith(
+    final titleLargeTextStyle = originalTextTheme.titleLarge!.copyWith(
       color: AppColors.defaultTextColor,
     );
 
-    final headline2TextStyle = originalTextTheme.headline2!.copyWith(
+    final displayMediumTextStyle = originalTextTheme.displayMedium!.copyWith(
       fontSize: Dimensions.largeFontSize,
       fontWeight: FontWeight.bold,
       color: AppColors.defaultTextColor,
     );
 
-    final headline1TextStyle = originalTextTheme.headline1!.copyWith(
+    final displayLargeTextStyle = originalTextTheme.displayLarge!.copyWith(
       fontSize: Dimensions.extraLargeFontSize,
       fontWeight: FontWeight.bold,
       color: AppColors.defaultTextColor,
     );
 
-    final headline3TextStyle = originalTextTheme.headline3!.copyWith(
+    final displaySmallTextStyle = originalTextTheme.displaySmall!.copyWith(
       fontSize: Dimensions.mediumFontSize,
       fontWeight: FontWeight.bold,
       color: AppColors.defaultTextColor,
     );
 
-    final headline4TextStyle = originalTextTheme.headline4!.copyWith(
+    final headlineMediumTextStyle = originalTextTheme.headlineMedium!.copyWith(
       fontSize: Dimensions.standardFontSize,
       color: AppColors.defaultTextColor,
     );
@@ -86,26 +86,15 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.primaryColorLight, // LicensePage when loading
       primaryColor: AppColors.primaryColor,
       primaryColorLight: AppColors.primaryColorLight,
-      backgroundColor: Colors.grey[800],
       highlightColor: AppColors.accentColor,
       dialogBackgroundColor: AppColors.primaryColorLight,
       dialogTheme: ThemeData.light().dialogTheme.copyWith(
             backgroundColor: AppColors.primaryColorLight,
-            titleTextStyle: headline2TextStyle,
-            contentTextStyle: headline3TextStyle.copyWith(
+            titleTextStyle: displayMediumTextStyle,
+            contentTextStyle: displaySmallTextStyle.copyWith(
               fontWeight: FontWeight.normal,
             ),
           ),
-      colorScheme: originalColorScheme.copyWith(
-        primary: AppColors.primaryColor,
-        onPrimary: AppColors.defaultTextColor,
-        secondary: AppColors.accentColor,
-        onSecondary: AppColors.defaultTextColor,
-        surface: AppColors.primaryColorLight,
-        onSurface: AppColors.defaultTextColor,
-        background: AppColors.primaryColorLight,
-        onBackground: AppColors.defaultTextColor,
-      ),
       timePickerTheme: originaltimePickerTheme.copyWith(
         backgroundColor: AppColors.primaryColorLight,
         dialBackgroundColor: AppColors.accentColor,
@@ -155,30 +144,30 @@ class AppTheme {
         style: TextButton.styleFrom(foregroundColor: AppColors.accentColor),
       ),
       textTheme: originalTextTheme.copyWith(
-        bodyText1: originalBodyText1.copyWith(
+        bodyLarge: originalBodyLarge.copyWith(
           decorationColor: Colors.transparent,
           color: AppColors.defaultTextColor,
           fontSize: Dimensions.mediumFontSize,
         ),
-        bodyText2: originalBodyText2.copyWith(
+        bodyMedium: originalBodyMedium.copyWith(
           decorationColor: Colors.transparent,
           color: AppColors.defaultTextColor,
           fontSize: Dimensions.standardFontSize,
         ),
-        headline6: headline6TextStyle,
-        headline5: originalHeadline5.copyWith(
+        titleLarge: titleLargeTextStyle,
+        headlineSmall: originalHeadlineSmall.copyWith(
           color: AppColors.defaultTextColor,
         ),
-        headline4: headline4TextStyle,
-        headline3: headline3TextStyle,
-        headline2: originalHeadline2.copyWith(
+        headlineMedium: headlineMediumTextStyle,
+        displaySmall: displaySmallTextStyle,
+        displayMedium: originalHeadlineMedium.copyWith(
           fontSize: Dimensions.largeFontSize,
           fontWeight: FontWeight.bold,
           color: AppColors.defaultTextColor,
         ),
-        headline1: headline1TextStyle,
-        subtitle1: subtitle1TextStyle,
-        subtitle2: originalSubtitle2.copyWith(
+        displayLarge: displayLargeTextStyle,
+        titleMedium: subtitleMediumTextStyle,
+        titleSmall: originalSubtitleSmall.copyWith(
           fontSize: Dimensions.extraLargeFontSize,
           color: AppColors.secondaryTextColor,
         ),
@@ -220,6 +209,18 @@ class AppTheme {
             thickness: 0.5,
           ),
       iconTheme: ThemeData.light().iconTheme.copyWith(color: AppColors.accentColor),
+      colorScheme: originalColorScheme
+          .copyWith(
+            primary: AppColors.primaryColor,
+            onPrimary: AppColors.defaultTextColor,
+            secondary: AppColors.accentColor,
+            onSecondary: AppColors.defaultTextColor,
+            surface: AppColors.primaryColorLight,
+            onSurface: AppColors.defaultTextColor,
+            background: AppColors.primaryColorLight,
+            onBackground: AppColors.defaultTextColor,
+          )
+          .copyWith(background: Colors.grey[800]),
     );
   }
 }

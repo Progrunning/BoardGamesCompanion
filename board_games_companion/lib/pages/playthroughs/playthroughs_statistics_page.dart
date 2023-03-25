@@ -1,11 +1,14 @@
 import 'dart:math';
 
 import 'package:board_games_companion/common/app_theme.dart';
+import 'package:board_games_companion/extensions/date_time_extensions.dart';
 import 'package:board_games_companion/injectable.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
@@ -13,7 +16,6 @@ import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../extensions/date_time_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
@@ -72,61 +74,18 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                 ),
               ),
             ),
-            if (viewModel.futureLoadBoardGamesStatistics?.status == FutureStatus.fulfilled) ...[
-              SliverPersistentHeader(
-                delegate: BgcSliverHeaderDelegate(
-                  primaryTitle: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
-                ),
-              ),
-              _SliverSectionWrapper(
-                child: _LastWinnerSection(boardGameStatistics: viewModel.boardGameStatistics),
-              ),
-              SliverPersistentHeader(
-                delegate: BgcSliverHeaderDelegate(
-                  primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
-                ),
-              ),
-              _SliverSectionWrapper(
-                child: _OverallStatsSection(boardGameStatistics: viewModel.boardGameStatistics),
-              ),
-              if (viewModel.boardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
-                SliverPersistentHeader(
-                  delegate: BgcSliverHeaderDelegate(
-                    primaryTitle: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
-                  ),
-                ),
-                _SliverSectionWrapper(
-                  child: _TopScores(boardGameStatistics: viewModel.boardGameStatistics),
-                ),
-              ],
-              if ((viewModel.boardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
-                  (viewModel.boardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false)) ...[
-                SliverPersistentHeader(
-                  delegate: BgcSliverHeaderDelegate(
-                    primaryTitle: AppText
-                        .playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
-                    secondaryTitle: AppText
-                        .playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle,
-                  ),
-                ),
-                _SliverSectionWrapper(
-                  child: _PlayerCharts(boardGameStatistics: viewModel.boardGameStatistics),
-                ),
-              ],
-              if (viewModel.boardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...[
-                SliverPersistentHeader(
-                  delegate: BgcSliverHeaderDelegate(
-                    primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
-                  ),
-                ),
-                _PlayersStatisticsSection(boardGameStatistics: viewModel.boardGameStatistics),
-              ],
-              const SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
-                ),
-              ),
-            ],
+            if (viewModel.futureLoadBoardGamesStatistics?.status == FutureStatus.fulfilled)
+              Observer(builder: (_) {
+                return viewModel.boardGameStatistics.when(
+                  // TODO Update UI for this state
+                  none: () => const SliverToBoxAdapter(child: Text('No stats')),
+                  loading: () => const SliverFillRemaining(child: LoadingIndicator()),
+                  score: (scoreBoardGameStatistics) =>
+                      _ScoreBoardGameStatistics(scoreBoardGameStatistics: scoreBoardGameStatistics),
+                  // TODO Update UI for this state
+                  noScore: () => const SliverToBoxAdapter(child: Text('TODO')),
+                );
+              }),
           ],
         );
       },
@@ -134,10 +93,77 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
   }
 }
 
+class _ScoreBoardGameStatistics extends StatelessWidget {
+  const _ScoreBoardGameStatistics({
+    required this.scoreBoardGameStatistics,
+  });
+
+  final ScoreBoardGameStatistics scoreBoardGameStatistics;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(children: [
+      SliverPersistentHeader(
+        delegate: BgcSliverHeaderDelegate(
+          primaryTitle: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
+        ),
+      ),
+      _SliverSectionWrapper(
+        child: _LastWinnerSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
+      ),
+      SliverPersistentHeader(
+        delegate: BgcSliverHeaderDelegate(
+          primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
+        ),
+      ),
+      _SliverSectionWrapper(
+        child: _OverallStatsSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
+      ),
+      if (scoreBoardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
+        SliverPersistentHeader(
+          delegate: BgcSliverHeaderDelegate(
+            primaryTitle: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
+          ),
+        ),
+        _SliverSectionWrapper(
+          child: _TopScores(scoreBoardGameStatistics: scoreBoardGameStatistics),
+        ),
+      ],
+      if ((scoreBoardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
+          (scoreBoardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false)) ...[
+        SliverPersistentHeader(
+          delegate: BgcSliverHeaderDelegate(
+            primaryTitle:
+                AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
+            secondaryTitle:
+                AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle,
+          ),
+        ),
+        _SliverSectionWrapper(
+          child: _PlayerCharts(scoreBoardGameStatistics: scoreBoardGameStatistics),
+        ),
+      ],
+      if (scoreBoardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...[
+        SliverPersistentHeader(
+          delegate: BgcSliverHeaderDelegate(
+            primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
+          ),
+        ),
+        _PlayersStatisticsSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
+      ],
+      const SliverPadding(
+        padding: EdgeInsets.only(
+          bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
+        ),
+      ),
+    ]);
+  }
+}
+
 class _PlayersStatisticsSection extends StatelessWidget {
   const _PlayersStatisticsSection({
     Key? key,
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
   }) : super(key: key);
 
   static const double _statsItemIconSize = 32;
@@ -146,7 +172,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
     fontSize: Dimensions.largeFontSize,
   );
 
-  final BoardGameStatistics boardGameStatistics;
+  final ScoreBoardGameStatistics scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +188,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
             final int itemIndex = index ~/ 2;
             if (index.isEven) {
               final PlayerStatistics playerStatistics =
-                  boardGameStatistics.playersStatistics![itemIndex];
+                  scoreBoardGameStatistics.playersStatistics![itemIndex];
               return SizedBox(
                 height: Dimensions.smallPlayerAvatarSize.height,
                 child: Row(
@@ -196,7 +222,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
                       Center(
                         child: _StatisticsItem(
                           value: playerStatistics.averageScore!
-                              .toStringAsFixed(boardGameStatistics.averageScorePrecision),
+                              .toStringAsFixed(scoreBoardGameStatistics.averageScorePrecision),
                           valueTextStyle: _statsItemTextStyle,
                           icon: Icons.calculate,
                           iconColor: AppColors.averageScoreStatColor,
@@ -226,7 +252,7 @@ class _PlayersStatisticsSection extends StatelessWidget {
 
             return const SizedBox(height: Dimensions.standardSpacing);
           },
-          childCount: max(0, boardGameStatistics.playersStatistics!.length * 2 - 1),
+          childCount: max(0, scoreBoardGameStatistics.playersStatistics!.length * 2 - 1),
         ),
       ),
     );
@@ -236,10 +262,10 @@ class _PlayersStatisticsSection extends StatelessWidget {
 class _LastWinnerSection extends StatelessWidget {
   const _LastWinnerSection({
     Key? key,
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
   }) : super(key: key);
 
-  final BoardGameStatistics? boardGameStatistics;
+  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -252,11 +278,11 @@ class _LastWinnerSection extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: <Widget>[
-              _LastWinnerAvatar(boardGameStatistics: boardGameStatistics),
+              _LastWinnerAvatar(scoreBoardGameStatistics: scoreBoardGameStatistics),
               const SizedBox(width: Dimensions.standardSpacing),
-              _LastWinnerText(boardGameStatistics: boardGameStatistics),
+              _LastWinnerText(scoreBoardGameStatistics: scoreBoardGameStatistics),
               const SizedBox(width: Dimensions.standardSpacing),
-              _LastTimePlayed(boardGameStatistics: boardGameStatistics),
+              _LastTimePlayed(scoreBoardGameStatistics: scoreBoardGameStatistics),
             ],
           ),
         ),
@@ -267,11 +293,11 @@ class _LastWinnerSection extends StatelessWidget {
 
 class _PlayerCharts extends StatefulWidget {
   const _PlayerCharts({
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics boardGameStatistics;
+  final ScoreBoardGameStatistics scoreBoardGameStatistics;
 
   @override
   State<_PlayerCharts> createState() => _PlayerChartsState();
@@ -296,13 +322,13 @@ class _PlayerChartsState extends State<_PlayerCharts> {
     playerWinsChartColors = {};
     int i = 0;
     for (final PlayerCountStatistics playeCountStatistics
-        in widget.boardGameStatistics.playerCountPercentage!) {
+        in widget.scoreBoardGameStatistics.playerCountPercentage!) {
       playerCountChartColors[playeCountStatistics.numberOfPlayers] =
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
     i = 0;
     for (final PlayerWinsStatistics playerWinsStatistics
-        in widget.boardGameStatistics.playerWinsPercentage!) {
+        in widget.scoreBoardGameStatistics.playerWinsPercentage!) {
       playerWinsChartColors[playerWinsStatistics.player] =
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
@@ -320,7 +346,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                 PieChartData(
                   sections: <PieChartSectionData>[
                     for (final PlayerCountStatistics playeCountStatistics
-                        in widget.boardGameStatistics.playerCountPercentage!)
+                        in widget.scoreBoardGameStatistics.playerCountPercentage!)
                       PieChartSectionData(
                         value: playeCountStatistics.gamesPlayedPercentage,
                         title: '${playeCountStatistics.numberOfGamesPlayed}',
@@ -338,7 +364,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                 PieChartData(
                   sections: <PieChartSectionData>[
                     for (final PlayerWinsStatistics playeWinsStatistics
-                        in widget.boardGameStatistics.playerWinsPercentage!)
+                        in widget.scoreBoardGameStatistics.playerWinsPercentage!)
                       PieChartSectionData(
                         value: playeWinsStatistics.winsPercentage,
                         title: '${playeWinsStatistics.numberOfWins}',
@@ -360,7 +386,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 for (final PlayerCountStatistics playeCountStatistics
-                    in widget.boardGameStatistics.playerCountPercentage!)
+                    in widget.scoreBoardGameStatistics.playerCountPercentage!)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
@@ -386,7 +412,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                               TextSpan(
                                 text:
                                     ' [${(playeCountStatistics.gamesPlayedPercentage * 100).toStringAsFixed(0)}%]',
-                                style: AppTheme.theme.textTheme.subtitle1,
+                                style: AppTheme.theme.textTheme.titleMedium,
                               ),
                             ],
                           ),
@@ -403,7 +429,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 for (final PlayerWinsStatistics playerWinsStatistics
-                    in widget.boardGameStatistics.playerWinsPercentage!)
+                    in widget.scoreBoardGameStatistics.playerWinsPercentage!)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
@@ -415,7 +441,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                               TextSpan(
                                 text:
                                     '[${(playerWinsStatistics.winsPercentage * 100).toStringAsFixed(0)}%]',
-                                style: AppTheme.theme.textTheme.subtitle1,
+                                style: AppTheme.theme.textTheme.titleMedium,
                               ),
                             ],
                           ),
@@ -458,10 +484,10 @@ class _ChartLegendBox extends StatelessWidget {
 class _LastWinnerText extends StatelessWidget {
   const _LastWinnerText({
     Key? key,
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
   }) : super(key: key);
 
-  final BoardGameStatistics? boardGameStatistics;
+  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -477,7 +503,7 @@ class _LastWinnerText extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: ' ${boardGameStatistics?.lastWinner?.score.value ?? '-'} ',
+              text: ' ${scoreBoardGameStatistics?.lastWinner?.score.value ?? '-'} ',
               style: AppStyles.playerScoreTextStyle,
             ),
             const WidgetSpan(
@@ -498,11 +524,11 @@ class _LastWinnerText extends StatelessWidget {
 
 class _LastWinnerAvatar extends StatelessWidget {
   const _LastWinnerAvatar({
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics? boardGameStatistics;
+  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -510,7 +536,7 @@ class _LastWinnerAvatar extends StatelessWidget {
       height: Dimensions.smallPlayerAvatarSize.height,
       width: Dimensions.smallPlayerAvatarSize.width,
       child: PlayerAvatar(
-        player: boardGameStatistics?.lastWinner?.player,
+        player: scoreBoardGameStatistics?.lastWinner?.player,
         avatarImageSize: Dimensions.smallPlayerAvatarSize,
         useHeroAnimation: false,
       ),
@@ -520,20 +546,20 @@ class _LastWinnerAvatar extends StatelessWidget {
 
 class _LastTimePlayed extends StatelessWidget {
   const _LastTimePlayed({
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics? boardGameStatistics;
+  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        CalendarCard(boardGameStatistics?.lastPlayed),
+        CalendarCard(scoreBoardGameStatistics?.lastPlayed),
         const SizedBox(width: Dimensions.standardSpacing),
         Text(
-          boardGameStatistics?.lastPlayed?.toDaysAgo() ?? '',
+          scoreBoardGameStatistics?.lastPlayed?.toDaysAgo() ?? '',
           style: const TextStyle(
             fontSize: Dimensions.smallFontSize,
             fontWeight: FontWeight.normal,
@@ -546,11 +572,11 @@ class _LastTimePlayed extends StatelessWidget {
 
 class _OverallStatsSection extends StatelessWidget {
   const _OverallStatsSection({
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics? boardGameStatistics;
+  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -562,14 +588,14 @@ class _OverallStatsSection extends StatelessWidget {
             Column(
               children: <Widget>[
                 _StatisticsItem(
-                  value: boardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
+                  value: scoreBoardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
                   icon: Icons.casino,
                   iconColor: AppColors.playedGamesStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value: boardGameStatistics?.bestScore?.toString() ?? '-',
+                  value: scoreBoardGameStatistics?.bestScore?.toString() ?? '-',
                   icon: Icons.show_chart,
                   iconColor: AppColors.highscoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsBestScore,
@@ -580,15 +606,16 @@ class _OverallStatsSection extends StatelessWidget {
             Column(
               children: <Widget>[
                 _StatisticsItem(
-                  value: boardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
+                  value:
+                      scoreBoardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
                   icon: Icons.person,
                   iconColor: AppColors.averagePlayerCountStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value: boardGameStatistics?.averageScore
-                          ?.toStringAsFixed(boardGameStatistics!.averageScorePrecision) ??
+                  value: scoreBoardGameStatistics?.averageScore
+                          ?.toStringAsFixed(scoreBoardGameStatistics!.averageScorePrecision) ??
                       '-',
                   icon: Icons.calculate,
                   iconColor: AppColors.averageScoreStatColor,
@@ -600,7 +627,7 @@ class _OverallStatsSection extends StatelessWidget {
             Column(
               children: <Widget>[
                 _StatisticsItem(
-                  value: boardGameStatistics?.averagePlaytimeInSeconds
+                  value: scoreBoardGameStatistics?.averagePlaytimeInSeconds
                           ?.toPlaytimeDuration(fallbackValue: '-') ??
                       '-',
                   icon: Icons.av_timer,
@@ -609,7 +636,7 @@ class _OverallStatsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value: boardGameStatistics?.totalPlaytimeInSeconds
+                  value: scoreBoardGameStatistics?.totalPlaytimeInSeconds
                           ?.toPlaytimeDuration(fallbackValue: '-') ??
                       '-',
                   icon: Icons.timelapse,
@@ -627,11 +654,11 @@ class _OverallStatsSection extends StatelessWidget {
 
 class _TopScores extends StatelessWidget {
   const _TopScores({
-    required this.boardGameStatistics,
+    required this.scoreBoardGameStatistics,
     Key? key,
   }) : super(key: key);
 
-  final BoardGameStatistics boardGameStatistics;
+  final ScoreBoardGameStatistics scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -639,15 +666,15 @@ class _TopScores extends StatelessWidget {
       height: Dimensions.smallPlayerAvatarWithScoreSize,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: boardGameStatistics.topScoreres!.length,
+        itemCount: scoreBoardGameStatistics.topScoreres!.length,
         separatorBuilder: (context, index) {
           return const SizedBox(width: Dimensions.doubleStandardSpacing);
         },
         itemBuilder: (context, index) {
           return PlayerScoreRankAvatar(
-            player: boardGameStatistics.topScoreres![index].item1,
+            player: scoreBoardGameStatistics.topScoreres![index].item1,
             rank: index + 1,
-            score: boardGameStatistics.topScoreres![index].item2,
+            score: scoreBoardGameStatistics.topScoreres![index].item2,
             useHeroAnimation: false,
           );
         },

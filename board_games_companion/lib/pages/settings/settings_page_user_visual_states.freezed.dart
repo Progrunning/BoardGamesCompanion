@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'settings_page_user_visual_states.dart';
 
@@ -24,8 +24,8 @@ mixin _$SettingsPageUserVisualState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? noUser,
-    TResult Function()? user,
+    TResult? Function()? noUser,
+    TResult? Function()? user,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -43,8 +43,8 @@ mixin _$SettingsPageUserVisualState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(NoUser value)? noUser,
-    TResult Function(User value)? user,
+    TResult? Function(NoUser value)? noUser,
+    TResult? Function(User value)? user,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -61,17 +61,20 @@ abstract class $SettingsPageUserVisualStateCopyWith<$Res> {
   factory $SettingsPageUserVisualStateCopyWith(
           SettingsPageUserVisualState value,
           $Res Function(SettingsPageUserVisualState) then) =
-      _$SettingsPageUserVisualStateCopyWithImpl<$Res>;
+      _$SettingsPageUserVisualStateCopyWithImpl<$Res,
+          SettingsPageUserVisualState>;
 }
 
 /// @nodoc
-class _$SettingsPageUserVisualStateCopyWithImpl<$Res>
+class _$SettingsPageUserVisualStateCopyWithImpl<$Res,
+        $Val extends SettingsPageUserVisualState>
     implements $SettingsPageUserVisualStateCopyWith<$Res> {
   _$SettingsPageUserVisualStateCopyWithImpl(this._value, this._then);
 
-  final SettingsPageUserVisualState _value;
   // ignore: unused_field
-  final $Res Function(SettingsPageUserVisualState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -82,13 +85,10 @@ abstract class _$$NoUserCopyWith<$Res> {
 
 /// @nodoc
 class __$$NoUserCopyWithImpl<$Res>
-    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res>
+    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res, _$NoUser>
     implements _$$NoUserCopyWith<$Res> {
   __$$NoUserCopyWithImpl(_$NoUser _value, $Res Function(_$NoUser) _then)
-      : super(_value, (v) => _then(v as _$NoUser));
-
-  @override
-  _$NoUser get _value => super._value as _$NoUser;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -122,8 +122,8 @@ class _$NoUser implements NoUser {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? noUser,
-    TResult Function()? user,
+    TResult? Function()? noUser,
+    TResult? Function()? user,
   }) {
     return noUser?.call();
   }
@@ -153,8 +153,8 @@ class _$NoUser implements NoUser {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(NoUser value)? noUser,
-    TResult Function(User value)? user,
+    TResult? Function(NoUser value)? noUser,
+    TResult? Function(User value)? user,
   }) {
     return noUser?.call(this);
   }
@@ -185,13 +185,10 @@ abstract class _$$UserCopyWith<$Res> {
 
 /// @nodoc
 class __$$UserCopyWithImpl<$Res>
-    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res>
+    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res, _$User>
     implements _$$UserCopyWith<$Res> {
   __$$UserCopyWithImpl(_$User _value, $Res Function(_$User) _then)
-      : super(_value, (v) => _then(v as _$User));
-
-  @override
-  _$User get _value => super._value as _$User;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -225,8 +222,8 @@ class _$User implements User {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? noUser,
-    TResult Function()? user,
+    TResult? Function()? noUser,
+    TResult? Function()? user,
   }) {
     return user?.call();
   }
@@ -256,8 +253,8 @@ class _$User implements User {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(NoUser value)? noUser,
-    TResult Function(User value)? user,
+    TResult? Function(NoUser value)? noUser,
+    TResult? Function(User value)? user,
   }) {
     return user?.call(this);
   }

@@ -4,12 +4,12 @@ extension AverageScorePrecisionExtensions on AverageScorePrecision {
   String toFormattedText() {
     return when(
       none: () => 'None',
-      value: (precision) {
-        if (precision == 1) {
+      precision: (value) {
+        if (value == 1) {
           return '.0';
         }
 
-        if (precision == 2) {
+        if (value == 2) {
           return '.00';
         }
 

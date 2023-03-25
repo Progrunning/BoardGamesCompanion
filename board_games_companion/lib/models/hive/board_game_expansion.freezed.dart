@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'board_game_expansion.dart';
 
@@ -30,34 +30,37 @@ mixin _$BoardGameExpansion {
 abstract class $BoardGameExpansionCopyWith<$Res> {
   factory $BoardGameExpansionCopyWith(
           BoardGameExpansion value, $Res Function(BoardGameExpansion) then) =
-      _$BoardGameExpansionCopyWithImpl<$Res>;
+      _$BoardGameExpansionCopyWithImpl<$Res, BoardGameExpansion>;
+  @useResult
   $Res call({@HiveField(0) String id, @HiveField(1) String name});
 }
 
 /// @nodoc
-class _$BoardGameExpansionCopyWithImpl<$Res>
+class _$BoardGameExpansionCopyWithImpl<$Res, $Val extends BoardGameExpansion>
     implements $BoardGameExpansionCopyWith<$Res> {
   _$BoardGameExpansionCopyWithImpl(this._value, this._then);
 
-  final BoardGameExpansion _value;
   // ignore: unused_field
-  final $Res Function(BoardGameExpansion) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
+    Object? id = null,
+    Object? name = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -68,31 +71,30 @@ abstract class _$$_BoardGameExpansionCopyWith<$Res>
           $Res Function(_$_BoardGameExpansion) then) =
       __$$_BoardGameExpansionCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({@HiveField(0) String id, @HiveField(1) String name});
 }
 
 /// @nodoc
 class __$$_BoardGameExpansionCopyWithImpl<$Res>
-    extends _$BoardGameExpansionCopyWithImpl<$Res>
+    extends _$BoardGameExpansionCopyWithImpl<$Res, _$_BoardGameExpansion>
     implements _$$_BoardGameExpansionCopyWith<$Res> {
   __$$_BoardGameExpansionCopyWithImpl(
       _$_BoardGameExpansion _value, $Res Function(_$_BoardGameExpansion) _then)
-      : super(_value, (v) => _then(v as _$_BoardGameExpansion));
+      : super(_value, _then);
 
-  @override
-  _$_BoardGameExpansion get _value => super._value as _$_BoardGameExpansion;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
+    Object? id = null,
+    Object? name = null,
   }) {
     return _then(_$_BoardGameExpansion(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
@@ -126,18 +128,16 @@ class _$_BoardGameExpansion implements _BoardGameExpansion {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_BoardGameExpansion &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.name, name));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(name));
+  int get hashCode => Object.hash(runtimeType, id, name);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_BoardGameExpansionCopyWith<_$_BoardGameExpansion> get copyWith =>
       __$$_BoardGameExpansionCopyWithImpl<_$_BoardGameExpansion>(
           this, _$identity);

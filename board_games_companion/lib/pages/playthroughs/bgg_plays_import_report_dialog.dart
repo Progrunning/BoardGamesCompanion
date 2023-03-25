@@ -60,7 +60,7 @@ class BggPlaysImportReportDialog extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     AppText.importPlaysReportImportReportTitle,
-                    style: AppTheme.theme.textTheme.headline2,
+                    style: AppTheme.theme.textTheme.displayMedium,
                   ),
                   const SizedBox(height: Dimensions.doubleStandardSpacing),
                   LimitedBox(

@@ -31,7 +31,7 @@ class LoadingOverlay extends StatelessWidget {
                 const Padding(padding: EdgeInsets.only(top: Dimensions.doubleStandardSpacing)),
                 Text(
                   title!,
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
               ],
               const Expanded(child: SizedBox.shrink()),

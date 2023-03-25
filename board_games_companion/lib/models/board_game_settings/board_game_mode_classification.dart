@@ -10,7 +10,7 @@ class BoardGameClassificationSettings with _$BoardGameClassificationSettings {
   const factory BoardGameClassificationSettings.score({
     required GameFamily gameFamily,
     required AverageScorePrecision averageScorePrecision,
-  }) = _score;
+  }) = _score; 
   const factory BoardGameClassificationSettings.noScore({
     required GameFamily gameFamily,
   }) = _noScore;

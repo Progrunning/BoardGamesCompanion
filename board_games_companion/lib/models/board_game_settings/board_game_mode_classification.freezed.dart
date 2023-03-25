@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'board_game_mode_classification.dart';
 
@@ -27,10 +27,10 @@ mixin _$BoardGameClassificationSettings {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameFamily gameFamily)? noScore,
+    TResult? Function(GameFamily gameFamily)? noScore,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,8 +50,8 @@ mixin _$BoardGameClassificationSettings {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_score value)? score,
-    TResult Function(_noScore value)? noScore,
+    TResult? Function(_score value)? score,
+    TResult? Function(_noScore value)? noScore,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -72,29 +72,34 @@ abstract class $BoardGameClassificationSettingsCopyWith<$Res> {
   factory $BoardGameClassificationSettingsCopyWith(
           BoardGameClassificationSettings value,
           $Res Function(BoardGameClassificationSettings) then) =
-      _$BoardGameClassificationSettingsCopyWithImpl<$Res>;
+      _$BoardGameClassificationSettingsCopyWithImpl<$Res,
+          BoardGameClassificationSettings>;
+  @useResult
   $Res call({GameFamily gameFamily});
 }
 
 /// @nodoc
-class _$BoardGameClassificationSettingsCopyWithImpl<$Res>
+class _$BoardGameClassificationSettingsCopyWithImpl<$Res,
+        $Val extends BoardGameClassificationSettings>
     implements $BoardGameClassificationSettingsCopyWith<$Res> {
   _$BoardGameClassificationSettingsCopyWithImpl(this._value, this._then);
 
-  final BoardGameClassificationSettings _value;
   // ignore: unused_field
-  final $Res Function(BoardGameClassificationSettings) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameFamily = freezed,
+    Object? gameFamily = null,
   }) {
     return _then(_value.copyWith(
-      gameFamily: gameFamily == freezed
+      gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
               as GameFamily,
-    ));
+    ) as $Val);
   }
 }
 
@@ -104,6 +109,7 @@ abstract class _$$_scoreCopyWith<$Res>
   factory _$$_scoreCopyWith(_$_score value, $Res Function(_$_score) then) =
       __$$_scoreCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {GameFamily gameFamily, AverageScorePrecision averageScorePrecision});
 
@@ -112,25 +118,23 @@ abstract class _$$_scoreCopyWith<$Res>
 
 /// @nodoc
 class __$$_scoreCopyWithImpl<$Res>
-    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res>
+    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res, _$_score>
     implements _$$_scoreCopyWith<$Res> {
   __$$_scoreCopyWithImpl(_$_score _value, $Res Function(_$_score) _then)
-      : super(_value, (v) => _then(v as _$_score));
+      : super(_value, _then);
 
-  @override
-  _$_score get _value => super._value as _$_score;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameFamily = freezed,
-    Object? averageScorePrecision = freezed,
+    Object? gameFamily = null,
+    Object? averageScorePrecision = null,
   }) {
     return _then(_$_score(
-      gameFamily: gameFamily == freezed
+      gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
               as GameFamily,
-      averageScorePrecision: averageScorePrecision == freezed
+      averageScorePrecision: null == averageScorePrecision
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
               as AverageScorePrecision,
@@ -138,6 +142,7 @@ class __$$_scoreCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $AverageScorePrecisionCopyWith<$Res> get averageScorePrecision {
     return $AverageScorePrecisionCopyWith<$Res>(_value.averageScorePrecision,
         (value) {
@@ -167,20 +172,19 @@ class _$_score implements _score {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_score &&
-            const DeepCollectionEquality()
-                .equals(other.gameFamily, gameFamily) &&
-            const DeepCollectionEquality()
-                .equals(other.averageScorePrecision, averageScorePrecision));
+            (identical(other.gameFamily, gameFamily) ||
+                other.gameFamily == gameFamily) &&
+            (identical(other.averageScorePrecision, averageScorePrecision) ||
+                other.averageScorePrecision == averageScorePrecision));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(gameFamily),
-      const DeepCollectionEquality().hash(averageScorePrecision));
+  int get hashCode =>
+      Object.hash(runtimeType, gameFamily, averageScorePrecision);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_scoreCopyWith<_$_score> get copyWith =>
       __$$_scoreCopyWithImpl<_$_score>(this, _$identity);
 
@@ -198,10 +202,10 @@ class _$_score implements _score {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameFamily gameFamily)? noScore,
+    TResult? Function(GameFamily gameFamily)? noScore,
   }) {
     return score?.call(gameFamily, averageScorePrecision);
   }
@@ -233,8 +237,8 @@ class _$_score implements _score {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_score value)? score,
-    TResult Function(_noScore value)? noScore,
+    TResult? Function(_score value)? score,
+    TResult? Function(_noScore value)? noScore,
   }) {
     return score?.call(this);
   }
@@ -274,25 +278,24 @@ abstract class _$$_noScoreCopyWith<$Res>
           _$_noScore value, $Res Function(_$_noScore) then) =
       __$$_noScoreCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({GameFamily gameFamily});
 }
 
 /// @nodoc
 class __$$_noScoreCopyWithImpl<$Res>
-    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res>
+    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res, _$_noScore>
     implements _$$_noScoreCopyWith<$Res> {
   __$$_noScoreCopyWithImpl(_$_noScore _value, $Res Function(_$_noScore) _then)
-      : super(_value, (v) => _then(v as _$_noScore));
+      : super(_value, _then);
 
-  @override
-  _$_noScore get _value => super._value as _$_noScore;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameFamily = freezed,
+    Object? gameFamily = null,
   }) {
     return _then(_$_noScore(
-      gameFamily: gameFamily == freezed
+      gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
               as GameFamily,
@@ -318,16 +321,16 @@ class _$_noScore implements _noScore {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_noScore &&
-            const DeepCollectionEquality()
-                .equals(other.gameFamily, gameFamily));
+            (identical(other.gameFamily, gameFamily) ||
+                other.gameFamily == gameFamily));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(gameFamily));
+  int get hashCode => Object.hash(runtimeType, gameFamily);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_noScoreCopyWith<_$_noScore> get copyWith =>
       __$$_noScoreCopyWithImpl<_$_noScore>(this, _$identity);
 
@@ -345,10 +348,10 @@ class _$_noScore implements _noScore {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(
+    TResult? Function(
             GameFamily gameFamily, AverageScorePrecision averageScorePrecision)?
         score,
-    TResult Function(GameFamily gameFamily)? noScore,
+    TResult? Function(GameFamily gameFamily)? noScore,
   }) {
     return noScore?.call(gameFamily);
   }
@@ -380,8 +383,8 @@ class _$_noScore implements _noScore {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_score value)? score,
-    TResult Function(_noScore value)? noScore,
+    TResult? Function(_score value)? score,
+    TResult? Function(_noScore value)? noScore,
   }) {
     return noScore?.call(this);
   }

@@ -156,15 +156,15 @@ class _ScoreSection extends StatelessWidget {
                         ),
                         _AverageScorePrecisionTile.precision(
                           isSelected: averageScorePrecision ==
-                              const AverageScorePrecision.value(precision: 1),
+                              const AverageScorePrecision.precision(value: 1),
                           onSelected: (precision) => onPrecisionChanged(precision),
-                          averageScorePrecision: const AverageScorePrecision.value(precision: 1),
+                          averageScorePrecision: const AverageScorePrecision.precision(value: 1),
                         ),
                         _AverageScorePrecisionTile.precision(
                           isSelected: averageScorePrecision ==
-                              const AverageScorePrecision.value(precision: 2),
+                              const AverageScorePrecision.precision(value: 2),
                           onSelected: (precision) => onPrecisionChanged(precision),
-                          averageScorePrecision: const AverageScorePrecision.value(precision: 2),
+                          averageScorePrecision: const AverageScorePrecision.precision(value: 2),
                         ),
                       ],
                     ),
@@ -189,7 +189,7 @@ class _AverageScorePrecisionTile extends FilterToggleButton<AverageScorePrecisio
           child: Center(
             child: Text(
               averageScorePrecision.toFormattedText(),
-              style: AppTheme.theme.textTheme.headline3,
+              style: AppTheme.theme.textTheme.displaySmall,
             ),
           ),
         );
@@ -231,14 +231,14 @@ class _GameClassificationSectionState extends State<_GameClassificationSection> 
               value: GameClassification.Score,
               child: Text(
                 AppText.playthroughsGameSettingsGameClassificationScore,
-                style: AppTheme.theme.textTheme.bodyText1!,
+                style: AppTheme.theme.textTheme.bodyLarge!,
               ),
             ),
             DropdownMenuItem<GameClassification>(
               value: GameClassification.NoScore,
               child: Text(
                 AppText.playthroughsGameSettingsGameClssificationNoScore,
-                style: AppTheme.theme.textTheme.bodyText1!,
+                style: AppTheme.theme.textTheme.bodyLarge!,
               ),
             ),
           ],

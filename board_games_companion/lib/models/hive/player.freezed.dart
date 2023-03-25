@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'player.dart';
 
@@ -36,7 +36,8 @@ mixin _$Player {
 /// @nodoc
 abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
-      _$PlayerCopyWithImpl<$Res>;
+      _$PlayerCopyWithImpl<$Res, Player>;
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String? name,
@@ -48,53 +49,56 @@ abstract class $PlayerCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
+class _$PlayerCopyWithImpl<$Res, $Val extends Player>
+    implements $PlayerCopyWith<$Res> {
   _$PlayerCopyWithImpl(this._value, this._then);
 
-  final Player _value;
   // ignore: unused_field
-  final $Res Function(Player) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? name = freezed,
     Object? isDeleted = freezed,
     Object? avatarFileName = freezed,
     Object? bggName = freezed,
-    Object? avatarImageUri = freezed,
+    Object? avatarImageUri = null,
     Object? avatarFileToSave = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: name == freezed
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      isDeleted: isDeleted == freezed
+      isDeleted: freezed == isDeleted
           ? _value.isDeleted
           : isDeleted // ignore: cast_nullable_to_non_nullable
               as bool?,
-      avatarFileName: avatarFileName == freezed
+      avatarFileName: freezed == avatarFileName
           ? _value.avatarFileName
           : avatarFileName // ignore: cast_nullable_to_non_nullable
               as String?,
-      bggName: bggName == freezed
+      bggName: freezed == bggName
           ? _value.bggName
           : bggName // ignore: cast_nullable_to_non_nullable
               as String?,
-      avatarImageUri: avatarImageUri == freezed
+      avatarImageUri: null == avatarImageUri
           ? _value.avatarImageUri
           : avatarImageUri // ignore: cast_nullable_to_non_nullable
               as String,
-      avatarFileToSave: avatarFileToSave == freezed
+      avatarFileToSave: freezed == avatarFileToSave
           ? _value.avatarFileToSave
           : avatarFileToSave // ignore: cast_nullable_to_non_nullable
               as XFile?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -103,6 +107,7 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   factory _$$_PlayerCopyWith(_$_Player value, $Res Function(_$_Player) then) =
       __$$_PlayerCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String? name,
@@ -114,50 +119,49 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_PlayerCopyWithImpl<$Res> extends _$PlayerCopyWithImpl<$Res>
+class __$$_PlayerCopyWithImpl<$Res>
+    extends _$PlayerCopyWithImpl<$Res, _$_Player>
     implements _$$_PlayerCopyWith<$Res> {
   __$$_PlayerCopyWithImpl(_$_Player _value, $Res Function(_$_Player) _then)
-      : super(_value, (v) => _then(v as _$_Player));
+      : super(_value, _then);
 
-  @override
-  _$_Player get _value => super._value as _$_Player;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? name = freezed,
     Object? isDeleted = freezed,
     Object? avatarFileName = freezed,
     Object? bggName = freezed,
-    Object? avatarImageUri = freezed,
+    Object? avatarImageUri = null,
     Object? avatarFileToSave = freezed,
   }) {
     return _then(_$_Player(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: name == freezed
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      isDeleted: isDeleted == freezed
+      isDeleted: freezed == isDeleted
           ? _value.isDeleted
           : isDeleted // ignore: cast_nullable_to_non_nullable
               as bool?,
-      avatarFileName: avatarFileName == freezed
+      avatarFileName: freezed == avatarFileName
           ? _value.avatarFileName
           : avatarFileName // ignore: cast_nullable_to_non_nullable
               as String?,
-      bggName: bggName == freezed
+      bggName: freezed == bggName
           ? _value.bggName
           : bggName // ignore: cast_nullable_to_non_nullable
               as String?,
-      avatarImageUri: avatarImageUri == freezed
+      avatarImageUri: null == avatarImageUri
           ? _value.avatarImageUri
           : avatarImageUri // ignore: cast_nullable_to_non_nullable
               as String,
-      avatarFileToSave: avatarFileToSave == freezed
+      avatarFileToSave: freezed == avatarFileToSave
           ? _value.avatarFileToSave
           : avatarFileToSave // ignore: cast_nullable_to_non_nullable
               as XFile?,
@@ -209,31 +213,26 @@ class _$_Player implements _Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Player &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.name, name) &&
-            const DeepCollectionEquality().equals(other.isDeleted, isDeleted) &&
-            const DeepCollectionEquality()
-                .equals(other.avatarFileName, avatarFileName) &&
-            const DeepCollectionEquality().equals(other.bggName, bggName) &&
-            const DeepCollectionEquality()
-                .equals(other.avatarImageUri, avatarImageUri) &&
-            const DeepCollectionEquality()
-                .equals(other.avatarFileToSave, avatarFileToSave));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.isDeleted, isDeleted) ||
+                other.isDeleted == isDeleted) &&
+            (identical(other.avatarFileName, avatarFileName) ||
+                other.avatarFileName == avatarFileName) &&
+            (identical(other.bggName, bggName) || other.bggName == bggName) &&
+            (identical(other.avatarImageUri, avatarImageUri) ||
+                other.avatarImageUri == avatarImageUri) &&
+            (identical(other.avatarFileToSave, avatarFileToSave) ||
+                other.avatarFileToSave == avatarFileToSave));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(name),
-      const DeepCollectionEquality().hash(isDeleted),
-      const DeepCollectionEquality().hash(avatarFileName),
-      const DeepCollectionEquality().hash(bggName),
-      const DeepCollectionEquality().hash(avatarImageUri),
-      const DeepCollectionEquality().hash(avatarFileToSave));
+  int get hashCode => Object.hash(runtimeType, id, name, isDeleted,
+      avatarFileName, bggName, avatarImageUri, avatarFileToSave);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlayerCopyWith<_$_Player> get copyWith =>
       __$$_PlayerCopyWithImpl<_$_Player>(this, _$identity);
 }

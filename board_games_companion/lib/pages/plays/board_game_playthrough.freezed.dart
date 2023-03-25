@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'board_game_playthrough.dart';
 
@@ -28,7 +28,8 @@ mixin _$BoardGamePlaythrough {
 abstract class $BoardGamePlaythroughCopyWith<$Res> {
   factory $BoardGamePlaythroughCopyWith(BoardGamePlaythrough value,
           $Res Function(BoardGamePlaythrough) then) =
-      _$BoardGamePlaythroughCopyWithImpl<$Res>;
+      _$BoardGamePlaythroughCopyWithImpl<$Res, BoardGamePlaythrough>;
+  @useResult
   $Res call(
       {PlaythroughDetails playthrough, BoardGameDetails boardGameDetails});
 
@@ -37,42 +38,47 @@ abstract class $BoardGamePlaythroughCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoardGamePlaythroughCopyWithImpl<$Res>
+class _$BoardGamePlaythroughCopyWithImpl<$Res,
+        $Val extends BoardGamePlaythrough>
     implements $BoardGamePlaythroughCopyWith<$Res> {
   _$BoardGamePlaythroughCopyWithImpl(this._value, this._then);
 
-  final BoardGamePlaythrough _value;
   // ignore: unused_field
-  final $Res Function(BoardGamePlaythrough) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playthrough = freezed,
-    Object? boardGameDetails = freezed,
+    Object? playthrough = null,
+    Object? boardGameDetails = null,
   }) {
     return _then(_value.copyWith(
-      playthrough: playthrough == freezed
+      playthrough: null == playthrough
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
               as PlaythroughDetails,
-      boardGameDetails: boardGameDetails == freezed
+      boardGameDetails: null == boardGameDetails
           ? _value.boardGameDetails
           : boardGameDetails // ignore: cast_nullable_to_non_nullable
               as BoardGameDetails,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $PlaythroughDetailsCopyWith<$Res> get playthrough {
     return $PlaythroughDetailsCopyWith<$Res>(_value.playthrough, (value) {
-      return _then(_value.copyWith(playthrough: value));
+      return _then(_value.copyWith(playthrough: value) as $Val);
     });
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $BoardGameDetailsCopyWith<$Res> get boardGameDetails {
     return $BoardGameDetailsCopyWith<$Res>(_value.boardGameDetails, (value) {
-      return _then(_value.copyWith(boardGameDetails: value));
+      return _then(_value.copyWith(boardGameDetails: value) as $Val);
     });
   }
 }
@@ -84,6 +90,7 @@ abstract class _$$_BoardGamePlaythroughCopyWith<$Res>
           $Res Function(_$_BoardGamePlaythrough) then) =
       __$$_BoardGamePlaythroughCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {PlaythroughDetails playthrough, BoardGameDetails boardGameDetails});
 
@@ -95,26 +102,24 @@ abstract class _$$_BoardGamePlaythroughCopyWith<$Res>
 
 /// @nodoc
 class __$$_BoardGamePlaythroughCopyWithImpl<$Res>
-    extends _$BoardGamePlaythroughCopyWithImpl<$Res>
+    extends _$BoardGamePlaythroughCopyWithImpl<$Res, _$_BoardGamePlaythrough>
     implements _$$_BoardGamePlaythroughCopyWith<$Res> {
   __$$_BoardGamePlaythroughCopyWithImpl(_$_BoardGamePlaythrough _value,
       $Res Function(_$_BoardGamePlaythrough) _then)
-      : super(_value, (v) => _then(v as _$_BoardGamePlaythrough));
+      : super(_value, _then);
 
-  @override
-  _$_BoardGamePlaythrough get _value => super._value as _$_BoardGamePlaythrough;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playthrough = freezed,
-    Object? boardGameDetails = freezed,
+    Object? playthrough = null,
+    Object? boardGameDetails = null,
   }) {
     return _then(_$_BoardGamePlaythrough(
-      playthrough: playthrough == freezed
+      playthrough: null == playthrough
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
               as PlaythroughDetails,
-      boardGameDetails: boardGameDetails == freezed
+      boardGameDetails: null == boardGameDetails
           ? _value.boardGameDetails
           : boardGameDetails // ignore: cast_nullable_to_non_nullable
               as BoardGameDetails,
@@ -144,20 +149,18 @@ class _$_BoardGamePlaythrough extends _BoardGamePlaythrough {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_BoardGamePlaythrough &&
-            const DeepCollectionEquality()
-                .equals(other.playthrough, playthrough) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameDetails, boardGameDetails));
+            (identical(other.playthrough, playthrough) ||
+                other.playthrough == playthrough) &&
+            (identical(other.boardGameDetails, boardGameDetails) ||
+                other.boardGameDetails == boardGameDetails));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(playthrough),
-      const DeepCollectionEquality().hash(boardGameDetails));
+  int get hashCode => Object.hash(runtimeType, playthrough, boardGameDetails);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_BoardGamePlaythroughCopyWith<_$_BoardGamePlaythrough> get copyWith =>
       __$$_BoardGamePlaythroughCopyWithImpl<_$_BoardGamePlaythrough>(
           this, _$identity);

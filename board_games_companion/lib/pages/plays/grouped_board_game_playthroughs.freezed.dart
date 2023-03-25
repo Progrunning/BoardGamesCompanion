@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'grouped_board_game_playthroughs.dart';
 
@@ -30,34 +30,39 @@ abstract class $GroupedBoardGamePlaythroughsCopyWith<$Res> {
   factory $GroupedBoardGamePlaythroughsCopyWith(
           GroupedBoardGamePlaythroughs value,
           $Res Function(GroupedBoardGamePlaythroughs) then) =
-      _$GroupedBoardGamePlaythroughsCopyWithImpl<$Res>;
+      _$GroupedBoardGamePlaythroughsCopyWithImpl<$Res,
+          GroupedBoardGamePlaythroughs>;
+  @useResult
   $Res call({DateTime date, List<BoardGamePlaythrough> boardGamePlaythroughs});
 }
 
 /// @nodoc
-class _$GroupedBoardGamePlaythroughsCopyWithImpl<$Res>
+class _$GroupedBoardGamePlaythroughsCopyWithImpl<$Res,
+        $Val extends GroupedBoardGamePlaythroughs>
     implements $GroupedBoardGamePlaythroughsCopyWith<$Res> {
   _$GroupedBoardGamePlaythroughsCopyWithImpl(this._value, this._then);
 
-  final GroupedBoardGamePlaythroughs _value;
   // ignore: unused_field
-  final $Res Function(GroupedBoardGamePlaythroughs) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? date = freezed,
-    Object? boardGamePlaythroughs = freezed,
+    Object? date = null,
+    Object? boardGamePlaythroughs = null,
   }) {
     return _then(_value.copyWith(
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      boardGamePlaythroughs: boardGamePlaythroughs == freezed
+      boardGamePlaythroughs: null == boardGamePlaythroughs
           ? _value.boardGamePlaythroughs
           : boardGamePlaythroughs // ignore: cast_nullable_to_non_nullable
               as List<BoardGamePlaythrough>,
-    ));
+    ) as $Val);
   }
 }
 
@@ -69,33 +74,32 @@ abstract class _$$_GroupedBoardGamePlaythroughsCopyWith<$Res>
           $Res Function(_$_GroupedBoardGamePlaythroughs) then) =
       __$$_GroupedBoardGamePlaythroughsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({DateTime date, List<BoardGamePlaythrough> boardGamePlaythroughs});
 }
 
 /// @nodoc
 class __$$_GroupedBoardGamePlaythroughsCopyWithImpl<$Res>
-    extends _$GroupedBoardGamePlaythroughsCopyWithImpl<$Res>
+    extends _$GroupedBoardGamePlaythroughsCopyWithImpl<$Res,
+        _$_GroupedBoardGamePlaythroughs>
     implements _$$_GroupedBoardGamePlaythroughsCopyWith<$Res> {
   __$$_GroupedBoardGamePlaythroughsCopyWithImpl(
       _$_GroupedBoardGamePlaythroughs _value,
       $Res Function(_$_GroupedBoardGamePlaythroughs) _then)
-      : super(_value, (v) => _then(v as _$_GroupedBoardGamePlaythroughs));
+      : super(_value, _then);
 
-  @override
-  _$_GroupedBoardGamePlaythroughs get _value =>
-      super._value as _$_GroupedBoardGamePlaythroughs;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? date = freezed,
-    Object? boardGamePlaythroughs = freezed,
+    Object? date = null,
+    Object? boardGamePlaythroughs = null,
   }) {
     return _then(_$_GroupedBoardGamePlaythroughs(
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      boardGamePlaythroughs: boardGamePlaythroughs == freezed
+      boardGamePlaythroughs: null == boardGamePlaythroughs
           ? _value._boardGamePlaythroughs
           : boardGamePlaythroughs // ignore: cast_nullable_to_non_nullable
               as List<BoardGamePlaythrough>,
@@ -117,6 +121,8 @@ class _$_GroupedBoardGamePlaythroughs extends _GroupedBoardGamePlaythroughs {
   final List<BoardGamePlaythrough> _boardGamePlaythroughs;
   @override
   List<BoardGamePlaythrough> get boardGamePlaythroughs {
+    if (_boardGamePlaythroughs is EqualUnmodifiableListView)
+      return _boardGamePlaythroughs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_boardGamePlaythroughs);
   }
@@ -131,19 +137,18 @@ class _$_GroupedBoardGamePlaythroughs extends _GroupedBoardGamePlaythroughs {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GroupedBoardGamePlaythroughs &&
-            const DeepCollectionEquality().equals(other.date, date) &&
+            (identical(other.date, date) || other.date == date) &&
             const DeepCollectionEquality()
                 .equals(other._boardGamePlaythroughs, _boardGamePlaythroughs));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(date),
+  int get hashCode => Object.hash(runtimeType, date,
       const DeepCollectionEquality().hash(_boardGamePlaythroughs));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GroupedBoardGamePlaythroughsCopyWith<_$_GroupedBoardGamePlaythroughs>
       get copyWith => __$$_GroupedBoardGamePlaythroughsCopyWithImpl<
           _$_GroupedBoardGamePlaythroughs>(this, _$identity);

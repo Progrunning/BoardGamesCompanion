@@ -48,7 +48,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
-        textTheme: const TextTheme(headline6: AppTheme.defaultTextFieldStyle),
+        textTheme: const TextTheme(titleLarge: AppTheme.defaultTextFieldStyle),
       );
 
   @override
@@ -329,7 +329,7 @@ class _SearchResultGameDetails extends StatelessWidget {
           Text(
             sprintf(AppText.onlineSearchGamePublishYearFormat, [boardGame.yearPublished]),
             overflow: TextOverflow.ellipsis,
-            style: AppTheme.theme.textTheme.subtitle1,
+            style: AppTheme.theme.textTheme.titleMedium,
           ),
       ],
     );

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'player_page_arguments.dart';
 
@@ -27,41 +27,45 @@ mixin _$PlayerPageArguments {
 abstract class $PlayerPageArgumentsCopyWith<$Res> {
   factory $PlayerPageArgumentsCopyWith(
           PlayerPageArguments value, $Res Function(PlayerPageArguments) then) =
-      _$PlayerPageArgumentsCopyWithImpl<$Res>;
+      _$PlayerPageArgumentsCopyWithImpl<$Res, PlayerPageArguments>;
+  @useResult
   $Res call({Player? player});
 
   $PlayerCopyWith<$Res>? get player;
 }
 
 /// @nodoc
-class _$PlayerPageArgumentsCopyWithImpl<$Res>
+class _$PlayerPageArgumentsCopyWithImpl<$Res, $Val extends PlayerPageArguments>
     implements $PlayerPageArgumentsCopyWith<$Res> {
   _$PlayerPageArgumentsCopyWithImpl(this._value, this._then);
 
-  final PlayerPageArguments _value;
   // ignore: unused_field
-  final $Res Function(PlayerPageArguments) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? player = freezed,
   }) {
     return _then(_value.copyWith(
-      player: player == freezed
+      player: freezed == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as Player?,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $PlayerCopyWith<$Res>? get player {
     if (_value.player == null) {
       return null;
     }
 
     return $PlayerCopyWith<$Res>(_value.player!, (value) {
-      return _then(_value.copyWith(player: value));
+      return _then(_value.copyWith(player: value) as $Val);
     });
   }
 }
@@ -73,6 +77,7 @@ abstract class _$$_PlayerPageArgumentsCopyWith<$Res>
           $Res Function(_$_PlayerPageArguments) then) =
       __$$_PlayerPageArgumentsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({Player? player});
 
   @override
@@ -81,21 +86,19 @@ abstract class _$$_PlayerPageArgumentsCopyWith<$Res>
 
 /// @nodoc
 class __$$_PlayerPageArgumentsCopyWithImpl<$Res>
-    extends _$PlayerPageArgumentsCopyWithImpl<$Res>
+    extends _$PlayerPageArgumentsCopyWithImpl<$Res, _$_PlayerPageArguments>
     implements _$$_PlayerPageArgumentsCopyWith<$Res> {
   __$$_PlayerPageArgumentsCopyWithImpl(_$_PlayerPageArguments _value,
       $Res Function(_$_PlayerPageArguments) _then)
-      : super(_value, (v) => _then(v as _$_PlayerPageArguments));
+      : super(_value, _then);
 
-  @override
-  _$_PlayerPageArguments get _value => super._value as _$_PlayerPageArguments;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? player = freezed,
   }) {
     return _then(_$_PlayerPageArguments(
-      player: player == freezed
+      player: freezed == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as Player?,
@@ -121,15 +124,15 @@ class _$_PlayerPageArguments implements _PlayerPageArguments {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PlayerPageArguments &&
-            const DeepCollectionEquality().equals(other.player, player));
+            (identical(other.player, player) || other.player == player));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(player));
+  int get hashCode => Object.hash(runtimeType, player);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlayerPageArgumentsCopyWith<_$_PlayerPageArguments> get copyWith =>
       __$$_PlayerPageArgumentsCopyWithImpl<_$_PlayerPageArguments>(
           this, _$identity);

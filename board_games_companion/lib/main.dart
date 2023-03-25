@@ -40,6 +40,8 @@ Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    await Firebase.initializeApp();
+
     final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
     Hive
       ..init(appDocumentDirectory.path)
@@ -74,8 +76,6 @@ Future<void> main() async {
       final license = await rootBundle.loadString('google_fonts/OFL.txt');
       yield LicenseEntryWithLineBreaks(['google_fonts'], license);
     });
-
-    await Firebase.initializeApp();
 
     if (kDebugMode) {
       await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);

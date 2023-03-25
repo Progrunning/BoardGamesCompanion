@@ -17,7 +17,7 @@ class SectionText extends StatelessWidget {
       padding: const EdgeInsets.all(Dimensions.standardSpacing),
       child: Text(
         text,
-        style: AppTheme.theme.textTheme.headline4,
+        style: AppTheme.theme.textTheme.headlineMedium,
         textAlign: TextAlign.justify,
       ),
     );

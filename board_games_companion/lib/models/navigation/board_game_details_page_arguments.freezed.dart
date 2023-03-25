@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'board_game_details_page_arguments.dart';
 
@@ -30,7 +30,9 @@ abstract class $BoardGameDetailsPageArgumentsCopyWith<$Res> {
   factory $BoardGameDetailsPageArgumentsCopyWith(
           BoardGameDetailsPageArguments value,
           $Res Function(BoardGameDetailsPageArguments) then) =
-      _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res>;
+      _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res,
+          BoardGameDetailsPageArguments>;
+  @useResult
   $Res call(
       {String boardGameId,
       Type navigatingFromType,
@@ -38,34 +40,37 @@ abstract class $BoardGameDetailsPageArgumentsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
+class _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res,
+        $Val extends BoardGameDetailsPageArguments>
     implements $BoardGameDetailsPageArgumentsCopyWith<$Res> {
   _$BoardGameDetailsPageArgumentsCopyWithImpl(this._value, this._then);
 
-  final BoardGameDetailsPageArguments _value;
   // ignore: unused_field
-  final $Res Function(BoardGameDetailsPageArguments) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameId = freezed,
-    Object? navigatingFromType = freezed,
-    Object? boardGameImageHeroId = freezed,
+    Object? boardGameId = null,
+    Object? navigatingFromType = null,
+    Object? boardGameImageHeroId = null,
   }) {
     return _then(_value.copyWith(
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      navigatingFromType: navigatingFromType == freezed
+      navigatingFromType: null == navigatingFromType
           ? _value.navigatingFromType
           : navigatingFromType // ignore: cast_nullable_to_non_nullable
               as Type,
-      boardGameImageHeroId: boardGameImageHeroId == freezed
+      boardGameImageHeroId: null == boardGameImageHeroId
           ? _value.boardGameImageHeroId
           : boardGameImageHeroId // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -77,6 +82,7 @@ abstract class _$$_BoardGameDetailsPageArgumentsCopyWith<$Res>
           $Res Function(_$_BoardGameDetailsPageArguments) then) =
       __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String boardGameId,
       Type navigatingFromType,
@@ -85,33 +91,31 @@ abstract class _$$_BoardGameDetailsPageArgumentsCopyWith<$Res>
 
 /// @nodoc
 class __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
-    extends _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
+    extends _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res,
+        _$_BoardGameDetailsPageArguments>
     implements _$$_BoardGameDetailsPageArgumentsCopyWith<$Res> {
   __$$_BoardGameDetailsPageArgumentsCopyWithImpl(
       _$_BoardGameDetailsPageArguments _value,
       $Res Function(_$_BoardGameDetailsPageArguments) _then)
-      : super(_value, (v) => _then(v as _$_BoardGameDetailsPageArguments));
+      : super(_value, _then);
 
-  @override
-  _$_BoardGameDetailsPageArguments get _value =>
-      super._value as _$_BoardGameDetailsPageArguments;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameId = freezed,
-    Object? navigatingFromType = freezed,
-    Object? boardGameImageHeroId = freezed,
+    Object? boardGameId = null,
+    Object? navigatingFromType = null,
+    Object? boardGameImageHeroId = null,
   }) {
     return _then(_$_BoardGameDetailsPageArguments(
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      navigatingFromType: navigatingFromType == freezed
+      navigatingFromType: null == navigatingFromType
           ? _value.navigatingFromType
           : navigatingFromType // ignore: cast_nullable_to_non_nullable
               as Type,
-      boardGameImageHeroId: boardGameImageHeroId == freezed
+      boardGameImageHeroId: null == boardGameImageHeroId
           ? _value.boardGameImageHeroId
           : boardGameImageHeroId // ignore: cast_nullable_to_non_nullable
               as String,
@@ -145,23 +149,21 @@ class _$_BoardGameDetailsPageArguments
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_BoardGameDetailsPageArguments &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameId, boardGameId) &&
-            const DeepCollectionEquality()
-                .equals(other.navigatingFromType, navigatingFromType) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameImageHeroId, boardGameImageHeroId));
+            (identical(other.boardGameId, boardGameId) ||
+                other.boardGameId == boardGameId) &&
+            (identical(other.navigatingFromType, navigatingFromType) ||
+                other.navigatingFromType == navigatingFromType) &&
+            (identical(other.boardGameImageHeroId, boardGameImageHeroId) ||
+                other.boardGameImageHeroId == boardGameImageHeroId));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(boardGameId),
-      const DeepCollectionEquality().hash(navigatingFromType),
-      const DeepCollectionEquality().hash(boardGameImageHeroId));
+      runtimeType, boardGameId, navigatingFromType, boardGameImageHeroId);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_BoardGameDetailsPageArgumentsCopyWith<_$_BoardGameDetailsPageArguments>
       get copyWith => __$$_BoardGameDetailsPageArgumentsCopyWithImpl<
           _$_BoardGameDetailsPageArguments>(this, _$identity);

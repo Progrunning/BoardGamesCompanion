@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'bgg_search_result.dart';
 
@@ -24,7 +24,7 @@ mixin _$BggSearchResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameName)? createGame,
+    TResult? Function(String boardGameName)? createGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -40,7 +40,7 @@ mixin _$BggSearchResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_createGame value)? createGame,
+    TResult? Function(_createGame value)? createGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -59,29 +59,32 @@ mixin _$BggSearchResult {
 abstract class $BggSearchResultCopyWith<$Res> {
   factory $BggSearchResultCopyWith(
           BggSearchResult value, $Res Function(BggSearchResult) then) =
-      _$BggSearchResultCopyWithImpl<$Res>;
+      _$BggSearchResultCopyWithImpl<$Res, BggSearchResult>;
+  @useResult
   $Res call({String boardGameName});
 }
 
 /// @nodoc
-class _$BggSearchResultCopyWithImpl<$Res>
+class _$BggSearchResultCopyWithImpl<$Res, $Val extends BggSearchResult>
     implements $BggSearchResultCopyWith<$Res> {
   _$BggSearchResultCopyWithImpl(this._value, this._then);
 
-  final BggSearchResult _value;
   // ignore: unused_field
-  final $Res Function(BggSearchResult) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameName = freezed,
+    Object? boardGameName = null,
   }) {
     return _then(_value.copyWith(
-      boardGameName: boardGameName == freezed
+      boardGameName: null == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -92,26 +95,25 @@ abstract class _$$_createGameCopyWith<$Res>
           _$_createGame value, $Res Function(_$_createGame) then) =
       __$$_createGameCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String boardGameName});
 }
 
 /// @nodoc
 class __$$_createGameCopyWithImpl<$Res>
-    extends _$BggSearchResultCopyWithImpl<$Res>
+    extends _$BggSearchResultCopyWithImpl<$Res, _$_createGame>
     implements _$$_createGameCopyWith<$Res> {
   __$$_createGameCopyWithImpl(
       _$_createGame _value, $Res Function(_$_createGame) _then)
-      : super(_value, (v) => _then(v as _$_createGame));
+      : super(_value, _then);
 
-  @override
-  _$_createGame get _value => super._value as _$_createGame;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameName = freezed,
+    Object? boardGameName = null,
   }) {
     return _then(_$_createGame(
-      boardGameName: boardGameName == freezed
+      boardGameName: null == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
@@ -137,16 +139,16 @@ class _$_createGame implements _createGame {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_createGame &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameName, boardGameName));
+            (identical(other.boardGameName, boardGameName) ||
+                other.boardGameName == boardGameName));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(boardGameName));
+  int get hashCode => Object.hash(runtimeType, boardGameName);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_createGameCopyWith<_$_createGame> get copyWith =>
       __$$_createGameCopyWithImpl<_$_createGame>(this, _$identity);
 
@@ -161,7 +163,7 @@ class _$_createGame implements _createGame {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameName)? createGame,
+    TResult? Function(String boardGameName)? createGame,
   }) {
     return createGame?.call(boardGameName);
   }
@@ -189,7 +191,7 @@ class _$_createGame implements _createGame {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_createGame value)? createGame,
+    TResult? Function(_createGame value)? createGame,
   }) {
     return createGame?.call(this);
   }

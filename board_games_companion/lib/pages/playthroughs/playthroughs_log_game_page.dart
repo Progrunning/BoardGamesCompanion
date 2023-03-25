@@ -417,7 +417,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                 ),
                 Text(
                   AppText.playthroughsLogGamePlayingNowOption,
-                  style: AppTheme.theme.textTheme.bodyText1,
+                  style: AppTheme.theme.textTheme.bodyLarge,
                 ),
               ],
             ),
@@ -440,7 +440,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                 ),
                 Text(
                   AppText.playthroughsLogGamePlayedOption,
-                  style: AppTheme.theme.textTheme.bodyText1,
+                  style: AppTheme.theme.textTheme.bodyLarge,
                 ),
               ],
             ),
@@ -450,7 +450,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
               children: <Widget>[
                 Text(
                   'The game took: ',
-                  style: AppTheme.theme.textTheme.bodyText1,
+                  style: AppTheme.theme.textTheme.bodyLarge,
                 ),
                 NumberPicker(
                   value: hoursPlayed,
@@ -463,7 +463,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text('h', style: AppTheme.theme.textTheme.bodyText2),
+                Text('h', style: AppTheme.theme.textTheme.bodyMedium),
                 const SizedBox(width: Dimensions.halfStandardSpacing),
                 NumberPicker(
                   value: math.min(Duration.minutesPerHour - 1, minutesPlyed),
@@ -477,7 +477,7 @@ class _PlayingOrPlayedStepState extends State<_PlayingOrPlayedStep> {
                     fontSize: Dimensions.doubleExtraLargeFontSize,
                   ),
                 ),
-                Text('min ', style: AppTheme.theme.textTheme.bodyText2),
+                Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
               ],
             ),
         ],
@@ -668,7 +668,7 @@ class _NoPlayers extends StatelessWidget {
         children: <Widget>[
           Text(
             AppText.playthroughsLogGamePageCreatePlayerTitle,
-            style: AppTheme.theme.textTheme.bodyText1,
+            style: AppTheme.theme.textTheme.bodyLarge,
           ),
           const SizedBox(height: Dimensions.halfStandardSpacing),
           Align(
@@ -734,7 +734,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
                 style: AppStyles.playerScoreTextStyle,
               ),
               const SizedBox(height: Dimensions.halfStandardSpacing),
-              Text('points', style: AppTheme.theme.textTheme.bodyText2),
+              Text('points', style: AppTheme.theme.textTheme.bodyMedium),
             ],
           ),
         ],

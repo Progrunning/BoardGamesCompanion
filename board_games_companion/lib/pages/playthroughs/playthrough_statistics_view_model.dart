@@ -9,6 +9,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../common/enums/game_classification.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/playthrough.dart';
@@ -36,7 +37,8 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
   static const int _maxNumberOfTopScoresToDisplay = 5;
 
-  BoardGameStatistics boardGameStatistics = BoardGameStatistics();
+  @observable
+  BoardGameStatistics boardGameStatistics = const BoardGameStatistics.none();
 
   @observable
   ObservableFuture<void>? futureLoadBoardGamesStatistics;
@@ -58,20 +60,23 @@ abstract class _PlaythroughStatisticsViewModel with Store {
   @computed
   String get boardGameName => _gamePlaythroughsStore.boardGameName;
 
+  @computed
+  GameClassification get gameClassification => _gamePlaythroughsStore.gameClassification;
+
   @action
   void loadBoardGamesStatistics() =>
       futureLoadBoardGamesStatistics = ObservableFuture<void>(_loadBoardGamesStatistics());
 
   Future<void> _loadBoardGamesStatistics() async {
+    boardGameStatistics = const BoardGameStatistics.loading();
     Fimber.d(
-        'Loading stats for game ${_gamePlaythroughsStore.boardGameName} [${_gamePlaythroughsStore.boardGameId}]');
-    final boardGameId = _gamePlaythroughsStore.boardGameId;
-    final gameFamily = _gamePlaythroughsStore.gameGameFamily;
+      'Loading stats for a game ${_gamePlaythroughsStore.boardGameName} classified as ${gameClassification.toString()} [${_gamePlaythroughsStore.boardGameId}]',
+    );
     final players = await _playerService.retrievePlayers(includeDeleted: true);
     final playersById = <String, Player>{for (Player player in players) player.id: player};
 
     if (_gamePlaythroughsStore.playthroughs.isEmpty) {
-      boardGameStatistics = BoardGameStatistics();
+      boardGameStatistics = const BoardGameStatistics.none();
       return;
     }
 
@@ -79,49 +84,72 @@ abstract class _PlaythroughStatisticsViewModel with Store {
         groupBy(_playthroughsScores, (s) => s.playthroughId!);
     final Map<String, List<Score>> playthroughScoresByBoardGameId =
         groupBy(_playthroughsScores, (s) => s.boardGameId);
-
     // MK Creating a local variable of finished playthroughs to avoid multitude of retrievals with a getter
     final finishedPlaythroughs = _gamePlaythroughsStore.finishedPlaythroughs;
+
+    switch (gameClassification) {
+      case GameClassification.Score:
+        boardGameStatistics = _loadScoreBoardGamesStatistics(
+          playersById,
+          playthroughScoresByPlaythroughId,
+          playthroughScoresByBoardGameId,
+          finishedPlaythroughs,
+        );
+        break;
+      case GameClassification.NoScore:
+        break;
+    }
+  }
+
+  BoardGameStatistics _loadScoreBoardGamesStatistics(
+    Map<String, Player> playersById,
+    Map<String, List<Score>> playthroughScoresByPlaythroughId,
+    Map<String, List<Score>> playthroughScoresByBoardGameId,
+    List<Playthrough> finishedPlaythroughs,
+  ) {
+    final scoreBoardGameStatistics = ScoreBoardGameStatistics();
+
     _updateLastPlayedAndWinner(
       finishedPlaythroughs,
-      boardGameStatistics,
+      scoreBoardGameStatistics,
       playthroughScoresByPlaythroughId,
       playersById,
-      gameFamily,
+      _gamePlaythroughsStore.gameGameFamily,
     );
 
     if (finishedPlaythroughs.isEmpty) {
-      boardGameStatistics = BoardGameStatistics();
-      return;
+      return const BoardGameStatistics.none();
     }
 
-    boardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs.length;
-    boardGameStatistics.averageNumberOfPlayers = finishedPlaythroughs
+    scoreBoardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs.length;
+    scoreBoardGameStatistics.averageNumberOfPlayers = finishedPlaythroughs
             .map((Playthrough playthrough) => playthrough.playerIds.length)
             .reduce((a, b) => a + b) /
-        boardGameStatistics.numberOfGamesPlayed!;
+        scoreBoardGameStatistics.numberOfGamesPlayed!;
 
     if (!playthroughScoresByBoardGameId.containsKey(boardGameId)) {
-      return;
+      return BoardGameStatistics.score(scoreBoardGameStatistics: scoreBoardGameStatistics);
     }
 
-    final List<Score> playerScoresCollection =
-        playthroughScoresByBoardGameId[boardGameId].onlyScoresWithValue()..sortByScore(gameFamily);
+    final List<Score> playerScoresCollection = playthroughScoresByBoardGameId[boardGameId]
+        .onlyScoresWithValue()
+      ..sortByScore(_gamePlaythroughsStore.gameGameFamily);
     if (playerScoresCollection.isNotEmpty) {
       final Map<String, List<Score>> playerScoresGrouped =
           groupBy(playerScoresCollection, (Score score) => score.playerId);
-      boardGameStatistics.bestScore = playerScoresCollection.toBestScore(gameFamily);
-      boardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
+      scoreBoardGameStatistics.bestScore =
+          playerScoresCollection.toBestScore(_gamePlaythroughsStore.gameGameFamily);
+      scoreBoardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
 
-      boardGameStatistics.topScoreres = [];
-      boardGameStatistics.playersStatistics = [];
+      scoreBoardGameStatistics.topScoreres = [];
+      scoreBoardGameStatistics.playersStatistics = [];
       for (final Score score in playerScoresCollection) {
         final Player player = playersById[score.playerId]!;
-        if (boardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
-          boardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
+        if (scoreBoardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
+          scoreBoardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
         }
 
-        if (boardGameStatistics.playersStatistics!
+        if (scoreBoardGameStatistics.playersStatistics!
             .any((PlayerStatistics playerStats) => playerStats.player == player)) {
           continue;
         }
@@ -130,28 +158,30 @@ abstract class _PlaythroughStatisticsViewModel with Store {
         playerStatistics.personalBestScore = num.tryParse(score.value!);
         playerStatistics.numberOfGamesPlayed = playerScoresGrouped[player.id]?.length ?? 0;
         playerStatistics.averageScore = playerScoresGrouped[player.id]!.toAverageScore();
-        boardGameStatistics.playersStatistics!.add(playerStatistics);
+        scoreBoardGameStatistics.playersStatistics!.add(playerStatistics);
       }
     }
 
-    _updatePlayerCountPercentage(finishedPlaythroughs, boardGameStatistics);
+    _updatePlayerCountPercentage(finishedPlaythroughs, scoreBoardGameStatistics);
     _updatePlayerWinsPercentage(
       finishedPlaythroughs,
-      boardGameStatistics,
+      scoreBoardGameStatistics,
       playthroughScoresByPlaythroughId,
       playersById,
-      gameFamily,
+      _gamePlaythroughsStore.gameGameFamily,
     );
 
-    boardGameStatistics.averageScorePrecision = _gamePlaythroughsStore.averageScorePrecision;
-    boardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
+    scoreBoardGameStatistics.averageScorePrecision = _gamePlaythroughsStore.averageScorePrecision;
+    scoreBoardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
         .map((Playthrough p) => p.endDate!.difference(p.startDate).inSeconds)
         .reduce((a, b) => a + b);
+
+    return BoardGameStatistics.score(scoreBoardGameStatistics: scoreBoardGameStatistics);
   }
 
   void _updateLastPlayedAndWinner(
     List<Playthrough>? finishedPlaythroughs,
-    BoardGameStatistics boardGameStatistics,
+    ScoreBoardGameStatistics scoreBoardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
     GameFamily gameFamily,
@@ -161,7 +191,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     }
 
     final lastPlaythrough = finishedPlaythroughs!.first;
-    boardGameStatistics.lastPlayed = lastPlaythrough.startDate;
+    scoreBoardGameStatistics.lastPlayed = lastPlaythrough.startDate;
 
     if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
       return;
@@ -172,7 +202,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       ..sortByScore(gameFamily);
 
     if (lastPlaythroughScores.isEmpty) {
-      boardGameStatistics.lastWinner = null;
+      scoreBoardGameStatistics.lastWinner = null;
       return;
     }
 
@@ -181,7 +211,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       return;
     }
 
-    boardGameStatistics.lastWinner = PlayerScore(
+    scoreBoardGameStatistics.lastWinner = PlayerScore(
       player: playersById[lastPlaythroughBestScore.playerId],
       score: lastPlaythroughBestScore,
     );
@@ -189,16 +219,16 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
   void _updatePlayerCountPercentage(
     List<Playthrough> finishedPlaythroughs,
-    BoardGameStatistics boardGameStatistics,
+    ScoreBoardGameStatistics scoreBoardGameStatistics,
   ) {
-    boardGameStatistics.playerCountPercentage = [];
+    scoreBoardGameStatistics.playerCountPercentage = [];
     final numberOfPlayersInPlaythroughs = finishedPlaythroughs
         .map((Playthrough playthrough) => playthrough.playerIds.length)
         .toList()
       ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
           numberOfPlayers.compareTo(otherNumberOfPlayers));
     groupBy(numberOfPlayersInPlaythroughs, (int numberOfPlayers) => numberOfPlayers).forEach(
-      (numberOfPlayers, playthroughs) => boardGameStatistics.playerCountPercentage!.add(
+      (numberOfPlayers, playthroughs) => scoreBoardGameStatistics.playerCountPercentage!.add(
         PlayerCountStatistics(
           numberOfPlayers: numberOfPlayers,
           numberOfGamesPlayed: playthroughs.length,
@@ -210,7 +240,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
   void _updatePlayerWinsPercentage(
     List<Playthrough> finishedPlaythroughs,
-    BoardGameStatistics boardGameStatistics,
+    ScoreBoardGameStatistics scoreBoardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
     GameFamily gameFamily,
@@ -235,9 +265,9 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       }
     }
 
-    boardGameStatistics.playerWinsPercentage = [];
+    scoreBoardGameStatistics.playerWinsPercentage = [];
     for (final MapEntry<Player, int> playerWin in playerWins.entries) {
-      boardGameStatistics.playerWinsPercentage!.add(PlayerWinsStatistics(
+      scoreBoardGameStatistics.playerWinsPercentage!.add(PlayerWinsStatistics(
         player: playerWin.key,
         numberOfWins: playerWin.value,
         winsPercentage: playerWin.value / finishedPlaythroughs.length,

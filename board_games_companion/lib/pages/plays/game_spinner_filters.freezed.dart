@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'game_spinner_filters.dart';
 
@@ -31,7 +31,8 @@ mixin _$GameSpinnerFilters {
 abstract class $GameSpinnerFiltersCopyWith<$Res> {
   factory $GameSpinnerFiltersCopyWith(
           GameSpinnerFilters value, $Res Function(GameSpinnerFilters) then) =
-      _$GameSpinnerFiltersCopyWithImpl<$Res>;
+      _$GameSpinnerFiltersCopyWithImpl<$Res, GameSpinnerFilters>;
+  @useResult
   $Res call(
       {Set<CollectionType> collections,
       bool includeExpansions,
@@ -43,53 +44,57 @@ abstract class $GameSpinnerFiltersCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GameSpinnerFiltersCopyWithImpl<$Res>
+class _$GameSpinnerFiltersCopyWithImpl<$Res, $Val extends GameSpinnerFilters>
     implements $GameSpinnerFiltersCopyWith<$Res> {
   _$GameSpinnerFiltersCopyWithImpl(this._value, this._then);
 
-  final GameSpinnerFilters _value;
   // ignore: unused_field
-  final $Res Function(GameSpinnerFilters) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? collections = freezed,
-    Object? includeExpansions = freezed,
-    Object? numberOfPlayersFilter = freezed,
-    Object? playtimeFilter = freezed,
+    Object? collections = null,
+    Object? includeExpansions = null,
+    Object? numberOfPlayersFilter = null,
+    Object? playtimeFilter = null,
   }) {
     return _then(_value.copyWith(
-      collections: collections == freezed
+      collections: null == collections
           ? _value.collections
           : collections // ignore: cast_nullable_to_non_nullable
               as Set<CollectionType>,
-      includeExpansions: includeExpansions == freezed
+      includeExpansions: null == includeExpansions
           ? _value.includeExpansions
           : includeExpansions // ignore: cast_nullable_to_non_nullable
               as bool,
-      numberOfPlayersFilter: numberOfPlayersFilter == freezed
+      numberOfPlayersFilter: null == numberOfPlayersFilter
           ? _value.numberOfPlayersFilter
           : numberOfPlayersFilter // ignore: cast_nullable_to_non_nullable
               as NumberOfPlayersFilter,
-      playtimeFilter: playtimeFilter == freezed
+      playtimeFilter: null == playtimeFilter
           ? _value.playtimeFilter
           : playtimeFilter // ignore: cast_nullable_to_non_nullable
               as PlaytimeFilter,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $NumberOfPlayersFilterCopyWith<$Res> get numberOfPlayersFilter {
     return $NumberOfPlayersFilterCopyWith<$Res>(_value.numberOfPlayersFilter,
         (value) {
-      return _then(_value.copyWith(numberOfPlayersFilter: value));
+      return _then(_value.copyWith(numberOfPlayersFilter: value) as $Val);
     });
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $PlaytimeFilterCopyWith<$Res> get playtimeFilter {
     return $PlaytimeFilterCopyWith<$Res>(_value.playtimeFilter, (value) {
-      return _then(_value.copyWith(playtimeFilter: value));
+      return _then(_value.copyWith(playtimeFilter: value) as $Val);
     });
   }
 }
@@ -101,6 +106,7 @@ abstract class _$$_GameSpinnerFiltersCopyWith<$Res>
           $Res Function(_$_GameSpinnerFilters) then) =
       __$$_GameSpinnerFiltersCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {Set<CollectionType> collections,
       bool includeExpansions,
@@ -115,36 +121,34 @@ abstract class _$$_GameSpinnerFiltersCopyWith<$Res>
 
 /// @nodoc
 class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
-    extends _$GameSpinnerFiltersCopyWithImpl<$Res>
+    extends _$GameSpinnerFiltersCopyWithImpl<$Res, _$_GameSpinnerFilters>
     implements _$$_GameSpinnerFiltersCopyWith<$Res> {
   __$$_GameSpinnerFiltersCopyWithImpl(
       _$_GameSpinnerFilters _value, $Res Function(_$_GameSpinnerFilters) _then)
-      : super(_value, (v) => _then(v as _$_GameSpinnerFilters));
+      : super(_value, _then);
 
-  @override
-  _$_GameSpinnerFilters get _value => super._value as _$_GameSpinnerFilters;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? collections = freezed,
-    Object? includeExpansions = freezed,
-    Object? numberOfPlayersFilter = freezed,
-    Object? playtimeFilter = freezed,
+    Object? collections = null,
+    Object? includeExpansions = null,
+    Object? numberOfPlayersFilter = null,
+    Object? playtimeFilter = null,
   }) {
     return _then(_$_GameSpinnerFilters(
-      collections: collections == freezed
+      collections: null == collections
           ? _value._collections
           : collections // ignore: cast_nullable_to_non_nullable
               as Set<CollectionType>,
-      includeExpansions: includeExpansions == freezed
+      includeExpansions: null == includeExpansions
           ? _value.includeExpansions
           : includeExpansions // ignore: cast_nullable_to_non_nullable
               as bool,
-      numberOfPlayersFilter: numberOfPlayersFilter == freezed
+      numberOfPlayersFilter: null == numberOfPlayersFilter
           ? _value.numberOfPlayersFilter
           : numberOfPlayersFilter // ignore: cast_nullable_to_non_nullable
               as NumberOfPlayersFilter,
-      playtimeFilter: playtimeFilter == freezed
+      playtimeFilter: null == playtimeFilter
           ? _value.playtimeFilter
           : playtimeFilter // ignore: cast_nullable_to_non_nullable
               as PlaytimeFilter,
@@ -166,6 +170,7 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
   final Set<CollectionType> _collections;
   @override
   Set<CollectionType> get collections {
+    if (_collections is EqualUnmodifiableSetView) return _collections;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableSetView(_collections);
   }
@@ -191,24 +196,25 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
             other is _$_GameSpinnerFilters &&
             const DeepCollectionEquality()
                 .equals(other._collections, _collections) &&
-            const DeepCollectionEquality()
-                .equals(other.includeExpansions, includeExpansions) &&
-            const DeepCollectionEquality()
-                .equals(other.numberOfPlayersFilter, numberOfPlayersFilter) &&
-            const DeepCollectionEquality()
-                .equals(other.playtimeFilter, playtimeFilter));
+            (identical(other.includeExpansions, includeExpansions) ||
+                other.includeExpansions == includeExpansions) &&
+            (identical(other.numberOfPlayersFilter, numberOfPlayersFilter) ||
+                other.numberOfPlayersFilter == numberOfPlayersFilter) &&
+            (identical(other.playtimeFilter, playtimeFilter) ||
+                other.playtimeFilter == playtimeFilter));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_collections),
-      const DeepCollectionEquality().hash(includeExpansions),
-      const DeepCollectionEquality().hash(numberOfPlayersFilter),
-      const DeepCollectionEquality().hash(playtimeFilter));
+      includeExpansions,
+      numberOfPlayersFilter,
+      playtimeFilter);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GameSpinnerFiltersCopyWith<_$_GameSpinnerFilters> get copyWith =>
       __$$_GameSpinnerFiltersCopyWithImpl<_$_GameSpinnerFilters>(
           this, _$identity);
@@ -247,9 +253,9 @@ mixin _$NumberOfPlayersFilter {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? any,
+    TResult? Function()? singlePlayerOnly,
+    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -269,9 +275,9 @@ mixin _$NumberOfPlayersFilter {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult? Function(_numberOfPlayersAny value)? any,
+    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
+    TResult? Function(_moreThan value)? moreThan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -288,17 +294,19 @@ mixin _$NumberOfPlayersFilter {
 abstract class $NumberOfPlayersFilterCopyWith<$Res> {
   factory $NumberOfPlayersFilterCopyWith(NumberOfPlayersFilter value,
           $Res Function(NumberOfPlayersFilter) then) =
-      _$NumberOfPlayersFilterCopyWithImpl<$Res>;
+      _$NumberOfPlayersFilterCopyWithImpl<$Res, NumberOfPlayersFilter>;
 }
 
 /// @nodoc
-class _$NumberOfPlayersFilterCopyWithImpl<$Res>
+class _$NumberOfPlayersFilterCopyWithImpl<$Res,
+        $Val extends NumberOfPlayersFilter>
     implements $NumberOfPlayersFilterCopyWith<$Res> {
   _$NumberOfPlayersFilterCopyWithImpl(this._value, this._then);
 
-  final NumberOfPlayersFilter _value;
   // ignore: unused_field
-  final $Res Function(NumberOfPlayersFilter) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -310,14 +318,11 @@ abstract class _$$_numberOfPlayersAnyCopyWith<$Res> {
 
 /// @nodoc
 class __$$_numberOfPlayersAnyCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_numberOfPlayersAny>
     implements _$$_numberOfPlayersAnyCopyWith<$Res> {
   __$$_numberOfPlayersAnyCopyWithImpl(
       _$_numberOfPlayersAny _value, $Res Function(_$_numberOfPlayersAny) _then)
-      : super(_value, (v) => _then(v as _$_numberOfPlayersAny));
-
-  @override
-  _$_numberOfPlayersAny get _value => super._value as _$_numberOfPlayersAny;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -352,9 +357,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? any,
+    TResult? Function()? singlePlayerOnly,
+    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
   }) {
     return any?.call();
   }
@@ -386,9 +391,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult? Function(_numberOfPlayersAny value)? any,
+    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
+    TResult? Function(_moreThan value)? moreThan,
   }) {
     return any?.call(this);
   }
@@ -421,14 +426,11 @@ abstract class _$$_singlePlayerOnlyCopyWith<$Res> {
 
 /// @nodoc
 class __$$_singlePlayerOnlyCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_singlePlayerOnly>
     implements _$$_singlePlayerOnlyCopyWith<$Res> {
   __$$_singlePlayerOnlyCopyWithImpl(
       _$_singlePlayerOnly _value, $Res Function(_$_singlePlayerOnly) _then)
-      : super(_value, (v) => _then(v as _$_singlePlayerOnly));
-
-  @override
-  _$_singlePlayerOnly get _value => super._value as _$_singlePlayerOnly;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -463,9 +465,9 @@ class _$_singlePlayerOnly implements _singlePlayerOnly {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? any,
+    TResult? Function()? singlePlayerOnly,
+    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
   }) {
     return singlePlayerOnly?.call();
   }
@@ -497,9 +499,9 @@ class _$_singlePlayerOnly implements _singlePlayerOnly {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult? Function(_numberOfPlayersAny value)? any,
+    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
+    TResult? Function(_moreThan value)? moreThan,
   }) {
     return singlePlayerOnly?.call(this);
   }
@@ -528,26 +530,25 @@ abstract class _$$_moreThanCopyWith<$Res> {
   factory _$$_moreThanCopyWith(
           _$_moreThan value, $Res Function(_$_moreThan) then) =
       __$$_moreThanCopyWithImpl<$Res>;
+  @useResult
   $Res call({int moreThanNumberOfPlayers});
 }
 
 /// @nodoc
 class __$$_moreThanCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_moreThan>
     implements _$$_moreThanCopyWith<$Res> {
   __$$_moreThanCopyWithImpl(
       _$_moreThan _value, $Res Function(_$_moreThan) _then)
-      : super(_value, (v) => _then(v as _$_moreThan));
+      : super(_value, _then);
 
-  @override
-  _$_moreThan get _value => super._value as _$_moreThan;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? moreThanNumberOfPlayers = freezed,
+    Object? moreThanNumberOfPlayers = null,
   }) {
     return _then(_$_moreThan(
-      moreThanNumberOfPlayers: moreThanNumberOfPlayers == freezed
+      moreThanNumberOfPlayers: null == moreThanNumberOfPlayers
           ? _value.moreThanNumberOfPlayers
           : moreThanNumberOfPlayers // ignore: cast_nullable_to_non_nullable
               as int,
@@ -573,16 +574,17 @@ class _$_moreThan implements _moreThan {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_moreThan &&
-            const DeepCollectionEquality().equals(
-                other.moreThanNumberOfPlayers, moreThanNumberOfPlayers));
+            (identical(
+                    other.moreThanNumberOfPlayers, moreThanNumberOfPlayers) ||
+                other.moreThanNumberOfPlayers == moreThanNumberOfPlayers));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(moreThanNumberOfPlayers));
+  int get hashCode => Object.hash(runtimeType, moreThanNumberOfPlayers);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_moreThanCopyWith<_$_moreThan> get copyWith =>
       __$$_moreThanCopyWithImpl<_$_moreThan>(this, _$identity);
 
@@ -599,9 +601,9 @@ class _$_moreThan implements _moreThan {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? any,
+    TResult? Function()? singlePlayerOnly,
+    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
   }) {
     return moreThan?.call(moreThanNumberOfPlayers);
   }
@@ -633,9 +635,9 @@ class _$_moreThan implements _moreThan {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult? Function(_numberOfPlayersAny value)? any,
+    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
+    TResult? Function(_moreThan value)? moreThan,
   }) {
     return moreThan?.call(this);
   }
@@ -675,8 +677,8 @@ mixin _$PlaytimeFilter {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? any,
-    TResult Function(int playtimeInMinutes)? lessThan,
+    TResult? Function()? any,
+    TResult? Function(int playtimeInMinutes)? lessThan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -694,8 +696,8 @@ mixin _$PlaytimeFilter {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_playtimeAny value)? any,
-    TResult Function(_lessThan value)? lessThan,
+    TResult? Function(_playtimeAny value)? any,
+    TResult? Function(_lessThan value)? lessThan,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -711,17 +713,18 @@ mixin _$PlaytimeFilter {
 abstract class $PlaytimeFilterCopyWith<$Res> {
   factory $PlaytimeFilterCopyWith(
           PlaytimeFilter value, $Res Function(PlaytimeFilter) then) =
-      _$PlaytimeFilterCopyWithImpl<$Res>;
+      _$PlaytimeFilterCopyWithImpl<$Res, PlaytimeFilter>;
 }
 
 /// @nodoc
-class _$PlaytimeFilterCopyWithImpl<$Res>
+class _$PlaytimeFilterCopyWithImpl<$Res, $Val extends PlaytimeFilter>
     implements $PlaytimeFilterCopyWith<$Res> {
   _$PlaytimeFilterCopyWithImpl(this._value, this._then);
 
-  final PlaytimeFilter _value;
   // ignore: unused_field
-  final $Res Function(PlaytimeFilter) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -733,14 +736,11 @@ abstract class _$$_playtimeAnyCopyWith<$Res> {
 
 /// @nodoc
 class __$$_playtimeAnyCopyWithImpl<$Res>
-    extends _$PlaytimeFilterCopyWithImpl<$Res>
+    extends _$PlaytimeFilterCopyWithImpl<$Res, _$_playtimeAny>
     implements _$$_playtimeAnyCopyWith<$Res> {
   __$$_playtimeAnyCopyWithImpl(
       _$_playtimeAny _value, $Res Function(_$_playtimeAny) _then)
-      : super(_value, (v) => _then(v as _$_playtimeAny));
-
-  @override
-  _$_playtimeAny get _value => super._value as _$_playtimeAny;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -774,8 +774,8 @@ class _$_playtimeAny implements _playtimeAny {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? any,
-    TResult Function(int playtimeInMinutes)? lessThan,
+    TResult? Function()? any,
+    TResult? Function(int playtimeInMinutes)? lessThan,
   }) {
     return any?.call();
   }
@@ -805,8 +805,8 @@ class _$_playtimeAny implements _playtimeAny {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_playtimeAny value)? any,
-    TResult Function(_lessThan value)? lessThan,
+    TResult? Function(_playtimeAny value)? any,
+    TResult? Function(_lessThan value)? lessThan,
   }) {
     return any?.call(this);
   }
@@ -834,25 +834,25 @@ abstract class _$$_lessThanCopyWith<$Res> {
   factory _$$_lessThanCopyWith(
           _$_lessThan value, $Res Function(_$_lessThan) then) =
       __$$_lessThanCopyWithImpl<$Res>;
+  @useResult
   $Res call({int playtimeInMinutes});
 }
 
 /// @nodoc
-class __$$_lessThanCopyWithImpl<$Res> extends _$PlaytimeFilterCopyWithImpl<$Res>
+class __$$_lessThanCopyWithImpl<$Res>
+    extends _$PlaytimeFilterCopyWithImpl<$Res, _$_lessThan>
     implements _$$_lessThanCopyWith<$Res> {
   __$$_lessThanCopyWithImpl(
       _$_lessThan _value, $Res Function(_$_lessThan) _then)
-      : super(_value, (v) => _then(v as _$_lessThan));
+      : super(_value, _then);
 
-  @override
-  _$_lessThan get _value => super._value as _$_lessThan;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playtimeInMinutes = freezed,
+    Object? playtimeInMinutes = null,
   }) {
     return _then(_$_lessThan(
-      playtimeInMinutes: playtimeInMinutes == freezed
+      playtimeInMinutes: null == playtimeInMinutes
           ? _value.playtimeInMinutes
           : playtimeInMinutes // ignore: cast_nullable_to_non_nullable
               as int,
@@ -878,16 +878,16 @@ class _$_lessThan implements _lessThan {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_lessThan &&
-            const DeepCollectionEquality()
-                .equals(other.playtimeInMinutes, playtimeInMinutes));
+            (identical(other.playtimeInMinutes, playtimeInMinutes) ||
+                other.playtimeInMinutes == playtimeInMinutes));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(playtimeInMinutes));
+  int get hashCode => Object.hash(runtimeType, playtimeInMinutes);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_lessThanCopyWith<_$_lessThan> get copyWith =>
       __$$_lessThanCopyWithImpl<_$_lessThan>(this, _$identity);
 
@@ -903,8 +903,8 @@ class _$_lessThan implements _lessThan {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? any,
-    TResult Function(int playtimeInMinutes)? lessThan,
+    TResult? Function()? any,
+    TResult? Function(int playtimeInMinutes)? lessThan,
   }) {
     return lessThan?.call(playtimeInMinutes);
   }
@@ -934,8 +934,8 @@ class _$_lessThan implements _lessThan {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_playtimeAny value)? any,
-    TResult Function(_lessThan value)? lessThan,
+    TResult? Function(_playtimeAny value)? any,
+    TResult? Function(_lessThan value)? lessThan,
   }) {
     return lessThan?.call(this);
   }

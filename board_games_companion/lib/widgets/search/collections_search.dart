@@ -41,7 +41,7 @@ class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
-        textTheme: const TextTheme(headline6: AppTheme.defaultTextFieldStyle),
+        textTheme: const TextTheme(titleLarge: AppTheme.defaultTextFieldStyle),
       );
 
   @override
@@ -294,7 +294,7 @@ class _SearchResultGameExpansions extends StatelessWidget {
         const SizedBox(height: Dimensions.standardSpacing),
         Text(
           sprintf(AppText.gamesPageSearchResultExpansionsSectionTitleFormat, [expansions.length]),
-          style: AppTheme.theme.textTheme.subtitle1,
+          style: AppTheme.theme.textTheme.titleMedium,
         ),
         const SizedBox(height: Dimensions.standardSpacing),
         SizedBox(
@@ -376,7 +376,7 @@ class _SearchResultGameRefreshDataState extends State<_SearchResultGameRefreshDa
             Expanded(
               child: Text(
                 AppText.gamesPageSearchResultRefreshDetails,
-                style: AppTheme.theme.textTheme.subtitle1,
+                style: AppTheme.theme.textTheme.titleMedium,
               ),
             ),
             RotationTransition(

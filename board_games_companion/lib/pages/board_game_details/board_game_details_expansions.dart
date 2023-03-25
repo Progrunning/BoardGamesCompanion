@@ -138,7 +138,7 @@ class _Expansion extends StatelessWidget {
             Expanded(
               child: Text(
                 _boardGameExpansion.name,
-                style: AppTheme.theme.textTheme.headline3,
+                style: AppTheme.theme.textTheme.displaySmall,
               ),
             ),
             const Icon(Icons.navigate_next, color: AppColors.accentColor),

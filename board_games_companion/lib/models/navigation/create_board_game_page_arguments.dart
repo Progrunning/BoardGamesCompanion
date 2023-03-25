@@ -4,7 +4,7 @@ part 'create_board_game_page_arguments.freezed.dart';
 
 /// Specify [boardGameId] to toggle edit mode.
 @freezed
-abstract class CreateBoardGamePageArguments with _$CreateBoardGamePageArguments {
+class CreateBoardGamePageArguments with _$CreateBoardGamePageArguments {
   const factory CreateBoardGamePageArguments({
     String? boardGameName,
     String? boardGameId,
