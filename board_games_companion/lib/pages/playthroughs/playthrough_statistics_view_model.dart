@@ -97,8 +97,24 @@ abstract class _PlaythroughStatisticsViewModel with Store {
         );
         break;
       case GameClassification.NoScore:
+        boardGameStatistics = _loadNoScoreBoardGameStatistics(
+          playersById,
+          playthroughScoresByPlaythroughId,
+          playthroughScoresByBoardGameId,
+          finishedPlaythroughs,
+        );
         break;
     }
+  }
+
+  BoardGameStatistics _loadNoScoreBoardGameStatistics(
+    Map<String, Player> playersById,
+    Map<String, List<Score>> playthroughScoresByPlaythroughId,
+    Map<String, List<Score>> playthroughScoresByBoardGameId,
+    List<Playthrough> finishedPlaythroughs,
+  ) {
+    // TODO Implement
+    return const BoardGameStatistics.none();
   }
 
   BoardGameStatistics _loadScoreBoardGamesStatistics(

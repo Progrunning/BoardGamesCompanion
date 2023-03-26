@@ -83,7 +83,7 @@ class AppText {
 
   static const playthroughsHistoryPageNoGamesTitle = "You haven't logged any games yet";
   static const playthroughsHistoryPageNoGamesSubtitle =
-      'This page will be filled with the history of plays, once you start logging games.';
+      'This page will fill up with the history of plays, once you start logging games.';
 
   static const playthroughsGameSettingsGameClassificationScore = 'Score based game';
   static const playthroughsGameSettingsGameClssificationNoScore = 'No score based game';
