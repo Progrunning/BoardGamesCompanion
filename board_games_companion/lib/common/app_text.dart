@@ -56,6 +56,10 @@ class AppText {
 
   static const hotBoardGamesPageTitle = 'Hot Board Games';
 
+  static const playthroughsStatisticsPageNoStatsTitle = "You haven't logged any games yet";
+  static const playthroughsStatisticsPageNoStatsSubtitle =
+      'Start logging games to see overal and personalised statistics.';
+
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5 scores';
   static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle =

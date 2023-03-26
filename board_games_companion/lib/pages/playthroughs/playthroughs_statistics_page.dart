@@ -78,7 +78,7 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
               Observer(builder: (_) {
                 return viewModel.boardGameStatistics.when(
                   // TODO Update UI for this state
-                  none: () => const SliverToBoxAdapter(child: Text('No stats')),
+                  none: () => const _NoStats(),
                   loading: () => const SliverFillRemaining(child: LoadingIndicator()),
                   score: (scoreBoardGameStatistics) =>
                       _ScoreBoardGameStatistics(scoreBoardGameStatistics: scoreBoardGameStatistics),
@@ -89,6 +89,48 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
           ],
         );
       },
+    );
+  }
+}
+
+class _NoStats extends StatelessWidget {
+  const _NoStats();
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const <Widget>[
+              Center(
+                child: Text(
+                  AppText.playthroughsStatisticsPageNoStatsTitle,
+                  style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+                ),
+              ),
+              SizedBox(height: Dimensions.doubleStandardSpacing),
+              Icon(
+                Icons.query_stats,
+                size: Dimensions.emptyPageTitleIconSize,
+                color: AppColors.primaryColor,
+              ),
+              SizedBox(height: Dimensions.doubleStandardSpacing),
+              Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(text: AppText.playthroughsStatisticsPageNoStatsSubtitle),
+                  ],
+                ),
+                textAlign: TextAlign.justify,
+                style: TextStyle(fontSize: Dimensions.mediumFontSize),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
