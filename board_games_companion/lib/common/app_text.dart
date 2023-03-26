@@ -81,6 +81,10 @@ class AppText {
   static const playthroughsStatisticsPagePlayerCountChartLegendFormatSingular = '%i player';
   static const playthroughsStatisticsPagePlayerCountChartLegendFormatPlural = '%i players';
 
+  static const playthroughsHistoryPageNoGamesTitle = "You haven't logged any games yet";
+  static const playthroughsHistoryPageNoGamesSubtitle =
+      'This page will be filled with the history of plays, once you start logging games.';
+
   static const playthroughsGameSettingsGameClassificationScore = 'Score based game';
   static const playthroughsGameSettingsGameClssificationNoScore = 'No score based game';
   static const playthroughsGameSettingsGameClassificationSectionTitle = 'Classification';

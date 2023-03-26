@@ -14,6 +14,7 @@ import '../../models/playthroughs/playthrough_details.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
+import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
@@ -50,10 +51,18 @@ class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
             return const LoadingIndicator();
           case FutureStatus.fulfilled:
             if (!viewModel.hasAnyPlaythroughs) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
-                child: Center(
-                  child: Text("It looks like you haven't played this game yet"),
+              return const EmptyPageInformationPanel(
+                title: AppText.playthroughsHistoryPageNoGamesTitle,
+                subtitle: AppText.playthroughsHistoryPageNoGamesSubtitle,
+                icon: Icon(
+                  Icons.history,
+                  size: Dimensions.emptyPageTitleIconSize,
+                  color: AppColors.primaryColor,
+                ),
+                padding: EdgeInsets.only(
+                  left: Dimensions.doubleStandardSpacing,
+                  top: Dimensions.emptyPageTitleTopSpacing,
+                  right: Dimensions.doubleStandardSpacing,
                 ),
               );
             }

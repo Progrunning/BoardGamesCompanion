@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/extensions/date_time_extensions.dart';
 import 'package:board_games_companion/injectable.dart';
+import 'package:board_games_companion/widgets/common/empty_page_information_panel.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,6 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
             if (viewModel.futureLoadBoardGamesStatistics?.status == FutureStatus.fulfilled)
               Observer(builder: (_) {
                 return viewModel.boardGameStatistics.when(
-                  // TODO Update UI for this state
                   none: () => const _NoStats(),
                   loading: () => const SliverFillRemaining(child: LoadingIndicator()),
                   score: (scoreBoardGameStatistics) =>
@@ -98,36 +98,15 @@ class _NoStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const <Widget>[
-              Center(
-                child: Text(
-                  AppText.playthroughsStatisticsPageNoStatsTitle,
-                  style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
-                ),
-              ),
-              SizedBox(height: Dimensions.doubleStandardSpacing),
-              Icon(
-                Icons.query_stats,
-                size: Dimensions.emptyPageTitleIconSize,
-                color: AppColors.primaryColor,
-              ),
-              SizedBox(height: Dimensions.doubleStandardSpacing),
-              Text.rich(
-                TextSpan(
-                  children: <InlineSpan>[
-                    TextSpan(text: AppText.playthroughsStatisticsPageNoStatsSubtitle),
-                  ],
-                ),
-                textAlign: TextAlign.justify,
-                style: TextStyle(fontSize: Dimensions.mediumFontSize),
-              ),
-            ],
+    return const SliverFillRemaining(
+      child: Center(
+        child: EmptyPageInformationPanel(
+          title: AppText.playthroughsStatisticsPageNoStatsTitle,
+          subtitle: AppText.playthroughsStatisticsPageNoStatsSubtitle,
+          icon: Icon(
+            Icons.query_stats,
+            size: Dimensions.emptyPageTitleIconSize,
+            color: AppColors.primaryColor,
           ),
         ),
       ),

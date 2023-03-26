@@ -115,8 +115,8 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           items: const <TabItem>[
             TabItem<BottomTabIcon>(
               title: AppText.playthroughPageStatsBottomTabTitle,
-              icon: BottomTabIcon(iconData: Icons.multiline_chart),
-              activeIcon: BottomTabIcon(iconData: Icons.multiline_chart, isActive: true),
+              icon: BottomTabIcon(iconData: Icons.query_stats),
+              activeIcon: BottomTabIcon(iconData: Icons.query_stats, isActive: true),
             ),
             TabItem<BottomTabIcon>(
               title: AppText.playthroughPageHistoryBottomTabTitle,
