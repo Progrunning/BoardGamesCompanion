@@ -155,6 +155,11 @@ class AppText {
   static const editPlaythroughPageTitle = 'Edit Playthrough';
   static const editPlaythroughDateAndDurationHeaderTitle = 'Date & Duration';
   static const editPlaythroughScoresHeaderTitle = 'Scores';
+  static const editPlaythroughNoScoreResultHeaderTitle = 'Result';
+  static const editPlaythroughNoScoreResultText = 'Game result';
+  static const editPlaythroughNoScoreResultWinText = 'Win';
+  static const editPlaythroughNoScoreResultLossText = 'Loss';
+  static const editPlaythroughNoScorePlayersHeaderTitle = 'Players';
   static const editPlaythroughNotesHeaderTitle = 'Notes';
   static const editPlaythroughPagePlayedOnSectionTitle = 'Played on';
   static const editPlaythroughPageDurationSectionTitle = 'Duration';

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../common/app_colors.dart';
 import '../../elevated_container.dart';
 
-class FilterToggleButton<TValue> extends StatelessWidget {
-  const FilterToggleButton({
+class BgcToggleButton<TValue> extends StatelessWidget {
+  const BgcToggleButton({
     Key? key,
     required bool isSelected,
     required Function(TValue?) onTapped,

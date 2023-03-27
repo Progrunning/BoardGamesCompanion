@@ -13,7 +13,7 @@ import 'package:board_games_companion/pages/plays/game_spinner_game_selected_dia
 import 'package:board_games_companion/pages/plays/plays_page_visual_states.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:board_games_companion/widgets/common/collection_toggle_button.dart';
-import 'package:board_games_companion/widgets/common/filtering/filter_toggle_buttons_container.dart';
+import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_buttons_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -35,10 +35,10 @@ import '../../widgets/board_games/board_game_name.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgc_checkbox.dart';
-import '../../widgets/common/filtering/filter_toggle_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import '../../widgets/common/toggle_buttons/bgc_toggle_button.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../home/home_page.dart';
 import 'board_game_playthrough.dart';
@@ -425,7 +425,7 @@ class _PlaytimeFilter extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(right: Dimensions.standardSpacing),
-              child: FilterToggleButtonsContainer(
+              child: BgcToggleButtonsContainer(
                 height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
                 child: Row(
                   children: [
@@ -1063,7 +1063,7 @@ class _AppBar extends StatelessWidget {
   }
 }
 
-class _FilterPlaytime extends FilterToggleButton<PlaytimeFilter> {
+class _FilterPlaytime extends BgcToggleButton<PlaytimeFilter> {
   _FilterPlaytime.time({
     required bool isSelected,
     required PlaytimeFilter playtimeFilter,

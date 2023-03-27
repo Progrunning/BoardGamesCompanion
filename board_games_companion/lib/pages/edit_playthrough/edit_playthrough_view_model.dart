@@ -1,5 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/player_score.dart';
@@ -43,6 +46,13 @@ abstract class _EditPlaythoughViewModel with Store {
       playthroughDetailsWorkingCopy.playerScores.asObservable();
 
   @computed
+  ObservableList<Player> get players => playthroughDetailsWorkingCopy.playerScores
+      .where((playerScore) => playerScore.player != null)
+      .map((playerScore) => playerScore.player!)
+      .toList()
+      .asObservable();
+
+  @computed
   DateTime get playthroughStartTime => playthroughDetailsWorkingCopy.startDate;
 
   @computed
@@ -63,6 +73,12 @@ abstract class _EditPlaythoughViewModel with Store {
     return ObservableList.of(
         playthroughNotes..sort((noteA, noteB) => noteA.createdAt.compareTo(noteB.createdAt)));
   }
+
+  @computed
+  GameFamily get gameFamily => _gamePlaythroughsDetailsStore.gameGameFamily;
+
+  @computed
+  GameClassification get gameClassification => _gamePlaythroughsDetailsStore.gameClassification;
 
   bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
 

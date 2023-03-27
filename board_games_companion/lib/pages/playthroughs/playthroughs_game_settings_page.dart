@@ -5,15 +5,15 @@ import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:board_games_companion/common/enums/game_family.dart';
 import 'package:board_games_companion/extensions/average_score_precision_extensions.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart';
-import 'package:board_games_companion/widgets/common/filtering/filter_toggle_buttons_container.dart';
+import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_buttons_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../common/app_colors.dart';
 import '../../injectable.dart';
-import '../../widgets/common/filtering/filter_toggle_button.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import '../../widgets/common/toggle_buttons/bgc_toggle_button.dart';
 import 'average_score_precision.dart';
 
 class PlaythroughsGameSettingsPage extends StatefulWidget {
@@ -144,7 +144,7 @@ class _ScoreSection extends StatelessWidget {
                     style: AppTheme.defaultTextFieldStyle,
                   ),
                   const Spacer(),
-                  FilterToggleButtonsContainer(
+                  BgcToggleButtonsContainer(
                     height: precisionContainerHeight,
                     width: precisionContainerWidth,
                     child: Row(
@@ -177,7 +177,7 @@ class _ScoreSection extends StatelessWidget {
       );
 }
 
-class _AverageScorePrecisionTile extends FilterToggleButton<AverageScorePrecision> {
+class _AverageScorePrecisionTile extends BgcToggleButton<AverageScorePrecision> {
   _AverageScorePrecisionTile.precision({
     required bool isSelected,
     required AverageScorePrecision averageScorePrecision,

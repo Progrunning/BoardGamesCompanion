@@ -1,14 +1,19 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/navigation/playthough_note_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
+import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_button.dart';
+import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_buttons_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -59,41 +64,21 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
               child: Observer(builder: (_) {
                 return CustomScrollView(
                   slivers: [
-                    SliverPersistentHeader(
-                      delegate: BgcSliverHeaderDelegate(
-                        primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
-                      ),
-                    ),
                     _PlayDateTimeSection(viewModel: widget.viewModel),
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: BgcSliverHeaderDelegate(
-                          primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
-                    ),
-                    _ScoresSection(
-                      viewModel: widget.viewModel,
-                      onItemTapped: (PlayerScore playerScore) async =>
-                          _editPlayerScore(playerScore, context),
-                    ),
-                    if (widget.viewModel.hasNotes) ...[
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: BgcSliverHeaderDelegate(
-                            primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+                    if (widget.viewModel.gameClassification == GameClassification.Score)
+                      _ScoresSection(
+                        viewModel: widget.viewModel,
+                        onItemTapped: (PlayerScore playerScore) async =>
+                            _editPlayerScore(playerScore, context),
                       ),
+                    if (widget.viewModel.gameClassification == GameClassification.NoScore)
+                      _NoScoreSection(players: widget.viewModel.players),
+                    if (widget.viewModel.hasNotes)
                       _NotesSection(
                         notes: widget.viewModel.notes!,
                         onTap: (note) => _editNote(note.id),
                         onDelete: (note) => _deleteNote(note),
                       ),
-                      // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
-                      const SliverPadding(
-                        padding: EdgeInsets.only(
-                          bottom: Dimensions.floatingActionButtonBottomSpacing +
-                              Dimensions.standardSpacing,
-                        ),
-                      ),
-                    ]
                   ],
                 );
               }),
@@ -167,8 +152,12 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _close(BuildContext context) async {
+    // MK Need to pass the context to show the dialog - unsure how else the warning could be fixed.
+    // ignore: use_build_context_synchronously
     if (await _handleOnWillPop(context)) {
-      Navigator.pop(context);
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -270,32 +259,137 @@ class _ScoresSection extends StatelessWidget {
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
-  Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) {
-        return SliverPadding(
-          padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, index) {
-                final int itemIndex = index ~/ 2;
-                if (index.isEven) {
-                  return _PlayerScoreTile(
-                    playerScore: viewModel.playerScores[itemIndex],
-                    playthroughId: viewModel.playthroughDetails.id,
-                    onItemTapped: onItemTapped,
-                  );
-                }
+  Widget build(BuildContext context) => MultiSliver(
+        children: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate:
+                BgcSliverHeaderDelegate(primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
+          ),
+          Observer(
+            builder: (_) {
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (_, index) {
+                      final int itemIndex = index ~/ 2;
+                      if (index.isEven) {
+                        return _PlayerScoreTile(
+                          playerScore: viewModel.playerScores[itemIndex],
+                          playthroughId: viewModel.playthroughDetails.id,
+                          onItemTapped: onItemTapped,
+                        );
+                      }
 
-                return const SizedBox(height: Dimensions.doubleStandardSpacing);
-              },
-              childCount: max(0, viewModel.playerScores.length * 2 - 1),
+                      return const SizedBox(height: Dimensions.doubleStandardSpacing);
+                    },
+                    childCount: max(0, viewModel.playerScores.length * 2 - 1),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+}
+
+class _NoScoreSection extends StatelessWidget {
+  const _NoScoreSection({
+    required this.players,
+  });
+
+  final List<Player> players;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverHeaderDelegate(
+              primaryTitle: AppText.editPlaythroughNoScoreResultHeaderTitle),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              children: [
+                const Text(AppText.editPlaythroughNoScoreResultText),
+                const Spacer(),
+                BgcToggleButtonsContainer(
+                  // MK an arbitrary number based on 75px being enough to tap on the button and to show the name on the tile
+                  width: 150,
+                  height: Dimensions.defaultToggleButtonContaienrHeight,
+                  // TODO Hook in the win/loss logic
+                  child: Row(
+                    children: [
+                      _NoScoreResultTile.result(
+                        text: AppText.editPlaythroughNoScoreResultWinText,
+                        isSelected: true,
+                        onSelected: (isWin) {},
+                      ),
+                      _NoScoreResultTile.result(
+                        text: AppText.editPlaythroughNoScoreResultLossText,
+                        isSelected: false,
+                        onSelected: (isLoss) {},
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverHeaderDelegate(
+              primaryTitle: AppText.editPlaythroughNoScorePlayersHeaderTitle),
+        ),
+        Observer(
+          builder: (_) {
+            return SliverPadding(
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+              sliver: SliverGrid.extent(
+                crossAxisSpacing: Dimensions.standardSpacing,
+                mainAxisSpacing: Dimensions.standardSpacing,
+                maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
+                children: [
+                  for (var player in players)
+                    SizedBox(
+                      height: Dimensions.smallPlayerAvatarSize.height,
+                      width: Dimensions.smallPlayerAvatarSize.width,
+                      child: PlayerAvatar(
+                        player: player,
+                        avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _NoScoreResultTile extends BgcToggleButton<bool> {
+  _NoScoreResultTile.result({
+    required String text,
+    required bool isSelected,
+    required Function(bool) onSelected,
+  }) : super(
+          value: isSelected,
+          isSelected: isSelected,
+          onTapped: (_) => onSelected(isSelected),
+          child: Center(
+            child: Text(
+              text,
+              style: AppTheme.theme.textTheme.displaySmall,
             ),
           ),
         );
-      },
-    );
-  }
 }
 
 class _NotesSection extends StatelessWidget {
@@ -312,44 +406,58 @@ class _NotesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (_, index) {
-          final int itemIndex = index ~/ 2;
-          final note = notes[itemIndex];
-          if (index.isEven) {
-            return InkWell(
-              onTap: () => onTap(note),
-              child: Slidable(
-                endActionPane: ActionPane(
-                  extentRatio: 0.25,
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      icon: Icons.delete,
-                      onPressed: (_) => onDelete(note),
-                      backgroundColor: AppColors.redColor,
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverHeaderDelegate(primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, index) {
+              final int itemIndex = index ~/ 2;
+              final note = notes[itemIndex];
+              if (index.isEven) {
+                return InkWell(
+                  onTap: () => onTap(note),
+                  child: Slidable(
+                    endActionPane: ActionPane(
+                      extentRatio: 0.25,
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          icon: Icons.delete,
+                          onPressed: (_) => onDelete(note),
+                          backgroundColor: AppColors.redColor,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                        child: Text(note.text, textAlign: TextAlign.justify),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          }
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                            child: Text(note.text, textAlign: TextAlign.justify),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
 
-          return const SizedBox(height: Dimensions.standardSpacing);
-        },
-        childCount: max(0, notes.length * 2 - 1),
-      ),
+              return const SizedBox(height: Dimensions.standardSpacing);
+            },
+            childCount: max(0, notes.length * 2 - 1),
+          ),
+        ),
+        // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
+        const SliverPadding(
+          padding: EdgeInsets.only(
+            bottom: Dimensions.floatingActionButtonBottomSpacing + Dimensions.standardSpacing,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -484,58 +592,67 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
   @override
   Widget build(BuildContext context) {
     _setHourseAndMinutesRange();
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-        child: Row(
-          children: [
-            Center(
-              child: Observer(
-                builder: (_) {
-                  return CalendarCard(
-                    widget.viewModel.playthroughStartTime,
-                    onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
-                  );
-                },
-              ),
-            ),
-            const Expanded(child: SizedBox.shrink()),
-            AbsorbPointer(
-              absorbing: !widget.viewModel.playthoughEnded,
-              child: Row(
-                children: <Widget>[
-                  NumberPicker(
-                    value: math.min(hoursPlayed, _maxHours),
-                    minValue: minHours,
-                    maxValue: maxHours,
-                    onChanged: (num value) => _updateDurationHours(value),
-                    itemWidth: 46,
-                    selectedTextStyle: const TextStyle(
-                      color: AppColors.accentColor,
-                      fontSize: Dimensions.doubleExtraLargeFontSize,
-                    ),
-                  ),
-                  Text('h', style: AppTheme.theme.textTheme.bodyMedium),
-                  const SizedBox(width: Dimensions.halfStandardSpacing),
-                  NumberPicker(
-                    value: minutesPlyed,
-                    infiniteLoop: true,
-                    minValue: minMinutes,
-                    maxValue: maxMinutes,
-                    onChanged: (num value) => _updateDurationMinutes(value),
-                    itemWidth: 46,
-                    selectedTextStyle: const TextStyle(
-                      color: AppColors.accentColor,
-                      fontSize: Dimensions.doubleExtraLargeFontSize,
-                    ),
-                  ),
-                  Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
-                ],
-              ),
-            )
-          ],
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverHeaderDelegate(
+            primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
+          ),
         ),
-      ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            child: Row(
+              children: [
+                Center(
+                  child: Observer(
+                    builder: (_) {
+                      return CalendarCard(
+                        widget.viewModel.playthroughStartTime,
+                        onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
+                      );
+                    },
+                  ),
+                ),
+                const Expanded(child: SizedBox.shrink()),
+                AbsorbPointer(
+                  absorbing: !widget.viewModel.playthoughEnded,
+                  child: Row(
+                    children: <Widget>[
+                      NumberPicker(
+                        value: math.min(hoursPlayed, _maxHours),
+                        minValue: minHours,
+                        maxValue: maxHours,
+                        onChanged: (num value) => _updateDurationHours(value),
+                        itemWidth: 46,
+                        selectedTextStyle: const TextStyle(
+                          color: AppColors.accentColor,
+                          fontSize: Dimensions.doubleExtraLargeFontSize,
+                        ),
+                      ),
+                      Text('h', style: AppTheme.theme.textTheme.bodyMedium),
+                      const SizedBox(width: Dimensions.halfStandardSpacing),
+                      NumberPicker(
+                        value: minutesPlyed,
+                        infiniteLoop: true,
+                        minValue: minMinutes,
+                        maxValue: maxMinutes,
+                        onChanged: (num value) => _updateDurationMinutes(value),
+                        itemWidth: 46,
+                        selectedTextStyle: const TextStyle(
+                          color: AppColors.accentColor,
+                          fontSize: Dimensions.doubleExtraLargeFontSize,
+                        ),
+                      ),
+                      Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

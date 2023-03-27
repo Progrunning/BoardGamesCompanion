@@ -30,6 +30,13 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
           Computed<ObservableList<PlayerScore>>(() => super.playerScores,
               name: '_EditPlaythoughViewModel.playerScores'))
       .value;
+  Computed<ObservableList<Player>>? _$playersComputed;
+
+  @override
+  ObservableList<Player> get players => (_$playersComputed ??=
+          Computed<ObservableList<Player>>(() => super.players,
+              name: '_EditPlaythoughViewModel.players'))
+      .value;
   Computed<DateTime>? _$playthroughStartTimeComputed;
 
   @override
@@ -64,6 +71,20 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   ObservableList<PlaythroughNote>? get notes => (_$notesComputed ??=
           Computed<ObservableList<PlaythroughNote>?>(() => super.notes,
               name: '_EditPlaythoughViewModel.notes'))
+      .value;
+  Computed<GameFamily>? _$gameFamilyComputed;
+
+  @override
+  GameFamily get gameFamily =>
+      (_$gameFamilyComputed ??= Computed<GameFamily>(() => super.gameFamily,
+              name: '_EditPlaythoughViewModel.gameFamily'))
+          .value;
+  Computed<GameClassification>? _$gameClassificationComputed;
+
+  @override
+  GameClassification get gameClassification => (_$gameClassificationComputed ??=
+          Computed<GameClassification>(() => super.gameClassification,
+              name: '_EditPlaythoughViewModel.gameClassification'))
       .value;
 
   late final _$_playthroughDetailsWorkingCopyAtom = Atom(
@@ -195,11 +216,14 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
 playthroughDetails: ${playthroughDetails},
 playthrough: ${playthrough},
 playerScores: ${playerScores},
+players: ${players},
 playthroughStartTime: ${playthroughStartTime},
 playthoughEnded: ${playthoughEnded},
 playthoughDuration: ${playthoughDuration},
 hasNotes: ${hasNotes},
-notes: ${notes}
+notes: ${notes},
+gameFamily: ${gameFamily},
+gameClassification: ${gameClassification}
     ''';
   }
 }
