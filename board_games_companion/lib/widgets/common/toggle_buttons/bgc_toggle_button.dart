@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../common/app_colors.dart';
+import '../../../common/app_styles.dart';
 import '../../elevated_container.dart';
 
 class BgcToggleButton<TValue> extends StatelessWidget {
@@ -33,9 +34,13 @@ class BgcToggleButton<TValue> extends StatelessWidget {
     }
 
     return Expanded(
-      child: InkWell(
-        child: _child,
-        onTap: () => _onTapped(_value),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppStyles.toggleButtonsCornerRadius),
+          onTap: () => _onTapped(_value),
+          child: _child,
+        ),
       ),
     );
   }

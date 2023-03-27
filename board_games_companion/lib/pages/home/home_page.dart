@@ -180,8 +180,12 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
   Future<void> _searchBgg() async {
     final navigatorState = Navigator.of(context);
     await widget.viewModel.rateAndReviewService.increaseNumberOfSignificantActions();
+    if (!navigatorState.mounted) {
+      return;
+    }
+
     final boardGameResult = await showSearch(
-      context: context,
+      context: navigatorState.context,
       delegate: BggSearch(
         searchHistory: widget.viewModel.searchHistory,
         sortByOptions: widget.viewModel.bggSearchSortByOptions,
@@ -203,9 +207,14 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
   }
 
   Future<void> _searchCollections() async {
+    final navigatorState = Navigator.of(context);
     await widget.viewModel.rateAndReviewService.increaseNumberOfSignificantActions();
+    if (!navigatorState.mounted) {
+      return;
+    }
+
     await showSearch(
-      context: context,
+      context: navigatorState.context,
       delegate: CollectionsSearch(
         allBoardGames: widget.viewModel.allBoardGames,
         searchHistory: widget.viewModel.searchHistory,

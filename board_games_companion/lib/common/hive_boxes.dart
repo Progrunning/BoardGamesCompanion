@@ -53,4 +53,5 @@ class HiveBoxes {
   static const playthroughNoteId = 18;
   static const searchHistoryEntryId = 19;
   static const gameClassificationTypeId = 20;
+  static const noScoreGameResult = 21;
 }

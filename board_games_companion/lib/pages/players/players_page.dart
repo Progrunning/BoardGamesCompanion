@@ -94,6 +94,7 @@ class PlayersPageState extends State<PlayersPage> {
                           icon: const DefaultIcon(Icons.delete),
                           color: AppColors.redColor,
                           onPressed: () async {
+                            // ignore: use_build_context_synchronously
                             if (await _showDeletePlayersDialog(context) ?? false) {
                               setState(() {});
                             }

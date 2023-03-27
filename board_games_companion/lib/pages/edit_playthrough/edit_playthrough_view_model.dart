@@ -2,6 +2,7 @@
 
 import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:board_games_companion/common/enums/game_family.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
@@ -13,6 +14,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/playthrough_status.dart';
+import '../../models/hive/score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
 
 part 'edit_playthrough_view_model.g.dart';
@@ -79,6 +81,16 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @computed
   GameClassification get gameClassification => _gamePlaythroughsDetailsStore.gameClassification;
+
+  @computed
+  CooperativeGameResult get cooperativeGameResult {
+    if (gameClassification != GameClassification.NoScore || playerScores.isEmpty) {
+      return CooperativeGameResult.win;
+    }
+
+    return playerScores.first.score.noScoreGameResult?.cooperativeGameResult ??
+        CooperativeGameResult.win;
+  }
 
   bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
 
@@ -151,6 +163,24 @@ abstract class _EditPlaythoughViewModel with Store {
 
     _playthroughDetailsWorkingCopy =
         playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
+  }
+
+  @action
+  void updateCooperativeGameResult(CooperativeGameResult cooperativeGameResult) {
+    final updatedPlayerScores = <PlayerScore>[];
+    for (final playerScore in playerScores) {
+      final noScoreGameResult = playerScore.score.noScoreGameResult ?? const NoScoreGameResult();
+      final updatedPlayerScore = playerScore.copyWith(
+        score: playerScore.score.copyWith(
+          noScoreGameResult:
+              noScoreGameResult.copyWith(cooperativeGameResult: cooperativeGameResult),
+        ),
+      );
+      updatedPlayerScores.add(updatedPlayerScore);
+    }
+
+    _playthroughDetailsWorkingCopy =
+        playthroughDetailsWorkingCopy.copyWith(playerScores: updatedPlayerScores);
   }
 
   /// After adding/editing a note to the [PlaythroughDetails] refresh the working copy with the latest data

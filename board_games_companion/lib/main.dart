@@ -26,6 +26,7 @@ import 'models/hive/board_game_details.dart';
 import 'models/hive/board_game_expansion.dart';
 import 'models/hive/board_game_publisher.dart';
 import 'models/hive/board_game_rank.dart';
+import 'models/hive/no_score_game_result.dart';
 import 'models/hive/player.dart';
 import 'models/hive/playthrough.dart';
 import 'models/hive/score.dart';
@@ -65,7 +66,8 @@ Future<void> main() async {
       ..registerAdapter(GameClassificationAdapter())
       ..registerAdapter(BoardGameSettingsAdapter())
       ..registerAdapter(PlaythroughNoteAdapter())
-      ..registerAdapter(SearchHistoryEntryAdapter());
+      ..registerAdapter(SearchHistoryEntryAdapter())
+      ..registerAdapter(NoScoreGameResultAdapter());
 
     configureDependencies();
 

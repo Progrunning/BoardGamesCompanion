@@ -28,7 +28,7 @@ class BgcToggleButtonsContainer extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+              borderRadius: BorderRadius.circular(AppStyles.toggleButtonsCornerRadius),
             ),
             child: child,
           ),

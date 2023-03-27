@@ -86,6 +86,14 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
           Computed<GameClassification>(() => super.gameClassification,
               name: '_EditPlaythoughViewModel.gameClassification'))
       .value;
+  Computed<CooperativeGameResult>? _$cooperativeGameResultComputed;
+
+  @override
+  CooperativeGameResult get cooperativeGameResult =>
+      (_$cooperativeGameResultComputed ??= Computed<CooperativeGameResult>(
+              () => super.cooperativeGameResult,
+              name: '_EditPlaythoughViewModel.cooperativeGameResult'))
+          .value;
 
   late final _$_playthroughDetailsWorkingCopyAtom = Atom(
       name: '_EditPlaythoughViewModel._playthroughDetailsWorkingCopy',
@@ -189,6 +197,18 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
+  void updateCooperativeGameResult(
+      CooperativeGameResult cooperativeGameResult) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.updateCooperativeGameResult');
+    try {
+      return super.updateCooperativeGameResult(cooperativeGameResult);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void refreshNotes() {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
         name: '_EditPlaythoughViewModel.refreshNotes');
@@ -223,7 +243,8 @@ playthoughDuration: ${playthoughDuration},
 hasNotes: ${hasNotes},
 notes: ${notes},
 gameFamily: ${gameFamily},
-gameClassification: ${gameClassification}
+gameClassification: ${gameClassification},
+cooperativeGameResult: ${cooperativeGameResult}
     ''';
   }
 }

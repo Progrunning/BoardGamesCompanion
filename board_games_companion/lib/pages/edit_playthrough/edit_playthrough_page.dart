@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
+import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/navigation/playthough_note_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_button.dart';
@@ -72,7 +73,13 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                             _editPlayerScore(playerScore, context),
                       ),
                     if (widget.viewModel.gameClassification == GameClassification.NoScore)
-                      _NoScoreSection(players: widget.viewModel.players),
+                      //   TODO Fix splash on clicking the tiles
+                      _NoScoreSection(
+                        players: widget.viewModel.players,
+                        cooperativeGameResult: widget.viewModel.cooperativeGameResult,
+                        onCooperativeGameResultChanged: (cooperativeGameResult) =>
+                            widget.viewModel.updateCooperativeGameResult(cooperativeGameResult),
+                      ),
                     if (widget.viewModel.hasNotes)
                       _NotesSection(
                         notes: widget.viewModel.notes!,
@@ -152,7 +159,6 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _close(BuildContext context) async {
-    // MK Need to pass the context to show the dialog - unsure how else the warning could be fixed.
     // ignore: use_build_context_synchronously
     if (await _handleOnWillPop(context)) {
       if (context.mounted) {
@@ -296,10 +302,14 @@ class _ScoresSection extends StatelessWidget {
 
 class _NoScoreSection extends StatelessWidget {
   const _NoScoreSection({
+    required this.cooperativeGameResult,
     required this.players,
+    required this.onCooperativeGameResultChanged,
   });
 
+  final CooperativeGameResult cooperativeGameResult;
   final List<Player> players;
+  final void Function(CooperativeGameResult) onCooperativeGameResultChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -321,18 +331,19 @@ class _NoScoreSection extends StatelessWidget {
                   // MK an arbitrary number based on 75px being enough to tap on the button and to show the name on the tile
                   width: 150,
                   height: Dimensions.defaultToggleButtonContaienrHeight,
-                  // TODO Hook in the win/loss logic
                   child: Row(
                     children: [
                       _NoScoreResultTile.result(
                         text: AppText.editPlaythroughNoScoreResultWinText,
-                        isSelected: true,
-                        onSelected: (isWin) {},
+                        isSelected: cooperativeGameResult == CooperativeGameResult.win,
+                        onSelected: (isWin) =>
+                            onCooperativeGameResultChanged(CooperativeGameResult.win),
                       ),
                       _NoScoreResultTile.result(
                         text: AppText.editPlaythroughNoScoreResultLossText,
-                        isSelected: false,
-                        onSelected: (isLoss) {},
+                        isSelected: cooperativeGameResult == CooperativeGameResult.loss,
+                        onSelected: (isLoss) =>
+                            onCooperativeGameResultChanged(CooperativeGameResult.loss),
                       ),
                     ],
                   ),
