@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -25,6 +27,7 @@ import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
 import '../enter_score/enter_score_view_model.dart';
 import '../player/player_page.dart';
 import 'playthroughs_log_game_view_model.dart';
@@ -81,7 +84,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
   int playersScoreStep = 3;
 
   bool selectPlayersStepError = false;
-  int completedSteps = 0;
+  bool setCooperativeGameResultStepError = false;
 
   int get lastStep => widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
       ? selectPlayersStep
@@ -106,8 +109,9 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
               steps: [
                 Step(
                   title: const Text(AppText.playthroughsLogGamePlayingPlayedHeaderTitle),
-                  state:
-                      completedSteps > playingOrPlayedStep ? StepState.complete : StepState.indexed,
+                  state: widget.viewModel.logGameStep > playingOrPlayedStep
+                      ? StepState.complete
+                      : StepState.indexed,
                   content: _PlayingOrPlayedStep(
                       viewModel: widget.viewModel,
                       onSelectionChanged: (PlaythroughStartTime playthroughStartTime) =>
@@ -118,7 +122,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                   isActive: widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
                   state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
                       ? StepState.disabled
-                      : completedSteps > selectDateStep
+                      : widget.viewModel.logGameStep > selectDateStep
                           ? StepState.complete
                           : StepState.indexed,
                   content: _SelectDateStep(
@@ -132,7 +136,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                   title: const Text('Select players'),
                   state: selectPlayersStepError
                       ? StepState.error
-                      : completedSteps > selectPlayersStep
+                      : widget.viewModel.logGameStep > selectPlayersStep
                           ? StepState.complete
                           : StepState.indexed,
                   content: Observer(
@@ -146,16 +150,39 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
                     },
                   ),
                 ),
-                Step(
-                  title: const Text(AppText.playthroughsLogGamePagePlayerScoresStepTitle),
-                  isActive: widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
-                  state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
-                      ? StepState.disabled
-                      : completedSteps > playersScoreStep
-                          ? StepState.complete
-                          : StepState.indexed,
-                  content: _PlayerScoresStep(viewModel: widget.viewModel),
-                ),
+                // TODO Fix stepper?
+                if (widget.viewModel.gameClassification == GameClassification.Score)
+                  Step(
+                    title: const Text(AppText.playthroughsLogGamePagePlayerScoresStepTitle),
+                    isActive:
+                        widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
+                    state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
+                        ? StepState.disabled
+                        : widget.viewModel.logGameStep > playersScoreStep
+                            ? StepState.complete
+                            : StepState.indexed,
+                    content: _PlayerScoresStep(viewModel: widget.viewModel),
+                  ),
+                if (widget.viewModel.gameClassification == GameClassification.NoScore)
+                  Step(
+                    title: const Text(AppText.playthroughsLogGamePageNoScoreResultStepTitle),
+                    isActive:
+                        widget.viewModel.playthroughStartTime == PlaythroughStartTime.inThePast,
+                    state: widget.viewModel.playthroughStartTime == PlaythroughStartTime.now
+                        ? StepState.disabled
+                        : widget.viewModel.logGameStep > playersScoreStep
+                            ? StepState.complete
+                            : StepState.indexed,
+                    content: Observer(
+                      builder: (_) {
+                        return _CooperativeGameResultStep(
+                          cooperativeGameResult: widget.viewModel.cooperativeGameResult,
+                          onResultChanged: (cooperativeGameResult) =>
+                              widget.viewModel.updateCooperativeGameResult(cooperativeGameResult),
+                        );
+                      },
+                    ),
+                  ),
               ],
               onStepCancel: () => _stepCancel(),
               onStepContinue: () => _stepContinue(context),
@@ -194,7 +221,7 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           TextButton(
             onPressed: () => onStepCancel!(),
-            child: const Text('Go Back'),
+            child: const Text(AppText.goBack),
           ),
         ],
       );
@@ -225,6 +252,13 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
       return;
     }
 
+    if (widget.viewModel.gameClassification == GameClassification.NoScore &&
+        widget.viewModel.logGameStep == playersScoreStep &&
+        widget.viewModel.cooperativeGameResult == null) {
+      _showSelectPlayerError(context);
+      return;
+    }
+
     if (widget.viewModel.logGameStep >= selectPlayersStep && selectPlayersStepError) {
       setState(() {
         selectPlayersStepError = false;
@@ -240,7 +274,6 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
 
       setState(() {
         widget.viewModel.logGameStep += stepIncrement;
-        completedSteps = widget.viewModel.logGameStep;
       });
     } else {
       final PlaythroughDetails? newPlaythrough =
@@ -282,6 +315,21 @@ class _LogPlaythroughStepperState extends State<_LogPlaythroughStepper> {
         margin: Dimensions.snackbarMargin,
         behavior: SnackBarBehavior.floating,
         content: Text('You need to select at least one player'),
+      ),
+    );
+  }
+
+  void _showSelectCooperativeGameResultError(BuildContext context) {
+    setState(() {
+      selectPlayersStepError = true;
+    });
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        margin: Dimensions.snackbarMargin,
+        behavior: SnackBarBehavior.floating,
+        content: Text('You need to select Please select Win or Loss result'),
       ),
     );
   }
@@ -534,6 +582,32 @@ class _SelectPlayersStep extends StatelessWidget {
       ),
     );
   }
+}
+
+class _CooperativeGameResultStep extends StatelessWidget {
+  const _CooperativeGameResultStep({
+    required this.cooperativeGameResult,
+    required this.onResultChanged,
+    Key? key,
+  }) : super(key: key);
+
+  final CooperativeGameResult? cooperativeGameResult;
+  final void Function(CooperativeGameResult) onResultChanged;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: Dimensions.defaultToggleButtonContaienrHeight,
+            child: CooperativeGameResultSegmentedButton(
+              cooperativeGameResult: cooperativeGameResult,
+              onCooperativeGameResultChanged: (cooperativeGameResult) =>
+                  onResultChanged(cooperativeGameResult),
+            ),
+          ),
+        ],
+      );
 }
 
 class _SelectDateStep extends StatefulWidget {

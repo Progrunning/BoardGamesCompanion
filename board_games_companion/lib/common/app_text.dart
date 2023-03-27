@@ -119,6 +119,7 @@ class AppText {
   static const playthroughsLogGamePlayingNowOption = 'Playing now';
   static const playthroughsLogGamePlayedOption = 'Played some time ago';
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
+  static const playthroughsLogGamePageNoScoreResultStepTitle = 'Result';
   static const playthroughsLogGamePageCreatePlayerButtonText = 'Create Player';
   static const playthroughsLogGamePageCreatePlayerTitle =
       'To log a game, you need to create players first';

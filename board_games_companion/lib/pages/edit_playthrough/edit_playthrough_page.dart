@@ -6,8 +6,6 @@ import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/navigation/playthough_note_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
-import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_button.dart';
-import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_buttons_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -28,6 +26,7 @@ import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
 import '../enter_score/enter_score_view_model.dart';
 import 'edit_playthrough_view_model.dart';
 
@@ -329,26 +328,10 @@ class _NoScoreSection extends StatelessWidget {
               children: [
                 const Text(AppText.editPlaythroughNoScoreResultText),
                 const Spacer(),
-                BgcToggleButtonsContainer(
-                  // MK an arbitrary number based on 75px being enough to tap on the button and to show the name on the tile
-                  width: 150,
-                  height: Dimensions.defaultToggleButtonContaienrHeight,
-                  child: Row(
-                    children: [
-                      _NoScoreResultTile.result(
-                        text: AppText.editPlaythroughNoScoreResultWinText,
-                        isSelected: cooperativeGameResult == CooperativeGameResult.win,
-                        onSelected: (isWin) =>
-                            onCooperativeGameResultChanged(CooperativeGameResult.win),
-                      ),
-                      _NoScoreResultTile.result(
-                        text: AppText.editPlaythroughNoScoreResultLossText,
-                        isSelected: cooperativeGameResult == CooperativeGameResult.loss,
-                        onSelected: (isLoss) =>
-                            onCooperativeGameResultChanged(CooperativeGameResult.loss),
-                      ),
-                    ],
-                  ),
+                CooperativeGameResultSegmentedButton(
+                  cooperativeGameResult: cooperativeGameResult,
+                  onCooperativeGameResultChanged: (cooperativeGameResult) =>
+                      onCooperativeGameResultChanged(cooperativeGameResult),
                 ),
               ],
             ),
@@ -386,24 +369,6 @@ class _NoScoreSection extends StatelessWidget {
       ],
     );
   }
-}
-
-class _NoScoreResultTile extends BgcToggleButton<bool> {
-  _NoScoreResultTile.result({
-    required String text,
-    required bool isSelected,
-    required Function(bool) onSelected,
-  }) : super(
-          value: isSelected,
-          isSelected: isSelected,
-          onTapped: (_) => onSelected(isSelected),
-          child: Center(
-            child: Text(
-              text,
-              style: AppTheme.theme.textTheme.displaySmall,
-            ),
-          ),
-        );
 }
 
 class _NotesSection extends StatelessWidget {

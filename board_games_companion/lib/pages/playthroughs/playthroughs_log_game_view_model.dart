@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:injectable/injectable.dart';
@@ -53,6 +55,9 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   @observable
   ObservableList<PlaythroughPlayer> playthroughPlayers = ObservableList.of([]);
 
+  @observable
+  CooperativeGameResult? cooperativeGameResult;
+
   @computed
   String get boardGameId => _gamePlaythroughsStore.boardGameId;
 
@@ -63,8 +68,8 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
       playthroughPlayers.where((player) => player.isChecked).toList();
 
-  @action
-  void setLogGameStep(int value) => logGameStep = value;
+  @computed
+  GameClassification get gameClassification => _gamePlaythroughsStore.gameClassification;
 
   @action
   void selectPlayer(PlaythroughPlayer playthroughPlayer) {
@@ -136,6 +141,28 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     final updatedPlayerScore =
         playerScore.copyWith(score: playerScore.score.copyWith(value: newScore.toString()));
     playerScores[playerScore.player!.id] = updatedPlayerScore;
+  }
+
+  @action
+  void updateCooperativeGameResult(CooperativeGameResult cooperativeGameResult) {
+    this.cooperativeGameResult = cooperativeGameResult;
+
+    final updatedPlayerScores = <String, PlayerScore>{};
+    for (final playerScore in playerScores.values) {
+      if (playerScore.player == null) {
+        continue;
+      }
+
+      updatedPlayerScores[playerScore.player!.id] = playerScore.copyWith(
+        score: playerScore.score.copyWith(
+          noScoreGameResult: NoScoreGameResult(
+            cooperativeGameResult: cooperativeGameResult,
+          ),
+        ),
+      );
+    }
+
+    playerScores = updatedPlayerScores.asObservable();
   }
 
   Future<void> _loadPlaythroughPlayers() async {

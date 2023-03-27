@@ -33,6 +33,13 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
               name:
                   '_PlaythroughsLogGameViewModel._selectedPlaythroughPlayers'))
           .value;
+  Computed<GameClassification>? _$gameClassificationComputed;
+
+  @override
+  GameClassification get gameClassification => (_$gameClassificationComputed ??=
+          Computed<GameClassification>(() => super.gameClassification,
+              name: '_PlaythroughsLogGameViewModel.gameClassification'))
+      .value;
 
   late final _$playerScoresAtom = Atom(
       name: '_PlaythroughsLogGameViewModel.playerScores', context: context);
@@ -152,6 +159,24 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
     });
   }
 
+  late final _$cooperativeGameResultAtom = Atom(
+      name: '_PlaythroughsLogGameViewModel.cooperativeGameResult',
+      context: context);
+
+  @override
+  CooperativeGameResult? get cooperativeGameResult {
+    _$cooperativeGameResultAtom.reportRead();
+    return super.cooperativeGameResult;
+  }
+
+  @override
+  set cooperativeGameResult(CooperativeGameResult? value) {
+    _$cooperativeGameResultAtom.reportWrite(value, super.cooperativeGameResult,
+        () {
+      super.cooperativeGameResult = value;
+    });
+  }
+
   late final _$createPlaythroughAsyncAction = AsyncAction(
       '_PlaythroughsLogGameViewModel.createPlaythrough',
       context: context);
@@ -164,17 +189,6 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
 
   late final _$_PlaythroughsLogGameViewModelActionController =
       ActionController(name: '_PlaythroughsLogGameViewModel', context: context);
-
-  @override
-  void setLogGameStep(int value) {
-    final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
-        .startAction(name: '_PlaythroughsLogGameViewModel.setLogGameStep');
-    try {
-      return super.setLogGameStep(value);
-    } finally {
-      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
-    }
-  }
 
   @override
   void selectPlayer(PlaythroughPlayer playthroughPlayer) {
@@ -222,6 +236,19 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
   }
 
   @override
+  void updateCooperativeGameResult(
+      CooperativeGameResult cooperativeGameResult) {
+    final _$actionInfo =
+        _$_PlaythroughsLogGameViewModelActionController.startAction(
+            name: '_PlaythroughsLogGameViewModel.updateCooperativeGameResult');
+    try {
+      return super.updateCooperativeGameResult(cooperativeGameResult);
+    } finally {
+      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 playerScores: ${playerScores},
@@ -231,8 +258,10 @@ playthroughStartTime: ${playthroughStartTime},
 logGameStep: ${logGameStep},
 futureLoadPlaythroughPlayers: ${futureLoadPlaythroughPlayers},
 playthroughPlayers: ${playthroughPlayers},
+cooperativeGameResult: ${cooperativeGameResult},
 boardGameId: ${boardGameId},
-anyPlayerSelected: ${anyPlayerSelected}
+anyPlayerSelected: ${anyPlayerSelected},
+gameClassification: ${gameClassification}
     ''';
   }
 }
