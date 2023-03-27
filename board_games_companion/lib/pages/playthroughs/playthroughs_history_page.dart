@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -9,6 +11,7 @@ import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../injectable.dart';
+import '../../models/hive/player.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../models/playthroughs/playthrough_details.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
@@ -19,6 +22,7 @@ import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
+import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/player_score_rank_avatar.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
@@ -73,6 +77,7 @@ class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
                 return _Playthrough(
                   playthroughDetails: viewModel.playthroughs[index],
                   playthroughNumber: viewModel.playthroughs.length - index,
+                  gameClassification: viewModel.gameClassification,
                   isLast: index == viewModel.playthroughs.length - 1,
                 );
               },
@@ -94,13 +99,15 @@ class _Playthrough extends StatefulWidget {
   const _Playthrough({
     required this.playthroughDetails,
     required this.isLast,
+    required this.gameClassification,
     this.playthroughNumber,
     Key? key,
   }) : super(key: key);
 
   final PlaythroughDetails playthroughDetails;
-  final int? playthroughNumber;
   final bool isLast;
+  final GameClassification gameClassification;
+  final int? playthroughNumber;
 
   static const double _maxPlaythroughItemHeight = 240;
 
@@ -135,7 +142,10 @@ class _PlaythroughState extends State<_Playthrough> {
                 ),
                 const SizedBox(width: Dimensions.doubleStandardSpacing),
                 Expanded(
-                  child: _PlaythroughPlayersStats(playthroughDetails: widget.playthroughDetails),
+                  child: _PlaythroughPlayersStats(
+                    playthroughDetails: widget.playthroughDetails,
+                    gameClassification: widget.gameClassification,
+                  ),
                 ),
               ],
             ),
@@ -150,16 +160,23 @@ class _PlaythroughPlayersStats extends StatelessWidget {
   const _PlaythroughPlayersStats({
     Key? key,
     required this.playthroughDetails,
+    required this.gameClassification,
   }) : super(key: key);
 
   final PlaythroughDetails playthroughDetails;
+  final GameClassification gameClassification;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Expanded(child: _PlaythroughPlayerList(playthroughDetails: playthroughDetails)),
+        Expanded(
+          child: _PlaythroughPlayers(
+            playthroughDetails: playthroughDetails,
+            gameClassification: gameClassification,
+          ),
+        ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -202,31 +219,84 @@ class _PlaythroughPlayersStats extends StatelessWidget {
   }
 }
 
-class _PlaythroughPlayerList extends StatelessWidget {
-  const _PlaythroughPlayerList({
+class _PlaythroughPlayers extends StatelessWidget {
+  const _PlaythroughPlayers({
+    required this.playthroughDetails,
+    required this.gameClassification,
     Key? key,
-    required PlaythroughDetails playthroughDetails,
-  })  : _playthroughDetails = playthroughDetails,
-        super(key: key);
+  }) : super(key: key);
 
-  final PlaythroughDetails _playthroughDetails;
+  final PlaythroughDetails playthroughDetails;
+  final GameClassification gameClassification;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      itemCount: _playthroughDetails.playerScores.length,
+      itemCount: playthroughDetails.playerScores.length,
       separatorBuilder: (context, index) {
         return const SizedBox(width: Dimensions.doubleStandardSpacing);
       },
       itemBuilder: (context, index) {
-        return PlayerScoreRankAvatar(
-          player: _playthroughDetails.playerScores[index].player,
-          playerHeroIdSuffix: _playthroughDetails.id,
-          rank: _playthroughDetails.playerScores[index].place,
-          score: _playthroughDetails.playerScores[index].score.value,
-        );
+        switch (gameClassification) {
+          case GameClassification.Score:
+            return PlayerScoreRankAvatar(
+              player: playthroughDetails.playerScores[index].player,
+              playerHeroIdSuffix: playthroughDetails.id,
+              rank: playthroughDetails.playerScores[index].place,
+              score: playthroughDetails.playerScores[index].score.value,
+            );
+          case GameClassification.NoScore:
+            return _PlayerNoScoreAvatar(
+              player: playthroughDetails.playerScores[index].player,
+              playerHeroIdSuffix: playthroughDetails.id,
+              noScoreGameResult: playthroughDetails.playerScores[index].score.noScoreGameResult,
+            );
+        }
       },
+    );
+  }
+}
+
+class _PlayerNoScoreAvatar extends StatelessWidget {
+  const _PlayerNoScoreAvatar({
+    required this.player,
+    this.playerHeroIdSuffix = '',
+    this.noScoreGameResult,
+  });
+
+  final Player? player;
+  final String playerHeroIdSuffix;
+  final NoScoreGameResult? noScoreGameResult;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: Dimensions.smallPlayerAvatarSize.height,
+          width: Dimensions.smallPlayerAvatarSize.width,
+          child: Stack(
+            children: [
+              PlayerAvatar(
+                player: player,
+                avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                playerHeroIdSuffix: playerHeroIdSuffix,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
+        Text(
+          noScoreGameResult.toPlayerAvatarDisplayText(),
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: Dimensions.extraLargeFontSize,
+          ),
+        ),
+      ],
     );
   }
 }

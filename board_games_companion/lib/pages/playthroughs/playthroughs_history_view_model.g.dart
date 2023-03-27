@@ -24,6 +24,13 @@ mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
           Computed<bool>(() => super.hasAnyPlaythroughs,
               name: '_PlaythroughsHistoryViewModel.hasAnyPlaythroughs'))
       .value;
+  Computed<GameClassification>? _$gameClassificationComputed;
+
+  @override
+  GameClassification get gameClassification => (_$gameClassificationComputed ??=
+          Computed<GameClassification>(() => super.gameClassification,
+              name: '_PlaythroughsHistoryViewModel.gameClassification'))
+      .value;
 
   late final _$futureloadPlaythroughsAtom = Atom(
       name: '_PlaythroughsHistoryViewModel.futureloadPlaythroughs',
@@ -62,7 +69,8 @@ mixin _$PlaythroughsHistoryViewModel on _PlaythroughsHistoryViewModel, Store {
     return '''
 futureloadPlaythroughs: ${futureloadPlaythroughs},
 playthroughs: ${playthroughs},
-hasAnyPlaythroughs: ${hasAnyPlaythroughs}
+hasAnyPlaythroughs: ${hasAnyPlaythroughs},
+gameClassification: ${gameClassification}
     ''';
   }
 }

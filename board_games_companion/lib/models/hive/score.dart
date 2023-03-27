@@ -9,11 +9,6 @@ export '../../extensions/scores_extensions.dart';
 part 'score.freezed.dart';
 part 'score.g.dart';
 
-enum CooperativeGameResult {
-  win,
-  loss,
-}
-
 // TODO Consider renaming this class to Result and The PlayerScore to PlayerResult as this would better
 //      align with keeping a score and no score information.
 //

@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$NoScoreGameResult {
+  @HiveField(0, defaultValue: null)
   CooperativeGameResult? get cooperativeGameResult =>
       throw _privateConstructorUsedError;
 
@@ -30,7 +31,9 @@ abstract class $NoScoreGameResultCopyWith<$Res> {
           NoScoreGameResult value, $Res Function(NoScoreGameResult) then) =
       _$NoScoreGameResultCopyWithImpl<$Res, NoScoreGameResult>;
   @useResult
-  $Res call({CooperativeGameResult? cooperativeGameResult});
+  $Res call(
+      {@HiveField(0, defaultValue: null)
+          CooperativeGameResult? cooperativeGameResult});
 }
 
 /// @nodoc
@@ -65,7 +68,9 @@ abstract class _$$_NoScoreGameResultCopyWith<$Res>
       __$$_NoScoreGameResultCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({CooperativeGameResult? cooperativeGameResult});
+  $Res call(
+      {@HiveField(0, defaultValue: null)
+          CooperativeGameResult? cooperativeGameResult});
 }
 
 /// @nodoc
@@ -93,12 +98,15 @@ class __$$_NoScoreGameResultCopyWithImpl<$Res>
 /// @nodoc
 
 @HiveType(
-    typeId: HiveBoxes.noScoreGameResult,
+    typeId: HiveBoxes.noScoreGameResultTypeId,
     adapterName: 'NoScoreGameResultAdapter')
 class _$_NoScoreGameResult extends _NoScoreGameResult {
-  const _$_NoScoreGameResult({this.cooperativeGameResult}) : super._();
+  const _$_NoScoreGameResult(
+      {@HiveField(0, defaultValue: null) this.cooperativeGameResult})
+      : super._();
 
   @override
+  @HiveField(0, defaultValue: null)
   final CooperativeGameResult? cooperativeGameResult;
 
   @override
@@ -128,11 +136,13 @@ class _$_NoScoreGameResult extends _NoScoreGameResult {
 
 abstract class _NoScoreGameResult extends NoScoreGameResult {
   const factory _NoScoreGameResult(
-          {final CooperativeGameResult? cooperativeGameResult}) =
+          {@HiveField(0, defaultValue: null)
+              final CooperativeGameResult? cooperativeGameResult}) =
       _$_NoScoreGameResult;
   const _NoScoreGameResult._() : super._();
 
   @override
+  @HiveField(0, defaultValue: null)
   CooperativeGameResult? get cooperativeGameResult;
   @override
   @JsonKey(ignore: true)

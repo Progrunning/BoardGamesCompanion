@@ -22,35 +22,33 @@ class PlayerScoreRankAvatar extends StatelessWidget {
   final bool useHeroAnimation;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          height: Dimensions.smallPlayerAvatarSize.height,
-          width: Dimensions.smallPlayerAvatarSize.width,
-          child: Stack(
-            children: [
-              PlayerAvatar(
-                player: player,
-                avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                playerHeroIdSuffix: playerHeroIdSuffix,
-                useHeroAnimation: useHeroAnimation,
-              ),
-              if (rank != null) PositionedTileRankRibbon(rank: rank!),
-            ],
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: Dimensions.smallPlayerAvatarSize.height,
+            width: Dimensions.smallPlayerAvatarSize.width,
+            child: Stack(
+              children: [
+                PlayerAvatar(
+                  player: player,
+                  avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                  playerHeroIdSuffix: playerHeroIdSuffix,
+                  useHeroAnimation: useHeroAnimation,
+                ),
+                if (rank != null) PositionedTileRankRibbon(rank: rank!),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        Text(
-          score ?? '-',
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: Dimensions.doubleExtraLargeFontSize,
+          const SizedBox(height: Dimensions.standardSpacing),
+          Text(
+            score ?? '-',
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: Dimensions.doubleExtraLargeFontSize,
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }

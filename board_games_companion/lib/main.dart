@@ -67,7 +67,8 @@ Future<void> main() async {
       ..registerAdapter(BoardGameSettingsAdapter())
       ..registerAdapter(PlaythroughNoteAdapter())
       ..registerAdapter(SearchHistoryEntryAdapter())
-      ..registerAdapter(NoScoreGameResultAdapter());
+      ..registerAdapter(NoScoreGameResultAdapter())
+      ..registerAdapter(CooperativeGameResultAdapter());
 
     configureDependencies();
 

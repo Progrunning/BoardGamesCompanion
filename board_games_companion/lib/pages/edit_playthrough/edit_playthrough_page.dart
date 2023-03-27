@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
-import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/navigation/playthough_note_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:board_games_companion/widgets/common/toggle_buttons/bgc_toggle_button.dart';
@@ -23,6 +22,7 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../mixins/enter_score_dialog.dart';
+import '../../models/hive/no_score_game_result.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
@@ -73,8 +73,8 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                             _editPlayerScore(playerScore, context),
                       ),
                     if (widget.viewModel.gameClassification == GameClassification.NoScore)
-                      //   TODO Fix splash on clicking the tiles
                       _NoScoreSection(
+                        playthroughId: widget.viewModel.playthrough.id,
                         players: widget.viewModel.players,
                         cooperativeGameResult: widget.viewModel.cooperativeGameResult,
                         onCooperativeGameResultChanged: (cooperativeGameResult) =>
@@ -302,11 +302,13 @@ class _ScoresSection extends StatelessWidget {
 
 class _NoScoreSection extends StatelessWidget {
   const _NoScoreSection({
+    required this.playthroughId,
     required this.cooperativeGameResult,
     required this.players,
     required this.onCooperativeGameResultChanged,
   });
 
+  final String playthroughId;
   final CooperativeGameResult cooperativeGameResult;
   final List<Player> players;
   final void Function(CooperativeGameResult) onCooperativeGameResultChanged;
@@ -372,6 +374,7 @@ class _NoScoreSection extends StatelessWidget {
                       width: Dimensions.smallPlayerAvatarSize.width,
                       child: PlayerAvatar(
                         player: player,
+                        playerHeroIdSuffix: playthroughId,
                         avatarImageSize: Dimensions.smallPlayerAvatarSize,
                       ),
                     ),

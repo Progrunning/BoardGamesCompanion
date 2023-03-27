@@ -14,7 +14,6 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/playthrough_status.dart';
-import '../../models/hive/score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
 
 part 'edit_playthrough_view_model.g.dart';
