@@ -308,7 +308,7 @@ class _NoScoreSection extends StatelessWidget {
   });
 
   final String playthroughId;
-  final CooperativeGameResult cooperativeGameResult;
+  final CooperativeGameResult? cooperativeGameResult;
   final List<Player> players;
   final void Function(CooperativeGameResult) onCooperativeGameResultChanged;
 

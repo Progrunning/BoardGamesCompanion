@@ -134,6 +134,7 @@ class AppText {
   static const playthroughsLogGamePageCreatePlayerTitle = 'No players to log a game';
   static const playthroughsLogGamePageCreatePlayerSubtitle =
       "To log a game, you need to create players first. Use the plus button in this section's header to add new players or go back and select players bottom tab and start adding players";
+  static const playthroughsLogGameSubmitButtonText = 'Log game';
 
   static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';
   static const importCollectionsButtonText = 'Import';
@@ -150,8 +151,8 @@ class AppText {
   static const importPlaysReportNoPlaysToImportError = 'There were no plays to import';
 
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
-  static const logGameFailureConfirmationSnackbarText =
-      "We ran into a problem and your game wasn't logged. Please try again.";
+  static const logGameFailureSnackbarText =
+      'Please makes sure that all of the steps are completed (e.g. selecting players) before logging a game. If the problem persists please contact support.';
   static const gameFiltersAnyNumberOfPlayers = 'Any';
   static const gameFiltersSinglePlayerOnly = 'Has solo mode';
 

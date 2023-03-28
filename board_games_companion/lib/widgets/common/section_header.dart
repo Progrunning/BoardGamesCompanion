@@ -10,6 +10,7 @@ class SectionHeader extends StatelessWidget {
     required this.primaryWidget,
     this.secondaryWidget,
     this.height = Dimensions.sectionHeaderHeight,
+    this.padding = const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
   }) : super(key: key);
 
   factory SectionHeader.title({
@@ -57,11 +58,13 @@ class SectionHeader extends StatelessWidget {
         ),
         secondaryWidget: action,
         height: height,
+        padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
       );
 
-  final double height;
   final Widget primaryWidget;
   final Widget? secondaryWidget;
+  final double height;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +74,7 @@ class SectionHeader extends StatelessWidget {
       child: SizedBox(
         height: height,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+          padding: padding,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

@@ -82,14 +82,8 @@ abstract class _EditPlaythoughViewModel with Store {
   GameClassification get gameClassification => _gamePlaythroughsDetailsStore.gameClassification;
 
   @computed
-  CooperativeGameResult get cooperativeGameResult {
-    if (gameClassification != GameClassification.NoScore || playerScores.isEmpty) {
-      return CooperativeGameResult.win;
-    }
-
-    return playerScores.first.score.noScoreGameResult?.cooperativeGameResult ??
-        CooperativeGameResult.win;
-  }
+  CooperativeGameResult? get cooperativeGameResult =>
+      playerScores.first.score.noScoreGameResult?.cooperativeGameResult;
 
   bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
 

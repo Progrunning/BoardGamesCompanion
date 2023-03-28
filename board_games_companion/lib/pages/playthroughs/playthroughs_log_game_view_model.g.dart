@@ -153,9 +153,8 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
       context: context);
 
   @override
-  Future<PlaythroughDetails?> createPlaythrough(String boardGameId) {
-    return _$createPlaythroughAsyncAction
-        .run(() => super.createPlaythrough(boardGameId));
+  Future<PlaythroughDetails?> createPlaythrough() {
+    return _$createPlaythroughAsyncAction.run(() => super.createPlaythrough());
   }
 
   late final _$_PlaythroughsLogGameViewModelActionController =

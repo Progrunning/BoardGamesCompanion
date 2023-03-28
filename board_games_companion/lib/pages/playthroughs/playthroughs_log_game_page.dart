@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:board_games_companion/models/navigation/edit_playthrough_page_arguments.dart';
+import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:board_games_companion/pages/playthroughs/playthrough_timeline.dart';
 import 'package:board_games_companion/pages/playthroughs/playthroughs_log_game_players.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
@@ -26,6 +28,8 @@ import '../../models/hive/score.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_players_selection_result.dart';
+import '../../widgets/common/default_icon.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
@@ -35,9 +39,15 @@ import '../enter_score/enter_score_view_model.dart';
 import '../player/player_page.dart';
 import 'playthrough_players_selection_page.dart';
 import 'playthroughs_log_game_view_model.dart';
+import 'playthroughs_page.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
-  const PlaythroughsLogGamePage({Key? key}) : super(key: key);
+  const PlaythroughsLogGamePage({
+    required this.parentPageTabController,
+    Key? key,
+  }) : super(key: key);
+
+  final TabController parentPageTabController;
 
   @override
   PlaythroughsLogGamePageState createState() => PlaythroughsLogGamePageState();
@@ -100,6 +110,12 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
                     );
                   },
                 ),
+                Observer(builder: (_) {
+                  return _SubmitSection(
+                    players: viewModel.playersState,
+                    onLogPlaythrough: () => _handleLoggingPlaythrough(),
+                  );
+                }),
               ],
             );
         }
@@ -131,6 +147,76 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
 
   void _handlePlayerScoreUpdate(PlayerScore playerScore, int score) {
     viewModel.updatePlayerScore(playerScore, score);
+  }
+
+  Future<void> _handleLoggingPlaythrough() async {
+    final scaffoldMessengerState = ScaffoldMessenger.of(context);
+    final navigatorState = Navigator.of(context);
+    final newPlaythrough = await viewModel.createPlaythrough();
+    if (newPlaythrough == null) {
+      _showLogGameFailureSnackbar(scaffoldMessengerState);
+      return;
+    }
+
+    viewModel.playthroughTimeline.maybeWhen(
+      now: () async {
+        await navigatorState.pushNamed(
+          EditPlaythroughPage.pageRoute,
+          arguments: EditPlaythroughPageArguments(
+            playthroughId: newPlaythrough.id,
+            boardGameId: viewModel.boardGameId,
+            goBackPageRoute: PlaythroughsPage.pageRoute,
+          ),
+        );
+        widget.parentPageTabController.animateTo(PlaythroughsPage.historyTabIndex);
+      },
+      orElse: () {},
+    );
+  }
+
+  void _showLogGameFailureSnackbar(ScaffoldMessengerState scaffoldMessengerState) {
+    scaffoldMessengerState.hideCurrentSnackBar();
+    scaffoldMessengerState.showSnackBar(
+      SnackBar(
+        margin: Dimensions.snackbarMargin,
+        behavior: SnackBarBehavior.floating,
+        content: const Text(AppText.logGameFailureSnackbarText),
+        duration: const Duration(seconds: 10),
+        action: SnackBarAction(
+          label: AppText.ok,
+          onPressed: () => scaffoldMessengerState.hideCurrentSnackBar(),
+        ),
+      ),
+    );
+  }
+}
+
+class _SubmitSection extends StatelessWidget {
+  const _SubmitSection({
+    required this.players,
+    required this.onLogPlaythrough,
+  });
+
+  final PlaythroughsLogGamePlayers players;
+  final VoidCallback onLogPlaythrough;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      sliver: SliverToBoxAdapter(
+        child: Row(
+          children: [
+            const Spacer(),
+            ElevatedIconButton(
+              title: AppText.playthroughsLogGameSubmitButtonText,
+              icon: const DefaultIcon(Icons.done),
+              onPressed: () => onLogPlaythrough(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

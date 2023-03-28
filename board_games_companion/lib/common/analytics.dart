@@ -31,4 +31,7 @@ class Analytics {
   static const String logPlaythroughNumberOfPlayers = 'number_of_players';
   static const String logPlaythroughStarTime = 'start_time';
   static const String logPlaythroughDuration = 'duration';
+
+  static const String playthroughTimelineNow = 'now';
+  static const String playthroughTimelineInThePast = 'inThePast';
 }

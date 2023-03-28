@@ -86,11 +86,11 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
           Computed<GameClassification>(() => super.gameClassification,
               name: '_EditPlaythoughViewModel.gameClassification'))
       .value;
-  Computed<CooperativeGameResult>? _$cooperativeGameResultComputed;
+  Computed<CooperativeGameResult?>? _$cooperativeGameResultComputed;
 
   @override
-  CooperativeGameResult get cooperativeGameResult =>
-      (_$cooperativeGameResultComputed ??= Computed<CooperativeGameResult>(
+  CooperativeGameResult? get cooperativeGameResult =>
+      (_$cooperativeGameResultComputed ??= Computed<CooperativeGameResult?>(
               () => super.cooperativeGameResult,
               name: '_EditPlaythoughViewModel.cooperativeGameResult'))
           .value;

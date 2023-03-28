@@ -24,6 +24,13 @@ mixin _$PlaythroughPlayersSelectionViewModel
           Computed<Map<String, Player>>(() => super.playersMap,
               name: '_PlaythroughPlayersSelectionViewModel.playersMap'))
       .value;
+  Computed<bool>? _$hasSelectedPlayersComputed;
+
+  @override
+  bool get hasSelectedPlayers => (_$hasSelectedPlayersComputed ??=
+          Computed<bool>(() => super.hasSelectedPlayers,
+              name: '_PlaythroughPlayersSelectionViewModel.hasSelectedPlayers'))
+      .value;
 
   late final _$selectedPlayersMapAtom = Atom(
       name: '_PlaythroughPlayersSelectionViewModel.selectedPlayersMap',
@@ -95,7 +102,8 @@ mixin _$PlaythroughPlayersSelectionViewModel
 selectedPlayersMap: ${selectedPlayersMap},
 futureLoadPlayers: ${futureLoadPlayers},
 players: ${players},
-playersMap: ${playersMap}
+playersMap: ${playersMap},
+hasSelectedPlayers: ${hasSelectedPlayers}
     ''';
   }
 }
