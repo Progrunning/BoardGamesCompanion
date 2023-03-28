@@ -133,7 +133,7 @@ class _ScoreSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -215,7 +215,7 @@ class _GameClassificationSectionState extends State<_GameClassificationSection> 
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(
-          left: Dimensions.doubleStandardSpacing,
+          left: Dimensions.standardSpacing,
           top: Dimensions.standardSpacing,
           right: Dimensions.standardSpacing,
           bottom: Dimensions.standardSpacing,
@@ -268,7 +268,7 @@ class _ScoreGameFamilySectionState extends State<_ScoreGameFamilySection> {
   Widget build(BuildContext context) => Column(
         children: [
           RadioListTile<GameFamily>(
-            contentPadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            contentPadding: EdgeInsets.zero,
             activeColor: AppColors.accentColor,
             title: const Text(
               AppText.playthroughsGameSettingsGameFamilyHighestScore,
@@ -284,7 +284,7 @@ class _ScoreGameFamilySectionState extends State<_ScoreGameFamilySection> {
             },
           ),
           RadioListTile<GameFamily>(
-            contentPadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            contentPadding: EdgeInsets.zero,
             activeColor: AppColors.accentColor,
             title: const Text(
               AppText.playthroughsGameSettingsGameFamilyLowestScore,

@@ -118,7 +118,13 @@ class AppText {
   static const playthroughsLogGameplayTimelineTitle = 'Gameplay timeline';
   static const playthroughsLogTimelineTitle = 'Timeline';
   static const playthroughsLogTimelineInThePastName = 'In the past';
+  static const playthroughsLogDateSectionTitle = 'Date';
+  static const playthroughsLogDurationSectionTitle = 'Duration';
   static const playthroughsLogPlayersSectionTitle = 'Players';
+  static const playthroughsLogPlayersPlayingNowSectionSubtitle =
+      'Select all players that are playing';
+  static const playthroughsLogPlayersPlayedInThePastSectionSubtitle =
+      'Select all players that played';
   static const playthroughsLogTimelineNowName = 'Now';
   static const playthroughsLogGamePlayingNowOption = 'Playing now';
   static const playthroughsLogGamePlayedOption = 'Played some time ago';

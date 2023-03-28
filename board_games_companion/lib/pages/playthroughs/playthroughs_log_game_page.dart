@@ -1,16 +1,21 @@
+import 'dart:math' as math;
+
 import 'package:board_games_companion/pages/playthroughs/playthrough_chronology.dart';
 import 'package:board_games_companion/widgets/common/segmented_buttons/bgc_segmented_button.dart';
 import 'package:board_games_companion/widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
+import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../extensions/date_time_extensions.dart';
 import '../../injectable.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
@@ -18,7 +23,9 @@ import '../../models/playthroughs/playthrough_player.dart';
 import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
+import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
+import '../../widgets/playthrough/calendar_card.dart';
 import '../player/player_page.dart';
 import 'playthroughs_log_game_view_model.dart';
 
@@ -61,8 +68,24 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
                 ),
                 Observer(
                   builder: (_) {
+                    return viewModel.playthroughTimeline.maybeWhen(
+                      inThePast: () => _DateAndDurationSection(
+                        playthroughDate: viewModel.playthroughDate,
+                        playthroughDuration: viewModel.playthroughDuration,
+                        onPlaythroughTimeChanged: (playthoughDate) =>
+                            viewModel.playthroughDate = playthoughDate,
+                        onPlaythroughDurationChanged: (playthoughDuration) =>
+                            viewModel.playthroughDuration = playthoughDuration,
+                      ),
+                      orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+                    );
+                  },
+                ),
+                Observer(
+                  builder: (_) {
                     return _PlayersSection(
                       hasAnyPlayers: viewModel.hasAnyPlayers,
+                      playthroughTimeline: viewModel.playthroughTimeline,
                       playthroughPlayers: viewModel.playthroughPlayers,
                       onPlayerSelectionChanged: (isSelected, playthroughPlayer) =>
                           _togglePlayerSelection(isSelected, playthroughPlayer),
@@ -124,7 +147,10 @@ class _TimelineSection extends StatelessWidget {
               padding: const EdgeInsets.all(Dimensions.standardSpacing),
               child: Row(
                 children: [
-                  const Text(AppText.playthroughsLogGameplayTimelineTitle),
+                  const Text(
+                    AppText.playthroughsLogGameplayTimelineTitle,
+                    style: AppTheme.defaultTextFieldStyle,
+                  ),
                   const Spacer(),
                   BgcSegmentedButtonsContainer(
                     // MK An arbitrary number to have the text on segmented buttons fit
@@ -155,15 +181,139 @@ class _TimelineSection extends StatelessWidget {
       );
 }
 
+class _DateAndDurationSection extends StatelessWidget {
+  const _DateAndDurationSection({
+    required this.playthroughDate,
+    required this.playthroughDuration,
+    required this.onPlaythroughTimeChanged,
+    required this.onPlaythroughDurationChanged,
+  });
+
+  final DateTime playthroughDate;
+  final Duration playthroughDuration;
+  final Function(DateTime) onPlaythroughTimeChanged;
+  final Function(Duration) onPlaythroughDurationChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.titles(
+            primaryTitle: AppText.playthroughsLogDateSectionTitle,
+            secondaryTitle: AppText.playthroughsLogDurationSectionTitle,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            child: Row(
+              children: [
+                _SelectPlaythroughDate(
+                  playthroughDate: playthroughDate,
+                  onPlaythroughTimeChanged: (playthroughDate) =>
+                      onPlaythroughTimeChanged(playthroughDate),
+                ),
+                const Spacer(),
+                _SetPlaythroughDuration(
+                  playthroughDuration: playthroughDuration,
+                  onDurationChanged: (playthroughDuration) =>
+                      onPlaythroughDurationChanged(playthroughDuration),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SetPlaythroughDuration extends StatefulWidget {
+  const _SetPlaythroughDuration({
+    required this.playthroughDuration,
+    required this.onDurationChanged,
+  });
+
+  final Duration playthroughDuration;
+  final void Function(Duration) onDurationChanged;
+
+  @override
+  State<_SetPlaythroughDuration> createState() => _SetPlaythroughDurationState();
+}
+
+class _SetPlaythroughDurationState extends State<_SetPlaythroughDuration> {
+  late int hoursPlayed;
+  late int minutesPlyed;
+
+  @override
+  void initState() {
+    super.initState();
+
+    hoursPlayed = widget.playthroughDuration.inHours;
+    minutesPlyed = widget.playthroughDuration.inMinutes % Duration.minutesPerHour;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        NumberPicker(
+          value: hoursPlayed,
+          minValue: 0,
+          maxValue: 99,
+          onChanged: (num value) => _updateDurationHours(value),
+          itemWidth: 46,
+          selectedTextStyle: const TextStyle(
+            color: AppColors.accentColor,
+            fontSize: Dimensions.doubleExtraLargeFontSize,
+          ),
+        ),
+        Text('h', style: AppTheme.theme.textTheme.bodyMedium),
+        const SizedBox(width: Dimensions.halfStandardSpacing),
+        NumberPicker(
+          value: math.min(Duration.minutesPerHour - 1, minutesPlyed),
+          infiniteLoop: true,
+          minValue: 0,
+          maxValue: Duration.minutesPerHour - 1,
+          onChanged: (num value) => _updateDurationMinutes(value),
+          itemWidth: 46,
+          selectedTextStyle: const TextStyle(
+            color: AppColors.accentColor,
+            fontSize: Dimensions.doubleExtraLargeFontSize,
+          ),
+        ),
+        Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
+      ],
+    );
+  }
+
+  void _updateDurationMinutes(num value) {
+    setState(() {
+      minutesPlyed = value.toInt();
+      widget.onDurationChanged(Duration(hours: hoursPlayed, minutes: minutesPlyed));
+    });
+  }
+
+  void _updateDurationHours(num value) {
+    setState(() {
+      hoursPlayed = value.toInt();
+      widget.onDurationChanged(Duration(hours: hoursPlayed, minutes: minutesPlyed));
+    });
+  }
+}
+
 class _PlayersSection extends StatelessWidget {
   const _PlayersSection({
     required this.hasAnyPlayers,
+    required this.playthroughTimeline,
     required this.playthroughPlayers,
     required this.onPlayerSelectionChanged,
     required this.onCreatePlayer,
   });
 
   final bool hasAnyPlayers;
+  final PlaythroughTimeline playthroughTimeline;
   final List<PlaythroughPlayer> playthroughPlayers;
   final void Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
   final VoidCallback onCreatePlayer;
@@ -180,12 +330,26 @@ class _PlayersSection extends StatelessWidget {
               ),
             ),
           ),
-          if (hasAnyPlayers)
+          if (hasAnyPlayers) ...[
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Dimensions.standardSpacing,
+                left: Dimensions.standardSpacing,
+              ),
+              child: Text(
+                playthroughTimeline.when(
+                  now: () => AppText.playthroughsLogPlayersPlayingNowSectionSubtitle,
+                  inThePast: () => AppText.playthroughsLogPlayersPlayedInThePastSectionSubtitle,
+                ),
+                style: AppTheme.defaultTextFieldStyle,
+              ),
+            ),
             _Players(
               playthroughPlayers: playthroughPlayers,
               onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
                   onPlayerSelectionChanged(isSelected, player),
             ),
+          ],
           if (!hasAnyPlayers)
             const SliverFillRemaining(
               child: _NoPlayers(),
@@ -759,79 +923,77 @@ class _PlaythroughTimelineSegmentedButton extends BgcSegmentedButton<Playthrough
 //       );
 // }
 
-// class _SelectDateStep extends StatefulWidget {
-//   const _SelectDateStep({
-//     required this.playthroughDate,
-//     required this.onPlaythroughTimeChanged,
-//     Key? key,
-//   }) : super(key: key);
+class _SelectPlaythroughDate extends StatefulWidget {
+  const _SelectPlaythroughDate({
+    required this.playthroughDate,
+    required this.onPlaythroughTimeChanged,
+    Key? key,
+  }) : super(key: key);
 
-//   final DateTime playthroughDate;
-//   final Function(DateTime) onPlaythroughTimeChanged;
+  final DateTime playthroughDate;
+  final Function(DateTime) onPlaythroughTimeChanged;
 
-//   @override
-//   _SelectDateStepState createState() => _SelectDateStepState();
-// }
+  @override
+  _SelectPlaythroughDateState createState() => _SelectPlaythroughDateState();
+}
 
-// class _SelectDateStepState extends State<_SelectDateStep> {
-//   DateTime? _playthroughDate;
+class _SelectPlaythroughDateState extends State<_SelectPlaythroughDate> {
+  DateTime? _playthroughDate;
 
-//   @override
-//   void initState() {
-//     _playthroughDate = widget.playthroughDate;
-//     super.initState();
-//   }
+  @override
+  void initState() {
+    _playthroughDate = widget.playthroughDate;
+    super.initState();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: <Widget>[
-//         Material(
-//           child: InkWell(
-//             onTap: () => _pickPlaythroughDate(context, _playthroughDate!),
-//             child: CalendarCard(_playthroughDate),
-//           ),
-//         ),
-//         const SizedBox(
-//           width: Dimensions.standardSpacing,
-//         ),
-//         ItemPropertyValue(
-//           _playthroughDate.toDaysAgo(),
-//         ),
-//       ],
-//     );
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Material(
+          child: InkWell(
+            onTap: () => _pickPlaythroughDate(context, _playthroughDate!),
+            child: CalendarCard(_playthroughDate),
+          ),
+        ),
+        const SizedBox(
+          width: Dimensions.standardSpacing,
+        ),
+        ItemPropertyValue(_playthroughDate.toDaysAgo()),
+      ],
+    );
+  }
 
-//   Future<void> _pickPlaythroughDate(BuildContext context, DateTime playthroughDate) async {
-//     final DateTime? newPlaythroughDate = await showDatePicker(
-//       context: context,
-//       initialDate: playthroughDate,
-//       firstDate: playthroughDate.add(const Duration(days: -Constants.daysInTenYears)),
-//       lastDate: DateTime.now(),
-//       currentDate: playthroughDate,
-//       helpText: 'Pick a playthrough date',
-//       builder: (_, Widget? child) {
-//         return Theme(
-//           data: Theme.of(context).copyWith(
-//             colorScheme: Theme.of(context).colorScheme.copyWith(
-//                   primary: AppColors.accentColor,
-//                 ),
-//           ),
-//           child: child!,
-//         );
-//       },
-//     );
+  Future<void> _pickPlaythroughDate(BuildContext context, DateTime playthroughDate) async {
+    final DateTime? newPlaythroughDate = await showDatePicker(
+      context: context,
+      initialDate: playthroughDate,
+      firstDate: playthroughDate.add(const Duration(days: -Constants.daysInTenYears)),
+      lastDate: DateTime.now(),
+      currentDate: playthroughDate,
+      helpText: 'Pick a playthrough date',
+      builder: (_, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: AppColors.accentColor,
+                ),
+          ),
+          child: child!,
+        );
+      },
+    );
 
-//     if (newPlaythroughDate == null) {
-//       return;
-//     }
+    if (newPlaythroughDate == null) {
+      return;
+    }
 
-//     setState(() {
-//       _playthroughDate = newPlaythroughDate;
-//       widget.onPlaythroughTimeChanged(_playthroughDate!);
-//     });
-//   }
-// }
+    setState(() {
+      _playthroughDate = newPlaythroughDate;
+      widget.onPlaythroughTimeChanged(_playthroughDate!);
+    });
+  }
+}
 
 class _Players extends StatelessWidget {
   const _Players({
