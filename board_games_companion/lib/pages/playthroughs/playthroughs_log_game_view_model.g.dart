@@ -9,36 +9,19 @@ part of 'playthroughs_log_game_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
+  Computed<ObservableList<Player>>? _$playersComputed;
+
+  @override
+  ObservableList<Player> get players => (_$playersComputed ??=
+          Computed<ObservableList<Player>>(() => super.players,
+              name: '_PlaythroughsLogGameViewModel.players'))
+      .value;
   Computed<String>? _$boardGameIdComputed;
 
   @override
   String get boardGameId =>
       (_$boardGameIdComputed ??= Computed<String>(() => super.boardGameId,
               name: '_PlaythroughsLogGameViewModel.boardGameId'))
-          .value;
-  Computed<bool>? _$anyPlayerSelectedComputed;
-
-  @override
-  bool get anyPlayerSelected => (_$anyPlayerSelectedComputed ??= Computed<bool>(
-          () => super.anyPlayerSelected,
-          name: '_PlaythroughsLogGameViewModel.anyPlayerSelected'))
-      .value;
-  Computed<bool>? _$hasAnyPlayersComputed;
-
-  @override
-  bool get hasAnyPlayers =>
-      (_$hasAnyPlayersComputed ??= Computed<bool>(() => super.hasAnyPlayers,
-              name: '_PlaythroughsLogGameViewModel.hasAnyPlayers'))
-          .value;
-  Computed<List<PlaythroughPlayer>>? _$_selectedPlaythroughPlayersComputed;
-
-  @override
-  List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
-      (_$_selectedPlaythroughPlayersComputed ??= Computed<
-                  List<PlaythroughPlayer>>(
-              () => super._selectedPlaythroughPlayers,
-              name:
-                  '_PlaythroughsLogGameViewModel._selectedPlaythroughPlayers'))
           .value;
   Computed<GameClassification>? _$gameClassificationComputed;
 
@@ -97,54 +80,20 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
     });
   }
 
-  late final _$logGameStepAtom =
-      Atom(name: '_PlaythroughsLogGameViewModel.logGameStep', context: context);
-
-  @override
-  int get logGameStep {
-    _$logGameStepAtom.reportRead();
-    return super.logGameStep;
-  }
-
-  @override
-  set logGameStep(int value) {
-    _$logGameStepAtom.reportWrite(value, super.logGameStep, () {
-      super.logGameStep = value;
-    });
-  }
-
-  late final _$futureLoadPlaythroughPlayersAtom = Atom(
-      name: '_PlaythroughsLogGameViewModel.futureLoadPlaythroughPlayers',
+  late final _$futureLoadPlayersAtom = Atom(
+      name: '_PlaythroughsLogGameViewModel.futureLoadPlayers',
       context: context);
 
   @override
-  ObservableFuture<void>? get futureLoadPlaythroughPlayers {
-    _$futureLoadPlaythroughPlayersAtom.reportRead();
-    return super.futureLoadPlaythroughPlayers;
+  ObservableFuture<void>? get futureLoadPlayers {
+    _$futureLoadPlayersAtom.reportRead();
+    return super.futureLoadPlayers;
   }
 
   @override
-  set futureLoadPlaythroughPlayers(ObservableFuture<void>? value) {
-    _$futureLoadPlaythroughPlayersAtom
-        .reportWrite(value, super.futureLoadPlaythroughPlayers, () {
-      super.futureLoadPlaythroughPlayers = value;
-    });
-  }
-
-  late final _$playthroughPlayersAtom = Atom(
-      name: '_PlaythroughsLogGameViewModel.playthroughPlayers',
-      context: context);
-
-  @override
-  ObservableList<PlaythroughPlayer> get playthroughPlayers {
-    _$playthroughPlayersAtom.reportRead();
-    return super.playthroughPlayers;
-  }
-
-  @override
-  set playthroughPlayers(ObservableList<PlaythroughPlayer> value) {
-    _$playthroughPlayersAtom.reportWrite(value, super.playthroughPlayers, () {
-      super.playthroughPlayers = value;
+  set futureLoadPlayers(ObservableFuture<void>? value) {
+    _$futureLoadPlayersAtom.reportWrite(value, super.futureLoadPlayers, () {
+      super.futureLoadPlayers = value;
     });
   }
 
@@ -183,6 +132,22 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
     });
   }
 
+  late final _$playersStateAtom = Atom(
+      name: '_PlaythroughsLogGameViewModel.playersState', context: context);
+
+  @override
+  PlaythroughsLogGamePlayers get playersState {
+    _$playersStateAtom.reportRead();
+    return super.playersState;
+  }
+
+  @override
+  set playersState(PlaythroughsLogGamePlayers value) {
+    _$playersStateAtom.reportWrite(value, super.playersState, () {
+      super.playersState = value;
+    });
+  }
+
   late final _$createPlaythroughAsyncAction = AsyncAction(
       '_PlaythroughsLogGameViewModel.createPlaythrough',
       context: context);
@@ -197,34 +162,22 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
       ActionController(name: '_PlaythroughsLogGameViewModel', context: context);
 
   @override
-  void selectPlayer(PlaythroughPlayer playthroughPlayer) {
+  void loadPlayers() {
     final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
-        .startAction(name: '_PlaythroughsLogGameViewModel.selectPlayer');
+        .startAction(name: '_PlaythroughsLogGameViewModel.loadPlayers');
     try {
-      return super.selectPlayer(playthroughPlayer);
+      return super.loadPlayers();
     } finally {
       _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void deselectPlayer(PlaythroughPlayer playthroughPlayer) {
+  void setSelectedPlayers(List<Player> selectedPlayers) {
     final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
-        .startAction(name: '_PlaythroughsLogGameViewModel.deselectPlayer');
+        .startAction(name: '_PlaythroughsLogGameViewModel.setSelectedPlayers');
     try {
-      return super.deselectPlayer(playthroughPlayer);
-    } finally {
-      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void loadPlaythroughPlayers() {
-    final _$actionInfo =
-        _$_PlaythroughsLogGameViewModelActionController.startAction(
-            name: '_PlaythroughsLogGameViewModel.loadPlaythroughPlayers');
-    try {
-      return super.loadPlaythroughPlayers();
+      return super.setSelectedPlayers(selectedPlayers);
     } finally {
       _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
     }
@@ -272,14 +225,12 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
 playerScores: ${playerScores},
 playthroughDate: ${playthroughDate},
 playthroughDuration: ${playthroughDuration},
-logGameStep: ${logGameStep},
-futureLoadPlaythroughPlayers: ${futureLoadPlaythroughPlayers},
-playthroughPlayers: ${playthroughPlayers},
+futureLoadPlayers: ${futureLoadPlayers},
 cooperativeGameResult: ${cooperativeGameResult},
 playthroughTimeline: ${playthroughTimeline},
+playersState: ${playersState},
+players: ${players},
 boardGameId: ${boardGameId},
-anyPlayerSelected: ${anyPlayerSelected},
-hasAnyPlayers: ${hasAnyPlayers},
 gameClassification: ${gameClassification}
     ''';
   }

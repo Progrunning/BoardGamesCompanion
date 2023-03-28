@@ -24,7 +24,7 @@ import '../common/sorting/sort_by_chip.dart';
 
 /// [SearchDelegate] for the online (i.e. BGG) search.
 /// Controller by the [HomeViewModel].
-/// Returns the id of a [BoardGameDetails]
+/// Returns the [BggSearchResult]
 class BggSearch extends SearchDelegate<BggSearchResult?> {
   BggSearch({
     required this.searchHistory,

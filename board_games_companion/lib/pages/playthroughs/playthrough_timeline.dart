@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-export '../../extensions/playthrough_chronology_extensions.dart';
+export '../../extensions/playthrough_timeline_extensions.dart';
 
-part 'playthrough_chronology.freezed.dart';
+part 'playthrough_timeline.freezed.dart';
 
 @freezed
 class PlaythroughTimeline with _$PlaythroughTimeline {

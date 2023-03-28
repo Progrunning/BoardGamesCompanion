@@ -6,15 +6,13 @@ import 'package:board_games_companion/stores/game_playthroughs_details_store.dar
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../models/hive/player.dart';
-import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
-import '../../models/playthroughs/playthrough_player.dart';
 import '../../services/analytics_service.dart';
-import 'playthrough_chronology.dart';
+import 'playthrough_timeline.dart';
+import 'playthroughs_log_game_players.dart';
 
 part 'playthroughs_log_game_view_model.g.dart';
 
@@ -43,13 +41,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   Duration playthroughDuration = const Duration();
 
   @observable
-  int logGameStep = 0;
-
-  @observable
-  ObservableFuture<void>? futureLoadPlaythroughPlayers;
-
-  @observable
-  ObservableList<PlaythroughPlayer> playthroughPlayers = ObservableList.of([]);
+  ObservableFuture<void>? futureLoadPlayers;
 
   @observable
   CooperativeGameResult? cooperativeGameResult;
@@ -58,49 +50,44 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   PlaythroughTimeline playthroughTimeline = const PlaythroughTimeline.now();
 
   @computed
+  ObservableList<Player> get players => _playersStore.players;
+
+  @observable
+  PlaythroughsLogGamePlayers playersState = const PlaythroughsLogGamePlayers.loading();
+
+  @computed
   String get boardGameId => _gamePlaythroughsStore.boardGameId;
-
-  @computed
-  bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
-
-  @computed
-  bool get hasAnyPlayers => playthroughPlayers.isNotEmpty;
-
-  @computed
-  List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
-      playthroughPlayers.where((player) => player.isChecked).toList();
 
   @computed
   GameClassification get gameClassification => _gamePlaythroughsStore.gameClassification;
 
-  @action
-  void selectPlayer(PlaythroughPlayer playthroughPlayer) {
-    final indexOfPlaythroughPlayer =
-        playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
-    playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: true);
-    playerScores[playthroughPlayer.player.id] = PlayerScore(
-      player: playthroughPlayer.player,
-      score: Score(
-        id: const Uuid().v4(),
-        playerId: playthroughPlayer.player.id,
-        boardGameId: _gamePlaythroughsStore.boardGameId,
-      ),
-    );
-  }
+  // @action
+  // void selectPlayer(Player playthroughPlayer) {
+  //   final indexOfPlaythroughPlayer =
+  //       playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
+  //   playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: true);
+  //   playerScores[playthroughPlayer.player.id] = PlayerScore(
+  //     player: playthroughPlayer.player,
+  //     score: Score(
+  //       id: const Uuid().v4(),
+  //       playerId: playthroughPlayer.player.id,
+  //       boardGameId: _gamePlaythroughsStore.boardGameId,
+  //     ),
+  //   );
+  // }
+
+  // @action
+  // void deselectPlayer(Player playthroughPlayer) {
+  //   final indexOfPlaythroughPlayer =
+  //       playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
+  //   playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: false);
+  //   if (playerScores.containsKey(playthroughPlayer.player.id)) {
+  //     playerScores.remove(playthroughPlayer.player.id);
+  //   }
+  // }
 
   @action
-  void deselectPlayer(PlaythroughPlayer playthroughPlayer) {
-    final indexOfPlaythroughPlayer =
-        playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
-    playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: false);
-    if (playerScores.containsKey(playthroughPlayer.player.id)) {
-      playerScores.remove(playthroughPlayer.player.id);
-    }
-  }
-
-  @action
-  void loadPlaythroughPlayers() =>
-      futureLoadPlaythroughPlayers = ObservableFuture<void>(_loadPlaythroughPlayers());
+  void loadPlayers() => futureLoadPlayers = ObservableFuture<void>(_loadPlayers());
 
   @action
   Future<PlaythroughDetails?> createPlaythrough(String boardGameId) async {
@@ -134,6 +121,10 @@ abstract class _PlaythroughsLogGameViewModel with Store {
 
     // return newPlaythrough;
   }
+
+  @action
+  void setSelectedPlayers(List<Player> selectedPlayers) =>
+      playersState = PlaythroughsLogGamePlayers.playersSelected(players: selectedPlayers);
 
   @action
   void updatePlayerScore(PlayerScore playerScore, int newScore) {
@@ -172,11 +163,20 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   void setPlaythroughTimeline(PlaythroughTimeline playthroughTimeline) =>
       this.playthroughTimeline = playthroughTimeline;
 
-  Future<void> _loadPlaythroughPlayers() async {
+  Future<void> _loadPlayers() async {
+    playersState = const PlaythroughsLogGamePlayers.loading();
+
     await _playersStore.loadPlayers();
-    final orderedPlayers = _playersStore.players
-      ..sort((player, otherPlayer) => player.name!.compareTo(otherPlayer.name!));
-    playthroughPlayers = ObservableList.of(
-        orderedPlayers.map((Player player) => PlaythroughPlayer(player: player)).toList());
+    // final orderedPlayers = _playersStore.players
+    //   ..sort((player, otherPlayer) => player.name!.compareTo(otherPlayer.name!));
+    // playthroughPlayers =
+    //     ObservableList.of(orderedPlayers.map((Player player) => Player(player: player)).toList());
+
+    if (_playersStore.players.isEmpty) {
+      playersState = const PlaythroughsLogGamePlayers.noPlayers();
+      return;
+    }
+
+    playersState = const PlaythroughsLogGamePlayers.noPlayersSelected();
   }
 }

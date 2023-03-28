@@ -1,7 +1,7 @@
 import '../common/app_text.dart';
-import '../pages/playthroughs/playthrough_chronology.dart';
+import '../pages/playthroughs/playthrough_timeline.dart';
 
-extension PlaythroughChronologyExtensions on PlaythroughTimeline {
+extension PlaythroughTimelineExtensions on PlaythroughTimeline {
   String toFormattedText() {
     return when(
       now: () => AppText.playthroughsLogTimelineNowName,

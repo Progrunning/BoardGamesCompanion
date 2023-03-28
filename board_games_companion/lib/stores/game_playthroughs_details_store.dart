@@ -16,7 +16,6 @@ import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
 import '../models/playthroughs/playthrough_details.dart';
-import '../models/playthroughs/playthrough_player.dart';
 import 'players_store.dart';
 
 part 'game_playthroughs_details_store.g.dart';
@@ -101,7 +100,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
 
   Future<PlaythroughDetails?> createPlaythrough(
     String boardGameId,
-    List<PlaythroughPlayer> playthoughPlayers,
+    List<Player> players,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
     Duration? duration, {
@@ -109,7 +108,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   }) async {
     final newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
-      playthoughPlayers,
+      players,
       playerScores,
       startDate,
       duration,

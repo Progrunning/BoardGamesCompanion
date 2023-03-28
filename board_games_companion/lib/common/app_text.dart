@@ -121,10 +121,10 @@ class AppText {
   static const playthroughsLogDateSectionTitle = 'Date';
   static const playthroughsLogDurationSectionTitle = 'Duration';
   static const playthroughsLogPlayersSectionTitle = 'Players';
-  static const playthroughsLogPlayersPlayingNowSectionSubtitle =
-      'Select all players that are playing';
-  static const playthroughsLogPlayersPlayedInThePastSectionSubtitle =
-      'Select all players that played';
+  static const playthroughsLogPlayersPlayingNowButtonText = 'Select players that are playing';
+  static const playthroughsLogPlayersPlayedInThePastButtonText = 'Select players that played';
+  static const playthroughsLogPlayersChangePlayerSelectionButtonText = 'Change player selection';
+  static const playthroughsLogPlayersSelectedPlayersHeader = 'You have selected the below players';
   static const playthroughsLogTimelineNowName = 'Now';
   static const playthroughsLogGamePlayingNowOption = 'Playing now';
   static const playthroughsLogGamePlayedOption = 'Played some time ago';
@@ -303,4 +303,6 @@ class AppText {
       'Remove game from collections';
   static const createNewGameRemoveFromCollectionConfirmationDialogContentFormat =
       'Removing game %s from all of your collections will effectively remove the game from the app.';
+
+  static const playthroughPlayersSelectionPageTitle = 'Select players';
 }

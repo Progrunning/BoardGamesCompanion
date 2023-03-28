@@ -13,6 +13,7 @@ import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
 import 'models/navigation/playthough_note_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
+import 'models/playthroughs/playthrough_players_selection_result.dart';
 import 'models/results/board_game_creation_result.dart';
 import 'pages/about/about_page.dart';
 import 'pages/board_game_details/board_game_details_page.dart';
@@ -26,6 +27,8 @@ import 'pages/home/home_page.dart';
 import 'pages/home/home_view_model.dart';
 import 'pages/player/player_page.dart';
 import 'pages/player/player_view_model.dart';
+import 'pages/playthroughs/playthrough_players_selection_page.dart';
+import 'pages/playthroughs/playthrough_players_selection_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
 import 'pages/settings/settings_page.dart';
@@ -173,6 +176,16 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
                 child: child,
               ),
             );
+
+          case PlahtyroughPlayersSelectionPage.pageRoute:
+            final viewModel = getIt<PlaythroughPlayersSelectionViewModel>();
+
+            return MaterialPageRoute<PlaythroughPlayersSelectionResult?>(
+              settings: routeSettings,
+              builder: (BuildContext context) =>
+                  PlahtyroughPlayersSelectionPage(viewModel: viewModel),
+            );
+
           default:
             return null;
         }

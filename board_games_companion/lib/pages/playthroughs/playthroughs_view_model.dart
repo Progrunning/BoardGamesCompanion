@@ -15,7 +15,6 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
-import '../../models/playthroughs/playthrough_player.dart';
 import '../../services/analytics_service.dart';
 import '../../services/board_games_service.dart';
 import '../../stores/game_playthroughs_details_store.dart';
@@ -53,9 +52,6 @@ abstract class _PlaythroughsViewModel with Store {
 
   late final BoardGameDetails _boardGameDetails;
   late String _boardGameImageHeroId;
-
-  List<PlaythroughPlayer>? _playthroughPlayers;
-  List<PlaythroughPlayer>? get playthroughPlayers => _playthroughPlayers;
 
   BggPlaysImportRaport? bggPlaysImportRaport;
 
@@ -124,7 +120,7 @@ abstract class _PlaythroughsViewModel with Store {
         continue;
       }
 
-      final List<PlaythroughPlayer> playthroughPlayers = [];
+      final List<Player> players = [];
       final Map<String, PlayerScore> playerScores = {};
       for (final bggPlayer in bggPlay.players) {
         String playerId;
@@ -151,7 +147,7 @@ abstract class _PlaythroughsViewModel with Store {
             bggPlaysImportRaport!.createdPlayers.add(player.name ?? player.bggName ?? '');
           }
 
-          playthroughPlayers.add(PlaythroughPlayer(player: player));
+          players.add(player);
           final Score playerScore = Score(
             id: const Uuid().v4(),
             playerId: player.id,
@@ -164,7 +160,7 @@ abstract class _PlaythroughsViewModel with Store {
 
       final newPlaythrough = await _gamePlaythroughsDetailsStore.createPlaythrough(
         bggPlay.boardGameId,
-        playthroughPlayers,
+        players,
         playerScores,
         bggPlay.playDate!,
         Duration(minutes: bggPlay.playTimeInMinutes ?? 0),

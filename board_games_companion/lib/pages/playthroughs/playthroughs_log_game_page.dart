@@ -1,6 +1,9 @@
 import 'dart:math' as math;
+import 'dart:math';
 
-import 'package:board_games_companion/pages/playthroughs/playthrough_chronology.dart';
+import 'package:board_games_companion/pages/playthroughs/playthrough_timeline.dart';
+import 'package:board_games_companion/pages/playthroughs/playthroughs_log_game_players.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:board_games_companion/widgets/common/segmented_buttons/bgc_segmented_button.dart';
 import 'package:board_games_companion/widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +20,20 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../injectable.dart';
+import '../../mixins/enter_score_dialog.dart';
+import '../../models/hive/player.dart';
+import '../../models/hive/score.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
-import '../../models/playthroughs/playthrough_player.dart';
-import '../../widgets/common/bgc_checkbox.dart';
+import '../../models/playthroughs/playthrough_players_selection_result.dart';
 import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../enter_score/enter_score_view_model.dart';
 import '../player/player_page.dart';
+import 'playthrough_players_selection_page.dart';
 import 'playthroughs_log_game_view_model.dart';
 
 class PlaythroughsLogGamePage extends StatefulWidget {
@@ -43,14 +50,14 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
   void initState() {
     super.initState();
     viewModel = getIt<PlaythroughsLogGameViewModel>();
-    viewModel.loadPlaythroughPlayers();
+    viewModel.loadPlayers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        switch (viewModel.futureLoadPlaythroughPlayers?.status ?? FutureStatus.pending) {
+        switch (viewModel.futureLoadPlayers?.status ?? FutureStatus.pending) {
           case FutureStatus.pending:
           case FutureStatus.rejected:
             return const SizedBox.shrink();
@@ -84,18 +91,17 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
                 Observer(
                   builder: (_) {
                     return _PlayersSection(
-                      hasAnyPlayers: viewModel.hasAnyPlayers,
                       playthroughTimeline: viewModel.playthroughTimeline,
-                      playthroughPlayers: viewModel.playthroughPlayers,
-                      onPlayerSelectionChanged: (isSelected, playthroughPlayer) =>
-                          _togglePlayerSelection(isSelected, playthroughPlayer),
+                      players: viewModel.playersState,
                       onCreatePlayer: () => _handleCreatePlayer(),
+                      onSelectPlayers: () => _handleSelectPlayers(),
+                      onPlayerScoreUpdated: (playerScore, score) =>
+                          _handlePlayerScoreUpdate(playerScore, score),
                     );
                   },
                 ),
               ],
             );
-          // return _LogPlaythroughStepper(viewModel: viewModel);
         }
       },
     );
@@ -109,19 +115,22 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
     );
 
     // MK Reload players after getting back from players page
-    viewModel.loadPlaythroughPlayers();
+    viewModel.loadPlayers();
   }
 
-  void _togglePlayerSelection(bool? isSelected, PlaythroughPlayer player) {
-    if (isSelected == null) {
-      return;
-    }
+  Future<void> _handleSelectPlayers() async {
+    final playersSearchResult = await Navigator.pushNamed<PlaythroughPlayersSelectionResult?>(
+      context,
+      PlahtyroughPlayersSelectionPage.pageRoute,
+    );
 
-    if (isSelected) {
-      viewModel.selectPlayer(player);
-    } else {
-      viewModel.deselectPlayer(player);
-    }
+    playersSearchResult?.when(
+      selectedPlayers: (players) => viewModel.setSelectedPlayers(players),
+    );
+  }
+
+  void _handlePlayerScoreUpdate(PlayerScore playerScore, int score) {
+    viewModel.updatePlayerScore(playerScore, score);
   }
 }
 
@@ -305,18 +314,18 @@ class _SetPlaythroughDurationState extends State<_SetPlaythroughDuration> {
 
 class _PlayersSection extends StatelessWidget {
   const _PlayersSection({
-    required this.hasAnyPlayers,
     required this.playthroughTimeline,
-    required this.playthroughPlayers,
-    required this.onPlayerSelectionChanged,
+    required this.players,
     required this.onCreatePlayer,
+    required this.onSelectPlayers,
+    required this.onPlayerScoreUpdated,
   });
 
-  final bool hasAnyPlayers;
   final PlaythroughTimeline playthroughTimeline;
-  final List<PlaythroughPlayer> playthroughPlayers;
-  final void Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
+  final PlaythroughsLogGamePlayers players;
   final VoidCallback onCreatePlayer;
+  final VoidCallback onSelectPlayers;
+  final void Function(PlayerScore, int) onPlayerScoreUpdated;
 
   @override
   Widget build(BuildContext context) => MultiSliver(
@@ -330,32 +339,82 @@ class _PlayersSection extends StatelessWidget {
               ),
             ),
           ),
-          if (hasAnyPlayers) ...[
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Dimensions.standardSpacing,
-                left: Dimensions.standardSpacing,
-              ),
-              child: Text(
-                playthroughTimeline.when(
-                  now: () => AppText.playthroughsLogPlayersPlayingNowSectionSubtitle,
-                  inThePast: () => AppText.playthroughsLogPlayersPlayedInThePastSectionSubtitle,
+          players.when(
+            loading: () => const SliverFillRemaining(child: LoadingIndicator()),
+            noPlayers: () => const SliverFillRemaining(child: _NoPlayers()),
+            noPlayersSelected: () => SliverToBoxAdapter(
+              child: _SelectPlayersButton(
+                text: playthroughTimeline.when(
+                  now: () => AppText.playthroughsLogPlayersPlayingNowButtonText,
+                  inThePast: () => AppText.playthroughsLogPlayersPlayedInThePastButtonText,
                 ),
-                style: AppTheme.defaultTextFieldStyle,
+                playthroughTimeline: playthroughTimeline,
+                onSelectPlayers: () => onSelectPlayers(),
               ),
             ),
-            _Players(
-              playthroughPlayers: playthroughPlayers,
-              onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
-                  onPlayerSelectionChanged(isSelected, player),
-            ),
-          ],
-          if (!hasAnyPlayers)
-            const SliverFillRemaining(
-              child: _NoPlayers(),
-            ),
+            playersSelected: (selectedPlayers) {
+              return MultiSliver(
+                children: [
+                  _SelectPlayersButton(
+                    text: AppText.playthroughsLogPlayersChangePlayerSelectionButtonText,
+                    playthroughTimeline: playthroughTimeline,
+                    onSelectPlayers: () => onSelectPlayers(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      top: Dimensions.standardSpacing,
+                      left: Dimensions.standardSpacing,
+                    ),
+                  ),
+                  playthroughTimeline.when(
+                    inThePast: () => _SelectedPlayersList(
+                      selectedPlayers: selectedPlayers,
+                      onPlayerScoreUpdated: (playerScore, score) =>
+                          onPlayerScoreUpdated(playerScore, score),
+                    ),
+                    now: () => _SelectedPlayersGrid(selectedPlayers: selectedPlayers),
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       );
+}
+
+class _SelectPlayersButton extends StatelessWidget {
+  const _SelectPlayersButton({
+    required this.text,
+    required this.playthroughTimeline,
+    required this.onSelectPlayers,
+  });
+
+  final String text;
+  final PlaythroughTimeline playthroughTimeline;
+  final VoidCallback onSelectPlayers;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => onSelectPlayers(),
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Row(
+            children: [
+              Text(
+                text,
+                style: AppTheme.defaultTextFieldStyle,
+              ),
+              const Spacer(),
+              const Icon(Icons.chevron_right),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _PlaythroughTimelineSegmentedButton extends BgcSegmentedButton<PlaythroughTimeline> {
@@ -456,7 +515,7 @@ class _PlaythroughTimelineSegmentedButton extends BgcSegmentedButton<Playthrough
 //                     builder: (_) {
 //                       return _SelectPlayersStep(
 //                         playthroughPlayers: widget.viewModel.playthroughPlayers.toList(),
-//                         onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
+//                         onPlayerSelectionChanged: (bool? isSelected, Player player) =>
 //                             _togglePlayerSelection(isSelected, player),
 //                         onCreatePlayer: () async => _handleCreatePlayer(),
 //                       );
@@ -657,7 +716,7 @@ class _PlaythroughTimelineSegmentedButton extends BgcSegmentedButton<Playthrough
 //     widget.viewModel.loadPlaythroughPlayers();
 //   }
 
-//   void _togglePlayerSelection(bool? isSelected, PlaythroughPlayer player) {
+//   void _togglePlayerSelection(bool? isSelected, Player player) {
 //     if (isSelected == null) {
 //       return;
 //     }
@@ -876,8 +935,8 @@ class _PlaythroughTimelineSegmentedButton extends BgcSegmentedButton<Playthrough
 //     required this.onCreatePlayer,
 //   }) : super(key: key);
 
-//   final List<PlaythroughPlayer>? playthroughPlayers;
-//   final void Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
+//   final List<Player>? playthroughPlayers;
+//   final void Function(bool?, Player) onPlayerSelectionChanged;
 //   final VoidCallback onCreatePlayer;
 
 //   @override
@@ -890,7 +949,7 @@ class _PlaythroughTimelineSegmentedButton extends BgcSegmentedButton<Playthrough
 //       height: MediaQuery.of(context).size.height / 3,
 //       child: _Players(
 //         playthroughPlayers: playthroughPlayers,
-//         onPlayerSelectionChanged: (bool? isSelected, PlaythroughPlayer player) =>
+//         onPlayerSelectionChanged: (bool? isSelected, Player player) =>
 //             onPlayerSelectionChanged(isSelected, player),
 //       ),
 //     );
@@ -995,21 +1054,65 @@ class _SelectPlaythroughDateState extends State<_SelectPlaythroughDate> {
   }
 }
 
-class _Players extends StatelessWidget {
-  const _Players({
+class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
+  const _SelectedPlayersList({
     Key? key,
-    required this.playthroughPlayers,
-    required this.onPlayerSelectionChanged,
+    required this.selectedPlayers,
+    required this.onPlayerScoreUpdated,
   }) : super(key: key);
 
-  int get _numberOfPlayerColumns => 4;
-  final List<PlaythroughPlayer>? playthroughPlayers;
-  final Function(bool?, PlaythroughPlayer) onPlayerSelectionChanged;
+  final List<Player> selectedPlayers;
+  final void Function(PlayerScore, int) onPlayerScoreUpdated;
 
   @override
   Widget build(BuildContext context) {
-    final playerAvatarSize = MediaQuery.of(context).size.width / _numberOfPlayerColumns;
+    return SliverPadding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (_, index) {
+            final int itemIndex = index ~/ 2;
+            final player = selectedPlayers[itemIndex];
+            if (index.isEven) {
+              return _PlayerScore(
+                playerScore: PlayerScore(
+                  player: player,
+                  score: const Score(
+                    boardGameId: '',
+                    id: '',
+                    playerId: '',
+                  ),
+                ),
+                onTap: (PlayerScore playerScore) async {
+                  final enterScoreViewModel = EnterScoreViewModel(playerScore);
+                  await showEnterScoreDialog(context, enterScoreViewModel);
+                  onPlayerScoreUpdated(playerScore, enterScoreViewModel.score);
+                  return enterScoreViewModel.score.toString();
+                },
+              );
+            }
 
+            return const SizedBox(height: Dimensions.standardSpacing);
+          },
+          childCount: max(0, selectedPlayers.length * 2 - 1),
+        ),
+      ),
+    );
+  }
+}
+
+class _SelectedPlayersGrid extends StatelessWidget {
+  const _SelectedPlayersGrid({
+    Key? key,
+    required this.selectedPlayers,
+  }) : super(key: key);
+
+  static const int _numberOfPlayerColumns = 3;
+
+  final List<Player> selectedPlayers;
+
+  @override
+  Widget build(BuildContext context) {
     return SliverPadding(
       padding: const EdgeInsets.all(Dimensions.standardSpacing),
       sliver: SliverGrid.count(
@@ -1017,22 +1120,12 @@ class _Players extends StatelessWidget {
         crossAxisSpacing: Dimensions.standardSpacing,
         mainAxisSpacing: Dimensions.standardSpacing,
         children: [
-          for (var playthroughPlayer in playthroughPlayers!)
+          for (final player in selectedPlayers)
             Stack(
               children: <Widget>[
                 PlayerAvatar(
-                  player: playthroughPlayer.player,
-                  avatarImageSize: Size(playerAvatarSize, playerAvatarSize),
-                  onTap: () =>
-                      onPlayerSelectionChanged(!playthroughPlayer.isChecked, playthroughPlayer),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: BgcCheckbox(
-                    isChecked: playthroughPlayer.isChecked,
-                    onChanged: (isChecked) =>
-                        onPlayerSelectionChanged(isChecked, playthroughPlayer),
-                  ),
+                  player: player,
+                  avatarImageSize: Dimensions.smallPlayerAvatarSize,
                 ),
               ],
             ),
@@ -1061,26 +1154,6 @@ class _NoPlayers extends StatelessWidget {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) => Column(
-  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-  //       children: <Widget>[
-  //         Text(
-  //           AppText.playthroughsLogGamePageCreatePlayerTitle,
-  //           style: AppTheme.theme.textTheme.bodyLarge,
-  //         ),
-  //         const SizedBox(height: Dimensions.halfStandardSpacing),
-  //         Align(
-  //           alignment: Alignment.topRight,
-  //           child: ElevatedIconButton(
-  //             title: AppText.playthroughsLogGamePageCreatePlayerButtonText,
-  //             icon: const DefaultIcon(Icons.add),
-  //             onPressed: () => onCreatePlayer(),
-  //           ),
-  //         ),
-  //       ],
-  //     );
 }
 
 class _PlayerScore extends StatefulWidget {

@@ -8,8 +8,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
+import '../models/hive/player.dart';
 import '../models/player_score.dart';
-import '../models/playthroughs/playthrough_player.dart';
 
 part 'playthroughs_store.g.dart';
 
@@ -43,7 +43,7 @@ abstract class _PlaythroughsStore with Store {
 
   Future<Playthrough?> createPlaythrough(
     String boardGameId,
-    List<PlaythroughPlayer> playthoughPlayers,
+    List<Player> players,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
     Duration? duration, {
@@ -51,7 +51,7 @@ abstract class _PlaythroughsStore with Store {
   }) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
       boardGameId,
-      playthoughPlayers,
+      players.map((player) => player.id).toList(),
       playerScores,
       startDate,
       duration,
@@ -60,7 +60,7 @@ abstract class _PlaythroughsStore with Store {
 
     if (newPlaythrough == null) {
       FirebaseCrashlytics.instance.log(
-        'Faild to new playthrough for a board game $boardGameId with ${playthoughPlayers.length} players',
+        'Faild to new playthrough for a board game $boardGameId with ${players.length} players',
       );
 
       return null;
