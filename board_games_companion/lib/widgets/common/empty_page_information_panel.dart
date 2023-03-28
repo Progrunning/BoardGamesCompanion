@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/dimensions.dart';
@@ -5,14 +6,14 @@ import '../../common/dimensions.dart';
 class EmptyPageInformationPanel extends StatelessWidget {
   const EmptyPageInformationPanel({
     required this.title,
-    required this.subtitle,
     required this.icon,
+    this.subtitle,
     this.padding = const EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
     super.key,
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final Widget icon;
   final EdgeInsets padding;
 
@@ -32,15 +33,16 @@ class EmptyPageInformationPanel extends StatelessWidget {
           const SizedBox(height: Dimensions.doubleStandardSpacing),
           icon,
           const SizedBox(height: Dimensions.doubleStandardSpacing),
-          Text.rich(
-            TextSpan(
-              children: <InlineSpan>[
-                TextSpan(text: subtitle),
-              ],
+          if (subtitle.isNotNullOrBlank)
+            Text.rich(
+              TextSpan(
+                children: <InlineSpan>[
+                  TextSpan(text: subtitle),
+                ],
+              ),
+              textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: Dimensions.mediumFontSize),
             ),
-            textAlign: TextAlign.justify,
-            style: const TextStyle(fontSize: Dimensions.mediumFontSize),
-          ),
         ],
       ),
     );

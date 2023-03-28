@@ -4,8 +4,8 @@ import '../../../common/app_colors.dart';
 import '../../../common/app_styles.dart';
 import '../../elevated_container.dart';
 
-class BgcToggleButton<TValue> extends StatelessWidget {
-  const BgcToggleButton({
+class BgcSegmentedButton<TValue> extends StatelessWidget {
+  const BgcSegmentedButton({
     Key? key,
     required bool isSelected,
     required Function(TValue?) onTapped,

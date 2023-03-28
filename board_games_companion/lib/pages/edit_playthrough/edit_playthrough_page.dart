@@ -23,7 +23,7 @@ import '../../mixins/enter_score_dialog.dart';
 import '../../models/hive/no_score_game_result.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/page_container.dart';
-import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
@@ -268,8 +268,8 @@ class _ScoresSection extends StatelessWidget {
         children: [
           SliverPersistentHeader(
             pinned: true,
-            delegate:
-                BgcSliverHeaderDelegate(primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
+            delegate: BgcSliverTitleHeaderDelegate.title(
+                primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
           ),
           Observer(
             builder: (_) {
@@ -318,7 +318,7 @@ class _NoScoreSection extends StatelessWidget {
       children: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: BgcSliverHeaderDelegate(
+          delegate: BgcSliverTitleHeaderDelegate.title(
               primaryTitle: AppText.editPlaythroughNoScoreResultHeaderTitle),
         ),
         SliverPadding(
@@ -339,7 +339,7 @@ class _NoScoreSection extends StatelessWidget {
         ),
         SliverPersistentHeader(
           pinned: true,
-          delegate: BgcSliverHeaderDelegate(
+          delegate: BgcSliverTitleHeaderDelegate.title(
               primaryTitle: AppText.editPlaythroughNoScorePlayersHeaderTitle),
         ),
         Observer(
@@ -389,7 +389,8 @@ class _NotesSection extends StatelessWidget {
       children: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: BgcSliverHeaderDelegate(primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+          delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -574,7 +575,7 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
     return MultiSliver(
       children: [
         SliverPersistentHeader(
-          delegate: BgcSliverHeaderDelegate(
+          delegate: BgcSliverTitleHeaderDelegate.title(
             primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
           ),
         ),

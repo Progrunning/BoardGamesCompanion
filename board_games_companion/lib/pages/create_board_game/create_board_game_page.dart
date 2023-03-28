@@ -245,7 +245,7 @@ class _Form extends StatelessWidget {
     return SliverList(
       delegate: SliverChildListDelegate.fixed(
         [
-          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameImage),
+          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGameImage),
           Observer(
             builder: (_) {
               return _ImageSection(
@@ -253,7 +253,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          const SectionHeader(
+          SectionHeader.titles(
             primaryTitle: AppText.createNewGameBoardGameName,
             secondaryTitle: AppText.createNewGameBoardGameCollections,
           ),
@@ -266,7 +266,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameRating),
+          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGameRating),
           Observer(
             builder: (_) {
               return _RatingSection(
@@ -275,7 +275,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          const SectionHeader(primaryTitle: AppText.createNewGameBoardGamePlayers),
+          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGamePlayers),
           Observer(
             builder: (_) {
               return _PlayersSection(
@@ -286,7 +286,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          const SectionHeader(primaryTitle: AppText.createNewGameBoardGamePlaytime),
+          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGamePlaytime),
           Observer(
             builder: (_) {
               return _PlaytimeSection(
@@ -297,7 +297,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          const SectionHeader(primaryTitle: AppText.createNewGameBoardGameMinAge),
+          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGameMinAge),
           Observer(
             builder: (_) {
               return _AgeSection(

@@ -13,7 +13,7 @@ import '../../widgets/about/detail_item.dart';
 import '../../widgets/about/section_text.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container.dart';
-import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../base_page_state.dart';
 
 class AboutPage extends StatefulWidget {
@@ -46,7 +46,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                   child: CustomScrollView(
                     slivers: [
                       SliverPersistentHeader(
-                        delegate: BgcSliverHeaderDelegate(
+                        delegate: BgcSliverTitleHeaderDelegate.title(
                           primaryTitle: AppText.aboutPageAuthorSectionTitle,
                         ),
                       ),
@@ -59,7 +59,7 @@ class AboutPageState extends BasePageState<AboutPage> {
                         ),
                       ),
                       SliverPersistentHeader(
-                        delegate: BgcSliverHeaderDelegate(
+                        delegate: BgcSliverTitleHeaderDelegate.title(
                           primaryTitle: AppText.aboutPageDesignAndArtSectionTitle,
                         ),
                       ),
@@ -72,25 +72,25 @@ class AboutPageState extends BasePageState<AboutPage> {
                         ),
                       ),
                       SliverPersistentHeader(
-                        delegate: BgcSliverHeaderDelegate(
+                        delegate: BgcSliverTitleHeaderDelegate.title(
                           primaryTitle: AppText.aboutPageCommunityTitle,
                         ),
                       ),
                       const _CommunitySection(),
                       SliverPersistentHeader(
-                        delegate: BgcSliverHeaderDelegate(
+                        delegate: BgcSliverTitleHeaderDelegate.title(
                           primaryTitle: AppText.aboutPageContentAndDataSectionTitle,
                         ),
                       ),
                       const _ContentAndDataSection(),
                       SliverPersistentHeader(
-                        delegate: BgcSliverHeaderDelegate(
+                        delegate: BgcSliverTitleHeaderDelegate.title(
                           primaryTitle: AppText.aboutPagePluginsAndLibrariesSectionTitle,
                         ),
                       ),
                       const _PluginsAndLibrariesSection(),
                       SliverPersistentHeader(
-                        delegate: BgcSliverHeaderDelegate(
+                        delegate: BgcSliverTitleHeaderDelegate.title(
                           primaryTitle: AppText.aboutPageLicensesSectionTitle,
                         ),
                       ),

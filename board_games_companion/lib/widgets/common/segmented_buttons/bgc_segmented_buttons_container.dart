@@ -5,8 +5,8 @@ import '../../../common/app_colors.dart';
 import '../../../common/app_styles.dart';
 import '../../../common/dimensions.dart';
 
-class BgcToggleButtonsContainer extends StatelessWidget {
-  const BgcToggleButtonsContainer({
+class BgcSegmentedButtonsContainer extends StatelessWidget {
+  const BgcSegmentedButtonsContainer({
     super.key,
     required this.height,
     required this.child,

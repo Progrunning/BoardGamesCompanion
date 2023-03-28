@@ -12,8 +12,8 @@ import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
 import '../../models/sort_by.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
-import '../../widgets/common/toggle_buttons/bgc_toggle_button.dart';
-import '../../widgets/common/toggle_buttons/bgc_toggle_buttons_container.dart';
+import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
+import '../../widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import 'collections_view_model.dart';
 
 class CollectionsFilterPanel extends StatefulWidget {
@@ -164,7 +164,7 @@ class _Filters extends StatelessWidget {
           child: Text('Rating', style: AppTheme.sectionHeaderTextStyle),
         ),
         const SizedBox(height: Dimensions.standardSpacing),
-        BgcToggleButtonsContainer(
+        BgcSegmentedButtonsContainer(
           height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
           backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
           child: Observer(
@@ -276,7 +276,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
   }
 }
 
-class _FilterRatingValue extends BgcToggleButton<double> {
+class _FilterRatingValue extends BgcSegmentedButton<double> {
   _FilterRatingValue.any({
     required bool isSelected,
     required Function(double?) onRatingSelected,

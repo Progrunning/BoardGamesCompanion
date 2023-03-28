@@ -22,7 +22,7 @@ import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
 import '../../models/player_statistics.dart';
 import '../../widgets/board_games/board_game_image.dart';
-import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -125,7 +125,7 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiSliver(children: [
       SliverPersistentHeader(
-        delegate: BgcSliverHeaderDelegate(
+        delegate: BgcSliverTitleHeaderDelegate.title(
           primaryTitle: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
         ),
       ),
@@ -133,7 +133,7 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
         child: _LastWinnerSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
       ),
       SliverPersistentHeader(
-        delegate: BgcSliverHeaderDelegate(
+        delegate: BgcSliverTitleHeaderDelegate.title(
           primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
         ),
       ),
@@ -142,7 +142,7 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
       ),
       if (scoreBoardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
         SliverPersistentHeader(
-          delegate: BgcSliverHeaderDelegate(
+          delegate: BgcSliverTitleHeaderDelegate.title(
             primaryTitle: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
           ),
         ),
@@ -153,7 +153,7 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
       if ((scoreBoardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
           (scoreBoardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false)) ...[
         SliverPersistentHeader(
-          delegate: BgcSliverHeaderDelegate(
+          delegate: BgcSliverTitleHeaderDelegate.titles(
             primaryTitle:
                 AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
             secondaryTitle:
@@ -166,7 +166,7 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
       ],
       if (scoreBoardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...[
         SliverPersistentHeader(
-          delegate: BgcSliverHeaderDelegate(
+          delegate: BgcSliverTitleHeaderDelegate.title(
             primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
           ),
         ),

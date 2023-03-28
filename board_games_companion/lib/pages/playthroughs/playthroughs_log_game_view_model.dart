@@ -8,14 +8,13 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../common/analytics.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
 import '../../models/playthroughs/playthrough_player.dart';
 import '../../services/analytics_service.dart';
-import 'playthroughs_log_game_page.dart';
+import 'playthrough_chronology.dart';
 
 part 'playthroughs_log_game_view_model.g.dart';
 
@@ -44,9 +43,6 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   Duration playthroughDuration = const Duration();
 
   @observable
-  PlaythroughStartTime playthroughStartTime = PlaythroughStartTime.now;
-
-  @observable
   int logGameStep = 0;
 
   @observable
@@ -58,11 +54,17 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   @observable
   CooperativeGameResult? cooperativeGameResult;
 
+  @observable
+  PlaythroughTimeline playthroughTimeline = const PlaythroughTimeline.now();
+
   @computed
   String get boardGameId => _gamePlaythroughsStore.boardGameId;
 
   @computed
   bool get anyPlayerSelected => playthroughPlayers.any((player) => player.isChecked);
+
+  @computed
+  bool get hasAnyPlayers => playthroughPlayers.isNotEmpty;
 
   @computed
   List<PlaythroughPlayer> get _selectedPlaythroughPlayers =>
@@ -76,7 +78,6 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     final indexOfPlaythroughPlayer =
         playthroughPlayers.indexWhere((pp) => pp.player.id == playthroughPlayer.player.id);
     playthroughPlayers[indexOfPlaythroughPlayer] = playthroughPlayer.copyWith(isChecked: true);
-    // playthroughPlayers = ObservableList.of(playthroughPlayers);
     playerScores[playthroughPlayer.player.id] = PlayerScore(
       player: playthroughPlayer.player,
       score: Score(
@@ -103,33 +104,35 @@ abstract class _PlaythroughsLogGameViewModel with Store {
 
   @action
   Future<PlaythroughDetails?> createPlaythrough(String boardGameId) async {
-    final PlaythroughDetails? newPlaythrough = await _gamePlaythroughsStore.createPlaythrough(
-      boardGameId,
-      _selectedPlaythroughPlayers,
-      playerScores,
-      playthroughStartTime == PlaythroughStartTime.now ? DateTime.now() : playthroughDate,
-      playthroughStartTime == PlaythroughStartTime.inThePast ? playthroughDuration : null,
-    );
+    return null;
 
-    await _analyticsService.logEvent(
-      name: Analytics.logPlaythrough,
-      parameters: <String, String>{
-        Analytics.boardGameIdParameter: boardGameId,
-        Analytics.logPlaythroughNumberOfPlayers: _selectedPlaythroughPlayers.length.toString(),
-        Analytics.logPlaythroughStarTime: playthroughStartTime.toString(),
-        Analytics.logPlaythroughDuration: playthroughDuration.toString(),
-      },
-    );
+    // final PlaythroughDetails? newPlaythrough = await _gamePlaythroughsStore.createPlaythrough(
+    //   boardGameId,
+    //   _selectedPlaythroughPlayers,
+    //   playerScores,
+    //   playthroughStartTime == PlaythroughStartTime.now ? DateTime.now() : playthroughDate,
+    //   playthroughStartTime == PlaythroughStartTime.inThePast ? playthroughDuration : null,
+    // );
 
-    logGameStep = 0;
-    playthroughDate = DateTime.now();
-    playthroughStartTime = PlaythroughStartTime.now;
-    playthroughDuration = const Duration();
-    playerScores.clear();
+    // await _analyticsService.logEvent(
+    //   name: Analytics.logPlaythrough,
+    //   parameters: <String, String>{
+    //     Analytics.boardGameIdParameter: boardGameId,
+    //     Analytics.logPlaythroughNumberOfPlayers: _selectedPlaythroughPlayers.length.toString(),
+    //     Analytics.logPlaythroughStarTime: playthroughStartTime.toString(),
+    //     Analytics.logPlaythroughDuration: playthroughDuration.toString(),
+    //   },
+    // );
 
-    loadPlaythroughPlayers();
+    // logGameStep = 0;
+    // playthroughDate = DateTime.now();
+    // playthroughStartTime = PlaythroughStartTime.now;
+    // playthroughDuration = const Duration();
+    // playerScores.clear();
 
-    return newPlaythrough;
+    // loadPlaythroughPlayers();
+
+    // return newPlaythrough;
   }
 
   @action
@@ -165,10 +168,15 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     playerScores = updatedPlayerScores.asObservable();
   }
 
+  @action
+  void setPlaythroughTimeline(PlaythroughTimeline playthroughTimeline) =>
+      this.playthroughTimeline = playthroughTimeline;
+
   Future<void> _loadPlaythroughPlayers() async {
     await _playersStore.loadPlayers();
+    final orderedPlayers = _playersStore.players
+      ..sort((player, otherPlayer) => player.name!.compareTo(otherPlayer.name!));
     playthroughPlayers = ObservableList.of(
-      _playersStore.players.map((Player player) => PlaythroughPlayer(player: player)).toList(),
-    );
+        orderedPlayers.map((Player player) => PlaythroughPlayer(player: player)).toList());
   }
 }

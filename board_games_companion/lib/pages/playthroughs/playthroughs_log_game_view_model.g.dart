@@ -23,6 +23,13 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
           () => super.anyPlayerSelected,
           name: '_PlaythroughsLogGameViewModel.anyPlayerSelected'))
       .value;
+  Computed<bool>? _$hasAnyPlayersComputed;
+
+  @override
+  bool get hasAnyPlayers =>
+      (_$hasAnyPlayersComputed ??= Computed<bool>(() => super.hasAnyPlayers,
+              name: '_PlaythroughsLogGameViewModel.hasAnyPlayers'))
+          .value;
   Computed<List<PlaythroughPlayer>>? _$_selectedPlaythroughPlayersComputed;
 
   @override
@@ -87,24 +94,6 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
   set playthroughDuration(Duration value) {
     _$playthroughDurationAtom.reportWrite(value, super.playthroughDuration, () {
       super.playthroughDuration = value;
-    });
-  }
-
-  late final _$playthroughStartTimeAtom = Atom(
-      name: '_PlaythroughsLogGameViewModel.playthroughStartTime',
-      context: context);
-
-  @override
-  PlaythroughStartTime get playthroughStartTime {
-    _$playthroughStartTimeAtom.reportRead();
-    return super.playthroughStartTime;
-  }
-
-  @override
-  set playthroughStartTime(PlaythroughStartTime value) {
-    _$playthroughStartTimeAtom.reportWrite(value, super.playthroughStartTime,
-        () {
-      super.playthroughStartTime = value;
     });
   }
 
@@ -174,6 +163,23 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
     _$cooperativeGameResultAtom.reportWrite(value, super.cooperativeGameResult,
         () {
       super.cooperativeGameResult = value;
+    });
+  }
+
+  late final _$playthroughTimelineAtom = Atom(
+      name: '_PlaythroughsLogGameViewModel.playthroughTimeline',
+      context: context);
+
+  @override
+  PlaythroughTimeline get playthroughTimeline {
+    _$playthroughTimelineAtom.reportRead();
+    return super.playthroughTimeline;
+  }
+
+  @override
+  set playthroughTimeline(PlaythroughTimeline value) {
+    _$playthroughTimelineAtom.reportWrite(value, super.playthroughTimeline, () {
+      super.playthroughTimeline = value;
     });
   }
 
@@ -249,18 +255,31 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
   }
 
   @override
+  void setPlaythroughTimeline(PlaythroughTimeline playthroughTimeline) {
+    final _$actionInfo =
+        _$_PlaythroughsLogGameViewModelActionController.startAction(
+            name: '_PlaythroughsLogGameViewModel.setPlaythroughTimeline');
+    try {
+      return super.setPlaythroughTimeline(playthroughTimeline);
+    } finally {
+      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 playerScores: ${playerScores},
 playthroughDate: ${playthroughDate},
 playthroughDuration: ${playthroughDuration},
-playthroughStartTime: ${playthroughStartTime},
 logGameStep: ${logGameStep},
 futureLoadPlaythroughPlayers: ${futureLoadPlaythroughPlayers},
 playthroughPlayers: ${playthroughPlayers},
 cooperativeGameResult: ${cooperativeGameResult},
+playthroughTimeline: ${playthroughTimeline},
 boardGameId: ${boardGameId},
 anyPlayerSelected: ${anyPlayerSelected},
+hasAnyPlayers: ${hasAnyPlayers},
 gameClassification: ${gameClassification}
     ''';
   }

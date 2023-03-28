@@ -19,7 +19,7 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
-import '../common/slivers/bgc_sliver_header_delegate.dart';
+import '../common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../common/sorting/sort_by_chip.dart';
 
 /// [SearchDelegate] for the online (i.e. BGG) search.
@@ -108,7 +108,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
               return CustomScrollView(
                 slivers: [
                   SliverPersistentHeader(
-                    delegate: BgcSliverHeaderDelegate(
+                    delegate: BgcSliverTitleHeaderDelegate.title(
                       primaryTitle: AppText.onlineSearchSortingSectionTitle,
                     ),
                   ),
@@ -120,7 +120,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
                     },
                   ),
                   SliverPersistentHeader(
-                    delegate: BgcSliverHeaderDelegate(
+                    delegate: BgcSliverTitleHeaderDelegate.title(
                       primaryTitle: sprintf(
                         AppText.onlineSearchResultsSectionTitleFormat,
                         [foundGames!.length],

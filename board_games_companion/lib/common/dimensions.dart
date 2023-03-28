@@ -71,7 +71,7 @@ class Dimensions {
 
   static const double boardGameTileHeight = 200;
 
-  static const double defaultToggleButtonContaienrHeight = 40;
+  static const double defaultSegmentedButtonsContainerHeight = 40;
 
   static const double sectionHeaderHeight = 50;
 

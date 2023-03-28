@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../common/toggle_buttons/bgc_toggle_button.dart';
-import '../common/toggle_buttons/bgc_toggle_buttons_container.dart';
+import '../common/segmented_buttons/bgc_segmented_button.dart';
+import '../common/segmented_buttons/bgc_segmented_buttons_container.dart';
 
 class CooperativeGameResultSegmentedButton extends StatelessWidget {
   const CooperativeGameResultSegmentedButton({
@@ -19,10 +19,10 @@ class CooperativeGameResultSegmentedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BgcToggleButtonsContainer(
+    return BgcSegmentedButtonsContainer(
       // MK an arbitrary number based on 75px being enough to tap on the button and to show the name on the tile
       width: 150,
-      height: Dimensions.defaultToggleButtonContaienrHeight,
+      height: Dimensions.defaultSegmentedButtonsContainerHeight,
       child: Row(
         children: [
           _NoScoreResultTile.result(
@@ -41,7 +41,7 @@ class CooperativeGameResultSegmentedButton extends StatelessWidget {
   }
 }
 
-class _NoScoreResultTile extends BgcToggleButton<bool> {
+class _NoScoreResultTile extends BgcSegmentedButton<bool> {
   _NoScoreResultTile.result({
     required String text,
     required bool isSelected,
