@@ -2,10 +2,12 @@
 
 import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:board_games_companion/models/hive/no_score_game_result.dart';
+import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
 import '../../models/hive/player.dart';
@@ -31,9 +33,6 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   final PlayersStore _playersStore;
   final GamePlaythroughsDetailsStore _gamePlaythroughsStore;
   final AnalyticsService _analyticsService;
-
-  @observable
-  ObservableMap<String, PlayerScore> playerScores = ObservableMap.of({});
 
   @observable
   DateTime playthroughDate = DateTime.now();
@@ -68,11 +67,11 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   @action
   Future<PlaythroughDetails?> createPlaythrough() async {
     return playersState.maybeWhen(
-      playersSelected: (selectedPlayers) async {
+      playersSelected: (selectedPlayers, selectedPlayerScores) async {
         final PlaythroughDetails? newPlaythrough = await _gamePlaythroughsStore.createPlaythrough(
           boardGameId,
           selectedPlayers,
-          playerScores,
+          selectedPlayerScores,
           playthroughTimeline.when(now: () => DateTime.now(), inThePast: () => playthroughDate),
           playthroughTimeline.when(now: () => null, inThePast: () => playthroughDuration),
         );
@@ -107,8 +106,24 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   }
 
   @action
-  void setSelectedPlayers(List<Player> selectedPlayers) =>
-      playersState = PlaythroughsLogGamePlayers.playersSelected(players: selectedPlayers);
+  void setSelectedPlayers(List<Player> selectedPlayers) {
+    final playerScores = <String, PlayerScore>{};
+    for (final player in selectedPlayers) {
+      playerScores[player.id] = PlayerScore(
+        player: player,
+        score: Score(
+          id: const Uuid().v4(),
+          playerId: player.id,
+          boardGameId: boardGameId,
+        ),
+      );
+    }
+
+    playersState = PlaythroughsLogGamePlayers.playersSelected(
+      players: selectedPlayers,
+      playerScores: playerScores,
+    );
+  }
 
   @action
   void updatePlayerScore(PlayerScore playerScore, int newScore) {
@@ -116,31 +131,55 @@ abstract class _PlaythroughsLogGameViewModel with Store {
       return;
     }
 
-    final updatedPlayerScore =
-        playerScore.copyWith(score: playerScore.score.copyWith(value: newScore.toString()));
-    playerScores[playerScore.player!.id] = updatedPlayerScore;
+    playersState.maybeWhen(
+      playersSelected: (selectedPlayers, selectedPlayerScores) {
+        final updatedPlayerScores = Map<String, PlayerScore>.from(selectedPlayerScores);
+        final playerScoreToUpdate = selectedPlayerScores[playerScore.id];
+        if (playerScoreToUpdate == null) {
+          return;
+        }
+
+        final updatedPlayerScore = playerScoreToUpdate.copyWith(
+            score: playerScoreToUpdate.score.copyWith(value: newScore.toString()));
+        updatedPlayerScores[playerScore.player!.id] = updatedPlayerScore;
+
+        playersState = PlaythroughsLogGamePlayers.playersSelected(
+          players: selectedPlayers,
+          playerScores: updatedPlayerScores,
+        );
+      },
+      orElse: () {},
+    );
   }
 
   @action
   void updateCooperativeGameResult(CooperativeGameResult cooperativeGameResult) {
     this.cooperativeGameResult = cooperativeGameResult;
 
-    final updatedPlayerScores = <String, PlayerScore>{};
-    for (final playerScore in playerScores.values) {
-      if (playerScore.player == null) {
-        continue;
-      }
+    playersState.maybeWhen(
+      playersSelected: (selectedPlayers, selectedPlayerScores) {
+        final updatedPlayerScores = <String, PlayerScore>{};
+        for (final playerScore in selectedPlayerScores.values) {
+          if (playerScore.player == null) {
+            continue;
+          }
 
-      updatedPlayerScores[playerScore.player!.id] = playerScore.copyWith(
-        score: playerScore.score.copyWith(
-          noScoreGameResult: NoScoreGameResult(
-            cooperativeGameResult: cooperativeGameResult,
-          ),
-        ),
-      );
-    }
+          updatedPlayerScores[playerScore.player!.id] = playerScore.copyWith(
+            score: playerScore.score.copyWith(
+              noScoreGameResult: NoScoreGameResult(
+                cooperativeGameResult: cooperativeGameResult,
+              ),
+            ),
+          );
+        }
 
-    playerScores = updatedPlayerScores.asObservable();
+        playersState = PlaythroughsLogGamePlayers.playersSelected(
+          players: selectedPlayers,
+          playerScores: updatedPlayerScores,
+        );
+      },
+      orElse: () {},
+    );
   }
 
   @action

@@ -31,22 +31,6 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
               name: '_PlaythroughsLogGameViewModel.gameClassification'))
       .value;
 
-  late final _$playerScoresAtom = Atom(
-      name: '_PlaythroughsLogGameViewModel.playerScores', context: context);
-
-  @override
-  ObservableMap<String, PlayerScore> get playerScores {
-    _$playerScoresAtom.reportRead();
-    return super.playerScores;
-  }
-
-  @override
-  set playerScores(ObservableMap<String, PlayerScore> value) {
-    _$playerScoresAtom.reportWrite(value, super.playerScores, () {
-      super.playerScores = value;
-    });
-  }
-
   late final _$playthroughDateAtom = Atom(
       name: '_PlaythroughsLogGameViewModel.playthroughDate', context: context);
 
@@ -221,7 +205,6 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
   @override
   String toString() {
     return '''
-playerScores: ${playerScores},
 playthroughDate: ${playthroughDate},
 playthroughDuration: ${playthroughDuration},
 futureLoadPlayers: ${futureLoadPlayers},

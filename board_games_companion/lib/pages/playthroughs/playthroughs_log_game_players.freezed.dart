@@ -21,7 +21,9 @@ mixin _$PlaythroughsLogGamePlayers {
     required TResult Function() loading,
     required TResult Function() noPlayers,
     required TResult Function() noPlayersSelected,
-    required TResult Function(List<Player> players) playersSelected,
+    required TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)
+        playersSelected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,7 +31,9 @@ mixin _$PlaythroughsLogGamePlayers {
     TResult? Function()? loading,
     TResult? Function()? noPlayers,
     TResult? Function()? noPlayersSelected,
-    TResult? Function(List<Player> players)? playersSelected,
+    TResult? Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -37,7 +41,9 @@ mixin _$PlaythroughsLogGamePlayers {
     TResult Function()? loading,
     TResult Function()? noPlayers,
     TResult Function()? noPlayersSelected,
-    TResult Function(List<Player> players)? playersSelected,
+    TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -128,7 +134,9 @@ class _$_loading implements _loading {
     required TResult Function() loading,
     required TResult Function() noPlayers,
     required TResult Function() noPlayersSelected,
-    required TResult Function(List<Player> players) playersSelected,
+    required TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)
+        playersSelected,
   }) {
     return loading();
   }
@@ -139,7 +147,9 @@ class _$_loading implements _loading {
     TResult? Function()? loading,
     TResult? Function()? noPlayers,
     TResult? Function()? noPlayersSelected,
-    TResult? Function(List<Player> players)? playersSelected,
+    TResult? Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
   }) {
     return loading?.call();
   }
@@ -150,7 +160,9 @@ class _$_loading implements _loading {
     TResult Function()? loading,
     TResult Function()? noPlayers,
     TResult Function()? noPlayersSelected,
-    TResult Function(List<Player> players)? playersSelected,
+    TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -242,7 +254,9 @@ class _$_noPlayers implements _noPlayers {
     required TResult Function() loading,
     required TResult Function() noPlayers,
     required TResult Function() noPlayersSelected,
-    required TResult Function(List<Player> players) playersSelected,
+    required TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)
+        playersSelected,
   }) {
     return noPlayers();
   }
@@ -253,7 +267,9 @@ class _$_noPlayers implements _noPlayers {
     TResult? Function()? loading,
     TResult? Function()? noPlayers,
     TResult? Function()? noPlayersSelected,
-    TResult? Function(List<Player> players)? playersSelected,
+    TResult? Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
   }) {
     return noPlayers?.call();
   }
@@ -264,7 +280,9 @@ class _$_noPlayers implements _noPlayers {
     TResult Function()? loading,
     TResult Function()? noPlayers,
     TResult Function()? noPlayersSelected,
-    TResult Function(List<Player> players)? playersSelected,
+    TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
     required TResult orElse(),
   }) {
     if (noPlayers != null) {
@@ -356,7 +374,9 @@ class _$_noPlayersSelected implements _noPlayersSelected {
     required TResult Function() loading,
     required TResult Function() noPlayers,
     required TResult Function() noPlayersSelected,
-    required TResult Function(List<Player> players) playersSelected,
+    required TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)
+        playersSelected,
   }) {
     return noPlayersSelected();
   }
@@ -367,7 +387,9 @@ class _$_noPlayersSelected implements _noPlayersSelected {
     TResult? Function()? loading,
     TResult? Function()? noPlayers,
     TResult? Function()? noPlayersSelected,
-    TResult? Function(List<Player> players)? playersSelected,
+    TResult? Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
   }) {
     return noPlayersSelected?.call();
   }
@@ -378,7 +400,9 @@ class _$_noPlayersSelected implements _noPlayersSelected {
     TResult Function()? loading,
     TResult Function()? noPlayers,
     TResult Function()? noPlayersSelected,
-    TResult Function(List<Player> players)? playersSelected,
+    TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
     required TResult orElse(),
   }) {
     if (noPlayersSelected != null) {
@@ -435,7 +459,7 @@ abstract class _$$_playersSelectedCopyWith<$Res> {
           _$_playersSelected value, $Res Function(_$_playersSelected) then) =
       __$$_playersSelectedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Player> players});
+  $Res call({List<Player> players, Map<String, PlayerScore> playerScores});
 }
 
 /// @nodoc
@@ -450,12 +474,17 @@ class __$$_playersSelectedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? players = null,
+    Object? playerScores = null,
   }) {
     return _then(_$_playersSelected(
       players: null == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
               as List<Player>,
+      playerScores: null == playerScores
+          ? _value._playerScores
+          : playerScores // ignore: cast_nullable_to_non_nullable
+              as Map<String, PlayerScore>,
     ));
   }
 }
@@ -463,8 +492,11 @@ class __$$_playersSelectedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_playersSelected implements _playersSelected {
-  const _$_playersSelected({required final List<Player> players})
-      : _players = players;
+  const _$_playersSelected(
+      {required final List<Player> players,
+      required final Map<String, PlayerScore> playerScores})
+      : _players = players,
+        _playerScores = playerScores;
 
   final List<Player> _players;
   @override
@@ -474,9 +506,17 @@ class _$_playersSelected implements _playersSelected {
     return EqualUnmodifiableListView(_players);
   }
 
+  final Map<String, PlayerScore> _playerScores;
+  @override
+  Map<String, PlayerScore> get playerScores {
+    if (_playerScores is EqualUnmodifiableMapView) return _playerScores;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_playerScores);
+  }
+
   @override
   String toString() {
-    return 'PlaythroughsLogGamePlayers.playersSelected(players: $players)';
+    return 'PlaythroughsLogGamePlayers.playersSelected(players: $players, playerScores: $playerScores)';
   }
 
   @override
@@ -484,12 +524,16 @@ class _$_playersSelected implements _playersSelected {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_playersSelected &&
-            const DeepCollectionEquality().equals(other._players, _players));
+            const DeepCollectionEquality().equals(other._players, _players) &&
+            const DeepCollectionEquality()
+                .equals(other._playerScores, _playerScores));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_players));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_players),
+      const DeepCollectionEquality().hash(_playerScores));
 
   @JsonKey(ignore: true)
   @override
@@ -503,9 +547,11 @@ class _$_playersSelected implements _playersSelected {
     required TResult Function() loading,
     required TResult Function() noPlayers,
     required TResult Function() noPlayersSelected,
-    required TResult Function(List<Player> players) playersSelected,
+    required TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)
+        playersSelected,
   }) {
-    return playersSelected(players);
+    return playersSelected(players, playerScores);
   }
 
   @override
@@ -514,9 +560,11 @@ class _$_playersSelected implements _playersSelected {
     TResult? Function()? loading,
     TResult? Function()? noPlayers,
     TResult? Function()? noPlayersSelected,
-    TResult? Function(List<Player> players)? playersSelected,
+    TResult? Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
   }) {
-    return playersSelected?.call(players);
+    return playersSelected?.call(players, playerScores);
   }
 
   @override
@@ -525,11 +573,13 @@ class _$_playersSelected implements _playersSelected {
     TResult Function()? loading,
     TResult Function()? noPlayers,
     TResult Function()? noPlayersSelected,
-    TResult Function(List<Player> players)? playersSelected,
+    TResult Function(
+            List<Player> players, Map<String, PlayerScore> playerScores)?
+        playersSelected,
     required TResult orElse(),
   }) {
     if (playersSelected != null) {
-      return playersSelected(players);
+      return playersSelected(players, playerScores);
     }
     return orElse();
   }
@@ -573,10 +623,13 @@ class _$_playersSelected implements _playersSelected {
 }
 
 abstract class _playersSelected implements PlaythroughsLogGamePlayers {
-  const factory _playersSelected({required final List<Player> players}) =
+  const factory _playersSelected(
+          {required final List<Player> players,
+          required final Map<String, PlayerScore> playerScores}) =
       _$_playersSelected;
 
   List<Player> get players;
+  Map<String, PlayerScore> get playerScores;
   @JsonKey(ignore: true)
   _$$_playersSelectedCopyWith<_$_playersSelected> get copyWith =>
       throw _privateConstructorUsedError;

@@ -24,7 +24,6 @@ import '../../extensions/date_time_extensions.dart';
 import '../../injectable.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/hive/player.dart';
-import '../../models/hive/score.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_players_selection_result.dart';
@@ -170,6 +169,7 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
         );
         widget.parentPageTabController.animateTo(PlaythroughsPage.historyTabIndex);
       },
+      inThePast: () => _showLogGameConfirmationSnackbar(scaffoldMessengerState),
       orElse: () {},
     );
   }
@@ -182,6 +182,21 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
         behavior: SnackBarBehavior.floating,
         content: const Text(AppText.logGameFailureSnackbarText),
         duration: const Duration(seconds: 10),
+        action: SnackBarAction(
+          label: AppText.ok,
+          onPressed: () => scaffoldMessengerState.hideCurrentSnackBar(),
+        ),
+      ),
+    );
+  }
+
+  void _showLogGameConfirmationSnackbar(ScaffoldMessengerState scaffoldMessengerState) {
+    scaffoldMessengerState.hideCurrentSnackBar();
+    scaffoldMessengerState.showSnackBar(
+      SnackBar(
+        margin: Dimensions.snackbarMargin,
+        behavior: SnackBarBehavior.floating,
+        content: const Text(AppText.logGameSuccessConfirmationSnackbarText),
         action: SnackBarAction(
           label: AppText.ok,
           onPressed: () => scaffoldMessengerState.hideCurrentSnackBar(),
@@ -434,9 +449,10 @@ class _PlayersSection extends StatelessWidget {
                 onSelectPlayers: onSelectPlayers,
               ),
             ),
-            playersSelected: (selectedPlayers) {
+            playersSelected: (selectedPlayers, selectedPlayerScores) {
               return _SelectedPlayers(
                 selectedPlayers: selectedPlayers,
+                selectedPlayerScores: selectedPlayerScores,
                 playthroughTimeline: playthroughTimeline,
                 onSelectPlayers: onSelectPlayers,
                 onPlayerScoreUpdated: onPlayerScoreUpdated,
@@ -450,15 +466,17 @@ class _PlayersSection extends StatelessWidget {
 class _SelectedPlayers extends StatelessWidget {
   const _SelectedPlayers({
     required this.selectedPlayers,
+    required this.selectedPlayerScores,
     required this.playthroughTimeline,
     required this.onSelectPlayers,
     required this.onPlayerScoreUpdated,
   });
 
   final List<Player> selectedPlayers;
+  final Map<String, PlayerScore> selectedPlayerScores;
   final PlaythroughTimeline playthroughTimeline;
   final VoidCallback onSelectPlayers;
-  final void Function(PlayerScore p1, int p2) onPlayerScoreUpdated;
+  final void Function(PlayerScore playerScore, int score) onPlayerScoreUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -478,6 +496,7 @@ class _SelectedPlayers extends StatelessWidget {
         playthroughTimeline.when(
           inThePast: () => _SelectedPlayersList(
             selectedPlayers: selectedPlayers,
+            selectedPlayerScores: selectedPlayerScores,
             onPlayerScoreUpdated: (playerScore, score) => onPlayerScoreUpdated(playerScore, score),
           ),
           now: () => _SelectedPlayersGrid(selectedPlayers: selectedPlayers),
@@ -1190,10 +1209,12 @@ class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
   const _SelectedPlayersList({
     Key? key,
     required this.selectedPlayers,
+    required this.selectedPlayerScores,
     required this.onPlayerScoreUpdated,
   }) : super(key: key);
 
   final List<Player> selectedPlayers;
+  final Map<String, PlayerScore> selectedPlayerScores;
   final void Function(PlayerScore, int) onPlayerScoreUpdated;
 
   @override
@@ -1206,20 +1227,13 @@ class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
             final int itemIndex = index ~/ 2;
             final player = selectedPlayers[itemIndex];
             if (index.isEven) {
+              final playerScore = selectedPlayerScores[player.id]!;
               return _PlayerScore(
-                playerScore: PlayerScore(
-                  player: player,
-                  score: const Score(
-                    boardGameId: '',
-                    id: '',
-                    playerId: '',
-                  ),
-                ),
-                onTap: (PlayerScore playerScore) async {
+                playerScore: playerScore,
+                onTap: () async {
                   final enterScoreViewModel = EnterScoreViewModel(playerScore);
                   await showEnterScoreDialog(context, enterScoreViewModel);
                   onPlayerScoreUpdated(playerScore, enterScoreViewModel.score);
-                  return enterScoreViewModel.score.toString();
                 },
               );
             }
@@ -1288,7 +1302,7 @@ class _NoPlayers extends StatelessWidget {
   }
 }
 
-class _PlayerScore extends StatefulWidget {
+class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
@@ -1296,38 +1310,19 @@ class _PlayerScore extends StatefulWidget {
   }) : super(key: key);
 
   final PlayerScore playerScore;
-  final Future<String?> Function(PlayerScore) onTap;
-
-  @override
-  State<_PlayerScore> createState() => _PlayerScoreState();
-}
-
-class _PlayerScoreState extends State<_PlayerScore> {
-  late String? score;
-
-  @override
-  void initState() {
-    super.initState();
-
-    score = widget.playerScore.score.value;
-  }
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () async {
-        final newScore = await widget.onTap(widget.playerScore);
-        setState(() {
-          score = newScore;
-        });
-      },
+      onTap: () => onTap(),
       child: Row(
         children: <Widget>[
           SizedBox(
             height: Dimensions.smallPlayerAvatarSize.height,
             width: Dimensions.smallPlayerAvatarSize.width,
             child: PlayerAvatar(
-              player: widget.playerScore.player,
+              player: playerScore.player,
               avatarImageSize: Dimensions.smallPlayerAvatarSize,
             ),
           ),
@@ -1335,7 +1330,7 @@ class _PlayerScoreState extends State<_PlayerScore> {
           Column(
             children: <Widget>[
               Text(
-                score ?? '-',
+                playerScore.score.value ?? '-',
                 style: AppStyles.playerScoreTextStyle,
               ),
               const SizedBox(height: Dimensions.halfStandardSpacing),
