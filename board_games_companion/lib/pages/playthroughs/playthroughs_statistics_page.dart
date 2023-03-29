@@ -8,6 +8,7 @@ import 'package:board_games_companion/widgets/common/loading_indicator_widget.da
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:sprintf/sprintf.dart';
@@ -317,7 +318,7 @@ class _LastWinnerSection extends StatelessWidget {
     required this.scoreBoardGameStatistics,
   }) : super(key: key);
 
-  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
+  final ScoreBoardGameStatistics scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
@@ -602,16 +603,16 @@ class _LastTimePlayed extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
+  final ScoreBoardGameStatistics scoreBoardGameStatistics;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        CalendarCard(scoreBoardGameStatistics?.lastPlayed),
+        CalendarCard(scoreBoardGameStatistics.lastTimePlayed),
         const SizedBox(width: Dimensions.standardSpacing),
         Text(
-          scoreBoardGameStatistics?.lastPlayed?.toDaysAgo() ?? '',
+          scoreBoardGameStatistics.lastTimePlayed.toDaysAgo(),
           style: const TextStyle(
             fontSize: Dimensions.smallFontSize,
             fontWeight: FontWeight.normal,
@@ -640,7 +641,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
             Column(
               children: <Widget>[
                 _StatisticsItem(
-                  value: scoreBoardGameStatistics?.numberOfGamesPlayed?.toString() ?? '-',
+                  value: scoreBoardGameStatistics?.numberOfGamesPlayed.toString() ?? '-',
                   icon: Icons.casino,
                   iconColor: AppColors.playedGamesStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
@@ -658,8 +659,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
             Column(
               children: <Widget>[
                 _StatisticsItem(
-                  value:
-                      scoreBoardGameStatistics?.averageNumberOfPlayers?.toStringAsFixed(0) ?? '-',
+                  value: scoreBoardGameStatistics?.averageNumberOfPlayers.toStringAsFixed(0) ?? '-',
                   icon: Icons.person,
                   iconColor: AppColors.averagePlayerCountStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
@@ -680,7 +680,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
               children: <Widget>[
                 _StatisticsItem(
                   value: scoreBoardGameStatistics?.averagePlaytimeInSeconds
-                          ?.toPlaytimeDuration(fallbackValue: '-') ??
+                          .toPlaytimeDuration(fallbackValue: '-') ??
                       '-',
                   icon: Icons.av_timer,
                   iconColor: AppColors.averagePlaytimeStatColor,
@@ -689,7 +689,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
                   value: scoreBoardGameStatistics?.totalPlaytimeInSeconds
-                          ?.toPlaytimeDuration(fallbackValue: '-') ??
+                          .toPlaytimeDuration(fallbackValue: '-') ??
                       '-',
                   icon: Icons.timelapse,
                   iconColor: AppColors.totalPlaytimeStatColor,
@@ -730,7 +730,8 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
                   value: noScoreBoardGameStatistics.totalWins.toString(),
-                  icon: Icons.show_chart,
+                  icon: FontAwesomeIcons.trophy,
+                  iconSize: 22,
                   iconColor: AppColors.highscoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalWins,
                 ),
@@ -748,7 +749,7 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
                   value: noScoreBoardGameStatistics.totalLosses.toString(),
-                  icon: Icons.calculate,
+                  icon: Icons.thumb_down_alt,
                   iconColor: AppColors.averageScoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalLosses,
                 ),
@@ -836,7 +837,7 @@ class _StatisticsItem extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(
+            FaIcon(
               icon,
               color: iconColor ?? IconTheme.of(context).color,
               size: iconSize,

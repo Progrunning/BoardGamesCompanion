@@ -933,7 +933,7 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
       required this.lastTimePlayed,
       required this.totalPlaytimeInSeconds,
       required this.averagePlaytimeInSeconds,
-      required this.averageScorePrecision = 0,
+      required this.averageScorePrecision,
       this.lastWinner,
       this.bestScore,
       this.averageScore,
@@ -955,7 +955,6 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
   @override
   int averagePlaytimeInSeconds;
   @override
-  @JsonKey()
   int averageScorePrecision;
   @override
   PlayerScore? lastWinner;

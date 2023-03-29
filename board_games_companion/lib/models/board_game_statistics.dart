@@ -5,8 +5,6 @@ import 'hive/player.dart';
 import 'player_score.dart';
 import 'player_statistics.dart';
 
-export '../extensions/board_game_statistics_extensions.dart';
-
 part 'board_game_statistics.freezed.dart';
 
 @freezed
@@ -29,7 +27,7 @@ class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
     required DateTime lastTimePlayed,
     required int totalPlaytimeInSeconds,
     required int averagePlaytimeInSeconds,
-    @Default(0) required int averageScorePrecision,
+    required int averageScorePrecision,
     PlayerScore? lastWinner,
     num? bestScore,
     double? averageScore,
