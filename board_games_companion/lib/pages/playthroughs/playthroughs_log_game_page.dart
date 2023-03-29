@@ -454,7 +454,10 @@ class _CooperativeResultSection extends StatelessWidget {
           sliver: SliverToBoxAdapter(
             child: Row(
               children: [
-                const Text(AppText.editPlaythroughNoScoreResultText),
+                const Text(
+                  AppText.editPlaythroughNoScoreResultText,
+                  style: AppTheme.defaultTextFieldStyle,
+                ),
                 const Spacer(),
                 CooperativeGameResultSegmentedButton(
                   cooperativeGameResult: cooperativeGameResult,
