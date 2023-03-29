@@ -429,43 +429,89 @@ class _PlayersSection extends StatelessWidget {
             loading: () => const SliverFillRemaining(child: LoadingIndicator()),
             noPlayers: () => const SliverFillRemaining(child: _NoPlayers()),
             noPlayersSelected: () => SliverToBoxAdapter(
-              child: _SelectPlayersButton(
-                text: playthroughTimeline.when(
-                  now: () => AppText.playthroughsLogPlayersPlayingNowButtonText,
-                  inThePast: () => AppText.playthroughsLogPlayersPlayedInThePastButtonText,
-                ),
+              child: _NoPlayersSelected(
                 playthroughTimeline: playthroughTimeline,
-                onSelectPlayers: () => onSelectPlayers(),
+                onSelectPlayers: onSelectPlayers,
               ),
             ),
             playersSelected: (selectedPlayers) {
-              return MultiSliver(
-                children: [
-                  _SelectPlayersButton(
-                    text: AppText.playthroughsLogPlayersChangePlayerSelectionButtonText,
-                    playthroughTimeline: playthroughTimeline,
-                    onSelectPlayers: () => onSelectPlayers(),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: Dimensions.standardSpacing,
-                      left: Dimensions.standardSpacing,
-                    ),
-                  ),
-                  playthroughTimeline.when(
-                    inThePast: () => _SelectedPlayersList(
-                      selectedPlayers: selectedPlayers,
-                      onPlayerScoreUpdated: (playerScore, score) =>
-                          onPlayerScoreUpdated(playerScore, score),
-                    ),
-                    now: () => _SelectedPlayersGrid(selectedPlayers: selectedPlayers),
-                  ),
-                ],
+              return _SelectedPlayers(
+                selectedPlayers: selectedPlayers,
+                playthroughTimeline: playthroughTimeline,
+                onSelectPlayers: onSelectPlayers,
+                onPlayerScoreUpdated: onPlayerScoreUpdated,
               );
             },
           ),
         ],
       );
+}
+
+class _SelectedPlayers extends StatelessWidget {
+  const _SelectedPlayers({
+    required this.selectedPlayers,
+    required this.playthroughTimeline,
+    required this.onSelectPlayers,
+    required this.onPlayerScoreUpdated,
+  });
+
+  final List<Player> selectedPlayers;
+  final PlaythroughTimeline playthroughTimeline;
+  final VoidCallback onSelectPlayers;
+  final void Function(PlayerScore p1, int p2) onPlayerScoreUpdated;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        _SelectPlayersButton(
+          text: AppText.playthroughsLogPlayersChangePlayerSelectionButtonText,
+          playthroughTimeline: playthroughTimeline,
+          onSelectPlayers: () => onSelectPlayers(),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(
+            top: Dimensions.standardSpacing,
+            left: Dimensions.standardSpacing,
+          ),
+        ),
+        playthroughTimeline.when(
+          inThePast: () => _SelectedPlayersList(
+            selectedPlayers: selectedPlayers,
+            onPlayerScoreUpdated: (playerScore, score) => onPlayerScoreUpdated(playerScore, score),
+          ),
+          now: () => _SelectedPlayersGrid(selectedPlayers: selectedPlayers),
+        ),
+      ],
+    );
+  }
+}
+
+class _NoPlayersSelected extends StatelessWidget {
+  const _NoPlayersSelected({
+    required this.playthroughTimeline,
+    required this.onSelectPlayers,
+  });
+
+  final PlaythroughTimeline playthroughTimeline;
+  final VoidCallback onSelectPlayers;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: Dimensions.standardSpacing),
+        _SelectPlayersButton(
+          text: playthroughTimeline.when(
+            now: () => AppText.playthroughsLogPlayersPlayingNowButtonText,
+            inThePast: () => AppText.playthroughsLogPlayersPlayedInThePastButtonText,
+          ),
+          playthroughTimeline: playthroughTimeline,
+          onSelectPlayers: () => onSelectPlayers(),
+        ),
+      ],
+    );
+  }
 }
 
 class _SelectPlayersButton extends StatelessWidget {

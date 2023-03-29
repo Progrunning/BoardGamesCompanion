@@ -170,7 +170,9 @@ abstract class _GamePlaythroughsDetailsStore with Store {
     final playerScores = scores.mapIndexed((int index, Score score) {
       final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
       return PlayerScore(player: player, score: score, place: index + 1);
-    }).toList();
+    }).toList()
+      ..sortByPlayerName()
+      ..sortByScore(gameGameFamily);
 
     return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores);
   }
