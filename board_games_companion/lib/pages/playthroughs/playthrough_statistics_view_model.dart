@@ -102,6 +102,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
         boardGameStatistics = _loadNoScoreBoardGameStatistics(
           playersById,
           playthroughScoresByPlaythroughId,
+          playthroughScoresByBoardGameId,
           finishedPlaythroughs,
         );
         break;
@@ -111,6 +112,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
   BoardGameStatistics _loadNoScoreBoardGameStatistics(
     Map<String, Player> playersById,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
+    Map<String, List<Score>> playthroughScoresByBoardGameId,
     List<Playthrough> finishedPlaythroughs,
   ) {
     if (finishedPlaythroughs.isEmpty) {
@@ -138,7 +140,30 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       averagePlaytimeInSeconds: finishedPlaythroughs.averagePlaytimeInSeconds,
     );
 
-    return BoardGameStatistics.noScore(boardGameStatistics: noScoreBoardGameStatistics);
+    final List<PlayerStatistics> playersStatistics = [];
+    final List<Score> playerScoresCollection =
+        playthroughScoresByBoardGameId[boardGameId].onlyCooperativeGames();
+    if (playerScoresCollection.isNotEmpty) {
+      final Map<String, List<Score>> playerScoresGrouped =
+          groupBy(playerScoresCollection, (Score score) => score.playerId);
+      for (final String playerId in playerScoresGrouped.keys) {
+        final Player player = playersById[playerId]!;
+        playersStatistics.add(
+          PlayerStatistics.noScoreGames(
+            player: player,
+            totalGamesPlayed: playerScoresGrouped[player.id]?.length ?? 0,
+            totalLosses: playerScoresGrouped[player.id].totalCooperativeWins,
+            totalWins: playerScoresGrouped[player.id].totalCooperativeLosses,
+          ),
+        );
+      }
+    }
+
+    return BoardGameStatistics.noScore(
+      boardGameStatistics: noScoreBoardGameStatistics.copyWith(
+        playersStatistics: playersStatistics.sortByResult.toList(),
+      ),
+    );
   }
 
   BoardGameStatistics _loadScoreBoardGamesStatistics(
@@ -172,9 +197,8 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       return BoardGameStatistics.score(boardGameStatistics: scoreBoardGameStatistics);
     }
 
-    final List<Score> playerScoresCollection = playthroughScoresByBoardGameId[boardGameId]
-        .onlyScoresWithValue()
-      ..sortByScore(_gamePlaythroughsStore.gameGameFamily);
+    final List<Score> playerScoresCollection =
+        playthroughScoresByBoardGameId[boardGameId].onlyScoresWithValue();
     if (playerScoresCollection.isNotEmpty) {
       final Map<String, List<Score>> playerScoresGrouped =
           groupBy(playerScoresCollection, (Score score) => score.playerId);
@@ -183,24 +207,30 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       scoreBoardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
 
       scoreBoardGameStatistics.topScoreres = [];
-      scoreBoardGameStatistics.playersStatistics = [];
       for (final Score score in playerScoresCollection) {
         final Player player = playersById[score.playerId]!;
         if (scoreBoardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
           scoreBoardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
         }
-
-        if (scoreBoardGameStatistics.playersStatistics!
-            .any((PlayerStatistics playerStats) => playerStats.player == player)) {
-          continue;
-        }
-
-        final PlayerStatistics playerStatistics = PlayerStatistics(player);
-        playerStatistics.personalBestScore = num.tryParse(score.value!);
-        playerStatistics.numberOfGamesPlayed = playerScoresGrouped[player.id]?.length ?? 0;
-        playerStatistics.averageScore = playerScoresGrouped[player.id]!.toAverageScore();
-        scoreBoardGameStatistics.playersStatistics!.add(playerStatistics);
       }
+
+      final playersStatistics = <PlayerStatistics>[];
+      for (final String playerId in playerScoresGrouped.keys) {
+        final Player player = playersById[playerId]!;
+        playersStatistics.add(
+          PlayerStatistics.scoreGames(
+            player: player,
+            averageScore: playerScoresGrouped[player.id]!.toAverageScore(),
+            totalGamesPlayed: playerScoresGrouped[player.id]?.length ?? 0,
+            personalBestScore: playerScoresGrouped[player.id]!
+                    .toBestScore(_gamePlaythroughsStore.gameGameFamily)
+                    ?.toInt() ??
+                0,
+          ),
+        );
+      }
+
+      scoreBoardGameStatistics.playersStatistics = playersStatistics.sortByResult.toList();
     }
 
     _updatePlayerCountPercentage(finishedPlaythroughs, scoreBoardGameStatistics);

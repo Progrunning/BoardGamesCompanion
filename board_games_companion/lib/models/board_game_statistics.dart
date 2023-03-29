@@ -32,7 +32,7 @@ class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
     num? bestScore,
     double? averageScore,
     List<Tuple2<Player, String>>? topScoreres,
-    List<PlayerStatistics>? playersStatistics,
+    @Default(<PlayerStatistics>[]) List<PlayerStatistics> playersStatistics,
     List<PlayerCountStatistics>? playerCountPercentage,
     List<PlayerWinsStatistics>? playerWinsPercentage,
     Map<Player, int>? playerWins,
@@ -51,6 +51,7 @@ class NoScoreBoardGameStatistics with _$NoScoreBoardGameStatistics {
     required int totalLosses,
     required int totalPlaytimeInSeconds,
     required int averagePlaytimeInSeconds,
+    @Default(<PlayerStatistics>[]) List<PlayerStatistics> playersStatistics,
   }) = _NoScoreBoardGameStatitics;
 
   const NoScoreBoardGameStatistics._();

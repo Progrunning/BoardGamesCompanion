@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:board_games_companion/common/constants.dart';
 import 'package:board_games_companion/common/enums/game_family.dart';
 
+import '../models/hive/no_score_game_result.dart';
 import '../models/hive/score.dart';
 
 extension ScoreExtesions on Score {
@@ -16,6 +17,11 @@ extension ScoresExtesions on List<Score>? {
     return this
             ?.where((s) => (s.value?.isNotEmpty ?? false) && num.tryParse(s.value!) != null)
             .toList() ??
+        <Score>[];
+  }
+
+  List<Score> onlyCooperativeGames() {
+    return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??
         <Score>[];
   }
 
@@ -43,18 +49,28 @@ extension ScoresExtesions on List<Score>? {
     return null;
   }
 
-  double? toAverageScore() {
+  double toAverageScore() {
     final scores = this
             ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
             .map((Score score) => num.parse(score.value!)) ??
         [];
 
-    if (scores.isEmpty) {
-      return null;
-    }
-
     return scores.reduce((a, b) => a + b) / scores.length;
   }
+
+  int get totalCooperativeWins =>
+      this
+          ?.where((score) =>
+              score.noScoreGameResult?.cooperativeGameResult == CooperativeGameResult.win)
+          .length ??
+      0;
+
+  int get totalCooperativeLosses =>
+      this
+          ?.where((score) =>
+              score.noScoreGameResult?.cooperativeGameResult == CooperativeGameResult.loss)
+          .length ??
+      0;
 }
 
 int compareScores(Score score, Score otherScore, GameFamily gameFamily) {

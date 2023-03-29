@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/extensions/date_time_extensions.dart';
 import 'package:board_games_companion/injectable.dart';
+import 'package:board_games_companion/models/player_statistics.dart';
 import 'package:board_games_companion/widgets/common/empty_page_information_panel.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -21,7 +22,6 @@ import '../../common/dimensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
-import '../../models/player_statistics.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
@@ -136,6 +136,12 @@ class _NoScoreBoardGameStatistics extends StatelessWidget {
             noScoreBoardGameStatistics: noScoreBoardGameStatistics,
           ),
         ),
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
+          ),
+        ),
+        _PlayersStatisticsSection(playersStatistics: noScoreBoardGameStatistics.playersStatistics),
         const SliverPadding(
           padding: EdgeInsets.only(
             bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
@@ -196,13 +202,16 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
           child: _PlayerCharts(scoreBoardGameStatistics: scoreBoardGameStatistics),
         ),
       ],
-      if (scoreBoardGameStatistics.playersStatistics?.isNotEmpty ?? false) ...[
+      if (scoreBoardGameStatistics.playersStatistics.isNotEmpty) ...[
         SliverPersistentHeader(
           delegate: BgcSliverTitleHeaderDelegate.title(
             primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
           ),
         ),
-        _PlayersStatisticsSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
+        _PlayersStatisticsSection(
+          playersStatistics: scoreBoardGameStatistics.playersStatistics,
+          averageScorePrecision: scoreBoardGameStatistics.averageScorePrecision,
+        ),
       ],
       const SliverPadding(
         padding: EdgeInsets.only(
@@ -216,16 +225,12 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
 class _PlayersStatisticsSection extends StatelessWidget {
   const _PlayersStatisticsSection({
     Key? key,
-    required this.scoreBoardGameStatistics,
+    required this.playersStatistics,
+    this.averageScorePrecision = 0,
   }) : super(key: key);
 
-  static const double _statsItemIconSize = 32;
-  static const TextStyle _statsItemTextStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: Dimensions.largeFontSize,
-  );
-
-  final ScoreBoardGameStatistics scoreBoardGameStatistics;
+  final List<PlayerStatistics> playersStatistics;
+  final int averageScorePrecision;
 
   @override
   Widget build(BuildContext context) {
@@ -240,73 +245,172 @@ class _PlayersStatisticsSection extends StatelessWidget {
           (_, index) {
             final int itemIndex = index ~/ 2;
             if (index.isEven) {
-              final PlayerStatistics playerStatistics =
-                  scoreBoardGameStatistics.playersStatistics![itemIndex];
-              return SizedBox(
-                height: Dimensions.smallPlayerAvatarSize.height,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    SizedBox(
-                      height: Dimensions.smallPlayerAvatarSize.height,
-                      width: Dimensions.smallPlayerAvatarSize.width,
-                      child: PlayerAvatar(
-                        player: playerStatistics.player,
-                        useHeroAnimation: false,
-                        avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                      ),
-                    ),
-                    const Expanded(child: SizedBox.shrink()),
-                    if (playerStatistics.personalBestScore != null) ...<Widget>[
-                      Center(
-                        child: _StatisticsItem(
-                          value: playerStatistics.personalBestScore.toString(),
-                          valueTextStyle: _statsItemTextStyle,
-                          icon: Icons.show_chart,
-                          iconColor: AppColors.highscoreStatColor,
-                          iconSize: _statsItemIconSize,
-                          subtitle: AppText.playthroughsStatisticsPagePlayersStatsPersonalBest,
-                        ),
-                      ),
-                      const Expanded(child: SizedBox.shrink()),
-                    ],
-                    if (playerStatistics.averageScore != null) ...<Widget>[
-                      Center(
-                        child: _StatisticsItem(
-                          value: playerStatistics.averageScore!
-                              .toStringAsFixed(scoreBoardGameStatistics.averageScorePrecision),
-                          valueTextStyle: _statsItemTextStyle,
-                          icon: Icons.calculate,
-                          iconColor: AppColors.averageScoreStatColor,
-                          iconSize: _statsItemIconSize,
-                          subtitle: AppText.playthroughsStatisticsPagePlayersStatsAvgScore,
-                        ),
-                      ),
-                      const Expanded(child: SizedBox.shrink()),
-                    ],
-                    if (playerStatistics.numberOfGamesPlayed != null) ...<Widget>[
-                      Center(
-                        child: _StatisticsItem(
-                          value: playerStatistics.numberOfGamesPlayed.toString(),
-                          valueTextStyle: _statsItemTextStyle,
-                          icon: Icons.casino,
-                          iconColor: AppColors.playedGamesStatColor,
-                          iconSize: _statsItemIconSize,
-                          subtitle: AppText.playthroughsStatisticsPagePlayersStatsPlayedGames,
-                        ),
-                      ),
-                      const Expanded(child: SizedBox.shrink()),
-                    ],
-                  ],
+              return playersStatistics[itemIndex].when(
+                scoreGames: (player, personalBest, averageScore, totalGamesPlayed) =>
+                    _PlayerStatsDetails.scoreGames(
+                  player: player,
+                  personalBestScore: personalBest,
+                  averageScore: averageScore,
+                  averageScorePrecision: averageScorePrecision,
+                  totalGamesPlayed: totalGamesPlayed,
+                ),
+                noScoreGames: (player, totalGamesPlayed, totalWins, totalLosses) =>
+                    _PlayerStatsDetails.noScoreGames(
+                  player: player,
+                  totalGamesPlayed: totalGamesPlayed,
+                  totalWins: totalWins,
+                  totalLosses: totalLosses,
                 ),
               );
             }
 
             return const SizedBox(height: Dimensions.standardSpacing);
           },
-          childCount: max(0, scoreBoardGameStatistics.playersStatistics!.length * 2 - 1),
+          childCount: max(0, playersStatistics.length * 2 - 1),
         ),
+      ),
+    );
+  }
+}
+
+class _PlayerStatsDetails extends StatelessWidget {
+  const _PlayerStatsDetails({
+    required this.player,
+    this.personalBestScore,
+    this.averageScore,
+    this.averageScorePrecision,
+    this.totalGamesPlayed,
+    this.totalWins,
+    this.totalLosses,
+  });
+
+  factory _PlayerStatsDetails.scoreGames({
+    required Player player,
+    required int personalBestScore,
+    required num averageScore,
+    required int averageScorePrecision,
+    required int totalGamesPlayed,
+  }) =>
+      _PlayerStatsDetails(
+        player: player,
+        personalBestScore: personalBestScore,
+        averageScore: averageScore,
+        averageScorePrecision: averageScorePrecision,
+        totalGamesPlayed: totalGamesPlayed,
+      );
+
+  factory _PlayerStatsDetails.noScoreGames({
+    required Player player,
+    required int totalGamesPlayed,
+    required int totalWins,
+    required int totalLosses,
+  }) =>
+      _PlayerStatsDetails(
+        player: player,
+        totalGamesPlayed: totalGamesPlayed,
+        totalWins: totalWins,
+        totalLosses: totalLosses,
+      );
+
+  static const double _statsItemIconSize = 32;
+  static const double _fontAwesomeStatsItemIconSize = 26;
+  static const TextStyle _statsItemTextStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: Dimensions.largeFontSize,
+  );
+
+  final Player player;
+  final int? personalBestScore;
+  final num? averageScore;
+  final int? averageScorePrecision;
+  final int? totalGamesPlayed;
+  final int? totalWins;
+  final int? totalLosses;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: Dimensions.smallPlayerAvatarSize.height,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          SizedBox(
+            height: Dimensions.smallPlayerAvatarSize.height,
+            width: Dimensions.smallPlayerAvatarSize.width,
+            child: PlayerAvatar(
+              player: player,
+              useHeroAnimation: false,
+              avatarImageSize: Dimensions.smallPlayerAvatarSize,
+            ),
+          ),
+          const Spacer(),
+          if (personalBestScore != null) ...<Widget>[
+            Center(
+              child: _StatisticsItem(
+                value: personalBestScore.toString(),
+                valueTextStyle: _statsItemTextStyle,
+                icon: Icons.show_chart,
+                iconColor: AppColors.highscoreStatColor,
+                iconSize: _statsItemIconSize,
+                subtitle: AppText.playthroughsStatisticsPagePlayersStatsPersonalBest,
+              ),
+            ),
+            const Spacer(),
+          ],
+          if (averageScore != null) ...<Widget>[
+            Center(
+              child: _StatisticsItem(
+                value: averageScore!.toStringAsFixed(averageScorePrecision!),
+                valueTextStyle: _statsItemTextStyle,
+                icon: Icons.calculate,
+                iconColor: AppColors.averageScoreStatColor,
+                iconSize: _statsItemIconSize,
+                subtitle: AppText.playthroughsStatisticsPagePlayersStatsAvgScore,
+              ),
+            ),
+            const Spacer(),
+          ],
+          if (totalWins != null) ...<Widget>[
+            Center(
+              child: _StatisticsItem(
+                value: totalWins.toString(),
+                valueTextStyle: _statsItemTextStyle,
+                icon: FontAwesomeIcons.trophy,
+                iconColor: AppColors.totalWinsStatColor,
+                iconSize: _fontAwesomeStatsItemIconSize,
+                subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalWins,
+              ),
+            ),
+            const Spacer(),
+          ],
+          if (totalLosses != null) ...<Widget>[
+            Center(
+              child: _StatisticsItem(
+                value: totalLosses.toString(),
+                valueTextStyle: _statsItemTextStyle,
+                icon: Icons.thumb_down_alt,
+                iconColor: AppColors.totalLossesStatColor,
+                iconSize: _fontAwesomeStatsItemIconSize,
+                subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalLosses,
+              ),
+            ),
+            const Spacer(),
+          ],
+          if (totalGamesPlayed != null) ...<Widget>[
+            Center(
+              child: _StatisticsItem(
+                value: totalGamesPlayed.toString(),
+                valueTextStyle: _statsItemTextStyle,
+                icon: Icons.casino,
+                iconColor: AppColors.playedGamesStatColor,
+                iconSize: _statsItemIconSize,
+                subtitle: AppText.playthroughsStatisticsPagePlayersStatsPlayedGames,
+              ),
+            ),
+            const Spacer(),
+          ],
+        ],
       ),
     );
   }
@@ -409,7 +513,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                 ),
               ),
             ),
-            const Expanded(child: SizedBox.shrink()),
+            const Spacer(),
             SizedBox(
               height: _chartSize,
               width: _chartSize,
@@ -475,7 +579,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                   ),
               ],
             ),
-            const Expanded(child: SizedBox.shrink()),
+            const Spacer(),
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -655,7 +759,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
                 ),
               ],
             ),
-            const Expanded(child: SizedBox.shrink()),
+            const Spacer(),
             Column(
               children: <Widget>[
                 _StatisticsItem(
@@ -675,7 +779,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
                 ),
               ],
             ),
-            const Expanded(child: SizedBox.shrink()),
+            const Spacer(),
             Column(
               children: <Widget>[
                 _StatisticsItem(
@@ -737,7 +841,7 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
                 ),
               ],
             ),
-            const Expanded(child: SizedBox.shrink()),
+            const Spacer(),
             Column(
               children: <Widget>[
                 _StatisticsItem(
@@ -750,12 +854,12 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
                 _StatisticsItem(
                   value: noScoreBoardGameStatistics.totalLosses.toString(),
                   icon: Icons.thumb_down_alt,
-                  iconColor: AppColors.averageScoreStatColor,
+                  iconColor: AppColors.totalLossesStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalLosses,
                 ),
               ],
             ),
-            const Expanded(child: SizedBox.shrink()),
+            const Spacer(),
             Column(
               children: <Widget>[
                 _StatisticsItem(

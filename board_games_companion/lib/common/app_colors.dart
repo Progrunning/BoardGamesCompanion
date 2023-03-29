@@ -53,6 +53,8 @@ class AppColors {
 
   static Color playedGamesStatColor = chartColorPallete[0];
   static Color highscoreStatColor = chartColorPallete[1];
+  static Color totalWinsStatColor = highscoreStatColor;
+  static Color totalLossesStatColor = averageScoreStatColor;
   static Color averagePlayerCountStatColor = chartColorPallete[5];
   static Color averageScoreStatColor = chartColorPallete[3];
   static Color averagePlaytimeStatColor = chartColorPallete[2];
