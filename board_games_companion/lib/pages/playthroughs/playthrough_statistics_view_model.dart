@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/common/enums/game_family.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
@@ -10,6 +11,7 @@ import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../common/enums/game_classification.dart';
+import '../../extensions/playthroughs_extensions.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/playthrough.dart';
@@ -100,7 +102,6 @@ abstract class _PlaythroughStatisticsViewModel with Store {
         boardGameStatistics = _loadNoScoreBoardGameStatistics(
           playersById,
           playthroughScoresByPlaythroughId,
-          playthroughScoresByBoardGameId,
           finishedPlaythroughs,
         );
         break;
@@ -110,11 +111,34 @@ abstract class _PlaythroughStatisticsViewModel with Store {
   BoardGameStatistics _loadNoScoreBoardGameStatistics(
     Map<String, Player> playersById,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
-    Map<String, List<Score>> playthroughScoresByBoardGameId,
     List<Playthrough> finishedPlaythroughs,
   ) {
-    // TODO Implement
-    return const BoardGameStatistics.none();
+    if (finishedPlaythroughs.isEmpty) {
+      return const BoardGameStatistics.none();
+    }
+
+    final totalWins = playthroughScoresByPlaythroughId.values
+        .where((playthroughScores) =>
+            playthroughScores.first.noScoreGameResult?.cooperativeGameResult ==
+            CooperativeGameResult.win)
+        .length;
+    final totalLosses = playthroughScoresByPlaythroughId.values
+        .where((playthroughScores) =>
+            playthroughScores.first.noScoreGameResult?.cooperativeGameResult ==
+            CooperativeGameResult.loss)
+        .length;
+
+    final noScoreBoardGameStatistics = NoScoreBoardGameStatistics(
+      numberOfGamesPlayed: finishedPlaythroughs.length,
+      averageNumberOfPlayers: finishedPlaythroughs.averageNumberOfPlayers,
+      lastTimePlayed: finishedPlaythroughs.lastTimePlayed,
+      totalWins: totalWins,
+      totalLosses: totalLosses,
+      totalPlaytimeInSeconds: finishedPlaythroughs.totalPlaytimeInSeconds,
+      averagePlaytimeInSeconds: finishedPlaythroughs.averagePlaytimeInSeconds,
+    );
+
+    return BoardGameStatistics.noScore(boardGameStatistics: noScoreBoardGameStatistics);
   }
 
   BoardGameStatistics _loadScoreBoardGamesStatistics(
@@ -123,9 +147,20 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     Map<String, List<Score>> playthroughScoresByBoardGameId,
     List<Playthrough> finishedPlaythroughs,
   ) {
-    final scoreBoardGameStatistics = ScoreBoardGameStatistics();
+    if (finishedPlaythroughs.isEmpty) {
+      return const BoardGameStatistics.none();
+    }
 
-    _updateLastPlayedAndWinner(
+    final scoreBoardGameStatistics = ScoreBoardGameStatistics(
+      numberOfGamesPlayed: finishedPlaythroughs.length,
+      averageNumberOfPlayers: finishedPlaythroughs.averageNumberOfPlayers,
+      lastTimePlayed: finishedPlaythroughs.lastTimePlayed,
+      totalPlaytimeInSeconds: finishedPlaythroughs.totalPlaytimeInSeconds,
+      averagePlaytimeInSeconds: finishedPlaythroughs.averagePlaytimeInSeconds,
+      averageScorePrecision: _gamePlaythroughsStore.averageScorePrecision,
+    );
+
+    _updateLastWinner(
       finishedPlaythroughs,
       scoreBoardGameStatistics,
       playthroughScoresByPlaythroughId,
@@ -133,18 +168,8 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       _gamePlaythroughsStore.gameGameFamily,
     );
 
-    if (finishedPlaythroughs.isEmpty) {
-      return const BoardGameStatistics.none();
-    }
-
-    scoreBoardGameStatistics.numberOfGamesPlayed = finishedPlaythroughs.length;
-    scoreBoardGameStatistics.averageNumberOfPlayers = finishedPlaythroughs
-            .map((Playthrough playthrough) => playthrough.playerIds.length)
-            .reduce((a, b) => a + b) /
-        scoreBoardGameStatistics.numberOfGamesPlayed!;
-
     if (!playthroughScoresByBoardGameId.containsKey(boardGameId)) {
-      return BoardGameStatistics.score(scoreBoardGameStatistics: scoreBoardGameStatistics);
+      return BoardGameStatistics.score(boardGameStatistics: scoreBoardGameStatistics);
     }
 
     final List<Score> playerScoresCollection = playthroughScoresByBoardGameId[boardGameId]
@@ -187,28 +212,17 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       _gamePlaythroughsStore.gameGameFamily,
     );
 
-    scoreBoardGameStatistics.averageScorePrecision = _gamePlaythroughsStore.averageScorePrecision;
-    scoreBoardGameStatistics.totalPlaytimeInSeconds = finishedPlaythroughs
-        .map((Playthrough p) => p.endDate!.difference(p.startDate).inSeconds)
-        .reduce((a, b) => a + b);
-
-    return BoardGameStatistics.score(scoreBoardGameStatistics: scoreBoardGameStatistics);
+    return BoardGameStatistics.score(boardGameStatistics: scoreBoardGameStatistics);
   }
 
-  void _updateLastPlayedAndWinner(
-    List<Playthrough>? finishedPlaythroughs,
+  void _updateLastWinner(
+    List<Playthrough> finishedPlaythroughs,
     ScoreBoardGameStatistics scoreBoardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
     GameFamily gameFamily,
   ) {
-    if (finishedPlaythroughs?.isEmpty ?? true) {
-      return;
-    }
-
-    final lastPlaythrough = finishedPlaythroughs!.first;
-    scoreBoardGameStatistics.lastPlayed = lastPlaythrough.startDate;
-
+    final lastPlaythrough = finishedPlaythroughs.mostRecentPlaythrough;
     if (!playthroughScoresByPlaythroughId.containsKey(lastPlaythrough.id)) {
       return;
     }

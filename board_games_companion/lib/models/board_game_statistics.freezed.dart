@@ -20,25 +20,26 @@ mixin _$BoardGameStatistics {
   TResult when<TResult extends Object?>({
     required TResult Function() none,
     required TResult Function() loading,
-    required TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)
+    required TResult Function(ScoreBoardGameStatistics boardGameStatistics)
         score,
-    required TResult Function() noScore,
+    required TResult Function(NoScoreBoardGameStatistics boardGameStatistics)
+        noScore,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? none,
     TResult? Function()? loading,
-    TResult? Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult? Function()? noScore,
+    TResult? Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult? Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? none,
     TResult Function()? loading,
-    TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult Function()? noScore,
+    TResult Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -125,9 +126,10 @@ class _$_none implements _none {
   TResult when<TResult extends Object?>({
     required TResult Function() none,
     required TResult Function() loading,
-    required TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)
+    required TResult Function(ScoreBoardGameStatistics boardGameStatistics)
         score,
-    required TResult Function() noScore,
+    required TResult Function(NoScoreBoardGameStatistics boardGameStatistics)
+        noScore,
   }) {
     return none();
   }
@@ -137,8 +139,8 @@ class _$_none implements _none {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? none,
     TResult? Function()? loading,
-    TResult? Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult? Function()? noScore,
+    TResult? Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult? Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
   }) {
     return none?.call();
   }
@@ -148,8 +150,8 @@ class _$_none implements _none {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? none,
     TResult Function()? loading,
-    TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult Function()? noScore,
+    TResult Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
     required TResult orElse(),
   }) {
     if (none != null) {
@@ -239,9 +241,10 @@ class _$_loading implements _loading {
   TResult when<TResult extends Object?>({
     required TResult Function() none,
     required TResult Function() loading,
-    required TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)
+    required TResult Function(ScoreBoardGameStatistics boardGameStatistics)
         score,
-    required TResult Function() noScore,
+    required TResult Function(NoScoreBoardGameStatistics boardGameStatistics)
+        noScore,
   }) {
     return loading();
   }
@@ -251,8 +254,8 @@ class _$_loading implements _loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? none,
     TResult? Function()? loading,
-    TResult? Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult? Function()? noScore,
+    TResult? Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult? Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
   }) {
     return loading?.call();
   }
@@ -262,8 +265,8 @@ class _$_loading implements _loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? none,
     TResult Function()? loading,
-    TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult Function()? noScore,
+    TResult Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -319,9 +322,9 @@ abstract class _$$_scoreCopyWith<$Res> {
   factory _$$_scoreCopyWith(_$_score value, $Res Function(_$_score) then) =
       __$$_scoreCopyWithImpl<$Res>;
   @useResult
-  $Res call({ScoreBoardGameStatistics scoreBoardGameStatistics});
+  $Res call({ScoreBoardGameStatistics boardGameStatistics});
 
-  $ScoreBoardGameStatisticsCopyWith<$Res> get scoreBoardGameStatistics;
+  $ScoreBoardGameStatisticsCopyWith<$Res> get boardGameStatistics;
 }
 
 /// @nodoc
@@ -334,22 +337,22 @@ class __$$_scoreCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scoreBoardGameStatistics = null,
+    Object? boardGameStatistics = null,
   }) {
     return _then(_$_score(
-      scoreBoardGameStatistics: null == scoreBoardGameStatistics
-          ? _value.scoreBoardGameStatistics
-          : scoreBoardGameStatistics // ignore: cast_nullable_to_non_nullable
+      boardGameStatistics: null == boardGameStatistics
+          ? _value.boardGameStatistics
+          : boardGameStatistics // ignore: cast_nullable_to_non_nullable
               as ScoreBoardGameStatistics,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $ScoreBoardGameStatisticsCopyWith<$Res> get scoreBoardGameStatistics {
-    return $ScoreBoardGameStatisticsCopyWith<$Res>(
-        _value.scoreBoardGameStatistics, (value) {
-      return _then(_value.copyWith(scoreBoardGameStatistics: value));
+  $ScoreBoardGameStatisticsCopyWith<$Res> get boardGameStatistics {
+    return $ScoreBoardGameStatisticsCopyWith<$Res>(_value.boardGameStatistics,
+        (value) {
+      return _then(_value.copyWith(boardGameStatistics: value));
     });
   }
 }
@@ -357,14 +360,14 @@ class __$$_scoreCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_score implements _score {
-  const _$_score({required this.scoreBoardGameStatistics});
+  const _$_score({required this.boardGameStatistics});
 
   @override
-  final ScoreBoardGameStatistics scoreBoardGameStatistics;
+  final ScoreBoardGameStatistics boardGameStatistics;
 
   @override
   String toString() {
-    return 'BoardGameStatistics.score(scoreBoardGameStatistics: $scoreBoardGameStatistics)';
+    return 'BoardGameStatistics.score(boardGameStatistics: $boardGameStatistics)';
   }
 
   @override
@@ -372,13 +375,12 @@ class _$_score implements _score {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_score &&
-            (identical(
-                    other.scoreBoardGameStatistics, scoreBoardGameStatistics) ||
-                other.scoreBoardGameStatistics == scoreBoardGameStatistics));
+            (identical(other.boardGameStatistics, boardGameStatistics) ||
+                other.boardGameStatistics == boardGameStatistics));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, scoreBoardGameStatistics);
+  int get hashCode => Object.hash(runtimeType, boardGameStatistics);
 
   @JsonKey(ignore: true)
   @override
@@ -391,11 +393,12 @@ class _$_score implements _score {
   TResult when<TResult extends Object?>({
     required TResult Function() none,
     required TResult Function() loading,
-    required TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)
+    required TResult Function(ScoreBoardGameStatistics boardGameStatistics)
         score,
-    required TResult Function() noScore,
+    required TResult Function(NoScoreBoardGameStatistics boardGameStatistics)
+        noScore,
   }) {
-    return score(scoreBoardGameStatistics);
+    return score(boardGameStatistics);
   }
 
   @override
@@ -403,10 +406,10 @@ class _$_score implements _score {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? none,
     TResult? Function()? loading,
-    TResult? Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult? Function()? noScore,
+    TResult? Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult? Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
   }) {
-    return score?.call(scoreBoardGameStatistics);
+    return score?.call(boardGameStatistics);
   }
 
   @override
@@ -414,12 +417,12 @@ class _$_score implements _score {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? none,
     TResult Function()? loading,
-    TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult Function()? noScore,
+    TResult Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
     required TResult orElse(),
   }) {
     if (score != null) {
-      return score(scoreBoardGameStatistics);
+      return score(boardGameStatistics);
     }
     return orElse();
   }
@@ -464,10 +467,9 @@ class _$_score implements _score {
 
 abstract class _score implements BoardGameStatistics {
   const factory _score(
-          {required final ScoreBoardGameStatistics scoreBoardGameStatistics}) =
-      _$_score;
+      {required final ScoreBoardGameStatistics boardGameStatistics}) = _$_score;
 
-  ScoreBoardGameStatistics get scoreBoardGameStatistics;
+  ScoreBoardGameStatistics get boardGameStatistics;
   @JsonKey(ignore: true)
   _$$_scoreCopyWith<_$_score> get copyWith =>
       throw _privateConstructorUsedError;
@@ -478,6 +480,10 @@ abstract class _$$_noScoreCopyWith<$Res> {
   factory _$$_noScoreCopyWith(
           _$_noScore value, $Res Function(_$_noScore) then) =
       __$$_noScoreCopyWithImpl<$Res>;
+  @useResult
+  $Res call({NoScoreBoardGameStatistics boardGameStatistics});
+
+  $NoScoreBoardGameStatisticsCopyWith<$Res> get boardGameStatistics;
 }
 
 /// @nodoc
@@ -486,37 +492,72 @@ class __$$_noScoreCopyWithImpl<$Res>
     implements _$$_noScoreCopyWith<$Res> {
   __$$_noScoreCopyWithImpl(_$_noScore _value, $Res Function(_$_noScore) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? boardGameStatistics = null,
+  }) {
+    return _then(_$_noScore(
+      boardGameStatistics: null == boardGameStatistics
+          ? _value.boardGameStatistics
+          : boardGameStatistics // ignore: cast_nullable_to_non_nullable
+              as NoScoreBoardGameStatistics,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $NoScoreBoardGameStatisticsCopyWith<$Res> get boardGameStatistics {
+    return $NoScoreBoardGameStatisticsCopyWith<$Res>(_value.boardGameStatistics,
+        (value) {
+      return _then(_value.copyWith(boardGameStatistics: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$_noScore implements _noScore {
-  const _$_noScore();
+  const _$_noScore({required this.boardGameStatistics});
+
+  @override
+  final NoScoreBoardGameStatistics boardGameStatistics;
 
   @override
   String toString() {
-    return 'BoardGameStatistics.noScore()';
+    return 'BoardGameStatistics.noScore(boardGameStatistics: $boardGameStatistics)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_noScore);
+        (other.runtimeType == runtimeType &&
+            other is _$_noScore &&
+            (identical(other.boardGameStatistics, boardGameStatistics) ||
+                other.boardGameStatistics == boardGameStatistics));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, boardGameStatistics);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_noScoreCopyWith<_$_noScore> get copyWith =>
+      __$$_noScoreCopyWithImpl<_$_noScore>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() none,
     required TResult Function() loading,
-    required TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)
+    required TResult Function(ScoreBoardGameStatistics boardGameStatistics)
         score,
-    required TResult Function() noScore,
+    required TResult Function(NoScoreBoardGameStatistics boardGameStatistics)
+        noScore,
   }) {
-    return noScore();
+    return noScore(boardGameStatistics);
   }
 
   @override
@@ -524,10 +565,10 @@ class _$_noScore implements _noScore {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? none,
     TResult? Function()? loading,
-    TResult? Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult? Function()? noScore,
+    TResult? Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult? Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
   }) {
-    return noScore?.call();
+    return noScore?.call(boardGameStatistics);
   }
 
   @override
@@ -535,12 +576,12 @@ class _$_noScore implements _noScore {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? none,
     TResult Function()? loading,
-    TResult Function(ScoreBoardGameStatistics scoreBoardGameStatistics)? score,
-    TResult Function()? noScore,
+    TResult Function(ScoreBoardGameStatistics boardGameStatistics)? score,
+    TResult Function(NoScoreBoardGameStatistics boardGameStatistics)? noScore,
     required TResult orElse(),
   }) {
     if (noScore != null) {
-      return noScore();
+      return noScore(boardGameStatistics);
     }
     return orElse();
   }
@@ -584,28 +625,37 @@ class _$_noScore implements _noScore {
 }
 
 abstract class _noScore implements BoardGameStatistics {
-  const factory _noScore() = _$_noScore;
+  const factory _noScore(
+          {required final NoScoreBoardGameStatistics boardGameStatistics}) =
+      _$_noScore;
+
+  NoScoreBoardGameStatistics get boardGameStatistics;
+  @JsonKey(ignore: true)
+  _$$_noScoreCopyWith<_$_noScore> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 mixin _$ScoreBoardGameStatistics {
-  int? get numberOfGamesPlayed => throw _privateConstructorUsedError;
-  set numberOfGamesPlayed(int? value) => throw _privateConstructorUsedError;
-  double? get averageNumberOfPlayers => throw _privateConstructorUsedError;
-  set averageNumberOfPlayers(double? value) =>
+  int get numberOfGamesPlayed => throw _privateConstructorUsedError;
+  set numberOfGamesPlayed(int value) => throw _privateConstructorUsedError;
+  double get averageNumberOfPlayers => throw _privateConstructorUsedError;
+  set averageNumberOfPlayers(double value) =>
       throw _privateConstructorUsedError;
-  DateTime? get lastPlayed => throw _privateConstructorUsedError;
-  set lastPlayed(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime get lastTimePlayed => throw _privateConstructorUsedError;
+  set lastTimePlayed(DateTime value) => throw _privateConstructorUsedError;
+  int get totalPlaytimeInSeconds => throw _privateConstructorUsedError;
+  set totalPlaytimeInSeconds(int value) => throw _privateConstructorUsedError;
+  int get averagePlaytimeInSeconds => throw _privateConstructorUsedError;
+  set averagePlaytimeInSeconds(int value) => throw _privateConstructorUsedError;
+  int get averageScorePrecision => throw _privateConstructorUsedError;
+  set averageScorePrecision(int value) => throw _privateConstructorUsedError;
   PlayerScore? get lastWinner => throw _privateConstructorUsedError;
   set lastWinner(PlayerScore? value) => throw _privateConstructorUsedError;
-  int? get totalPlaytimeInSeconds => throw _privateConstructorUsedError;
-  set totalPlaytimeInSeconds(int? value) => throw _privateConstructorUsedError;
   num? get bestScore => throw _privateConstructorUsedError;
   set bestScore(num? value) => throw _privateConstructorUsedError;
   double? get averageScore => throw _privateConstructorUsedError;
   set averageScore(double? value) => throw _privateConstructorUsedError;
-  int get averageScorePrecision => throw _privateConstructorUsedError;
-  set averageScorePrecision(int value) => throw _privateConstructorUsedError;
   List<Tuple2<Player, String>>? get topScoreres =>
       throw _privateConstructorUsedError;
   set topScoreres(List<Tuple2<Player, String>>? value) =>
@@ -637,14 +687,15 @@ abstract class $ScoreBoardGameStatisticsCopyWith<$Res> {
       _$ScoreBoardGameStatisticsCopyWithImpl<$Res, ScoreBoardGameStatistics>;
   @useResult
   $Res call(
-      {int? numberOfGamesPlayed,
-      double? averageNumberOfPlayers,
-      DateTime? lastPlayed,
+      {int numberOfGamesPlayed,
+      double averageNumberOfPlayers,
+      DateTime lastTimePlayed,
+      int totalPlaytimeInSeconds,
+      int averagePlaytimeInSeconds,
+      int averageScorePrecision,
       PlayerScore? lastWinner,
-      int? totalPlaytimeInSeconds,
       num? bestScore,
       double? averageScore,
-      int averageScorePrecision,
       List<Tuple2<Player, String>>? topScoreres,
       List<PlayerStatistics>? playersStatistics,
       List<PlayerCountStatistics>? playerCountPercentage,
@@ -668,14 +719,15 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? numberOfGamesPlayed = freezed,
-    Object? averageNumberOfPlayers = freezed,
-    Object? lastPlayed = freezed,
+    Object? numberOfGamesPlayed = null,
+    Object? averageNumberOfPlayers = null,
+    Object? lastTimePlayed = null,
+    Object? totalPlaytimeInSeconds = null,
+    Object? averagePlaytimeInSeconds = null,
+    Object? averageScorePrecision = null,
     Object? lastWinner = freezed,
-    Object? totalPlaytimeInSeconds = freezed,
     Object? bestScore = freezed,
     Object? averageScore = freezed,
-    Object? averageScorePrecision = null,
     Object? topScoreres = freezed,
     Object? playersStatistics = freezed,
     Object? playerCountPercentage = freezed,
@@ -683,26 +735,34 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
     Object? playerWins = freezed,
   }) {
     return _then(_value.copyWith(
-      numberOfGamesPlayed: freezed == numberOfGamesPlayed
+      numberOfGamesPlayed: null == numberOfGamesPlayed
           ? _value.numberOfGamesPlayed
           : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
-              as int?,
-      averageNumberOfPlayers: freezed == averageNumberOfPlayers
+              as int,
+      averageNumberOfPlayers: null == averageNumberOfPlayers
           ? _value.averageNumberOfPlayers
           : averageNumberOfPlayers // ignore: cast_nullable_to_non_nullable
-              as double?,
-      lastPlayed: freezed == lastPlayed
-          ? _value.lastPlayed
-          : lastPlayed // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as double,
+      lastTimePlayed: null == lastTimePlayed
+          ? _value.lastTimePlayed
+          : lastTimePlayed // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      totalPlaytimeInSeconds: null == totalPlaytimeInSeconds
+          ? _value.totalPlaytimeInSeconds
+          : totalPlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+      averagePlaytimeInSeconds: null == averagePlaytimeInSeconds
+          ? _value.averagePlaytimeInSeconds
+          : averagePlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageScorePrecision: null == averageScorePrecision
+          ? _value.averageScorePrecision
+          : averageScorePrecision // ignore: cast_nullable_to_non_nullable
+              as int,
       lastWinner: freezed == lastWinner
           ? _value.lastWinner
           : lastWinner // ignore: cast_nullable_to_non_nullable
               as PlayerScore?,
-      totalPlaytimeInSeconds: freezed == totalPlaytimeInSeconds
-          ? _value.totalPlaytimeInSeconds
-          : totalPlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
-              as int?,
       bestScore: freezed == bestScore
           ? _value.bestScore
           : bestScore // ignore: cast_nullable_to_non_nullable
@@ -711,10 +771,6 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
           ? _value.averageScore
           : averageScore // ignore: cast_nullable_to_non_nullable
               as double?,
-      averageScorePrecision: null == averageScorePrecision
-          ? _value.averageScorePrecision
-          : averageScorePrecision // ignore: cast_nullable_to_non_nullable
-              as int,
       topScoreres: freezed == topScoreres
           ? _value.topScoreres
           : topScoreres // ignore: cast_nullable_to_non_nullable
@@ -761,14 +817,15 @@ abstract class _$$_ScoreBoardGameStatisticsCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? numberOfGamesPlayed,
-      double? averageNumberOfPlayers,
-      DateTime? lastPlayed,
+      {int numberOfGamesPlayed,
+      double averageNumberOfPlayers,
+      DateTime lastTimePlayed,
+      int totalPlaytimeInSeconds,
+      int averagePlaytimeInSeconds,
+      int averageScorePrecision,
       PlayerScore? lastWinner,
-      int? totalPlaytimeInSeconds,
       num? bestScore,
       double? averageScore,
-      int averageScorePrecision,
       List<Tuple2<Player, String>>? topScoreres,
       List<PlayerStatistics>? playersStatistics,
       List<PlayerCountStatistics>? playerCountPercentage,
@@ -791,14 +848,15 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? numberOfGamesPlayed = freezed,
-    Object? averageNumberOfPlayers = freezed,
-    Object? lastPlayed = freezed,
+    Object? numberOfGamesPlayed = null,
+    Object? averageNumberOfPlayers = null,
+    Object? lastTimePlayed = null,
+    Object? totalPlaytimeInSeconds = null,
+    Object? averagePlaytimeInSeconds = null,
+    Object? averageScorePrecision = null,
     Object? lastWinner = freezed,
-    Object? totalPlaytimeInSeconds = freezed,
     Object? bestScore = freezed,
     Object? averageScore = freezed,
-    Object? averageScorePrecision = null,
     Object? topScoreres = freezed,
     Object? playersStatistics = freezed,
     Object? playerCountPercentage = freezed,
@@ -806,26 +864,34 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
     Object? playerWins = freezed,
   }) {
     return _then(_$_ScoreBoardGameStatistics(
-      numberOfGamesPlayed: freezed == numberOfGamesPlayed
+      numberOfGamesPlayed: null == numberOfGamesPlayed
           ? _value.numberOfGamesPlayed
           : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
-              as int?,
-      averageNumberOfPlayers: freezed == averageNumberOfPlayers
+              as int,
+      averageNumberOfPlayers: null == averageNumberOfPlayers
           ? _value.averageNumberOfPlayers
           : averageNumberOfPlayers // ignore: cast_nullable_to_non_nullable
-              as double?,
-      lastPlayed: freezed == lastPlayed
-          ? _value.lastPlayed
-          : lastPlayed // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as double,
+      lastTimePlayed: null == lastTimePlayed
+          ? _value.lastTimePlayed
+          : lastTimePlayed // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      totalPlaytimeInSeconds: null == totalPlaytimeInSeconds
+          ? _value.totalPlaytimeInSeconds
+          : totalPlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+      averagePlaytimeInSeconds: null == averagePlaytimeInSeconds
+          ? _value.averagePlaytimeInSeconds
+          : averagePlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageScorePrecision: null == averageScorePrecision
+          ? _value.averageScorePrecision
+          : averageScorePrecision // ignore: cast_nullable_to_non_nullable
+              as int,
       lastWinner: freezed == lastWinner
           ? _value.lastWinner
           : lastWinner // ignore: cast_nullable_to_non_nullable
               as PlayerScore?,
-      totalPlaytimeInSeconds: freezed == totalPlaytimeInSeconds
-          ? _value.totalPlaytimeInSeconds
-          : totalPlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
-              as int?,
       bestScore: freezed == bestScore
           ? _value.bestScore
           : bestScore // ignore: cast_nullable_to_non_nullable
@@ -834,10 +900,6 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
           ? _value.averageScore
           : averageScore // ignore: cast_nullable_to_non_nullable
               as double?,
-      averageScorePrecision: null == averageScorePrecision
-          ? _value.averageScorePrecision
-          : averageScorePrecision // ignore: cast_nullable_to_non_nullable
-              as int,
       topScoreres: freezed == topScoreres
           ? _value.topScoreres
           : topScoreres // ignore: cast_nullable_to_non_nullable
@@ -866,14 +928,15 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
 
 class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
   _$_ScoreBoardGameStatistics(
-      {this.numberOfGamesPlayed,
-      this.averageNumberOfPlayers,
-      this.lastPlayed,
+      {required this.numberOfGamesPlayed,
+      required this.averageNumberOfPlayers,
+      required this.lastTimePlayed,
+      required this.totalPlaytimeInSeconds,
+      required this.averagePlaytimeInSeconds,
+      required this.averageScorePrecision = 0,
       this.lastWinner,
-      this.totalPlaytimeInSeconds,
       this.bestScore,
       this.averageScore,
-      this.averageScorePrecision = 0,
       this.topScoreres,
       this.playersStatistics,
       this.playerCountPercentage,
@@ -882,22 +945,24 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
       : super._();
 
   @override
-  int? numberOfGamesPlayed;
+  int numberOfGamesPlayed;
   @override
-  double? averageNumberOfPlayers;
+  double averageNumberOfPlayers;
   @override
-  DateTime? lastPlayed;
+  DateTime lastTimePlayed;
+  @override
+  int totalPlaytimeInSeconds;
+  @override
+  int averagePlaytimeInSeconds;
+  @override
+  @JsonKey()
+  int averageScorePrecision;
   @override
   PlayerScore? lastWinner;
-  @override
-  int? totalPlaytimeInSeconds;
   @override
   num? bestScore;
   @override
   double? averageScore;
-  @override
-  @JsonKey()
-  int averageScorePrecision;
   @override
   List<Tuple2<Player, String>>? topScoreres;
   @override
@@ -911,7 +976,7 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
 
   @override
   String toString() {
-    return 'ScoreBoardGameStatistics(numberOfGamesPlayed: $numberOfGamesPlayed, averageNumberOfPlayers: $averageNumberOfPlayers, lastPlayed: $lastPlayed, lastWinner: $lastWinner, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, bestScore: $bestScore, averageScore: $averageScore, averageScorePrecision: $averageScorePrecision, topScoreres: $topScoreres, playersStatistics: $playersStatistics, playerCountPercentage: $playerCountPercentage, playerWinsPercentage: $playerWinsPercentage, playerWins: $playerWins)';
+    return 'ScoreBoardGameStatistics(numberOfGamesPlayed: $numberOfGamesPlayed, averageNumberOfPlayers: $averageNumberOfPlayers, lastTimePlayed: $lastTimePlayed, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, averagePlaytimeInSeconds: $averagePlaytimeInSeconds, averageScorePrecision: $averageScorePrecision, lastWinner: $lastWinner, bestScore: $bestScore, averageScore: $averageScore, topScoreres: $topScoreres, playersStatistics: $playersStatistics, playerCountPercentage: $playerCountPercentage, playerWinsPercentage: $playerWinsPercentage, playerWins: $playerWins)';
   }
 
   @JsonKey(ignore: true)
@@ -924,14 +989,15 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
 
 abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   factory _ScoreBoardGameStatistics(
-      {int? numberOfGamesPlayed,
-      double? averageNumberOfPlayers,
-      DateTime? lastPlayed,
+      {required int numberOfGamesPlayed,
+      required double averageNumberOfPlayers,
+      required DateTime lastTimePlayed,
+      required int totalPlaytimeInSeconds,
+      required int averagePlaytimeInSeconds,
+      required int averageScorePrecision,
       PlayerScore? lastWinner,
-      int? totalPlaytimeInSeconds,
       num? bestScore,
       double? averageScore,
-      int averageScorePrecision,
       List<Tuple2<Player, String>>? topScoreres,
       List<PlayerStatistics>? playersStatistics,
       List<PlayerCountStatistics>? playerCountPercentage,
@@ -940,29 +1006,32 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   _ScoreBoardGameStatistics._() : super._();
 
   @override
-  int? get numberOfGamesPlayed;
-  set numberOfGamesPlayed(int? value);
+  int get numberOfGamesPlayed;
+  set numberOfGamesPlayed(int value);
   @override
-  double? get averageNumberOfPlayers;
-  set averageNumberOfPlayers(double? value);
+  double get averageNumberOfPlayers;
+  set averageNumberOfPlayers(double value);
   @override
-  DateTime? get lastPlayed;
-  set lastPlayed(DateTime? value);
+  DateTime get lastTimePlayed;
+  set lastTimePlayed(DateTime value);
+  @override
+  int get totalPlaytimeInSeconds;
+  set totalPlaytimeInSeconds(int value);
+  @override
+  int get averagePlaytimeInSeconds;
+  set averagePlaytimeInSeconds(int value);
+  @override
+  int get averageScorePrecision;
+  set averageScorePrecision(int value);
   @override
   PlayerScore? get lastWinner;
   set lastWinner(PlayerScore? value);
-  @override
-  int? get totalPlaytimeInSeconds;
-  set totalPlaytimeInSeconds(int? value);
   @override
   num? get bestScore;
   set bestScore(num? value);
   @override
   double? get averageScore;
   set averageScore(double? value);
-  @override
-  int get averageScorePrecision;
-  set averageScorePrecision(int value);
   @override
   List<Tuple2<Player, String>>? get topScoreres;
   set topScoreres(List<Tuple2<Player, String>>? value);
@@ -981,6 +1050,253 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   @override
   @JsonKey(ignore: true)
   _$$_ScoreBoardGameStatisticsCopyWith<_$_ScoreBoardGameStatistics>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$NoScoreBoardGameStatistics {
+  int get numberOfGamesPlayed => throw _privateConstructorUsedError;
+  set numberOfGamesPlayed(int value) => throw _privateConstructorUsedError;
+  double get averageNumberOfPlayers => throw _privateConstructorUsedError;
+  set averageNumberOfPlayers(double value) =>
+      throw _privateConstructorUsedError;
+  DateTime get lastTimePlayed => throw _privateConstructorUsedError;
+  set lastTimePlayed(DateTime value) => throw _privateConstructorUsedError;
+  int get totalWins => throw _privateConstructorUsedError;
+  set totalWins(int value) => throw _privateConstructorUsedError;
+  int get totalLosses => throw _privateConstructorUsedError;
+  set totalLosses(int value) => throw _privateConstructorUsedError;
+  int get totalPlaytimeInSeconds => throw _privateConstructorUsedError;
+  set totalPlaytimeInSeconds(int value) => throw _privateConstructorUsedError;
+  int get averagePlaytimeInSeconds => throw _privateConstructorUsedError;
+  set averagePlaytimeInSeconds(int value) => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $NoScoreBoardGameStatisticsCopyWith<NoScoreBoardGameStatistics>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $NoScoreBoardGameStatisticsCopyWith<$Res> {
+  factory $NoScoreBoardGameStatisticsCopyWith(NoScoreBoardGameStatistics value,
+          $Res Function(NoScoreBoardGameStatistics) then) =
+      _$NoScoreBoardGameStatisticsCopyWithImpl<$Res,
+          NoScoreBoardGameStatistics>;
+  @useResult
+  $Res call(
+      {int numberOfGamesPlayed,
+      double averageNumberOfPlayers,
+      DateTime lastTimePlayed,
+      int totalWins,
+      int totalLosses,
+      int totalPlaytimeInSeconds,
+      int averagePlaytimeInSeconds});
+}
+
+/// @nodoc
+class _$NoScoreBoardGameStatisticsCopyWithImpl<$Res,
+        $Val extends NoScoreBoardGameStatistics>
+    implements $NoScoreBoardGameStatisticsCopyWith<$Res> {
+  _$NoScoreBoardGameStatisticsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? numberOfGamesPlayed = null,
+    Object? averageNumberOfPlayers = null,
+    Object? lastTimePlayed = null,
+    Object? totalWins = null,
+    Object? totalLosses = null,
+    Object? totalPlaytimeInSeconds = null,
+    Object? averagePlaytimeInSeconds = null,
+  }) {
+    return _then(_value.copyWith(
+      numberOfGamesPlayed: null == numberOfGamesPlayed
+          ? _value.numberOfGamesPlayed
+          : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageNumberOfPlayers: null == averageNumberOfPlayers
+          ? _value.averageNumberOfPlayers
+          : averageNumberOfPlayers // ignore: cast_nullable_to_non_nullable
+              as double,
+      lastTimePlayed: null == lastTimePlayed
+          ? _value.lastTimePlayed
+          : lastTimePlayed // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      totalWins: null == totalWins
+          ? _value.totalWins
+          : totalWins // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalLosses: null == totalLosses
+          ? _value.totalLosses
+          : totalLosses // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalPlaytimeInSeconds: null == totalPlaytimeInSeconds
+          ? _value.totalPlaytimeInSeconds
+          : totalPlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+      averagePlaytimeInSeconds: null == averagePlaytimeInSeconds
+          ? _value.averagePlaytimeInSeconds
+          : averagePlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_NoScoreBoardGameStatiticsCopyWith<$Res>
+    implements $NoScoreBoardGameStatisticsCopyWith<$Res> {
+  factory _$$_NoScoreBoardGameStatiticsCopyWith(
+          _$_NoScoreBoardGameStatitics value,
+          $Res Function(_$_NoScoreBoardGameStatitics) then) =
+      __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int numberOfGamesPlayed,
+      double averageNumberOfPlayers,
+      DateTime lastTimePlayed,
+      int totalWins,
+      int totalLosses,
+      int totalPlaytimeInSeconds,
+      int averagePlaytimeInSeconds});
+}
+
+/// @nodoc
+class __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>
+    extends _$NoScoreBoardGameStatisticsCopyWithImpl<$Res,
+        _$_NoScoreBoardGameStatitics>
+    implements _$$_NoScoreBoardGameStatiticsCopyWith<$Res> {
+  __$$_NoScoreBoardGameStatiticsCopyWithImpl(
+      _$_NoScoreBoardGameStatitics _value,
+      $Res Function(_$_NoScoreBoardGameStatitics) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? numberOfGamesPlayed = null,
+    Object? averageNumberOfPlayers = null,
+    Object? lastTimePlayed = null,
+    Object? totalWins = null,
+    Object? totalLosses = null,
+    Object? totalPlaytimeInSeconds = null,
+    Object? averagePlaytimeInSeconds = null,
+  }) {
+    return _then(_$_NoScoreBoardGameStatitics(
+      numberOfGamesPlayed: null == numberOfGamesPlayed
+          ? _value.numberOfGamesPlayed
+          : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageNumberOfPlayers: null == averageNumberOfPlayers
+          ? _value.averageNumberOfPlayers
+          : averageNumberOfPlayers // ignore: cast_nullable_to_non_nullable
+              as double,
+      lastTimePlayed: null == lastTimePlayed
+          ? _value.lastTimePlayed
+          : lastTimePlayed // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      totalWins: null == totalWins
+          ? _value.totalWins
+          : totalWins // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalLosses: null == totalLosses
+          ? _value.totalLosses
+          : totalLosses // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalPlaytimeInSeconds: null == totalPlaytimeInSeconds
+          ? _value.totalPlaytimeInSeconds
+          : totalPlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+      averagePlaytimeInSeconds: null == averagePlaytimeInSeconds
+          ? _value.averagePlaytimeInSeconds
+          : averagePlaytimeInSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_NoScoreBoardGameStatitics extends _NoScoreBoardGameStatitics {
+  _$_NoScoreBoardGameStatitics(
+      {required this.numberOfGamesPlayed,
+      required this.averageNumberOfPlayers,
+      required this.lastTimePlayed,
+      required this.totalWins,
+      required this.totalLosses,
+      required this.totalPlaytimeInSeconds,
+      required this.averagePlaytimeInSeconds})
+      : super._();
+
+  @override
+  int numberOfGamesPlayed;
+  @override
+  double averageNumberOfPlayers;
+  @override
+  DateTime lastTimePlayed;
+  @override
+  int totalWins;
+  @override
+  int totalLosses;
+  @override
+  int totalPlaytimeInSeconds;
+  @override
+  int averagePlaytimeInSeconds;
+
+  @override
+  String toString() {
+    return 'NoScoreBoardGameStatistics(numberOfGamesPlayed: $numberOfGamesPlayed, averageNumberOfPlayers: $averageNumberOfPlayers, lastTimePlayed: $lastTimePlayed, totalWins: $totalWins, totalLosses: $totalLosses, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, averagePlaytimeInSeconds: $averagePlaytimeInSeconds)';
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_NoScoreBoardGameStatiticsCopyWith<_$_NoScoreBoardGameStatitics>
+      get copyWith => __$$_NoScoreBoardGameStatiticsCopyWithImpl<
+          _$_NoScoreBoardGameStatitics>(this, _$identity);
+}
+
+abstract class _NoScoreBoardGameStatitics extends NoScoreBoardGameStatistics {
+  factory _NoScoreBoardGameStatitics(
+      {required int numberOfGamesPlayed,
+      required double averageNumberOfPlayers,
+      required DateTime lastTimePlayed,
+      required int totalWins,
+      required int totalLosses,
+      required int totalPlaytimeInSeconds,
+      required int averagePlaytimeInSeconds}) = _$_NoScoreBoardGameStatitics;
+  _NoScoreBoardGameStatitics._() : super._();
+
+  @override
+  int get numberOfGamesPlayed;
+  set numberOfGamesPlayed(int value);
+  @override
+  double get averageNumberOfPlayers;
+  set averageNumberOfPlayers(double value);
+  @override
+  DateTime get lastTimePlayed;
+  set lastTimePlayed(DateTime value);
+  @override
+  int get totalWins;
+  set totalWins(int value);
+  @override
+  int get totalLosses;
+  set totalLosses(int value);
+  @override
+  int get totalPlaytimeInSeconds;
+  set totalPlaytimeInSeconds(int value);
+  @override
+  int get averagePlaytimeInSeconds;
+  set averagePlaytimeInSeconds(int value);
+  @override
+  @JsonKey(ignore: true)
+  _$$_NoScoreBoardGameStatiticsCopyWith<_$_NoScoreBoardGameStatitics>
       get copyWith => throw _privateConstructorUsedError;
 }
 

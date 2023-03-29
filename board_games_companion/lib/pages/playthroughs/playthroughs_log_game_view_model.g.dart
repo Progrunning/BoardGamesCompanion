@@ -30,6 +30,13 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
           Computed<GameClassification>(() => super.gameClassification,
               name: '_PlaythroughsLogGameViewModel.gameClassification'))
       .value;
+  Computed<GameFamily>? _$gameFamilyComputed;
+
+  @override
+  GameFamily get gameFamily =>
+      (_$gameFamilyComputed ??= Computed<GameFamily>(() => super.gameFamily,
+              name: '_PlaythroughsLogGameViewModel.gameFamily'))
+          .value;
 
   late final _$playthroughDateAtom = Atom(
       name: '_PlaythroughsLogGameViewModel.playthroughDate', context: context);
@@ -213,7 +220,8 @@ playthroughTimeline: ${playthroughTimeline},
 playersState: ${playersState},
 players: ${players},
 boardGameId: ${boardGameId},
-gameClassification: ${gameClassification}
+gameClassification: ${gameClassification},
+gameFamily: ${gameFamily}
     ''';
   }
 }

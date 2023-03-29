@@ -14,22 +14,25 @@ class BoardGameStatistics with _$BoardGameStatistics {
   const factory BoardGameStatistics.none() = _none;
   const factory BoardGameStatistics.loading() = _loading;
   const factory BoardGameStatistics.score({
-    required ScoreBoardGameStatistics scoreBoardGameStatistics,
+    required ScoreBoardGameStatistics boardGameStatistics,
   }) = _score;
-  const factory BoardGameStatistics.noScore() = _noScore;
+  const factory BoardGameStatistics.noScore({
+    required NoScoreBoardGameStatistics boardGameStatistics,
+  }) = _noScore;
 }
 
 @unfreezed
 class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
   factory ScoreBoardGameStatistics({
-    int? numberOfGamesPlayed,
-    double? averageNumberOfPlayers,
-    DateTime? lastPlayed,
+    required int numberOfGamesPlayed,
+    required double averageNumberOfPlayers,
+    required DateTime lastTimePlayed,
+    required int totalPlaytimeInSeconds,
+    required int averagePlaytimeInSeconds,
+    @Default(0) required int averageScorePrecision,
     PlayerScore? lastWinner,
-    int? totalPlaytimeInSeconds,
     num? bestScore,
     double? averageScore,
-    @Default(0) int averageScorePrecision,
     List<Tuple2<Player, String>>? topScoreres,
     List<PlayerStatistics>? playersStatistics,
     List<PlayerCountStatistics>? playerCountPercentage,
@@ -38,6 +41,21 @@ class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
   }) = _ScoreBoardGameStatistics;
 
   ScoreBoardGameStatistics._();
+}
+
+@unfreezed
+class NoScoreBoardGameStatistics with _$NoScoreBoardGameStatistics {
+  factory NoScoreBoardGameStatistics({
+    required int numberOfGamesPlayed,
+    required double averageNumberOfPlayers,
+    required DateTime lastTimePlayed,
+    required int totalWins,
+    required int totalLosses,
+    required int totalPlaytimeInSeconds,
+    required int averagePlaytimeInSeconds,
+  }) = _NoScoreBoardGameStatitics;
+
+  const NoScoreBoardGameStatistics._();
 }
 
 @freezed

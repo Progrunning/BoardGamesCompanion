@@ -80,10 +80,10 @@ class PlaythroughStatistcsPageState extends State<PlaythroughStatistcsPage> {
                 return viewModel.boardGameStatistics.when(
                   none: () => const _NoStats(),
                   loading: () => const SliverFillRemaining(child: LoadingIndicator()),
-                  score: (scoreBoardGameStatistics) =>
-                      _ScoreBoardGameStatistics(scoreBoardGameStatistics: scoreBoardGameStatistics),
-                  // TODO Update UI for this state
-                  noScore: () => const SliverToBoxAdapter(child: Text('TODO')),
+                  score: (boardGameStatistics) =>
+                      _ScoreBoardGameStatistics(scoreBoardGameStatistics: boardGameStatistics),
+                  noScore: (boardGameStatistics) =>
+                      _NoScoreBoardGameStatistics(noScoreBoardGameStatistics: boardGameStatistics),
                 );
               }),
           ],
@@ -114,6 +114,37 @@ class _NoStats extends StatelessWidget {
   }
 }
 
+class _NoScoreBoardGameStatistics extends StatelessWidget {
+  const _NoScoreBoardGameStatistics({
+    required this.noScoreBoardGameStatistics,
+  });
+
+  final NoScoreBoardGameStatistics noScoreBoardGameStatistics;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
+          ),
+        ),
+        _SliverSectionWrapper(
+          child: _OverallStatsNoScoreGameSection(
+            noScoreBoardGameStatistics: noScoreBoardGameStatistics,
+          ),
+        ),
+        const SliverPadding(
+          padding: EdgeInsets.only(
+            bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _ScoreBoardGameStatistics extends StatelessWidget {
   const _ScoreBoardGameStatistics({
     required this.scoreBoardGameStatistics,
@@ -138,7 +169,7 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
         ),
       ),
       _SliverSectionWrapper(
-        child: _OverallStatsSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
+        child: _OverallStatsScoreGameSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
       ),
       if (scoreBoardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
         SliverPersistentHeader(
@@ -591,8 +622,8 @@ class _LastTimePlayed extends StatelessWidget {
   }
 }
 
-class _OverallStatsSection extends StatelessWidget {
-  const _OverallStatsSection({
+class _OverallStatsScoreGameSection extends StatelessWidget {
+  const _OverallStatsScoreGameSection({
     required this.scoreBoardGameStatistics,
     Key? key,
   }) : super(key: key);
@@ -660,6 +691,81 @@ class _OverallStatsSection extends StatelessWidget {
                   value: scoreBoardGameStatistics?.totalPlaytimeInSeconds
                           ?.toPlaytimeDuration(fallbackValue: '-') ??
                       '-',
+                  icon: Icons.timelapse,
+                  iconColor: AppColors.totalPlaytimeStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _OverallStatsNoScoreGameSection extends StatelessWidget {
+  const _OverallStatsNoScoreGameSection({
+    required this.noScoreBoardGameStatistics,
+    Key? key,
+  }) : super(key: key);
+
+  final NoScoreBoardGameStatistics noScoreBoardGameStatistics;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value: noScoreBoardGameStatistics.numberOfGamesPlayed.toString(),
+                  icon: Icons.casino,
+                  iconColor: AppColors.playedGamesStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: noScoreBoardGameStatistics.totalWins.toString(),
+                  icon: Icons.show_chart,
+                  iconColor: AppColors.highscoreStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalWins,
+                ),
+              ],
+            ),
+            const Expanded(child: SizedBox.shrink()),
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value: noScoreBoardGameStatistics.averageNumberOfPlayers.toStringAsFixed(0),
+                  icon: Icons.person,
+                  iconColor: AppColors.averagePlayerCountStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: noScoreBoardGameStatistics.totalLosses.toString(),
+                  icon: Icons.calculate,
+                  iconColor: AppColors.averageScoreStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalLosses,
+                ),
+              ],
+            ),
+            const Expanded(child: SizedBox.shrink()),
+            Column(
+              children: <Widget>[
+                _StatisticsItem(
+                  value: noScoreBoardGameStatistics.averagePlaytimeInSeconds.toPlaytimeDuration(),
+                  icon: Icons.av_timer,
+                  iconColor: AppColors.averagePlaytimeStatColor,
+                  subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
+                ),
+                const SizedBox(height: Dimensions.doubleStandardSpacing),
+                _StatisticsItem(
+                  value: noScoreBoardGameStatistics.totalPlaytimeInSeconds.toPlaytimeDuration(),
                   icon: Icons.timelapse,
                   iconColor: AppColors.totalPlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
