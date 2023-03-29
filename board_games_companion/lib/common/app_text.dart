@@ -121,6 +121,7 @@ class AppText {
   static const playthroughsLogDateSectionTitle = 'Date';
   static const playthroughsLogDurationSectionTitle = 'Duration';
   static const playthroughsLogPlayersSectionTitle = 'Players';
+  static const playthroughsLogCooperativeResultSectionTitle = 'Result';
   static const playthroughsLogPlayersPlayingNowButtonText = 'Select players that are playing';
   static const playthroughsLogPlayersPlayedInThePastButtonText = 'Select players that played';
   static const playthroughsLogPlayersChangePlayerSelectionButtonText = 'Change player selection';

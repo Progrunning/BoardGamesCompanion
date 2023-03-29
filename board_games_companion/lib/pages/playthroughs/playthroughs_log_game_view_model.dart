@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
@@ -61,6 +62,9 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   @computed
   GameClassification get gameClassification => _gamePlaythroughsStore.gameClassification;
 
+  @computed
+  GameFamily get gameFamily => _gamePlaythroughsStore.gameGameFamily;
+
   @action
   void loadPlayers() => futureLoadPlayers = ObservableFuture<void>(_loadPlayers());
 
@@ -92,6 +96,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
         // MK Reset the log screen
         playthroughDate = DateTime.now();
         playthroughDuration = const Duration();
+        cooperativeGameResult = null;
 
         if (_playersStore.players.isEmpty) {
           playersState = const PlaythroughsLogGamePlayers.noPlayers();
@@ -109,14 +114,20 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   void setSelectedPlayers(List<Player> selectedPlayers) {
     final playerScores = <String, PlayerScore>{};
     for (final player in selectedPlayers) {
-      playerScores[player.id] = PlayerScore(
-        player: player,
-        score: Score(
-          id: const Uuid().v4(),
-          playerId: player.id,
-          boardGameId: boardGameId,
-        ),
+      final score = Score(
+        id: const Uuid().v4(),
+        playerId: player.id,
+        boardGameId: boardGameId,
       );
+      playerScores[player.id] = PlayerScore(player: player, score: score);
+
+      if (gameFamily == GameFamily.Cooperative && cooperativeGameResult != null) {
+        playerScores[player.id] = playerScores[player.id]!.copyWith(
+          score: score.copyWith(
+            noScoreGameResult: NoScoreGameResult(cooperativeGameResult: cooperativeGameResult),
+          ),
+        );
+      }
     }
 
     playersState = PlaythroughsLogGamePlayers.playersSelected(

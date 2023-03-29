@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:board_games_companion/common/enums/game_family.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:board_games_companion/models/navigation/edit_playthrough_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_page.dart';
 import 'package:board_games_companion/pages/playthroughs/playthrough_timeline.dart';
@@ -34,6 +36,7 @@ import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
 import '../enter_score/enter_score_view_model.dart';
 import '../player/player_page.dart';
 import 'playthrough_players_selection_page.dart';
@@ -99,8 +102,23 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
                 ),
                 Observer(
                   builder: (_) {
+                    if (viewModel.gameFamily == GameFamily.Cooperative &&
+                        viewModel.playthroughTimeline == const PlaythroughTimeline.inThePast()) {
+                      return _CooperativeResultSection(
+                        cooperativeGameResult: viewModel.cooperativeGameResult,
+                        onCooperativeGameResultChanged: (cooperativeGameResult) =>
+                            viewModel.updateCooperativeGameResult(cooperativeGameResult),
+                      );
+                    }
+
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  },
+                ),
+                Observer(
+                  builder: (_) {
                     return _PlayersSection(
                       playthroughTimeline: viewModel.playthroughTimeline,
+                      gameFamily: viewModel.gameFamily,
                       players: viewModel.playersState,
                       onCreatePlayer: () => _handleCreatePlayer(),
                       onSelectPlayers: () => _handleSelectPlayers(),
@@ -413,9 +431,49 @@ class _SetPlaythroughDurationState extends State<_SetPlaythroughDuration> {
   }
 }
 
+class _CooperativeResultSection extends StatelessWidget {
+  const _CooperativeResultSection({
+    required this.cooperativeGameResult,
+    required this.onCooperativeGameResultChanged,
+  });
+
+  final CooperativeGameResult? cooperativeGameResult;
+  final void Function(CooperativeGameResult) onCooperativeGameResultChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playthroughsLogCooperativeResultSectionTitle,
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              children: [
+                const Text(AppText.editPlaythroughNoScoreResultText),
+                const Spacer(),
+                CooperativeGameResultSegmentedButton(
+                  cooperativeGameResult: cooperativeGameResult,
+                  onCooperativeGameResultChanged: (cooperativeGameResult) =>
+                      onCooperativeGameResultChanged(cooperativeGameResult),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _PlayersSection extends StatelessWidget {
   const _PlayersSection({
     required this.playthroughTimeline,
+    required this.gameFamily,
     required this.players,
     required this.onCreatePlayer,
     required this.onSelectPlayers,
@@ -423,6 +481,7 @@ class _PlayersSection extends StatelessWidget {
   });
 
   final PlaythroughTimeline playthroughTimeline;
+  final GameFamily gameFamily;
   final PlaythroughsLogGamePlayers players;
   final VoidCallback onCreatePlayer;
   final VoidCallback onSelectPlayers;
@@ -456,6 +515,7 @@ class _PlayersSection extends StatelessWidget {
                 playthroughTimeline: playthroughTimeline,
                 onSelectPlayers: onSelectPlayers,
                 onPlayerScoreUpdated: onPlayerScoreUpdated,
+                gameFamily: gameFamily,
               );
             },
           ),
@@ -468,6 +528,7 @@ class _SelectedPlayers extends StatelessWidget {
     required this.selectedPlayers,
     required this.selectedPlayerScores,
     required this.playthroughTimeline,
+    required this.gameFamily,
     required this.onSelectPlayers,
     required this.onPlayerScoreUpdated,
   });
@@ -475,6 +536,7 @@ class _SelectedPlayers extends StatelessWidget {
   final List<Player> selectedPlayers;
   final Map<String, PlayerScore> selectedPlayerScores;
   final PlaythroughTimeline playthroughTimeline;
+  final GameFamily gameFamily;
   final VoidCallback onSelectPlayers;
   final void Function(PlayerScore playerScore, int score) onPlayerScoreUpdated;
 
@@ -498,6 +560,7 @@ class _SelectedPlayers extends StatelessWidget {
             selectedPlayers: selectedPlayers,
             selectedPlayerScores: selectedPlayerScores,
             onPlayerScoreUpdated: (playerScore, score) => onPlayerScoreUpdated(playerScore, score),
+            gameFamily: gameFamily,
           ),
           now: () => _SelectedPlayersGrid(selectedPlayers: selectedPlayers),
         ),
@@ -1211,11 +1274,13 @@ class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
     required this.selectedPlayers,
     required this.selectedPlayerScores,
     required this.onPlayerScoreUpdated,
+    required this.gameFamily,
   }) : super(key: key);
 
   final List<Player> selectedPlayers;
   final Map<String, PlayerScore> selectedPlayerScores;
   final void Function(PlayerScore, int) onPlayerScoreUpdated;
+  final GameFamily gameFamily;
 
   @override
   Widget build(BuildContext context) {
@@ -1230,6 +1295,7 @@ class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
               final playerScore = selectedPlayerScores[player.id]!;
               return _PlayerScore(
                 playerScore: playerScore,
+                gameFamily: gameFamily,
                 onTap: () async {
                   final enterScoreViewModel = EnterScoreViewModel(playerScore);
                   await showEnterScoreDialog(context, enterScoreViewModel);
@@ -1306,10 +1372,12 @@ class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
     Key? key,
     required this.playerScore,
+    required this.gameFamily,
     required this.onTap,
   }) : super(key: key);
 
   final PlayerScore playerScore;
+  final GameFamily gameFamily;
   final VoidCallback onTap;
 
   @override
@@ -1327,18 +1395,54 @@ class _PlayerScore extends StatelessWidget {
             ),
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
-          Column(
-            children: <Widget>[
-              Text(
-                playerScore.score.value ?? '-',
-                style: AppStyles.playerScoreTextStyle,
-              ),
-              const SizedBox(height: Dimensions.halfStandardSpacing),
-              Text('points', style: AppTheme.theme.textTheme.bodyMedium),
-            ],
-          ),
+          if (gameFamily == GameFamily.LowestScore || gameFamily == GameFamily.HighestScore)
+            _PlayerScoreScoreGameFamily(playerScore: playerScore),
+          if (gameFamily == GameFamily.Cooperative)
+            _PlayerScoreCooperativeGameFamily(
+              noScoreGameResult: playerScore.score.noScoreGameResult,
+            ),
         ],
       ),
+    );
+  }
+}
+
+class _PlayerScoreScoreGameFamily extends StatelessWidget {
+  const _PlayerScoreScoreGameFamily({
+    required this.playerScore,
+  });
+
+  final PlayerScore playerScore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Text(
+          playerScore.score.value ?? '-',
+          style: AppStyles.playerScoreTextStyle,
+        ),
+        const SizedBox(height: Dimensions.halfStandardSpacing),
+        Text('points', style: AppTheme.theme.textTheme.bodyMedium),
+      ],
+    );
+  }
+}
+
+class _PlayerScoreCooperativeGameFamily extends StatelessWidget {
+  const _PlayerScoreCooperativeGameFamily({required this.noScoreGameResult});
+
+  final NoScoreGameResult? noScoreGameResult;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Text(
+          noScoreGameResult.toPlayerAvatarDisplayText(),
+          style: AppStyles.playerScoreTextStyle,
+        ),
+      ],
     );
   }
 }
