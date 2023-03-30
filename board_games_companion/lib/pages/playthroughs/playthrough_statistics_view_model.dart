@@ -152,8 +152,8 @@ abstract class _PlaythroughStatisticsViewModel with Store {
           PlayerStatistics.noScoreGames(
             player: player,
             totalGamesPlayed: playerScoresGrouped[player.id]?.length ?? 0,
-            totalLosses: playerScoresGrouped[player.id].totalCooperativeWins,
-            totalWins: playerScoresGrouped[player.id].totalCooperativeLosses,
+            totalWins: playerScoresGrouped[player.id].totalCooperativeWins,
+            totalLosses: playerScoresGrouped[player.id].totalCooperativeLosses,
           ),
         );
       }

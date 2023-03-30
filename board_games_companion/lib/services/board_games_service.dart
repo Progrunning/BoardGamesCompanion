@@ -2,6 +2,7 @@ import 'package:board_games_companion/models/bgg/bgg_import_plays.dart';
 import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
 import 'package:injectable/injectable.dart';
 
+import '../common/enums/game_family.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
 import 'board_games_geek_service.dart';
@@ -82,7 +83,11 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesServ
     await storageBox.clear();
   }
 
-  Future<BggPlaysImportResult> importPlays(String username, String boardGameId) async {
+  Future<BggPlaysImportResult> importPlays(
+    String username,
+    String boardGameId,
+    GameFamily gameFamily,
+  ) async {
     final playsImportResult = BggPlaysImportResult()
       ..data = []
       ..errors = [];
@@ -94,6 +99,7 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesServ
       pagePlaysImportResult = await _boardGameGeekService.importPlays(BggImportPlays(
         username,
         boardGameId,
+        gameFamily,
         pageNumber: pageNumber,
       ));
       playsImportResult.data!.addAll(pagePlaysImportResult.data ?? []);
