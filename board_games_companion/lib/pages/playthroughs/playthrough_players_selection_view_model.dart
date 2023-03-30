@@ -18,8 +18,9 @@ abstract class _PlaythroughPlayersSelectionViewModel with Store {
   final PlayersStore _playersStore;
 
   @computed
-  ObservableList<Player> get players => _playersStore.players
-    ..sort((player, otherPlayer) => player.name!.compareTo(otherPlayer.name!));
+  ObservableList<Player> get players => ([..._playersStore.players]
+        ..sort((player, otherPlayer) => player.name!.compareTo(otherPlayer.name!)))
+      .asObservable();
 
   @computed
   Map<String, Player> get playersMap => {for (final player in players) player.id: player};
