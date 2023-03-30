@@ -22,6 +22,8 @@ export '../../extensions/board_game_extentions.dart';
 part 'board_game_details.freezed.dart';
 part 'board_game_details.g.dart';
 
+/// Whenever adding new fields to this model ensure that when refreshing the data from the API,
+/// the [refreshBoardGameDetails] method logic is also updated accordingly.
 @freezed
 class BoardGameDetails with _$BoardGameDetails {
   @HiveType(typeId: HiveBoxes.boardGamesDetailsTypeId, adapterName: 'BoardGameDetailsAdapter')
