@@ -249,6 +249,9 @@ class AppText {
   static const playsPageHistoryTabEmptyTitle = "You haven't played any games yet";
   static const playPageHistoryTabEmptySubtitle =
       'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
+  static const playPageHistoryTabScoreGameResultFormat = '%s (%s points)';
+  static const playPageHistoryTabCooperativeGameResultWin = 'Win';
+  static const playPageHistoryTabCooperativeGameResultLoss = 'Loss';
 
   static const playsPageSelectGameTabEmptyTitle = 'Your collections are empty';
   static const playsPageSelectGameTabEmptySubtitle =

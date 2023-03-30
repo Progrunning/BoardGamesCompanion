@@ -697,8 +697,9 @@ class _PlaythroughGroupListSliver extends StatelessWidget {
                               ),
                               const SizedBox(width: Dimensions.standardSpacing),
                               Expanded(
-                                child:
-                                    _PlaythroughDetails(boardGamePlaythrough: boardGamePlaythrough),
+                                child: _PlaythroughDetails(
+                                  boardGamePlaythrough: boardGamePlaythrough,
+                                ),
                               ),
                               _PlaythroughActions(
                                 onTapBoardGameDetails: () =>
@@ -794,8 +795,7 @@ class _PlaythroughDetails extends StatelessWidget {
             FontAwesomeIcons.trophy,
             size: _playthroughStatsFontAwesomeIconSize,
           ),
-          statistic:
-              '${boardGamePlaythrough.winner.player?.name ?? ''} (${boardGamePlaythrough.winner.score.valueInt} points)',
+          statistic: boardGamePlaythrough.gameResultTextFormatted,
         ),
         _PlaythroughGeneralStats(
           icon: const Icon(Icons.people, size: _playthroughStatsIconSize),
@@ -830,10 +830,11 @@ class _PlaythroughGeneralStats extends StatelessWidget {
       children: [
         SizedBox(width: _uniformedIconSize, child: Center(child: icon)),
         const SizedBox(width: Dimensions.standardSpacing),
-        Text(
-          statistic,
-          overflow: TextOverflow.ellipsis,
-          style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
+        Expanded(
+          child: Text(
+            statistic,
+            style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
+          ),
         ),
       ],
     );

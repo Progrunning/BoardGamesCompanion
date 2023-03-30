@@ -69,13 +69,11 @@ abstract class _PlaysViewModel with Store {
   );
 
   @computed
-  Map<String, Score> get _scores {
-    return {
-      for (final Score score
-          in _scoreStore.scores.where((Score score) => score.playthroughId.isNotNullOrBlank))
-        score.toMapKey(): score
-    };
-  }
+  Map<String, Score> get _scores => {
+        for (final Score score
+            in _scoreStore.scores.where((Score score) => score.playthroughId.isNotNullOrBlank))
+          score.toMapKey(): score
+      };
 
   @computed
   List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs
