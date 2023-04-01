@@ -159,9 +159,12 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       }
     }
 
+    final playerCountPercentage = _retrievePlayerCountPercentage(finishedPlaythroughs);    
+
     return BoardGameStatistics.noScore(
       boardGameStatistics: noScoreBoardGameStatistics.copyWith(
         playersStatistics: playersStatistics.sortByResult.toList(),
+        playerCountPercentage: playerCountPercentage,
       ),
     );
   }
@@ -233,10 +236,10 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       scoreBoardGameStatistics.playersStatistics = playersStatistics.sortByResult.toList();
     }
 
-    _updatePlayerCountPercentage(finishedPlaythroughs, scoreBoardGameStatistics);
-    _updatePlayerWinsPercentage(
+    scoreBoardGameStatistics.playerCountPercentage =
+        _retrievePlayerCountPercentage(finishedPlaythroughs);
+    scoreBoardGameStatistics.playerWinsPercentage = _retrievePlayerWinsPercentage(
       finishedPlaythroughs,
-      scoreBoardGameStatistics,
       playthroughScoresByPlaythroughId,
       playersById,
       _gamePlaythroughsStore.gameGameFamily,
@@ -277,18 +280,17 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     );
   }
 
-  void _updatePlayerCountPercentage(
+  List<PlayerCountStatistics> _retrievePlayerCountPercentage(
     List<Playthrough> finishedPlaythroughs,
-    ScoreBoardGameStatistics scoreBoardGameStatistics,
   ) {
-    scoreBoardGameStatistics.playerCountPercentage = [];
+    final List<PlayerCountStatistics> playerCountStatistics = [];
     final numberOfPlayersInPlaythroughs = finishedPlaythroughs
         .map((Playthrough playthrough) => playthrough.playerIds.length)
         .toList()
       ..sort((int numberOfPlayers, int otherNumberOfPlayers) =>
           numberOfPlayers.compareTo(otherNumberOfPlayers));
     groupBy(numberOfPlayersInPlaythroughs, (int numberOfPlayers) => numberOfPlayers).forEach(
-      (numberOfPlayers, playthroughs) => scoreBoardGameStatistics.playerCountPercentage!.add(
+      (numberOfPlayers, playthroughs) => playerCountStatistics.add(
         PlayerCountStatistics(
           numberOfPlayers: numberOfPlayers,
           numberOfGamesPlayed: playthroughs.length,
@@ -296,42 +298,46 @@ abstract class _PlaythroughStatisticsViewModel with Store {
         ),
       ),
     );
+
+    return playerCountStatistics
+      ..sort((playerCount, otherPlayerCount) =>
+          otherPlayerCount.numberOfGamesPlayed.compareTo(playerCount.numberOfGamesPlayed));
   }
 
-  void _updatePlayerWinsPercentage(
+  List<PlayerWinsStatistics> _retrievePlayerWinsPercentage(
     List<Playthrough> finishedPlaythroughs,
-    ScoreBoardGameStatistics scoreBoardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
     Map<String, Player> playersById,
     GameFamily gameFamily,
   ) {
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
-      final List<Score> playthroughScores =
-          playthroughScoresByPlaythroughId[finishedPlaythrough.id].sortByScore(gameFamily) ?? [];
+      final playthroughScores = playthroughScoresByPlaythroughId[finishedPlaythrough.id]
+              .onlyScoresWithValue()
+              .sortByScore(gameFamily) ??
+          [];
       if (playthroughScores.isEmpty) {
         continue;
       }
 
       final Player? winner = playersById[playthroughScores.first.playerId];
       if (winner == null) {
-        continue;
+        break;
       }
-
-      if (!playerWins.containsKey(winner)) {
-        playerWins[winner] = 1;
-      } else {
-        playerWins[winner] = playerWins[winner]! + 1;
-      }
+      playerWins[winner] = (playerWins[winner] ?? 0) + 1;
     }
 
-    scoreBoardGameStatistics.playerWinsPercentage = [];
+    final playerWinsPercentage = <PlayerWinsStatistics>[];
     for (final MapEntry<Player, int> playerWin in playerWins.entries) {
-      scoreBoardGameStatistics.playerWinsPercentage!.add(PlayerWinsStatistics(
+      playerWinsPercentage.add(PlayerWinsStatistics(
         player: playerWin.key,
         numberOfWins: playerWin.value,
         winsPercentage: playerWin.value / finishedPlaythroughs.length,
       ));
     }
+
+    return playerWinsPercentage
+      ..sort((playerWins, otherPlayerWins) =>
+          otherPlayerWins.numberOfWins.compareTo(playerWins.numberOfWins));
   }
 }

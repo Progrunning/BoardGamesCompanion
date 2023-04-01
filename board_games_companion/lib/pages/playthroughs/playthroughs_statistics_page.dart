@@ -136,6 +136,19 @@ class _NoScoreBoardGameStatistics extends StatelessWidget {
             noScoreBoardGameStatistics: noScoreBoardGameStatistics,
           ),
         ),
+        if (noScoreBoardGameStatistics.playerCountPercentage.isNotEmpty) ...[
+          SliverPersistentHeader(
+            delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle:
+                  AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
+            ),
+          ),
+          _SliverSectionWrapper(
+            child: _PlayerCharts(
+              playerCountPercentage: noScoreBoardGameStatistics.playerCountPercentage,
+            ),
+          ),
+        ],
         SliverPersistentHeader(
           delegate: BgcSliverTitleHeaderDelegate.title(
             primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
@@ -188,8 +201,8 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
           child: _TopScores(scoreBoardGameStatistics: scoreBoardGameStatistics),
         ),
       ],
-      if ((scoreBoardGameStatistics.playerCountPercentage?.isNotEmpty ?? false) &&
-          (scoreBoardGameStatistics.playerWinsPercentage?.isNotEmpty ?? false)) ...[
+      if (scoreBoardGameStatistics.playerCountPercentage.isNotEmpty &&
+          scoreBoardGameStatistics.playerWinsPercentage.isNotEmpty) ...[
         SliverPersistentHeader(
           delegate: BgcSliverTitleHeaderDelegate.titles(
             primaryTitle:
@@ -199,7 +212,10 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
           ),
         ),
         _SliverSectionWrapper(
-          child: _PlayerCharts(scoreBoardGameStatistics: scoreBoardGameStatistics),
+          child: _PlayerCharts(
+            playerCountPercentage: scoreBoardGameStatistics.playerCountPercentage,
+            playerWinsPercentage: scoreBoardGameStatistics.playerWinsPercentage,
+          ),
         ),
       ],
       if (scoreBoardGameStatistics.playersStatistics.isNotEmpty) ...[
@@ -313,7 +329,7 @@ class _PlayerStatsDetails extends StatelessWidget {
       );
 
   static const double _statsItemIconSize = 32;
-  static const double _fontAwesomeStatsItemIconSize = 26;
+  static const double _fontAwesomeStatsItemIconSize = _statsItemIconSize;
   static const TextStyle _statsItemTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: Dimensions.largeFontSize,
@@ -450,11 +466,13 @@ class _LastWinnerSection extends StatelessWidget {
 
 class _PlayerCharts extends StatefulWidget {
   const _PlayerCharts({
-    required this.scoreBoardGameStatistics,
+    required this.playerCountPercentage,
+    this.playerWinsPercentage,
     Key? key,
   }) : super(key: key);
 
-  final ScoreBoardGameStatistics scoreBoardGameStatistics;
+  final List<PlayerCountStatistics> playerCountPercentage;
+  final List<PlayerWinsStatistics>? playerWinsPercentage;
 
   @override
   State<_PlayerCharts> createState() => _PlayerChartsState();
@@ -478,16 +496,16 @@ class _PlayerChartsState extends State<_PlayerCharts> {
     playerCountChartColors = {};
     playerWinsChartColors = {};
     int i = 0;
-    for (final PlayerCountStatistics playeCountStatistics
-        in widget.scoreBoardGameStatistics.playerCountPercentage!) {
+    for (final PlayerCountStatistics playeCountStatistics in widget.playerCountPercentage) {
       playerCountChartColors[playeCountStatistics.numberOfPlayers] =
           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
     }
-    i = 0;
-    for (final PlayerWinsStatistics playerWinsStatistics
-        in widget.scoreBoardGameStatistics.playerWinsPercentage!) {
-      playerWinsChartColors[playerWinsStatistics.player] =
-          AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
+    if (widget.playerWinsPercentage != null) {
+      i = 0;
+      for (final PlayerWinsStatistics playerWinsStatistics in widget.playerWinsPercentage!) {
+        playerWinsChartColors[playerWinsStatistics.player] =
+            AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
+      }
     }
 
     return Column(
@@ -503,7 +521,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                 PieChartData(
                   sections: <PieChartSectionData>[
                     for (final PlayerCountStatistics playeCountStatistics
-                        in widget.scoreBoardGameStatistics.playerCountPercentage!)
+                        in widget.playerCountPercentage)
                       PieChartSectionData(
                         value: playeCountStatistics.gamesPlayedPercentage,
                         title: '${playeCountStatistics.numberOfGamesPlayed}',
@@ -514,23 +532,24 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               ),
             ),
             const Spacer(),
-            SizedBox(
-              height: _chartSize,
-              width: _chartSize,
-              child: PieChart(
-                PieChartData(
-                  sections: <PieChartSectionData>[
-                    for (final PlayerWinsStatistics playeWinsStatistics
-                        in widget.scoreBoardGameStatistics.playerWinsPercentage!)
-                      PieChartSectionData(
-                        value: playeWinsStatistics.winsPercentage,
-                        title: '${playeWinsStatistics.numberOfWins}',
-                        color: playerWinsChartColors[playeWinsStatistics.player],
-                      ),
-                  ],
+            if (widget.playerWinsPercentage != null)
+              SizedBox(
+                height: _chartSize,
+                width: _chartSize,
+                child: PieChart(
+                  PieChartData(
+                    sections: <PieChartSectionData>[
+                      for (final PlayerWinsStatistics playeWinsStatistics
+                          in widget.playerWinsPercentage!)
+                        PieChartSectionData(
+                          value: playeWinsStatistics.winsPercentage,
+                          title: '${playeWinsStatistics.numberOfWins}',
+                          color: playerWinsChartColors[playeWinsStatistics.player],
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         const SizedBox(height: Dimensions.halfStandardSpacing),
@@ -543,7 +562,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 for (final PlayerCountStatistics playeCountStatistics
-                    in widget.scoreBoardGameStatistics.playerCountPercentage!)
+                    in widget.playerCountPercentage)
                   Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
@@ -580,36 +599,38 @@ class _PlayerChartsState extends State<_PlayerCharts> {
               ],
             ),
             const Spacer(),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                for (final PlayerWinsStatistics playerWinsStatistics
-                    in widget.scoreBoardGameStatistics.playerWinsPercentage!)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
-                    child: Row(
-                      children: <Widget>[
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(text: '${playerWinsStatistics.player.name} '),
-                              TextSpan(
-                                text:
-                                    '[${(playerWinsStatistics.winsPercentage * 100).toStringAsFixed(0)}%]',
-                                style: AppTheme.theme.textTheme.titleMedium,
-                              ),
-                            ],
+            if (widget.playerWinsPercentage != null)
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  for (final PlayerWinsStatistics playerWinsStatistics
+                      in widget.playerWinsPercentage!)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
+                      child: Row(
+                        children: <Widget>[
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(text: '${playerWinsStatistics.player.name} '),
+                                TextSpan(
+                                  text:
+                                      '[${(playerWinsStatistics.winsPercentage * 100).toStringAsFixed(0)}%]',
+                                  style: AppTheme.theme.textTheme.titleMedium,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: Dimensions.halfStandardSpacing),
-                        _ChartLegendBox(color: playerWinsChartColors[playerWinsStatistics.player]!),
-                      ],
+                          const SizedBox(width: Dimensions.halfStandardSpacing),
+                          _ChartLegendBox(
+                              color: playerWinsChartColors[playerWinsStatistics.player]!),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ],
@@ -835,7 +856,6 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
                 _StatisticsItem(
                   value: noScoreBoardGameStatistics.totalWins.toString(),
                   icon: FontAwesomeIcons.trophy,
-                  iconSize: 22,
                   iconColor: AppColors.highscoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalWins,
                 ),
@@ -950,6 +970,7 @@ class _StatisticsItem extends StatelessWidget {
             Text(value, style: valueTextStyle),
           ],
         ),
+        const SizedBox(height: Dimensions.quarterStandardSpacing),
         ItemPropertyTitle(
           subtitle,
           color: AppColors.defaultTextColor,

@@ -664,13 +664,13 @@ mixin _$ScoreBoardGameStatistics {
       throw _privateConstructorUsedError;
   set playersStatistics(List<PlayerStatistics> value) =>
       throw _privateConstructorUsedError;
-  List<PlayerCountStatistics>? get playerCountPercentage =>
+  List<PlayerCountStatistics> get playerCountPercentage =>
       throw _privateConstructorUsedError;
-  set playerCountPercentage(List<PlayerCountStatistics>? value) =>
+  set playerCountPercentage(List<PlayerCountStatistics> value) =>
       throw _privateConstructorUsedError;
-  List<PlayerWinsStatistics>? get playerWinsPercentage =>
+  List<PlayerWinsStatistics> get playerWinsPercentage =>
       throw _privateConstructorUsedError;
-  set playerWinsPercentage(List<PlayerWinsStatistics>? value) =>
+  set playerWinsPercentage(List<PlayerWinsStatistics> value) =>
       throw _privateConstructorUsedError;
   Map<Player, int>? get playerWins => throw _privateConstructorUsedError;
   set playerWins(Map<Player, int>? value) => throw _privateConstructorUsedError;
@@ -698,8 +698,8 @@ abstract class $ScoreBoardGameStatisticsCopyWith<$Res> {
       double? averageScore,
       List<Tuple2<Player, String>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
-      List<PlayerCountStatistics>? playerCountPercentage,
-      List<PlayerWinsStatistics>? playerWinsPercentage,
+      List<PlayerCountStatistics> playerCountPercentage,
+      List<PlayerWinsStatistics> playerWinsPercentage,
       Map<Player, int>? playerWins});
 
   $PlayerScoreCopyWith<$Res>? get lastWinner;
@@ -730,8 +730,8 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
     Object? averageScore = freezed,
     Object? topScoreres = freezed,
     Object? playersStatistics = null,
-    Object? playerCountPercentage = freezed,
-    Object? playerWinsPercentage = freezed,
+    Object? playerCountPercentage = null,
+    Object? playerWinsPercentage = null,
     Object? playerWins = freezed,
   }) {
     return _then(_value.copyWith(
@@ -779,14 +779,14 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
               as List<PlayerStatistics>,
-      playerCountPercentage: freezed == playerCountPercentage
+      playerCountPercentage: null == playerCountPercentage
           ? _value.playerCountPercentage
           : playerCountPercentage // ignore: cast_nullable_to_non_nullable
-              as List<PlayerCountStatistics>?,
-      playerWinsPercentage: freezed == playerWinsPercentage
+              as List<PlayerCountStatistics>,
+      playerWinsPercentage: null == playerWinsPercentage
           ? _value.playerWinsPercentage
           : playerWinsPercentage // ignore: cast_nullable_to_non_nullable
-              as List<PlayerWinsStatistics>?,
+              as List<PlayerWinsStatistics>,
       playerWins: freezed == playerWins
           ? _value.playerWins
           : playerWins // ignore: cast_nullable_to_non_nullable
@@ -828,8 +828,8 @@ abstract class _$$_ScoreBoardGameStatisticsCopyWith<$Res>
       double? averageScore,
       List<Tuple2<Player, String>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
-      List<PlayerCountStatistics>? playerCountPercentage,
-      List<PlayerWinsStatistics>? playerWinsPercentage,
+      List<PlayerCountStatistics> playerCountPercentage,
+      List<PlayerWinsStatistics> playerWinsPercentage,
       Map<Player, int>? playerWins});
 
   @override
@@ -859,8 +859,8 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
     Object? averageScore = freezed,
     Object? topScoreres = freezed,
     Object? playersStatistics = null,
-    Object? playerCountPercentage = freezed,
-    Object? playerWinsPercentage = freezed,
+    Object? playerCountPercentage = null,
+    Object? playerWinsPercentage = null,
     Object? playerWins = freezed,
   }) {
     return _then(_$_ScoreBoardGameStatistics(
@@ -908,14 +908,14 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
               as List<PlayerStatistics>,
-      playerCountPercentage: freezed == playerCountPercentage
+      playerCountPercentage: null == playerCountPercentage
           ? _value.playerCountPercentage
           : playerCountPercentage // ignore: cast_nullable_to_non_nullable
-              as List<PlayerCountStatistics>?,
-      playerWinsPercentage: freezed == playerWinsPercentage
+              as List<PlayerCountStatistics>,
+      playerWinsPercentage: null == playerWinsPercentage
           ? _value.playerWinsPercentage
           : playerWinsPercentage // ignore: cast_nullable_to_non_nullable
-              as List<PlayerWinsStatistics>?,
+              as List<PlayerWinsStatistics>,
       playerWins: freezed == playerWins
           ? _value.playerWins
           : playerWins // ignore: cast_nullable_to_non_nullable
@@ -939,8 +939,8 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
       this.averageScore,
       this.topScoreres,
       this.playersStatistics = const <PlayerStatistics>[],
-      this.playerCountPercentage,
-      this.playerWinsPercentage,
+      this.playerCountPercentage = const <PlayerCountStatistics>[],
+      this.playerWinsPercentage = const <PlayerWinsStatistics>[],
       this.playerWins})
       : super._();
 
@@ -968,9 +968,11 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
   @JsonKey()
   List<PlayerStatistics> playersStatistics;
   @override
-  List<PlayerCountStatistics>? playerCountPercentage;
+  @JsonKey()
+  List<PlayerCountStatistics> playerCountPercentage;
   @override
-  List<PlayerWinsStatistics>? playerWinsPercentage;
+  @JsonKey()
+  List<PlayerWinsStatistics> playerWinsPercentage;
   @override
   Map<Player, int>? playerWins;
 
@@ -1000,8 +1002,8 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
       double? averageScore,
       List<Tuple2<Player, String>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
-      List<PlayerCountStatistics>? playerCountPercentage,
-      List<PlayerWinsStatistics>? playerWinsPercentage,
+      List<PlayerCountStatistics> playerCountPercentage,
+      List<PlayerWinsStatistics> playerWinsPercentage,
       Map<Player, int>? playerWins}) = _$_ScoreBoardGameStatistics;
   _ScoreBoardGameStatistics._() : super._();
 
@@ -1039,11 +1041,11 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   List<PlayerStatistics> get playersStatistics;
   set playersStatistics(List<PlayerStatistics> value);
   @override
-  List<PlayerCountStatistics>? get playerCountPercentage;
-  set playerCountPercentage(List<PlayerCountStatistics>? value);
+  List<PlayerCountStatistics> get playerCountPercentage;
+  set playerCountPercentage(List<PlayerCountStatistics> value);
   @override
-  List<PlayerWinsStatistics>? get playerWinsPercentage;
-  set playerWinsPercentage(List<PlayerWinsStatistics>? value);
+  List<PlayerWinsStatistics> get playerWinsPercentage;
+  set playerWinsPercentage(List<PlayerWinsStatistics> value);
   @override
   Map<Player, int>? get playerWins;
   set playerWins(Map<Player, int>? value);
@@ -1074,6 +1076,10 @@ mixin _$NoScoreBoardGameStatistics {
       throw _privateConstructorUsedError;
   set playersStatistics(List<PlayerStatistics> value) =>
       throw _privateConstructorUsedError;
+  List<PlayerCountStatistics> get playerCountPercentage =>
+      throw _privateConstructorUsedError;
+  set playerCountPercentage(List<PlayerCountStatistics> value) =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NoScoreBoardGameStatisticsCopyWith<NoScoreBoardGameStatistics>
@@ -1095,7 +1101,8 @@ abstract class $NoScoreBoardGameStatisticsCopyWith<$Res> {
       int totalLosses,
       int totalPlaytimeInSeconds,
       int averagePlaytimeInSeconds,
-      List<PlayerStatistics> playersStatistics});
+      List<PlayerStatistics> playersStatistics,
+      List<PlayerCountStatistics> playerCountPercentage});
 }
 
 /// @nodoc
@@ -1120,6 +1127,7 @@ class _$NoScoreBoardGameStatisticsCopyWithImpl<$Res,
     Object? totalPlaytimeInSeconds = null,
     Object? averagePlaytimeInSeconds = null,
     Object? playersStatistics = null,
+    Object? playerCountPercentage = null,
   }) {
     return _then(_value.copyWith(
       numberOfGamesPlayed: null == numberOfGamesPlayed
@@ -1154,6 +1162,10 @@ class _$NoScoreBoardGameStatisticsCopyWithImpl<$Res,
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
               as List<PlayerStatistics>,
+      playerCountPercentage: null == playerCountPercentage
+          ? _value.playerCountPercentage
+          : playerCountPercentage // ignore: cast_nullable_to_non_nullable
+              as List<PlayerCountStatistics>,
     ) as $Val);
   }
 }
@@ -1175,7 +1187,8 @@ abstract class _$$_NoScoreBoardGameStatiticsCopyWith<$Res>
       int totalLosses,
       int totalPlaytimeInSeconds,
       int averagePlaytimeInSeconds,
-      List<PlayerStatistics> playersStatistics});
+      List<PlayerStatistics> playersStatistics,
+      List<PlayerCountStatistics> playerCountPercentage});
 }
 
 /// @nodoc
@@ -1199,6 +1212,7 @@ class __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>
     Object? totalPlaytimeInSeconds = null,
     Object? averagePlaytimeInSeconds = null,
     Object? playersStatistics = null,
+    Object? playerCountPercentage = null,
   }) {
     return _then(_$_NoScoreBoardGameStatitics(
       numberOfGamesPlayed: null == numberOfGamesPlayed
@@ -1233,6 +1247,10 @@ class __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
               as List<PlayerStatistics>,
+      playerCountPercentage: null == playerCountPercentage
+          ? _value.playerCountPercentage
+          : playerCountPercentage // ignore: cast_nullable_to_non_nullable
+              as List<PlayerCountStatistics>,
     ));
   }
 }
@@ -1248,7 +1266,8 @@ class _$_NoScoreBoardGameStatitics extends _NoScoreBoardGameStatitics {
       required this.totalLosses,
       required this.totalPlaytimeInSeconds,
       required this.averagePlaytimeInSeconds,
-      this.playersStatistics = const <PlayerStatistics>[]})
+      this.playersStatistics = const <PlayerStatistics>[],
+      this.playerCountPercentage = const <PlayerCountStatistics>[]})
       : super._();
 
   @override
@@ -1268,10 +1287,13 @@ class _$_NoScoreBoardGameStatitics extends _NoScoreBoardGameStatitics {
   @override
   @JsonKey()
   List<PlayerStatistics> playersStatistics;
+  @override
+  @JsonKey()
+  List<PlayerCountStatistics> playerCountPercentage;
 
   @override
   String toString() {
-    return 'NoScoreBoardGameStatistics(numberOfGamesPlayed: $numberOfGamesPlayed, averageNumberOfPlayers: $averageNumberOfPlayers, lastTimePlayed: $lastTimePlayed, totalWins: $totalWins, totalLosses: $totalLosses, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, averagePlaytimeInSeconds: $averagePlaytimeInSeconds, playersStatistics: $playersStatistics)';
+    return 'NoScoreBoardGameStatistics(numberOfGamesPlayed: $numberOfGamesPlayed, averageNumberOfPlayers: $averageNumberOfPlayers, lastTimePlayed: $lastTimePlayed, totalWins: $totalWins, totalLosses: $totalLosses, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, averagePlaytimeInSeconds: $averagePlaytimeInSeconds, playersStatistics: $playersStatistics, playerCountPercentage: $playerCountPercentage)';
   }
 
   @JsonKey(ignore: true)
@@ -1284,14 +1306,16 @@ class _$_NoScoreBoardGameStatitics extends _NoScoreBoardGameStatitics {
 
 abstract class _NoScoreBoardGameStatitics extends NoScoreBoardGameStatistics {
   factory _NoScoreBoardGameStatitics(
-      {required int numberOfGamesPlayed,
-      required double averageNumberOfPlayers,
-      required DateTime lastTimePlayed,
-      required int totalWins,
-      required int totalLosses,
-      required int totalPlaytimeInSeconds,
-      required int averagePlaytimeInSeconds,
-      List<PlayerStatistics> playersStatistics}) = _$_NoScoreBoardGameStatitics;
+          {required int numberOfGamesPlayed,
+          required double averageNumberOfPlayers,
+          required DateTime lastTimePlayed,
+          required int totalWins,
+          required int totalLosses,
+          required int totalPlaytimeInSeconds,
+          required int averagePlaytimeInSeconds,
+          List<PlayerStatistics> playersStatistics,
+          List<PlayerCountStatistics> playerCountPercentage}) =
+      _$_NoScoreBoardGameStatitics;
   _NoScoreBoardGameStatitics._() : super._();
 
   @override
@@ -1318,6 +1342,9 @@ abstract class _NoScoreBoardGameStatitics extends NoScoreBoardGameStatistics {
   @override
   List<PlayerStatistics> get playersStatistics;
   set playersStatistics(List<PlayerStatistics> value);
+  @override
+  List<PlayerCountStatistics> get playerCountPercentage;
+  set playerCountPercentage(List<PlayerCountStatistics> value);
   @override
   @JsonKey(ignore: true)
   _$$_NoScoreBoardGameStatiticsCopyWith<_$_NoScoreBoardGameStatitics>
