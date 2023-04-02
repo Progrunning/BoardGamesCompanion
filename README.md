@@ -78,11 +78,21 @@ The release to the iOS and Android stores should be followed by:
 
 ### iOS
 
-Whenever updating flutter to a new version there might be a problem with plugin dependencies. This might require updating `pods`. In order to update pods you need to:
+#### Flutter upgrade
+
+Whenever flutter version gets updated there might be a problem with plugin dependencies. This might require updating `pods`. In order to update pods you need to:
 
 1. Run Terminal
 2. Open iOS folder directory (e.g. `cd /path/to/the/project/board_games_companion/ios`)
 3. Run `pod install` command
+
+Additionally there will be a need to update the `PATH` of the Z shell. This can be done by doing the following:
+
+1. Ensuring that the `~/.zhrc` file exists (`touch ~/.zshrc`)
+2. Editing the file by existing one of the following
+ - `vim ~/.zshrc`
+ - `code ~/.zshrc`
+3. Editing the `PATH` with the path to the update Flutter SDK
 
 #### M1 processors shenanigans
 
