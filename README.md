@@ -94,6 +94,8 @@ Additionally there will be a need to update the `PATH` of the Z shell. This can 
  - `code ~/.zshrc`
 3. Editing the `PATH` with the path to the update Flutter SDK
 
+> NOTE: More info in this [SO thread](https://stackoverflow.com/questions/10574684/where-to-place-path-variable-assertions-in-zsh) and in the [official docs](https://docs.flutter.dev/get-started/install/macos#update-your-path)
+
 #### M1 processors shenanigans
 
 You may run into issues with updating pods on M1 processor devices. Here's some articles that might help with that:
