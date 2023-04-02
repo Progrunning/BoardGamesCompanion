@@ -176,11 +176,9 @@ _i1.GetIt $initGetIt(
         gh<_i15.ScoresStore>(),
         gh<_i20.AnalyticsService>(),
       ));
-  gh.factory<_i35.PlaythroughMigrationViewModel>(
-      () => _i35.PlaythroughMigrationViewModel(
-            gh<_i15.ScoresStore>(),
-            gh<_i32.GamePlaythroughsDetailsStore>(),
-          ));
+  gh.factory<_i35.PlaythroughMigrationViewModel>(() =>
+      _i35.PlaythroughMigrationViewModel(
+          gh<_i32.GamePlaythroughsDetailsStore>()));
   gh.factory<_i36.PlaythroughNoteViewModel>(() =>
       _i36.PlaythroughNoteViewModel(gh<_i32.GamePlaythroughsDetailsStore>()));
   gh.singleton<_i37.PlaythroughStatisticsViewModel>(

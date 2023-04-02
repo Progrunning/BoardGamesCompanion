@@ -7,7 +7,6 @@ import 'package:board_games_companion/models/playthroughs/playthrough_details.da
 import 'package:board_games_companion/pages/playthroughs/playthrough_migration.dart';
 import 'package:board_games_companion/pages/playthroughs/playthrough_migration_progress.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
-import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -19,9 +18,8 @@ class PlaythroughMigrationViewModel = _PlaythroughMigrationViewModel
     with _$PlaythroughMigrationViewModel;
 
 abstract class _PlaythroughMigrationViewModel with Store {
-  _PlaythroughMigrationViewModel(this._scoresStore, this._gamePlaythroughsStore);
+  _PlaythroughMigrationViewModel(this._gamePlaythroughsStore);
 
-  final ScoresStore _scoresStore;
   final GamePlaythroughsDetailsStore _gamePlaythroughsStore;
 
   late PlaythroughDetails? _ogirinalPlaythroughDetails;
@@ -30,7 +28,7 @@ abstract class _PlaythroughMigrationViewModel with Store {
     return playthroughMighration.when(
       init: () => false,
       fromScoreToCooperative: (playthroughDetails, cooperativeGameResult) =>
-          _ogirinalPlaythroughDetails == playthroughDetails || cooperativeGameResult != null,
+          _ogirinalPlaythroughDetails != playthroughDetails || cooperativeGameResult != null,
     );
   }
 

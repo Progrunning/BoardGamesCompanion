@@ -332,4 +332,9 @@ class AppText {
       'Sorry, we ran into a problem when migrating your game. Please contact support.';
   static const playthroughMigrationScoreToCooperativeInvalidFormErrorMessage =
       'Make sure to select a win or loss before you migrate your game.';
+  static const playthroughMigrationPageMigrationNotFinishedDialogTitle =
+      "You didn't finish migration.";
+  static const playthroughMigrationPageMigrationNotFinishedDialogContent =
+      'Are you sure you want to navigate away?';
+  static const playthroughMigrationPageMigrationNotFinishedActionButtonText = 'Navigate away';
 }

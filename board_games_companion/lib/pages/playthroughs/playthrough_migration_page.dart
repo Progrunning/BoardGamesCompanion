@@ -4,6 +4,7 @@ import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/common/dimensions.dart';
 import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:board_games_companion/pages/playthroughs/playthrough_migration_view_model.dart';
+import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
 import 'package:board_games_companion/widgets/common/empty_page_information_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -61,64 +62,67 @@ class _PlaythroughMigrationPageState extends State<PlaythroughMigrationPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            AppText.playthroughMigrationPageTitle,
-            style: AppTheme.titleTextStyle,
+  Widget build(BuildContext context) => WillPopScope(
+        onWillPop: () async => _handleOnWillPop(context),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              AppText.playthroughMigrationPageTitle,
+              style: AppTheme.titleTextStyle,
+            ),
           ),
-        ),
-        body: Observer(
-          builder: (_) {
-            return CustomScrollView(
-              slivers: [
-                widget.viewModel.playthroughMighration.maybeWhen(
-                  fromScoreToCooperative: (playthroughDetails, cooperativeGameResult) {
-                    return MultiSliver(
-                      children: [
-                        const _OverviewSection(),
-                        _ResultSection(
-                          cooperativeGameResult: cooperativeGameResult,
-                          onCooperativeGameResultChanged: (selectedResult) =>
-                              widget.viewModel.updateCooperativeGameResult(selectedResult),
+          body: Observer(
+            builder: (_) {
+              return CustomScrollView(
+                slivers: [
+                  widget.viewModel.playthroughMighration.maybeWhen(
+                    fromScoreToCooperative: (playthroughDetails, cooperativeGameResult) {
+                      return MultiSliver(
+                        children: [
+                          const _OverviewSection(),
+                          _ResultSection(
+                            cooperativeGameResult: cooperativeGameResult,
+                            onCooperativeGameResultChanged: (selectedResult) =>
+                                widget.viewModel.updateCooperativeGameResult(selectedResult),
+                          ),
+                          _PlayerScoresSection(
+                            playerScores: playthroughDetails.playerScores,
+                            onPlayerScoreRemoved: (playerScore) =>
+                                widget.viewModel.removePlayerScore(playerScore),
+                          ),
+                        ],
+                      );
+                    },
+                    orElse: () => const SliverFillRemaining(
+                      child: Center(
+                        child: EmptyPageInformationPanel(
+                          title: AppText.playthroughMigrationPageInvalidMigrationTitle,
+                          subtitle: AppText.playthroughMigrationPageInvalidMigrationSubtitle,
+                          icon: Icon(Icons.error),
                         ),
-                        _PlayerScoresSection(
-                          playerScores: playthroughDetails.playerScores,
-                          onPlayerScoreRemoved: (playerScore) =>
-                              widget.viewModel.removePlayerScore(playerScore),
-                        ),
-                      ],
-                    );
-                  },
-                  orElse: () => const SliverFillRemaining(
-                    child: Center(
-                      child: EmptyPageInformationPanel(
-                        title: AppText.playthroughMigrationPageInvalidMigrationTitle,
-                        subtitle: AppText.playthroughMigrationPageInvalidMigrationSubtitle,
-                        icon: Icon(Icons.error),
                       ),
                     ),
                   ),
+                ],
+              );
+            },
+          ),
+          floatingActionButton: Observer(
+            builder: (_) {
+              return widget.viewModel.playthroughMighrationProgress.maybeWhen(
+                orElse: () => FloatingActionButton(
+                  onPressed: () => widget.viewModel.migrate(),
+                  backgroundColor: AppColors.blueColor,
+                  child: const Icon(Icons.compare_arrows),
                 ),
-              ],
-            );
-          },
-        ),
-        floatingActionButton: Observer(
-          builder: (_) {
-            return widget.viewModel.playthroughMighrationProgress.maybeWhen(
-              orElse: () => FloatingActionButton(
-                onPressed: () => widget.viewModel.migrate(),
-                backgroundColor: AppColors.blueColor,
-                child: const Icon(Icons.compare_arrows),
-              ),
-              inProgress: () => const FloatingActionButton(
-                onPressed: null,
-                backgroundColor: AppColors.blueColor,
-                child: CircularProgressIndicator(color: AppColors.accentColor),
-              ),
-            );
-          },
+                inProgress: () => const FloatingActionButton(
+                  onPressed: null,
+                  backgroundColor: AppColors.blueColor,
+                  child: CircularProgressIndicator(color: AppColors.accentColor),
+                ),
+              );
+            },
+          ),
         ),
       );
 
@@ -134,6 +138,40 @@ class _PlaythroughMigrationPageState extends State<PlaythroughMigrationPage> {
         content: Text(message),
       ),
     );
+  }
+
+  Future<bool> _handleOnWillPop(BuildContext context) async {
+    if (!widget.viewModel.isDirty) {
+      return true;
+    }
+
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(AppText.playthroughMigrationPageMigrationNotFinishedDialogTitle),
+          content: const Text(AppText.playthroughMigrationPageMigrationNotFinishedDialogContent),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppText.cancel, style: TextStyle(color: AppColors.accentColor)),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
+              onPressed: () async =>
+                  Navigator.of(context).popUntil(ModalRoute.withName(PlaythroughsPage.pageRoute)),
+              child: const Text(
+                AppText.playthroughMigrationPageMigrationNotFinishedActionButtonText,
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return false;
   }
 }
 
