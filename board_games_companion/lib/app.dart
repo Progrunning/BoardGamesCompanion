@@ -2,6 +2,8 @@ import 'package:animations/animations.dart';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
+import 'package:board_games_companion/pages/playthroughs/playthrough_migration_page.dart';
+import 'package:board_games_companion/pages/playthroughs/playthrough_migration_view_model.dart';
 import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import 'models/navigation/board_game_details_page_arguments.dart';
 import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
 import 'models/navigation/playthough_note_page_arguments.dart';
+import 'models/navigation/playthrough_migration_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
 import 'models/playthroughs/playthrough_players_selection_result.dart';
 import 'models/results/board_game_creation_result.dart';
@@ -184,6 +187,16 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
               settings: routeSettings,
               builder: (BuildContext context) =>
                   PlahtyroughPlayersSelectionPage(viewModel: viewModel),
+            );
+
+          case PlaythroughMigrationPage.pageRoute:
+            final arguments = routeSettings.arguments as PlaythroughMigrationArguments;
+            final viewModel = getIt<PlaythroughMigrationViewModel>();
+            viewModel.setPlaythroughMigration(arguments.playthroughMigration);           
+
+            return MaterialPageRoute<dynamic>(
+              settings: routeSettings,
+              builder: (BuildContext context) => PlaythroughMigrationPage(viewModel: viewModel),
             );
 
           default:

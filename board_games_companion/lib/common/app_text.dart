@@ -13,6 +13,7 @@ class AppText {
   static const delete = 'Delete';
   static const remove = 'Remove';
   static const edit = 'Edit';
+  static const migrate = 'Migrate';
   static const ok = 'OK';
   static const navigateAway = 'Navigate away';
 
@@ -169,7 +170,8 @@ class AppText {
   static const editPlaythroughAddNote = 'Add note';
 
   static const editPlaythroughPageTitle = 'Edit Playthrough';
-  static const editPlaythroughDateAndDurationHeaderTitle = 'Date & Duration';
+  static const editPlaythroughDateHeaderTitle = 'Date';
+  static const editPlaythroughDurationHeaderTitle = 'Duration';
   static const editPlaythroughScoresHeaderTitle = 'Scores';
   static const editPlaythroughNoScoreResultHeaderTitle = 'Result';
   static const editPlaythroughNoScoreResultText = 'Game result';
@@ -312,4 +314,22 @@ class AppText {
       'Removing game %s from all of your collections will effectively remove the game from the app.';
 
   static const playthroughPlayersSelectionPageTitle = 'Select players';
+
+  static const playthroughMigrationPageTitle = 'Migrate a game';
+  static const playthroughMigrationPageMigrationOverviewHeader = 'Overview';
+  static const playthroughMigrationPageMigrationOverviewContent =
+      'You are about to migrate a game where players were assigned a numeric score to a cooperative result (i.e. no numeric score).';
+  static const playthroughMigrationPageMigrationOverviewAiInfo =
+      'If you used an AI player to track your wins against the game then it is safe to remove that "player" from the players list by swiping right and tapping remove button.';
+  static const playthroughMigrationPagePlayerScoresInfo =
+      'Player scores are shown only for the purpose of deciding if the game was a win or a loss';
+  static const playthroughMigrationPageMigrationResultHeader = 'Result';
+  static const playthroughMigrationPageMigrationPlayerScoresHeader = 'Player scores';
+  static const playthroughMigrationPageInvalidMigrationTitle = 'Oops, something went wrong';
+  static const playthroughMigrationPageInvalidMigrationSubtitle =
+      'Sorry, we are having trouble with loading appropriate content for this migration. Please contact support.';
+  static const playthroughMigrationFailureSnackbar =
+      'Sorry, we ran into a problem when migrating your game. Please contact support.';
+  static const playthroughMigrationScoreToCooperativeInvalidFormErrorMessage =
+      'Make sure to select a win or loss before you migrate your game.';
 }

@@ -63,6 +63,7 @@ class Dimensions {
   static const double defaultElevation = 3;
 
   static const double bottomTabTopHeight = 20;
+  static const double floatingActionButtonHeight = 48;
 
   static const double detailsItemHeight = 60;
 

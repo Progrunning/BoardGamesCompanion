@@ -67,7 +67,8 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     _PlayDateTimeSection(viewModel: widget.viewModel),
                     if (widget.viewModel.gameClassification == GameClassification.Score)
                       _ScoresSection(
-                        viewModel: widget.viewModel,
+                        playerScores: widget.viewModel.playerScores,
+                        playthroughDetailsId: widget.viewModel.playthroughDetails.id,
                         onItemTapped: (PlayerScore playerScore) async =>
                             _editPlayerScore(playerScore, context),
                       ),
@@ -256,11 +257,13 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
 class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
     Key? key,
-    required this.viewModel,
+    required this.playerScores,
+    required this.playthroughDetailsId,
     required this.onItemTapped,
   }) : super(key: key);
 
-  final EditPlaythoughViewModel viewModel;
+  final List<PlayerScore> playerScores;
+  final String playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
@@ -269,7 +272,8 @@ class _ScoresSection extends StatelessWidget {
           SliverPersistentHeader(
             pinned: true,
             delegate: BgcSliverTitleHeaderDelegate.title(
-                primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
+              primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
+            ),
           ),
           Observer(
             builder: (_) {
@@ -281,15 +285,15 @@ class _ScoresSection extends StatelessWidget {
                       final int itemIndex = index ~/ 2;
                       if (index.isEven) {
                         return _PlayerScoreTile(
-                          playerScore: viewModel.playerScores[itemIndex],
-                          playthroughId: viewModel.playthroughDetails.id,
+                          playerScore: playerScores[itemIndex],
+                          playthroughId: playthroughDetailsId,
                           onItemTapped: onItemTapped,
                         );
                       }
 
                       return const SizedBox(height: Dimensions.doubleStandardSpacing);
                     },
-                    childCount: max(0, viewModel.playerScores.length * 2 - 1),
+                    childCount: max(0, playerScores.length * 2 - 1),
                   ),
                 ),
               );
@@ -319,14 +323,18 @@ class _NoScoreSection extends StatelessWidget {
         SliverPersistentHeader(
           pinned: true,
           delegate: BgcSliverTitleHeaderDelegate.title(
-              primaryTitle: AppText.editPlaythroughNoScoreResultHeaderTitle),
+            primaryTitle: AppText.editPlaythroughNoScoreResultHeaderTitle,
+          ),
         ),
         SliverPadding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
           sliver: SliverToBoxAdapter(
             child: Row(
               children: [
-                const Text(AppText.editPlaythroughNoScoreResultText),
+                const Text(
+                  AppText.editPlaythroughNoScoreResultText,
+                  style: AppTheme.defaultTextFieldStyle,
+                ),
                 const Spacer(),
                 CooperativeGameResultSegmentedButton(
                   cooperativeGameResult: cooperativeGameResult,
@@ -340,7 +348,8 @@ class _NoScoreSection extends StatelessWidget {
         SliverPersistentHeader(
           pinned: true,
           delegate: BgcSliverTitleHeaderDelegate.title(
-              primaryTitle: AppText.editPlaythroughNoScorePlayersHeaderTitle),
+            primaryTitle: AppText.editPlaythroughNoScorePlayersHeaderTitle,
+          ),
         ),
         Observer(
           builder: (_) {
@@ -575,8 +584,9 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
     return MultiSliver(
       children: [
         SliverPersistentHeader(
-          delegate: BgcSliverTitleHeaderDelegate.title(
-            primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
+          delegate: BgcSliverTitleHeaderDelegate.titles(
+            primaryTitle: AppText.editPlaythroughDateHeaderTitle,
+            secondaryTitle: AppText.editPlaythroughDurationHeaderTitle,
           ),
         ),
         SliverToBoxAdapter(

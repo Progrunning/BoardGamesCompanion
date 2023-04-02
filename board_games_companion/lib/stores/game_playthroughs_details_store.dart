@@ -130,10 +130,26 @@ abstract class _GamePlaythroughsDetailsStore with Store {
     }
 
     try {
+      final originalPlaythrough = _playthroughsStore.playthroughs
+          .firstWhereOrNull((playthrough) => playthrough.id == playthroughDetails!.id);
+      if (originalPlaythrough == null) {
+        return;
+      }
+
       final updateSuceeded =
           await _playthroughsStore.updatePlaythrough(playthroughDetails!.playthrough);
       if (updateSuceeded) {
-        for (final PlayerScore playerScore in playthroughDetails.playerScores) {
+        // MK Update playthrough's player scores
+        for (final playerScoreId in originalPlaythrough.scoreIds) {
+          final playerScore = playthroughDetails.playerScores
+              .firstWhereOrNull((playerScore) => playerScore.score.id == playerScoreId);
+          // MK Delete if not present anymore
+          if (playerScore == null) {
+            await _scoresStore.deleteScore(playerScoreId);
+            continue;
+          }
+
+          // MK Add/Update extings ones
           await _scoresStore.addOrUpdateScore(playerScore.score);
         }
 

@@ -25,27 +25,35 @@ abstract class _ScoresStore with Store {
 
   Future<void> refreshScores(String playthroughId) async {
     final playthroughScores = await _scoreService.retrieveScoresForPlaythrough(playthroughId);
+    // ignore: prefer_foreach
     for (final score in playthroughScores) {
-      final scoreIndex = scores.indexWhere((s) => s.id == score.id);
-      if (scoreIndex == -1) {
-        scores.add(score);
-      } else {
-        scores[scoreIndex] = score;
-      }
+      _addOrUpdateScore(score);
     }
   }
 
   Future<bool> addOrUpdateScore(Score score) async {
     final operationSucceeded = await _scoreService.addOrUpdateScore(score);
     if (operationSucceeded) {
-      final scoreIndex = scores.indexWhere((element) => element.id == score.id);
-      if (scoreIndex == -1) {
-        scores.add(score);
-      } else {
-        scores[scoreIndex] = score;
-      }
+      _addOrUpdateScore(score);
     }
 
     return operationSucceeded;
+  }
+
+  void _addOrUpdateScore(Score updatedScore) {
+    final scoreIndex = scores.indexWhere((score) => score.id == updatedScore.id);
+    if (scoreIndex == -1) {
+      scores.add(updatedScore);
+    } else {
+      scores[scoreIndex] = updatedScore;
+    }
+  }
+
+  Future<void> deleteScore(String scoreId) async {
+    await _scoreService.deleteScore(scoreId);
+    final scoreIndex = scores.indexWhere((score) => score.id == scoreId);
+    if (scoreIndex >= 0) {
+      scores.removeAt(scoreIndex);
+    }
   }
 }

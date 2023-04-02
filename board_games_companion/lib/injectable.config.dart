@@ -6,7 +6,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:board_games_companion/pages/board_game_details/board_game_details_view_model.dart'
-    as _i42;
+    as _i43;
 import 'package:board_games_companion/pages/collections/collection_search_result_view_model.dart'
     as _i29;
 import 'package:board_games_companion/pages/collections/collections_view_model.dart'
@@ -14,10 +14,10 @@ import 'package:board_games_companion/pages/collections/collections_view_model.d
 import 'package:board_games_companion/pages/create_board_game/create_board_game_view_model.dart'
     as _i31;
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_view_model.dart'
-    as _i43;
+    as _i44;
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_view_model.dart'
-    as _i35;
-import 'package:board_games_companion/pages/home/home_view_model.dart' as _i44;
+    as _i36;
+import 'package:board_games_companion/pages/home/home_view_model.dart' as _i45;
 import 'package:board_games_companion/pages/hot_board_games/hot_board_games_view_model.dart'
     as _i33;
 import 'package:board_games_companion/pages/player/player_view_model.dart'
@@ -26,20 +26,22 @@ import 'package:board_games_companion/pages/players/players_view_model.dart'
     as _i10;
 import 'package:board_games_companion/pages/plays/plays_view_model.dart'
     as _i34;
+import 'package:board_games_companion/pages/playthroughs/playthrough_migration_view_model.dart'
+    as _i35;
 import 'package:board_games_companion/pages/playthroughs/playthrough_players_selection_view_model.dart'
     as _i11;
 import 'package:board_games_companion/pages/playthroughs/playthrough_statistics_view_model.dart'
-    as _i36;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart'
     as _i37;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_history_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart'
     as _i38;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_log_game_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_history_view_model.dart'
     as _i39;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_log_game_view_model.dart'
     as _i40;
-import 'package:board_games_companion/pages/settings/settings_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_view_model.dart'
     as _i41;
+import 'package:board_games_companion/pages/settings/settings_view_model.dart'
+    as _i42;
 import 'package:board_games_companion/services/analytics_service.dart' as _i20;
 import 'package:board_games_companion/services/board_games_filters_service.dart'
     as _i4;
@@ -77,7 +79,7 @@ import 'package:firebase_analytics/firebase_analytics.dart' as _i7;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import 'services/injectable_register_module.dart' as _i45;
+import 'services/injectable_register_module.dart' as _i46;
 
 // ignore_for_file: unnecessary_lambdas
 // ignore_for_file: lines_longer_than_80_chars
@@ -174,36 +176,41 @@ _i1.GetIt $initGetIt(
         gh<_i15.ScoresStore>(),
         gh<_i20.AnalyticsService>(),
       ));
-  gh.factory<_i35.PlaythroughNoteViewModel>(() =>
-      _i35.PlaythroughNoteViewModel(gh<_i32.GamePlaythroughsDetailsStore>()));
-  gh.singleton<_i36.PlaythroughStatisticsViewModel>(
-      _i36.PlaythroughStatisticsViewModel(
+  gh.factory<_i35.PlaythroughMigrationViewModel>(
+      () => _i35.PlaythroughMigrationViewModel(
+            gh<_i15.ScoresStore>(),
+            gh<_i32.GamePlaythroughsDetailsStore>(),
+          ));
+  gh.factory<_i36.PlaythroughNoteViewModel>(() =>
+      _i36.PlaythroughNoteViewModel(gh<_i32.GamePlaythroughsDetailsStore>()));
+  gh.singleton<_i37.PlaythroughStatisticsViewModel>(
+      _i37.PlaythroughStatisticsViewModel(
     gh<_i8.PlayerService>(),
     gh<_i15.ScoresStore>(),
     gh<_i32.GamePlaythroughsDetailsStore>(),
   ));
-  gh.factory<_i37.PlaythroughsGameSettingsViewModel>(
-      () => _i37.PlaythroughsGameSettingsViewModel(
+  gh.factory<_i38.PlaythroughsGameSettingsViewModel>(
+      () => _i38.PlaythroughsGameSettingsViewModel(
             gh<_i28.BoardGamesStore>(),
             gh<_i32.GamePlaythroughsDetailsStore>(),
           ));
-  gh.factory<_i38.PlaythroughsHistoryViewModel>(() =>
-      _i38.PlaythroughsHistoryViewModel(
+  gh.factory<_i39.PlaythroughsHistoryViewModel>(() =>
+      _i39.PlaythroughsHistoryViewModel(
           gh<_i32.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i39.PlaythroughsLogGameViewModel>(
-      () => _i39.PlaythroughsLogGameViewModel(
+  gh.factory<_i40.PlaythroughsLogGameViewModel>(
+      () => _i40.PlaythroughsLogGameViewModel(
             gh<_i9.PlayersStore>(),
             gh<_i32.GamePlaythroughsDetailsStore>(),
             gh<_i20.AnalyticsService>(),
           ));
-  gh.factory<_i40.PlaythroughsViewModel>(() => _i40.PlaythroughsViewModel(
+  gh.factory<_i41.PlaythroughsViewModel>(() => _i41.PlaythroughsViewModel(
         gh<_i32.GamePlaythroughsDetailsStore>(),
         gh<_i9.PlayersStore>(),
         gh<_i20.AnalyticsService>(),
         gh<_i23.BoardGamesService>(),
         gh<_i19.UserStore>(),
       ));
-  gh.singleton<_i41.SettingsViewModel>(_i41.SettingsViewModel(
+  gh.singleton<_i42.SettingsViewModel>(_i42.SettingsViewModel(
     gh<_i6.FileService>(),
     gh<_i23.BoardGamesService>(),
     gh<_i4.BoardGamesFiltersService>(),
@@ -216,14 +223,14 @@ _i1.GetIt $initGetIt(
     gh<_i19.UserStore>(),
     gh<_i28.BoardGamesStore>(),
   ));
-  gh.factory<_i42.BoardGameDetailsViewModel>(
-      () => _i42.BoardGameDetailsViewModel(
+  gh.factory<_i43.BoardGameDetailsViewModel>(
+      () => _i43.BoardGameDetailsViewModel(
             gh<_i28.BoardGamesStore>(),
             gh<_i20.AnalyticsService>(),
           ));
-  gh.factory<_i43.EditPlaythoughViewModel>(() =>
-      _i43.EditPlaythoughViewModel(gh<_i32.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i44.HomeViewModel>(() => _i44.HomeViewModel(
+  gh.factory<_i44.EditPlaythoughViewModel>(() =>
+      _i44.EditPlaythoughViewModel(gh<_i32.GamePlaythroughsDetailsStore>()));
+  gh.factory<_i45.HomeViewModel>(() => _i45.HomeViewModel(
         gh<_i20.AnalyticsService>(),
         gh<_i13.RateAndReviewService>(),
         gh<_i10.PlayersViewModel>(),
@@ -239,4 +246,4 @@ _i1.GetIt $initGetIt(
   return getIt;
 }
 
-class _$RegisterModule extends _i45.RegisterModule {}
+class _$RegisterModule extends _i46.RegisterModule {}

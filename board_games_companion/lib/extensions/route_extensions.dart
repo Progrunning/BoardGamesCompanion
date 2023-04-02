@@ -7,6 +7,8 @@ import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../pages/edit_playthrough/playthrough_note_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/player/player_page.dart';
+import '../pages/playthroughs/playthrough_migration_page.dart';
+import '../pages/playthroughs/playthrough_players_selection_page.dart';
 import '../pages/playthroughs/playthroughs_page.dart';
 import '../pages/settings/settings_page.dart';
 
@@ -31,6 +33,10 @@ extension RouteExtensions on Route {
         return 'Settings';
       case CreateBoardGamePage.pageRoute:
         return 'Create Board Game';
+      case PlaythroughMigrationPage.pageRoute:
+        return 'Playthrough Migration';
+      case PlahtyroughPlayersSelectionPage.pageRoute:
+        return 'Playthrough Player Selection';
       default:
         return settings.name ?? 'Undefined';
     }
@@ -56,6 +62,10 @@ extension RouteExtensions on Route {
         return 'SettingsPage';
       case CreateBoardGamePage.pageRoute:
         return 'CreateBoardGamePage';
+      case PlaythroughMigrationPage.pageRoute:
+        return 'PlaythroughMigrationPage';
+      case PlahtyroughPlayersSelectionPage.pageRoute:
+        return 'PlahtyroughPlayersSelectionPage';
       default:
         return settings.name ?? 'Undefined';
     }
