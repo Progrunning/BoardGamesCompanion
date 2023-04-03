@@ -10,16 +10,16 @@ abstract class BaseHiveService<TBox, TService> {
 
   late Box<TBox> storageBox;
 
-  String? get _boxName => HiveBoxes.boxesNamesMap[TService];
+  String get _boxName => HiveBoxes.boxesNamesMap[TService] ?? '';
 
-  bool get _isBoxOpen => Hive.isBoxOpen(_boxName!);
+  bool get _isBoxOpen => Hive.isBoxOpen(_boxName);
 
   void closeBox() {
     if (_boxName.isNullOrBlank || !_isBoxOpen) {
       return;
     }
 
-    Hive.box<TBox>(_boxName!).close();
+    Hive.box<TBox>(_boxName).close();
   }
 
   Future<bool> ensureBoxOpen() async {
@@ -28,7 +28,7 @@ abstract class BaseHiveService<TBox, TService> {
     }
 
     if (!_isBoxOpen) {
-      storageBox = await Hive.openBox<TBox>(_boxName!);
+      storageBox = await Hive.openBox<TBox>(_boxName);
     }
 
     return storageBox != null;

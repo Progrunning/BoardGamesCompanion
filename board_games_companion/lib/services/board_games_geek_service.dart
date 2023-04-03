@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 import 'package:board_games_companion/common/hive_boxes.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -33,6 +34,7 @@ import '../models/hive/board_game_publisher.dart';
 import '../models/hive/board_game_rank.dart';
 import '../models/import_result.dart';
 import '../models/parse_collection_xml_arguments.dart';
+import '../models/parse_plays_xml_arguments.dart';
 import '../utilities/custom_http_client_adapter.dart';
 
 const String _xmlErrorElementName = 'error';
@@ -68,6 +70,7 @@ const String _xmlNameAttributeName = 'name';
 const String _xmlUsernameAttributeName = 'username';
 const String _xmlUserIdAttributeName = 'userid';
 const String _xmlScoreAttributeName = 'score';
+const String _xmlWinAttributeName = 'win';
 const String _xmlRankAttributeName = 'rank';
 const String _xmlFriendlyNameAttributeName = 'friendlyname';
 const String _xmlCategoryAttributeTypeName = 'boardgamecategory';
@@ -80,6 +83,8 @@ const String _xmlLengthAttributeTypeName = 'length';
 const String _xmlDateAttributeTypeName = 'date';
 const String _xmlIncompleteAttributeTypeName = 'incomplete';
 const String _xmlLastModifiedAttributeTypeName = 'lastmodified';
+
+const int _playerWinIndicator = 1;
 
 @singleton
 class BoardGamesGeekService {
@@ -459,7 +464,10 @@ class BoardGamesGeekService {
       retryIf: (e) => e is SocketException || e is TimeoutException,
     );
 
-    return compute(parsePlaysXml, playsResultXml.data);
+    return compute(
+      parsePlaysXml,
+      ParsePlaysXmlArguments(playsResultXml.data, bggImportPlays.gameFamily),
+    );
   }
 
   Future<CollectionImportResult> _importCollection(
@@ -497,10 +505,10 @@ class BoardGamesGeekService {
   }
 }
 
-BggPlaysImportResult parsePlaysXml(String? responseData) {
+BggPlaysImportResult parsePlaysXml(ParsePlaysXmlArguments arguments) {
   XmlDocument? playsXmlDocument;
   try {
-    playsXmlDocument = xml.XmlDocument.parse(responseData!);
+    playsXmlDocument = xml.XmlDocument.parse(arguments.responseData!);
   } catch (e, stack) {
     return BggPlaysImportResult.failure([ImportError.exception(e, stack)]);
   }
@@ -532,14 +540,16 @@ BggPlaysImportResult parsePlaysXml(String? responseData) {
       continue;
     }
 
-    final play = BggPlay()
-      ..id = playId
-      ..boardGameId = boardGameId!
-      ..playTimeInMinutes = playTimeInMinutes
-      ..playDate = playDate
-      ..completed = playCompleted
-      ..players = [];
+    var play = BggPlay(
+      id: playId,
+      boardGameId: boardGameId!,
+      playTimeInMinutes: playTimeInMinutes,
+      playDate: playDate,
+      completed: playCompleted,
+      players: [],
+    );
 
+    final bggPlayPlayers = <BggPlayPlayer>[];
     final playPlayersElements = playElement.findAllElements(_xmlPlayerElementName);
     for (final XmlElement playerElement in playPlayersElements) {
       final String? playerName = playerElement.firstOrDefaultAttributeValue(_xmlNameAttributeName);
@@ -549,6 +559,9 @@ BggPlaysImportResult parsePlaysXml(String? responseData) {
           int.tryParse(playElement.firstOrDefaultAttributeValue(_xmlUserIdAttributeName) ?? '');
       final int? playerScore =
           int.tryParse(playerElement.firstOrDefaultAttributeValue(_xmlScoreAttributeName) ?? '');
+      final bool playerWin =
+          int.tryParse(playerElement.firstOrDefaultAttributeValue(_xmlWinAttributeName) ?? '') ==
+              _playerWinIndicator;
 
       if (playerName?.isBlank ?? true) {
         playsImportResult.errors!
@@ -556,19 +569,24 @@ BggPlaysImportResult parsePlaysXml(String? responseData) {
         continue;
       }
 
-      if (playerScore == null) {
+      if (playerScore == null &&
+          (arguments.gameFamily == GameFamily.HighestScore ||
+              arguments.gameFamily == GameFamily.LowestScore)) {
         playsImportResult.errors!
             .add(ImportError('Cannot import a play #$playId without a numeric score'));
         continue;
       }
 
-      play.players.add(BggPlayPlayer()
-        ..playerName = playerName!
-        ..playerScore = playerScore
-        ..playerBggName = playerBggName
-        ..playerBggUserId = playerBggUserId);
+      bggPlayPlayers.add(BggPlayPlayer(
+        playerName: playerName!,
+        playerScore: playerScore,
+        playerBggName: playerBggName,
+        playerBggUserId: playerBggUserId,
+        playerWin: playerWin,
+      ));
     }
 
+    play = play.copyWith(players: bggPlayPlayers);
     if (play.players.isEmpty) {
       continue;
     }

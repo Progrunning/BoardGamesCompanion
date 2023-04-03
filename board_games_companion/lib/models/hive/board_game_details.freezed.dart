@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'board_game_details.dart';
 
@@ -90,7 +90,8 @@ mixin _$BoardGameDetails {
 abstract class $BoardGameDetailsCopyWith<$Res> {
   factory $BoardGameDetailsCopyWith(
           BoardGameDetails value, $Res Function(BoardGameDetails) then) =
-      _$BoardGameDetailsCopyWithImpl<$Res>;
+      _$BoardGameDetailsCopyWithImpl<$Res, BoardGameDetails>;
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String name,
@@ -127,18 +128,20 @@ abstract class $BoardGameDetailsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoardGameDetailsCopyWithImpl<$Res>
+class _$BoardGameDetailsCopyWithImpl<$Res, $Val extends BoardGameDetails>
     implements $BoardGameDetailsCopyWith<$Res> {
   _$BoardGameDetailsCopyWithImpl(this._value, this._then);
 
-  final BoardGameDetails _value;
   // ignore: unused_field
-  final $Res Function(BoardGameDetails) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
+    Object? id = null,
+    Object? name = null,
     Object? thumbnailUrl = freezed,
     Object? rank = freezed,
     Object? yearPublished = freezed,
@@ -153,153 +156,154 @@ class _$BoardGameDetailsCopyWithImpl<$Res>
     Object? maxPlaytime = freezed,
     Object? minAge = freezed,
     Object? avgWeight = freezed,
-    Object? publishers = freezed,
-    Object? artists = freezed,
-    Object? desingers = freezed,
+    Object? publishers = null,
+    Object? artists = null,
+    Object? desingers = null,
     Object? commentsNumber = freezed,
-    Object? ranks = freezed,
+    Object? ranks = null,
     Object? lastModified = freezed,
-    Object? expansions = freezed,
+    Object? expansions = null,
     Object? isExpansion = freezed,
     Object? isOwned = freezed,
     Object? isOnWishlist = freezed,
     Object? isFriends = freezed,
     Object? isBggSynced = freezed,
     Object? settings = freezed,
-    Object? isCreatedByUser = freezed,
+    Object? isCreatedByUser = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      thumbnailUrl: thumbnailUrl == freezed
+      thumbnailUrl: freezed == thumbnailUrl
           ? _value.thumbnailUrl
           : thumbnailUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      rank: rank == freezed
+      rank: freezed == rank
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as int?,
-      yearPublished: yearPublished == freezed
+      yearPublished: freezed == yearPublished
           ? _value.yearPublished
           : yearPublished // ignore: cast_nullable_to_non_nullable
               as int?,
-      imageUrl: imageUrl == freezed
+      imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      description: description == freezed
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      categories: categories == freezed
+      categories: freezed == categories
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<BoardGameCategory>?,
-      rating: rating == freezed
+      rating: freezed == rating
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double?,
-      votes: votes == freezed
+      votes: freezed == votes
           ? _value.votes
           : votes // ignore: cast_nullable_to_non_nullable
               as int?,
-      minPlayers: minPlayers == freezed
+      minPlayers: freezed == minPlayers
           ? _value.minPlayers
           : minPlayers // ignore: cast_nullable_to_non_nullable
               as int?,
-      minPlaytime: minPlaytime == freezed
+      minPlaytime: freezed == minPlaytime
           ? _value.minPlaytime
           : minPlaytime // ignore: cast_nullable_to_non_nullable
               as int?,
-      maxPlayers: maxPlayers == freezed
+      maxPlayers: freezed == maxPlayers
           ? _value.maxPlayers
           : maxPlayers // ignore: cast_nullable_to_non_nullable
               as int?,
-      maxPlaytime: maxPlaytime == freezed
+      maxPlaytime: freezed == maxPlaytime
           ? _value.maxPlaytime
           : maxPlaytime // ignore: cast_nullable_to_non_nullable
               as int?,
-      minAge: minAge == freezed
+      minAge: freezed == minAge
           ? _value.minAge
           : minAge // ignore: cast_nullable_to_non_nullable
               as int?,
-      avgWeight: avgWeight == freezed
+      avgWeight: freezed == avgWeight
           ? _value.avgWeight
           : avgWeight // ignore: cast_nullable_to_non_nullable
               as num?,
-      publishers: publishers == freezed
+      publishers: null == publishers
           ? _value.publishers
           : publishers // ignore: cast_nullable_to_non_nullable
               as List<BoardGamePublisher>,
-      artists: artists == freezed
+      artists: null == artists
           ? _value.artists
           : artists // ignore: cast_nullable_to_non_nullable
               as List<BoardGameArtist>,
-      desingers: desingers == freezed
+      desingers: null == desingers
           ? _value.desingers
           : desingers // ignore: cast_nullable_to_non_nullable
               as List<BoardGameDesigner>,
-      commentsNumber: commentsNumber == freezed
+      commentsNumber: freezed == commentsNumber
           ? _value.commentsNumber
           : commentsNumber // ignore: cast_nullable_to_non_nullable
               as int?,
-      ranks: ranks == freezed
+      ranks: null == ranks
           ? _value.ranks
           : ranks // ignore: cast_nullable_to_non_nullable
               as List<BoardGameRank>,
-      lastModified: lastModified == freezed
+      lastModified: freezed == lastModified
           ? _value.lastModified
           : lastModified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      expansions: expansions == freezed
+      expansions: null == expansions
           ? _value.expansions
           : expansions // ignore: cast_nullable_to_non_nullable
               as List<BoardGameExpansion>,
-      isExpansion: isExpansion == freezed
+      isExpansion: freezed == isExpansion
           ? _value.isExpansion
           : isExpansion // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isOwned: isOwned == freezed
+      isOwned: freezed == isOwned
           ? _value.isOwned
           : isOwned // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isOnWishlist: isOnWishlist == freezed
+      isOnWishlist: freezed == isOnWishlist
           ? _value.isOnWishlist
           : isOnWishlist // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isFriends: isFriends == freezed
+      isFriends: freezed == isFriends
           ? _value.isFriends
           : isFriends // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isBggSynced: isBggSynced == freezed
+      isBggSynced: freezed == isBggSynced
           ? _value.isBggSynced
           : isBggSynced // ignore: cast_nullable_to_non_nullable
               as bool?,
-      settings: settings == freezed
+      settings: freezed == settings
           ? _value.settings
           : settings // ignore: cast_nullable_to_non_nullable
               as BoardGameSettings?,
-      isCreatedByUser: isCreatedByUser == freezed
+      isCreatedByUser: null == isCreatedByUser
           ? _value.isCreatedByUser
           : isCreatedByUser // ignore: cast_nullable_to_non_nullable
               as bool,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $BoardGameSettingsCopyWith<$Res>? get settings {
     if (_value.settings == null) {
       return null;
     }
 
     return $BoardGameSettingsCopyWith<$Res>(_value.settings!, (value) {
-      return _then(_value.copyWith(settings: value));
+      return _then(_value.copyWith(settings: value) as $Val);
     });
   }
 }
@@ -311,6 +315,7 @@ abstract class _$$_BoardGameDetailsCopyWith<$Res>
           _$_BoardGameDetails value, $Res Function(_$_BoardGameDetails) then) =
       __$$_BoardGameDetailsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String name,
@@ -349,19 +354,17 @@ abstract class _$$_BoardGameDetailsCopyWith<$Res>
 
 /// @nodoc
 class __$$_BoardGameDetailsCopyWithImpl<$Res>
-    extends _$BoardGameDetailsCopyWithImpl<$Res>
+    extends _$BoardGameDetailsCopyWithImpl<$Res, _$_BoardGameDetails>
     implements _$$_BoardGameDetailsCopyWith<$Res> {
   __$$_BoardGameDetailsCopyWithImpl(
       _$_BoardGameDetails _value, $Res Function(_$_BoardGameDetails) _then)
-      : super(_value, (v) => _then(v as _$_BoardGameDetails));
+      : super(_value, _then);
 
-  @override
-  _$_BoardGameDetails get _value => super._value as _$_BoardGameDetails;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
+    Object? id = null,
+    Object? name = null,
     Object? thumbnailUrl = freezed,
     Object? rank = freezed,
     Object? yearPublished = freezed,
@@ -376,139 +379,139 @@ class __$$_BoardGameDetailsCopyWithImpl<$Res>
     Object? maxPlaytime = freezed,
     Object? minAge = freezed,
     Object? avgWeight = freezed,
-    Object? publishers = freezed,
-    Object? artists = freezed,
-    Object? desingers = freezed,
+    Object? publishers = null,
+    Object? artists = null,
+    Object? desingers = null,
     Object? commentsNumber = freezed,
-    Object? ranks = freezed,
+    Object? ranks = null,
     Object? lastModified = freezed,
-    Object? expansions = freezed,
+    Object? expansions = null,
     Object? isExpansion = freezed,
     Object? isOwned = freezed,
     Object? isOnWishlist = freezed,
     Object? isFriends = freezed,
     Object? isBggSynced = freezed,
     Object? settings = freezed,
-    Object? isCreatedByUser = freezed,
+    Object? isCreatedByUser = null,
   }) {
     return _then(_$_BoardGameDetails(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      thumbnailUrl: thumbnailUrl == freezed
+      thumbnailUrl: freezed == thumbnailUrl
           ? _value.thumbnailUrl
           : thumbnailUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      rank: rank == freezed
+      rank: freezed == rank
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as int?,
-      yearPublished: yearPublished == freezed
+      yearPublished: freezed == yearPublished
           ? _value.yearPublished
           : yearPublished // ignore: cast_nullable_to_non_nullable
               as int?,
-      imageUrl: imageUrl == freezed
+      imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      description: description == freezed
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      categories: categories == freezed
+      categories: freezed == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<BoardGameCategory>?,
-      rating: rating == freezed
+      rating: freezed == rating
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double?,
-      votes: votes == freezed
+      votes: freezed == votes
           ? _value.votes
           : votes // ignore: cast_nullable_to_non_nullable
               as int?,
-      minPlayers: minPlayers == freezed
+      minPlayers: freezed == minPlayers
           ? _value.minPlayers
           : minPlayers // ignore: cast_nullable_to_non_nullable
               as int?,
-      minPlaytime: minPlaytime == freezed
+      minPlaytime: freezed == minPlaytime
           ? _value.minPlaytime
           : minPlaytime // ignore: cast_nullable_to_non_nullable
               as int?,
-      maxPlayers: maxPlayers == freezed
+      maxPlayers: freezed == maxPlayers
           ? _value.maxPlayers
           : maxPlayers // ignore: cast_nullable_to_non_nullable
               as int?,
-      maxPlaytime: maxPlaytime == freezed
+      maxPlaytime: freezed == maxPlaytime
           ? _value.maxPlaytime
           : maxPlaytime // ignore: cast_nullable_to_non_nullable
               as int?,
-      minAge: minAge == freezed
+      minAge: freezed == minAge
           ? _value.minAge
           : minAge // ignore: cast_nullable_to_non_nullable
               as int?,
-      avgWeight: avgWeight == freezed
+      avgWeight: freezed == avgWeight
           ? _value.avgWeight
           : avgWeight // ignore: cast_nullable_to_non_nullable
               as num?,
-      publishers: publishers == freezed
+      publishers: null == publishers
           ? _value._publishers
           : publishers // ignore: cast_nullable_to_non_nullable
               as List<BoardGamePublisher>,
-      artists: artists == freezed
+      artists: null == artists
           ? _value._artists
           : artists // ignore: cast_nullable_to_non_nullable
               as List<BoardGameArtist>,
-      desingers: desingers == freezed
+      desingers: null == desingers
           ? _value._desingers
           : desingers // ignore: cast_nullable_to_non_nullable
               as List<BoardGameDesigner>,
-      commentsNumber: commentsNumber == freezed
+      commentsNumber: freezed == commentsNumber
           ? _value.commentsNumber
           : commentsNumber // ignore: cast_nullable_to_non_nullable
               as int?,
-      ranks: ranks == freezed
+      ranks: null == ranks
           ? _value._ranks
           : ranks // ignore: cast_nullable_to_non_nullable
               as List<BoardGameRank>,
-      lastModified: lastModified == freezed
+      lastModified: freezed == lastModified
           ? _value.lastModified
           : lastModified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      expansions: expansions == freezed
+      expansions: null == expansions
           ? _value._expansions
           : expansions // ignore: cast_nullable_to_non_nullable
               as List<BoardGameExpansion>,
-      isExpansion: isExpansion == freezed
+      isExpansion: freezed == isExpansion
           ? _value.isExpansion
           : isExpansion // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isOwned: isOwned == freezed
+      isOwned: freezed == isOwned
           ? _value.isOwned
           : isOwned // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isOnWishlist: isOnWishlist == freezed
+      isOnWishlist: freezed == isOnWishlist
           ? _value.isOnWishlist
           : isOnWishlist // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isFriends: isFriends == freezed
+      isFriends: freezed == isFriends
           ? _value.isFriends
           : isFriends // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isBggSynced: isBggSynced == freezed
+      isBggSynced: freezed == isBggSynced
           ? _value.isBggSynced
           : isBggSynced // ignore: cast_nullable_to_non_nullable
               as bool?,
-      settings: settings == freezed
+      settings: freezed == settings
           ? _value.settings
           : settings // ignore: cast_nullable_to_non_nullable
               as BoardGameSettings?,
-      isCreatedByUser: isCreatedByUser == freezed
+      isCreatedByUser: null == isCreatedByUser
           ? _value.isCreatedByUser
           : isCreatedByUser // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -626,6 +629,7 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   List<BoardGameCategory>? get categories {
     final value = _categories;
     if (value == null) return null;
+    if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -659,6 +663,7 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @JsonKey()
   @HiveField(16)
   List<BoardGamePublisher> get publishers {
+    if (_publishers is EqualUnmodifiableListView) return _publishers;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_publishers);
   }
@@ -668,6 +673,7 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @JsonKey()
   @HiveField(17)
   List<BoardGameArtist> get artists {
+    if (_artists is EqualUnmodifiableListView) return _artists;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_artists);
   }
@@ -677,6 +683,7 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @JsonKey()
   @HiveField(18)
   List<BoardGameDesigner> get desingers {
+    if (_desingers is EqualUnmodifiableListView) return _desingers;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_desingers);
   }
@@ -689,6 +696,7 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @JsonKey()
   @HiveField(20)
   List<BoardGameRank> get ranks {
+    if (_ranks is EqualUnmodifiableListView) return _ranks;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_ranks);
   }
@@ -701,6 +709,7 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @JsonKey()
   @HiveField(22)
   List<BoardGameExpansion> get expansions {
+    if (_expansions is EqualUnmodifiableListView) return _expansions;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_expansions);
   }
@@ -738,92 +747,97 @@ class _$_BoardGameDetails extends _BoardGameDetails {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_BoardGameDetails &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.name, name) &&
-            const DeepCollectionEquality()
-                .equals(other.thumbnailUrl, thumbnailUrl) &&
-            const DeepCollectionEquality().equals(other.rank, rank) &&
-            const DeepCollectionEquality()
-                .equals(other.yearPublished, yearPublished) &&
-            const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
-            const DeepCollectionEquality()
-                .equals(other.description, description) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.thumbnailUrl, thumbnailUrl) ||
+                other.thumbnailUrl == thumbnailUrl) &&
+            (identical(other.rank, rank) || other.rank == rank) &&
+            (identical(other.yearPublished, yearPublished) ||
+                other.yearPublished == yearPublished) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
-            const DeepCollectionEquality().equals(other.rating, rating) &&
-            const DeepCollectionEquality().equals(other.votes, votes) &&
-            const DeepCollectionEquality()
-                .equals(other.minPlayers, minPlayers) &&
-            const DeepCollectionEquality()
-                .equals(other.minPlaytime, minPlaytime) &&
-            const DeepCollectionEquality()
-                .equals(other.maxPlayers, maxPlayers) &&
-            const DeepCollectionEquality()
-                .equals(other.maxPlaytime, maxPlaytime) &&
-            const DeepCollectionEquality().equals(other.minAge, minAge) &&
-            const DeepCollectionEquality().equals(other.avgWeight, avgWeight) &&
+            (identical(other.rating, rating) || other.rating == rating) &&
+            (identical(other.votes, votes) || other.votes == votes) &&
+            (identical(other.minPlayers, minPlayers) ||
+                other.minPlayers == minPlayers) &&
+            (identical(other.minPlaytime, minPlaytime) ||
+                other.minPlaytime == minPlaytime) &&
+            (identical(other.maxPlayers, maxPlayers) ||
+                other.maxPlayers == maxPlayers) &&
+            (identical(other.maxPlaytime, maxPlaytime) ||
+                other.maxPlaytime == maxPlaytime) &&
+            (identical(other.minAge, minAge) || other.minAge == minAge) &&
+            (identical(other.avgWeight, avgWeight) ||
+                other.avgWeight == avgWeight) &&
             const DeepCollectionEquality()
                 .equals(other._publishers, _publishers) &&
             const DeepCollectionEquality().equals(other._artists, _artists) &&
             const DeepCollectionEquality()
                 .equals(other._desingers, _desingers) &&
-            const DeepCollectionEquality()
-                .equals(other.commentsNumber, commentsNumber) &&
+            (identical(other.commentsNumber, commentsNumber) ||
+                other.commentsNumber == commentsNumber) &&
             const DeepCollectionEquality().equals(other._ranks, _ranks) &&
-            const DeepCollectionEquality()
-                .equals(other.lastModified, lastModified) &&
+            (identical(other.lastModified, lastModified) ||
+                other.lastModified == lastModified) &&
             const DeepCollectionEquality()
                 .equals(other._expansions, _expansions) &&
-            const DeepCollectionEquality()
-                .equals(other.isExpansion, isExpansion) &&
-            const DeepCollectionEquality().equals(other.isOwned, isOwned) &&
-            const DeepCollectionEquality()
-                .equals(other.isOnWishlist, isOnWishlist) &&
-            const DeepCollectionEquality().equals(other.isFriends, isFriends) &&
-            const DeepCollectionEquality()
-                .equals(other.isBggSynced, isBggSynced) &&
-            const DeepCollectionEquality().equals(other.settings, settings) &&
-            const DeepCollectionEquality()
-                .equals(other.isCreatedByUser, isCreatedByUser));
+            (identical(other.isExpansion, isExpansion) ||
+                other.isExpansion == isExpansion) &&
+            (identical(other.isOwned, isOwned) || other.isOwned == isOwned) &&
+            (identical(other.isOnWishlist, isOnWishlist) ||
+                other.isOnWishlist == isOnWishlist) &&
+            (identical(other.isFriends, isFriends) ||
+                other.isFriends == isFriends) &&
+            (identical(other.isBggSynced, isBggSynced) ||
+                other.isBggSynced == isBggSynced) &&
+            (identical(other.settings, settings) ||
+                other.settings == settings) &&
+            (identical(other.isCreatedByUser, isCreatedByUser) ||
+                other.isCreatedByUser == isCreatedByUser));
   }
 
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
-        const DeepCollectionEquality().hash(id),
-        const DeepCollectionEquality().hash(name),
-        const DeepCollectionEquality().hash(thumbnailUrl),
-        const DeepCollectionEquality().hash(rank),
-        const DeepCollectionEquality().hash(yearPublished),
-        const DeepCollectionEquality().hash(imageUrl),
-        const DeepCollectionEquality().hash(description),
+        id,
+        name,
+        thumbnailUrl,
+        rank,
+        yearPublished,
+        imageUrl,
+        description,
         const DeepCollectionEquality().hash(_categories),
-        const DeepCollectionEquality().hash(rating),
-        const DeepCollectionEquality().hash(votes),
-        const DeepCollectionEquality().hash(minPlayers),
-        const DeepCollectionEquality().hash(minPlaytime),
-        const DeepCollectionEquality().hash(maxPlayers),
-        const DeepCollectionEquality().hash(maxPlaytime),
-        const DeepCollectionEquality().hash(minAge),
-        const DeepCollectionEquality().hash(avgWeight),
+        rating,
+        votes,
+        minPlayers,
+        minPlaytime,
+        maxPlayers,
+        maxPlaytime,
+        minAge,
+        avgWeight,
         const DeepCollectionEquality().hash(_publishers),
         const DeepCollectionEquality().hash(_artists),
         const DeepCollectionEquality().hash(_desingers),
-        const DeepCollectionEquality().hash(commentsNumber),
+        commentsNumber,
         const DeepCollectionEquality().hash(_ranks),
-        const DeepCollectionEquality().hash(lastModified),
+        lastModified,
         const DeepCollectionEquality().hash(_expansions),
-        const DeepCollectionEquality().hash(isExpansion),
-        const DeepCollectionEquality().hash(isOwned),
-        const DeepCollectionEquality().hash(isOnWishlist),
-        const DeepCollectionEquality().hash(isFriends),
-        const DeepCollectionEquality().hash(isBggSynced),
-        const DeepCollectionEquality().hash(settings),
-        const DeepCollectionEquality().hash(isCreatedByUser)
+        isExpansion,
+        isOwned,
+        isOnWishlist,
+        isFriends,
+        isBggSynced,
+        settings,
+        isCreatedByUser
       ]);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_BoardGameDetailsCopyWith<_$_BoardGameDetails> get copyWith =>
       __$$_BoardGameDetailsCopyWithImpl<_$_BoardGameDetails>(this, _$identity);
 }

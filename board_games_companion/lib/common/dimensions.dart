@@ -63,6 +63,7 @@ class Dimensions {
   static const double defaultElevation = 3;
 
   static const double bottomTabTopHeight = 20;
+  static const double floatingActionButtonHeight = 48;
 
   static const double detailsItemHeight = 60;
 
@@ -70,6 +71,8 @@ class Dimensions {
   static const double gameSpinnerMaxWidth = 800;
 
   static const double boardGameTileHeight = 200;
+
+  static const double defaultSegmentedButtonsContainerHeight = 40;
 
   static const double sectionHeaderHeight = 50;
 

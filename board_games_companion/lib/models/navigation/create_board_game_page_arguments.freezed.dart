@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'create_board_game_page_arguments.dart';
 
@@ -29,34 +29,39 @@ abstract class $CreateBoardGamePageArgumentsCopyWith<$Res> {
   factory $CreateBoardGamePageArgumentsCopyWith(
           CreateBoardGamePageArguments value,
           $Res Function(CreateBoardGamePageArguments) then) =
-      _$CreateBoardGamePageArgumentsCopyWithImpl<$Res>;
+      _$CreateBoardGamePageArgumentsCopyWithImpl<$Res,
+          CreateBoardGamePageArguments>;
+  @useResult
   $Res call({String? boardGameName, String? boardGameId});
 }
 
 /// @nodoc
-class _$CreateBoardGamePageArgumentsCopyWithImpl<$Res>
+class _$CreateBoardGamePageArgumentsCopyWithImpl<$Res,
+        $Val extends CreateBoardGamePageArguments>
     implements $CreateBoardGamePageArgumentsCopyWith<$Res> {
   _$CreateBoardGamePageArgumentsCopyWithImpl(this._value, this._then);
 
-  final CreateBoardGamePageArguments _value;
   // ignore: unused_field
-  final $Res Function(CreateBoardGamePageArguments) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? boardGameName = freezed,
     Object? boardGameId = freezed,
   }) {
     return _then(_value.copyWith(
-      boardGameName: boardGameName == freezed
+      boardGameName: freezed == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String?,
-      boardGameId: boardGameId == freezed
+      boardGameId: freezed == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -68,33 +73,32 @@ abstract class _$$_CreateBoardGamePageArgumentsCopyWith<$Res>
           $Res Function(_$_CreateBoardGamePageArguments) then) =
       __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String? boardGameName, String? boardGameId});
 }
 
 /// @nodoc
 class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
-    extends _$CreateBoardGamePageArgumentsCopyWithImpl<$Res>
+    extends _$CreateBoardGamePageArgumentsCopyWithImpl<$Res,
+        _$_CreateBoardGamePageArguments>
     implements _$$_CreateBoardGamePageArgumentsCopyWith<$Res> {
   __$$_CreateBoardGamePageArgumentsCopyWithImpl(
       _$_CreateBoardGamePageArguments _value,
       $Res Function(_$_CreateBoardGamePageArguments) _then)
-      : super(_value, (v) => _then(v as _$_CreateBoardGamePageArguments));
+      : super(_value, _then);
 
-  @override
-  _$_CreateBoardGamePageArguments get _value =>
-      super._value as _$_CreateBoardGamePageArguments;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? boardGameName = freezed,
     Object? boardGameId = freezed,
   }) {
     return _then(_$_CreateBoardGamePageArguments(
-      boardGameName: boardGameName == freezed
+      boardGameName: freezed == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String?,
-      boardGameId: boardGameId == freezed
+      boardGameId: freezed == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -123,20 +127,18 @@ class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CreateBoardGamePageArguments &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameName, boardGameName) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameId, boardGameId));
+            (identical(other.boardGameName, boardGameName) ||
+                other.boardGameName == boardGameName) &&
+            (identical(other.boardGameId, boardGameId) ||
+                other.boardGameId == boardGameId));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(boardGameName),
-      const DeepCollectionEquality().hash(boardGameId));
+  int get hashCode => Object.hash(runtimeType, boardGameName, boardGameId);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_CreateBoardGamePageArgumentsCopyWith<_$_CreateBoardGamePageArguments>
       get copyWith => __$$_CreateBoardGamePageArgumentsCopyWithImpl<
           _$_CreateBoardGamePageArguments>(this, _$identity);

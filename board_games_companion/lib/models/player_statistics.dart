@@ -1,13 +1,23 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'hive/player.dart';
 
-class PlayerStatistics {
-  PlayerStatistics(this.player);
+export '../extensions/player_statistics_extensions.dart';
 
-  final Player player;
+part 'player_statistics.freezed.dart';
 
-  num? personalBestScore;
-
-  num? averageScore;
-
-  int? numberOfGamesPlayed;
+@freezed
+class PlayerStatistics with _$PlayerStatistics {
+  const factory PlayerStatistics.scoreGames({
+    required Player player,
+    required int personalBestScore,
+    required num averageScore,
+    required int totalGamesPlayed,
+  }) = _scoreGames;
+  const factory PlayerStatistics.noScoreGames({
+    required Player player,
+    required int totalGamesPlayed,
+    required int totalWins,
+    required int totalLosses,
+  }) = _noScoreGames;
 }

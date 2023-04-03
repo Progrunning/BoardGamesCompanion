@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/enums/game_winning_condition.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
 
+import '../models/hive/no_score_game_result.dart';
 import '../models/hive/score.dart';
 
 extension ScoreExtesions on Score {
@@ -19,50 +20,71 @@ extension ScoresExtesions on List<Score>? {
         <Score>[];
   }
 
-  List<Score>? sortByScore(GameWinningCondition winningCondition) {
+  List<Score> onlyCooperativeGames() {
+    return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??
+        <Score>[];
+  }
+
+  List<Score>? sortByScore(GameFamily gameFamily) {
     return this
       ?..sort((Score score, Score otherScore) {
-        return compareScores(score, otherScore, winningCondition);
+        return compareScores(score, otherScore, gameFamily);
       });
   }
 
-  num? toBestScore(GameWinningCondition gameWinningCondition) {
+  num? toBestScore(GameFamily gameFamily) {
     final scores = this
             ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
             .map((Score score) => num.parse(score.value!)) ??
         [];
-    switch (gameWinningCondition) {
-      case GameWinningCondition.HighestScore:
+    switch (gameFamily) {
+      case GameFamily.HighestScore:
         return scores.reduce(max);
-      case GameWinningCondition.LowestScore:
+      case GameFamily.LowestScore:
         return scores.reduce(min);
+      case GameFamily.Cooperative:
+        break;
     }
+
+    return null;
   }
 
-  double? toAverageScore() {
+  double toAverageScore() {
     final scores = this
             ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
             .map((Score score) => num.parse(score.value!)) ??
         [];
-
-    if (scores.isEmpty) {
-      return null;
-    }
 
     return scores.reduce((a, b) => a + b) / scores.length;
   }
+
+  int get totalCooperativeWins =>
+      this
+          ?.where((score) =>
+              score.noScoreGameResult?.cooperativeGameResult == CooperativeGameResult.win)
+          .length ??
+      0;
+
+  int get totalCooperativeLosses =>
+      this
+          ?.where((score) =>
+              score.noScoreGameResult?.cooperativeGameResult == CooperativeGameResult.loss)
+          .length ??
+      0;
 }
 
-int compareScores(Score score, Score otherScore, GameWinningCondition winningCondition) {
-  switch (winningCondition) {
-    case GameWinningCondition.LowestScore:
+int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
+  switch (gameFamily) {
+    case GameFamily.LowestScore:
       // MK Swap scores around
       final buffer = otherScore;
       otherScore = score;
       score = buffer;
       break;
-    case GameWinningCondition.HighestScore:
+    case GameFamily.HighestScore:
       // MK No swapping needed
+      break;
+    case GameFamily.Cooperative:
       break;
   }
 

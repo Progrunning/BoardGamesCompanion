@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'player_score.dart';
 
@@ -29,7 +29,8 @@ mixin _$PlayerScore {
 abstract class $PlayerScoreCopyWith<$Res> {
   factory $PlayerScoreCopyWith(
           PlayerScore value, $Res Function(PlayerScore) then) =
-      _$PlayerScoreCopyWithImpl<$Res>;
+      _$PlayerScoreCopyWithImpl<$Res, PlayerScore>;
+  @useResult
   $Res call({Player? player, Score score, int? place});
 
   $PlayerCopyWith<$Res>? get player;
@@ -37,50 +38,55 @@ abstract class $PlayerScoreCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PlayerScoreCopyWithImpl<$Res> implements $PlayerScoreCopyWith<$Res> {
+class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
+    implements $PlayerScoreCopyWith<$Res> {
   _$PlayerScoreCopyWithImpl(this._value, this._then);
 
-  final PlayerScore _value;
   // ignore: unused_field
-  final $Res Function(PlayerScore) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? player = freezed,
-    Object? score = freezed,
+    Object? score = null,
     Object? place = freezed,
   }) {
     return _then(_value.copyWith(
-      player: player == freezed
+      player: freezed == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as Player?,
-      score: score == freezed
+      score: null == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as Score,
-      place: place == freezed
+      place: freezed == place
           ? _value.place
           : place // ignore: cast_nullable_to_non_nullable
               as int?,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $PlayerCopyWith<$Res>? get player {
     if (_value.player == null) {
       return null;
     }
 
     return $PlayerCopyWith<$Res>(_value.player!, (value) {
-      return _then(_value.copyWith(player: value));
+      return _then(_value.copyWith(player: value) as $Val);
     });
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $ScoreCopyWith<$Res> get score {
     return $ScoreCopyWith<$Res>(_value.score, (value) {
-      return _then(_value.copyWith(score: value));
+      return _then(_value.copyWith(score: value) as $Val);
     });
   }
 }
@@ -92,6 +98,7 @@ abstract class _$$_PlayerScoreCopyWith<$Res>
           _$_PlayerScore value, $Res Function(_$_PlayerScore) then) =
       __$$_PlayerScoreCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({Player? player, Score score, int? place});
 
   @override
@@ -101,31 +108,30 @@ abstract class _$$_PlayerScoreCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlayerScoreCopyWithImpl<$Res> extends _$PlayerScoreCopyWithImpl<$Res>
+class __$$_PlayerScoreCopyWithImpl<$Res>
+    extends _$PlayerScoreCopyWithImpl<$Res, _$_PlayerScore>
     implements _$$_PlayerScoreCopyWith<$Res> {
   __$$_PlayerScoreCopyWithImpl(
       _$_PlayerScore _value, $Res Function(_$_PlayerScore) _then)
-      : super(_value, (v) => _then(v as _$_PlayerScore));
+      : super(_value, _then);
 
-  @override
-  _$_PlayerScore get _value => super._value as _$_PlayerScore;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? player = freezed,
-    Object? score = freezed,
+    Object? score = null,
     Object? place = freezed,
   }) {
     return _then(_$_PlayerScore(
-      player: player == freezed
+      player: freezed == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as Player?,
-      score: score == freezed
+      score: null == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as Score,
-      place: place == freezed
+      place: freezed == place
           ? _value.place
           : place // ignore: cast_nullable_to_non_nullable
               as int?,
@@ -156,20 +162,17 @@ class _$_PlayerScore extends _PlayerScore {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PlayerScore &&
-            const DeepCollectionEquality().equals(other.player, player) &&
-            const DeepCollectionEquality().equals(other.score, score) &&
-            const DeepCollectionEquality().equals(other.place, place));
+            (identical(other.player, player) || other.player == player) &&
+            (identical(other.score, score) || other.score == score) &&
+            (identical(other.place, place) || other.place == place));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(player),
-      const DeepCollectionEquality().hash(score),
-      const DeepCollectionEquality().hash(place));
+  int get hashCode => Object.hash(runtimeType, player, score, place);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlayerScoreCopyWith<_$_PlayerScore> get copyWith =>
       __$$_PlayerScoreCopyWithImpl<_$_PlayerScore>(this, _$identity);
 }

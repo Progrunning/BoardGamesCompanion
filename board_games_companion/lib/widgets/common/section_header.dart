@@ -1,4 +1,3 @@
-import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
@@ -8,15 +7,64 @@ import '../../common/dimensions.dart';
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
     Key? key,
-    required this.primaryTitle,
-    this.secondaryTitle,
-    double height = Dimensions.sectionHeaderHeight,
-  })  : _height = height,
-        super(key: key);
+    required this.primaryWidget,
+    this.secondaryWidget,
+    this.height = Dimensions.sectionHeaderHeight,
+    this.padding = const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+  }) : super(key: key);
 
-  final double _height;
-  final String primaryTitle;
-  final String? secondaryTitle;
+  factory SectionHeader.title({
+    required String primaryTitle,
+    double height = Dimensions.sectionHeaderHeight,
+  }) =>
+      SectionHeader(
+        primaryWidget: Text(
+          primaryTitle,
+          style: AppTheme.titleTextStyle,
+          overflow: TextOverflow.ellipsis,
+        ),
+        height: height,
+      );
+
+  factory SectionHeader.titles({
+    required String primaryTitle,
+    required String secondaryTitle,
+    double height = Dimensions.sectionHeaderHeight,
+  }) =>
+      SectionHeader(
+        primaryWidget: Text(
+          primaryTitle,
+          style: AppTheme.titleTextStyle,
+          overflow: TextOverflow.ellipsis,
+        ),
+        secondaryWidget: Text(
+          secondaryTitle,
+          style: AppTheme.titleTextStyle,
+          overflow: TextOverflow.ellipsis,
+        ),
+        height: height,
+      );
+
+  factory SectionHeader.customAction({
+    required String primaryTitle,
+    required Widget action,
+    double height = Dimensions.sectionHeaderHeight,
+  }) =>
+      SectionHeader(
+        primaryWidget: Text(
+          primaryTitle,
+          style: AppTheme.titleTextStyle,
+          overflow: TextOverflow.ellipsis,
+        ),
+        secondaryWidget: action,
+        height: height,
+        padding: const EdgeInsets.only(left: Dimensions.standardSpacing),
+      );
+
+  final Widget primaryWidget;
+  final Widget? secondaryWidget;
+  final double height;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +72,17 @@ class SectionHeader extends StatelessWidget {
       elevation: Dimensions.defaultElevation,
       color: AppColors.primaryColor,
       child: SizedBox(
-        height: _height,
+        height: height,
         child: Padding(
-          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          padding: padding,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(primaryTitle, style: AppTheme.titleTextStyle, overflow: TextOverflow.ellipsis),
-              if (secondaryTitle.isNotNullOrBlank) ...[
-                const Expanded(child: SizedBox.shrink()),
-                Text(
-                  secondaryTitle!,
-                  style: AppTheme.titleTextStyle,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ]
+              primaryWidget,
+              if (secondaryWidget != null) ...[
+                const Spacer(),
+                secondaryWidget!,
+              ],
             ],
           ),
         ),

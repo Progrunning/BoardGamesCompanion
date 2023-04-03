@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'edit_playthrough_page_arguments.dart';
 
@@ -30,39 +30,44 @@ abstract class $EditPlaythroughPageArgumentsCopyWith<$Res> {
   factory $EditPlaythroughPageArgumentsCopyWith(
           EditPlaythroughPageArguments value,
           $Res Function(EditPlaythroughPageArguments) then) =
-      _$EditPlaythroughPageArgumentsCopyWithImpl<$Res>;
+      _$EditPlaythroughPageArgumentsCopyWithImpl<$Res,
+          EditPlaythroughPageArguments>;
+  @useResult
   $Res call({String playthroughId, String boardGameId, String goBackPageRoute});
 }
 
 /// @nodoc
-class _$EditPlaythroughPageArgumentsCopyWithImpl<$Res>
+class _$EditPlaythroughPageArgumentsCopyWithImpl<$Res,
+        $Val extends EditPlaythroughPageArguments>
     implements $EditPlaythroughPageArgumentsCopyWith<$Res> {
   _$EditPlaythroughPageArgumentsCopyWithImpl(this._value, this._then);
 
-  final EditPlaythroughPageArguments _value;
   // ignore: unused_field
-  final $Res Function(EditPlaythroughPageArguments) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playthroughId = freezed,
-    Object? boardGameId = freezed,
-    Object? goBackPageRoute = freezed,
+    Object? playthroughId = null,
+    Object? boardGameId = null,
+    Object? goBackPageRoute = null,
   }) {
     return _then(_value.copyWith(
-      playthroughId: playthroughId == freezed
+      playthroughId: null == playthroughId
           ? _value.playthroughId
           : playthroughId // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      goBackPageRoute: goBackPageRoute == freezed
+      goBackPageRoute: null == goBackPageRoute
           ? _value.goBackPageRoute
           : goBackPageRoute // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -74,38 +79,37 @@ abstract class _$$_EditPlaythroughPageArgumentsCopyWith<$Res>
           $Res Function(_$_EditPlaythroughPageArguments) then) =
       __$$_EditPlaythroughPageArgumentsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String playthroughId, String boardGameId, String goBackPageRoute});
 }
 
 /// @nodoc
 class __$$_EditPlaythroughPageArgumentsCopyWithImpl<$Res>
-    extends _$EditPlaythroughPageArgumentsCopyWithImpl<$Res>
+    extends _$EditPlaythroughPageArgumentsCopyWithImpl<$Res,
+        _$_EditPlaythroughPageArguments>
     implements _$$_EditPlaythroughPageArgumentsCopyWith<$Res> {
   __$$_EditPlaythroughPageArgumentsCopyWithImpl(
       _$_EditPlaythroughPageArguments _value,
       $Res Function(_$_EditPlaythroughPageArguments) _then)
-      : super(_value, (v) => _then(v as _$_EditPlaythroughPageArguments));
+      : super(_value, _then);
 
-  @override
-  _$_EditPlaythroughPageArguments get _value =>
-      super._value as _$_EditPlaythroughPageArguments;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playthroughId = freezed,
-    Object? boardGameId = freezed,
-    Object? goBackPageRoute = freezed,
+    Object? playthroughId = null,
+    Object? boardGameId = null,
+    Object? goBackPageRoute = null,
   }) {
     return _then(_$_EditPlaythroughPageArguments(
-      playthroughId: playthroughId == freezed
+      playthroughId: null == playthroughId
           ? _value.playthroughId
           : playthroughId // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      goBackPageRoute: goBackPageRoute == freezed
+      goBackPageRoute: null == goBackPageRoute
           ? _value.goBackPageRoute
           : goBackPageRoute // ignore: cast_nullable_to_non_nullable
               as String,
@@ -138,23 +142,21 @@ class _$_EditPlaythroughPageArguments implements _EditPlaythroughPageArguments {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EditPlaythroughPageArguments &&
-            const DeepCollectionEquality()
-                .equals(other.playthroughId, playthroughId) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameId, boardGameId) &&
-            const DeepCollectionEquality()
-                .equals(other.goBackPageRoute, goBackPageRoute));
+            (identical(other.playthroughId, playthroughId) ||
+                other.playthroughId == playthroughId) &&
+            (identical(other.boardGameId, boardGameId) ||
+                other.boardGameId == boardGameId) &&
+            (identical(other.goBackPageRoute, goBackPageRoute) ||
+                other.goBackPageRoute == goBackPageRoute));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(playthroughId),
-      const DeepCollectionEquality().hash(boardGameId),
-      const DeepCollectionEquality().hash(goBackPageRoute));
+  int get hashCode =>
+      Object.hash(runtimeType, playthroughId, boardGameId, goBackPageRoute);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_EditPlaythroughPageArgumentsCopyWith<_$_EditPlaythroughPageArguments>
       get copyWith => __$$_EditPlaythroughPageArgumentsCopyWithImpl<
           _$_EditPlaythroughPageArguments>(this, _$identity);

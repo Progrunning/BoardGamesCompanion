@@ -128,17 +128,17 @@ class _ScoreHistory extends StatelessWidget {
       child: Wrap(
         alignment: WrapAlignment.center,
         children: [
-          Text('(', style: AppTheme.theme.textTheme.bodyText1),
+          Text('(', style: AppTheme.theme.textTheme.bodyLarge),
           for (var i = 0; i < partialScores.length; i++) ...[
             Text(
               partialScores[i] > 0 ? '+${partialScores[i]}' : '${partialScores[i]}',
-              style: AppTheme.theme.textTheme.bodyText1,
+              style: AppTheme.theme.textTheme.bodyLarge,
             ),
             if (i != partialScores.length - 1) ...[
-              Text(', ', style: AppTheme.theme.textTheme.bodyText1),
+              Text(', ', style: AppTheme.theme.textTheme.bodyLarge),
             ]
           ],
-          Text(')', style: AppTheme.theme.textTheme.bodyText1),
+          Text(')', style: AppTheme.theme.textTheme.bodyLarge),
         ],
       ),
     );
@@ -162,22 +162,22 @@ class _Score extends StatelessWidget {
       children: <Widget>[
         Text(
           '$playerName ',
-          style: AppTheme.theme.textTheme.headline1!,
+          style: AppTheme.theme.textTheme.displayLarge!,
         ),
         Text(
           sprintf(AppText.editPlaythroughPlayerScored, [playerName]),
-          style: AppTheme.theme.textTheme.headline1!.copyWith(fontWeight: FontWeight.normal),
+          style: AppTheme.theme.textTheme.displayLarge!.copyWith(fontWeight: FontWeight.normal),
         ),
         Text(
           ' $score ',
-          style: AppTheme.theme.textTheme.headline1!.copyWith(
+          style: AppTheme.theme.textTheme.displayLarge!.copyWith(
             fontSize: Dimensions.doubleExtraLargeFontSize,
             color: AppColors.accentColor,
           ),
         ),
         Text(
           AppText.editPlaythroughScorePoints,
-          style: AppTheme.theme.textTheme.headline1!.copyWith(fontWeight: FontWeight.normal),
+          style: AppTheme.theme.textTheme.displayLarge!.copyWith(fontWeight: FontWeight.normal),
         ),
       ],
     );
@@ -259,7 +259,7 @@ class _InstantScoreOperationTile extends StatelessWidget {
         child: Center(
             child: Text(
           symbol,
-          style: AppTheme.theme.textTheme.headline1,
+          style: AppTheme.theme.textTheme.displayLarge,
         )),
       ),
     );
@@ -289,7 +289,7 @@ class _InstantScoreTile extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: AppTheme.theme.textTheme.headline3!,
+            style: AppTheme.theme.textTheme.displaySmall!,
             textAlign: TextAlign.center,
           ),
         ),
@@ -387,11 +387,6 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.size.width,
@@ -414,7 +409,7 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
                 onEnd: () => _resetPickedNumber(),
                 child: Text(
                   _number > 0 ? '+$_number' : '$_number',
-                  style: AppTheme.theme.textTheme.headline1?.copyWith(fontSize: 56),
+                  style: AppTheme.theme.textTheme.displayLarge?.copyWith(fontSize: 56),
                 ),
               ),
             ),

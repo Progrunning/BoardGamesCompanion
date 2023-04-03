@@ -19,12 +19,12 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
-import '../common/slivers/bgc_sliver_header_delegate.dart';
+import '../common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../common/sorting/sort_by_chip.dart';
 
 /// [SearchDelegate] for the online (i.e. BGG) search.
 /// Controller by the [HomeViewModel].
-/// Returns the id of a [BoardGameDetails]
+/// Returns the [BggSearchResult]
 class BggSearch extends SearchDelegate<BggSearchResult?> {
   BggSearch({
     required this.searchHistory,
@@ -48,7 +48,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
-        textTheme: const TextTheme(headline6: AppTheme.defaultTextFieldStyle),
+        textTheme: const TextTheme(titleLarge: AppTheme.defaultTextFieldStyle),
       );
 
   @override
@@ -108,7 +108,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
               return CustomScrollView(
                 slivers: [
                   SliverPersistentHeader(
-                    delegate: BgcSliverHeaderDelegate(
+                    delegate: BgcSliverTitleHeaderDelegate.title(
                       primaryTitle: AppText.onlineSearchSortingSectionTitle,
                     ),
                   ),
@@ -120,7 +120,7 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
                     },
                   ),
                   SliverPersistentHeader(
-                    delegate: BgcSliverHeaderDelegate(
+                    delegate: BgcSliverTitleHeaderDelegate.title(
                       primaryTitle: sprintf(
                         AppText.onlineSearchResultsSectionTitleFormat,
                         [foundGames!.length],
@@ -329,7 +329,7 @@ class _SearchResultGameDetails extends StatelessWidget {
           Text(
             sprintf(AppText.onlineSearchGamePublishYearFormat, [boardGame.yearPublished]),
             overflow: TextOverflow.ellipsis,
-            style: AppTheme.theme.textTheme.subtitle1,
+            style: AppTheme.theme.textTheme.titleMedium,
           ),
       ],
     );

@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/navigation/playthough_note_page_arguments.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -17,11 +20,13 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../mixins/enter_score_dialog.dart';
+import '../../models/hive/no_score_game_result.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/page_container.dart';
-import '../../widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
+import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
 import '../enter_score/enter_score_view_model.dart';
 import 'edit_playthrough_view_model.dart';
 
@@ -59,41 +64,28 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
               child: Observer(builder: (_) {
                 return CustomScrollView(
                   slivers: [
-                    SliverPersistentHeader(
-                      delegate: BgcSliverHeaderDelegate(
-                        primaryTitle: AppText.editPlaythroughDateAndDurationHeaderTitle,
-                      ),
-                    ),
                     _PlayDateTimeSection(viewModel: widget.viewModel),
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: BgcSliverHeaderDelegate(
-                          primaryTitle: AppText.editPlaythroughScoresHeaderTitle),
-                    ),
-                    _ScoresSection(
-                      viewModel: widget.viewModel,
-                      onItemTapped: (PlayerScore playerScore) async =>
-                          _editPlayerScore(playerScore, context),
-                    ),
-                    if (widget.viewModel.hasNotes) ...[
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: BgcSliverHeaderDelegate(
-                            primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+                    if (widget.viewModel.gameClassification == GameClassification.Score)
+                      _ScoresSection(
+                        playerScores: widget.viewModel.playerScores,
+                        playthroughDetailsId: widget.viewModel.playthroughDetails.id,
+                        onItemTapped: (PlayerScore playerScore) async =>
+                            _editPlayerScore(playerScore, context),
                       ),
+                    if (widget.viewModel.gameClassification == GameClassification.NoScore)
+                      _NoScoreSection(
+                        playthroughId: widget.viewModel.playthrough.id,
+                        players: widget.viewModel.players,
+                        cooperativeGameResult: widget.viewModel.cooperativeGameResult,
+                        onCooperativeGameResultChanged: (cooperativeGameResult) =>
+                            widget.viewModel.updateCooperativeGameResult(cooperativeGameResult),
+                      ),
+                    if (widget.viewModel.hasNotes)
                       _NotesSection(
                         notes: widget.viewModel.notes!,
                         onTap: (note) => _editNote(note.id),
                         onDelete: (note) => _deleteNote(note),
                       ),
-                      // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
-                      const SliverPadding(
-                        padding: EdgeInsets.only(
-                          bottom: Dimensions.floatingActionButtonBottomSpacing +
-                              Dimensions.standardSpacing,
-                        ),
-                      ),
-                    ]
                   ],
                 );
               }),
@@ -167,8 +159,11 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _close(BuildContext context) async {
+    // ignore: use_build_context_synchronously
     if (await _handleOnWillPop(context)) {
-      Navigator.pop(context);
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -262,38 +257,125 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
 class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
     Key? key,
-    required this.viewModel,
+    required this.playerScores,
+    required this.playthroughDetailsId,
     required this.onItemTapped,
   }) : super(key: key);
 
-  final EditPlaythoughViewModel viewModel;
+  final List<PlayerScore> playerScores;
+  final String playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
-  Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) {
-        return SliverPadding(
-          padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, index) {
-                final int itemIndex = index ~/ 2;
-                if (index.isEven) {
-                  return _PlayerScoreTile(
-                    playerScore: viewModel.playerScores[itemIndex],
-                    playthroughId: viewModel.playthroughDetails.id,
-                    onItemTapped: onItemTapped,
-                  );
-                }
-
-                return const SizedBox(height: Dimensions.doubleStandardSpacing);
-              },
-              childCount: max(0, viewModel.playerScores.length * 2 - 1),
+  Widget build(BuildContext context) => MultiSliver(
+        children: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
             ),
           ),
-        );
-      },
+          Observer(
+            builder: (_) {
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (_, index) {
+                      final int itemIndex = index ~/ 2;
+                      if (index.isEven) {
+                        return _PlayerScoreTile(
+                          playerScore: playerScores[itemIndex],
+                          playthroughId: playthroughDetailsId,
+                          onItemTapped: onItemTapped,
+                        );
+                      }
+
+                      return const SizedBox(height: Dimensions.doubleStandardSpacing);
+                    },
+                    childCount: max(0, playerScores.length * 2 - 1),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+}
+
+class _NoScoreSection extends StatelessWidget {
+  const _NoScoreSection({
+    required this.playthroughId,
+    required this.cooperativeGameResult,
+    required this.players,
+    required this.onCooperativeGameResultChanged,
+  });
+
+  final String playthroughId;
+  final CooperativeGameResult? cooperativeGameResult;
+  final List<Player> players;
+  final void Function(CooperativeGameResult) onCooperativeGameResultChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.editPlaythroughNoScoreResultHeaderTitle,
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              children: [
+                const Text(
+                  AppText.editPlaythroughNoScoreResultText,
+                  style: AppTheme.defaultTextFieldStyle,
+                ),
+                const Spacer(),
+                CooperativeGameResultSegmentedButton(
+                  cooperativeGameResult: cooperativeGameResult,
+                  onCooperativeGameResultChanged: (cooperativeGameResult) =>
+                      onCooperativeGameResultChanged(cooperativeGameResult),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.editPlaythroughNoScorePlayersHeaderTitle,
+          ),
+        ),
+        Observer(
+          builder: (_) {
+            return SliverPadding(
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+              sliver: SliverGrid.extent(
+                crossAxisSpacing: Dimensions.standardSpacing,
+                mainAxisSpacing: Dimensions.standardSpacing,
+                maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
+                children: [
+                  for (var player in players)
+                    SizedBox(
+                      height: Dimensions.smallPlayerAvatarSize.height,
+                      width: Dimensions.smallPlayerAvatarSize.width,
+                      child: PlayerAvatar(
+                        player: player,
+                        playerHeroIdSuffix: playthroughId,
+                        avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -312,44 +394,59 @@ class _NotesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (_, index) {
-          final int itemIndex = index ~/ 2;
-          final note = notes[itemIndex];
-          if (index.isEven) {
-            return InkWell(
-              onTap: () => onTap(note),
-              child: Slidable(
-                endActionPane: ActionPane(
-                  extentRatio: 0.25,
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      icon: Icons.delete,
-                      onPressed: (_) => onDelete(note),
-                      backgroundColor: AppColors.redColor,
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, index) {
+              final int itemIndex = index ~/ 2;
+              final note = notes[itemIndex];
+              if (index.isEven) {
+                return InkWell(
+                  onTap: () => onTap(note),
+                  child: Slidable(
+                    endActionPane: ActionPane(
+                      extentRatio: 0.25,
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          icon: Icons.delete,
+                          onPressed: (_) => onDelete(note),
+                          backgroundColor: AppColors.redColor,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                        child: Text(note.text, textAlign: TextAlign.justify),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          }
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                            child: Text(note.text, textAlign: TextAlign.justify),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
 
-          return const SizedBox(height: Dimensions.standardSpacing);
-        },
-        childCount: max(0, notes.length * 2 - 1),
-      ),
+              return const SizedBox(height: Dimensions.standardSpacing);
+            },
+            childCount: max(0, notes.length * 2 - 1),
+          ),
+        ),
+        // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
+        const SliverPadding(
+          padding: EdgeInsets.only(
+            bottom: Dimensions.floatingActionButtonBottomSpacing + Dimensions.standardSpacing,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -438,7 +535,7 @@ class _PlayerScore extends StatelessWidget {
               style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),
-            Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyText2),
+            Text(AppText.editPlaythroughScorePoints, style: AppTheme.theme.textTheme.bodyMedium),
           ],
         ),
       ],
@@ -484,58 +581,68 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
   @override
   Widget build(BuildContext context) {
     _setHourseAndMinutesRange();
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-        child: Row(
-          children: [
-            Center(
-              child: Observer(
-                builder: (_) {
-                  return CalendarCard(
-                    widget.viewModel.playthroughStartTime,
-                    onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
-                  );
-                },
-              ),
-            ),
-            const Expanded(child: SizedBox.shrink()),
-            AbsorbPointer(
-              absorbing: !widget.viewModel.playthoughEnded,
-              child: Row(
-                children: <Widget>[
-                  NumberPicker(
-                    value: math.min(hoursPlayed, _maxHours),
-                    minValue: minHours,
-                    maxValue: maxHours,
-                    onChanged: (num value) => _updateDurationHours(value),
-                    itemWidth: 46,
-                    selectedTextStyle: const TextStyle(
-                      color: AppColors.accentColor,
-                      fontSize: Dimensions.doubleExtraLargeFontSize,
-                    ),
-                  ),
-                  Text('h', style: AppTheme.theme.textTheme.bodyText2),
-                  const SizedBox(width: Dimensions.halfStandardSpacing),
-                  NumberPicker(
-                    value: minutesPlyed,
-                    infiniteLoop: true,
-                    minValue: minMinutes,
-                    maxValue: maxMinutes,
-                    onChanged: (num value) => _updateDurationMinutes(value),
-                    itemWidth: 46,
-                    selectedTextStyle: const TextStyle(
-                      color: AppColors.accentColor,
-                      fontSize: Dimensions.doubleExtraLargeFontSize,
-                    ),
-                  ),
-                  Text('min ', style: AppTheme.theme.textTheme.bodyText2),
-                ],
-              ),
-            )
-          ],
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.titles(
+            primaryTitle: AppText.editPlaythroughDateHeaderTitle,
+            secondaryTitle: AppText.editPlaythroughDurationHeaderTitle,
+          ),
         ),
-      ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+            child: Row(
+              children: [
+                Center(
+                  child: Observer(
+                    builder: (_) {
+                      return CalendarCard(
+                        widget.viewModel.playthroughStartTime,
+                        onTap: widget.viewModel.playthoughEnded ? () => _pickStartDate() : null,
+                      );
+                    },
+                  ),
+                ),
+                const Expanded(child: SizedBox.shrink()),
+                AbsorbPointer(
+                  absorbing: !widget.viewModel.playthoughEnded,
+                  child: Row(
+                    children: <Widget>[
+                      NumberPicker(
+                        value: math.min(hoursPlayed, _maxHours),
+                        minValue: minHours,
+                        maxValue: maxHours,
+                        onChanged: (num value) => _updateDurationHours(value),
+                        itemWidth: 46,
+                        selectedTextStyle: const TextStyle(
+                          color: AppColors.accentColor,
+                          fontSize: Dimensions.doubleExtraLargeFontSize,
+                        ),
+                      ),
+                      Text('h', style: AppTheme.theme.textTheme.bodyMedium),
+                      const SizedBox(width: Dimensions.halfStandardSpacing),
+                      NumberPicker(
+                        value: minutesPlyed,
+                        infiniteLoop: true,
+                        minValue: minMinutes,
+                        maxValue: maxMinutes,
+                        onChanged: (num value) => _updateDurationMinutes(value),
+                        itemWidth: 46,
+                        selectedTextStyle: const TextStyle(
+                          color: AppColors.accentColor,
+                          fontSize: Dimensions.doubleExtraLargeFontSize,
+                        ),
+                      ),
+                      Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

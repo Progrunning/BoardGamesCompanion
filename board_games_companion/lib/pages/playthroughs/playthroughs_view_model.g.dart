@@ -57,6 +57,13 @@ mixin _$PlaythroughsViewModel on _PlaythroughsViewModel, Store {
           () => super.gamePlaylistUrl,
           name: '_PlaythroughsViewModel.gamePlaylistUrl'))
       .value;
+  Computed<GameFamily>? _$gameFamilyComputed;
+
+  @override
+  GameFamily get gameFamily =>
+      (_$gameFamilyComputed ??= Computed<GameFamily>(() => super.gameFamily,
+              name: '_PlaythroughsViewModel.gameFamily'))
+          .value;
 
   late final _$_PlaythroughsViewModelActionController =
       ActionController(name: '_PlaythroughsViewModel', context: context);
@@ -81,7 +88,8 @@ isCreatedByUser: ${isCreatedByUser},
 hasUser: ${hasUser},
 userName: ${userName},
 canImportGames: ${canImportGames},
-gamePlaylistUrl: ${gamePlaylistUrl}
+gamePlaylistUrl: ${gamePlaylistUrl},
+gameFamily: ${gameFamily}
     ''';
   }
 }

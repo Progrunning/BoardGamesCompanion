@@ -5,8 +5,8 @@ import '../../../common/app_colors.dart';
 import '../../../common/app_styles.dart';
 import '../../../common/dimensions.dart';
 
-class FilterToggleButtonsContainer extends StatelessWidget {
-  const FilterToggleButtonsContainer({
+class BgcSegmentedButtonsContainer extends StatelessWidget {
+  const BgcSegmentedButtonsContainer({
     super.key,
     required this.height,
     required this.child,
@@ -28,7 +28,7 @@ class FilterToggleButtonsContainer extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+              borderRadius: BorderRadius.circular(AppStyles.toggleButtonsCornerRadius),
             ),
             child: child,
           ),

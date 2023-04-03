@@ -1,10 +1,19 @@
-import 'package:board_games_companion/models/bgg/bgg_play_player.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class BggPlay {
-  late int id;
-  late String boardGameId;
-  late int? playTimeInMinutes;
-  late DateTime? playDate;
-  late bool completed;
-  late List<BggPlayPlayer> players;
+import 'bgg_play_player.dart';
+
+part 'bgg_play.freezed.dart';
+
+@freezed
+abstract class BggPlay with _$BggPlay {
+  const factory BggPlay({
+    required int id,
+    required String boardGameId,
+    required int? playTimeInMinutes,
+    required DateTime? playDate,
+    required bool completed,
+    required List<BggPlayPlayer> players,
+  }) = _BggPlay;
+
+  const BggPlay._();
 }

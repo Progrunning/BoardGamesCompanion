@@ -3,13 +3,13 @@ import 'package:board_games_companion/pages/playthroughs/average_score_precision
 extension AverageScorePrecisionExtensions on AverageScorePrecision {
   String toFormattedText() {
     return when(
-      none: () => '0',
-      value: (precision) {
-        if (precision == 1) {
+      none: () => 'None',
+      precision: (value) {
+        if (value == 1) {
           return '.0';
         }
 
-        if (precision == 2) {
+        if (value == 2) {
           return '.00';
         }
 

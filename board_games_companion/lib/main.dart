@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/common/enums/game_winning_condition.dart';
 import 'package:board_games_companion/models/hive/board_game_settings.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:fimber/fimber.dart';
@@ -13,6 +12,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 import 'app.dart';
+import 'common/enums/game_classification.dart';
+import 'common/enums/game_family.dart';
 import 'common/enums/order_by.dart';
 import 'common/enums/playthrough_status.dart';
 import 'common/enums/sort_by_option.dart';
@@ -25,6 +26,7 @@ import 'models/hive/board_game_details.dart';
 import 'models/hive/board_game_expansion.dart';
 import 'models/hive/board_game_publisher.dart';
 import 'models/hive/board_game_rank.dart';
+import 'models/hive/no_score_game_result.dart';
 import 'models/hive/player.dart';
 import 'models/hive/playthrough.dart';
 import 'models/hive/score.dart';
@@ -38,6 +40,8 @@ Future<void> main() async {
 
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    await Firebase.initializeApp();
 
     final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
     Hive
@@ -58,10 +62,13 @@ Future<void> main() async {
       ..registerAdapter(SortByOptionAdapter())
       ..registerAdapter(OrderByAdapter())
       ..registerAdapter(CollectionFiltersAdapter())
-      ..registerAdapter(GameWinningConditionAdapter())
+      ..registerAdapter(GameFamilyAdapter())
+      ..registerAdapter(GameClassificationAdapter())
       ..registerAdapter(BoardGameSettingsAdapter())
       ..registerAdapter(PlaythroughNoteAdapter())
-      ..registerAdapter(SearchHistoryEntryAdapter());
+      ..registerAdapter(SearchHistoryEntryAdapter())
+      ..registerAdapter(NoScoreGameResultAdapter())
+      ..registerAdapter(CooperativeGameResultAdapter());
 
     configureDependencies();
 
@@ -72,8 +79,6 @@ Future<void> main() async {
       final license = await rootBundle.loadString('google_fonts/OFL.txt');
       yield LicenseEntryWithLineBreaks(['google_fonts'], license);
     });
-
-    await Firebase.initializeApp();
 
     if (kDebugMode) {
       await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);

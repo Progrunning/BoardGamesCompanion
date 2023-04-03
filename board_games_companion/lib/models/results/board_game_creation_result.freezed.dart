@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'board_game_creation_result.dart';
 
@@ -28,10 +28,10 @@ mixin _$GameCreationResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
-    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
-    TResult Function()? cancelled,
-    TResult Function()? failure,
+    TResult? Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult? Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult? Function()? cancelled,
+    TResult? Function()? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -54,11 +54,11 @@ mixin _$GameCreationResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_saveSuccess value)? saveSuccess,
-    TResult Function(_removingFromCollectionsSucceeded value)?
+    TResult? Function(_saveSuccess value)? saveSuccess,
+    TResult? Function(_removingFromCollectionsSucceeded value)?
         removingFromCollectionsSucceeded,
-    TResult Function(_cancelled value)? cancelled,
-    TResult Function(_failure value)? failure,
+    TResult? Function(_cancelled value)? cancelled,
+    TResult? Function(_failure value)? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -77,17 +77,18 @@ mixin _$GameCreationResult {
 abstract class $GameCreationResultCopyWith<$Res> {
   factory $GameCreationResultCopyWith(
           GameCreationResult value, $Res Function(GameCreationResult) then) =
-      _$GameCreationResultCopyWithImpl<$Res>;
+      _$GameCreationResultCopyWithImpl<$Res, GameCreationResult>;
 }
 
 /// @nodoc
-class _$GameCreationResultCopyWithImpl<$Res>
+class _$GameCreationResultCopyWithImpl<$Res, $Val extends GameCreationResult>
     implements $GameCreationResultCopyWith<$Res> {
   _$GameCreationResultCopyWithImpl(this._value, this._then);
 
-  final GameCreationResult _value;
   // ignore: unused_field
-  final $Res Function(GameCreationResult) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -95,31 +96,30 @@ abstract class _$$_saveSuccessCopyWith<$Res> {
   factory _$$_saveSuccessCopyWith(
           _$_saveSuccess value, $Res Function(_$_saveSuccess) then) =
       __$$_saveSuccessCopyWithImpl<$Res>;
+  @useResult
   $Res call({String boardGameId, String boardGameName});
 }
 
 /// @nodoc
 class __$$_saveSuccessCopyWithImpl<$Res>
-    extends _$GameCreationResultCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res, _$_saveSuccess>
     implements _$$_saveSuccessCopyWith<$Res> {
   __$$_saveSuccessCopyWithImpl(
       _$_saveSuccess _value, $Res Function(_$_saveSuccess) _then)
-      : super(_value, (v) => _then(v as _$_saveSuccess));
+      : super(_value, _then);
 
-  @override
-  _$_saveSuccess get _value => super._value as _$_saveSuccess;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameId = freezed,
-    Object? boardGameName = freezed,
+    Object? boardGameId = null,
+    Object? boardGameName = null,
   }) {
     return _then(_$_saveSuccess(
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameName: boardGameName == freezed
+      boardGameName: null == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
@@ -148,20 +148,18 @@ class _$_saveSuccess implements _saveSuccess {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_saveSuccess &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameId, boardGameId) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameName, boardGameName));
+            (identical(other.boardGameId, boardGameId) ||
+                other.boardGameId == boardGameId) &&
+            (identical(other.boardGameName, boardGameName) ||
+                other.boardGameName == boardGameName));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(boardGameId),
-      const DeepCollectionEquality().hash(boardGameName));
+  int get hashCode => Object.hash(runtimeType, boardGameId, boardGameName);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_saveSuccessCopyWith<_$_saveSuccess> get copyWith =>
       __$$_saveSuccessCopyWithImpl<_$_saveSuccess>(this, _$identity);
 
@@ -181,10 +179,10 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
-    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
-    TResult Function()? cancelled,
-    TResult Function()? failure,
+    TResult? Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult? Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult? Function()? cancelled,
+    TResult? Function()? failure,
   }) {
     return saveSuccess?.call(boardGameId, boardGameName);
   }
@@ -219,11 +217,11 @@ class _$_saveSuccess implements _saveSuccess {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_saveSuccess value)? saveSuccess,
-    TResult Function(_removingFromCollectionsSucceeded value)?
+    TResult? Function(_saveSuccess value)? saveSuccess,
+    TResult? Function(_removingFromCollectionsSucceeded value)?
         removingFromCollectionsSucceeded,
-    TResult Function(_cancelled value)? cancelled,
-    TResult Function(_failure value)? failure,
+    TResult? Function(_cancelled value)? cancelled,
+    TResult? Function(_failure value)? failure,
   }) {
     return saveSuccess?.call(this);
   }
@@ -263,28 +261,27 @@ abstract class _$$_removingFromCollectionsSucceededCopyWith<$Res> {
           _$_removingFromCollectionsSucceeded value,
           $Res Function(_$_removingFromCollectionsSucceeded) then) =
       __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>;
+  @useResult
   $Res call({String boardGameName});
 }
 
 /// @nodoc
 class __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>
-    extends _$GameCreationResultCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res,
+        _$_removingFromCollectionsSucceeded>
     implements _$$_removingFromCollectionsSucceededCopyWith<$Res> {
   __$$_removingFromCollectionsSucceededCopyWithImpl(
       _$_removingFromCollectionsSucceeded _value,
       $Res Function(_$_removingFromCollectionsSucceeded) _then)
-      : super(_value, (v) => _then(v as _$_removingFromCollectionsSucceeded));
+      : super(_value, _then);
 
-  @override
-  _$_removingFromCollectionsSucceeded get _value =>
-      super._value as _$_removingFromCollectionsSucceeded;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameName = freezed,
+    Object? boardGameName = null,
   }) {
     return _then(_$_removingFromCollectionsSucceeded(
-      boardGameName: boardGameName == freezed
+      boardGameName: null == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
               as String,
@@ -311,16 +308,16 @@ class _$_removingFromCollectionsSucceeded
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_removingFromCollectionsSucceeded &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameName, boardGameName));
+            (identical(other.boardGameName, boardGameName) ||
+                other.boardGameName == boardGameName));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(boardGameName));
+  int get hashCode => Object.hash(runtimeType, boardGameName);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_removingFromCollectionsSucceededCopyWith<
           _$_removingFromCollectionsSucceeded>
       get copyWith => __$$_removingFromCollectionsSucceededCopyWithImpl<
@@ -342,10 +339,10 @@ class _$_removingFromCollectionsSucceeded
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
-    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
-    TResult Function()? cancelled,
-    TResult Function()? failure,
+    TResult? Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult? Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult? Function()? cancelled,
+    TResult? Function()? failure,
   }) {
     return removingFromCollectionsSucceeded?.call(boardGameName);
   }
@@ -380,11 +377,11 @@ class _$_removingFromCollectionsSucceeded
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_saveSuccess value)? saveSuccess,
-    TResult Function(_removingFromCollectionsSucceeded value)?
+    TResult? Function(_saveSuccess value)? saveSuccess,
+    TResult? Function(_removingFromCollectionsSucceeded value)?
         removingFromCollectionsSucceeded,
-    TResult Function(_cancelled value)? cancelled,
-    TResult Function(_failure value)? failure,
+    TResult? Function(_cancelled value)? cancelled,
+    TResult? Function(_failure value)? failure,
   }) {
     return removingFromCollectionsSucceeded?.call(this);
   }
@@ -427,14 +424,11 @@ abstract class _$$_cancelledCopyWith<$Res> {
 
 /// @nodoc
 class __$$_cancelledCopyWithImpl<$Res>
-    extends _$GameCreationResultCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res, _$_cancelled>
     implements _$$_cancelledCopyWith<$Res> {
   __$$_cancelledCopyWithImpl(
       _$_cancelled _value, $Res Function(_$_cancelled) _then)
-      : super(_value, (v) => _then(v as _$_cancelled));
-
-  @override
-  _$_cancelled get _value => super._value as _$_cancelled;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -472,10 +466,10 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
-    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
-    TResult Function()? cancelled,
-    TResult Function()? failure,
+    TResult? Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult? Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult? Function()? cancelled,
+    TResult? Function()? failure,
   }) {
     return cancelled?.call();
   }
@@ -510,11 +504,11 @@ class _$_cancelled implements _cancelled {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_saveSuccess value)? saveSuccess,
-    TResult Function(_removingFromCollectionsSucceeded value)?
+    TResult? Function(_saveSuccess value)? saveSuccess,
+    TResult? Function(_removingFromCollectionsSucceeded value)?
         removingFromCollectionsSucceeded,
-    TResult Function(_cancelled value)? cancelled,
-    TResult Function(_failure value)? failure,
+    TResult? Function(_cancelled value)? cancelled,
+    TResult? Function(_failure value)? failure,
   }) {
     return cancelled?.call(this);
   }
@@ -549,13 +543,10 @@ abstract class _$$_failureCopyWith<$Res> {
 
 /// @nodoc
 class __$$_failureCopyWithImpl<$Res>
-    extends _$GameCreationResultCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res, _$_failure>
     implements _$$_failureCopyWith<$Res> {
   __$$_failureCopyWithImpl(_$_failure _value, $Res Function(_$_failure) _then)
-      : super(_value, (v) => _then(v as _$_failure));
-
-  @override
-  _$_failure get _value => super._value as _$_failure;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -593,10 +584,10 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String boardGameId, String boardGameName)? saveSuccess,
-    TResult Function(String boardGameName)? removingFromCollectionsSucceeded,
-    TResult Function()? cancelled,
-    TResult Function()? failure,
+    TResult? Function(String boardGameId, String boardGameName)? saveSuccess,
+    TResult? Function(String boardGameName)? removingFromCollectionsSucceeded,
+    TResult? Function()? cancelled,
+    TResult? Function()? failure,
   }) {
     return failure?.call();
   }
@@ -631,11 +622,11 @@ class _$_failure implements _failure {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_saveSuccess value)? saveSuccess,
-    TResult Function(_removingFromCollectionsSucceeded value)?
+    TResult? Function(_saveSuccess value)? saveSuccess,
+    TResult? Function(_removingFromCollectionsSucceeded value)?
         removingFromCollectionsSucceeded,
-    TResult Function(_cancelled value)? cancelled,
-    TResult Function(_failure value)? failure,
+    TResult? Function(_cancelled value)? cancelled,
+    TResult? Function(_failure value)? failure,
   }) {
     return failure?.call(this);
   }

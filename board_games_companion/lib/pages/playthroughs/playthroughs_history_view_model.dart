@@ -1,10 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../models/playthrough_details.dart';
+import '../../models/playthroughs/playthrough_details.dart';
 
 part 'playthroughs_history_view_model.g.dart';
 
@@ -28,6 +29,9 @@ abstract class _PlaythroughsHistoryViewModel with Store {
 
   @computed
   bool get hasAnyPlaythroughs => _gamePlaythroughsStore.playthroughsDetails.isNotEmpty;
+
+  @computed
+  GameClassification get gameClassification => _gamePlaythroughsStore.gameClassification;
 
   @action
   void loadPlaythroughs() => futureloadPlaythroughs = ObservableFuture<void>(_loadPlaythroughs());

@@ -78,11 +78,62 @@ The release to the iOS and Android stores should be followed by:
 
 ### iOS
 
-Whenever updating flutter to a new version there might be a problem with plugin dependencies. This might require updating `pods`. In order to update pods you need to:
+#### CocoaPods
+
+Package managing on iOS is uber complex and sometimes might not make much sense. Please see this [intro YT video on CocoaPods](https://www.youtube.com/watch?v=iEAjvNRdZa0).
+
+To put it "simply" there are a few steps and dependencies when working with CocoaPods:
+
+1. Homebrew
+A "default" package manager "to rule them all", which comes handy if you need to get an app/library from the internet. Go to [how to install](https://docs.brew.sh/Installation), to get it on your mac.
+
+[Optional] Run `brew update` to update Homebrew, if you already have it.
+
+> REQUIRED: To install RubyGems and other stuff
+
+2. RubyGems
+RubyGems is (you guess it) another package manager and is required to get CocoaPods. MacOS comes with a pre-installed version of it but it is recommended to update it, which can be done by executing the following:
+
+`sudo gem update --system`
+
+Whenever there's a need to update Ruby it is recommended to use [`rbenv`](https://github.com/rbenv/rbenv) or [`rvm`](https://rvm.io/rvm/about), both of which are a version manager tool for Ruby.
+
+You can check Ruby's version by executing command `ruby -v`. 
+
+3. Ruby Manager Tool
+
+*rvm*: The tool can be installed by executing in terminal the following `curl -L https://get.rvm.io | bash -s stable`. After that updating Ruby is done by executing `rvm install ruby-<version_number>`.
+
+*rbenv*: Install using Homebrew `brew install rbenv ruby-build`. Update ruby by executing `rbenv install <version_number>`
+
+> !IMPORTANT!: Manager commands executed on M1 chips macs need to be prefixed with `arch arm64 ...`.
+
+4. CocoaPods
+Download CocoaPods using RubyGems by executing the following
+
+`sudo gem install cocoapods`
+
+> NOTE: The same can be used to update cocoapods
+
+To install all of the dependencies/packages execute `pod install` command.
+
+#### Flutter upgrade
+s
+Whenever flutter version gets updated there might be a problem with plugin dependencies. This might require updating `pods`. In order to update pods you need to:
 
 1. Run Terminal
 2. Open iOS folder directory (e.g. `cd /path/to/the/project/board_games_companion/ios`)
-3. Run `pod install` command
+3. Run `pod install` command (`arch -arm64 pod install` on macs with M1 chip)
+
+Additionally there will be a need to update the `PATH` of the Z shell. This can be done by doing the following:
+
+1. Ensuring that the `~/.zhrc` file exists (`touch ~/.zshrc`)
+2. Editing the file by existing one of the following
+ - `vim ~/.zshrc`
+ - `code ~/.zshrc`
+3. Editing the `PATH` with the path to the update Flutter SDK
+
+> NOTE: More info in this [SO thread](https://stackoverflow.com/questions/10574684/where-to-place-path-variable-assertions-in-zsh) and in the [official docs](https://docs.flutter.dev/get-started/install/macos#update-your-path)
 
 #### M1 processors shenanigans
 
@@ -91,7 +142,11 @@ You may run into issues with updating pods on M1 processor devices. Here's some 
 - https://stackoverflow.com/a/65334677
 - https://stackoverflow.com/a/64997047
 
-Generally speaking try using **homebrew** to manage cocoapods. The regular command `brew install cocoapods` might not work on the M1 devives therefore you should try running `arch -arm64 brew install cocoapods`.
+Installing or updating pods on M1 chip (i.e. `arm64`) is done with the following commands `arch -arm64 pod install` and `arch -arm64 pod update`
+
+Generally speaking try using **homebrew** to manage cocoapods. The command `brew install cocoapods` will not work on the **M1 processor devives** therefore you should run `arch -arm64 brew install cocoapods`.
+
+> NOTE: In case an FFI requires updating try executing this command `sudo arch -arm64 gem install ffi`
 
 # Pipelines
 

@@ -9,7 +9,6 @@ import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/players_store.dart';
 import 'package:board_games_companion/stores/scores_store.dart';
@@ -19,6 +18,7 @@ import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../models/hive/score.dart';
+import '../../models/playthroughs/playthrough_details.dart';
 import '../../services/analytics_service.dart';
 import '../../stores/playthroughs_store.dart';
 import 'board_game_playthrough.dart';
@@ -69,13 +69,11 @@ abstract class _PlaysViewModel with Store {
   );
 
   @computed
-  Map<String, Score> get _scores {
-    return {
-      for (final Score score
-          in _scoreStore.scores.where((Score score) => score.playthroughId.isNotNullOrBlank))
-        score.toMapKey(): score
-    };
-  }
+  Map<String, Score> get _scores => {
+        for (final Score score
+            in _scoreStore.scores.where((Score score) => score.playthroughId.isNotNullOrBlank))
+          score.toMapKey(): score
+      };
 
   @computed
   List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs

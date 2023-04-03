@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'settings_page_visual_states.dart';
 
@@ -27,11 +27,11 @@ mixin _$SettingsPageVisualState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? restoring,
-    TResult Function()? restoringCancelled,
-    TResult Function()? restoringSuccess,
-    TResult Function(String? message)? restoringFailure,
+    TResult? Function()? initial,
+    TResult? Function()? restoring,
+    TResult? Function()? restoringCancelled,
+    TResult? Function()? restoringSuccess,
+    TResult? Function(String? message)? restoringFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,11 +55,11 @@ mixin _$SettingsPageVisualState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Restoring value)? restoring,
-    TResult Function(RestoringCancelled value)? restoringCancelled,
-    TResult Function(RestoringSucceeded value)? restoringSuccess,
-    TResult Function(RestoringFailed value)? restoringFailure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Restoring value)? restoring,
+    TResult? Function(RestoringCancelled value)? restoringCancelled,
+    TResult? Function(RestoringSucceeded value)? restoringSuccess,
+    TResult? Function(RestoringFailed value)? restoringFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -78,17 +78,19 @@ mixin _$SettingsPageVisualState {
 abstract class $SettingsPageVisualStateCopyWith<$Res> {
   factory $SettingsPageVisualStateCopyWith(SettingsPageVisualState value,
           $Res Function(SettingsPageVisualState) then) =
-      _$SettingsPageVisualStateCopyWithImpl<$Res>;
+      _$SettingsPageVisualStateCopyWithImpl<$Res, SettingsPageVisualState>;
 }
 
 /// @nodoc
-class _$SettingsPageVisualStateCopyWithImpl<$Res>
+class _$SettingsPageVisualStateCopyWithImpl<$Res,
+        $Val extends SettingsPageVisualState>
     implements $SettingsPageVisualStateCopyWith<$Res> {
   _$SettingsPageVisualStateCopyWithImpl(this._value, this._then);
 
-  final SettingsPageVisualState _value;
   // ignore: unused_field
-  final $Res Function(SettingsPageVisualState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -99,13 +101,10 @@ abstract class _$$InitialCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$Initial>
     implements _$$InitialCopyWith<$Res> {
   __$$InitialCopyWithImpl(_$Initial _value, $Res Function(_$Initial) _then)
-      : super(_value, (v) => _then(v as _$Initial));
-
-  @override
-  _$Initial get _value => super._value as _$Initial;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -142,11 +141,11 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? restoring,
-    TResult Function()? restoringCancelled,
-    TResult Function()? restoringSuccess,
-    TResult Function(String? message)? restoringFailure,
+    TResult? Function()? initial,
+    TResult? Function()? restoring,
+    TResult? Function()? restoringCancelled,
+    TResult? Function()? restoringSuccess,
+    TResult? Function(String? message)? restoringFailure,
   }) {
     return initial?.call();
   }
@@ -182,11 +181,11 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Restoring value)? restoring,
-    TResult Function(RestoringCancelled value)? restoringCancelled,
-    TResult Function(RestoringSucceeded value)? restoringSuccess,
-    TResult Function(RestoringFailed value)? restoringFailure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Restoring value)? restoring,
+    TResult? Function(RestoringCancelled value)? restoringCancelled,
+    TResult? Function(RestoringSucceeded value)? restoringSuccess,
+    TResult? Function(RestoringFailed value)? restoringFailure,
   }) {
     return initial?.call(this);
   }
@@ -221,14 +220,11 @@ abstract class _$$RestoringCopyWith<$Res> {
 
 /// @nodoc
 class __$$RestoringCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$Restoring>
     implements _$$RestoringCopyWith<$Res> {
   __$$RestoringCopyWithImpl(
       _$Restoring _value, $Res Function(_$Restoring) _then)
-      : super(_value, (v) => _then(v as _$Restoring));
-
-  @override
-  _$Restoring get _value => super._value as _$Restoring;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -265,11 +261,11 @@ class _$Restoring implements Restoring {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? restoring,
-    TResult Function()? restoringCancelled,
-    TResult Function()? restoringSuccess,
-    TResult Function(String? message)? restoringFailure,
+    TResult? Function()? initial,
+    TResult? Function()? restoring,
+    TResult? Function()? restoringCancelled,
+    TResult? Function()? restoringSuccess,
+    TResult? Function(String? message)? restoringFailure,
   }) {
     return restoring?.call();
   }
@@ -305,11 +301,11 @@ class _$Restoring implements Restoring {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Restoring value)? restoring,
-    TResult Function(RestoringCancelled value)? restoringCancelled,
-    TResult Function(RestoringSucceeded value)? restoringSuccess,
-    TResult Function(RestoringFailed value)? restoringFailure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Restoring value)? restoring,
+    TResult? Function(RestoringCancelled value)? restoringCancelled,
+    TResult? Function(RestoringSucceeded value)? restoringSuccess,
+    TResult? Function(RestoringFailed value)? restoringFailure,
   }) {
     return restoring?.call(this);
   }
@@ -344,14 +340,11 @@ abstract class _$$RestoringCancelledCopyWith<$Res> {
 
 /// @nodoc
 class __$$RestoringCancelledCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringCancelled>
     implements _$$RestoringCancelledCopyWith<$Res> {
   __$$RestoringCancelledCopyWithImpl(
       _$RestoringCancelled _value, $Res Function(_$RestoringCancelled) _then)
-      : super(_value, (v) => _then(v as _$RestoringCancelled));
-
-  @override
-  _$RestoringCancelled get _value => super._value as _$RestoringCancelled;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -388,11 +381,11 @@ class _$RestoringCancelled implements RestoringCancelled {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? restoring,
-    TResult Function()? restoringCancelled,
-    TResult Function()? restoringSuccess,
-    TResult Function(String? message)? restoringFailure,
+    TResult? Function()? initial,
+    TResult? Function()? restoring,
+    TResult? Function()? restoringCancelled,
+    TResult? Function()? restoringSuccess,
+    TResult? Function(String? message)? restoringFailure,
   }) {
     return restoringCancelled?.call();
   }
@@ -428,11 +421,11 @@ class _$RestoringCancelled implements RestoringCancelled {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Restoring value)? restoring,
-    TResult Function(RestoringCancelled value)? restoringCancelled,
-    TResult Function(RestoringSucceeded value)? restoringSuccess,
-    TResult Function(RestoringFailed value)? restoringFailure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Restoring value)? restoring,
+    TResult? Function(RestoringCancelled value)? restoringCancelled,
+    TResult? Function(RestoringSucceeded value)? restoringSuccess,
+    TResult? Function(RestoringFailed value)? restoringFailure,
   }) {
     return restoringCancelled?.call(this);
   }
@@ -467,14 +460,11 @@ abstract class _$$RestoringSucceededCopyWith<$Res> {
 
 /// @nodoc
 class __$$RestoringSucceededCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringSucceeded>
     implements _$$RestoringSucceededCopyWith<$Res> {
   __$$RestoringSucceededCopyWithImpl(
       _$RestoringSucceeded _value, $Res Function(_$RestoringSucceeded) _then)
-      : super(_value, (v) => _then(v as _$RestoringSucceeded));
-
-  @override
-  _$RestoringSucceeded get _value => super._value as _$RestoringSucceeded;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -511,11 +501,11 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? restoring,
-    TResult Function()? restoringCancelled,
-    TResult Function()? restoringSuccess,
-    TResult Function(String? message)? restoringFailure,
+    TResult? Function()? initial,
+    TResult? Function()? restoring,
+    TResult? Function()? restoringCancelled,
+    TResult? Function()? restoringSuccess,
+    TResult? Function(String? message)? restoringFailure,
   }) {
     return restoringSuccess?.call();
   }
@@ -551,11 +541,11 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Restoring value)? restoring,
-    TResult Function(RestoringCancelled value)? restoringCancelled,
-    TResult Function(RestoringSucceeded value)? restoringSuccess,
-    TResult Function(RestoringFailed value)? restoringFailure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Restoring value)? restoring,
+    TResult? Function(RestoringCancelled value)? restoringCancelled,
+    TResult? Function(RestoringSucceeded value)? restoringSuccess,
+    TResult? Function(RestoringFailed value)? restoringFailure,
   }) {
     return restoringSuccess?.call(this);
   }
@@ -586,26 +576,25 @@ abstract class _$$RestoringFailedCopyWith<$Res> {
   factory _$$RestoringFailedCopyWith(
           _$RestoringFailed value, $Res Function(_$RestoringFailed) then) =
       __$$RestoringFailedCopyWithImpl<$Res>;
+  @useResult
   $Res call({String? message});
 }
 
 /// @nodoc
 class __$$RestoringFailedCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringFailed>
     implements _$$RestoringFailedCopyWith<$Res> {
   __$$RestoringFailedCopyWithImpl(
       _$RestoringFailed _value, $Res Function(_$RestoringFailed) _then)
-      : super(_value, (v) => _then(v as _$RestoringFailed));
+      : super(_value, _then);
 
-  @override
-  _$RestoringFailed get _value => super._value as _$RestoringFailed;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? message = freezed,
   }) {
     return _then(_$RestoringFailed(
-      message == freezed
+      freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -631,15 +620,15 @@ class _$RestoringFailed implements RestoringFailed {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RestoringFailed &&
-            const DeepCollectionEquality().equals(other.message, message));
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
+  int get hashCode => Object.hash(runtimeType, message);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$RestoringFailedCopyWith<_$RestoringFailed> get copyWith =>
       __$$RestoringFailedCopyWithImpl<_$RestoringFailed>(this, _$identity);
 
@@ -658,11 +647,11 @@ class _$RestoringFailed implements RestoringFailed {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? restoring,
-    TResult Function()? restoringCancelled,
-    TResult Function()? restoringSuccess,
-    TResult Function(String? message)? restoringFailure,
+    TResult? Function()? initial,
+    TResult? Function()? restoring,
+    TResult? Function()? restoringCancelled,
+    TResult? Function()? restoringSuccess,
+    TResult? Function(String? message)? restoringFailure,
   }) {
     return restoringFailure?.call(message);
   }
@@ -698,11 +687,11 @@ class _$RestoringFailed implements RestoringFailed {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Restoring value)? restoring,
-    TResult Function(RestoringCancelled value)? restoringCancelled,
-    TResult Function(RestoringSucceeded value)? restoringSuccess,
-    TResult Function(RestoringFailed value)? restoringFailure,
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Restoring value)? restoring,
+    TResult? Function(RestoringCancelled value)? restoringCancelled,
+    TResult? Function(RestoringSucceeded value)? restoringSuccess,
+    TResult? Function(RestoringFailed value)? restoringFailure,
   }) {
     return restoringFailure?.call(this);
   }

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'playthrough_note.dart';
 
@@ -34,7 +34,8 @@ mixin _$PlaythroughNote {
 abstract class $PlaythroughNoteCopyWith<$Res> {
   factory $PlaythroughNoteCopyWith(
           PlaythroughNote value, $Res Function(PlaythroughNote) then) =
-      _$PlaythroughNoteCopyWithImpl<$Res>;
+      _$PlaythroughNoteCopyWithImpl<$Res, PlaythroughNote>;
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String text,
@@ -43,39 +44,41 @@ abstract class $PlaythroughNoteCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PlaythroughNoteCopyWithImpl<$Res>
+class _$PlaythroughNoteCopyWithImpl<$Res, $Val extends PlaythroughNote>
     implements $PlaythroughNoteCopyWith<$Res> {
   _$PlaythroughNoteCopyWithImpl(this._value, this._then);
 
-  final PlaythroughNote _value;
   // ignore: unused_field
-  final $Res Function(PlaythroughNote) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? text = freezed,
-    Object? createdAt = freezed,
+    Object? id = null,
+    Object? text = null,
+    Object? createdAt = null,
     Object? modifiedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      text: text == freezed
+      text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: createdAt == freezed
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      modifiedAt: modifiedAt == freezed
+      modifiedAt: freezed == modifiedAt
           ? _value.modifiedAt
           : modifiedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -86,6 +89,7 @@ abstract class _$$_PlaythroughNoteCopyWith<$Res>
           _$_PlaythroughNote value, $Res Function(_$_PlaythroughNote) then) =
       __$$_PlaythroughNoteCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String text,
@@ -95,36 +99,34 @@ abstract class _$$_PlaythroughNoteCopyWith<$Res>
 
 /// @nodoc
 class __$$_PlaythroughNoteCopyWithImpl<$Res>
-    extends _$PlaythroughNoteCopyWithImpl<$Res>
+    extends _$PlaythroughNoteCopyWithImpl<$Res, _$_PlaythroughNote>
     implements _$$_PlaythroughNoteCopyWith<$Res> {
   __$$_PlaythroughNoteCopyWithImpl(
       _$_PlaythroughNote _value, $Res Function(_$_PlaythroughNote) _then)
-      : super(_value, (v) => _then(v as _$_PlaythroughNote));
+      : super(_value, _then);
 
-  @override
-  _$_PlaythroughNote get _value => super._value as _$_PlaythroughNote;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? text = freezed,
-    Object? createdAt = freezed,
+    Object? id = null,
+    Object? text = null,
+    Object? createdAt = null,
     Object? modifiedAt = freezed,
   }) {
     return _then(_$_PlaythroughNote(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      text: text == freezed
+      text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: createdAt == freezed
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      modifiedAt: modifiedAt == freezed
+      modifiedAt: freezed == modifiedAt
           ? _value.modifiedAt
           : modifiedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
@@ -166,23 +168,20 @@ class _$_PlaythroughNote implements _PlaythroughNote {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PlaythroughNote &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.text, text) &&
-            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
-            const DeepCollectionEquality()
-                .equals(other.modifiedAt, modifiedAt));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.text, text) || other.text == text) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.modifiedAt, modifiedAt) ||
+                other.modifiedAt == modifiedAt));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(text),
-      const DeepCollectionEquality().hash(createdAt),
-      const DeepCollectionEquality().hash(modifiedAt));
+  int get hashCode => Object.hash(runtimeType, id, text, createdAt, modifiedAt);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlaythroughNoteCopyWith<_$_PlaythroughNote> get copyWith =>
       __$$_PlaythroughNoteCopyWithImpl<_$_PlaythroughNote>(this, _$identity);
 }

@@ -82,7 +82,10 @@ abstract class _BoardGamesStore with Store {
           final existingBoardGameExpansionDetails = _retrieveBoardGame(boardGameExpansion.id);
           if (existingBoardGameExpansionDetails == null) {
             await addOrUpdateBoardGame(
-              BoardGameDetails(id: boardGameExpansion.id, name: boardGameExpansion.name),
+              BoardGameDetails(
+                id: boardGameExpansion.id,
+                name: boardGameExpansion.name,
+              ),
             );
           } else {
             await addOrUpdateBoardGame(
@@ -98,6 +101,9 @@ abstract class _BoardGamesStore with Store {
           isFriends: existingBoardGameDetails.isFriends,
           isOnWishlist: existingBoardGameDetails.isOnWishlist,
           isOwned: existingBoardGameDetails.isOwned,
+          isBggSynced: existingBoardGameDetails.isBggSynced,
+          isExpansion: existingBoardGameDetails.isExpansion,
+          settings: existingBoardGameDetails.settings,
         );
       }
 

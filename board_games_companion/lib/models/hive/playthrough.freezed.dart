@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'playthrough.dart';
 
@@ -46,7 +46,8 @@ mixin _$Playthrough {
 abstract class $PlaythroughCopyWith<$Res> {
   factory $PlaythroughCopyWith(
           Playthrough value, $Res Function(Playthrough) then) =
-      _$PlaythroughCopyWithImpl<$Res>;
+      _$PlaythroughCopyWithImpl<$Res, Playthrough>;
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String boardGameId,
@@ -61,20 +62,23 @@ abstract class $PlaythroughCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PlaythroughCopyWithImpl<$Res> implements $PlaythroughCopyWith<$Res> {
+class _$PlaythroughCopyWithImpl<$Res, $Val extends Playthrough>
+    implements $PlaythroughCopyWith<$Res> {
   _$PlaythroughCopyWithImpl(this._value, this._then);
 
-  final Playthrough _value;
   // ignore: unused_field
-  final $Res Function(Playthrough) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? boardGameId = freezed,
-    Object? playerIds = freezed,
-    Object? scoreIds = freezed,
-    Object? startDate = freezed,
+    Object? id = null,
+    Object? boardGameId = null,
+    Object? playerIds = null,
+    Object? scoreIds = null,
+    Object? startDate = null,
     Object? endDate = freezed,
     Object? status = freezed,
     Object? isDeleted = freezed,
@@ -82,47 +86,47 @@ class _$PlaythroughCopyWithImpl<$Res> implements $PlaythroughCopyWith<$Res> {
     Object? notes = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      playerIds: playerIds == freezed
+      playerIds: null == playerIds
           ? _value.playerIds
           : playerIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      scoreIds: scoreIds == freezed
+      scoreIds: null == scoreIds
           ? _value.scoreIds
           : scoreIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      startDate: startDate == freezed
+      startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      endDate: endDate == freezed
+      endDate: freezed == endDate
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      status: status == freezed
+      status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PlaythroughStatus?,
-      isDeleted: isDeleted == freezed
+      isDeleted: freezed == isDeleted
           ? _value.isDeleted
           : isDeleted // ignore: cast_nullable_to_non_nullable
               as bool?,
-      bggPlayId: bggPlayId == freezed
+      bggPlayId: freezed == bggPlayId
           ? _value.bggPlayId
           : bggPlayId // ignore: cast_nullable_to_non_nullable
               as int?,
-      notes: notes == freezed
+      notes: freezed == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as List<PlaythroughNote>?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -133,6 +137,7 @@ abstract class _$$_PlaythroughCopyWith<$Res>
           _$_Playthrough value, $Res Function(_$_Playthrough) then) =
       __$$_PlaythroughCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) String boardGameId,
@@ -147,22 +152,21 @@ abstract class _$$_PlaythroughCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlaythroughCopyWithImpl<$Res> extends _$PlaythroughCopyWithImpl<$Res>
+class __$$_PlaythroughCopyWithImpl<$Res>
+    extends _$PlaythroughCopyWithImpl<$Res, _$_Playthrough>
     implements _$$_PlaythroughCopyWith<$Res> {
   __$$_PlaythroughCopyWithImpl(
       _$_Playthrough _value, $Res Function(_$_Playthrough) _then)
-      : super(_value, (v) => _then(v as _$_Playthrough));
+      : super(_value, _then);
 
-  @override
-  _$_Playthrough get _value => super._value as _$_Playthrough;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? boardGameId = freezed,
-    Object? playerIds = freezed,
-    Object? scoreIds = freezed,
-    Object? startDate = freezed,
+    Object? id = null,
+    Object? boardGameId = null,
+    Object? playerIds = null,
+    Object? scoreIds = null,
+    Object? startDate = null,
     Object? endDate = freezed,
     Object? status = freezed,
     Object? isDeleted = freezed,
@@ -170,43 +174,43 @@ class __$$_PlaythroughCopyWithImpl<$Res> extends _$PlaythroughCopyWithImpl<$Res>
     Object? notes = freezed,
   }) {
     return _then(_$_Playthrough(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      boardGameId: boardGameId == freezed
+      boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
               as String,
-      playerIds: playerIds == freezed
+      playerIds: null == playerIds
           ? _value._playerIds
           : playerIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      scoreIds: scoreIds == freezed
+      scoreIds: null == scoreIds
           ? _value._scoreIds
           : scoreIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      startDate: startDate == freezed
+      startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      endDate: endDate == freezed
+      endDate: freezed == endDate
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      status: status == freezed
+      status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PlaythroughStatus?,
-      isDeleted: isDeleted == freezed
+      isDeleted: freezed == isDeleted
           ? _value.isDeleted
           : isDeleted // ignore: cast_nullable_to_non_nullable
               as bool?,
-      bggPlayId: bggPlayId == freezed
+      bggPlayId: freezed == bggPlayId
           ? _value.bggPlayId
           : bggPlayId // ignore: cast_nullable_to_non_nullable
               as int?,
-      notes: notes == freezed
+      notes: freezed == notes
           ? _value._notes
           : notes // ignore: cast_nullable_to_non_nullable
               as List<PlaythroughNote>?,
@@ -244,6 +248,7 @@ class _$_Playthrough implements _Playthrough {
   @override
   @HiveField(2)
   List<String> get playerIds {
+    if (_playerIds is EqualUnmodifiableListView) return _playerIds;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_playerIds);
   }
@@ -252,6 +257,7 @@ class _$_Playthrough implements _Playthrough {
   @override
   @HiveField(3)
   List<String> get scoreIds {
+    if (_scoreIds is EqualUnmodifiableListView) return _scoreIds;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_scoreIds);
   }
@@ -278,6 +284,7 @@ class _$_Playthrough implements _Playthrough {
   List<PlaythroughNote>? get notes {
     final value = _notes;
     if (value == null) return null;
+    if (_notes is EqualUnmodifiableListView) return _notes;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -292,36 +299,40 @@ class _$_Playthrough implements _Playthrough {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Playthrough &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameId, boardGameId) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.boardGameId, boardGameId) ||
+                other.boardGameId == boardGameId) &&
             const DeepCollectionEquality()
                 .equals(other._playerIds, _playerIds) &&
             const DeepCollectionEquality().equals(other._scoreIds, _scoreIds) &&
-            const DeepCollectionEquality().equals(other.startDate, startDate) &&
-            const DeepCollectionEquality().equals(other.endDate, endDate) &&
-            const DeepCollectionEquality().equals(other.status, status) &&
-            const DeepCollectionEquality().equals(other.isDeleted, isDeleted) &&
-            const DeepCollectionEquality().equals(other.bggPlayId, bggPlayId) &&
+            (identical(other.startDate, startDate) ||
+                other.startDate == startDate) &&
+            (identical(other.endDate, endDate) || other.endDate == endDate) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.isDeleted, isDeleted) ||
+                other.isDeleted == isDeleted) &&
+            (identical(other.bggPlayId, bggPlayId) ||
+                other.bggPlayId == bggPlayId) &&
             const DeepCollectionEquality().equals(other._notes, _notes));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(boardGameId),
+      id,
+      boardGameId,
       const DeepCollectionEquality().hash(_playerIds),
       const DeepCollectionEquality().hash(_scoreIds),
-      const DeepCollectionEquality().hash(startDate),
-      const DeepCollectionEquality().hash(endDate),
-      const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(isDeleted),
-      const DeepCollectionEquality().hash(bggPlayId),
+      startDate,
+      endDate,
+      status,
+      isDeleted,
+      bggPlayId,
       const DeepCollectionEquality().hash(_notes));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlaythroughCopyWith<_$_Playthrough> get copyWith =>
       __$$_PlaythroughCopyWithImpl<_$_Playthrough>(this, _$identity);
 }

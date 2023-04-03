@@ -7,40 +7,55 @@ import 'player_statistics.dart';
 
 part 'board_game_statistics.freezed.dart';
 
-class BoardGameStatistics {
-  DateTime? lastPlayed;
+@freezed
+class BoardGameStatistics with _$BoardGameStatistics {
+  const factory BoardGameStatistics.none() = _none;
+  const factory BoardGameStatistics.loading() = _loading;
+  const factory BoardGameStatistics.score({
+    required ScoreBoardGameStatistics boardGameStatistics,
+  }) = _score;
+  const factory BoardGameStatistics.noScore({
+    required NoScoreBoardGameStatistics boardGameStatistics,
+  }) = _noScore;
+}
 
-  PlayerScore? lastWinner;
+@unfreezed
+class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
+  factory ScoreBoardGameStatistics({
+    required int numberOfGamesPlayed,
+    required double averageNumberOfPlayers,
+    required DateTime lastTimePlayed,
+    required int totalPlaytimeInSeconds,
+    required int averagePlaytimeInSeconds,
+    required int averageScorePrecision,
+    PlayerScore? lastWinner,
+    num? bestScore,
+    double? averageScore,
+    List<Tuple2<Player, String>>? topScoreres,
+    @Default(<PlayerStatistics>[]) List<PlayerStatistics> playersStatistics,
+    @Default(<PlayerCountStatistics>[]) List<PlayerCountStatistics> playerCountPercentage,
+    @Default(<PlayerWinsStatistics>[]) List<PlayerWinsStatistics> playerWinsPercentage,
+    Map<Player, int>? playerWins,
+  }) = _ScoreBoardGameStatistics;
 
-  int? numberOfGamesPlayed;
+  ScoreBoardGameStatistics._();
+}
 
-  int? totalPlaytimeInSeconds;
+@unfreezed
+class NoScoreBoardGameStatistics with _$NoScoreBoardGameStatistics {
+  factory NoScoreBoardGameStatistics({
+    required int numberOfGamesPlayed,
+    required double averageNumberOfPlayers,
+    required DateTime lastTimePlayed,
+    required int totalWins,
+    required int totalLosses,
+    required int totalPlaytimeInSeconds,
+    required int averagePlaytimeInSeconds,
+    @Default(<PlayerStatistics>[]) List<PlayerStatistics> playersStatistics,
+    @Default(<PlayerCountStatistics>[]) List<PlayerCountStatistics> playerCountPercentage,
+  }) = _NoScoreBoardGameStatitics;
 
-  int? get averagePlaytimeInSeconds {
-    if (totalPlaytimeInSeconds == null || numberOfGamesPlayed == null) {
-      return null;
-    }
-
-    return (totalPlaytimeInSeconds! / numberOfGamesPlayed!).floor();
-  }
-
-  num? bestScore;
-
-  double? averageScore;
-
-  int averageScorePrecision = 0;
-
-  double? averageNumberOfPlayers;
-
-  List<Tuple2<Player, String>>? topScoreres;
-
-  List<PlayerStatistics>? playersStatistics;
-
-  List<PlayerCountStatistics>? playerCountPercentage;
-
-  List<PlayerWinsStatistics>? playerWinsPercentage;
-
-  Map<Player, int>? playerWins;
+  const NoScoreBoardGameStatistics._();
 }
 
 @freezed

@@ -97,7 +97,7 @@ class _MenuItem extends StatelessWidget {
       leading: Icon(icon, color: AppColors.accentColor),
       title: Text(
         title,
-        style: AppTheme.theme.textTheme.bodyText1!,
+        style: AppTheme.theme.textTheme.bodyLarge!,
       ),
       onTap: onTap,
     );

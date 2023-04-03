@@ -41,4 +41,12 @@ class ScoreService extends BaseHiveService<Score, ScoreService> {
         .where((score) => playthroughId == score.playthroughId)
         .toList();
   }
+
+  Future<void> deleteScore(String id) async {
+    if (!await ensureBoxOpen()) {
+      return;
+    }
+
+    await storageBox.delete(id);
+  }
 }

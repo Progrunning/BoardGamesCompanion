@@ -8,6 +8,7 @@ class AppStyles {
   static const double _hundredPercent = 100;
 
   static const double defaultCornerRadius = 5;
+  static const double toggleButtonsCornerRadius = defaultCornerRadius;
   static const double defaultShadowRadius = defaultCornerRadius;
   static const Offset defaultShadowOffset =
       Offset(defaultCornerRadius / 2, defaultCornerRadius / 2);

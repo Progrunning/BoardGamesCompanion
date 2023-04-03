@@ -1,34 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'game_winning_condition.dart';
+part of 'game_classification.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class GameWinningConditionAdapter extends TypeAdapter<GameWinningCondition> {
+class GameClassificationAdapter extends TypeAdapter<GameClassification> {
   @override
-  final int typeId = 16;
+  final int typeId = 20;
 
   @override
-  GameWinningCondition read(BinaryReader reader) {
+  GameClassification read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return GameWinningCondition.HighestScore;
+        return GameClassification.Score;
       case 1:
-        return GameWinningCondition.LowestScore;
+        return GameClassification.NoScore;
       default:
-        return GameWinningCondition.HighestScore;
+        return GameClassification.Score;
     }
   }
 
   @override
-  void write(BinaryWriter writer, GameWinningCondition obj) {
+  void write(BinaryWriter writer, GameClassification obj) {
     switch (obj) {
-      case GameWinningCondition.HighestScore:
+      case GameClassification.Score:
         writer.writeByte(0);
         break;
-      case GameWinningCondition.LowestScore:
+      case GameClassification.NoScore:
         writer.writeByte(1);
         break;
     }
@@ -40,7 +40,7 @@ class GameWinningConditionAdapter extends TypeAdapter<GameWinningCondition> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GameWinningConditionAdapter &&
+      other is GameClassificationAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

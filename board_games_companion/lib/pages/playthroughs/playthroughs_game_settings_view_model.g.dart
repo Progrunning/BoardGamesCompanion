@@ -10,30 +10,52 @@ part of 'playthroughs_game_settings_view_model.dart';
 
 mixin _$PlaythroughsGameSettingsViewModel
     on _PlaythroughsGameSettingsViewModel, Store {
-  Computed<GameWinningCondition>? _$winningConditionComputed;
+  Computed<AverageScorePrecision>? _$_averageScorePrecisionComputed;
 
   @override
-  GameWinningCondition get winningCondition => (_$winningConditionComputed ??=
-          Computed<GameWinningCondition>(() => super.winningCondition,
-              name: '_PlaythroughsGameSettingsViewModel.winningCondition'))
-      .value;
-  Computed<AverageScorePrecision>? _$averageScorePrecisionComputed;
-
-  @override
-  AverageScorePrecision get averageScorePrecision =>
-      (_$averageScorePrecisionComputed ??= Computed<AverageScorePrecision>(
-              () => super.averageScorePrecision,
-              name: '_PlaythroughsGameSettingsViewModel.averageScorePrecision'))
+  AverageScorePrecision get _averageScorePrecision =>
+      (_$_averageScorePrecisionComputed ??= Computed<AverageScorePrecision>(
+              () => super._averageScorePrecision,
+              name:
+                  '_PlaythroughsGameSettingsViewModel._averageScorePrecision'))
           .value;
+  Computed<BoardGameClassificationSettings>?
+      _$gameClassificationSettingsComputed;
 
-  late final _$updateWinningConditionAsyncAction = AsyncAction(
-      '_PlaythroughsGameSettingsViewModel.updateWinningCondition',
+  @override
+  BoardGameClassificationSettings get gameClassificationSettings =>
+      (_$gameClassificationSettingsComputed ??= Computed<
+                  BoardGameClassificationSettings>(
+              () => super.gameClassificationSettings,
+              name:
+                  '_PlaythroughsGameSettingsViewModel.gameClassificationSettings'))
+          .value;
+  Computed<GameClassification>? _$gameClassificationComputed;
+
+  @override
+  GameClassification get gameClassification => (_$gameClassificationComputed ??=
+          Computed<GameClassification>(() => super.gameClassification,
+              name: '_PlaythroughsGameSettingsViewModel.gameClassification'))
+      .value;
+
+  late final _$updateGameFamilyAsyncAction = AsyncAction(
+      '_PlaythroughsGameSettingsViewModel.updateGameFamily',
       context: context);
 
   @override
-  Future<void> updateWinningCondition(GameWinningCondition winningCondition) {
-    return _$updateWinningConditionAsyncAction
-        .run(() => super.updateWinningCondition(winningCondition));
+  Future<void> updateGameFamily(GameFamily gameFamily) {
+    return _$updateGameFamilyAsyncAction
+        .run(() => super.updateGameFamily(gameFamily));
+  }
+
+  late final _$updateGameClassificationAsyncAction = AsyncAction(
+      '_PlaythroughsGameSettingsViewModel.updateGameClassification',
+      context: context);
+
+  @override
+  Future<void> updateGameClassification(GameClassification gameClassification) {
+    return _$updateGameClassificationAsyncAction
+        .run(() => super.updateGameClassification(gameClassification));
   }
 
   late final _$updateAverageScorePrecisionAsyncAction = AsyncAction(
@@ -50,8 +72,8 @@ mixin _$PlaythroughsGameSettingsViewModel
   @override
   String toString() {
     return '''
-winningCondition: ${winningCondition},
-averageScorePrecision: ${averageScorePrecision}
+gameClassificationSettings: ${gameClassificationSettings},
+gameClassification: ${gameClassification}
     ''';
   }
 }

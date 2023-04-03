@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'playthrough_details.dart';
 
@@ -28,42 +28,46 @@ mixin _$PlaythroughDetails {
 abstract class $PlaythroughDetailsCopyWith<$Res> {
   factory $PlaythroughDetailsCopyWith(
           PlaythroughDetails value, $Res Function(PlaythroughDetails) then) =
-      _$PlaythroughDetailsCopyWithImpl<$Res>;
+      _$PlaythroughDetailsCopyWithImpl<$Res, PlaythroughDetails>;
+  @useResult
   $Res call({Playthrough playthrough, List<PlayerScore> playerScores});
 
   $PlaythroughCopyWith<$Res> get playthrough;
 }
 
 /// @nodoc
-class _$PlaythroughDetailsCopyWithImpl<$Res>
+class _$PlaythroughDetailsCopyWithImpl<$Res, $Val extends PlaythroughDetails>
     implements $PlaythroughDetailsCopyWith<$Res> {
   _$PlaythroughDetailsCopyWithImpl(this._value, this._then);
 
-  final PlaythroughDetails _value;
   // ignore: unused_field
-  final $Res Function(PlaythroughDetails) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playthrough = freezed,
-    Object? playerScores = freezed,
+    Object? playthrough = null,
+    Object? playerScores = null,
   }) {
     return _then(_value.copyWith(
-      playthrough: playthrough == freezed
+      playthrough: null == playthrough
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
               as Playthrough,
-      playerScores: playerScores == freezed
+      playerScores: null == playerScores
           ? _value.playerScores
           : playerScores // ignore: cast_nullable_to_non_nullable
               as List<PlayerScore>,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $PlaythroughCopyWith<$Res> get playthrough {
     return $PlaythroughCopyWith<$Res>(_value.playthrough, (value) {
-      return _then(_value.copyWith(playthrough: value));
+      return _then(_value.copyWith(playthrough: value) as $Val);
     });
   }
 }
@@ -75,6 +79,7 @@ abstract class _$$_PlaythroughDetailsCopyWith<$Res>
           $Res Function(_$_PlaythroughDetails) then) =
       __$$_PlaythroughDetailsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({Playthrough playthrough, List<PlayerScore> playerScores});
 
   @override
@@ -83,26 +88,24 @@ abstract class _$$_PlaythroughDetailsCopyWith<$Res>
 
 /// @nodoc
 class __$$_PlaythroughDetailsCopyWithImpl<$Res>
-    extends _$PlaythroughDetailsCopyWithImpl<$Res>
+    extends _$PlaythroughDetailsCopyWithImpl<$Res, _$_PlaythroughDetails>
     implements _$$_PlaythroughDetailsCopyWith<$Res> {
   __$$_PlaythroughDetailsCopyWithImpl(
       _$_PlaythroughDetails _value, $Res Function(_$_PlaythroughDetails) _then)
-      : super(_value, (v) => _then(v as _$_PlaythroughDetails));
+      : super(_value, _then);
 
-  @override
-  _$_PlaythroughDetails get _value => super._value as _$_PlaythroughDetails;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playthrough = freezed,
-    Object? playerScores = freezed,
+    Object? playthrough = null,
+    Object? playerScores = null,
   }) {
     return _then(_$_PlaythroughDetails(
-      playthrough: playthrough == freezed
+      playthrough: null == playthrough
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
               as Playthrough,
-      playerScores: playerScores == freezed
+      playerScores: null == playerScores
           ? _value._playerScores
           : playerScores // ignore: cast_nullable_to_non_nullable
               as List<PlayerScore>,
@@ -124,6 +127,7 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
   final List<PlayerScore> _playerScores;
   @override
   List<PlayerScore> get playerScores {
+    if (_playerScores is EqualUnmodifiableListView) return _playerScores;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_playerScores);
   }
@@ -138,20 +142,19 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PlaythroughDetails &&
-            const DeepCollectionEquality()
-                .equals(other.playthrough, playthrough) &&
+            (identical(other.playthrough, playthrough) ||
+                other.playthrough == playthrough) &&
             const DeepCollectionEquality()
                 .equals(other._playerScores, _playerScores));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(playthrough),
+  int get hashCode => Object.hash(runtimeType, playthrough,
       const DeepCollectionEquality().hash(_playerScores));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlaythroughDetailsCopyWith<_$_PlaythroughDetails> get copyWith =>
       __$$_PlaythroughDetailsCopyWithImpl<_$_PlaythroughDetails>(
           this, _$identity);

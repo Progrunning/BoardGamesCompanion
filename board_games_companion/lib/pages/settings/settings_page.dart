@@ -449,7 +449,7 @@ class _BackupFile extends StatelessWidget {
                 const SizedBox(height: Dimensions.halfStandardSpacing),
                 Text(
                   backupFile.readableFileSize,
-                  style: AppTheme.theme.textTheme.subtitle1,
+                  style: AppTheme.theme.textTheme.titleMedium,
                 ),
               ],
             ),

@@ -45,6 +45,30 @@ mixin _$PlaythroughStatisticsViewModel
       (_$boardGameNameComputed ??= Computed<String>(() => super.boardGameName,
               name: '_PlaythroughStatisticsViewModel.boardGameName'))
           .value;
+  Computed<GameClassification>? _$gameClassificationComputed;
+
+  @override
+  GameClassification get gameClassification => (_$gameClassificationComputed ??=
+          Computed<GameClassification>(() => super.gameClassification,
+              name: '_PlaythroughStatisticsViewModel.gameClassification'))
+      .value;
+
+  late final _$boardGameStatisticsAtom = Atom(
+      name: '_PlaythroughStatisticsViewModel.boardGameStatistics',
+      context: context);
+
+  @override
+  BoardGameStatistics get boardGameStatistics {
+    _$boardGameStatisticsAtom.reportRead();
+    return super.boardGameStatistics;
+  }
+
+  @override
+  set boardGameStatistics(BoardGameStatistics value) {
+    _$boardGameStatisticsAtom.reportWrite(value, super.boardGameStatistics, () {
+      super.boardGameStatistics = value;
+    });
+  }
 
   late final _$futureLoadBoardGamesStatisticsAtom = Atom(
       name: '_PlaythroughStatisticsViewModel.futureLoadBoardGamesStatistics',
@@ -83,10 +107,12 @@ mixin _$PlaythroughStatisticsViewModel
   @override
   String toString() {
     return '''
+boardGameStatistics: ${boardGameStatistics},
 futureLoadBoardGamesStatistics: ${futureLoadBoardGamesStatistics},
 boardGameId: ${boardGameId},
 boardGameImageUrl: ${boardGameImageUrl},
-boardGameName: ${boardGameName}
+boardGameName: ${boardGameName},
+gameClassification: ${gameClassification}
     ''';
   }
 }

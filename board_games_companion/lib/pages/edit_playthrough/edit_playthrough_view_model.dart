@@ -1,9 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/common/enums/game_family.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/models/playthrough_details.dart';
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +14,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/playthrough_status.dart';
+import '../../models/playthroughs/playthrough_details.dart';
 
 part 'edit_playthrough_view_model.g.dart';
 
@@ -43,6 +47,13 @@ abstract class _EditPlaythoughViewModel with Store {
       playthroughDetailsWorkingCopy.playerScores.asObservable();
 
   @computed
+  ObservableList<Player> get players => playthroughDetailsWorkingCopy.playerScores
+      .where((playerScore) => playerScore.player != null)
+      .map((playerScore) => playerScore.player!)
+      .toList()
+      .asObservable();
+
+  @computed
   DateTime get playthroughStartTime => playthroughDetailsWorkingCopy.startDate;
 
   @computed
@@ -64,17 +75,24 @@ abstract class _EditPlaythoughViewModel with Store {
         playthroughNotes..sort((noteA, noteB) => noteA.createdAt.compareTo(noteB.createdAt)));
   }
 
+  @computed
+  GameFamily get gameFamily => _gamePlaythroughsDetailsStore.gameGameFamily;
+
+  @computed
+  GameClassification get gameClassification => _gamePlaythroughsDetailsStore.gameClassification;
+
+  @computed
+  CooperativeGameResult? get cooperativeGameResult =>
+      playerScores.first.score.noScoreGameResult?.cooperativeGameResult;
+
   bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
 
   @action
   void setPlaythroughId(String playthroughId) {
     _playthroughId = playthroughId;
 
-    final sortedPlayerScores = playthroughDetails.playerScores.toList()
-      ..sortByPlayerName()
-      ..sortByScore(_gamePlaythroughsDetailsStore.gameWinningCondition);
-
-    _playthroughDetailsWorkingCopy = playthroughDetails.copyWith(playerScores: sortedPlayerScores);
+    _playthroughDetailsWorkingCopy =
+        playthroughDetails.copyWith(playerScores: playthroughDetails.playerScores);
   }
 
   @action
@@ -135,6 +153,24 @@ abstract class _EditPlaythoughViewModel with Store {
 
     _playthroughDetailsWorkingCopy =
         playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
+  }
+
+  @action
+  void updateCooperativeGameResult(CooperativeGameResult cooperativeGameResult) {
+    final updatedPlayerScores = <PlayerScore>[];
+    for (final playerScore in playerScores) {
+      final noScoreGameResult = playerScore.score.noScoreGameResult ?? const NoScoreGameResult();
+      final updatedPlayerScore = playerScore.copyWith(
+        score: playerScore.score.copyWith(
+          noScoreGameResult:
+              noScoreGameResult.copyWith(cooperativeGameResult: cooperativeGameResult),
+        ),
+      );
+      updatedPlayerScores.add(updatedPlayerScore);
+    }
+
+    _playthroughDetailsWorkingCopy =
+        playthroughDetailsWorkingCopy.copyWith(playerScores: updatedPlayerScores);
   }
 
   /// After adding/editing a note to the [PlaythroughDetails] refresh the working copy with the latest data

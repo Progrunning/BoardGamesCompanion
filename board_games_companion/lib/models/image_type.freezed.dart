@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'image_type.dart';
 
@@ -25,9 +25,9 @@ mixin _$ImageType {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? web,
-    TResult Function()? file,
-    TResult Function()? undefined,
+    TResult? Function()? web,
+    TResult? Function()? file,
+    TResult? Function()? undefined,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -47,9 +47,9 @@ mixin _$ImageType {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_web value)? web,
-    TResult Function(_file value)? file,
-    TResult Function(_undefined value)? undefined,
+    TResult? Function(_web value)? web,
+    TResult? Function(_file value)? file,
+    TResult? Function(_undefined value)? undefined,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -65,16 +65,18 @@ mixin _$ImageType {
 /// @nodoc
 abstract class $ImageTypeCopyWith<$Res> {
   factory $ImageTypeCopyWith(ImageType value, $Res Function(ImageType) then) =
-      _$ImageTypeCopyWithImpl<$Res>;
+      _$ImageTypeCopyWithImpl<$Res, ImageType>;
 }
 
 /// @nodoc
-class _$ImageTypeCopyWithImpl<$Res> implements $ImageTypeCopyWith<$Res> {
+class _$ImageTypeCopyWithImpl<$Res, $Val extends ImageType>
+    implements $ImageTypeCopyWith<$Res> {
   _$ImageTypeCopyWithImpl(this._value, this._then);
 
-  final ImageType _value;
   // ignore: unused_field
-  final $Res Function(ImageType) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -84,13 +86,10 @@ abstract class _$$_webCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_webCopyWithImpl<$Res> extends _$ImageTypeCopyWithImpl<$Res>
+class __$$_webCopyWithImpl<$Res> extends _$ImageTypeCopyWithImpl<$Res, _$_web>
     implements _$$_webCopyWith<$Res> {
   __$$_webCopyWithImpl(_$_web _value, $Res Function(_$_web) _then)
-      : super(_value, (v) => _then(v as _$_web));
-
-  @override
-  _$_web get _value => super._value as _$_web;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -125,9 +124,9 @@ class _$_web implements _web {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? web,
-    TResult Function()? file,
-    TResult Function()? undefined,
+    TResult? Function()? web,
+    TResult? Function()? file,
+    TResult? Function()? undefined,
   }) {
     return web?.call();
   }
@@ -159,9 +158,9 @@ class _$_web implements _web {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_web value)? web,
-    TResult Function(_file value)? file,
-    TResult Function(_undefined value)? undefined,
+    TResult? Function(_web value)? web,
+    TResult? Function(_file value)? file,
+    TResult? Function(_undefined value)? undefined,
   }) {
     return web?.call(this);
   }
@@ -192,13 +191,10 @@ abstract class _$$_fileCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_fileCopyWithImpl<$Res> extends _$ImageTypeCopyWithImpl<$Res>
+class __$$_fileCopyWithImpl<$Res> extends _$ImageTypeCopyWithImpl<$Res, _$_file>
     implements _$$_fileCopyWith<$Res> {
   __$$_fileCopyWithImpl(_$_file _value, $Res Function(_$_file) _then)
-      : super(_value, (v) => _then(v as _$_file));
-
-  @override
-  _$_file get _value => super._value as _$_file;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -233,9 +229,9 @@ class _$_file implements _file {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? web,
-    TResult Function()? file,
-    TResult Function()? undefined,
+    TResult? Function()? web,
+    TResult? Function()? file,
+    TResult? Function()? undefined,
   }) {
     return file?.call();
   }
@@ -267,9 +263,9 @@ class _$_file implements _file {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_web value)? web,
-    TResult Function(_file value)? file,
-    TResult Function(_undefined value)? undefined,
+    TResult? Function(_web value)? web,
+    TResult? Function(_file value)? file,
+    TResult? Function(_undefined value)? undefined,
   }) {
     return file?.call(this);
   }
@@ -301,14 +297,12 @@ abstract class _$$_undefinedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_undefinedCopyWithImpl<$Res> extends _$ImageTypeCopyWithImpl<$Res>
+class __$$_undefinedCopyWithImpl<$Res>
+    extends _$ImageTypeCopyWithImpl<$Res, _$_undefined>
     implements _$$_undefinedCopyWith<$Res> {
   __$$_undefinedCopyWithImpl(
       _$_undefined _value, $Res Function(_$_undefined) _then)
-      : super(_value, (v) => _then(v as _$_undefined));
-
-  @override
-  _$_undefined get _value => super._value as _$_undefined;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -343,9 +337,9 @@ class _$_undefined implements _undefined {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? web,
-    TResult Function()? file,
-    TResult Function()? undefined,
+    TResult? Function()? web,
+    TResult? Function()? file,
+    TResult? Function()? undefined,
   }) {
     return undefined?.call();
   }
@@ -377,9 +371,9 @@ class _$_undefined implements _undefined {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_web value)? web,
-    TResult Function(_file value)? file,
-    TResult Function(_undefined value)? undefined,
+    TResult? Function(_web value)? web,
+    TResult? Function(_file value)? file,
+    TResult? Function(_undefined value)? undefined,
   }) {
     return undefined?.call(this);
   }

@@ -19,7 +19,7 @@ class SectionTitle extends StatelessWidget {
       padding: padding,
       child: Text(
         title,
-        style: AppTheme.theme.textTheme.headline2,
+        style: AppTheme.theme.textTheme.displayMedium,
       ),
     );
   }

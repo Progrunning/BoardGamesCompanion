@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:board_games_companion/stores/playthroughs_store.dart';
@@ -9,13 +10,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
-import '../common/enums/game_winning_condition.dart';
+import '../common/enums/game_family.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
-import '../models/playthrough_details.dart';
-import '../models/playthrough_player.dart';
+import '../models/playthroughs/playthrough_details.dart';
 import 'players_store.dart';
 
 part 'game_playthroughs_details_store.g.dart';
@@ -70,8 +70,11 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   String? get boardGameImageUrl => _boardGame!.imageUrl;
 
   @computed
-  GameWinningCondition get gameWinningCondition =>
-      _boardGame!.settings?.winningCondition ?? GameWinningCondition.HighestScore;
+  GameFamily get gameGameFamily => _boardGame!.settings?.gameFamily ?? GameFamily.HighestScore;
+
+  @computed
+  GameClassification get gameClassification =>
+      _boardGame!.settings?.gameClassification ?? GameClassification.Score;
 
   @computed
   int get averageScorePrecision => _boardGame!.settings?.averageScorePrecision ?? 0;
@@ -97,7 +100,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
 
   Future<PlaythroughDetails?> createPlaythrough(
     String boardGameId,
-    List<PlaythroughPlayer> playthoughPlayers,
+    List<Player> players,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
     Duration? duration, {
@@ -105,7 +108,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   }) async {
     final newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
-      playthoughPlayers,
+      players,
       playerScores,
       startDate,
       duration,
@@ -127,10 +130,26 @@ abstract class _GamePlaythroughsDetailsStore with Store {
     }
 
     try {
+      final originalPlaythrough = _playthroughsStore.playthroughs
+          .firstWhereOrNull((playthrough) => playthrough.id == playthroughDetails!.id);
+      if (originalPlaythrough == null) {
+        return;
+      }
+
       final updateSuceeded =
           await _playthroughsStore.updatePlaythrough(playthroughDetails!.playthrough);
       if (updateSuceeded) {
-        for (final PlayerScore playerScore in playthroughDetails.playerScores) {
+        // MK Update playthrough's player scores
+        for (final playerScoreId in originalPlaythrough.scoreIds) {
+          final playerScore = playthroughDetails.playerScores
+              .firstWhereOrNull((playerScore) => playerScore.score.id == playerScoreId);
+          // MK Delete if not present anymore
+          if (playerScore == null) {
+            await _scoresStore.deleteScore(playerScoreId);
+            continue;
+          }
+
+          // MK Add/Update extings ones
           await _scoresStore.addOrUpdateScore(playerScore.score);
         }
 
@@ -159,7 +178,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   PlaythroughDetails createPlaythroughDetails(Playthrough playthrough) {
     final scores =
         _scoresStore.scores.where((score) => score.playthroughId == playthrough.id).toList()
-          ..sortByScore(gameWinningCondition)
+          ..sortByScore(gameGameFamily)
           ..toList();
     final players =
         _playerStore.players.where((player) => playthrough.playerIds.contains(player.id)).toList();
@@ -167,7 +186,9 @@ abstract class _GamePlaythroughsDetailsStore with Store {
     final playerScores = scores.mapIndexed((int index, Score score) {
       final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
       return PlayerScore(player: player, score: score, place: index + 1);
-    }).toList();
+    }).toList()
+      ..sortByPlayerName()
+      ..sortByScore(gameGameFamily);
 
     return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores);
   }

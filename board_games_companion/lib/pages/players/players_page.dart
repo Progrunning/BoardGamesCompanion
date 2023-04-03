@@ -94,6 +94,7 @@ class PlayersPageState extends State<PlayersPage> {
                           icon: const DefaultIcon(Icons.delete),
                           color: AppColors.redColor,
                           onPressed: () async {
+                            // ignore: use_build_context_synchronously
                             if (await _showDeletePlayersDialog(context) ?? false) {
                               setState(() {});
                             }
@@ -372,7 +373,7 @@ class _PlayersSerach extends SearchDelegate<Player?> {
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(
-        textTheme: const TextTheme(headline6: AppTheme.defaultTextFieldStyle),
+        textTheme: const TextTheme(titleLarge: AppTheme.defaultTextFieldStyle),
       );
 
   @override
@@ -507,7 +508,7 @@ class _SearchResults extends StatelessWidget {
                       const ItemPropertyTitle(AppText.playerPagePlayerNameTitle),
                       Text(
                         player.name ?? '',
-                        style: AppTheme.theme.textTheme.headline4
+                        style: AppTheme.theme.textTheme.headlineMedium
                             ?.copyWith(fontWeight: FontWeight.normal),
                       ),
                       if (player.bggName?.isNotBlank ?? false) ...[
@@ -515,7 +516,7 @@ class _SearchResults extends StatelessWidget {
                         const ItemPropertyTitle(AppText.playerPagePlayerBggNameTitle),
                         Text(
                           player.bggName!,
-                          style: AppTheme.theme.textTheme.headline4
+                          style: AppTheme.theme.textTheme.headlineMedium
                               ?.copyWith(fontWeight: FontWeight.normal),
                         ),
                       ],

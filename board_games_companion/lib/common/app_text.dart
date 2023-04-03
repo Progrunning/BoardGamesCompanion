@@ -13,6 +13,7 @@ class AppText {
   static const delete = 'Delete';
   static const remove = 'Remove';
   static const edit = 'Edit';
+  static const migrate = 'Migrate';
   static const ok = 'OK';
   static const navigateAway = 'Navigate away';
 
@@ -56,6 +57,10 @@ class AppText {
 
   static const hotBoardGamesPageTitle = 'Hot Board Games';
 
+  static const playthroughsStatisticsPageNoStatsTitle = "You haven't logged any games yet";
+  static const playthroughsStatisticsPageNoStatsSubtitle =
+      'Start logging games to see overal and personalised statistics.';
+
   static const playthroughsStatisticsPageLastWinnerSectionTitle = 'Last winner';
   static const playthroughsStatisticsPageTopFiveSectionTitle = 'Top 5 scores';
   static const playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle =
@@ -65,6 +70,8 @@ class AppText {
   static const playthroughsStatisticsPageOverallStatsAvgPlaytime = 'Avg. playtime';
   static const playthroughsStatisticsPageOverallStatsTotalPlaytime = 'Total playtime';
   static const playthroughsStatisticsPageOverallStatsBestScore = 'Best score';
+  static const playthroughsStatisticsPageOverallStatsTotalWins = 'Total wins';
+  static const playthroughsStatisticsPageOverallStatsTotalLosses = 'Total losses';
   static const playthroughsStatisticsPageOverallStatsAvgScore = 'Avg. score';
   static const playthroughsStatisticsPageOverallStatsAvgPlayerCount = 'Avg. player count';
   static const playthroughsStatisticsPageOverallStatsAvgPlayedGames = 'Played games';
@@ -77,10 +84,18 @@ class AppText {
   static const playthroughsStatisticsPagePlayerCountChartLegendFormatSingular = '%i player';
   static const playthroughsStatisticsPagePlayerCountChartLegendFormatPlural = '%i players';
 
-  static const playthroughsGameSettingsWinningConditionSectionTitle = 'Winning Condition';
-  static const playthroughsGameSettingsScoreSectionTitle = 'Score';
-  static const playthroughsGameSettingsWinningConditionHighestScore = 'Highest score';
-  static const playthroughsGameSettingsWinningConditionLowestScore = 'Lowest score';
+  static const playthroughsHistoryPageNoGamesTitle = "You haven't logged any games yet";
+  static const playthroughsHistoryPageNoGamesSubtitle =
+      'This page will fill up with the history of plays, once you start logging games.';
+
+  static const playthroughsGameSettingsGameClassificationScore = 'Score based game';
+  static const playthroughsGameSettingsGameClssificationNoScore = 'No score based game';
+  static const playthroughsGameSettingsGameClassificationSectionTitle = 'Classification';
+  static const playthroughsGameSettingsGameFamilySectionTitle = 'Family';
+  static const playthroughsGameSettingsScoreDetailsSectionTitle = 'Details';
+  static const playthroughsGameSettingsGameFamilyHighestScore = 'Highest score';
+  static const playthroughsGameSettingsGameFamilyLowestScore = 'Lowest score';
+  static const playthroughsGameSettingsGameFamilyCoop = 'Cooperative';
 
   static const searchBoardGamesPageSearchInstructions =
       'To search for board games, please type a board game title in the above search bar.';
@@ -103,13 +118,27 @@ class AppText {
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 
   static const playthroughsLogGamePageHeader = 'Log a game';
-  static const playthroughsLogGamePlayingPlayedHeaderTitle = 'Playing or played';
+  static const playthroughsLogGameplayTimelineTitle = 'Gameplay timeline';
+  static const playthroughsLogTimelineTitle = 'Timeline';
+  static const playthroughsLogTimelineInThePastName = 'In the past';
+  static const playthroughsLogDateSectionTitle = 'Date';
+  static const playthroughsLogDurationSectionTitle = 'Duration';
+  static const playthroughsLogPlayersSectionTitle = 'Players';
+  static const playthroughsLogCooperativeResultSectionTitle = 'Result';
+  static const playthroughsLogPlayersPlayingNowButtonText = 'Select players that are playing';
+  static const playthroughsLogPlayersPlayedInThePastButtonText = 'Select players that played';
+  static const playthroughsLogPlayersChangePlayerSelectionButtonText = 'Change player selection';
+  static const playthroughsLogPlayersSelectedPlayersHeader = 'You have selected the below players';
+  static const playthroughsLogTimelineNowName = 'Now';
   static const playthroughsLogGamePlayingNowOption = 'Playing now';
   static const playthroughsLogGamePlayedOption = 'Played some time ago';
   static const playthroughsLogGamePagePlayerScoresStepTitle = 'Player scores';
+  static const playthroughsLogGamePageNoScoreResultStepTitle = 'Result';
   static const playthroughsLogGamePageCreatePlayerButtonText = 'Create Player';
-  static const playthroughsLogGamePageCreatePlayerTitle =
-      'To log a game, you need to create players first';
+  static const playthroughsLogGamePageCreatePlayerTitle = 'No players to log a game';
+  static const playthroughsLogGamePageCreatePlayerSubtitle =
+      "To log a game, you need to create players first. Use the plus button in this section's header to add new players or go back and select players bottom tab and start adding players";
+  static const playthroughsLogGameSubmitButtonText = 'Log game';
 
   static const importCollectionsSucceeded = 'Your collection has been imported from BGG!';
   static const importCollectionsButtonText = 'Import';
@@ -126,8 +155,8 @@ class AppText {
   static const importPlaysReportNoPlaysToImportError = 'There were no plays to import';
 
   static const logGameSuccessConfirmationSnackbarText = 'Your game has been logged!';
-  static const logGameFailureConfirmationSnackbarText =
-      "We ran into a problem and your game wasn't logged. Please try again.";
+  static const logGameFailureSnackbarText =
+      'Please makes sure that all of the steps are completed (e.g. selecting players) before logging a game. If the problem persists please contact support.';
   static const gameFiltersAnyNumberOfPlayers = 'Any';
   static const gameFiltersSinglePlayerOnly = 'Has solo mode';
 
@@ -141,8 +170,14 @@ class AppText {
   static const editPlaythroughAddNote = 'Add note';
 
   static const editPlaythroughPageTitle = 'Edit Playthrough';
-  static const editPlaythroughDateAndDurationHeaderTitle = 'Date & Duration';
+  static const editPlaythroughDateHeaderTitle = 'Date';
+  static const editPlaythroughDurationHeaderTitle = 'Duration';
   static const editPlaythroughScoresHeaderTitle = 'Scores';
+  static const editPlaythroughNoScoreResultHeaderTitle = 'Result';
+  static const editPlaythroughNoScoreResultText = 'Game result';
+  static const editPlaythroughNoScoreResultWinText = 'Win';
+  static const editPlaythroughNoScoreResultLossText = 'Loss';
+  static const editPlaythroughNoScorePlayersHeaderTitle = 'Players';
   static const editPlaythroughNotesHeaderTitle = 'Notes';
   static const editPlaythroughPagePlayedOnSectionTitle = 'Played on';
   static const editPlaythroughPageDurationSectionTitle = 'Duration';
@@ -216,6 +251,9 @@ class AppText {
   static const playsPageHistoryTabEmptyTitle = "You haven't played any games yet";
   static const playPageHistoryTabEmptySubtitle =
       'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
+  static const playPageHistoryTabScoreGameResultFormat = '%s (%s points)';
+  static const playPageHistoryTabCooperativeGameResultWin = 'Win';
+  static const playPageHistoryTabCooperativeGameResultLoss = 'Loss';
 
   static const playsPageSelectGameTabEmptyTitle = 'Your collections are empty';
   static const playsPageSelectGameTabEmptySubtitle =
@@ -274,4 +312,29 @@ class AppText {
       'Remove game from collections';
   static const createNewGameRemoveFromCollectionConfirmationDialogContentFormat =
       'Removing game %s from all of your collections will effectively remove the game from the app.';
+
+  static const playthroughPlayersSelectionPageTitle = 'Select players';
+
+  static const playthroughMigrationPageTitle = 'Migrate a game';
+  static const playthroughMigrationPageMigrationOverviewHeader = 'Overview';
+  static const playthroughMigrationPageMigrationOverviewContent =
+      'You are about to migrate a game where players were assigned a numeric score to a cooperative result (i.e. no numeric score).';
+  static const playthroughMigrationPageMigrationOverviewAiInfo =
+      'If you used an AI player to track your wins against the game then it is safe to remove that "player" from the players list by swiping right and tapping remove button.';
+  static const playthroughMigrationPagePlayerScoresInfo =
+      'Player scores are shown only for the purpose of deciding if the game was a win or a loss';
+  static const playthroughMigrationPageMigrationResultHeader = 'Result';
+  static const playthroughMigrationPageMigrationPlayerScoresHeader = 'Player scores';
+  static const playthroughMigrationPageInvalidMigrationTitle = 'Oops, something went wrong';
+  static const playthroughMigrationPageInvalidMigrationSubtitle =
+      'Sorry, we are having trouble with loading appropriate content for this migration. Please contact support.';
+  static const playthroughMigrationFailureSnackbar =
+      'Sorry, we ran into a problem when migrating your game. Please contact support.';
+  static const playthroughMigrationScoreToCooperativeInvalidFormErrorMessage =
+      'Make sure to select a win or loss before you migrate your game.';
+  static const playthroughMigrationPageMigrationNotFinishedDialogTitle =
+      "You didn't finish migration.";
+  static const playthroughMigrationPageMigrationNotFinishedDialogContent =
+      'Are you sure you want to navigate away?';
+  static const playthroughMigrationPageMigrationNotFinishedActionButtonText = 'Navigate away';
 }

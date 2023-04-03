@@ -33,6 +33,8 @@ class PlaythroughsPage extends StatefulWidget {
 
   static const String pageRoute = '/playthroughs';
 
+  static const int historyTabIndex = 1;
+
   final PlaythroughsViewModel viewModel;
 
   @override
@@ -102,7 +104,9 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
                   boardGameImageHeroId: widget.viewModel.boardGameImageHeroId,
                 ),
                 const PlaythroughsHistoryPage(),
-                const PlaythroughsLogGamePage(),
+                PlaythroughsLogGamePage(
+                  parentPageTabController: tabController,
+                ),
                 const PlaythroughsGameSettingsPage()
               ],
             ),
@@ -115,8 +119,8 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           items: const <TabItem>[
             TabItem<BottomTabIcon>(
               title: AppText.playthroughPageStatsBottomTabTitle,
-              icon: BottomTabIcon(iconData: Icons.multiline_chart),
-              activeIcon: BottomTabIcon(iconData: Icons.multiline_chart, isActive: true),
+              icon: BottomTabIcon(iconData: Icons.query_stats),
+              activeIcon: BottomTabIcon(iconData: Icons.query_stats, isActive: true),
             ),
             TabItem<BottomTabIcon>(
               title: AppText.playthroughPageHistoryBottomTabTitle,

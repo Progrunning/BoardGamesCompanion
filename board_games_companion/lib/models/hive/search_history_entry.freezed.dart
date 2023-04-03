@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'search_history_entry.dart';
 
@@ -30,34 +30,37 @@ mixin _$SearchHistoryEntry {
 abstract class $SearchHistoryEntryCopyWith<$Res> {
   factory $SearchHistoryEntryCopyWith(
           SearchHistoryEntry value, $Res Function(SearchHistoryEntry) then) =
-      _$SearchHistoryEntryCopyWithImpl<$Res>;
+      _$SearchHistoryEntryCopyWithImpl<$Res, SearchHistoryEntry>;
+  @useResult
   $Res call({@HiveField(0) String query, @HiveField(1) DateTime dateTime});
 }
 
 /// @nodoc
-class _$SearchHistoryEntryCopyWithImpl<$Res>
+class _$SearchHistoryEntryCopyWithImpl<$Res, $Val extends SearchHistoryEntry>
     implements $SearchHistoryEntryCopyWith<$Res> {
   _$SearchHistoryEntryCopyWithImpl(this._value, this._then);
 
-  final SearchHistoryEntry _value;
   // ignore: unused_field
-  final $Res Function(SearchHistoryEntry) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? query = freezed,
-    Object? dateTime = freezed,
+    Object? query = null,
+    Object? dateTime = null,
   }) {
     return _then(_value.copyWith(
-      query: query == freezed
+      query: null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String,
-      dateTime: dateTime == freezed
+      dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-    ));
+    ) as $Val);
   }
 }
 
@@ -68,31 +71,30 @@ abstract class _$$_SearchHistoryEntryCopyWith<$Res>
           $Res Function(_$_SearchHistoryEntry) then) =
       __$$_SearchHistoryEntryCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({@HiveField(0) String query, @HiveField(1) DateTime dateTime});
 }
 
 /// @nodoc
 class __$$_SearchHistoryEntryCopyWithImpl<$Res>
-    extends _$SearchHistoryEntryCopyWithImpl<$Res>
+    extends _$SearchHistoryEntryCopyWithImpl<$Res, _$_SearchHistoryEntry>
     implements _$$_SearchHistoryEntryCopyWith<$Res> {
   __$$_SearchHistoryEntryCopyWithImpl(
       _$_SearchHistoryEntry _value, $Res Function(_$_SearchHistoryEntry) _then)
-      : super(_value, (v) => _then(v as _$_SearchHistoryEntry));
+      : super(_value, _then);
 
-  @override
-  _$_SearchHistoryEntry get _value => super._value as _$_SearchHistoryEntry;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? query = freezed,
-    Object? dateTime = freezed,
+    Object? query = null,
+    Object? dateTime = null,
   }) {
     return _then(_$_SearchHistoryEntry(
-      query: query == freezed
+      query: null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String,
-      dateTime: dateTime == freezed
+      dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
@@ -127,18 +129,17 @@ class _$_SearchHistoryEntry implements _SearchHistoryEntry {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SearchHistoryEntry &&
-            const DeepCollectionEquality().equals(other.query, query) &&
-            const DeepCollectionEquality().equals(other.dateTime, dateTime));
+            (identical(other.query, query) || other.query == query) &&
+            (identical(other.dateTime, dateTime) ||
+                other.dateTime == dateTime));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(query),
-      const DeepCollectionEquality().hash(dateTime));
+  int get hashCode => Object.hash(runtimeType, query, dateTime);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SearchHistoryEntryCopyWith<_$_SearchHistoryEntry> get copyWith =>
       __$$_SearchHistoryEntryCopyWithImpl<_$_SearchHistoryEntry>(
           this, _$identity);

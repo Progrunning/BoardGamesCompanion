@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'playthroughs_page_arguments.dart';
 
@@ -28,42 +28,47 @@ mixin _$PlaythroughsPageArguments {
 abstract class $PlaythroughsPageArgumentsCopyWith<$Res> {
   factory $PlaythroughsPageArgumentsCopyWith(PlaythroughsPageArguments value,
           $Res Function(PlaythroughsPageArguments) then) =
-      _$PlaythroughsPageArgumentsCopyWithImpl<$Res>;
+      _$PlaythroughsPageArgumentsCopyWithImpl<$Res, PlaythroughsPageArguments>;
+  @useResult
   $Res call({BoardGameDetails boardGameDetails, String boardGameImageHeroId});
 
   $BoardGameDetailsCopyWith<$Res> get boardGameDetails;
 }
 
 /// @nodoc
-class _$PlaythroughsPageArgumentsCopyWithImpl<$Res>
+class _$PlaythroughsPageArgumentsCopyWithImpl<$Res,
+        $Val extends PlaythroughsPageArguments>
     implements $PlaythroughsPageArgumentsCopyWith<$Res> {
   _$PlaythroughsPageArgumentsCopyWithImpl(this._value, this._then);
 
-  final PlaythroughsPageArguments _value;
   // ignore: unused_field
-  final $Res Function(PlaythroughsPageArguments) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameDetails = freezed,
-    Object? boardGameImageHeroId = freezed,
+    Object? boardGameDetails = null,
+    Object? boardGameImageHeroId = null,
   }) {
     return _then(_value.copyWith(
-      boardGameDetails: boardGameDetails == freezed
+      boardGameDetails: null == boardGameDetails
           ? _value.boardGameDetails
           : boardGameDetails // ignore: cast_nullable_to_non_nullable
               as BoardGameDetails,
-      boardGameImageHeroId: boardGameImageHeroId == freezed
+      boardGameImageHeroId: null == boardGameImageHeroId
           ? _value.boardGameImageHeroId
           : boardGameImageHeroId // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $BoardGameDetailsCopyWith<$Res> get boardGameDetails {
     return $BoardGameDetailsCopyWith<$Res>(_value.boardGameDetails, (value) {
-      return _then(_value.copyWith(boardGameDetails: value));
+      return _then(_value.copyWith(boardGameDetails: value) as $Val);
     });
   }
 }
@@ -76,6 +81,7 @@ abstract class _$$_PlaythroughsPageArgumentsCopyWith<$Res>
           $Res Function(_$_PlaythroughsPageArguments) then) =
       __$$_PlaythroughsPageArgumentsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({BoardGameDetails boardGameDetails, String boardGameImageHeroId});
 
   @override
@@ -84,28 +90,26 @@ abstract class _$$_PlaythroughsPageArgumentsCopyWith<$Res>
 
 /// @nodoc
 class __$$_PlaythroughsPageArgumentsCopyWithImpl<$Res>
-    extends _$PlaythroughsPageArgumentsCopyWithImpl<$Res>
+    extends _$PlaythroughsPageArgumentsCopyWithImpl<$Res,
+        _$_PlaythroughsPageArguments>
     implements _$$_PlaythroughsPageArgumentsCopyWith<$Res> {
   __$$_PlaythroughsPageArgumentsCopyWithImpl(
       _$_PlaythroughsPageArguments _value,
       $Res Function(_$_PlaythroughsPageArguments) _then)
-      : super(_value, (v) => _then(v as _$_PlaythroughsPageArguments));
+      : super(_value, _then);
 
-  @override
-  _$_PlaythroughsPageArguments get _value =>
-      super._value as _$_PlaythroughsPageArguments;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? boardGameDetails = freezed,
-    Object? boardGameImageHeroId = freezed,
+    Object? boardGameDetails = null,
+    Object? boardGameImageHeroId = null,
   }) {
     return _then(_$_PlaythroughsPageArguments(
-      boardGameDetails: boardGameDetails == freezed
+      boardGameDetails: null == boardGameDetails
           ? _value.boardGameDetails
           : boardGameDetails // ignore: cast_nullable_to_non_nullable
               as BoardGameDetails,
-      boardGameImageHeroId: boardGameImageHeroId == freezed
+      boardGameImageHeroId: null == boardGameImageHeroId
           ? _value.boardGameImageHeroId
           : boardGameImageHeroId // ignore: cast_nullable_to_non_nullable
               as String,
@@ -134,20 +138,19 @@ class _$_PlaythroughsPageArguments implements _PlaythroughsPageArguments {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PlaythroughsPageArguments &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameDetails, boardGameDetails) &&
-            const DeepCollectionEquality()
-                .equals(other.boardGameImageHeroId, boardGameImageHeroId));
+            (identical(other.boardGameDetails, boardGameDetails) ||
+                other.boardGameDetails == boardGameDetails) &&
+            (identical(other.boardGameImageHeroId, boardGameImageHeroId) ||
+                other.boardGameImageHeroId == boardGameImageHeroId));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(boardGameDetails),
-      const DeepCollectionEquality().hash(boardGameImageHeroId));
+  int get hashCode =>
+      Object.hash(runtimeType, boardGameDetails, boardGameImageHeroId);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PlaythroughsPageArgumentsCopyWith<_$_PlaythroughsPageArguments>
       get copyWith => __$$_PlaythroughsPageArgumentsCopyWithImpl<
           _$_PlaythroughsPageArguments>(this, _$identity);

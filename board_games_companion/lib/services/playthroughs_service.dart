@@ -5,7 +5,6 @@ import 'package:injectable/injectable.dart';
 import '../common/enums/playthrough_status.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
-import '../models/playthrough_player.dart';
 import 'hive_base_service.dart';
 import 'score_service.dart';
 
@@ -50,17 +49,16 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
 
   Future<Playthrough?> createPlaythrough(
     String boardGameId,
-    List<PlaythroughPlayer> playthoughPlayers,
+    List<String> playerIds,
     Map<String, PlayerScore> playerScores,
     DateTime startDate,
     Duration? duration, {
     int? bggPlayId,
   }) async {
-    if ((boardGameId.isEmpty) || (playthoughPlayers.isEmpty)) {
+    if ((boardGameId.isEmpty) || (playerIds.isEmpty)) {
       return null;
     }
 
-    final playthroughPlayerIds = playthoughPlayers.map((p) => p.player.id).toList();
     if (!await ensureBoxOpen()) {
       return null;
     }
@@ -68,7 +66,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     var newPlaythrough = Playthrough(
       id: uuid.v4(),
       boardGameId: boardGameId,
-      playerIds: playthroughPlayerIds,
+      playerIds: playerIds,
       scoreIds: <String>[],
       startDate: startDate,
       bggPlayId: bggPlayId,
@@ -86,11 +84,11 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     try {
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
-      for (final String playthroughPlayerId in playthroughPlayerIds) {
-        var playerScore = playerScores[playthroughPlayerId]?.score ??
+      for (final String playerId in playerIds) {
+        var playerScore = playerScores[playerId]?.score ??
             Score(
               id: uuid.v4(),
-              playerId: playthroughPlayerId,
+              playerId: playerId,
               boardGameId: boardGameId,
               playthroughId: newPlaythrough.id,
             );
@@ -100,7 +98,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
 
         if (!await scoreService.addOrUpdateScore(playerScore)) {
           FirebaseCrashlytics.instance.log(
-            'Faild to create a player score for player $playthroughPlayerId for a board game $boardGameId',
+            'Faild to create a player score for player $playerId for a board game $boardGameId',
           );
         } else {
           newPlaythrough = newPlaythrough.copyWith(

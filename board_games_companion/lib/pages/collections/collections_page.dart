@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/pages/collections/collections_view_model.dart';
-import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_header_delegate.dart';
+import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -172,7 +172,7 @@ class _Collection extends StatelessWidget {
         if (!isCollectionEmpty) ...[
           if (hasMainGames) ...[
             SliverPersistentHeader(
-              delegate: BgcSliverHeaderDelegate(
+              delegate: BgcSliverTitleHeaderDelegate.title(
                 primaryTitle: sprintf(
                   AppText.gamesPageMainGamesSliverSectionTitleFormat,
                   [totalMainGames],
@@ -184,7 +184,7 @@ class _Collection extends StatelessWidget {
           if (hasExpansions) ...[
             for (var expansionsMapEntry in expansionsMap.entries) ...[
               SliverPersistentHeader(
-                delegate: BgcSliverHeaderDelegate(
+                delegate: BgcSliverTitleHeaderDelegate.title(
                   primaryTitle: sprintf(
                     AppText.gamesPageExpansionsSliverSectionTitleFormat,
                     [expansionsMapEntry.key.item2, expansionsMapEntry.value.length],

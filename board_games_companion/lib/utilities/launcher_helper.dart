@@ -11,7 +11,7 @@ class LauncherHelper {
     if (context == null || uri.isEmpty) {
       return;
     }
-
+    final navigatorState = Navigator.of(context);
     final Uri? parsedUri = Uri.tryParse(uri);
     if (parsedUri == null) {
       return;
@@ -20,15 +20,17 @@ class LauncherHelper {
     if (await canLaunchUrl(parsedUri)) {
       await launchUrl(parsedUri, mode: launchMode);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!navigatorState.mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(navigatorState.context).showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
           content: Text("Sorry, we couldn't open the $uri"),
           action: SnackBarAction(
             label: 'Ok',
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => navigatorState.pop(),
           ),
         ),
       );
