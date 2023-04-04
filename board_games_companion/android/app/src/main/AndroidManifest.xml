@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.board_games_companion">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" package="com.example.board_games_companion">
 
     <queries>
         <intent>
@@ -30,6 +31,8 @@
         <!-- MK Disable automatic screen reporting for Firebase analytics https://firebase.google.com/docs/analytics/screenviews#disable_screenview_tracking. 
                 We're traking screen views manually in the analytics_route_observer -->
         <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />
+        <!-- MK Disable advertisment ID collection as there's no ads in the app and this will prevent Google Play submission from happening because that's how the app is configured -->
+        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
     </application>
 
     <!-- MK Nees to explicitly remove the advertisment ID because of manigest merge. 
