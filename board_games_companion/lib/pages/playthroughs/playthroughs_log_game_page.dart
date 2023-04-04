@@ -357,7 +357,7 @@ class _DateAndDurationSection extends StatelessWidget {
   }
 }
 
-class _SetPlaythroughDuration extends StatefulWidget {
+class _SetPlaythroughDuration extends StatelessWidget {
   const _SetPlaythroughDuration({
     required this.playthroughDuration,
     required this.onDurationChanged,
@@ -367,68 +367,49 @@ class _SetPlaythroughDuration extends StatefulWidget {
   final void Function(Duration) onDurationChanged;
 
   @override
-  State<_SetPlaythroughDuration> createState() => _SetPlaythroughDurationState();
-}
-
-class _SetPlaythroughDurationState extends State<_SetPlaythroughDuration> {
-  late int hoursPlayed;
-  late int minutesPlyed;
-
-  @override
-  void initState() {
-    super.initState();
-
-    hoursPlayed = widget.playthroughDuration.inHours;
-    minutesPlyed = widget.playthroughDuration.inMinutes % Duration.minutesPerHour;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        NumberPicker(
-          value: hoursPlayed,
-          minValue: 0,
-          maxValue: 99,
-          onChanged: (num value) => _updateDurationHours(value),
-          itemWidth: 46,
-          selectedTextStyle: const TextStyle(
-            color: AppColors.accentColor,
-            fontSize: Dimensions.doubleExtraLargeFontSize,
+  Widget build(BuildContext context) => Row(
+        children: <Widget>[
+          NumberPicker(
+            value: playthroughDuration.inHours,
+            minValue: 0,
+            maxValue: 99,
+            onChanged: (num value) => _updateDurationHours(value),
+            itemWidth: 46,
+            selectedTextStyle: const TextStyle(
+              color: AppColors.accentColor,
+              fontSize: Dimensions.doubleExtraLargeFontSize,
+            ),
           ),
-        ),
-        Text('h', style: AppTheme.theme.textTheme.bodyMedium),
-        const SizedBox(width: Dimensions.halfStandardSpacing),
-        NumberPicker(
-          value: math.min(Duration.minutesPerHour - 1, minutesPlyed),
-          infiniteLoop: true,
-          minValue: 0,
-          maxValue: Duration.minutesPerHour - 1,
-          onChanged: (num value) => _updateDurationMinutes(value),
-          itemWidth: 46,
-          selectedTextStyle: const TextStyle(
-            color: AppColors.accentColor,
-            fontSize: Dimensions.doubleExtraLargeFontSize,
+          Text('h', style: AppTheme.theme.textTheme.bodyMedium),
+          const SizedBox(width: Dimensions.halfStandardSpacing),
+          NumberPicker(
+            value: math.min(
+              Duration.minutesPerHour - 1,
+              playthroughDuration.inMinutes % Duration.minutesPerHour,
+            ),
+            infiniteLoop: true,
+            minValue: 0,
+            maxValue: Duration.minutesPerHour - 1,
+            onChanged: (num value) => _updateDurationMinutes(value),
+            itemWidth: 46,
+            selectedTextStyle: const TextStyle(
+              color: AppColors.accentColor,
+              fontSize: Dimensions.doubleExtraLargeFontSize,
+            ),
           ),
+          Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
+        ],
+      );
+
+  void _updateDurationMinutes(num value) =>
+      onDurationChanged(Duration(hours: playthroughDuration.inHours, minutes: value.toInt()));
+
+  void _updateDurationHours(num value) => onDurationChanged(
+        Duration(
+          hours: value.toInt(),
+          minutes: playthroughDuration.inMinutes % Duration.minutesPerHour,
         ),
-        Text('min ', style: AppTheme.theme.textTheme.bodyMedium),
-      ],
-    );
-  }
-
-  void _updateDurationMinutes(num value) {
-    setState(() {
-      minutesPlyed = value.toInt();
-      widget.onDurationChanged(Duration(hours: hoursPlayed, minutes: minutesPlyed));
-    });
-  }
-
-  void _updateDurationHours(num value) {
-    setState(() {
-      hoursPlayed = value.toInt();
-      widget.onDurationChanged(Duration(hours: hoursPlayed, minutes: minutesPlyed));
-    });
-  }
+      );
 }
 
 class _CooperativeResultSection extends StatelessWidget {
