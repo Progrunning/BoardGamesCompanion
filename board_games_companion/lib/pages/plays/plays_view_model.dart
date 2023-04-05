@@ -132,9 +132,6 @@ abstract class _PlaysViewModel with Store {
   bool get hasAnyBoardGamesToShuffle => shuffledBoardGames.isNotEmpty;
 
   @computed
-  int get minNumberOfPlayers => _shuffledBoardGames.minNumberOfPlayers;
-
-  @computed
   int get maxNumberOfPlayers => _shuffledBoardGames.maxNumberOfPlayers;
 
   @computed
@@ -152,9 +149,14 @@ abstract class _PlaysViewModel with Store {
     }
 
     gameSpinnerFilters.numberOfPlayersFilter.maybeWhen(
-      singlePlayerOnly: () => filteredShuffledBoardGames
+      solo: () => filteredShuffledBoardGames
           .removeWhere((boardGame) => boardGame.minPlayers == null || boardGame.minPlayers! > 1),
-      moreThan: (numberOfPlayers) => filteredShuffledBoardGames.removeWhere(
+      couple: () => filteredShuffledBoardGames.removeWhere(
+        (boardGame) =>
+            (boardGame.minPlayers == null || boardGame.minPlayers != 2) ||
+            (boardGame.maxPlayers == null || boardGame.maxPlayers != 2),
+      ),
+      moreOrEqualTo: (numberOfPlayers) => filteredShuffledBoardGames.removeWhere(
           (boardGame) => boardGame.maxPlayers == null || boardGame.maxPlayers! < numberOfPlayers),
       orElse: () {},
     );

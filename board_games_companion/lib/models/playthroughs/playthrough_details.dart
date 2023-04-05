@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/enums/game_classification.dart';
+import 'package:board_games_companion/extensions/scores_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -56,4 +57,10 @@ class PlaythroughDetails with _$PlaythroughDetails {
   }
 
   PlaythroughNote? get latestNote => notes?.sortedBy((note) => note.createdAt).last;
+
+  bool get hasAnyScores => playerScores
+      .map((playerScore) => playerScore.score)
+      .toList()
+      .onlyScoresWithValue()
+      .isNotEmpty;
 }

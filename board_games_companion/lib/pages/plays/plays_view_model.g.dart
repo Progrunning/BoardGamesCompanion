@@ -56,13 +56,6 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
           Computed<bool>(() => super.hasAnyBoardGamesToShuffle,
               name: '_PlaysViewModel.hasAnyBoardGamesToShuffle'))
       .value;
-  Computed<int>? _$minNumberOfPlayersComputed;
-
-  @override
-  int get minNumberOfPlayers => (_$minNumberOfPlayersComputed ??= Computed<int>(
-          () => super.minNumberOfPlayers,
-          name: '_PlaysViewModel.minNumberOfPlayers'))
-      .value;
   Computed<int>? _$maxNumberOfPlayersComputed;
 
   @override
@@ -232,7 +225,6 @@ finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},
 hasAnyBoardGames: ${hasAnyBoardGames},
 hasAnyBoardGamesToShuffle: ${hasAnyBoardGamesToShuffle},
-minNumberOfPlayers: ${minNumberOfPlayers},
 maxNumberOfPlayers: ${maxNumberOfPlayers},
 shuffledBoardGames: ${shuffledBoardGames},
 randomItemIndex: ${randomItemIndex}

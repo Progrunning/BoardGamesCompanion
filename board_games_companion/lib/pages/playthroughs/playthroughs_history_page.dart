@@ -120,7 +120,8 @@ class _PlaythroughState extends State<_Playthrough> {
   Widget build(BuildContext context) {
     final migrateToCooperativeResult =
         widget.playthroughDetails.playerScoreBasedGameClassification != widget.gameClassification &&
-            widget.gameClassification == GameClassification.NoScore;
+            widget.gameClassification == GameClassification.NoScore &&
+            widget.playthroughDetails.hasAnyScores;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -164,12 +165,12 @@ class _PlaythroughState extends State<_Playthrough> {
 }
 
 class _PlaythroughPlayersStats extends StatelessWidget {
-  const _PlaythroughPlayersStats(
-      {Key? key,
-      required this.playthroughDetails,
-      required this.gameClassification,
-      required this.migrateToCooperativeResult})
-      : super(key: key);
+  const _PlaythroughPlayersStats({
+    Key? key,
+    required this.playthroughDetails,
+    required this.gameClassification,
+    required this.migrateToCooperativeResult,
+  }) : super(key: key);
 
   final PlaythroughDetails playthroughDetails;
   final GameClassification gameClassification;

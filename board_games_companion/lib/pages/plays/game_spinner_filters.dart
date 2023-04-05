@@ -25,8 +25,10 @@ class GameSpinnerFilters with _$GameSpinnerFilters {
 @freezed
 class NumberOfPlayersFilter with _$NumberOfPlayersFilter {
   const factory NumberOfPlayersFilter.any() = _numberOfPlayersAny;
-  const factory NumberOfPlayersFilter.singlePlayerOnly() = _singlePlayerOnly;
-  const factory NumberOfPlayersFilter.moreThan({required int moreThanNumberOfPlayers}) = _moreThan;
+  const factory NumberOfPlayersFilter.solo() = _solo;
+  const factory NumberOfPlayersFilter.couple() = _couple;
+  const factory NumberOfPlayersFilter.moreOrEqualTo({required int numberOfPlayers}) =
+      _moreOrEqualTo;
 }
 
 @freezed
