@@ -247,44 +247,50 @@ mixin _$NumberOfPlayersFilter {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() any,
-    required TResult Function() singlePlayerOnly,
-    required TResult Function(int moreThanNumberOfPlayers) moreThan,
+    required TResult Function() solo,
+    required TResult Function() couple,
+    required TResult Function(int numberOfPlayers) moreOrEqualTo,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? any,
-    TResult? Function()? singlePlayerOnly,
-    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? solo,
+    TResult? Function()? couple,
+    TResult? Function(int numberOfPlayers)? moreOrEqualTo,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult Function()? solo,
+    TResult Function()? couple,
+    TResult Function(int numberOfPlayers)? moreOrEqualTo,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_numberOfPlayersAny value) any,
-    required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
-    required TResult Function(_moreThan value) moreThan,
+    required TResult Function(_solo value) solo,
+    required TResult Function(_couple value) couple,
+    required TResult Function(_moreOrEqualTo value) moreOrEqualTo,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_numberOfPlayersAny value)? any,
-    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult? Function(_moreThan value)? moreThan,
+    TResult? Function(_solo value)? solo,
+    TResult? Function(_couple value)? couple,
+    TResult? Function(_moreOrEqualTo value)? moreOrEqualTo,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult Function(_solo value)? solo,
+    TResult Function(_couple value)? couple,
+    TResult Function(_moreOrEqualTo value)? moreOrEqualTo,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -348,8 +354,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() any,
-    required TResult Function() singlePlayerOnly,
-    required TResult Function(int moreThanNumberOfPlayers) moreThan,
+    required TResult Function() solo,
+    required TResult Function() couple,
+    required TResult Function(int numberOfPlayers) moreOrEqualTo,
   }) {
     return any();
   }
@@ -358,8 +365,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? any,
-    TResult? Function()? singlePlayerOnly,
-    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? solo,
+    TResult? Function()? couple,
+    TResult? Function(int numberOfPlayers)? moreOrEqualTo,
   }) {
     return any?.call();
   }
@@ -368,8 +376,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult Function()? solo,
+    TResult Function()? couple,
+    TResult Function(int numberOfPlayers)? moreOrEqualTo,
     required TResult orElse(),
   }) {
     if (any != null) {
@@ -382,8 +391,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_numberOfPlayersAny value) any,
-    required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
-    required TResult Function(_moreThan value) moreThan,
+    required TResult Function(_solo value) solo,
+    required TResult Function(_couple value) couple,
+    required TResult Function(_moreOrEqualTo value) moreOrEqualTo,
   }) {
     return any(this);
   }
@@ -392,8 +402,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_numberOfPlayersAny value)? any,
-    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult? Function(_moreThan value)? moreThan,
+    TResult? Function(_solo value)? solo,
+    TResult? Function(_couple value)? couple,
+    TResult? Function(_moreOrEqualTo value)? moreOrEqualTo,
   }) {
     return any?.call(this);
   }
@@ -402,8 +413,9 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult Function(_solo value)? solo,
+    TResult Function(_couple value)? couple,
+    TResult Function(_moreOrEqualTo value)? moreOrEqualTo,
     required TResult orElse(),
   }) {
     if (any != null) {
@@ -418,35 +430,33 @@ abstract class _numberOfPlayersAny implements NumberOfPlayersFilter {
 }
 
 /// @nodoc
-abstract class _$$_singlePlayerOnlyCopyWith<$Res> {
-  factory _$$_singlePlayerOnlyCopyWith(
-          _$_singlePlayerOnly value, $Res Function(_$_singlePlayerOnly) then) =
-      __$$_singlePlayerOnlyCopyWithImpl<$Res>;
+abstract class _$$_soloCopyWith<$Res> {
+  factory _$$_soloCopyWith(_$_solo value, $Res Function(_$_solo) then) =
+      __$$_soloCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_singlePlayerOnlyCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_singlePlayerOnly>
-    implements _$$_singlePlayerOnlyCopyWith<$Res> {
-  __$$_singlePlayerOnlyCopyWithImpl(
-      _$_singlePlayerOnly _value, $Res Function(_$_singlePlayerOnly) _then)
+class __$$_soloCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_solo>
+    implements _$$_soloCopyWith<$Res> {
+  __$$_soloCopyWithImpl(_$_solo _value, $Res Function(_$_solo) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_singlePlayerOnly implements _singlePlayerOnly {
-  const _$_singlePlayerOnly();
+class _$_solo implements _solo {
+  const _$_solo();
 
   @override
   String toString() {
-    return 'NumberOfPlayersFilter.singlePlayerOnly()';
+    return 'NumberOfPlayersFilter.solo()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_singlePlayerOnly);
+        (other.runtimeType == runtimeType && other is _$_solo);
   }
 
   @override
@@ -456,32 +466,35 @@ class _$_singlePlayerOnly implements _singlePlayerOnly {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() any,
-    required TResult Function() singlePlayerOnly,
-    required TResult Function(int moreThanNumberOfPlayers) moreThan,
+    required TResult Function() solo,
+    required TResult Function() couple,
+    required TResult Function(int numberOfPlayers) moreOrEqualTo,
   }) {
-    return singlePlayerOnly();
+    return solo();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? any,
-    TResult? Function()? singlePlayerOnly,
-    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? solo,
+    TResult? Function()? couple,
+    TResult? Function(int numberOfPlayers)? moreOrEqualTo,
   }) {
-    return singlePlayerOnly?.call();
+    return solo?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult Function()? solo,
+    TResult Function()? couple,
+    TResult Function(int numberOfPlayers)? moreOrEqualTo,
     required TResult orElse(),
   }) {
-    if (singlePlayerOnly != null) {
-      return singlePlayerOnly();
+    if (solo != null) {
+      return solo();
     }
     return orElse();
   }
@@ -490,67 +503,182 @@ class _$_singlePlayerOnly implements _singlePlayerOnly {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_numberOfPlayersAny value) any,
-    required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
-    required TResult Function(_moreThan value) moreThan,
+    required TResult Function(_solo value) solo,
+    required TResult Function(_couple value) couple,
+    required TResult Function(_moreOrEqualTo value) moreOrEqualTo,
   }) {
-    return singlePlayerOnly(this);
+    return solo(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_numberOfPlayersAny value)? any,
-    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult? Function(_moreThan value)? moreThan,
+    TResult? Function(_solo value)? solo,
+    TResult? Function(_couple value)? couple,
+    TResult? Function(_moreOrEqualTo value)? moreOrEqualTo,
   }) {
-    return singlePlayerOnly?.call(this);
+    return solo?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult Function(_solo value)? solo,
+    TResult Function(_couple value)? couple,
+    TResult Function(_moreOrEqualTo value)? moreOrEqualTo,
     required TResult orElse(),
   }) {
-    if (singlePlayerOnly != null) {
-      return singlePlayerOnly(this);
+    if (solo != null) {
+      return solo(this);
     }
     return orElse();
   }
 }
 
-abstract class _singlePlayerOnly implements NumberOfPlayersFilter {
-  const factory _singlePlayerOnly() = _$_singlePlayerOnly;
+abstract class _solo implements NumberOfPlayersFilter {
+  const factory _solo() = _$_solo;
 }
 
 /// @nodoc
-abstract class _$$_moreThanCopyWith<$Res> {
-  factory _$$_moreThanCopyWith(
-          _$_moreThan value, $Res Function(_$_moreThan) then) =
-      __$$_moreThanCopyWithImpl<$Res>;
+abstract class _$$_coupleCopyWith<$Res> {
+  factory _$$_coupleCopyWith(_$_couple value, $Res Function(_$_couple) then) =
+      __$$_coupleCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_coupleCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_couple>
+    implements _$$_coupleCopyWith<$Res> {
+  __$$_coupleCopyWithImpl(_$_couple _value, $Res Function(_$_couple) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$_couple implements _couple {
+  const _$_couple();
+
+  @override
+  String toString() {
+    return 'NumberOfPlayersFilter.couple()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_couple);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() any,
+    required TResult Function() solo,
+    required TResult Function() couple,
+    required TResult Function(int numberOfPlayers) moreOrEqualTo,
+  }) {
+    return couple();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? any,
+    TResult? Function()? solo,
+    TResult? Function()? couple,
+    TResult? Function(int numberOfPlayers)? moreOrEqualTo,
+  }) {
+    return couple?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? any,
+    TResult Function()? solo,
+    TResult Function()? couple,
+    TResult Function(int numberOfPlayers)? moreOrEqualTo,
+    required TResult orElse(),
+  }) {
+    if (couple != null) {
+      return couple();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_numberOfPlayersAny value) any,
+    required TResult Function(_solo value) solo,
+    required TResult Function(_couple value) couple,
+    required TResult Function(_moreOrEqualTo value) moreOrEqualTo,
+  }) {
+    return couple(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_numberOfPlayersAny value)? any,
+    TResult? Function(_solo value)? solo,
+    TResult? Function(_couple value)? couple,
+    TResult? Function(_moreOrEqualTo value)? moreOrEqualTo,
+  }) {
+    return couple?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_numberOfPlayersAny value)? any,
+    TResult Function(_solo value)? solo,
+    TResult Function(_couple value)? couple,
+    TResult Function(_moreOrEqualTo value)? moreOrEqualTo,
+    required TResult orElse(),
+  }) {
+    if (couple != null) {
+      return couple(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _couple implements NumberOfPlayersFilter {
+  const factory _couple() = _$_couple;
+}
+
+/// @nodoc
+abstract class _$$_moreOrEqualToCopyWith<$Res> {
+  factory _$$_moreOrEqualToCopyWith(
+          _$_moreOrEqualTo value, $Res Function(_$_moreOrEqualTo) then) =
+      __$$_moreOrEqualToCopyWithImpl<$Res>;
   @useResult
-  $Res call({int moreThanNumberOfPlayers});
+  $Res call({int numberOfPlayers});
 }
 
 /// @nodoc
-class __$$_moreThanCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_moreThan>
-    implements _$$_moreThanCopyWith<$Res> {
-  __$$_moreThanCopyWithImpl(
-      _$_moreThan _value, $Res Function(_$_moreThan) _then)
+class __$$_moreOrEqualToCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_moreOrEqualTo>
+    implements _$$_moreOrEqualToCopyWith<$Res> {
+  __$$_moreOrEqualToCopyWithImpl(
+      _$_moreOrEqualTo _value, $Res Function(_$_moreOrEqualTo) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? moreThanNumberOfPlayers = null,
+    Object? numberOfPlayers = null,
   }) {
-    return _then(_$_moreThan(
-      moreThanNumberOfPlayers: null == moreThanNumberOfPlayers
-          ? _value.moreThanNumberOfPlayers
-          : moreThanNumberOfPlayers // ignore: cast_nullable_to_non_nullable
+    return _then(_$_moreOrEqualTo(
+      numberOfPlayers: null == numberOfPlayers
+          ? _value.numberOfPlayers
+          : numberOfPlayers // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -558,66 +686,68 @@ class __$$_moreThanCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_moreThan implements _moreThan {
-  const _$_moreThan({required this.moreThanNumberOfPlayers});
+class _$_moreOrEqualTo implements _moreOrEqualTo {
+  const _$_moreOrEqualTo({required this.numberOfPlayers});
 
   @override
-  final int moreThanNumberOfPlayers;
+  final int numberOfPlayers;
 
   @override
   String toString() {
-    return 'NumberOfPlayersFilter.moreThan(moreThanNumberOfPlayers: $moreThanNumberOfPlayers)';
+    return 'NumberOfPlayersFilter.moreOrEqualTo(numberOfPlayers: $numberOfPlayers)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_moreThan &&
-            (identical(
-                    other.moreThanNumberOfPlayers, moreThanNumberOfPlayers) ||
-                other.moreThanNumberOfPlayers == moreThanNumberOfPlayers));
+            other is _$_moreOrEqualTo &&
+            (identical(other.numberOfPlayers, numberOfPlayers) ||
+                other.numberOfPlayers == numberOfPlayers));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, moreThanNumberOfPlayers);
+  int get hashCode => Object.hash(runtimeType, numberOfPlayers);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_moreThanCopyWith<_$_moreThan> get copyWith =>
-      __$$_moreThanCopyWithImpl<_$_moreThan>(this, _$identity);
+  _$$_moreOrEqualToCopyWith<_$_moreOrEqualTo> get copyWith =>
+      __$$_moreOrEqualToCopyWithImpl<_$_moreOrEqualTo>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() any,
-    required TResult Function() singlePlayerOnly,
-    required TResult Function(int moreThanNumberOfPlayers) moreThan,
+    required TResult Function() solo,
+    required TResult Function() couple,
+    required TResult Function(int numberOfPlayers) moreOrEqualTo,
   }) {
-    return moreThan(moreThanNumberOfPlayers);
+    return moreOrEqualTo(numberOfPlayers);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? any,
-    TResult? Function()? singlePlayerOnly,
-    TResult? Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult? Function()? solo,
+    TResult? Function()? couple,
+    TResult? Function(int numberOfPlayers)? moreOrEqualTo,
   }) {
-    return moreThan?.call(moreThanNumberOfPlayers);
+    return moreOrEqualTo?.call(numberOfPlayers);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? any,
-    TResult Function()? singlePlayerOnly,
-    TResult Function(int moreThanNumberOfPlayers)? moreThan,
+    TResult Function()? solo,
+    TResult Function()? couple,
+    TResult Function(int numberOfPlayers)? moreOrEqualTo,
     required TResult orElse(),
   }) {
-    if (moreThan != null) {
-      return moreThan(moreThanNumberOfPlayers);
+    if (moreOrEqualTo != null) {
+      return moreOrEqualTo(numberOfPlayers);
     }
     return orElse();
   }
@@ -626,44 +756,47 @@ class _$_moreThan implements _moreThan {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_numberOfPlayersAny value) any,
-    required TResult Function(_singlePlayerOnly value) singlePlayerOnly,
-    required TResult Function(_moreThan value) moreThan,
+    required TResult Function(_solo value) solo,
+    required TResult Function(_couple value) couple,
+    required TResult Function(_moreOrEqualTo value) moreOrEqualTo,
   }) {
-    return moreThan(this);
+    return moreOrEqualTo(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_numberOfPlayersAny value)? any,
-    TResult? Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult? Function(_moreThan value)? moreThan,
+    TResult? Function(_solo value)? solo,
+    TResult? Function(_couple value)? couple,
+    TResult? Function(_moreOrEqualTo value)? moreOrEqualTo,
   }) {
-    return moreThan?.call(this);
+    return moreOrEqualTo?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_numberOfPlayersAny value)? any,
-    TResult Function(_singlePlayerOnly value)? singlePlayerOnly,
-    TResult Function(_moreThan value)? moreThan,
+    TResult Function(_solo value)? solo,
+    TResult Function(_couple value)? couple,
+    TResult Function(_moreOrEqualTo value)? moreOrEqualTo,
     required TResult orElse(),
   }) {
-    if (moreThan != null) {
-      return moreThan(this);
+    if (moreOrEqualTo != null) {
+      return moreOrEqualTo(this);
     }
     return orElse();
   }
 }
 
-abstract class _moreThan implements NumberOfPlayersFilter {
-  const factory _moreThan({required final int moreThanNumberOfPlayers}) =
-      _$_moreThan;
+abstract class _moreOrEqualTo implements NumberOfPlayersFilter {
+  const factory _moreOrEqualTo({required final int numberOfPlayers}) =
+      _$_moreOrEqualTo;
 
-  int get moreThanNumberOfPlayers;
+  int get numberOfPlayers;
   @JsonKey(ignore: true)
-  _$$_moreThanCopyWith<_$_moreThan> get copyWith =>
+  _$$_moreOrEqualToCopyWith<_$_moreOrEqualTo> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

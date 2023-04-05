@@ -158,7 +158,8 @@ class AppText {
   static const logGameFailureSnackbarText =
       'Please makes sure that all of the steps are completed (e.g. selecting players) before logging a game. If the problem persists please contact support.';
   static const gameFiltersAnyNumberOfPlayers = 'Any';
-  static const gameFiltersSinglePlayerOnly = 'Has solo mode';
+  static const gameFiltersSolo = 'Solo';
+  static const gameFiltersCouple = 'Couple';
 
   static const playthroughPageStatsBottomTabTitle = 'Stats';
   static const playthroughPageHistoryBottomTabTitle = 'History';
