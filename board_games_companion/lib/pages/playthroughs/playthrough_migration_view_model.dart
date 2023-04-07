@@ -100,7 +100,7 @@ abstract class _PlaythroughMigrationViewModel with Store {
         final playerScores = [...playthroughDetails.playerScores];
         playerScores.remove(playerScoreToRemove);
         playerScoreIds.remove(playerScoreToRemove.score.id);
-        playerIds.remove(playerScoreToRemove.player!.id);
+        playerIds.remove(playerScoreToRemove.player?.id);
 
         playthroughMighration = PlaythroughMigration.fromScoreToCooperative(
           playthroughDetails: playthroughDetails.copyWith(
