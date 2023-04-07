@@ -278,7 +278,13 @@ class PlayerPageState extends BasePageState<PlayerPage> {
           ),
           action: SnackBarAction(
             label: AppText.goBack,
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              if (!context.mounted) {
+                return;
+              }
+
+              Navigator.of(context).pop();
+            },
           ),
         ),
       );
