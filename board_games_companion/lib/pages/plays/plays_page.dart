@@ -595,22 +595,9 @@ class _GameSpinnerItem extends StatelessWidget {
         child: LayoutBuilder(
           builder: (_, BoxConstraints boxConstraints) {
             return boardGameImageUrl.toImageType().when(
-                  web: () => CachedNetworkImage(
-                    maxHeightDiskCache: boxConstraints.maxWidth.toInt(),
-                    imageUrl: boardGameImageUrl,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius: AppTheme.defaultBorderRadius,
-                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                      ),
-                    ),
-                    fit: BoxFit.fitWidth,
-                    placeholder: (context, url) => Container(
-                      decoration: AppStyles.tileGradientBoxDecoration,
-                    ),
-                    errorWidget: (context, url, dynamic error) => Container(
-                      decoration: AppStyles.tileGradientBoxDecoration,
-                    ),
+                  web: () => _GameSpinnerItemWebImage(
+                    boardGameImageUrl: boardGameImageUrl,
+                    boxConstraints: boxConstraints,
                   ),
                   file: () => ClipRRect(
                     borderRadius: AppTheme.defaultBorderRadius,
@@ -632,6 +619,57 @@ class _GameSpinnerItem extends StatelessWidget {
           },
         ),
       );
+}
+
+class _GameSpinnerItemWebImage extends StatelessWidget {
+  const _GameSpinnerItemWebImage({
+    required this.boardGameImageUrl,
+    required this.boxConstraints,
+    this.errorWidget,
+  });
+
+  final BoxConstraints boxConstraints;
+  final String boardGameImageUrl;
+  final Widget? errorWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      maxHeightDiskCache: boxConstraints.maxWidth.toInt(),
+      imageUrl: boardGameImageUrl,
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          borderRadius: AppTheme.defaultBorderRadius,
+          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        ),
+      ),
+      fit: BoxFit.fitWidth,
+      placeholder: (context, url) => Container(
+        decoration: AppStyles.tileGradientBoxDecoration,
+      ),
+      errorWidget: (context, url, dynamic error) {
+        if (errorWidget != null) {
+          return errorWidget!;
+        }
+
+        // MK Re-trying to show web image on error because there seems to be an issue in Flutter SDK,
+        //    where _minScrollExtent in scroll_position.dart file is null when being accessed.
+        //    The problem appears to be happening only on the first "draw" of the screen with ListWheelScrollView
+        //    but with second attempt it works fine.
+        //
+        //    Github issues:
+        //    - https://github.com/flutter/flutter/issues/60578
+        //    - https://github.com/flutter/flutter/issues/61228 <-- an idea from hyungtaecf comment that seems to fix it
+        return _GameSpinnerItemWebImage(
+          boardGameImageUrl: boardGameImageUrl,
+          boxConstraints: boxConstraints,
+          errorWidget: Container(
+            decoration: AppStyles.tileGradientBoxDecoration,
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _PlaythroughGroupListSliver extends StatelessWidget {
