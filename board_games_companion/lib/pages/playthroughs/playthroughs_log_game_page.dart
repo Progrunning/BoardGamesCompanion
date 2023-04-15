@@ -115,24 +115,22 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
                   },
                 ),
                 Observer(
-                  builder: (_) {
-                    return _PlayersSection(
-                      playthroughTimeline: viewModel.playthroughTimeline,
-                      gameFamily: viewModel.gameFamily,
-                      players: viewModel.playersState,
-                      onCreatePlayer: () => _handleCreatePlayer(),
-                      onSelectPlayers: () => _handleSelectPlayers(),
-                      onPlayerScoreUpdated: (playerScore, score) =>
-                          _handlePlayerScoreUpdate(playerScore, score),
-                    );
-                  },
+                  builder: (_) => _PlayersSection(
+                    playthroughTimeline: viewModel.playthroughTimeline,
+                    gameFamily: viewModel.gameFamily,
+                    players: viewModel.playersState,
+                    onCreatePlayer: () => _handleCreatePlayer(),
+                    onSelectPlayers: () => _handleSelectPlayers(),
+                    onPlayerScoreUpdated: (playerScore, score) =>
+                        _handlePlayerScoreUpdate(playerScore, score),
+                  ),
                 ),
-                Observer(builder: (_) {
-                  return _SubmitSection(
+                Observer(
+                  builder: (_) => _SubmitSection(
                     players: viewModel.playersState,
                     onLogPlaythrough: () => _handleLoggingPlaythrough(),
-                  );
-                }),
+                  ),
+                ),
               ],
             );
         }

@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../common/constants.dart';
 import '../../common/hive_boxes.dart';
 
+export '../../extensions/players_extensions.dart';
+
 part 'player.freezed.dart';
 part 'player.g.dart';
 
