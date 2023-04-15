@@ -131,7 +131,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     }
 
     playersState = PlaythroughsLogGamePlayers.playersSelected(
-      players: selectedPlayers,
+      players: selectedPlayers.sortAlphabetically(),
       playerScores: playerScores,
     );
   }
