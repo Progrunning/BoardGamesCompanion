@@ -1,10 +1,5 @@
 import 'dart:io' show Platform;
 
-import 'package:board_games_companion/models/backup_file.dart';
-import 'package:board_games_companion/pages/settings/settings_page_visual_states.dart';
-import 'package:board_games_companion/pages/settings/settings_view_model.dart';
-import 'package:board_games_companion/widgets/common/loading_overlay.dart';
-import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -16,6 +11,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../models/backup_file.dart';
 import '../../widgets/about/detail_item.dart';
 import '../../widgets/about/section_title.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
@@ -23,6 +19,10 @@ import '../../widgets/common/bgg_community_member_user_name_text_field_widget.da
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/import_collections_button.dart';
+import '../../widgets/common/loading_overlay.dart';
+import '../../widgets/common/page_container.dart';
+import 'settings_page_visual_states.dart';
+import 'settings_view_model.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({

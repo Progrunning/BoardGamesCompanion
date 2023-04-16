@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +5,7 @@ import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';

@@ -3,9 +3,6 @@
 import 'dart:io';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/enums/collection_type.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,9 +10,12 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../common/constants.dart';
+import '../../common/enums/collection_type.dart';
 import '../../common/regex_expressions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../services/file_service.dart';
+import '../../stores/board_games_store.dart';
 import 'create_board_game_visual_states.dart';
 
 part 'create_board_game_view_model.g.dart';

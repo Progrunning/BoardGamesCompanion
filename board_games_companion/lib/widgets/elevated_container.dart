@@ -1,6 +1,6 @@
-import 'package:board_games_companion/common/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../common/app_colors.dart';
 import '../common/app_styles.dart';
 
 class ElevatedContainer extends StatelessWidget {

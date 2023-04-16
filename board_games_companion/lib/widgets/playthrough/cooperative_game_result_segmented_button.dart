@@ -1,9 +1,9 @@
-import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
+import '../../models/hive/no_score_game_result.dart';
 import '../common/segmented_buttons/bgc_segmented_button.dart';
 import '../common/segmented_buttons/bgc_segmented_buttons_container.dart';
 

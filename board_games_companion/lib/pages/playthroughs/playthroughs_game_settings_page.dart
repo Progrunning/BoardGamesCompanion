@@ -1,20 +1,20 @@
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/common/enums/game_classification.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
-import 'package:board_games_companion/extensions/average_score_precision_extensions.dart';
-import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart';
-import 'package:board_games_companion/widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_text.dart';
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../common/enums/game_classification.dart';
+import '../../common/enums/game_family.dart';
+import '../../extensions/average_score_precision_extensions.dart';
 import '../../injectable.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
+import '../../widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import 'average_score_precision.dart';
+import 'playthroughs_game_settings_view_model.dart';
 
 class PlaythroughsGameSettingsPage extends StatefulWidget {
   const PlaythroughsGameSettingsPage({Key? key}) : super(key: key);

@@ -1,4 +1,4 @@
-import 'package:board_games_companion/models/hive/playthrough.dart';
+import '../models/hive/playthrough.dart';
 
 extension PlaythroughsExtensions on Iterable<Playthrough> {
   double get averageNumberOfPlayers =>

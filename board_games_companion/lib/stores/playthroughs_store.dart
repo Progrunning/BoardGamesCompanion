@@ -1,15 +1,15 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/enums/playthrough_status.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/services/playthroughs_service.dart';
-import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
+import '../common/enums/playthrough_status.dart';
 import '../models/hive/player.dart';
+import '../models/hive/playthrough.dart';
 import '../models/player_score.dart';
+import '../services/playthroughs_service.dart';
+import 'scores_store.dart';
 
 part 'playthroughs_store.g.dart';
 

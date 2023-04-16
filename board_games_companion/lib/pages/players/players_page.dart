@@ -1,13 +1,11 @@
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/app_styles.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
+import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
@@ -15,7 +13,9 @@ import '../../models/hive/player.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
+import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
+import '../../widgets/elevated_container.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/player/player_image.dart';
 import '../player/player_page.dart';

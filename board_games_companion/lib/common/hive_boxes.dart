@@ -1,14 +1,13 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:board_games_companion/services/board_games_service.dart';
-import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/services/score_service.dart';
-import 'package:board_games_companion/services/search_service.dart';
-import 'package:board_games_companion/services/user_service.dart';
-
 import '../services/board_games_filters_service.dart';
+import '../services/board_games_service.dart';
+import '../services/player_service.dart';
 import '../services/playthroughs_service.dart';
 import '../services/preferences_service.dart';
+import '../services/score_service.dart';
+import '../services/search_service.dart';
+import '../services/user_service.dart';
 
 class HiveBoxes {
   static Map<Type, String> boxesNamesMap = {

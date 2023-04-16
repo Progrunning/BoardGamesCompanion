@@ -1,9 +1,9 @@
 import 'package:basics/string_basics.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/dimensions.dart';
+import 'loading_indicator_widget.dart';
 
 class LoadingOverlay extends StatelessWidget {
   const LoadingOverlay({

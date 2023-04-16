@@ -2,10 +2,6 @@
 
 import 'dart:async';
 
-import 'package:board_games_companion/services/board_games_geek_service.dart';
-import 'package:board_games_companion/stores/app_store.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/search_store.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +16,12 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
 import '../../models/sort_by.dart';
 import '../../services/analytics_service.dart';
+import '../../services/board_games_geek_service.dart';
 import '../../services/rate_and_review_service.dart';
+import '../../stores/app_store.dart';
 import '../../stores/board_games_filters_store.dart';
+import '../../stores/board_games_store.dart';
+import '../../stores/search_store.dart';
 import '../collections/collections_view_model.dart';
 import '../hot_board_games/hot_board_games_view_model.dart';
 import '../players/players_view_model.dart';

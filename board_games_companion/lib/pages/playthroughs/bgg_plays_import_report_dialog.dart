@@ -1,19 +1,19 @@
 import 'dart:math';
 
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/models/import_result.dart';
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
+import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
+import '../../models/import_result.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
+import '../../widgets/elevated_container.dart';
 
 class BggPlaysImportReportDialog extends StatelessWidget {
   const BggPlaysImportReportDialog({

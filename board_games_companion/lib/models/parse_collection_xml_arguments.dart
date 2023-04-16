@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums/collection_type.dart';
+import '../common/enums/collection_type.dart';
 
 class ParseCollectionXmlArguments {
   ParseCollectionXmlArguments(this.responseData, this.collectionType);

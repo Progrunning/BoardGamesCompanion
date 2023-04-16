@@ -1,5 +1,5 @@
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/models/player_statistics.dart';
+import '../common/constants.dart';
+import '../models/player_statistics.dart';
 
 extension PlayerStatisticsExtensions on Iterable<PlayerStatistics> {
   Iterable<PlayerStatistics> get sortByResult => [...this]..sort((playerStats, otherPlayerStats) {

@@ -1,11 +1,38 @@
-# Deploying bicep template
+# Provisioning infrastructure
 
-Follow the below instructions to deploy the `template.bicep` into Azure.
+This project infrastructure will be provisioned in Azure using Terraform scripts.
 
-1. Ensure Azure CLI is installed on your machine - execute the `az version` command
-2. Connect to Azure Account by executing `az login` command. Sign in using browser
-3. List all the subscriptions `az account list` and copy the id of the one that you want to work with (usually a dev subscription)
-4. Set the working subscription by executing `az account set --subscription <subscription_id>` command
-5. Execute a *what-if* command on the bicep templat to test your changes `az deployment group what-if --resource-group bgc-test --template-file .\template.bicep --parameters .\paramteres.dev.json`
+## Prerequisite
 
-> NOTE: Replace the *what-if* comand with *create* to publish the template into Azure
+See details in this guideline for what will be required to provision Azure infrastructure using terraform https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build#prerequisites
+
+### Terraform
+
+Install terraform on your local device by following the steps from this document https://developer.hashicorp.com/terraform/tutorials/azure-get-started/install-cli#install-terraform.
+
+## Steps
+
+### Authenticate using the Azure CLI
+
+https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build#authenticate-using-the-azure-cli
+
+1. Connect to Azure Account by executing `az login` command. Sign in using browser
+2. List all the subscriptions `az account list` and copy the id of the one that you want to work with (usually a dev subscription)
+3. Set the working subscription by executing `az account set --subscription <subscription_id>` command
+4. <TODO>
+
+
+### Provisioninig
+
+More details on the below commands can be found here https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build#write-configuration
+
+1. Exceute `terraform fmt` to keep the files consistently formatter
+2. Execute `terraform validate` to validate the code
+3. Exceute `terraform init` to initialize terraform and start working with your code as infrastructure
+4. Execute `terraform plan` to preview the changes that Terraform plans to make to your infrastructure
+> IMPORTANT: This is the last step before making changes to the actual infrastructure in the cloud
+5. Execute `terraform apply` to apply the configuration to the cloud
+
+> NOTE: This is when terraform writes data into the `terraform.tfstate` file
+> NOTE2: provide `-auto-approve` parameter to auto approve the changes
+> NOTE3: to provide variables from a `tfvars` file use the `-var-file="testing.tfvars"` parameter

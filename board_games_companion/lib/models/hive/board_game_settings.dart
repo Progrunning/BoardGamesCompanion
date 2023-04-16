@@ -1,7 +1,7 @@
-import 'package:board_games_companion/common/enums/game_classification.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
+import '../../common/enums/game_classification.dart';
 import '../../common/enums/game_family.dart';
 import '../../common/hive_boxes.dart';
 

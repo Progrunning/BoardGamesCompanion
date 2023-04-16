@@ -1,6 +1,6 @@
-import 'package:board_games_companion/common/enums/plays_tab.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../common/enums/plays_tab.dart';
 import '../../models/hive/board_game_details.dart';
 import 'grouped_board_game_playthroughs.dart';
 

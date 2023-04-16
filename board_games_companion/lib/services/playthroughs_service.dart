@@ -1,10 +1,10 @@
-import 'package:board_games_companion/models/player_score.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/enums/playthrough_status.dart';
 import '../models/hive/playthrough.dart';
 import '../models/hive/score.dart';
+import '../models/player_score.dart';
 import 'hive_base_service.dart';
 import 'score_service.dart';
 

@@ -3,12 +3,12 @@
 import 'dart:io';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
+import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/string_extensions.dart';

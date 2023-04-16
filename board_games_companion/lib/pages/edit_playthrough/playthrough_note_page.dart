@@ -1,10 +1,10 @@
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';

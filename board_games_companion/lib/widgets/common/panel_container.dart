@@ -1,7 +1,7 @@
-import 'package:board_games_companion/common/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_styles.dart';
+import '../../common/app_theme.dart';
 import '../elevated_container.dart';
 
 class PanelContainer extends StatelessWidget {

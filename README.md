@@ -1,5 +1,5 @@
 <p align="center">  
-    <img src="https://github.com/Progrunning/BoardGamesCompanion/blob/main/board_games_companion/assets/icons/logo_transparent.png?raw=true" height="128"/>  
+    <img src="https://github.com/Progrunning/BoardGamesCompanion/blob/main/BGC.App/assets/icons/logo_transparent.png?raw=true" height="128"/>  
   <h1 align="center">Board Games Companion</h1>
 </p>
 
@@ -122,7 +122,7 @@ s
 Whenever flutter version gets updated there might be a problem with plugin dependencies. This might require updating `pods`. In order to update pods you need to:
 
 1. Run Terminal
-2. Open iOS folder directory (e.g. `cd /path/to/the/project/board_games_companion/ios`)
+2. Open iOS folder directory (e.g. `cd /path/to/the/project/BGC.App/ios`)
 3. Run `pod install` command (`arch -arm64 pod install` on macs with M1 chip)
 
 Additionally there will be a need to update the `PATH` of the Z shell. This can be done by doing the following:

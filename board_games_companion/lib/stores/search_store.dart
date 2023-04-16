@@ -1,10 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/services/search_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/hive/search_history_entry.dart';
+import '../services/search_service.dart';
 
 part 'search_store.g.dart';
 

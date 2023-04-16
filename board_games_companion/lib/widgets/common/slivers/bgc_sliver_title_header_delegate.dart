@@ -1,7 +1,7 @@
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/dimensions.dart';
 import 'package:flutter/material.dart';
 
+import '../../../common/dimensions.dart';
 import '../section_header.dart';
 
 class BgcSliverTitleHeaderDelegate extends SliverPersistentHeaderDelegate {

@@ -1,15 +1,16 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/models/hive/no_score_game_result.dart';
-import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/models/playthroughs/playthrough_details.dart';
-import 'package:board_games_companion/pages/playthroughs/playthrough_migration.dart';
-import 'package:board_games_companion/pages/playthroughs/playthrough_migration_progress.dart';
-import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../common/app_text.dart';
+import '../../models/hive/no_score_game_result.dart';
+import '../../models/player_score.dart';
+import '../../models/playthroughs/playthrough_details.dart';
+import '../../stores/game_playthroughs_details_store.dart';
+import 'playthrough_migration.dart';
+import 'playthrough_migration_progress.dart';
 
 part 'playthrough_migration_view_model.g.dart';
 

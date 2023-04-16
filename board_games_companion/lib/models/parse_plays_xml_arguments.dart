@@ -1,4 +1,4 @@
-import 'package:board_games_companion/common/enums/game_family.dart';
+import '../common/enums/game_family.dart';
 
 class ParsePlaysXmlArguments {
   ParsePlaysXmlArguments(this.responseData, this.gameFamily);

@@ -1,9 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
-import 'package:board_games_companion/models/results/board_game_creation_result.dart';
-import 'package:board_games_companion/pages/create_board_game/create_board_game_page.dart';
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -20,6 +16,8 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/create_board_game_page_arguments.dart';
+import '../../models/results/board_game_creation_result.dart';
 import '../../services/preferences_service.dart';
 import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
@@ -31,7 +29,9 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/ripple_effect.dart';
+import '../../widgets/elevated_container.dart';
 import '../base_page_state.dart';
+import '../create_board_game/create_board_game_page.dart';
 import '../home/home_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'board_game_details_expansions.dart';

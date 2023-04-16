@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
+import '../../utilities/launcher_helper.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/common/page_container.dart';

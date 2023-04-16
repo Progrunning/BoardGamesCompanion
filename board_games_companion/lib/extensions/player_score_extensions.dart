@@ -1,5 +1,4 @@
-import 'package:board_games_companion/common/constants.dart';
-
+import '../common/constants.dart';
 import '../common/enums/game_family.dart';
 import '../extensions/scores_extensions.dart';
 import '../models/player_score.dart';

@@ -1,13 +1,13 @@
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/models/playthroughs/playthrough_players_selection_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/player.dart';
+import '../../models/playthroughs/playthrough_players_selection_result.dart';
 import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/player/player_avatar.dart';
 import 'playthrough_players_selection_view_model.dart';

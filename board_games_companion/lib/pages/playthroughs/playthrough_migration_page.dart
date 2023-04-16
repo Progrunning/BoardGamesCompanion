@@ -1,11 +1,5 @@
 import 'dart:math';
 
-import 'package:board_games_companion/common/app_theme.dart';
-import 'package:board_games_companion/common/dimensions.dart';
-import 'package:board_games_companion/models/hive/no_score_game_result.dart';
-import 'package:board_games_companion/pages/playthroughs/playthrough_migration_view_model.dart';
-import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
-import 'package:board_games_companion/widgets/common/empty_page_information_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -15,12 +9,18 @@ import 'package:sliver_tools/sliver_tools.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
+import '../../common/app_theme.dart';
+import '../../common/dimensions.dart';
+import '../../models/hive/no_score_game_result.dart';
 import '../../models/player_score.dart';
+import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/info_panel.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
 import 'playthrough_migration_progress.dart';
+import 'playthrough_migration_view_model.dart';
+import 'playthroughs_page.dart';
 
 class PlaythroughMigrationPage extends StatefulWidget {
   const PlaythroughMigrationPage({

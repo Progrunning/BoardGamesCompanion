@@ -1,14 +1,14 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../models/hive/playthrough.dart';
 import '../../models/hive/playthrough_note.dart';
 import '../../models/playthroughs/playthrough_details.dart';
+import '../../stores/game_playthroughs_details_store.dart';
 import 'playthrough_note_page_visual_states.dart';
 
 part 'playthrough_note_view_model.g.dart';

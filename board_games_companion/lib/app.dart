@@ -1,16 +1,12 @@
 import 'package:animations/animations.dart';
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
-import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
-import 'package:board_games_companion/pages/playthroughs/playthrough_migration_page.dart';
-import 'package:board_games_companion/pages/playthroughs/playthrough_migration_view_model.dart';
-import 'package:board_games_companion/pages/settings/settings_view_model.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 import 'common/app_theme.dart';
 import 'injectable.dart';
 import 'models/navigation/board_game_details_page_arguments.dart';
+import 'models/navigation/create_board_game_page_arguments.dart';
 import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
 import 'models/navigation/playthough_note_page_arguments.dart';
@@ -25,16 +21,20 @@ import 'pages/create_board_game/create_board_game_page.dart';
 import 'pages/create_board_game/create_board_game_view_model.dart';
 import 'pages/edit_playthrough/edit_playthrough_page.dart';
 import 'pages/edit_playthrough/edit_playthrough_view_model.dart';
+import 'pages/edit_playthrough/playthrough_note_page.dart';
 import 'pages/edit_playthrough/playthrough_note_view_model.dart';
 import 'pages/home/home_page.dart';
 import 'pages/home/home_view_model.dart';
 import 'pages/player/player_page.dart';
 import 'pages/player/player_view_model.dart';
+import 'pages/playthroughs/playthrough_migration_page.dart';
+import 'pages/playthroughs/playthrough_migration_view_model.dart';
 import 'pages/playthroughs/playthrough_players_selection_page.dart';
 import 'pages/playthroughs/playthrough_players_selection_view_model.dart';
 import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
 import 'pages/settings/settings_page.dart';
+import 'pages/settings/settings_view_model.dart';
 import 'services/preferences_service.dart';
 import 'utilities/analytics_route_observer.dart';
 
@@ -192,7 +192,7 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           case PlaythroughMigrationPage.pageRoute:
             final arguments = routeSettings.arguments as PlaythroughMigrationArguments;
             final viewModel = getIt<PlaythroughMigrationViewModel>();
-            viewModel.setPlaythroughMigration(arguments.playthroughMigration);           
+            viewModel.setPlaythroughMigration(arguments.playthroughMigration);
 
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,

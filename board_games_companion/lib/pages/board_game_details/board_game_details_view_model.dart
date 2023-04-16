@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/models/hive/board_game_expansion.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:injectable/injectable.dart';
@@ -9,6 +8,7 @@ import 'package:mobx/mobx.dart';
 import '../../common/analytics.dart';
 import '../../common/enums/collection_type.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/hive/board_game_expansion.dart';
 import '../../services/analytics_service.dart';
 import '../../stores/board_games_store.dart';
 

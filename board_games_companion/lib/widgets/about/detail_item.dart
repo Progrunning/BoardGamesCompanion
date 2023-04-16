@@ -1,5 +1,4 @@
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,6 +7,7 @@ import '../../common/app_styles.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../utilities/launcher_helper.dart';
+import '../elevated_container.dart';
 
 class DetailsItem extends StatelessWidget {
   const DetailsItem({

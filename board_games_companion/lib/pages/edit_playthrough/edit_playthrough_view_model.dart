@@ -1,20 +1,20 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/enums/game_classification.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
-import 'package:board_games_companion/models/hive/no_score_game_result.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/models/hive/playthrough_note.dart';
-import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../common/enums/game_classification.dart';
+import '../../common/enums/game_family.dart';
 import '../../common/enums/playthrough_status.dart';
+import '../../models/hive/no_score_game_result.dart';
+import '../../models/hive/player.dart';
+import '../../models/hive/playthrough.dart';
+import '../../models/hive/playthrough_note.dart';
+import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
+import '../../stores/game_playthroughs_details_store.dart';
 
 part 'edit_playthrough_view_model.g.dart';
 

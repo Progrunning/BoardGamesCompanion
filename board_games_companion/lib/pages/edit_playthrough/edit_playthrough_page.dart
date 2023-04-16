@@ -1,11 +1,6 @@
 import 'dart:math' as math;
 import 'dart:math';
 
-import 'package:board_games_companion/common/enums/game_classification.dart';
-import 'package:board_games_companion/models/hive/player.dart';
-import 'package:board_games_companion/models/hive/playthrough_note.dart';
-import 'package:board_games_companion/models/navigation/playthough_note_page_arguments.dart';
-import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -19,8 +14,12 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../common/enums/game_classification.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/hive/no_score_game_result.dart';
+import '../../models/hive/player.dart';
+import '../../models/hive/playthrough_note.dart';
+import '../../models/navigation/playthough_note_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
@@ -29,6 +28,7 @@ import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
 import '../enter_score/enter_score_view_model.dart';
 import 'edit_playthrough_view_model.dart';
+import 'playthrough_note_page.dart';
 
 class EditPlaythroughPage extends StatefulWidget {
   const EditPlaythroughPage({

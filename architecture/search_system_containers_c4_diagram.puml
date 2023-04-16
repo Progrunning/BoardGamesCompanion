@@ -1,0 +1,36 @@
+@startuml search_system_containers
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include FONTAWESOME/users.puml
+
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+
+Person(user, "User", "Board game enthusiast creating their collection or searching for a game to buy", $sprite="users")
+System_Ext(bggApi, "BGG Api", "Stores all of the board games detail information")
+System_Ext(boardGameOracleApi, "Board Game Oracle Api", "Stores current and historical pricing information about board games in different countries")
+
+System_Boundary(c1, "Search System"){
+    Container(mobile, "Mobile Application", "Dart, Flutter", "Provies all of the BGC System functionality to the users via the mobile application")
+    Container(searchService, "Search microservice", "ASP.NET Core", "Provides the BGC Search functionality via JSON/HTTPs API", $tags="microService")
+    ContainerDb(nosql, "NoSQL Data Store", "MongoDB", "Database sttoring all of the board games information", $tags="storage")
+    Container(searchQueue, "Search Queue", "Azure Service Bus", "Queues up board games that were not found in the database")
+    Container(searchQueueWorker, "Search Queue Worker", "Azure Functions", "Processes board games that require details and pricing information")
+}
+
+Rel(user, mobile, "Opens up")
+Rel_R(mobile, searchService, "Gets search results for user queries from", "via Firebase AppCheck")
+Rel_R(searchService, bggApi, "Gets board games search results from")
+Rel_D(searchService, nosql, "Gets available board games information based on the search results from")
+Rel_D(searchService, searchQueue, "Sends not found board games to")
+Rel_U(searchQueueWorker, searchQueue, "Reads board games from")
+Rel_U(searchQueueWorker, nosql, "Stores the board game details and pricing information in")
+Rel_R(searchQueueWorker, boardGameOracleApi, "Gets current and historical pricing board games information from")
+
+LAYOUT_WITH_LEGEND()
+
+C4VersionDetails()
+
+@enduml

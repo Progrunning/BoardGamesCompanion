@@ -1,8 +1,8 @@
-import 'package:board_games_companion/pages/create_board_game/create_board_game_page.dart';
 import 'package:flutter/widgets.dart';
 
 import '../pages/about/about_page.dart';
 import '../pages/board_game_details/board_game_details_page.dart';
+import '../pages/create_board_game/create_board_game_page.dart';
 import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../pages/edit_playthrough/playthrough_note_page.dart';
 import '../pages/home/home_page.dart';

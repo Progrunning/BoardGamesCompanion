@@ -1,9 +1,9 @@
-import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../models/hive/board_game_expansion.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/preferences_service.dart';

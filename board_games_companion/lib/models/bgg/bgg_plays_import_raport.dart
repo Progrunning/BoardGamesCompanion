@@ -1,4 +1,4 @@
-import 'package:board_games_companion/models/import_result.dart';
+import '../import_result.dart';
 
 class BggPlaysImportRaport {
   int playsToImportTotal = 0;

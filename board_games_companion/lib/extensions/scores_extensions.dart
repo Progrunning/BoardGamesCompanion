@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
-
+import '../common/constants.dart';
+import '../common/enums/game_family.dart';
 import '../models/hive/no_score_game_result.dart';
 import '../models/hive/score.dart';
 

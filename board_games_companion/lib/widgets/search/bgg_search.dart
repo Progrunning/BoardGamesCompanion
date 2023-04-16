@@ -1,24 +1,24 @@
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/pages/collections/collections_page.dart';
-import 'package:board_games_companion/pages/home/home_page.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
 import '../../models/results/bgg_search_result.dart';
 import '../../models/sort_by.dart';
+import '../../pages/collections/collections_page.dart';
 import '../../pages/collections/search_suggestion.dart';
+import '../../pages/home/home_page.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
+import '../common/loading_indicator_widget.dart';
 import '../common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../common/sorting/sort_by_chip.dart';
 

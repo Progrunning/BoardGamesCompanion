@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:sprintf/sprintf.dart';
@@ -13,6 +12,7 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/double_extensions.dart';
 import '../../widgets/common/elevated_icon_button.dart';
+import '../../widgets/elevated_container.dart';
 import 'enter_score_view_model.dart';
 
 class EnterScoreDialog extends StatelessWidget {

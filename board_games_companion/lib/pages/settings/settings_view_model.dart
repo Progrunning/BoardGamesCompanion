@@ -1,11 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/services/board_games_filters_service.dart';
-import 'package:board_games_companion/services/file_service.dart';
-import 'package:board_games_companion/services/player_service.dart';
-import 'package:board_games_companion/stores/app_store.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/user_store.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
@@ -13,11 +7,17 @@ import 'package:mobx/mobx.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../models/backup_file.dart';
+import '../../services/board_games_filters_service.dart';
 import '../../services/board_games_service.dart';
+import '../../services/file_service.dart';
+import '../../services/player_service.dart';
 import '../../services/playthroughs_service.dart';
 import '../../services/preferences_service.dart';
 import '../../services/score_service.dart';
 import '../../services/user_service.dart';
+import '../../stores/app_store.dart';
+import '../../stores/board_games_store.dart';
+import '../../stores/user_store.dart';
 import 'settings_page_user_visual_states.dart';
 import 'settings_page_visual_states.dart';
 

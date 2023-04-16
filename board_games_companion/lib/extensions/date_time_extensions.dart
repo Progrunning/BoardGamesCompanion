@@ -1,7 +1,7 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../common/app_text.dart';
 import '../common/constants.dart';
 
 extension DateTimeExtensions on DateTime? {

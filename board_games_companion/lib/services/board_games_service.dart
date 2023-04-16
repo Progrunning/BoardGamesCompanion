@@ -1,8 +1,8 @@
-import 'package:board_games_companion/models/bgg/bgg_import_plays.dart';
-import 'package:board_games_companion/models/bgg/bgg_plays_import_result.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/enums/game_family.dart';
+import '../models/bgg/bgg_import_plays.dart';
+import '../models/bgg/bgg_plays_import_result.dart';
 import '../models/collection_import_result.dart';
 import '../models/hive/board_game_details.dart';
 import 'board_games_geek_service.dart';
