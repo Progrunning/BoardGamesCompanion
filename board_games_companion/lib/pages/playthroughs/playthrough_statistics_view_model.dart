@@ -159,7 +159,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       }
     }
 
-    final playerCountPercentage = _retrievePlayerCountPercentage(finishedPlaythroughs);    
+    final playerCountPercentage = _retrievePlayerCountPercentage(finishedPlaythroughs);
 
     return BoardGameStatistics.noScore(
       boardGameStatistics: noScoreBoardGameStatistics.copyWith(
@@ -209,8 +209,11 @@ abstract class _PlaythroughStatisticsViewModel with Store {
           playerScoresCollection.toBestScore(_gamePlaythroughsStore.gameGameFamily);
       scoreBoardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
 
+      final topFiveScores = playerScoresCollection
+          .sortByScore(_gamePlaythroughsStore.gameGameFamily)!
+          .take(_maxNumberOfTopScoresToDisplay);
       scoreBoardGameStatistics.topScoreres = [];
-      for (final Score score in playerScoresCollection) {
+      for (final Score score in topFiveScores) {
         final Player player = playersById[score.playerId]!;
         if (scoreBoardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
           scoreBoardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
