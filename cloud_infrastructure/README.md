@@ -12,6 +12,12 @@ Install terraform on your local device by following the steps from this document
 
 ## Steps
 
+### Init
+
+When setting up the infrastructure environment for the firs time, provisioning of a resource group and terraform's storage account is done manually by executing terraform scripts from the `cloud_infrastructure/terraform/init` directory.
+
+The process of provisioning is the same as described in the below section but it's done from the local machine. The `terraform.tfstate` is not preserved as this initialization will be done only once.
+
 ### Authenticate using the Azure CLI
 
 https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build#authenticate-using-the-azure-cli

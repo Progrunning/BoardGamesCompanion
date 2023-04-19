@@ -1,0 +1,59 @@
+name: $(Build.BuildID) $(SourceBranchName)
+
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - pipelines
+      - cloud_infrastructure
+
+variables:
+  terraformVersion: "1.4.4"
+  isMainBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+stages:
+  - stage: DEV
+    variables:
+      - group: BGC-GLOBAL
+      - group: BGC-DEV-INFRA
+    jobs:
+      - deployment: ProvisionAzureResources
+        displayName: Provision Azure Resources
+        environment: DEV
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: azure-resource-provisioning-template.yml
+                  parameters:
+                    environment: dev
+                    azureSpnConnectionName: $(azureSpnConnectionName)
+                    azureSpnConnectionId: $(azureSpnConnectionId)
+                    resourceGroupName: $(resourceGroupName)
+                    storageAccountName: $(storageAccountName)
+                    terraformVersion: $(terraformVersion)
+  - stage: PROD
+    condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
+    variables:
+      - group: BGC-GLOBAL
+      - group: BGC-PROD-INFRA
+    jobs:
+      - deployment: ProvisionAzureResources
+        displayName: Provision Azure Resources
+        environment: PROD
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: azure-resource-provisioning-template.yml
+                  parameters:
+                    environment: prod
+                    azureSpnConnectionName: $(azureSpnConnectionName)
+                    azureSpnConnectionId: $(azureSpnConnectionId)
+                    resourceGroupName: $(resourceGroupName)
+                    storageAccountName: $(storageAccountName)
+                    terraformVersion: $(terraformVersion)

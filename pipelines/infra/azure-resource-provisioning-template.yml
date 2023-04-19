@@ -1,0 +1,52 @@
+parameters:
+  environment:
+  azureSpnConnectionName:
+  azureSpnConnectionId:
+  resourceGroupName:
+  storageAccountName:
+  terraformVersion:
+
+variables:
+  workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/${{ parameters.environment }}
+
+steps:
+  - checkout: self
+
+  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+    displayName: Installing Terraform v$(terraformVersion)
+    condition: succeeded()
+    inputs:
+      terraformVersion: $(terraformVersion)
+
+  - task: TerraformTaskV2@2
+    displayName: Terraform init
+    condition: succeeded()
+    inputs:
+      provider: "azurerm"
+      command: "init"
+      workingDirectory: $(workingDirectory)
+      backendServiceArm: $(azureSpnConnectionName)
+      backendAzureRmResourceGroupName: $(resourceGroupName)
+      backendAzureRmStorageAccountName: $(storageAccountName)
+      backendAzureRmContainerName: "tfstate"
+      backendAzureRmKey: "terraform.tfstate"
+
+  - task: TerraformTaskV2@2
+    displayName: Terraform plan
+    condition: succeeded()
+    inputs:
+      provider: "azurerm"
+      command: "plan"
+      workingDirectory: $(workingDirectory)
+      commandOptions: "-detailed-exitcode -input=false --var-file ./terraform.tfvars.json -out=tfplan"
+      environmentServiceNameAzureRM: $(azureSpnConnectionName)
+
+  - task: TerraformTaskV2@2
+    displayName: Terraform validate and apply
+    condition: succeeded()
+    inputs:
+      provider: "azurerm"
+      command: "apply"
+      workingDirectory: $(workingDirectory)
+      commandOptions: "-input=false tfplan"
+      environmentServiceNameAzureRM: $(azureSpnConnectionName)
