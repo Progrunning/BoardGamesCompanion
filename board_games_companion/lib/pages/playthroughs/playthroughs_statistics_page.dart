@@ -913,26 +913,24 @@ class _TopScores extends StatelessWidget {
   final ScoreBoardGameStatistics scoreBoardGameStatistics;
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: Dimensions.smallPlayerAvatarWithScoreSize,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: scoreBoardGameStatistics.topScoreres!.length,
-        separatorBuilder: (context, index) {
-          return const SizedBox(width: Dimensions.doubleStandardSpacing);
-        },
-        itemBuilder: (context, index) {
-          return PlayerScoreRankAvatar(
-            player: scoreBoardGameStatistics.topScoreres![index].item1,
-            rank: index + 1,
-            score: scoreBoardGameStatistics.topScoreres![index].item2,
-            useHeroAnimation: false,
-          );
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SizedBox(
+        height: Dimensions.smallPlayerAvatarWithScoreSize,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: scoreBoardGameStatistics.topScoreres!.length,
+          separatorBuilder: (context, index) {
+            return const SizedBox(width: Dimensions.doubleStandardSpacing);
+          },
+          itemBuilder: (context, index) {
+            return PlayerScoreRankAvatar(
+              player: scoreBoardGameStatistics.topScoreres![index].item1,
+              rank: index + 1,
+              score: scoreBoardGameStatistics.topScoreres![index].item2,
+              useHeroAnimation: false,
+            );
+          },
+        ),
+      );
 }
 
 class _StatisticsItem extends StatelessWidget {
