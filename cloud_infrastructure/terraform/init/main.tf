@@ -1,12 +1,5 @@
 # Init module to create the resource group and the storage account to store terraform's state.
-# Provision this module, manually, before provisioning the environment's resources
-
-variable "project" {
-  type = object({
-    name = string
-  })
-  nullable = false
-}
+# Manually provision this module, before provisioning the rest of the environment's resources
 
 variable "resource_group" {
   type = object({
@@ -31,7 +24,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0.2"
+      version = "~> 3.54.0"
     }
   }
 
@@ -46,17 +39,16 @@ resource "azurerm_resource_group" "rg" {
   location = var.resource_group.location
 }
 
-resource "azurerm_storage_account" "tfstate" {
+resource "azurerm_storage_account" "storage_account" {
   name                     = var.resource_names.terraform_state_storage.account_name
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  allow_blob_public_access = false
 }
 
-resource "azurerm_storage_container" "tfstate" {
+resource "azurerm_storage_container" "storage_container" {
   name                  = var.resource_names.terraform_state_storage.container_name
-  storage_account_name  = var.resource_names.terraform_state_storage.account_name
+  storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
 }

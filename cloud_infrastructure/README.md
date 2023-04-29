@@ -4,7 +4,7 @@ This project infrastructure will be provisioned in Azure using Terraform scripts
 
 ## Prerequisite
 
-See details in this guideline for what will be required to provision Azure infrastructure using terraform https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build#prerequisites
+See details in [this guideline](https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build#prerequisites) for what will be required to provision Azure infrastructure using terraform 
 
 ### Terraform
 
@@ -14,7 +14,7 @@ Install terraform on your local device by following the steps from this document
 
 ### Init
 
-When setting up the infrastructure environment for the firs time, provisioning of a resource group and terraform's storage account is done manually by executing terraform scripts from the `cloud_infrastructure/terraform/init` directory.
+When setting up the infrastructure environment for the firs time, provisioning of a resource group and a storage account to keep terraform's state is done manually by executing terraform scripts from the `cloud_infrastructure/terraform/init` directory.
 
 The process of provisioning is the same as described in the below section but it's done from the local machine. The `terraform.tfstate` is not preserved as this initialization will be done only once.
 
@@ -33,11 +33,11 @@ https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-buil
 More details on the below commands can be found here https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build#write-configuration
 
 1. Exceute `terraform fmt` to keep the files consistently formatter
-2. Execute `terraform validate` to validate the code
-3. Exceute `terraform init` to initialize terraform and start working with your code as infrastructure
+2. Exceute `terraform init` to initialize terraform and start working with your code as infrastructure
+3. Execute `terraform validate` to validate the code
 4. Execute `terraform plan` to preview the changes that Terraform plans to make to your infrastructure
 > IMPORTANT: This is the last step before making changes to the actual infrastructure in the cloud
-5. Execute `terraform apply` to apply the configuration to the cloud
+1. Execute `terraform apply` to apply the configuration to the cloud
 
 > NOTE: This is when terraform writes data into the `terraform.tfstate` file
 > NOTE2: provide `-auto-approve` parameter to auto approve the changes
