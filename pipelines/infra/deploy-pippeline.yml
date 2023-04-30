@@ -22,6 +22,7 @@ stages:
   - stage: DEV
     variables:
       - group: BGC-DEV-INFRA
+      - group: BGC-GLOBAL
     jobs:
       - deployment: ProvisionAzureResources
         displayName: Provision Azure Resources
