@@ -15,7 +15,7 @@ System_Ext(boardGameOracleApi, "Board Game Oracle Api", "Stores current and hist
 System_Boundary(c1, "Search System"){
     Container(mobile, "Mobile Application", "Dart, Flutter", "Provies all of the BGC System functionality to the users via the mobile application")
     Container(searchService, "Search microservice", "ASP.NET Core", "Provides the BGC Search functionality via JSON/HTTPs API", $tags="microService")
-    ContainerDb(nosql, "NoSQL Data Store", "MongoDB", "Database sttoring all of the board games information", $tags="storage")
+    ContainerDb(nosql, "NoSQL Data Store", "MongoDB", "Database storing all of the board games information", $tags="storage")
     Container(searchQueue, "Search Queue", "Azure Service Bus", "Queues up board games that were not found in the database")
     Container(searchQueueWorker, "Search Queue Worker", "Azure Functions", "Processes board games that require details and pricing information")
 }
@@ -27,7 +27,8 @@ Rel_D(searchService, nosql, "Gets available board games information based on the
 Rel_D(searchService, searchQueue, "Sends not found board games to")
 Rel_U(searchQueueWorker, searchQueue, "Reads board games from")
 Rel_U(searchQueueWorker, nosql, "Stores the board game details and pricing information in")
-Rel_R(searchQueueWorker, boardGameOracleApi, "Gets current and historical pricing board games information from")
+Rel_R(searchQueueWorker, bggApi, "Gets board games details information from")
+Rel_D(searchQueueWorker, boardGameOracleApi, "Gets current and historical pricing board games information from")
 
 LAYOUT_WITH_LEGEND()
 
