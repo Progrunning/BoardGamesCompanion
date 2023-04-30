@@ -32,7 +32,7 @@ stages:
               steps:
                 - template: azure-resource-provisioning-template.yml
                   parameters:
-                    environment: dev
+                    workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/dev
                     azureSpnConnectionName: $(azureSpnConnectionName)
                     azureSpnConnectionId: $(azureSpnConnectionId)
                     resourceGroupName: $(resourceGroupName)
@@ -52,7 +52,7 @@ stages:
               steps:
                 - template: azure-resource-provisioning-template.yml
                   parameters:
-                    environment: prod
+                    workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/prod
                     azureSpnConnectionName: $(azureSpnConnectionName)
                     azureSpnConnectionId: $(azureSpnConnectionId)
                     resourceGroupName: $(resourceGroupName)
