@@ -34,28 +34,28 @@ stages:
                 - template: azure-resource-provisioning-template.yml
                   parameters:
                     workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/dev
-                    azureSpnConnectionName: $(azureSpnConnectionName)
-                    azureSpnConnectionId: $(azureSpnConnectionId)
+                    azureSpnConnectionName: bgc-dev
+                    azureSpnConnectionId: e3fc2d39-5f38-4743-beee-0186ad98d553
                     resourceGroupName: $(resourceGroupName)
                     storageAccountName: $(storageAccountName)
                     terraformVersion: $(terraformVersion)
-  - stage: PROD
-    condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
-    variables:
-      - group: BGC-PROD-INFRA
-    jobs:
-      - deployment: ProvisionAzureResources
-        displayName: Provision Azure Resources
-        environment: PROD
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - template: azure-resource-provisioning-template.yml
-                  parameters:
-                    workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/prod
-                    azureSpnConnectionName: $(azureSpnConnectionName)
-                    azureSpnConnectionId: $(azureSpnConnectionId)
-                    resourceGroupName: $(resourceGroupName)
-                    storageAccountName: $(storageAccountName)
-                    terraformVersion: $(terraformVersion)
+  # - stage: PROD
+  #   condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
+  #   variables:
+  #     - group: BGC-PROD-INFRA
+  #   jobs:
+  #     - deployment: ProvisionAzureResources
+  #       displayName: Provision Azure Resources
+  #       environment: PROD
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - template: azure-resource-provisioning-template.yml
+  #                 parameters:
+  #                   workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/prod
+  #                   azureSpnConnectionName: $(azureSpnConnectionName)
+  #                   azureSpnConnectionId: $(azureSpnConnectionId)
+  #                   resourceGroupName: $(resourceGroupName)
+  #                   storageAccountName: $(storageAccountName)
+  #                   terraformVersion: $(terraformVersion)
