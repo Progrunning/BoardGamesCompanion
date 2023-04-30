@@ -9,13 +9,13 @@ parameters:
 steps:
   - checkout: self
 
-  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+  - task: TerraformInstaller@0
     displayName: Installing Terraform v${{ parameters.terraformVersion }}
     condition: succeeded()
     inputs:
       terraformVersion: ${{ parameters.terraformVersion }}
 
-  - task: TerraformTaskV2@2
+  - task: TerraformTaskV4@4
     displayName: Terraform init
     condition: succeeded()
     inputs:
@@ -28,7 +28,7 @@ steps:
       backendAzureRmContainerName: "tfstate"
       backendAzureRmKey: "terraform.tfstate"
 
-  - task: TerraformTaskV2@2
+  - task: TerraformTaskV4@4
     displayName: Terraform plan
     condition: succeeded()
     inputs:
@@ -38,7 +38,7 @@ steps:
       commandOptions: "-detailed-exitcode -input=false --var-file ./terraform.tfvars.json -out=tfplan"
       environmentServiceNameAzureRM: ${{ parameters.azureSpnConnectionName }}
 
-  - task: TerraformTaskV2@2
+  - task: TerraformTaskV4@4
     displayName: Terraform validate and apply
     condition: succeeded()
     inputs:
