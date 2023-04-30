@@ -22,9 +22,9 @@ stages:
   - stage: DEV
     variables:
       - group: BGC-DEV-INFRA
-      - group: BGC-GLOBAL
-      - name: terraformVersion
-        value: $[variables['terraform.version']]
+      # - group: BGC-GLOBAL
+      # - name: terraformVersion
+      #   value: $[variables['terraform.version']]
     jobs:
       - deployment: ProvisionAzureResources
         displayName: Provision Azure Resources
@@ -40,7 +40,7 @@ stages:
                     azureSpnConnectionId: $(azureSpnConnectionId)
                     resourceGroupName: $(resourceGroupName)
                     storageAccountName: $(storageAccountName)
-                    terraformVersion: $(terraformVersion)
+                    terraformVersion: $(terraform.version)
   - stage: PROD
     condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
     variables:
