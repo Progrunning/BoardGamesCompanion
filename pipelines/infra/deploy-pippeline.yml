@@ -8,7 +8,7 @@ pr:
       - main
   paths:
     include:
-      - pipelines
+      - pipelines/infra
       - cloud_infrastructure
 
 variables:

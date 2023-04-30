@@ -7,7 +7,8 @@ parameters:
   terraformVersion:
 
 variables:
-  workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/${{ parameters.environment }}
+  - name: workingDirectory
+    value: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/${{ parameters.environment }}
 
 steps:
   - checkout: self
