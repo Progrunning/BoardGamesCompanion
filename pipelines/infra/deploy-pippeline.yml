@@ -22,7 +22,6 @@ stages:
   - stage: DEV
     variables:
       - group: BGC-DEV-INFRA
-      - group: BGC-GLOBAL
     jobs:
       - deployment: ProvisionAzureResources
         displayName: Provision Azure Resources
@@ -39,23 +38,23 @@ stages:
                     resourceGroupName: $(resourceGroupName)
                     storageAccountName: $(storageAccountName)
                     terraformVersion: $(terraformVersion)
-  # - stage: PROD
-  #   condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
-  #   variables:
-  #     - group: BGC-PROD-INFRA
-  #   jobs:
-  #     - deployment: ProvisionAzureResources
-  #       displayName: Provision Azure Resources
-  #       environment: PROD
-  #       strategy:
-  #         runOnce:
-  #           deploy:
-  #             steps:
-  #               - template: azure-resource-provisioning-template.yml
-  #                 parameters:
-  #                   workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/prod
-  #                   azureSpnConnectionName: $(azureSpnConnectionName)
-  #                   azureSpnConnectionId: $(azureSpnConnectionId)
-  #                   resourceGroupName: $(resourceGroupName)
-  #                   storageAccountName: $(storageAccountName)
-  #                   terraformVersion: $(terraformVersion)
+  - stage: PROD
+    condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
+    variables:
+      - group: BGC-PROD-INFRA
+    jobs:
+      - deployment: ProvisionAzureResources
+        displayName: Provision Azure Resources
+        environment: PROD
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: azure-resource-provisioning-template.yml
+                  parameters:
+                    workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/prod
+                    azureSpnConnectionName: bgc-prod
+                    azureSpnConnectionId: 909c51d2-a2f4-4c09-85f9-2f4985afe4c6
+                    resourceGroupName: $(resourceGroupName)
+                    storageAccountName: $(storageAccountName)
+                    terraformVersion: $(terraformVersion)
