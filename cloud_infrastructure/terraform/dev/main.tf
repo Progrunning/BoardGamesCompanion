@@ -39,5 +39,5 @@ provider "azurerm" {
 
 data "azurerm_resource_group" "rg" {
   name     = var.resource_group.name
-  location = local.location
+  location = var.resource_group.location
 }
