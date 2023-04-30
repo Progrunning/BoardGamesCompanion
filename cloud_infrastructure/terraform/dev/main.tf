@@ -12,6 +12,9 @@ variable "resource_names" {
       account_name   = string
       container_name = string
     })
+    container_registry = object({
+      name = string
+    })
   })
   nullable = false
 }
@@ -39,4 +42,11 @@ provider "azurerm" {
 
 data "azurerm_resource_group" "rg" {
   name = var.resource_group.name
+}
+
+resource "azurerm_container_registry" "acr" {
+  name                = var.resource_names.container_registry.name
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.location
+  sku                 = "Basic"
 }
