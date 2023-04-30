@@ -16,7 +16,7 @@ System_Boundary(c1, "Search System"){
     Container(mobile, "Mobile Application", "Dart, Flutter", "Provies all of the BGC System functionality to the users via the mobile application")
     Container(searchService, "Search microservice", "ASP.NET Core", "Provides the BGC Search functionality via JSON/HTTPs API", $tags="microService")
     ContainerDb(nosql, "NoSQL Data Store", "MongoDB", "Database storing all of the board games information", $tags="storage")
-    Container(searchQueue, "Search Queue", "Azure Service Bus", "Queues up board games that were not found in the database")
+    Container(searchQueue, "Search Queue", "Azure Service Bus", "Queues up board games that were not found in the database or their information is outdated")
     Container(searchQueueWorker, "Search Queue Worker", "Azure Functions", "Processes board games that require details and pricing information")
 }
 
