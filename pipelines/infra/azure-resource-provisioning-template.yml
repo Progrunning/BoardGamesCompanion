@@ -10,10 +10,10 @@ steps:
   - checkout: self
 
   - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-    displayName: Installing Terraform v${{ terraformVersion }}
+    displayName: Installing Terraform v${{ parameters.terraformVersion }}
     condition: succeeded()
     inputs:
-      terraformVersion: ${{ terraformVersion }}
+      terraformVersion: ${{ parameters.terraformVersion }}
 
   - task: TerraformTaskV2@2
     displayName: Terraform init
@@ -21,10 +21,10 @@ steps:
     inputs:
       provider: "azurerm"
       command: "init"
-      workingDirectory: ${{ workingDirectory }}
-      backendServiceArm: ${{ azureSpnConnectionName }}
-      backendAzureRmResourceGroupName: ${{ resourceGroupName }}
-      backendAzureRmStorageAccountName: ${{ storageAccountName }}
+      workingDirectory: ${{ parameters.workingDirectory }}
+      backendServiceArm: ${{ parameters.azureSpnConnectionName }}
+      backendAzureRmResourceGroupName: ${{ parameters.resourceGroupName }}
+      backendAzureRmStorageAccountName: ${{ parameters.storageAccountName }}
       backendAzureRmContainerName: "tfstate"
       backendAzureRmKey: "terraform.tfstate"
 
@@ -34,9 +34,9 @@ steps:
     inputs:
       provider: "azurerm"
       command: "plan"
-      workingDirectory: ${{ workingDirectory }}
+      workingDirectory: ${{ parameters.workingDirectory }}
       commandOptions: "-detailed-exitcode -input=false --var-file ./terraform.tfvars.json -out=tfplan"
-      environmentServiceNameAzureRM: ${{ azureSpnConnectionName }}
+      environmentServiceNameAzureRM: ${{ parameters.azureSpnConnectionName }}
 
   - task: TerraformTaskV2@2
     displayName: Terraform validate and apply
@@ -44,6 +44,6 @@ steps:
     inputs:
       provider: "azurerm"
       command: "apply"
-      workingDirectory: ${{ workingDirectory }}
+      workingDirectory: ${{ parameters.workingDirectory }}
       commandOptions: "-input=false tfplan"
-      environmentServiceNameAzureRM: ${{ azureSpnConnectionName }}
+      environmentServiceNameAzureRM: ${{ parameters.azureSpnConnectionName }}
