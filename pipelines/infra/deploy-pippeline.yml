@@ -12,13 +12,15 @@ pr:
       - cloud_infrastructure
 
 variables:
-  terraformVersion: "1.4.4"
-  isMainBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  - group: BGC-GLOBAL
+  - name: terraformVersion
+    value: $[variables['terraform.version']]
+  - name: isMainBranch
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 stages:
   - stage: DEV
     variables:
-      - group: BGC-GLOBAL
       - group: BGC-DEV-INFRA
     jobs:
       - deployment: ProvisionAzureResources
@@ -39,7 +41,6 @@ stages:
   - stage: PROD
     condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
     variables:
-      - group: BGC-GLOBAL
       - group: BGC-PROD-INFRA
     jobs:
       - deployment: ProvisionAzureResources

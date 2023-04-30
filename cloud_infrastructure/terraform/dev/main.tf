@@ -1,18 +1,20 @@
-variable "tf_state_storage_account_name" {
-  type     = string
+variable "resource_group" {
+  type = object({
+    name     = string
+    location = string
+  })
   nullable = false
 }
 
-variable "tf_state_storage_container_name" {
-  type     = string
+variable "resource_names" {
+  type = object({
+    terraform_state_storage = object({
+      account_name   = string
+      container_name = string
+    })
+  })
   nullable = false
 }
-
-variable "resource_group_name" {
-  type     = string
-  nullable = false
-}
-
 
 terraform {
   required_providers {
@@ -22,9 +24,9 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = var.resource_group_name
-    storage_account_name = var.tf_state_storage_account_name
-    container_name       = var.tf_state_storage_container_name
+    resource_group_name  = var.resource_group.name
+    storage_account_name = var.resource_names.terraform_state_storage.account_name
+    container_name       = var.resource_names.terraform_state_storage.container_name
     key                  = "terraform.tfstate"
   }
 
