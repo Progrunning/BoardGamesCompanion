@@ -8,7 +8,8 @@ parameters:
 
 variables:
   - name: workingDirectory
-    value: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/${{ parameters.environment }}
+    # value: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/${{ parameters.environment }}
+    value: "evn"
 
 steps:
   - checkout: self
