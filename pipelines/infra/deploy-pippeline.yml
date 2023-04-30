@@ -39,7 +39,8 @@ stages:
                     storageAccountName: $(storageAccountName)
                     terraformVersion: $(terraformVersion)
   - stage: PROD
-    condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
+    # condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
+    condition: succeeded()
     variables:
       - group: BGC-PROD-INFRA
     jobs:
