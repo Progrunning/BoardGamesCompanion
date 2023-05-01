@@ -23,12 +23,7 @@ terraform {
       version = "~> 3.54.0"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = var.resource_group.name
-    storage_account_name = var.resource_names.terraform_state_storage.account_name
-    container_name       = var.resource_names.terraform_state_storage.container_name
-    key                  = "terraform.tfstate"
-  }
+  backend "azurerm" {}
 
   required_version = ">= 1.4.4"
 }

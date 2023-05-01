@@ -34,6 +34,9 @@ More details on the below commands can be found here https://developer.hashicorp
 
 1. Exceute `terraform fmt` to keep the files consistently formatter
 2. Exceute `terraform init` to initialize terraform and start working with your code as infrastructure
+
+> NOTE: When testing locally, ensure that you're connected to the Azure (using Azure CLI), have selected the correct subscription, your command line tool is set to the directory with the terraform file and then add execute the following `terraform init -backend-config=".\backend.conf"`.
+
 3. Execute `terraform validate` to validate the code
 4. Execute `terraform plan` to preview the changes that Terraform plans to make to your infrastructure
 > IMPORTANT: This is the last step before making changes to the actual infrastructure in the cloud
