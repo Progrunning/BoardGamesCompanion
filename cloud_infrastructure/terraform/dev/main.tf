@@ -8,9 +8,9 @@ variable "resource_group" {
 
 variable "resource_names" {
   type = object({
-    terraform_state_storage = object({
-      account_name   = string
-      container_name = string
+    storage_account = object({
+      name                     = string
+      terraform_container_name = string
     })
     container_registry = object({
       name = string
@@ -29,6 +29,13 @@ variable "resource_names" {
       search_service = object({
         name     = string
         app_name = string
+      })
+    })
+    search_queue_function = object({
+      name     = string
+      app_name = string
+      service_plan = object({
+        name = string
       })
     })
   })
@@ -54,6 +61,11 @@ provider "azurerm" {
 
 data "azurerm_resource_group" "rg" {
   name = var.resource_group.name
+}
+
+data "azurerm_storage_account" "sa" {
+  name                = var.resource_names.storage_account.name
+  resource_group_name = var.resource_group.name
 }
 
 resource "azurerm_container_registry" "acr" {
@@ -92,4 +104,39 @@ resource "azurerm_container_app" "search_service_ca" {
       memory = "0.5Gi"
     }
   }
+
+  ingress {
+    external_enabled = true
+    target_port      = 80
+    traffic_weight {
+      percentage = 100
+    }
+  }
 }
+
+resource "azurerm_service_plan" "asp" {
+  name                = var.resource_names.search_queue_function.service_plan.name
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.location
+  os_type             = "Linux"
+  sku_name            = "Y1"
+}
+
+resource "azurerm_linux_function_app" "func" {
+  name                = var.resource_names.search_queue_function.name
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.location
+
+  storage_account_name       = data.azurerm_storage_account.sa.name
+  storage_account_access_key = data.azurerm_storage_account.sa.primary_access_key
+  service_plan_id            = azurerm_service_plan.asp.id
+
+  site_config {
+    application_stack {
+      dotnet_version              = "7.0"
+      use_dotnet_isolated_runtime = true
+    }
+  }
+}
+
+# Add service bus

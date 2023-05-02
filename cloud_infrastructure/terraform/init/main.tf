@@ -11,9 +11,9 @@ variable "resource_group" {
 
 variable "resource_names" {
   type = object({
-    terraform_state_storage = object({
-      account_name   = string
-      container_name = string
+    storage_account = object({
+      name                     = string
+      terraform_container_name = string
     })
   })
   nullable = false
@@ -40,7 +40,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_storage_account" "storage_account" {
-  name                     = var.resource_names.terraform_state_storage.account_name
+  name                     = var.resource_names.storage_account.name
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -48,7 +48,7 @@ resource "azurerm_storage_account" "storage_account" {
 }
 
 resource "azurerm_storage_container" "storage_container" {
-  name                  = var.resource_names.terraform_state_storage.container_name
+  name                  = var.resource_names.storage_account.terraform_container_name
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
 }

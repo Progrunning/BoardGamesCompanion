@@ -8,9 +8,9 @@ variable "resource_group" {
 
 variable "resource_names" {
   type = object({
-    terraform_state_storage = object({
-      account_name   = string
-      container_name = string
+    storage_account = object({
+      name                     = string
+      terraform_container_name = string
     })
   })
   nullable = false
