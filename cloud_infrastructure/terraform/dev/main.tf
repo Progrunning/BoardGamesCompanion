@@ -12,6 +12,10 @@ variable "resource_names" {
       name                     = string
       terraform_container_name = string
     })
+    apim = object({
+      name = string
+      sku  = string
+    })
     container_registry = object({
       name = string
       sku  = string
@@ -31,7 +35,16 @@ variable "resource_names" {
         app_name = string
       })
     })
-    search_queue_function = object({
+    cache_service_bus = object({
+      namespace = object({
+        name = string
+        sku  = string
+      })
+      queue = object({
+        name = string
+      })
+    })
+    cache_function = object({
       name     = string
       app_name = string
       service_plan = object({
@@ -66,6 +79,16 @@ data "azurerm_resource_group" "rg" {
 data "azurerm_storage_account" "sa" {
   name                = var.resource_names.storage_account.name
   resource_group_name = var.resource_group.name
+}
+
+resource "azurerm_api_management" "apim" {
+  name                = var.resource_names.apim.name
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.location
+  publisher_name      = "Progrunning"
+  publisher_email     = "info@progrunning.net"
+
+  sku_name = var.resource_names.apim.sku
 }
 
 resource "azurerm_container_registry" "acr" {
@@ -114,8 +137,21 @@ resource "azurerm_container_app" "search_service_ca" {
   }
 }
 
+
+resource "azurerm_servicebus_namespace" "sbns" {
+  name                = var.resource_names.cache_service_bus.namespace.name
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.location
+  sku                 = var.resource_names.cache_service_bus.namespace.sku
+}
+
+resource "azurerm_servicebus_queue" "sbq" {
+  name         = var.resource_names.cache_service_bus.queue.name
+  namespace_id = azurerm_servicebus_namespace.sbns.id
+}
+
 resource "azurerm_service_plan" "asp" {
-  name                = var.resource_names.search_queue_function.service_plan.name
+  name                = var.resource_names.cache_function.service_plan.name
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
   os_type             = "Linux"
@@ -123,7 +159,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_function_app" "func" {
-  name                = var.resource_names.search_queue_function.name
+  name                = var.resource_names.cache_function.name
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
 
@@ -139,4 +175,3 @@ resource "azurerm_linux_function_app" "func" {
   }
 }
 
-# Add service bus
