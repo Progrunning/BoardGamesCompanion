@@ -6,5 +6,13 @@ public static class Constants
     {
         public const string BaseUrl = "https://boardgamegeek.com/xmlapi2";
     }
+
+    public static class MongoDb
+    {
+        public static class ConventionNames
+        {
+            public const string CamelCase = "camelCase";
+        }
+    }
 }
 

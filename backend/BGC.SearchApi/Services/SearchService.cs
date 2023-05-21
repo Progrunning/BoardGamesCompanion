@@ -2,6 +2,7 @@ using System.Net;
 
 using BGC.SearchApi.Models.Dtos;
 using BGC.SearchApi.Models.Exceptions;
+using BGC.SearchApi.Repositories.Interfaces;
 using BGC.SearchApi.Services.Interface;
 using BGC.SearchApi.Services.Interfaces;
 
@@ -11,11 +12,13 @@ public class SearchService : ISearchService
 {
     private readonly ILogger<SearchService> _logger;
     private readonly IBggService _bggService;
+    private readonly IBoardGamesRepository _boardGamesRepository;
 
-    public SearchService(ILogger<SearchService> logger, IBggService bggService)
+    public SearchService(ILogger<SearchService> logger, IBggService bggService, IBoardGamesRepository boardGamesRepository)
     {
         _logger = logger;
         _bggService = bggService;
+        _boardGamesRepository = boardGamesRepository;
     }
 
     public async Task<IReadOnlyCollection<BoardGameSummaryDto>> Search(string query, CancellationToken cancellationToken)
@@ -28,7 +31,7 @@ public class SearchService : ISearchService
                 return Array.Empty<BoardGameSummaryDto>();
             }
 
-            // TODO Get detailed data from Mongo DB
+            var boardGames = await _boardGamesRepository.GetBoardGames(bggSearchResponse.BoardGames.Select(boardGame => boardGame.Id));
             // TODO If detailed info doesn't exists, queue a message to retrieve it
 
             return bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id, boardGame.Name, boardGame.YearPublished)).ToArray();

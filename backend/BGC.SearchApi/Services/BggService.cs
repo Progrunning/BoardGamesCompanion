@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-using BGC.SearchApi.Models.Domain.BoardGameGeek;
+using BGC.SearchApi.Models.BoardGameGeek;
 using BGC.SearchApi.Services.Interfaces;
 
 namespace BGC.SearchApi.Services;

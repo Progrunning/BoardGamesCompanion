@@ -1,4 +1,4 @@
-﻿using BGC.SearchApi.Models.Domain.BoardGameGeek;
+﻿using BGC.SearchApi.Models.BoardGameGeek;
 
 namespace BGC.SearchApi.Services.Interfaces;
 
