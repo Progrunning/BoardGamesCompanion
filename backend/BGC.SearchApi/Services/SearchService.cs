@@ -1,4 +1,7 @@
+using System.Net;
+
 using BGC.SearchApi.Models.Dtos;
+using BGC.SearchApi.Models.Exceptions;
 using BGC.SearchApi.Services.Interface;
 using BGC.SearchApi.Services.Interfaces;
 
@@ -17,15 +20,24 @@ public class SearchService : ISearchService
 
     public async Task<IReadOnlyCollection<BoardGameSummaryDto>> Search(string query, CancellationToken cancellationToken)
     {
-        var bggSearchResponse = await _bggService.Search(query, cancellationToken);
-        if (bggSearchResponse.IsEmpty)
+        try
         {
-            return Array.Empty<BoardGameSummaryDto>();
+            var bggSearchResponse = await _bggService.Search(query, cancellationToken);
+            if (bggSearchResponse.IsEmpty)
+            {
+                return Array.Empty<BoardGameSummaryDto>();
+            }
+
+            // TODO Get detailed data from Mongo DB
+            // TODO If detailed info doesn't exists, queue a message to retrieve it
+
+            return bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id, boardGame.Name, boardGame.YearPublished)).ToArray();
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Search failed");
 
-        // TODO Get detailed data from Mongo DB
-        // TODO If detailed info doesn't exists, queue a message to retrieve it
-
-        return bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id, boardGame.Name, boardGame.YearPublished)).ToArray();
+            throw new BggException((int)HttpStatusCode.InternalServerError, "Search failed");
+        }
     }
 }
