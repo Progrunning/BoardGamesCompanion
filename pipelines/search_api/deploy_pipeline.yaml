@@ -1,0 +1,100 @@
+resources:
+  pipelines:
+    - pipeline: Search API CI
+      source: "Search API CI"
+      trigger:
+        branches:
+          include:
+            - main
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-22.04
+  workspace:
+    clean: all
+
+parameters:
+  - name: buildId
+    displayName: Build ID
+    type: string
+    default: ""
+
+variables:
+  acrServerDev: edgdevofaaaeacr.azurecr.io
+  acrServerUat: edguatofaaaeacr.azurecr.io
+  acrServerProd: edgprdofaaaeacr.azurecr.io
+  acrServiceConnectionDev: EGDEVTEST-OFA-ACR
+  acrServiceConnectionUat: EGUAT-OFA-ACR
+  acrServiceConnectionProd: EGPROD-OFA-ACR
+  # TODO MK Change the repository name
+  # acrServiceRepositoryName: order-fulfillment-app-bff
+  acrServiceRepositoryName: edg-online-fulfilment-bff
+  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.OFA-BFF-CI.runID'])]
+
+stages:
+  - stage: DEV
+    jobs:
+      - deployment: DeployDev
+        environment: DEV
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+
+                - task: PowerShell@2
+                  displayName: Set build name
+                  inputs:
+                    targetType: "inline"
+                    script: |
+                      [string] $releaseName = "$(deployTagId)"
+                      Write-Host "Setting the name of the build to '$releaseName'."
+                      Write-Host "##vso[build.updatebuildnumber]$releaseName"
+
+                - task: AzureRmWebAppDeployment@4
+                  displayName: Deploy Docker image to App Service
+                  inputs:
+                    appType: webAppContainer
+                    ConnectedServiceName: "SPN-EGDEVTEST-OFA-dev"
+                    WebAppName: "egl-dev-ofa-api"
+                    DockerNamespace: $(acrServerDev)
+                    DockerRepository: $(acrServiceRepositoryName)
+                    DockerImageTag: $(deployTagId)
+
+  - stage: PROD
+    dependsOn: DEV
+    jobs:
+      - deployment: DeployProd
+        environment: PROD
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+
+                - template: templates/promote_docker_image_to_higher_environment.yaml
+                  parameters:
+                    acrServiceRepositoryName: $(acrServiceRepositoryName)
+                    deployTagId: $(deployTagId)
+                    lowerEnvironmentName: UAT
+                    lowerEnvironmentAcrServiceConnection: $(acrServiceConnectionUat)
+                    lowerEnvironmentAcrServer: $(acrServerUat)
+                    higherEnvironmentName: PROD
+                    higherEnvironmentAcrServiceConnection: $(acrServiceConnectionProd)
+                    higherEnvironmentAcrServer: $(acrServerProd)
+
+                - task: AzureRmWebAppDeployment@4
+                  displayName: Deploy Docker image to App Service
+                  inputs:
+                    azureSubscription: "SPN-EGPROD-OFA-prod"
+                    appType: "webAppContainer"
+                    WebAppName: "egl-prd-ofa-api"
+                    DockerNamespace: "$(acrServerProd)"
+                    DockerRepository: $(acrServiceRepositoryName)
+                    DockerImageTag: $(deployTagId)
+
+                - task: git-tag-on-release-task@9
+                  displayName: Tag Artifacts
+                  inputs:
+                    staticTagName: $(deployTagId)
