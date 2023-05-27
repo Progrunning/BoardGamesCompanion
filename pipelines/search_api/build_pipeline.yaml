@@ -16,10 +16,10 @@ pool:
 
 variables:
   isPR: $[in(variables['Build.Reason'], 'PullRequest')]
-  # dockerContainerRegistry: EGDEVTEST-OFA-ACR
-  # dockerRepository: edg-online-fulfilment-bff
-  # dockerBuildContext: $(Build.SourcesDirectory)/src
-  # dockerfilePath: $(Build.SourcesDirectory)/src/EDGOnlineFulfilmentBFF/Dockerfile
+  # dockerContainerRegistry:
+  # dockerRepository:
+  # dockerBuildContext:
+  # dockerfilePath:
 
 jobs:
   - job: CI
