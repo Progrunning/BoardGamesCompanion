@@ -1,0 +1,73 @@
+parameters:
+  - name: pathToProjects
+    type: string
+    default: "**/*.csproj"
+  # How to include/exclude proejcts/files
+  # https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/MSBuildIntegration.md#source-files
+  - name: includeFilterExpression
+    type: string
+    default: "[*]*" # Includes all types in all assemblies
+  - name: excludeFilterExpression
+    type: string
+    default: "" # Excludes nothing
+  - name: testsAndCoverageOutputDirectory
+    type: string
+    default: "$(System.DefaultWorkingDirectory)/TestResults"
+  - name: minCodeCoveragePercentage
+    type: number
+    default: 70
+
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: Run tests and collect coverage
+    inputs:
+      command: test
+      projects: "${{ parameters.pathToProjects }}"
+      publishTestResults: false
+      arguments: '
+        -c Release
+        /p:CollectCoverage=true
+        /p:CoverletOutputFormat=cobertura
+        /p:CoverletOutput="${{ parameters.testsAndCoverageOutputDirectory }}/"
+        /p:Include="${{ parameters.includeFilterExpression }}"
+        /p:Exclude="${{ parameters.excludeFilterExpression }}"
+        --logger trx;LogFileName=testresults.trx
+        '
+
+  - task: reportgenerator@5
+    displayName: Generate test report
+    inputs:
+      reports: "${{ parameters.testsAndCoverageOutputDirectory }}/coverage.cobertura.xml"
+      targetdir: "${{ parameters.testsAndCoverageOutputDirectory }}/reports"
+      reporttypes: "Cobertura;Badges"
+
+  - task: PublishCodeCoverageResults@1
+    displayName: Publish code coverage
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: "${{ parameters.testsAndCoverageOutputDirectory }}/coverage.cobertura.xml"
+      reportDirectory: "${{ parameters.testsAndCoverageOutputDirectory }}/reports"
+      failIfCoverageEmpty: true
+
+  - task: PowerShell@2
+    displayName: Check code coverage
+    inputs:
+      targetType: "inline"
+      workingDirectory: ${{ parameters.testsAndCoverageOutputDirectory }}
+      script: |
+        $minCodeCoveragePercentage = ${{ parameters.minCodeCoveragePercentage }}
+        $coberturaFileContent = [xml](get-content '.\coverage.cobertura.xml')
+        $lineRateObj = $($coberturaFileContent.SelectNodes('//coverage') | select "line-rate")
+        $lineRatePercentage = [decimal]$lineRateObj."line-rate" * 100
+
+        if ($lineRatePercentage -lt $minCodeCoveragePercentage) {
+            echo "Expected a minimum code coverage of $minCodeCoveragePercentage percent, actual code coverage is $lineRatePercentage percent."
+            exit 1
+        }
+
+  - task: DeleteFiles@1
+    condition: always()
+    displayName: Clean up test coverage file(s)
+    inputs:
+      SourceFolder: "$(System.DefaultWorkingDirectory/**/TestResults"
+      Contents: "**/*.coverage"

@@ -1,0 +1,53 @@
+name: $(Build.BuildId)
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - backend/BGC.SearchApi/**/*
+
+pool:
+  vmImage: ubuntu-22.04
+  workspace:
+    clean: all
+
+variables:
+  isPR: $[in(variables['Build.Reason'], 'PullRequest')]
+  # dockerContainerRegistry: EGDEVTEST-OFA-ACR
+  # dockerRepository: edg-online-fulfilment-bff
+  # dockerBuildContext: $(Build.SourcesDirectory)/src
+  # dockerfilePath: $(Build.SourcesDirectory)/src/EDGOnlineFulfilmentBFF/Dockerfile
+
+jobs:
+  - job: CI
+    displayName: CI
+    steps:
+      - task: UseDotNet@2
+        displayName: "Install .NET 7.x SDK"
+        inputs:
+          version: 7.x
+
+      - task: DotNetCoreCLI@2
+        displayName: "Build Search API"
+        inputs:
+          projects: "**/BGC.SearchApi.csproj"
+          arguments: "--output publish_output --configuration Release"
+
+      - template: templates/test_and_coverage.yaml
+        parameters:
+          pathToProjects: "**/BGC.SearchApi.csproj"
+
+      # - task: Docker@2
+      #   condition: and(succeeded(), eq(variables.isPR, 'false'))
+      #   displayName: Publish docker image to DEV ACR
+      #   inputs:
+      #     command: buildAndPush
+      #     containerRegistry: $(dockerContainerRegistry)
+      #     repository: $(dockerRepository)
+      #     tags: "$(Build.BuildId)"
+      #     dockerfile: $(dockerfilePath)
+      #     buildContext: $(dockerBuildContext)
+      #     addPipelineData: true
