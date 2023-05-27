@@ -36,7 +36,7 @@ jobs:
           projects: "**/BGC.SearchApi.csproj"
           arguments: "--output publish_output --configuration Release"
 
-      - template: pipelines/templates/test_and_coverage.yaml
+      - template: test_and_coverage.yaml
         parameters:
           pathToProjects: "**/BGC.SearchApi.csproj"
 
