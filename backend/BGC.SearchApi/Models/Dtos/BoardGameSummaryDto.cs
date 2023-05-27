@@ -1,6 +1,6 @@
 ﻿namespace BGC.SearchApi.Models.Dtos;
 
-public class BoardGameSummaryDto
+public record BoardGameSummaryDto
 {
     public BoardGameSummaryDto(string id, string name, int yearPublished)
     {
