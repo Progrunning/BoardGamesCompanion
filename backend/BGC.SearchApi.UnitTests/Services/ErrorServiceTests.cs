@@ -1,15 +1,8 @@
-﻿using BGC.SearchApi.Models.BoardGameGeek;
-using BGC.SearchApi.Models.Domain;
-using BGC.SearchApi.Models.Dtos;
-using BGC.SearchApi.Models.Exceptions;
-using BGC.SearchApi.Repositories.Interfaces;
-using BGC.SearchApi.Services.Interfaces;
+﻿using BGC.SearchApi.Models.Exceptions;
 using BGC.SearchApi.Services;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Http.HttpResults;
+
 using System.Net;
 
 namespace BGC.SearchApi.UnitTests.Services

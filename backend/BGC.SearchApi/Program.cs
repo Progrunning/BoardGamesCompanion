@@ -8,8 +8,10 @@ using BGC.SearchApi.Services.Interfaces;
 
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddProblemDetails();
@@ -17,6 +19,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
+builder.Services.AddTransient<IMongoClient>((services) =>
+{
+    var appSettings = services.GetService<IOptions<AppSettings>>();
+    
+    return new MongoClient(appSettings!.Value.MongoDb!.ConnectionString);
+});
 builder.Services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();
 builder.Services.AddTransient<IErrorService, ErrorService>();
 builder.Services.AddTransient<IBggService, BggService>();

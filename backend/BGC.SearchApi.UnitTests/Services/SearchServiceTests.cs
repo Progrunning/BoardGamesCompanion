@@ -6,12 +6,6 @@ using BGC.SearchApi.Repositories.Interfaces;
 using BGC.SearchApi.Services;
 using BGC.SearchApi.Services.Interfaces;
 
-using FluentAssertions;
-
-using Microsoft.Extensions.Logging;
-
-using Moq;
-
 namespace BGC.SearchApi.UnitTests.Services;
 
 public class SearchServiceTests
