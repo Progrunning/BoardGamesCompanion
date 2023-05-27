@@ -15,6 +15,11 @@ public class BoardGameSummaryDto
 
     public int YearPublished { get; init; }
 
+    /// <summary>
+    /// Type of the board game (e.g. BoardGame or BoardGameExpansion)
+    /// </summary>
+    public string Type { get; set; } = null!;
+
     public string? ImageUrl { get; set; }
 
     public string? ThumbnailUrl { get; set; }

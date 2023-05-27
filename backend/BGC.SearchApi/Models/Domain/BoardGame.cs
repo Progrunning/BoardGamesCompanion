@@ -12,27 +12,25 @@ namespace BGC.SearchApi.Models.Domain
         [BsonRequired]
         public string Name { get; init; } = null!;
 
+        [BsonRequired]
+        public string Type { get; init; } = null!;
+
         public string? Description { get; init; }
 
         public string? ThumbnailUrl { get; init; }
 
-        [BsonElement("imageUrl")]
         public string? ImageUrl { get; init; }
 
         public double? Complexity { get; init; }
 
         public double? AverageRating { get; init; }
 
-        [BsonElement("minPlayers")]
         public int? MinNumberOfPlayers { get; init; }
 
-        [BsonElement("maxPlayers")]
         public int? MaxNumberOfPlayers { get; init; }
 
-        [BsonElement("minTimeInMinutes")]
         public int? MinPlaytimeInMinutes { get; init; }
 
-        [BsonElement("maxTimeInMinutes")]
         public int? MaxPlaytimeInMinutes { get; init; }
 
         public int? MinAgeInYears { get; init; }
@@ -45,17 +43,18 @@ namespace BGC.SearchApi.Models.Domain
 
         public string? Url { get; init; }
 
-        public IReadOnlyCollection<string> Artists { get; init; } = Array.Empty<string>();
+        public IReadOnlyCollection<NamedEntity> Artists { get; init; } = Array.Empty<NamedEntity>();
 
-        public IReadOnlyCollection<string> Category { get; init; } = Array.Empty<string>();
+        public IReadOnlyCollection<NamedEntity> Category { get; init; } = Array.Empty<NamedEntity>();
 
-        public IReadOnlyCollection<string> Designers { get; init; } = Array.Empty<string>();
+        public IReadOnlyCollection<NamedEntity> Designers { get; init; } = Array.Empty<NamedEntity>();
 
-        public IReadOnlyCollection<string> Types { get; init; } = Array.Empty<string>();
+        public IReadOnlyCollection<NamedEntity> GameTypes { get; init; } = Array.Empty<NamedEntity>();
 
-        [BsonElement("mechanis")]
-        public IReadOnlyCollection<string> Mechanisms { get; init; } = Array.Empty<string>();
+        public IReadOnlyCollection<NamedEntity> Mechanic { get; init; } = Array.Empty<NamedEntity>();
 
-        public IReadOnlyCollection<string> Publishers { get; init; } = Array.Empty<string>();
+        public IReadOnlyCollection<NamedEntity> Publishers { get; init; } = Array.Empty<NamedEntity>();
+        
+        public IReadOnlyCollection<NamedEntity> Expansions { get; init; } = Array.Empty<NamedEntity>();
     }
 }
