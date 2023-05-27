@@ -1,10 +1,9 @@
 name: $(Build.BuildId)
 
-trigger:
-  batch: true
+pr:
   branches:
     include:
-      - master
+      - main
   paths:
     include:
       - backend/BGC.SearchApi/**/*
@@ -38,7 +37,7 @@ jobs:
 
       - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
         parameters:
-          pathToProjects: "**/BGC.SearchApi.csproj"
+          pathToProjects: "**/BGC.SearchApi.UnitTests.csproj"
 
       # - task: Docker@2
       #   condition: and(succeeded(), eq(variables.isPR, 'false'))
