@@ -49,15 +49,16 @@ app.UseStatusCodePages(async statusCodeContext =>
 app.MapGet("api/search", ([FromQuery] string query, ISearchService searchService) => searchService.Search(query, CancellationToken.None))
    .WithOpenApi();
 
-// TODO Remove from swagger
 app.MapGet("api/error", (IErrorService errorService, HttpContext context) =>
 {
     var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>()!;
     return errorService.HandleError(exceptionHandlerFeature.Error);
-});
+}).ExcludeFromDescription();
 
-var mongoDbConventionPack = new ConventionPack();
-mongoDbConventionPack.Add(new CamelCaseElementNameConvention());
+var mongoDbConventionPack = new ConventionPack
+{
+    new CamelCaseElementNameConvention()
+};
 ConventionRegistry.Register(Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
 
 app.Run();

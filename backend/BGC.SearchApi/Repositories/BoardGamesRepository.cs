@@ -10,8 +10,8 @@ namespace BGC.SearchApi.Repositories
 {
     public class BoardGamesRepository : IBoardGamesRepository
     {
-        private const string BgcDbName = "boardGamesCompanion";
-        private const string BoardGamesDbCollectionName = "boardGames";
+        private const string BgcDbName = "boardGames";
+        private const string BoardGamesDbCollectionName = "bgg";
 
         private readonly ILogger<BoardGamesRepository> _logger;
         private readonly MongoClient _mongoClient;
@@ -22,13 +22,21 @@ namespace BGC.SearchApi.Repositories
             _mongoClient = new MongoClient(appSettings.Value.MongoDb!.ConnectionString);
         }
 
-        public async Task<IReadOnlyCollection<BoardGame>> GetBoardGames(IEnumerable<string> boardGameIds)
+        public async Task<IReadOnlyCollection<BoardGame>> GetBoardGames(IEnumerable<string> boardGameIds, CancellationToken cancellationToken)
         {
             var boardGamesCollection = _mongoClient.GetDatabase(BgcDbName).GetCollection<BoardGame>(BoardGamesDbCollectionName);
+
+            var projectionBuilder = new ProjectionDefinitionBuilder<BoardGame>();
+            var projectionDefinition = projectionBuilder.Include(boardGame => boardGame.ImageUrl);
+
             var filterBuilder = new FilterDefinitionBuilder<BoardGame>();
             var filter = filterBuilder.In(boardGame => boardGame.Id, boardGameIds);
+            //var filterFluent = boardGamesCollection.Find(filter).Project<BoardGame>(projectionDefinition);
+            var filterFluent = boardGamesCollection.Find(filter);
 
-            return await boardGamesCollection.Find(filter).ToListAsync();
+            _logger.LogInformation($"Executing the following command in MongoDb: {filterFluent}");
+
+            return await filterFluent.ToListAsync(cancellationToken);
         }
     }
 }

@@ -31,10 +31,12 @@ public class SearchService : ISearchService
                 return Array.Empty<BoardGameSummaryDto>();
             }
 
-            var boardGames = await _boardGamesRepository.GetBoardGames(bggSearchResponse.BoardGames.Select(boardGame => boardGame.Id));
             // TODO If detailed info doesn't exists, queue a message to retrieve it
 
-            return bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id, boardGame.Name, boardGame.YearPublished)).ToArray();
+            var boardGames = bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id, boardGame.Name, boardGame.YearPublished)).ToArray();
+            await EnrichBoardGameDetails(boardGames, cancellationToken);
+
+            return boardGames;
         }
         catch (Exception ex)
         {
@@ -42,5 +44,36 @@ public class SearchService : ISearchService
 
             throw new BggException((int)HttpStatusCode.InternalServerError, "Search failed");
         }
+    }
+
+    private async Task EnrichBoardGameDetails(IReadOnlyCollection<BoardGameSummaryDto> boardGames, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var boardGamesDetails = await _boardGamesRepository.GetBoardGames(boardGames.Select(boardGame => boardGame.Id), cancellationToken);
+            var boardGamesDetailsDict = boardGamesDetails.ToDictionary(boardGame => boardGame.Id);
+            foreach (var boardGame in boardGames)
+            {
+                if (!boardGamesDetailsDict.TryGetValue(boardGame.Id, out var boardGameDetails))
+                {
+                    continue;
+                }
+
+                boardGame.Description = boardGameDetails.Description;
+                boardGame.ImageUrl = boardGameDetails.ImageUrl;
+                boardGame.ThumbnailUrl = boardGameDetails.ThumbnailUrl;
+                boardGame.MinNumberOfPlayers = boardGameDetails.MinNumberOfPlayers;
+                boardGame.MaxNumberOfPlayers = boardGameDetails.MaxNumberOfPlayers;
+                boardGame.MinPlaytimeInMinutes = boardGameDetails.MinPlaytimeInMinutes;
+                boardGame.MaxPlaytimeInMinutes = boardGameDetails.MaxPlaytimeInMinutes;
+                boardGame.Complexity = boardGameDetails.Complexity;
+                boardGame.Rank = boardGameDetails.Rank;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to enrich board games with details");
+        }
+
     }
 }
