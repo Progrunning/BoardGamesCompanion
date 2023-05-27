@@ -1,7 +1,7 @@
 resources:
   pipelines:
     - pipeline: Search API CI
-      source: "Search API CI"
+      source: "Search-API-CI"
       trigger:
         branches:
           include:
@@ -21,16 +21,23 @@ parameters:
     default: ""
 
 variables:
-  acrServerDev: edgdevofaaaeacr.azurecr.io
-  acrServerUat: edguatofaaaeacr.azurecr.io
-  acrServerProd: edgprdofaaaeacr.azurecr.io
-  acrServiceConnectionDev: EGDEVTEST-OFA-ACR
-  acrServiceConnectionUat: EGUAT-OFA-ACR
-  acrServiceConnectionProd: EGPROD-OFA-ACR
-  # TODO MK Change the repository name
-  # acrServiceRepositoryName: order-fulfillment-app-bff
-  acrServiceRepositoryName: edg-online-fulfilment-bff
-  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.OFA-BFF-CI.runID'])]
+  # General
+  acrServer: bgccr.azurecr.io
+  acrServiceRepositoryName: bgc
+
+  # Dev
+  acrServiceConnectionDev: bgc-dev-acr
+  armServiceConnectionDev: bgc-dev
+  resourceGroupNameDev: bgc-dev-rg
+  azureContainerAppNameDev: bgc-search-service-dev-ca
+
+  # Prod
+  acrServiceConnectionProd: bgc-prod-acr
+  armServiceConnectionProd: bgc-prod
+  resourceGroupNameProd: bgc-dev-rg
+  azureContainerAppNameProd: bgc-search-service-prod-ca
+
+  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Search-API-CI.runID'])]
 
 stages:
   - stage: DEV
@@ -52,15 +59,13 @@ stages:
                       Write-Host "Setting the name of the build to '$releaseName'."
                       Write-Host "##vso[build.updatebuildnumber]$releaseName"
 
-                - task: AzureRmWebAppDeployment@4
-                  displayName: Deploy Docker image to App Service
+                - task: AzureContainerApps@1
+                  displayName: Deploy Docker image to Container App
                   inputs:
-                    appType: webAppContainer
-                    ConnectedServiceName: "SPN-EGDEVTEST-OFA-dev"
-                    WebAppName: "egl-dev-ofa-api"
-                    DockerNamespace: $(acrServerDev)
-                    DockerRepository: $(acrServiceRepositoryName)
-                    DockerImageTag: $(deployTagId)
+                    azureSubscription: $(armServiceConnectionDev)
+                    containerAppName: $(azureContainerAppNameDev)
+                    resourceGroup: $(resourceGroupNameDev)
+                    imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
 
   - stage: PROD
     dependsOn: DEV
@@ -73,26 +78,13 @@ stages:
               steps:
                 - download: none
 
-                - template: templates/promote_docker_image_to_higher_environment.yaml
-                  parameters:
-                    acrServiceRepositoryName: $(acrServiceRepositoryName)
-                    deployTagId: $(deployTagId)
-                    lowerEnvironmentName: UAT
-                    lowerEnvironmentAcrServiceConnection: $(acrServiceConnectionUat)
-                    lowerEnvironmentAcrServer: $(acrServerUat)
-                    higherEnvironmentName: PROD
-                    higherEnvironmentAcrServiceConnection: $(acrServiceConnectionProd)
-                    higherEnvironmentAcrServer: $(acrServerProd)
-
-                - task: AzureRmWebAppDeployment@4
-                  displayName: Deploy Docker image to App Service
+                - task: AzureContainerApps@1
+                  displayName: Deploy Docker image to Container App
                   inputs:
-                    azureSubscription: "SPN-EGPROD-OFA-prod"
-                    appType: "webAppContainer"
-                    WebAppName: "egl-prd-ofa-api"
-                    DockerNamespace: "$(acrServerProd)"
-                    DockerRepository: $(acrServiceRepositoryName)
-                    DockerImageTag: $(deployTagId)
+                    azureSubscription: $(armServiceConnectionProd)
+                    containerAppName: $(azureContainerAppNameProd)
+                    resourceGroup: $(resourceGroupNameProd)
+                    imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
 
                 - task: git-tag-on-release-task@9
                   displayName: Tag Artifacts
