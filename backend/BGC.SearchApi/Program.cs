@@ -22,7 +22,7 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(
 builder.Services.AddTransient<IMongoClient>((services) =>
 {
     var appSettings = services.GetService<IOptions<AppSettings>>();
-    
+
     return new MongoClient(appSettings!.Value.MongoDb!.ConnectionString);
 });
 builder.Services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();
@@ -41,6 +41,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseExceptionHandler("/api/error");
 }
 else
 {
@@ -70,3 +71,6 @@ var mongoDbConventionPack = new ConventionPack
 ConventionRegistry.Register(Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
 
 app.Run();
+
+// MK Having this is required because otherwise the integration tests using WebApplicationFactory won't work
+public partial class Program { }
