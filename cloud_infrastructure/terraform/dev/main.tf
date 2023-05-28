@@ -6,20 +6,34 @@ variable "resource_group" {
   nullable = false
 }
 
+variable "shared_resources" {
+  type = object({
+    resource_group = object({
+      name     = string
+      location = string
+    })
+    storage_account = object({
+      name                     = string
+      terraform_container_name = string
+    })
+    container_registry = object({
+      name = string
+      sku  = string
+    })
+    apim = object({
+      name = string
+      sku  = string
+    })
+  })
+}
+
 variable "resource_names" {
   type = object({
     storage_account = object({
       name                     = string
       terraform_container_name = string
     })
-    apim = object({
-      name = string
-      sku  = string
-    })
-    container_registry = object({
-      name = string
-      sku  = string
-    })
+
     analytics_workspace = object({
       name              = string
       retention_in_days = number
@@ -72,30 +86,14 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group.name
-}
-
 data "azurerm_storage_account" "sa" {
-  name                = var.resource_names.storage_account.name
-  resource_group_name = var.resource_group.name
+  name                = var.shared_resources.storage_account.name
+  resource_group_name = var.shared_resources.resource_group.name
 }
 
-resource "azurerm_api_management" "apim" {
-  name                = var.resource_names.apim.name
-  resource_group_name = var.resource_group.name
-  location            = var.resource_group.location
-  publisher_name      = "Progrunning"
-  publisher_email     = "info@progrunning.net"
-
-  sku_name = var.resource_names.apim.sku
-}
-
-resource "azurerm_container_registry" "acr" {
-  name                = var.resource_names.container_registry.name
-  resource_group_name = var.resource_group.name
-  location            = var.resource_group.location
-  sku                 = var.resource_names.container_registry.sku
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group.name
+  location = var.resource_group.location
 }
 
 resource "azurerm_log_analytics_workspace" "log" {

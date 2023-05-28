@@ -1,22 +1,25 @@
 # Init module to create the resource group and the storage account to store terraform's state.
 # Manually provision this module, before provisioning the rest of the environment's resources
 
-variable "resource_group" {
+variable "shared_resources" {
   type = object({
-    name     = string
-    location = string
-  })
-  nullable = false
-}
-
-variable "resource_names" {
-  type = object({
+    resource_group = object({
+      name     = string
+      location = string
+    })
     storage_account = object({
       name                     = string
       terraform_container_name = string
     })
+    container_registry = object({
+      name = string
+      sku  = string
+    })
+    apim = object({
+      name = string
+      sku  = string
+    })
   })
-  nullable = false
 }
 
 
@@ -35,12 +38,12 @@ provider "azurerm" {
   features {}
 }
 resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group.name
-  location = var.resource_group.location
+  name     = var.shared_resources.resource_group.name
+  location = var.shared_resources.resource_group.location
 }
 
 resource "azurerm_storage_account" "storage_account" {
-  name                     = var.resource_names.storage_account.name
+  name                     = var.shared_resources.storage_account.name
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -48,7 +51,37 @@ resource "azurerm_storage_account" "storage_account" {
 }
 
 resource "azurerm_storage_container" "storage_container" {
-  name                  = var.resource_names.storage_account.terraform_container_name
+  name                  = var.shared_resources.storage_account.terraform_container_name_dev
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
+}
+
+resource "azurerm_storage_container" "storage_container" {
+  name                  = var.shared_resources.storage_account.terraform_container_name_prod
+  storage_account_name  = azurerm_storage_account.storage_account.name
+  container_access_type = "private"
+}
+
+resource "azurerm_container_registry" "acr" {
+  name                = var.shared_resources.container_registry.name
+  resource_group_name = var.shared_resources.resource_group.name
+  location            = var.shared_resources.resource_group.location
+  sku                 = var.shared_resources.container_registry.sku
+}
+
+resource "azurerm_container_registry" "acr" {
+  name                = var.shared_resources.container_registry.name
+  resource_group_name = var.shared_resources.resource_group.name
+  location            = var.shared_resources.resource_group.location
+  sku                 = var.shared_resources.container_registry.sku
+}
+
+resource "azurerm_api_management" "apim" {
+  name                = var.shared_resources.apim.name
+  resource_group_name = var.shared_resources.resource_group.name
+  location            = var.shared_resources.resource_group.location
+  publisher_name      = "Progrunning"
+  publisher_email     = "info@progrunning.net"
+
+  sku_name = var.shared_resources.apim.sku
 }
