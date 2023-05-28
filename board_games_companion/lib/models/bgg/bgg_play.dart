@@ -5,7 +5,7 @@ import 'bgg_play_player.dart';
 part 'bgg_play.freezed.dart';
 
 @freezed
-abstract class BggPlay with _$BggPlay {
+class BggPlay with _$BggPlay {
   const factory BggPlay({
     required int id,
     required String boardGameId,
