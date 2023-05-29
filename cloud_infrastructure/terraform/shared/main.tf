@@ -8,8 +8,9 @@ variable "shared_resources" {
       location = string
     })
     storage_account = object({
-      name                     = string
-      terraform_container_name = string
+      name                          = string
+      terraform_container_name_dev  = string
+      terraform_container_name_prod = string
     })
     container_registry = object({
       name = string
@@ -32,10 +33,18 @@ terraform {
   }
 
   required_version = ">= 1.4.4"
+
+  backend "local" {
+    path = "./terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    api_management {
+      recover_soft_deleted = true
+    }
+  }
 }
 resource "azurerm_resource_group" "rg" {
   name     = var.shared_resources.resource_group.name
@@ -50,23 +59,16 @@ resource "azurerm_storage_account" "storage_account" {
   account_replication_type = "LRS"
 }
 
-resource "azurerm_storage_container" "storage_container" {
+resource "azurerm_storage_container" "storage_container_dev" {
   name                  = var.shared_resources.storage_account.terraform_container_name_dev
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
 }
 
-resource "azurerm_storage_container" "storage_container" {
+resource "azurerm_storage_container" "storage_container_prod" {
   name                  = var.shared_resources.storage_account.terraform_container_name_prod
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
-}
-
-resource "azurerm_container_registry" "acr" {
-  name                = var.shared_resources.container_registry.name
-  resource_group_name = var.shared_resources.resource_group.name
-  location            = var.shared_resources.resource_group.location
-  sku                 = var.shared_resources.container_registry.sku
 }
 
 resource "azurerm_container_registry" "acr" {

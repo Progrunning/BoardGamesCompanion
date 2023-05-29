@@ -6,32 +6,10 @@ variable "resource_group" {
   nullable = false
 }
 
-variable "shared_resources" {
-  type = object({
-    resource_group = object({
-      name     = string
-      location = string
-    })
-    storage_account = object({
-      name                     = string
-      terraform_container_name = string
-    })
-    container_registry = object({
-      name = string
-      sku  = string
-    })
-    apim = object({
-      name = string
-      sku  = string
-    })
-  })
-}
-
 variable "resource_names" {
   type = object({
     storage_account = object({
-      name                     = string
-      terraform_container_name = string
+      name = string
     })
 
     analytics_workspace = object({
@@ -86,14 +64,17 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_storage_account" "sa" {
-  name                = var.shared_resources.storage_account.name
-  resource_group_name = var.shared_resources.resource_group.name
-}
-
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group.name
   location = var.resource_group.location
+}
+
+resource "azurerm_storage_account" "storage_account" {
+  name                     = var.shared_resources.storage_account.name
+  resource_group_name      = var.resource_group.name
+  location                 = var.resource_group.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 }
 
 resource "azurerm_log_analytics_workspace" "log" {

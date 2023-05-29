@@ -14,9 +14,15 @@ Install terraform on your local device by following the steps from this document
 
 ### Init
 
-When setting up the infrastructure environment for the firs time, provisioning of a resource group and a storage account to keep terraform's state is done manually by executing terraform scripts from the `cloud_infrastructure/terraform/init` directory.
+When setting up the infrastructure environment for the firs time, provisioning of a resource group and a storage account to keep terraform's state is done manually by executing terraform scripts from the `cloud_infrastructure/terraform/shared` directory.
 
 The process of provisioning is the same as described in the below section but it's done from the local machine. The `terraform.tfstate` is not preserved as this initialization will be done only once.
+
+In case of an update to the cloud resources it could be that the `terraform.tfstate` will not be present on the local machine, which will require updating the state from the cloud. This can be done by executing `import` commands. For example, to import `bgc-shared-rg` to the local state one would need to execute the following command:
+
+`terraform import azurerm_resource_group.rg /subscriptions/2b318413-397e-40dc-b433-7aeee9e6f546/resourceGroups/bgc-shared-rg`
+
+> NOTE: The ID part of the command can be found in the error messages from the `terraform apply` command
 
 ### Authenticate using the Azure CLI
 
@@ -40,7 +46,7 @@ More details on the below commands can be found here https://developer.hashicorp
 3. Execute `terraform validate` to validate the code
 4. Execute `terraform plan` to preview the changes that Terraform plans to make to your infrastructure
 > IMPORTANT: This is the last step before making changes to the actual infrastructure in the cloud
-1. Execute `terraform apply` to apply the configuration to the cloud
+5. Execute `terraform apply` to apply the configuration to the cloud
 
 > NOTE: This is when terraform writes data into the `terraform.tfstate` file
 > NOTE2: provide `-auto-approve` parameter to auto approve the changes
