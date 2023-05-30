@@ -24,15 +24,14 @@ variables:
   # General
   acrServer: bgccr.azurecr.io
   acrServiceRepositoryName: bgc
+  acrServiceConnection: bgc-acr
 
   # Dev
-  acrServiceConnectionDev: bgc-dev-acr
   armServiceConnectionDev: bgc-dev
   resourceGroupNameDev: bgc-dev-rg
   azureContainerAppNameDev: bgc-search-service-dev-ca
 
   # Prod
-  acrServiceConnectionProd: bgc-prod-acr
   armServiceConnectionProd: bgc-prod
   resourceGroupNameProd: bgc-dev-rg
   azureContainerAppNameProd: bgc-search-service-prod-ca
