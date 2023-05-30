@@ -61,6 +61,7 @@ stages:
                 - task: AzureContainerApps@1
                   displayName: Deploy Docker image to Container App
                   inputs:
+                    acrName: bgc-acr
                     azureSubscription: $(armServiceConnectionDev)
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
