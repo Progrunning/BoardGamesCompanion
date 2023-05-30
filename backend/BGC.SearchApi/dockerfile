@@ -5,9 +5,9 @@ COPY *.csproj .
 RUN dotnet restore
 
 COPY . .
-RUN dotnet publish -self-contained false --no-restore -o /app
+RUN dotnet publish --self-contained false -o /app
 
-FROM alpine:3.14
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
 WORKDIR /app
 COPY --from=build /app .
 ENTRYPOINT ["dotnet", "BGC.SearchApi.dll"]
