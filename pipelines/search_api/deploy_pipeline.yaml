@@ -22,7 +22,7 @@ parameters:
 
 variables:
   # General
-  acrServer: bgccr.azurecr.io
+  acrServer: bgcsharedcr.azurecr.io
   acrServiceRepositoryName: bgc
   acrServiceConnection: bgc-acr
 
