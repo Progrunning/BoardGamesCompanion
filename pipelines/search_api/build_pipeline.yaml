@@ -1,6 +1,6 @@
 name: $(Build.BuildId)
 
-pr:
+trigger:
   branches:
     include:
       - main
