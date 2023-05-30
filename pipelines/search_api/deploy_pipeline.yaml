@@ -1,7 +1,7 @@
 resources:
   pipelines:
-    - pipeline: Search API CI
-      source: "Search-API-CI"
+    - pipeline: Search-API-CI
+      source: "Search API CI"
       trigger:
         branches:
           include:
