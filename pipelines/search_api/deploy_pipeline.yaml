@@ -22,6 +22,7 @@ parameters:
 
 variables:
   # General
+  acrName: bgcsharedcr
   acrServer: bgcsharedcr.azurecr.io
   acrServiceRepositoryName: bgc
   acrServiceConnection: bgc-acr
@@ -61,7 +62,7 @@ stages:
                 - task: AzureContainerApps@1
                   displayName: Deploy Docker image to Container App
                   inputs:
-                    acrName: bgc-acr
+                    acrName: $(acrName)
                     azureSubscription: $(armServiceConnectionDev)
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
