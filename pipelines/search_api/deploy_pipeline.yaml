@@ -43,6 +43,8 @@ stages:
   - stage: DEV
     jobs:
       - deployment: DeployDev
+        variables:
+          - group: BGC-GLOBAL
         environment: DEV
         strategy:
           runOnce:
@@ -69,6 +71,8 @@ stages:
                   displayName: Deploy Docker image to Container App
                   inputs:
                     acrName: $(acrName)
+                    acrUsername: $(acrUsername)
+                    acrPassword: $(acrPassword)
                     azureSubscription: $(armServiceConnectionDev)
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
