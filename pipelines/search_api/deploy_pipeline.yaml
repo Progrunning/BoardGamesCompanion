@@ -72,6 +72,7 @@ stages:
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
+                    # TODO Find a way to set the secret (CLI?) and then add this variable
                     environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:appsettings--mongodb--connectionstring
 
   - stage: PROD
