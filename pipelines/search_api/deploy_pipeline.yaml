@@ -72,7 +72,7 @@ stages:
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:$(mongoDbConnectionString)
+                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:appsettings--mongodb--connectionstring
 
   - stage: PROD
     dependsOn: DEV
