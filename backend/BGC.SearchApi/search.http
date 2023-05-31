@@ -3,4 +3,6 @@
 
 #GET https://{{hostname}}:{{port}}/api/search?query=scythe
 
-GET https://{{hostname}}:{{port}}/api/search?query=My Little Scythe
+#GET https://{{hostname}}:{{port}}/api/search?query=My Little Scythe
+
+GET https://bgc-search-service-dev-ca.wonderfulwater-bf498b4b.eastus.azurecontainerapps.io/api/search?query=scythe

@@ -44,7 +44,8 @@ stages:
     jobs:
       - deployment: DeployDev
         variables:
-          - group: BGC-GLOBAL
+          - group: BGC-SEARCH-API-SHARED
+          - group: BGC-SEARCH-API-DEV
         environment: DEV
         strategy:
           runOnce:
@@ -61,12 +62,6 @@ stages:
                       Write-Host "Setting the name of the build to '$releaseName'."
                       Write-Host "##vso[build.updatebuildnumber]$releaseName"
 
-                - task: Docker@2
-                  displayName: Login to ACR
-                  inputs:
-                    command: login
-                    containerRegistry: $(acrServiceConnection)
-
                 - task: AzureContainerApps@1
                   displayName: Deploy Docker image to Container App
                   inputs:
@@ -77,11 +72,15 @@ stages:
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
+                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:$(mongoDbConnectionString)
 
   - stage: PROD
     dependsOn: DEV
     jobs:
       - deployment: DeployProd
+        variables:
+          - group: BGC-SEARCH-API-SHARED
+          - group: BGC-SEARCH-API-PROD
         environment: PROD
         strategy:
           runOnce:
@@ -93,10 +92,13 @@ stages:
                   displayName: Deploy Docker image to Container App
                   inputs:
                     acrName: $(acrName)
+                    acrUsername: $(acrUsername)
+                    acrPassword: $(acrPassword)
                     azureSubscription: $(armServiceConnectionProd)
                     containerAppName: $(azureContainerAppNameProd)
                     resourceGroup: $(resourceGroupNameProd)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
+                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:$(mongoDbConnectionString)
 
                 - task: git-tag-on-release-task@9
                   displayName: Tag Artifacts

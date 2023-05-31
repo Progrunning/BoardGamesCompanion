@@ -76,6 +76,9 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name = var.shared_resources.resource_group.name
   location            = var.shared_resources.resource_group.location
   sku                 = var.shared_resources.container_registry.sku
+
+  # MK Required for the deployment pipeline to push the image from shared ACR to container app
+  admin_enabled = true
 }
 
 resource "azurerm_api_management" "apim" {
