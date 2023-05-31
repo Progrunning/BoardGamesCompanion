@@ -31,7 +31,6 @@ steps:
         /p:CoverletOutput="${{ parameters.testsAndCoverageOutputDirectory }}/"
         /p:Include="${{ parameters.includeFilterExpression }}"
         /p:Exclude="${{ parameters.excludeFilterExpression }}"
-        --logger trx;LogFileName=testresults.trx
         '
 
   - task: reportgenerator@5
@@ -45,7 +44,7 @@ steps:
     displayName: Publish code coverage
     inputs:
       codeCoverageTool: Cobertura
-      summaryFileLocation: "${{ parameters.testsAndCoverageOutputDirectory }}/coverage.cobertura.xml"
+      summaryFileLocation: "${{ parameters.testsAndCoverageOutputDirectory }}/Cobertura.xml"
       reportDirectory: "${{ parameters.testsAndCoverageOutputDirectory }}/reports"
       failIfCoverageEmpty: true
 
@@ -56,13 +55,15 @@ steps:
       workingDirectory: ${{ parameters.testsAndCoverageOutputDirectory }}
       script: |
         $minCodeCoveragePercentage = ${{ parameters.minCodeCoveragePercentage }}
-        $coberturaFileContent = [xml](get-content '.\coverage.cobertura.xml')
+        $coberturaFileContent = [xml](get-content '/reports/Cobertura.xml')
         $lineRateObj = $($coberturaFileContent.SelectNodes('//coverage') | select "line-rate")
         $lineRatePercentage = [decimal]$lineRateObj."line-rate" * 100
 
         if ($lineRatePercentage -lt $minCodeCoveragePercentage) {
             echo "Expected a minimum code coverage of $minCodeCoveragePercentage percent, actual code coverage is $lineRatePercentage percent."
             exit 1
+        } else {
+            echo "Minimum code coverage of $minCodeCoveragePercentage percent, was satisfied with$lineRatePercentage percent."
         }
 
   - task: DeleteFiles@1
