@@ -188,8 +188,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       context: navigatorState.context,
       delegate: BggSearch(
         searchHistory: widget.viewModel.searchHistory,
-        sortByOptions: widget.viewModel.bggSearchSortByOptions,
-        searchResultsStream: widget.viewModel.bggSearchResultsStream,
+        sortByOptions: widget.viewModel.searchSortByOptions,
+        searchResultsStream: widget.viewModel.searchResultsStream,
         onResultAction: (boardGame, actionType) async =>
             _handleBggSearchResultAction(boardGame, actionType),
         onSortyByUpdate: (sortBy) => widget.viewModel.updateBggSearchSortByOption(sortBy),

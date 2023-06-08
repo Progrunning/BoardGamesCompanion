@@ -331,6 +331,12 @@ class _SearchResultGameDetails extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: AppTheme.theme.textTheme.titleMedium,
           ),
+        if (boardGame.minPlayers != null)
+          Text(
+            boardGame.playersFormatted,
+            overflow: TextOverflow.ellipsis,
+            style: AppTheme.theme.textTheme.titleMedium,
+          ),
       ],
     );
   }

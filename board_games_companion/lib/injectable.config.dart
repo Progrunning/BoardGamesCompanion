@@ -6,55 +6,56 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:board_games_companion/pages/board_game_details/board_game_details_view_model.dart'
-    as _i44;
-import 'package:board_games_companion/pages/collections/collection_search_result_view_model.dart'
-    as _i30;
-import 'package:board_games_companion/pages/collections/collections_view_model.dart'
-    as _i31;
-import 'package:board_games_companion/pages/create_board_game/create_board_game_view_model.dart'
-    as _i32;
-import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_view_model.dart'
     as _i45;
+import 'package:board_games_companion/pages/collections/collection_search_result_view_model.dart'
+    as _i31;
+import 'package:board_games_companion/pages/collections/collections_view_model.dart'
+    as _i32;
+import 'package:board_games_companion/pages/create_board_game/create_board_game_view_model.dart'
+    as _i33;
+import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_view_model.dart'
+    as _i46;
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_note_view_model.dart'
-    as _i37;
-import 'package:board_games_companion/pages/home/home_view_model.dart' as _i46;
+    as _i38;
+import 'package:board_games_companion/pages/home/home_view_model.dart' as _i47;
 import 'package:board_games_companion/pages/hot_board_games/hot_board_games_view_model.dart'
-    as _i34;
+    as _i35;
 import 'package:board_games_companion/pages/player/player_view_model.dart'
-    as _i25;
+    as _i26;
 import 'package:board_games_companion/pages/players/players_view_model.dart'
     as _i11;
 import 'package:board_games_companion/pages/plays/plays_view_model.dart'
-    as _i35;
-import 'package:board_games_companion/pages/playthroughs/playthrough_migration_view_model.dart'
     as _i36;
+import 'package:board_games_companion/pages/playthroughs/playthrough_migration_view_model.dart'
+    as _i37;
 import 'package:board_games_companion/pages/playthroughs/playthrough_players_selection_view_model.dart'
     as _i12;
 import 'package:board_games_companion/pages/playthroughs/playthrough_statistics_view_model.dart'
-    as _i38;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart'
     as _i39;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_history_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_game_settings_view_model.dart'
     as _i40;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_log_game_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_history_view_model.dart'
     as _i41;
-import 'package:board_games_companion/pages/playthroughs/playthroughs_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_log_game_view_model.dart'
     as _i42;
-import 'package:board_games_companion/pages/settings/settings_view_model.dart'
+import 'package:board_games_companion/pages/playthroughs/playthroughs_view_model.dart'
     as _i43;
+import 'package:board_games_companion/pages/settings/settings_view_model.dart'
+    as _i44;
 import 'package:board_games_companion/services/analytics_service.dart' as _i21;
 import 'package:board_games_companion/services/board_games_filters_service.dart'
-    as _i5;
+    as _i4;
 import 'package:board_games_companion/services/board_games_geek_service.dart'
     as _i23;
 import 'package:board_games_companion/services/board_games_search_service.dart'
-    as _i4;
-import 'package:board_games_companion/services/board_games_service.dart'
     as _i24;
+import 'package:board_games_companion/services/board_games_service.dart'
+    as _i25;
+import 'package:board_games_companion/services/environment_service.dart' as _i6;
 import 'package:board_games_companion/services/file_service.dart' as _i7;
 import 'package:board_games_companion/services/player_service.dart' as _i9;
 import 'package:board_games_companion/services/playthroughs_service.dart'
-    as _i26;
+    as _i27;
 import 'package:board_games_companion/services/preferences_service.dart'
     as _i13;
 import 'package:board_games_companion/services/rate_and_review_service.dart'
@@ -65,23 +66,23 @@ import 'package:board_games_companion/services/user_service.dart' as _i19;
 import 'package:board_games_companion/stores/app_store.dart' as _i3;
 import 'package:board_games_companion/stores/board_games_filters_store.dart'
     as _i22;
-import 'package:board_games_companion/stores/board_games_store.dart' as _i29;
+import 'package:board_games_companion/stores/board_games_store.dart' as _i30;
 import 'package:board_games_companion/stores/game_playthroughs_details_store.dart'
-    as _i33;
+    as _i34;
 import 'package:board_games_companion/stores/players_store.dart' as _i10;
-import 'package:board_games_companion/stores/playthroughs_store.dart' as _i27;
+import 'package:board_games_companion/stores/playthroughs_store.dart' as _i28;
 import 'package:board_games_companion/stores/scores_store.dart' as _i16;
 import 'package:board_games_companion/stores/search_store.dart' as _i18;
 import 'package:board_games_companion/stores/user_store.dart' as _i20;
 import 'package:board_games_companion/utilities/analytics_route_observer.dart'
-    as _i28;
+    as _i29;
 import 'package:board_games_companion/utilities/custom_http_client_adapter.dart'
-    as _i6;
+    as _i5;
 import 'package:firebase_analytics/firebase_analytics.dart' as _i8;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import 'services/injectable_register_module.dart' as _i47;
+import 'services/injectable_register_module.dart' as _i48;
 
 // ignore_for_file: unnecessary_lambdas
 // ignore_for_file: lines_longer_than_80_chars
@@ -98,9 +99,9 @@ _i1.GetIt $initGetIt(
   );
   final registerModule = _$RegisterModule();
   gh.singleton<_i3.AppStore>(_i3.AppStore());
-  gh.singleton<_i4.BoardGameSearchService>(_i4.BoardGameSearchService());
-  gh.singleton<_i5.BoardGamesFiltersService>(_i5.BoardGamesFiltersService());
-  gh.factory<_i6.CustomHttpClientAdapter>(() => _i6.CustomHttpClientAdapter());
+  gh.singleton<_i4.BoardGamesFiltersService>(_i4.BoardGamesFiltersService());
+  gh.factory<_i5.CustomHttpClientAdapter>(() => _i5.CustomHttpClientAdapter());
+  gh.singleton<_i6.EnvironmentService>(_i6.EnvironmentService());
   gh.singleton<_i7.FileService>(_i7.FileService());
   gh.singleton<_i8.FirebaseAnalytics>(registerModule.firebaseAnalytics);
   gh.singleton<_i8.FirebaseAnalyticsObserver>(
@@ -125,126 +126,128 @@ _i1.GetIt $initGetIt(
     gh<_i14.RateAndReviewService>(),
   ));
   gh.singleton<_i22.BoardGamesFiltersStore>(_i22.BoardGamesFiltersStore(
-    gh<_i5.BoardGamesFiltersService>(),
+    gh<_i4.BoardGamesFiltersService>(),
     gh<_i21.AnalyticsService>(),
   ));
   gh.singleton<_i23.BoardGamesGeekService>(
-      _i23.BoardGamesGeekService(gh<_i6.CustomHttpClientAdapter>()));
-  gh.singleton<_i24.BoardGamesService>(
-      _i24.BoardGamesService(gh<_i23.BoardGamesGeekService>()));
-  gh.factory<_i25.PlayerViewModel>(
-      () => _i25.PlayerViewModel(gh<_i10.PlayersStore>()));
-  gh.singleton<_i26.PlaythroughService>(
-      _i26.PlaythroughService(gh<_i15.ScoreService>()));
-  gh.singleton<_i27.PlaythroughsStore>(_i27.PlaythroughsStore(
-    gh<_i26.PlaythroughService>(),
+      _i23.BoardGamesGeekService(gh<_i5.CustomHttpClientAdapter>()));
+  gh.singleton<_i24.BoardGamesSearchService>(
+      _i24.BoardGamesSearchService(gh<_i6.EnvironmentService>()));
+  gh.singleton<_i25.BoardGamesService>(
+      _i25.BoardGamesService(gh<_i23.BoardGamesGeekService>()));
+  gh.factory<_i26.PlayerViewModel>(
+      () => _i26.PlayerViewModel(gh<_i10.PlayersStore>()));
+  gh.singleton<_i27.PlaythroughService>(
+      _i27.PlaythroughService(gh<_i15.ScoreService>()));
+  gh.singleton<_i28.PlaythroughsStore>(_i28.PlaythroughsStore(
+    gh<_i27.PlaythroughService>(),
     gh<_i16.ScoresStore>(),
   ));
-  gh.factory<_i28.AnalyticsRouteObserver>(
-      () => _i28.AnalyticsRouteObserver(gh<_i21.AnalyticsService>()));
-  gh.singleton<_i29.BoardGamesStore>(_i29.BoardGamesStore(
-    gh<_i24.BoardGamesService>(),
-    gh<_i26.PlaythroughService>(),
+  gh.factory<_i29.AnalyticsRouteObserver>(
+      () => _i29.AnalyticsRouteObserver(gh<_i21.AnalyticsService>()));
+  gh.singleton<_i30.BoardGamesStore>(_i30.BoardGamesStore(
+    gh<_i25.BoardGamesService>(),
+    gh<_i27.PlaythroughService>(),
   ));
-  gh.factory<_i30.CollectionSearchResultViewModel>(
-      () => _i30.CollectionSearchResultViewModel(gh<_i29.BoardGamesStore>()));
-  gh.factory<_i31.CollectionsViewModel>(() => _i31.CollectionsViewModel(
+  gh.factory<_i31.CollectionSearchResultViewModel>(
+      () => _i31.CollectionSearchResultViewModel(gh<_i30.BoardGamesStore>()));
+  gh.factory<_i32.CollectionsViewModel>(() => _i32.CollectionsViewModel(
         gh<_i20.UserStore>(),
-        gh<_i29.BoardGamesStore>(),
+        gh<_i30.BoardGamesStore>(),
         gh<_i22.BoardGamesFiltersStore>(),
         gh<_i16.ScoresStore>(),
-        gh<_i27.PlaythroughsStore>(),
+        gh<_i28.PlaythroughsStore>(),
         gh<_i10.PlayersStore>(),
       ));
-  gh.factory<_i32.CreateBoardGameViewModel>(() => _i32.CreateBoardGameViewModel(
-        gh<_i29.BoardGamesStore>(),
+  gh.factory<_i33.CreateBoardGameViewModel>(() => _i33.CreateBoardGameViewModel(
+        gh<_i30.BoardGamesStore>(),
         gh<_i7.FileService>(),
       ));
-  gh.singleton<_i33.GamePlaythroughsDetailsStore>(
-      _i33.GamePlaythroughsDetailsStore(
-    gh<_i27.PlaythroughsStore>(),
+  gh.singleton<_i34.GamePlaythroughsDetailsStore>(
+      _i34.GamePlaythroughsDetailsStore(
+    gh<_i28.PlaythroughsStore>(),
     gh<_i16.ScoresStore>(),
     gh<_i10.PlayersStore>(),
-    gh<_i29.BoardGamesStore>(),
+    gh<_i30.BoardGamesStore>(),
   ));
-  gh.singleton<_i34.HotBoardGamesViewModel>(_i34.HotBoardGamesViewModel(
-    gh<_i29.BoardGamesStore>(),
+  gh.singleton<_i35.HotBoardGamesViewModel>(_i35.HotBoardGamesViewModel(
+    gh<_i30.BoardGamesStore>(),
     gh<_i23.BoardGamesGeekService>(),
     gh<_i21.AnalyticsService>(),
   ));
-  gh.factory<_i35.PlaysViewModel>(() => _i35.PlaysViewModel(
-        gh<_i27.PlaythroughsStore>(),
-        gh<_i29.BoardGamesStore>(),
+  gh.factory<_i36.PlaysViewModel>(() => _i36.PlaysViewModel(
+        gh<_i28.PlaythroughsStore>(),
+        gh<_i30.BoardGamesStore>(),
         gh<_i10.PlayersStore>(),
         gh<_i16.ScoresStore>(),
         gh<_i21.AnalyticsService>(),
       ));
-  gh.factory<_i36.PlaythroughMigrationViewModel>(() =>
-      _i36.PlaythroughMigrationViewModel(
-          gh<_i33.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i37.PlaythroughNoteViewModel>(() =>
-      _i37.PlaythroughNoteViewModel(gh<_i33.GamePlaythroughsDetailsStore>()));
-  gh.singleton<_i38.PlaythroughStatisticsViewModel>(
-      _i38.PlaythroughStatisticsViewModel(
+  gh.factory<_i37.PlaythroughMigrationViewModel>(() =>
+      _i37.PlaythroughMigrationViewModel(
+          gh<_i34.GamePlaythroughsDetailsStore>()));
+  gh.factory<_i38.PlaythroughNoteViewModel>(() =>
+      _i38.PlaythroughNoteViewModel(gh<_i34.GamePlaythroughsDetailsStore>()));
+  gh.singleton<_i39.PlaythroughStatisticsViewModel>(
+      _i39.PlaythroughStatisticsViewModel(
     gh<_i9.PlayerService>(),
     gh<_i16.ScoresStore>(),
-    gh<_i33.GamePlaythroughsDetailsStore>(),
+    gh<_i34.GamePlaythroughsDetailsStore>(),
   ));
-  gh.factory<_i39.PlaythroughsGameSettingsViewModel>(
-      () => _i39.PlaythroughsGameSettingsViewModel(
-            gh<_i29.BoardGamesStore>(),
-            gh<_i33.GamePlaythroughsDetailsStore>(),
+  gh.factory<_i40.PlaythroughsGameSettingsViewModel>(
+      () => _i40.PlaythroughsGameSettingsViewModel(
+            gh<_i30.BoardGamesStore>(),
+            gh<_i34.GamePlaythroughsDetailsStore>(),
           ));
-  gh.factory<_i40.PlaythroughsHistoryViewModel>(() =>
-      _i40.PlaythroughsHistoryViewModel(
-          gh<_i33.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i41.PlaythroughsLogGameViewModel>(
-      () => _i41.PlaythroughsLogGameViewModel(
+  gh.factory<_i41.PlaythroughsHistoryViewModel>(() =>
+      _i41.PlaythroughsHistoryViewModel(
+          gh<_i34.GamePlaythroughsDetailsStore>()));
+  gh.factory<_i42.PlaythroughsLogGameViewModel>(
+      () => _i42.PlaythroughsLogGameViewModel(
             gh<_i10.PlayersStore>(),
-            gh<_i33.GamePlaythroughsDetailsStore>(),
+            gh<_i34.GamePlaythroughsDetailsStore>(),
             gh<_i21.AnalyticsService>(),
           ));
-  gh.factory<_i42.PlaythroughsViewModel>(() => _i42.PlaythroughsViewModel(
-        gh<_i33.GamePlaythroughsDetailsStore>(),
+  gh.factory<_i43.PlaythroughsViewModel>(() => _i43.PlaythroughsViewModel(
+        gh<_i34.GamePlaythroughsDetailsStore>(),
         gh<_i10.PlayersStore>(),
         gh<_i21.AnalyticsService>(),
-        gh<_i24.BoardGamesService>(),
+        gh<_i25.BoardGamesService>(),
         gh<_i20.UserStore>(),
       ));
-  gh.singleton<_i43.SettingsViewModel>(_i43.SettingsViewModel(
+  gh.singleton<_i44.SettingsViewModel>(_i44.SettingsViewModel(
     gh<_i7.FileService>(),
-    gh<_i24.BoardGamesService>(),
-    gh<_i5.BoardGamesFiltersService>(),
+    gh<_i25.BoardGamesService>(),
+    gh<_i4.BoardGamesFiltersService>(),
     gh<_i9.PlayerService>(),
     gh<_i19.UserService>(),
-    gh<_i26.PlaythroughService>(),
+    gh<_i27.PlaythroughService>(),
     gh<_i15.ScoreService>(),
     gh<_i13.PreferencesService>(),
     gh<_i3.AppStore>(),
     gh<_i20.UserStore>(),
-    gh<_i29.BoardGamesStore>(),
+    gh<_i30.BoardGamesStore>(),
   ));
-  gh.factory<_i44.BoardGameDetailsViewModel>(
-      () => _i44.BoardGameDetailsViewModel(
-            gh<_i29.BoardGamesStore>(),
+  gh.factory<_i45.BoardGameDetailsViewModel>(
+      () => _i45.BoardGameDetailsViewModel(
+            gh<_i30.BoardGamesStore>(),
             gh<_i21.AnalyticsService>(),
           ));
-  gh.factory<_i45.EditPlaythoughViewModel>(() =>
-      _i45.EditPlaythoughViewModel(gh<_i33.GamePlaythroughsDetailsStore>()));
-  gh.factory<_i46.HomeViewModel>(() => _i46.HomeViewModel(
+  gh.factory<_i46.EditPlaythoughViewModel>(() =>
+      _i46.EditPlaythoughViewModel(gh<_i34.GamePlaythroughsDetailsStore>()));
+  gh.factory<_i47.HomeViewModel>(() => _i47.HomeViewModel(
         gh<_i21.AnalyticsService>(),
         gh<_i14.RateAndReviewService>(),
         gh<_i11.PlayersViewModel>(),
         gh<_i22.BoardGamesFiltersStore>(),
-        gh<_i31.CollectionsViewModel>(),
-        gh<_i34.HotBoardGamesViewModel>(),
-        gh<_i35.PlaysViewModel>(),
+        gh<_i32.CollectionsViewModel>(),
+        gh<_i35.HotBoardGamesViewModel>(),
+        gh<_i36.PlaysViewModel>(),
         gh<_i3.AppStore>(),
         gh<_i18.SearchStore>(),
-        gh<_i29.BoardGamesStore>(),
-        gh<_i23.BoardGamesGeekService>(),
+        gh<_i30.BoardGamesStore>(),
+        gh<_i24.BoardGamesSearchService>(),
       ));
   return getIt;
 }
 
-class _$RegisterModule extends _i47.RegisterModule {}
+class _$RegisterModule extends _i48.RegisterModule {}

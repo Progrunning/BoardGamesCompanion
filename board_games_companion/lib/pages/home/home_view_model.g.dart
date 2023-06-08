@@ -31,45 +31,43 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
           Computed<List<SearchHistoryEntry>>(() => super.searchHistory,
               name: '_HomeViewModelBase.searchHistory'))
       .value;
-  Computed<SortBy?>? _$bggSearchSelectedSortByComputed;
+  Computed<SortBy?>? _$searchSelectedSortByComputed;
 
   @override
-  SortBy? get bggSearchSelectedSortBy => (_$bggSearchSelectedSortByComputed ??=
-          Computed<SortBy?>(() => super.bggSearchSelectedSortBy,
-              name: '_HomeViewModelBase.bggSearchSelectedSortBy'))
+  SortBy? get searchSelectedSortBy => (_$searchSelectedSortByComputed ??=
+          Computed<SortBy?>(() => super.searchSelectedSortBy,
+              name: '_HomeViewModelBase.searchSelectedSortBy'))
       .value;
 
-  late final _$bggSearchResultsStreamAtom =
-      Atom(name: '_HomeViewModelBase.bggSearchResultsStream', context: context);
+  late final _$searchResultsStreamAtom =
+      Atom(name: '_HomeViewModelBase.searchResultsStream', context: context);
 
   @override
-  ObservableStream<List<BoardGameDetails>> get bggSearchResultsStream {
-    _$bggSearchResultsStreamAtom.reportRead();
-    return super.bggSearchResultsStream;
+  ObservableStream<List<BoardGameDetails>> get searchResultsStream {
+    _$searchResultsStreamAtom.reportRead();
+    return super.searchResultsStream;
   }
 
   @override
-  set bggSearchResultsStream(ObservableStream<List<BoardGameDetails>> value) {
-    _$bggSearchResultsStreamAtom
-        .reportWrite(value, super.bggSearchResultsStream, () {
-      super.bggSearchResultsStream = value;
+  set searchResultsStream(ObservableStream<List<BoardGameDetails>> value) {
+    _$searchResultsStreamAtom.reportWrite(value, super.searchResultsStream, () {
+      super.searchResultsStream = value;
     });
   }
 
-  late final _$bggSearchSortByOptionsAtom =
-      Atom(name: '_HomeViewModelBase.bggSearchSortByOptions', context: context);
+  late final _$searchSortByOptionsAtom =
+      Atom(name: '_HomeViewModelBase.searchSortByOptions', context: context);
 
   @override
-  ObservableList<SortBy> get bggSearchSortByOptions {
-    _$bggSearchSortByOptionsAtom.reportRead();
-    return super.bggSearchSortByOptions;
+  ObservableList<SortBy> get searchSortByOptions {
+    _$searchSortByOptionsAtom.reportRead();
+    return super.searchSortByOptions;
   }
 
   @override
-  set bggSearchSortByOptions(ObservableList<SortBy> value) {
-    _$bggSearchSortByOptionsAtom
-        .reportWrite(value, super.bggSearchSortByOptions, () {
-      super.bggSearchSortByOptions = value;
+  set searchSortByOptions(ObservableList<SortBy> value) {
+    _$searchSortByOptionsAtom.reportWrite(value, super.searchSortByOptions, () {
+      super.searchSortByOptions = value;
     });
   }
 
@@ -148,13 +146,13 @@ mixin _$HomeViewModel on _HomeViewModelBase, Store {
   @override
   String toString() {
     return '''
-bggSearchResultsStream: ${bggSearchResultsStream},
-bggSearchSortByOptions: ${bggSearchSortByOptions},
+searchResultsStream: ${searchResultsStream},
+searchSortByOptions: ${searchSortByOptions},
 futureloadData: ${futureloadData},
 allBoardGames: ${allBoardGames},
 anyBoardGamesInCollections: ${anyBoardGamesInCollections},
 searchHistory: ${searchHistory},
-bggSearchSelectedSortBy: ${bggSearchSelectedSortBy}
+searchSelectedSortBy: ${searchSelectedSortBy}
     ''';
   }
 }

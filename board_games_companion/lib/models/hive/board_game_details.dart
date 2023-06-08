@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:board_games_companion/models/api/board_game_type.dart';
+import 'package:board_games_companion/models/api/search/board_game_search_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:sprintf/sprintf.dart';
@@ -65,6 +67,23 @@ class BoardGameDetails with _$BoardGameDetails {
   }) = _BoardGameDetails;
 
   const BoardGameDetails._();
+
+  factory BoardGameDetails.fromSearchResult(BoardGameSearchResultDto searchResult) =>
+      BoardGameDetails(
+        id: searchResult.id,
+        name: searchResult.name,
+        yearPublished: searchResult.yearPublished,
+        imageUrl: searchResult.imageUrl,
+        thumbnailUrl: searchResult.thumbnailUrl,
+        description: searchResult.description,
+        minPlayers: searchResult.minNumberOfPlayers,
+        maxPlayers: searchResult.maxNumberOfPlayers,
+        minPlaytime: searchResult.minPlaytimeInMinutes,
+        maxPlaytime: searchResult.maxPlaytimeInMinutes,
+        rank: searchResult.rank,
+        avgWeight: searchResult.complexity,
+        isExpansion: searchResult.type == BoardGameType.expansion,
+      );
 
   RegExp get onlyLettersOrNumbersRegex => RegExp(r'[a-zA-Z0-9\-]+');
   static const Set<String> bggNotUsedUrlEncodedNameParts = {
