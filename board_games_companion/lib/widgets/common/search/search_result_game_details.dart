@@ -38,7 +38,7 @@ class SearchResultGameDetails extends StatelessWidget {
             propertyName: boardGame.playersFormatted,
           ),
         ],
-        if (boardGame.minPlaytime != null) ...[
+        if (boardGame.minPlaytime != null && boardGame.minPlaytime != 0) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
             icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
@@ -66,7 +66,7 @@ class SearchResultGameDetails extends StatelessWidget {
                 boardGame.rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
           ),
         ],
-        if (boardGame.yearPublished != null) ...[
+        if (boardGame.yearPublished != null && boardGame.yearPublished != 0) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
             icon: const Icon(Icons.event, size: _gameStatIconSize),
