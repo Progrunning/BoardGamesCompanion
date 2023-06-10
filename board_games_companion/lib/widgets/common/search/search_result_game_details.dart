@@ -28,25 +28,25 @@ class SearchResultGameDetails extends StatelessWidget {
       children: [
         Text(
           boardGame.name,
-          overflow: TextOverflow.ellipsis,
           style: AppTheme.theme.textTheme.bodyLarge,
         ),
-        const SizedBox(height: Dimensions.standardSpacing),
         if (boardGame.minPlayers != null) ...[
+          const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
             icon: const Icon(Icons.people, size: _gameStatIconSize),
             iconWidth: _gamePropertyIconSize,
             propertyName: boardGame.playersFormatted,
           ),
-          const SizedBox(height: Dimensions.standardSpacing),
         ],
-        if (boardGame.minPlaytime != null)
+        if (boardGame.minPlaytime != null) ...[
+          const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
             icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
             iconWidth: _gamePropertyIconSize,
             propertyName: boardGame.playtimeFormatted,
           ),
-        if (boardGame.avgWeight != null) ...[
+        ],
+        if (boardGame.avgWeight != null && boardGame.avgWeight != 0) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
             icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced, size: _gameStatIconSize),

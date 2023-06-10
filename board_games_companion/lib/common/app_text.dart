@@ -229,7 +229,7 @@ class AppText {
   static const gamesPageSearchNoSearchResults =
       '''It looks there's no games in your collections that match the search phrase ''';
   static const gamesPageSearchClearSaerch = 'Clear search';
-  static const gamesPageSearchResultComplexityGameStatFormat = '%s (complexity rating)';
+  static const gamesPageSearchResultComplexityGameStatFormat = '%s';
   static const gamesPageSearchResultRefreshDetails =
       'Games imported from the BGG collections are missing some details (e.g. complexity or expansions). Refresh the data to get the latest information.';
   static const gamesPageSearchResultExpansionsSectionTitleFormat = 'Expansions (%i)';
