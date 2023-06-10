@@ -40,13 +40,11 @@ class BoardGameRatingHexagon extends StatelessWidget {
       height: _height,
       hexColor: _hexColor,
       hexColorOpacity: _hexColorOpacity,
-      child: Center(
-        child: Text(
-          _rating == null
-              ? '?'
-              : _rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
-          style: TextStyle(color: _fontColor, fontSize: _fontSize),
-        ),
+      child: Text(
+        _rating == null
+            ? '?'
+            : _rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
+        style: TextStyle(color: _fontColor, fontSize: _fontSize),
       ),
     );
   }

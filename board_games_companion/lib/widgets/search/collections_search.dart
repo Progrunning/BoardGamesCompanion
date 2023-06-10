@@ -7,7 +7,6 @@ import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
-import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
@@ -17,12 +16,11 @@ import '../../pages/collections/collections_page.dart';
 import '../../pages/collections/search_suggestion.dart';
 import '../../pages/home/home_page.dart';
 import '../../widgets/board_games/board_game_tile.dart';
-import '../../widgets/common/board_game/board_game_property.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
-import '../../widgets/common/rating_hexagon.dart';
+import '../common/search/search_result_game_details.dart';
 
 class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
   CollectionsSearch({
@@ -250,7 +248,7 @@ class _SearchResultGame extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: Dimensions.standardSpacing),
-                    Expanded(child: _SearchResultGameDetails(boardGame: boardGame)),
+                    Expanded(child: SearchResultGameDetails(boardGame: boardGame)),
                     _SearchResultGameActions(boardGame: boardGame, onResultAction: onResultAction),
                   ],
                 ),
@@ -396,64 +394,6 @@ class _SearchResultGameRefreshDataState extends State<_SearchResultGameRefreshDa
   }
 }
 
-class _SearchResultGameDetails extends StatelessWidget {
-  const _SearchResultGameDetails({
-    Key? key,
-    required this.boardGame,
-  }) : super(key: key);
-
-  final BoardGameDetails boardGame;
-
-  static const double _gameStatIconSize = 16;
-  static const double _gamePropertyIconSize = 20;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          boardGame.name,
-          overflow: TextOverflow.ellipsis,
-          style: AppTheme.theme.textTheme.bodyLarge,
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        BoardGameProperty(
-          icon: const Icon(Icons.people, size: _gameStatIconSize),
-          iconWidth: _gamePropertyIconSize,
-          propertyName: boardGame.playersFormatted,
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        BoardGameProperty(
-          icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
-          iconWidth: _gamePropertyIconSize,
-          propertyName: boardGame.playtimeFormatted,
-        ),
-        if (boardGame.avgWeight != null) ...[
-          const SizedBox(height: Dimensions.standardSpacing),
-          BoardGameProperty(
-            icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced, size: _gameStatIconSize),
-            iconWidth: _gamePropertyIconSize,
-            propertyName: sprintf(
-              AppText.gamesPageSearchResultComplexityGameStatFormat,
-              [boardGame.avgWeight!.toStringAsFixed(2)],
-            ),
-          ),
-        ],
-        if (boardGame.rating != null) ...[
-          const SizedBox(height: Dimensions.standardSpacing),
-          BoardGameProperty(
-            icon: const RatingHexagon(width: _gameStatIconSize, height: _gameStatIconSize),
-            iconWidth: _gamePropertyIconSize,
-            propertyName:
-                boardGame.rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
-          ),
-        ]
-      ],
-    );
-  }
-}
-
 class _SearchResultGameActions extends StatelessWidget {
   const _SearchResultGameActions({
     Key? key,
@@ -472,7 +412,7 @@ class _SearchResultGameActions extends StatelessWidget {
           icon: const Icon(Icons.info),
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.details),
         ),
-        const Expanded(child: SizedBox.shrink()),
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
         IconButton(
           icon: const FaIcon(FontAwesomeIcons.dice),
           onPressed: () => onResultAction(boardGame, BoardGameResultActionType.playthroughs),

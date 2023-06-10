@@ -158,6 +158,10 @@ class BoardGameDetails with _$BoardGameDetails {
     return null;
   }
 
+  String? get votesFormatted => _formatNumber(votes);
+
+  String? get commentsNumberFormatted => _formatNumber(commentsNumber);
+
   bool get hasIncompleteDetails =>
       (isBggSynced ?? false) &&
       (avgWeight == null || rating == null || commentsNumber == null || votes == null);
@@ -202,5 +206,18 @@ class BoardGameDetails with _$BoardGameDetails {
       final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
       return regexMatch;
     }).join('-');
+  }
+
+  String? _formatNumber(int? number) {
+    if (number == null) {
+      return null;
+    }
+
+    if (number < 1000) {
+      return number.toString();
+    }
+
+    final numberOfThousands = number / 1000;
+    return '${numberOfThousands.round()}k';
   }
 }

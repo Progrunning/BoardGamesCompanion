@@ -19,6 +19,7 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
 import '../common/loading_indicator_widget.dart';
+import '../common/search/search_result_game_details.dart';
 import '../common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../common/sorting/sort_by_chip.dart';
 
@@ -293,7 +294,7 @@ class _SearchResultGame extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: Dimensions.standardSpacing),
-                      Expanded(child: _SearchResultGameDetails(boardGame: boardGame)),
+                      Expanded(child: SearchResultGameDetails(boardGame: boardGame)),
                     ],
                   ),
                 ),
@@ -302,42 +303,6 @@ class _SearchResultGame extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SearchResultGameDetails extends StatelessWidget {
-  const _SearchResultGameDetails({
-    Key? key,
-    required this.boardGame,
-  }) : super(key: key);
-
-  final BoardGameDetails boardGame;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          boardGame.name,
-          overflow: TextOverflow.ellipsis,
-          style: AppTheme.theme.textTheme.bodyLarge,
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        if (boardGame.yearPublished != null)
-          Text(
-            sprintf(AppText.onlineSearchGamePublishYearFormat, [boardGame.yearPublished]),
-            overflow: TextOverflow.ellipsis,
-            style: AppTheme.theme.textTheme.titleMedium,
-          ),
-        if (boardGame.minPlayers != null)
-          Text(
-            boardGame.playersFormatted,
-            overflow: TextOverflow.ellipsis,
-            style: AppTheme.theme.textTheme.titleMedium,
-          ),
-      ],
     );
   }
 }
