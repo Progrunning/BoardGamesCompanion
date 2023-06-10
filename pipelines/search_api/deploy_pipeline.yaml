@@ -62,6 +62,11 @@ stages:
                       Write-Host "Setting the name of the build to '$releaseName'."
                       Write-Host "##vso[build.updatebuildnumber]$releaseName"
 
+                - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
+                  parameters:
+                    containerName: $(azureContainerAppNameDev)
+                    resourceGroupName: $(resourceGroupNameDev)
+
                 - task: AzureContainerApps@1
                   displayName: Deploy Docker image to Container App
                   inputs:
@@ -72,7 +77,6 @@ stages:
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    # TODO Find a way to set the secret (CLI?) and then add this variable
                     environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:appsettings--mongodb--connectionstring
 
   - stage: PROD
@@ -89,6 +93,11 @@ stages:
               steps:
                 - download: none
 
+                - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
+                  parameters:
+                    containerName: $(azureContainerAppNameProd)
+                    resourceGroupName: $(resourceGroupNameProd)
+
                 - task: AzureContainerApps@1
                   displayName: Deploy Docker image to Container App
                   inputs:
@@ -99,7 +108,7 @@ stages:
                     containerAppName: $(azureContainerAppNameProd)
                     resourceGroup: $(resourceGroupNameProd)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:$(mongoDbConnectionString)
+                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:appsettings--mongodb--connectionstring
 
                 - task: git-tag-on-release-task@9
                   displayName: Tag Artifacts
