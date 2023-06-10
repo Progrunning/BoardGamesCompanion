@@ -64,6 +64,7 @@ stages:
 
                 - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
                   parameters:
+                    armServiceConnection: $(armServiceConnectionDev)
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroupName: $(resourceGroupNameDev)
 
@@ -95,6 +96,7 @@ stages:
 
                 - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
                   parameters:
+                    armServiceConnection: $(armServiceConnectionProd)
                     containerAppName: $(azureContainerAppNameProd)
                     resourceGroupName: $(resourceGroupNameProd)
 
