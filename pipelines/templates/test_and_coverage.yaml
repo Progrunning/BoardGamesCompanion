@@ -26,11 +26,8 @@ steps:
       publishTestResults: false
       arguments: '
         -c Release
-        /p:CollectCoverage=true
-        /p:CoverletOutputFormat=cobertura
-        /p:CoverletOutput="${{ parameters.testsAndCoverageOutputDirectory }}/"
-        /p:Include="${{ parameters.includeFilterExpression }}"
-        /p:Exclude="${{ parameters.excludeFilterExpression }}"
+        --collect:"XPlat Code Coverage"
+        -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="${{ parameters.includeFilterExpression }}" DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="${{ parameters.excludeFilterExpression }}"
         '
 
   - task: reportgenerator@5
@@ -63,7 +60,7 @@ steps:
             echo "Expected a minimum code coverage of $minCodeCoveragePercentage percent, actual code coverage is $lineRatePercentage percent."
             exit 1
         } else {
-            echo "Minimum code coverage of $minCodeCoveragePercentage percent, was satisfied with$lineRatePercentage percent."
+            echo "Minimum code coverage of $minCodeCoveragePercentage percent, was satisfied with $lineRatePercentage percent."
         }
 
   - task: DeleteFiles@1
@@ -71,4 +68,4 @@ steps:
     displayName: Clean up test coverage file(s)
     inputs:
       SourceFolder: "$(System.DefaultWorkingDirectory/**/TestResults"
-      Contents: "**/*.coverage"
+      Contents: "**/*"
