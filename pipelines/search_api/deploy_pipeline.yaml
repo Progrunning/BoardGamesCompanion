@@ -64,7 +64,7 @@ stages:
 
                 - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
                   parameters:
-                    containerName: $(azureContainerAppNameDev)
+                    containerAppName: $(azureContainerAppNameDev)
                     resourceGroupName: $(resourceGroupNameDev)
 
                 - task: AzureContainerApps@1
@@ -77,7 +77,7 @@ stages:
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroup: $(resourceGroupNameDev)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:appsettings--mongodb--connectionstring
+                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:mongodb-connection
 
   - stage: PROD
     dependsOn: DEV
@@ -95,7 +95,7 @@ stages:
 
                 - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
                   parameters:
-                    containerName: $(azureContainerAppNameProd)
+                    containerAppName: $(azureContainerAppNameProd)
                     resourceGroupName: $(resourceGroupNameProd)
 
                 - task: AzureContainerApps@1
@@ -108,7 +108,7 @@ stages:
                     containerAppName: $(azureContainerAppNameProd)
                     resourceGroup: $(resourceGroupNameProd)
                     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:appsettings--mongodb--connectionstring
+                    environmentVariables: AppSettings__MongoDb__ConnectionString=secretref:mongodb-connection
 
                 - task: git-tag-on-release-task@9
                   displayName: Tag Artifacts
