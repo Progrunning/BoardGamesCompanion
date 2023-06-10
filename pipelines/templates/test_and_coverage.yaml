@@ -33,7 +33,7 @@ steps:
   - task: reportgenerator@5
     displayName: Generate test report
     inputs:
-      reports: "${{ parameters.testsAndCoverageOutputDirectory }}/coverage.cobertura.xml"
+      reports: "$(System.DefaultWorkingDirectory)/**/coverage.cobertura.xml"
       targetdir: "${{ parameters.testsAndCoverageOutputDirectory }}/reports"
       reporttypes: "Cobertura;Badges"
 
@@ -41,7 +41,7 @@ steps:
     displayName: Publish code coverage
     inputs:
       codeCoverageTool: Cobertura
-      summaryFileLocation: "${{ parameters.testsAndCoverageOutputDirectory }}/Cobertura.xml"
+      summaryFileLocation: "${{ parameters.testsAndCoverageOutputDirectory }}/reports/Cobertura.xml"
       reportDirectory: "${{ parameters.testsAndCoverageOutputDirectory }}/reports"
       failIfCoverageEmpty: true
 
@@ -52,7 +52,7 @@ steps:
       workingDirectory: ${{ parameters.testsAndCoverageOutputDirectory }}
       script: |
         $minCodeCoveragePercentage = ${{ parameters.minCodeCoveragePercentage }}
-        $coberturaFileContent = [xml](get-content '/reports/Cobertura.xml')
+        $coberturaFileContent = [xml](get-content './reports/Cobertura.xml')
         $lineRateObj = $($coberturaFileContent.SelectNodes('//coverage') | select "line-rate")
         $lineRatePercentage = [decimal]$lineRateObj."line-rate" * 100
 
@@ -60,12 +60,12 @@ steps:
             echo "Expected a minimum code coverage of $minCodeCoveragePercentage percent, actual code coverage is $lineRatePercentage percent."
             exit 1
         } else {
-            echo "Minimum code coverage of $minCodeCoveragePercentage percent, was satisfied with $lineRatePercentage percent."
+          echo "Code coverage is $lineRatePercentage percent, satisfying minimum coverage of $minCodeCoveragePercentage percent"
         }
 
   - task: DeleteFiles@1
     condition: always()
     displayName: Clean up test coverage file(s)
     inputs:
-      SourceFolder: "$(System.DefaultWorkingDirectory/**/TestResults"
+      SourceFolder: "$(System.DefaultWorkingDirectory)/**/TestResults"
       Contents: "**/*"
