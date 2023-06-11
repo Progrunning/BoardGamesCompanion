@@ -63,7 +63,6 @@ stages:
                       Write-Host "##vso[build.updatebuildnumber]$releaseName"
 
                 - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
-                  continueOnError: true
                   parameters:
                     armServiceConnection: $(armServiceConnectionDev)
                     containerAppName: $(azureContainerAppNameDev)
@@ -71,8 +70,6 @@ stages:
 
                 - task: AzureContainerApps@1
                   displayName: Deploy Docker image to Container App
-                  # Previous task relies on preview azure cli commands and might fail
-                  # Manual intervention with secrets might be required
                   inputs:
                     acrName: $(acrName)
                     acrUsername: $(acrUsername)
