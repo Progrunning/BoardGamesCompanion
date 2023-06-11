@@ -1,11 +1,6 @@
 ﻿using BGC.SearchApi.Common;
 using BGC.SearchApi.Models.Domain;
-using BGC.SearchApi.Models.Settings;
 using BGC.SearchApi.Repositories;
-using BGC.SearchApi.Services;
-using BGC.SearchApi.UnitTests.Helpers;
-
-using Microsoft.Extensions.Options;
 
 using MongoDB.Driver;
 

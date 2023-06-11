@@ -60,7 +60,7 @@ public class BggService : IBggService
 
         return new BoardGameSearchResponse()
         {
-            BoardGames = searchResults
+            BoardGames = searchResults,
         };
     }
 }
