@@ -70,6 +70,9 @@ stages:
 
                 - task: AzureContainerApps@1
                   displayName: Deploy Docker image to Container App
+                  # Previous task relies on preview azure cli commands and might fail
+                  # Manual intervention with secrets might be required
+                  continueOnError: true
                   inputs:
                     acrName: $(acrName)
                     acrUsername: $(acrUsername)
