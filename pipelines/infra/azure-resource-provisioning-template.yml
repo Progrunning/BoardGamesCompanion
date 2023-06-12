@@ -24,10 +24,10 @@ steps:
       command: "init"
       workingDirectory: ${{ parameters.workingDirectory }}
       backendServiceArm: ${{ parameters.sharedAzureSpnConnectionName }}
-      backendAzureRmResourceGroupName: ${{ parameters.sharedRecourceGroupName }}
-      backendAzureRmStorageAccountName: ${{ parameters.sharedStorageAccountName }}
-      backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
-      backendAzureRmKey: "terraform.tfstate"
+      # backendAzureRmResourceGroupName: ${{ parameters.sharedRecourceGroupName }}
+      # backendAzureRmStorageAccountName: ${{ parameters.sharedStorageAccountName }}
+      # backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
+      # backendAzureRmKey: "terraform.tfstate"
 
   - task: TerraformTaskV4@4
     displayName: Terraform plan
