@@ -15,8 +15,6 @@ variables:
   - group: BGC-GLOBAL
   - name: terraformVersion
     value: $[variables['terraform.version']]
-  - name: isMainBranch
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 stages:
   - stage: DEV
@@ -40,7 +38,6 @@ stages:
                     terraformStateContainerName: $(terraformStateContainerName)
                     terraformVersion: $(terraformVersion)
   - stage: PROD
-    condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
     variables:
       - group: BGC-PROD-INFRA
     jobs:
