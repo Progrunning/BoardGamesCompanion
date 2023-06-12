@@ -54,14 +54,8 @@ terraform {
       version = "~> 3.54.0"
     }
   }
-  # Can't use variables to populate this data
-  # See for details -> https://github.com/hashicorp/terraform/issues/13022
+
   backend "azurerm" {
-    subscription_id      = "2b318413-397e-40dc-b433-7aeee9e6f546"
-    resource_group_name  = "bgc-shared-rg"
-    storage_account_name = "bgcsharedst"
-    container_name       = "tfstate-prod"
-    key                  = "root.terraform.tfstate"
   }
 
   required_version = ">= 1.4.4"
