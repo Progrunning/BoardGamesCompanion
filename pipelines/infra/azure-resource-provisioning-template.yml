@@ -2,8 +2,9 @@ parameters:
   workingDirectory:
   azureSpnConnectionName:
   azureSpnConnectionId:
-  resourceGroupName:
-  storageAccountName:
+  sharedStorageAccountName:
+  sharedRecourceGroupName:
+  terraformStateContainerName:
   terraformVersion:
 
 steps:
@@ -23,9 +24,9 @@ steps:
       command: "init"
       workingDirectory: ${{ parameters.workingDirectory }}
       backendServiceArm: ${{ parameters.azureSpnConnectionName }}
-      backendAzureRmResourceGroupName: ${{ parameters.resourceGroupName }}
-      backendAzureRmStorageAccountName: ${{ parameters.storageAccountName }}
-      backendAzureRmContainerName: "tfstate"
+      backendAzureRmResourceGroupName: ${{ parameters.sharedRecourceGroupName }}
+      backendAzureRmStorageAccountName: ${{ parameters.sharedStorageAccountName }}
+      backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
       backendAzureRmKey: "terraform.tfstate"
 
   - task: TerraformTaskV4@4
