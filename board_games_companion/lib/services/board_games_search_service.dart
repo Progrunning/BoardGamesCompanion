@@ -24,7 +24,7 @@ class BoardGamesSearchService {
     final response = await http.get(
       Uri.parse(url),
       headers: <String, String>{
-        'apiKey': _environmentService.searchBoardGamesApiKey,
+        'Ocp-Apim-Subscription-Key': _environmentService.searchBoardGamesApiSubscriptionKey,
       },
     );
 
