@@ -142,8 +142,8 @@ resource "azurerm_linux_function_app" "func" {
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
 
-  storage_account_name       = data.azurerm_storage_account.sa.name
-  storage_account_access_key = data.azurerm_storage_account.sa.primary_access_key
+  storage_account_name       = azurerm_storage_account.sa.name
+  storage_account_access_key = azurerm_storage_account.sa.primary_access_key
   service_plan_id            = azurerm_service_plan.asp.id
 
   site_config {
