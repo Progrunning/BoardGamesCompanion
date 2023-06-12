@@ -53,8 +53,6 @@ builder.Services.AddHttpClient<IBggService, BggService>(client =>
 
 var app = builder.Build();
 
-//app.UseAuthentication();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -74,7 +72,6 @@ app.UseStatusCodePages(async statusCodeContext =>
 });
 
 app.MapGet("api/search", [Authorize] ([FromQuery] string query, ISearchService searchService) => searchService.Search(query, CancellationToken.None))
-    //.RequireAuthorization(Constants.AuthenticationSchemes.ApiKey)
     .WithOpenApi();
 
 app.MapGet("api/error", (IErrorService errorService, HttpContext context) =>
