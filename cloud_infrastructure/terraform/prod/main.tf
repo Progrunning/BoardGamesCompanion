@@ -70,7 +70,7 @@ resource "azurerm_resource_group" "rg" {
   location = var.resource_group.location
 }
 
-resource "azurerm_storage_account" "storage_account" {
+resource "azurerm_storage_account" "sa" {
   name                     = var.resources.storage_account.name
   resource_group_name      = var.resource_group.name
   location                 = var.resource_group.location
