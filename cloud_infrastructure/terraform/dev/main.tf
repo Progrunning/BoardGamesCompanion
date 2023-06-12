@@ -6,7 +6,7 @@ variable "resource_group" {
   nullable = false
 }
 
-variable "resource_names" {
+variable "resources" {
   type = object({
     storage_account = object({
       name = string
@@ -70,7 +70,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_storage_account" "storage_account" {
-  name                     = var.shared_resources.storage_account.name
+  name                     = var.resources.storage_account.name
   resource_group_name      = var.resource_group.name
   location                 = var.resource_group.location
   account_tier             = "Standard"
@@ -78,29 +78,29 @@ resource "azurerm_storage_account" "storage_account" {
 }
 
 resource "azurerm_log_analytics_workspace" "log" {
-  name                = var.resource_names.analytics_workspace.name
+  name                = var.resources.analytics_workspace.name
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
-  sku                 = var.resource_names.analytics_workspace.sku
-  retention_in_days   = var.resource_names.analytics_workspace.retention_in_days
+  sku                 = var.resources.analytics_workspace.sku
+  retention_in_days   = var.resources.analytics_workspace.retention_in_days
 }
 
 resource "azurerm_container_app_environment" "cae" {
-  name                       = var.resource_names.container_app_environemnt.name
+  name                       = var.resources.container_app_environemnt.name
   resource_group_name        = var.resource_group.name
-  location                   = var.resource_names.container_app_environemnt.location
+  location                   = var.resources.container_app_environemnt.location
   log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
 }
 
 resource "azurerm_container_app" "search_service_ca" {
-  name                         = var.resource_names.container_apps.search_service.name
+  name                         = var.resources.container_apps.search_service.name
   container_app_environment_id = azurerm_container_app_environment.cae.id
   resource_group_name          = var.resource_group.name
   revision_mode                = "Single"
 
   template {
     container {
-      name   = var.resource_names.container_apps.search_service.app_name
+      name   = var.resources.container_apps.search_service.app_name
       image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.25
       memory = "0.5Gi"
@@ -118,19 +118,19 @@ resource "azurerm_container_app" "search_service_ca" {
 
 
 resource "azurerm_servicebus_namespace" "sbns" {
-  name                = var.resource_names.cache_service_bus.namespace.name
+  name                = var.resources.cache_service_bus.namespace.name
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
-  sku                 = var.resource_names.cache_service_bus.namespace.sku
+  sku                 = var.resources.cache_service_bus.namespace.sku
 }
 
 resource "azurerm_servicebus_queue" "sbq" {
-  name         = var.resource_names.cache_service_bus.queue.name
+  name         = var.resources.cache_service_bus.queue.name
   namespace_id = azurerm_servicebus_namespace.sbns.id
 }
 
 resource "azurerm_service_plan" "asp" {
-  name                = var.resource_names.cache_function.service_plan.name
+  name                = var.resources.cache_function.service_plan.name
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
   os_type             = "Linux"
@@ -138,7 +138,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_function_app" "func" {
-  name                = var.resource_names.cache_function.name
+  name                = var.resources.cache_function.name
   resource_group_name = var.resource_group.name
   location            = var.resource_group.location
 
