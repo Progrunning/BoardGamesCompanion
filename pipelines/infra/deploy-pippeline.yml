@@ -34,7 +34,7 @@ stages:
                   parameters:
                     workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/dev
                     azureSpnConnectionName: bgc-dev
-                    azureSpnConnectionId: e3fc2d39-5f38-4743-beee-0186ad98d553
+                    sharedAzureSpnConnectionName: bgc-shared
                     sharedRecourceGroupName: $(sharedRecourceGroupName)
                     sharedStorageAccountName: $(sharedStorageAccountName)
                     terraformStateContainerName: $(terraformStateContainerName)
@@ -55,7 +55,7 @@ stages:
                   parameters:
                     workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/prod
                     azureSpnConnectionName: bgc-prod
-                    azureSpnConnectionId: 909c51d2-a2f4-4c09-85f9-2f4985afe4c6
+                    sharedAzureSpnConnectionName: bgc-shared
                     sharedRecourceGroupName: $(sharedRecourceGroupName)
                     sharedStorageAccountName: $(sharedStorageAccountName)
                     terraformStateContainerName: $(terraformStateContainerName)
