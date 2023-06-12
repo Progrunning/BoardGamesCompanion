@@ -24,8 +24,8 @@ steps:
       command: "init"
       workingDirectory: ${{ parameters.workingDirectory }}
       backendServiceArm: ${{ parameters.sharedAzureSpnConnectionName }}
+      backendAzureRmStorageAccountName: ${{ parameters.sharedStorageAccountName }}
       # backendAzureRmResourceGroupName: ${{ parameters.sharedRecourceGroupName }}
-      # backendAzureRmStorageAccountName: ${{ parameters.sharedStorageAccountName }}
       # backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
       # backendAzureRmKey: "terraform.tfstate"
 
