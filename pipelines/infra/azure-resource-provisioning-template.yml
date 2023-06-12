@@ -25,9 +25,9 @@ steps:
       workingDirectory: ${{ parameters.workingDirectory }}
       backendServiceArm: ${{ parameters.sharedAzureSpnConnectionName }}
       backendAzureRmStorageAccountName: ${{ parameters.sharedStorageAccountName }}
-      # backendAzureRmResourceGroupName: ${{ parameters.sharedRecourceGroupName }}
-      # backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
-      # backendAzureRmKey: "terraform.tfstate"
+      backendAzureRmResourceGroupName: ${{ parameters.sharedRecourceGroupName }}
+      backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
+      backendAzureRmKey: "terraform.tfstate"
 
   - task: TerraformTaskV4@4
     displayName: Terraform plan
