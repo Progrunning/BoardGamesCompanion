@@ -34,7 +34,7 @@ variables:
 
   # Prod
   armServiceConnectionProd: bgc-prod
-  resourceGroupNameProd: bgc-dev-rg
+  resourceGroupNameProd: bgc-prod-rg
   azureContainerAppNameProd: bgc-search-service-prod-ca
 
   deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Search-API-CI.runID'])]

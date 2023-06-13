@@ -29,6 +29,12 @@ steps:
       backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
       backendAzureRmKey: "terraform.tfstate"
 
+  # For some reason deployment of the container app using terraform is timing out constantly and makes the app broken.
+  # Manual steps to fix it are required
+  # 1. Delete the created app from Azure
+  # 2. Create it using CLI command from here https://learn.microsoft.com/en-us/azure/container-apps/get-started?tabs=bash#create-and-deploy-the-container-app
+  # Example: az containerapp up   --name bgc-search-service-dev-ca   --resource-group bgc-dev-rg   --location eastus   --environment 'bgc-dev-cae'   --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest   --target-port 80   --ingress external   --query properties.configuration.ingress.fqdn
+
   - task: TerraformTaskV4@4
     displayName: Terraform plan
     condition: succeeded()
