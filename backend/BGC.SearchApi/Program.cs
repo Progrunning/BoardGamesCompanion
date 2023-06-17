@@ -27,7 +27,7 @@ builder.Services.AddOptions<ApiKeyAuthenticationSettings>()
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddAuthentication()
                 .AddScheme<ApiKeyAuthenticationSettings, ApiKeyAuthenticationHandler>(Constants.AuthenticationSchemes.ApiKey, null);
 builder.Services.AddAuthorization();

@@ -118,13 +118,19 @@ resource "azurerm_container_app" "search_service_ca" {
       cpu    = 0.25
       memory = "0.5Gi"
     }
+
+    env {
+      name        = "APPLICATIONINSIGHTS_CONNECTION_STRING"
+      secret_name = "instrumentation-key"
+    }
   }
 
   ingress {
     external_enabled = true
     target_port      = 80
     traffic_weight {
-      percentage = 100
+      latest_revision = true
+      percentage      = 100
     }
   }
 

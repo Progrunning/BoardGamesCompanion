@@ -382,4 +382,4 @@ dotnet_diagnostic.SA1101.severity = none
 
 # No need to document parameter
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1614.md
-dotnet_diagnostic.SA1614..severity = suggestion
+dotnet_diagnostic.SA1614.severity = suggestion

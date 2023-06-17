@@ -5,6 +5,9 @@ using BGC.SearchApi.Services.Interfaces;
 
 namespace BGC.SearchApi.Services;
 
+/// <summary>
+/// BGG API service.
+/// </summary>
 public class BggService : IBggService
 {
     private const string SearchResultsElementName = "items";
@@ -18,12 +21,23 @@ public class BggService : IBggService
     private readonly ILogger<BggService> _logger;
     private readonly HttpClient _httpClient;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BggService"/> class.
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="httpClient"></param>
     public BggService(ILogger<BggService> logger, HttpClient httpClient)
     {
         _logger = logger;
         _httpClient = httpClient;
     }
 
+    /// <summary>
+    /// Search board games in the BGG collection.
+    /// </summary>
+    /// <param name="query">Serach query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns><see cref="BoardGameSearchResponse"/>.</returns>
     public async Task<BoardGameSearchResponse> Search(string query, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(query))
