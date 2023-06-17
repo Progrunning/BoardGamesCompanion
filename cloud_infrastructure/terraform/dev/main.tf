@@ -133,15 +133,12 @@ resource "azurerm_container_app" "search_service_ca" {
     value = azurerm_application_insights.search_service_appi.instrumentation_key
   }
 
-  env {}
-  registry {}
-
   lifecycle {
     ignore_changes = [
       template[0].container[0].image,
+      template[0].container[0].env,
       ingress,
       secret,
-      env,
       registry,
     ]
   }
