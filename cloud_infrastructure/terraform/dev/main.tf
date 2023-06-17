@@ -128,7 +128,7 @@ resource "azurerm_container_app" "search_service_ca" {
   }
 
   secret {
-    name  = "instrumentation_key"
+    name  = "instrumentation-key"
     value = azurerm_application_insights.search_service_appi.instrumentation_key
   }
 }
