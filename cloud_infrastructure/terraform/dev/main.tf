@@ -128,10 +128,13 @@ resource "azurerm_container_app" "search_service_ca" {
     }
   }
 
-  secret {
-    name  = "instrumentation-key"
-    value = azurerm_application_insights.search_service_appi.instrumentation_key
-  }
+  # For some reason this is failing, indicating secret being deleted:
+  # Error: cannot remove secrets from Container Apps at this time due to a limitation in the Container Apps Service. Please see `https://github.com/microsoft/azure-container-apps/issues/395` for more details
+  # Will require manual intervention
+  # secret {
+  #   name  = "instrumentation-key"
+  #   value = azurerm_application_insights.search_service_appi.instrumentation_key
+  # }
 }
 
 
