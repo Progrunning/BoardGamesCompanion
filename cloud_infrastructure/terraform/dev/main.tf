@@ -101,6 +101,7 @@ resource "azurerm_application_insights" "search_service_appi" {
   name                = var.resources.application_insights.search_service.name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
+  workspace_id        = azurerm_log_analytics_workspace.log.id
   application_type    = "web"
 }
 
