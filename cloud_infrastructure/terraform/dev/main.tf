@@ -104,11 +104,6 @@ resource "azurerm_application_insights" "search_service_appi" {
   application_type    = "web"
 }
 
-output "search_service_appi_instrumentation_key" {
-  value     = azurerm_application_insights.search_service_appi.instrumentation_key
-  sensitive = true
-}
-
 resource "azurerm_container_app" "search_service_ca" {
   name                         = var.resources.container_apps.search_service.name
   container_app_environment_id = azurerm_container_app_environment.cae.id
@@ -134,7 +129,7 @@ resource "azurerm_container_app" "search_service_ca" {
 
   secret {
     name  = "instrumentation_key"
-    value = var.search_service_appi_instrumentation_key
+    value = azurerm_application_insights.search_service_appi.instrumentation_key
   }
 }
 
