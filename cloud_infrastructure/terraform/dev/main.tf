@@ -136,6 +136,10 @@ resource "azurerm_container_app" "search_service_ca" {
   lifecycle {
     ignore_changes = [
       secret,
+      env,
+      registry,
+      ingress,
+      template[0].container[0].image
     ]
   }
 }
