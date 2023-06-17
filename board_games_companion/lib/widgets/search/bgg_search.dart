@@ -18,6 +18,7 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
+import '../common/empty_page_information_panel.dart';
 import '../common/loading_indicator_widget.dart';
 import '../common/search/search_result_game_details.dart';
 import '../common/slivers/bgc_sliver_title_header_delegate.dart';
@@ -321,23 +322,14 @@ class _SearchError extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const <Widget>[
           SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
-          Center(
-            child: Icon(
+          EmptyPageInformationPanel(
+            title: 'Sorry, we ran into a problem',
+            icon: Icon(
               FontAwesomeIcons.faceSadTear,
               size: Dimensions.emptyPageTitleIconSize,
               color: AppColors.primaryColor,
             ),
-          ),
-          SizedBox(height: Dimensions.doubleStandardSpacing),
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text:
-                      'Sorry, we ran into a problem when searching for board games. Check your internet connectivity and try again.',
-                ),
-              ],
-            ),
+            subtitle: 'Check your internet connectivity and try again.',
           ),
           SizedBox(height: Dimensions.doubleStandardSpacing),
         ],
@@ -367,39 +359,16 @@ class _NoSearchResults extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
-          const Center(
-            child: Icon(
+          const EmptyPageInformationPanel(
+            title: "We didn't find any board games",
+            icon: Icon(
               FontAwesomeIcons.faceSadTear,
               size: Dimensions.emptyPageTitleIconSize,
               color: AppColors.primaryColor,
             ),
+            subtitle:
+                'The search is done using the BoardGamesGeek database, which is the biggest community based catalog of games but some of the titles might still be missing.\n\nYou can create any missing games and add them to your collections manually by clicking the below button.',
           ),
-          const SizedBox(height: Dimensions.doubleStandardSpacing),
-          Text.rich(
-            TextSpan(
-              children: [
-                const TextSpan(
-                    text: '''Sorry, we couldn't find any board game titles for your query: '''),
-                TextSpan(
-                  text: '$query.',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          const Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                    text:
-                        '''The search is done using the BoardGamesGeek database, which is the biggest community based catalog of games but some of the titles might still be missing.'''),
-              ],
-            ),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          const Text(
-              'You can create any missing games and add them to your collections manually by clicking the below button.'),
           const SizedBox(height: Dimensions.doubleStandardSpacing),
           Row(
             children: [

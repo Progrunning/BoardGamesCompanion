@@ -18,8 +18,6 @@ class BoardGamesSearchService {
     }
 
     final url = '${_environmentService.searchBoardGamesApiBaseUrl}/api/search?query=$searchPhrase';
-    // TODO Add caching
-    // TODO Handle errors
     // TODO Add retry policy https://stackoverflow.com/a/65585101/510627?
     final response = await http.get(
       Uri.parse(url),
