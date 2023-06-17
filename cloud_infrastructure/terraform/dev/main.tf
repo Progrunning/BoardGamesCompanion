@@ -134,7 +134,7 @@ resource "azurerm_container_app" "search_service_ca" {
 
   secret {
     name  = "instrumentation_key"
-    value = search_service_appi_instrumentation_key
+    value = var.search_service_appi_instrumentation_key
   }
 }
 
