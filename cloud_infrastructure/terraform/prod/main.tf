@@ -92,6 +92,14 @@ resource "azurerm_container_app_environment" "cae" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
 }
 
+resource "azurerm_application_insights" "search_service_appi" {
+  name                = var.resources.application_insights.search_service.name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  workspace_id        = azurerm_log_analytics_workspace.log.id
+  application_type    = "web"
+}
+
 resource "azurerm_container_app" "search_service_ca" {
   name                         = var.resources.container_apps.search_service.name
   container_app_environment_id = azurerm_container_app_environment.cae.id
@@ -111,8 +119,24 @@ resource "azurerm_container_app" "search_service_ca" {
     external_enabled = true
     target_port      = 80
     traffic_weight {
-      percentage = 100
+      latest_revision = true
+      percentage      = 100
     }
+  }
+
+  secret {
+    name  = "appi-con-string"
+    value = azurerm_application_insights.search_service_appi.connection_string
+  }
+
+  lifecycle {
+    ignore_changes = [
+      template[0].container[0].image,
+      template[0].container[0].env,
+      ingress,
+      secret,
+      registry,
+    ]
   }
 }
 
