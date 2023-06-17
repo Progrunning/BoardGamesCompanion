@@ -27,6 +27,11 @@ variable "resources" {
         app_name = string
       })
     })
+    application_insights = object({
+      search_service = object({
+        name = string
+      })
+    })
     cache_service_bus = object({
       namespace = object({
         name = string
@@ -92,6 +97,18 @@ resource "azurerm_container_app_environment" "cae" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
 }
 
+resource "azurerm_application_insights" "search_service_appi" {
+  name                = var.resources.application_insights.search_service.name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  application_type    = "web"
+}
+
+output "search_service_appi_instrumentation_key" {
+  value     = azurerm_application_insights.search_service_appi.instrumentation_key
+  sensitive = true
+}
+
 resource "azurerm_container_app" "search_service_ca" {
   name                         = var.resources.container_apps.search_service.name
   container_app_environment_id = azurerm_container_app_environment.cae.id
@@ -113,6 +130,11 @@ resource "azurerm_container_app" "search_service_ca" {
     traffic_weight {
       percentage = 100
     }
+  }
+
+  secret {
+    name  = "instrumentation_key"
+    value = search_service_appi_instrumentation_key
   }
 }
 
