@@ -7,6 +7,7 @@ using BGC.SearchApi.Services;
 using BGC.SearchApi.Services.Interface;
 using BGC.SearchApi.Services.Interfaces;
 
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,13 @@ builder.Services.AddOptions<ApiKeyAuthenticationSettings>()
                 .ValidateOnStart();
 
 builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.Configure<TelemetryConfiguration>(config =>
+{
+#if DEBUG
+    config.DisableTelemetry = true;
+#endif
+});
+
 builder.Services.AddAuthentication()
                 .AddScheme<ApiKeyAuthenticationSettings, ApiKeyAuthenticationHandler>(Constants.AuthenticationSchemes.ApiKey, null);
 builder.Services.AddAuthorization();

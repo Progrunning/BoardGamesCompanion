@@ -117,11 +117,11 @@ resource "azurerm_container_app" "search_service_ca" {
       image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.25
       memory = "0.5Gi"
-    }
 
-    env {
-      name        = "APPLICATIONINSIGHTS_CONNECTION_STRING"
-      secret_name = "instrumentation-key"
+      env {
+        name        = "APPLICATIONINSIGHTS_CONNECTION_STRING"
+        secret_name = "instrumentation-key"
+      }
     }
   }
 
