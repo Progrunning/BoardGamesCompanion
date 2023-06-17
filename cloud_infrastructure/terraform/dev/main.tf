@@ -120,7 +120,7 @@ resource "azurerm_container_app" "search_service_ca" {
 
       env {
         name        = "APPLICATIONINSIGHTS_CONNECTION_STRING"
-        secret_name = "instrumentation-key"
+        secret_name = "appi-con-string"
       }
     }
   }
@@ -135,8 +135,8 @@ resource "azurerm_container_app" "search_service_ca" {
   }
 
   secret {
-    name  = "instrumentation-key"
-    value = azurerm_application_insights.search_service_appi.instrumentation_key
+    name  = "appi-con-string"
+    value = azurerm_application_insights.search_service_appi.connection_string
   }
 
   lifecycle {
