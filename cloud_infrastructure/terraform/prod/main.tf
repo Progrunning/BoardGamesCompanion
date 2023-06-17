@@ -27,6 +27,11 @@ variable "resources" {
         app_name = string
       })
     })
+    application_insights = object({
+      search_service = object({
+        name = string
+      })
+    })
     cache_service_bus = object({
       namespace = object({
         name = string
