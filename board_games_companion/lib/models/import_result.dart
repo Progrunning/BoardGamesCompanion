@@ -1,4 +1,4 @@
-import 'package:board_games_companion/models/result.dart';
+import 'result.dart';
 
 class ImportResult<TData> extends Result<TData> {
   ImportResult();

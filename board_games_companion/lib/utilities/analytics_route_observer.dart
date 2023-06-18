@@ -1,10 +1,10 @@
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/extensions/route_extensions.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
 import '../common/analytics.dart';
+import '../extensions/route_extensions.dart';
 import '../models/navigation/board_game_details_page_arguments.dart';
 import '../models/navigation/edit_playthrough_page_arguments.dart';
 import '../models/navigation/playthroughs_page_arguments.dart';

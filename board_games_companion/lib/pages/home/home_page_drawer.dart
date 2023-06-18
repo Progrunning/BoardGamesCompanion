@@ -1,4 +1,3 @@
-import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
@@ -9,6 +8,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../utilities/launcher_helper.dart';
 import '../about/about_page.dart';
 import '../settings/settings_page.dart';
 

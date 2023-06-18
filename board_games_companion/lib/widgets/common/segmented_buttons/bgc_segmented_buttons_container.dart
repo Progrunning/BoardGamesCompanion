@@ -1,9 +1,9 @@
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/app_colors.dart';
 import '../../../common/app_styles.dart';
 import '../../../common/dimensions.dart';
+import '../../elevated_container.dart';
 
 class BgcSegmentedButtonsContainer extends StatelessWidget {
   const BgcSegmentedButtonsContainer({

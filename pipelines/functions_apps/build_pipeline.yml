@@ -4,14 +4,6 @@ variables:
   AppDirectoryName: BGC.Functions
   BicepTemplateDirectoryName: cloud_infrastructure
 
-pr:
-  branches:
-    include:
-      - main
-  paths:
-    include:
-      - BGC.Functions
-
 trigger:
   branches:
     include:

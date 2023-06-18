@@ -1,11 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
-import 'package:board_games_companion/extensions/bool_extensions.dart';
-import 'package:board_games_companion/models/hive/no_score_game_result.dart';
-import 'package:board_games_companion/models/import_result.dart';
-import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -13,15 +8,20 @@ import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
+import '../../common/enums/game_family.dart';
+import '../../extensions/bool_extensions.dart';
 import '../../models/bgg/bgg_plays_import_raport.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/score.dart';
+import '../../models/import_result.dart';
 import '../../models/player_score.dart';
 import '../../services/analytics_service.dart';
 import '../../services/board_games_service.dart';
 import '../../stores/game_playthroughs_details_store.dart';
 import '../../stores/players_store.dart';
+import '../../stores/user_store.dart';
 
 part 'playthroughs_view_model.g.dart';
 

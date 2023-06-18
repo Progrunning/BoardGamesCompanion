@@ -10,7 +10,6 @@ pr:
     include:
       - board_games_companion
 
-
 variables:
   - name: appDirectoryName
     value: board_games_companion
@@ -29,7 +28,7 @@ jobs:
           versionSpec: "11"
           jdkArchitectureOption: x64
           jdkSourceOption: PreInstalled
-      
+
       - task: FlutterInstall@0
         displayName: "Install Flutter"
         inputs:

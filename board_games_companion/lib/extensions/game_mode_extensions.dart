@@ -1,5 +1,5 @@
-import 'package:board_games_companion/common/enums/game_classification.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
+import '../common/enums/game_classification.dart';
+import '../common/enums/game_family.dart';
 
 extension GameClassificationExtensions on GameClassification {
   GameFamily toDefaultGameFamily() {

@@ -1,9 +1,6 @@
 import 'dart:async';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/pages/collections/collections_view_model.dart';
-import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -14,6 +11,7 @@ import '../../common/analytics.dart';
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
+import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../common/enums/games_tab.dart';
@@ -29,8 +27,10 @@ import '../../widgets/common/bgg_community_member_user_name_text_field_widget.da
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
+import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'collections_filter_panel.dart';
+import 'collections_view_model.dart';
 
 enum BoardGameResultActionType {
   details,

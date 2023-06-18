@@ -1,0 +1,47 @@
+name: $(Build.BuildId)
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - backend/BGC.SearchApi/**/*
+
+pool:
+  vmImage: ubuntu-22.04
+  workspace:
+    clean: all
+
+variables:
+  isPR: $[in(variables['Build.Reason'], 'PullRequest')]
+
+jobs:
+  - job: CI
+    displayName: CI
+    steps:
+      - task: UseDotNet@2
+        displayName: "Install .NET 7.x SDK"
+        inputs:
+          version: 7.x
+
+      - task: DotNetCoreCLI@2
+        displayName: "Build Search API"
+        inputs:
+          projects: "**/BGC.SearchApi.csproj"
+          arguments: "--output publish_output --configuration Release"
+
+      - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
+        parameters:
+          pathToProjects: "**/BGC.SearchApi.UnitTests.csproj"
+
+      - task: Docker@2
+        condition: and(succeeded(), eq(variables.isPR, 'false'))
+        displayName: Publish docker image to ACR
+        inputs:
+          command: buildAndPush
+          containerRegistry: bgc-acr
+          repository: bgc
+          tags: "$(Build.BuildId)"
+          dockerfile: backend/BGC.SearchApi/dockerfile
+          addPipelineData: true

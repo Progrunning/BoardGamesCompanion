@@ -1,5 +1,4 @@
-import 'package:board_games_companion/models/import_result.dart';
-
+import '../import_result.dart';
 import 'bgg_play.dart';
 
 class BggPlaysImportResult extends ImportResult<List<BggPlay>> {

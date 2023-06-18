@@ -1,15 +1,15 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/enums/game_classification.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
-import 'package:board_games_companion/models/board_game_settings/board_game_mode_classification.dart';
-import 'package:board_games_companion/models/hive/board_game_settings.dart';
-import 'package:board_games_companion/pages/playthroughs/average_score_precision.dart';
-import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../common/enums/game_classification.dart';
+import '../../common/enums/game_family.dart';
+import '../../models/board_game_settings/board_game_mode_classification.dart';
+import '../../models/hive/board_game_settings.dart';
 import '../../stores/board_games_store.dart';
+import '../../stores/game_playthroughs_details_store.dart';
+import 'average_score_precision.dart';
 
 part 'playthroughs_game_settings_view_model.g.dart';
 

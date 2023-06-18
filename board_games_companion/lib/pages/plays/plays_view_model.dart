@@ -3,24 +3,24 @@
 import 'dart:math';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/common/analytics.dart';
-import 'package:board_games_companion/common/enums/collection_type.dart';
-import 'package:board_games_companion/common/enums/plays_tab.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/hive/playthrough.dart';
-import 'package:board_games_companion/models/player_score.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
-import 'package:board_games_companion/stores/players_store.dart';
-import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../common/analytics.dart';
+import '../../common/enums/collection_type.dart';
+import '../../common/enums/plays_tab.dart';
+import '../../models/hive/board_game_details.dart';
+import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
+import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
 import '../../services/analytics_service.dart';
+import '../../stores/board_games_store.dart';
+import '../../stores/players_store.dart';
 import '../../stores/playthroughs_store.dart';
+import '../../stores/scores_store.dart';
 import 'board_game_playthrough.dart';
 import 'game_spinner_filters.dart';
 import 'grouped_board_game_playthroughs.dart';

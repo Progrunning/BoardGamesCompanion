@@ -1,5 +1,4 @@
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +14,7 @@ import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
+import '../../widgets/elevated_container.dart';
 import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
 import '../home/home_page.dart';

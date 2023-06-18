@@ -1,11 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/stores/players_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../models/hive/player.dart';
+import '../../stores/players_store.dart';
 
 part 'players_view_model.g.dart';
 

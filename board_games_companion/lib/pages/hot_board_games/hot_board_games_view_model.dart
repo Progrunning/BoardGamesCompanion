@@ -1,15 +1,15 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/stores/board_games_store.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/analytics.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../services/analytics_service.dart';
 import '../../services/board_games_geek_service.dart';
+import '../../stores/board_games_store.dart';
 
 part 'hot_board_games_view_model.g.dart';
 

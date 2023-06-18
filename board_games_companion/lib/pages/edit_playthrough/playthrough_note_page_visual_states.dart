@@ -1,5 +1,6 @@
-import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../models/hive/playthrough_note.dart';
 
 part 'playthrough_note_page_visual_states.freezed.dart';
 

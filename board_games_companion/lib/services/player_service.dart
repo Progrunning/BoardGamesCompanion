@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:board_games_companion/common/constants.dart';
-import 'package:board_games_companion/common/regex_expressions.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart' show Uuid;
 
+import '../common/constants.dart';
+import '../common/regex_expressions.dart';
 import '../models/hive/player.dart';
 import 'file_service.dart';
 import 'hive_base_service.dart';

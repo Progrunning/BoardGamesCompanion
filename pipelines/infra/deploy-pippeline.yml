@@ -1,0 +1,59 @@
+name: $(Build.BuildID) $(SourceBranchName)
+
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - pipelines/infra
+      - cloud_infrastructure
+
+variables:
+  - group: BGC-GLOBAL
+  - name: terraformVersion
+    value: $[variables['terraform.version']]
+
+stages:
+  - stage: DEV
+    variables:
+      - group: BGC-DEV-INFRA
+    jobs:
+      - deployment: ProvisionAzureResources
+        displayName: Provision Azure Resources
+        environment: DEV
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: azure-resource-provisioning-template.yml
+                  parameters:
+                    workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/dev
+                    azureSpnConnectionName: bgc-dev
+                    sharedAzureSpnConnectionName: bgc-shared
+                    sharedRecourceGroupName: $(sharedRecourceGroupName)
+                    sharedStorageAccountName: $(sharedStorageAccountName)
+                    terraformStateContainerName: $(terraformStateContainerName)
+                    terraformVersion: $(terraformVersion)
+  - stage: PROD
+    variables:
+      - group: BGC-PROD-INFRA
+    jobs:
+      - deployment: ProvisionAzureResources
+        displayName: Provision Azure Resources
+        environment: PROD
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: azure-resource-provisioning-template.yml
+                  parameters:
+                    workingDirectory: $(System.DefaultWorkingDirectory)/cloud_infrastructure/terraform/prod
+                    azureSpnConnectionName: bgc-prod
+                    sharedAzureSpnConnectionName: bgc-shared
+                    sharedRecourceGroupName: $(sharedRecourceGroupName)
+                    sharedStorageAccountName: $(sharedStorageAccountName)
+                    terraformStateContainerName: $(terraformStateContainerName)
+                    terraformVersion: $(terraformVersion)

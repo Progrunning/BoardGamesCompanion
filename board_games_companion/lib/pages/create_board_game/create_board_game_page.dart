@@ -1,9 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/pages/create_board_game/create_board_game_visual_states.dart';
-import 'package:board_games_companion/widgets/common/board_game/collection_flags.dart';
-import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,11 +12,15 @@ import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../models/results/board_game_creation_result.dart';
 import '../../widgets/board_games/bgc_flexible_space_bar.dart';
+import '../../widgets/common/board_game/collection_flags.dart';
 import '../../widgets/common/custom_icon_button.dart';
+import '../../widgets/common/page_container.dart';
 import '../../widgets/common/section_header.dart';
 import 'create_board_game_view_model.dart';
+import 'create_board_game_visual_states.dart';
 
 class CreateBoardGamePage extends StatefulWidget {
   const CreateBoardGamePage({

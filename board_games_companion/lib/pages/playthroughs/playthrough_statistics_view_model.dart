@@ -1,9 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/enums/game_family.dart';
-import 'package:board_games_companion/models/hive/no_score_game_result.dart';
-import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
-import 'package:board_games_companion/stores/scores_store.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:injectable/injectable.dart';
@@ -11,14 +7,18 @@ import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../common/enums/game_classification.dart';
+import '../../common/enums/game_family.dart';
 import '../../extensions/playthroughs_extensions.dart';
 import '../../models/board_game_statistics.dart';
+import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/player_statistics.dart';
 import '../../services/player_service.dart';
+import '../../stores/game_playthroughs_details_store.dart';
+import '../../stores/scores_store.dart';
 
 part 'playthrough_statistics_view_model.g.dart';
 

@@ -1,24 +1,26 @@
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/pages/collections/collections_page.dart';
-import 'package:board_games_companion/pages/home/home_page.dart';
-import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
 import '../../models/results/bgg_search_result.dart';
 import '../../models/sort_by.dart';
+import '../../pages/collections/collections_page.dart';
 import '../../pages/collections/search_suggestion.dart';
+import '../../pages/home/home_page.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
+import '../common/empty_page_information_panel.dart';
+import '../common/loading_indicator_widget.dart';
+import '../common/search/search_result_game_details.dart';
 import '../common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../common/sorting/sort_by_chip.dart';
 
@@ -293,7 +295,7 @@ class _SearchResultGame extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: Dimensions.standardSpacing),
-                      Expanded(child: _SearchResultGameDetails(boardGame: boardGame)),
+                      Expanded(child: SearchResultGameDetails(boardGame: boardGame)),
                     ],
                   ),
                 ),
@@ -302,36 +304,6 @@ class _SearchResultGame extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SearchResultGameDetails extends StatelessWidget {
-  const _SearchResultGameDetails({
-    Key? key,
-    required this.boardGame,
-  }) : super(key: key);
-
-  final BoardGameDetails boardGame;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          boardGame.name,
-          overflow: TextOverflow.ellipsis,
-          style: AppTheme.theme.textTheme.bodyLarge,
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        if (boardGame.yearPublished != null)
-          Text(
-            sprintf(AppText.onlineSearchGamePublishYearFormat, [boardGame.yearPublished]),
-            overflow: TextOverflow.ellipsis,
-            style: AppTheme.theme.textTheme.titleMedium,
-          ),
-      ],
     );
   }
 }
@@ -350,23 +322,14 @@ class _SearchError extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const <Widget>[
           SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
-          Center(
-            child: Icon(
+          EmptyPageInformationPanel(
+            title: 'Sorry, we ran into a problem',
+            icon: Icon(
               FontAwesomeIcons.faceSadTear,
               size: Dimensions.emptyPageTitleIconSize,
               color: AppColors.primaryColor,
             ),
-          ),
-          SizedBox(height: Dimensions.doubleStandardSpacing),
-          Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text:
-                      'Sorry, we ran into a problem when searching for board games. Check your internet connectivity and try again.',
-                ),
-              ],
-            ),
+            subtitle: 'Check your internet connectivity and try again.',
           ),
           SizedBox(height: Dimensions.doubleStandardSpacing),
         ],
@@ -396,39 +359,16 @@ class _NoSearchResults extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
-          const Center(
-            child: Icon(
+          const EmptyPageInformationPanel(
+            title: "We didn't find any board games",
+            icon: Icon(
               FontAwesomeIcons.faceSadTear,
               size: Dimensions.emptyPageTitleIconSize,
               color: AppColors.primaryColor,
             ),
+            subtitle:
+                'The search is done using the BoardGamesGeek database, which is the biggest community based catalog of games but some of the titles might still be missing.\n\nYou can create any missing games and add them to your collections manually by clicking the below button.',
           ),
-          const SizedBox(height: Dimensions.doubleStandardSpacing),
-          Text.rich(
-            TextSpan(
-              children: [
-                const TextSpan(
-                    text: '''Sorry, we couldn't find any board game titles for your query: '''),
-                TextSpan(
-                  text: '$query.',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          const Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                    text:
-                        '''The search is done using the BoardGamesGeek database, which is the biggest community based catalog of games but some of the titles might still be missing.'''),
-              ],
-            ),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          const Text(
-              'You can create any missing games and add them to your collections manually by clicking the below button.'),
           const SizedBox(height: Dimensions.doubleStandardSpacing),
           Row(
             children: [

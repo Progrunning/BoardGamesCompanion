@@ -1,5 +1,6 @@
-import 'package:board_games_companion/pages/playthroughs/playthrough_migration.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../pages/playthroughs/playthrough_migration.dart';
 
 part 'playthrough_migration_page_arguments.freezed.dart';
 

@@ -55,6 +55,13 @@ class AppText {
   static const aboutPageCommunityJoinDiscord =
       "Tap on the below logo to join the BGC's Discord server.";
 
+  static const boardGameDetailsPaboutGeneralTitle = 'General';
+  static const boardGameDetailsPaboutLinksTitle = 'Links';
+  static const boardGameDetailsPaboutCreditsTitle = 'Credits';
+  static const boardGameDetailsPaboutCategoriesTitle = 'Categories';
+  static const boardGameDetailsPaboutDescriptionTitle = 'Description';
+  static const boardGameDetailsPaboutCollectionsTitle = 'Collections';
+
   static const hotBoardGamesPageTitle = 'Hot Board Games';
 
   static const playthroughsStatisticsPageNoStatsTitle = "You haven't logged any games yet";
@@ -222,7 +229,7 @@ class AppText {
   static const gamesPageSearchNoSearchResults =
       '''It looks there's no games in your collections that match the search phrase ''';
   static const gamesPageSearchClearSaerch = 'Clear search';
-  static const gamesPageSearchResultComplexityGameStatFormat = '%s (complexity rating)';
+  static const gamesPageSearchResultComplexityGameStatFormat = '%s';
   static const gamesPageSearchResultRefreshDetails =
       'Games imported from the BGG collections are missing some details (e.g. complexity or expansions). Refresh the data to get the latest information.';
   static const gamesPageSearchResultExpansionsSectionTitleFormat = 'Expansions (%i)';

@@ -54,7 +54,7 @@ stages:
               jdkSourceOption: PreInstalled
 
           - task: FlutterInstall@0
-            displayName: "Install Flutter"
+            displayName: "Install Flutter v$(flutter.version)"
             inputs:
               mode: "auto"
               channel: "stable"
@@ -92,6 +92,7 @@ stages:
               projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
               buildName: "$(appVersion)"
+              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey)
 
           - task: DeleteFiles@1
             displayName: Deleting key.properties file
@@ -118,8 +119,8 @@ stages:
   - stage: CdPublishAndroid
     dependsOn: CdBuildAndroid
     jobs:
-      - job: PublishAndroid        
-        condition: eq(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')    
+      - job: PublishAndroid
+        condition: eq(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')
         timeoutInMinutes: 5
         pool:
           vmImage: "ubuntu-22.04"
@@ -165,6 +166,7 @@ stages:
               channel: "stable"
               version: "custom"
               customVersion: $(flutter.version)
+              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey)
 
           - task: InstallAppleCertificate@2
             inputs:

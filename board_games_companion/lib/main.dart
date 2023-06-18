@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/models/hive/board_game_settings.dart';
-import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -26,9 +24,11 @@ import 'models/hive/board_game_details.dart';
 import 'models/hive/board_game_expansion.dart';
 import 'models/hive/board_game_publisher.dart';
 import 'models/hive/board_game_rank.dart';
+import 'models/hive/board_game_settings.dart';
 import 'models/hive/no_score_game_result.dart';
 import 'models/hive/player.dart';
 import 'models/hive/playthrough.dart';
+import 'models/hive/playthrough_note.dart';
 import 'models/hive/score.dart';
 import 'models/hive/search_history_entry.dart';
 import 'models/hive/user.dart';

@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:board_games_companion/models/navigation/create_board_game_page_arguments.dart';
-import 'package:board_games_companion/models/results/board_game_creation_result.dart';
-import 'package:board_games_companion/pages/create_board_game/create_board_game_page.dart';
-import 'package:board_games_companion/widgets/elevated_container.dart';
+import 'package:board_games_companion/models/hive/board_game_category.dart';
+import 'package:board_games_companion/widgets/common/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -20,18 +18,23 @@ import '../../common/constants.dart';
 import '../../common/dimensions.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/create_board_game_page_arguments.dart';
+import '../../models/results/board_game_creation_result.dart';
 import '../../services/preferences_service.dart';
 import '../../stores/board_games_store.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/board_games/bgc_flexible_space_bar.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import '../../widgets/common/board_game/board_game_property.dart';
 import '../../widgets/common/board_game/collection_flags.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/ripple_effect.dart';
+import '../../widgets/elevated_container.dart';
 import '../base_page_state.dart';
+import '../create_board_game/create_board_game_page.dart';
 import '../home/home_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'board_game_details_expansions.dart';
@@ -193,6 +196,7 @@ class _Body extends StatelessWidget {
 
   static const _spacingBetweenSecions = Dimensions.doubleStandardSpacing;
   static const _halfSpacingBetweenSecions = Dimensions.standardSpacing;
+  static const _sectionTopSpacing = Dimensions.standardSpacing;
 
   @override
   Widget build(BuildContext context) {
@@ -218,9 +222,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: Dimensions.standardSpacing,
-                    ),
+                    const SizedBox(height: Dimensions.standardSpacing),
                     ElevatedIconButton(
                         title: 'Refresh',
                         icon: const DefaultIcon(Icons.refresh),
@@ -232,76 +234,43 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
 
           case FutureStatus.fulfilled:
             return SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+              padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
               sliver: SliverList(
                 delegate: SliverChildListDelegate.fixed(
                   <Widget>[
-                    const _BodySectionHeader(title: 'Stats', secondaryTitle: 'Collections'),
-                    _StatsAndCollections(viewModel: viewModel),
+                    SectionHeader.titles(
+                      primaryTitle: AppText.boardGameDetailsPaboutGeneralTitle,
+                      secondaryTitle: AppText.boardGameDetailsPaboutCollectionsTitle,
+                    ),
+                    const SizedBox(height: _sectionTopSpacing),
+                    _GeneralAndCollections(viewModel: viewModel),
                     const SizedBox(height: _spacingBetweenSecions),
                     Observer(
                       builder: (_) {
                         if (viewModel.boardGame.hasGeneralInfoDefined) {
-                          return const _BodySectionHeader(title: 'General');
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                    Observer(
-                      builder: (_) {
-                        return _FirstRowGeneralInfoPanels(
-                          playersFormatted: viewModel.boardGame.playersFormatted,
-                          playtimeFormatted: viewModel.boardGame.playtimeFormatted,
-                        );
-                      },
-                    ),
-                    Observer(
-                      builder: (_) {
-                        if (viewModel.boardGame.minAge != null ||
-                            viewModel.boardGame.avgWeight != null) {
-                          return Column(
-                            children: [
-                              const SizedBox(height: _halfSpacingBetweenSecions),
-                              _SecondRowGeneralInfoPanels(
-                                minAge: viewModel.boardGame.minAge,
-                                avgWeight: viewModel.boardGame.avgWeight,
-                              ),
-                            ],
+                          return _General(
+                            playersFormatted: viewModel.boardGame.playersFormatted,
+                            playtimeFormatted: viewModel.boardGame.playtimeFormatted,
+                            minAge: viewModel.boardGame.minAge,
+                            avgWeight: viewModel.boardGame.avgWeight,
                           );
                         }
                         return const SizedBox.shrink();
                       },
                     ),
-                    const SizedBox(height: _spacingBetweenSecions),
+                    const SizedBox(height: _halfSpacingBetweenSecions),
                     if (!viewModel.isCreatedByUser) ...[
-                      const _BodySectionHeader(title: 'Links'),
+                      SectionHeader.title(primaryTitle: AppText.boardGameDetailsPaboutLinksTitle),
                       _Links(boardGameDetailsStore: viewModel),
                       const SizedBox(height: _halfSpacingBetweenSecions),
-                      const _BodySectionHeader(title: 'Credits'),
+                      SectionHeader.title(primaryTitle: AppText.boardGameDetailsPaboutCreditsTitle),
+                      const SizedBox(height: _sectionTopSpacing),
                       _Credits(boardGameDetails: viewModel.boardGame),
                       const SizedBox(height: _halfSpacingBetweenSecions),
-                      const _BodySectionHeader(title: 'Categories'),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          spacing: Dimensions.standardSpacing,
-                          alignment: WrapAlignment.spaceEvenly,
-                          children: [
-                            for (var category in viewModel.boardGame.categories!)
-                              Chip(
-                                padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                                backgroundColor: AppColors.primaryColor.withAlpha(
-                                  AppStyles.opacity80Percent,
-                                ),
-                                label: Text(
-                                  category.name,
-                                  style: const TextStyle(color: AppColors.defaultTextColor),
-                                ),
-                              )
-                          ],
-                        ),
+                      SectionHeader.title(
+                        primaryTitle: AppText.boardGameDetailsPaboutCategoriesTitle,
                       ),
+                      _Categories(categories: viewModel.boardGame.categories!),
                       if (viewModel.isMainGame && viewModel.hasExpansions)
                         Observer(
                           builder: (_) {
@@ -314,14 +283,17 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                             );
                           },
                         ),
-                      const SizedBox(height: _spacingBetweenSecions),
-                      const _BodySectionHeader(title: 'Description'),
+                      const SizedBox(height: _halfSpacingBetweenSecions),
+                      SectionHeader.title(
+                        primaryTitle: AppText.boardGameDetailsPaboutDescriptionTitle,
+                      ),
+                      const SizedBox(height: _sectionTopSpacing),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
                         child: Text(
                           viewModel.unescapedDescription,
                           textAlign: TextAlign.justify,
-                          style: const TextStyle(fontSize: Dimensions.mediumFontSize),
+                          style: AppTheme.theme.textTheme.bodyMedium,
                         ),
                       )
                     ],
@@ -331,6 +303,72 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
             );
         }
       },
+    );
+  }
+}
+
+class _Categories extends StatelessWidget {
+  const _Categories({
+    required this.categories,
+  });
+
+  final List<BoardGameCategory> categories;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+      child: Wrap(
+        direction: Axis.horizontal,
+        spacing: Dimensions.standardSpacing,
+        alignment: WrapAlignment.spaceEvenly,
+        children: [
+          for (var category in categories)
+            Chip(
+              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+              backgroundColor: AppColors.primaryColor.withAlpha(
+                AppStyles.opacity80Percent,
+              ),
+              label: Text(
+                category.name,
+                style: const TextStyle(color: AppColors.defaultTextColor),
+              ),
+            )
+        ],
+      ),
+    );
+  }
+}
+
+class _General extends StatelessWidget {
+  const _General({
+    required this.playersFormatted,
+    required this.playtimeFormatted,
+    required this.minAge,
+    required this.avgWeight,
+  });
+
+  final String playersFormatted;
+  final String playtimeFormatted;
+  final int? minAge;
+  final num? avgWeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _FirstRowGeneralInfoPanels(
+          playersFormatted: playersFormatted,
+          playtimeFormatted: playtimeFormatted,
+        ),
+        if (minAge != null || avgWeight != null) ...[
+          const SizedBox(height: Dimensions.standardSpacing),
+          _SecondRowGeneralInfoPanels(
+            minAge: minAge,
+            avgWeight: avgWeight,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -464,43 +502,6 @@ class _Link extends StatelessWidget {
   }
 }
 
-class _BodySectionHeader extends StatelessWidget {
-  const _BodySectionHeader({
-    required this.title,
-    this.secondaryTitle,
-    Key? key,
-  }) : super(key: key);
-
-  final String title;
-  final String? secondaryTitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: AppTheme.sectionHeaderTextStyle),
-              if (secondaryTitle?.isEmpty ?? true)
-                const SizedBox.shrink()
-              else ...[
-                const Expanded(child: SizedBox.shrink()),
-                Text(secondaryTitle!, style: AppTheme.sectionHeaderTextStyle),
-              ]
-            ],
-          ),
-          const SizedBox(height: Dimensions.halfStandardSpacing),
-        ],
-      ),
-    );
-  }
-}
-
 class _Credits extends StatelessWidget {
   const _Credits({
     required this.boardGameDetails,
@@ -520,17 +521,17 @@ class _Credits extends StatelessWidget {
         children: <Widget>[
           _CreditsItem(
             title: 'Designer:',
-            detail: boardGameDetails?.desingers.map((d) => d.name).join(', '),
+            detail: boardGameDetails?.desingers.map((designer) => designer.name).join(', '),
           ),
           const SizedBox(height: _spacingBetweenCredits),
           _CreditsItem(
             title: 'Artist:',
-            detail: boardGameDetails?.artists.map((d) => d.name).join(', '),
+            detail: boardGameDetails?.artists.map((artist) => artist.name).join(', '),
           ),
           const SizedBox(height: _spacingBetweenCredits),
           _CreditsItem(
             title: 'Publisher:',
-            detail: boardGameDetails?.publishers.map((d) => d.name).join(', '),
+            detail: boardGameDetails?.publishers.map((publisher) => publisher.name).join(', '),
           ),
         ],
       ),
@@ -555,23 +556,28 @@ class _CreditsItem extends StatelessWidget {
         children: [
           TextSpan(
             text: title,
-            style: AppTheme.titleTextStyle.copyWith(fontWeight: FontWeight.bold),
+            style: AppTheme.theme.textTheme.displaySmall,
           ),
           const TextSpan(text: ' '),
-          TextSpan(text: detail),
+          TextSpan(
+            text: detail,
+            style: AppTheme.theme.textTheme.bodyMedium,
+          ),
         ],
       ),
     );
   }
 }
 
-class _StatsAndCollections extends StatelessWidget {
-  const _StatsAndCollections({
+class _GeneralAndCollections extends StatelessWidget {
+  const _GeneralAndCollections({
     Key? key,
     required this.viewModel,
   }) : super(key: key);
 
   final BoardGameDetailsViewModel viewModel;
+
+  static const double _iconSize = 28;
 
   @override
   Widget build(BuildContext context) {
@@ -580,12 +586,14 @@ class _StatsAndCollections extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Center(
-            child: Observer(
-              builder: (_) {
-                return BoardGameRatingHexagon(rating: viewModel.boardGame.rating);
-              },
-            ),
+          Observer(
+            builder: (_) {
+              return Column(
+                children: [
+                  BoardGameRatingHexagon(rating: viewModel.boardGame.rating),
+                ],
+              );
+            },
           ),
           const SizedBox(width: Dimensions.standardSpacing),
           if (viewModel.isCreatedByUser) const Spacer(),
@@ -595,26 +603,32 @@ class _StatsAndCollections extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _DetailsNumbersItem(
-                    title: 'Rank',
-                    detail: viewModel.boardGame.rankFormatted,
+                  BoardGameProperty(
+                    icon: const Icon(Icons.tag, size: _iconSize),
+                    iconWidth: _iconSize,
+                    propertyName: '${viewModel.boardGame.rankFormatted}',
+                    fontSize: Dimensions.mediumFontSize,
                   ),
                   const SizedBox(height: Dimensions.halfStandardSpacing),
-                  _DetailsNumbersItem(
-                    title: 'Ratings',
-                    detail: '${viewModel.boardGame.votes}',
-                    format: true,
+                  BoardGameProperty(
+                    icon: const Icon(Icons.how_to_vote, size: _iconSize),
+                    iconWidth: _iconSize,
+                    propertyName: '${viewModel.boardGame.votesFormatted} ratings',
+                    fontSize: Dimensions.mediumFontSize,
                   ),
                   const SizedBox(height: Dimensions.halfStandardSpacing),
-                  _DetailsNumbersItem(
-                    title: 'Comments',
-                    detail: '${viewModel.boardGame.commentsNumber}',
-                    format: true,
+                  BoardGameProperty(
+                    icon: const Icon(Icons.comment, size: _iconSize),
+                    iconWidth: _iconSize,
+                    propertyName: '${viewModel.boardGame.commentsNumberFormatted} comments',
+                    fontSize: Dimensions.mediumFontSize,
                   ),
                   const SizedBox(height: Dimensions.halfStandardSpacing),
-                  _DetailsNumbersItem(
-                    title: 'Published',
-                    detail: '${viewModel.boardGame.yearPublished}',
+                  BoardGameProperty(
+                    icon: const Icon(Icons.event, size: _iconSize),
+                    iconWidth: _iconSize,
+                    propertyName: '${viewModel.boardGame.yearPublished}',
+                    fontSize: Dimensions.mediumFontSize,
                   ),
                 ],
               ),
@@ -751,58 +765,5 @@ class _InfoPanel extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _DetailsNumbersItem extends StatelessWidget {
-  const _DetailsNumbersItem({
-    Key? key,
-    required String title,
-    required String? detail,
-    bool format = false,
-  })  : _title = title,
-        _detail = detail,
-        _format = format,
-        super(key: key);
-
-  final String _title;
-  final String? _detail;
-  final bool _format;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: '$_title: ',
-          ),
-          TextSpan(
-            text: _formatNumber(),
-            style: AppTheme.titleTextStyle.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String? _formatNumber() {
-    if (_detail?.isEmpty ?? true) {
-      return '';
-    }
-
-    final number = num.tryParse(_detail!);
-    if (number == null) {
-      return _detail;
-    }
-
-    if (!_format || number < 1000) {
-      return number.toString();
-    }
-
-    final numberOfThousands = number / 1000;
-    return '${numberOfThousands.round()}k';
   }
 }

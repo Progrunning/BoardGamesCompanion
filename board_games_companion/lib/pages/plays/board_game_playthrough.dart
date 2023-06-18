@@ -1,9 +1,9 @@
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
-import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../common/app_text.dart';
+import '../../common/enums/game_family.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../models/hive/no_score_game_result.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_details.dart';

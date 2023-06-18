@@ -1,12 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:board_games_companion/models/hive/board_game_details.dart';
-import 'package:board_games_companion/models/navigation/board_game_details_page_arguments.dart';
-import 'package:board_games_companion/pages/board_game_details/board_game_details_page.dart';
-import 'package:board_games_companion/pages/playthroughs/playthroughs_page.dart';
-import 'package:board_games_companion/widgets/board_games/board_game_tile.dart';
-import 'package:board_games_companion/widgets/common/board_game/board_game_property.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,10 +12,16 @@ import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
+import '../../widgets/board_games/board_game_tile.dart';
+import '../../widgets/common/board_game/board_game_property.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/rating_hexagon.dart';
 import '../../widgets/elevated_container.dart';
+import '../board_game_details/board_game_details_page.dart';
+import '../playthroughs/playthroughs_page.dart';
 
 class GameSpinnerGameSelectedDialog extends StatefulWidget {
   const GameSpinnerGameSelectedDialog({

@@ -3,11 +3,6 @@
 import 'dart:async';
 
 import 'package:basics/basics.dart';
-import 'package:board_games_companion/models/sort_by.dart';
-import 'package:board_games_companion/stores/board_games_filters_store.dart';
-import 'package:board_games_companion/stores/playthroughs_store.dart';
-import 'package:board_games_companion/stores/scores_store.dart';
-import 'package:board_games_companion/stores/user_store.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -17,8 +12,13 @@ import 'package:tuple/tuple.dart';
 import '../../common/enums/games_tab.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/sort_by.dart';
+import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
 import '../../stores/players_store.dart';
+import '../../stores/playthroughs_store.dart';
+import '../../stores/scores_store.dart';
+import '../../stores/user_store.dart';
 
 part 'collections_view_model.g.dart';
 

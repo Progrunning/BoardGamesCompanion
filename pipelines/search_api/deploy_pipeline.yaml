@@ -1,0 +1,118 @@
+resources:
+  pipelines:
+    - pipeline: Search-API-CI
+      source: "Search API CI"
+      trigger:
+        branches:
+          include:
+            - main
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-22.04
+  workspace:
+    clean: all
+
+parameters:
+  - name: buildId
+    displayName: Build ID
+    type: string
+    default: ""
+
+variables:
+  # General
+  acrName: bgcsharedcr
+  acrServer: bgcsharedcr.azurecr.io
+  acrServiceRepositoryName: bgc
+  acrServiceConnection: bgc-acr
+
+  # Dev
+  armServiceConnectionDev: bgc-dev
+  resourceGroupNameDev: bgc-dev-rg
+  azureContainerAppNameDev: bgc-search-service-dev-ca
+
+  # Prod
+  armServiceConnectionProd: bgc-prod
+  resourceGroupNameProd: bgc-prod-rg
+  azureContainerAppNameProd: bgc-search-service-prod-ca
+
+  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Search-API-CI.runID'])]
+
+stages:
+  - stage: DEV
+    jobs:
+      - deployment: DeployDev
+        variables:
+          - group: BGC-SEARCH-API-SHARED
+          - group: BGC-SEARCH-API-DEV
+        environment: DEV
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+
+                - task: PowerShell@2
+                  displayName: Set build name
+                  inputs:
+                    targetType: "inline"
+                    script: |
+                      [string] $releaseName = "$(deployTagId)"
+                      Write-Host "Setting the name of the build to '$releaseName'."
+                      Write-Host "##vso[build.updatebuildnumber]$releaseName"
+
+                - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
+                  parameters:
+                    armServiceConnection: $(armServiceConnectionDev)
+                    containerAppName: $(azureContainerAppNameDev)
+                    resourceGroupName: $(resourceGroupNameDev)
+
+                - task: AzureContainerApps@1
+                  displayName: Deploy Docker image to Container App
+                  inputs:
+                    acrName: $(acrName)
+                    acrUsername: $(acrUsername)
+                    acrPassword: $(acrPassword)
+                    azureSubscription: $(armServiceConnectionDev)
+                    containerAppName: $(azureContainerAppNameDev)
+                    resourceGroup: $(resourceGroupNameDev)
+                    imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
+                    environmentVariables: AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key ApplicationInsights__ConnectionString=secretref:appi-con-string
+
+  - stage: PROD
+    dependsOn: DEV
+    jobs:
+      - deployment: DeployProd
+        variables:
+          - group: BGC-SEARCH-API-SHARED
+          - group: BGC-SEARCH-API-PROD
+        environment: PROD
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+
+                - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/update_container_secrets.yaml
+                  parameters:
+                    armServiceConnection: $(armServiceConnectionProd)
+                    containerAppName: $(azureContainerAppNameProd)
+                    resourceGroupName: $(resourceGroupNameProd)
+
+                - task: AzureContainerApps@1
+                  displayName: Deploy Docker image to Container App
+                  inputs:
+                    acrName: $(acrName)
+                    acrUsername: $(acrUsername)
+                    acrPassword: $(acrPassword)
+                    azureSubscription: $(armServiceConnectionProd)
+                    containerAppName: $(azureContainerAppNameProd)
+                    resourceGroup: $(resourceGroupNameProd)
+                    imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
+                    environmentVariables: AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key ApplicationInsights__ConnectionString=secretref:appi-con-string
+
+                - task: git-tag-on-release-task@9
+                  displayName: Tag Artifacts
+                  inputs:
+                    staticTagName: $(deployTagId)

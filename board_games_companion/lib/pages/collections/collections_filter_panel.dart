@@ -1,17 +1,17 @@
 import 'dart:math';
 
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/widgets/common/elevated_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
+import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
 import '../../models/sort_by.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import 'collections_view_model.dart';

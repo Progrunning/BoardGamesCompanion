@@ -3,8 +3,8 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/board_games_companion/.pub" />
-      <excludeFolder url="file://$MODULE_DIR$/board_games_companion/build" />
+      <excludeFolder url="file://$MODULE_DIR$/BGC.App/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/BGC.App/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

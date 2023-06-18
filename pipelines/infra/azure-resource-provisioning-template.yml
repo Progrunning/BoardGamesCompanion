@@ -1,0 +1,56 @@
+parameters:
+  workingDirectory:
+  azureSpnConnectionName:
+  sharedAzureSpnConnectionName:
+  sharedStorageAccountName:
+  sharedRecourceGroupName:
+  terraformStateContainerName:
+  terraformVersion:
+
+steps:
+  - checkout: self
+
+  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+    displayName: Installing Terraform v${{ parameters.terraformVersion }}
+    condition: succeeded()
+    inputs:
+      terraformVersion: ${{ parameters.terraformVersion }}
+
+  - task: TerraformTaskV4@4
+    displayName: Terraform init
+    condition: succeeded()
+    inputs:
+      provider: "azurerm"
+      command: "init"
+      workingDirectory: ${{ parameters.workingDirectory }}
+      backendServiceArm: ${{ parameters.sharedAzureSpnConnectionName }}
+      backendAzureRmStorageAccountName: ${{ parameters.sharedStorageAccountName }}
+      backendAzureRmResourceGroupName: ${{ parameters.sharedRecourceGroupName }}
+      backendAzureRmContainerName: ${{ parameters.terraformStateContainerName }}
+      backendAzureRmKey: "terraform.tfstate"
+
+  # For some reason deployment of the container app using terraform is timing out constantly and makes the app broken.
+  # Manual steps to fix it are required
+  # 1. Delete the created app from Azure
+  # 2. Create it using CLI command from here https://learn.microsoft.com/en-us/azure/container-apps/get-started?tabs=bash#create-and-deploy-the-container-app
+  # Example: az containerapp up   --name bgc-search-service-dev-ca   --resource-group bgc-dev-rg   --location eastus   --environment 'bgc-dev-cae'   --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest   --target-port 80   --ingress external   --query properties.configuration.ingress.fqdn
+
+  - task: TerraformTaskV4@4
+    displayName: Terraform plan
+    condition: succeeded()
+    inputs:
+      provider: "azurerm"
+      command: "plan"
+      workingDirectory: ${{ parameters.workingDirectory }}
+      commandOptions: "-detailed-exitcode -input=false --var-file ./terraform.tfvars.json -out=tfplan"
+      environmentServiceNameAzureRM: ${{ parameters.azureSpnConnectionName }}
+
+  - task: TerraformTaskV4@4
+    displayName: Terraform validate and apply
+    condition: succeeded()
+    inputs:
+      provider: "azurerm"
+      command: "apply"
+      workingDirectory: ${{ parameters.workingDirectory }}
+      commandOptions: "-input=false tfplan"
+      environmentServiceNameAzureRM: ${{ parameters.azureSpnConnectionName }}

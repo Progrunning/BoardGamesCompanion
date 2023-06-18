@@ -1,20 +1,20 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/enums/game_classification.dart';
-import 'package:board_games_companion/common/enums/game_family.dart';
-import 'package:board_games_companion/models/hive/no_score_game_result.dart';
-import 'package:board_games_companion/models/hive/score.dart';
-import 'package:board_games_companion/stores/game_playthroughs_details_store.dart';
-import 'package:board_games_companion/stores/players_store.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/analytics.dart';
+import '../../common/enums/game_classification.dart';
+import '../../common/enums/game_family.dart';
+import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
+import '../../models/hive/score.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
 import '../../services/analytics_service.dart';
+import '../../stores/game_playthroughs_details_store.dart';
+import '../../stores/players_store.dart';
 import 'playthrough_timeline.dart';
 import 'playthroughs_log_game_players.dart';
 

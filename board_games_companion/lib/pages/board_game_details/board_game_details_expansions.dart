@@ -1,9 +1,9 @@
-import 'package:board_games_companion/models/hive/board_game_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
+import '../../models/hive/board_game_details.dart';
 import '../../models/hive/board_game_expansion.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../services/preferences_service.dart';
@@ -36,23 +36,18 @@ class BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> 
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: widget.spacingBetweenSecions),
-        Material(
-          color: Colors.transparent,
-          child: Theme(
-            data: AppTheme.theme.copyWith(unselectedWidgetColor: AppColors.accentColor),
-            child: _Expansions(
-              expansions: widget.expansions,
-              ownedExpansionsById: widget.ownedExpansionsById,
-              totalExpansionsOwned: widget.totalExpansionsOwned,
-              preferencesService: widget.preferencesService!,
-              initiallyExpanded: widget.preferencesService!.getExpansionsPanelExpandedState(),
-            ),
-          ),
+    return Material(
+      color: Colors.transparent,
+      child: Theme(
+        data: AppTheme.theme.copyWith(unselectedWidgetColor: AppColors.accentColor),
+        child: _Expansions(
+          expansions: widget.expansions,
+          ownedExpansionsById: widget.ownedExpansionsById,
+          totalExpansionsOwned: widget.totalExpansionsOwned,
+          preferencesService: widget.preferencesService!,
+          initiallyExpanded: widget.preferencesService!.getExpansionsPanelExpandedState(),
         ),
-      ],
+      ),
     );
   }
 }
@@ -80,21 +75,19 @@ class _Expansions extends StatelessWidget {
       child: ExpansionTile(
         title: Text(
           'Expansions (${expansions.length})',
-          style: const TextStyle(fontSize: Dimensions.standardFontSize),
+          style: const TextStyle(fontSize: Dimensions.largeFontSize),
         ),
-        textColor: AppColors.accentColor,
-        collapsedTextColor: AppColors.secondaryTextColor,
-        iconColor: AppColors.accentColor,
-        collapsedIconColor: AppColors.accentColor,
         subtitle: Text(
           totalExpansionsOwned == 0
               ? "You don't own any expansions"
               : 'You own $totalExpansionsOwned expansion(s)',
-          style: const TextStyle(
-            color: AppColors.defaultTextColor,
-            fontSize: Dimensions.smallFontSize,
-          ),
+          style: AppTheme.subTitleTextStyle.copyWith(fontSize: Dimensions.smallFontSize),
         ),
+        collapsedBackgroundColor: AppColors.primaryColor,
+        textColor: AppColors.accentColor,
+        collapsedTextColor: AppColors.defaultTextColor,
+        iconColor: AppColors.accentColor,
+        collapsedIconColor: AppColors.accentColor,
         tilePadding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
         initiallyExpanded: initiallyExpanded!,
         onExpansionChanged: (bool isExpanded) async =>
@@ -138,7 +131,7 @@ class _Expansion extends StatelessWidget {
             Expanded(
               child: Text(
                 _boardGameExpansion.name,
-                style: AppTheme.theme.textTheme.displaySmall,
+                style: AppTheme.theme.textTheme.bodyMedium,
               ),
             ),
             const Icon(Icons.navigate_next, color: AppColors.accentColor),

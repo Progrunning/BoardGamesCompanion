@@ -1,9 +1,9 @@
-import 'package:board_games_companion/common/enums/game_classification.dart';
-import 'package:board_games_companion/extensions/scores_extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../common/enums/game_classification.dart';
 import '../../common/enums/playthrough_status.dart';
+import '../../extensions/scores_extensions.dart';
 import '../hive/playthrough.dart';
 import '../hive/playthrough_note.dart';
 import '../player_score.dart';

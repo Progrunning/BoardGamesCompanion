@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/pages/home/home_view_model.dart';
-import 'package:board_games_companion/widgets/search/bgg_search.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -11,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/board_game_details_page_arguments.dart';
@@ -19,6 +17,7 @@ import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../models/results/board_game_creation_result.dart';
 import '../../widgets/bottom_tab_icon.dart';
 import '../../widgets/common/page_container.dart';
+import '../../widgets/search/bgg_search.dart';
 import '../../widgets/search/collections_search.dart';
 import '../base_page_state.dart';
 import '../board_game_details/board_game_details_page.dart';
@@ -29,6 +28,7 @@ import '../players/players_page.dart';
 import '../plays/plays_page.dart';
 import '../playthroughs/playthroughs_page.dart';
 import 'home_page_drawer.dart';
+import 'home_view_model.dart';
 
 typedef SearchCallback = Future<List<BoardGameDetails>> Function(String query);
 
@@ -188,8 +188,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
       context: navigatorState.context,
       delegate: BggSearch(
         searchHistory: widget.viewModel.searchHistory,
-        sortByOptions: widget.viewModel.bggSearchSortByOptions,
-        searchResultsStream: widget.viewModel.bggSearchResultsStream,
+        sortByOptions: widget.viewModel.searchSortByOptions,
+        searchResultsStream: widget.viewModel.searchResultsStream,
         onResultAction: (boardGame, actionType) async =>
             _handleBggSearchResultAction(boardGame, actionType),
         onSortyByUpdate: (sortBy) => widget.viewModel.updateBggSearchSortByOption(sortBy),

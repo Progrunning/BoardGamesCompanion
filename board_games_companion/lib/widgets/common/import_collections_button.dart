@@ -1,7 +1,7 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/app_text.dart';
 import '../../mixins/import_collection.dart';
 import 'default_icon.dart';
 import 'elevated_icon_button.dart';

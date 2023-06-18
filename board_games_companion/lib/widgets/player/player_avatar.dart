@@ -1,10 +1,10 @@
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_styles.dart';
 import '../../models/hive/player.dart';
 import '../common/ripple_effect.dart';
+import '../elevated_container.dart';
 import 'player_avatar_subtitle_widget.dart';
 import 'player_image.dart';
 

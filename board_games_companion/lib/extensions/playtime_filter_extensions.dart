@@ -1,6 +1,7 @@
-import 'package:board_games_companion/common/app_text.dart';
-import 'package:board_games_companion/pages/plays/game_spinner_filters.dart';
 import 'package:sprintf/sprintf.dart';
+
+import '../common/app_text.dart';
+import '../pages/plays/game_spinner_filters.dart';
 
 extension PlaytimeFilterExtensions on PlaytimeFilter {
   String toFormattedText() {

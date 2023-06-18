@@ -1,10 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/services/score_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/hive/score.dart';
+import '../services/score_service.dart';
 
 part 'scores_store.g.dart';
 

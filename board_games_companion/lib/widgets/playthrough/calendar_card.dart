@@ -1,4 +1,3 @@
-import 'package:board_games_companion/widgets/elevated_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
@@ -7,6 +6,7 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../common/ripple_effect.dart';
+import '../elevated_container.dart';
 import '../painters/divider_painter.dart';
 
 class CalendarCard extends StatelessWidget {

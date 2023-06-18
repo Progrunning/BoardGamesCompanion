@@ -1,0 +1,23 @@
+@startuml search_system_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/users.puml
+
+Person(user, "User", "Board game enthusiast creating their collection or searching for a game to buy", $sprite="users")
+System(bgcSearchSystem, "Search System", "Allows board game enthusiasts to search for board games")
+System_Ext(bggApi, "BGG Api", "Stores all of the board games detail information")
+System_Ext(boardGameOracleApi, "Board Game Oracle Api", "Stores current and historical pricing information about board games in different countries")
+
+Rel(user, bgcSearchSystem, "Looks for board games to add to collection")
+Rel(user, bgcSearchSystem, "Looks for board games to purchase")
+
+Rel(bgcSearchSystem, bggApi, "Looks for board games to purchase")
+Rel(bgcSearchSystem, boardGameOracleApi, "Looks for board games to purchase")
+
+LAYOUT_WITH_LEGEND()
+
+C4VersionDetails()
+
+@enduml

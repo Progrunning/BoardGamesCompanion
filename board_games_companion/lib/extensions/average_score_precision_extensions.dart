@@ -1,4 +1,4 @@
-import 'package:board_games_companion/pages/playthroughs/average_score_precision.dart';
+import '../pages/playthroughs/average_score_precision.dart';
 
 extension AverageScorePrecisionExtensions on AverageScorePrecision {
   String toFormattedText() {

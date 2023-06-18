@@ -35,7 +35,7 @@ class RatingHexagon extends StatelessWidget {
         sides: Dimensions.edgeNumberOfHexagon,
         child: Container(
           color: _hexColor.withAlpha(_hexColorOpacity),
-          child: _child,
+          child: Center(child: _child),
         ),
       ),
     );
