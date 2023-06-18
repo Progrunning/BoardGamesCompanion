@@ -28,4 +28,6 @@ class Score with _$Score {
   const Score._();
 
   int get valueInt => int.tryParse(value ?? '0') ?? 0;
+
+  bool get hasScore => value != null || noScoreGameResult?.cooperativeGameResult != null;
 }

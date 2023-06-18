@@ -663,7 +663,7 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
   }
 
   void _updateDuration(void _) {
-    if (mounted) {
+    if (mounted && !widget.viewModel.playthoughEnded) {
       setState(() {});
     }
   }
