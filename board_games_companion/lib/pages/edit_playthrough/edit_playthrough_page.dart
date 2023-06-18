@@ -21,6 +21,7 @@ import '../../models/hive/player.dart';
 import '../../models/hive/playthrough_note.dart';
 import '../../models/navigation/playthough_note_page_arguments.dart';
 import '../../models/player_score.dart';
+import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
@@ -568,18 +569,33 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
   late int minMinutes;
   late int maxMinutes;
 
+  // MK An arbitrary number of seconds to refresh the duration
+  final PeriodicBroadcastStream _refreshPlayDurationPeriodicStream =
+      PeriodicBroadcastStream(const Duration(seconds: 10));
+
   @override
   void initState() {
     super.initState();
 
-    playthroughDuration = widget.viewModel.playthoughDuration;
-    playthroughDurationInSeconds = playthroughDuration.inSeconds;
-    hoursPlayed = playthroughDuration.inHours;
-    minutesPlyed = playthroughDuration.inMinutes - hoursPlayed * Duration.minutesPerHour;
+    if (!widget.viewModel.playthoughEnded) {
+      _refreshPlayDurationPeriodicStream.stream.listen(_updateDuration);
+    }
+  }
+
+  @override
+  void dispose() {
+    _refreshPlayDurationPeriodicStream.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    playthroughDuration = widget.viewModel.playthoughDuration;
+    playthroughDurationInSeconds = playthroughDuration.inSeconds;
+    hoursPlayed = playthroughDuration.inHours;
+    minutesPlyed = playthroughDuration.inMinutes - hoursPlayed * Duration.minutesPerHour;
+
     _setHourseAndMinutesRange();
     return MultiSliver(
       children: [
@@ -646,7 +662,17 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
     );
   }
 
+  void _updateDuration(void _) {
+    if (mounted && !widget.viewModel.playthoughEnded) {
+      setState(() {});
+    }
+  }
+
   void _updateDurationHours(num value) {
+    if (!widget.viewModel.playthoughEnded) {
+      return;
+    }
+
     setState(() {
       hoursPlayed = value.toInt();
       widget.viewModel.updateDuration(hoursPlayed, minutesPlyed);
@@ -654,6 +680,10 @@ class _PlayDateTimeSectionState extends State<_PlayDateTimeSection> {
   }
 
   void _updateDurationMinutes(num value) {
+    if (!widget.viewModel.playthoughEnded) {
+      return;
+    }
+
     setState(() {
       minutesPlyed = value.toInt();
       widget.viewModel.updateDuration(hoursPlayed, minutesPlyed);

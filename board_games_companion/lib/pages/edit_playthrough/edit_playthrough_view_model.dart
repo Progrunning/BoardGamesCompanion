@@ -142,7 +142,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @action
   void updatePlayerScore(PlayerScore playerScore, int newScore) {
-    if (playerScore.score.valueInt == newScore) {
+    if (playerScore.score.hasScore && playerScore.score.valueInt == newScore) {
       return;
     }
 
