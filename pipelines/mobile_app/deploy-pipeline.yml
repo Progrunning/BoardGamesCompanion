@@ -166,7 +166,6 @@ stages:
               channel: "stable"
               version: "custom"
               customVersion: $(flutter.version)
-              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey)
 
           - task: InstallAppleCertificate@2
             inputs:
@@ -189,6 +188,7 @@ stages:
               projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
               buildName: "$(appVersion)"
+              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey)
 
           - task: Xcode@5
             inputs:
