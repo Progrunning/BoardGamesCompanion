@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -48,6 +49,7 @@ abstract class _PlaythroughsStore with Store {
     DateTime startDate,
     Duration? duration, {
     int? bggPlayId,
+    List<PlaythroughNote>? notes,
   }) async {
     final newPlaythrough = await _playthroughService.createPlaythrough(
       boardGameId,
@@ -56,6 +58,7 @@ abstract class _PlaythroughsStore with Store {
       startDate,
       duration,
       bggPlayId: bggPlayId,
+      notes: notes,
     );
 
     if (newPlaythrough == null) {

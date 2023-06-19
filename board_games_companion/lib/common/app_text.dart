@@ -131,6 +131,7 @@ class AppText {
   static const playthroughsLogDateSectionTitle = 'Date';
   static const playthroughsLogDurationSectionTitle = 'Duration';
   static const playthroughsLogPlayersSectionTitle = 'Players';
+  static const playthroughsLogNotesSectionTitle = 'Notes';
   static const playthroughsLogCooperativeResultSectionTitle = 'Result';
   static const playthroughsLogPlayersPlayingNowButtonText = 'Select players that are playing';
   static const playthroughsLogPlayersPlayedInThePastButtonText = 'Select players that played';
@@ -187,6 +188,7 @@ class AppText {
   static const editPlaythroughNoScoreResultLossText = 'Loss';
   static const editPlaythroughNoScorePlayersHeaderTitle = 'Players';
   static const editPlaythroughNotesHeaderTitle = 'Notes';
+  static const editPlaythroughNoNotesText = 'Add notes about your game';
   static const editPlaythroughPagePlayedOnSectionTitle = 'Played on';
   static const editPlaythroughPageDurationSectionTitle = 'Duration';
   static const editPlaythroughPageScoreSectionTitle = 'Score';

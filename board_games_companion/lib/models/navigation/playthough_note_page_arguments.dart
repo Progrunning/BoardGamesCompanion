@@ -1,8 +1,7 @@
-import '../hive/playthrough.dart';
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
 
 class PlaythroughNotePageArguments {
-  const PlaythroughNotePageArguments(this.playthrough, {this.noteId});
+  const PlaythroughNotePageArguments({this.note});
 
-  final String? noteId;
-  final Playthrough playthrough;
+  final PlaythroughNote? note;
 }

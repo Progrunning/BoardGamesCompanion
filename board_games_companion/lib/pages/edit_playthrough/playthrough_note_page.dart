@@ -103,8 +103,8 @@ class _PlaythroughNotePageState extends State<PlaythroughNotePage> {
 
   Future<void> _saveNote() async {
     final navigatorState = Navigator.of(context);
-    await widget.viewModel.saveNote(_controller.text);
-    navigatorState.pop();
+    widget.viewModel.updateNote(_controller.text);
+    navigatorState.pop(widget.viewModel.note);
   }
 
   void _updateNote(String note) => widget.viewModel.updateNote(note);

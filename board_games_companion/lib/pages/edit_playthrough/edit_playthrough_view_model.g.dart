@@ -209,11 +209,22 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
-  void refreshNotes() {
+  void addPlaythroughNote(PlaythroughNote note) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
-        name: '_EditPlaythoughViewModel.refreshNotes');
+        name: '_EditPlaythoughViewModel.addPlaythroughNote');
     try {
-      return super.refreshNotes();
+      return super.addPlaythroughNote(note);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void editPlaythroughNote(PlaythroughNote note) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.editPlaythroughNote');
+    try {
+      return super.editPlaythroughNote(note);
     } finally {
       _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
     }

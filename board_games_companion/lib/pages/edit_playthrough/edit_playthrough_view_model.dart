@@ -173,25 +173,41 @@ abstract class _EditPlaythoughViewModel with Store {
         playthroughDetailsWorkingCopy.copyWith(playerScores: updatedPlayerScores);
   }
 
-  /// After adding/editing a note to the [PlaythroughDetails] refresh the working copy with the latest data
-  @action
-  void refreshNotes() {
-    _playthroughDetailsWorkingCopy = _playthroughDetailsWorkingCopy!.copyWith(
-        playthrough:
-            _playthroughDetailsWorkingCopy!.playthrough.copyWith(notes: playthroughDetails.notes));
-  }
-
   @action
   Future<void> deletePlaythrough() async {
     await _gamePlaythroughsDetailsStore.deletePlaythrough(playthroughDetails.id);
   }
 
   @action
+  void addPlaythroughNote(PlaythroughNote note) {
+    final existingNotes = _playthroughDetailsWorkingCopy!.notes ?? [];
+
+    _updatePlaythroughDetailsNotes([...existingNotes, note]);
+  }
+
+  @action
+  void editPlaythroughNote(PlaythroughNote note) {
+    final noteToUpdateIndex =
+        _playthroughDetailsWorkingCopy!.notes?.indexWhere((n) => n.id == note.id);
+    if (noteToUpdateIndex == null) {
+      return;
+    }
+
+    final updatedPlaythroughNotes = _playthroughDetailsWorkingCopy!.notes!;
+    updatedPlaythroughNotes[noteToUpdateIndex] = note;
+
+    _updatePlaythroughDetailsNotes(updatedPlaythroughNotes);
+  }
+
+  @action
   void deletePlaythroughNote(PlaythroughNote note) {
     final updatedPlaythroughNotes =
         List<PlaythroughNote>.from(_playthroughDetailsWorkingCopy!.notes!)..remove(note);
-    _playthroughDetailsWorkingCopy = _playthroughDetailsWorkingCopy!.copyWith(
-        playthrough:
-            _playthroughDetailsWorkingCopy!.playthrough.copyWith(notes: updatedPlaythroughNotes));
+    _updatePlaythroughDetailsNotes(updatedPlaythroughNotes);
+  }
+
+  void _updatePlaythroughDetailsNotes(List<PlaythroughNote> notes) {
+    _playthroughDetailsWorkingCopy = _playthroughDetailsWorkingCopy!
+        .copyWith(playthrough: _playthroughDetailsWorkingCopy!.playthrough.copyWith(notes: notes));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
@@ -151,10 +152,9 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
           case PlaythroughNotePage.pageRoute:
             final arguments = routeSettings.arguments as PlaythroughNotePageArguments;
             final viewModel = getIt<PlaythroughNoteViewModel>();
-            viewModel.setPlaythrough(arguments.playthrough);
-            viewModel.setNoteId(arguments.noteId);
+            viewModel.setNote(arguments.note);
 
-            return MaterialPageRoute<dynamic>(
+            return MaterialPageRoute<PlaythroughNote?>(
               settings: routeSettings,
               builder: (BuildContext context) => PlaythroughNotePage(viewModel: viewModel),
             );

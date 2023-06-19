@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -27,6 +26,7 @@ import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
+import '../../widgets/playthrough/playthrough_note_list_item.dart';
 import '../enter_score/enter_score_view_model.dart';
 import 'edit_playthrough_view_model.dart';
 import 'playthrough_note_page.dart';
@@ -84,7 +84,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     if (widget.viewModel.hasNotes)
                       _NotesSection(
                         notes: widget.viewModel.notes!,
-                        onTap: (note) => _editNote(note.id),
+                        onTap: (note) => _editNote(note),
                         onDelete: (note) => _deleteNote(note),
                       ),
                   ],
@@ -235,19 +235,29 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _addNote() async {
-    await Navigator.of(context).pushNamed(
+    final PlaythroughNote? addedNote = await Navigator.of(context).pushNamed(
       PlaythroughNotePage.pageRoute,
-      arguments: PlaythroughNotePageArguments(widget.viewModel.playthrough),
+      arguments: const PlaythroughNotePageArguments(),
     );
-    widget.viewModel.refreshNotes();
+
+    if (addedNote == null) {
+      return;
+    }
+
+    widget.viewModel.addPlaythroughNote(addedNote);
   }
 
-  Future<void> _editNote(String noteId) async {
-    await Navigator.of(context).pushNamed(
+  Future<void> _editNote(PlaythroughNote note) async {
+    final PlaythroughNote? editedNote = await Navigator.of(context).pushNamed(
       PlaythroughNotePage.pageRoute,
-      arguments: PlaythroughNotePageArguments(widget.viewModel.playthrough, noteId: noteId),
+      arguments: PlaythroughNotePageArguments(note: note),
     );
-    widget.viewModel.refreshNotes();
+
+    if (editedNote == null) {
+      return;
+    }
+
+    widget.viewModel.editPlaythroughNote(editedNote);
   }
 
   Future<void> _deleteNote(PlaythroughNote note) async {
@@ -400,7 +410,8 @@ class _NotesSection extends StatelessWidget {
         SliverPersistentHeader(
           pinned: true,
           delegate: BgcSliverTitleHeaderDelegate.title(
-              primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+            primaryTitle: AppText.editPlaythroughNotesHeaderTitle,
+          ),
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -408,32 +419,7 @@ class _NotesSection extends StatelessWidget {
               final int itemIndex = index ~/ 2;
               final note = notes[itemIndex];
               if (index.isEven) {
-                return InkWell(
-                  onTap: () => onTap(note),
-                  child: Slidable(
-                    endActionPane: ActionPane(
-                      extentRatio: 0.25,
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          icon: Icons.delete,
-                          onPressed: (_) => onDelete(note),
-                          backgroundColor: AppColors.redColor,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                            child: Text(note.text, textAlign: TextAlign.justify),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                return PlaythroughNoteListItem(onTap: onTap, note: note, onDelete: onDelete);
               }
 
               return const SizedBox(height: Dimensions.standardSpacing);

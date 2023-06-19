@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
+import 'package:board_games_companion/pages/playthroughs/playthrough_notes_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -21,6 +23,7 @@ import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
 import '../../models/navigation/player_page_arguments.dart';
+import '../../models/navigation/playthough_note_page_arguments.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_players_selection_result.dart';
 import '../../widgets/common/default_icon.dart';
@@ -34,7 +37,9 @@ import '../../widgets/common/text/item_property_value_widget.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
+import '../../widgets/playthrough/playthrough_note_list_item.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
+import '../edit_playthrough/playthrough_note_page.dart';
 import '../enter_score/enter_score_view_model.dart';
 import '../player/player_page.dart';
 import 'playthrough_players_selection_page.dart';
@@ -88,13 +93,23 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
                 Observer(
                   builder: (_) {
                     return viewModel.playthroughTimeline.maybeWhen(
-                      inThePast: () => _DateAndDurationSection(
-                        playthroughDate: viewModel.playthroughDate,
-                        playthroughDuration: viewModel.playthroughDuration,
-                        onPlaythroughTimeChanged: (playthoughDate) =>
-                            viewModel.playthroughDate = playthoughDate,
-                        onPlaythroughDurationChanged: (playthoughDuration) =>
-                            viewModel.playthroughDuration = playthoughDuration,
+                      inThePast: () => MultiSliver(
+                        children: [
+                          _DateAndDurationSection(
+                            playthroughDate: viewModel.playthroughDate,
+                            playthroughDuration: viewModel.playthroughDuration,
+                            onPlaythroughTimeChanged: (playthoughDate) =>
+                                viewModel.playthroughDate = playthoughDate,
+                            onPlaythroughDurationChanged: (playthoughDuration) =>
+                                viewModel.playthroughDuration = playthoughDuration,
+                          ),
+                          _NotesSection(
+                            noteState: viewModel.notesState,
+                            onCreateNote: () => _createNote(),
+                            onDeleteNote: (note) => viewModel.deleteNote(note),
+                            onEditNote: (note) => _editNote(note),
+                          ),
+                        ],
                       ),
                       orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
                     );
@@ -219,6 +234,32 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _createNote() async {
+    final PlaythroughNote? addedNote = await Navigator.of(context).pushNamed(
+      PlaythroughNotePage.pageRoute,
+      arguments: const PlaythroughNotePageArguments(),
+    );
+
+    if (addedNote == null) {
+      return;
+    }
+
+    viewModel.addNote(addedNote);
+  }
+
+  Future<void> _editNote(PlaythroughNote note) async {
+    final PlaythroughNote? editedNote = await Navigator.of(context).pushNamed(
+      PlaythroughNotePage.pageRoute,
+      arguments: PlaythroughNotePageArguments(note: note),
+    );
+
+    if (editedNote == null) {
+      return;
+    }
+
+    viewModel.editNote(editedNote);
   }
 }
 
@@ -347,6 +388,67 @@ class _DateAndDurationSection extends StatelessWidget {
                       onPlaythroughDurationChanged(playthroughDuration),
                 ),
               ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NotesSection extends StatelessWidget {
+  const _NotesSection({
+    required this.noteState,
+    required this.onCreateNote,
+    required this.onEditNote,
+    required this.onDeleteNote,
+  });
+
+  final PlaythroughNotesState noteState;
+  final VoidCallback onCreateNote;
+  final void Function(PlaythroughNote) onEditNote;
+  final void Function(PlaythroughNote) onDeleteNote;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.action(
+            primaryTitle: AppText.playthroughsLogNotesSectionTitle,
+            action: IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () => onCreateNote(),
+            ),
+          ),
+        ),
+        noteState.when(
+          notes: (notes) => SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (_, index) {
+                final int itemIndex = index ~/ 2;
+                final note = notes[itemIndex];
+                if (index.isEven) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
+                    child: PlaythroughNoteListItem(
+                      note: note,
+                      onTap: onEditNote,
+                      onDelete: onDeleteNote,
+                    ),
+                  );
+                }
+
+                return const SizedBox(height: Dimensions.standardSpacing);
+              },
+              childCount: max(0, notes.length * 2 - 1),
+            ),
+          ),
+          empty: () => const Padding(
+            padding: EdgeInsets.all(Dimensions.standardSpacing),
+            child: Text(
+              AppText.editPlaythroughNoNotesText,
+              style: AppTheme.defaultTextFieldStyle,
             ),
           ),
         ),

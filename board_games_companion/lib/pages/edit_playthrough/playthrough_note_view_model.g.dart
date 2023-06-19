@@ -47,50 +47,15 @@ mixin _$PlaythroughNoteViewModel on _PlaythroughNoteViewModel, Store {
     });
   }
 
-  late final _$_playthroughAtom =
-      Atom(name: '_PlaythroughNoteViewModel._playthrough', context: context);
-
-  @override
-  Playthrough? get _playthrough {
-    _$_playthroughAtom.reportRead();
-    return super._playthrough;
-  }
-
-  @override
-  set _playthrough(Playthrough? value) {
-    _$_playthroughAtom.reportWrite(value, super._playthrough, () {
-      super._playthrough = value;
-    });
-  }
-
-  late final _$saveNoteAsyncAction =
-      AsyncAction('_PlaythroughNoteViewModel.saveNote', context: context);
-
-  @override
-  Future<void> saveNote(String text) {
-    return _$saveNoteAsyncAction.run(() => super.saveNote(text));
-  }
-
   late final _$_PlaythroughNoteViewModelActionController =
       ActionController(name: '_PlaythroughNoteViewModel', context: context);
 
   @override
-  void setNoteId(String? value) {
+  void setNote(PlaythroughNote? playthroughNote) {
     final _$actionInfo = _$_PlaythroughNoteViewModelActionController
-        .startAction(name: '_PlaythroughNoteViewModel.setNoteId');
+        .startAction(name: '_PlaythroughNoteViewModel.setNote');
     try {
-      return super.setNoteId(value);
-    } finally {
-      _$_PlaythroughNoteViewModelActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setPlaythrough(Playthrough value) {
-    final _$actionInfo = _$_PlaythroughNoteViewModelActionController
-        .startAction(name: '_PlaythroughNoteViewModel.setPlaythrough');
-    try {
-      return super.setPlaythrough(value);
+      return super.setNote(playthroughNote);
     } finally {
       _$_PlaythroughNoteViewModelActionController.endAction(_$actionInfo);
     }
