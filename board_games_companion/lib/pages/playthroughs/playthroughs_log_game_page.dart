@@ -423,25 +423,20 @@ class _NotesSection extends StatelessWidget {
           ),
         ),
         noteState.when(
-          notes: (notes) => SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, index) {
-                final int itemIndex = index ~/ 2;
-                final note = notes[itemIndex];
-                if (index.isEven) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Dimensions.halfStandardSpacing),
-                    child: PlaythroughNoteListItem(
-                      note: note,
-                      onTap: onEditNote,
-                      onDelete: onDeleteNote,
-                    ),
+          notes: (notes) => SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, index) {
+                  final note = notes[index];
+                  return PlaythroughNoteListItem(
+                    note: note,
+                    onTap: onEditNote,
+                    onDelete: onDeleteNote,
                   );
-                }
-
-                return const SizedBox(height: Dimensions.standardSpacing);
-              },
-              childCount: max(0, notes.length * 2 - 1),
+                },
+                childCount: notes.length,
+              ),
             ),
           ),
           empty: () => const Padding(

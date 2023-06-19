@@ -241,9 +241,13 @@ abstract class _PlaythroughsLogGameViewModel with Store {
       notes: (playthroughNotes) {
         final notes = playthroughNotes.toList();
         notes.remove(note);
-        notesState = PlaythroughNotesState.notes(
-          playthroughNotes: notes,
-        );
+        if (notes.isEmpty) {
+          notesState = const PlaythroughNotesState.empty();
+        } else {
+          notesState = PlaythroughNotesState.notes(
+            playthroughNotes: notes,
+          );
+        }
       },
       orElse: () {},
     );

@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
@@ -36,8 +37,8 @@ abstract class _EditPlaythoughViewModel with Store {
   PlaythroughDetails get playthroughDetailsWorkingCopy => _playthroughDetailsWorkingCopy!;
 
   @computed
-  PlaythroughDetails get playthroughDetails =>
-      _gamePlaythroughsDetailsStore.playthroughsDetails.firstWhere((pd) => pd.id == _playthroughId);
+  PlaythroughDetails? get playthroughDetails => _gamePlaythroughsDetailsStore.playthroughsDetails
+      .firstWhereOrNull((pd) => pd.id == _playthroughId);
 
   @computed
   Playthrough get playthrough => playthroughDetailsWorkingCopy.playthrough;
@@ -92,7 +93,7 @@ abstract class _EditPlaythoughViewModel with Store {
     _playthroughId = playthroughId;
 
     _playthroughDetailsWorkingCopy =
-        playthroughDetails.copyWith(playerScores: playthroughDetails.playerScores);
+        playthroughDetails?.copyWith(playerScores: playthroughDetails!.playerScores);
   }
 
   @action
@@ -134,7 +135,7 @@ abstract class _EditPlaythoughViewModel with Store {
   void updateDuration(int hoursPlayed, int minutesPlyed) {
     final updatedPlaythrough = playthrough.copyWith(
         endDate:
-            playthroughDetails.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed)));
+            playthroughDetails?.startDate.add(Duration(hours: hoursPlayed, minutes: minutesPlyed)));
 
     _playthroughDetailsWorkingCopy =
         _playthroughDetailsWorkingCopy?.copyWith(playthrough: updatedPlaythrough);
@@ -175,7 +176,11 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @action
   Future<void> deletePlaythrough() async {
-    await _gamePlaythroughsDetailsStore.deletePlaythrough(playthroughDetails.id);
+    if (playthroughDetails == null) {
+      return;
+    }
+
+    await _gamePlaythroughsDetailsStore.deletePlaythrough(playthroughDetails!.id);
   }
 
   @action

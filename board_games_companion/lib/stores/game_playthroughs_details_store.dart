@@ -115,6 +115,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
       startDate,
       duration,
       bggPlayId: bggPlayId,
+      notes: notes,
     );
 
     if (newPlaythrough == null) {

@@ -14,11 +14,10 @@ part 'playthrough_note_view_model.g.dart';
 class PlaythroughNoteViewModel = _PlaythroughNoteViewModel with _$PlaythroughNoteViewModel;
 
 abstract class _PlaythroughNoteViewModel with Store {
+  late bool isNewNote;
+
   @observable
   PlaythroughNote? note;
-
-  @computed
-  bool get isNewNote => note == null;
 
   @computed
   bool get isNoteEmpty => note?.text.isNullOrBlank ?? false;
@@ -30,6 +29,7 @@ abstract class _PlaythroughNoteViewModel with Store {
 
   @action
   void setNote(PlaythroughNote? playthroughNote) {
+    isNewNote = playthroughNote == null;
     playthroughNote ??= PlaythroughNote(
       id: const Uuid().v4(),
       text: '',

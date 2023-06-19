@@ -19,29 +19,30 @@ class PlaythroughNoteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => onTap(note),
-      child: Slidable(
-        endActionPane: ActionPane(
-          extentRatio: 0.25,
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-              icon: Icons.delete,
-              onPressed: (_) => onDelete(note),
-              backgroundColor: AppColors.redColor,
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => onTap(note),
+        child: Slidable(
+          endActionPane: ActionPane(
+            extentRatio: 0.25,
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                icon: Icons.delete,
+                onPressed: (_) => onDelete(note),
+                backgroundColor: AppColors.redColor,
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Padding(
                 padding: const EdgeInsets.all(Dimensions.standardSpacing),
                 child: Text(note.text, textAlign: TextAlign.justify),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

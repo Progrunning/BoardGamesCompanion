@@ -69,7 +69,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     if (widget.viewModel.gameClassification == GameClassification.Score)
                       _ScoresSection(
                         playerScores: widget.viewModel.playerScores,
-                        playthroughDetailsId: widget.viewModel.playthroughDetails.id,
+                        playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
                         onItemTapped: (PlayerScore playerScore) async =>
                             _editPlayerScore(playerScore, context),
                       ),
@@ -274,7 +274,7 @@ class _ScoresSection extends StatelessWidget {
   }) : super(key: key);
 
   final List<PlayerScore> playerScores;
-  final String playthroughDetailsId;
+  final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
@@ -297,7 +297,7 @@ class _ScoresSection extends StatelessWidget {
                       if (index.isEven) {
                         return _PlayerScoreTile(
                           playerScore: playerScores[itemIndex],
-                          playthroughId: playthroughDetailsId,
+                          playthroughDetailsId: playthroughDetailsId,
                           onItemTapped: onItemTapped,
                         );
                       }
@@ -416,15 +416,13 @@ class _NotesSection extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (_, index) {
-              final int itemIndex = index ~/ 2;
-              final note = notes[itemIndex];
-              if (index.isEven) {
-                return PlaythroughNoteListItem(onTap: onTap, note: note, onDelete: onDelete);
-              }
-
-              return const SizedBox(height: Dimensions.standardSpacing);
+              return PlaythroughNoteListItem(
+                onTap: onTap,
+                note: notes[index],
+                onDelete: onDelete,
+              );
             },
-            childCount: max(0, notes.length * 2 - 1),
+            childCount: notes.length,
           ),
         ),
         // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
@@ -442,12 +440,12 @@ class _PlayerScoreTile extends StatefulWidget {
   const _PlayerScoreTile({
     Key? key,
     required this.playerScore,
-    required this.playthroughId,
+    required this.playthroughDetailsId,
     required this.onItemTapped,
   }) : super(key: key);
 
   final PlayerScore playerScore;
-  final String playthroughId;
+  final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
@@ -485,7 +483,7 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                 child: PlayerAvatar(
                   player: widget.playerScore.player,
                   avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                  playerHeroIdSuffix: widget.playthroughId,
+                  playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
                 ),
               ),
               const SizedBox(width: Dimensions.standardSpacing),
