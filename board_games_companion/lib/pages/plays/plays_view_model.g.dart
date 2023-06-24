@@ -24,15 +24,14 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
               () => super.finishedPlaythroughs,
               name: '_PlaysViewModel.finishedPlaythroughs'))
           .value;
-  Computed<List<GroupedBoardGamePlaythroughs>>?
-      _$finishedBoardGamePlaythroughsComputed;
+  Computed<List<HistoricalPlaythrough>>? _$historicalPlaythroughsComputed;
 
   @override
-  List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs =>
-      (_$finishedBoardGamePlaythroughsComputed ??=
-              Computed<List<GroupedBoardGamePlaythroughs>>(
-                  () => super.finishedBoardGamePlaythroughs,
-                  name: '_PlaysViewModel.finishedBoardGamePlaythroughs'))
+  List<HistoricalPlaythrough> get historicalPlaythroughs =>
+      (_$historicalPlaythroughsComputed ??=
+              Computed<List<HistoricalPlaythrough>>(
+                  () => super.historicalPlaythroughs,
+                  name: '_PlaysViewModel.historicalPlaythroughs'))
           .value;
   Computed<bool>? _$hasAnyFinishedPlaythroughsComputed;
 
@@ -221,7 +220,7 @@ futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
 visualState: ${visualState},
 gameSpinnerFilters: ${gameSpinnerFilters},
 finishedPlaythroughs: ${finishedPlaythroughs},
-finishedBoardGamePlaythroughs: ${finishedBoardGamePlaythroughs},
+historicalPlaythroughs: ${historicalPlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},
 hasAnyBoardGames: ${hasAnyBoardGames},
 hasAnyBoardGamesToShuffle: ${hasAnyBoardGamesToShuffle},

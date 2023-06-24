@@ -20,7 +20,7 @@ mixin _$PlaysPageVisualState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)
+            List<HistoricalPlaythrough> historicalPlaythroughs)
         history,
     required TResult Function(PlaysTab playsTab) statistics,
     required TResult Function(
@@ -31,7 +31,7 @@ mixin _$PlaysPageVisualState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult? Function(PlaysTab playsTab)? statistics,
     TResult? Function(
@@ -42,7 +42,7 @@ mixin _$PlaysPageVisualState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult Function(PlaysTab playsTab)? statistics,
     TResult Function(
@@ -122,8 +122,7 @@ abstract class _$$_HistoryCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {PlaysTab playsTab,
-      List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs});
+      {PlaysTab playsTab, List<HistoricalPlaythrough> historicalPlaythroughs});
 }
 
 /// @nodoc
@@ -137,17 +136,17 @@ class __$$_HistoryCopyWithImpl<$Res>
   @override
   $Res call({
     Object? playsTab = null,
-    Object? finishedBoardGamePlaythroughs = null,
+    Object? historicalPlaythroughs = null,
   }) {
     return _then(_$_History(
       null == playsTab
           ? _value.playsTab
           : playsTab // ignore: cast_nullable_to_non_nullable
               as PlaysTab,
-      null == finishedBoardGamePlaythroughs
-          ? _value._finishedBoardGamePlaythroughs
-          : finishedBoardGamePlaythroughs // ignore: cast_nullable_to_non_nullable
-              as List<GroupedBoardGamePlaythroughs>,
+      null == historicalPlaythroughs
+          ? _value._historicalPlaythroughs
+          : historicalPlaythroughs // ignore: cast_nullable_to_non_nullable
+              as List<HistoricalPlaythrough>,
     ));
   }
 }
@@ -155,24 +154,24 @@ class __$$_HistoryCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_History implements _History {
-  const _$_History(this.playsTab,
-      final List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)
-      : _finishedBoardGamePlaythroughs = finishedBoardGamePlaythroughs;
+  const _$_History(
+      this.playsTab, final List<HistoricalPlaythrough> historicalPlaythroughs)
+      : _historicalPlaythroughs = historicalPlaythroughs;
 
   @override
   final PlaysTab playsTab;
-  final List<GroupedBoardGamePlaythroughs> _finishedBoardGamePlaythroughs;
+  final List<HistoricalPlaythrough> _historicalPlaythroughs;
   @override
-  List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs {
-    if (_finishedBoardGamePlaythroughs is EqualUnmodifiableListView)
-      return _finishedBoardGamePlaythroughs;
+  List<HistoricalPlaythrough> get historicalPlaythroughs {
+    if (_historicalPlaythroughs is EqualUnmodifiableListView)
+      return _historicalPlaythroughs;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_finishedBoardGamePlaythroughs);
+    return EqualUnmodifiableListView(_historicalPlaythroughs);
   }
 
   @override
   String toString() {
-    return 'PlaysPageVisualState.history(playsTab: $playsTab, finishedBoardGamePlaythroughs: $finishedBoardGamePlaythroughs)';
+    return 'PlaysPageVisualState.history(playsTab: $playsTab, historicalPlaythroughs: $historicalPlaythroughs)';
   }
 
   @override
@@ -183,13 +182,12 @@ class _$_History implements _History {
             (identical(other.playsTab, playsTab) ||
                 other.playsTab == playsTab) &&
             const DeepCollectionEquality().equals(
-                other._finishedBoardGamePlaythroughs,
-                _finishedBoardGamePlaythroughs));
+                other._historicalPlaythroughs, _historicalPlaythroughs));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, playsTab,
-      const DeepCollectionEquality().hash(_finishedBoardGamePlaythroughs));
+      const DeepCollectionEquality().hash(_historicalPlaythroughs));
 
   @JsonKey(ignore: true)
   @override
@@ -201,35 +199,35 @@ class _$_History implements _History {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)
+            List<HistoricalPlaythrough> historicalPlaythroughs)
         history,
     required TResult Function(PlaysTab playsTab) statistics,
     required TResult Function(
             PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)
         selectGame,
   }) {
-    return history(playsTab, finishedBoardGamePlaythroughs);
+    return history(playsTab, historicalPlaythroughs);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult? Function(PlaysTab playsTab)? statistics,
     TResult? Function(
             PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
         selectGame,
   }) {
-    return history?.call(playsTab, finishedBoardGamePlaythroughs);
+    return history?.call(playsTab, historicalPlaythroughs);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult Function(PlaysTab playsTab)? statistics,
     TResult Function(
@@ -238,7 +236,7 @@ class _$_History implements _History {
     required TResult orElse(),
   }) {
     if (history != null) {
-      return history(playsTab, finishedBoardGamePlaythroughs);
+      return history(playsTab, historicalPlaythroughs);
     }
     return orElse();
   }
@@ -279,14 +277,12 @@ class _$_History implements _History {
 }
 
 abstract class _History implements PlaysPageVisualState {
-  const factory _History(
-      final PlaysTab playsTab,
-      final List<GroupedBoardGamePlaythroughs>
-          finishedBoardGamePlaythroughs) = _$_History;
+  const factory _History(final PlaysTab playsTab,
+      final List<HistoricalPlaythrough> historicalPlaythroughs) = _$_History;
 
   @override
   PlaysTab get playsTab;
-  List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs;
+  List<HistoricalPlaythrough> get historicalPlaythroughs;
   @override
   @JsonKey(ignore: true)
   _$$_HistoryCopyWith<_$_History> get copyWith =>
@@ -361,7 +357,7 @@ class _$_Statistics implements _Statistics {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)
+            List<HistoricalPlaythrough> historicalPlaythroughs)
         history,
     required TResult Function(PlaysTab playsTab) statistics,
     required TResult Function(
@@ -375,7 +371,7 @@ class _$_Statistics implements _Statistics {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult? Function(PlaysTab playsTab)? statistics,
     TResult? Function(
@@ -389,7 +385,7 @@ class _$_Statistics implements _Statistics {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult Function(PlaysTab playsTab)? statistics,
     TResult Function(
@@ -535,7 +531,7 @@ class _$_SelectGame implements _SelectGame {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)
+            List<HistoricalPlaythrough> historicalPlaythroughs)
         history,
     required TResult Function(PlaysTab playsTab) statistics,
     required TResult Function(
@@ -549,7 +545,7 @@ class _$_SelectGame implements _SelectGame {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult? Function(PlaysTab playsTab)? statistics,
     TResult? Function(
@@ -563,7 +559,7 @@ class _$_SelectGame implements _SelectGame {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(PlaysTab playsTab,
-            List<GroupedBoardGamePlaythroughs> finishedBoardGamePlaythroughs)?
+            List<HistoricalPlaythrough> historicalPlaythroughs)?
         history,
     TResult Function(PlaysTab playsTab)? statistics,
     TResult Function(

@@ -1,8 +1,11 @@
+import 'package:board_games_companion/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../common/app_text.dart';
 import '../common/constants.dart';
+
+final DateFormat historicalPlaythroughDateFormat = DateFormat('d MMMM y');
 
 extension DateTimeExtensions on DateTime? {
   String toShortMonth([String? fallbackValue]) {
@@ -37,6 +40,26 @@ extension DateTimeExtensions on DateTime? {
     }
 
     return sprintf(AppText.daysAgoFormat, [daysAgo]);
+  }
+
+  String toHistoricalPlaythroughHeaderFormat() {
+    if (this == null) {
+      return '';
+    }
+
+    if (isToday) {
+      return AppText.today.toCapitalized();
+    }
+
+    if (isYesterday) {
+      return AppText.yesteday.toCapitalized();
+    }
+
+    if (isDayBeforeYesterday) {
+      return AppText.dayBeforeYesteday.toCapitalized();
+    }
+
+    return historicalPlaythroughDateFormat.format(this!);
   }
 
   int get daysAgo {
