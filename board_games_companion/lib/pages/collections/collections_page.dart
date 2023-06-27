@@ -223,6 +223,8 @@ class _AppBar extends StatefulWidget {
 }
 
 class _AppBarState extends State<_AppBar> {
+  static const double _requiredFiltersBottomSheetHeight = 500;
+
   @override
   Widget build(BuildContext context) => SliverAppBar(
         pinned: true,
@@ -286,6 +288,7 @@ class _AppBarState extends State<_AppBar> {
     await showModalBottomSheet<Widget>(
       backgroundColor: AppColors.primaryColor,
       elevation: Dimensions.defaultElevation,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
@@ -293,8 +296,12 @@ class _AppBarState extends State<_AppBar> {
         ),
       ),
       context: context,
-      builder: (_) {
-        return CollectionsFilterPanel(viewModel: widget.viewModel);
+      builder: (context) {
+        final pageHeight = MediaQuery.of(context).size.height;
+        return FractionallySizedBox(
+          heightFactor: _requiredFiltersBottomSheetHeight / pageHeight,
+          child: CollectionsFilterPanel(viewModel: widget.viewModel),
+        );
       },
     );
   }

@@ -260,15 +260,15 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                     ),
                     const SizedBox(height: _halfSpacingBetweenSecions),
                     if (!viewModel.isCreatedByUser) ...[
-                      SectionHeader.title(primaryTitle: AppText.boardGameDetailsPaboutLinksTitle),
+                      SectionHeader.title(title: AppText.boardGameDetailsPaboutLinksTitle),
                       _Links(boardGameDetailsStore: viewModel),
                       const SizedBox(height: _halfSpacingBetweenSecions),
-                      SectionHeader.title(primaryTitle: AppText.boardGameDetailsPaboutCreditsTitle),
+                      SectionHeader.title(title: AppText.boardGameDetailsPaboutCreditsTitle),
                       const SizedBox(height: _sectionTopSpacing),
                       _Credits(boardGameDetails: viewModel.boardGame),
                       const SizedBox(height: _halfSpacingBetweenSecions),
                       SectionHeader.title(
-                        primaryTitle: AppText.boardGameDetailsPaboutCategoriesTitle,
+                        title: AppText.boardGameDetailsPaboutCategoriesTitle,
                       ),
                       _Categories(categories: viewModel.boardGame.categories!),
                       if (viewModel.isMainGame && viewModel.hasExpansions)
@@ -285,7 +285,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                         ),
                       const SizedBox(height: _halfSpacingBetweenSecions),
                       SectionHeader.title(
-                        primaryTitle: AppText.boardGameDetailsPaboutDescriptionTitle,
+                        title: AppText.boardGameDetailsPaboutDescriptionTitle,
                       ),
                       const SizedBox(height: _sectionTopSpacing),
                       Padding(

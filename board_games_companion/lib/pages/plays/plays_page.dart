@@ -784,7 +784,7 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
 
     return Column(
       children: [
-        SectionHeader.title(primaryTitle: playedOn!.toHistoricalPlaythroughHeaderFormat()),
+        SectionHeader.title(title: playedOn!.toHistoricalPlaythroughHeaderFormat()),
         const SizedBox(height: Dimensions.standardSpacing),
         playthroughTile,
       ],
