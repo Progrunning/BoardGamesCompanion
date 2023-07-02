@@ -271,7 +271,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                         title: AppText.boardGameDetailsPaboutCategoriesTitle,
                       ),
                       _Categories(categories: viewModel.boardGame.categories!),
-                      if (viewModel.isMainGame && viewModel.hasExpansions)
+                      if (viewModel.isMainGame && viewModel.hasExpansions) ...[
                         Observer(
                           builder: (_) {
                             return BoardGameDetailsExpansions(
@@ -283,7 +283,8 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                             );
                           },
                         ),
-                      const SizedBox(height: _halfSpacingBetweenSecions),
+                        const SizedBox(height: _halfSpacingBetweenSecions),
+                      ],
                       SectionHeader.title(
                         title: AppText.boardGameDetailsPaboutDescriptionTitle,
                       ),
