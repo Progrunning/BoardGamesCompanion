@@ -297,9 +297,8 @@ class _AppBarState extends State<_AppBar> {
       ),
       context: context,
       builder: (context) {
-        final pageHeight = MediaQuery.of(context).size.height;
-        return FractionallySizedBox(
-          heightFactor: _requiredFiltersBottomSheetHeight / pageHeight,
+        return SizedBox(
+          height: _requiredFiltersBottomSheetHeight,
           child: CollectionsFilterPanel(viewModel: widget.viewModel),
         );
       },
