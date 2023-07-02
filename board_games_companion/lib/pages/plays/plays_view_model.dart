@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -11,6 +12,7 @@ import 'package:tuple/tuple.dart';
 import '../../common/analytics.dart';
 import '../../common/enums/collection_type.dart';
 import '../../common/enums/plays_tab.dart';
+import '../../extensions/date_time_extensions.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/hive/playthrough.dart';
 import '../../models/hive/score.dart';
@@ -23,7 +25,6 @@ import '../../stores/playthroughs_store.dart';
 import '../../stores/scores_store.dart';
 import 'board_game_playthrough.dart';
 import 'game_spinner_filters.dart';
-import 'grouped_board_game_playthroughs.dart';
 import 'plays_page_visual_states.dart';
 
 part 'plays_view_model.g.dart';
@@ -82,41 +83,31 @@ abstract class _PlaysViewModel with Store {
       .toList();
 
   @computed
-  List<GroupedBoardGamePlaythroughs> get finishedBoardGamePlaythroughs {
-    final result = <GroupedBoardGamePlaythroughs>[];
-    final finishedPlaythroughsGrouped = groupBy(
+  List<HistoricalPlaythrough> get historicalPlaythroughs {
+    final result = <HistoricalPlaythrough>[];
+    final playthroughsGrouped = groupBy(
         finishedPlaythroughs
           ..sort((playthroughA, playthroughB) =>
               playthroughB.endDate!.compareTo(playthroughA.endDate!)),
-        (Playthrough playthrough) => playthroughGroupingDateFormat.format(playthrough.endDate!));
+        (Playthrough playthrough) => historicalPlaythroughDateFormat.format(playthrough.endDate!));
 
-    for (final playthroughsEntry in finishedPlaythroughsGrouped.entries) {
+    for (final playthroughsEntry in playthroughsGrouped.entries) {
       result.add(
-        GroupedBoardGamePlaythroughs(
-          date: playthroughGroupingDateFormat.parse(playthroughsEntry.key),
-          boardGamePlaythroughs: playthroughsEntry.value
-              .map((playthrough) => BoardGamePlaythrough(
-                    playthrough: PlaythroughDetails(
-                      playthrough: playthrough,
-                      playerScores: [
-                        for (final playerId in playthrough.playerIds)
-                          PlayerScore(
-                            player: _playersStore.playersById[playerId],
-                            score: _scores['${playthrough.id}$playerId'] ??
-                                Score(
-                                  id: '',
-                                  playerId: playerId,
-                                  boardGameId: playthrough.boardGameId,
-                                ),
-                          )
-                      ],
-                    ),
-                    boardGameDetails:
-                        _boardGamesStore.allBoardGamesInCollectionsMap[playthrough.boardGameId]!,
-                  ))
-              .toList(),
+        HistoricalPlaythrough.withDateHeader(
+          playedOn: historicalPlaythroughDateFormat.parse(playthroughsEntry.key),
+          boardGamePlaythroughs: _mapToBoardGamePlaythrough(playthroughsEntry.value.first),
         ),
       );
+
+      if (playthroughsEntry.value.length <= 1) {
+        continue;
+      }
+
+      for (final playthrough in playthroughsEntry.value.skip(1)) {
+        result.add(HistoricalPlaythrough.withoutDateHeader(
+          boardGamePlaythroughs: _mapToBoardGamePlaythrough(playthrough),
+        ));
+      }
     }
 
     return result;
@@ -186,7 +177,7 @@ abstract class _PlaysViewModel with Store {
   void setSelectTab(PlaysTab selectedTab) {
     switch (selectedTab) {
       case PlaysTab.history:
-        visualState = PlaysPageVisualState.history(PlaysTab.history, finishedBoardGamePlaythroughs);
+        visualState = PlaysPageVisualState.history(PlaysTab.history, historicalPlaythroughs);
         break;
 
       case PlaysTab.statistics:
@@ -263,7 +254,8 @@ abstract class _PlaysViewModel with Store {
     _setupGameSpinnerFilters();
     visualState = PlaysPageVisualState.history(
       PlaysTab.history,
-      finishedBoardGamePlaythroughs,
+      historicalPlaythroughs,
+      // finishedBoardGamePlaythroughs.take(2).toList(),
     );
   }
 
@@ -277,6 +269,27 @@ abstract class _PlaysViewModel with Store {
     }
     gameSpinnerFilters = gameSpinnerFilters.copyWith(
       collections: filterCollections,
+    );
+  }
+
+  BoardGamePlaythrough _mapToBoardGamePlaythrough(Playthrough playthrough) {
+    return BoardGamePlaythrough(
+      playthrough: PlaythroughDetails(
+        playthrough: playthrough,
+        playerScores: [
+          for (final playerId in playthrough.playerIds)
+            PlayerScore(
+              player: _playersStore.playersById[playerId],
+              score: _scores['${playthrough.id}$playerId'] ??
+                  Score(
+                    id: '',
+                    playerId: playerId,
+                    boardGameId: playthrough.boardGameId,
+                  ),
+            )
+        ],
+      ),
+      boardGameDetails: _boardGamesStore.allBoardGamesInCollectionsMap[playthrough.boardGameId]!,
     );
   }
 }

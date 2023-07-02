@@ -1,12 +1,13 @@
 import 'dart:math';
 
+import 'package:board_games_companion/widgets/common/page_container.dart';
+import 'package:board_games_companion/widgets/common/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
-import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/order_by.dart';
 import '../../models/sort_by.dart';
@@ -33,39 +34,73 @@ class CollectionsFilterPanelState extends State<CollectionsFilterPanel> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.standardSpacing,
-          vertical: Dimensions.doubleStandardSpacing,
+        padding: const EdgeInsets.only(
+          bottom: Dimensions.doubleStandardSpacing,
         ),
-        child: Column(
-          children: <Widget>[
-            _SortBy(gamesViewModel: widget.viewModel),
-            _Filters(gamesViewModel: widget.viewModel),
-            const SizedBox(height: Dimensions.standardSpacing),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Observer(
+        child: PageContainer(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
+            topRight: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
+          ),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
+              const _BottomSheetHandle(),
+              const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
+              _SortBySection(gamesViewModel: widget.viewModel),
+              const SizedBox(height: Dimensions.standardSpacing),
+              _FiltersSection(gamesViewModel: widget.viewModel),
+              const SizedBox(height: Dimensions.standardSpacing),
+              Observer(
                 builder: (_) {
-                  return ElevatedIconButton(
-                    icon: const Icon(Icons.clear),
-                    title: AppText.filterGamesPanelClearFiltersButtonText,
-                    color: AppColors.accentColor,
-                    onPressed: widget.viewModel.anyFiltersApplied
-                        ? () => widget.viewModel.clearFilters()
-                        : null,
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: Dimensions.standardSpacing),
+                        child: ElevatedIconButton(
+                          icon: const Icon(Icons.clear),
+                          title: AppText.filterGamesPanelClearFiltersButtonText,
+                          color: AppColors.accentColor,
+                          onPressed: widget.viewModel.anyFiltersApplied
+                              ? () => widget.viewModel.clearFilters()
+                              : null,
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _SortBy extends StatelessWidget {
-  const _SortBy({
+class _BottomSheetHandle extends StatelessWidget {
+  const _BottomSheetHandle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.accentColor,
+          borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+        ),
+        child: const SizedBox(
+          height: Dimensions.halfStandardSpacing,
+          width: Dimensions.trippleStandardSpacing,
+        ),
+      ),
+    );
+  }
+}
+
+class _SortBySection extends StatelessWidget {
+  const _SortBySection({
     Key? key,
     required CollectionsViewModel gamesViewModel,
   })  : _gamesViewModel = gamesViewModel,
@@ -78,7 +113,11 @@ class _SortBy extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Text('Sort by', style: AppTheme.titleTextStyle),
+        SectionHeader.titleWithIcon(
+          title: 'Sort by',
+          icon: const Icon(Icons.sort),
+        ),
+        const SizedBox(height: Dimensions.standardSpacing),
         Wrap(
           spacing: Dimensions.standardSpacing,
           children: [
@@ -90,7 +129,6 @@ class _SortBy extends StatelessWidget {
               )
           ],
         ),
-        const SizedBox(height: Dimensions.doubleStandardSpacing),
       ],
     );
   }
@@ -145,8 +183,8 @@ class _SortByChip extends StatelessWidget {
   }
 }
 
-class _Filters extends StatelessWidget {
-  const _Filters({
+class _FiltersSection extends StatelessWidget {
+  const _FiltersSection({
     required this.gamesViewModel,
     Key? key,
   }) : super(key: key);
@@ -157,63 +195,69 @@ class _Filters extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const Text('Filter by', style: AppTheme.titleTextStyle),
-        const SizedBox(height: Dimensions.standardSpacing),
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text('Rating', style: AppTheme.sectionHeaderTextStyle),
+        SectionHeader.titleWithIcon(
+          title: 'Rating',
+          icon: const Icon(Icons.filter_alt_outlined),
         ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        BgcSegmentedButtonsContainer(
-          height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
-          backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
-          child: Observer(
-            builder: (_) {
-              return Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _FilterRatingValue.any(
-                    isSelected: gamesViewModel.filterByRating == null,
-                    onRatingSelected: (double? rating) => updateFilterRating(rating),
-                  ),
-                  _FilterRatingValue.rating(
-                    rating: 6.5,
-                    onRatingSelected: (double? rating) => updateFilterRating(rating),
-                    isSelected: gamesViewModel.filterByRating == 6.5,
-                  ),
-                  _FilterRatingValue.rating(
-                    rating: 7.5,
-                    onRatingSelected: (double? rating) => updateFilterRating(rating),
-                    isSelected: gamesViewModel.filterByRating == 7.5,
-                  ),
-                  _FilterRatingValue.rating(
-                    rating: 8.0,
-                    onRatingSelected: (double? rating) => updateFilterRating(rating),
-                    isSelected: gamesViewModel.filterByRating == 8.0,
-                  ),
-                  _FilterRatingValue.rating(
-                    rating: 8.5,
-                    onRatingSelected: (double? rating) => updateFilterRating(rating),
-                    isSelected: gamesViewModel.filterByRating == 8.5,
-                  ),
-                ],
-              );
-            },
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+          child: BgcSegmentedButtonsContainer(
+            height: Dimensions.collectionFilterHexagonSize + Dimensions.doubleStandardSpacing,
+            backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
+            child: Observer(
+              builder: (_) {
+                return Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    _FilterRatingValue.any(
+                      isSelected: gamesViewModel.filterByRating == null,
+                      onRatingSelected: (double? rating) => updateFilterRating(rating),
+                    ),
+                    _FilterRatingValue.rating(
+                      rating: 6.5,
+                      onRatingSelected: (double? rating) => updateFilterRating(rating),
+                      isSelected: gamesViewModel.filterByRating == 6.5,
+                    ),
+                    _FilterRatingValue.rating(
+                      rating: 7.5,
+                      onRatingSelected: (double? rating) => updateFilterRating(rating),
+                      isSelected: gamesViewModel.filterByRating == 7.5,
+                    ),
+                    _FilterRatingValue.rating(
+                      rating: 8.0,
+                      onRatingSelected: (double? rating) => updateFilterRating(rating),
+                      isSelected: gamesViewModel.filterByRating == 8.0,
+                    ),
+                    _FilterRatingValue.rating(
+                      rating: 8.5,
+                      onRatingSelected: (double? rating) => updateFilterRating(rating),
+                      isSelected: gamesViewModel.filterByRating == 8.5,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
-        const SizedBox(height: Dimensions.doubleStandardSpacing * 2),
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text('Number of players', style: AppTheme.sectionHeaderTextStyle),
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
+        SectionHeader.titleWithIcon(
+          title: 'Number of players',
+          icon: const Icon(Icons.filter_alt_outlined),
         ),
-        Observer(builder: (_) {
-          if (gamesViewModel.anyBoardGames) {
-            return _FilterNumberOfPlayersSlider(gamesViewModel: gamesViewModel);
-          }
+        Observer(
+          builder: (_) {
+            if (gamesViewModel.anyBoardGames) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                child: _FilterNumberOfPlayersSlider(gamesViewModel: gamesViewModel),
+              );
+            }
 
-          return const SizedBox.shrink();
-        }),
+            return const SizedBox.shrink();
+          },
+        ),
       ],
     );
   }

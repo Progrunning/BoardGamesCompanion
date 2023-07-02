@@ -37,11 +37,11 @@ class BgcSliverTitleHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     if (action != null) {
-      return SectionHeader.customAction(primaryTitle: primaryTitle, action: action!);
+      return SectionHeader.titleWithAction(title: primaryTitle, action: action!);
     }
 
     if (secondaryTitle.isNullOrBlank) {
-      return SectionHeader.title(height: _size, primaryTitle: primaryTitle);
+      return SectionHeader.title(height: _size, title: primaryTitle);
     }
 
     return SectionHeader.titles(

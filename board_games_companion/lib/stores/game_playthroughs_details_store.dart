@@ -10,6 +10,7 @@ import '../common/enums/game_family.dart';
 import '../models/hive/board_game_details.dart';
 import '../models/hive/player.dart';
 import '../models/hive/playthrough.dart';
+import '../models/hive/playthrough_note.dart';
 import '../models/hive/score.dart';
 import '../models/player_score.dart';
 import '../models/playthroughs/playthrough_details.dart';
@@ -105,6 +106,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
     DateTime startDate,
     Duration? duration, {
     int? bggPlayId,
+    List<PlaythroughNote>? notes,
   }) async {
     final newPlaythrough = await _playthroughsStore.createPlaythrough(
       boardGameId,
@@ -113,6 +115,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
       startDate,
       duration,
       bggPlayId: bggPlayId,
+      notes: notes,
     );
 
     if (newPlaythrough == null) {

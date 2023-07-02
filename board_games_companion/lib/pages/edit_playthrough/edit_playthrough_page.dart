@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -27,6 +26,7 @@ import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
+import '../../widgets/playthrough/playthrough_note_list_item.dart';
 import '../enter_score/enter_score_view_model.dart';
 import 'edit_playthrough_view_model.dart';
 import 'playthrough_note_page.dart';
@@ -69,7 +69,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     if (widget.viewModel.gameClassification == GameClassification.Score)
                       _ScoresSection(
                         playerScores: widget.viewModel.playerScores,
-                        playthroughDetailsId: widget.viewModel.playthroughDetails.id,
+                        playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
                         onItemTapped: (PlayerScore playerScore) async =>
                             _editPlayerScore(playerScore, context),
                       ),
@@ -84,7 +84,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     if (widget.viewModel.hasNotes)
                       _NotesSection(
                         notes: widget.viewModel.notes!,
-                        onTap: (note) => _editNote(note.id),
+                        onTap: (note) => _editNote(note),
                         onDelete: (note) => _deleteNote(note),
                       ),
                   ],
@@ -235,19 +235,29 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _addNote() async {
-    await Navigator.of(context).pushNamed(
+    final PlaythroughNote? addedNote = await Navigator.of(context).pushNamed(
       PlaythroughNotePage.pageRoute,
-      arguments: PlaythroughNotePageArguments(widget.viewModel.playthrough),
+      arguments: const PlaythroughNotePageArguments(),
     );
-    widget.viewModel.refreshNotes();
+
+    if (addedNote == null) {
+      return;
+    }
+
+    widget.viewModel.addPlaythroughNote(addedNote);
   }
 
-  Future<void> _editNote(String noteId) async {
-    await Navigator.of(context).pushNamed(
+  Future<void> _editNote(PlaythroughNote note) async {
+    final PlaythroughNote? editedNote = await Navigator.of(context).pushNamed(
       PlaythroughNotePage.pageRoute,
-      arguments: PlaythroughNotePageArguments(widget.viewModel.playthrough, noteId: noteId),
+      arguments: PlaythroughNotePageArguments(note: note),
     );
-    widget.viewModel.refreshNotes();
+
+    if (editedNote == null) {
+      return;
+    }
+
+    widget.viewModel.editPlaythroughNote(editedNote);
   }
 
   Future<void> _deleteNote(PlaythroughNote note) async {
@@ -264,7 +274,7 @@ class _ScoresSection extends StatelessWidget {
   }) : super(key: key);
 
   final List<PlayerScore> playerScores;
-  final String playthroughDetailsId;
+  final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
@@ -287,7 +297,7 @@ class _ScoresSection extends StatelessWidget {
                       if (index.isEven) {
                         return _PlayerScoreTile(
                           playerScore: playerScores[itemIndex],
-                          playthroughId: playthroughDetailsId,
+                          playthroughDetailsId: playthroughDetailsId,
                           onItemTapped: onItemTapped,
                         );
                       }
@@ -400,45 +410,19 @@ class _NotesSection extends StatelessWidget {
         SliverPersistentHeader(
           pinned: true,
           delegate: BgcSliverTitleHeaderDelegate.title(
-              primaryTitle: AppText.editPlaythroughNotesHeaderTitle),
+            primaryTitle: AppText.editPlaythroughNotesHeaderTitle,
+          ),
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (_, index) {
-              final int itemIndex = index ~/ 2;
-              final note = notes[itemIndex];
-              if (index.isEven) {
-                return InkWell(
-                  onTap: () => onTap(note),
-                  child: Slidable(
-                    endActionPane: ActionPane(
-                      extentRatio: 0.25,
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          icon: Icons.delete,
-                          onPressed: (_) => onDelete(note),
-                          backgroundColor: AppColors.redColor,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                            child: Text(note.text, textAlign: TextAlign.justify),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
-
-              return const SizedBox(height: Dimensions.standardSpacing);
+              return PlaythroughNoteListItem(
+                onTap: onTap,
+                note: notes[index],
+                onDelete: onDelete,
+              );
             },
-            childCount: max(0, notes.length * 2 - 1),
+            childCount: notes.length,
           ),
         ),
         // MK Adding padding to the bottom of the list to avoid overlap of the FOB with the notes
@@ -456,12 +440,12 @@ class _PlayerScoreTile extends StatefulWidget {
   const _PlayerScoreTile({
     Key? key,
     required this.playerScore,
-    required this.playthroughId,
+    required this.playthroughDetailsId,
     required this.onItemTapped,
   }) : super(key: key);
 
   final PlayerScore playerScore;
-  final String playthroughId;
+  final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
@@ -499,7 +483,7 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                 child: PlayerAvatar(
                   player: widget.playerScore.player,
                   avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                  playerHeroIdSuffix: widget.playthroughId,
+                  playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
                 ),
               ),
               const SizedBox(width: Dimensions.standardSpacing),

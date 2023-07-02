@@ -245,7 +245,7 @@ class _Form extends StatelessWidget {
     return SliverList(
       delegate: SliverChildListDelegate.fixed(
         [
-          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGameImage),
+          SectionHeader.title(title: AppText.createNewGameBoardGameImage),
           Observer(
             builder: (_) {
               return _ImageSection(
@@ -266,7 +266,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGameRating),
+          SectionHeader.title(title: AppText.createNewGameBoardGameRating),
           Observer(
             builder: (_) {
               return _RatingSection(
@@ -275,7 +275,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGamePlayers),
+          SectionHeader.title(title: AppText.createNewGameBoardGamePlayers),
           Observer(
             builder: (_) {
               return _PlayersSection(
@@ -286,7 +286,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGamePlaytime),
+          SectionHeader.title(title: AppText.createNewGameBoardGamePlaytime),
           Observer(
             builder: (_) {
               return _PlaytimeSection(
@@ -297,7 +297,7 @@ class _Form extends StatelessWidget {
               );
             },
           ),
-          SectionHeader.title(primaryTitle: AppText.createNewGameBoardGameMinAge),
+          SectionHeader.title(title: AppText.createNewGameBoardGameMinAge),
           Observer(
             builder: (_) {
               return _AgeSection(

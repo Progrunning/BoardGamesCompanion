@@ -71,6 +71,22 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
     });
   }
 
+  late final _$notesStateAtom =
+      Atom(name: '_PlaythroughsLogGameViewModel.notesState', context: context);
+
+  @override
+  PlaythroughNotesState get notesState {
+    _$notesStateAtom.reportRead();
+    return super.notesState;
+  }
+
+  @override
+  set notesState(PlaythroughNotesState value) {
+    _$notesStateAtom.reportWrite(value, super.notesState, () {
+      super.notesState = value;
+    });
+  }
+
   late final _$futureLoadPlayersAtom = Atom(
       name: '_PlaythroughsLogGameViewModel.futureLoadPlayers',
       context: context);
@@ -198,6 +214,39 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
   }
 
   @override
+  void addNote(PlaythroughNote note) {
+    final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
+        .startAction(name: '_PlaythroughsLogGameViewModel.addNote');
+    try {
+      return super.addNote(note);
+    } finally {
+      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void editNote(PlaythroughNote note) {
+    final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
+        .startAction(name: '_PlaythroughsLogGameViewModel.editNote');
+    try {
+      return super.editNote(note);
+    } finally {
+      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deleteNote(PlaythroughNote note) {
+    final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
+        .startAction(name: '_PlaythroughsLogGameViewModel.deleteNote');
+    try {
+      return super.deleteNote(note);
+    } finally {
+      _$_PlaythroughsLogGameViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setPlaythroughTimeline(PlaythroughTimeline playthroughTimeline) {
     final _$actionInfo =
         _$_PlaythroughsLogGameViewModelActionController.startAction(
@@ -214,6 +263,7 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
     return '''
 playthroughDate: ${playthroughDate},
 playthroughDuration: ${playthroughDuration},
+notesState: ${notesState},
 futureLoadPlayers: ${futureLoadPlayers},
 cooperativeGameResult: ${cooperativeGameResult},
 playthroughTimeline: ${playthroughTimeline},

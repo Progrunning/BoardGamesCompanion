@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../common/enums/playthrough_status.dart';
 import '../models/hive/playthrough.dart';
+import '../models/hive/playthrough_note.dart';
 import '../models/hive/score.dart';
 import '../models/player_score.dart';
 import 'hive_base_service.dart';
@@ -54,6 +55,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     DateTime startDate,
     Duration? duration, {
     int? bggPlayId,
+    List<PlaythroughNote>? notes,
   }) async {
     if ((boardGameId.isEmpty) || (playerIds.isEmpty)) {
       return null;
@@ -70,6 +72,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
       scoreIds: <String>[],
       startDate: startDate,
       bggPlayId: bggPlayId,
+      notes: notes,
     );
 
     if (duration == null) {

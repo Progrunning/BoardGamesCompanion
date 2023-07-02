@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -15,6 +16,7 @@ import '../../models/playthroughs/playthrough_details.dart';
 import '../../services/analytics_service.dart';
 import '../../stores/game_playthroughs_details_store.dart';
 import '../../stores/players_store.dart';
+import 'playthrough_notes_state.dart';
 import 'playthrough_timeline.dart';
 import 'playthroughs_log_game_players.dart';
 
@@ -40,6 +42,9 @@ abstract class _PlaythroughsLogGameViewModel with Store {
 
   @observable
   Duration playthroughDuration = const Duration();
+
+  @observable
+  PlaythroughNotesState notesState = const PlaythroughNotesState.empty();
 
   @observable
   ObservableFuture<void>? futureLoadPlayers;
@@ -78,6 +83,10 @@ abstract class _PlaythroughsLogGameViewModel with Store {
           selectedPlayerScores,
           playthroughTimeline.when(now: () => DateTime.now(), inThePast: () => playthroughDate),
           playthroughTimeline.when(now: () => null, inThePast: () => playthroughDuration),
+          notes: notesState.maybeWhen(
+            notes: (playthroughNotes) => playthroughNotes,
+            orElse: () => null,
+          ),
         );
 
         await _analyticsService.logEvent(
@@ -97,6 +106,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
         playthroughDate = DateTime.now();
         playthroughDuration = const Duration();
         cooperativeGameResult = null;
+        notesState = const PlaythroughNotesState.empty();
 
         if (_playersStore.players.isEmpty) {
           playersState = const PlaythroughsLogGamePlayers.noPlayers();
@@ -188,6 +198,56 @@ abstract class _PlaythroughsLogGameViewModel with Store {
           players: selectedPlayers,
           playerScores: updatedPlayerScores,
         );
+      },
+      orElse: () {},
+    );
+  }
+
+  @action
+  void addNote(PlaythroughNote note) {
+    notesState.when(
+      notes: (playthroughNotes) {
+        notesState = PlaythroughNotesState.notes(
+          playthroughNotes: [...playthroughNotes, note],
+        );
+      },
+      empty: () => notesState = PlaythroughNotesState.notes(playthroughNotes: [note]),
+    );
+  }
+
+  @action
+  void editNote(PlaythroughNote note) {
+    notesState.maybeWhen(
+      notes: (playthroughNotes) {
+        final notes = playthroughNotes.toList();
+        final noteToUpdateIndex = notes.indexWhere((n) => n.id == note.id);
+        if (noteToUpdateIndex == null) {
+          return;
+        }
+
+        notes[noteToUpdateIndex] = note;
+
+        notesState = PlaythroughNotesState.notes(
+          playthroughNotes: notes,
+        );
+      },
+      orElse: () {},
+    );
+  }
+
+  @action
+  void deleteNote(PlaythroughNote note) {
+    notesState.maybeWhen(
+      notes: (playthroughNotes) {
+        final notes = playthroughNotes.toList();
+        notes.remove(note);
+        if (notes.isEmpty) {
+          notesState = const PlaythroughNotesState.empty();
+        } else {
+          notesState = PlaythroughNotesState.notes(
+            playthroughNotes: notes,
+          );
+        }
       },
       orElse: () {},
     );
