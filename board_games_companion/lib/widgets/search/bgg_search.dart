@@ -18,8 +18,8 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
+import '../common/bgc_shimmer.dart';
 import '../common/empty_page_information_panel.dart';
-import '../common/loading_indicator_widget.dart';
 import '../common/search/search_result_game_details.dart';
 import '../common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../common/sorting/sort_by_chip.dart';
@@ -91,7 +91,15 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return const LoadingIndicator();
+              return Padding(
+                padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                child: ListView.separated(
+                  itemBuilder: (BuildContext context, int index) => const _SearchResultShimmer(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(height: Dimensions.standardSpacing),
+                  itemCount: 10,
+                ),
+              );
             case ConnectionState.active:
             case ConnectionState.done:
               if (snapshot.hasError) {
@@ -188,6 +196,94 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
     );
 
     return suggestions;
+  }
+}
+
+class _SearchResultShimmer extends StatelessWidget {
+  const _SearchResultShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return PanelContainer(
+      child: BgcShimmer(
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                decoration: const BoxDecoration(
+                  borderRadius: AppTheme.defaultBorderRadius,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: Dimensions.standardSpacing),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: Dimensions.largeFontSize,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: Dimensions.standardSpacing),
+                    Row(
+                      children: [
+                        Container(
+                          height: Dimensions.smallButtonIconSize,
+                          width: Dimensions.smallButtonIconSize,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: Dimensions.standardSpacing),
+                        Container(
+                          height: Dimensions.mediumFontSize,
+                          width: 80,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.standardSpacing),
+                    Row(
+                      children: [
+                        Container(
+                          height: Dimensions.smallButtonIconSize,
+                          width: Dimensions.smallButtonIconSize,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: Dimensions.standardSpacing),
+                        Container(
+                          height: Dimensions.mediumFontSize,
+                          width: 110,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.standardSpacing),
+                    Row(
+                      children: [
+                        Container(
+                          height: Dimensions.smallButtonIconSize,
+                          width: Dimensions.smallButtonIconSize,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: Dimensions.standardSpacing),
+                        Container(
+                          height: Dimensions.mediumFontSize,
+                          width: 60,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
