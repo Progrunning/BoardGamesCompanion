@@ -223,8 +223,6 @@ class _AppBar extends StatefulWidget {
 }
 
 class _AppBarState extends State<_AppBar> {
-  static const double _requiredFiltersBottomSheetHeight = 500;
-
   @override
   Widget build(BuildContext context) => SliverAppBar(
         pinned: true,
