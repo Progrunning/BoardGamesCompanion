@@ -297,8 +297,7 @@ class _AppBarState extends State<_AppBar> {
       ),
       context: context,
       builder: (context) {
-        return SizedBox(
-          height: _requiredFiltersBottomSheetHeight,
+        return IntrinsicHeight(
           child: CollectionsFilterPanel(viewModel: widget.viewModel),
         );
       },
