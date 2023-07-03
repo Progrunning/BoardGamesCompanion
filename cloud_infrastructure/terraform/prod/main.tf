@@ -118,6 +118,8 @@ resource "azurerm_container_app" "search_service_ca" {
       cpu    = 0.25
       memory = "0.5Gi"
     }
+
+    min_replicas = 1
   }
 
   ingress {

@@ -223,8 +223,6 @@ class _AppBar extends StatefulWidget {
 }
 
 class _AppBarState extends State<_AppBar> {
-  static const double _requiredFiltersBottomSheetHeight = 500;
-
   @override
   Widget build(BuildContext context) => SliverAppBar(
         pinned: true,
@@ -297,8 +295,7 @@ class _AppBarState extends State<_AppBar> {
       ),
       context: context,
       builder: (context) {
-        return SizedBox(
-          height: _requiredFiltersBottomSheetHeight,
+        return IntrinsicHeight(
           child: CollectionsFilterPanel(viewModel: widget.viewModel),
         );
       },
