@@ -15,7 +15,7 @@ class BgcShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: AppColors.primaryColor,
-      highlightColor: AppColors.accentColor,
+      highlightColor: AppColors.primaryColorLight,
       enabled: true,
       child: child,
     );

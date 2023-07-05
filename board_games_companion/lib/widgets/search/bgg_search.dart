@@ -216,7 +216,7 @@ class _SearchResultShimmer extends StatelessWidget {
                 width: Dimensions.collectionSearchResultBoardGameImageWidth,
                 decoration: const BoxDecoration(
                   borderRadius: AppTheme.defaultBorderRadius,
-                  color: Colors.white,
+                  color: AppColors.primaryColor,
                 ),
               ),
               const SizedBox(width: Dimensions.standardSpacing),
@@ -226,7 +226,7 @@ class _SearchResultShimmer extends StatelessWidget {
                   children: [
                     Container(
                       height: Dimensions.largeFontSize,
-                      color: Colors.white,
+                      color: AppColors.primaryColor,
                     ),
                     const SizedBox(height: Dimensions.standardSpacing),
                     Row(
@@ -234,13 +234,13 @@ class _SearchResultShimmer extends StatelessWidget {
                         Container(
                           height: Dimensions.smallButtonIconSize,
                           width: Dimensions.smallButtonIconSize,
-                          color: Colors.white,
+                          color: AppColors.primaryColor,
                         ),
                         const SizedBox(width: Dimensions.standardSpacing),
                         Container(
                           height: Dimensions.mediumFontSize,
                           width: 80,
-                          color: Colors.white,
+                          color: AppColors.primaryColor,
                         ),
                       ],
                     ),
@@ -250,13 +250,13 @@ class _SearchResultShimmer extends StatelessWidget {
                         Container(
                           height: Dimensions.smallButtonIconSize,
                           width: Dimensions.smallButtonIconSize,
-                          color: Colors.white,
+                          color: AppColors.primaryColor,
                         ),
                         const SizedBox(width: Dimensions.standardSpacing),
                         Container(
                           height: Dimensions.mediumFontSize,
                           width: 110,
-                          color: Colors.white,
+                          color: AppColors.primaryColor,
                         ),
                       ],
                     ),
@@ -266,13 +266,13 @@ class _SearchResultShimmer extends StatelessWidget {
                         Container(
                           height: Dimensions.smallButtonIconSize,
                           width: Dimensions.smallButtonIconSize,
-                          color: Colors.white,
+                          color: AppColors.primaryColor,
                         ),
                         const SizedBox(width: Dimensions.standardSpacing),
                         Container(
                           height: Dimensions.mediumFontSize,
                           width: 60,
-                          color: Colors.white,
+                          color: AppColors.primaryColor,
                         ),
                       ],
                     ),
