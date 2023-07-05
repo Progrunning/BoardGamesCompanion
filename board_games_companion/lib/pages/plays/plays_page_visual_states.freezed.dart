@@ -16,38 +16,25 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PlaysPageVisualState {
-  PlaysTab get playsTab => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)
-        history,
-    required TResult Function(PlaysTab playsTab) statistics,
-    required TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)
-        selectGame,
+    required TResult Function() history,
+    required TResult Function() statistics,
+    required TResult Function() selectGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult? Function(PlaysTab playsTab)? statistics,
-    TResult? Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult? Function()? history,
+    TResult? Function()? statistics,
+    TResult? Function()? selectGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult Function(PlaysTab playsTab)? statistics,
-    TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult Function()? history,
+    TResult Function()? statistics,
+    TResult Function()? selectGame,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -73,10 +60,6 @@ mixin _$PlaysPageVisualState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $PlaysPageVisualStateCopyWith<PlaysPageVisualState> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -84,8 +67,6 @@ abstract class $PlaysPageVisualStateCopyWith<$Res> {
   factory $PlaysPageVisualStateCopyWith(PlaysPageVisualState value,
           $Res Function(PlaysPageVisualState) then) =
       _$PlaysPageVisualStateCopyWithImpl<$Res, PlaysPageVisualState>;
-  @useResult
-  $Res call({PlaysTab playsTab});
 }
 
 /// @nodoc
@@ -98,31 +79,13 @@ class _$PlaysPageVisualStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? playsTab = null,
-  }) {
-    return _then(_value.copyWith(
-      playsTab: null == playsTab
-          ? _value.playsTab
-          : playsTab // ignore: cast_nullable_to_non_nullable
-              as PlaysTab,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$_HistoryCopyWith<$Res>
-    implements $PlaysPageVisualStateCopyWith<$Res> {
+abstract class _$$_HistoryCopyWith<$Res> {
   factory _$$_HistoryCopyWith(
           _$_History value, $Res Function(_$_History) then) =
       __$$_HistoryCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {PlaysTab playsTab, List<HistoricalPlaythrough> historicalPlaythroughs});
 }
 
 /// @nodoc
@@ -131,112 +94,57 @@ class __$$_HistoryCopyWithImpl<$Res>
     implements _$$_HistoryCopyWith<$Res> {
   __$$_HistoryCopyWithImpl(_$_History _value, $Res Function(_$_History) _then)
       : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? playsTab = null,
-    Object? historicalPlaythroughs = null,
-  }) {
-    return _then(_$_History(
-      null == playsTab
-          ? _value.playsTab
-          : playsTab // ignore: cast_nullable_to_non_nullable
-              as PlaysTab,
-      null == historicalPlaythroughs
-          ? _value._historicalPlaythroughs
-          : historicalPlaythroughs // ignore: cast_nullable_to_non_nullable
-              as List<HistoricalPlaythrough>,
-    ));
-  }
 }
 
 /// @nodoc
 
 class _$_History implements _History {
-  const _$_History(
-      this.playsTab, final List<HistoricalPlaythrough> historicalPlaythroughs)
-      : _historicalPlaythroughs = historicalPlaythroughs;
-
-  @override
-  final PlaysTab playsTab;
-  final List<HistoricalPlaythrough> _historicalPlaythroughs;
-  @override
-  List<HistoricalPlaythrough> get historicalPlaythroughs {
-    if (_historicalPlaythroughs is EqualUnmodifiableListView)
-      return _historicalPlaythroughs;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_historicalPlaythroughs);
-  }
+  const _$_History();
 
   @override
   String toString() {
-    return 'PlaysPageVisualState.history(playsTab: $playsTab, historicalPlaythroughs: $historicalPlaythroughs)';
+    return 'PlaysPageVisualState.history()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_History &&
-            (identical(other.playsTab, playsTab) ||
-                other.playsTab == playsTab) &&
-            const DeepCollectionEquality().equals(
-                other._historicalPlaythroughs, _historicalPlaythroughs));
+        (other.runtimeType == runtimeType && other is _$_History);
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, playsTab,
-      const DeepCollectionEquality().hash(_historicalPlaythroughs));
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_HistoryCopyWith<_$_History> get copyWith =>
-      __$$_HistoryCopyWithImpl<_$_History>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)
-        history,
-    required TResult Function(PlaysTab playsTab) statistics,
-    required TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)
-        selectGame,
+    required TResult Function() history,
+    required TResult Function() statistics,
+    required TResult Function() selectGame,
   }) {
-    return history(playsTab, historicalPlaythroughs);
+    return history();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult? Function(PlaysTab playsTab)? statistics,
-    TResult? Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult? Function()? history,
+    TResult? Function()? statistics,
+    TResult? Function()? selectGame,
   }) {
-    return history?.call(playsTab, historicalPlaythroughs);
+    return history?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult Function(PlaysTab playsTab)? statistics,
-    TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult Function()? history,
+    TResult Function()? statistics,
+    TResult Function()? selectGame,
     required TResult orElse(),
   }) {
     if (history != null) {
-      return history(playsTab, historicalPlaythroughs);
+      return history();
     }
     return orElse();
   }
@@ -277,27 +185,14 @@ class _$_History implements _History {
 }
 
 abstract class _History implements PlaysPageVisualState {
-  const factory _History(final PlaysTab playsTab,
-      final List<HistoricalPlaythrough> historicalPlaythroughs) = _$_History;
-
-  @override
-  PlaysTab get playsTab;
-  List<HistoricalPlaythrough> get historicalPlaythroughs;
-  @override
-  @JsonKey(ignore: true)
-  _$$_HistoryCopyWith<_$_History> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory _History() = _$_History;
 }
 
 /// @nodoc
-abstract class _$$_StatisticsCopyWith<$Res>
-    implements $PlaysPageVisualStateCopyWith<$Res> {
+abstract class _$$_StatisticsCopyWith<$Res> {
   factory _$$_StatisticsCopyWith(
           _$_Statistics value, $Res Function(_$_Statistics) then) =
       __$$_StatisticsCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({PlaysTab playsTab});
 }
 
 /// @nodoc
@@ -307,94 +202,57 @@ class __$$_StatisticsCopyWithImpl<$Res>
   __$$_StatisticsCopyWithImpl(
       _$_Statistics _value, $Res Function(_$_Statistics) _then)
       : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? playsTab = null,
-  }) {
-    return _then(_$_Statistics(
-      null == playsTab
-          ? _value.playsTab
-          : playsTab // ignore: cast_nullable_to_non_nullable
-              as PlaysTab,
-    ));
-  }
 }
 
 /// @nodoc
 
 class _$_Statistics implements _Statistics {
-  const _$_Statistics(this.playsTab);
-
-  @override
-  final PlaysTab playsTab;
+  const _$_Statistics();
 
   @override
   String toString() {
-    return 'PlaysPageVisualState.statistics(playsTab: $playsTab)';
+    return 'PlaysPageVisualState.statistics()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_Statistics &&
-            (identical(other.playsTab, playsTab) ||
-                other.playsTab == playsTab));
+        (other.runtimeType == runtimeType && other is _$_Statistics);
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, playsTab);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_StatisticsCopyWith<_$_Statistics> get copyWith =>
-      __$$_StatisticsCopyWithImpl<_$_Statistics>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)
-        history,
-    required TResult Function(PlaysTab playsTab) statistics,
-    required TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)
-        selectGame,
+    required TResult Function() history,
+    required TResult Function() statistics,
+    required TResult Function() selectGame,
   }) {
-    return statistics(playsTab);
+    return statistics();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult? Function(PlaysTab playsTab)? statistics,
-    TResult? Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult? Function()? history,
+    TResult? Function()? statistics,
+    TResult? Function()? selectGame,
   }) {
-    return statistics?.call(playsTab);
+    return statistics?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult Function(PlaysTab playsTab)? statistics,
-    TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult Function()? history,
+    TResult Function()? statistics,
+    TResult Function()? selectGame,
     required TResult orElse(),
   }) {
     if (statistics != null) {
-      return statistics(playsTab);
+      return statistics();
     }
     return orElse();
   }
@@ -435,25 +293,14 @@ class _$_Statistics implements _Statistics {
 }
 
 abstract class _Statistics implements PlaysPageVisualState {
-  const factory _Statistics(final PlaysTab playsTab) = _$_Statistics;
-
-  @override
-  PlaysTab get playsTab;
-  @override
-  @JsonKey(ignore: true)
-  _$$_StatisticsCopyWith<_$_Statistics> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory _Statistics() = _$_Statistics;
 }
 
 /// @nodoc
-abstract class _$$_SelectGameCopyWith<$Res>
-    implements $PlaysPageVisualStateCopyWith<$Res> {
+abstract class _$$_SelectGameCopyWith<$Res> {
   factory _$$_SelectGameCopyWith(
           _$_SelectGame value, $Res Function(_$_SelectGame) then) =
       __$$_SelectGameCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames});
 }
 
 /// @nodoc
@@ -463,112 +310,57 @@ class __$$_SelectGameCopyWithImpl<$Res>
   __$$_SelectGameCopyWithImpl(
       _$_SelectGame _value, $Res Function(_$_SelectGame) _then)
       : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? playsTab = null,
-    Object? shuffledBoardGames = null,
-  }) {
-    return _then(_$_SelectGame(
-      null == playsTab
-          ? _value.playsTab
-          : playsTab // ignore: cast_nullable_to_non_nullable
-              as PlaysTab,
-      null == shuffledBoardGames
-          ? _value._shuffledBoardGames
-          : shuffledBoardGames // ignore: cast_nullable_to_non_nullable
-              as List<BoardGameDetails>,
-    ));
-  }
 }
 
 /// @nodoc
 
 class _$_SelectGame implements _SelectGame {
-  const _$_SelectGame(
-      this.playsTab, final List<BoardGameDetails> shuffledBoardGames)
-      : _shuffledBoardGames = shuffledBoardGames;
-
-  @override
-  final PlaysTab playsTab;
-  final List<BoardGameDetails> _shuffledBoardGames;
-  @override
-  List<BoardGameDetails> get shuffledBoardGames {
-    if (_shuffledBoardGames is EqualUnmodifiableListView)
-      return _shuffledBoardGames;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_shuffledBoardGames);
-  }
+  const _$_SelectGame();
 
   @override
   String toString() {
-    return 'PlaysPageVisualState.selectGame(playsTab: $playsTab, shuffledBoardGames: $shuffledBoardGames)';
+    return 'PlaysPageVisualState.selectGame()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_SelectGame &&
-            (identical(other.playsTab, playsTab) ||
-                other.playsTab == playsTab) &&
-            const DeepCollectionEquality()
-                .equals(other._shuffledBoardGames, _shuffledBoardGames));
+        (other.runtimeType == runtimeType && other is _$_SelectGame);
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, playsTab,
-      const DeepCollectionEquality().hash(_shuffledBoardGames));
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_SelectGameCopyWith<_$_SelectGame> get copyWith =>
-      __$$_SelectGameCopyWithImpl<_$_SelectGame>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)
-        history,
-    required TResult Function(PlaysTab playsTab) statistics,
-    required TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)
-        selectGame,
+    required TResult Function() history,
+    required TResult Function() statistics,
+    required TResult Function() selectGame,
   }) {
-    return selectGame(playsTab, shuffledBoardGames);
+    return selectGame();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult? Function(PlaysTab playsTab)? statistics,
-    TResult? Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult? Function()? history,
+    TResult? Function()? statistics,
+    TResult? Function()? selectGame,
   }) {
-    return selectGame?.call(playsTab, shuffledBoardGames);
+    return selectGame?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(PlaysTab playsTab,
-            List<HistoricalPlaythrough> historicalPlaythroughs)?
-        history,
-    TResult Function(PlaysTab playsTab)? statistics,
-    TResult Function(
-            PlaysTab playsTab, List<BoardGameDetails> shuffledBoardGames)?
-        selectGame,
+    TResult Function()? history,
+    TResult Function()? statistics,
+    TResult Function()? selectGame,
     required TResult orElse(),
   }) {
     if (selectGame != null) {
-      return selectGame(playsTab, shuffledBoardGames);
+      return selectGame();
     }
     return orElse();
   }
@@ -609,14 +401,5 @@ class _$_SelectGame implements _SelectGame {
 }
 
 abstract class _SelectGame implements PlaysPageVisualState {
-  const factory _SelectGame(final PlaysTab playsTab,
-      final List<BoardGameDetails> shuffledBoardGames) = _$_SelectGame;
-
-  @override
-  PlaysTab get playsTab;
-  List<BoardGameDetails> get shuffledBoardGames;
-  @override
-  @JsonKey(ignore: true)
-  _$$_SelectGameCopyWith<_$_SelectGame> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory _SelectGame() = _$_SelectGame;
 }
