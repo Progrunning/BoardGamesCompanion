@@ -119,6 +119,11 @@ class AppText {
   static const searchBoardGamesSearchRetry = 'Retry';
   static const searchBoardGamesCreateGame = 'Create game';
 
+  static const searchBoardGamesErrorTitle = 'Sorry, we ran into a problem';
+  static const searchBoardGamesTimeoutError =
+      'Unfortunately our services timed out. Please try searching again.';
+  static const searchBoardGamesGenericError = 'Check your internet connectivity and try again.';
+
   static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
 
