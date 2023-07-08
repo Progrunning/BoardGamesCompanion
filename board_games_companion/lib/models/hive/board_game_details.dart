@@ -147,20 +147,33 @@ class BoardGameDetails with _$BoardGameDetails {
     return sprintf(AppText.gamePlayersRangeFormat, [minPlayers, maxPlayers]);
   }
 
-  String? get rankFormatted {
+  String get rankFormatted {
     if (rank != null) {
       return rank.toString();
     } else if (ranks.isNotEmpty) {
       final overallRank = ranks.first.rank;
-      return overallRank?.toString() ?? 'Not Ranked';
+      return overallRank?.toString() ?? AppText.boardGameDetailsPaboutGameNotRanked;
     }
 
-    return null;
+    return AppText.boardGameDetailsPaboutGameNotRanked;
   }
 
-  String? get votesFormatted => _formatNumber(votes);
+  String get votesNumberFormatted {
+    if (votes == null) {
+      return AppText.boardGameDetailsPaboutGameNotRated;
+    }
 
-  String? get commentsNumberFormatted => _formatNumber(commentsNumber);
+    return sprintf(AppText.boardGameDetailsPaboutGameRatingFormat, [_formatNumber(votes)]);
+  }
+
+  String get commentsNumberFormatted {
+    if (votes == null) {
+      return AppText.boardGameDetailsPaboutGameNoComments;
+    }
+
+    return sprintf(
+        AppText.boardGameDetailsPaboutGameCommentsFormat, [_formatNumber(commentsNumber)]);
+  }
 
   bool get hasIncompleteDetails =>
       (isBggSynced ?? false) &&

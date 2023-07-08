@@ -239,8 +239,8 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                 delegate: SliverChildListDelegate.fixed(
                   <Widget>[
                     SectionHeader.titles(
-                      primaryTitle: AppText.boardGameDetailsPaboutGeneralTitle,
-                      secondaryTitle: AppText.boardGameDetailsPaboutCollectionsTitle,
+                      primaryTitle: AppText.boardGameDetailsPageGeneralTitle,
+                      secondaryTitle: AppText.boardGameDetailsPageCollectionsTitle,
                     ),
                     const SizedBox(height: _sectionTopSpacing),
                     _GeneralAndCollections(viewModel: viewModel),
@@ -260,15 +260,15 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                     ),
                     const SizedBox(height: _halfSpacingBetweenSecions),
                     if (!viewModel.isCreatedByUser) ...[
-                      SectionHeader.title(title: AppText.boardGameDetailsPaboutLinksTitle),
+                      SectionHeader.title(title: AppText.boardGameDetailsPagetLinksTitle),
                       _Links(boardGameDetailsStore: viewModel),
                       const SizedBox(height: _halfSpacingBetweenSecions),
-                      SectionHeader.title(title: AppText.boardGameDetailsPaboutCreditsTitle),
+                      SectionHeader.title(title: AppText.boardGameDetailsPageCreditsTitle),
                       const SizedBox(height: _sectionTopSpacing),
                       _Credits(boardGameDetails: viewModel.boardGame),
                       const SizedBox(height: _halfSpacingBetweenSecions),
                       SectionHeader.title(
-                        title: AppText.boardGameDetailsPaboutCategoriesTitle,
+                        title: AppText.boardGameDetailsPageCategoriesTitle,
                       ),
                       _Categories(categories: viewModel.boardGame.categories!),
                       if (viewModel.isMainGame && viewModel.hasExpansions) ...[
@@ -286,7 +286,7 @@ We couldn't retrieve any board games. Check your Internet connectivity and try a
                         const SizedBox(height: _halfSpacingBetweenSecions),
                       ],
                       SectionHeader.title(
-                        title: AppText.boardGameDetailsPaboutDescriptionTitle,
+                        title: AppText.boardGameDetailsPageDescriptionTitle,
                       ),
                       const SizedBox(height: _sectionTopSpacing),
                       Padding(
@@ -607,21 +607,21 @@ class _GeneralAndCollections extends StatelessWidget {
                   BoardGameProperty(
                     icon: const Icon(Icons.tag, size: _iconSize),
                     iconWidth: _iconSize,
-                    propertyName: '${viewModel.boardGame.rankFormatted}',
+                    propertyName: viewModel.boardGame.rankFormatted,
                     fontSize: Dimensions.mediumFontSize,
                   ),
                   const SizedBox(height: Dimensions.halfStandardSpacing),
                   BoardGameProperty(
                     icon: const Icon(Icons.how_to_vote, size: _iconSize),
                     iconWidth: _iconSize,
-                    propertyName: '${viewModel.boardGame.votesFormatted} ratings',
+                    propertyName: viewModel.boardGame.votesNumberFormatted,
                     fontSize: Dimensions.mediumFontSize,
                   ),
                   const SizedBox(height: Dimensions.halfStandardSpacing),
                   BoardGameProperty(
                     icon: const Icon(Icons.comment, size: _iconSize),
                     iconWidth: _iconSize,
-                    propertyName: '${viewModel.boardGame.commentsNumberFormatted} comments',
+                    propertyName: viewModel.boardGame.commentsNumberFormatted,
                     fontSize: Dimensions.mediumFontSize,
                   ),
                   const SizedBox(height: Dimensions.halfStandardSpacing),
@@ -717,14 +717,14 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
                 ),
               ),
             const SizedBox(width: Dimensions.standardSpacing),
-            if (avgWeight != null)
+            if (avgWeight != null && avgWeight != 0)
               Expanded(
                 child: _InfoPanel(
                   icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced),
                   title: '${avgWeight!.toStringAsFixed(2)} / 5',
                 ),
               ),
-            if (avgWeight == null) const Spacer()
+            if (avgWeight == null || avgWeight == 0) const Spacer()
           ],
         ),
       ),

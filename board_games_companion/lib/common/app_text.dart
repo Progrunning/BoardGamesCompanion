@@ -55,12 +55,18 @@ class AppText {
   static const aboutPageCommunityJoinDiscord =
       "Tap on the below logo to join the BGC's Discord server.";
 
-  static const boardGameDetailsPaboutGeneralTitle = 'General';
-  static const boardGameDetailsPaboutLinksTitle = 'Links';
-  static const boardGameDetailsPaboutCreditsTitle = 'Credits';
-  static const boardGameDetailsPaboutCategoriesTitle = 'Categories';
-  static const boardGameDetailsPaboutDescriptionTitle = 'Description';
-  static const boardGameDetailsPaboutCollectionsTitle = 'Collections';
+  static const boardGameDetailsPageGeneralTitle = 'General';
+  static const boardGameDetailsPagetLinksTitle = 'Links';
+  static const boardGameDetailsPageCreditsTitle = 'Credits';
+  static const boardGameDetailsPageCategoriesTitle = 'Categories';
+  static const boardGameDetailsPageDescriptionTitle = 'Description';
+  static const boardGameDetailsPageCollectionsTitle = 'Collections';
+
+  static const boardGameDetailsPaboutGameNotRanked = 'Not ranked';
+  static const boardGameDetailsPaboutGameNotRated = 'Not rated';
+  static const boardGameDetailsPaboutGameRatingFormat = '%s ratings';
+  static const boardGameDetailsPaboutGameNoComments = 'No comments';
+  static const boardGameDetailsPaboutGameCommentsFormat = '%s comments';
 
   static const hotBoardGamesPageTitle = 'Hot Board Games';
 
