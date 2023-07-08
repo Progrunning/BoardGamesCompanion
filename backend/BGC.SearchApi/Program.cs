@@ -28,6 +28,7 @@ builder.Services.AddOptions<ApiKeyAuthenticationSettings>()
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
+builder.Services.AddHealthChecks();
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.Configure<TelemetryConfiguration>(config =>
 {
@@ -78,6 +79,7 @@ app.UseStatusCodePages(async statusCodeContext =>
     await Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
                  .ExecuteAsync(statusCodeContext.HttpContext);
 });
+app.MapHealthChecks("/health");
 
 app.MapGet("api/search", [Authorize] ([FromQuery] string query, ISearchService searchService) => searchService.Search(query, CancellationToken.None))
     .WithOpenApi();
