@@ -55,12 +55,18 @@ class AppText {
   static const aboutPageCommunityJoinDiscord =
       "Tap on the below logo to join the BGC's Discord server.";
 
-  static const boardGameDetailsPaboutGeneralTitle = 'General';
-  static const boardGameDetailsPaboutLinksTitle = 'Links';
-  static const boardGameDetailsPaboutCreditsTitle = 'Credits';
-  static const boardGameDetailsPaboutCategoriesTitle = 'Categories';
-  static const boardGameDetailsPaboutDescriptionTitle = 'Description';
-  static const boardGameDetailsPaboutCollectionsTitle = 'Collections';
+  static const boardGameDetailsPageGeneralTitle = 'General';
+  static const boardGameDetailsPagetLinksTitle = 'Links';
+  static const boardGameDetailsPageCreditsTitle = 'Credits';
+  static const boardGameDetailsPageCategoriesTitle = 'Categories';
+  static const boardGameDetailsPageDescriptionTitle = 'Description';
+  static const boardGameDetailsPageCollectionsTitle = 'Collections';
+
+  static const boardGameDetailsPaboutGameNotRanked = 'Not ranked';
+  static const boardGameDetailsPaboutGameNotRated = 'Not rated';
+  static const boardGameDetailsPaboutGameRatingFormat = '%s ratings';
+  static const boardGameDetailsPaboutGameNoComments = 'No comments';
+  static const boardGameDetailsPaboutGameCommentsFormat = '%s comments';
 
   static const hotBoardGamesPageTitle = 'Hot Board Games';
 
@@ -112,6 +118,11 @@ class AppText {
   static const searchBoardGamesSearchBarHint = 'Search...';
   static const searchBoardGamesSearchRetry = 'Retry';
   static const searchBoardGamesCreateGame = 'Create game';
+
+  static const searchBoardGamesErrorTitle = 'Sorry, we ran into a problem';
+  static const searchBoardGamesTimeoutError =
+      'Unfortunately our services timed out. Please try searching again.';
+  static const searchBoardGamesGenericError = 'Check your internet connectivity and try again.';
 
   static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';

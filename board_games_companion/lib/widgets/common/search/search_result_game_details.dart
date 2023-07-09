@@ -18,7 +18,6 @@ class SearchResultGameDetails extends StatelessWidget {
 
   final BoardGameDetails boardGame;
 
-  static const double _gameStatIconSize = 16;
   static const double _gamePropertyIconSize = 20;
 
   @override
@@ -33,7 +32,7 @@ class SearchResultGameDetails extends StatelessWidget {
         if (boardGame.minPlayers != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
-            icon: const Icon(Icons.people, size: _gameStatIconSize),
+            icon: const Icon(Icons.people, size: Dimensions.smallButtonIconSize),
             iconWidth: _gamePropertyIconSize,
             propertyName: boardGame.playersFormatted,
           ),
@@ -41,7 +40,7 @@ class SearchResultGameDetails extends StatelessWidget {
         if (boardGame.minPlaytime != null && boardGame.minPlaytime != 0) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
-            icon: const Icon(Icons.hourglass_bottom, size: _gameStatIconSize),
+            icon: const Icon(Icons.hourglass_bottom, size: Dimensions.smallButtonIconSize),
             iconWidth: _gamePropertyIconSize,
             propertyName: boardGame.playtimeFormatted,
           ),
@@ -49,7 +48,8 @@ class SearchResultGameDetails extends StatelessWidget {
         if (boardGame.avgWeight != null && boardGame.avgWeight != 0) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
-            icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced, size: _gameStatIconSize),
+            icon: const FaIcon(FontAwesomeIcons.scaleUnbalanced,
+                size: Dimensions.smallButtonIconSize),
             iconWidth: _gamePropertyIconSize,
             propertyName: sprintf(
               AppText.gamesPageSearchResultComplexityGameStatFormat,
@@ -60,7 +60,8 @@ class SearchResultGameDetails extends StatelessWidget {
         if (boardGame.rating != null) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
-            icon: const RatingHexagon(width: _gameStatIconSize, height: _gameStatIconSize),
+            icon: const RatingHexagon(
+                width: Dimensions.smallButtonIconSize, height: Dimensions.smallButtonIconSize),
             iconWidth: _gamePropertyIconSize,
             propertyName:
                 boardGame.rating!.toStringAsFixed(Constants.boardGameRatingNumberOfDecimalPlaces),
@@ -69,7 +70,7 @@ class SearchResultGameDetails extends StatelessWidget {
         if (boardGame.yearPublished != null && boardGame.yearPublished != 0) ...[
           const SizedBox(height: Dimensions.standardSpacing),
           BoardGameProperty(
-            icon: const Icon(Icons.event, size: _gameStatIconSize),
+            icon: const Icon(Icons.event, size: Dimensions.smallButtonIconSize),
             iconWidth: _gamePropertyIconSize,
             propertyName: '${boardGame.yearPublished}',
           ),

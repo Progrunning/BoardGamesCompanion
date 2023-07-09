@@ -124,17 +124,15 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                   Observer(
                     builder: (_) {
                       return widget.viewModel.visualState?.when(
-                            history: (tab, historicalPlaythroughs) {
-                              if (historicalPlaythroughs.isEmpty) {
-                                return const _NoPlaythroughsSliver();
-                              } else {
-                                return _HistoricalPlaythroughSliverList(
-                                  historicalPlaythroughs: historicalPlaythroughs,
+                            history: () => Observer(
+                              builder: (_) {
+                                return _HistoryTab(
+                                  historicalPlaythroughs: widget.viewModel.historicalPlaythroughs,
                                 );
-                              }
-                            },
-                            statistics: (tab) => const SliverToBoxAdapter(),
-                            selectGame: (tab, shuffledBoardGames) {
+                              },
+                            ),
+                            statistics: () => const SliverToBoxAdapter(),
+                            selectGame: () {
                               if (!widget.viewModel.hasAnyBoardGames) {
                                 return const _NoBoardGamesSliver();
                               }
@@ -146,7 +144,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                                   if (widget.viewModel.hasAnyBoardGamesToShuffle)
                                     _GameSpinnerSliver(
                                       scrollController: _scrollController,
-                                      shuffledBoardGames: shuffledBoardGames,
+                                      shuffledBoardGames: widget.viewModel.shuffledBoardGames,
                                       onSpin: () => _spin(),
                                       onGameSelected: () => _selectGame(),
                                     ),
@@ -1214,7 +1212,7 @@ class _AppBar extends StatelessWidget {
             AppBarBottomTab(
               AppText.playsPageHistoryTabTitle,
               Icons.history,
-              isSelected: tabVisualState?.playsTab == PlaysTab.history,
+              isSelected: tabVisualState == const PlaysPageVisualState.history(),
             ),
             // TODO Add stats page
             // AppBarBottomTab(
@@ -1225,7 +1223,7 @@ class _AppBar extends StatelessWidget {
             AppBarBottomTab(
               AppText.playsPageSelectGameTabTitle,
               Icons.shuffle,
-              isSelected: tabVisualState?.playsTab == PlaysTab.selectGame,
+              isSelected: tabVisualState == const PlaysPageVisualState.selectGame(),
             ),
           ],
           indicatorColor: AppColors.accentColor,
@@ -1233,6 +1231,25 @@ class _AppBar extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _HistoryTab extends StatelessWidget {
+  const _HistoryTab({
+    required this.historicalPlaythroughs,
+  });
+
+  final List<HistoricalPlaythrough> historicalPlaythroughs;
+
+  @override
+  Widget build(BuildContext context) {
+    if (historicalPlaythroughs.isEmpty) {
+      return const _NoPlaythroughsSliver();
+    } else {
+      return _HistoricalPlaythroughSliverList(
+        historicalPlaythroughs: historicalPlaythroughs,
+      );
+    }
   }
 }
 

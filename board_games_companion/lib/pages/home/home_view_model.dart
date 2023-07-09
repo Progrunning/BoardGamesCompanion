@@ -2,7 +2,10 @@
 
 import 'dart:async';
 
+import 'package:async/async.dart';
+import 'package:board_games_companion/models/api/search/board_game_search_dto.dart';
 import 'package:board_games_companion/services/board_games_search_service.dart';
+import 'package:board_games_companion/widgets/search/board_game_search_error.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +86,8 @@ abstract class _HomeViewModelBase with Store {
 
   String? _searchQuery;
   String? _previousSearchQuery;
+
+  CancelableOperation<List<BoardGameSearchResultDto>>? _searchBoardGamesOperation;
 
   @observable
   ObservableStream<List<BoardGameDetails>> searchResultsStream = ObservableStream(Stream.value([]));
@@ -177,6 +182,8 @@ abstract class _HomeViewModelBase with Store {
       return;
     }
 
+    await _searchBoardGamesOperation?.cancel();
+
     if (_previousSearchQuery == _searchQuery && (searchResultsStream.value?.isNotEmpty ?? false)) {
       // Refresh data in the stream, otherwise the [ConnectionState] won't change from waiting
       _searchResultsStreamController.add(searchResultsStream.value!);
@@ -185,29 +192,36 @@ abstract class _HomeViewModelBase with Store {
 
     await _captureSearchDetailsEvent(_searchQuery!);
 
-    try {
-      _searchResults.clear();
-      final searchResultBoardGames = await _boardGameSearchServive.search(_searchQuery);
-      for (final searchResultBoardGame in searchResultBoardGames) {
-        // Enrich game details, if game details are available.
-        // Otherwise add the game to the store.
-        final boardGameDetails = BoardGameDetails.fromSearchResult(searchResultBoardGame);
-        if (_boardGamesStore.allBoardGamesMap.containsKey(boardGameDetails.id)) {
-          _searchResults.add(_boardGamesStore.allBoardGamesMap[boardGameDetails.id]!);
-          continue;
-        }
-
-        await _boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
-        _searchResults.add(boardGameDetails);
+    _searchResults.clear();
+    _searchBoardGamesOperation = CancelableOperation<List<BoardGameSearchResultDto>>.fromFuture(
+        _boardGameSearchServive.search(_searchQuery));
+    _searchBoardGamesOperation!.value.onError<Exception>((error, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      if (error is TimeoutException) {
+        _searchResultsStreamController.addError(const BoardGameSearchError.timout());
+      } else {
+        _searchResultsStreamController.addError(const BoardGameSearchError.generic());
       }
 
-      _previousSearchQuery = _searchQuery;
-      _searchResultsStreamController.add(_searchResults..sortBy(searchSelectedSortBy));
-    } catch (e, stack) {
-      FirebaseCrashlytics.instance.recordError(e, stack);
-      _searchResultsStreamController.addError(e);
-      rethrow;
+      return Future.value([]);
+    });
+
+    final searchResultBoardGames = await _searchBoardGamesOperation!.value;
+    for (final searchResultBoardGame in searchResultBoardGames) {
+      // Enrich game details, if game details are available.
+      // Otherwise add the game to the store.
+      final boardGameDetails = BoardGameDetails.fromSearchResult(searchResultBoardGame);
+      if (_boardGamesStore.allBoardGamesMap.containsKey(boardGameDetails.id)) {
+        _searchResults.add(_boardGamesStore.allBoardGamesMap[boardGameDetails.id]!);
+        continue;
+      }
+
+      await _boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
+      _searchResults.add(boardGameDetails);
     }
+
+    _previousSearchQuery = _searchQuery;
+    _searchResultsStreamController.add(_searchResults..sortBy(searchSelectedSortBy));
   }
 
   Future<void> _captureSearchDetailsEvent(String query) async {

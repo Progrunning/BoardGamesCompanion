@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/widgets/common/bgc_shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -154,10 +155,12 @@ class _WebImage extends StatelessWidget {
           ),
         ),
         fit: BoxFit.fitWidth,
-        placeholder: (context, url) => Container(
-          decoration: BoxDecoration(
-            color: AppColors.primaryColor,
-            borderRadius: borderRadius,
+        placeholder: (context, url) => BgcShimmer(
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor,
+              borderRadius: borderRadius,
+            ),
           ),
         ),
         errorWidget: (context, url, dynamic error) => _NoImage(

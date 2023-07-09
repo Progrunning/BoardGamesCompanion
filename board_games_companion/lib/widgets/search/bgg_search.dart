@@ -18,11 +18,12 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/panel_container.dart';
+import '../common/bgc_shimmer.dart';
 import '../common/empty_page_information_panel.dart';
-import '../common/loading_indicator_widget.dart';
 import '../common/search/search_result_game_details.dart';
 import '../common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../common/sorting/sort_by_chip.dart';
+import 'board_game_search_error.dart';
 
 /// [SearchDelegate] for the online (i.e. BGG) search.
 /// Controller by the [HomeViewModel].
@@ -91,11 +92,21 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return const LoadingIndicator();
+              return Padding(
+                padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                child: ListView.separated(
+                  itemBuilder: (BuildContext context, int index) => const _SearchResultShimmer(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(height: Dimensions.standardSpacing),
+                  itemCount: 10,
+                ),
+              );
             case ConnectionState.active:
             case ConnectionState.done:
               if (snapshot.hasError) {
-                return const _SearchError();
+                return _SearchError(
+                  error: snapshot.error as BoardGameSearchError,
+                );
               }
 
               final foundGames = snapshot.data;
@@ -188,6 +199,94 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
     );
 
     return suggestions;
+  }
+}
+
+class _SearchResultShimmer extends StatelessWidget {
+  const _SearchResultShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return PanelContainer(
+      child: BgcShimmer(
+        child: Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                decoration: const BoxDecoration(
+                  borderRadius: AppTheme.defaultBorderRadius,
+                  color: AppColors.primaryColor,
+                ),
+              ),
+              const SizedBox(width: Dimensions.standardSpacing),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: Dimensions.largeFontSize,
+                      color: AppColors.primaryColor,
+                    ),
+                    const SizedBox(height: Dimensions.standardSpacing),
+                    Row(
+                      children: [
+                        Container(
+                          height: Dimensions.smallButtonIconSize,
+                          width: Dimensions.smallButtonIconSize,
+                          color: AppColors.primaryColor,
+                        ),
+                        const SizedBox(width: Dimensions.standardSpacing),
+                        Container(
+                          height: Dimensions.mediumFontSize,
+                          width: 80,
+                          color: AppColors.primaryColor,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.standardSpacing),
+                    Row(
+                      children: [
+                        Container(
+                          height: Dimensions.smallButtonIconSize,
+                          width: Dimensions.smallButtonIconSize,
+                          color: AppColors.primaryColor,
+                        ),
+                        const SizedBox(width: Dimensions.standardSpacing),
+                        Container(
+                          height: Dimensions.mediumFontSize,
+                          width: 110,
+                          color: AppColors.primaryColor,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.standardSpacing),
+                    Row(
+                      children: [
+                        Container(
+                          height: Dimensions.smallButtonIconSize,
+                          width: Dimensions.smallButtonIconSize,
+                          color: AppColors.primaryColor,
+                        ),
+                        const SizedBox(width: Dimensions.standardSpacing),
+                        Container(
+                          height: Dimensions.mediumFontSize,
+                          width: 60,
+                          color: AppColors.primaryColor,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -309,7 +408,12 @@ class _SearchResultGame extends StatelessWidget {
 }
 
 class _SearchError extends StatelessWidget {
-  const _SearchError({Key? key}) : super(key: key);
+  const _SearchError({
+    required this.error,
+    Key? key,
+  }) : super(key: key);
+
+  final BoardGameSearchError error;
 
   @override
   Widget build(BuildContext context) {
@@ -320,18 +424,21 @@ class _SearchError extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const <Widget>[
-          SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+        children: <Widget>[
+          const SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
           EmptyPageInformationPanel(
-            title: 'Sorry, we ran into a problem',
-            icon: Icon(
+            title: AppText.searchBoardGamesErrorTitle,
+            icon: const Icon(
               FontAwesomeIcons.faceSadTear,
               size: Dimensions.emptyPageTitleIconSize,
               color: AppColors.primaryColor,
             ),
-            subtitle: 'Check your internet connectivity and try again.',
+            subtitle: error.when(
+              timout: () => AppText.searchBoardGamesTimeoutError,
+              generic: () => AppText.searchBoardGamesGenericError,
+            ),
           ),
-          SizedBox(height: Dimensions.doubleStandardSpacing),
+          const SizedBox(height: Dimensions.doubleStandardSpacing),
         ],
       ),
     );

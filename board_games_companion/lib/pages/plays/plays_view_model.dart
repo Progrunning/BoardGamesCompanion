@@ -88,8 +88,8 @@ abstract class _PlaysViewModel with Store {
     final playthroughsGrouped = groupBy(
         finishedPlaythroughs
           ..sort((playthroughA, playthroughB) =>
-              playthroughB.endDate!.compareTo(playthroughA.endDate!)),
-        (Playthrough playthrough) => historicalPlaythroughDateFormat.format(playthrough.endDate!));
+              playthroughB.startDate.compareTo(playthroughA.startDate)),
+        (Playthrough playthrough) => historicalPlaythroughDateFormat.format(playthrough.startDate));
 
     for (final playthroughsEntry in playthroughsGrouped.entries) {
       result.add(
@@ -177,15 +177,15 @@ abstract class _PlaysViewModel with Store {
   void setSelectTab(PlaysTab selectedTab) {
     switch (selectedTab) {
       case PlaysTab.history:
-        visualState = PlaysPageVisualState.history(PlaysTab.history, historicalPlaythroughs);
+        visualState = const PlaysPageVisualState.history();
         break;
 
       case PlaysTab.statistics:
-        visualState = const PlaysPageVisualState.statistics(PlaysTab.statistics);
+        visualState = const PlaysPageVisualState.statistics();
         break;
 
       case PlaysTab.selectGame:
-        visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+        visualState = const PlaysPageVisualState.selectGame();
         break;
 
       default:
@@ -206,7 +206,7 @@ abstract class _PlaysViewModel with Store {
       );
     }
 
-    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+    visualState = const PlaysPageVisualState.selectGame();
   }
 
   @action
@@ -215,21 +215,21 @@ abstract class _PlaysViewModel with Store {
       includeExpansions: includeExpansions ?? false,
     );
 
-    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+    visualState = const PlaysPageVisualState.selectGame();
   }
 
   @action
   void updateNumberOfPlayersNumberFilter(NumberOfPlayersFilter numberOfPlayersFilter) {
     gameSpinnerFilters = gameSpinnerFilters.copyWith(numberOfPlayersFilter: numberOfPlayersFilter);
 
-    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+    visualState = const PlaysPageVisualState.selectGame();
   }
 
   @action
   void updatePlaytimeFilter(PlaytimeFilter playtimeFilter) {
     gameSpinnerFilters = gameSpinnerFilters.copyWith(playtimeFilter: playtimeFilter);
 
-    visualState = PlaysPageVisualState.selectGame(PlaysTab.selectGame, shuffledBoardGames);
+    visualState = const PlaysPageVisualState.selectGame();
   }
 
   Future<void> trackTabChange(int tabIndex) async {
@@ -252,11 +252,7 @@ abstract class _PlaysViewModel with Store {
         .toList()
       ..shuffle();
     _setupGameSpinnerFilters();
-    visualState = PlaysPageVisualState.history(
-      PlaysTab.history,
-      historicalPlaythroughs,
-      // finishedBoardGamePlaythroughs.take(2).toList(),
-    );
+    visualState = const PlaysPageVisualState.history();
   }
 
   void _setupGameSpinnerFilters() {
