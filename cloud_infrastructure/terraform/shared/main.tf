@@ -128,5 +128,3 @@ resource "azurerm_api_management_logger" "apim-insights" {
     instrumentation_key = azurerm_application_insights.apim_appi.instrumentation_key
   }
 }
-
-
