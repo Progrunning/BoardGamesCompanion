@@ -26,9 +26,6 @@ variable "shared_resources" {
         name          = string
         insights_name = string
       })
-      search_api_health_test = object({
-        name = string
-      })
     })
     apim = object({
       name = string
