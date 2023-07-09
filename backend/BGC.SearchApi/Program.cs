@@ -79,7 +79,7 @@ app.UseStatusCodePages(async statusCodeContext =>
     await Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
                  .ExecuteAsync(statusCodeContext.HttpContext);
 });
-app.MapHealthChecks("/health");
+app.MapHealthChecks("api/search/health");
 
 app.MapGet("api/search", [Authorize] ([FromQuery] string query, ISearchService searchService) => searchService.Search(query, CancellationToken.None))
     .WithOpenApi();

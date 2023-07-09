@@ -131,25 +131,3 @@ resource "azurerm_api_management_logger" "apim-insights" {
     instrumentation_key = azurerm_application_insights.apim_appi.instrumentation_key
   }
 }
-
-resource "azurerm_application_insights_standard_web_test" "example" {
-  name                    = var.shared_resources.application_insights.search_api_health_test.name
-  resource_group_name     = azurerm_resource_group.rg.name
-  location                = azurerm_resource_group.rg.location
-  application_insights_id = azurerm_application_insights.apim_appi.id
-  geo_locations           = ["us-va-ash-azr", "emea-nl-ams-azr", "emea-au-syd-edge", "apac-sg-sin-azr", "latam-br-gru-edge"]
-
-  request {
-    url = format("%s/%s", azurerm_api_management.apim.management_api_url, "health")
-  }
-
-
-  validation_rules {
-    expected_status_code = 200
-    content {
-      content_match = "Healthy"
-    }
-  }
-}
-
-
