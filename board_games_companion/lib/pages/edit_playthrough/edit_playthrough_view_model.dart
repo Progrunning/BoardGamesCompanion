@@ -198,7 +198,7 @@ abstract class _EditPlaythoughViewModel with Store {
       return;
     }
 
-    final updatedPlaythroughNotes = _playthroughDetailsWorkingCopy!.notes!;
+    final updatedPlaythroughNotes = _playthroughDetailsWorkingCopy!.notes!.toList();
     updatedPlaythroughNotes[noteToUpdateIndex] = note;
 
     _updatePlaythroughDetailsNotes(updatedPlaythroughNotes);
