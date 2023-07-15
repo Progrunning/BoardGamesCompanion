@@ -95,24 +95,12 @@ resource "azurerm_key_vault" "kv" {
   enable_rbac_authorization  = true
 
   sku_name = var.resources.key_vault.sku
+}
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "Create",
-      "Get",
-    ]
-
-    secret_permissions = [
-      "Set",
-      "Get",
-      "Delete",
-      "Purge",
-      "Recover"
-    ]
-  }
+resource "azurerm_role_assignment" "kv_reader" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
 }
 
 resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
