@@ -29,13 +29,14 @@ namespace BGC.SearchApi.Services
         /// Initializes a new instance of the <see cref="CacheService"/> class.
         /// </summary>
         /// <param name="cacheSettings"></param>
+        /// <param name="logger"></param>
         public CacheService(IOptions<CacheSettings> cacheSettings, ILogger<CacheService> logger)
         {
             var clientOptions = new ServiceBusClientOptions()
             {
                 TransportType = ServiceBusTransportType.AmqpWebSockets,
             };
-            _client = new ServiceBusClient(cacheSettings.Value.ConnectionString, clientOptions);
+            _client = new ServiceBusClient(cacheSettings.Value.SendConnectionString, clientOptions);
             _sender = _client.CreateSender(cacheSettings.Value.QueueName);
             _logger = logger;
         }

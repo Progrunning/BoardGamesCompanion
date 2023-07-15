@@ -7,10 +7,10 @@ namespace BGC.SearchApi.Models.Settings
     public record CacheSettings
     {
         /// <summary>
-        /// Gets connection string.
+        /// Gets connection string for sending messages.
         /// </summary>
         [Required]
-        public string ConnectionString { get; init; } = null!;
+        public string SendConnectionString { get; init; } = null!;
 
         /// <summary>
         /// Gets queue name.
