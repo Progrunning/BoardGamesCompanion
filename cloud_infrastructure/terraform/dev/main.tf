@@ -82,46 +82,6 @@ resource "azurerm_resource_group" "rg" {
 }
 
 ###
-### Key Vault
-###
-
-resource "azurerm_key_vault" "kv" {
-  name                       = var.resources.key_vault.name
-  location                   = azurerm_resource_group.rg.location
-  resource_group_name        = azurerm_resource_group.rg.name
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days = 7
-  purge_protection_enabled   = false
-  enable_rbac_authorization  = true
-
-  sku_name = var.resources.key_vault.sku
-}
-
-resource "azurerm_role_assignment" "kv_reader" {
-  scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Contributor"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
-
-resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
-  name         = "AppSettings--CacheSettings--SendConnectionString"
-  value        = azurerm_servicebus_queue_authorization_rule.sbq_send_policy.primary_connection_string
-  key_vault_id = azurerm_key_vault.kv.id
-}
-
-resource "azurerm_key_vault_secret" "kv_queue_send_name" {
-  name         = "AppSettings--CacheSettings--QueueName"
-  value        = var.resources.cache_service_bus.queue.send_policy_name
-  key_vault_id = azurerm_key_vault.kv.id
-}
-
-resource "azurerm_key_vault_secret" "kv_application_insights_connection_string" {
-  name         = "ApplicationInsights--ConnectionString"
-  value        = azurerm_application_insights.search_service_appi.connection_string
-  key_vault_id = azurerm_key_vault.kv.id
-}
-
-###
 ### Storage
 ###
 
@@ -208,12 +168,6 @@ resource "azurerm_container_app" "search_service_ca" {
   }
 }
 
-resource "azurerm_role_assignment" "kv_reader" {
-  scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Reader"
-  principal_id         = azurerm_container_app.search_service_ca.identity.0.principal_id
-}
-
 ###
 ### Service Bus
 ###
@@ -264,5 +218,65 @@ resource "azurerm_linux_function_app" "func" {
       use_dotnet_isolated_runtime = true
     }
   }
+}
+
+###
+### Key Vault
+###
+
+resource "azurerm_key_vault" "kv" {
+  name                       = var.resources.key_vault.name
+  location                   = azurerm_resource_group.rg.location
+  resource_group_name        = azurerm_resource_group.rg.name
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
+
+  sku_name = var.resources.key_vault.sku
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Create",
+      "Get",
+    ]
+
+    secret_permissions = [
+      "Set",
+      "Get",
+      "Delete",
+      "Purge",
+      "Recover"
+    ]
+  }
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = azurerm_container_app.search_service_ca.identity.0.principal_id
+
+    secret_permissions = [
+      "Get",
+    ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
+  name         = "AppSettings--CacheSettings--SendConnectionString"
+  value        = azurerm_servicebus_queue_authorization_rule.sbq_send_policy.primary_connection_string
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+resource "azurerm_key_vault_secret" "kv_queue_send_name" {
+  name         = "AppSettings--CacheSettings--QueueName"
+  value        = var.resources.cache_service_bus.queue.send_policy_name
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+resource "azurerm_key_vault_secret" "kv_application_insights_connection_string" {
+  name         = "ApplicationInsights--ConnectionString"
+  value        = azurerm_application_insights.search_service_appi.connection_string
+  key_vault_id = azurerm_key_vault.kv.id
 }
 
