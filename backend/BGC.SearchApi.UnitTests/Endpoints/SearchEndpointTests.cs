@@ -9,13 +9,14 @@ using BGC.SearchApi.Services.Interface;
 using BGC.SearchApi.UnitTests.Helpers;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BGC.SearchApi.UnitTests.Endpoints
 {
     public class SearchEndpointTests
     {
+        private const string InvalidApiKey = "invalid-api-key";
+
         private readonly Mock<ISearchService> _mockSearchService;
 
         public SearchEndpointTests()
@@ -23,7 +24,6 @@ namespace BGC.SearchApi.UnitTests.Endpoints
             _mockSearchService = new Mock<ISearchService>();
         }
 
-        private const string InvalidApiKey = "invalid-api-key";
 
         [Fact]
         public async Task Search_NoApiKey_ThrowsUnauthorizedException()

@@ -160,10 +160,8 @@ resource "azurerm_servicebus_queue" "sbq" {
 }
 
 resource "azurerm_servicebus_queue_authorization_rule" "sbqsendpolicy" {
-  name                = var.resources.cache_service_bus.queue.send_policy_name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  queue_id            = azurerm_servicebus_queue.sbq.id
+  name     = var.resources.cache_service_bus.queue.send_policy_name
+  queue_id = azurerm_servicebus_queue.sbq.id
 
   listen = false
   send   = true

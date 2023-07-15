@@ -61,6 +61,7 @@ public class SearchServiceTests
             }
         };
         _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(bggSearchResposne);
+        _mockBoardGamesRepository.Setup(repository => repository.GetBoardGames(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(Array.Empty<BoardGame>);
 
         var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
         searchResults.Should().NotBeEmpty();
