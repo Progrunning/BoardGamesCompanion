@@ -98,19 +98,19 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
-  name         = "AppSettings:CacheSettings:SendConnectionString"
+  name         = "AppSettings__CacheSettings__SendConnectionString"
   value        = azurerm_servicebus_queue_authorization_rule.sbq_send_policy.primary_connection_string
   key_vault_id = azurerm_key_vault.kv.id
 }
 
 resource "azurerm_key_vault_secret" "kv_queue_send_name" {
-  name         = "AppSettings:CacheSettings:QueueName"
+  name         = "AppSettings__CacheSettings__QueueName"
   value        = var.resources.cache_service_bus.queue.send_policy_name
   key_vault_id = azurerm_key_vault.kv.id
 }
 
 resource "azurerm_key_vault_secret" "kv_application_insights_connection_string" {
-  name         = "ApplicationInsights:ConnectionString"
+  name         = "ApplicationInsights__ConnectionString"
   value        = azurerm_application_insights.search_service_appi.connection_string
   key_vault_id = azurerm_key_vault.kv.id
 }
