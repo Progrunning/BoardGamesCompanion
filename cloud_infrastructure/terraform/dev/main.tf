@@ -109,7 +109,7 @@ resource "azurerm_key_vault_secret" "kv_queue_send_name" {
   key_vault_id = azurerm_key_vault.kv.id
 }
 
-resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
+resource "azurerm_key_vault_secret" "kv_application_insights_connection_string" {
   name         = "ApplicationInsights:ConnectionString"
   value        = azurerm_application_insights.search_service_appi.connection_string
   key_vault_id = azurerm_key_vault.kv.id
