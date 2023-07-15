@@ -38,7 +38,8 @@ variable "resources" {
         sku  = string
       })
       queue = object({
-        name = string
+        name             = string
+        send_policy_name = string
       })
     })
     cache_function = object({
@@ -158,6 +159,17 @@ resource "azurerm_servicebus_queue" "sbq" {
   namespace_id = azurerm_servicebus_namespace.sbns.id
 }
 
+resource "azurerm_servicebus_queue_authorization_rule" "sbqsendpolicy" {
+  name                = var.resources.cache_service_bus.queue.send_policy_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  queue_id            = azurerm_servicebus_queue.sbq.id
+
+  listen = false
+  send   = true
+  manage = false
+}
+
 resource "azurerm_service_plan" "asp" {
   name                = var.resources.cache_function.service_plan.name
   resource_group_name = azurerm_resource_group.rg.name
@@ -165,6 +177,7 @@ resource "azurerm_service_plan" "asp" {
   os_type             = "Linux"
   sku_name            = "Y1"
 }
+
 
 resource "azurerm_linux_function_app" "func" {
   name                = var.resources.cache_function.name

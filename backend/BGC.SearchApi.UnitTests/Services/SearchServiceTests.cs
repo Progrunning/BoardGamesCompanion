@@ -13,6 +13,7 @@ public class SearchServiceTests
     private readonly Mock<ILogger<SearchService>> _mockLogger;
     private readonly Mock<IBggService> _mockBggService;
     private readonly Mock<IBoardGamesRepository> _mockBoardGamesRepository;
+    private readonly Mock<ICacheService> _mockCacheService;
 
     private readonly SearchService searchService;
 
@@ -21,8 +22,9 @@ public class SearchServiceTests
         _mockLogger = new Mock<ILogger<SearchService>>();
         _mockBggService = new Mock<IBggService>();
         _mockBoardGamesRepository = new Mock<IBoardGamesRepository>();
+        _mockCacheService = new Mock<ICacheService>();
 
-        searchService = new SearchService(_mockLogger.Object, _mockBggService.Object, _mockBoardGamesRepository.Object);
+        searchService = new SearchService(_mockLogger.Object, _mockBggService.Object, _mockBoardGamesRepository.Object, _mockCacheService.Object);
     }
 
     [Fact]

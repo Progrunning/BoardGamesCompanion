@@ -13,6 +13,6 @@ namespace BGC.SearchApi.Policies
         /// Gets api key.
         /// </summary>
         [Required]
-        public string ApiKey { get; init; }
+        public string ApiKey { get; init; } = null!;
     }
 }
