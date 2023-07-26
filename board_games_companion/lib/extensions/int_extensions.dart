@@ -4,7 +4,7 @@ import '../common/app_text.dart';
 import '../common/constants.dart';
 
 extension IntExtensions on int? {
-  String toOrdinalAbbreviations() {
+  String toOrdinalAbbreviation() {
     if (this == null) {
       return '';
     }

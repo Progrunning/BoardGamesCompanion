@@ -22,7 +22,7 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   const PlaythroughDetails._();
 
-  int? get daysSinceStart => DateTime.now().toUtc().difference(playthrough.startDate).inDays;
+  int get daysSinceStart => DateTime.now().toUtc().difference(playthrough.startDate).inDays;
 
   Duration get duration {
     final nowUtc = DateTime.now().toUtc();

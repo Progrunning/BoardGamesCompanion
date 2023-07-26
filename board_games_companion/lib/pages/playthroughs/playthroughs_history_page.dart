@@ -348,13 +348,18 @@ class _PlaythroughGameStats extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         CalendarCard(playthroughDetails.startDate),
+        if (playthroughDetails.daysSinceStart == 0)
+          const Text(AppText.playthroughsHistoryPageToday),
+        if (playthroughDetails.daysSinceStart == 1)
+          const Text(AppText.playthroughsHistoryPageYesterday),
+        if (playthroughDetails.daysSinceStart > 1)
+          _PlaythroughItemDetail(
+            playthroughDetails.daysSinceStart.toString(),
+            AppText.playthroughsHistoryPageDaysAgo,
+          ),
         _PlaythroughItemDetail(
-          playthroughDetails.daysSinceStart?.toString(),
-          'day(s) ago',
-        ),
-        _PlaythroughItemDetail(
-          '$playthroughNumber${playthroughNumber.toOrdinalAbbreviations()}',
-          'game',
+          '$playthroughNumber${playthroughNumber.toOrdinalAbbreviation()}',
+          AppText.playthroughsHistoryPageGameNumberSubtitle,
         ),
         _PlaythroughDuration(playthroughDetails: playthroughDetails),
       ],
