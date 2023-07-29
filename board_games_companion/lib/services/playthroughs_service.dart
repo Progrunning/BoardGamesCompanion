@@ -1,3 +1,4 @@
+import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
@@ -57,6 +58,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     int? bggPlayId,
     List<PlaythroughNote>? notes,
   }) async {
+    Fimber.d('Creating a Playthrough...');
     if ((boardGameId.isEmpty) || (playerIds.isEmpty)) {
       return null;
     }
@@ -85,9 +87,11 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     }
 
     try {
+      Fimber.d('Saving $newPlaythrough...');
       await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playerId in playerIds) {
+        Fimber.d('Creating or updated player score  [$playerId]...');
         var playerScore = playerScores[playerId]?.score ??
             Score(
               id: uuid.v4(),
@@ -99,16 +103,21 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
           playerScore = playerScore.copyWith(playthroughId: newPlaythrough.id);
         }
 
+        Fimber.d('Saving $playerScore...');
         if (!await scoreService.addOrUpdateScore(playerScore)) {
+          Fimber.e('Failed to save $playerScore');
           FirebaseCrashlytics.instance.log(
             'Faild to create a player score for player $playerId for a board game $boardGameId',
           );
         } else {
           newPlaythrough = newPlaythrough.copyWith(
               scoreIds: newPlaythrough.scoreIds.toList()..add(playerScore.id));
+          await storageBox.put(newPlaythrough.id, newPlaythrough);
+          Fimber.d('Saved $playerScore and updated the ${newPlaythrough.scoreIds}');
         }
       }
 
+      Fimber.d('Playthrough created');
       return newPlaythrough;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

@@ -110,8 +110,8 @@ class AppText {
   static const playthroughsGameSettingsGameClassificationSectionTitle = 'Classification';
   static const playthroughsGameSettingsGameFamilySectionTitle = 'Family';
   static const playthroughsGameSettingsScoreDetailsSectionTitle = 'Details';
-  static const playthroughsGameSettingsGameFamilyHighestScore = 'Highest score';
-  static const playthroughsGameSettingsGameFamilyLowestScore = 'Lowest score';
+  static const playthroughsGameSettingsGameFamilyHighestScore = 'Highest score wins';
+  static const playthroughsGameSettingsGameFamilyLowestScore = 'Lowest score wins';
   static const playthroughsGameSettingsGameFamilyCoop = 'Cooperative';
 
   static const searchBoardGamesPageSearchInstructions =

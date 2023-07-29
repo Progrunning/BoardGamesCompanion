@@ -1,3 +1,4 @@
+import 'package:fimber/fimber.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:injectable/injectable.dart';
 
@@ -14,6 +15,7 @@ class AnalyticsService {
     required String name,
     Map<String, dynamic>? parameters,
   }) async {
+    Fimber.i('Captured an $name event with $parameters');
     await _firebaseAnalytics.logEvent(name: name, parameters: parameters);
     await _rateAndReviewService.increaseNumberOfSignificantActions();
   }
