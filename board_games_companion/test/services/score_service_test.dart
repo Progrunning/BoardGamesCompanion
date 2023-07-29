@@ -1,33 +1,59 @@
 import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/services/score_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../mocks/hive_interface_mock.dart';
 import '../mocks/score_hive_box_mock.dart';
 
 void main() {
-  late final MockHiveInterface mockHiveInterface;
-  late final MockScoreHiveBox mockScoreHiveBox;
+  late MockHiveInterface mockHiveInterface;
+  late MockScoreHiveBox mockScoreHiveBox;
 
-  late final ScoreService scoreService;
+  late ScoreService scoreService;
+
+  const emptyScore = Score(
+    boardGameId: '',
+    id: '',
+    playerId: '',
+  );
 
   setUp(() {
-    mockHiveInterface = MockHiveInterface();
     mockScoreHiveBox = MockScoreHiveBox();
+    when(() => mockScoreHiveBox.put(any<dynamic>(), any())).thenAnswer((_) => Future.value());
+    mockHiveInterface = MockHiveInterface();
+    when(() => mockHiveInterface.isBoxOpen(any())).thenAnswer((_) => false);
+    when(() => mockHiveInterface.openBox<Score>(any())).thenAnswer((_) async => mockScoreHiveBox);
+
     scoreService = ScoreService(mockHiveInterface);
   });
 
-  test(
-      'GIVEN a score service '
-      'WHEN creating a score without a playthrough id '
-      'THEN score should not be created ', () async {
-    const mockScore = Score(
-      boardGameId: '',
-      id: '',
-      playerId: '',
-    );
+  setUpAll(() {
+    registerFallbackValue(emptyScore);
+  });
 
-    final createResult = await scoreService.addOrUpdateScore(mockScore);
-    expect(createResult, isFalse);
+  tearDown(() {
+    reset(mockHiveInterface);
+    reset(mockScoreHiveBox);
+  });
+
+  group('GIVEN a score service ', () {
+    void verifyScore(Score score, bool expectedResult) {
+      test(
+          'WHEN saving a score model $score '
+          'THEN saving should result with $expectedResult ', () async {
+        final createResult = await scoreService.addOrUpdateScore(score);
+        expect(createResult, expectedResult);
+      });
+    }
+
+    verifyScore(emptyScore, false);
+    verifyScore(emptyScore.copyWith(id: '123'), false);
+    verifyScore(emptyScore.copyWith(id: '123', boardGameId: '321'), false);
+    verifyScore(emptyScore.copyWith(id: '123', boardGameId: '321', playerId: '834'), false);
+    verifyScore(
+      emptyScore.copyWith(id: '123', boardGameId: '321', playerId: '834', playthroughId: '123'),
+      true,
+    );
   });
 }
