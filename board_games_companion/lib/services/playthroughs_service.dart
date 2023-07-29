@@ -88,10 +88,9 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
 
     try {
       Fimber.d('Saving $newPlaythrough...');
-      await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       for (final String playerId in playerIds) {
-        Fimber.d('Creating or updated player score  [$playerId]...');
+        Fimber.d('Creating or updated player score [$playerId]...');
         var playerScore = playerScores[playerId]?.score ??
             Score(
               id: uuid.v4(),
@@ -112,10 +111,10 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
         } else {
           newPlaythrough = newPlaythrough.copyWith(
               scoreIds: newPlaythrough.scoreIds.toList()..add(playerScore.id));
-          await storageBox.put(newPlaythrough.id, newPlaythrough);
-          Fimber.d('Saved $playerScore and updated the ${newPlaythrough.scoreIds}');
         }
       }
+
+      await storageBox.put(newPlaythrough.id, newPlaythrough);
 
       Fimber.d('Playthrough created');
       return newPlaythrough;
