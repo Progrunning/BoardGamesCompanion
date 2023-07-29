@@ -12,7 +12,7 @@ void main() {
 
   late ScoreService scoreService;
 
-  const emptyScore = Score(
+  const sampleScore = Score(
     boardGameId: '',
     id: '',
     playerId: '',
@@ -30,7 +30,7 @@ void main() {
 
   setUpAll(() {
     // MK Required fallback of a dummy score when mocktail needs to return a model of such type
-    registerFallbackValue(emptyScore);
+    registerFallbackValue(sampleScore);
   });
 
   tearDown(() {
@@ -49,12 +49,12 @@ void main() {
       });
     }
 
-    verifyScore(emptyScore, false);
-    verifyScore(emptyScore.copyWith(id: '123'), false);
-    verifyScore(emptyScore.copyWith(id: '123', boardGameId: '321'), false);
-    verifyScore(emptyScore.copyWith(id: '123', boardGameId: '321', playerId: '834'), false);
+    verifyScore(sampleScore, false);
+    verifyScore(sampleScore.copyWith(id: '123'), false);
+    verifyScore(sampleScore.copyWith(id: '123', boardGameId: '321'), false);
+    verifyScore(sampleScore.copyWith(id: '123', boardGameId: '321', playerId: '834'), false);
     verifyScore(
-      emptyScore.copyWith(id: '123', boardGameId: '321', playerId: '834', playthroughId: '123'),
+      sampleScore.copyWith(id: '123', boardGameId: '321', playerId: '834', playthroughId: '123'),
       true,
     );
 
@@ -62,7 +62,7 @@ void main() {
         'GIVEN a score '
         'WHEN saving it '
         'THEN the score should be put in the hive box ', () async {
-      final validScore = emptyScore.copyWith(
+      final validScore = sampleScore.copyWith(
         id: '123',
         boardGameId: '321',
         playerId: '834',
