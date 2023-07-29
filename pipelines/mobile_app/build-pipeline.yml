@@ -56,6 +56,7 @@ jobs:
         inputs:
           reports: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/lcov.info"
           targetdir: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/"
+          sourcedirs: "$(Build.SourcesDirectory)/$(appDirectoryName)"
           tag: "$(app.version).$(Build.BuildID)"
 
       - task: PublishCodeCoverageResults@2
