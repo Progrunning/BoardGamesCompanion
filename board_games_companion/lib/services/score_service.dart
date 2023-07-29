@@ -7,6 +7,8 @@ import 'hive_base_service.dart';
 
 @singleton
 class ScoreService extends BaseHiveService<Score, ScoreService> {
+  ScoreService(super.hive);
+
   Future<bool> addOrUpdateScore(Score score) async {
     Fimber.d('Saving a score $score');
     if ((score.playthroughId?.isEmpty ?? true) ||

@@ -12,7 +12,7 @@ import 'score_service.dart';
 
 @singleton
 class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService> {
-  PlaythroughService(this.scoreService);
+  PlaythroughService(super.hive, this.scoreService);
 
   final ScoreService scoreService;
 

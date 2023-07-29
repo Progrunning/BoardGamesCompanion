@@ -6,6 +6,8 @@ import 'hive_base_service.dart';
 @singleton
 class BoardGamesFiltersService
     extends BaseHiveService<CollectionFilters, BoardGamesFiltersService> {
+  BoardGamesFiltersService(super._hive);
+
   static const String _collectionFiltersPreferenceKey = 'collectionFilters';
 
   Future<CollectionFilters?> retrieveCollectionFiltersPreferences() async {

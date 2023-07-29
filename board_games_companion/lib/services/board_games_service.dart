@@ -10,7 +10,7 @@ import 'hive_base_service.dart';
 
 @singleton
 class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesService> {
-  BoardGamesService(this._boardGameGeekService);
+  BoardGamesService(super.hive, this._boardGameGeekService);
 
   final BoardGamesGeekService _boardGameGeekService;
 
