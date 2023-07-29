@@ -59,13 +59,15 @@ jobs:
           tag: "$(app.version).$(Build.BuildID)"
 
       - task: PublishCodeCoverageResults@2
+        displayName: "Publish code coverage results"
         inputs:
-          summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/**/coverage.xml"
+          summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
           pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)"
 
   - job: BuildDroid
-    timeoutInMinutes: 10
+    dependsOn: Test
     condition: eq('${{ parameters.buildAndroid }}', 'true')
+    timeoutInMinutes: 10
     pool:
       vmImage: "macOS-latest"
 
@@ -95,8 +97,9 @@ jobs:
           buildName: "$(app.version).$(Build.BuildID)"
 
   - job: BuildIOS
-    timeoutInMinutes: 10
+    dependsOn: Test
     condition: eq('${{ parameters.buildIOS }}', 'true')
+    timeoutInMinutes: 10
     pool:
       vmImage: "macOS-latest"
 
