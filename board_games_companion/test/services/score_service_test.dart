@@ -38,11 +38,12 @@ void main() {
     reset(mockScoreHiveBox);
   });
 
-  group('GIVEN a score service ', () {
+  group('Saving score ', () {
     void verifyScore(Score score, bool expectedResult) {
       test(
-          'WHEN saving a score model $score '
-          'THEN saving should result with $expectedResult ', () async {
+          'GIVEN a score $score '
+          'WHEN saving it '
+          'THEN saving should ${expectedResult ? "succeed" : "fail"} ', () async {
         final createResult = await scoreService.addOrUpdateScore(score);
         expect(createResult, expectedResult);
       });
@@ -56,5 +57,21 @@ void main() {
       emptyScore.copyWith(id: '123', boardGameId: '321', playerId: '834', playthroughId: '123'),
       true,
     );
+
+    test(
+        'GIVEN a score '
+        'WHEN saving it '
+        'THEN the score should be put in the hive box ', () async {
+      final validScore = emptyScore.copyWith(
+        id: '123',
+        boardGameId: '321',
+        playerId: '834',
+        playthroughId: '123',
+      );
+
+      await scoreService.addOrUpdateScore(validScore);
+
+      verify(() => mockScoreHiveBox.put(validScore.id, validScore)).called(1);
+    });
   });
 }

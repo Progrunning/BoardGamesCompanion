@@ -17,7 +17,7 @@ variables:
 
 jobs:
   - job: Build
-    timeoutInMinutes: 20
+    timeoutInMinutes: 30
     pool:
       vmImage: "macOS-latest"
 
@@ -36,6 +36,11 @@ jobs:
           channel: "stable"
           version: "custom"
           customVersion: $(flutter.version)
+
+      - task: FlutterTest@0
+        inputs:
+          projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
+          generateCodeCoverageReport: true
 
       - task: FlutterBuild@0
         displayName: "Build Android"
