@@ -29,6 +29,7 @@ void main() {
   });
 
   setUpAll(() {
+    // MK Required fallback of a dummy score when mocktail needs to return a model of such type
     registerFallbackValue(emptyScore);
   });
 
