@@ -38,7 +38,8 @@ variable "resources" {
         sku  = string
       })
       queue = object({
-        name = string
+        name             = string
+        send_policy_name = string
       })
     })
     cache_function = object({
@@ -47,6 +48,10 @@ variable "resources" {
       service_plan = object({
         name = string
       })
+    })
+    key_vault = object({
+      name = string
+      sku  = string
     })
   })
   nullable = false
@@ -69,10 +74,16 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group.name
   location = var.resource_group.location
 }
+
+###
+### Storage
+###
 
 resource "azurerm_storage_account" "sa" {
   name                     = var.resources.storage_account.name
@@ -82,6 +93,10 @@ resource "azurerm_storage_account" "sa" {
   account_replication_type = "LRS"
 }
 
+###
+### Logs
+###
+
 resource "azurerm_log_analytics_workspace" "log" {
   name                = var.resources.analytics_workspace.name
   resource_group_name = azurerm_resource_group.rg.name
@@ -90,19 +105,23 @@ resource "azurerm_log_analytics_workspace" "log" {
   retention_in_days   = var.resources.analytics_workspace.retention_in_days
 }
 
-resource "azurerm_container_app_environment" "cae" {
-  name                       = var.resources.container_app_environemnt.name
-  resource_group_name        = azurerm_resource_group.rg.name
-  location                   = var.resources.container_app_environemnt.location
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
-}
-
 resource "azurerm_application_insights" "search_service_appi" {
   name                = var.resources.application_insights.search_service.name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   workspace_id        = azurerm_log_analytics_workspace.log.id
   application_type    = "web"
+}
+
+###
+### Container Apps
+###
+
+resource "azurerm_container_app_environment" "cae" {
+  name                       = var.resources.container_app_environemnt.name
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = var.resources.container_app_environemnt.location
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
 }
 
 resource "azurerm_container_app" "search_service_ca" {
@@ -118,6 +137,10 @@ resource "azurerm_container_app" "search_service_ca" {
       cpu    = 0.25
       memory = "0.5Gi"
     }
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   ingress {
@@ -145,7 +168,9 @@ resource "azurerm_container_app" "search_service_ca" {
   }
 }
 
-
+###
+### Service Bus
+###
 resource "azurerm_servicebus_namespace" "sbns" {
   name                = var.resources.cache_service_bus.namespace.name
   resource_group_name = azurerm_resource_group.rg.name
@@ -158,6 +183,17 @@ resource "azurerm_servicebus_queue" "sbq" {
   namespace_id = azurerm_servicebus_namespace.sbns.id
 }
 
+resource "azurerm_servicebus_queue_authorization_rule" "sbq_send_policy" {
+  name     = var.resources.cache_service_bus.queue.send_policy_name
+  queue_id = azurerm_servicebus_queue.sbq.id
+
+  listen = false
+  send   = true
+  manage = false
+}
+
+### Functions
+
 resource "azurerm_service_plan" "asp" {
   name                = var.resources.cache_function.service_plan.name
   resource_group_name = azurerm_resource_group.rg.name
@@ -165,6 +201,7 @@ resource "azurerm_service_plan" "asp" {
   os_type             = "Linux"
   sku_name            = "Y1"
 }
+
 
 resource "azurerm_linux_function_app" "func" {
   name                = var.resources.cache_function.name
@@ -181,5 +218,67 @@ resource "azurerm_linux_function_app" "func" {
       use_dotnet_isolated_runtime = true
     }
   }
+}
+
+###
+### Key Vault
+###
+
+resource "azurerm_key_vault" "kv" {
+  name                       = var.resources.key_vault.name
+  location                   = azurerm_resource_group.rg.location
+  resource_group_name        = azurerm_resource_group.rg.name
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
+
+  sku_name = var.resources.key_vault.sku
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Create",
+      "Get",
+    ]
+
+    secret_permissions = [
+      "Get",
+      "List",
+      "Delete",
+      "Recover",
+      "Backup",
+      "Restore",
+      "Set",
+    ]
+  }
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = azurerm_container_app.search_service_ca.identity.0.principal_id
+
+    secret_permissions = [
+      "Get",
+    ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
+  name         = "AppSettings--CacheSettings--SendConnectionString"
+  value        = azurerm_servicebus_queue_authorization_rule.sbq_send_policy.primary_connection_string
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+resource "azurerm_key_vault_secret" "kv_queue_send_name" {
+  name         = "AppSettings--CacheSettings--QueueName"
+  value        = var.resources.cache_service_bus.queue.send_policy_name
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+resource "azurerm_key_vault_secret" "kv_application_insights_connection_string" {
+  name         = "ApplicationInsights--ConnectionString"
+  value        = azurerm_application_insights.search_service_appi.connection_string
+  key_vault_id = azurerm_key_vault.kv.id
 }
 

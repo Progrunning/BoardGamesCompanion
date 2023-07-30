@@ -11,7 +11,7 @@ import 'hive_base_service.dart';
 
 @singleton
 class PlayerService extends BaseHiveService<Player, PlayerService> {
-  PlayerService(this.fileService);
+  PlayerService(super.hive, this.fileService);
 
   final FileService fileService;
 

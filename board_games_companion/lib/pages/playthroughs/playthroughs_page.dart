@@ -200,9 +200,11 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     } finally {
-      setState(() {
-        _showImportGamesLoadingIndicator = false;
-      });
+      if (mounted) {
+        setState(() {
+          _showImportGamesLoadingIndicator = false;
+        });
+      }
     }
   }
 

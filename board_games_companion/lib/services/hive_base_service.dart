@@ -6,6 +6,10 @@ import 'package:uuid/uuid.dart';
 import '../common/hive_boxes.dart';
 
 abstract class BaseHiveService<TBox, TService> {
+  BaseHiveService(this._hive);
+
+  final HiveInterface _hive;
+
   @protected
   final uuid = const Uuid();
 
@@ -13,14 +17,14 @@ abstract class BaseHiveService<TBox, TService> {
 
   String get _boxName => HiveBoxes.boxesNamesMap[TService] ?? '';
 
-  bool get _isBoxOpen => Hive.isBoxOpen(_boxName);
+  bool get _isBoxOpen => _hive.isBoxOpen(_boxName);
 
   void closeBox() {
     if (_boxName.isNullOrBlank || !_isBoxOpen) {
       return;
     }
 
-    Hive.box<TBox>(_boxName).close();
+    _hive.box<TBox>(_boxName).close();
   }
 
   Future<bool> ensureBoxOpen() async {
@@ -29,7 +33,7 @@ abstract class BaseHiveService<TBox, TService> {
     }
 
     if (!_isBoxOpen) {
-      storageBox = await Hive.openBox<TBox>(_boxName);
+      storageBox = await _hive.openBox<TBox>(_boxName);
     }
 
     return storageBox != null;

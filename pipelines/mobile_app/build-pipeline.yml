@@ -15,9 +15,63 @@ variables:
     value: board_games_companion
   - group: BGC-GLOBAL
 
+parameters:
+  - name: runTests
+    displayName: Run tests
+    type: boolean
+    default: true
+  - name: buildIOS
+    displayName: Build iOS
+    type: boolean
+    default: true
+  - name: buildAndroid
+    displayName: Build Android
+    type: boolean
+    default: true
+
 jobs:
-  - job: Build
-    timeoutInMinutes: 20
+  - job: Test
+    timeoutInMinutes: 10
+    condition: eq('${{ parameters.runTests }}', 'true')
+    pool:
+      vmImage: "macOS-latest"
+
+    steps:
+      - task: FlutterInstall@0
+        displayName: "Install Flutter"
+        inputs:
+          mode: "auto"
+          channel: "stable"
+          version: "custom"
+          customVersion: $(flutter.version)
+
+      - task: FlutterTest@0
+        displayName: "Run tests"
+        inputs:
+          projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
+          generateCodeCoverageReport: true
+
+      - task: reportgenerator@5
+        displayName: "Generate coverage report"
+        inputs:
+          reports: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/lcov.info"
+          targetdir: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/"
+          sourcedirs: "$(Build.SourcesDirectory)/$(appDirectoryName)"
+          reporttypes: "HtmlInline_AzurePipelines;Cobertura"
+          # Exclude all generated files from the code coverage
+          filefilters: "-lib/**/*.g.dart"
+          tag: "$(app.version).$(Build.BuildID)"
+
+      - task: PublishCodeCoverageResults@2
+        displayName: "Publish code coverage results"
+        inputs:
+          summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
+          pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)"
+
+  - job: BuildDroid
+    dependsOn: Test
+    condition: eq('${{ parameters.buildAndroid }}', 'true')
+    timeoutInMinutes: 10
     pool:
       vmImage: "macOS-latest"
 
@@ -45,6 +99,22 @@ jobs:
           projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
           buildNumber: "$(Build.BuildID)"
           buildName: "$(app.version).$(Build.BuildID)"
+
+  - job: BuildIOS
+    dependsOn: Test
+    condition: eq('${{ parameters.buildIOS }}', 'true')
+    timeoutInMinutes: 10
+    pool:
+      vmImage: "macOS-latest"
+
+    steps:
+      - task: FlutterInstall@0
+        displayName: "Install Flutter"
+        inputs:
+          mode: "auto"
+          channel: "stable"
+          version: "custom"
+          customVersion: $(flutter.version)
 
       - task: FlutterBuild@0
         displayName: "Build iOS"

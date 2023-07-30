@@ -160,6 +160,15 @@ resource "azurerm_servicebus_queue" "sbq" {
   namespace_id = azurerm_servicebus_namespace.sbns.id
 }
 
+resource "azurerm_servicebus_queue_authorization_rule" "sbqsendpolicy" {
+  name     = var.resources.cache_service_bus.queue.send_policy_name
+  queue_id = azurerm_servicebus_queue.sbq.id
+
+  listen = false
+  send   = true
+  manage = false
+}
+
 resource "azurerm_service_plan" "asp" {
   name                = var.resources.cache_function.service_plan.name
   resource_group_name = azurerm_resource_group.rg.name

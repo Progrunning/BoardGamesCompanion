@@ -2,6 +2,13 @@
 
 public record BoardGameSummaryDto
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BoardGameSummaryDto"/> class.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="yearPublished"></param>
+    /// <remarks>Model is based on the data returned from the BGG XML API.</remarks>
     public BoardGameSummaryDto(string id, string name, int yearPublished)
     {
         Id = id;
@@ -16,7 +23,7 @@ public record BoardGameSummaryDto
     public int YearPublished { get; init; }
 
     /// <summary>
-    /// Type of the board game (e.g. BoardGame or BoardGameExpansion)
+    /// Type of the board game (e.g. BoardGame or BoardGameExpansion).
     /// </summary>
     public string Type { get; set; } = null!;
 

@@ -52,9 +52,9 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
     Fimber.d(
       'Pushed a route $routeName. Current page is ${route.toScreenName()} with backing class ${route.toScreenClassName()}',
     );
-    Fimber.d(
-      'Pushed route arguments ${route.settings.arguments}',
-    );
+    if (route.settings.arguments != null) {
+      Fimber.d('Pushed route arguments ${route.settings.arguments}');
+    }
 
     switch (routeName) {
       case BoardGamesDetailsPage.pageRoute:

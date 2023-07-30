@@ -19,6 +19,10 @@ using MongoDB.Driver;
 var builder = WebApplication.CreateBuilder(args);
 
 var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));
+builder.Services.AddOptions<CacheSettings>()
+                .Bind(appSettingsConfigurationSection.GetSection(nameof(CacheSettings)))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 builder.Services.AddOptions<MongoDbSettings>()
                 .Bind(appSettingsConfigurationSection.GetSection(nameof(MongoDbSettings)))
                 .ValidateDataAnnotations()
@@ -50,6 +54,7 @@ builder.Services.AddTransient<IMongoClient>((services) =>
 
     return new MongoClient(mongoDbSettings!.Value.ConnectionString);
 });
+builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();
 builder.Services.AddTransient<IErrorService, ErrorService>();
 builder.Services.AddTransient<IBggService, BggService>();
@@ -101,5 +106,5 @@ app.Run();
 /// <summary>
 /// Entry point for the API.
 /// </summary>
-/// <remarks>MK Having this is required because otherwise the integration tests using WebApplicationFactory won't work.</remarks>
+/// <remarks>MK Declaring <see cref="Program"/> as a partial class is required because otherwise the integration tests using WebApplicationFactory won't work.</remarks>
 public partial class Program { }

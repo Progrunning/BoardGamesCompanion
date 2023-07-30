@@ -6,7 +6,10 @@ namespace BGC.SearchApi.Models.Settings
     [ExcludeFromCodeCoverage(Justification = "Settings model don't require testing")]
     public record MongoDbSettings
     {
+        /// <summary>
+        /// Gets connection string.
+        /// </summary>
         [Required]
-        public string? ConnectionString { get; init; }
+        public string ConnectionString { get; init; } = null!;
     }
 }

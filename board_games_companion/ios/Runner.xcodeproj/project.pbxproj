@@ -153,6 +153,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				D02AFCB5254E4BFD00C36357 /* ShellScript */,
 				173C006E3010407C6C42EADC /* [CP] Embed Pods Frameworks */,
+				D0EAC3432A713F62008D8C1C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -348,6 +349,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "${PODS_ROOT}/FirebaseCrashlytics/run";
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+		D0EAC3432A713F62008D8C1C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$PODS_ROOT/FirebaseCrashlytics/upload-symbols --build-phase --validate -ai 1:718227562022:ios:56c660a2206709a39390e7\n$PODS_ROOT/FirebaseCrashlytics/upload-symbols --build-phase -ai 1:718227562022:ios:56c660a2206709a39390e7\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

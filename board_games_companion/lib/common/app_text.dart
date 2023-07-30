@@ -100,14 +100,18 @@ class AppText {
   static const playthroughsHistoryPageNoGamesTitle = "You haven't logged any games yet";
   static const playthroughsHistoryPageNoGamesSubtitle =
       'This page will fill up with the history of plays, once you start logging games.';
+  static const playthroughsHistoryPageGameNumberSubtitle = 'game';
+  static const playthroughsHistoryPageDaysAgo = 'days ago';
+  static const playthroughsHistoryPageToday = 'today';
+  static const playthroughsHistoryPageYesterday = 'yesterday';
 
   static const playthroughsGameSettingsGameClassificationScore = 'Score based game';
   static const playthroughsGameSettingsGameClssificationNoScore = 'No score based game';
   static const playthroughsGameSettingsGameClassificationSectionTitle = 'Classification';
   static const playthroughsGameSettingsGameFamilySectionTitle = 'Family';
   static const playthroughsGameSettingsScoreDetailsSectionTitle = 'Details';
-  static const playthroughsGameSettingsGameFamilyHighestScore = 'Highest score';
-  static const playthroughsGameSettingsGameFamilyLowestScore = 'Lowest score';
+  static const playthroughsGameSettingsGameFamilyHighestScore = 'Highest score wins';
+  static const playthroughsGameSettingsGameFamilyLowestScore = 'Lowest score wins';
   static const playthroughsGameSettingsGameFamilyCoop = 'Cooperative';
 
   static const searchBoardGamesPageSearchInstructions =

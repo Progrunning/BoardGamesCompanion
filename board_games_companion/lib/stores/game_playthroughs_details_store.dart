@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:collection/collection.dart';
+import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -122,6 +123,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
       return null;
     }
 
+    Fimber.i('Mapping Playthrough to PlaythroughDetails');
     final newPlaythroughDetails = createPlaythroughDetails(newPlaythrough);
     playthroughsDetails.add(newPlaythroughDetails);
     return newPlaythroughDetails;

@@ -5,6 +5,8 @@ import 'hive_base_service.dart';
 
 @singleton
 class UserService extends BaseHiveService<User, UserService> {
+  UserService(super.hive);
+
   Future<User?> retrieveUser() async {
     if (!await ensureBoxOpen()) {
       return null;

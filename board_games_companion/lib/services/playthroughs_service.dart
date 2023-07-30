@@ -1,3 +1,4 @@
+import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
 
@@ -11,7 +12,7 @@ import 'score_service.dart';
 
 @singleton
 class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService> {
-  PlaythroughService(this.scoreService);
+  PlaythroughService(super.hive, this.scoreService);
 
   final ScoreService scoreService;
 
@@ -57,6 +58,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     int? bggPlayId,
     List<PlaythroughNote>? notes,
   }) async {
+    Fimber.d('Creating a Playthrough...');
     if ((boardGameId.isEmpty) || (playerIds.isEmpty)) {
       return null;
     }
@@ -85,9 +87,10 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     }
 
     try {
-      await storageBox.put(newPlaythrough.id, newPlaythrough);
+      Fimber.d('Saving $newPlaythrough...');
 
       for (final String playerId in playerIds) {
+        Fimber.d('Creating or updated player score [$playerId]...');
         var playerScore = playerScores[playerId]?.score ??
             Score(
               id: uuid.v4(),
@@ -99,7 +102,9 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
           playerScore = playerScore.copyWith(playthroughId: newPlaythrough.id);
         }
 
+        Fimber.d('Saving $playerScore...');
         if (!await scoreService.addOrUpdateScore(playerScore)) {
+          Fimber.e('Failed to save $playerScore');
           FirebaseCrashlytics.instance.log(
             'Faild to create a player score for player $playerId for a board game $boardGameId',
           );
@@ -109,6 +114,9 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
         }
       }
 
+      await storageBox.put(newPlaythrough.id, newPlaythrough);
+
+      Fimber.d('Playthrough created');
       return newPlaythrough;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);

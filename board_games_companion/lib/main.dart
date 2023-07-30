@@ -36,7 +36,9 @@ import 'models/sort_by.dart';
 import 'services/preferences_service.dart';
 
 Future<void> main() async {
-  Fimber.plantTree(DebugTree());
+  Fimber.plantTree(DebugTree(
+    useColors: true,
+  ));
 
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
