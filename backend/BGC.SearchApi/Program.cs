@@ -21,9 +21,12 @@ using MongoDB.Driver;
 var builder = WebApplication.CreateBuilder(args);
 
 #if !DEBUG
-builder.Configuration.AddAzureKeyVault(
-        new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
-        new DefaultAzureCredential());
+if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
+{
+    builder.Configuration.AddAzureKeyVault(
+            new Uri($"https://{builder.Configuration[Constants.ConfigurationKeyNames.KeyVault]}.vault.azure.net/"),
+            new DefaultAzureCredential());
+}
 #endif
 
 var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));

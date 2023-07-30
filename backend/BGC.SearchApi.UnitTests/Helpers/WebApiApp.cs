@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using BGC.SearchApi.Common;
+
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
@@ -20,6 +22,7 @@ namespace BGC.SearchApi.UnitTests.Helpers
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 configBuilder.AddInMemoryCollection(new Dictionary<string, string>
                 {
+                    { Constants.ConfigurationKeyNames.IsIntegrationTest, true.ToString() },
                     { "AppSettings:CacheSettings:ConnectionString", CacheConnectionString },
                     { "AppSettings:CacheSettings:QueueName", CacheQueueName },
                     { "AppSettings:CacheSettings:SendConnectionString", CacheSendConnectionString },

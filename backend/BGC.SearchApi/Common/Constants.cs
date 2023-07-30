@@ -21,6 +21,12 @@ public static class Constants
         }
     }
 
+    public static class ConfigurationKeyNames
+    {
+        public const string IsIntegrationTest = "IntegrationTest";
+        public const string KeyVault = "KeyVaultName";
+    }
+
     public static class Headers
     {
         public const string ApiKey = "x-api-key";
