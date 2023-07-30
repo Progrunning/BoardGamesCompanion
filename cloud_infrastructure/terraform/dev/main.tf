@@ -240,11 +240,6 @@ resource "azurerm_key_vault" "kv" {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
 
-    key_permissions = [
-      "Create",
-      "Get",
-    ]
-
     secret_permissions = [
       "Get",
       "List",
@@ -262,6 +257,7 @@ resource "azurerm_key_vault" "kv" {
 
     secret_permissions = [
       "Get",
+      "List",
     ]
   }
 }

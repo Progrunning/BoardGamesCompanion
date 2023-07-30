@@ -1,3 +1,5 @@
+using Azure.Identity;
+
 using BGC.SearchApi.Common;
 using BGC.SearchApi.Models.Settings;
 using BGC.SearchApi.Policies;
@@ -17,6 +19,12 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#if !DEBUG
+builder.Configuration.AddAzureKeyVault(
+        new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
+        new DefaultAzureCredential());
+#endif
 
 var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));
 builder.Services.AddOptions<CacheSettings>()
