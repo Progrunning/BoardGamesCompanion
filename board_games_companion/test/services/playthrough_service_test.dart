@@ -1,6 +1,8 @@
 import 'package:board_games_companion/common/enums/playthrough_status.dart';
+import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/services/playthroughs_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -57,8 +59,9 @@ void main() {
 
   group('Create playthrough ', () {
     test(
-        'GIVEN creating a playthrough '
-        'WHEN board game id is empty '
+        'GIVEN playthrough service '
+        'WHEN creating a playthrough '
+        'AND board game id is empty '
         'THEN the playthrough does not get created ', () async {
       const boardGameId = '';
       final createdPlaythrough = await playthroughService.createPlaythrough(
@@ -74,8 +77,9 @@ void main() {
     });
 
     test(
-        'GIVEN creating a playthrough '
-        'WHEN duration is not provided '
+        'GIVEN playthrough service '
+        'WHEN creating a playthrough '
+        'AND duration is not provided '
         'THEN the playthrough should be in Started status ', () async {
       const boardGameId = '123';
       const playerIds = ['434'];
@@ -92,8 +96,9 @@ void main() {
     });
 
     test(
-        'GIVEN creating a playthrough '
-        'WHEN duration is provided '
+        'GIVEN playthrough service '
+        'WHEN creating a playthrough '
+        'AND duration is provided '
         'THEN the playthrough should be in Finished status ', () async {
       const boardGameId = '123';
       const playerIds = ['434'];
@@ -107,6 +112,47 @@ void main() {
       );
 
       expect(createdPlaythrough!.status, PlaythroughStatus.Finished);
+    });
+
+    test(
+        'GIVEN playthrough service '
+        'WHEN creating a playthrough '
+        'AND player scores are provided '
+        'THEN the playthrough should be saved with the player scores ', () async {
+      const boardGameId = '123';
+      const playerIds = ['434', '564'];
+      final playerScores = {
+        playerIds[0]: PlayerScore(
+          player: Player(id: playerIds[0]),
+          score: Score(
+            id: '12938',
+            boardGameId: boardGameId,
+            playerId: playerIds[0],
+          ),
+        ),
+        playerIds[1]: PlayerScore(
+          player: Player(id: playerIds[1]),
+          score: Score(
+            id: '98223',
+            boardGameId: boardGameId,
+            playerId: playerIds[1],
+          ),
+        ),
+      };
+      const duration = Duration(seconds: 100);
+      final createdPlaythrough = await playthroughService.createPlaythrough(
+        boardGameId,
+        playerIds,
+        playerScores,
+        DateTime.now(),
+        duration,
+      );
+
+      expect(createdPlaythrough!.playerIds, playerIds);
+      expect(
+        createdPlaythrough.scoreIds,
+        playerScores.values.map((playerScore) => playerScore.score.id),
+      );
     });
   });
 }
