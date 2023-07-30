@@ -148,6 +148,7 @@ void main() {
         duration,
       );
 
+      verify(() => mockScoreService.addOrUpdateScore(any())).called(playerIds.length);
       expect(createdPlaythrough!.playerIds, playerIds);
       expect(
         createdPlaythrough.scoreIds,
