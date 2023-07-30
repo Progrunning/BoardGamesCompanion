@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 
 using Azure.Messaging.ServiceBus;
 
@@ -8,8 +6,6 @@ using BGC.SearchApi.Models.Settings;
 using BGC.SearchApi.Services.Interfaces;
 
 using Microsoft.Extensions.Options;
-
-using MongoDB.Bson.IO;
 
 namespace BGC.SearchApi.Services
 {

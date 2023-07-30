@@ -1,3 +1,5 @@
+[*.cs]
+
 # StyleCop
 
 # No need for documentation in the test projects, the code should be self documenting

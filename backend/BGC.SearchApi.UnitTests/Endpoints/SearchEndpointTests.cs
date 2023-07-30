@@ -24,11 +24,9 @@ namespace BGC.SearchApi.UnitTests.Endpoints
             _mockSearchService = new Mock<ISearchService>();
         }
 
-
         [Fact]
         public async Task Search_NoApiKey_ThrowsUnauthorizedException()
         {
-            var searchQuery = "Scythe";
             await using var application = new WebApiApp()
                 .WithWebHostBuilder(builder => builder.ConfigureServices(services =>
                 {
