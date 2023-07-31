@@ -20,6 +20,7 @@ using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// TODO Connect to KV locally and see if/how the settings are downloaded
 #if !DEBUG
 if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
 {

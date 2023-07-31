@@ -34,7 +34,7 @@ class CollectionFlags extends StatelessWidget {
             ),
             CollectionToggleButton(
               icon: Icons.card_giftcard,
-              title: AppText.whishlistCollectionToggleButtonText,
+              title: AppText.wishlistCollectionToggleButtonText,
               isSelected: isOnWishlist,
             ),
           ],

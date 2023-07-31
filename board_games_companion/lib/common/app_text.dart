@@ -26,7 +26,7 @@ class AppText {
 
   static const ownedCollectionToggleButtonText = 'Owned';
   static const friendsCollectionToggleButtonText = 'Friends';
-  static const whishlistCollectionToggleButtonText = 'Whishlist';
+  static const wishlistCollectionToggleButtonText = 'Wishlist';
 
   static const homePageCollectionsTabTitle = 'Collections';
   static const homePageHotBoardGamesTabTitle = 'Hot';
