@@ -270,7 +270,7 @@ resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
 
 resource "azurerm_key_vault_secret" "kv_queue_send_name" {
   name         = "AppSettings--CacheSettings--QueueName"
-  value        = var.resources.cache_service_bus.queue.send_policy_name
+  value        = var.resources.cache_service_bus.queue.name
   key_vault_id = azurerm_key_vault.kv.id
 }
 

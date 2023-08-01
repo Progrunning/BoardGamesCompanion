@@ -1,4 +1,7 @@
+using Azure.Core;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 
 using BGC.SearchApi.Common;
 using BGC.SearchApi.Models.Settings;
@@ -20,15 +23,12 @@ using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// TODO Connect to KV locally and see if/how the settings are downloaded
-#if !DEBUG
 if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
 {
     builder.Configuration.AddAzureKeyVault(
             new Uri($"https://{builder.Configuration[Constants.ConfigurationKeyNames.KeyVault]}.vault.azure.net/"),
             new DefaultAzureCredential());
 }
-#endif
 
 var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));
 builder.Services.AddOptions<CacheSettings>()
