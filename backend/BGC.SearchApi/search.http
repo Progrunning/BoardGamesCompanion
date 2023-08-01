@@ -10,5 +10,5 @@ GET https://{{hostname}}:{{port}}/api/search?query=My Little Scythe
 
 ###
 
-GET https://bgc-search-service-dev-ca.wonderfulwater-bf498b4b.eastus.azurecontainerapps.io/api/search?query=scythe
+GET https://bgc-search-service-dev-ca.graytree-d4bbc196.eastus.azurecontainerapps.io/api/search?query=scythe
 Ocp-Apim-Subscription-Key: <key>
