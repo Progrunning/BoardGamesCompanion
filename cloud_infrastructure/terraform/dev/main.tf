@@ -38,8 +38,9 @@ variable "resources" {
         sku  = string
       })
       queue = object({
-        name             = string
-        send_policy_name = string
+        name               = string
+        send_policy_name   = string
+        listen_policy_name = string
       })
     })
     cache_function = object({
@@ -189,6 +190,15 @@ resource "azurerm_servicebus_queue_authorization_rule" "sbq_send_policy" {
 
   listen = false
   send   = true
+  manage = false
+}
+
+resource "azurerm_servicebus_queue_authorization_rule" "sbq_listen_policy" {
+  name     = var.resources.cache_service_bus.queue.listen_policy_name
+  queue_id = azurerm_servicebus_queue.sbq.id
+
+  listen = true
+  send   = false
   manage = false
 }
 
