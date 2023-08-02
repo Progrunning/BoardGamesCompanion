@@ -5,7 +5,11 @@ VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.SearchApi", "BGC.SearchApi\BGC.SearchApi.csproj", "{13870AB1-E03F-442C-ADF3-6BC588A959E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.SearchApi.UnitTests", "BGC.SearchApi.UnitTests\BGC.SearchApi.UnitTests.csproj", "{BDB8947C-6470-4C43-962F-C3721CF95100}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.SearchApi.UnitTests", "tests\BGC.SearchApi.UnitTests\BGC.SearchApi.UnitTests.csproj", "{BDB8947C-6470-4C43-962F-C3721CF95100}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.CacheQueueFunction", "BGC.CacheQueueFunction\BGC.CacheQueueFunction.csproj", "{6CE61FDA-735C-432E-960C-9BBDE6BD6133}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DC1D220B-9094-4C67-88CD-0827282B79FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +25,16 @@ Global
 		{BDB8947C-6470-4C43-962F-C3721CF95100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDB8947C-6470-4C43-962F-C3721CF95100}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDB8947C-6470-4C43-962F-C3721CF95100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE61FDA-735C-432E-960C-9BBDE6BD6133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE61FDA-735C-432E-960C-9BBDE6BD6133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE61FDA-735C-432E-960C-9BBDE6BD6133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE61FDA-735C-432E-960C-9BBDE6BD6133}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BDB8947C-6470-4C43-962F-C3721CF95100} = {DC1D220B-9094-4C67-88CD-0827282B79FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DE80E511-B023-4552-9BB4-B9CD8F2AE2FE}
