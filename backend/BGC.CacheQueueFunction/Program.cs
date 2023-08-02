@@ -16,6 +16,7 @@ var host = new HostBuilder()
     })
     .ConfigureLogging(logging =>
     {
+        logging.AddConsole();
         logging.AddFilter("System.Net.Http.HttpClient", LogLevel.Warning);
     })
     .Build();
