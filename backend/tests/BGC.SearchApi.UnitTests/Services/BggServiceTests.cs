@@ -1,4 +1,4 @@
-﻿using BGC.SearchApi.Services;
+﻿using BGC.Core.Services;
 using BGC.SearchApi.UnitTests.Helpers;
 
 namespace BGC.SearchApi.UnitTests.Services

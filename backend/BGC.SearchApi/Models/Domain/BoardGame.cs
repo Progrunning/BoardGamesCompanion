@@ -43,18 +43,39 @@ namespace BGC.SearchApi.Models.Domain
 
         public string? Url { get; init; }
 
+        /// <summary>
+        /// Gets game artists.
+        /// </summary>
         public IReadOnlyCollection<NamedEntity> Artists { get; init; } = Array.Empty<NamedEntity>();
 
+        /// <summary>
+        /// Gets game categories.
+        /// </summary>
         public IReadOnlyCollection<NamedEntity> Category { get; init; } = Array.Empty<NamedEntity>();
 
+        /// <summary>
+        /// Gets game designers.
+        /// </summary>
         public IReadOnlyCollection<NamedEntity> Designers { get; init; } = Array.Empty<NamedEntity>();
 
+        /// <summary>
+        /// Gets game types.
+        /// </summary>
         public IReadOnlyCollection<NamedEntity> GameTypes { get; init; } = Array.Empty<NamedEntity>();
 
+        /// <summary>
+        /// Gets game mechanics.
+        /// </summary>
         public IReadOnlyCollection<NamedEntity> Mechanic { get; init; } = Array.Empty<NamedEntity>();
 
+        /// /// <summary>
+        /// Gets game publishers.
+        /// </summary>
         public IReadOnlyCollection<NamedEntity> Publishers { get; init; } = Array.Empty<NamedEntity>();
-        
+
+        /// <summary>
+        /// Gets game expansions.
+        /// </summary>
         public IReadOnlyCollection<NamedEntity> Expansions { get; init; } = Array.Empty<NamedEntity>();
     }
 }

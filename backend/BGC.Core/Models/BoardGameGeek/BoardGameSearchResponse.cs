@@ -1,4 +1,4 @@
-﻿namespace BGC.SearchApi.Models.BoardGameGeek;
+﻿namespace BGC.Core.Models.BoardGameGeek;
 
 public record BoardGameSearchResponse
 {

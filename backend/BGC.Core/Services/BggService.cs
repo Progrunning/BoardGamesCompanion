@@ -1,9 +1,13 @@
 ﻿using System.Xml.Linq;
+using System.Xml.Serialization;
 
-using BGC.SearchApi.Models.BoardGameGeek;
-using BGC.SearchApi.Services.Interfaces;
+using BGC.Core.Models.BoardGameGeek;
+using BGC.Core.Models.Exceptions;
+using BGC.Core.Services.Interfaces;
 
-namespace BGC.SearchApi.Services;
+using Microsoft.Extensions.Logging;
+
+namespace BGC.Core.Services;
 
 /// <summary>
 /// BGG API service.
@@ -32,12 +36,7 @@ public class BggService : IBggService
         _httpClient = httpClient;
     }
 
-    /// <summary>
-    /// Search board games in the BGG collection.
-    /// </summary>
-    /// <param name="query">Serach query.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns><see cref="BoardGameSearchResponse"/>.</returns>
+    /// <inheritdoc />
     public async Task<BoardGameSearchResponse> Search(string query, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(query))
@@ -77,4 +76,28 @@ public class BggService : IBggService
             BoardGames = searchResults,
         };
     }
+
+    /// <inheritdoc />
+    public async Task<BoardGameDetails> GetDetails(string boardGameId, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(boardGameId))
+        {
+            throw new ArgumentNullException(nameof(boardGameId));
+        }
+
+        var requestUri = new Uri($"{_httpClient.BaseAddress}/thing?id={boardGameId}");
+        var boardGameDetailsResponseStream = await _httpClient.GetStreamAsync(requestUri, cancellationToken);
+
+        var serializer = new XmlSerializer(typeof(BoardGameDetailsDto));
+        var boardGamesDetailsDto = (BoardGameDetailsDto?)serializer.Deserialize(boardGameDetailsResponseStream);
+        if (boardGamesDetailsDto == null)
+        {
+            throw new XmlParsingException($"Faield to parse xml for {boardGameId}");
+        }
+
+        return new BoardGameDetails()
+        {
+            Id = boardGamesDetailsDto.Id.ToString(),
+        };
+    }    
 }

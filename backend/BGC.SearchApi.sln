@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.CacheQueueFunction", "B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DC1D220B-9094-4C67-88CD-0827282B79FE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Core", "BGC.Core\BGC.Core.csproj", "{1E8C3561-44E6-42EF-A9D7-6666AC7FD687}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{6CE61FDA-735C-432E-960C-9BBDE6BD6133}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CE61FDA-735C-432E-960C-9BBDE6BD6133}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CE61FDA-735C-432E-960C-9BBDE6BD6133}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E8C3561-44E6-42EF-A9D7-6666AC7FD687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E8C3561-44E6-42EF-A9D7-6666AC7FD687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E8C3561-44E6-42EF-A9D7-6666AC7FD687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E8C3561-44E6-42EF-A9D7-6666AC7FD687}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

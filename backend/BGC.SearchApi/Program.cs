@@ -1,8 +1,7 @@
-using Azure.Core;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 
+using BGC.Core.Services;
+using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Common;
 using BGC.SearchApi.Models.Settings;
 using BGC.SearchApi.Policies;
@@ -74,7 +73,7 @@ builder.Services.AddTransient<ISearchService, SearchService>();
 
 builder.Services.AddHttpClient<IBggService, BggService>(client =>
 {
-    client.BaseAddress = new Uri(Constants.BggApi.BaseUrl);
+    client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseUrl);
 });
 
 var app = builder.Build();
@@ -93,8 +92,9 @@ else
 app.UseHttpsRedirection();
 app.UseStatusCodePages(async statusCodeContext =>
 {
-    await Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
-                 .ExecuteAsync(statusCodeContext.HttpContext);
+
+    await Microsoft.AspNetCore.Http.Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
+                                           .ExecuteAsync(statusCodeContext.HttpContext);
 });
 app.MapHealthChecks("api/search/health");
 

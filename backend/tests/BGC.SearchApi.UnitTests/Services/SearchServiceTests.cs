@@ -1,4 +1,5 @@
-using BGC.SearchApi.Models.BoardGameGeek;
+using BGC.Core.Models.BoardGameGeek;
+using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Models.Domain;
 using BGC.SearchApi.Models.Dtos;
 using BGC.SearchApi.Models.Exceptions;

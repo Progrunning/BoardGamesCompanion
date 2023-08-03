@@ -1,9 +1,9 @@
-﻿using BGC.SearchApi.Models.Exceptions;
+﻿using System.Net;
+
+using BGC.SearchApi.Models.Exceptions;
 using BGC.SearchApi.Services;
 
 using Microsoft.AspNetCore.Http.HttpResults;
-
-using System.Net;
 
 namespace BGC.SearchApi.UnitTests.Services
 {
