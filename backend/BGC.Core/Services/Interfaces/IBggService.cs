@@ -1,4 +1,4 @@
-﻿using BGC.Core.Models.BoardGameGeek;
+﻿using BGC.Core.Models.Dtos.BoardGameGeek;
 
 namespace BGC.Core.Services.Interfaces;
 
@@ -9,8 +9,8 @@ public interface IBggService
     /// </summary>
     /// <param name="query">Serach query.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns><see cref="BoardGameSearchResponse"/>.</returns>
-    Task<BoardGameSearchResponse> Search(string query, CancellationToken cancellationToken);
+    /// <returns><see cref="BoardGameSearchResponseDto"/>.</returns>
+    Task<BoardGameSearchResponseDto> Search(string query, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieve board game's details.
@@ -18,5 +18,5 @@ public interface IBggService
     /// <param name="boardGameId">Board game id.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns><see cref="BoardGameDetails"/>.</returns>
-    Task<BoardGameDetails> GetDetails(string boardGameId, CancellationToken cancellationToken);
+    Task<BoardGameDetailsDto> GetDetails(string boardGameId, CancellationToken cancellationToken);
 }

@@ -5,23 +5,29 @@ using BGC.SearchApi.Services.Interfaces;
 
 namespace BGC.SearchApi.Services
 {
+    /// <inheritdoc />
     public class ErrorService : IErrorService
     {
         private readonly ILogger<ErrorService> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorService"/> class.
+        /// </summary>
+        /// <param name="logger"></param>
         public ErrorService(ILogger<ErrorService> logger)
         {
             _logger = logger;
         }
 
+        /// <inheritdoc />
         public IResult HandleError(Exception excption)
         {
             switch (excption)
             {
                 case BggException bggException:
-                    return Microsoft.AspNetCore.Http.Results.Problem(title: bggException.Message, statusCode: bggException.HttpStatus);
+                    return Results.Problem(title: bggException.Message, statusCode: bggException.HttpStatus);
                 default:
-                    return Microsoft.AspNetCore.Http.Results.StatusCode((int)HttpStatusCode.InternalServerError);
+                    return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
     }

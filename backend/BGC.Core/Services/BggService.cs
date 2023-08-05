@@ -1,8 +1,6 @@
-﻿using System.Xml.Linq;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-using BGC.Core.Models.BoardGameGeek;
-using BGC.Core.Models.Dtos;
+using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Models.Exceptions;
 using BGC.Core.Services.Interfaces;
 
@@ -15,13 +13,7 @@ namespace BGC.Core.Services;
 /// </summary>
 public class BggService : IBggService
 {
-    private const string SearchResultsElementName = "items";
     private const string SearchResultBoardGameType = "boardgame";
-
-    private const string SearchResultIdAttributeName = "id";
-    private const string SearchResultValueAttributeName = "value";
-    private const string SearchResultNameElementName = "name";
-    private const string SearchResultYearPublishedElementName = "yearpublished";
 
     private readonly ILogger<BggService> _logger;
     private readonly HttpClient _httpClient;
@@ -38,48 +30,28 @@ public class BggService : IBggService
     }
 
     /// <inheritdoc />
-    public async Task<BoardGameSearchResponse> Search(string query, CancellationToken cancellationToken)
+    public async Task<BoardGameSearchResponseDto> Search(string query, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
-            return new BoardGameSearchResponse();
+            return new BoardGameSearchResponseDto();
         }
 
         var requestUri = new Uri($"{_httpClient.BaseAddress}/search?query={query}&type={SearchResultBoardGameType}");
         var searchResponseStream = await _httpClient.GetStreamAsync(requestUri);
 
-        var searchResultsDocument = await XDocument.LoadAsync(searchResponseStream, LoadOptions.None, cancellationToken);
-        var searchResultsElement = searchResultsDocument?.Element(SearchResultsElementName);
-        if (searchResultsElement is null)
+        var serializer = new XmlSerializer(typeof(BoardGameSearchResponseDto));
+        var boardGamesDetailsResponse = (BoardGameSearchResponseDto?)serializer.Deserialize(searchResponseStream);
+        if (boardGamesDetailsResponse is null)
         {
-            _logger.LogWarning($"{SearchResultsElementName} not found in the search resuts");
-            return new BoardGameSearchResponse();
+            throw new XmlParsingException($"Faield to parse search results for query {query}");
         }
 
-        var searchResults = new List<BoardGameSearchResult>();
-
-        foreach (XElement searchResult in searchResultsElement.Descendants())
-        {
-            var boardGameId = searchResult.Attribute(SearchResultIdAttributeName)?.Value;
-            var boardGameName = searchResult.Element(SearchResultNameElementName)?.Attribute(SearchResultValueAttributeName)?.Value;
-            int.TryParse(searchResult.Element(SearchResultYearPublishedElementName)?.Attribute(SearchResultValueAttributeName)?.Value, out var boardGameYearPublished);
-
-            if (string.IsNullOrEmpty(boardGameId) || string.IsNullOrWhiteSpace(boardGameName))
-            {
-                continue;
-            }
-
-            searchResults.Add(new BoardGameSearchResult(boardGameId, boardGameName, boardGameYearPublished));
-        }
-
-        return new BoardGameSearchResponse()
-        {
-            BoardGames = searchResults,
-        };
+        return boardGamesDetailsResponse;
     }
 
     /// <inheritdoc />
-    public async Task<BoardGameDetails> GetDetails(string boardGameId, CancellationToken cancellationToken)
+    public async Task<BoardGameDetailsDto> GetDetails(string boardGameId, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(boardGameId))
         {
@@ -89,18 +61,13 @@ public class BggService : IBggService
         var requestUri = new Uri($"{_httpClient.BaseAddress}/thing?id={boardGameId}");
         var boardGameDetailsResponseStream = await _httpClient.GetStreamAsync(requestUri, cancellationToken);
 
-        var serializer = new XmlSerializer(typeof(BoardGameDetailsResponse));
-        var boardGamesDetailsResponse = (BoardGameDetailsResponse?)serializer.Deserialize(boardGameDetailsResponseStream);
+        var serializer = new XmlSerializer(typeof(BoardGameDetailsResponseDto));
+        var boardGamesDetailsResponse = (BoardGameDetailsResponseDto?)serializer.Deserialize(boardGameDetailsResponseStream);
         if (!(boardGamesDetailsResponse?.BoardGames?.Any() ?? false))
         {
             throw new XmlParsingException($"Faield to parse xml for {boardGameId}");
         }
 
-        var boardGameDetailsDto = boardGamesDetailsResponse.BoardGames.First();
-
-        return new BoardGameDetails()
-        {
-            Id = boardGameDetailsDto.Id.ToString(),
-        };
+        return boardGamesDetailsResponse.BoardGames.First();
     }
 }

@@ -2,7 +2,7 @@
 
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace BGC.SearchApi.Models.Domain
+namespace BGC.Core.Models.Domain
 {
     [BsonNoId]
     [ExcludeFromCodeCoverage(Justification = "Simple domain models don't require testing")]

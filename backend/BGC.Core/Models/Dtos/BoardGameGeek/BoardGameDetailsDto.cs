@@ -1,165 +1,160 @@
 ﻿using System.Xml.Serialization;
 
+namespace BGC.Core.Models.Dtos.BoardGameGeek;
+
 [XmlRoot(ElementName = "name")]
-public class BoardGameName
+public record BoardGameName
 {
     [XmlAttribute(AttributeName = "type")]
-    public string Type { get; set; }
+    public string Type { get; init; }
 
     [XmlAttribute(AttributeName = "sortindex")]
-    public int Sortindex { get; set; }
+    public int Sortindex { get; init; }
 
     [XmlAttribute(AttributeName = "value")]
-    public string Name { get; set; }
-}
-
-[XmlRoot(ElementName = "yearpublished")]
-public class YearPublished
-{
-    [XmlAttribute(AttributeName = "value")]
-    public int Value { get; set; }
+    public string Name { get; init; }
 }
 
 [XmlRoot(ElementName = "minplayers")]
-public class MinPlayers
+public record MinPlayers
 {
     [XmlAttribute(AttributeName = "value")]
-    public int Value { get; set; }
+    public int Value { get; init; }
 }
 
 [XmlRoot(ElementName = "maxplayers")]
-public class MaxPlayers
+public record MaxPlayers
 {
     [XmlAttribute(AttributeName = "value")]
-    public int Value { get; set; }
+    public int Value { get; init; }
 }
 
 [XmlRoot(ElementName = "result")]
-public class Result
+public record Result
 {
     [XmlAttribute(AttributeName = "value")]
-    public string Value { get; set; }
+    public string Value { get; init; }
 
     [XmlAttribute(AttributeName = "numvotes")]
-    public int Numvotes { get; set; }
+    public int Numvotes { get; init; }
 
     [XmlAttribute(AttributeName = "level")]
-    public int Level { get; set; }
+    public int Level { get; init; }
 }
 
 [XmlRoot(ElementName = "results")]
-public class Results
+public record Results
 {
     [XmlElement(ElementName = "result")]
-    public List<Result> Result { get; set; }
+    public List<Result> Result { get; init; }
 
     [XmlAttribute(AttributeName = "numplayers")]
-    public string Numplayers { get; set; }
+    public string Numplayers { get; init; }
 }
 
 [XmlRoot(ElementName = "poll")]
-public class Poll
+public record Poll
 {
     [XmlElement(ElementName = "results")]
-    public List<Results> Results { get; set; }
+    public List<Results> Results { get; init; }
 
     [XmlAttribute(AttributeName = "name")]
-    public string Name { get; set; }
+    public string Name { get; init; }
 
     [XmlAttribute(AttributeName = "title")]
-    public string Title { get; set; }
+    public string Title { get; init; }
 
     [XmlAttribute(AttributeName = "totalvotes")]
-    public int Totalvotes { get; set; }
+    public int Totalvotes { get; init; }
 }
 
 [XmlRoot(ElementName = "playingtime")]
-public class Playingtime
+public record PlayingTime
 {
     [XmlAttribute(AttributeName = "value")]
-    public int Value { get; set; }
+    public int Value { get; init; }
 }
 
 [XmlRoot(ElementName = "minplaytime")]
-public class Minplaytime
+public record MinPlaytime
 {
     [XmlAttribute(AttributeName = "value")]
-    public int Value { get; set; }
+    public int Value { get; init; }
 }
 
 [XmlRoot(ElementName = "maxplaytime")]
-public class Maxplaytime
+public record MaxPlaytime
 {
     [XmlAttribute(AttributeName = "value")]
-    public int Value { get; set; }
+    public int Value { get; init; }
 }
 
 [XmlRoot(ElementName = "minage")]
-public class Minage
+public record Minage
 {
     [XmlAttribute(AttributeName = "value")]
-    public int Value { get; set; }
+    public int Value { get; init; }
 }
 
 [XmlRoot(ElementName = "link")]
-public class Link
+public record Link
 {
     [XmlAttribute(AttributeName = "type")]
-    public string Type { get; set; }
+    public string Type { get; init; }
 
     [XmlAttribute(AttributeName = "id")]
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     [XmlAttribute(AttributeName = "value")]
-    public string Value { get; set; }
+    public string Value { get; init; }
 }
 
 [XmlRoot(ElementName = "item")]
-public class BoardGameDetailsDto
+public record BoardGameDetailsDto
 {
     [XmlElement(ElementName = "thumbnail")]
-    public string Thumbnail { get; set; }
+    public string Thumbnail { get; init; }
 
     [XmlElement(ElementName = "image")]
-    public string Image { get; set; }
+    public string Image { get; init; }
 
     [XmlElement(ElementName = "name")]
-    public List<BoardGameName> Name { get; set; }
+    public List<BoardGameName> Name { get; init; }
 
     [XmlElement(ElementName = "description")]
-    public string Description { get; set; }
+    public string Description { get; init; }
 
     [XmlElement(ElementName = "yearpublished")]
-    public YearPublished Yearpublished { get; set; }
+    public YearPublishedDto Yearpublished { get; init; }
 
     [XmlElement(ElementName = "minplayers")]
-    public MinPlayers Minplayers { get; set; }
+    public MinPlayers Minplayers { get; init; }
 
     [XmlElement(ElementName = "maxplayers")]
-    public MaxPlayers Maxplayers { get; set; }
+    public MaxPlayers Maxplayers { get; init; }
 
     [XmlElement(ElementName = "poll")]
-    public List<Poll> Poll { get; set; }
+    public List<Poll> Poll { get; init; }
 
     [XmlElement(ElementName = "playingtime")]
-    public Playingtime Playingtime { get; set; }
+    public PlayingTime Playingtime { get; init; }
 
     [XmlElement(ElementName = "minplaytime")]
-    public Minplaytime Minplaytime { get; set; }
+    public MinPlaytime Minplaytime { get; init; }
 
     [XmlElement(ElementName = "maxplaytime")]
-    public Maxplaytime Maxplaytime { get; set; }
+    public MaxPlaytime Maxplaytime { get; init; }
 
     [XmlElement(ElementName = "minage")]
-    public Minage Minage { get; set; }
+    public Minage Minage { get; init; }
 
     [XmlElement(ElementName = "link")]
-    public List<Link> Link { get; set; }
+    public List<Link> Link { get; init; }
 
     [XmlAttribute(AttributeName = "type")]
-    public string Type { get; set; }
+    public string Type { get; init; }
 
     [XmlAttribute(AttributeName = "id")]
-    public int Id { get; set; }
+    public int Id { get; init; }
 }
 

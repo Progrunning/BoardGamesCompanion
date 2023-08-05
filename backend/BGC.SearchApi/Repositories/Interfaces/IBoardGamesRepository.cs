@@ -1,4 +1,4 @@
-﻿using BGC.SearchApi.Models.Domain;
+﻿using BGC.Core.Models.Domain;
 
 using MongoDB.Driver;
 

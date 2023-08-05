@@ -1,6 +1,6 @@
-using BGC.Core.Models.BoardGameGeek;
+using BGC.Core.Models.Domain;
+using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Services.Interfaces;
-using BGC.SearchApi.Models.Domain;
 using BGC.SearchApi.Models.Dtos;
 using BGC.SearchApi.Models.Exceptions;
 using BGC.SearchApi.Repositories.Interfaces;
@@ -43,7 +43,7 @@ public class SearchServiceTests
     public async Task Search_NoBggGamesFound_ReturnsEmptyResults()
     {
         var searchQuery = "aisjdiajsida";
-        _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(new BoardGameSearchResponse());
+        _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(new BoardGameSearchResponseDto());
 
         var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
         searchResults.Should().BeEmpty();
@@ -53,12 +53,12 @@ public class SearchServiceTests
     public async Task Search_FindsBggGames_ReturnsGameResults()
     {
         var searchQuery = "Scythe";
-        var bggSearchResposne = new BoardGameSearchResponse()
+        var bggSearchResposne = new BoardGameSearchResponseDto()
         {
-            BoardGames = new List<BoardGameSearchResult>()
+            BoardGames = new List<BoardGameSearchResultDto>()
             {
-                new BoardGameSearchResult("1238", "Scythe", 1987),
-                new BoardGameSearchResult("82374", "My Little Scythe", 2018),
+                new BoardGameSearchResultDto("1238", "Scythe", 1987),
+                new BoardGameSearchResultDto("82374", "My Little Scythe", 2018),
             },
         };
         _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(bggSearchResposne);
@@ -75,12 +75,12 @@ public class SearchServiceTests
     public async Task Search_EnrichesBoardGameDetails_ReturnsEnrichedGameDetailResults()
     {
         var searchQuery = "Scythe";
-        var bggSearchResposne = new BoardGameSearchResponse()
+        var bggSearchResposne = new BoardGameSearchResponseDto()
         {
-            BoardGames = new List<BoardGameSearchResult>()
+            BoardGames = new List<BoardGameSearchResultDto>()
             {
-                new BoardGameSearchResult("1238", "Scythe", 1987),
-                new BoardGameSearchResult("82374", "My Little Scythe", 2018),
+                new BoardGameSearchResultDto("1238", "Scythe", 1987),
+                new BoardGameSearchResultDto("82374", "My Little Scythe", 2018),
             },
         };
         _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(bggSearchResposne);
@@ -105,12 +105,12 @@ public class SearchServiceTests
         var searchQuery = "Scythe";
         var cachedBoardGameId = "1238";
         var newBoardGameId = "82374";
-        var bggSearchResposne = new BoardGameSearchResponse()
+        var bggSearchResposne = new BoardGameSearchResponseDto()
         {
-            BoardGames = new List<BoardGameSearchResult>()
+            BoardGames = new List<BoardGameSearchResultDto>()
             {
-                new BoardGameSearchResult(cachedBoardGameId, "Scythe", 1987),
-                new BoardGameSearchResult(newBoardGameId, "My Little Scythe", 2018),
+                new BoardGameSearchResultDto(cachedBoardGameId, "Scythe", 1987),
+                new BoardGameSearchResultDto(newBoardGameId, "My Little Scythe", 2018),
             },
         };
         var cachedBoardGames = new List<BoardGame>()

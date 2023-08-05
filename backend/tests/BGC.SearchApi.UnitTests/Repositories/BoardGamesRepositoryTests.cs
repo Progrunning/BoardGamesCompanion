@@ -1,5 +1,5 @@
-﻿using BGC.SearchApi.Common;
-using BGC.SearchApi.Models.Domain;
+﻿using BGC.Core.Models.Domain;
+using BGC.SearchApi.Common;
 using BGC.SearchApi.Repositories;
 
 using MongoDB.Driver;
