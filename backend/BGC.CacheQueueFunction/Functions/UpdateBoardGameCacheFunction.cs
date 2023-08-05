@@ -39,7 +39,13 @@ namespace BGC.CacheQueueFunction.Functions
 
                 _logger.LogInformation($"Caching a board game {boardGameToCache.BoardGameId}...");
 
-                var boardGameDetails = await _bggService.GetDetails(boardGameToCache.BoardGameId, CancellationToken.None);
+                var boardGameDetailsDto = await _bggService.GetDetails(boardGameToCache.BoardGameId, CancellationToken.None);
+                // TODO Convert DTO to Domain
+                await _boardGamesRepository.UpsertBoardGame(new Core.Models.Domain.BoardGame()
+                {
+                    Id = boardGameDetailsDto.Id.ToString(),
+                    LastUpdated = DateTimeOffset.UtcNow,
+                }, CancellationToken.None);
             }
             catch (Exception ex)
             {

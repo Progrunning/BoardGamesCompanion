@@ -43,6 +43,8 @@ namespace BGC.Core.Models.Domain
 
         public string? Url { get; init; }
 
+        public DateTimeOffset? LastUpdated { get; init; }
+
         /// <summary>
         /// Gets game artists.
         /// </summary>

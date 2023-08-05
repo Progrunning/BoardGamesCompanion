@@ -43,8 +43,7 @@ var host = new HostBuilder()
         });
         services.AddTransient<IMongoClient>((services) =>
         {
-            var mongoDbSettings = services.GetService<IOptions<MongoDbSettings>>();
-
+            var mongoDbSettings = services.GetService<IOptions<MongoDbSettings>>();            
             return new MongoClient(mongoDbSettings!.Value.ConnectionString);
         });
         services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();

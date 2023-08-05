@@ -17,6 +17,6 @@ public interface IBggService
     /// </summary>
     /// <param name="boardGameId">Board game id.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns><see cref="BoardGameDetails"/>.</returns>
+    /// <returns><see cref="BoardGameDetailsDto"/>.</returns>
     Task<BoardGameDetailsDto> GetDetails(string boardGameId, CancellationToken cancellationToken);
 }

@@ -21,5 +21,12 @@ namespace BGC.Core.Repositories.Interfaces
         /// <param name="cancellationToken"></param>
         /// <returns>Collection of <see cref="BoardGame"/>.</returns>
         Task<IReadOnlyCollection<BoardGame>> GetBoardGames(IEnumerable<string> boardGameIds, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Updates board game in MongoDb.
+        /// </summary>
+        /// <param name="boardGame"></param>
+        /// <returns></returns>
+        Task UpsertBoardGame(BoardGame boardGame, CancellationToken cancellationToken);
     }
 }

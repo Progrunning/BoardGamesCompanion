@@ -3,6 +3,7 @@ using BGC.Core.Repositories.Interfaces;
 
 using Microsoft.Extensions.Logging;
 
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BGC.Core.Repositories
@@ -32,9 +33,18 @@ namespace BGC.Core.Repositories
         {
             var filterBuilder = new FilterDefinitionBuilder<BoardGame>();
             var filter = filterBuilder.In(boardGame => boardGame.Id, boardGameIds);
-            var filterFluent = BoardGamesCollection.Find(filter);
+            var findFluent = BoardGamesCollection.Find(filter);
 
-            return await filterFluent.ToListAsync(cancellationToken);
+            return await findFluent.ToListAsync(cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task UpsertBoardGame(BoardGame boardGame, CancellationToken cancellationToken)
+        {
+            await BoardGamesCollection.ReplaceOneAsync(new BsonDocument("_id", boardGame.Id),
+                                                       boardGame,
+                                                       new ReplaceOptions { IsUpsert = true }, 
+                                                       cancellationToken);
         }
     }
 }
