@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 
 using BGC.Core.Models.BoardGameGeek;
+using BGC.Core.Models.Dtos;
 using BGC.Core.Models.Exceptions;
 using BGC.Core.Services.Interfaces;
 
@@ -88,16 +89,18 @@ public class BggService : IBggService
         var requestUri = new Uri($"{_httpClient.BaseAddress}/thing?id={boardGameId}");
         var boardGameDetailsResponseStream = await _httpClient.GetStreamAsync(requestUri, cancellationToken);
 
-        var serializer = new XmlSerializer(typeof(BoardGameDetailsDto));
-        var boardGamesDetailsDto = (BoardGameDetailsDto?)serializer.Deserialize(boardGameDetailsResponseStream);
-        if (boardGamesDetailsDto == null)
+        var serializer = new XmlSerializer(typeof(BoardGameDetailsResponse));
+        var boardGamesDetailsResponse = (BoardGameDetailsResponse?)serializer.Deserialize(boardGameDetailsResponseStream);
+        if (!(boardGamesDetailsResponse?.BoardGames?.Any() ?? false))
         {
             throw new XmlParsingException($"Faield to parse xml for {boardGameId}");
         }
 
+        var boardGameDetailsDto = boardGamesDetailsResponse.BoardGames.First();
+
         return new BoardGameDetails()
         {
-            Id = boardGamesDetailsDto.Id.ToString(),
+            Id = boardGameDetailsDto.Id.ToString(),
         };
-    }    
+    }
 }

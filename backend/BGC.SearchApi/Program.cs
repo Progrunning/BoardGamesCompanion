@@ -92,7 +92,6 @@ else
 app.UseHttpsRedirection();
 app.UseStatusCodePages(async statusCodeContext =>
 {
-
     await Microsoft.AspNetCore.Http.Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
                                            .ExecuteAsync(statusCodeContext.HttpContext);
 });

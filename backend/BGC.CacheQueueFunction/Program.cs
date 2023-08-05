@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BGC.Core;
 
+
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults(builder => { }, options =>
     {

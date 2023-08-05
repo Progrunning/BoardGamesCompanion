@@ -1,7 +1,14 @@
-﻿namespace BGC.CacheQueueFunction
+﻿using System.Text.Json;
+
+namespace BGC.CacheQueueFunction
 {
     internal static class Constants
     {
+        internal static JsonSerializerOptions CustomJsonSerializerOptions = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+
         internal static class Configruration
         {
             internal static class Names

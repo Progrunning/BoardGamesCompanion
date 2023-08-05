@@ -19,9 +19,9 @@ namespace BGC.SearchApi.Services
             switch (excption)
             {
                 case BggException bggException:
-                    return Results.Problem(title: bggException.Message, statusCode: bggException.HttpStatus);
+                    return Microsoft.AspNetCore.Http.Results.Problem(title: bggException.Message, statusCode: bggException.HttpStatus);
                 default:
-                    return Results.StatusCode((int)HttpStatusCode.InternalServerError);
+                    return Microsoft.AspNetCore.Http.Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
     }
