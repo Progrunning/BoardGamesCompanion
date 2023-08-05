@@ -1,12 +1,13 @@
 using Azure.Identity;
 
+using BGC.Core.Models.Settings;
+using BGC.Core.Repositories;
+using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services;
 using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Common;
 using BGC.SearchApi.Models.Settings;
 using BGC.SearchApi.Policies;
-using BGC.SearchApi.Repositories;
-using BGC.SearchApi.Repositories.Interfaces;
 using BGC.SearchApi.Services;
 using BGC.SearchApi.Services.Interface;
 using BGC.SearchApi.Services.Interfaces;
@@ -110,7 +111,7 @@ var mongoDbConventionPack = new ConventionPack
 {
     new CamelCaseElementNameConvention(),
 };
-ConventionRegistry.Register(Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
+ConventionRegistry.Register(BGC.Core.Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
 
 app.Run();
 

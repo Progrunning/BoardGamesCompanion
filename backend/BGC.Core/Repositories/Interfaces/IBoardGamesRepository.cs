@@ -2,12 +2,15 @@
 
 using MongoDB.Driver;
 
-namespace BGC.SearchApi.Repositories.Interfaces
+namespace BGC.Core.Repositories.Interfaces
 {
+    /// <summary>
+    /// Board games repository.
+    /// </summary>
     public interface IBoardGamesRepository
     {
         /// <summary>
-        /// Mongo's board games collection.
+        /// Gets mongo's board games collection.
         /// </summary>
         IMongoCollection<BoardGame> BoardGamesCollection { get; }
 
@@ -16,7 +19,7 @@ namespace BGC.SearchApi.Repositories.Interfaces
         /// </summary>
         /// <param name="boardGameIds"></param>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <returns>Collection of <see cref="BoardGame"/>.</returns>
         Task<IReadOnlyCollection<BoardGame>> GetBoardGames(IEnumerable<string> boardGameIds, CancellationToken cancellationToken);
     }
 }

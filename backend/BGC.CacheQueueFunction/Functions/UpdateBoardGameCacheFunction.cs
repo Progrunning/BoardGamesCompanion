@@ -4,6 +4,7 @@ using Azure.Messaging.ServiceBus;
 
 using BGC.CacheQueueFunction.Models;
 using BGC.CacheQueueFunction.Models.Exceptions;
+using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
 
 using Microsoft.Azure.Functions.Worker;
@@ -15,11 +16,13 @@ namespace BGC.CacheQueueFunction.Functions
     {
         private readonly ILogger _logger;
         private readonly IBggService _bggService;
+        private readonly IBoardGamesRepository _boardGamesRepository;
 
-        public UpdateBoardGameCacheFunction(ILoggerFactory loggerFactory, IBggService bggService)
+        public UpdateBoardGameCacheFunction(ILoggerFactory loggerFactory, IBggService bggService, IBoardGamesRepository boardGamesRepository)
         {
             _logger = loggerFactory.CreateLogger<UpdateBoardGameCacheFunction>();
             _bggService = bggService;
+            _boardGamesRepository = boardGamesRepository;
         }
 
         [Function(nameof(UpdateBoardGameCacheFunction))]
