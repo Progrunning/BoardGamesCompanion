@@ -58,7 +58,7 @@ public class BggService : IBggService
             throw new ArgumentNullException(nameof(boardGameId));
         }
 
-        var requestUri = new Uri($"{_httpClient.BaseAddress}/thing?id={boardGameId}");
+        var requestUri = new Uri($"{_httpClient.BaseAddress}/thing?id={boardGameId}&stats=1");
         var boardGameDetailsResponseStream = await _httpClient.GetStreamAsync(requestUri, cancellationToken);
 
         var serializer = new XmlSerializer(typeof(BoardGameDetailsResponseDto));

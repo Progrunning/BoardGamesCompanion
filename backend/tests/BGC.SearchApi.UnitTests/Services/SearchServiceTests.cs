@@ -55,10 +55,20 @@ public class SearchServiceTests
         var searchQuery = "Scythe";
         var bggSearchResposne = new BoardGameSearchResponseDto()
         {
-            BoardGames = new List<BoardGameSearchResultDto>()
+            BoardGames = new[]
             {
-                new BoardGameSearchResultDto("1238", "Scythe", 1987),
-                new BoardGameSearchResultDto("82374", "My Little Scythe", 2018),
+                new BoardGameSearchItemDto()
+                {
+                    Id = 1238,
+                    Name = new BoardGameSearchItemNameDto() { Value = "Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 1987 },
+                },
+                new BoardGameSearchItemDto()
+                {
+                    Id = 82374,
+                    Name = new BoardGameSearchItemNameDto() { Value = "My Little Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 2018 },
+                },
             },
         };
         _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(bggSearchResposne);
@@ -66,7 +76,7 @@ public class SearchServiceTests
 
         var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
         searchResults.Should().NotBeEmpty();
-        searchResults.Should().HaveCount(bggSearchResposne.BoardGames.Count);
+        searchResults.Should().HaveCount(bggSearchResposne.BoardGames.Length);
         searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("1238", "Scythe", 1987));
         searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("82374", "My Little Scythe", 2018));
     }
@@ -77,10 +87,20 @@ public class SearchServiceTests
         var searchQuery = "Scythe";
         var bggSearchResposne = new BoardGameSearchResponseDto()
         {
-            BoardGames = new List<BoardGameSearchResultDto>()
+            BoardGames = new[]
             {
-                new BoardGameSearchResultDto("1238", "Scythe", 1987),
-                new BoardGameSearchResultDto("82374", "My Little Scythe", 2018),
+                new BoardGameSearchItemDto()
+                {
+                    Id = 1238,
+                    Name = new BoardGameSearchItemNameDto() { Value = "Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 1987 },
+                },
+                new BoardGameSearchItemDto()
+                {
+                    Id = 82374,
+                    Name = new BoardGameSearchItemNameDto() { Value = "My Little Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 2018 },
+                },
             },
         };
         _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(bggSearchResposne);
@@ -94,7 +114,7 @@ public class SearchServiceTests
 
         var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
         searchResults.Should().NotBeEmpty();
-        searchResults.Should().HaveCount(bggSearchResposne.BoardGames.Count);
+        searchResults.Should().HaveCount(bggSearchResposne.BoardGames.Length);
         searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("1238", "Scythe", 1987) { ImageUrl = enrichedBoardGameDetails.ImageUrl });
         searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("82374", "My Little Scythe", 2018));
     }
@@ -107,10 +127,20 @@ public class SearchServiceTests
         var newBoardGameId = "82374";
         var bggSearchResposne = new BoardGameSearchResponseDto()
         {
-            BoardGames = new List<BoardGameSearchResultDto>()
+            BoardGames = new[]
             {
-                new BoardGameSearchResultDto(cachedBoardGameId, "Scythe", 1987),
-                new BoardGameSearchResultDto(newBoardGameId, "My Little Scythe", 2018),
+                new BoardGameSearchItemDto()
+                {
+                    Id = 1238,
+                    Name = new BoardGameSearchItemNameDto() { Value = "Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 1987 },
+                },
+                new BoardGameSearchItemDto()
+                {
+                    Id = 82374,
+                    Name = new BoardGameSearchItemNameDto() { Value = "My Little Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 2018 },
+                },
             },
         };
         var cachedBoardGames = new List<BoardGame>()

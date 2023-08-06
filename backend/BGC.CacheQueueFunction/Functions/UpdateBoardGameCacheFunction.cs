@@ -4,8 +4,10 @@ using Azure.Messaging.ServiceBus;
 
 using BGC.CacheQueueFunction.Models;
 using BGC.CacheQueueFunction.Models.Exceptions;
+using BGC.Core.Models.Exceptions;
 using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
+using BGC.Core.Extensions;
 
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -40,12 +42,13 @@ namespace BGC.CacheQueueFunction.Functions
                 _logger.LogInformation($"Caching a board game {boardGameToCache.BoardGameId}...");
 
                 var boardGameDetailsDto = await _bggService.GetDetails(boardGameToCache.BoardGameId, CancellationToken.None);
-                // TODO Convert DTO to Domain
-                await _boardGamesRepository.UpsertBoardGame(new Core.Models.Domain.BoardGame()
+                if (boardGameDetailsDto is null)
                 {
-                    Id = boardGameDetailsDto.Id.ToString(),
-                    LastUpdated = DateTimeOffset.UtcNow,
-                }, CancellationToken.None);
+                    throw new BoardGameNotFoundException();
+                }
+
+                var boardGame = boardGameDetailsDto!.ToDomain();
+                await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);
             }
             catch (Exception ex)
             {

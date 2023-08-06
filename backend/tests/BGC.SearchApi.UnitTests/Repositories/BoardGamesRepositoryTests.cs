@@ -66,9 +66,9 @@ namespace BGC.SearchApi.UnitTests.Repositories
             _mockMongoCollection = new Mock<IMongoCollection<BoardGame>>();
             _mockMongoCollection.Setup(collection => collection.FindAsync(It.IsAny<FilterDefinition<BoardGame>>(), It.IsAny<FindOptions<BoardGame>>(), It.IsAny<CancellationToken>())).ReturnsAsync(_mockBoardGameCursor.Object);
             _mockMongoDb = new Mock<IMongoDatabase>();
-            _mockMongoDb.Setup(settings => settings.GetCollection<BoardGame>(Constants.MongoDb.BoardGamesDbCollectionName, default)).Returns(_mockMongoCollection.Object);
+            _mockMongoDb.Setup(settings => settings.GetCollection<BoardGame>(Core.Constants.MongoDb.BoardGamesDbCollectionName, default)).Returns(_mockMongoCollection.Object);
             _mockMongoClient = new Mock<IMongoClient>();
-            _mockMongoClient.Setup(settings => settings.GetDatabase(Constants.MongoDb.BgcDbName, default)).Returns(_mockMongoDb.Object);
+            _mockMongoClient.Setup(settings => settings.GetDatabase(Core.Constants.MongoDb.BgcDbName, default)).Returns(_mockMongoDb.Object);
 
             _boardGamesRepository = new BoardGamesRepository(_mockLogger.Object, _mockMongoClient.Object);
         }

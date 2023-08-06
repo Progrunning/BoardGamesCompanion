@@ -8,6 +8,9 @@ public class BoardGameSearchResponseDto
     [XmlElement(typeof(BoardGameSearchItemDto), ElementName = "item")]
     public BoardGameSearchItemDto[] BoardGames { get; init; } = Array.Empty<BoardGameSearchItemDto>();
 
+    [XmlIgnore]
+    public bool IsEmpty => !BoardGames.Any();
+
     [XmlAttribute(AttributeName = "total")]
     public int Total { get; set; }
 

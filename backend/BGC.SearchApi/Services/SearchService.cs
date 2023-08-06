@@ -45,7 +45,7 @@ public class SearchService : ISearchService
                 return Array.Empty<BoardGameSummaryDto>();
             }
 
-            var boardGameSummaries = bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id, boardGame.Name, boardGame.YearPublished)).ToArray();
+            var boardGameSummaries = bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id.ToString(), boardGame.Name.Value, boardGame.YearPublished.Value)).ToArray();
 
             var boardGamesDetails = await _boardGamesRepository.GetBoardGames(boardGameSummaries.Select(boardGame => boardGame.Id), cancellationToken);
             var boardGamesDetailsDict = boardGamesDetails.ToDictionary(boardGame => boardGame.Id);

@@ -15,7 +15,8 @@
 
         public static class BggApi
         {
-            public const string BaseUrl = "https://boardgamegeek.com/xmlapi2";
+            public const string BaseUrl = "https://boardgamegeek.com";
+            public const string BaseXmlApiUrl = $"{BaseUrl}/xmlapi2";
         }
     }
 }

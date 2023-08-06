@@ -39,7 +39,7 @@ var host = new HostBuilder()
         services.AddTransient<IBggService, BggService>();
         services.AddHttpClient<IBggService, BggService>(client =>
         {
-            client.BaseAddress = new Uri(Constants.BggApi.BaseUrl);
+            client.BaseAddress = new Uri(Constants.BggApi.BaseXmlApiUrl);
         });
         services.AddTransient<IMongoClient>((services) =>
         {

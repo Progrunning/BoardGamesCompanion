@@ -74,7 +74,7 @@ builder.Services.AddTransient<ISearchService, SearchService>();
 
 builder.Services.AddHttpClient<IBggService, BggService>(client =>
 {
-    client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseUrl);
+    client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseXmlApiUrl);
 });
 
 var app = builder.Build();
