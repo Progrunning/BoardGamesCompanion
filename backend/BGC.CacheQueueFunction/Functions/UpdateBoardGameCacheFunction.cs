@@ -39,15 +39,17 @@ namespace BGC.CacheQueueFunction.Functions
                     throw new ValidationException();
                 }
 
-                _logger.LogInformation($"Caching a board game {boardGameToCache.BoardGameId}...");
-
+                _logger.LogInformation($"Updating cache of a board game {boardGameToCache.BoardGameId}...");
+                _logger.LogInformation($"Retrieveing board game {boardGameToCache.BoardGameId} details.");
                 var boardGameDetailsDto = await _bggService.GetDetails(boardGameToCache.BoardGameId, CancellationToken.None);
                 if (boardGameDetailsDto is null)
                 {
                     throw new BoardGameNotFoundException();
                 }
 
+                _logger.LogInformation($"Converting board game dto to domain model.");
                 var boardGame = boardGameDetailsDto!.ToDomain();
+                _logger.LogInformation($"Upserting board game details {boardGame}");
                 await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);
             }
             catch (Exception ex)
