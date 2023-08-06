@@ -18,5 +18,10 @@
             public const string BaseUrl = "https://boardgamegeek.com";
             public const string BaseXmlApiUrl = $"{BaseUrl}/xmlapi2";
         }
+
+        public static class BoardGameOracleApi
+        {
+            public const string BaseUrl = "https://api.boardgameoracle.com";
+        }
     }
 }

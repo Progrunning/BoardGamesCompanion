@@ -41,9 +41,13 @@ var host = new HostBuilder()
         {
             client.BaseAddress = new Uri(Constants.BggApi.BaseXmlApiUrl);
         });
+        services.AddHttpClient<IBoardGameOracleService, BoardGameOracelService>(client =>
+        {
+            client.BaseAddress = new Uri(Constants.BoardGameOracleApi.BaseUrl);
+        });
         services.AddTransient<IMongoClient>((services) =>
         {
-            var mongoDbSettings = services.GetService<IOptions<MongoDbSettings>>();            
+            var mongoDbSettings = services.GetService<IOptions<MongoDbSettings>>();
             return new MongoClient(mongoDbSettings!.Value.ConnectionString);
         });
         services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();

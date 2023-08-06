@@ -50,6 +50,9 @@ namespace BGC.CacheQueueFunction.Functions
                 _logger.LogInformation($"Converting board game dto to domain model.");
                 var boardGame = boardGameDetailsDto!.ToDomain();
                 _logger.LogInformation($"Upserting board game details {boardGame}");
+
+                // TODO Loop through all of the regions to get prices
+
                 await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);
             }
             catch (Exception ex)

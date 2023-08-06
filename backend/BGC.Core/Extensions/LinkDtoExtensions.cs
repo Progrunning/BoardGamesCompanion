@@ -7,11 +7,13 @@ namespace BGC.Core.Extensions
     {
         public static IReadOnlyCollection<NamedEntity> To(this IEnumerable<LinkDto> linkDtos, LinkDtoType linkDtoType)
         {
-            return linkDtos.Where(l => string.Equals(l.Type, linkDtoType.ToTypeName(), StringComparison.OrdinalIgnoreCase)).Select(l => new NamedEntity()
-            {
-                Id = l.Id.ToString(),
-                Name = l.Value,
-            }).ToArray();
+            return linkDtos.Where(l => string.Equals(l.Type, linkDtoType.ToTypeName(), StringComparison.OrdinalIgnoreCase))
+                           .Select(l => new NamedEntity()
+                           {
+                               Id = l.Id.ToString(),
+                               Name = l.Value,
+                           })
+                           .ToArray();
         }
 
         private static string? ToTypeName(this LinkDtoType linkDtoType)
