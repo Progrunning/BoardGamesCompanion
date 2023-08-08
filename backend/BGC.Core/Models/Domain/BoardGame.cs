@@ -79,5 +79,10 @@ namespace BGC.Core.Models.Domain
         /// Gets game expansions.
         /// </summary>
         public IReadOnlyCollection<NamedEntity> Expansions { get; init; } = Array.Empty<NamedEntity>();
+
+        /// <summary>
+        /// Gets game prices from different regions.
+        /// </summary>
+        public IReadOnlyCollection<Prices> Prices { get; init; } = Array.Empty<Prices>();
     }
 }

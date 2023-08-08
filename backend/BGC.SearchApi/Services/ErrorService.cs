@@ -20,9 +20,9 @@ namespace BGC.SearchApi.Services
         }
 
         /// <inheritdoc />
-        public IResult HandleError(Exception excption)
+        public IResult HandleError(Exception exception)
         {
-            switch (excption)
+            switch (exception)
             {
                 case BggException bggException:
                     return Results.Problem(title: bggException.Message, statusCode: bggException.HttpStatus);

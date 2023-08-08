@@ -11,6 +11,7 @@ using BGC.Core.Extensions;
 
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using BGC.Core.Models.Dtos.BoardGameOracle;
 
 namespace BGC.CacheQueueFunction.Functions
 {
@@ -19,12 +20,18 @@ namespace BGC.CacheQueueFunction.Functions
         private readonly ILogger _logger;
         private readonly IBggService _bggService;
         private readonly IBoardGamesRepository _boardGamesRepository;
+        private readonly IBoardGameOracleService _boardGameOracleService;
 
-        public UpdateBoardGameCacheFunction(ILoggerFactory loggerFactory, IBggService bggService, IBoardGamesRepository boardGamesRepository)
+        public UpdateBoardGameCacheFunction(
+            ILoggerFactory loggerFactory,
+            IBggService bggService,
+            IBoardGamesRepository boardGamesRepository,
+            IBoardGameOracleService boardGameOracleService)
         {
             _logger = loggerFactory.CreateLogger<UpdateBoardGameCacheFunction>();
             _bggService = bggService;
             _boardGamesRepository = boardGamesRepository;
+            _boardGameOracleService = boardGameOracleService;
         }
 
         [Function(nameof(UpdateBoardGameCacheFunction))]
@@ -48,11 +55,11 @@ namespace BGC.CacheQueueFunction.Functions
                 }
 
                 _logger.LogInformation($"Converting board game dto to domain model.");
-                var boardGame = boardGameDetailsDto!.ToDomain();
+                var regionalPriceStatistics = await RetrieveRegionalPriceStatistics(boardGameToCache);                
+
+                var boardGame = boardGameDetailsDto!.ToDomain(regionalPriceStatistics);
+
                 _logger.LogInformation($"Upserting board game details {boardGame}");
-
-                // TODO Loop through all of the regions to get prices
-
                 await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);
             }
             catch (Exception ex)
@@ -79,6 +86,23 @@ namespace BGC.CacheQueueFunction.Functions
                 throw;
             }
 
+        }
+
+        private async Task<IReadOnlyCollection<PriceStatisticsDto>> RetrieveRegionalPriceStatistics(CacheBoardGameMessage boardGameToCache)
+        {
+            var regionalPriceStatisticsTasks = new List<Task<PriceStatisticsDto?>>();
+            foreach (RegionDto regionDto in Enum.GetValues(typeof(RegionDto)))
+            {
+                regionalPriceStatisticsTasks.Add(_boardGameOracleService.GetPriceStats(boardGameToCache.BoardGameId, regionDto));
+            }
+
+            var regionalPriceStatistics = await Task.WhenAll(regionalPriceStatisticsTasks);
+            if (regionalPriceStatistics is null)
+            {
+                return Array.Empty<PriceStatisticsDto>();
+            }
+
+            return regionalPriceStatistics.Where(rps => rps is not null).OfType<PriceStatisticsDto>().ToArray();
         }
     }
 }

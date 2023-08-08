@@ -14,8 +14,6 @@ namespace BGC.Core.Services.Interfaces
         /// <param name="bggId">Board Games Geek id</param>
         /// <param name="region">Prices for a <see cref="RegionDto"/></param>
         /// <returns></returns>
-        Task<PriceStatisticsDto> GetPriceStats(string bggId, RegionDto region);
-
-        // https://api.boardgameoracle.com/boardgame?region=au&bggid=174430&pricestats=1
+        Task<PriceStatisticsDto?> GetPriceStats(string bggId, RegionDto region);        
     }
 }

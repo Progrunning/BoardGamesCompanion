@@ -1,11 +1,12 @@
 ﻿using BGC.Core.Models.Domain;
 using BGC.Core.Models.Dtos.BoardGameGeek;
+using BGC.Core.Models.Dtos.BoardGameOracle;
 
 namespace BGC.Core.Extensions;
 
 public static class BoardGameDetailsDtoExtensions
 {
-    public static BoardGame ToDomain(this BoardGameDetailsDto boardGameDetailsDto)
+    public static BoardGame ToDomain(this BoardGameDetailsDto boardGameDetailsDto, IReadOnlyCollection<PriceStatisticsDto>? regionalPriceStatistics)
     {
         return new BoardGame()
         {
@@ -34,6 +35,8 @@ public static class BoardGameDetailsDtoExtensions
             Mechanic = boardGameDetailsDto.LinkElements.To(LinkDtoType.Mechanic),
             Publishers = boardGameDetailsDto.LinkElements.To(LinkDtoType.Publisher),
             Expansions = boardGameDetailsDto.LinkElements.To(LinkDtoType.Expansion),
+
+            Prices = regionalPriceStatistics.ToDomain(),
         };
     }
 }

@@ -2,32 +2,32 @@
 
 namespace BGC.Core.Models.Dtos.BoardGameOracle
 {
-    public record Latest(
-        [property: JsonPropertyName("max")] int? Max,
+    public record LatestDto(
+        [property: JsonPropertyName("max")] double? Max,
         [property: JsonPropertyName("mean")] double? Average,
-        [property: JsonPropertyName("median")] int? Median,
+        [property: JsonPropertyName("median")] double? Median,
         [property: JsonPropertyName("min")] double? Min,
         [property: JsonPropertyName("n")] int N,
         [property: JsonPropertyName("lowest_store_name")] string? LowestStoreName,
         [property: JsonPropertyName("lowest_store_short_name")] string? LowestStoreShortName
     );
 
-    public record PriceDropDay(
+    public record PriceDropDayDto(
         [property: JsonPropertyName("previous_price")] double? PreviousPrice,
-        [property: JsonPropertyName("change_percent")] int? ChangePercent,
-        [property: JsonPropertyName("change_value")] int? ChangeValue
+        [property: JsonPropertyName("change_percent")] double? ChangePercent,
+        [property: JsonPropertyName("change_value")] double? ChangeValue
     );
 
-    public record PriceDropWeek(
+    public record PriceDropWeekDto(
         [property: JsonPropertyName("previous_price")] double? PreviousPrice,
-        [property: JsonPropertyName("change_percent")] int? ChangePercent,
-        [property: JsonPropertyName("change_value")] int? ChangeValue
+        [property: JsonPropertyName("change_percent")] double? ChangePercent,
+        [property: JsonPropertyName("change_value")] double? ChangeValue
     );
 
     public record StatisticsDto(
-        [property: JsonPropertyName("latest")] Latest Latest,
-        [property: JsonPropertyName("price_drop_day")] PriceDropDay PriceDropDay,
-        [property: JsonPropertyName("price_drop_week")] PriceDropWeek PriceDropWeek,
+        [property: JsonPropertyName("latest")] LatestDto Latest,
+        [property: JsonPropertyName("price_drop_day")] PriceDropDayDto PriceDropDay,
+        [property: JsonPropertyName("price_drop_week")] PriceDropWeekDto PriceDropWeek,
         [property: JsonPropertyName("lowest_30d")] double? Lowest30d,
         [property: JsonPropertyName("lowest_30d_store")] string? Lowest30dStore,
         [property: JsonPropertyName("lowest_30d_date")] DateTime? Lowest30dDate,
