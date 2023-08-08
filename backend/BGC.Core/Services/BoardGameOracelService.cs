@@ -28,13 +28,15 @@ namespace BGC.Core.Services
         {
             if (string.IsNullOrWhiteSpace(bggId))
             {
-                throw new ArgumentNullException(nameof(bggId));
+                _logger.LogInformation($"Invalid {nameof(bggId)} parameter");
+                return null;
             }
 
             var regionName = region.ToAbbreviation();
             if (string.IsNullOrWhiteSpace(regionName))
             {
-                throw new ArgumentNullException(nameof(regionName));
+                _logger.LogInformation($"Invalid {nameof(regionName)} parameter");
+                return null;
             }
 
             try
@@ -52,11 +54,11 @@ namespace BGC.Core.Services
                 switch (exception)
                 {
                     case HttpRequestException httpRequestException when httpRequestException.StatusCode == HttpStatusCode.NotFound:
-                        _logger.LogError(exception, $"Prices for board game {bggId} in region {region.ToAbbreviation()} were not found");
+                        _logger.LogInformation(exception, $"Prices for board game {bggId} in region {region.ToAbbreviation()} were not found");
                         break;
 
                     default:
-                        _logger.LogError(exception, $"Failed to retrieve price statistics for board game {bggId} in region {region.ToAbbreviation()}");
+                        _logger.LogWarning(exception, $"Failed to retrieve price statistics for board game {bggId} in region {region.ToAbbreviation()}");
                         break;
                 }
 
