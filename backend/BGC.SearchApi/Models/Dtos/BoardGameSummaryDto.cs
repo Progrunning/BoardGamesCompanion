@@ -44,4 +44,9 @@ public record BoardGameSummaryDto
     public double? Complexity { get; set; }
 
     public int? Rank { get; set; }
+
+    /// <summary>
+    /// Game prices.
+    /// </summary>
+    public IReadOnlyCollection<BoardGameSummaryPriceDto> Prices { get; set; }
 }

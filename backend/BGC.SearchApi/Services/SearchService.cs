@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net;
 
 using BGC.Core.Models.Domain;
@@ -87,6 +86,13 @@ public class SearchService : ISearchService
                 boardGame.MaxPlaytimeInMinutes = boardGameDetails.MaxPlaytimeInMinutes;
                 boardGame.Complexity = boardGameDetails.Complexity;
                 boardGame.Rank = boardGameDetails.Rank;
+                boardGame.Prices = boardGameDetails.Prices.Select(price => new BoardGameSummaryPriceDto()
+                {
+                    Region = price.Region,
+                    WebsiteUrl = price.WebsiteUrl,
+                    LowestPrice = price.Lowest,
+                    LowestPriceStoreName = price.LowestStoreName,
+                }).ToArray();
             }
         }
         catch (Exception ex)

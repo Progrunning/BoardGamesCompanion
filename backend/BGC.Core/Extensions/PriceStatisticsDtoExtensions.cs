@@ -15,6 +15,7 @@ namespace BGC.Core.Extensions
             return regionalPriceStatistics.Select(rps => new Prices()
             {
                 Region = rps.Region,
+                WebsiteUrl = rps.Url,
                 Highest = rps.PriceStats.Latest.Max,
                 Average = rps.PriceStats.Latest.Average,
                 Median = rps.PriceStats.Latest.Median,

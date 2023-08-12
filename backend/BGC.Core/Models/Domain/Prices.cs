@@ -11,6 +11,11 @@ namespace BGC.Core.Models.Domain
         public string Region { get; init; } = null!;
 
         /// <summary>
+        /// Website url to the game price list.
+        /// </summary>
+        public string WebsiteUrl { get; init; } = null!;
+
+        /// <summary>
         /// Latest highest price.
         /// </summary>
         public double? Highest { get; init; }
@@ -28,7 +33,7 @@ namespace BGC.Core.Models.Domain
         /// <summary>
         /// Latest lowest price.
         /// </summary>
-        public double? Lowest { get; init; }
+        public double? Lowest { get; init; }               
         
         /// <summary>
         /// Latest lowest price store name.

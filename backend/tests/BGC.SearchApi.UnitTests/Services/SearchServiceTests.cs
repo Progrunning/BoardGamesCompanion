@@ -1,5 +1,7 @@
+using BGC.Core.Extensions;
 using BGC.Core.Models.Domain;
 using BGC.Core.Models.Dtos.BoardGameGeek;
+using BGC.Core.Models.Dtos.BoardGameOracle;
 using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Models.Dtos;
@@ -109,13 +111,36 @@ public class SearchServiceTests
         {
             Id = "1238",
             ImageUrl = "https://fancy.image.net/funny.jpg",
+            Prices = new[]
+            {
+                new Prices()
+                {
+                    Region = RegionDto.Australia.ToAbbreviation()!,
+                    WebsiteUrl = "https://nothingtoseehere.com",
+                    Lowest = 12.31,
+                    LowestStoreName = "Amazon",
+                },
+            },
         };
         _mockBoardGamesRepository.Setup(repository => repository.GetBoardGames(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(new[] { enrichedBoardGameDetails });
 
         var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
         searchResults.Should().NotBeEmpty();
         searchResults.Should().HaveCount(bggSearchResposne.BoardGames.Length);
-        searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("1238", "Scythe", 1987) { ImageUrl = enrichedBoardGameDetails.ImageUrl });
+        searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("1238", "Scythe", 1987)
+        {
+            ImageUrl = enrichedBoardGameDetails.ImageUrl,
+            Prices = new BoardGameSummaryPriceDto[]
+            {
+                new BoardGameSummaryPriceDto()
+                {
+                    Region = enrichedBoardGameDetails.Prices.First().Region,
+                    WebsiteUrl = enrichedBoardGameDetails.Prices.First().WebsiteUrl,
+                    LowestPrice = enrichedBoardGameDetails.Prices.First().Lowest,
+                    LowestPriceStoreName = enrichedBoardGameDetails.Prices.First().LowestStoreName,
+                },
+            },
+        });
         searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("82374", "My Little Scythe", 2018));
     }
 
