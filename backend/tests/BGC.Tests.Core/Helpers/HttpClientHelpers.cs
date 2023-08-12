@@ -1,8 +1,9 @@
 ﻿using System.Net;
 
+using Moq;
 using Moq.Protected;
 
-namespace BGC.SearchApi.UnitTests.Helpers
+namespace BGC.Tests.Core.Helpers
 {
     public static class HttpClientHelpers
     {

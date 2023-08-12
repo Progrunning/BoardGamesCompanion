@@ -1,0 +1,10 @@
+[*.cs]
+
+# StyleCop
+
+# No need for documentation in the test projects, the code should be self documenting
+dotnet_diagnostic.SA1600.severity = none
+
+# No need for a file header
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1633.md
+dotnet_diagnostic.SA1633.severity = none

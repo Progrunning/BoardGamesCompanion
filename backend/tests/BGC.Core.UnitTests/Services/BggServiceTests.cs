@@ -1,7 +1,7 @@
 ﻿using BGC.Core.Services;
-using BGC.SearchApi.UnitTests.Helpers;
+using BGC.Tests.Core.Helpers;
 
-namespace BGC.SearchApi.UnitTests.Services
+namespace BGC.Core.UnitTests.Services
 {
     public class BggServiceTests
     {
@@ -19,7 +19,7 @@ namespace BGC.SearchApi.UnitTests.Services
 
             bggService = new BggService(_mockLogger.Object, new HttpClient(_mockMessageHandler.Object)
             {
-                BaseAddress = mockBaseAddress
+                BaseAddress = mockBaseAddress,
             });
         }
 
