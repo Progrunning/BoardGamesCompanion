@@ -24,7 +24,7 @@ namespace BGC.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PriceStatisticsDto?> GetPriceStats(string bggId, RegionDto region)
+        public async Task<PriceStatisticsDto?> GetPriceStats(string bggId, RegionDto region, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(bggId))
             {
@@ -44,8 +44,8 @@ namespace BGC.Core.Services
                 _logger.LogInformation($"Retrieving regional {region.ToAbbreviation()} price statistics for a game {bggId}");
 
                 var requestUri = new Uri($"{_httpClient.BaseAddress}boardgame?region={regionName}&bggid={bggId}&pricestats=1");
-                var searchResponseStream = await _httpClient.GetStreamAsync(requestUri);
-                var priceStatisticsDto = await JsonSerializer.DeserializeAsync<PriceStatisticsDto>(searchResponseStream);
+                var searchResponseStream = await _httpClient.GetStreamAsync(requestUri, cancellationToken);
+                var priceStatisticsDto = await JsonSerializer.DeserializeAsync<PriceStatisticsDto>(searchResponseStream, cancellationToken: cancellationToken);
                 return priceStatisticsDto;
             }
             catch (Exception exception)

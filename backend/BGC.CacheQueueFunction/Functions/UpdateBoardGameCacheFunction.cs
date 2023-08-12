@@ -55,7 +55,7 @@ namespace BGC.CacheQueueFunction.Functions
                 }
 
                 _logger.LogInformation($"Converting board game dto to domain model.");
-                var regionalPriceStatistics = await RetrieveRegionalPriceStatistics(boardGameToCache);                
+                var regionalPriceStatistics = await RetrieveRegionalPriceStatistics(boardGameToCache, CancellationToken.None);                
 
                 var boardGame = boardGameDetailsDto!.ToDomain(regionalPriceStatistics);
 
@@ -88,12 +88,12 @@ namespace BGC.CacheQueueFunction.Functions
 
         }
 
-        private async Task<IReadOnlyCollection<PriceStatisticsDto>> RetrieveRegionalPriceStatistics(CacheBoardGameMessage boardGameToCache)
+        private async Task<IReadOnlyCollection<PriceStatisticsDto>> RetrieveRegionalPriceStatistics(CacheBoardGameMessage boardGameToCache, CancellationToken cancellationToken)
         {
             var regionalPriceStatisticsTasks = new List<Task<PriceStatisticsDto?>>();
             foreach (RegionDto regionDto in Enum.GetValues(typeof(RegionDto)))
             {
-                regionalPriceStatisticsTasks.Add(_boardGameOracleService.GetPriceStats(boardGameToCache.BoardGameId, regionDto));
+                regionalPriceStatisticsTasks.Add(_boardGameOracleService.GetPriceStats(boardGameToCache.BoardGameId, regionDto, cancellationToken));
             }
 
             var regionalPriceStatistics = await Task.WhenAll(regionalPriceStatisticsTasks);

@@ -33,4 +33,12 @@
     <ProjectReference Include="..\BGC.Tests.Core\BGC.Tests.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Dev\Projects\BoardGamesCompanion\backend\tests\BGC.Core.UnitTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Dev\Projects\BoardGamesCompanion\backend\tests\BGC.Core.UnitTests\.editorconfig" />
+  </ItemGroup>
+
 </Project>
