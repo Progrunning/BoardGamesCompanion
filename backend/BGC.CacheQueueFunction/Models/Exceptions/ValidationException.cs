@@ -1,4 +1,4 @@
-﻿namespace BGC.CacheQueueFunction.Models.Exceptions
+﻿namespace BGC.Functions.Models.Exceptions
 {
     public class ValidationException : Exception
     {

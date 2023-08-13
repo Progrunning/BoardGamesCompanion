@@ -1,4 +1,4 @@
-﻿namespace BGC.CacheQueueFunction.Models
+﻿namespace BGC.Functions.Models
 {
     public record CacheBoardGameMessage
     {

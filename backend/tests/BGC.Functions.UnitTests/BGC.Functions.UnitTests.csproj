@@ -35,8 +35,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BGC.SearchApi\BGC.SearchApi.csproj" />
-    <ProjectReference Include="..\BGC.Tests.Core\BGC.Tests.Core.csproj" />
+    <ProjectReference Include="..\..\BGC.CacheQueueFunction\BGC.Functions.csproj" />
+    <ProjectReference Include="..\BGC.Core.UnitTests\BGC.Core.UnitTests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Dev\Projects\BoardGamesCompanion\backend\tests\BGC.Functions.UnitTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Dev\Projects\BoardGamesCompanion\backend\tests\BGC.Functions.UnitTests\.editorconfig" />
   </ItemGroup>
 
 </Project>

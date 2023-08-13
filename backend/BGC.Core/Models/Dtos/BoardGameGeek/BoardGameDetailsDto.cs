@@ -1,7 +1,5 @@
 ﻿using System.Xml.Serialization;
 
-using DnsClient;
-
 namespace BGC.Core.Models.Dtos.BoardGameGeek;
 
 [XmlRoot(ElementName = "item")]
