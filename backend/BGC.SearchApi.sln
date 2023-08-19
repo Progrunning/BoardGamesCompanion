@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.SearchApi", "BGC.Search
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.SearchApi.UnitTests", "tests\BGC.SearchApi.UnitTests\BGC.SearchApi.UnitTests.csproj", "{BDB8947C-6470-4C43-962F-C3721CF95100}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Functions", "BGC.CacheQueueFunction\BGC.Functions.csproj", "{6CE61FDA-735C-432E-960C-9BBDE6BD6133}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Functions", "BGC.Functions\BGC.Functions.csproj", "{6CE61FDA-735C-432E-960C-9BBDE6BD6133}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DC1D220B-9094-4C67-88CD-0827282B79FE}"
 EndProject

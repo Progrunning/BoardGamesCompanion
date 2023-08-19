@@ -2,7 +2,7 @@ name: $(functions.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
   - name: appDirectoryName
-    value: BGC.CacheQueueFunction
+    value: backend/BGC.Functions
   - group: BGC-GLOBAL
 
 trigger:
@@ -11,7 +11,7 @@ trigger:
       - main
   paths:
     include:
-      - BGC.CacheQueueFunction
+      - BGC.Functions
       - BGC.Core
 
 pool:
@@ -28,13 +28,13 @@ steps:
       dotnet restore
       dotnet build -c Release
     displayName: Restore & Build
-    workingDirectory: "$(Build.SourcesDirectory)/**/$(appDirectoryName)"
+    workingDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
 
   - task: DotNetCoreCLI@2
     displayName: Publish
     inputs:
       command: "publish"
-      projects: "$(Build.SourcesDirectory)/**/$(appDirectoryName)/*.csproj"
+      projects: "$(Build.SourcesDirectory)/$(appDirectoryName)/*.csproj"
       arguments: "-c Release -o $(Build.ArtifactStagingDirectory)/out"
       publishWebProjects: false
       modifyOutputPath: false
