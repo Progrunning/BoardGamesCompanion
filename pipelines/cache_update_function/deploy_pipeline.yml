@@ -74,7 +74,7 @@ stages:
                     azureSubscription: $(armServiceConnectionDev)
                     appType: "functionAppLinux"
                     appName: "$(functionsAppNameDev)"
-                    package: "$(Pipeline.Workspace)/*.zip"
+                    package: "$(Pipeline.Workspace)/**/*.zip"
                     appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
 
   - stage: PROD
@@ -109,5 +109,5 @@ stages:
                     azureSubscription: $(armServiceConnectionProd)
                     appType: "functionAppLinux"
                     appName: "$(functionsAppNameProd)"
-                    package: "$(Pipeline.Workspace)/*.zip"
+                    package: "$(Pipeline.Workspace)/**/*.zip"
                     appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
