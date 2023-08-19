@@ -22,14 +22,16 @@ parameters:
 
 variables:
   # General
-  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Functions-CI.runID'])]
+  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Cache-Function-CI.runID'])]
   functionsAppName: cache-update-function
 
   # Dev
   armServiceConnectionDev: bgc-dev
+  functionsAppNameDev: bgc-dev-func
 
   # Prod
   armServiceConnectionProd: bgc-prod
+  functionsAppNameProd: bgc-prod-func
 
 stages:
   - stage: DEV
@@ -60,7 +62,7 @@ stages:
                   inputs:
                     azureSubscription: $(armServiceConnectionDev)
                     appType: "functionAppLinux"
-                    appName: "$(functionsAppName)"
+                    appName: "$(functionsAppNameDev)"
                     package: "$(Pipeline.Workspace)/*.zip"
                     appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
 
@@ -85,6 +87,6 @@ stages:
                   inputs:
                     azureSubscription: $(armServiceConnectionProd)
                     appType: "functionAppLinux"
-                    appName: "$(functionsAppName)"
+                    appName: "$(functionsAppNameProd)"
                     package: "$(Pipeline.Workspace)/*.zip"
                     appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
