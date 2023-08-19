@@ -1,7 +1,6 @@
 using System.Text.Json;
 
 using Azure.Messaging.ServiceBus;
-using BGC.Core.Models.Exceptions;
 using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
 using BGC.Core.Extensions;

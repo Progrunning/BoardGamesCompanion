@@ -1,0 +1,90 @@
+resources:
+  pipelines:
+    - pipeline: Functions-CI
+      source: "Functions CI"
+      trigger:
+        branches:
+          include:
+            - main
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-22.04
+  workspace:
+    clean: all
+
+parameters:
+  - name: buildId
+    displayName: Build ID
+    type: string
+    default: ""
+
+variables:
+  # General
+  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Functions-CI.runID'])]
+  functionsAppName: cache-update-function
+
+  # Dev
+  armServiceConnectionDev: bgc-dev
+
+  # Prod
+  armServiceConnectionProd: bgc-prod
+
+stages:
+  - stage: DEV
+    jobs:
+      - deployment: PublishFunctions
+        variables:
+          # Using already stored mongo db connection to avoid duplication
+          # The plan is to use AppConfiguration to retrieve this config
+          - group: BGC-SEARCH-API-DEV
+        environment: DEV
+        strategy:
+        runOnce:
+          deploy:
+            steps:
+              - download: none
+
+              - task: PowerShell@2
+                displayName: Set build name
+                inputs:
+                  targetType: "inline"
+                  script: |
+                    [string] $releaseName = "$(deployTagId)"
+                    Write-Host "Setting the name of the build to '$releaseName'."
+                    Write-Host "##vso[build.updatebuildnumber]$releaseName"
+
+              - task: AzureFunctionApp@1
+                displayName: "Deploy Functions"
+                inputs:
+                  azureSubscription: $(armServiceConnectionDev)
+                  appType: "functionAppLinux"
+                  appName: "$(functionsAppName)"
+                  package: "$(Pipeline.Workspace)/*.zip"
+                  appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
+
+  - stage: PROD
+    dependsOn:
+      - DEV
+    jobs:
+      - deployment: PublishFunctions
+        variables:
+          # Using already stored mongo db connection to avoid duplication
+          # The plan is to use AppConfiguration to retrieve this config
+          - group: BGC-SEARCH-API-PROD
+        environment: PROD
+        strategy:
+        runOnce:
+          deploy:
+            steps:
+              - download: none
+
+              - task: AzureFunctionApp@1
+                displayName: "Deploy Functions"
+                inputs:
+                  azureSubscription: $(armServiceConnectionProd)
+                  appType: "functionAppLinux"
+                  appName: "$(functionsAppName)"
+                  package: "$(Pipeline.Workspace)/*.zip"
+                  appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)

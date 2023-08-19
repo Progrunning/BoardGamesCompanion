@@ -1,8 +1,7 @@
-name: $(app.version).$(Build.BuildID) $(SourceBranchName)
+name: $(functions.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
-  AppDirectoryName: BGC.Functions
-  BicepTemplateDirectoryName: cloud_infrastructure
+  appDirectoryName: BGC.Functions
 
 trigger:
   branches:
@@ -17,22 +16,22 @@ pool:
 
 steps:
   - task: UseDotNet@2
-    displayName: Use .NET 6.0
+    displayName: Use .NET 7.0
     inputs:
       packageType: "sdk"
-      version: "6.0.x"
+      version: "7.0.x"
 
   - script: |
       dotnet restore
       dotnet build -c Release
     displayName: Restore & Build
-    workingDirectory: "$(Build.SourcesDirectory)/$(AppDirectoryName)"
+    workingDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
 
   - task: DotNetCoreCLI@2
     displayName: Publish
     inputs:
       command: "publish"
-      projects: "$(Build.SourcesDirectory)/$(AppDirectoryName)/*.csproj"
+      projects: "$(Build.SourcesDirectory)/$(appDirectoryName)/*.csproj"
       arguments: "-c Release -o $(Build.ArtifactStagingDirectory)/out"
       publishWebProjects: false
       modifyOutputPath: false
@@ -43,18 +42,11 @@ steps:
     inputs:
       rootFolderOrFile: "$(Build.ArtifactStagingDirectory)/out"
       includeRootFolder: false
-      archiveFile: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
+      archiveFile: "$(Build.ArtifactStagingDirectory)/out/$(functions.version).$(Build.BuildID).zip"
 
   - task: PublishPipelineArtifact@1
     displayName: "Publish Functions Artifact"
     inputs:
-      targetPath: "$(Build.ArtifactStagingDirectory)/out/$(app.version).$(Build.BuildID).zip"
+      targetPath: "$(Build.ArtifactStagingDirectory)/out/$(functions.version).$(Build.BuildID).zip"
       artifactName: "functions"
-      publishLocation: "pipeline"
-
-  - task: PublishPipelineArtifact@1
-    displayName: "Publish Bicep Template"
-    inputs:
-      targetPath: "$(Build.SourcesDirectory)/$(BicepTemplateDirectoryName)"
-      artifactName: "bicep"
       publishLocation: "pipeline"

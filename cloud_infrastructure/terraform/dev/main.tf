@@ -43,9 +43,8 @@ variable "resources" {
         listen_policy_name = string
       })
     })
-    cache_function = object({
-      name     = string
-      app_name = string
+    function = object({
+      name = string
       service_plan = object({
         name = string
       })
@@ -205,16 +204,15 @@ resource "azurerm_servicebus_queue_authorization_rule" "sbq_listen_policy" {
 ### Functions
 
 resource "azurerm_service_plan" "asp" {
-  name                = var.resources.cache_function.service_plan.name
+  name                = var.resources.function.service_plan.name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   os_type             = "Linux"
   sku_name            = "Y1"
 }
 
-
 resource "azurerm_linux_function_app" "func" {
-  name                = var.resources.cache_function.name
+  name                = var.resources.function.name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
@@ -227,6 +225,12 @@ resource "azurerm_linux_function_app" "func" {
       dotnet_version              = "7.0"
       use_dotnet_isolated_runtime = true
     }
+  }
+
+  app_settings = {
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.search_service_appi.instrumentation_key
+    "CacheQueueName"                 = var.resources.cache_service_bus.queue.name
+    "CacheQueueConnectionString"     = azurerm_servicebus_queue_authorization_rule.sbq_listen_policy.primary_connection_string
   }
 }
 
