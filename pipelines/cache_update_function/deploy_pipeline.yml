@@ -22,7 +22,9 @@ parameters:
 
 variables:
   # General
-  deployTagId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Cache-Function-CI.runID'])]
+  pipelineSourceProjectId: "cf1ca5c2-9446-441f-b3af-6e9f951997cf"
+  pipelineSourceProjectDefinitionId: "22"
+  versionToDeploy: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Cache-Function-CI.runID'])]
   functionsAppName: cache-update-function
 
   # Dev
@@ -53,9 +55,18 @@ stages:
                   inputs:
                     targetType: "inline"
                     script: |
-                      [string] $releaseName = "$(deployTagId)"
+                      [string] $releaseName = "$(versionToDeploy)"
                       Write-Host "Setting the name of the build to '$releaseName'."
                       Write-Host "##vso[build.updatebuildnumber]$releaseName"
+
+                - task: DownloadPipelineArtifact@2
+                  displayName: "Download Artifacts"
+                  inputs:
+                    buildType: "specific"
+                    project: $(pipelineSourceProjectId)
+                    definition: $(pipelineSourceProjectDefinitionId)
+                    buildVersionToDownload: versionToDeploy
+                    targetPath: "$(Pipeline.Workspace)"
 
                 - task: AzureFunctionApp@1
                   displayName: "Deploy Functions"
@@ -81,6 +92,15 @@ stages:
             deploy:
               steps:
                 - download: none
+
+                - task: DownloadPipelineArtifact@2
+                  displayName: "Download Artifacts"
+                  inputs:
+                    buildType: "specific"
+                    project: $(pipelineSourceProjectId)
+                    definition: $(pipelineSourceProjectDefinitionId)
+                    buildVersionToDownload: versionToDeploy
+                    targetPath: "$(Pipeline.Workspace)"
 
                 - task: AzureFunctionApp@1
                   displayName: "Deploy Functions"
