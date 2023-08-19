@@ -22,8 +22,7 @@ parameters:
 
 variables:
   # General
-  pipelineSourceProjectId: "cf1ca5c2-9446-441f-b3af-6e9f951997cf"
-  pipelineSourceProjectDefinitionId: "22"
+  cacheUpdateFunctionPipelineId: "22"
   releaseVersion: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Cache-Function-CI.runID'])]
   functionsAppName: cache-update-function
 
@@ -63,8 +62,8 @@ stages:
                   displayName: "Download Artifacts"
                   inputs:
                     buildType: "specific"
-                    project: $(pipelineSourceProjectId)
-                    definition: $(pipelineSourceProjectDefinitionId)
+                    project: $(System.TeamProjectId)
+                    definition: $(cacheUpdateFunctionPipelineId)
                     buildVersionToDownload: $(releaseVersion)
                     targetPath: "$(Pipeline.Workspace)"
 
@@ -98,7 +97,7 @@ stages:
                   inputs:
                     buildType: "specific"
                     project: $(pipelineSourceProjectId)
-                    definition: $(pipelineSourceProjectDefinitionId)
+                    definition: $(cacheUpdateFunctionPipelineId)
                     buildVersionToDownload: releaseVersion
                     targetPath: "$(Pipeline.Workspace)"
 
