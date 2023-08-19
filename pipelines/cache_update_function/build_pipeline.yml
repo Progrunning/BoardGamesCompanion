@@ -2,7 +2,7 @@ name: $(functions.version).$(Build.BuildID) $(SourceBranchName)
 
 variables:
   - name: appDirectoryName
-    value: BGC.Functions
+    value: BGC.CacheQueueFunction
   - group: BGC-GLOBAL
 
 trigger:
@@ -11,7 +11,8 @@ trigger:
       - main
   paths:
     include:
-      - BGC.Functions
+      - BGC.CacheQueueFunction
+      - BGC.Core
 
 pool:
   vmImage: ubuntu-latest
