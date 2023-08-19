@@ -23,7 +23,7 @@ parameters:
 variables:
   # General
   cacheUpdateFunctionPipelineId: "22"
-  releaseVersion: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Cache-Function-CI.runID'])]
+  buildId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Cache-Function-CI.runID'])]
   functionsAppName: cache-update-function
 
   # Dev
@@ -54,7 +54,7 @@ stages:
                   inputs:
                     targetType: "inline"
                     script: |
-                      [string] $releaseName = "$(releaseVersion)"
+                      [string] $releaseName = "$(buildId)"
                       Write-Host "Setting the name of the build to '$releaseName'."
                       Write-Host "##vso[build.updatebuildnumber]$releaseName"
 
@@ -64,7 +64,8 @@ stages:
                     buildType: "specific"
                     project: "c64aad17-a92f-4a9b-8084-0911460331cb"
                     definition: $(cacheUpdateFunctionPipelineId)
-                    buildVersionToDownload: $(releaseVersion)
+                    pipelineId: $(buildId)
+                    buildVersionToDownload: latest
                     targetPath: "$(Pipeline.Workspace)"
 
                 - task: AzureFunctionApp@1
@@ -98,7 +99,7 @@ stages:
                     buildType: "specific"
                     project: $(pipelineSourceProjectId)
                     definition: $(cacheUpdateFunctionPipelineId)
-                    buildVersionToDownload: releaseVersion
+                    buildVersionToDownload: buildId
                     targetPath: "$(Pipeline.Workspace)"
 
                 - task: AzureFunctionApp@1

@@ -1,4 +1,4 @@
-name: $(functions.version).$(Build.BuildID) $(SourceBranchName)
+name: $(functions.version) $(Build.BuildID) $(SourceBranchName)
 
 variables:
   - name: appDirectoryName
