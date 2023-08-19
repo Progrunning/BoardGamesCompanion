@@ -1,7 +1,7 @@
 resources:
   pipelines:
-    - pipeline: Functions-CI
-      source: "Functions CI"
+    - pipeline: Cache-Function-CI
+      source: "Cache Function CI"
       trigger:
         branches:
           include:
