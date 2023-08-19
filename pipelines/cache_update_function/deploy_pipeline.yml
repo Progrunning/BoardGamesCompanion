@@ -62,7 +62,7 @@ stages:
                   displayName: "Download Artifacts"
                   inputs:
                     buildType: "specific"
-                    project: $(System.TeamProjectId)
+                    project: "c64aad17-a92f-4a9b-8084-0911460331cb"
                     definition: $(cacheUpdateFunctionPipelineId)
                     buildVersionToDownload: $(releaseVersion)
                     targetPath: "$(Pipeline.Workspace)"
