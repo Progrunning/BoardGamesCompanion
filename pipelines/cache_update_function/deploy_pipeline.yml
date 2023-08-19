@@ -62,7 +62,7 @@ stages:
                   displayName: "Download Artifacts"
                   inputs:
                     buildType: "specific"
-                    project: "c64aad17-a92f-4a9b-8084-0911460331cb"
+                    project: $(System.TeamProjectId)
                     definition: $(cacheUpdateFunctionPipelineId)
                     pipelineId: $(buildId)
                     buildVersionToDownload: latest
@@ -97,9 +97,10 @@ stages:
                   displayName: "Download Artifacts"
                   inputs:
                     buildType: "specific"
-                    project: $(pipelineSourceProjectId)
+                    project: $(System.TeamProjectId)
                     definition: $(cacheUpdateFunctionPipelineId)
-                    buildVersionToDownload: buildId
+                    pipelineId: $(buildId)
+                    buildVersionToDownload: latest
                     targetPath: "$(Pipeline.Workspace)"
 
                 - task: AzureFunctionApp@1
