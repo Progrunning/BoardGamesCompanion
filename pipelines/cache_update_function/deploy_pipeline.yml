@@ -41,28 +41,28 @@ stages:
           - group: BGC-SEARCH-API-DEV
         environment: DEV
         strategy:
-        runOnce:
-          deploy:
-            steps:
-              - download: none
+          runOnce:
+            deploy:
+              steps:
+                - download: none
 
-              - task: PowerShell@2
-                displayName: Set build name
-                inputs:
-                  targetType: "inline"
-                  script: |
-                    [string] $releaseName = "$(deployTagId)"
-                    Write-Host "Setting the name of the build to '$releaseName'."
-                    Write-Host "##vso[build.updatebuildnumber]$releaseName"
+                - task: PowerShell@2
+                  displayName: Set build name
+                  inputs:
+                    targetType: "inline"
+                    script: |
+                      [string] $releaseName = "$(deployTagId)"
+                      Write-Host "Setting the name of the build to '$releaseName'."
+                      Write-Host "##vso[build.updatebuildnumber]$releaseName"
 
-              - task: AzureFunctionApp@1
-                displayName: "Deploy Functions"
-                inputs:
-                  azureSubscription: $(armServiceConnectionDev)
-                  appType: "functionAppLinux"
-                  appName: "$(functionsAppName)"
-                  package: "$(Pipeline.Workspace)/*.zip"
-                  appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
+                - task: AzureFunctionApp@1
+                  displayName: "Deploy Functions"
+                  inputs:
+                    azureSubscription: $(armServiceConnectionDev)
+                    appType: "functionAppLinux"
+                    appName: "$(functionsAppName)"
+                    package: "$(Pipeline.Workspace)/*.zip"
+                    appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
 
   - stage: PROD
     dependsOn:
@@ -75,16 +75,16 @@ stages:
           - group: BGC-SEARCH-API-PROD
         environment: PROD
         strategy:
-        runOnce:
-          deploy:
-            steps:
-              - download: none
+          runOnce:
+            deploy:
+              steps:
+                - download: none
 
-              - task: AzureFunctionApp@1
-                displayName: "Deploy Functions"
-                inputs:
-                  azureSubscription: $(armServiceConnectionProd)
-                  appType: "functionAppLinux"
-                  appName: "$(functionsAppName)"
-                  package: "$(Pipeline.Workspace)/*.zip"
-                  appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
+                - task: AzureFunctionApp@1
+                  displayName: "Deploy Functions"
+                  inputs:
+                    azureSubscription: $(armServiceConnectionProd)
+                    appType: "functionAppLinux"
+                    appName: "$(functionsAppName)"
+                    package: "$(Pipeline.Workspace)/*.zip"
+                    appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
