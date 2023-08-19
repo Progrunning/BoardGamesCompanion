@@ -75,7 +75,7 @@ stages:
                     appType: "functionAppLinux"
                     appName: "$(functionsAppNameDev)"
                     package: "$(Pipeline.Workspace)/**/*.zip"
-                    appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
+                    appSettings: -MongoDbSettings__ConnectionString $(mongoDbConnectionString)
 
   - stage: PROD
     dependsOn:
@@ -110,4 +110,4 @@ stages:
                     appType: "functionAppLinux"
                     appName: "$(functionsAppNameProd)"
                     package: "$(Pipeline.Workspace)/**/*.zip"
-                    appSettings: -MongoDbSettings:ConnectionString $(mongoDbConnectionString)
+                    appSettings: -MongoDbSettings__ConnectionString $(mongoDbConnectionString)
