@@ -30,6 +30,10 @@ steps:
     displayName: Restore & Build
     workingDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
 
+  - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
+    parameters:
+      pathToProjects: "**/BGC.@(Core|Functions).UnitTests).csproj"
+
   - task: DotNetCoreCLI@2
     displayName: Publish
     inputs:

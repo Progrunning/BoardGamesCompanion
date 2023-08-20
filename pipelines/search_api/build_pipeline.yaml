@@ -33,7 +33,7 @@ jobs:
 
       - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
         parameters:
-          pathToProjects: "**/BGC.SearchApi.UnitTests.csproj"
+          pathToProjects: "**/BGC.@(Core|SearchApi).UnitTests.csproj"
 
       - task: Docker@2
         condition: and(succeeded(), eq(variables.isPR, 'false'))
