@@ -17,6 +17,7 @@ public class SearchService : ISearchService
     private readonly IBggService _bggService;
     private readonly IBoardGamesRepository _boardGamesRepository;
     private readonly ICacheService _cacheService;
+    private readonly IDateTimeService _dateTimeService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SearchService"/> class.
@@ -25,12 +26,14 @@ public class SearchService : ISearchService
     /// <param name="bggService"></param>
     /// <param name="boardGamesRepository"></param>
     /// <param name="cacheService"></param>
-    public SearchService(ILogger<SearchService> logger, IBggService bggService, IBoardGamesRepository boardGamesRepository, ICacheService cacheService)
+    /// <param name="dateTimeService"></param>
+    public SearchService(ILogger<SearchService> logger, IBggService bggService, IBoardGamesRepository boardGamesRepository, ICacheService cacheService, IDateTimeService dateTimeService)
     {
         _logger = logger;
         _bggService = bggService;
         _boardGamesRepository = boardGamesRepository;
         _cacheService = cacheService;
+        _dateTimeService = dateTimeService;
     }
 
     /// <inheritdoc />
@@ -103,9 +106,20 @@ public class SearchService : ISearchService
 
     private async Task CacheBoardGames(IReadOnlyCollection<BoardGameSummaryDto> boardGameSummaries, Dictionary<string, BoardGame> boardGamesDetailsDict)
     {
-        var newBoardGameIds = boardGameSummaries.Select(boardGame => boardGame.Id).Except(boardGamesDetailsDict.Values.Select(boardGame => boardGame.Id));
+        var cachedBoardGameIds = boardGamesDetailsDict.Values.Select(boardGame => boardGame.Id);
+        var newBoardGameIds = boardGameSummaries.Select(boardGame => boardGame.Id).Except(cachedBoardGameIds);
+
+        _logger.LogInformation($"Adding {newBoardGameIds} to cache.");
+
         await _cacheService.Add(newBoardGameIds);
 
-        // TODO Handle expired board game details
+        var existingBoardGameIds = cachedBoardGameIds.Except(newBoardGameIds);
+        var cacheExpiredBoardGameIds = existingBoardGameIds.Where(existingBoardGameId => boardGamesDetailsDict[existingBoardGameId].LastUpdated == null ||
+                                                                                         boardGamesDetailsDict[existingBoardGameId].LastUpdated?.AddMinutes(_cacheService.CacheExpirationInMinutes) <= _dateTimeService.UtcOffsetNow)
+                                                           .ToArray();
+
+        _logger.LogInformation($"Updating {cacheExpiredBoardGameIds} in cache.");
+
+        await _cacheService.Update(cacheExpiredBoardGameIds);
     }
 }

@@ -25,6 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
 {
+    // MK Might require adding Access Policies to the user signed into Azure
     builder.Configuration.AddAzureKeyVault(
             new Uri($"https://{builder.Configuration[Constants.ConfigurationKeyNames.KeyVault]}.vault.azure.net/"),
             new DefaultAzureCredential());
@@ -71,6 +72,7 @@ builder.Services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();
 builder.Services.AddTransient<IErrorService, ErrorService>();
 builder.Services.AddTransient<IBggService, BggService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
+builder.Services.AddTransient<IDateTimeService, DateTimeService>();
 
 builder.Services.AddHttpClient<IBggService, BggService>(client =>
 {

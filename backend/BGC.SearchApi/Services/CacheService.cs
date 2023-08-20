@@ -19,6 +19,7 @@ namespace BGC.SearchApi.Services
 
         private readonly ServiceBusClient _client;
         private readonly ServiceBusSender _sender;
+        private readonly IOptions<CacheSettings> _cacheSettings;
         private readonly ILogger<CacheService> _logger;
 
         /// <summary>
@@ -34,8 +35,12 @@ namespace BGC.SearchApi.Services
             };
             _client = new ServiceBusClient(cacheSettings.Value.SendConnectionString, clientOptions);
             _sender = _client.CreateSender(cacheSettings.Value.QueueName);
+            _cacheSettings = cacheSettings;
             _logger = logger;
         }
+
+        /// <inheritdoc />
+        public int CacheExpirationInMinutes => _cacheSettings.Value.CacheExpirationInMinutes;
 
         /// <inheritdoc />
         public async Task Add(IEnumerable<string> boardGameIds)

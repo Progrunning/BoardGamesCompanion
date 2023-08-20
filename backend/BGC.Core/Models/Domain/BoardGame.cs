@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace BGC.Core.Models.Domain
 {
@@ -43,6 +44,7 @@ namespace BGC.Core.Models.Domain
 
         public string? Url { get; init; }
 
+        [BsonRepresentation(BsonType.DateTime)]
         public DateTimeOffset? LastUpdated { get; init; }
 
         /// <summary>

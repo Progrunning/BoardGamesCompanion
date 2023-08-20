@@ -17,6 +17,7 @@ public class SearchServiceTests
     private readonly Mock<IBggService> _mockBggService;
     private readonly Mock<IBoardGamesRepository> _mockBoardGamesRepository;
     private readonly Mock<ICacheService> _mockCacheService;
+    private readonly Mock<IDateTimeService> _mockDateTimeService;
 
     private readonly SearchService searchService;
 
@@ -26,8 +27,9 @@ public class SearchServiceTests
         _mockBggService = new Mock<IBggService>();
         _mockBoardGamesRepository = new Mock<IBoardGamesRepository>();
         _mockCacheService = new Mock<ICacheService>();
+        _mockDateTimeService = new Mock<IDateTimeService>();
 
-        searchService = new SearchService(_mockLogger.Object, _mockBggService.Object, _mockBoardGamesRepository.Object, _mockCacheService.Object);
+        searchService = new SearchService(_mockLogger.Object, _mockBggService.Object, _mockBoardGamesRepository.Object, _mockCacheService.Object, _mockDateTimeService.Object);
     }
 
     [Fact]
@@ -180,5 +182,78 @@ public class SearchServiceTests
 
         var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
         _mockCacheService.Verify(service => service.Add(It.Is<IEnumerable<string>>(boardGames => boardGames.Contains(newBoardGameId))), Times.Once);
+    }
+
+    [Fact]
+    public async Task Search_BoardGamesNotUpdatedBefore_UpdatesCache()
+    {
+        var searchQuery = "Scythe";
+        var cachedBoardGameId = 1238;
+        var newBoardGameId = 82374;
+        var bggSearchResposne = new BoardGameSearchResponseDto()
+        {
+            BoardGames = new[]
+            {
+                new BoardGameSearchItemDto()
+                {
+                    Id = cachedBoardGameId,
+                    Name = new BoardGameSearchItemNameDto() { Value = "Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 1987 },
+                },
+            },
+        };
+        var cachedBoardGames = new List<BoardGame>()
+        {
+            new BoardGame()
+            {
+                Id = cachedBoardGameId.ToString(),
+                LastUpdated = null,
+            },
+        };
+        _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(bggSearchResposne);
+        _mockBoardGamesRepository.Setup(repository => repository.GetBoardGames(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(cachedBoardGames);
+
+        var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
+        _mockCacheService.Verify(service => service.Add(It.Is<IEnumerable<string>>(boardGames => boardGames.Contains(newBoardGameId.ToString()))), Times.Never);
+        _mockCacheService.Verify(service => service.Update(It.Is<IEnumerable<string>>(boardGames => boardGames.Contains(cachedBoardGameId.ToString()))), Times.Once);
+    }
+
+    [Fact]
+    public async Task Search_BoardGamesCacheExpired_UpdatesCache()
+    {
+        var searchQuery = "Scythe";
+        var cachedBoardGameId = 1238;
+        var newBoardGameId = 82374;
+        var utcNow = DateTimeOffset.UtcNow;
+        var cacheExpirationTimeInMinutes = 10;
+        var eleventMinutesAgo = utcNow.AddMinutes(-(cacheExpirationTimeInMinutes + 1));
+        var bggSearchResposne = new BoardGameSearchResponseDto()
+        {
+            BoardGames = new[]
+            {
+                new BoardGameSearchItemDto()
+                {
+                    Id = cachedBoardGameId,
+                    Name = new BoardGameSearchItemNameDto() { Value = "Scythe" },
+                    YearPublished = new YearPublishedDto() { Value = 1987 },
+                },
+            },
+        };
+        var cachedBoardGames = new List<BoardGame>()
+        {
+            new BoardGame()
+            {
+                Id = cachedBoardGameId.ToString(),
+                LastUpdated = eleventMinutesAgo,
+            },
+        };
+        _mockBggService.Setup(service => service.Search(searchQuery, It.IsAny<CancellationToken>())).ReturnsAsync(bggSearchResposne);
+        _mockBoardGamesRepository.Setup(repository => repository.GetBoardGames(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(cachedBoardGames);
+        _mockCacheService.Setup(service => service.CacheExpirationInMinutes).Returns(cacheExpirationTimeInMinutes);
+        _mockDateTimeService.Setup(service => service.UtcOffsetNow).Returns(utcNow);
+
+        var searchResults = await searchService.Search(searchQuery, CancellationToken.None);
+        _mockCacheService.Verify(service => service.Add(It.Is<IEnumerable<string>>(boardGames => boardGames.Contains(newBoardGameId.ToString()))), Times.Never);
+        _mockCacheService.Verify(service => service.Update(It.Is<IEnumerable<string>>(boardGames => boardGames.Contains(cachedBoardGameId.ToString()))), Times.Once);
     }
 }

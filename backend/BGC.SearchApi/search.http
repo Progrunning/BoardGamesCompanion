@@ -1,7 +1,7 @@
 @hostname=localhost
 @port=7226
 
-GET https://{{hostname}}:{{port}}/api/search?query=scythe
+GET https://{{hostname}}:{{port}}/api/search?query=wingspan
 X-Api-Key: whatever
 
 ###
