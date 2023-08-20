@@ -21,17 +21,17 @@ namespace BGC.Core.Extensions
             switch (linkDtoType)
             {
                 case LinkDtoType.Artist:
-                    return "boardgameartist";
+                    return Constants.BggApi.NamedEntities.Artists;
                 case LinkDtoType.Publisher:
-                    return "boardgamepublisher";
+                    return Constants.BggApi.NamedEntities.Publisher;
                 case LinkDtoType.Category:
-                    return "boardgamecategory";
+                    return Constants.BggApi.NamedEntities.Category;
                 case LinkDtoType.Mechanic:
-                    return "boardgamemechanic";
+                    return Constants.BggApi.NamedEntities.Mechanic;
                 case LinkDtoType.Designer:
-                    return "boardgamedesigner";
+                    return Constants.BggApi.NamedEntities.Designer;
                 case LinkDtoType.Expansion:
-                    return "boardgameexpansion";
+                    return Constants.BggApi.NamedEntities.Expansion;
             }
 
             return null;
