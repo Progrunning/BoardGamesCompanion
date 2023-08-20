@@ -34,6 +34,8 @@ jobs:
       - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
         parameters:
           pathToProjects: "**/BGC.@(Core|SearchApi).UnitTests.csproj"
+          # Excluding all the models as they shouldn't have any or much logic
+          excludeFilterExpression: "[*]BGC.Core.Models.*"
 
       - task: Docker@2
         condition: and(succeeded(), eq(variables.isPR, 'false'))
