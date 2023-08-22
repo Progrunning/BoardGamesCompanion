@@ -45,5 +45,6 @@ jobs:
           containerRegistry: bgc-acr
           repository: bgc
           tags: "$(Build.BuildId)"
+          buildContext: backend/
           dockerfile: backend/BGC.SearchApi/dockerfile
           addPipelineData: true
