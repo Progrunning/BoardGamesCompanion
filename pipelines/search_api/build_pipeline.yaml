@@ -15,6 +15,7 @@ pool:
 
 parameters:
   - name: checkTestCoverage
+    displayName: Check test coverage?
     default: true
     type: boolean
 
@@ -26,11 +27,13 @@ jobs:
     displayName: CI
     steps:
       - task: UseDotNet@2
+        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Install .NET 7.x SDK"
         inputs:
           version: 7.x
 
       - task: DotNetCoreCLI@2
+        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Build Search API"
         inputs:
           projects: "**/BGC.SearchApi.csproj"
@@ -38,7 +41,6 @@ jobs:
 
       - ${{ if eq('${{ parameters.checkTestCoverage }}', true) }}:
           - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
-            condition:
             parameters:
               pathToProjects: "**/BGC.@(Core|SearchApi).UnitTests.csproj"
               # Excluding all the models as they shouldn't have any or much logic
