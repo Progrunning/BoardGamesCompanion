@@ -34,7 +34,7 @@ steps:
     parameters:
       pathToProjects: "**/BGC.@(Core|Functions).UnitTests.csproj"
       # Excluding all the models as they shouldn't have any or much logic
-      excludeFilterExpression: "[*]BGC.Core.Models.*"
+      excludeFilterExpression: "[*]BGC.Core.Models.*,[*.UnitTests]*"
 
   - task: DotNetCoreCLI@2
     displayName: Publish
