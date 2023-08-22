@@ -33,8 +33,7 @@ steps:
   - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
     parameters:
       pathToProjects: "**/BGC.@(Core|Functions).UnitTests.csproj"
-      # Excluding all the models as they shouldn't have any or much logic
-      excludeFilterExpression: "[*]BGC.Core.Models.*,[*.UnitTests]*"
+      excludeFilterExpression: "[*]BGC.Core.Models.*,[*.UnitTests]*,[BGC.Tests.Core]*,[BGC.Functions]Program"
 
   - task: DotNetCoreCLI@2
     displayName: Publish
