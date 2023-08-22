@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../board_game_type.dart';
+import 'board_game_summary_price_dto.dart';
 
 part 'board_game_search_dto.freezed.dart';
 part 'board_game_search_dto.g.dart';
@@ -11,7 +12,9 @@ class BoardGameSearchResultDto with _$BoardGameSearchResultDto {
     required String id,
     required String name,
     required int yearPublished,
-    @Default(BoardGameType.boardGame) BoardGameType type,
+    @Default(BoardGameType.boardGame)
+    @JsonKey(unknownEnumValue: BoardGameType.boardGame)
+        BoardGameType type,
     String? imageUrl,
     String? thumbnailUrl,
     String? description,
@@ -21,6 +24,7 @@ class BoardGameSearchResultDto with _$BoardGameSearchResultDto {
     int? maxPlaytimeInMinutes,
     double? complexity,
     int? rank,
+    List<BoardGameSummaryPriceDto>? prices,
   }) = _BoardGameSearchResultDto;
 
   const BoardGameSearchResultDto._();

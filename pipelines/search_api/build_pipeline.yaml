@@ -1,3 +1,4 @@
+# TODO Add API version (define in variables)
 name: $(Build.BuildId)
 
 trigger:

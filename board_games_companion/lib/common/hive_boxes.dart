@@ -54,4 +54,5 @@ class HiveBoxes {
   static const gameClassificationTypeId = 20;
   static const noScoreGameResultTypeId = 21;
   static const cooperativeGameResultTypeId = 22;
+  static const boardGamePrices = 23;
 }

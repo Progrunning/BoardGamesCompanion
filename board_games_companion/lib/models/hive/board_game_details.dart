@@ -15,6 +15,7 @@ import 'board_game_artist.dart';
 import 'board_game_category.dart';
 import 'board_game_designer.dart';
 import 'board_game_expansion.dart';
+import 'board_game_prices.dart';
 import 'board_game_publisher.dart';
 import 'board_game_rank.dart';
 import 'board_game_settings.dart';
@@ -64,6 +65,9 @@ class BoardGameDetails with _$BoardGameDetails {
     @HiveField(27) bool? isBggSynced,
     @HiveField(28) BoardGameSettings? settings,
     @Default(false) @HiveField(29, defaultValue: false) bool isCreatedByUser,
+    @Default(<BoardGamePrices>[])
+    @HiveField(30, defaultValue: <BoardGamePrices>[])
+        List<BoardGamePrices> prices,
   }) = _BoardGameDetails;
 
   const BoardGameDetails._();
@@ -83,6 +87,15 @@ class BoardGameDetails with _$BoardGameDetails {
         rank: searchResult.rank,
         avgWeight: searchResult.complexity,
         isExpansion: searchResult.type == BoardGameType.expansion,
+        prices: searchResult.prices
+                ?.map((price) => BoardGamePrices(
+                      region: price.region,
+                      websiteUrl: price.websiteUrl,
+                      lowest: price.lowestPrice,
+                      lowestStoreName: price.lowestPriceStoreName,
+                    ))
+                .toList() ??
+            [],
       );
 
   RegExp get onlyLettersOrNumbersRegex => RegExp(r'[a-zA-Z0-9\-]+');
