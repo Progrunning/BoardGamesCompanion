@@ -23,7 +23,7 @@ public record BoardGameSummaryDto
     public int YearPublished { get; init; }
 
     /// <summary>
-    /// Type of the board game (e.g. BoardGame or BoardGameExpansion).
+    /// Gets or sets type of the board game (e.g. BoardGame or BoardGameExpansion).
     /// </summary>
     public string Type { get; set; } = null!;
 
@@ -46,7 +46,7 @@ public record BoardGameSummaryDto
     public int? Rank { get; set; }
 
     /// <summary>
-    /// Game prices.
+    /// Gets or sets game prices.
     /// </summary>
-    public IReadOnlyCollection<BoardGameSummaryPriceDto> Prices { get; set; }
+    public IReadOnlyCollection<BoardGameSummaryPriceDto> Prices { get; set; } = Array.Empty<BoardGameSummaryPriceDto>();
 }
