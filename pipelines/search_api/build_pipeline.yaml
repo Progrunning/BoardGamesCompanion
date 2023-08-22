@@ -13,6 +13,11 @@ pool:
   workspace:
     clean: all
 
+parameters:
+  - name: checkTestCoverage
+    default: true
+    type: boolean
+
 variables:
   isPR: $[in(variables['Build.Reason'], 'PullRequest')]
 
@@ -32,6 +37,7 @@ jobs:
           arguments: "--output publish_output --configuration Release"
 
       - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
+        condition: eq('${{ parameters.checkTestCoverage }}', true)
         parameters:
           pathToProjects: "**/BGC.@(Core|SearchApi).UnitTests.csproj"
           # Excluding all the models as they shouldn't have any or much logic

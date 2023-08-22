@@ -1,9 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
+COPY . .
+RUN ls
+
 WORKDIR /source
 COPY BGC.SearchApi/*.csproj ./
 COPY BGC.Core/*.csproj ./BGC.Core/
 
-RUN ls
 RUN dotnet restore
 
 COPY . ./
