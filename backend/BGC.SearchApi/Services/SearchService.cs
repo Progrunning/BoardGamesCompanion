@@ -79,6 +79,7 @@ public class SearchService : ISearchService
                     continue;
                 }
 
+                boardGame.LastUpdated = boardGameDetails.LastUpdated;
                 boardGame.Type = boardGameDetails.Type;
                 boardGame.Description = boardGameDetails.Description;
                 boardGame.ImageUrl = boardGameDetails.ImageUrl;

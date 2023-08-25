@@ -1,7 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'dart:io';
-
 import 'package:board_games_companion/models/api/board_game_type.dart';
 import 'package:board_games_companion/models/api/search/board_game_search_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -87,6 +85,7 @@ class BoardGameDetails with _$BoardGameDetails {
         rank: searchResult.rank,
         avgWeight: searchResult.complexity,
         isExpansion: searchResult.type == BoardGameType.expansion,
+        lastModified: searchResult.lastUpdated,
         prices: searchResult.prices
                 ?.map((price) => BoardGamePrices(
                       region: price.region,
@@ -198,18 +197,13 @@ class BoardGameDetails with _$BoardGameDetails {
 
   String get bggHotForumUrl => '$bggOverviewUrl/forums/0?sort=hot';
 
-  String get boardGameOraclePriceUrl {
-    final String currentCulture = Platform.localeName.replaceFirst('_', '-');
-    if (!Constants.boardGameOracleSupportedCultureNames.contains(currentCulture) ||
-        currentCulture == Constants.boardGameOracleUsaCultureName) {
-      return '${Constants.boardGameOracleBaseUrl}boardgame/price/$_boardGameOracleUrlEncodedName';
-    }
-
-    return '${Constants.boardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
-  }
-
   bool get hasGeneralInfoDefined =>
       minPlayers != null || minPlaytime != null || minAge != null || avgWeight != null;
+
+  Map<String, BoardGamePrices> get pricesByRegion =>
+      {for (var price in prices) price.region.toLowerCase(): price};
+
+  bool hasPricesForRegion(String? countryCode) => pricesByRegion[countryCode] != null;
 
   String get _baseBggBoardGameUrl => '${Constants.boardGameGeekBaseUrl}boardgame';
 
@@ -219,15 +213,6 @@ class BoardGameDetails with _$BoardGameDetails {
       final String trimmedAndLoweredPart = part.trim();
       return !bggNotUsedUrlEncodedNameParts.contains(trimmedAndLoweredPart);
     }).map((part) {
-      final String trimmedAndLoweredPart = part.trim();
-      final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
-      return regexMatch;
-    }).join('-');
-  }
-
-  String get _boardGameOracleUrlEncodedName {
-    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
-    return spaceSeparatedNameParts.map((part) {
       final String trimmedAndLoweredPart = part.trim();
       final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
       return regexMatch;

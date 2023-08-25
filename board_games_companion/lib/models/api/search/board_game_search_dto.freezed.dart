@@ -35,6 +35,7 @@ mixin _$BoardGameSearchResultDto {
   int? get maxPlaytimeInMinutes => throw _privateConstructorUsedError;
   double? get complexity => throw _privateConstructorUsedError;
   int? get rank => throw _privateConstructorUsedError;
+  DateTime? get lastUpdated => throw _privateConstructorUsedError;
   List<BoardGameSummaryPriceDto>? get prices =>
       throw _privateConstructorUsedError;
 
@@ -64,6 +65,7 @@ abstract class $BoardGameSearchResultDtoCopyWith<$Res> {
       int? maxPlaytimeInMinutes,
       double? complexity,
       int? rank,
+      DateTime? lastUpdated,
       List<BoardGameSummaryPriceDto>? prices});
 }
 
@@ -94,6 +96,7 @@ class _$BoardGameSearchResultDtoCopyWithImpl<$Res,
     Object? maxPlaytimeInMinutes = freezed,
     Object? complexity = freezed,
     Object? rank = freezed,
+    Object? lastUpdated = freezed,
     Object? prices = freezed,
   }) {
     return _then(_value.copyWith(
@@ -149,6 +152,10 @@ class _$BoardGameSearchResultDtoCopyWithImpl<$Res,
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as int?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       prices: freezed == prices
           ? _value.prices
           : prices // ignore: cast_nullable_to_non_nullable
@@ -180,6 +187,7 @@ abstract class _$$_BoardGameSearchResultDtoCopyWith<$Res>
       int? maxPlaytimeInMinutes,
       double? complexity,
       int? rank,
+      DateTime? lastUpdated,
       List<BoardGameSummaryPriceDto>? prices});
 }
 
@@ -208,6 +216,7 @@ class __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>
     Object? maxPlaytimeInMinutes = freezed,
     Object? complexity = freezed,
     Object? rank = freezed,
+    Object? lastUpdated = freezed,
     Object? prices = freezed,
   }) {
     return _then(_$_BoardGameSearchResultDto(
@@ -263,6 +272,10 @@ class __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as int?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       prices: freezed == prices
           ? _value._prices
           : prices // ignore: cast_nullable_to_non_nullable
@@ -289,6 +302,7 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
       this.maxPlaytimeInMinutes,
       this.complexity,
       this.rank,
+      this.lastUpdated,
       final List<BoardGameSummaryPriceDto>? prices})
       : _prices = prices,
         super._();
@@ -323,6 +337,8 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
   final double? complexity;
   @override
   final int? rank;
+  @override
+  final DateTime? lastUpdated;
   final List<BoardGameSummaryPriceDto>? _prices;
   @override
   List<BoardGameSummaryPriceDto>? get prices {
@@ -335,7 +351,7 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
 
   @override
   String toString() {
-    return 'BoardGameSearchResultDto(id: $id, name: $name, yearPublished: $yearPublished, type: $type, imageUrl: $imageUrl, thumbnailUrl: $thumbnailUrl, description: $description, minNumberOfPlayers: $minNumberOfPlayers, maxNumberOfPlayers: $maxNumberOfPlayers, minPlaytimeInMinutes: $minPlaytimeInMinutes, maxPlaytimeInMinutes: $maxPlaytimeInMinutes, complexity: $complexity, rank: $rank, prices: $prices)';
+    return 'BoardGameSearchResultDto(id: $id, name: $name, yearPublished: $yearPublished, type: $type, imageUrl: $imageUrl, thumbnailUrl: $thumbnailUrl, description: $description, minNumberOfPlayers: $minNumberOfPlayers, maxNumberOfPlayers: $maxNumberOfPlayers, minPlaytimeInMinutes: $minPlaytimeInMinutes, maxPlaytimeInMinutes: $maxPlaytimeInMinutes, complexity: $complexity, rank: $rank, lastUpdated: $lastUpdated, prices: $prices)';
   }
 
   @override
@@ -365,6 +381,8 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
             (identical(other.complexity, complexity) ||
                 other.complexity == complexity) &&
             (identical(other.rank, rank) || other.rank == rank) &&
+            (identical(other.lastUpdated, lastUpdated) ||
+                other.lastUpdated == lastUpdated) &&
             const DeepCollectionEquality().equals(other._prices, _prices));
   }
 
@@ -385,6 +403,7 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
       maxPlaytimeInMinutes,
       complexity,
       rank,
+      lastUpdated,
       const DeepCollectionEquality().hash(_prices));
 
   @JsonKey(ignore: true)
@@ -418,6 +437,7 @@ abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
           final int? maxPlaytimeInMinutes,
           final double? complexity,
           final int? rank,
+          final DateTime? lastUpdated,
           final List<BoardGameSummaryPriceDto>? prices}) =
       _$_BoardGameSearchResultDto;
   const _BoardGameSearchResultDto._() : super._();
@@ -452,6 +472,8 @@ abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   double? get complexity;
   @override
   int? get rank;
+  @override
+  DateTime? get lastUpdated;
   @override
   List<BoardGameSummaryPriceDto>? get prices;
   @override

@@ -208,16 +208,13 @@ abstract class _HomeViewModelBase with Store {
 
     final searchResultBoardGames = await _searchBoardGamesOperation!.value;
     for (final searchResultBoardGame in searchResultBoardGames) {
-      // Enrich game details, if game details are available.
-      // Otherwise add the game to the store.
       final boardGameDetails = BoardGameDetails.fromSearchResult(searchResultBoardGame);
-      if (_boardGamesStore.allBoardGamesMap.containsKey(boardGameDetails.id)) {
-        _searchResults.add(_boardGamesStore.allBoardGamesMap[boardGameDetails.id]!);
-        continue;
-      }
-
-      await _boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
       _searchResults.add(boardGameDetails);
+
+      // Add the game to the store if not present
+      if (!_boardGamesStore.allBoardGamesMap.containsKey(boardGameDetails.id)) {
+        await _boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
+      }
     }
 
     _previousSearchQuery = _searchQuery;

@@ -46,6 +46,11 @@ public record BoardGameSummaryDto
     public int? Rank { get; set; }
 
     /// <summary>
+    /// Gets or sets the date of when the game was last updated.
+    /// </summary>
+    public DateTimeOffset? LastUpdated { get; set; }
+
+    /// <summary>
     /// Gets or sets game prices.
     /// </summary>
     public IReadOnlyCollection<BoardGameSummaryPriceDto> Prices { get; set; } = Array.Empty<BoardGameSummaryPriceDto>();

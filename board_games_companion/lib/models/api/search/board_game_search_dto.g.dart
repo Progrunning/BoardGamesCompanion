@@ -24,6 +24,9 @@ _$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
       maxPlaytimeInMinutes: json['maxPlaytimeInMinutes'] as int?,
       complexity: (json['complexity'] as num?)?.toDouble(),
       rank: json['rank'] as int?,
+      lastUpdated: json['lastUpdated'] == null
+          ? null
+          : DateTime.parse(json['lastUpdated'] as String),
       prices: (json['prices'] as List<dynamic>?)
           ?.map((e) =>
               BoardGameSummaryPriceDto.fromJson(e as Map<String, dynamic>))
@@ -46,6 +49,7 @@ Map<String, dynamic> _$$_BoardGameSearchResultDtoToJson(
       'maxPlaytimeInMinutes': instance.maxPlaytimeInMinutes,
       'complexity': instance.complexity,
       'rank': instance.rank,
+      'lastUpdated': instance.lastUpdated?.toIso8601String(),
       'prices': instance.prices,
     };
 

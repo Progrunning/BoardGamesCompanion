@@ -1,5 +1,7 @@
+import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
@@ -366,6 +368,9 @@ class _SearchResultGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final countryCode = locale.countryCode?.toLowerCase();
+    final currencyFormat = NumberFormat.simpleCurrency(locale: locale.toString());
     return Padding(
       padding: EdgeInsets.only(
         top: isFirstItem ? Dimensions.standardSpacing : 0,
@@ -385,12 +390,30 @@ class _SearchResultGame extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: Dimensions.collectionSearchResultBoardGameImageHeight,
-                        width: Dimensions.collectionSearchResultBoardGameImageWidth,
-                        child: BoardGameTile(
-                          id: boardGame.id,
-                          imageUrl: boardGame.imageUrl ?? '',
+                      // TODO Change where this is done as this is only test
+                      InkWell(
+                        onTap: () => LauncherHelper.launchUri(
+                          context,
+                          boardGame.pricesByRegion[countryCode]!.websiteUrl,
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                              width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                              child: BoardGameTile(
+                                id: boardGame.id,
+                                imageUrl: boardGame.imageUrl ?? '',
+                              ),
+                            ),
+                            if (boardGame.hasPricesForRegion(countryCode)) ...[
+                              const SizedBox(height: Dimensions.halfStandardSpacing),
+                              Text(currencyFormat
+                                  .format(boardGame.pricesByRegion[countryCode]!.lowest)),
+                              if (boardGame.pricesByRegion[countryCode]!.lowestStoreName != null)
+                                Text(boardGame.pricesByRegion[countryCode]!.lowestStoreName!),
+                            ],
+                          ],
                         ),
                       ),
                       const SizedBox(width: Dimensions.standardSpacing),
