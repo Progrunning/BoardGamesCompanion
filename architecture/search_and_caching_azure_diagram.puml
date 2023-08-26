@@ -1,0 +1,58 @@
+# 
+# Azure PUML github repo https://github.com/plantuml-stdlib/Azure-PlantUML
+#
+
+@startuml azure_architecture
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/release/2-2/dist
+
+!includeurl AzurePuml/AzureCommon.puml
+!includeurl AzurePuml/Web/AzureAPIManagement.puml
+!includeurl AzurePuml/Databases/AzureCosmosDb.puml
+!includeurl AzurePuml/DevOps/AzureApplicationInsights.puml
+!includeurl AzurePuml/Containers/AzureContainerApp.puml
+!includeurl AzurePuml/Compute/AzureFunction.puml
+!includeurl AzurePuml/Integration/AzureServiceBusQueue.puml
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!includeurl AzurePuml/AzureC4Integration.puml
+!include FONTAWESOME/users.puml
+
+Person(user, "User", "Board game enthusiast creating their collection or searching for a game to buy", $sprite="users")
+System_Ext(bggApi, "BGG Api", "Stores all of the board games detail information")
+System_Ext(boardGameOracleApi, "Board Game Oracle Api", "Stores current and historical pricing information about board games in different countries")
+
+System_Boundary(shared, "Resource Group (bgc-shared-rg)") {    
+    AzureCosmosDb(mongoDb, "Board Games Database (bgc-games-mongodb)", "MongoDB", "Stores board game details")
+    AzureAPIManagement(apim, "Gateway (bgc-shared-apim)", "APIM", "Gateway for all API calls")
+    AzureApplicationInsights(apimApplicationInsights, "Application Insights (bgc-shared-apim-appi)", "Application Insights", "Gathers insights from the APIM")
+}
+
+System_Boundary(environment, "Resource Group (bgc-<env>-rg)") {
+    System_Boundary(appsEnvironment, "Container Apps Environment (bgc-<env>-cae)") {
+        AzureContainerApp(searchApiContainerApp, "Search Api (bgc-search-service-<env>-ca)", ".NET 7 Linux", "Search board games Api")
+    }
+    AzureApplicationInsights(serachServiceApplicationInsights, "Application Insights (bgc-search-service-<env>-appi)", "Application Insights", "Gathers insights from the Search Api")
+    AzureFunction(updateCacheFunction, "Update cache function (bgc-<env>-func)", "Azure Function", "Processes messages for board games to cache")
+    AzureServiceBusQueue(updateCacheServiceBusQueue, "Update cache queue (bgc-cache-service-bus-<evn>-sbns)", "Service Bus Queue", "Queue that holds messages about board games to cache")
+}
+
+Rel_D(user, apim, "GET /search")
+Rel_R(apim, apimApplicationInsights,  "Capture request insights")
+Rel_R(apim, searchApiContainerApp, "GET /search")
+Rel_R(searchApiContainerApp, serachServiceApplicationInsights, "Captures search Api insights")
+BiRel_L(searchApiContainerApp, mongoDb, "Retrieve board game details")
+Rel_D(searchApiContainerApp, updateCacheServiceBusQueue, "Captures search Api insights")
+Rel_U(updateCacheFunction, updateCacheServiceBusQueue, "Reads message from")
+Rel(updateCacheFunction, mongoDb, "Update board game details in cache")
+Rel_D(updateCacheFunction, bggApi, "Retrieve latest board game details")
+Rel_D(updateCacheFunction, boardGameOracleApi, "Retrieve latest board game prices")
+
+LAYOUT_WITH_LEGEND()
+
+C4VersionDetails()
+
+@enduml

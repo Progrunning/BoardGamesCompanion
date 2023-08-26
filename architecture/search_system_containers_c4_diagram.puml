@@ -12,7 +12,7 @@ Person(user, "User", "Board game enthusiast creating their collection or searchi
 System_Ext(bggApi, "BGG Api", "Stores all of the board games detail information")
 System_Ext(boardGameOracleApi, "Board Game Oracle Api", "Stores current and historical pricing information about board games in different countries")
 
-System_Boundary(c1, "Search System"){
+System_Boundary(c1, "Search System") {
     Container(mobile, "Mobile Application", "Dart, Flutter", "Provies all of the BGC System functionality to the users via the mobile application")
     Container(searchService, "Search microservice", "ASP.NET Core", "Provides the BGC Search functionality via JSON/HTTPs API", $tags="microService")
     ContainerDb(nosql, "NoSQL Data Store", "MongoDB", "Database storing all of the board games information", $tags="storage")
