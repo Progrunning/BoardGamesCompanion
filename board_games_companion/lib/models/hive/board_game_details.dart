@@ -205,6 +205,9 @@ class BoardGameDetails with _$BoardGameDetails {
 
   bool hasPricesForRegion(String? countryCode) => pricesByRegion[countryCode] != null;
 
+  bool hasLowestPricesForRegion(String? countryCode) =>
+      hasPricesForRegion(countryCode) && pricesByRegion[countryCode]!.lowest != null;
+
   String get _baseBggBoardGameUrl => '${Constants.boardGameGeekBaseUrl}boardgame';
 
   String get _bggUrlEncodedName {

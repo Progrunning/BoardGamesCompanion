@@ -122,6 +122,7 @@ class AppText {
   static const searchBoardGamesSearchBarHint = 'Search...';
   static const searchBoardGamesSearchRetry = 'Retry';
   static const searchBoardGamesCreateGame = 'Create game';
+  static const searchBoardGamesPriceUpdatedAtFormat = 'Updated %s';
 
   static const searchBoardGamesErrorTitle = 'Sorry, we ran into a problem';
   static const searchBoardGamesTimeoutError =

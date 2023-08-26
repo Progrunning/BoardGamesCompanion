@@ -1,5 +1,6 @@
 import 'package:board_games_companion/utilities/launcher_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sprintf/sprintf.dart';
@@ -370,7 +371,6 @@ class _SearchResultGame extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context);
     final countryCode = locale.countryCode?.toLowerCase();
-    final currencyFormat = NumberFormat.simpleCurrency(locale: locale.toString());
     return Padding(
       padding: EdgeInsets.only(
         top: isFirstItem ? Dimensions.standardSpacing : 0,
@@ -390,30 +390,12 @@ class _SearchResultGame extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // TODO Change where this is done as this is only test
-                      InkWell(
-                        onTap: () => LauncherHelper.launchUri(
-                          context,
-                          boardGame.pricesByRegion[countryCode]!.websiteUrl,
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: Dimensions.collectionSearchResultBoardGameImageHeight,
-                              width: Dimensions.collectionSearchResultBoardGameImageWidth,
-                              child: BoardGameTile(
-                                id: boardGame.id,
-                                imageUrl: boardGame.imageUrl ?? '',
-                              ),
-                            ),
-                            if (boardGame.hasPricesForRegion(countryCode)) ...[
-                              const SizedBox(height: Dimensions.halfStandardSpacing),
-                              Text(currencyFormat
-                                  .format(boardGame.pricesByRegion[countryCode]!.lowest)),
-                              if (boardGame.pricesByRegion[countryCode]!.lowestStoreName != null)
-                                Text(boardGame.pricesByRegion[countryCode]!.lowestStoreName!),
-                            ],
-                          ],
+                      SizedBox(
+                        height: Dimensions.collectionSearchResultBoardGameImageHeight,
+                        width: Dimensions.collectionSearchResultBoardGameImageWidth,
+                        child: BoardGameTile(
+                          id: boardGame.id,
+                          imageUrl: boardGame.imageUrl ?? '',
                         ),
                       ),
                       const SizedBox(width: Dimensions.standardSpacing),
@@ -421,11 +403,100 @@ class _SearchResultGame extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (boardGame.hasLowestPricesForRegion(countryCode))
+                  Builder(builder: (context) {
+                    final prices = boardGame.pricesByRegion[countryCode]!;
+                    return _SearchResultGamePrices(
+                      lowestPrice: prices.lowest!,
+                      lowestPriceStoreName: prices.lowestStoreName,
+                      pricesWebsiteUrl: prices.websiteUrl,
+                      updatedAt: boardGame.lastModified,
+                      currencyFormat: NumberFormat.simpleCurrency(locale: locale.toString()),
+                    );
+                  }),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SearchResultGamePrices extends StatelessWidget {
+  const _SearchResultGamePrices({
+    required this.lowestPrice,
+    required this.lowestPriceStoreName,
+    required this.pricesWebsiteUrl,
+    required this.updatedAt,
+    required this.currencyFormat,
+  });
+
+  final double lowestPrice;
+  final String? lowestPriceStoreName;
+  final String pricesWebsiteUrl;
+  final DateTime? updatedAt;
+  final NumberFormat currencyFormat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
+        const Divider(),
+        const SizedBox(height: Dimensions.standardSpacing),
+        InkWell(
+          onTap: () => LauncherHelper.launchUri(context, pricesWebsiteUrl),
+          child: Row(
+            children: [
+              Chip(
+                padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                backgroundColor: AppColors.accentColor,
+                label: Text(
+                  currencyFormat.format(lowestPrice),
+                  style: AppTheme.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              if (lowestPriceStoreName != null) ...[
+                const SizedBox(width: Dimensions.standardSpacing),
+                Expanded(
+                  child: Text(
+                    // TODO Move to AppText
+                    'at ${lowestPriceStoreName!}',
+                    style: AppTheme.theme.textTheme.bodyMedium!,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: Dimensions.standardSpacing),
+              ],
+              if (lowestPriceStoreName == null) const Expanded(child: SizedBox.shrink()),
+              Column(
+                children: [
+                  // TODO Move to AppText
+                  Text(
+                    'powered by',
+                    style: AppTheme.theme.textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: Dimensions.halfStandardSpacing),
+                  SvgPicture.asset(
+                    'assets/icons/boardgameoracle_logo_name.svg',
+                    height: 18,
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        // if (updatedAt != null) ...[
+        //   const Expanded(child: SizedBox.shrink()),
+        //   Text(
+        //     sprintf(AppText.searchBoardGamesPriceUpdatedAtFormat, [updatedAt!.toDaysAgo()]),
+        //     style: AppTheme.theme.textTheme.titleSmall,
+        //   ),
+        // ]
+      ],
     );
   }
 }

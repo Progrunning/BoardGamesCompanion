@@ -168,7 +168,7 @@ class AppTheme {
         displayLarge: displayLargeTextStyle,
         titleMedium: subtitleMediumTextStyle,
         titleSmall: originalSubtitleSmall.copyWith(
-          fontSize: Dimensions.extraLargeFontSize,
+          fontSize: Dimensions.extraSmallFontSize,
           color: AppColors.secondaryTextColor,
         ),
       ),
