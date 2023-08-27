@@ -382,11 +382,11 @@ class _SearchResultGame extends StatelessWidget {
         child: InkWell(
           borderRadius: AppTheme.defaultBorderRadius,
           onTap: () => onResultAction(boardGame, BoardGameResultActionType.details),
-          child: Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-            child: Column(
-              children: [
-                IntrinsicHeight(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                child: IntrinsicHeight(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -403,19 +403,19 @@ class _SearchResultGame extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (boardGame.hasLowestPricesForRegion(countryCode))
-                  Builder(builder: (context) {
-                    final prices = boardGame.pricesByRegion[countryCode]!;
-                    return _SearchResultGamePrices(
-                      lowestPrice: prices.lowest!,
-                      lowestPriceStoreName: prices.lowestStoreName,
-                      pricesWebsiteUrl: prices.websiteUrl,
-                      updatedAt: boardGame.lastModified,
-                      currencyFormat: NumberFormat.simpleCurrency(locale: locale.toString()),
-                    );
-                  }),
-              ],
-            ),
+              ),
+              if (boardGame.hasLowestPricesForRegion(countryCode))
+                Builder(builder: (context) {
+                  final prices = boardGame.pricesByRegion[countryCode]!;
+                  return _SearchResultGamePrices(
+                    lowestPrice: prices.lowest!,
+                    lowestPriceStoreName: prices.lowestStoreName,
+                    pricesWebsiteUrl: prices.websiteUrl,
+                    updatedAt: boardGame.lastModified,
+                    currencyFormat: NumberFormat.simpleCurrency(locale: locale.toString()),
+                  );
+                }),
+            ],
           ),
         ),
       ),
@@ -443,50 +443,63 @@ class _SearchResultGamePrices extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: Dimensions.doubleStandardSpacing),
-        const Divider(),
         const SizedBox(height: Dimensions.standardSpacing),
+        const Divider(
+          indent: Dimensions.standardSpacing,
+          endIndent: Dimensions.standardSpacing,
+        ),
         InkWell(
+          borderRadius: AppTheme.defaultBorderRadius.copyWith(
+            topLeft: Radius.zero,
+            topRight: Radius.zero,
+          ),
           onTap: () => LauncherHelper.launchUri(context, pricesWebsiteUrl),
-          child: Row(
-            children: [
-              Chip(
-                padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                backgroundColor: AppColors.accentColor,
-                label: Text(
-                  currencyFormat.format(lowestPrice),
-                  style: AppTheme.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              if (lowestPriceStoreName != null) ...[
-                const SizedBox(width: Dimensions.standardSpacing),
-                Expanded(
-                  child: Text(
-                    // TODO Move to AppText
-                    'at ${lowestPriceStoreName!}',
-                    style: AppTheme.theme.textTheme.bodyMedium!,
-                    overflow: TextOverflow.ellipsis,
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            child: Row(
+              children: [
+                Chip(
+                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                  backgroundColor: AppColors.accentColor,
+                  shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
+                  label: Text(
+                    currencyFormat.format(lowestPrice),
+                    style:
+                        AppTheme.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(width: Dimensions.standardSpacing),
-              ],
-              if (lowestPriceStoreName == null) const Expanded(child: SizedBox.shrink()),
-              Column(
-                children: [
-                  // TODO Move to AppText
-                  Text(
-                    'powered by',
-                    style: AppTheme.theme.textTheme.titleSmall,
+                if (lowestPriceStoreName != null) ...[
+                  const SizedBox(width: Dimensions.standardSpacing),
+                  Expanded(
+                    child: Text(
+                      sprintf(
+                        AppText.searchBoardGamesLowestPriceAtFormat,
+                        [lowestPriceStoreName!],
+                      ),
+                      style: AppTheme.theme.textTheme.bodyMedium!,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  const SizedBox(height: Dimensions.halfStandardSpacing),
-                  SvgPicture.asset(
-                    'assets/icons/boardgameoracle_logo_name.svg',
-                    height: 18,
-                    fit: BoxFit.cover,
-                  ),
+                  const SizedBox(width: Dimensions.standardSpacing),
                 ],
-              ),
-            ],
+                if (lowestPriceStoreName == null) const Expanded(child: SizedBox.shrink()),
+                Column(
+                  children: [
+                    // TODO Move to AppText
+                    Text(
+                      'powered by',
+                      style: AppTheme.theme.textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: Dimensions.halfStandardSpacing),
+                    SvgPicture.asset(
+                      'assets/icons/boardgameoracle_logo_name.svg',
+                      height: 18,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         // if (updatedAt != null) ...[
