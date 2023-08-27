@@ -39,7 +39,6 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
     required this.searchResultsStream,
     required this.onSortyByUpdate,
     required this.onQueryChanged,
-    required this.onRefresh,
   });
 
   static const int _maxSearchHistoryEntriesToShow = 10;
@@ -50,7 +49,6 @@ class BggSearch extends SearchDelegate<BggSearchResult?> {
   final BoardGameResultAction onResultAction;
   final void Function(SortBy) onSortyByUpdate;
   final void Function(String) onQueryChanged;
-  final VoidCallback onRefresh;
 
   @override
   ThemeData appBarTheme(BuildContext context) => AppTheme.theme.copyWith(

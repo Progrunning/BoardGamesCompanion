@@ -159,10 +159,6 @@ abstract class _HomeViewModelBase with Store {
   @action
   void updateBggSearchQuery(String query) => _searchQuery = query;
 
-  /// Refresh the results in the stream.
-  @action
-  void refreshSearchResults() => _searchBoardGames();
-
   ValueNotifier<bool> isSearchDialContextMenuOpen = ValueNotifier(false);
 
   Future<void> trackTabChange(int tabIndex) async {
@@ -228,7 +224,7 @@ abstract class _HomeViewModelBase with Store {
       parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: query},
     ));
 
-    await _searchStore.addOrUpdateScore(
+    await _searchStore.addOrUpdateEntry(
       SearchHistoryEntry(
         query: query,
         dateTime: DateTime.now().toUtc(),

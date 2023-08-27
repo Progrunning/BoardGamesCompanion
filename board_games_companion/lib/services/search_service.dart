@@ -8,7 +8,7 @@ import 'hive_base_service.dart';
 class SearchService extends BaseHiveService<SearchHistoryEntry, SearchService> {
   SearchService(super.hive);
 
-  Future<bool> addOrUpdateScore(SearchHistoryEntry searchHistoryEntry) async {
+  Future<bool> addOrUpdateEntry(SearchHistoryEntry searchHistoryEntry) async {
     if (!await ensureBoxOpen()) {
       return false;
     }

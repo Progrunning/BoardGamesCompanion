@@ -24,8 +24,8 @@ abstract class _SearchStore with Store {
       searchHistory = (await _searchService.retrieveSearchHistory()).asObservable();
 
   @action
-  Future<void> addOrUpdateScore(SearchHistoryEntry searchHistoryEntry) async {
-    final operationSucceeded = await _searchService.addOrUpdateScore(searchHistoryEntry);
+  Future<void> addOrUpdateEntry(SearchHistoryEntry searchHistoryEntry) async {
+    final operationSucceeded = await _searchService.addOrUpdateEntry(searchHistoryEntry);
     if (operationSucceeded) {
       final entryIndex = searchHistory
           .indexWhere((SearchHistoryEntry entry) => entry.query == searchHistoryEntry.query);

@@ -1,5 +1,6 @@
 import 'package:board_games_companion/pages/home/home_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../mocks/analytics_service_mock.dart';
 import '../mocks/app_store_mock.dart';
@@ -43,5 +44,15 @@ void main() {
       mockBoardGamesStore,
       mockBoardGamesSearchService,
     );
+  });
+
+  group('GIVEN searching for board games ', () {
+    test(
+        'WHEN bgg search query empty '
+        'THEN search is not triggered ', () {
+      homeViewModel.updateBggSearchQuery('');
+
+      verifyNever(() => mockBoardGamesSearchService.search(any()));
+    });
   });
 }
