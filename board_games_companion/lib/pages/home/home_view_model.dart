@@ -43,7 +43,7 @@ abstract class _HomeViewModelBase with Store {
     this.boardGamesFiltersStore,
     this.collectionsViewModel,
     this.hotBoardGamesViewModel,
-    this.playthroughsHistoryViewModel,
+    this.playsViewModel,
     this._appStore,
     this._searchStore,
     this._boardGamesStore,
@@ -66,7 +66,7 @@ abstract class _HomeViewModelBase with Store {
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final CollectionsViewModel collectionsViewModel;
   final HotBoardGamesViewModel hotBoardGamesViewModel;
-  final PlaysViewModel playthroughsHistoryViewModel;
+  final PlaysViewModel playsViewModel;
   final AppStore _appStore;
   final BoardGamesStore _boardGamesStore;
   final SearchStore _searchStore;
