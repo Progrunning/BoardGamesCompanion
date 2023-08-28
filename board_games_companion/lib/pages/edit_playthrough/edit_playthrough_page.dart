@@ -72,6 +72,8 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                         playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
                         onItemTapped: (PlayerScore playerScore) async =>
                             _editPlayerScore(playerScore, context),
+                        onReorder: (oldIndex, newIndex) =>
+                            widget.viewModel.reorderPlayerScores(oldIndex, newIndex),
                       ),
                     if (widget.viewModel.gameClassification == GameClassification.NoScore)
                       _NoScoreSection(
@@ -271,11 +273,13 @@ class _ScoresSection extends StatelessWidget {
     required this.playerScores,
     required this.playthroughDetailsId,
     required this.onItemTapped,
+    required this.onReorder,
   }) : super(key: key);
 
   final List<PlayerScore> playerScores;
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
+  final void Function(int oldIndex, int newIndex) onReorder;
 
   @override
   Widget build(BuildContext context) => MultiSliver(
@@ -290,22 +294,32 @@ class _ScoresSection extends StatelessWidget {
             builder: (_) {
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (_, index) {
-                      final int itemIndex = index ~/ 2;
-                      if (index.isEven) {
-                        return _PlayerScoreTile(
+                sliver: SliverReorderableList(
+                  itemBuilder: (_, index) {
+                    final int itemIndex = index ~/ 2;
+                    if (index.isEven) {
+                      return ReorderableDragStartListener(
+                        key: Key('PlayerScoreTile${playerScores[itemIndex].id}'),
+                        index: index,
+                        child: _PlayerScoreTile(
                           playerScore: playerScores[itemIndex],
                           playthroughDetailsId: playthroughDetailsId,
                           onItemTapped: onItemTapped,
-                        );
-                      }
+                        ),
+                      );
+                    }
 
-                      return const SizedBox(height: Dimensions.doubleStandardSpacing);
-                    },
-                    childCount: max(0, playerScores.length * 2 - 1),
-                  ),
+                    return SizedBox(
+                      key: Key('PlayerScoreSeparator${playerScores[itemIndex].id}'),
+                      height: Dimensions.doubleStandardSpacing,
+                    );
+                  },
+                  itemCount: max(0, playerScores.length * 2 - 1),
+                  onReorder: (int oldIndex, int newIndex) {
+                    final oldItemIndex = oldIndex ~/ 2;
+                    final newItemIndex = newIndex ~/ 2;
+                    onReorder(oldItemIndex, newItemIndex);
+                  },
                 ),
               );
             },
@@ -464,33 +478,36 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        final newScore = await widget.onItemTapped(widget.playerScore);
-        setState(() {
-          score = newScore;
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-        child: SizedBox(
-          height: Dimensions.smallPlayerAvatarSize.height,
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-                height: Dimensions.smallPlayerAvatarSize.height,
-                width: Dimensions.smallPlayerAvatarSize.width,
-                child: PlayerAvatar(
-                  player: widget.playerScore.player,
-                  avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                  playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () async {
+          final newScore = await widget.onItemTapped(widget.playerScore);
+          setState(() {
+            score = newScore;
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+          child: SizedBox(
+            height: Dimensions.smallPlayerAvatarSize.height,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  height: Dimensions.smallPlayerAvatarSize.height,
+                  width: Dimensions.smallPlayerAvatarSize.width,
+                  child: PlayerAvatar(
+                    player: widget.playerScore.player,
+                    avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                    playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
+                  ),
                 ),
-              ),
-              const SizedBox(width: Dimensions.standardSpacing),
-              Expanded(
-                child: _PlayerScore(score: score),
-              ),
-            ],
+                const SizedBox(width: Dimensions.standardSpacing),
+                Expanded(
+                  child: _PlayerScore(score: score),
+                ),
+              ],
+            ),
           ),
         ),
       ),

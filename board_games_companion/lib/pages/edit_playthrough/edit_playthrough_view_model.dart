@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:collection/collection.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
@@ -154,6 +155,19 @@ abstract class _EditPlaythoughViewModel with Store {
 
     _playthroughDetailsWorkingCopy =
         playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
+  }
+
+  @action
+  void reorderPlayerScores(int oldIndex, int newIndex) {
+    Fimber.d('OLD $oldIndex | NEW $newIndex');
+
+    final oldElement = playerScores[oldIndex];
+
+    playerScores[oldIndex] = playerScores[newIndex];
+    playerScores[newIndex] = oldElement;
+
+    // _playthroughDetailsWorkingCopy =
+    //     playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
   }
 
   @action
