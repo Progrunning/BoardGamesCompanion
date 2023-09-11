@@ -12,7 +12,7 @@ public static class BoardGameDetailsDtoExtensions
         {
             Id = boardGameDetailsDto.Id.ToString(),
             Name = boardGameDetailsDto.PrimaryName,
-            Type = boardGameDetailsDto.Type,
+            Type = RetrieveBoardGameDomainType(boardGameDetailsDto),
             Description = boardGameDetailsDto.Description,
             ThumbnailUrl = boardGameDetailsDto.ThumbnailUrl,
             ImageUrl = boardGameDetailsDto.ImageUrl,
@@ -38,5 +38,18 @@ public static class BoardGameDetailsDtoExtensions
 
             Prices = regionalPriceStatistics.ToDomain(),
         };
+    }
+
+    private static string RetrieveBoardGameDomainType(BoardGameDetailsDto boardGameDetailsDto)
+    {
+        switch (boardGameDetailsDto.Type.ToLowerInvariant())
+        {
+            case Constants.BggApi.BoardGameTypes.MainGame:
+                return Constants.Domain.BoardGameTypes.MainGame;
+            case Constants.BggApi.BoardGameTypes.Expansion:
+                return Constants.Domain.BoardGameTypes.Expansion;
+            default:
+                return Constants.Domain.BoardGameTypes.MainGame;
+        }
     }
 }
