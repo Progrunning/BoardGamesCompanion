@@ -6,8 +6,8 @@
         {
             public static class BoardGameTypes
             {
-                public const string MainGame = "boardgame";
-                public const string Expansion = "expansion";
+                public const string MainGame = "BoardGame";
+                public const string Expansion = "Expansion";
             }
         }
 
