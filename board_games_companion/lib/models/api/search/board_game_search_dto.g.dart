@@ -12,7 +12,8 @@ _$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
       id: json['id'] as String,
       name: json['name'] as String,
       yearPublished: json['yearPublished'] as int,
-      type: $enumDecodeNullable(_$BoardGameTypeEnumMap, json['type']) ??
+      type: $enumDecodeNullable(_$BoardGameTypeEnumMap, json['type'],
+              unknownValue: BoardGameType.boardGame) ??
           BoardGameType.boardGame,
       imageUrl: json['imageUrl'] as String?,
       thumbnailUrl: json['thumbnailUrl'] as String?,
@@ -23,6 +24,13 @@ _$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
       maxPlaytimeInMinutes: json['maxPlaytimeInMinutes'] as int?,
       complexity: (json['complexity'] as num?)?.toDouble(),
       rank: json['rank'] as int?,
+      lastUpdated: json['lastUpdated'] == null
+          ? null
+          : DateTime.parse(json['lastUpdated'] as String),
+      prices: (json['prices'] as List<dynamic>?)
+          ?.map((e) =>
+              BoardGameSummaryPriceDto.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$_BoardGameSearchResultDtoToJson(
@@ -41,6 +49,8 @@ Map<String, dynamic> _$$_BoardGameSearchResultDtoToJson(
       'maxPlaytimeInMinutes': instance.maxPlaytimeInMinutes,
       'complexity': instance.complexity,
       'rank': instance.rank,
+      'lastUpdated': instance.lastUpdated?.toIso8601String(),
+      'prices': instance.prices,
     };
 
 const _$BoardGameTypeEnumMap = {

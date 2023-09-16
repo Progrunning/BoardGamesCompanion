@@ -1,0 +1,113 @@
+resources:
+  pipelines:
+    - pipeline: Cache-Function-CI
+      source: "Cache Function CI"
+      trigger:
+        branches:
+          include:
+            - main
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-22.04
+  workspace:
+    clean: all
+
+parameters:
+  - name: buildId
+    displayName: Build ID
+    type: string
+    default: ""
+
+variables:
+  # General
+  cacheUpdateFunctionPipelineId: "22"
+  buildId: $[coalesce('${{ parameters.buildId }}', variables['resources.pipeline.Cache-Function-CI.runID'])]
+  functionsAppName: cache-update-function
+
+  # Dev
+  armServiceConnectionDev: bgc-dev
+  functionsAppNameDev: bgc-dev-func
+
+  # Prod
+  armServiceConnectionProd: bgc-prod
+  functionsAppNameProd: bgc-prod-func
+
+stages:
+  - stage: DEV
+    jobs:
+      - deployment: PublishFunctions
+        variables:
+          # Using already stored mongo db connection to avoid duplication
+          # The plan is to use AppConfiguration to retrieve this config
+          - group: BGC-SEARCH-API-DEV
+        environment: DEV
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+
+                - task: PowerShell@2
+                  displayName: Set build name
+                  inputs:
+                    targetType: "inline"
+                    script: |
+                      [string] $releaseName = "$(buildId)"
+                      Write-Host "Setting the name of the build to '$releaseName'."
+                      Write-Host "##vso[build.updatebuildnumber]$releaseName"
+
+                - task: DownloadPipelineArtifact@2
+                  displayName: "Download Artifacts"
+                  inputs:
+                    buildType: "specific"
+                    project: $(System.TeamProjectId)
+                    definition: $(cacheUpdateFunctionPipelineId)
+                    pipelineId: $(buildId)
+                    buildVersionToDownload: latest
+                    targetPath: "$(Pipeline.Workspace)"
+
+                - task: AzureFunctionApp@1
+                  displayName: "Deploy Functions"
+                  inputs:
+                    azureSubscription: $(armServiceConnectionDev)
+                    appType: "functionAppLinux"
+                    appName: "$(functionsAppNameDev)"
+                    package: "$(Pipeline.Workspace)/**/*.zip"
+                    appSettings: -MongoDbSettings__ConnectionString $(mongoDbConnectionString)
+
+  - stage: PROD
+    dependsOn:
+      - DEV
+    jobs:
+      - deployment: PublishFunctions
+        variables:
+          # Using already stored mongo db connection to avoid duplication
+          # The plan is to use AppConfiguration to retrieve this config
+          - group: BGC-SEARCH-API-PROD
+        environment: PROD
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+
+                - task: DownloadPipelineArtifact@2
+                  displayName: "Download Artifacts"
+                  inputs:
+                    buildType: "specific"
+                    project: $(System.TeamProjectId)
+                    definition: $(cacheUpdateFunctionPipelineId)
+                    pipelineId: $(buildId)
+                    buildVersionToDownload: latest
+                    targetPath: "$(Pipeline.Workspace)"
+
+                - task: AzureFunctionApp@1
+                  displayName: "Deploy Functions"
+                  inputs:
+                    azureSubscription: $(armServiceConnectionProd)
+                    appType: "functionAppLinux"
+                    appName: "$(functionsAppNameProd)"
+                    package: "$(Pipeline.Workspace)/**/*.zip"
+                    appSettings: -MongoDbSettings__ConnectionString $(mongoDbConnectionString)

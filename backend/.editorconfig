@@ -362,6 +362,14 @@ dotnet_naming_style.s_camelcase.required_suffix =
 dotnet_naming_style.s_camelcase.word_separator =
 dotnet_naming_style.s_camelcase.capitalization = camel_case
 
+# C#
+
+# missing switch case for named enum value
+dotnet_diagnostic.CS8509.severity = error 
+
+# missing switch case for unnamed enum value
+dotnet_diagnostic.CS8524.severity = none 
+
 # StyleCop
 
 # No need for a file header

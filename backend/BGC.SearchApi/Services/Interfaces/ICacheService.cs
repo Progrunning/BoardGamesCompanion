@@ -6,6 +6,11 @@
     public interface ICacheService
     {
         /// <summary>
+        /// Gets cache expiration in minutes.
+        /// </summary>
+        int CacheExpirationInMinutes { get; }
+
+        /// <summary>
         /// Adds a board game to cache.
         /// </summary>
         /// <param name="boardGameIds"></param>

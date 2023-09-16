@@ -43,7 +43,7 @@ abstract class _HomeViewModelBase with Store {
     this.boardGamesFiltersStore,
     this.collectionsViewModel,
     this.hotBoardGamesViewModel,
-    this.playthroughsHistoryViewModel,
+    this.playsViewModel,
     this._appStore,
     this._searchStore,
     this._boardGamesStore,
@@ -66,7 +66,7 @@ abstract class _HomeViewModelBase with Store {
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final CollectionsViewModel collectionsViewModel;
   final HotBoardGamesViewModel hotBoardGamesViewModel;
-  final PlaysViewModel playthroughsHistoryViewModel;
+  final PlaysViewModel playsViewModel;
   final AppStore _appStore;
   final BoardGamesStore _boardGamesStore;
   final SearchStore _searchStore;
@@ -159,10 +159,6 @@ abstract class _HomeViewModelBase with Store {
   @action
   void updateBggSearchQuery(String query) => _searchQuery = query;
 
-  /// Refresh the results in the stream.
-  @action
-  void refreshSearchResults() => _searchBoardGames();
-
   ValueNotifier<bool> isSearchDialContextMenuOpen = ValueNotifier(false);
 
   Future<void> trackTabChange(int tabIndex) async {
@@ -208,16 +204,13 @@ abstract class _HomeViewModelBase with Store {
 
     final searchResultBoardGames = await _searchBoardGamesOperation!.value;
     for (final searchResultBoardGame in searchResultBoardGames) {
-      // Enrich game details, if game details are available.
-      // Otherwise add the game to the store.
       final boardGameDetails = BoardGameDetails.fromSearchResult(searchResultBoardGame);
-      if (_boardGamesStore.allBoardGamesMap.containsKey(boardGameDetails.id)) {
-        _searchResults.add(_boardGamesStore.allBoardGamesMap[boardGameDetails.id]!);
-        continue;
-      }
-
-      await _boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
       _searchResults.add(boardGameDetails);
+
+      // Add the game to the store if not present
+      if (!_boardGamesStore.allBoardGamesMap.containsKey(boardGameDetails.id)) {
+        await _boardGamesStore.addOrUpdateBoardGame(boardGameDetails);
+      }
     }
 
     _previousSearchQuery = _searchQuery;
@@ -231,7 +224,7 @@ abstract class _HomeViewModelBase with Store {
       parameters: <String, String?>{Analytics.searchBoardGamesPhraseParameter: query},
     ));
 
-    await _searchStore.addOrUpdateScore(
+    await _searchStore.addOrUpdateEntry(
       SearchHistoryEntry(
         query: query,
         dateTime: DateTime.now().toUtc(),

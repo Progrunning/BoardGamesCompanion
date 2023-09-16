@@ -54,9 +54,7 @@ class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
     return [
       IconButton(
         icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
+        onPressed: () => query = '',
       ),
     ];
   }

@@ -425,37 +425,6 @@ class _Links extends StatelessWidget {
             );
           },
         ),
-        // TODO Wait until Board Game Oracle owner responds
-        // const SizedBox(
-        //   width: Dimensions.doubleStandardSpacing,
-        // ),
-        // Stack(
-        //   children: [
-        //     if (isPricingInCountrySupported)
-        //       const SizedBox.shrink()
-        //     else
-        //       Positioned(
-        //         top: Dimensions.standardSpacing,
-        //         right: Dimensions.standardSpacing,
-        //         child: Image.asset(
-        //           'assets/flags/${Constants.UsaCountryCode.toLowerCase()}.png',
-        //           width: 16,
-        //           height: 12,
-        //         ),
-        //       ),
-        //     _Link(
-        //       title: isPricingInCountrySupported ? 'Prices' : '${Constants.UsaCountryCode} Prices',
-        //       icon: Icons.attach_money,
-        //       boardGameDetailsStore: _boardGameDetailsStore,
-        //       onPressed: () async {
-        //         await LauncherHelper.launchUri(
-        //           context,
-        //           _boardGameDetailsStore.boardGameDetails.boardGameOraclePriceUrl,
-        //         );
-        //       },
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }

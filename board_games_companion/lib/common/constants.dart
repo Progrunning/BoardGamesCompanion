@@ -15,20 +15,6 @@ class Constants {
 
   static const boardGameGeekLastModifiedDateTimeFormat = 'yyyy-mm-dd HH:MM:ss';
 
-  static const boardGameOracleBaseUrl = 'https://www.boardgameoracle.com/';
-  static const boardGameOracleUsaCultureName = 'en-US';
-  static const boardGameOracleNewZealandCultureName = 'en-NZ';
-  static const boardGameOracleAustraliaCultureName = 'en-AU';
-  static const boardGameOracleCanadaCultureName = 'en-CA';
-  static const Set<String> boardGameOracleSupportedCultureNames = {
-    boardGameOracleUsaCultureName,
-    boardGameOracleNewZealandCultureName,
-    boardGameOracleAustraliaCultureName,
-    boardGameOracleCanadaCultureName
-  };
-
-  static const usaCountryCode = 'US';
-
   static const leaveAsIs = 0;
   static const moveBelow = 1;
   static const moveAbove = -1;

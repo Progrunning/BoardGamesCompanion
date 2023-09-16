@@ -24,6 +24,7 @@ mixin _$BoardGameSearchResultDto {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   int get yearPublished => throw _privateConstructorUsedError;
+  @JsonKey(unknownEnumValue: BoardGameType.boardGame)
   BoardGameType get type => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   String? get thumbnailUrl => throw _privateConstructorUsedError;
@@ -34,6 +35,9 @@ mixin _$BoardGameSearchResultDto {
   int? get maxPlaytimeInMinutes => throw _privateConstructorUsedError;
   double? get complexity => throw _privateConstructorUsedError;
   int? get rank => throw _privateConstructorUsedError;
+  DateTime? get lastUpdated => throw _privateConstructorUsedError;
+  List<BoardGameSummaryPriceDto>? get prices =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +55,7 @@ abstract class $BoardGameSearchResultDtoCopyWith<$Res> {
       {String id,
       String name,
       int yearPublished,
-      BoardGameType type,
+      @JsonKey(unknownEnumValue: BoardGameType.boardGame) BoardGameType type,
       String? imageUrl,
       String? thumbnailUrl,
       String? description,
@@ -60,7 +64,9 @@ abstract class $BoardGameSearchResultDtoCopyWith<$Res> {
       int? minPlaytimeInMinutes,
       int? maxPlaytimeInMinutes,
       double? complexity,
-      int? rank});
+      int? rank,
+      DateTime? lastUpdated,
+      List<BoardGameSummaryPriceDto>? prices});
 }
 
 /// @nodoc
@@ -90,6 +96,8 @@ class _$BoardGameSearchResultDtoCopyWithImpl<$Res,
     Object? maxPlaytimeInMinutes = freezed,
     Object? complexity = freezed,
     Object? rank = freezed,
+    Object? lastUpdated = freezed,
+    Object? prices = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -144,6 +152,14 @@ class _$BoardGameSearchResultDtoCopyWithImpl<$Res,
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as int?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      prices: freezed == prices
+          ? _value.prices
+          : prices // ignore: cast_nullable_to_non_nullable
+              as List<BoardGameSummaryPriceDto>?,
     ) as $Val);
   }
 }
@@ -161,7 +177,7 @@ abstract class _$$_BoardGameSearchResultDtoCopyWith<$Res>
       {String id,
       String name,
       int yearPublished,
-      BoardGameType type,
+      @JsonKey(unknownEnumValue: BoardGameType.boardGame) BoardGameType type,
       String? imageUrl,
       String? thumbnailUrl,
       String? description,
@@ -170,7 +186,9 @@ abstract class _$$_BoardGameSearchResultDtoCopyWith<$Res>
       int? minPlaytimeInMinutes,
       int? maxPlaytimeInMinutes,
       double? complexity,
-      int? rank});
+      int? rank,
+      DateTime? lastUpdated,
+      List<BoardGameSummaryPriceDto>? prices});
 }
 
 /// @nodoc
@@ -198,6 +216,8 @@ class __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>
     Object? maxPlaytimeInMinutes = freezed,
     Object? complexity = freezed,
     Object? rank = freezed,
+    Object? lastUpdated = freezed,
+    Object? prices = freezed,
   }) {
     return _then(_$_BoardGameSearchResultDto(
       id: null == id
@@ -252,6 +272,14 @@ class __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as int?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      prices: freezed == prices
+          ? _value._prices
+          : prices // ignore: cast_nullable_to_non_nullable
+              as List<BoardGameSummaryPriceDto>?,
     ));
   }
 }
@@ -263,7 +291,8 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
       {required this.id,
       required this.name,
       required this.yearPublished,
-      this.type = BoardGameType.boardGame,
+      @JsonKey(unknownEnumValue: BoardGameType.boardGame)
+          this.type = BoardGameType.boardGame,
       this.imageUrl,
       this.thumbnailUrl,
       this.description,
@@ -272,8 +301,11 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
       this.minPlaytimeInMinutes,
       this.maxPlaytimeInMinutes,
       this.complexity,
-      this.rank})
-      : super._();
+      this.rank,
+      this.lastUpdated,
+      final List<BoardGameSummaryPriceDto>? prices})
+      : _prices = prices,
+        super._();
 
   factory _$_BoardGameSearchResultDto.fromJson(Map<String, dynamic> json) =>
       _$$_BoardGameSearchResultDtoFromJson(json);
@@ -285,7 +317,7 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
   @override
   final int yearPublished;
   @override
-  @JsonKey()
+  @JsonKey(unknownEnumValue: BoardGameType.boardGame)
   final BoardGameType type;
   @override
   final String? imageUrl;
@@ -305,10 +337,21 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
   final double? complexity;
   @override
   final int? rank;
+  @override
+  final DateTime? lastUpdated;
+  final List<BoardGameSummaryPriceDto>? _prices;
+  @override
+  List<BoardGameSummaryPriceDto>? get prices {
+    final value = _prices;
+    if (value == null) return null;
+    if (_prices is EqualUnmodifiableListView) return _prices;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'BoardGameSearchResultDto(id: $id, name: $name, yearPublished: $yearPublished, type: $type, imageUrl: $imageUrl, thumbnailUrl: $thumbnailUrl, description: $description, minNumberOfPlayers: $minNumberOfPlayers, maxNumberOfPlayers: $maxNumberOfPlayers, minPlaytimeInMinutes: $minPlaytimeInMinutes, maxPlaytimeInMinutes: $maxPlaytimeInMinutes, complexity: $complexity, rank: $rank)';
+    return 'BoardGameSearchResultDto(id: $id, name: $name, yearPublished: $yearPublished, type: $type, imageUrl: $imageUrl, thumbnailUrl: $thumbnailUrl, description: $description, minNumberOfPlayers: $minNumberOfPlayers, maxNumberOfPlayers: $maxNumberOfPlayers, minPlaytimeInMinutes: $minPlaytimeInMinutes, maxPlaytimeInMinutes: $maxPlaytimeInMinutes, complexity: $complexity, rank: $rank, lastUpdated: $lastUpdated, prices: $prices)';
   }
 
   @override
@@ -337,7 +380,10 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
                 other.maxPlaytimeInMinutes == maxPlaytimeInMinutes) &&
             (identical(other.complexity, complexity) ||
                 other.complexity == complexity) &&
-            (identical(other.rank, rank) || other.rank == rank));
+            (identical(other.rank, rank) || other.rank == rank) &&
+            (identical(other.lastUpdated, lastUpdated) ||
+                other.lastUpdated == lastUpdated) &&
+            const DeepCollectionEquality().equals(other._prices, _prices));
   }
 
   @JsonKey(ignore: true)
@@ -356,7 +402,9 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
       minPlaytimeInMinutes,
       maxPlaytimeInMinutes,
       complexity,
-      rank);
+      rank,
+      lastUpdated,
+      const DeepCollectionEquality().hash(_prices));
 
   @JsonKey(ignore: true)
   @override
@@ -375,19 +423,23 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
 
 abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   const factory _BoardGameSearchResultDto(
-      {required final String id,
-      required final String name,
-      required final int yearPublished,
-      final BoardGameType type,
-      final String? imageUrl,
-      final String? thumbnailUrl,
-      final String? description,
-      final int? minNumberOfPlayers,
-      final int? maxNumberOfPlayers,
-      final int? minPlaytimeInMinutes,
-      final int? maxPlaytimeInMinutes,
-      final double? complexity,
-      final int? rank}) = _$_BoardGameSearchResultDto;
+          {required final String id,
+          required final String name,
+          required final int yearPublished,
+          @JsonKey(unknownEnumValue: BoardGameType.boardGame)
+              final BoardGameType type,
+          final String? imageUrl,
+          final String? thumbnailUrl,
+          final String? description,
+          final int? minNumberOfPlayers,
+          final int? maxNumberOfPlayers,
+          final int? minPlaytimeInMinutes,
+          final int? maxPlaytimeInMinutes,
+          final double? complexity,
+          final int? rank,
+          final DateTime? lastUpdated,
+          final List<BoardGameSummaryPriceDto>? prices}) =
+      _$_BoardGameSearchResultDto;
   const _BoardGameSearchResultDto._() : super._();
 
   factory _BoardGameSearchResultDto.fromJson(Map<String, dynamic> json) =
@@ -400,6 +452,7 @@ abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   @override
   int get yearPublished;
   @override
+  @JsonKey(unknownEnumValue: BoardGameType.boardGame)
   BoardGameType get type;
   @override
   String? get imageUrl;
@@ -419,6 +472,10 @@ abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   double? get complexity;
   @override
   int? get rank;
+  @override
+  DateTime? get lastUpdated;
+  @override
+  List<BoardGameSummaryPriceDto>? get prices;
   @override
   @JsonKey(ignore: true)
   _$$_BoardGameSearchResultDtoCopyWith<_$_BoardGameSearchResultDto>

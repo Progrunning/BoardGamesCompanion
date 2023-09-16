@@ -17,5 +17,12 @@ namespace BGC.SearchApi.Models.Settings
         /// </summary>
         [Required]
         public string QueueName { get; init; } = null!;
+
+        /// <summary>
+        /// Gets expiration date on the cached games.
+        /// </summary>
+        /// <remarks>Defaults to one week.</remarks>
+        [Required]
+        public int CacheExpirationInMinutes { get; init; } = 10080;
     }
 }

@@ -22,6 +22,7 @@ import 'models/hive/board_game_category.dart';
 import 'models/hive/board_game_designer.dart';
 import 'models/hive/board_game_details.dart';
 import 'models/hive/board_game_expansion.dart';
+import 'models/hive/board_game_prices.dart';
 import 'models/hive/board_game_publisher.dart';
 import 'models/hive/board_game_rank.dart';
 import 'models/hive/board_game_settings.dart';
@@ -70,7 +71,8 @@ Future<void> main() async {
       ..registerAdapter(PlaythroughNoteAdapter())
       ..registerAdapter(SearchHistoryEntryAdapter())
       ..registerAdapter(NoScoreGameResultAdapter())
-      ..registerAdapter(CooperativeGameResultAdapter());
+      ..registerAdapter(CooperativeGameResultAdapter())
+      ..registerAdapter(BoardGamePricesAdapter());
 
     configureDependencies();
 

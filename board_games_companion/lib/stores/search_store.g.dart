@@ -33,13 +33,13 @@ mixin _$SearchStore on _SearchStore, Store {
     return _$loadSearchHistoryAsyncAction.run(() => super.loadSearchHistory());
   }
 
-  late final _$addOrUpdateScoreAsyncAction =
-      AsyncAction('_SearchStore.addOrUpdateScore', context: context);
+  late final _$addOrUpdateEntryAsyncAction =
+      AsyncAction('_SearchStore.addOrUpdateEntry', context: context);
 
   @override
-  Future<void> addOrUpdateScore(SearchHistoryEntry searchHistoryEntry) {
-    return _$addOrUpdateScoreAsyncAction
-        .run(() => super.addOrUpdateScore(searchHistoryEntry));
+  Future<void> addOrUpdateEntry(SearchHistoryEntry searchHistoryEntry) {
+    return _$addOrUpdateEntryAsyncAction
+        .run(() => super.addOrUpdateEntry(searchHistoryEntry));
   }
 
   @override

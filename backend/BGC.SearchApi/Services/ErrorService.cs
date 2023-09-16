@@ -5,18 +5,24 @@ using BGC.SearchApi.Services.Interfaces;
 
 namespace BGC.SearchApi.Services
 {
+    /// <inheritdoc />
     public class ErrorService : IErrorService
     {
         private readonly ILogger<ErrorService> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorService"/> class.
+        /// </summary>
+        /// <param name="logger"></param>
         public ErrorService(ILogger<ErrorService> logger)
         {
             _logger = logger;
         }
 
-        public IResult HandleError(Exception excption)
+        /// <inheritdoc />
+        public IResult HandleError(Exception exception)
         {
-            switch (excption)
+            switch (exception)
             {
                 case BggException bggException:
                     return Results.Problem(title: bggException.Message, statusCode: bggException.HttpStatus);

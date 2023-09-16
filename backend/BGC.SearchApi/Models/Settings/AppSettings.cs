@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using BGC.Core.Models.Settings;
 using BGC.SearchApi.Policies;
 
 namespace BGC.SearchApi.Models.Settings

@@ -1,8 +1,13 @@
+using Azure.Identity;
+
+using BGC.Core.Models.Settings;
+using BGC.Core.Repositories;
+using BGC.Core.Repositories.Interfaces;
+using BGC.Core.Services;
+using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Common;
 using BGC.SearchApi.Models.Settings;
 using BGC.SearchApi.Policies;
-using BGC.SearchApi.Repositories;
-using BGC.SearchApi.Repositories.Interfaces;
 using BGC.SearchApi.Services;
 using BGC.SearchApi.Services.Interface;
 using BGC.SearchApi.Services.Interfaces;
@@ -17,6 +22,14 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
+{
+    // MK Might require adding Access Policies to the user signed into Azure
+    builder.Configuration.AddAzureKeyVault(
+            new Uri($"https://{builder.Configuration[Constants.ConfigurationKeyNames.KeyVault]}.vault.azure.net/"),
+            new DefaultAzureCredential());
+}
 
 var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));
 builder.Services.AddOptions<CacheSettings>()
@@ -59,10 +72,11 @@ builder.Services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();
 builder.Services.AddTransient<IErrorService, ErrorService>();
 builder.Services.AddTransient<IBggService, BggService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
+builder.Services.AddTransient<IDateTimeService, DateTimeService>();
 
 builder.Services.AddHttpClient<IBggService, BggService>(client =>
 {
-    client.BaseAddress = new Uri(Constants.BggApi.BaseUrl);
+    client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseXmlApiUrl);
 });
 
 var app = builder.Build();
@@ -99,7 +113,7 @@ var mongoDbConventionPack = new ConventionPack
 {
     new CamelCaseElementNameConvention(),
 };
-ConventionRegistry.Register(Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
+ConventionRegistry.Register(BGC.Core.Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
 
 app.Run();
 

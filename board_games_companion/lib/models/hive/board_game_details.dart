@@ -1,7 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'dart:io';
-
 import 'package:board_games_companion/models/api/board_game_type.dart';
 import 'package:board_games_companion/models/api/search/board_game_search_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -15,6 +13,7 @@ import 'board_game_artist.dart';
 import 'board_game_category.dart';
 import 'board_game_designer.dart';
 import 'board_game_expansion.dart';
+import 'board_game_prices.dart';
 import 'board_game_publisher.dart';
 import 'board_game_rank.dart';
 import 'board_game_settings.dart';
@@ -64,6 +63,9 @@ class BoardGameDetails with _$BoardGameDetails {
     @HiveField(27) bool? isBggSynced,
     @HiveField(28) BoardGameSettings? settings,
     @Default(false) @HiveField(29, defaultValue: false) bool isCreatedByUser,
+    @Default(<BoardGamePrices>[])
+    @HiveField(30, defaultValue: <BoardGamePrices>[])
+        List<BoardGamePrices> prices,
   }) = _BoardGameDetails;
 
   const BoardGameDetails._();
@@ -83,6 +85,16 @@ class BoardGameDetails with _$BoardGameDetails {
         rank: searchResult.rank,
         avgWeight: searchResult.complexity,
         isExpansion: searchResult.type == BoardGameType.expansion,
+        lastModified: searchResult.lastUpdated,
+        prices: searchResult.prices
+                ?.map((price) => BoardGamePrices(
+                      region: price.region,
+                      websiteUrl: price.websiteUrl,
+                      lowest: price.lowestPrice,
+                      lowestStoreName: price.lowestPriceStoreName,
+                    ))
+                .toList() ??
+            [],
       );
 
   RegExp get onlyLettersOrNumbersRegex => RegExp(r'[a-zA-Z0-9\-]+');
@@ -185,18 +197,16 @@ class BoardGameDetails with _$BoardGameDetails {
 
   String get bggHotForumUrl => '$bggOverviewUrl/forums/0?sort=hot';
 
-  String get boardGameOraclePriceUrl {
-    final String currentCulture = Platform.localeName.replaceFirst('_', '-');
-    if (!Constants.boardGameOracleSupportedCultureNames.contains(currentCulture) ||
-        currentCulture == Constants.boardGameOracleUsaCultureName) {
-      return '${Constants.boardGameOracleBaseUrl}boardgame/price/$_boardGameOracleUrlEncodedName';
-    }
-
-    return '${Constants.boardGameOracleBaseUrl}$currentCulture/boardgame/price/$_boardGameOracleUrlEncodedName';
-  }
-
   bool get hasGeneralInfoDefined =>
       minPlayers != null || minPlaytime != null || minAge != null || avgWeight != null;
+
+  Map<String, BoardGamePrices> get pricesByRegion =>
+      {for (var price in prices) price.region.toLowerCase(): price};
+
+  bool hasPricesForRegion(String? countryCode) => pricesByRegion[countryCode] != null;
+
+  bool hasLowestPricesForRegion(String? countryCode) =>
+      hasPricesForRegion(countryCode) && pricesByRegion[countryCode]!.lowest != null;
 
   String get _baseBggBoardGameUrl => '${Constants.boardGameGeekBaseUrl}boardgame';
 
@@ -206,15 +216,6 @@ class BoardGameDetails with _$BoardGameDetails {
       final String trimmedAndLoweredPart = part.trim();
       return !bggNotUsedUrlEncodedNameParts.contains(trimmedAndLoweredPart);
     }).map((part) {
-      final String trimmedAndLoweredPart = part.trim();
-      final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
-      return regexMatch;
-    }).join('-');
-  }
-
-  String get _boardGameOracleUrlEncodedName {
-    final List<String> spaceSeparatedNameParts = name.toLowerCase().split(' ');
-    return spaceSeparatedNameParts.map((part) {
       final String trimmedAndLoweredPart = part.trim();
       final String? regexMatch = onlyLettersOrNumbersRegex.stringMatch(trimmedAndLoweredPart);
       return regexMatch;

@@ -1,0 +1,33 @@
+@startuml
+
+title Search board games
+autonumber
+
+actor User as User
+
+User -> APIM: GET /search?query={query}
+APIM -> SearchApi: GET /search?query={query}
+SearchApi -> BggApi: GET /xmlapi2/search?query={query}&type=boardgame
+BggApi --> SearchApi: Search results
+
+SearchApi -> MongoDb: Get cached board games details
+MongoDb --> SearchApi: Returns cached board games detials
+SearchApi -> UpdateCacheServiceBus: Queues up not cached and outdated (<b>3 days or older</b>)\nboard games details (<u>boardGameId</u>).
+
+autonumber stop    
+group Update cache
+    UpdateCacheFunction -> UpdateCacheServiceBus: Read messages from the queue
+    UpdateCacheFunction -> BggApi: GET /xmlapi2/thing?id={bggId}&stats=1
+    BggApi --> UpdateCacheFunction: Returns details
+    group Get prices for all regions (us,ca,nz,gb,au)
+        UpdateCacheFunction -> BoardGameOracleApi: GET /boardgame?region={region}&bggid={bggId}&pricestats=1
+        BoardGameOracleApi --> UpdateCacheFunction: Retrurns prices
+    end    
+    UpdateCacheFunction -> MongoDb: Updates enriched board game details
+end    
+autonumber resume    
+
+SearchApi --> APIM: Returns results
+APIM --> User: Returns results
+
+@enduml

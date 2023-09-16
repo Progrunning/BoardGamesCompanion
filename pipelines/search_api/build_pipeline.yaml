@@ -1,3 +1,4 @@
+# TODO Add API version (define in variables)
 name: $(Build.BuildId)
 
 trigger:
@@ -13,6 +14,12 @@ pool:
   workspace:
     clean: all
 
+parameters:
+  - name: checkTestCoverage
+    displayName: Check test coverage?
+    default: true
+    type: boolean
+
 variables:
   isPR: $[in(variables['Build.Reason'], 'PullRequest')]
 
@@ -21,19 +28,24 @@ jobs:
     displayName: CI
     steps:
       - task: UseDotNet@2
+        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Install .NET 7.x SDK"
         inputs:
           version: 7.x
 
       - task: DotNetCoreCLI@2
+        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Build Search API"
         inputs:
           projects: "**/BGC.SearchApi.csproj"
           arguments: "--output publish_output --configuration Release"
 
-      - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
-        parameters:
-          pathToProjects: "**/BGC.SearchApi.UnitTests.csproj"
+      - ${{ if eq('${{ parameters.checkTestCoverage }}', true) }}:
+          - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
+            parameters:
+              pathToProjects: "**/BGC.@(Core|SearchApi).UnitTests.csproj"
+              # Excluding all the models as they shouldn't have any or much logic
+              excludeFilterExpression: "[*]BGC.Core.Models.*"
 
       - task: Docker@2
         condition: and(succeeded(), eq(variables.isPR, 'false'))
@@ -43,5 +55,6 @@ jobs:
           containerRegistry: bgc-acr
           repository: bgc
           tags: "$(Build.BuildId)"
+          buildContext: backend/
           dockerfile: backend/BGC.SearchApi/dockerfile
           addPipelineData: true

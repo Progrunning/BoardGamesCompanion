@@ -47,13 +47,16 @@ class BoardGameDetailsAdapter extends TypeAdapter<_$_BoardGameDetails> {
       isBggSynced: fields[27] as bool?,
       settings: fields[28] as BoardGameSettings?,
       isCreatedByUser: fields[29] == null ? false : fields[29] as bool,
+      prices: fields[30] == null
+          ? []
+          : (fields[30] as List).cast<BoardGamePrices>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_BoardGameDetails obj) {
     writer
-      ..writeByte(30)
+      ..writeByte(31)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -113,7 +116,9 @@ class BoardGameDetailsAdapter extends TypeAdapter<_$_BoardGameDetails> {
       ..writeByte(20)
       ..write(obj.ranks)
       ..writeByte(22)
-      ..write(obj.expansions);
+      ..write(obj.expansions)
+      ..writeByte(30)
+      ..write(obj.prices);
   }
 
   @override

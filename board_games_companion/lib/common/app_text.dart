@@ -26,7 +26,7 @@ class AppText {
 
   static const ownedCollectionToggleButtonText = 'Owned';
   static const friendsCollectionToggleButtonText = 'Friends';
-  static const whishlistCollectionToggleButtonText = 'Whishlist';
+  static const wishlistCollectionToggleButtonText = 'Wishlist';
 
   static const homePageCollectionsTabTitle = 'Collections';
   static const homePageHotBoardGamesTabTitle = 'Hot';
@@ -122,6 +122,8 @@ class AppText {
   static const searchBoardGamesSearchBarHint = 'Search...';
   static const searchBoardGamesSearchRetry = 'Retry';
   static const searchBoardGamesCreateGame = 'Create game';
+  static const searchBoardGamesPriceUpdatedAtFormat = 'Updated %s';
+  static const searchBoardGamesLowestPriceAtFormat = 'at %s';
 
   static const searchBoardGamesErrorTitle = 'Sorry, we ran into a problem';
   static const searchBoardGamesTimeoutError =

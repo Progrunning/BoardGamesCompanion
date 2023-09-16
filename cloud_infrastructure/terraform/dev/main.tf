@@ -38,13 +38,13 @@ variable "resources" {
         sku  = string
       })
       queue = object({
-        name             = string
-        send_policy_name = string
+        name               = string
+        send_policy_name   = string
+        listen_policy_name = string
       })
     })
-    cache_function = object({
-      name     = string
-      app_name = string
+    function = object({
+      name = string
       service_plan = object({
         name = string
       })
@@ -192,19 +192,27 @@ resource "azurerm_servicebus_queue_authorization_rule" "sbq_send_policy" {
   manage = false
 }
 
+resource "azurerm_servicebus_queue_authorization_rule" "sbq_listen_policy" {
+  name     = var.resources.cache_service_bus.queue.listen_policy_name
+  queue_id = azurerm_servicebus_queue.sbq.id
+
+  listen = true
+  send   = false
+  manage = false
+}
+
 ### Functions
 
 resource "azurerm_service_plan" "asp" {
-  name                = var.resources.cache_function.service_plan.name
+  name                = var.resources.function.service_plan.name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   os_type             = "Linux"
   sku_name            = "Y1"
 }
 
-
 resource "azurerm_linux_function_app" "func" {
-  name                = var.resources.cache_function.name
+  name                = var.resources.function.name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
@@ -217,6 +225,12 @@ resource "azurerm_linux_function_app" "func" {
       dotnet_version              = "7.0"
       use_dotnet_isolated_runtime = true
     }
+  }
+
+  app_settings = {
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.search_service_appi.instrumentation_key
+    "CacheQueueName"                 = var.resources.cache_service_bus.queue.name
+    "CacheQueueConnectionString"     = azurerm_servicebus_queue_authorization_rule.sbq_listen_policy.primary_connection_string
   }
 }
 
@@ -231,17 +245,14 @@ resource "azurerm_key_vault" "kv" {
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days = 7
   purge_protection_enabled   = false
+  enable_rbac_authorization  = false
+
 
   sku_name = var.resources.key_vault.sku
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "Create",
-      "Get",
-    ]
 
     secret_permissions = [
       "Get",
@@ -260,6 +271,12 @@ resource "azurerm_key_vault" "kv" {
 
     secret_permissions = [
       "Get",
+      "List",
+      "Delete",
+      "Recover",
+      "Backup",
+      "Restore",
+      "Set",
     ]
   }
 }
@@ -272,7 +289,7 @@ resource "azurerm_key_vault_secret" "kv_queue_send_connection_string" {
 
 resource "azurerm_key_vault_secret" "kv_queue_send_name" {
   name         = "AppSettings--CacheSettings--QueueName"
-  value        = var.resources.cache_service_bus.queue.send_policy_name
+  value        = var.resources.cache_service_bus.queue.name
   key_vault_id = azurerm_key_vault.kv.id
 }
 

@@ -17,7 +17,7 @@ enum CooperativeGameResult {
 }
 
 @freezed
-abstract class NoScoreGameResult with _$NoScoreGameResult {
+class NoScoreGameResult with _$NoScoreGameResult {
   @HiveType(typeId: HiveBoxes.noScoreGameResultTypeId, adapterName: 'NoScoreGameResultAdapter')
   const factory NoScoreGameResult({
     @HiveField(0, defaultValue: null) CooperativeGameResult? cooperativeGameResult,

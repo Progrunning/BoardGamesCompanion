@@ -100,7 +100,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                     widget.viewModel.analyticsService,
                     widget.viewModel.rateAndReviewService,
                   ),
-                  PlaysPage(viewModel: widget.viewModel.playthroughsHistoryViewModel),
+                  PlaysPage(viewModel: widget.viewModel.playsViewModel),
                   PlayersPage(viewModel: widget.viewModel.playersViewModel),
                   HotBoardGamesPage(viewModel: widget.viewModel.hotBoardGamesViewModel),
                 ],
@@ -194,7 +194,6 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             _handleBggSearchResultAction(boardGame, actionType),
         onSortyByUpdate: (sortBy) => widget.viewModel.updateBggSearchSortByOption(sortBy),
         onQueryChanged: (query) => widget.viewModel.updateBggSearchQuery(query),
-        onRefresh: () => widget.viewModel.refreshSearchResults(),
       ),
     );
 
