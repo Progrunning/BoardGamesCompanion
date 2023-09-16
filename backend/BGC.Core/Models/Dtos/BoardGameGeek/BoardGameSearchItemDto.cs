@@ -9,7 +9,7 @@ public record BoardGameSearchItemDto
     public BoardGameSearchItemNameDto Name { get; init; }
 
     [XmlElement(ElementName = "yearpublished")]
-    public YearPublishedDto YearPublished { get; init; }
+    public YearPublishedDto? YearPublished { get; init; }
 
     [XmlAttribute(AttributeName = "type")]
     public string Type { get; init; }

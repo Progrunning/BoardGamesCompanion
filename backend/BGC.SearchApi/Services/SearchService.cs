@@ -1,6 +1,8 @@
 using System.Net;
 
+using BGC.Core;
 using BGC.Core.Models.Domain;
+using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Models.Dtos;
@@ -47,7 +49,8 @@ public class SearchService : ISearchService
                 return Array.Empty<BoardGameSummaryDto>();
             }
 
-            var boardGameSummaries = bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id.ToString(), boardGame.Name.Value, boardGame.YearPublished.Value)).ToArray();
+            var boardGameSummaries = bggSearchResponse.BoardGames.Select(boardGame => new BoardGameSummaryDto(boardGame.Id.ToString(), boardGame.Name.Value, boardGame.YearPublished?.Value))
+                                                                 .ToArray();
 
             var boardGamesDetails = await _boardGamesRepository.GetBoardGames(boardGameSummaries.Select(boardGame => boardGame.Id), cancellationToken);
             var boardGamesDetailsDict = boardGamesDetails.ToDictionary(boardGame => boardGame.Id);
@@ -68,6 +71,25 @@ public class SearchService : ISearchService
         }
     }
 
+    /// <summary>
+    /// This method has been implemented to ensure that the returned type of the board game is "expension" rather than "boardgameexpansion"
+    /// for the app's backward compatibility. Once everyone goes beyond version of the app 1.11.4 this could potentially be removed.
+    /// </summary>
+    /// <param name="boardGame"></param>
+    /// <returns>App safe version of the board game type.</returns>
+    private static string RetrieveBoardGameDomainType(BoardGame boardGame)
+    {
+        switch (boardGame.Type.ToLowerInvariant())
+        {
+            case Constants.BggApi.BoardGameTypes.MainGame:
+                return Constants.Domain.BoardGameTypes.MainGame;
+            case Constants.BggApi.BoardGameTypes.Expansion:
+                return Constants.Domain.BoardGameTypes.Expansion;
+            default:
+                return Constants.Domain.BoardGameTypes.MainGame;
+        }
+    }
+
     private void EnrichBoardGameDetails(IReadOnlyCollection<BoardGameSummaryDto> boardGames, IDictionary<string, BoardGame> boardGamesDetailsDict)
     {
         try
@@ -80,7 +102,7 @@ public class SearchService : ISearchService
                 }
 
                 boardGame.LastUpdated = boardGameDetails.LastUpdated;
-                boardGame.Type = boardGameDetails.Type;
+                boardGame.Type = RetrieveBoardGameDomainType(boardGameDetails);
                 boardGame.Description = boardGameDetails.Description;
                 boardGame.ImageUrl = boardGameDetails.ImageUrl;
                 boardGame.ThumbnailUrl = boardGameDetails.ThumbnailUrl;

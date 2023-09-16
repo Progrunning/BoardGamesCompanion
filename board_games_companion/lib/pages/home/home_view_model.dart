@@ -191,7 +191,7 @@ abstract class _HomeViewModelBase with Store {
     _searchResults.clear();
     _searchBoardGamesOperation = CancelableOperation<List<BoardGameSearchResultDto>>.fromFuture(
         _boardGameSearchServive.search(_searchQuery));
-    _searchBoardGamesOperation!.value.onError<Exception>((error, stackTrace) {
+    _searchBoardGamesOperation!.value.onError((error, stackTrace) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
       if (error is TimeoutException) {
         _searchResultsStreamController.addError(const BoardGameSearchError.timout());

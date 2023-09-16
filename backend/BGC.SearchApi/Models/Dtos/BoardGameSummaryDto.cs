@@ -9,7 +9,7 @@ public record BoardGameSummaryDto
     /// <param name="name"></param>
     /// <param name="yearPublished"></param>
     /// <remarks>Model is based on the data returned from the BGG XML API.</remarks>
-    public BoardGameSummaryDto(string id, string name, int yearPublished)
+    public BoardGameSummaryDto(string id, string name, int? yearPublished)
     {
         Id = id;
         Name = name;
@@ -20,7 +20,7 @@ public record BoardGameSummaryDto
 
     public string Name { get; init; }
 
-    public int YearPublished { get; init; }
+    public int? YearPublished { get; init; }
 
     /// <summary>
     /// Gets or sets type of the board game (e.g. BoardGame or BoardGameExpansion).

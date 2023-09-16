@@ -6,12 +6,11 @@ part of 'board_game_search_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
-        Map<String, dynamic> json) =>
+_$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(Map<String, dynamic> json) =>
     _$_BoardGameSearchResultDto(
       id: json['id'] as String,
       name: json['name'] as String,
-      yearPublished: json['yearPublished'] as int,
+      yearPublished: json['yearPublished'] as int?,
       type: $enumDecodeNullable(_$BoardGameTypeEnumMap, json['type'],
               unknownValue: BoardGameType.boardGame) ??
           BoardGameType.boardGame,
@@ -24,17 +23,14 @@ _$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
       maxPlaytimeInMinutes: json['maxPlaytimeInMinutes'] as int?,
       complexity: (json['complexity'] as num?)?.toDouble(),
       rank: json['rank'] as int?,
-      lastUpdated: json['lastUpdated'] == null
-          ? null
-          : DateTime.parse(json['lastUpdated'] as String),
+      lastUpdated:
+          json['lastUpdated'] == null ? null : DateTime.parse(json['lastUpdated'] as String),
       prices: (json['prices'] as List<dynamic>?)
-          ?.map((e) =>
-              BoardGameSummaryPriceDto.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => BoardGameSummaryPriceDto.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$$_BoardGameSearchResultDtoToJson(
-        _$_BoardGameSearchResultDto instance) =>
+Map<String, dynamic> _$$_BoardGameSearchResultDtoToJson(_$_BoardGameSearchResultDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
