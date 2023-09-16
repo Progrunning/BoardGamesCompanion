@@ -13,7 +13,7 @@ class BoardGameSearchResultDto with _$BoardGameSearchResultDto {
   const factory BoardGameSearchResultDto({
     required String id,
     required String name,
-    required int yearPublished,
+    int? yearPublished,
     @JsonKey(unknownEnumValue: BoardGameType.boardGame)
     @Default(BoardGameType.boardGame)
         BoardGameType type,

@@ -11,7 +11,7 @@ _$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
     _$_BoardGameSearchResultDto(
       id: json['id'] as String,
       name: json['name'] as String,
-      yearPublished: json['yearPublished'] as int,
+      yearPublished: json['yearPublished'] as int?,
       type: $enumDecodeNullable(_$BoardGameTypeEnumMap, json['type'],
               unknownValue: BoardGameType.boardGame) ??
           BoardGameType.boardGame,

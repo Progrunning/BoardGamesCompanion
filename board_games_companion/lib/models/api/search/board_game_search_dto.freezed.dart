@@ -23,7 +23,7 @@ BoardGameSearchResultDto _$BoardGameSearchResultDtoFromJson(
 mixin _$BoardGameSearchResultDto {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  int get yearPublished => throw _privateConstructorUsedError;
+  int? get yearPublished => throw _privateConstructorUsedError;
   @JsonKey(unknownEnumValue: BoardGameType.boardGame)
   BoardGameType get type => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
@@ -54,7 +54,7 @@ abstract class $BoardGameSearchResultDtoCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
-      int yearPublished,
+      int? yearPublished,
       @JsonKey(unknownEnumValue: BoardGameType.boardGame) BoardGameType type,
       String? imageUrl,
       String? thumbnailUrl,
@@ -85,7 +85,7 @@ class _$BoardGameSearchResultDtoCopyWithImpl<$Res,
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? yearPublished = null,
+    Object? yearPublished = freezed,
     Object? type = null,
     Object? imageUrl = freezed,
     Object? thumbnailUrl = freezed,
@@ -108,10 +108,10 @@ class _$BoardGameSearchResultDtoCopyWithImpl<$Res,
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      yearPublished: null == yearPublished
+      yearPublished: freezed == yearPublished
           ? _value.yearPublished
           : yearPublished // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -176,7 +176,7 @@ abstract class _$$_BoardGameSearchResultDtoCopyWith<$Res>
   $Res call(
       {String id,
       String name,
-      int yearPublished,
+      int? yearPublished,
       @JsonKey(unknownEnumValue: BoardGameType.boardGame) BoardGameType type,
       String? imageUrl,
       String? thumbnailUrl,
@@ -205,7 +205,7 @@ class __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? yearPublished = null,
+    Object? yearPublished = freezed,
     Object? type = null,
     Object? imageUrl = freezed,
     Object? thumbnailUrl = freezed,
@@ -228,10 +228,10 @@ class __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      yearPublished: null == yearPublished
+      yearPublished: freezed == yearPublished
           ? _value.yearPublished
           : yearPublished // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -290,7 +290,7 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
   const _$_BoardGameSearchResultDto(
       {required this.id,
       required this.name,
-      required this.yearPublished,
+      this.yearPublished,
       @JsonKey(unknownEnumValue: BoardGameType.boardGame)
           this.type = BoardGameType.boardGame,
       this.imageUrl,
@@ -315,7 +315,7 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
   @override
   final String name;
   @override
-  final int yearPublished;
+  final int? yearPublished;
   @override
   @JsonKey(unknownEnumValue: BoardGameType.boardGame)
   final BoardGameType type;
@@ -425,7 +425,7 @@ abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   const factory _BoardGameSearchResultDto(
           {required final String id,
           required final String name,
-          required final int yearPublished,
+          final int? yearPublished,
           @JsonKey(unknownEnumValue: BoardGameType.boardGame)
               final BoardGameType type,
           final String? imageUrl,
@@ -450,7 +450,7 @@ abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   @override
   String get name;
   @override
-  int get yearPublished;
+  int? get yearPublished;
   @override
   @JsonKey(unknownEnumValue: BoardGameType.boardGame)
   BoardGameType get type;
