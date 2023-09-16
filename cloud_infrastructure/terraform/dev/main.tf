@@ -171,6 +171,7 @@ resource "azurerm_container_app" "search_service_ca" {
 ###
 ### Service Bus
 ###
+
 resource "azurerm_servicebus_namespace" "sbns" {
   name                = var.resources.cache_service_bus.namespace.name
   resource_group_name = azurerm_resource_group.rg.name
@@ -201,7 +202,9 @@ resource "azurerm_servicebus_queue_authorization_rule" "sbq_listen_policy" {
   manage = false
 }
 
+###
 ### Functions
+###
 
 resource "azurerm_service_plan" "asp" {
   name                = var.resources.function.service_plan.name
