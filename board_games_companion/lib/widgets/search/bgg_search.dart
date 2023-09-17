@@ -367,7 +367,7 @@ class _SearchResultGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context);
+    final locale = WidgetsBinding.instance.window.locale;
     final countryCode = locale.countryCode?.toLowerCase();
     return Padding(
       padding: EdgeInsets.only(
