@@ -307,14 +307,10 @@ class _PlayerNoScoreAvatar extends StatelessWidget {
         SizedBox(
           height: Dimensions.smallPlayerAvatarSize.height,
           width: Dimensions.smallPlayerAvatarSize.width,
-          child: Stack(
-            children: [
-              PlayerAvatar(
-                player: player,
-                avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                playerHeroIdSuffix: playerHeroIdSuffix,
-              ),
-            ],
+          child: PlayerAvatar(
+            player: player,
+            avatarImageSize: Dimensions.smallPlayerAvatarSize,
+            playerHeroIdSuffix: playerHeroIdSuffix,
           ),
         ),
         const SizedBox(height: Dimensions.standardSpacing),

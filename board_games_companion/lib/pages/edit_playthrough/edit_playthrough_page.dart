@@ -510,9 +510,7 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                   ),
                 ),
                 const SizedBox(width: Dimensions.standardSpacing),
-                Expanded(
-                  child: _PlayerScore(score: score),
-                ),
+                Expanded(child: _PlayerScore(score: score)),
               ],
             ),
           ),

@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:math';
+
 import 'package:board_games_companion/common/constants.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
@@ -190,21 +192,33 @@ abstract class _EditPlaythoughViewModel with Store {
   void reorderPlayerScores(int oldIndex, int newIndex) {
     Fimber.d('OLD $oldIndex | NEW $newIndex');
 
-    Fimber.d('BEFORE');
-    for (final playerScore in playerScores) {
-      Fimber.d('${playerScore.player!.name}');
-    }
+    // 3 -> 0
+    // 0 -> 1
+    // 1 -> 2
+    // 2 -> 3
+
+    // 0 -> 3
+    // 3 -> 2
+    // 2 -> 1
+    // 1 -> 0
+    final a = List.generate(max(oldIndex, newIndex), (int index) => index, growable: false);
+    Fimber.d('$a');
+
+    // Fimber.d('BEFORE');
+    // for (final playerScore in playerScores) {
+    //   Fimber.d('${playerScore.player!.name}');
+    // }
 
     final oldElement = playerScores[oldIndex];
 
     playerScores[oldIndex] = playerScores[newIndex];
     playerScores[newIndex] = oldElement;
 
-    Fimber.d('-----');
-    Fimber.d('AFTER');
-    for (final playerScore in playerScores) {
-      Fimber.d('${playerScore.player!.name}');
-    }
+    // Fimber.d('-----');
+    // Fimber.d('AFTER');
+    // for (final playerScore in playerScores) {
+    //   Fimber.d('${playerScore.player!.name}');
+    // }
 
     // _playthroughDetailsWorkingCopy =
     //     playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
