@@ -74,6 +74,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                             _editPlayerScore(playerScore, context),
                         onReorder: (oldIndex, newIndex) =>
                             widget.viewModel.reorderPlayerScores(oldIndex, newIndex),
+                        onSortScores: () => widget.viewModel.orderPlayerScoresByScore(),
                       ),
                     if (widget.viewModel.gameClassification == GameClassification.NoScore)
                       _NoScoreSection(
@@ -273,12 +274,14 @@ class _ScoresSection extends StatelessWidget {
     required this.playerScores,
     required this.playthroughDetailsId,
     required this.onItemTapped,
+    required this.onSortScores,
     required this.onReorder,
   }) : super(key: key);
 
   final List<PlayerScore> playerScores;
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
+  final VoidCallback onSortScores;
   final void Function(int oldIndex, int newIndex) onReorder;
 
   @override
@@ -286,8 +289,12 @@ class _ScoresSection extends StatelessWidget {
         children: [
           SliverPersistentHeader(
             pinned: true,
-            delegate: BgcSliverTitleHeaderDelegate.title(
+            delegate: BgcSliverTitleHeaderDelegate.action(
               primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
+              action: IconButton(
+                icon: const Icon(Icons.sort),
+                onPressed: () => onSortScores(),
+              ),
             ),
           ),
           Observer(

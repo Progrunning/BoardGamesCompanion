@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/common/constants.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
@@ -157,6 +158,29 @@ abstract class _EditPlaythoughViewModel with Store {
         playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
   }
 
+  @action
+  void orderPlayerScoresByScore() {
+    final orderedPlayerScore = playerScores
+      ..sort((playerScoreA, playerScoreB) {
+        if (playerScoreA.score.hasScore && !playerScoreB.score.hasScore) {
+          return Constants.moveAbove;
+        }
+
+        if (!playerScoreA.score.hasScore && playerScoreB.score.hasScore) {
+          return Constants.moveBelow;
+        }
+
+        if (!playerScoreA.score.hasScore && !playerScoreB.score.hasScore) {
+          return Constants.leaveAsIs;
+        }
+
+        return playerScoreB.score.valueInt.compareTo(playerScoreA.score.valueInt);
+      });
+
+    _playthroughDetailsWorkingCopy =
+        playthroughDetailsWorkingCopy.copyWith(playerScores: orderedPlayerScore);
+  }
+
   // TODO
   // - Need to order scores by score before editing
   // - Allow only moving scores that are tied
@@ -166,10 +190,21 @@ abstract class _EditPlaythoughViewModel with Store {
   void reorderPlayerScores(int oldIndex, int newIndex) {
     Fimber.d('OLD $oldIndex | NEW $newIndex');
 
+    Fimber.d('BEFORE');
+    for (final playerScore in playerScores) {
+      Fimber.d('${playerScore.player!.name}');
+    }
+
     final oldElement = playerScores[oldIndex];
 
     playerScores[oldIndex] = playerScores[newIndex];
     playerScores[newIndex] = oldElement;
+
+    Fimber.d('-----');
+    Fimber.d('AFTER');
+    for (final playerScore in playerScores) {
+      Fimber.d('${playerScore.player!.name}');
+    }
 
     // _playthroughDetailsWorkingCopy =
     //     playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
