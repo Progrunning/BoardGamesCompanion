@@ -55,7 +55,7 @@ namespace BGC.Functions.Functions
                 var boardGame = boardGameDetailsDto!.ToDomain(regionalPriceStatistics);
 
                 _logger.LogInformation($"Upserting board game details {boardGame}");
-                await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);
+                await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);                               
             }
             catch (Exception ex)
             {
@@ -81,7 +81,6 @@ namespace BGC.Functions.Functions
                 // MK Added to enforce re-try and dead-lettering after reaching max rety count
                 throw;
             }
-
         }
 
         private async Task<IReadOnlyCollection<PriceStatisticsDto>> RetrieveRegionalPriceStatistics(CacheBoardGameMessage boardGameToCache, CancellationToken cancellationToken)
