@@ -16,6 +16,11 @@ namespace BGC.CacheQueueFunction
                 internal const string CacheQueueConnectionString = nameof(CacheQueueConnectionString);
                 internal const string CacheQueueName = $"%{nameof(CacheQueueName)}%";
             }
+
+            internal static class Http
+            {
+                internal static TimeSpan Timeout = TimeSpan.FromSeconds(5);
+            }
         }
     }
 }

@@ -10,8 +10,8 @@
         "maxRetries": 3
       },
       "prefetchCount": 0,
-      "transportType": "amqpWebSockets",      
-      "autoCompleteMessages": false,
+      "transportType": "amqpWebSockets",
+      "autoCompleteMessages": true,
       "maxAutoLockRenewalDuration": "00:05:00",
       "maxConcurrentCalls": 16,
       "maxConcurrentSessions": 8,
@@ -22,6 +22,7 @@
       "enableCrossEntityTransactions": false
     }
   },
+  "functionTimeout": "00:01:00",
   "logging": {
     "applicationInsights": {
       "samplingSettings": {

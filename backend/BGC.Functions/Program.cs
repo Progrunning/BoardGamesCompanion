@@ -13,6 +13,8 @@ using BGC.Core.Repositories;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Microsoft.Extensions.Configuration;
+using Polly.Extensions.Http;
+using Polly;
 
 // TODO Use Azure App Configuration https://learn.microsoft.com/en-us/azure/azure-app-configuration/enable-dynamic-configuration-azure-functions-csharp?tabs=isolated-process
 
@@ -40,11 +42,13 @@ var host = new HostBuilder()
         services.AddHttpClient<IBggService, BggService>(client =>
         {
             client.BaseAddress = new Uri(Constants.BggApi.BaseXmlApiUrl);
-        });
+            client.Timeout = BGC.CacheQueueFunction.Constants.Configruration.Http.Timeout;
+        }).AddPolicyHandler(GetRetryPolicy());
         services.AddHttpClient<IBoardGameOracleService, BoardGameOracelService>(client =>
         {
             client.BaseAddress = new Uri(Constants.BoardGameOracleApi.BaseUrl);
-        });
+            client.Timeout = BGC.CacheQueueFunction.Constants.Configruration.Http.Timeout;
+        }).AddPolicyHandler(GetRetryPolicy());
         services.AddTransient<IMongoClient>((services) =>
         {
             var mongoDbSettings = services.GetService<IOptions<MongoDbSettings>>();
@@ -69,3 +73,11 @@ var mongoDbConventionPack = new ConventionPack
 ConventionRegistry.Register(Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
 
 await host.RunAsync();
+
+
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
