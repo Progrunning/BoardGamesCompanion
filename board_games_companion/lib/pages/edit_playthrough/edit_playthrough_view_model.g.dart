@@ -198,6 +198,28 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
+  void orderPlayerScoresByScore() {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.orderPlayerScoresByScore');
+    try {
+      return super.orderPlayerScoresByScore();
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void reorderPlayerScores(int oldIndex, int newIndex) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.reorderPlayerScores');
+    try {
+      return super.reorderPlayerScores(oldIndex, newIndex);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void updateCooperativeGameResult(
       CooperativeGameResult cooperativeGameResult) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
