@@ -13,7 +13,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/game_classification.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
@@ -66,8 +65,9 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 return CustomScrollView(
                   slivers: [
                     _PlayDateTimeSection(viewModel: widget.viewModel),
-                    if (widget.viewModel.gameClassification == GameClassification.Score)
-                      _ScoresSection(
+                    widget.viewModel.editPlaythroughPageVisualState.when(
+                      init: () => const SizedBox.shrink(),
+                      editScoreGame: (_) => _ScoresSection(
                         playerScores: widget.viewModel.playerScores,
                         playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
                         onItemTapped: (PlayerScore playerScore) async =>
@@ -76,14 +76,14 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                             widget.viewModel.reorderPlayerScores(oldIndex, newIndex),
                         onSortScores: () => widget.viewModel.orderPlayerScoresByScore(),
                       ),
-                    if (widget.viewModel.gameClassification == GameClassification.NoScore)
-                      _NoScoreSection(
+                      editNoScoreGame: (_) => _NoScoreSection(
                         playthroughId: widget.viewModel.playthrough.id,
                         players: widget.viewModel.players,
                         cooperativeGameResult: widget.viewModel.cooperativeGameResult,
                         onCooperativeGameResultChanged: (cooperativeGameResult) =>
                             widget.viewModel.updateCooperativeGameResult(cooperativeGameResult),
                       ),
+                    ),
                     if (widget.viewModel.hasNotes)
                       _NotesSection(
                         notes: widget.viewModel.notes!,

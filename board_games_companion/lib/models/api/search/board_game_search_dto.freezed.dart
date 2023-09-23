@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-BoardGameSearchResultDto _$BoardGameSearchResultDtoFromJson(Map<String, dynamic> json) {
+BoardGameSearchResultDto _$BoardGameSearchResultDtoFromJson(
+    Map<String, dynamic> json) {
   return _BoardGameSearchResultDto.fromJson(json);
 }
 
@@ -35,7 +36,8 @@ mixin _$BoardGameSearchResultDto {
   double? get complexity => throw _privateConstructorUsedError;
   int? get rank => throw _privateConstructorUsedError;
   DateTime? get lastUpdated => throw _privateConstructorUsedError;
-  List<BoardGameSummaryPriceDto>? get prices => throw _privateConstructorUsedError;
+  List<BoardGameSummaryPriceDto>? get prices =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,8 +47,8 @@ mixin _$BoardGameSearchResultDto {
 
 /// @nodoc
 abstract class $BoardGameSearchResultDtoCopyWith<$Res> {
-  factory $BoardGameSearchResultDtoCopyWith(
-          BoardGameSearchResultDto value, $Res Function(BoardGameSearchResultDto) then) =
+  factory $BoardGameSearchResultDtoCopyWith(BoardGameSearchResultDto value,
+          $Res Function(BoardGameSearchResultDto) then) =
       _$BoardGameSearchResultDtoCopyWithImpl<$Res, BoardGameSearchResultDto>;
   @useResult
   $Res call(
@@ -68,7 +70,8 @@ abstract class $BoardGameSearchResultDtoCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BoardGameSearchResultDtoCopyWithImpl<$Res, $Val extends BoardGameSearchResultDto>
+class _$BoardGameSearchResultDtoCopyWithImpl<$Res,
+        $Val extends BoardGameSearchResultDto>
     implements $BoardGameSearchResultDtoCopyWith<$Res> {
   _$BoardGameSearchResultDtoCopyWithImpl(this._value, this._then);
 
@@ -165,7 +168,8 @@ class _$BoardGameSearchResultDtoCopyWithImpl<$Res, $Val extends BoardGameSearchR
 abstract class _$$_BoardGameSearchResultDtoCopyWith<$Res>
     implements $BoardGameSearchResultDtoCopyWith<$Res> {
   factory _$$_BoardGameSearchResultDtoCopyWith(
-          _$_BoardGameSearchResultDto value, $Res Function(_$_BoardGameSearchResultDto) then) =
+          _$_BoardGameSearchResultDto value,
+          $Res Function(_$_BoardGameSearchResultDto) then) =
       __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>;
   @override
   @useResult
@@ -189,10 +193,11 @@ abstract class _$$_BoardGameSearchResultDtoCopyWith<$Res>
 
 /// @nodoc
 class __$$_BoardGameSearchResultDtoCopyWithImpl<$Res>
-    extends _$BoardGameSearchResultDtoCopyWithImpl<$Res, _$_BoardGameSearchResultDto>
+    extends _$BoardGameSearchResultDtoCopyWithImpl<$Res,
+        _$_BoardGameSearchResultDto>
     implements _$$_BoardGameSearchResultDtoCopyWith<$Res> {
-  __$$_BoardGameSearchResultDtoCopyWithImpl(
-      _$_BoardGameSearchResultDto _value, $Res Function(_$_BoardGameSearchResultDto) _then)
+  __$$_BoardGameSearchResultDtoCopyWithImpl(_$_BoardGameSearchResultDto _value,
+      $Res Function(_$_BoardGameSearchResultDto) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -286,7 +291,8 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
       {required this.id,
       required this.name,
       this.yearPublished,
-      @JsonKey(unknownEnumValue: BoardGameType.boardGame) this.type = BoardGameType.boardGame,
+      @JsonKey(unknownEnumValue: BoardGameType.boardGame)
+          this.type = BoardGameType.boardGame,
       this.imageUrl,
       this.thumbnailUrl,
       this.description,
@@ -358,9 +364,12 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
             (identical(other.yearPublished, yearPublished) ||
                 other.yearPublished == yearPublished) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl) &&
-            (identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl) &&
-            (identical(other.description, description) || other.description == description) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.thumbnailUrl, thumbnailUrl) ||
+                other.thumbnailUrl == thumbnailUrl) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.minNumberOfPlayers, minNumberOfPlayers) ||
                 other.minNumberOfPlayers == minNumberOfPlayers) &&
             (identical(other.maxNumberOfPlayers, maxNumberOfPlayers) ||
@@ -369,9 +378,11 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
                 other.minPlaytimeInMinutes == minPlaytimeInMinutes) &&
             (identical(other.maxPlaytimeInMinutes, maxPlaytimeInMinutes) ||
                 other.maxPlaytimeInMinutes == maxPlaytimeInMinutes) &&
-            (identical(other.complexity, complexity) || other.complexity == complexity) &&
+            (identical(other.complexity, complexity) ||
+                other.complexity == complexity) &&
             (identical(other.rank, rank) || other.rank == rank) &&
-            (identical(other.lastUpdated, lastUpdated) || other.lastUpdated == lastUpdated) &&
+            (identical(other.lastUpdated, lastUpdated) ||
+                other.lastUpdated == lastUpdated) &&
             const DeepCollectionEquality().equals(other._prices, _prices));
   }
 
@@ -398,8 +409,9 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGameSearchResultDtoCopyWith<_$_BoardGameSearchResultDto> get copyWith =>
-      __$$_BoardGameSearchResultDtoCopyWithImpl<_$_BoardGameSearchResultDto>(this, _$identity);
+  _$$_BoardGameSearchResultDtoCopyWith<_$_BoardGameSearchResultDto>
+      get copyWith => __$$_BoardGameSearchResultDtoCopyWithImpl<
+          _$_BoardGameSearchResultDto>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -411,21 +423,23 @@ class _$_BoardGameSearchResultDto extends _BoardGameSearchResultDto {
 
 abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   const factory _BoardGameSearchResultDto(
-      {required final String id,
-      required final String name,
-      final int? yearPublished,
-      @JsonKey(unknownEnumValue: BoardGameType.boardGame) final BoardGameType type,
-      final String? imageUrl,
-      final String? thumbnailUrl,
-      final String? description,
-      final int? minNumberOfPlayers,
-      final int? maxNumberOfPlayers,
-      final int? minPlaytimeInMinutes,
-      final int? maxPlaytimeInMinutes,
-      final double? complexity,
-      final int? rank,
-      final DateTime? lastUpdated,
-      final List<BoardGameSummaryPriceDto>? prices}) = _$_BoardGameSearchResultDto;
+          {required final String id,
+          required final String name,
+          final int? yearPublished,
+          @JsonKey(unknownEnumValue: BoardGameType.boardGame)
+              final BoardGameType type,
+          final String? imageUrl,
+          final String? thumbnailUrl,
+          final String? description,
+          final int? minNumberOfPlayers,
+          final int? maxNumberOfPlayers,
+          final int? minPlaytimeInMinutes,
+          final int? maxPlaytimeInMinutes,
+          final double? complexity,
+          final int? rank,
+          final DateTime? lastUpdated,
+          final List<BoardGameSummaryPriceDto>? prices}) =
+      _$_BoardGameSearchResultDto;
   const _BoardGameSearchResultDto._() : super._();
 
   factory _BoardGameSearchResultDto.fromJson(Map<String, dynamic> json) =
@@ -464,6 +478,6 @@ abstract class _BoardGameSearchResultDto extends BoardGameSearchResultDto {
   List<BoardGameSummaryPriceDto>? get prices;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGameSearchResultDtoCopyWith<_$_BoardGameSearchResultDto> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_BoardGameSearchResultDtoCopyWith<_$_BoardGameSearchResultDto>
+      get copyWith => throw _privateConstructorUsedError;
 }

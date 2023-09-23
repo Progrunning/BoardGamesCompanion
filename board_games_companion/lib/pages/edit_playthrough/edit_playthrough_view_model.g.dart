@@ -66,20 +66,6 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
           Computed<ObservableList<PlaythroughNote>?>(() => super.notes,
               name: '_EditPlaythoughViewModel.notes'))
       .value;
-  Computed<GameFamily>? _$gameFamilyComputed;
-
-  @override
-  GameFamily get gameFamily =>
-      (_$gameFamilyComputed ??= Computed<GameFamily>(() => super.gameFamily,
-              name: '_EditPlaythoughViewModel.gameFamily'))
-          .value;
-  Computed<GameClassification>? _$gameClassificationComputed;
-
-  @override
-  GameClassification get gameClassification => (_$gameClassificationComputed ??=
-          Computed<GameClassification>(() => super.gameClassification,
-              name: '_EditPlaythoughViewModel.gameClassification'))
-      .value;
   Computed<CooperativeGameResult?>? _$cooperativeGameResultComputed;
 
   @override
@@ -88,6 +74,42 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
               () => super.cooperativeGameResult,
               name: '_EditPlaythoughViewModel.cooperativeGameResult'))
           .value;
+
+  late final _$playthroughScoresVisualStateAtom = Atom(
+      name: '_EditPlaythoughViewModel.playthroughScoresVisualState',
+      context: context);
+
+  @override
+  PlaythroughScoresVisualState get playthroughScoresVisualState {
+    _$playthroughScoresVisualStateAtom.reportRead();
+    return super.playthroughScoresVisualState;
+  }
+
+  @override
+  set playthroughScoresVisualState(PlaythroughScoresVisualState value) {
+    _$playthroughScoresVisualStateAtom
+        .reportWrite(value, super.playthroughScoresVisualState, () {
+      super.playthroughScoresVisualState = value;
+    });
+  }
+
+  late final _$editPlaythroughPageVisualStateAtom = Atom(
+      name: '_EditPlaythoughViewModel.editPlaythroughPageVisualState',
+      context: context);
+
+  @override
+  EditPlaythroughPageVisualStates get editPlaythroughPageVisualState {
+    _$editPlaythroughPageVisualStateAtom.reportRead();
+    return super.editPlaythroughPageVisualState;
+  }
+
+  @override
+  set editPlaythroughPageVisualState(EditPlaythroughPageVisualStates value) {
+    _$editPlaythroughPageVisualStateAtom
+        .reportWrite(value, super.editPlaythroughPageVisualState, () {
+      super.editPlaythroughPageVisualState = value;
+    });
+  }
 
   late final _$_playthroughDetailsWorkingCopyAtom = Atom(
       name: '_EditPlaythoughViewModel._playthroughDetailsWorkingCopy',
@@ -276,6 +298,8 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   @override
   String toString() {
     return '''
+playthroughScoresVisualState: ${playthroughScoresVisualState},
+editPlaythroughPageVisualState: ${editPlaythroughPageVisualState},
 playerScores: ${playerScores},
 playthroughDetails: ${playthroughDetails},
 playthrough: ${playthrough},
@@ -285,8 +309,6 @@ playthoughEnded: ${playthoughEnded},
 playthoughDuration: ${playthoughDuration},
 hasNotes: ${hasNotes},
 notes: ${notes},
-gameFamily: ${gameFamily},
-gameClassification: ${gameClassification},
 cooperativeGameResult: ${cooperativeGameResult}
     ''';
   }

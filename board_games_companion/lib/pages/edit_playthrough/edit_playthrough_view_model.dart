@@ -9,7 +9,6 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../common/enums/game_classification.dart';
-import '../../common/enums/game_family.dart';
 import '../../common/enums/playthrough_status.dart';
 import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
@@ -18,6 +17,8 @@ import '../../models/hive/playthrough_note.dart';
 import '../../models/player_score.dart';
 import '../../models/playthroughs/playthrough_details.dart';
 import '../../stores/game_playthroughs_details_store.dart';
+import 'edit_playthrough_page_visual_states.dart';
+import 'playthrough_scores_visual_state.dart';
 
 part 'edit_playthrough_view_model.g.dart';
 
@@ -32,6 +33,14 @@ abstract class _EditPlaythoughViewModel with Store {
   late final String _playthroughId;
 
   ValueNotifier<bool> isSpeedDialContextMenuOpen = ValueNotifier(false);
+
+  @observable
+  PlaythroughScoresVisualState playthroughScoresVisualState =
+      const PlaythroughScoresVisualState.init();
+
+  @observable
+  EditPlaythroughPageVisualStates editPlaythroughPageVisualState =
+      const EditPlaythroughPageVisualStates.init();
 
   @observable
   PlaythroughDetails? _playthroughDetailsWorkingCopy;
@@ -79,12 +88,6 @@ abstract class _EditPlaythoughViewModel with Store {
   }
 
   @computed
-  GameFamily get gameFamily => _gamePlaythroughsDetailsStore.gameGameFamily;
-
-  @computed
-  GameClassification get gameClassification => _gamePlaythroughsDetailsStore.gameClassification;
-
-  @computed
   CooperativeGameResult? get cooperativeGameResult =>
       playerScores.first.score.noScoreGameResult?.cooperativeGameResult;
 
@@ -97,6 +100,8 @@ abstract class _EditPlaythoughViewModel with Store {
     _playthroughDetailsWorkingCopy =
         playthroughDetails?.copyWith(playerScores: playthroughDetails!.playerScores);
     playerScores.addAll(_playthroughDetailsWorkingCopy!.playerScores);
+    _updateEditPlaythroughPageVisualState();
+    _updatePlaythroughScoresVisualState();
   }
 
   @action
@@ -157,6 +162,8 @@ abstract class _EditPlaythoughViewModel with Store {
 
     _playthroughDetailsWorkingCopy =
         _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
+
+    _updatePlaythroughScoresVisualState();
   }
 
   @action
@@ -296,5 +303,30 @@ abstract class _EditPlaythoughViewModel with Store {
   void _updatePlaythroughDetailsNotes(List<PlaythroughNote> notes) {
     _playthroughDetailsWorkingCopy = _playthroughDetailsWorkingCopy!
         .copyWith(playthrough: _playthroughDetailsWorkingCopy!.playthrough.copyWith(notes: notes));
+  }
+
+  void _updateEditPlaythroughPageVisualState() {
+    switch (_playthroughDetailsWorkingCopy!.playerScoreBasedGameClassification) {
+      case GameClassification.Score:
+        editPlaythroughPageVisualState = EditPlaythroughPageVisualStates.editScoreGame(
+          gameFamily: _gamePlaythroughsDetailsStore.gameGameFamily,
+        );
+        break;
+      case GameClassification.NoScore:
+        editPlaythroughPageVisualState = EditPlaythroughPageVisualStates.editNoScoreGame(
+          gameFamily: _gamePlaythroughsDetailsStore.gameGameFamily,
+        );
+        break;
+    }
+  }
+
+  void _updatePlaythroughScoresVisualState() {
+    if (_playthroughDetailsWorkingCopy!.finishedScoring) {
+      playthroughScoresVisualState = PlaythroughScoresVisualState.finishedScoring(
+        hasTies: _playthroughDetailsWorkingCopy!.hasTies,
+      );
+    } else {
+      playthroughScoresVisualState = const PlaythroughScoresVisualState.scoring();
+    }
   }
 }

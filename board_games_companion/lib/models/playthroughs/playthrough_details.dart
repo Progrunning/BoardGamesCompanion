@@ -8,7 +8,6 @@ import '../hive/playthrough.dart';
 import '../hive/playthrough_note.dart';
 import '../hive/score.dart';
 import '../player_score.dart';
-import 'score_tirebreaker.dart';
 
 part 'playthrough_details.freezed.dart';
 
@@ -71,4 +70,6 @@ class PlaythroughDetails with _$PlaythroughDetails {
       playerScores.map((playerScore) => playerScore.score).onlyScoresWithValue();
 
   bool get hasAnyScores => scoresWithValue.isNotEmpty;
+
+  bool get finishedScoring => scoresWithValue.length == playerScores.length;
 }
