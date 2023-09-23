@@ -1,12 +1,14 @@
+import 'package:board_games_companion/models/playthroughs/tiebreaker.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../common/enums/game_classification.dart';
 import '../../common/enums/playthrough_status.dart';
-import '../../extensions/scores_extensions.dart';
 import '../hive/playthrough.dart';
 import '../hive/playthrough_note.dart';
+import '../hive/score.dart';
 import '../player_score.dart';
+import 'score_tirebreaker.dart';
 
 part 'playthrough_details.freezed.dart';
 
@@ -18,6 +20,7 @@ class PlaythroughDetails with _$PlaythroughDetails {
   const factory PlaythroughDetails({
     required Playthrough playthrough,
     required List<PlayerScore> playerScores,
+    Tiebreaker? tiebreaker,
   }) = _PlaythroughDetails;
 
   const PlaythroughDetails._();
@@ -48,6 +51,12 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   bool get hasNotes => notes?.isNotEmpty ?? false;
 
+  /// Checks if any of the scores with values have the same score
+  ///
+  /// NOTE: Creating a set removes duplicates, if there are any the lenght of the
+  ///       set should be different from the scores
+  bool get hasTies => scoresWithValue.toSet().length != scoresWithValue.length;
+
   GameClassification get playerScoreBasedGameClassification {
     if (playerScores.any((playerScore) => playerScore.score.noScoreGameResult != null)) {
       return GameClassification.NoScore;
@@ -58,9 +67,8 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   PlaythroughNote? get latestNote => notes?.sortedBy((note) => note.createdAt).last;
 
-  bool get hasAnyScores => playerScores
-      .map((playerScore) => playerScore.score)
-      .toList()
-      .onlyScoresWithValue()
-      .isNotEmpty;
+  List<Score> get scoresWithValue =>
+      playerScores.map((playerScore) => playerScore.score).onlyScoresWithValue();
+
+  bool get hasAnyScores => scoresWithValue.isNotEmpty;
 }

@@ -11,7 +11,7 @@ extension ScoreExtesions on Score {
   }
 }
 
-extension ScoresExtesions on List<Score>? {
+extension ScoresExtesions on Iterable<Score>? {
   List<Score> onlyScoresWithValue() {
     return this
             ?.where((s) => (s.value?.isNotEmpty ?? false) && num.tryParse(s.value!) != null)
@@ -25,7 +25,7 @@ extension ScoresExtesions on List<Score>? {
   }
 
   List<Score>? sortByScore(GameFamily gameFamily) {
-    return this
+    return this?.toList()
       ?..sort((Score score, Score otherScore) {
         return compareScores(score, otherScore, gameFamily);
       });

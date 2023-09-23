@@ -189,8 +189,6 @@ abstract class _EditPlaythoughViewModel with Store {
   // - Create TiebreakerResult or perhaps use place property?
   @action
   void reorderPlayerScores(int currentIndex, int movingToIndex) {
-    Fimber.d('OLD $currentIndex | NEW $movingToIndex');
-
     var elementIndexesAffectedByReorder = <int>[];
     // final distanceBetweenElements = (currentIndex - movingToIndex).abs();
     // final isMovingNeighbouringElements = distanceBetweenElements <= 1;
