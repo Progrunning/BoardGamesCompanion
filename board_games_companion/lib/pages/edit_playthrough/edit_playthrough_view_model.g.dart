@@ -24,13 +24,6 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
       (_$playthroughComputed ??= Computed<Playthrough>(() => super.playthrough,
               name: '_EditPlaythoughViewModel.playthrough'))
           .value;
-  Computed<ObservableList<PlayerScore>>? _$playerScoresComputed;
-
-  @override
-  ObservableList<PlayerScore> get playerScores => (_$playerScoresComputed ??=
-          Computed<ObservableList<PlayerScore>>(() => super.playerScores,
-              name: '_EditPlaythoughViewModel.playerScores'))
-      .value;
   Computed<ObservableList<Player>>? _$playersComputed;
 
   @override
@@ -111,6 +104,22 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
     _$_playthroughDetailsWorkingCopyAtom
         .reportWrite(value, super._playthroughDetailsWorkingCopy, () {
       super._playthroughDetailsWorkingCopy = value;
+    });
+  }
+
+  late final _$playerScoresAtom =
+      Atom(name: '_EditPlaythoughViewModel.playerScores', context: context);
+
+  @override
+  ObservableList<PlayerScore> get playerScores {
+    _$playerScoresAtom.reportRead();
+    return super.playerScores;
+  }
+
+  @override
+  set playerScores(ObservableList<PlayerScore> value) {
+    _$playerScoresAtom.reportWrite(value, super.playerScores, () {
+      super.playerScores = value;
     });
   }
 
@@ -209,11 +218,11 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
-  void reorderPlayerScores(int oldIndex, int newIndex) {
+  void reorderPlayerScores(int currentIndex, int movingToIndex) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
         name: '_EditPlaythoughViewModel.reorderPlayerScores');
     try {
-      return super.reorderPlayerScores(oldIndex, newIndex);
+      return super.reorderPlayerScores(currentIndex, movingToIndex);
     } finally {
       _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
     }
@@ -267,9 +276,9 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   @override
   String toString() {
     return '''
+playerScores: ${playerScores},
 playthroughDetails: ${playthroughDetails},
 playthrough: ${playthrough},
-playerScores: ${playerScores},
 players: ${players},
 playthroughStartTime: ${playthroughStartTime},
 playthoughEnded: ${playthoughEnded},

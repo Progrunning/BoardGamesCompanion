@@ -282,7 +282,7 @@ class _ScoresSection extends StatelessWidget {
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
   final VoidCallback onSortScores;
-  final void Function(int oldIndex, int newIndex) onReorder;
+  final void Function(int currentIndex, int newIndex) onReorder;
 
   @override
   Widget build(BuildContext context) => MultiSliver(
@@ -322,10 +322,10 @@ class _ScoresSection extends StatelessWidget {
                     );
                   },
                   itemCount: max(0, playerScores.length * 2 - 1),
-                  onReorder: (int oldIndex, int newIndex) {
-                    final oldItemIndex = oldIndex ~/ 2;
-                    final newItemIndex = newIndex ~/ 2;
-                    onReorder(oldItemIndex, newItemIndex);
+                  onReorder: (int currentIndex, int newIndex) {
+                    final itemsCurrentIndex = currentIndex ~/ 2;
+                    final itemsNewIndex = newIndex ~/ 2;
+                    onReorder(itemsCurrentIndex, itemsNewIndex);
                   },
                 ),
               );

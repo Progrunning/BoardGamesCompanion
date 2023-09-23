@@ -1,7 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'dart:math';
-
 import 'package:board_games_companion/common/constants.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
@@ -38,43 +36,43 @@ abstract class _EditPlaythoughViewModel with Store {
   @observable
   PlaythroughDetails? _playthroughDetailsWorkingCopy;
 
-  PlaythroughDetails get playthroughDetailsWorkingCopy => _playthroughDetailsWorkingCopy!;
+  /// Creating a separate "copy" of player scores to ensure we can easily update (i.e. [ObservableList])
+  /// the player list without having to re-render the entire list in the UI whenever there's an update to it.
+  /// It's especially important when reordering the list.
+  @observable
+  ObservableList<PlayerScore> playerScores = <PlayerScore>[].asObservable();
 
   @computed
   PlaythroughDetails? get playthroughDetails => _gamePlaythroughsDetailsStore.playthroughsDetails
       .firstWhereOrNull((pd) => pd.id == _playthroughId);
 
   @computed
-  Playthrough get playthrough => playthroughDetailsWorkingCopy.playthrough;
+  Playthrough get playthrough => _playthroughDetailsWorkingCopy!.playthrough;
 
   @computed
-  ObservableList<PlayerScore> get playerScores =>
-      playthroughDetailsWorkingCopy.playerScores.asObservable();
-
-  @computed
-  ObservableList<Player> get players => playthroughDetailsWorkingCopy.playerScores
+  ObservableList<Player> get players => _playthroughDetailsWorkingCopy!.playerScores
       .where((playerScore) => playerScore.player != null)
       .map((playerScore) => playerScore.player!)
       .toList()
       .asObservable();
 
   @computed
-  DateTime get playthroughStartTime => playthroughDetailsWorkingCopy.startDate;
+  DateTime get playthroughStartTime => _playthroughDetailsWorkingCopy!.startDate;
 
   @computed
-  bool get playthoughEnded => playthroughDetailsWorkingCopy.playthoughEnded;
+  bool get playthoughEnded => _playthroughDetailsWorkingCopy!.playthoughEnded;
 
   @computed
-  Duration get playthoughDuration => (playthroughDetailsWorkingCopy.endDate ?? DateTime.now())
-      .difference(playthroughDetailsWorkingCopy.startDate);
+  Duration get playthoughDuration => (_playthroughDetailsWorkingCopy!.endDate ?? DateTime.now())
+      .difference(_playthroughDetailsWorkingCopy!.startDate);
 
   @computed
-  bool get hasNotes => playthroughDetailsWorkingCopy.notes?.isNotEmpty ?? false;
+  bool get hasNotes => _playthroughDetailsWorkingCopy!.notes?.isNotEmpty ?? false;
 
   @computed
   ObservableList<PlaythroughNote>? get notes {
     final playthroughNotes =
-        List<PlaythroughNote>.from(playthroughDetailsWorkingCopy.notes ?? <PlaythroughNote>[]);
+        List<PlaythroughNote>.from(_playthroughDetailsWorkingCopy!.notes ?? <PlaythroughNote>[]);
 
     return ObservableList.of(
         playthroughNotes..sort((noteA, noteB) => noteA.createdAt.compareTo(noteB.createdAt)));
@@ -90,7 +88,7 @@ abstract class _EditPlaythoughViewModel with Store {
   CooperativeGameResult? get cooperativeGameResult =>
       playerScores.first.score.noScoreGameResult?.cooperativeGameResult;
 
-  bool get isDirty => playthroughDetailsWorkingCopy != playthroughDetails;
+  bool get isDirty => _playthroughDetailsWorkingCopy != playthroughDetails;
 
   @action
   void setPlaythroughId(String playthroughId) {
@@ -98,6 +96,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
     _playthroughDetailsWorkingCopy =
         playthroughDetails?.copyWith(playerScores: playthroughDetails!.playerScores);
+    playerScores.addAll(_playthroughDetailsWorkingCopy!.playerScores);
   }
 
   @action
@@ -120,7 +119,7 @@ abstract class _EditPlaythoughViewModel with Store {
   @action
   Future<void> saveChanges() async {
     if (isDirty) {
-      await _gamePlaythroughsDetailsStore.updatePlaythrough(playthroughDetailsWorkingCopy);
+      await _gamePlaythroughsDetailsStore.updatePlaythrough(_playthroughDetailsWorkingCopy);
     }
   }
 
@@ -157,7 +156,7 @@ abstract class _EditPlaythoughViewModel with Store {
     playerScores[playerScoreIndex] = updatedPlayerScore;
 
     _playthroughDetailsWorkingCopy =
-        playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
+        _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
   }
 
   @action
@@ -180,7 +179,7 @@ abstract class _EditPlaythoughViewModel with Store {
       });
 
     _playthroughDetailsWorkingCopy =
-        playthroughDetailsWorkingCopy.copyWith(playerScores: orderedPlayerScore);
+        _playthroughDetailsWorkingCopy!.copyWith(playerScores: orderedPlayerScore);
   }
 
   // TODO
@@ -189,39 +188,56 @@ abstract class _EditPlaythoughViewModel with Store {
   // - Toggle score moving mode for better control
   // - Create TiebreakerResult or perhaps use place property?
   @action
-  void reorderPlayerScores(int oldIndex, int newIndex) {
-    Fimber.d('OLD $oldIndex | NEW $newIndex');
+  void reorderPlayerScores(int currentIndex, int movingToIndex) {
+    Fimber.d('OLD $currentIndex | NEW $movingToIndex');
 
-    // 3 -> 0
-    // 0 -> 1
-    // 1 -> 2
-    // 2 -> 3
+    var elementIndexesAffectedByReorder = <int>[];
+    // final distanceBetweenElements = (currentIndex - movingToIndex).abs();
+    // final isMovingNeighbouringElements = distanceBetweenElements <= 1;
+    final movedElementUp = movingToIndex < currentIndex;
+    if (movedElementUp) {
+      // For example
+      // 3 -> 0
+      // ------
+      // 0 -> 1
+      // 1 -> 2
+      // 2 -> 3
+      final numberOfAffectedElements = currentIndex - movingToIndex;
+      elementIndexesAffectedByReorder = List.generate(
+        numberOfAffectedElements,
+        (int index) => movingToIndex + index,
+        growable: false,
+      );
+    } else {
+      // For example
+      // 0 -> 3
+      // ------
+      // 3 -> 2
+      // 2 -> 1
+      // 1 -> 0
+      final numberOfAffectedElements = movingToIndex - currentIndex;
+      elementIndexesAffectedByReorder = List.generate(
+        numberOfAffectedElements,
+        (int index) => movingToIndex - index,
+        growable: false,
+      );
+    }
 
-    // 0 -> 3
-    // 3 -> 2
-    // 2 -> 1
-    // 1 -> 0
-    final a = List.generate(max(oldIndex, newIndex), (int index) => index, growable: false);
-    Fimber.d('$a');
+    // Making working copy of player scores to capture the list sort before reordering
+    final playerScoresWorkingCopy = playerScores.toList();
 
-    // Fimber.d('BEFORE');
-    // for (final playerScore in playerScores) {
-    //   Fimber.d('${playerScore.player!.name}');
-    // }
+    Fimber.d('Reording dragged element from $currentIndex to $movingToIndex');
+    playerScores[movingToIndex] = playerScoresWorkingCopy[currentIndex];
 
-    final oldElement = playerScores[oldIndex];
+    for (final elementIndexAffectedByReorder in elementIndexesAffectedByReorder) {
+      final reorderedIndex =
+          movedElementUp ? elementIndexAffectedByReorder + 1 : elementIndexAffectedByReorder - 1;
+      Fimber.d('Reording affected element from $elementIndexAffectedByReorder to $reorderedIndex');
+      playerScores[reorderedIndex] = playerScoresWorkingCopy[elementIndexAffectedByReorder];
+    }
 
-    playerScores[oldIndex] = playerScores[newIndex];
-    playerScores[newIndex] = oldElement;
-
-    // Fimber.d('-----');
-    // Fimber.d('AFTER');
-    // for (final playerScore in playerScores) {
-    //   Fimber.d('${playerScore.player!.name}');
-    // }
-
-    // _playthroughDetailsWorkingCopy =
-    //     playthroughDetailsWorkingCopy.copyWith(playerScores: playerScores);
+    _playthroughDetailsWorkingCopy =
+        _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
   }
 
   @action
@@ -239,7 +255,7 @@ abstract class _EditPlaythoughViewModel with Store {
     }
 
     _playthroughDetailsWorkingCopy =
-        playthroughDetailsWorkingCopy.copyWith(playerScores: updatedPlayerScores);
+        _playthroughDetailsWorkingCopy!.copyWith(playerScores: updatedPlayerScores);
   }
 
   @action
