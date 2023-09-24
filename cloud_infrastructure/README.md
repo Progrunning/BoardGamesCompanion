@@ -51,3 +51,30 @@ More details on the below commands can be found here https://developer.hashicorp
 > NOTE: This is when terraform writes data into the `terraform.tfstate` file
 > NOTE2: provide `-auto-approve` parameter to auto approve the changes
 > NOTE3: to provide variables from a `tfvars` file use the `-var-file="testing.tfvars"` parameter
+
+# Azure Resources
+
+## Application Insights
+
+### Purging data
+
+Application insights were provisioned initially with sampling rate percentage of 100%, which caused high increase in stored data and resulted in increased costs. In order to reduce these costs retention period and sampling rate has been drastically reduced. However the existing collected data is causing the cost of the service to be higher than expected.
+
+In order to reduce the cost there is a REST API to purge Application Insights ([docs](https://learn.microsoft.com/en-us/rest/api/application-insights/components/purge?tabs=HTTP)). The below are examples of POST requests executed on the 24/09/2023
+
+`curl -X POST https://management.azure.com/subscriptions/637f5988-c385-408a-9b44-61b1c72f6b36/resourceGroups/bgc-prod-rg/Microsoft.OperationalInsights/workspaces/bgc-prod-log/purge?api-version=2020-08-01 -H "Content-Type: application/json" -H "Authorization: Bearer <access_token>" -d '{ "table": "traces", "filters": [ { "column": "TimeGenerated", "operator": ">", "value": "2023-07-10T00:00:00" } ] }'`
+
+```json
+{
+  "table": "AppTraces", 
+  "filters": [
+    {
+      "column": "TimeGenerated",
+      "operator": ">",
+      "value": "2023-07-10T00:00:00"
+    }
+  ]
+}
+```
+
+The above was repeated additionally for `AppPerformanceCounters`, `AppExceptions`,  `AppDependencies` and `AppMetrics` tables.
