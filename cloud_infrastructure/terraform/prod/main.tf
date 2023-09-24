@@ -29,7 +29,9 @@ variable "resources" {
     })
     application_insights = object({
       search_service = object({
-        name = string
+        name                = string
+        retention_in_days   = number
+        sampling_percentage = number
       })
     })
     cache_service_bus = object({
@@ -112,6 +114,8 @@ resource "azurerm_application_insights" "search_service_appi" {
   location            = azurerm_resource_group.rg.location
   workspace_id        = azurerm_log_analytics_workspace.log.id
   application_type    = "web"
+  retention_in_days   = var.resources.application_insights.search_service.retention_in_days
+  sampling_percentage = var.resources.application_insights.search_service.sampling_percentage
 }
 
 ###
