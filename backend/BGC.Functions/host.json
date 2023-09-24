@@ -24,11 +24,22 @@
   },
   "functionTimeout": "00:00:20",
   "logging": {
+    "logLevel": {
+      "default": "Warning",
+      "Microsoft": "Warning",
+      "Function": "Error",
+      "Host.Results": "Error",
+      "Host.Aggregator": "Information"
+    },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
-        "excludedTypes": "Request"
+        "maxTelemetryItemsPerSecond": 10
       }
+    },
+    "aggregator": {
+      "batchSize": 1000,
+      "flushTimeout": "00:30:00"
     }
   }
 }
