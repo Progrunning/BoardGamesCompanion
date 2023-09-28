@@ -37,10 +37,6 @@ extension XmlElementExtensions on XmlElement? {
       return null;
     }
 
-    return firstOrDefaultAttributeWhere(
-      (attr) {
-        return attr.name.local == attributeName;
-      },
-    )?.value;
+    return firstOrDefaultAttributeWhere((attr) => attr.name.local == attributeName)?.value;
   }
 }
