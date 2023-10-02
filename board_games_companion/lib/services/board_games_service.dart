@@ -144,6 +144,8 @@ class BoardGamesService extends BaseHiveService<BoardGameDetails, BoardGamesServ
           publishers: existingBoardGame.publishers,
           desingers: existingBoardGame.desingers,
           minAge: existingBoardGame.minAge,
+          settings: existingBoardGame.settings,
+          prices: existingBoardGame.prices,
         );
       }
 
