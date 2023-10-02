@@ -5,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 
 import '../mocks/hive_box_mock.dart';
 import '../mocks/hive_interface_mock.dart';
-import '../mocks/score_hive_box_mock.dart';
 
 void main() {
   late MockHiveInterface mockHiveInterface;
