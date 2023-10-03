@@ -59,7 +59,7 @@ jobs:
         displayName: Publish image to Docker Hub
         inputs:
           command: buildAndPush
-          repository: bgc
+          repository: mkieres/bgc
           tags: "$(Build.BuildId)"
           buildContext: backend/
           dockerfile: backend/BGC.SearchApi/dockerfile
