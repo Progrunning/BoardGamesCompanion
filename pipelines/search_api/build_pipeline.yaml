@@ -49,10 +49,16 @@ jobs:
 
       - task: Docker@2
         condition: and(succeeded(), eq(variables.isPR, 'false'))
-        displayName: Publish docker image to ACR
+        displayName: Login to Docker Hub
+        inputs:
+          command: login
+          containerRegistry: bgc-docker-hub
+
+      - task: Docker@2
+        condition: and(succeeded(), eq(variables.isPR, 'false'))
+        displayName: Publish image to Docker Hub
         inputs:
           command: buildAndPush
-          containerRegistry: bgc-docker-hub
           repository: bgc
           tags: "$(Build.BuildId)"
           buildContext: backend/
