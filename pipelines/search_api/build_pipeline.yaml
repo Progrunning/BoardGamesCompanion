@@ -52,7 +52,7 @@ jobs:
         displayName: Publish docker image to ACR
         inputs:
           command: buildAndPush
-          containerRegistry: bgc-acr
+          containerRegistry: bgc-docker-hub
           repository: bgc
           tags: "$(Build.BuildId)"
           buildContext: backend/
