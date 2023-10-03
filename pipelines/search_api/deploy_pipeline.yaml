@@ -25,7 +25,10 @@ variables:
   acrName: bgcsharedcr
   acrServer: bgcsharedcr.azurecr.io
   acrServiceRepositoryName: bgc
-  acrServiceConnection: bgc-acr
+
+  registryUrl: registry.hub.docker.com
+  registryName: mkieres
+  registryRepositoryName: bgc
 
   # Dev
   armServiceConnectionDev: bgc-dev
@@ -68,17 +71,27 @@ stages:
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroupName: $(resourceGroupNameDev)
 
-                - task: AzureContainerApps@1
-                  displayName: Deploy Docker image to Container App
+                - task: AzureCLI@2
                   inputs:
-                    acrName: $(acrName)
-                    acrUsername: $(acrUsername)
-                    acrPassword: $(acrPassword)
-                    azureSubscription: $(armServiceConnectionDev)
-                    containerAppName: $(azureContainerAppNameDev)
-                    resourceGroup: $(resourceGroupNameDev)
-                    imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    environmentVariables: AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
+                    azureSubscription: "bgc-dev"
+                    scriptType: "ps"
+                    scriptLocation: "inlineScript"
+                    inlineScript: |
+                      az config set extension.use_dynamic_install=yes_without_prompt
+                      az containerapp registry set -n $(azureContainerAppNameDev) -g $(resourceGroupNameDev) --server registry.hub.docker.com --username  $(registryUsername) --password $(registryPassword)
+                      az containerapp update -n $(azureContainerAppNameDev) -g $(resourceGroupNameDev) --image $(registryName)/$(registryRepositoryName):$(deployTagId) --set-env-vars "AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)"
+
+                # - task: AzureContainerApps@1
+                #   displayName: Deploy Docker image to Container App
+                #   inputs:
+                #     acrName: $(acrName)
+                #     acrUsername: $(acrUsername)
+                #     acrPassword: $(acrPassword)
+                #     azureSubscription: $(armServiceConnectionDev)
+                #     containerAppName: $(azureContainerAppNameDev)
+                #     resourceGroup: $(resourceGroupNameDev)
+                #     imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
+                #     environmentVariables: AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
 
   - stage: PROD
     dependsOn: DEV
