@@ -106,7 +106,7 @@ stages:
                   displayName: Deploy Docker image to Container App
                   continueOnError: true
                   inputs:
-                    azureSubscription: $(armServiceConnectionDev)
+                    azureSubscription: $(armServiceConnectionProd)
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
