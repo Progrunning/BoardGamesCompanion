@@ -69,6 +69,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                       init: () => const SizedBox.shrink(),
                       editScoreGame: (_) => _ScoresSection(
                         playerScores: widget.viewModel.playerScores,
+                        tiedPlayerScoresMap: widget.viewModel.tiedPlayerScoresMap,
                         playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
                         onItemTapped: (PlayerScore playerScore) async =>
                             _editPlayerScore(playerScore, context),
@@ -272,6 +273,7 @@ class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
     Key? key,
     required this.playerScores,
+    required this.tiedPlayerScoresMap,
     required this.playthroughDetailsId,
     required this.onItemTapped,
     required this.onSortScores,
@@ -279,6 +281,7 @@ class _ScoresSection extends StatelessWidget {
   }) : super(key: key);
 
   final List<PlayerScore> playerScores;
+  final Map<String, PlayerScore> tiedPlayerScoresMap;
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
   final VoidCallback onSortScores;
@@ -304,20 +307,22 @@ class _ScoresSection extends StatelessWidget {
                 sliver: SliverReorderableList(
                   itemBuilder: (_, index) {
                     final int itemIndex = index ~/ 2;
+                    final playerScore = playerScores[itemIndex];
                     if (index.isEven) {
                       return ReorderableDragStartListener(
-                        key: Key('PlayerScoreTile${playerScores[itemIndex].id}'),
+                        key: Key('PlayerScoreTile$playerScore'),
                         index: index,
                         child: _PlayerScoreTile(
-                          playerScore: playerScores[itemIndex],
+                          playerScore: playerScore,
                           playthroughDetailsId: playthroughDetailsId,
                           onItemTapped: onItemTapped,
+                          isTied: tiedPlayerScoresMap.containsKey(playerScore.id),
                         ),
                       );
                     }
 
                     return SizedBox(
-                      key: Key('PlayerScoreSeparator${playerScores[itemIndex].id}'),
+                      key: Key('PlayerScoreSeparator${playerScore.id}'),
                       height: Dimensions.doubleStandardSpacing,
                     );
                   },
@@ -462,11 +467,13 @@ class _PlayerScoreTile extends StatefulWidget {
     Key? key,
     required this.playerScore,
     required this.playthroughDetailsId,
+    required this.isTied,
     required this.onItemTapped,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String? playthroughDetailsId;
+  final bool isTied;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
@@ -511,6 +518,7 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                 ),
                 const SizedBox(width: Dimensions.standardSpacing),
                 Expanded(child: _PlayerScore(score: score)),
+                if (widget.isTied) const Text('tied'),
               ],
             ),
           ),

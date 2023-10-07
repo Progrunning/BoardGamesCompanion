@@ -52,8 +52,8 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   /// Checks if any of the scores with values have the same score
   ///
-  /// NOTE: Creating a set removes duplicates, if there are any the lenght of the
-  ///       set should be different from the scores
+  /// NOTE: Creating a set removes duplicates, if there are any then lenght of the
+  ///       set should be different from the total
   bool get hasTies => scoresWithValue.toSet().length != scoresWithValue.length;
 
   GameClassification get playerScoreBasedGameClassification {

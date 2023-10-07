@@ -52,6 +52,26 @@ abstract class _EditPlaythoughViewModel with Store {
   ObservableList<PlayerScore> playerScores = <PlayerScore>[].asObservable();
 
   @computed
+  Map<String, PlayerScore> get tiedPlayerScoresMap {
+    final playerScoresGrouped = playerScores
+        .toList()
+        .where((ps) => ps.score.value != null)
+        .groupListsBy((ps) => ps.score.value);
+    if (playerScoresGrouped.isEmpty) {
+      return {};
+    }
+
+    final tiedPlayerScoresCollections =
+        playerScoresGrouped.values.where((ps) => ps.length > 1).toList();
+    if (tiedPlayerScoresCollections.isEmpty) {
+      return {};
+    }
+
+    final tiedPlayerScores = tiedPlayerScoresCollections.reduce((a, b) => a..addAll(b));
+    return {for (final tiedPlayerScore in tiedPlayerScores) tiedPlayerScore.id!: tiedPlayerScore};
+  }
+
+  @computed
   PlaythroughDetails? get playthroughDetails => _gamePlaythroughsDetailsStore.playthroughsDetails
       .firstWhereOrNull((pd) => pd.id == _playthroughId);
 
