@@ -22,6 +22,7 @@ import '../../models/player_score.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
+import '../../widgets/common/tile_positioned_rank_ribbon.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
@@ -70,6 +71,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                       editScoreGame: (_) => _ScoresSection(
                         playerScores: widget.viewModel.playerScores,
                         tiedPlayerScoresMap: widget.viewModel.tiedPlayerScoresMap,
+                        hasTies: widget.viewModel.playthroughDetails?.hasTies ?? false,
                         playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
                         onItemTapped: (PlayerScore playerScore) async =>
                             _editPlayerScore(playerScore, context),
@@ -274,6 +276,7 @@ class _ScoresSection extends StatelessWidget {
     Key? key,
     required this.playerScores,
     required this.tiedPlayerScoresMap,
+    required this.hasTies,
     required this.playthroughDetailsId,
     required this.onItemTapped,
     required this.onSortScores,
@@ -282,6 +285,7 @@ class _ScoresSection extends StatelessWidget {
 
   final List<PlayerScore> playerScores;
   final Map<String, PlayerScore> tiedPlayerScoresMap;
+  final bool hasTies;
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
   final VoidCallback onSortScores;
@@ -300,6 +304,7 @@ class _ScoresSection extends StatelessWidget {
               ),
             ),
           ),
+          if (hasTies) const _ScoreTieBreakerInstruction(),
           Observer(
             builder: (_) {
               return SliverPadding(
@@ -330,6 +335,11 @@ class _ScoresSection extends StatelessWidget {
                   onReorder: (int currentIndex, int newIndex) {
                     final itemsCurrentIndex = currentIndex ~/ 2;
                     final itemsNewIndex = newIndex ~/ 2;
+                    if (!tiedPlayerScoresMap.containsKey(playerScores[itemsCurrentIndex].id)) {
+                      _showCannotReorderScoreNotTied(context);
+                      return;
+                    }
+
                     onReorder(itemsCurrentIndex, itemsNewIndex);
                   },
                 ),
@@ -338,6 +348,39 @@ class _ScoresSection extends StatelessWidget {
           ),
         ],
       );
+
+  void _showCannotReorderScoreNotTied(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        margin: Dimensions.snackbarMargin,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 2),
+        content: Text(AppText.editPlaythroughPageCannotReorderNotTiedScore),
+      ),
+    );
+  }
+}
+
+class _ScoreTieBreakerInstruction extends StatelessWidget {
+  const _ScoreTieBreakerInstruction();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              AppText.editPlaythroughPageTieBreakerInstruction,
+              style: AppTheme.theme.textTheme.bodyLarge,
+              textAlign: TextAlign.justify,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _NoScoreSection extends StatelessWidget {
@@ -510,15 +553,22 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                 SizedBox(
                   height: Dimensions.smallPlayerAvatarSize.height,
                   width: Dimensions.smallPlayerAvatarSize.width,
-                  child: PlayerAvatar(
-                    player: widget.playerScore.player,
-                    avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                    playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
-                  ),
+                  child: Stack(children: [
+                    PlayerAvatar(
+                      player: widget.playerScore.player,
+                      avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                      playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
+                    ),
+                    // TODO Fix/Update places when reordering
+                    PositionedTileRankRibbon(rank: widget.playerScore.place ?? 0),
+                  ]),
                 ),
                 const SizedBox(width: Dimensions.standardSpacing),
                 Expanded(child: _PlayerScore(score: score)),
-                if (widget.isTied) const Text('tied'),
+                if (widget.isTied) ...[
+                  Checkbox(value: false, onChanged: (value) {}),
+                  const Icon(Icons.drag_handle, size: Dimensions.largeIconSize),
+                ],
               ],
             ),
           ),

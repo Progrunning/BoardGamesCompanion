@@ -54,7 +54,7 @@ class PlaythroughDetails with _$PlaythroughDetails {
   ///
   /// NOTE: Creating a set removes duplicates, if there are any then lenght of the
   ///       set should be different from the total
-  bool get hasTies => scoresWithValue.toSet().length != scoresWithValue.length;
+  bool get hasTies => scoresWithValue.map((s) => s.value).toSet().length != scoresWithValue.length;
 
   GameClassification get playerScoreBasedGameClassification {
     if (playerScores.any((playerScore) => playerScore.score.noScoreGameResult != null)) {
