@@ -20,21 +20,27 @@ mixin _$PlaythroughScoresVisualState {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() scoring,
-    required TResult Function(bool hasTies) finishedScoring,
+    required TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)
+        finishedScoring,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? scoring,
-    TResult? Function(bool hasTies)? finishedScoring,
+    TResult? Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? scoring,
-    TResult Function(bool hasTies)? finishedScoring,
+    TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -121,7 +127,9 @@ class _$_init implements _init {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() scoring,
-    required TResult Function(bool hasTies) finishedScoring,
+    required TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)
+        finishedScoring,
   }) {
     return init();
   }
@@ -131,7 +139,9 @@ class _$_init implements _init {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? scoring,
-    TResult? Function(bool hasTies)? finishedScoring,
+    TResult? Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
   }) {
     return init?.call();
   }
@@ -141,7 +151,9 @@ class _$_init implements _init {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? scoring,
-    TResult Function(bool hasTies)? finishedScoring,
+    TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
     required TResult orElse(),
   }) {
     if (init != null) {
@@ -228,7 +240,9 @@ class _$_scoring implements _scoring {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() scoring,
-    required TResult Function(bool hasTies) finishedScoring,
+    required TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)
+        finishedScoring,
   }) {
     return scoring();
   }
@@ -238,7 +252,9 @@ class _$_scoring implements _scoring {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? scoring,
-    TResult? Function(bool hasTies)? finishedScoring,
+    TResult? Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
   }) {
     return scoring?.call();
   }
@@ -248,7 +264,9 @@ class _$_scoring implements _scoring {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? scoring,
-    TResult Function(bool hasTies)? finishedScoring,
+    TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
     required TResult orElse(),
   }) {
     if (scoring != null) {
@@ -302,7 +320,7 @@ abstract class _$$_finishedScoringCopyWith<$Res> {
           _$_finishedScoring value, $Res Function(_$_finishedScoring) then) =
       __$$_finishedScoringCopyWithImpl<$Res>;
   @useResult
-  $Res call({bool hasTies});
+  $Res call({Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies});
 }
 
 /// @nodoc
@@ -316,9 +334,14 @@ class __$$_finishedScoringCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? tiedPlayerScoresMap = null,
     Object? hasTies = null,
   }) {
     return _then(_$_finishedScoring(
+      tiedPlayerScoresMap: null == tiedPlayerScoresMap
+          ? _value._tiedPlayerScoresMap
+          : tiedPlayerScoresMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, PlayerScore>,
       hasTies: null == hasTies
           ? _value.hasTies
           : hasTies // ignore: cast_nullable_to_non_nullable
@@ -330,14 +353,26 @@ class __$$_finishedScoringCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_finishedScoring implements _finishedScoring {
-  const _$_finishedScoring({required this.hasTies});
+  const _$_finishedScoring(
+      {required final Map<String, PlayerScore> tiedPlayerScoresMap,
+      required this.hasTies})
+      : _tiedPlayerScoresMap = tiedPlayerScoresMap;
+
+  final Map<String, PlayerScore> _tiedPlayerScoresMap;
+  @override
+  Map<String, PlayerScore> get tiedPlayerScoresMap {
+    if (_tiedPlayerScoresMap is EqualUnmodifiableMapView)
+      return _tiedPlayerScoresMap;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_tiedPlayerScoresMap);
+  }
 
   @override
   final bool hasTies;
 
   @override
   String toString() {
-    return 'PlaythroughScoresVisualState.finishedScoring(hasTies: $hasTies)';
+    return 'PlaythroughScoresVisualState.finishedScoring(tiedPlayerScoresMap: $tiedPlayerScoresMap, hasTies: $hasTies)';
   }
 
   @override
@@ -345,11 +380,14 @@ class _$_finishedScoring implements _finishedScoring {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_finishedScoring &&
+            const DeepCollectionEquality()
+                .equals(other._tiedPlayerScoresMap, _tiedPlayerScoresMap) &&
             (identical(other.hasTies, hasTies) || other.hasTies == hasTies));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, hasTies);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_tiedPlayerScoresMap), hasTies);
 
   @JsonKey(ignore: true)
   @override
@@ -362,9 +400,11 @@ class _$_finishedScoring implements _finishedScoring {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() scoring,
-    required TResult Function(bool hasTies) finishedScoring,
+    required TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)
+        finishedScoring,
   }) {
-    return finishedScoring(hasTies);
+    return finishedScoring(tiedPlayerScoresMap, hasTies);
   }
 
   @override
@@ -372,9 +412,11 @@ class _$_finishedScoring implements _finishedScoring {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? scoring,
-    TResult? Function(bool hasTies)? finishedScoring,
+    TResult? Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
   }) {
-    return finishedScoring?.call(hasTies);
+    return finishedScoring?.call(tiedPlayerScoresMap, hasTies);
   }
 
   @override
@@ -382,11 +424,13 @@ class _$_finishedScoring implements _finishedScoring {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? scoring,
-    TResult Function(bool hasTies)? finishedScoring,
+    TResult Function(
+            Map<String, PlayerScore> tiedPlayerScoresMap, bool hasTies)?
+        finishedScoring,
     required TResult orElse(),
   }) {
     if (finishedScoring != null) {
-      return finishedScoring(hasTies);
+      return finishedScoring(tiedPlayerScoresMap, hasTies);
     }
     return orElse();
   }
@@ -427,9 +471,11 @@ class _$_finishedScoring implements _finishedScoring {
 }
 
 abstract class _finishedScoring implements PlaythroughScoresVisualState {
-  const factory _finishedScoring({required final bool hasTies}) =
-      _$_finishedScoring;
+  const factory _finishedScoring(
+      {required final Map<String, PlayerScore> tiedPlayerScoresMap,
+      required final bool hasTies}) = _$_finishedScoring;
 
+  Map<String, PlayerScore> get tiedPlayerScoresMap;
   bool get hasTies;
   @JsonKey(ignore: true)
   _$$_finishedScoringCopyWith<_$_finishedScoring> get copyWith =>

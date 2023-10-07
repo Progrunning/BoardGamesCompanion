@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:board_games_companion/pages/edit_playthrough/playthrough_scores_visual_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -70,8 +72,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                       init: () => const SizedBox.shrink(),
                       editScoreGame: (_) => _ScoresSection(
                         playerScores: widget.viewModel.playerScores,
-                        tiedPlayerScoresMap: widget.viewModel.tiedPlayerScoresMap,
-                        hasTies: widget.viewModel.playthroughDetails?.hasTies ?? false,
+                        playthroughScoresVisualState: widget.viewModel.playthroughScoresVisualState,
                         playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
                         onItemTapped: (PlayerScore playerScore) async =>
                             _editPlayerScore(playerScore, context),
@@ -275,8 +276,7 @@ class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
     Key? key,
     required this.playerScores,
-    required this.tiedPlayerScoresMap,
-    required this.hasTies,
+    required this.playthroughScoresVisualState,
     required this.playthroughDetailsId,
     required this.onItemTapped,
     required this.onSortScores,
@@ -284,70 +284,127 @@ class _ScoresSection extends StatelessWidget {
   }) : super(key: key);
 
   final List<PlayerScore> playerScores;
-  final Map<String, PlayerScore> tiedPlayerScoresMap;
-  final bool hasTies;
+  final PlaythroughScoresVisualState playthroughScoresVisualState;
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
   final VoidCallback onSortScores;
   final void Function(int currentIndex, int newIndex) onReorder;
 
   @override
-  Widget build(BuildContext context) => MultiSliver(
-        children: [
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: BgcSliverTitleHeaderDelegate.action(
-              primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
-              action: IconButton(
-                icon: const Icon(Icons.sort),
-                onPressed: () => onSortScores(),
-              ),
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverTitleHeaderDelegate.action(
+            primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
+            action: IconButton(
+              icon: const Icon(Icons.sort),
+              onPressed: () => onSortScores(),
             ),
           ),
-          if (hasTies) const _ScoreTieBreakerInstruction(),
-          Observer(
-            builder: (_) {
-              return SliverPadding(
-                padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-                sliver: SliverReorderableList(
-                  itemBuilder: (_, index) {
-                    final int itemIndex = index ~/ 2;
-                    final playerScore = playerScores[itemIndex];
-                    if (index.isEven) {
-                      return ReorderableDragStartListener(
-                        key: Key('PlayerScoreTile$playerScore'),
-                        index: index,
-                        child: _PlayerScoreTile(
-                          playerScore: playerScore,
-                          playthroughDetailsId: playthroughDetailsId,
-                          onItemTapped: onItemTapped,
-                          isTied: tiedPlayerScoresMap.containsKey(playerScore.id),
-                        ),
-                      );
-                    }
-
-                    return SizedBox(
-                      key: Key('PlayerScoreSeparator${playerScore.id}'),
-                      height: Dimensions.doubleStandardSpacing,
+        ),
+        playthroughScoresVisualState.maybeWhen(
+          finishedScoring: (_, hasTies) {
+            if (hasTies) {
+              return const _ScoreTieBreakerInstruction();
+            }
+            return const SizedBox.shrink();
+          },
+          orElse: () => const SizedBox.shrink(),
+        ),
+        Observer(
+          builder: (_) {
+            return SliverPadding(
+              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+              sliver: playthroughScoresVisualState.maybeWhen(
+                finishedScoring: (tiedPlayerScoresMap, hasTies) {
+                  if (hasTies) {
+                    return _ReordableScoreSliverList(
+                      onItemTapped: onItemTapped,
+                      onReorder: onReorder,
+                      playerScores: playerScores,
+                      playthroughDetailsId: playthroughDetailsId,
+                      tiedPlayerScoresMap: tiedPlayerScoresMap,
                     );
-                  },
-                  itemCount: max(0, playerScores.length * 2 - 1),
-                  onReorder: (int currentIndex, int newIndex) {
-                    final itemsCurrentIndex = currentIndex ~/ 2;
-                    final itemsNewIndex = newIndex ~/ 2;
-                    if (!tiedPlayerScoresMap.containsKey(playerScores[itemsCurrentIndex].id)) {
-                      _showCannotReorderScoreNotTied(context);
-                      return;
-                    }
+                  }
 
-                    onReorder(itemsCurrentIndex, itemsNewIndex);
-                  },
+                  return _ScoresSliverList(
+                    onItemTapped: onItemTapped,
+                    playerScores: playerScores,
+                    playthroughDetailsId: playthroughDetailsId,
+                  );
+                },
+                orElse: () => _ScoresSliverList(
+                  onItemTapped: onItemTapped,
+                  playerScores: playerScores,
+                  playthroughDetailsId: playthroughDetailsId,
                 ),
-              );
-            },
-          ),
-        ],
-      );
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _ReordableScoreSliverList extends StatelessWidget {
+  const _ReordableScoreSliverList({
+    required this.playerScores,
+    required this.tiedPlayerScoresMap,
+    required this.playthroughDetailsId,
+    required this.onItemTapped,
+    required this.onReorder,
+  });
+
+  final List<PlayerScore> playerScores;
+  final Map<String, PlayerScore> tiedPlayerScoresMap;
+  final String? playthroughDetailsId;
+  final Future<String?> Function(PlayerScore) onItemTapped;
+  final void Function(int currentIndex, int newIndex) onReorder;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverReorderableList(
+      itemBuilder: (_, index) {
+        final int itemIndex = index ~/ 2;
+        final playerScore = playerScores[itemIndex];
+        if (index.isEven) {
+          return ReorderableDragStartListener(
+            key: Key('PlayerScoreTile$playerScore'),
+            index: index,
+            child: _PlayerScoreTile(
+              playerScore: playerScore,
+              playthroughDetailsId: playthroughDetailsId,
+              onItemTapped: onItemTapped,
+              isTied: tiedPlayerScoresMap.containsKey(playerScore.id),
+            ),
+          );
+        }
+
+        return SizedBox(
+          key: Key('PlayerScoreSeparator${playerScore.id}'),
+          height: Dimensions.doubleStandardSpacing,
+        );
+      },
+      itemCount: max(0, playerScores.length * 2 - 1),
+      onReorder: (int currentIndex, int newIndex) =>
+          _handleScoresReorder(context, currentIndex, newIndex),
+    );
+  }
+
+  void _handleScoresReorder(BuildContext context, int currentIndex, int newIndex) {
+    final itemsCurrentIndex = currentIndex ~/ 2;
+    final itemsNewIndex = newIndex ~/ 2;
+    if (!tiedPlayerScoresMap.containsKey(playerScores[itemsCurrentIndex].id) ||
+        !tiedPlayerScoresMap.containsKey(playerScores[itemsNewIndex].id)) {
+      _showCannotReorderScoreNotTied(context);
+      return;
+    }
+
+    onReorder(itemsCurrentIndex, itemsNewIndex);
+  }
 
   void _showCannotReorderScoreNotTied(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -356,6 +413,40 @@ class _ScoresSection extends StatelessWidget {
         behavior: SnackBarBehavior.floating,
         duration: Duration(seconds: 2),
         content: Text(AppText.editPlaythroughPageCannotReorderNotTiedScore),
+      ),
+    );
+  }
+}
+
+class _ScoresSliverList extends StatelessWidget {
+  const _ScoresSliverList({
+    required this.playerScores,
+    required this.playthroughDetailsId,
+    required this.onItemTapped,
+  });
+
+  final List<PlayerScore> playerScores;
+  final String? playthroughDetailsId;
+  final Future<String?> Function(PlayerScore) onItemTapped;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (_, index) {
+          final int itemIndex = index ~/ 2;
+          if (index.isEven) {
+            return _PlayerScoreTile(
+              playerScore: playerScores[itemIndex],
+              playthroughDetailsId: playthroughDetailsId,
+              onItemTapped: onItemTapped,
+              isTied: false,
+            );
+          }
+
+          return const SizedBox(height: Dimensions.doubleStandardSpacing);
+        },
+        childCount: max(0, playerScores.length * 2 - 1),
       ),
     );
   }
@@ -375,7 +466,7 @@ class _ScoreTieBreakerInstruction extends StatelessWidget {
               AppText.editPlaythroughPageTieBreakerInstruction,
               style: AppTheme.theme.textTheme.bodyLarge,
               textAlign: TextAlign.justify,
-            ),
+            ).animate().fade(),
           ),
         ],
       ),

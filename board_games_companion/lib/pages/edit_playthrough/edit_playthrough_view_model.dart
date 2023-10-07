@@ -211,8 +211,6 @@ abstract class _EditPlaythoughViewModel with Store {
 
   // TODO
   // - Need to order scores by score before editing
-  // - Allow only moving scores that are tied
-  // - Toggle score moving mode for better control
   // - Create TiebreakerResult or perhaps use place property?
   @action
   void reorderPlayerScores(int currentIndex, int movingToIndex) {
@@ -342,7 +340,9 @@ abstract class _EditPlaythoughViewModel with Store {
 
   void _updatePlaythroughScoresVisualState() {
     if (_playthroughDetailsWorkingCopy!.finishedScoring) {
+      orderPlayerScoresByScore();
       playthroughScoresVisualState = PlaythroughScoresVisualState.finishedScoring(
+        tiedPlayerScoresMap: tiedPlayerScoresMap,
         hasTies: _playthroughDetailsWorkingCopy!.hasTies,
       );
     } else {
