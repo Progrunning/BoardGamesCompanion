@@ -378,6 +378,7 @@ class _ReordableScoreSliverList extends StatelessWidget {
               playerScore: playerScore,
               playthroughDetailsId: playthroughDetailsId,
               onItemTapped: onItemTapped,
+              hasFinishedScoring: true,
               isTied: tiedPlayerScoresMap.containsKey(playerScore.id),
             ),
           );
@@ -441,6 +442,7 @@ class _ScoresSliverList extends StatelessWidget {
               playthroughDetailsId: playthroughDetailsId,
               onItemTapped: onItemTapped,
               isTied: false,
+              hasFinishedScoring: false,
             );
           }
 
@@ -602,12 +604,14 @@ class _PlayerScoreTile extends StatefulWidget {
     required this.playerScore,
     required this.playthroughDetailsId,
     required this.isTied,
+    required this.hasFinishedScoring,
     required this.onItemTapped,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String? playthroughDetailsId;
   final bool isTied;
+  final bool hasFinishedScoring;
   final Future<String?> Function(PlayerScore) onItemTapped;
 
   @override
@@ -650,8 +654,10 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                       avatarImageSize: Dimensions.smallPlayerAvatarSize,
                       playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
                     ),
-                    // TODO Fix/Update places when reordering
-                    PositionedTileRankRibbon(rank: widget.playerScore.place ?? 0),
+                    if (widget.hasFinishedScoring)
+                      PositionedTileRankRibbon(rank: widget.playerScore.place ?? 0)
+                    else
+                      const SizedBox.shrink(),
                   ]),
                 ),
                 const SizedBox(width: Dimensions.standardSpacing),

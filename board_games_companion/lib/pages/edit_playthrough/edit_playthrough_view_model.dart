@@ -205,12 +205,14 @@ abstract class _EditPlaythoughViewModel with Store {
         return playerScoreB.score.valueInt.compareTo(playerScoreA.score.valueInt);
       });
 
+    for (var i = 0; i < orderedPlayerScore.length; i++) {
+      orderedPlayerScore[i] = orderedPlayerScore[i].copyWith(place: i + 1);
+    }
     _playthroughDetailsWorkingCopy =
         _playthroughDetailsWorkingCopy!.copyWith(playerScores: orderedPlayerScore);
   }
 
   // TODO
-  // - Need to order scores by score before editing
   // - Create TiebreakerResult or perhaps use place property?
   @action
   void reorderPlayerScores(int currentIndex, int movingToIndex) {
@@ -250,13 +252,15 @@ abstract class _EditPlaythoughViewModel with Store {
     final playerScoresWorkingCopy = playerScores.toList();
 
     Fimber.d('Reording dragged element from $currentIndex to $movingToIndex');
-    playerScores[movingToIndex] = playerScoresWorkingCopy[currentIndex];
+    playerScores[movingToIndex] =
+        playerScoresWorkingCopy[currentIndex].copyWith(place: movingToIndex + 1);
 
     for (final elementIndexAffectedByReorder in elementIndexesAffectedByReorder) {
       final reorderedIndex =
           movedElementUp ? elementIndexAffectedByReorder + 1 : elementIndexAffectedByReorder - 1;
       Fimber.d('Reording affected element from $elementIndexAffectedByReorder to $reorderedIndex');
-      playerScores[reorderedIndex] = playerScoresWorkingCopy[elementIndexAffectedByReorder];
+      playerScores[reorderedIndex] = playerScoresWorkingCopy[elementIndexAffectedByReorder]
+          .copyWith(place: reorderedIndex + 1);
     }
 
     _playthroughDetailsWorkingCopy =
