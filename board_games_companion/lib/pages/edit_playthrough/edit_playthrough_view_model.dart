@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/playthroughs/score_tiebreaker_result.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,23 +55,21 @@ abstract class _EditPlaythoughViewModel with Store {
   ObservableList<PlayerScore> playerScores = <PlayerScore>[].asObservable();
 
   @computed
-  Map<String, PlayerScore> get tiedPlayerScoresMap {
-    final playerScoresGrouped = playerScores
-        .toList()
-        .where((ps) => ps.score.value != null)
-        .groupListsBy((ps) => ps.score.value);
-    if (playerScoresGrouped.isEmpty) {
+  Set<String> get tiedPlayerScoresIds {
+    if (playthroughDetails?.scoreTiebreakers == null) {
       return {};
     }
 
-    final tiedPlayerScoresCollections =
-        playerScoresGrouped.values.where((ps) => ps.length > 1).toList();
-    if (tiedPlayerScoresCollections.isEmpty) {
-      return {};
+    final scoreIds = <String>{};
+
+    for (final scoreTiebreaker in playthroughDetails!.scoreTiebreakers!) {
+      scoreTiebreaker.when(
+        sharedPlace: (playerScoreIds, __) => scoreIds.addAll(playerScoreIds),
+        place: (playerScoreId, __) => scoreIds.add(playerScoreId),
+      );
     }
 
-    final tiedPlayerScores = tiedPlayerScoresCollections.reduce((a, b) => a..addAll(b));
-    return {for (final tiedPlayerScore in tiedPlayerScores) tiedPlayerScore.id!: tiedPlayerScore};
+    return scoreIds;
   }
 
   @computed
@@ -177,6 +176,7 @@ abstract class _EditPlaythoughViewModel with Store {
       return;
     }
 
+    // Update score
     final updatedPlayerScore =
         playerScore.copyWith(score: playerScore.score.copyWith(value: newScore.toString()));
     final playerScoreIndex = playerScores.indexOf(playerScore);
@@ -185,6 +185,7 @@ abstract class _EditPlaythoughViewModel with Store {
     _playthroughDetailsWorkingCopy =
         _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
 
+    _updateTiebreakers();
     _updatePlaythroughScoresVisualState();
   }
 
@@ -332,11 +333,49 @@ abstract class _EditPlaythoughViewModel with Store {
     if (_playthroughDetailsWorkingCopy!.finishedScoring) {
       orderPlayerScoresByScore();
       playthroughScoresVisualState = PlaythroughScoresVisualState.finishedScoring(
-        tiedPlayerScoresMap: tiedPlayerScoresMap,
+        tiedPlayerScoresSet: tiedPlayerScoresIds,
         hasTies: _playthroughDetailsWorkingCopy!.hasTies,
       );
     } else {
       playthroughScoresVisualState = const PlaythroughScoresVisualState.scoring();
     }
+  }
+
+  /// Ensure this is called after player scores are assigned places
+  void _updateTiebreakers() {
+    if (!_playthroughDetailsWorkingCopy!.hasTies) {
+      _playthroughDetailsWorkingCopy =
+          _playthroughDetailsWorkingCopy!.copyWith(scoreTiebreakers: null);
+      return;
+    }
+
+    final playerScoresGrouped = playerScores
+        .toList()
+        .where((ps) => ps.score.value != null)
+        .groupListsBy((ps) => ps.score.value);
+    if (playerScoresGrouped.isEmpty) {
+      return;
+    }
+
+    // TODO
+    // - Get current tiebreakers
+    // - Compare with what the current scores are indicating in terms of ties
+    //   - update playthrough detials
+    //   - update player scores
+    final tiedPlayerScoresCollections =
+        playerScoresGrouped.values.where((ps) => ps.length > 1).toList();
+    if (tiedPlayerScoresCollections.isEmpty) {
+      return;
+    }
+
+    final tiedPlayerScores = tiedPlayerScoresCollections.reduce((a, b) => a..addAll(b));
+    for (final tiedPlayerScore in tiedPlayerScores) {
+      final playerScoreIndex = playerScores.indexOf(tiedPlayerScore);
+      playerScores[playerScoreIndex] = tiedPlayerScore.copyWith(
+          tiebreakResult: ScoreTiebreakerResult.place(place: tiedPlayerScore.place!));
+    }
+
+    _playthroughDetailsWorkingCopy =
+        _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
   }
 }

@@ -328,7 +328,7 @@ class _ScoresSection extends StatelessWidget {
                   onReorder: onReorder,
                   playerScores: playerScores,
                   playthroughDetailsId: playthroughDetailsId,
-                  tiedPlayerScoresMap: tiedPlayerScoresMap,
+                  tiedPlayerScoresSet: tiedPlayerScoresMap,
                 );
               }
 
@@ -356,14 +356,14 @@ class _ScoresSection extends StatelessWidget {
 class _ReordableScoreSliverList extends StatelessWidget {
   const _ReordableScoreSliverList({
     required this.playerScores,
-    required this.tiedPlayerScoresMap,
+    required this.tiedPlayerScoresSet,
     required this.playthroughDetailsId,
     required this.onItemTapped,
     required this.onReorder,
   });
 
   final List<PlayerScore> playerScores;
-  final Map<String, PlayerScore> tiedPlayerScoresMap;
+  final Set<String> tiedPlayerScoresSet;
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
   final void Function(int currentIndex, int newIndex) onReorder;
@@ -383,7 +383,7 @@ class _ReordableScoreSliverList extends StatelessWidget {
               playthroughDetailsId: playthroughDetailsId,
               onItemTapped: onItemTapped,
               hasFinishedScoring: true,
-              isTied: tiedPlayerScoresMap.containsKey(playerScore.id),
+              isTied: playerScore.isTied,
             ),
           );
         }
@@ -402,8 +402,8 @@ class _ReordableScoreSliverList extends StatelessWidget {
   void _handleScoresReorder(BuildContext context, int currentIndex, int newIndex) {
     final itemsCurrentIndex = currentIndex ~/ 2;
     final itemsNewIndex = newIndex ~/ 2;
-    if (!tiedPlayerScoresMap.containsKey(playerScores[itemsCurrentIndex].id) ||
-        !tiedPlayerScoresMap.containsKey(playerScores[itemsNewIndex].id)) {
+    if (!tiedPlayerScoresSet.contains(playerScores[itemsCurrentIndex].id) ||
+        !tiedPlayerScoresSet.contains(playerScores[itemsNewIndex].id)) {
       _showCannotReorderScoreNotTied(context);
       return;
     }

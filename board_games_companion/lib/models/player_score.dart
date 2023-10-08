@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'hive/player.dart';
 import 'hive/score.dart';
+import 'playthroughs/score_tiebreaker_result.dart';
 
 export '../extensions/player_score_extensions.dart';
 
@@ -14,9 +15,12 @@ class PlayerScore with _$PlayerScore {
     required Player? player,
     required Score score,
     int? place,
+    ScoreTiebreakerResult? tiebreakResult,
   }) = _PlayerScore;
 
   const PlayerScore._();
 
   String? get id => player?.id;
+
+  bool get isTied => tiebreakResult != null;
 }

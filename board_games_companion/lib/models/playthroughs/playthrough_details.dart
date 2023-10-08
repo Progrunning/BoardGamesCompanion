@@ -1,4 +1,3 @@
-import 'package:board_games_companion/models/playthroughs/tiebreaker.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -8,6 +7,7 @@ import '../hive/playthrough.dart';
 import '../hive/playthrough_note.dart';
 import '../hive/score.dart';
 import '../player_score.dart';
+import 'score_tirebreaker.dart';
 
 part 'playthrough_details.freezed.dart';
 
@@ -19,7 +19,7 @@ class PlaythroughDetails with _$PlaythroughDetails {
   const factory PlaythroughDetails({
     required Playthrough playthrough,
     required List<PlayerScore> playerScores,
-    Tiebreaker? tiebreaker,
+    List<ScoreTiebreaker>? scoreTiebreakers,
   }) = _PlaythroughDetails;
 
   const PlaythroughDetails._();

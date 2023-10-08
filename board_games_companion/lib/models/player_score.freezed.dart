@@ -19,6 +19,8 @@ mixin _$PlayerScore {
   Player? get player => throw _privateConstructorUsedError;
   Score get score => throw _privateConstructorUsedError;
   int? get place => throw _privateConstructorUsedError;
+  ScoreTiebreakerResult? get tiebreakResult =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlayerScoreCopyWith<PlayerScore> get copyWith =>
@@ -31,10 +33,15 @@ abstract class $PlayerScoreCopyWith<$Res> {
           PlayerScore value, $Res Function(PlayerScore) then) =
       _$PlayerScoreCopyWithImpl<$Res, PlayerScore>;
   @useResult
-  $Res call({Player? player, Score score, int? place});
+  $Res call(
+      {Player? player,
+      Score score,
+      int? place,
+      ScoreTiebreakerResult? tiebreakResult});
 
   $PlayerCopyWith<$Res>? get player;
   $ScoreCopyWith<$Res> get score;
+  $ScoreTiebreakerResultCopyWith<$Res>? get tiebreakResult;
 }
 
 /// @nodoc
@@ -53,6 +60,7 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
     Object? player = freezed,
     Object? score = null,
     Object? place = freezed,
+    Object? tiebreakResult = freezed,
   }) {
     return _then(_value.copyWith(
       player: freezed == player
@@ -67,6 +75,10 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
           ? _value.place
           : place // ignore: cast_nullable_to_non_nullable
               as int?,
+      tiebreakResult: freezed == tiebreakResult
+          ? _value.tiebreakResult
+          : tiebreakResult // ignore: cast_nullable_to_non_nullable
+              as ScoreTiebreakerResult?,
     ) as $Val);
   }
 
@@ -89,6 +101,19 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
       return _then(_value.copyWith(score: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ScoreTiebreakerResultCopyWith<$Res>? get tiebreakResult {
+    if (_value.tiebreakResult == null) {
+      return null;
+    }
+
+    return $ScoreTiebreakerResultCopyWith<$Res>(_value.tiebreakResult!,
+        (value) {
+      return _then(_value.copyWith(tiebreakResult: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -99,12 +124,18 @@ abstract class _$$_PlayerScoreCopyWith<$Res>
       __$$_PlayerScoreCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Player? player, Score score, int? place});
+  $Res call(
+      {Player? player,
+      Score score,
+      int? place,
+      ScoreTiebreakerResult? tiebreakResult});
 
   @override
   $PlayerCopyWith<$Res>? get player;
   @override
   $ScoreCopyWith<$Res> get score;
+  @override
+  $ScoreTiebreakerResultCopyWith<$Res>? get tiebreakResult;
 }
 
 /// @nodoc
@@ -121,6 +152,7 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
     Object? player = freezed,
     Object? score = null,
     Object? place = freezed,
+    Object? tiebreakResult = freezed,
   }) {
     return _then(_$_PlayerScore(
       player: freezed == player
@@ -135,6 +167,10 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
           ? _value.place
           : place // ignore: cast_nullable_to_non_nullable
               as int?,
+      tiebreakResult: freezed == tiebreakResult
+          ? _value.tiebreakResult
+          : tiebreakResult // ignore: cast_nullable_to_non_nullable
+              as ScoreTiebreakerResult?,
     ));
   }
 }
@@ -142,7 +178,11 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_PlayerScore extends _PlayerScore {
-  const _$_PlayerScore({required this.player, required this.score, this.place})
+  const _$_PlayerScore(
+      {required this.player,
+      required this.score,
+      this.place,
+      this.tiebreakResult})
       : super._();
 
   @override
@@ -151,10 +191,12 @@ class _$_PlayerScore extends _PlayerScore {
   final Score score;
   @override
   final int? place;
+  @override
+  final ScoreTiebreakerResult? tiebreakResult;
 
   @override
   String toString() {
-    return 'PlayerScore(player: $player, score: $score, place: $place)';
+    return 'PlayerScore(player: $player, score: $score, place: $place, tiebreakResult: $tiebreakResult)';
   }
 
   @override
@@ -164,11 +206,14 @@ class _$_PlayerScore extends _PlayerScore {
             other is _$_PlayerScore &&
             (identical(other.player, player) || other.player == player) &&
             (identical(other.score, score) || other.score == score) &&
-            (identical(other.place, place) || other.place == place));
+            (identical(other.place, place) || other.place == place) &&
+            (identical(other.tiebreakResult, tiebreakResult) ||
+                other.tiebreakResult == tiebreakResult));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, player, score, place);
+  int get hashCode =>
+      Object.hash(runtimeType, player, score, place, tiebreakResult);
 
   @JsonKey(ignore: true)
   @override
@@ -181,7 +226,8 @@ abstract class _PlayerScore extends PlayerScore {
   const factory _PlayerScore(
       {required final Player? player,
       required final Score score,
-      final int? place}) = _$_PlayerScore;
+      final int? place,
+      final ScoreTiebreakerResult? tiebreakResult}) = _$_PlayerScore;
   const _PlayerScore._() : super._();
 
   @override
@@ -190,6 +236,8 @@ abstract class _PlayerScore extends PlayerScore {
   Score get score;
   @override
   int? get place;
+  @override
+  ScoreTiebreakerResult? get tiebreakResult;
   @override
   @JsonKey(ignore: true)
   _$$_PlayerScoreCopyWith<_$_PlayerScore> get copyWith =>
