@@ -87,15 +87,15 @@ int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
       break;
   }
 
-  if (score.value == null && otherScore.value == null) {
+  if (!score.hasScore && !otherScore.hasScore) {
     return Constants.leaveAsIs;
   }
 
-  if (score.value == null) {
+  if (!score.hasScore) {
     return Constants.moveBelow;
   }
 
-  if (otherScore.value == null) {
+  if (!otherScore.hasScore) {
     return Constants.moveAbove;
   }
 

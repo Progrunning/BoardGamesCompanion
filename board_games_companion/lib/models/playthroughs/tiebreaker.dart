@@ -7,7 +7,7 @@ part 'tiebreaker.freezed.dart';
 @freezed
 class Tiebreaker with _$Tiebreaker {
   const factory Tiebreaker({
-    required List<ScoreTiebreaker> scores,
+    required List<ScoreTiebreaker> scoreTiebreakers,
   }) = _Tiebreaker;
 
   const Tiebreaker._();

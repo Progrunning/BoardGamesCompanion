@@ -273,7 +273,9 @@ class _PlaythroughPlayers extends StatelessWidget {
             return PlayerScoreRankAvatar(
               player: playthroughDetails.playerScores[index].player,
               playerHeroIdSuffix: playthroughDetails.id,
-              rank: playthroughDetails.playerScores[index].place,
+              rank: playthroughDetails.finishedScoring
+                  ? playthroughDetails.playerScores[index].place
+                  : null,
               score: playthroughDetails.playerScores[index].score.value,
             );
           case GameClassification.NoScore:

@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Tiebreaker {
-  List<ScoreTiebreaker> get scores => throw _privateConstructorUsedError;
+  List<ScoreTiebreaker> get scoreTiebreakers =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TiebreakerCopyWith<Tiebreaker> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $TiebreakerCopyWith<$Res> {
           Tiebreaker value, $Res Function(Tiebreaker) then) =
       _$TiebreakerCopyWithImpl<$Res, Tiebreaker>;
   @useResult
-  $Res call({List<ScoreTiebreaker> scores});
+  $Res call({List<ScoreTiebreaker> scoreTiebreakers});
 }
 
 /// @nodoc
@@ -45,12 +46,12 @@ class _$TiebreakerCopyWithImpl<$Res, $Val extends Tiebreaker>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scores = null,
+    Object? scoreTiebreakers = null,
   }) {
     return _then(_value.copyWith(
-      scores: null == scores
-          ? _value.scores
-          : scores // ignore: cast_nullable_to_non_nullable
+      scoreTiebreakers: null == scoreTiebreakers
+          ? _value.scoreTiebreakers
+          : scoreTiebreakers // ignore: cast_nullable_to_non_nullable
               as List<ScoreTiebreaker>,
     ) as $Val);
   }
@@ -64,7 +65,7 @@ abstract class _$$_TiebreakerCopyWith<$Res>
       __$$_TiebreakerCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<ScoreTiebreaker> scores});
+  $Res call({List<ScoreTiebreaker> scoreTiebreakers});
 }
 
 /// @nodoc
@@ -78,12 +79,12 @@ class __$$_TiebreakerCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? scores = null,
+    Object? scoreTiebreakers = null,
   }) {
     return _then(_$_Tiebreaker(
-      scores: null == scores
-          ? _value._scores
-          : scores // ignore: cast_nullable_to_non_nullable
+      scoreTiebreakers: null == scoreTiebreakers
+          ? _value._scoreTiebreakers
+          : scoreTiebreakers // ignore: cast_nullable_to_non_nullable
               as List<ScoreTiebreaker>,
     ));
   }
@@ -92,21 +93,22 @@ class __$$_TiebreakerCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Tiebreaker extends _Tiebreaker {
-  const _$_Tiebreaker({required final List<ScoreTiebreaker> scores})
-      : _scores = scores,
+  const _$_Tiebreaker({required final List<ScoreTiebreaker> scoreTiebreakers})
+      : _scoreTiebreakers = scoreTiebreakers,
         super._();
 
-  final List<ScoreTiebreaker> _scores;
+  final List<ScoreTiebreaker> _scoreTiebreakers;
   @override
-  List<ScoreTiebreaker> get scores {
-    if (_scores is EqualUnmodifiableListView) return _scores;
+  List<ScoreTiebreaker> get scoreTiebreakers {
+    if (_scoreTiebreakers is EqualUnmodifiableListView)
+      return _scoreTiebreakers;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_scores);
+    return EqualUnmodifiableListView(_scoreTiebreakers);
   }
 
   @override
   String toString() {
-    return 'Tiebreaker(scores: $scores)';
+    return 'Tiebreaker(scoreTiebreakers: $scoreTiebreakers)';
   }
 
   @override
@@ -114,12 +116,13 @@ class _$_Tiebreaker extends _Tiebreaker {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Tiebreaker &&
-            const DeepCollectionEquality().equals(other._scores, _scores));
+            const DeepCollectionEquality()
+                .equals(other._scoreTiebreakers, _scoreTiebreakers));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_scores));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_scoreTiebreakers));
 
   @JsonKey(ignore: true)
   @override
@@ -129,12 +132,12 @@ class _$_Tiebreaker extends _Tiebreaker {
 }
 
 abstract class _Tiebreaker extends Tiebreaker {
-  const factory _Tiebreaker({required final List<ScoreTiebreaker> scores}) =
-      _$_Tiebreaker;
+  const factory _Tiebreaker(
+      {required final List<ScoreTiebreaker> scoreTiebreakers}) = _$_Tiebreaker;
   const _Tiebreaker._() : super._();
 
   @override
-  List<ScoreTiebreaker> get scores;
+  List<ScoreTiebreaker> get scoreTiebreakers;
   @override
   @JsonKey(ignore: true)
   _$$_TiebreakerCopyWith<_$_Tiebreaker> get copyWith =>

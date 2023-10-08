@@ -16,42 +16,43 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ScoreTiebreaker {
-  String get playerScoreId => throw _privateConstructorUsedError;
+  int get place => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String playerScoreId) sharedPlace,
-    required TResult Function(String playerScoreId) victory,
+    required TResult Function(List<String> playerScoreIds, int place)
+        sharedPlace,
+    required TResult Function(String playerScoreId, int place) place,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String playerScoreId)? sharedPlace,
-    TResult? Function(String playerScoreId)? victory,
+    TResult? Function(List<String> playerScoreIds, int place)? sharedPlace,
+    TResult? Function(String playerScoreId, int place)? place,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String playerScoreId)? sharedPlace,
-    TResult Function(String playerScoreId)? victory,
+    TResult Function(List<String> playerScoreIds, int place)? sharedPlace,
+    TResult Function(String playerScoreId, int place)? place,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_sharedPlace value) sharedPlace,
-    required TResult Function(_victory value) victory,
+    required TResult Function(_place value) place,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_sharedPlace value)? sharedPlace,
-    TResult? Function(_victory value)? victory,
+    TResult? Function(_place value)? place,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_sharedPlace value)? sharedPlace,
-    TResult Function(_victory value)? victory,
+    TResult Function(_place value)? place,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -67,7 +68,7 @@ abstract class $ScoreTiebreakerCopyWith<$Res> {
           ScoreTiebreaker value, $Res Function(ScoreTiebreaker) then) =
       _$ScoreTiebreakerCopyWithImpl<$Res, ScoreTiebreaker>;
   @useResult
-  $Res call({String playerScoreId});
+  $Res call({int place});
 }
 
 /// @nodoc
@@ -83,13 +84,13 @@ class _$ScoreTiebreakerCopyWithImpl<$Res, $Val extends ScoreTiebreaker>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playerScoreId = null,
+    Object? place = null,
   }) {
     return _then(_value.copyWith(
-      playerScoreId: null == playerScoreId
-          ? _value.playerScoreId
-          : playerScoreId // ignore: cast_nullable_to_non_nullable
-              as String,
+      place: null == place
+          ? _value.place
+          : place // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -102,7 +103,7 @@ abstract class _$$_sharedPlaceCopyWith<$Res>
       __$$_sharedPlaceCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String playerScoreId});
+  $Res call({List<String> playerScoreIds, int place});
 }
 
 /// @nodoc
@@ -116,13 +117,18 @@ class __$$_sharedPlaceCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? playerScoreId = null,
+    Object? playerScoreIds = null,
+    Object? place = null,
   }) {
     return _then(_$_sharedPlace(
-      playerScoreId: null == playerScoreId
-          ? _value.playerScoreId
-          : playerScoreId // ignore: cast_nullable_to_non_nullable
-              as String,
+      playerScoreIds: null == playerScoreIds
+          ? _value._playerScoreIds
+          : playerScoreIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      place: null == place
+          ? _value.place
+          : place // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -130,14 +136,24 @@ class __$$_sharedPlaceCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_sharedPlace implements _sharedPlace {
-  const _$_sharedPlace({required this.playerScoreId});
+  const _$_sharedPlace(
+      {required final List<String> playerScoreIds, required this.place})
+      : _playerScoreIds = playerScoreIds;
+
+  final List<String> _playerScoreIds;
+  @override
+  List<String> get playerScoreIds {
+    if (_playerScoreIds is EqualUnmodifiableListView) return _playerScoreIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_playerScoreIds);
+  }
 
   @override
-  final String playerScoreId;
+  final int place;
 
   @override
   String toString() {
-    return 'ScoreTiebreaker.sharedPlace(playerScoreId: $playerScoreId)';
+    return 'ScoreTiebreaker.sharedPlace(playerScoreIds: $playerScoreIds, place: $place)';
   }
 
   @override
@@ -145,12 +161,14 @@ class _$_sharedPlace implements _sharedPlace {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_sharedPlace &&
-            (identical(other.playerScoreId, playerScoreId) ||
-                other.playerScoreId == playerScoreId));
+            const DeepCollectionEquality()
+                .equals(other._playerScoreIds, _playerScoreIds) &&
+            (identical(other.place, place) || other.place == place));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, playerScoreId);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_playerScoreIds), place);
 
   @JsonKey(ignore: true)
   @override
@@ -161,30 +179,31 @@ class _$_sharedPlace implements _sharedPlace {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String playerScoreId) sharedPlace,
-    required TResult Function(String playerScoreId) victory,
+    required TResult Function(List<String> playerScoreIds, int place)
+        sharedPlace,
+    required TResult Function(String playerScoreId, int place) place,
   }) {
-    return sharedPlace(playerScoreId);
+    return sharedPlace(playerScoreIds, this.place);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String playerScoreId)? sharedPlace,
-    TResult? Function(String playerScoreId)? victory,
+    TResult? Function(List<String> playerScoreIds, int place)? sharedPlace,
+    TResult? Function(String playerScoreId, int place)? place,
   }) {
-    return sharedPlace?.call(playerScoreId);
+    return sharedPlace?.call(playerScoreIds, this.place);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String playerScoreId)? sharedPlace,
-    TResult Function(String playerScoreId)? victory,
+    TResult Function(List<String> playerScoreIds, int place)? sharedPlace,
+    TResult Function(String playerScoreId, int place)? place,
     required TResult orElse(),
   }) {
     if (sharedPlace != null) {
-      return sharedPlace(playerScoreId);
+      return sharedPlace(playerScoreIds, this.place);
     }
     return orElse();
   }
@@ -193,7 +212,7 @@ class _$_sharedPlace implements _sharedPlace {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_sharedPlace value) sharedPlace,
-    required TResult Function(_victory value) victory,
+    required TResult Function(_place value) place,
   }) {
     return sharedPlace(this);
   }
@@ -202,7 +221,7 @@ class _$_sharedPlace implements _sharedPlace {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_sharedPlace value)? sharedPlace,
-    TResult? Function(_victory value)? victory,
+    TResult? Function(_place value)? place,
   }) {
     return sharedPlace?.call(this);
   }
@@ -211,7 +230,7 @@ class _$_sharedPlace implements _sharedPlace {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_sharedPlace value)? sharedPlace,
-    TResult Function(_victory value)? victory,
+    TResult Function(_place value)? place,
     required TResult orElse(),
   }) {
     if (sharedPlace != null) {
@@ -222,11 +241,13 @@ class _$_sharedPlace implements _sharedPlace {
 }
 
 abstract class _sharedPlace implements ScoreTiebreaker {
-  const factory _sharedPlace({required final String playerScoreId}) =
-      _$_sharedPlace;
+  const factory _sharedPlace(
+      {required final List<String> playerScoreIds,
+      required final int place}) = _$_sharedPlace;
 
+  List<String> get playerScoreIds;
   @override
-  String get playerScoreId;
+  int get place;
   @override
   @JsonKey(ignore: true)
   _$$_sharedPlaceCopyWith<_$_sharedPlace> get copyWith =>
@@ -234,95 +255,103 @@ abstract class _sharedPlace implements ScoreTiebreaker {
 }
 
 /// @nodoc
-abstract class _$$_victoryCopyWith<$Res>
+abstract class _$$_placeCopyWith<$Res>
     implements $ScoreTiebreakerCopyWith<$Res> {
-  factory _$$_victoryCopyWith(
-          _$_victory value, $Res Function(_$_victory) then) =
-      __$$_victoryCopyWithImpl<$Res>;
+  factory _$$_placeCopyWith(_$_place value, $Res Function(_$_place) then) =
+      __$$_placeCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String playerScoreId});
+  $Res call({String playerScoreId, int place});
 }
 
 /// @nodoc
-class __$$_victoryCopyWithImpl<$Res>
-    extends _$ScoreTiebreakerCopyWithImpl<$Res, _$_victory>
-    implements _$$_victoryCopyWith<$Res> {
-  __$$_victoryCopyWithImpl(_$_victory _value, $Res Function(_$_victory) _then)
+class __$$_placeCopyWithImpl<$Res>
+    extends _$ScoreTiebreakerCopyWithImpl<$Res, _$_place>
+    implements _$$_placeCopyWith<$Res> {
+  __$$_placeCopyWithImpl(_$_place _value, $Res Function(_$_place) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? playerScoreId = null,
+    Object? place = null,
   }) {
-    return _then(_$_victory(
+    return _then(_$_place(
       playerScoreId: null == playerScoreId
           ? _value.playerScoreId
           : playerScoreId // ignore: cast_nullable_to_non_nullable
               as String,
+      place: null == place
+          ? _value.place
+          : place // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_victory implements _victory {
-  const _$_victory({required this.playerScoreId});
+class _$_place implements _place {
+  const _$_place({required this.playerScoreId, required this.place});
 
   @override
   final String playerScoreId;
+  @override
+  final int place;
 
   @override
   String toString() {
-    return 'ScoreTiebreaker.victory(playerScoreId: $playerScoreId)';
+    return 'ScoreTiebreaker.place(playerScoreId: $playerScoreId, place: $place)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_victory &&
+            other is _$_place &&
             (identical(other.playerScoreId, playerScoreId) ||
-                other.playerScoreId == playerScoreId));
+                other.playerScoreId == playerScoreId) &&
+            (identical(other.place, place) || other.place == place));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, playerScoreId);
+  int get hashCode => Object.hash(runtimeType, playerScoreId, place);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_victoryCopyWith<_$_victory> get copyWith =>
-      __$$_victoryCopyWithImpl<_$_victory>(this, _$identity);
+  _$$_placeCopyWith<_$_place> get copyWith =>
+      __$$_placeCopyWithImpl<_$_place>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String playerScoreId) sharedPlace,
-    required TResult Function(String playerScoreId) victory,
+    required TResult Function(List<String> playerScoreIds, int place)
+        sharedPlace,
+    required TResult Function(String playerScoreId, int place) place,
   }) {
-    return victory(playerScoreId);
+    return place(playerScoreId, this.place);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String playerScoreId)? sharedPlace,
-    TResult? Function(String playerScoreId)? victory,
+    TResult? Function(List<String> playerScoreIds, int place)? sharedPlace,
+    TResult? Function(String playerScoreId, int place)? place,
   }) {
-    return victory?.call(playerScoreId);
+    return place?.call(playerScoreId, this.place);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String playerScoreId)? sharedPlace,
-    TResult Function(String playerScoreId)? victory,
+    TResult Function(List<String> playerScoreIds, int place)? sharedPlace,
+    TResult Function(String playerScoreId, int place)? place,
     required TResult orElse(),
   }) {
-    if (victory != null) {
-      return victory(playerScoreId);
+    if (place != null) {
+      return place(playerScoreId, this.place);
     }
     return orElse();
   }
@@ -331,41 +360,44 @@ class _$_victory implements _victory {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_sharedPlace value) sharedPlace,
-    required TResult Function(_victory value) victory,
+    required TResult Function(_place value) place,
   }) {
-    return victory(this);
+    return place(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_sharedPlace value)? sharedPlace,
-    TResult? Function(_victory value)? victory,
+    TResult? Function(_place value)? place,
   }) {
-    return victory?.call(this);
+    return place?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_sharedPlace value)? sharedPlace,
-    TResult Function(_victory value)? victory,
+    TResult Function(_place value)? place,
     required TResult orElse(),
   }) {
-    if (victory != null) {
-      return victory(this);
+    if (place != null) {
+      return place(this);
     }
     return orElse();
   }
 }
 
-abstract class _victory implements ScoreTiebreaker {
-  const factory _victory({required final String playerScoreId}) = _$_victory;
+abstract class _place implements ScoreTiebreaker {
+  const factory _place(
+      {required final String playerScoreId,
+      required final int place}) = _$_place;
 
-  @override
   String get playerScoreId;
   @override
+  int get place;
+  @override
   @JsonKey(ignore: true)
-  _$$_victoryCopyWith<_$_victory> get copyWith =>
+  _$$_placeCopyWith<_$_place> get copyWith =>
       throw _privateConstructorUsedError;
 }

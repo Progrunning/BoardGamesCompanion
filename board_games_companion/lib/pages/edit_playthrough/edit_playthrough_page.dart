@@ -70,15 +70,20 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                     _PlayDateTimeSection(viewModel: widget.viewModel),
                     widget.viewModel.editPlaythroughPageVisualState.when(
                       init: () => const SizedBox.shrink(),
-                      editScoreGame: (_) => _ScoresSection(
-                        playerScores: widget.viewModel.playerScores,
-                        playthroughScoresVisualState: widget.viewModel.playthroughScoresVisualState,
-                        playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
-                        onItemTapped: (PlayerScore playerScore) async =>
-                            _editPlayerScore(playerScore, context),
-                        onReorder: (oldIndex, newIndex) =>
-                            widget.viewModel.reorderPlayerScores(oldIndex, newIndex),
-                        onSortScores: () => widget.viewModel.orderPlayerScoresByScore(),
+                      editScoreGame: (_) => Observer(
+                        builder: (context) {
+                          return _ScoresSection(
+                            playerScores: widget.viewModel.playerScores,
+                            playthroughScoresVisualState:
+                                widget.viewModel.playthroughScoresVisualState,
+                            playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
+                            onItemTapped: (PlayerScore playerScore) async =>
+                                _editPlayerScore(playerScore, context),
+                            onReorder: (oldIndex, newIndex) =>
+                                widget.viewModel.reorderPlayerScores(oldIndex, newIndex),
+                            onSortScores: () => widget.viewModel.orderPlayerScoresByScore(),
+                          );
+                        },
                       ),
                       editNoScoreGame: (_) => _NoScoreSection(
                         playthroughId: widget.viewModel.playthrough.id,
@@ -313,36 +318,35 @@ class _ScoresSection extends StatelessWidget {
           },
           orElse: () => const SizedBox.shrink(),
         ),
-        Observer(
-          builder: (_) {
-            return SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-              sliver: playthroughScoresVisualState.maybeWhen(
-                finishedScoring: (tiedPlayerScoresMap, hasTies) {
-                  if (hasTies) {
-                    return _ReordableScoreSliverList(
-                      onItemTapped: onItemTapped,
-                      onReorder: onReorder,
-                      playerScores: playerScores,
-                      playthroughDetailsId: playthroughDetailsId,
-                      tiedPlayerScoresMap: tiedPlayerScoresMap,
-                    );
-                  }
-
-                  return _ScoresSliverList(
-                    onItemTapped: onItemTapped,
-                    playerScores: playerScores,
-                    playthroughDetailsId: playthroughDetailsId,
-                  );
-                },
-                orElse: () => _ScoresSliverList(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+          sliver: playthroughScoresVisualState.maybeWhen(
+            finishedScoring: (tiedPlayerScoresMap, hasTies) {
+              if (hasTies) {
+                return _ReordableScoreSliverList(
                   onItemTapped: onItemTapped,
+                  onReorder: onReorder,
                   playerScores: playerScores,
                   playthroughDetailsId: playthroughDetailsId,
-                ),
-              ),
-            );
-          },
+                  tiedPlayerScoresMap: tiedPlayerScoresMap,
+                );
+              }
+
+              return _ScoresSliverList(
+                key: const Key('PlayerScoresFinishedScoring'),
+                onItemTapped: onItemTapped,
+                playerScores: playerScores,
+                playthroughDetailsId: playthroughDetailsId,
+                hasFinishedScoring: true,
+              );
+            },
+            orElse: () => _ScoresSliverList(
+              key: const Key('PlayerScoresScoring'),
+              onItemTapped: onItemTapped,
+              playerScores: playerScores,
+              playthroughDetailsId: playthroughDetailsId,
+            ),
+          ),
         ),
       ],
     );
@@ -421,14 +425,17 @@ class _ReordableScoreSliverList extends StatelessWidget {
 
 class _ScoresSliverList extends StatelessWidget {
   const _ScoresSliverList({
+    required super.key,
     required this.playerScores,
     required this.playthroughDetailsId,
     required this.onItemTapped,
+    this.hasFinishedScoring = false,
   });
 
   final List<PlayerScore> playerScores;
   final String? playthroughDetailsId;
   final Future<String?> Function(PlayerScore) onItemTapped;
+  final bool hasFinishedScoring;
 
   @override
   Widget build(BuildContext context) {
@@ -437,12 +444,16 @@ class _ScoresSliverList extends StatelessWidget {
         (_, index) {
           final int itemIndex = index ~/ 2;
           if (index.isEven) {
+            final playerScore = playerScores[itemIndex];
             return _PlayerScoreTile(
-              playerScore: playerScores[itemIndex],
+              // Giving it a key in order to force re-render when finishedScoring state
+              // kicks in. Otherwise the old scores would show on the screen
+              key: Key('PlayerScore${playerScore.id}$hasFinishedScoring'),
+              playerScore: playerScore,
               playthroughDetailsId: playthroughDetailsId,
               onItemTapped: onItemTapped,
               isTied: false,
-              hasFinishedScoring: false,
+              hasFinishedScoring: hasFinishedScoring,
             );
           }
 

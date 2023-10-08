@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:board_games_companion/common/constants.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,7 +46,10 @@ abstract class _EditPlaythoughViewModel with Store {
 
   /// Creating a separate "copy" of player scores to ensure we can easily update (i.e. [ObservableList])
   /// the player list without having to re-render the entire list in the UI whenever there's an update to it.
-  /// It's especially important when reordering the list.
+  /// It's especially important when reordering the list to avoid flickering effect.
+  ///
+  /// Whenever there's an update to the any UI visible properties (e.g. score or ordering) there is a need to
+  /// update this collection manually.
   @observable
   ObservableList<PlayerScore> playerScores = <PlayerScore>[].asObservable();
 
@@ -189,36 +191,20 @@ abstract class _EditPlaythoughViewModel with Store {
   @action
   void orderPlayerScoresByScore() {
     final orderedPlayerScore = playerScores
-      ..sort((playerScoreA, playerScoreB) {
-        if (playerScoreA.score.hasScore && !playerScoreB.score.hasScore) {
-          return Constants.moveAbove;
-        }
-
-        if (!playerScoreA.score.hasScore && playerScoreB.score.hasScore) {
-          return Constants.moveBelow;
-        }
-
-        if (!playerScoreA.score.hasScore && !playerScoreB.score.hasScore) {
-          return Constants.leaveAsIs;
-        }
-
-        return playerScoreB.score.valueInt.compareTo(playerScoreA.score.valueInt);
-      });
+      ..sortByScore(_gamePlaythroughsDetailsStore.gameGameFamily);
 
     for (var i = 0; i < orderedPlayerScore.length; i++) {
       orderedPlayerScore[i] = orderedPlayerScore[i].copyWith(place: i + 1);
     }
+
+    playerScores = orderedPlayerScore.asObservable();
     _playthroughDetailsWorkingCopy =
         _playthroughDetailsWorkingCopy!.copyWith(playerScores: orderedPlayerScore);
   }
 
-  // TODO
-  // - Create TiebreakerResult or perhaps use place property?
   @action
   void reorderPlayerScores(int currentIndex, int movingToIndex) {
     var elementIndexesAffectedByReorder = <int>[];
-    // final distanceBetweenElements = (currentIndex - movingToIndex).abs();
-    // final isMovingNeighbouringElements = distanceBetweenElements <= 1;
     final movedElementUp = movingToIndex < currentIndex;
     if (movedElementUp) {
       // For example
