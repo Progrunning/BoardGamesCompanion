@@ -35,7 +35,7 @@
       "enablePerformanceCountersCollection": false,
       "samplingSettings": {
         "isEnabled": true,
-        "maxTelemetryItemsPerSecond": "10.",
+        "maxTelemetryItemsPerSecond": "10"
       }
     },
     "aggregator": {
