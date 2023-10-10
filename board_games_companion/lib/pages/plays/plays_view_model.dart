@@ -77,10 +77,7 @@ abstract class _PlaysViewModel with Store {
       };
 
   @computed
-  List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs
-      .where((playthrough) =>
-          _boardGamesStore.allBoardGamesInCollectionsMap.containsKey(playthrough.boardGameId))
-      .toList();
+  List<Playthrough> get finishedPlaythroughs => _playthroughsStore.finishedPlaythroughs.toList();
 
   @computed
   List<HistoricalPlaythrough> get historicalPlaythroughs {
@@ -285,7 +282,7 @@ abstract class _PlaysViewModel with Store {
             )
         ],
       ),
-      boardGameDetails: _boardGamesStore.allBoardGamesInCollectionsMap[playthrough.boardGameId]!,
+      boardGameDetails: _boardGamesStore.allBoardGamesMap[playthrough.boardGameId]!,
     );
   }
 }
