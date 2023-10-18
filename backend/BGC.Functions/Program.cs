@@ -21,7 +21,9 @@ using Polly;
 var host = new HostBuilder()
     .ConfigureAppConfiguration((hostingContext, configBuilder) =>
     {
+#if DEBUG
         configBuilder.AddJsonFile("local.settings.json", optional: true, reloadOnChange: false);
+#endif
     })
     .ConfigureFunctionsWorkerDefaults(builder => { }, options =>
     {
