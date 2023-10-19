@@ -93,6 +93,10 @@ resource "azurerm_storage_account" "sa" {
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  # Using v1 storage (legacy) becuase of the issue with generating
+  # a lot of storage traffic, which increases the cost
+  # See for more details https://github.com/Azure/azure-powershell/issues/18758
+  account_kind = "Storage"
 }
 
 ###
