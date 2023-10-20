@@ -76,6 +76,7 @@ stages:
                     appName: "$(functionsAppNameDev)"
                     package: "$(Pipeline.Workspace)/**/*.zip"
                     appSettings: -MongoDbSettings__ConnectionString $(mongoDbConnectionString)
+                    deploymentMethod: "runFromPackage"
 
   - stage: PROD
     dependsOn:
@@ -111,3 +112,4 @@ stages:
                     appName: "$(functionsAppNameProd)"
                     package: "$(Pipeline.Workspace)/**/*.zip"
                     appSettings: -MongoDbSettings__ConnectionString $(mongoDbConnectionString)
+                    deploymentMethod: "runFromPackage"
