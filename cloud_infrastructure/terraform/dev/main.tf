@@ -109,6 +109,7 @@ resource "azurerm_log_analytics_workspace" "log" {
   location            = azurerm_resource_group.rg.location
   sku                 = var.resources.analytics_workspace.sku
   retention_in_days   = var.resources.analytics_workspace.retention_in_days
+  daily_quota_gb      = 0.023
 }
 
 resource "azurerm_application_insights" "search_service_appi" {
