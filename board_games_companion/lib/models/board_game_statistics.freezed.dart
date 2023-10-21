@@ -656,9 +656,9 @@ mixin _$ScoreBoardGameStatistics {
   set bestScore(num? value) => throw _privateConstructorUsedError;
   double? get averageScore => throw _privateConstructorUsedError;
   set averageScore(double? value) => throw _privateConstructorUsedError;
-  List<Tuple2<Player, String>>? get topScoreres =>
+  List<Tuple2<Player, double>>? get topScoreres =>
       throw _privateConstructorUsedError;
-  set topScoreres(List<Tuple2<Player, String>>? value) =>
+  set topScoreres(List<Tuple2<Player, double>>? value) =>
       throw _privateConstructorUsedError;
   List<PlayerStatistics> get playersStatistics =>
       throw _privateConstructorUsedError;
@@ -696,7 +696,7 @@ abstract class $ScoreBoardGameStatisticsCopyWith<$Res> {
       PlayerScore? lastWinner,
       num? bestScore,
       double? averageScore,
-      List<Tuple2<Player, String>>? topScoreres,
+      List<Tuple2<Player, double>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
       List<PlayerCountStatistics> playerCountPercentage,
       List<PlayerWinsStatistics> playerWinsPercentage,
@@ -774,7 +774,7 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
       topScoreres: freezed == topScoreres
           ? _value.topScoreres
           : topScoreres // ignore: cast_nullable_to_non_nullable
-              as List<Tuple2<Player, String>>?,
+              as List<Tuple2<Player, double>>?,
       playersStatistics: null == playersStatistics
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
@@ -826,7 +826,7 @@ abstract class _$$_ScoreBoardGameStatisticsCopyWith<$Res>
       PlayerScore? lastWinner,
       num? bestScore,
       double? averageScore,
-      List<Tuple2<Player, String>>? topScoreres,
+      List<Tuple2<Player, double>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
       List<PlayerCountStatistics> playerCountPercentage,
       List<PlayerWinsStatistics> playerWinsPercentage,
@@ -903,7 +903,7 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
       topScoreres: freezed == topScoreres
           ? _value.topScoreres
           : topScoreres // ignore: cast_nullable_to_non_nullable
-              as List<Tuple2<Player, String>>?,
+              as List<Tuple2<Player, double>>?,
       playersStatistics: null == playersStatistics
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
@@ -963,7 +963,7 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
   @override
   double? averageScore;
   @override
-  List<Tuple2<Player, String>>? topScoreres;
+  List<Tuple2<Player, double>>? topScoreres;
   @override
   @JsonKey()
   List<PlayerStatistics> playersStatistics;
@@ -1000,7 +1000,7 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
       PlayerScore? lastWinner,
       num? bestScore,
       double? averageScore,
-      List<Tuple2<Player, String>>? topScoreres,
+      List<Tuple2<Player, double>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
       List<PlayerCountStatistics> playerCountPercentage,
       List<PlayerWinsStatistics> playerWinsPercentage,
@@ -1035,8 +1035,8 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   double? get averageScore;
   set averageScore(double? value);
   @override
-  List<Tuple2<Player, String>>? get topScoreres;
-  set topScoreres(List<Tuple2<Player, String>>? value);
+  List<Tuple2<Player, double>>? get topScoreres;
+  set topScoreres(List<Tuple2<Player, double>>? value);
   @override
   List<PlayerStatistics> get playersStatistics;
   set playersStatistics(List<PlayerStatistics> value);

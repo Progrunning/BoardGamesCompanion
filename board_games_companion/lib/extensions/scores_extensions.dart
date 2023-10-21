@@ -12,12 +12,7 @@ extension ScoreExtesions on Score {
 }
 
 extension ScoresExtesions on Iterable<Score>? {
-  List<Score> onlyScoresWithValue() {
-    return this
-            ?.where((s) => (s.value?.isNotEmpty ?? false) && num.tryParse(s.value!) != null)
-            .toList() ??
-        <Score>[];
-  }
+  List<Score> onlyScoresWithValue() => this?.where((s) => s.hasScore).toList() ?? <Score>[];
 
   List<Score> onlyCooperativeGames() {
     return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??
@@ -32,10 +27,7 @@ extension ScoresExtesions on Iterable<Score>? {
   }
 
   num? toBestScore(GameFamily gameFamily) {
-    final scores = this
-            ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
-            .map((Score score) => num.parse(score.value!)) ??
-        [];
+    final scores = this?.onlyScoresWithValue().map((score) => num.parse(score.value!)) ?? [];
     switch (gameFamily) {
       case GameFamily.HighestScore:
         return scores.reduce(max);
@@ -87,6 +79,36 @@ int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
       break;
   }
 
+  if (score.scoreGameResult != null && otherScore.scoreGameResult != null) {
+    return _compareScores(score, otherScore);
+  }
+
+  return _compareScoresUsingDeprecatedValue(score, otherScore);
+}
+
+int _compareScores(Score score, Score otherScore) {
+  if (score.scoreGameResult!.place != null && otherScore.scoreGameResult!.place != null) {
+    return score.scoreGameResult!.place!.compareTo(otherScore.scoreGameResult!.place!);
+  }
+
+  if (!score.scoreGameResult!.hasScore && !otherScore.scoreGameResult!.hasScore) {
+    return Constants.leaveAsIs;
+  }
+
+  if (!score.scoreGameResult!.hasScore) {
+    return Constants.moveBelow;
+  }
+
+  if (!otherScore.scoreGameResult!.hasScore) {
+    return Constants.moveAbove;
+  }
+
+  return otherScore.scoreGameResult!.points!.compareTo(score.scoreGameResult!.points!);
+}
+
+/// Fallback comparison for old playthrough results captured
+/// in the value property
+int _compareScoresUsingDeprecatedValue(Score score, Score otherScore) {
   if (!score.hasScore && !otherScore.hasScore) {
     return Constants.leaveAsIs;
   }

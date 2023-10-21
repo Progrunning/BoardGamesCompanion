@@ -81,7 +81,6 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                                 _editPlayerScore(playerScore, context),
                             onReorder: (oldIndex, newIndex) =>
                                 widget.viewModel.reorderPlayerScores(oldIndex, newIndex),
-                            onSortScores: () => widget.viewModel.orderPlayerScoresByScore(),
                           );
                         },
                       ),
@@ -99,6 +98,9 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                         onTap: (note) => _editNote(note),
                         onDelete: (note) => _deleteNote(note),
                       ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: Dimensions.floatingActionButtonBottomSpacing),
+                    ),
                   ],
                 );
               }),
@@ -150,11 +152,11 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
         ),
       );
 
-  Future<String> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
+  Future<double> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
     final viewModel = EnterScoreViewModel(playerScore);
     await showEnterScoreDialog(context, viewModel);
     widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
-    return viewModel.score.toString();
+    return viewModel.score;
   }
 
   Future<void> _save() async {
@@ -284,15 +286,13 @@ class _ScoresSection extends StatelessWidget {
     required this.playthroughScoresVisualState,
     required this.playthroughDetailsId,
     required this.onItemTapped,
-    required this.onSortScores,
     required this.onReorder,
   }) : super(key: key);
 
   final List<PlayerScore> playerScores;
   final PlaythroughScoresVisualState playthroughScoresVisualState;
   final String? playthroughDetailsId;
-  final Future<String?> Function(PlayerScore) onItemTapped;
-  final VoidCallback onSortScores;
+  final Future<double> Function(PlayerScore) onItemTapped;
   final void Function(int currentIndex, int newIndex) onReorder;
 
   @override
@@ -301,12 +301,8 @@ class _ScoresSection extends StatelessWidget {
       children: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: BgcSliverTitleHeaderDelegate.action(
+          delegate: BgcSliverTitleHeaderDelegate.title(
             primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
-            action: IconButton(
-              icon: const Icon(Icons.sort),
-              onPressed: () => onSortScores(),
-            ),
           ),
         ),
         playthroughScoresVisualState.maybeWhen(
@@ -365,7 +361,7 @@ class _ReordableScoreSliverList extends StatelessWidget {
   final List<PlayerScore> playerScores;
   final Set<String> tiedPlayerScoresSet;
   final String? playthroughDetailsId;
-  final Future<String?> Function(PlayerScore) onItemTapped;
+  final Future<double> Function(PlayerScore) onItemTapped;
   final void Function(int currentIndex, int newIndex) onReorder;
 
   @override
@@ -375,16 +371,14 @@ class _ReordableScoreSliverList extends StatelessWidget {
         final int itemIndex = index ~/ 2;
         final playerScore = playerScores[itemIndex];
         if (index.isEven) {
-          return ReorderableDragStartListener(
+          return _PlayerScoreTile(
             key: Key('PlayerScoreTile$playerScore'),
-            index: index,
-            child: _PlayerScoreTile(
-              playerScore: playerScore,
-              playthroughDetailsId: playthroughDetailsId,
-              onItemTapped: onItemTapped,
-              hasFinishedScoring: true,
-              isTied: playerScore.isTied,
-            ),
+            reordableIndex: index,
+            playerScore: playerScore,
+            playthroughDetailsId: playthroughDetailsId,
+            onItemTapped: onItemTapped,
+            hasFinishedScoring: true,
+            isTied: playerScore.isTied,
           );
         }
 
@@ -434,7 +428,7 @@ class _ScoresSliverList extends StatelessWidget {
 
   final List<PlayerScore> playerScores;
   final String? playthroughDetailsId;
-  final Future<String?> Function(PlayerScore) onItemTapped;
+  final Future<double> Function(PlayerScore) onItemTapped;
   final bool hasFinishedScoring;
 
   @override
@@ -617,26 +611,28 @@ class _PlayerScoreTile extends StatefulWidget {
     required this.isTied,
     required this.hasFinishedScoring,
     required this.onItemTapped,
+    this.reordableIndex,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String? playthroughDetailsId;
   final bool isTied;
+  final int? reordableIndex;
   final bool hasFinishedScoring;
-  final Future<String?> Function(PlayerScore) onItemTapped;
+  final Future<double> Function(PlayerScore) onItemTapped;
 
   @override
   State<_PlayerScoreTile> createState() => _PlayerScoreTileState();
 }
 
 class _PlayerScoreTileState extends State<_PlayerScoreTile> {
-  late String? score;
+  late double? score;
 
   @override
   void initState() {
     super.initState();
 
-    score = widget.playerScore.score.value;
+    score = widget.playerScore.score.score;
   }
 
   @override
@@ -673,9 +669,16 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                 ),
                 const SizedBox(width: Dimensions.standardSpacing),
                 Expanded(child: _PlayerScore(score: score)),
-                if (widget.isTied) ...[
-                  Checkbox(value: false, onChanged: (value) {}),
-                  const Icon(Icons.drag_handle, size: Dimensions.largeIconSize),
+                if (widget.isTied && widget.reordableIndex != null) ...[
+                  Checkbox(
+                      value: false,
+                      onChanged: (value) {
+                        // TODO Handle
+                      }),
+                  ReorderableDragStartListener(
+                    index: widget.reordableIndex!,
+                    child: const Icon(Icons.drag_handle, size: Dimensions.largeIconSize),
+                  ),
                 ],
               ],
             ),
@@ -692,7 +695,7 @@ class _PlayerScore extends StatelessWidget {
     required this.score,
   }) : super(key: key);
 
-  final String? score;
+  final double? score;
 
   @override
   Widget build(BuildContext context) {
@@ -704,7 +707,7 @@ class _PlayerScore extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              score ?? '-',
+              score?.toStringAsFixed(0) ?? '-',
               style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),

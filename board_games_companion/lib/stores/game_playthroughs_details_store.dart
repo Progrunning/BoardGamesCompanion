@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -181,20 +182,35 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   }
 
   PlaythroughDetails createPlaythroughDetails(Playthrough playthrough) {
-    final scores =
-        _scoresStore.scores.where((score) => score.playthroughId == playthrough.id).toList()
-          ..sortByScore(gameGameFamily)
-          ..toList();
+    final unorderedScores =
+        _scoresStore.scores.where((score) => score.playthroughId == playthrough.id);
+    // Order initially by score in case the score has not been migrated to use scoreGameResult
+    final orderedScores = unorderedScores.sortByScore(gameGameFamily);
     final players =
         _playerStore.players.where((player) => playthrough.playerIds.contains(player.id)).toList();
 
-    final playerScores = scores.mapIndexed((int index, Score score) {
-      final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
-      return PlayerScore(player: player, score: score, place: index + 1);
-    }).toList()
-      ..sortByPlayerName()
-      ..sortByScore(gameGameFamily);
+    final playerScores = orderedScores
+        ?.mapIndexed((int index, Score score) {
+          // An adhoc way of specifying player's score and place after replacing value
+          // with scoreGameResult as way of persiting player's score details
+          if ((gameGameFamily == GameFamily.HighestScore ||
+                  gameGameFamily == GameFamily.LowestScore) &&
+              score.scoreGameResult == null) {
+            score = score.copyWith(
+              scoreGameResult: ScoreGameResult(
+                points: score.score,
+                place: index + 1,
+              ),
+            );
+          }
 
-    return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores);
+          final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
+          return PlayerScore(player: player, score: score);
+        })
+        .toList()
+        .sortByPlayerName()
+        .sortByScore(gameGameFamily);
+
+    return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores ?? []);
   }
 }

@@ -190,7 +190,7 @@ mixin _$PlaythroughsLogGameViewModel on _PlaythroughsLogGameViewModel, Store {
   }
 
   @override
-  void updatePlayerScore(PlayerScore playerScore, int newScore) {
+  void updatePlayerScore(PlayerScore playerScore, double newScore) {
     final _$actionInfo = _$_PlaythroughsLogGameViewModelActionController
         .startAction(name: '_PlaythroughsLogGameViewModel.updatePlayerScore');
     try {

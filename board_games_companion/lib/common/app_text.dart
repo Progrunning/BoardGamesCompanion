@@ -219,7 +219,7 @@ class AppText {
   static const editPlaythroughPageCannotReorderNotTiedScore =
       "Sorry, you can't reorder not tied score";
   static const editPlaythroughPageTieBreakerInstruction = 'Some players have tied scores. '
-      'In order to break the tie(s) tap and hold and drag up or down the tied player scores '
+      'In order to break the tie(s) drag up or down tied player scores '
       'or check the box if players share the place';
 
   static const playthroughNotePageTitle = 'Game Note';

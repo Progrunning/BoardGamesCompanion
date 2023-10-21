@@ -225,22 +225,11 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
-  void updatePlayerScore(PlayerScore playerScore, int newScore) {
+  void updatePlayerScore(PlayerScore playerScore, double newScore) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
         name: '_EditPlaythoughViewModel.updatePlayerScore');
     try {
       return super.updatePlayerScore(playerScore, newScore);
-    } finally {
-      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void orderPlayerScoresByScore() {
-    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
-        name: '_EditPlaythoughViewModel.orderPlayerScoresByScore');
-    try {
-      return super.orderPlayerScoresByScore();
     } finally {
       _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
     }

@@ -175,7 +175,7 @@ class PlaythroughsLogGamePageState extends State<PlaythroughsLogGamePage> {
     );
   }
 
-  void _handlePlayerScoreUpdate(PlayerScore playerScore, int score) {
+  void _handlePlayerScoreUpdate(PlayerScore playerScore, double score) {
     viewModel.updatePlayerScore(playerScore, score);
   }
 
@@ -564,7 +564,7 @@ class _PlayersSection extends StatelessWidget {
   final PlaythroughsLogGamePlayers players;
   final VoidCallback onCreatePlayer;
   final VoidCallback onSelectPlayers;
-  final void Function(PlayerScore, int) onPlayerScoreUpdated;
+  final void Function(PlayerScore, double) onPlayerScoreUpdated;
 
   @override
   Widget build(BuildContext context) => MultiSliver(
@@ -617,7 +617,7 @@ class _SelectedPlayers extends StatelessWidget {
   final PlaythroughTimeline playthroughTimeline;
   final GameFamily gameFamily;
   final VoidCallback onSelectPlayers;
-  final void Function(PlayerScore playerScore, int score) onPlayerScoreUpdated;
+  final void Function(PlayerScore playerScore, double score) onPlayerScoreUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -813,7 +813,7 @@ class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
 
   final List<Player> selectedPlayers;
   final Map<String, PlayerScore> selectedPlayerScores;
-  final void Function(PlayerScore, int) onPlayerScoreUpdated;
+  final void Function(PlayerScore, double) onPlayerScoreUpdated;
   final GameFamily gameFamily;
 
   @override

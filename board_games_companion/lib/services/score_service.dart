@@ -1,5 +1,6 @@
 import 'package:basics/basics.dart';
 import 'package:fimber/fimber.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import '../models/hive/score.dart';
@@ -23,6 +24,8 @@ class ScoreService extends BaseHiveService<Score, ScoreService> {
     }
 
     await storageBox.put(score.id, score);
+    final test = storageBox.values.where((element) => element.id == score.id).first;
+    debugPrint(test.id);
 
     return true;
   }
@@ -31,6 +34,11 @@ class ScoreService extends BaseHiveService<Score, ScoreService> {
     if (!await ensureBoxOpen()) {
       return <Score>[];
     }
+
+    // final a = storageBox.values
+    //     .where((element) => element.scoreGameResult == null)
+    //     .first;
+    // debugPrint(a.id);
 
     return storageBox.toMap().values.toList();
   }

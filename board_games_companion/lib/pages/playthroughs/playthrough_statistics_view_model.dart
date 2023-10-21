@@ -216,7 +216,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       for (final Score score in topFiveScores) {
         final Player player = playersById[score.playerId]!;
         if (scoreBoardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
-          scoreBoardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
+          scoreBoardGameStatistics.topScoreres!.add(Tuple2<Player, double>(player, score.score!));
         }
       }
 
@@ -265,14 +265,14 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
     final lastPlaythroughScores = playthroughScoresByPlaythroughId[lastPlaythrough.id]
         .onlyScoresWithValue()
-      ..sortByScore(gameFamily);
+        .sortByScore(gameFamily);
 
-    if (lastPlaythroughScores.isEmpty) {
+    if (lastPlaythroughScores?.isEmpty ?? true) {
       scoreBoardGameStatistics.lastWinner = null;
       return;
     }
 
-    final lastPlaythroughBestScore = lastPlaythroughScores.first;
+    final lastPlaythroughBestScore = lastPlaythroughScores!.first;
     if (!playersById.containsKey(lastPlaythroughBestScore.playerId)) {
       return;
     }

@@ -22,6 +22,7 @@ mixin _$Score {
   String get playerId => throw _privateConstructorUsedError;
   @HiveField(3)
   String get boardGameId => throw _privateConstructorUsedError;
+  @Deprecated('Use ScoreGameResult instead')
   @HiveField(4)
   String? get value => throw _privateConstructorUsedError;
   @HiveField(1)
@@ -29,6 +30,8 @@ mixin _$Score {
   @HiveField(5, defaultValue: null)
   NoScoreGameResult? get noScoreGameResult =>
       throw _privateConstructorUsedError;
+  @HiveField(6, defaultValue: null)
+  ScoreGameResult? get scoreGameResult => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ScoreCopyWith<Score> get copyWith => throw _privateConstructorUsedError;
@@ -43,11 +46,13 @@ abstract class $ScoreCopyWith<$Res> {
       {@HiveField(0) String id,
       @HiveField(2) String playerId,
       @HiveField(3) String boardGameId,
-      @HiveField(4) String? value,
+      @Deprecated('Use ScoreGameResult instead') @HiveField(4) String? value,
       @HiveField(1) String? playthroughId,
-      @HiveField(5, defaultValue: null) NoScoreGameResult? noScoreGameResult});
+      @HiveField(5, defaultValue: null) NoScoreGameResult? noScoreGameResult,
+      @HiveField(6, defaultValue: null) ScoreGameResult? scoreGameResult});
 
   $NoScoreGameResultCopyWith<$Res>? get noScoreGameResult;
+  $ScoreGameResultCopyWith<$Res>? get scoreGameResult;
 }
 
 /// @nodoc
@@ -69,6 +74,7 @@ class _$ScoreCopyWithImpl<$Res, $Val extends Score>
     Object? value = freezed,
     Object? playthroughId = freezed,
     Object? noScoreGameResult = freezed,
+    Object? scoreGameResult = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -95,6 +101,10 @@ class _$ScoreCopyWithImpl<$Res, $Val extends Score>
           ? _value.noScoreGameResult
           : noScoreGameResult // ignore: cast_nullable_to_non_nullable
               as NoScoreGameResult?,
+      scoreGameResult: freezed == scoreGameResult
+          ? _value.scoreGameResult
+          : scoreGameResult // ignore: cast_nullable_to_non_nullable
+              as ScoreGameResult?,
     ) as $Val);
   }
 
@@ -109,6 +119,18 @@ class _$ScoreCopyWithImpl<$Res, $Val extends Score>
       return _then(_value.copyWith(noScoreGameResult: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ScoreGameResultCopyWith<$Res>? get scoreGameResult {
+    if (_value.scoreGameResult == null) {
+      return null;
+    }
+
+    return $ScoreGameResultCopyWith<$Res>(_value.scoreGameResult!, (value) {
+      return _then(_value.copyWith(scoreGameResult: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -121,12 +143,15 @@ abstract class _$$_ScoreCopyWith<$Res> implements $ScoreCopyWith<$Res> {
       {@HiveField(0) String id,
       @HiveField(2) String playerId,
       @HiveField(3) String boardGameId,
-      @HiveField(4) String? value,
+      @Deprecated('Use ScoreGameResult instead') @HiveField(4) String? value,
       @HiveField(1) String? playthroughId,
-      @HiveField(5, defaultValue: null) NoScoreGameResult? noScoreGameResult});
+      @HiveField(5, defaultValue: null) NoScoreGameResult? noScoreGameResult,
+      @HiveField(6, defaultValue: null) ScoreGameResult? scoreGameResult});
 
   @override
   $NoScoreGameResultCopyWith<$Res>? get noScoreGameResult;
+  @override
+  $ScoreGameResultCopyWith<$Res>? get scoreGameResult;
 }
 
 /// @nodoc
@@ -144,6 +169,7 @@ class __$$_ScoreCopyWithImpl<$Res> extends _$ScoreCopyWithImpl<$Res, _$_Score>
     Object? value = freezed,
     Object? playthroughId = freezed,
     Object? noScoreGameResult = freezed,
+    Object? scoreGameResult = freezed,
   }) {
     return _then(_$_Score(
       id: null == id
@@ -170,6 +196,10 @@ class __$$_ScoreCopyWithImpl<$Res> extends _$ScoreCopyWithImpl<$Res, _$_Score>
           ? _value.noScoreGameResult
           : noScoreGameResult // ignore: cast_nullable_to_non_nullable
               as NoScoreGameResult?,
+      scoreGameResult: freezed == scoreGameResult
+          ? _value.scoreGameResult
+          : scoreGameResult // ignore: cast_nullable_to_non_nullable
+              as ScoreGameResult?,
     ));
   }
 }
@@ -182,9 +212,10 @@ class _$_Score extends _Score {
       {@HiveField(0) required this.id,
       @HiveField(2) required this.playerId,
       @HiveField(3) required this.boardGameId,
-      @HiveField(4) this.value,
+      @Deprecated('Use ScoreGameResult instead') @HiveField(4) this.value,
       @HiveField(1) this.playthroughId,
-      @HiveField(5, defaultValue: null) this.noScoreGameResult})
+      @HiveField(5, defaultValue: null) this.noScoreGameResult,
+      @HiveField(6, defaultValue: null) this.scoreGameResult})
       : super._();
 
   @override
@@ -197,6 +228,7 @@ class _$_Score extends _Score {
   @HiveField(3)
   final String boardGameId;
   @override
+  @Deprecated('Use ScoreGameResult instead')
   @HiveField(4)
   final String? value;
   @override
@@ -205,10 +237,13 @@ class _$_Score extends _Score {
   @override
   @HiveField(5, defaultValue: null)
   final NoScoreGameResult? noScoreGameResult;
+  @override
+  @HiveField(6, defaultValue: null)
+  final ScoreGameResult? scoreGameResult;
 
   @override
   String toString() {
-    return 'Score(id: $id, playerId: $playerId, boardGameId: $boardGameId, value: $value, playthroughId: $playthroughId, noScoreGameResult: $noScoreGameResult)';
+    return 'Score(id: $id, playerId: $playerId, boardGameId: $boardGameId, value: $value, playthroughId: $playthroughId, noScoreGameResult: $noScoreGameResult, scoreGameResult: $scoreGameResult)';
   }
 
   @override
@@ -225,12 +260,14 @@ class _$_Score extends _Score {
             (identical(other.playthroughId, playthroughId) ||
                 other.playthroughId == playthroughId) &&
             (identical(other.noScoreGameResult, noScoreGameResult) ||
-                other.noScoreGameResult == noScoreGameResult));
+                other.noScoreGameResult == noScoreGameResult) &&
+            (identical(other.scoreGameResult, scoreGameResult) ||
+                other.scoreGameResult == scoreGameResult));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, id, playerId, boardGameId, value,
-      playthroughId, noScoreGameResult);
+      playthroughId, noScoreGameResult, scoreGameResult);
 
   @JsonKey(ignore: true)
   @override
@@ -247,12 +284,15 @@ abstract class _Score extends Score {
           required final String playerId,
       @HiveField(3)
           required final String boardGameId,
+      @Deprecated('Use ScoreGameResult instead')
       @HiveField(4)
           final String? value,
       @HiveField(1)
           final String? playthroughId,
       @HiveField(5, defaultValue: null)
-          final NoScoreGameResult? noScoreGameResult}) = _$_Score;
+          final NoScoreGameResult? noScoreGameResult,
+      @HiveField(6, defaultValue: null)
+          final ScoreGameResult? scoreGameResult}) = _$_Score;
   const _Score._() : super._();
 
   @override
@@ -265,6 +305,7 @@ abstract class _Score extends Score {
   @HiveField(3)
   String get boardGameId;
   @override
+  @Deprecated('Use ScoreGameResult instead')
   @HiveField(4)
   String? get value;
   @override
@@ -273,6 +314,9 @@ abstract class _Score extends Score {
   @override
   @HiveField(5, defaultValue: null)
   NoScoreGameResult? get noScoreGameResult;
+  @override
+  @HiveField(6, defaultValue: null)
+  ScoreGameResult? get scoreGameResult;
   @override
   @JsonKey(ignore: true)
   _$$_ScoreCopyWith<_$_Score> get copyWith =>

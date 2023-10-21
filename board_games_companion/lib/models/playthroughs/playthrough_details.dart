@@ -50,11 +50,10 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   bool get hasNotes => notes?.isNotEmpty ?? false;
 
-  /// Checks if any of the scores with values have the same score
-  ///
-  /// NOTE: Creating a set removes duplicates, if there are any then lenght of the
-  ///       set should be different from the total
-  bool get hasTies => scoresWithValue.map((s) => s.value).toSet().length != scoresWithValue.length;
+  bool get hasTies => tiedPlayerScores.isNotEmpty;
+
+  List<PlayerScore> get tiedPlayerScores =>
+      playerScores.where((playerScore) => playerScore.id != null && playerScore.isTied).toList();
 
   GameClassification get playerScoreBasedGameClassification {
     if (playerScores.any((playerScore) => playerScore.score.noScoreGameResult != null)) {

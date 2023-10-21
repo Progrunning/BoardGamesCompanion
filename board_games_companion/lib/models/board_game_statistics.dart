@@ -31,7 +31,7 @@ class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
     PlayerScore? lastWinner,
     num? bestScore,
     double? averageScore,
-    List<Tuple2<Player, String>>? topScoreres,
+    List<Tuple2<Player, double>>? topScoreres,
     @Default(<PlayerStatistics>[]) List<PlayerStatistics> playersStatistics,
     @Default(<PlayerCountStatistics>[]) List<PlayerCountStatistics> playerCountPercentage,
     @Default(<PlayerWinsStatistics>[]) List<PlayerWinsStatistics> playerWinsPercentage,

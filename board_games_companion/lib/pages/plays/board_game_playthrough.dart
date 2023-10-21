@@ -39,7 +39,7 @@ class BoardGamePlaythrough with _$BoardGamePlaythrough {
           AppText.playPageHistoryTabScoreGameResultFormat,
           [
             winner.player?.name ?? '',
-            winner.score.valueInt,
+            winner.score.score,
           ],
         );
 

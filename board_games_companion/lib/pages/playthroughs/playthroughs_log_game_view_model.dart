@@ -147,8 +147,8 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   }
 
   @action
-  void updatePlayerScore(PlayerScore playerScore, int newScore) {
-    if (playerScore.score.valueInt == newScore || playerScore.player == null) {
+  void updatePlayerScore(PlayerScore playerScore, double newScore) {
+    if (playerScore.score.score == newScore || playerScore.player == null) {
       return;
     }
 

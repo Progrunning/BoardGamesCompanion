@@ -9,11 +9,11 @@ part of 'enter_score_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
-  Computed<int>? _$scoreComputed;
+  Computed<double>? _$scoreComputed;
 
   @override
-  int get score => (_$scoreComputed ??=
-          Computed<int>(() => super.score, name: '_EnterScoreViewModel.score'))
+  double get score => (_$scoreComputed ??= Computed<double>(() => super.score,
+          name: '_EnterScoreViewModel.score'))
       .value;
   Computed<String?>? _$playerNameComputed;
 
@@ -72,13 +72,13 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
       Atom(name: '_EnterScoreViewModel.partialScores', context: context);
 
   @override
-  ObservableList<int> get partialScores {
+  ObservableList<double> get partialScores {
     _$partialScoresAtom.reportRead();
     return super.partialScores;
   }
 
   @override
-  set partialScores(ObservableList<int> value) {
+  set partialScores(ObservableList<double> value) {
     _$partialScoresAtom.reportWrite(value, super.partialScores, () {
       super.partialScores = value;
     });
@@ -99,7 +99,7 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   }
 
   @override
-  void updateScore(int partialScore) {
+  void updateScore(double partialScore) {
     final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
         name: '_EnterScoreViewModel.updateScore');
     try {
