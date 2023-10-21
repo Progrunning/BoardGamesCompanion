@@ -19,6 +19,7 @@ class PlaythroughDetails with _$PlaythroughDetails {
   const factory PlaythroughDetails({
     required Playthrough playthrough,
     required List<PlayerScore> playerScores,
+    // TODO Perhaps this is not needed?
     List<ScoreTiebreaker>? scoreTiebreakers,
   }) = _PlaythroughDetails;
 
