@@ -22,10 +22,10 @@ extension ScoresExtesions on Iterable<Score>? {
         <Score>[];
   }
 
-  List<Score>? sortByScore(GameFamily gameFamily) {
+  List<Score>? sortByScore(GameFamily gameFamily, {bool ignorePlaces = false}) {
     return this?.toList()
       ?..sort((Score score, Score otherScore) {
-        return compareScores(score, otherScore, gameFamily);
+        return compareScores(score, otherScore, gameFamily, ignorePlaces: ignorePlaces);
       });
   }
 
@@ -64,8 +64,12 @@ extension ScoresExtesions on Iterable<Score>? {
       0;
 }
 
-int compareScores(Score score, Score otherScore, GameFamily gameFamily,
-    [bool ignorePlaces = false]) {
+int compareScores(
+  Score score,
+  Score otherScore,
+  GameFamily gameFamily, {
+  bool ignorePlaces = false,
+}) {
   switch (gameFamily) {
     case GameFamily.LowestScore:
       // MK Swap scores around
@@ -80,46 +84,16 @@ int compareScores(Score score, Score otherScore, GameFamily gameFamily,
       break;
   }
 
-  if (score.scoreGameResult != null || otherScore.scoreGameResult != null) {
-    return _compareScores(score, otherScore, ignorePlaces);
-  }
-
-  return _compareScoresUsingDeprecatedValue(score, otherScore);
+  return _compareScores(score, otherScore, ignorePlaces);
 }
 
 int _compareScores(Score score, Score otherScore, [bool ignorePlaces = false]) {
-  if (score.scoreGameResult != null && otherScore.scoreGameResult == null) {
-    return Constants.moveAbove;
-  }
-
-  if (score.scoreGameResult == null && otherScore.scoreGameResult != null) {
-    return Constants.moveBelow;
-  }
-
   if (!ignorePlaces &&
-      score.scoreGameResult!.place != null &&
-      otherScore.scoreGameResult!.place != null) {
+      score.scoreGameResult?.place != null &&
+      otherScore.scoreGameResult?.place != null) {
     return score.scoreGameResult!.place!.compareTo(otherScore.scoreGameResult!.place!);
   }
 
-  if (!score.scoreGameResult!.hasScore && !otherScore.scoreGameResult!.hasScore) {
-    return Constants.leaveAsIs;
-  }
-
-  if (!score.scoreGameResult!.hasScore) {
-    return Constants.moveBelow;
-  }
-
-  if (!otherScore.scoreGameResult!.hasScore) {
-    return Constants.moveAbove;
-  }
-
-  return otherScore.scoreGameResult!.points!.compareTo(score.scoreGameResult!.points!);
-}
-
-/// Fallback comparison for old playthrough results captured
-/// in the value property
-int _compareScoresUsingDeprecatedValue(Score score, Score otherScore) {
   if (!score.hasScore && !otherScore.hasScore) {
     return Constants.leaveAsIs;
   }
@@ -132,19 +106,5 @@ int _compareScoresUsingDeprecatedValue(Score score, Score otherScore) {
     return Constants.moveAbove;
   }
 
-  final num? aNumber = num.tryParse(score.value!);
-  final num? bNumber = num.tryParse(otherScore.value!);
-  if (aNumber == null && bNumber == null) {
-    return Constants.leaveAsIs;
-  }
-
-  if (aNumber == null) {
-    return Constants.moveBelow;
-  }
-
-  if (bNumber == null) {
-    return Constants.moveAbove;
-  }
-
-  return bNumber.compareTo(aNumber);
+  return otherScore.score!.compareTo(score.score!);
 }

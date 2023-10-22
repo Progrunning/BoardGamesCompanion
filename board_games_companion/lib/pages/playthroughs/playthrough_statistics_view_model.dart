@@ -210,7 +210,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       scoreBoardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
 
       final topFiveScores = playerScoresCollection
-          .sortByScore(_gamePlaythroughsStore.gameGameFamily)!
+          .sortByScore(_gamePlaythroughsStore.gameGameFamily, ignorePlaces: true)!
           .take(_maxNumberOfTopScoresToDisplay);
       scoreBoardGameStatistics.topScoreres = [];
       for (final Score score in topFiveScores) {

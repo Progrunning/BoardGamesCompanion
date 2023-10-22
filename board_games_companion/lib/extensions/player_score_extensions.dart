@@ -20,7 +20,12 @@ extension PlayerScoresExtesions on List<PlayerScore> {
   }) {
     return this
       ..sort((PlayerScore playerScore, PlayerScore otherPlayerScore) {
-        return compareScores(playerScore.score, otherPlayerScore.score, gameFamily, ignorePlaces);
+        return compareScores(
+          playerScore.score,
+          otherPlayerScore.score,
+          gameFamily,
+          ignorePlaces: ignorePlaces,
+        );
       });
   }
 
