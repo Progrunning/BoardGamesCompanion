@@ -1,3 +1,4 @@
+import 'package:basics/basics.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -19,11 +20,19 @@ class BoardGamePlaythrough with _$BoardGamePlaythrough {
 
   const BoardGamePlaythrough._();
 
-  PlayerScore get winner {
-    final sortedPlayerScores = playthrough.playerScores
-        .toList()
-        .sortByScore(boardGameDetails.settings?.gameFamily ?? GameFamily.HighestScore);
-    return sortedPlayerScores.first;
+  List<PlayerScore> get winners {
+    var bestPlayerScores = playthrough.playerScores.where((ps) => ps.score.isWinner).toList();
+    // The below condition is to ensure old score records are still showing winners
+    if (bestPlayerScores.isEmpty) {
+      bestPlayerScores = [
+        playthrough.playerScores
+            .toList()
+            .sortByScore(boardGameDetails.settings?.gameFamily ?? GameFamily.HighestScore)
+            .first
+      ];
+    }
+
+    return bestPlayerScores;
   }
 
   String get id => '${boardGameDetails.id}${playthrough.id}';
@@ -34,12 +43,14 @@ class BoardGamePlaythrough with _$BoardGamePlaythrough {
     switch (gameFamily) {
       case GameFamily.HighestScore:
       case GameFamily.LowestScore:
-        final winner = this.winner;
         return sprintf(
           AppText.playPageHistoryTabScoreGameResultFormat,
           [
-            winner.player?.name ?? '',
-            winner.score.score,
+            winners
+                .where((element) => element.player?.name.isNotNullOrBlank ?? false)
+                .map((e) => e.player!.name)
+                .join(', '),
+            winners.first.score.score?.toStringAsFixed(0),
           ],
         );
 

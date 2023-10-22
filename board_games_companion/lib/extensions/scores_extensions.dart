@@ -14,7 +14,8 @@ extension ScoreExtesions on Score {
 extension ScoresExtesions on Iterable<Score>? {
   List<Score> onlyScoresWithValue() => this?.where((s) => s.hasScore).toList() ?? <Score>[];
 
-  List<Score> winners() => this?.where((s) => s.hasScore && s.isWinner).toList() ?? <Score>[];
+  List<Score> winners() =>
+      this?.onlyScoresWithValue().where((s) => s.isWinner).toList() ?? <Score>[];
 
   List<Score> onlyCooperativeGames() {
     return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??
