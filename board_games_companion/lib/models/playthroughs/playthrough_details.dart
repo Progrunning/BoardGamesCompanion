@@ -7,7 +7,6 @@ import '../hive/playthrough.dart';
 import '../hive/playthrough_note.dart';
 import '../hive/score.dart';
 import '../player_score.dart';
-import 'score_tirebreaker.dart';
 
 part 'playthrough_details.freezed.dart';
 
@@ -19,8 +18,6 @@ class PlaythroughDetails with _$PlaythroughDetails {
   const factory PlaythroughDetails({
     required Playthrough playthrough,
     required List<PlayerScore> playerScores,
-    // TODO Perhaps this is not needed?
-    List<ScoreTiebreaker>? scoreTiebreakers,
   }) = _PlaythroughDetails;
 
   const PlaythroughDetails._();
