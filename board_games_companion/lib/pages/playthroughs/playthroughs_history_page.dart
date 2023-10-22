@@ -273,8 +273,10 @@ class _PlaythroughPlayers extends StatelessWidget {
             return PlayerScoreRankAvatar(
               player: playthroughDetails.playerScores[index].player,
               playerHeroIdSuffix: playthroughDetails.id,
-              rank: playthroughDetails.playerScores[index].place,
-              score: playthroughDetails.playerScores[index].score.value,
+              rank: playthroughDetails.finishedScoring
+                  ? playthroughDetails.playerScores[index].place
+                  : null,
+              score: playthroughDetails.playerScores[index].score.score,
             );
           case GameClassification.NoScore:
             return _PlayerNoScoreAvatar(
@@ -307,14 +309,10 @@ class _PlayerNoScoreAvatar extends StatelessWidget {
         SizedBox(
           height: Dimensions.smallPlayerAvatarSize.height,
           width: Dimensions.smallPlayerAvatarSize.width,
-          child: Stack(
-            children: [
-              PlayerAvatar(
-                player: player,
-                avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                playerHeroIdSuffix: playerHeroIdSuffix,
-              ),
-            ],
+          child: PlayerAvatar(
+            player: player,
+            avatarImageSize: Dimensions.smallPlayerAvatarSize,
+            playerHeroIdSuffix: playerHeroIdSuffix,
           ),
         ),
         const SizedBox(height: Dimensions.standardSpacing),

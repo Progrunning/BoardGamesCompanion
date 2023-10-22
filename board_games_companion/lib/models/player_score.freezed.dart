@@ -18,7 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$PlayerScore {
   Player? get player => throw _privateConstructorUsedError;
   Score get score => throw _privateConstructorUsedError;
-  int? get place => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlayerScoreCopyWith<PlayerScore> get copyWith =>
@@ -31,7 +30,7 @@ abstract class $PlayerScoreCopyWith<$Res> {
           PlayerScore value, $Res Function(PlayerScore) then) =
       _$PlayerScoreCopyWithImpl<$Res, PlayerScore>;
   @useResult
-  $Res call({Player? player, Score score, int? place});
+  $Res call({Player? player, Score score});
 
   $PlayerCopyWith<$Res>? get player;
   $ScoreCopyWith<$Res> get score;
@@ -52,7 +51,6 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
   $Res call({
     Object? player = freezed,
     Object? score = null,
-    Object? place = freezed,
   }) {
     return _then(_value.copyWith(
       player: freezed == player
@@ -63,10 +61,6 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as Score,
-      place: freezed == place
-          ? _value.place
-          : place // ignore: cast_nullable_to_non_nullable
-              as int?,
     ) as $Val);
   }
 
@@ -99,7 +93,7 @@ abstract class _$$_PlayerScoreCopyWith<$Res>
       __$$_PlayerScoreCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Player? player, Score score, int? place});
+  $Res call({Player? player, Score score});
 
   @override
   $PlayerCopyWith<$Res>? get player;
@@ -120,7 +114,6 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
   $Res call({
     Object? player = freezed,
     Object? score = null,
-    Object? place = freezed,
   }) {
     return _then(_$_PlayerScore(
       player: freezed == player
@@ -131,10 +124,6 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as Score,
-      place: freezed == place
-          ? _value.place
-          : place // ignore: cast_nullable_to_non_nullable
-              as int?,
     ));
   }
 }
@@ -142,19 +131,16 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_PlayerScore extends _PlayerScore {
-  const _$_PlayerScore({required this.player, required this.score, this.place})
-      : super._();
+  const _$_PlayerScore({required this.player, required this.score}) : super._();
 
   @override
   final Player? player;
   @override
   final Score score;
-  @override
-  final int? place;
 
   @override
   String toString() {
-    return 'PlayerScore(player: $player, score: $score, place: $place)';
+    return 'PlayerScore(player: $player, score: $score)';
   }
 
   @override
@@ -163,12 +149,11 @@ class _$_PlayerScore extends _PlayerScore {
         (other.runtimeType == runtimeType &&
             other is _$_PlayerScore &&
             (identical(other.player, player) || other.player == player) &&
-            (identical(other.score, score) || other.score == score) &&
-            (identical(other.place, place) || other.place == place));
+            (identical(other.score, score) || other.score == score));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, player, score, place);
+  int get hashCode => Object.hash(runtimeType, player, score);
 
   @JsonKey(ignore: true)
   @override
@@ -180,16 +165,13 @@ class _$_PlayerScore extends _PlayerScore {
 abstract class _PlayerScore extends PlayerScore {
   const factory _PlayerScore(
       {required final Player? player,
-      required final Score score,
-      final int? place}) = _$_PlayerScore;
+      required final Score score}) = _$_PlayerScore;
   const _PlayerScore._() : super._();
 
   @override
   Player? get player;
   @override
   Score get score;
-  @override
-  int? get place;
   @override
   @JsonKey(ignore: true)
   _$$_PlayerScoreCopyWith<_$_PlayerScore> get copyWith =>

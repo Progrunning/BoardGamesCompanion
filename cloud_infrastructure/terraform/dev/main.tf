@@ -93,6 +93,10 @@ resource "azurerm_storage_account" "sa" {
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  # Using v1 storage (legacy) becuase of the issue with generating
+  # a lot of storage traffic, which increases the cost
+  # See for more details https://github.com/Azure/azure-powershell/issues/18758
+  account_kind = "Storage"
 }
 
 ###
@@ -105,6 +109,7 @@ resource "azurerm_log_analytics_workspace" "log" {
   location            = azurerm_resource_group.rg.location
   sku                 = var.resources.analytics_workspace.sku
   retention_in_days   = var.resources.analytics_workspace.retention_in_days
+  daily_quota_gb      = 0.023
 }
 
 resource "azurerm_application_insights" "search_service_appi" {
@@ -226,6 +231,7 @@ resource "azurerm_linux_function_app" "func" {
   storage_account_name       = azurerm_storage_account.sa.name
   storage_account_access_key = azurerm_storage_account.sa.primary_access_key
   service_plan_id            = azurerm_service_plan.asp.id
+  builtin_logging_enabled    = false
 
   site_config {
     application_stack {

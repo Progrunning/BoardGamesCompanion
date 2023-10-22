@@ -21,7 +21,15 @@ using Polly;
 var host = new HostBuilder()
     .ConfigureAppConfiguration((hostingContext, configBuilder) =>
     {
+    // Added conditional code because there seems to be an issue with Azure Functions / Azure Storage
+    // where a lot of sotrage transactions is being made for no good reason, which increases the cost of subscription.
+    // The below are links with some information / explanation of the problem
+
+    // https://stackoverflow.com/questions/60114152/inexplicable-storage-transactions-from-azure-functions
+    // https://stackoverflow.com/a/60484059/510627
+#if DEBUG
         configBuilder.AddJsonFile("local.settings.json", optional: true, reloadOnChange: false);
+#endif
     })
     .ConfigureFunctionsWorkerDefaults(builder => { }, options =>
     {

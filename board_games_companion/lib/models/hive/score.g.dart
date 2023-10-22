@@ -23,13 +23,14 @@ class ScoreAdapter extends TypeAdapter<_$_Score> {
       value: fields[4] as String?,
       playthroughId: fields[1] as String?,
       noScoreGameResult: fields[5] as NoScoreGameResult?,
+      scoreGameResult: fields[6] as ScoreGameResult?,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_Score obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(2)
@@ -41,7 +42,9 @@ class ScoreAdapter extends TypeAdapter<_$_Score> {
       ..writeByte(1)
       ..write(obj.playthroughId)
       ..writeByte(5)
-      ..write(obj.noScoreGameResult);
+      ..write(obj.noScoreGameResult)
+      ..writeByte(6)
+      ..write(obj.scoreGameResult);
   }
 
   @override

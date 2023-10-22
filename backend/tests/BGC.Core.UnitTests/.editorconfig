@@ -1,4 +1,4 @@
-[*.cs]
+[*.{cs,vb}]
 
 # StyleCop
 
@@ -8,3 +8,7 @@ dotnet_diagnostic.SA1600.severity = none
 # No need for a file header
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1633.md
 dotnet_diagnostic.SA1633.severity = none
+
+# We do want to use underscores in the names of the test cases
+# https://learn.microsoft.com/en-nz/dotnet/fundamentals/code-analysis/quality-rules/ca1707
+dotnet_diagnostic.CA1707.severity = none

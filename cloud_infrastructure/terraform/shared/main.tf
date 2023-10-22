@@ -12,10 +12,6 @@ variable "shared_resources" {
       terraform_container_name_dev  = string
       terraform_container_name_prod = string
     })
-    container_registry = object({
-      name = string
-      sku  = string
-    })
     analytics_workspace = object({
       name              = string
       retention_in_days = number
@@ -80,16 +76,6 @@ resource "azurerm_storage_container" "storage_container_prod" {
   name                  = var.shared_resources.storage_account.terraform_container_name_prod
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "private"
-}
-
-resource "azurerm_container_registry" "acr" {
-  name                = var.shared_resources.container_registry.name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sku                 = var.shared_resources.container_registry.sku
-
-  # MK Required for the deployment pipeline to push the image from shared ACR to container app
-  admin_enabled = true
 }
 
 resource "azurerm_log_analytics_workspace" "log" {

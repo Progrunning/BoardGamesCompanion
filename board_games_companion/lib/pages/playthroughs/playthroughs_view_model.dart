@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -160,7 +161,9 @@ abstract class _PlaythroughsViewModel with Store {
             id: const Uuid().v4(),
             playerId: player.id,
             boardGameId: boardGameId,
-            value: bggPlayer.playerScore.toString(),
+            scoreGameResult: ScoreGameResult(
+              points: bggPlayer.playerScore?.toDouble(),
+            ),
           );
           if (gameFamily == GameFamily.Cooperative) {
             playerScore = playerScore.copyWith(

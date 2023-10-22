@@ -13,10 +13,13 @@ class PlayerScore with _$PlayerScore {
   const factory PlayerScore({
     required Player? player,
     required Score score,
-    int? place,
   }) = _PlayerScore;
 
   const PlayerScore._();
 
   String? get id => player?.id;
+
+  bool get isTied => score.isTied;
+
+  int? get place => score.scoreGameResult?.place;
 }

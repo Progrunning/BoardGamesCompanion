@@ -650,15 +650,16 @@ mixin _$ScoreBoardGameStatistics {
   set averagePlaytimeInSeconds(int value) => throw _privateConstructorUsedError;
   int get averageScorePrecision => throw _privateConstructorUsedError;
   set averageScorePrecision(int value) => throw _privateConstructorUsedError;
-  PlayerScore? get lastWinner => throw _privateConstructorUsedError;
-  set lastWinner(PlayerScore? value) => throw _privateConstructorUsedError;
+  List<PlayerScore>? get lastGameWinners => throw _privateConstructorUsedError;
+  set lastGameWinners(List<PlayerScore>? value) =>
+      throw _privateConstructorUsedError;
   num? get bestScore => throw _privateConstructorUsedError;
   set bestScore(num? value) => throw _privateConstructorUsedError;
   double? get averageScore => throw _privateConstructorUsedError;
   set averageScore(double? value) => throw _privateConstructorUsedError;
-  List<Tuple2<Player, String>>? get topScoreres =>
+  List<Tuple2<Player, double>>? get topScoreres =>
       throw _privateConstructorUsedError;
-  set topScoreres(List<Tuple2<Player, String>>? value) =>
+  set topScoreres(List<Tuple2<Player, double>>? value) =>
       throw _privateConstructorUsedError;
   List<PlayerStatistics> get playersStatistics =>
       throw _privateConstructorUsedError;
@@ -693,16 +694,14 @@ abstract class $ScoreBoardGameStatisticsCopyWith<$Res> {
       int totalPlaytimeInSeconds,
       int averagePlaytimeInSeconds,
       int averageScorePrecision,
-      PlayerScore? lastWinner,
+      List<PlayerScore>? lastGameWinners,
       num? bestScore,
       double? averageScore,
-      List<Tuple2<Player, String>>? topScoreres,
+      List<Tuple2<Player, double>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
       List<PlayerCountStatistics> playerCountPercentage,
       List<PlayerWinsStatistics> playerWinsPercentage,
       Map<Player, int>? playerWins});
-
-  $PlayerScoreCopyWith<$Res>? get lastWinner;
 }
 
 /// @nodoc
@@ -725,7 +724,7 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
     Object? totalPlaytimeInSeconds = null,
     Object? averagePlaytimeInSeconds = null,
     Object? averageScorePrecision = null,
-    Object? lastWinner = freezed,
+    Object? lastGameWinners = freezed,
     Object? bestScore = freezed,
     Object? averageScore = freezed,
     Object? topScoreres = freezed,
@@ -759,10 +758,10 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
               as int,
-      lastWinner: freezed == lastWinner
-          ? _value.lastWinner
-          : lastWinner // ignore: cast_nullable_to_non_nullable
-              as PlayerScore?,
+      lastGameWinners: freezed == lastGameWinners
+          ? _value.lastGameWinners
+          : lastGameWinners // ignore: cast_nullable_to_non_nullable
+              as List<PlayerScore>?,
       bestScore: freezed == bestScore
           ? _value.bestScore
           : bestScore // ignore: cast_nullable_to_non_nullable
@@ -774,7 +773,7 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
       topScoreres: freezed == topScoreres
           ? _value.topScoreres
           : topScoreres // ignore: cast_nullable_to_non_nullable
-              as List<Tuple2<Player, String>>?,
+              as List<Tuple2<Player, double>>?,
       playersStatistics: null == playersStatistics
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
@@ -792,18 +791,6 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
           : playerWins // ignore: cast_nullable_to_non_nullable
               as Map<Player, int>?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $PlayerScoreCopyWith<$Res>? get lastWinner {
-    if (_value.lastWinner == null) {
-      return null;
-    }
-
-    return $PlayerScoreCopyWith<$Res>(_value.lastWinner!, (value) {
-      return _then(_value.copyWith(lastWinner: value) as $Val);
-    });
   }
 }
 
@@ -823,17 +810,14 @@ abstract class _$$_ScoreBoardGameStatisticsCopyWith<$Res>
       int totalPlaytimeInSeconds,
       int averagePlaytimeInSeconds,
       int averageScorePrecision,
-      PlayerScore? lastWinner,
+      List<PlayerScore>? lastGameWinners,
       num? bestScore,
       double? averageScore,
-      List<Tuple2<Player, String>>? topScoreres,
+      List<Tuple2<Player, double>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
       List<PlayerCountStatistics> playerCountPercentage,
       List<PlayerWinsStatistics> playerWinsPercentage,
       Map<Player, int>? playerWins});
-
-  @override
-  $PlayerScoreCopyWith<$Res>? get lastWinner;
 }
 
 /// @nodoc
@@ -854,7 +838,7 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
     Object? totalPlaytimeInSeconds = null,
     Object? averagePlaytimeInSeconds = null,
     Object? averageScorePrecision = null,
-    Object? lastWinner = freezed,
+    Object? lastGameWinners = freezed,
     Object? bestScore = freezed,
     Object? averageScore = freezed,
     Object? topScoreres = freezed,
@@ -888,10 +872,10 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
           ? _value.averageScorePrecision
           : averageScorePrecision // ignore: cast_nullable_to_non_nullable
               as int,
-      lastWinner: freezed == lastWinner
-          ? _value.lastWinner
-          : lastWinner // ignore: cast_nullable_to_non_nullable
-              as PlayerScore?,
+      lastGameWinners: freezed == lastGameWinners
+          ? _value.lastGameWinners
+          : lastGameWinners // ignore: cast_nullable_to_non_nullable
+              as List<PlayerScore>?,
       bestScore: freezed == bestScore
           ? _value.bestScore
           : bestScore // ignore: cast_nullable_to_non_nullable
@@ -903,7 +887,7 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
       topScoreres: freezed == topScoreres
           ? _value.topScoreres
           : topScoreres // ignore: cast_nullable_to_non_nullable
-              as List<Tuple2<Player, String>>?,
+              as List<Tuple2<Player, double>>?,
       playersStatistics: null == playersStatistics
           ? _value.playersStatistics
           : playersStatistics // ignore: cast_nullable_to_non_nullable
@@ -934,7 +918,7 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
       required this.totalPlaytimeInSeconds,
       required this.averagePlaytimeInSeconds,
       required this.averageScorePrecision,
-      this.lastWinner,
+      this.lastGameWinners,
       this.bestScore,
       this.averageScore,
       this.topScoreres,
@@ -957,13 +941,13 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
   @override
   int averageScorePrecision;
   @override
-  PlayerScore? lastWinner;
+  List<PlayerScore>? lastGameWinners;
   @override
   num? bestScore;
   @override
   double? averageScore;
   @override
-  List<Tuple2<Player, String>>? topScoreres;
+  List<Tuple2<Player, double>>? topScoreres;
   @override
   @JsonKey()
   List<PlayerStatistics> playersStatistics;
@@ -978,7 +962,7 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
 
   @override
   String toString() {
-    return 'ScoreBoardGameStatistics(numberOfGamesPlayed: $numberOfGamesPlayed, averageNumberOfPlayers: $averageNumberOfPlayers, lastTimePlayed: $lastTimePlayed, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, averagePlaytimeInSeconds: $averagePlaytimeInSeconds, averageScorePrecision: $averageScorePrecision, lastWinner: $lastWinner, bestScore: $bestScore, averageScore: $averageScore, topScoreres: $topScoreres, playersStatistics: $playersStatistics, playerCountPercentage: $playerCountPercentage, playerWinsPercentage: $playerWinsPercentage, playerWins: $playerWins)';
+    return 'ScoreBoardGameStatistics(numberOfGamesPlayed: $numberOfGamesPlayed, averageNumberOfPlayers: $averageNumberOfPlayers, lastTimePlayed: $lastTimePlayed, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, averagePlaytimeInSeconds: $averagePlaytimeInSeconds, averageScorePrecision: $averageScorePrecision, lastGameWinners: $lastGameWinners, bestScore: $bestScore, averageScore: $averageScore, topScoreres: $topScoreres, playersStatistics: $playersStatistics, playerCountPercentage: $playerCountPercentage, playerWinsPercentage: $playerWinsPercentage, playerWins: $playerWins)';
   }
 
   @JsonKey(ignore: true)
@@ -997,10 +981,10 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
       required int totalPlaytimeInSeconds,
       required int averagePlaytimeInSeconds,
       required int averageScorePrecision,
-      PlayerScore? lastWinner,
+      List<PlayerScore>? lastGameWinners,
       num? bestScore,
       double? averageScore,
-      List<Tuple2<Player, String>>? topScoreres,
+      List<Tuple2<Player, double>>? topScoreres,
       List<PlayerStatistics> playersStatistics,
       List<PlayerCountStatistics> playerCountPercentage,
       List<PlayerWinsStatistics> playerWinsPercentage,
@@ -1026,8 +1010,8 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   int get averageScorePrecision;
   set averageScorePrecision(int value);
   @override
-  PlayerScore? get lastWinner;
-  set lastWinner(PlayerScore? value);
+  List<PlayerScore>? get lastGameWinners;
+  set lastGameWinners(List<PlayerScore>? value);
   @override
   num? get bestScore;
   set bestScore(num? value);
@@ -1035,8 +1019,8 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   double? get averageScore;
   set averageScore(double? value);
   @override
-  List<Tuple2<Player, String>>? get topScoreres;
-  set topScoreres(List<Tuple2<Player, String>>? value);
+  List<Tuple2<Player, double>>? get topScoreres;
+  set topScoreres(List<Tuple2<Player, double>>? value);
   @override
   List<PlayerStatistics> get playersStatistics;
   set playersStatistics(List<PlayerStatistics> value);

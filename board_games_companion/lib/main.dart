@@ -31,6 +31,7 @@ import 'models/hive/player.dart';
 import 'models/hive/playthrough.dart';
 import 'models/hive/playthrough_note.dart';
 import 'models/hive/score.dart';
+import 'models/hive/score_game_results.dart';
 import 'models/hive/search_history_entry.dart';
 import 'models/hive/user.dart';
 import 'models/sort_by.dart';
@@ -71,6 +72,8 @@ Future<void> main() async {
       ..registerAdapter(PlaythroughNoteAdapter())
       ..registerAdapter(SearchHistoryEntryAdapter())
       ..registerAdapter(NoScoreGameResultAdapter())
+      ..registerAdapter(ScoreGameResultAdapter())
+      ..registerAdapter(ScoreTiebreakerTypeAdapter())
       ..registerAdapter(CooperativeGameResultAdapter())
       ..registerAdapter(BoardGamePricesAdapter());
 

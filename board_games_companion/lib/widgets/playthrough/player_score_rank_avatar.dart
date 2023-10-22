@@ -18,7 +18,7 @@ class PlayerScoreRankAvatar extends StatelessWidget {
   final Player? player;
   final String playerHeroIdSuffix;
   final num? rank;
-  final String? score;
+  final double? score;
   final bool useHeroAnimation;
 
   @override
@@ -42,7 +42,7 @@ class PlayerScoreRankAvatar extends StatelessWidget {
           ),
           const SizedBox(height: Dimensions.standardSpacing),
           Text(
-            score ?? '-',
+            score?.toStringAsFixed(0) ?? '-',
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontWeight: FontWeight.bold,

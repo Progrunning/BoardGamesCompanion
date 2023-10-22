@@ -1,6 +1,7 @@
+import 'package:board_games_companion/common/constants.dart';
+import 'package:board_games_companion/widgets/common/bgc_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -13,7 +14,6 @@ import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
-import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/page_container.dart';
 import '../board_game_details/board_game_details_page.dart';
 import 'hot_board_games_view_model.dart';
@@ -100,17 +100,9 @@ class _HotBoardGames extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        switch (viewModel.futureLoadHotBoardGames?.status ?? FutureStatus.pending) {
-          case FutureStatus.pending:
-            return const SliverFillRemaining(child: LoadingIndicator());
-          case FutureStatus.rejected:
-            return const SliverFillRemaining(
-              child: Padding(
-                padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
-                child: Center(child: GenericErrorMessage()),
-              ),
-            );
-          case FutureStatus.fulfilled:
+        return viewModel.visualState.when(
+          loading: () => const _LoadingShimmer(),
+          loaded: () {
             if (viewModel.hasAnyHotBoardGames) {
               return SliverPadding(
                 padding: const EdgeInsets.only(
@@ -163,7 +155,14 @@ class _HotBoardGames extends StatelessWidget {
                 ),
               ),
             );
-        }
+          },
+          failedLoading: () => const SliverFillRemaining(
+            child: Padding(
+              padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
+              child: Center(child: GenericErrorMessage()),
+            ),
+          ),
+        );
       },
     );
   }
@@ -172,5 +171,36 @@ class _HotBoardGames extends StatelessWidget {
     viewModel.trackViewHotBoardGame(boardGame);
 
     onBoardGameTapped(boardGame);
+  }
+}
+
+class _LoadingShimmer extends StatelessWidget {
+  const _LoadingShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      sliver: SliverGrid.extent(
+        crossAxisSpacing: Dimensions.standardSpacing,
+        mainAxisSpacing: Dimensions.standardSpacing,
+        maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
+        children: [
+          for (final _ in Iterable<int>.generate(21))
+            BgcShimmer(
+              child: SizedBox.fromSize(
+                size: const Size(
+                  Constants.boardGameDetailsImageHeight,
+                  Constants.boardGameDetailsImageHeight,
+                ),
+                child: const Material(
+                  elevation: AppStyles.defaultElevation,
+                  borderRadius: AppTheme.defaultBorderRadius,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

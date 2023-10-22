@@ -16,13 +16,6 @@ mixin _$HotBoardGamesViewModel on _HotBoardGamesViewModel, Store {
           Computed<bool>(() => super.hasAnyHotBoardGames,
               name: '_HotBoardGamesViewModel.hasAnyHotBoardGames'))
       .value;
-  Computed<bool>? _$isSearchPhraseEmptyComputed;
-
-  @override
-  bool get isSearchPhraseEmpty => (_$isSearchPhraseEmptyComputed ??=
-          Computed<bool>(() => super.isSearchPhraseEmpty,
-              name: '_HotBoardGamesViewModel.isSearchPhraseEmpty'))
-      .value;
 
   late final _$hotBoardGamesAtom =
       Atom(name: '_HotBoardGamesViewModel.hotBoardGames', context: context);
@@ -40,91 +33,37 @@ mixin _$HotBoardGamesViewModel on _HotBoardGamesViewModel, Store {
     });
   }
 
-  late final _$futureLoadHotBoardGamesAtom = Atom(
-      name: '_HotBoardGamesViewModel.futureLoadHotBoardGames',
+  late final _$visualStateAtom =
+      Atom(name: '_HotBoardGamesViewModel.visualState', context: context);
+
+  @override
+  HotBoardGamesPageVisualState get visualState {
+    _$visualStateAtom.reportRead();
+    return super.visualState;
+  }
+
+  @override
+  set visualState(HotBoardGamesPageVisualState value) {
+    _$visualStateAtom.reportWrite(value, super.visualState, () {
+      super.visualState = value;
+    });
+  }
+
+  late final _$loadHotBoardGamesAsyncAction = AsyncAction(
+      '_HotBoardGamesViewModel.loadHotBoardGames',
       context: context);
 
   @override
-  ObservableFuture<void>? get futureLoadHotBoardGames {
-    _$futureLoadHotBoardGamesAtom.reportRead();
-    return super.futureLoadHotBoardGames;
-  }
-
-  @override
-  set futureLoadHotBoardGames(ObservableFuture<void>? value) {
-    _$futureLoadHotBoardGamesAtom
-        .reportWrite(value, super.futureLoadHotBoardGames, () {
-      super.futureLoadHotBoardGames = value;
-    });
-  }
-
-  late final _$futureSearchBoardGamesAtom = Atom(
-      name: '_HotBoardGamesViewModel.futureSearchBoardGames', context: context);
-
-  @override
-  ObservableFuture<void>? get futureSearchBoardGames {
-    _$futureSearchBoardGamesAtom.reportRead();
-    return super.futureSearchBoardGames;
-  }
-
-  @override
-  set futureSearchBoardGames(ObservableFuture<void>? value) {
-    _$futureSearchBoardGamesAtom
-        .reportWrite(value, super.futureSearchBoardGames, () {
-      super.futureSearchBoardGames = value;
-    });
-  }
-
-  late final _$searchPhraseAtom =
-      Atom(name: '_HotBoardGamesViewModel.searchPhrase', context: context);
-
-  @override
-  String? get searchPhrase {
-    _$searchPhraseAtom.reportRead();
-    return super.searchPhrase;
-  }
-
-  @override
-  set searchPhrase(String? value) {
-    _$searchPhraseAtom.reportWrite(value, super.searchPhrase, () {
-      super.searchPhrase = value;
-    });
-  }
-
-  late final _$_HotBoardGamesViewModelActionController =
-      ActionController(name: '_HotBoardGamesViewModel', context: context);
-
-  @override
-  void loadHotBoardGames() {
-    final _$actionInfo = _$_HotBoardGamesViewModelActionController.startAction(
-        name: '_HotBoardGamesViewModel.loadHotBoardGames');
-    try {
-      return super.loadHotBoardGames();
-    } finally {
-      _$_HotBoardGamesViewModelActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setSearchPhrase(String? searchPhrase) {
-    final _$actionInfo = _$_HotBoardGamesViewModelActionController.startAction(
-        name: '_HotBoardGamesViewModel.setSearchPhrase');
-    try {
-      return super.setSearchPhrase(searchPhrase);
-    } finally {
-      _$_HotBoardGamesViewModelActionController.endAction(_$actionInfo);
-    }
+  Future<void> loadHotBoardGames() {
+    return _$loadHotBoardGamesAsyncAction.run(() => super.loadHotBoardGames());
   }
 
   @override
   String toString() {
     return '''
 hotBoardGames: ${hotBoardGames},
-futureLoadHotBoardGames: ${futureLoadHotBoardGames},
-futureSearchBoardGames: ${futureSearchBoardGames},
-searchPhrase: ${searchPhrase},
-hasAnyHotBoardGames: ${hasAnyHotBoardGames},
-isSearchPhraseEmpty: ${isSearchPhraseEmpty}
+visualState: ${visualState},
+hasAnyHotBoardGames: ${hasAnyHotBoardGames}
     ''';
   }
 }

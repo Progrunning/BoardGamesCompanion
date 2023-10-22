@@ -451,9 +451,15 @@ class _LastWinnerSection extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: <Widget>[
-              _LastWinnerAvatar(scoreBoardGameStatistics: scoreBoardGameStatistics),
-              const SizedBox(width: Dimensions.standardSpacing),
-              _LastWinnerText(scoreBoardGameStatistics: scoreBoardGameStatistics),
+              for (final player
+                  in scoreBoardGameStatistics.lastGameWinners?.map((ps) => ps.player) ??
+                      <Player?>[]) ...[
+                _LastWinnerAvatar(player: player),
+                const SizedBox(width: Dimensions.standardSpacing),
+              ],
+              _LastWinnerPoints(
+                points: scoreBoardGameStatistics.lastGameWinners?.first.score.score,
+              ),
               const SizedBox(width: Dimensions.standardSpacing),
               _LastTimePlayed(scoreBoardGameStatistics: scoreBoardGameStatistics),
             ],
@@ -659,13 +665,13 @@ class _ChartLegendBox extends StatelessWidget {
   }
 }
 
-class _LastWinnerText extends StatelessWidget {
-  const _LastWinnerText({
+class _LastWinnerPoints extends StatelessWidget {
+  const _LastWinnerPoints({
     Key? key,
-    required this.scoreBoardGameStatistics,
+    required this.points,
   }) : super(key: key);
 
-  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
+  final double? points;
 
   @override
   Widget build(BuildContext context) {
@@ -681,7 +687,7 @@ class _LastWinnerText extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: ' ${scoreBoardGameStatistics?.lastWinner?.score.value ?? '-'} ',
+              text: ' ${points?.toStringAsFixed(0) ?? '-'} ',
               style: AppStyles.playerScoreTextStyle,
             ),
             const WidgetSpan(
@@ -702,11 +708,11 @@ class _LastWinnerText extends StatelessWidget {
 
 class _LastWinnerAvatar extends StatelessWidget {
   const _LastWinnerAvatar({
-    required this.scoreBoardGameStatistics,
+    required this.player,
     Key? key,
   }) : super(key: key);
 
-  final ScoreBoardGameStatistics? scoreBoardGameStatistics;
+  final Player? player;
 
   @override
   Widget build(BuildContext context) {
@@ -714,7 +720,7 @@ class _LastWinnerAvatar extends StatelessWidget {
       height: Dimensions.smallPlayerAvatarSize.height,
       width: Dimensions.smallPlayerAvatarSize.width,
       child: PlayerAvatar(
-        player: scoreBoardGameStatistics?.lastWinner?.player,
+        player: player,
         avatarImageSize: Dimensions.smallPlayerAvatarSize,
         useHeroAnimation: false,
       ),
@@ -773,7 +779,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 _StatisticsItem(
-                  value: scoreBoardGameStatistics?.bestScore?.toString() ?? '-',
+                  value: scoreBoardGameStatistics?.bestScore?.toStringAsFixed(0) ?? '-',
                   icon: Icons.show_chart,
                   iconColor: AppColors.highscoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsBestScore,
@@ -919,7 +925,7 @@ class _TopScores extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: scoreBoardGameStatistics.topScoreres!.length,
           separatorBuilder: (context, index) {
-            return const SizedBox(width: Dimensions.doubleStandardSpacing);
+            return const SizedBox(width: Dimensions.standardSpacing);
           },
           itemBuilder: (context, index) {
             return PlayerScoreRankAvatar(

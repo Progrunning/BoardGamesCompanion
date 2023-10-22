@@ -1,7 +1,11 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:board_games_companion/models/hive/score_game_results.dart';
+import 'package:board_games_companion/pages/edit_playthrough/playthrough_scores_visual_state.dart';
+import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -13,7 +17,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/game_classification.dart';
 import '../../mixins/enter_score_dialog.dart';
 import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
@@ -23,6 +26,7 @@ import '../../models/player_score.dart';
 import '../../utilities/periodic_boardcast_stream.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
+import '../../widgets/common/tile_positioned_rank_ribbon.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/cooperative_game_result_segmented_button.dart';
@@ -66,27 +70,41 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 return CustomScrollView(
                   slivers: [
                     _PlayDateTimeSection(viewModel: widget.viewModel),
-                    if (widget.viewModel.gameClassification == GameClassification.Score)
-                      _ScoresSection(
-                        playerScores: widget.viewModel.playerScores,
-                        playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
-                        onItemTapped: (PlayerScore playerScore) async =>
-                            _editPlayerScore(playerScore, context),
+                    widget.viewModel.editPlaythroughPageVisualState.when(
+                      init: () => const SizedBox.shrink(),
+                      editScoreGame: (_) => Observer(
+                        builder: (context) {
+                          return _ScoresSection(
+                            playthroughScoresVisualState:
+                                widget.viewModel.playthroughScoresVisualState,
+                            playthroughDetailsId: widget.viewModel.playthroughDetails?.id,
+                            onItemTapped: (PlayerScore playerScore) async =>
+                                _editPlayerScore(playerScore, context),
+                            onReorder: (oldIndex, newIndex) =>
+                                widget.viewModel.reorderPlayerScores(oldIndex, newIndex),
+                            onToggleSharedPlaceTiebreaker: (playerScore, sharePlace) => widget
+                                .viewModel
+                                .toggleSharedPlaceTiebreaker(playerScore, sharePlace),
+                          );
+                        },
                       ),
-                    if (widget.viewModel.gameClassification == GameClassification.NoScore)
-                      _NoScoreSection(
+                      editNoScoreGame: (_) => _NoScoreSection(
                         playthroughId: widget.viewModel.playthrough.id,
                         players: widget.viewModel.players,
                         cooperativeGameResult: widget.viewModel.cooperativeGameResult,
                         onCooperativeGameResultChanged: (cooperativeGameResult) =>
                             widget.viewModel.updateCooperativeGameResult(cooperativeGameResult),
                       ),
+                    ),
                     if (widget.viewModel.hasNotes)
                       _NotesSection(
                         notes: widget.viewModel.notes!,
                         onTap: (note) => _editNote(note),
                         onDelete: (note) => _deleteNote(note),
                       ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: Dimensions.floatingActionButtonBottomSpacing),
+                    ),
                   ],
                 );
               }),
@@ -138,11 +156,11 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
         ),
       );
 
-  Future<String> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
+  Future<double> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
     final viewModel = EnterScoreViewModel(playerScore);
     await showEnterScoreDialog(context, viewModel);
     widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
-    return viewModel.score.toString();
+    return viewModel.score;
   }
 
   Future<void> _save() async {
@@ -268,50 +286,225 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
 class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
     Key? key,
+    required this.playthroughScoresVisualState,
+    required this.playthroughDetailsId,
+    required this.onItemTapped,
+    required this.onReorder,
+    required this.onToggleSharedPlaceTiebreaker,
+  }) : super(key: key);
+
+  final PlaythroughScoresVisualState playthroughScoresVisualState;
+  final String? playthroughDetailsId;
+  final Future<double> Function(PlayerScore) onItemTapped;
+  final void Function(int currentIndex, int newIndex) onReorder;
+  final void Function(PlayerScore playerScore, bool sharePlace) onToggleSharedPlaceTiebreaker;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
+          ),
+        ),
+        playthroughScoresVisualState.maybeWhen(
+          finishedScoring: (_, scoreTiebreakersSet, __) {
+            if (scoreTiebreakersSet.isNotEmpty) {
+              return const _ScoreTieBreakerInstruction();
+            }
+            return const SizedBox.shrink();
+          },
+          orElse: () => const SizedBox.shrink(),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+          sliver: playthroughScoresVisualState.when(
+            init: () => const SliverFillRemaining(child: LoadingIndicator()),
+            finishedScoring: (playerScores, scoreTiebreakersSet, _) {
+              if (scoreTiebreakersSet.isNotEmpty) {
+                return _ReordableScoreSliverList(
+                  onItemTapped: onItemTapped,
+                  onReorder: onReorder,
+                  playerScores: playerScores,
+                  playthroughDetailsId: playthroughDetailsId,
+                  scoreTiebreakersSet: scoreTiebreakersSet,
+                  onToggleSharedPlaceTiebreaker: (playerScore, sharePlace) =>
+                      onToggleSharedPlaceTiebreaker(playerScore, sharePlace),
+                );
+              }
+
+              return _ScoresSliverList(
+                key: const Key('PlayerScoresFinishedScoring'),
+                onItemTapped: onItemTapped,
+                playerScores: playerScores,
+                playthroughDetailsId: playthroughDetailsId,
+                hasFinishedScoring: true,
+              );
+            },
+            scoring: (playerScores) => _ScoresSliverList(
+              key: const Key('PlayerScoresScoring'),
+              onItemTapped: onItemTapped,
+              playerScores: playerScores,
+              playthroughDetailsId: playthroughDetailsId,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ReordableScoreSliverList extends StatelessWidget {
+  const _ReordableScoreSliverList({
+    required this.playerScores,
+    required this.scoreTiebreakersSet,
+    required this.playthroughDetailsId,
+    required this.onItemTapped,
+    required this.onReorder,
+    required this.onToggleSharedPlaceTiebreaker,
+  });
+
+  final List<PlayerScore> playerScores;
+  final Map<String, ScoreTiebreakerType> scoreTiebreakersSet;
+  final String? playthroughDetailsId;
+  final Future<double> Function(PlayerScore playerScore) onItemTapped;
+  final void Function(int currentIndex, int newIndex) onReorder;
+  final void Function(PlayerScore playerScore, bool sharePlace) onToggleSharedPlaceTiebreaker;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverReorderableList(
+      itemBuilder: (_, index) {
+        final int itemIndex = index ~/ 2;
+        final playerScore = playerScores[itemIndex];
+        if (index.isEven) {
+          return _PlayerScoreTile(
+            key: ObjectKey(playerScore),
+            reordableIndex: index,
+            playerScore: playerScore,
+            playthroughDetailsId: playthroughDetailsId,
+            onItemTapped: onItemTapped,
+            hasFinishedScoring: true,
+            onToggleSharedPlaceTiebreaker: (sharePlace) =>
+                onToggleSharedPlaceTiebreaker(playerScore, sharePlace),
+          );
+        }
+
+        return SizedBox(
+          key: Key('PlayerScoreSeparator${playerScore.id}'),
+          height: Dimensions.doubleStandardSpacing,
+        );
+      },
+      itemCount: max(0, playerScores.length * 2 - 1),
+      onReorder: (int currentIndex, int newIndex) =>
+          _handleScoresReorder(context, currentIndex, newIndex),
+    );
+  }
+
+  void _handleScoresReorder(BuildContext context, int currentIndex, int newIndex) {
+    final itemsCurrentIndex = currentIndex ~/ 2;
+    final itemsNewIndex = newIndex ~/ 2;
+    if (scoreTiebreakersSet[playerScores[itemsCurrentIndex].id] == null ||
+        scoreTiebreakersSet[playerScores[itemsNewIndex].id] == null) {
+      _showCannotReorderNotTiedScore(context);
+      return;
+    }
+
+    if (scoreTiebreakersSet[playerScores[itemsCurrentIndex].id] == ScoreTiebreakerType.shared ||
+        scoreTiebreakersSet[playerScores[itemsNewIndex].id] == ScoreTiebreakerType.shared) {
+      _showCannotReorderSharedPlaceScore(context);
+      return;
+    }
+
+    onReorder(itemsCurrentIndex, itemsNewIndex);
+  }
+
+  void _showCannotReorderNotTiedScore(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        margin: Dimensions.snackbarMargin,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 2),
+        content: Text(AppText.editPlaythroughPageCannotReorderNotTiedScore),
+      ),
+    );
+  }
+
+  void _showCannotReorderSharedPlaceScore(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        margin: Dimensions.snackbarMargin,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 2),
+        content: Text(AppText.editPlaythroughPageCannotReorderSharedPlaceScore),
+      ),
+    );
+  }
+}
+
+class _ScoresSliverList extends StatelessWidget {
+  const _ScoresSliverList({
+    required super.key,
     required this.playerScores,
     required this.playthroughDetailsId,
     required this.onItemTapped,
-  }) : super(key: key);
+    this.hasFinishedScoring = false,
+  });
 
   final List<PlayerScore> playerScores;
   final String? playthroughDetailsId;
-  final Future<String?> Function(PlayerScore) onItemTapped;
+  final Future<double> Function(PlayerScore) onItemTapped;
+  final bool hasFinishedScoring;
 
   @override
-  Widget build(BuildContext context) => MultiSliver(
-        children: [
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: BgcSliverTitleHeaderDelegate.title(
-              primaryTitle: AppText.editPlaythroughScoresHeaderTitle,
-            ),
-          ),
-          Observer(
-            builder: (_) {
-              return SliverPadding(
-                padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (_, index) {
-                      final int itemIndex = index ~/ 2;
-                      if (index.isEven) {
-                        return _PlayerScoreTile(
-                          playerScore: playerScores[itemIndex],
-                          playthroughDetailsId: playthroughDetailsId,
-                          onItemTapped: onItemTapped,
-                        );
-                      }
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (_, index) {
+          final int itemIndex = index ~/ 2;
+          if (index.isEven) {
+            final playerScore = playerScores[itemIndex];
+            return _PlayerScoreTile(
+              // Giving it a key in order to force re-render when finishedScoring state
+              // kicks in. Otherwise the old scores would show on the screen
+              key: ObjectKey(playerScore),
+              playerScore: playerScore,
+              playthroughDetailsId: playthroughDetailsId,
+              onItemTapped: onItemTapped,
+              hasFinishedScoring: hasFinishedScoring,
+            );
+          }
 
-                      return const SizedBox(height: Dimensions.doubleStandardSpacing);
-                    },
-                    childCount: max(0, playerScores.length * 2 - 1),
-                  ),
-                ),
-              );
-            },
+          return const SizedBox(height: Dimensions.doubleStandardSpacing);
+        },
+        childCount: max(0, playerScores.length * 2 - 1),
+      ),
+    );
+  }
+}
+
+class _ScoreTieBreakerInstruction extends StatelessWidget {
+  const _ScoreTieBreakerInstruction();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              AppText.editPlaythroughPageTieBreakerInstruction,
+              style: AppTheme.theme.textTheme.bodyLarge,
+              textAlign: TextAlign.justify,
+            ).animate().fade(),
           ),
         ],
-      );
+      ),
+    );
+  }
 }
 
 class _NoScoreSection extends StatelessWidget {
@@ -441,56 +634,84 @@ class _PlayerScoreTile extends StatefulWidget {
     Key? key,
     required this.playerScore,
     required this.playthroughDetailsId,
+    required this.hasFinishedScoring,
     required this.onItemTapped,
+    this.onToggleSharedPlaceTiebreaker,
+    this.reordableIndex,
   }) : super(key: key);
 
   final PlayerScore playerScore;
   final String? playthroughDetailsId;
-  final Future<String?> Function(PlayerScore) onItemTapped;
+  final int? reordableIndex;
+  final bool hasFinishedScoring;
+  final Future<double> Function(PlayerScore) onItemTapped;
+  final void Function(bool sharePlace)? onToggleSharedPlaceTiebreaker;
 
   @override
   State<_PlayerScoreTile> createState() => _PlayerScoreTileState();
 }
 
 class _PlayerScoreTileState extends State<_PlayerScoreTile> {
-  late String? score;
+  late double? score;
 
   @override
   void initState() {
     super.initState();
 
-    score = widget.playerScore.score.value;
+    score = widget.playerScore.score.score;
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        final newScore = await widget.onItemTapped(widget.playerScore);
-        setState(() {
-          score = newScore;
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-        child: SizedBox(
-          height: Dimensions.smallPlayerAvatarSize.height,
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-                height: Dimensions.smallPlayerAvatarSize.height,
-                width: Dimensions.smallPlayerAvatarSize.width,
-                child: PlayerAvatar(
-                  player: widget.playerScore.player,
-                  avatarImageSize: Dimensions.smallPlayerAvatarSize,
-                  playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () async {
+          final newScore = await widget.onItemTapped(widget.playerScore);
+          setState(() {
+            score = newScore;
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+          child: SizedBox(
+            height: Dimensions.smallPlayerAvatarSize.height,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  height: Dimensions.smallPlayerAvatarSize.height,
+                  width: Dimensions.smallPlayerAvatarSize.width,
+                  child: Stack(children: [
+                    PlayerAvatar(
+                      player: widget.playerScore.player,
+                      avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                      playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
+                    ),
+                    if (widget.hasFinishedScoring)
+                      PositionedTileRankRibbon(
+                        rank: widget.playerScore.score.scoreGameResult?.place ?? 0,
+                      )
+                    else
+                      const SizedBox.shrink(),
+                  ]),
                 ),
-              ),
-              const SizedBox(width: Dimensions.standardSpacing),
-              Expanded(
-                child: _PlayerScore(score: score),
-              ),
-            ],
+                const SizedBox(width: Dimensions.standardSpacing),
+                Expanded(child: _PlayerScore(score: score)),
+                if (widget.playerScore.score.isTied && widget.reordableIndex != null) ...[
+                  Checkbox(
+                    value: widget.playerScore.score.scoreGameResult?.tiebreakerType ==
+                        ScoreTiebreakerType.shared,
+                    onChanged: (value) async {
+                      widget.onToggleSharedPlaceTiebreaker?.call(value ?? false);
+                    },
+                  ),
+                  ReorderableDragStartListener(
+                    index: widget.reordableIndex!,
+                    child: const Icon(Icons.drag_handle, size: Dimensions.largeIconSize),
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
       ),
@@ -504,7 +725,7 @@ class _PlayerScore extends StatelessWidget {
     required this.score,
   }) : super(key: key);
 
-  final String? score;
+  final double? score;
 
   @override
   Widget build(BuildContext context) {
@@ -516,7 +737,7 @@ class _PlayerScore extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              score ?? '-',
+              score?.toStringAsFixed(0) ?? '-',
               style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),

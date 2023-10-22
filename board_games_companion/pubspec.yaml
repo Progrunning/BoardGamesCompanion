@@ -22,6 +22,7 @@ dependencies:
   async: ^2.8.2
   basics: ^0.9.0
   cached_network_image: ^3.2.3
+  clock: ^1.1.1
   collection: ^1.15.0
   confetti: ^0.7.0
   convex_bottom_bar: ^3.0.0
@@ -35,6 +36,7 @@ dependencies:
   firebase_crashlytics: ^3.0.17
   firebase_analytics: ^10.1.6
   fl_chart: ^0.55.2
+  flutter_animate: ^4.2.0+1
   flutter_mobx: ^2.0.6+1
   flutter_polygon: ^0.2.0
   flutter_slidable: ^2.0.0

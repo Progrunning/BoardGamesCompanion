@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../models/player_score.dart';
@@ -14,9 +15,9 @@ enum EnterScoreOperation {
 class EnterScoreViewModel = _EnterScoreViewModel with _$EnterScoreViewModel;
 
 abstract class _EnterScoreViewModel with Store {
-  _EnterScoreViewModel(this._playerScore) : _initialScore = _playerScore.score.valueInt;
+  _EnterScoreViewModel(this._playerScore) : _initialScore = _playerScore.score.score ?? 0;
 
-  final int _initialScore;
+  final double _initialScore;
 
   @observable
   PlayerScore _playerScore;
@@ -25,10 +26,10 @@ abstract class _EnterScoreViewModel with Store {
   EnterScoreOperation operation = EnterScoreOperation.add;
 
   @observable
-  ObservableList<int> partialScores = <int>[].asObservable();
+  ObservableList<double> partialScores = <double>[].asObservable();
 
   @computed
-  int get score => _playerScore.score.valueInt;
+  double get score => _playerScore.score.score ?? 0;
 
   @computed
   String? get playerName => _playerScore.player?.name;
@@ -43,7 +44,7 @@ abstract class _EnterScoreViewModel with Store {
   void updateOperation(EnterScoreOperation operation) => this.operation = operation;
 
   @action
-  void updateScore(int partialScore) {
+  void updateScore(double partialScore) {
     final newScore = score + partialScore;
     partialScores = ObservableList.of(partialScores..add(partialScore));
 
@@ -51,9 +52,7 @@ abstract class _EnterScoreViewModel with Store {
   }
 
   @action
-  void scoreZero() {
-    _updatePlayerScore(0);
-  }
+  void scoreZero() => _updatePlayerScore(0);
 
   @action
   void undo() {
@@ -67,12 +66,16 @@ abstract class _EnterScoreViewModel with Store {
     _updatePlayerScore(newScore);
   }
 
-  void _updatePlayerScore(int? score) {
-    _playerScore =
-        _playerScore.copyWith(score: _playerScore.score.copyWith(value: score.toString()));
+  void _updatePlayerScore(double? score) {
+    final scoreGameResult = _playerScore.score.scoreGameResult ?? const ScoreGameResult();
+    _playerScore = _playerScore.copyWith(
+      score: _playerScore.score.copyWith(
+        scoreGameResult: scoreGameResult.copyWith(points: score),
+      ),
+    );
   }
 
-  int get _partialScoresSum {
+  double get _partialScoresSum {
     if (partialScores.isEmpty) {
       return 0;
     }

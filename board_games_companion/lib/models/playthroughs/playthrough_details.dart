@@ -3,9 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../common/enums/game_classification.dart';
 import '../../common/enums/playthrough_status.dart';
-import '../../extensions/scores_extensions.dart';
 import '../hive/playthrough.dart';
 import '../hive/playthrough_note.dart';
+import '../hive/score.dart';
 import '../player_score.dart';
 
 part 'playthrough_details.freezed.dart';
@@ -48,6 +48,11 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   bool get hasNotes => notes?.isNotEmpty ?? false;
 
+  bool get hasTies => tiedPlayerScores.isNotEmpty;
+
+  List<PlayerScore> get tiedPlayerScores =>
+      playerScores.where((playerScore) => playerScore.id != null && playerScore.isTied).toList();
+
   GameClassification get playerScoreBasedGameClassification {
     if (playerScores.any((playerScore) => playerScore.score.noScoreGameResult != null)) {
       return GameClassification.NoScore;
@@ -58,9 +63,10 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   PlaythroughNote? get latestNote => notes?.sortedBy((note) => note.createdAt).last;
 
-  bool get hasAnyScores => playerScores
-      .map((playerScore) => playerScore.score)
-      .toList()
-      .onlyScoresWithValue()
-      .isNotEmpty;
+  List<Score> get scoresWithValue =>
+      playerScores.map((playerScore) => playerScore.score).onlyScoresWithValue();
+
+  bool get hasAnyScores => scoresWithValue.isNotEmpty;
+
+  bool get finishedScoring => scoresWithValue.length == playerScores.length;
 }

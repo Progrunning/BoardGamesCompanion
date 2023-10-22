@@ -188,7 +188,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       averageScorePrecision: _gamePlaythroughsStore.averageScorePrecision,
     );
 
-    _updateLastWinner(
+    _updateLastGameWinners(
       finishedPlaythroughs,
       scoreBoardGameStatistics,
       playthroughScoresByPlaythroughId,
@@ -210,13 +210,13 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       scoreBoardGameStatistics.averageScore = playerScoresCollection.toAverageScore();
 
       final topFiveScores = playerScoresCollection
-          .sortByScore(_gamePlaythroughsStore.gameGameFamily)!
+          .sortByScore(_gamePlaythroughsStore.gameGameFamily, ignorePlaces: true)!
           .take(_maxNumberOfTopScoresToDisplay);
       scoreBoardGameStatistics.topScoreres = [];
       for (final Score score in topFiveScores) {
         final Player player = playersById[score.playerId]!;
         if (scoreBoardGameStatistics.topScoreres!.length < _maxNumberOfTopScoresToDisplay) {
-          scoreBoardGameStatistics.topScoreres!.add(Tuple2<Player, String>(player, score.value!));
+          scoreBoardGameStatistics.topScoreres!.add(Tuple2<Player, double>(player, score.score!));
         }
       }
 
@@ -251,7 +251,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     return BoardGameStatistics.score(boardGameStatistics: scoreBoardGameStatistics);
   }
 
-  void _updateLastWinner(
+  void _updateLastGameWinners(
     List<Playthrough> finishedPlaythroughs,
     ScoreBoardGameStatistics scoreBoardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
@@ -263,24 +263,18 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       return;
     }
 
-    final lastPlaythroughScores = playthroughScoresByPlaythroughId[lastPlaythrough.id]
-        .onlyScoresWithValue()
-      ..sortByScore(gameFamily);
-
-    if (lastPlaythroughScores.isEmpty) {
-      scoreBoardGameStatistics.lastWinner = null;
+    final lastPlaythroughBestScores =
+        playthroughScoresByPlaythroughId[lastPlaythrough.id].winners();
+    if (lastPlaythroughBestScores.isEmpty) {
       return;
     }
 
-    final lastPlaythroughBestScore = lastPlaythroughScores.first;
-    if (!playersById.containsKey(lastPlaythroughBestScore.playerId)) {
-      return;
-    }
-
-    scoreBoardGameStatistics.lastWinner = PlayerScore(
-      player: playersById[lastPlaythroughBestScore.playerId],
-      score: lastPlaythroughBestScore,
-    );
+    scoreBoardGameStatistics.lastGameWinners = lastPlaythroughBestScores
+        .map((Score score) => PlayerScore(
+              player: playersById[score.playerId],
+              score: score,
+            ))
+        .toList();
   }
 
   List<PlayerCountStatistics> _retrievePlayerCountPercentage(

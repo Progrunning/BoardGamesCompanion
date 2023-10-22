@@ -3,12 +3,12 @@ import 'package:board_games_companion/services/score_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../mocks/hive_box_mock.dart';
 import '../mocks/hive_interface_mock.dart';
-import '../mocks/score_hive_box_mock.dart';
 
 void main() {
   late MockHiveInterface mockHiveInterface;
-  late MockScoreHiveBox mockScoreHiveBox;
+  late MockBox<Score> mockScoreHiveBox;
 
   late ScoreService scoreService;
 
@@ -19,7 +19,7 @@ void main() {
   );
 
   setUp(() {
-    mockScoreHiveBox = MockScoreHiveBox();
+    mockScoreHiveBox = MockBox<Score>();
     when(() => mockScoreHiveBox.put(any<dynamic>(), any())).thenAnswer((_) => Future.value());
     mockHiveInterface = MockHiveInterface();
     when(() => mockHiveInterface.isBoxOpen(any())).thenAnswer((_) => false);

@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -181,20 +182,42 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   }
 
   PlaythroughDetails createPlaythroughDetails(Playthrough playthrough) {
-    final scores =
-        _scoresStore.scores.where((score) => score.playthroughId == playthrough.id).toList()
-          ..sortByScore(gameGameFamily)
-          ..toList();
+    final unorderedScores =
+        _scoresStore.scores.where((score) => score.playthroughId == playthrough.id);
+    // Order initially by score in case the score has not been migrated to use scoreGameResult
+    final orderedScores = unorderedScores.sortByScore(gameGameFamily);
     final players =
         _playerStore.players.where((player) => playthrough.playerIds.contains(player.id)).toList();
 
-    final playerScores = scores.mapIndexed((int index, Score score) {
-      final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
-      return PlayerScore(player: player, score: score, place: index + 1);
-    }).toList()
-      ..sortByPlayerName()
-      ..sortByScore(gameGameFamily);
+    final playerScores = orderedScores
+        ?.mapIndexed((int index, Score score) {
+          score = _migratePlayerScore(score, index);
 
-    return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores);
+          final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
+          return PlayerScore(player: player, score: score);
+        })
+        .toList()
+        .sortByPlayerName()
+        .sortByScore(gameGameFamily);
+
+    return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores ?? []);
+  }
+
+  /// An adhoc way of specifying player's score and place after replacing value property
+  /// with the scoreGameResult as way of persiting player's score details
+  Score _migratePlayerScore(Score score, int index) {
+    if ((gameGameFamily != GameFamily.HighestScore && gameGameFamily != GameFamily.LowestScore) ||
+        score.scoreGameResult != null) {
+      return score;
+    }
+
+    return score.copyWith(
+      scoreGameResult: ScoreGameResult(
+        points: score.score,
+        // If the player had a score (i.e. value) saved previously,
+        // we want to reflect that by speifying their place
+        place: score.hasScore ? index + 1 : null,
+      ),
+    );
   }
 }

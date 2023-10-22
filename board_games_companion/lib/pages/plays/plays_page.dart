@@ -198,6 +198,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
     await showGeneralDialog<void>(
       context: context,
       barrierDismissible: true,
+      routeSettings: const RouteSettings(name: GameSpinnerGameSelectedDialog.pageRoute),
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       pageBuilder: (_, __, ___) {
         return GameSpinnerGameSelectedDialog(selectedBoardGame: selectedBoardGame);

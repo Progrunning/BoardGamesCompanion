@@ -11,31 +11,26 @@ extension ScoreExtesions on Score {
   }
 }
 
-extension ScoresExtesions on List<Score>? {
-  List<Score> onlyScoresWithValue() {
-    return this
-            ?.where((s) => (s.value?.isNotEmpty ?? false) && num.tryParse(s.value!) != null)
-            .toList() ??
-        <Score>[];
-  }
+extension ScoresExtesions on Iterable<Score>? {
+  List<Score> onlyScoresWithValue() => this?.where((s) => s.hasScore).toList() ?? <Score>[];
+
+  List<Score> winners() =>
+      this?.onlyScoresWithValue().where((s) => s.isWinner).toList() ?? <Score>[];
 
   List<Score> onlyCooperativeGames() {
     return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??
         <Score>[];
   }
 
-  List<Score>? sortByScore(GameFamily gameFamily) {
-    return this
+  List<Score>? sortByScore(GameFamily gameFamily, {bool ignorePlaces = false}) {
+    return this?.toList()
       ?..sort((Score score, Score otherScore) {
-        return compareScores(score, otherScore, gameFamily);
+        return compareScores(score, otherScore, gameFamily, ignorePlaces: ignorePlaces);
       });
   }
 
   num? toBestScore(GameFamily gameFamily) {
-    final scores = this
-            ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
-            .map((Score score) => num.parse(score.value!)) ??
-        [];
+    final scores = this?.onlyScoresWithValue().map((Score score) => score.score!) ?? [];
     switch (gameFamily) {
       case GameFamily.HighestScore:
         return scores.reduce(max);
@@ -49,10 +44,7 @@ extension ScoresExtesions on List<Score>? {
   }
 
   double toAverageScore() {
-    final scores = this
-            ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
-            .map((Score score) => num.parse(score.value!)) ??
-        [];
+    final scores = this?.onlyScoresWithValue().map((Score score) => score.score!) ?? [];
 
     return scores.reduce((a, b) => a + b) / scores.length;
   }
@@ -72,7 +64,12 @@ extension ScoresExtesions on List<Score>? {
       0;
 }
 
-int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
+int compareScores(
+  Score score,
+  Score otherScore,
+  GameFamily gameFamily, {
+  bool ignorePlaces = false,
+}) {
   switch (gameFamily) {
     case GameFamily.LowestScore:
       // MK Swap scores around
@@ -87,31 +84,27 @@ int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
       break;
   }
 
-  if (score.value == null && otherScore.value == null) {
+  return _compareScores(score, otherScore, ignorePlaces);
+}
+
+int _compareScores(Score score, Score otherScore, [bool ignorePlaces = false]) {
+  if (!ignorePlaces &&
+      score.scoreGameResult?.place != null &&
+      otherScore.scoreGameResult?.place != null) {
+    return score.scoreGameResult!.place!.compareTo(otherScore.scoreGameResult!.place!);
+  }
+
+  if (!score.hasScore && !otherScore.hasScore) {
     return Constants.leaveAsIs;
   }
 
-  if (score.value == null) {
+  if (!score.hasScore) {
     return Constants.moveBelow;
   }
 
-  if (otherScore.value == null) {
+  if (!otherScore.hasScore) {
     return Constants.moveAbove;
   }
 
-  final num? aNumber = num.tryParse(score.value!);
-  final num? bNumber = num.tryParse(otherScore.value!);
-  if (aNumber == null && bNumber == null) {
-    return Constants.leaveAsIs;
-  }
-
-  if (aNumber == null) {
-    return Constants.moveBelow;
-  }
-
-  if (bNumber == null) {
-    return Constants.moveAbove;
-  }
-
-  return bNumber.compareTo(aNumber);
+  return otherScore.score!.compareTo(score.score!);
 }

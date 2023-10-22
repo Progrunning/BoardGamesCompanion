@@ -25,7 +25,10 @@ variables:
   acrName: bgcsharedcr
   acrServer: bgcsharedcr.azurecr.io
   acrServiceRepositoryName: bgc
-  acrServiceConnection: bgc-acr
+
+  registryUrl: registry.hub.docker.com
+  registryName: mkieres
+  registryRepositoryName: bgc
 
   # Dev
   armServiceConnectionDev: bgc-dev
@@ -68,17 +71,16 @@ stages:
                     containerAppName: $(azureContainerAppNameDev)
                     resourceGroupName: $(resourceGroupNameDev)
 
-                - task: AzureContainerApps@1
+                - task: AzureCLI@2
                   displayName: Deploy Docker image to Container App
+                  continueOnError: true
                   inputs:
-                    acrName: $(acrName)
-                    acrUsername: $(acrUsername)
-                    acrPassword: $(acrPassword)
                     azureSubscription: $(armServiceConnectionDev)
-                    containerAppName: $(azureContainerAppNameDev)
-                    resourceGroup: $(resourceGroupNameDev)
-                    imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    environmentVariables: AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az containerapp registry set -n $(azureContainerAppNameDev) -g $(resourceGroupNameDev) --server registry.hub.docker.com --username  $(registryUsername) --password $(registryPassword)
+                      az containerapp update -n $(azureContainerAppNameDev) -g $(resourceGroupNameDev) --image $(registryName)/$(registryRepositoryName):$(deployTagId) --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
 
   - stage: PROD
     dependsOn: DEV
@@ -100,17 +102,16 @@ stages:
                     containerAppName: $(azureContainerAppNameProd)
                     resourceGroupName: $(resourceGroupNameProd)
 
-                - task: AzureContainerApps@1
+                - task: AzureCLI@2
                   displayName: Deploy Docker image to Container App
+                  continueOnError: true
                   inputs:
-                    acrName: $(acrName)
-                    acrUsername: $(acrUsername)
-                    acrPassword: $(acrPassword)
                     azureSubscription: $(armServiceConnectionProd)
-                    containerAppName: $(azureContainerAppNameProd)
-                    resourceGroup: $(resourceGroupNameProd)
-                    imageToDeploy: "$(acrServer)/$(acrServiceRepositoryName):$(deployTagId)"
-                    environmentVariables: AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az containerapp registry set -n $(azureContainerAppNameProd) -g $(resourceGroupNameProd) --server registry.hub.docker.com --username  $(registryUsername) --password $(registryPassword)
+                      az containerapp update -n $(azureContainerAppNameProd) -g $(resourceGroupNameProd) --image $(registryName)/$(registryRepositoryName):$(deployTagId) --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
 
                 - task: git-tag-on-release-task@9
                   displayName: Tag Artifacts

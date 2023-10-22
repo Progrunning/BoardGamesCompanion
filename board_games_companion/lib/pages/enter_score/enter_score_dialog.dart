@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
@@ -23,6 +22,8 @@ class EnterScoreDialog extends StatelessWidget {
 
   static const double _minWidth = 340;
   static const double _maxWidth = 380;
+
+  static const String pageRoute = '/enterScoreDialog';
 
   final EnterScoreViewModel viewModel;
 
@@ -62,7 +63,7 @@ class EnterScoreDialog extends StatelessWidget {
                 _CircularNumberPicker(
                   strokeWidth: 50,
                   thumbSize: 50,
-                  onEnded: (int partialScore) => viewModel.updateScore(partialScore),
+                  onEnded: (double partialScore) => viewModel.updateScore(partialScore),
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 Observer(
@@ -71,7 +72,7 @@ class EnterScoreDialog extends StatelessWidget {
                       operation: viewModel.operation,
                       onOperationChange: (EnterScoreOperation operation) =>
                           viewModel.updateOperation(operation),
-                      onScoreChange: (int partialScore) {
+                      onScoreChange: (double partialScore) {
                         if (viewModel.operation == EnterScoreOperation.subtract) {
                           partialScore = -partialScore;
                         }
@@ -115,7 +116,7 @@ class _ScoreHistory extends StatelessWidget {
 
   static const double _height = 20;
 
-  final List<int> partialScores;
+  final List<double> partialScores;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,9 @@ class _ScoreHistory extends StatelessWidget {
           Text('(', style: AppTheme.theme.textTheme.bodyLarge),
           for (var i = 0; i < partialScores.length; i++) ...[
             Text(
-              partialScores[i] > 0 ? '+${partialScores[i]}' : '${partialScores[i]}',
+              partialScores[i] > 0
+                  ? '+${partialScores[i].toStringAsFixed(0)}'
+                  : '${partialScores[i]}',
               style: AppTheme.theme.textTheme.bodyLarge,
             ),
             if (i != partialScores.length - 1) ...[
@@ -153,7 +156,7 @@ class _Score extends StatelessWidget {
   }) : super(key: key);
 
   final String? playerName;
-  final int score;
+  final double score;
 
   @override
   Widget build(BuildContext context) {
@@ -165,11 +168,11 @@ class _Score extends StatelessWidget {
           style: AppTheme.theme.textTheme.displayLarge!,
         ),
         Text(
-          sprintf(AppText.editPlaythroughPlayerScored, [playerName]),
+          AppText.editPlaythroughPlayerScored,
           style: AppTheme.theme.textTheme.displayLarge!.copyWith(fontWeight: FontWeight.normal),
         ),
         Text(
-          ' $score ',
+          ' ${score.toStringAsFixed(0)} ',
           style: AppTheme.theme.textTheme.displayLarge!.copyWith(
             fontSize: Dimensions.doubleExtraLargeFontSize,
             color: AppColors.accentColor,
@@ -194,7 +197,7 @@ class _InstantScorePanel extends StatelessWidget {
 
   final EnterScoreOperation operation;
   final ValueChanged<EnterScoreOperation> onOperationChange;
-  final ValueChanged<int> onScoreChange;
+  final ValueChanged<double> onScoreChange;
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +346,7 @@ class _CircularNumberPicker extends StatefulWidget {
   /// Called when drag ended.
   ///
   /// This callback called with latest color that user selected.
-  final ValueChanged<int>? onEnded;
+  final ValueChanged<double>? onEnded;
 
   /// The size of widget.
   /// Draggable area is thumb widget is included to the size,
@@ -373,8 +376,10 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
   double _numberOpacity = 0.0;
 
   late double _angle;
-  late int _number;
+  late double _number;
   late final double _degreesPerNumber;
+
+  String get _numberFormatted => _number.toStringAsFixed(0);
 
   @override
   void initState() {
@@ -408,7 +413,7 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
                 opacity: _numberOpacity,
                 onEnd: () => _resetPickedNumber(),
                 child: Text(
-                  _number > 0 ? '+$_number' : '$_number',
+                  _number > 0 ? '+$_numberFormatted' : _numberFormatted,
                   style: AppTheme.theme.textTheme.displayLarge?.copyWith(fontSize: 56),
                 ),
               ),
@@ -429,8 +434,9 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
     setState(() {
       _angle = angle;
       _numberOpacity = 1;
-      _number =
-          ((angle / _degreesPerNumber).floor() + 1) + widget.highestNumberInSingleSpin * multiplier;
+      _number = (((angle / _degreesPerNumber).floor() + 1) +
+              widget.highestNumberInSingleSpin * multiplier)
+          .toDouble();
       if (multiplier < 0) {
         _number--;
       }

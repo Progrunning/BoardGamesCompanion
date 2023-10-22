@@ -563,7 +563,7 @@ BggPlaysImportResult parsePlaysXml(ParsePlaysXmlArguments arguments) {
           int.tryParse(playerElement.firstOrDefaultAttributeValue(_xmlWinAttributeName) ?? '') ==
               _playerWinIndicator;
 
-      if (playerName?.isBlank ?? true) {
+      if (playerName.isNullOrBlank && playerBggName.isNullOrBlank) {
         playsImportResult.errors!
             .add(ImportError("Cannot import a play #$playId without player's name"));
         continue;
@@ -577,13 +577,16 @@ BggPlaysImportResult parsePlaysXml(ParsePlaysXmlArguments arguments) {
         continue;
       }
 
-      bggPlayPlayers.add(BggPlayPlayer(
-        playerName: playerName!,
-        playerScore: playerScore,
-        playerBggName: playerBggName,
-        playerBggUserId: playerBggUserId,
-        playerWin: playerWin,
-      ));
+      bggPlayPlayers.add(
+        BggPlayPlayer(
+          // MK Use bgg name instead of user's name if it's not present in the game's data
+          playerName: playerName.isNotNullOrBlank ? playerName! : playerBggName!,
+          playerScore: playerScore,
+          playerBggName: playerBggName,
+          playerBggUserId: playerBggUserId,
+          playerWin: playerWin,
+        ),
+      );
     }
 
     play = play.copyWith(players: bggPlayPlayers);

@@ -265,7 +265,7 @@ class _PlayerScoreTile extends StatelessWidget {
             ),
             const SizedBox(width: Dimensions.standardSpacing),
             Expanded(
-              child: _PlayerScore(score: playerScore.score.value),
+              child: _PlayerScore(score: playerScore.score.scoreFormatted ?? '-'),
             ),
           ],
         ),
@@ -280,7 +280,7 @@ class _PlayerScore extends StatelessWidget {
     required this.score,
   }) : super(key: key);
 
-  final String? score;
+  final String score;
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +292,7 @@ class _PlayerScore extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              score ?? '-',
+              score,
               style: AppStyles.playerScoreTextStyle,
             ),
             const SizedBox(height: Dimensions.halfStandardSpacing),

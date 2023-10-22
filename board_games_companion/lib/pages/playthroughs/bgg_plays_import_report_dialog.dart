@@ -33,6 +33,8 @@ class BggPlaysImportReportDialog extends StatelessWidget {
   static const double _minHeight = 400;
   static const double _maxHeight = 500;
 
+  static const String pageRoute = '/bggPlaysImportDialog';
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;

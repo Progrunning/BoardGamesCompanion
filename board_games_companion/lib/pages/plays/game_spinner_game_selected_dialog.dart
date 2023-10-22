@@ -31,6 +31,8 @@ class GameSpinnerGameSelectedDialog extends StatefulWidget {
 
   final BoardGameDetails selectedBoardGame;
 
+  static const String pageRoute = '/gameSpinnerSelectedGame';
+
   @override
   State<GameSpinnerGameSelectedDialog> createState() => _GameSpinnerGameSelectedDialogState();
 }
