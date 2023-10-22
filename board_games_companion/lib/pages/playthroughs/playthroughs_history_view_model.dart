@@ -23,8 +23,10 @@ abstract class _PlaythroughsHistoryViewModel with Store {
 
   @computed
   ObservableList<PlaythroughDetails> get playthroughs {
-    final sortedPlaythrough = List.of(_gamePlaythroughsStore.playthroughsDetails, growable: false);
-    return ObservableList.of(sortedPlaythrough..sort((a, b) => b.startDate.compareTo(a.startDate)));
+    return ObservableList.of(
+      _gamePlaythroughsStore.playthroughsDetails.toList()
+        ..sort((a, b) => b.startDate.compareTo(a.startDate)),
+    );
   }
 
   @computed
@@ -36,7 +38,5 @@ abstract class _PlaythroughsHistoryViewModel with Store {
   @action
   void loadPlaythroughs() => futureloadPlaythroughs = ObservableFuture<void>(_loadPlaythroughs());
 
-  Future<void> _loadPlaythroughs() async {
-    _gamePlaythroughsStore.loadPlaythroughsDetails();
-  }
+  Future<void> _loadPlaythroughs() async => _gamePlaythroughsStore.loadPlaythroughsDetails();
 }

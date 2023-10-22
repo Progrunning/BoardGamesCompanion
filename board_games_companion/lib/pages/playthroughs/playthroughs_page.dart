@@ -232,6 +232,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
   ) async {
     await showGeneralDialog<void>(
       context: context,
+      routeSettings: const RouteSettings(name: BggPlaysImportReportDialog.pageRoute),
       pageBuilder: (_, __, ___) {
         return BggPlaysImportReportDialog(
           username: username,

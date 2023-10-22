@@ -9,6 +9,7 @@ mixin EnterScoreDialogMixin {
   Future<void> showEnterScoreDialog(BuildContext context, EnterScoreViewModel viewModel) async {
     await showGeneralDialog<void>(
       context: context,
+      routeSettings: const RouteSettings(name: EnterScoreDialog.pageRoute),
       pageBuilder: (_, __, ___) {
         return EnterScoreDialog(viewModel: viewModel);
       },

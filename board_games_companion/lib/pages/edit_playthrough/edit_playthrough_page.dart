@@ -310,8 +310,8 @@ class _ScoresSection extends StatelessWidget {
           ),
         ),
         playthroughScoresVisualState.maybeWhen(
-          finishedScoring: (_, __, hasTies) {
-            if (hasTies) {
+          finishedScoring: (_, scoreTiebreakersSet, __) {
+            if (scoreTiebreakersSet.isNotEmpty) {
               return const _ScoreTieBreakerInstruction();
             }
             return const SizedBox.shrink();
@@ -322,8 +322,8 @@ class _ScoresSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
           sliver: playthroughScoresVisualState.when(
             init: () => const SliverFillRemaining(child: LoadingIndicator()),
-            finishedScoring: (playerScores, scoreTiebreakersSet, hasTies) {
-              if (hasTies) {
+            finishedScoring: (playerScores, scoreTiebreakersSet, _) {
+              if (scoreTiebreakersSet.isNotEmpty) {
                 return _ReordableScoreSliverList(
                   onItemTapped: onItemTapped,
                   onReorder: onReorder,

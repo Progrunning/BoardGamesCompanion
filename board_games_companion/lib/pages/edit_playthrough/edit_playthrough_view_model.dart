@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:board_games_companion/models/hive/score_game_results.dart';
+import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
@@ -370,7 +371,7 @@ abstract class _EditPlaythoughViewModel with Store {
       playthroughScoresVisualState = PlaythroughScoresVisualState.finishedScoring(
         playerScores: playerScores,
         scoreTiebreakersSet: scoreTiebreakersSet,
-        hasTies: _playthroughDetailsWorkingCopy!.hasTies,
+        uniqnessEnforcingDummyDate: clock.now(),
       );
     } else {
       playthroughScoresVisualState = PlaythroughScoresVisualState.scoring(

@@ -23,6 +23,8 @@ class EnterScoreDialog extends StatelessWidget {
   static const double _minWidth = 340;
   static const double _maxWidth = 380;
 
+  static const String pageRoute = '/enterScoreDialog';
+
   final EnterScoreViewModel viewModel;
 
   @override

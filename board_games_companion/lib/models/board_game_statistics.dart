@@ -28,7 +28,6 @@ class ScoreBoardGameStatistics with _$ScoreBoardGameStatistics {
     required int totalPlaytimeInSeconds,
     required int averagePlaytimeInSeconds,
     required int averageScorePrecision,
-    // TODO Update logic on the plays history to reflect multiple winners
     List<PlayerScore>? lastGameWinners,
     num? bestScore,
     double? averageScore,

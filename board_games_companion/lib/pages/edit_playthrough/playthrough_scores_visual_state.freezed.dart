@@ -20,8 +20,10 @@ mixin _$PlaythroughScoresVisualState {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function(List<PlayerScore> playerScores) scoring,
-    required TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
+    required TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)
         finishedScoring,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,8 +31,10 @@ mixin _$PlaythroughScoresVisualState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function(List<PlayerScore> playerScores)? scoring,
-    TResult? Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult? Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
   }) =>
       throw _privateConstructorUsedError;
@@ -38,8 +42,10 @@ mixin _$PlaythroughScoresVisualState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function(List<PlayerScore> playerScores)? scoring,
-    TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
     required TResult orElse(),
   }) =>
@@ -127,8 +133,10 @@ class _$_init implements _init {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function(List<PlayerScore> playerScores) scoring,
-    required TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
+    required TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)
         finishedScoring,
   }) {
     return init();
@@ -139,8 +147,10 @@ class _$_init implements _init {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function(List<PlayerScore> playerScores)? scoring,
-    TResult? Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult? Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
   }) {
     return init?.call();
@@ -151,8 +161,10 @@ class _$_init implements _init {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function(List<PlayerScore> playerScores)? scoring,
-    TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
     required TResult orElse(),
   }) {
@@ -274,8 +286,10 @@ class _$_scoring implements _scoring {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function(List<PlayerScore> playerScores) scoring,
-    required TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
+    required TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)
         finishedScoring,
   }) {
     return scoring(playerScores);
@@ -286,8 +300,10 @@ class _$_scoring implements _scoring {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function(List<PlayerScore> playerScores)? scoring,
-    TResult? Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult? Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
   }) {
     return scoring?.call(playerScores);
@@ -298,8 +314,10 @@ class _$_scoring implements _scoring {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function(List<PlayerScore> playerScores)? scoring,
-    TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
     required TResult orElse(),
   }) {
@@ -363,7 +381,7 @@ abstract class _$$_finishedScoringCopyWith<$Res> {
   $Res call(
       {List<PlayerScore> playerScores,
       Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
-      bool hasTies});
+      DateTime uniqnessEnforcingDummyDate});
 }
 
 /// @nodoc
@@ -379,7 +397,7 @@ class __$$_finishedScoringCopyWithImpl<$Res>
   $Res call({
     Object? playerScores = null,
     Object? scoreTiebreakersSet = null,
-    Object? hasTies = null,
+    Object? uniqnessEnforcingDummyDate = null,
   }) {
     return _then(_$_finishedScoring(
       playerScores: null == playerScores
@@ -390,10 +408,10 @@ class __$$_finishedScoringCopyWithImpl<$Res>
           ? _value._scoreTiebreakersSet
           : scoreTiebreakersSet // ignore: cast_nullable_to_non_nullable
               as Map<String, ScoreTiebreakerType>,
-      hasTies: null == hasTies
-          ? _value.hasTies
-          : hasTies // ignore: cast_nullable_to_non_nullable
-              as bool,
+      uniqnessEnforcingDummyDate: null == uniqnessEnforcingDummyDate
+          ? _value.uniqnessEnforcingDummyDate
+          : uniqnessEnforcingDummyDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -404,7 +422,7 @@ class _$_finishedScoring implements _finishedScoring {
   const _$_finishedScoring(
       {required final List<PlayerScore> playerScores,
       required final Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
-      required this.hasTies})
+      required this.uniqnessEnforcingDummyDate})
       : _playerScores = playerScores,
         _scoreTiebreakersSet = scoreTiebreakersSet;
 
@@ -426,11 +444,11 @@ class _$_finishedScoring implements _finishedScoring {
   }
 
   @override
-  final bool hasTies;
+  final DateTime uniqnessEnforcingDummyDate;
 
   @override
   String toString() {
-    return 'PlaythroughScoresVisualState.finishedScoring(playerScores: $playerScores, scoreTiebreakersSet: $scoreTiebreakersSet, hasTies: $hasTies)';
+    return 'PlaythroughScoresVisualState.finishedScoring(playerScores: $playerScores, scoreTiebreakersSet: $scoreTiebreakersSet, uniqnessEnforcingDummyDate: $uniqnessEnforcingDummyDate)';
   }
 
   @override
@@ -442,7 +460,10 @@ class _$_finishedScoring implements _finishedScoring {
                 .equals(other._playerScores, _playerScores) &&
             const DeepCollectionEquality()
                 .equals(other._scoreTiebreakersSet, _scoreTiebreakersSet) &&
-            (identical(other.hasTies, hasTies) || other.hasTies == hasTies));
+            (identical(other.uniqnessEnforcingDummyDate,
+                    uniqnessEnforcingDummyDate) ||
+                other.uniqnessEnforcingDummyDate ==
+                    uniqnessEnforcingDummyDate));
   }
 
   @override
@@ -450,7 +471,7 @@ class _$_finishedScoring implements _finishedScoring {
       runtimeType,
       const DeepCollectionEquality().hash(_playerScores),
       const DeepCollectionEquality().hash(_scoreTiebreakersSet),
-      hasTies);
+      uniqnessEnforcingDummyDate);
 
   @JsonKey(ignore: true)
   @override
@@ -463,11 +484,14 @@ class _$_finishedScoring implements _finishedScoring {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function(List<PlayerScore> playerScores) scoring,
-    required TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
+    required TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)
         finishedScoring,
   }) {
-    return finishedScoring(playerScores, scoreTiebreakersSet, hasTies);
+    return finishedScoring(
+        playerScores, scoreTiebreakersSet, uniqnessEnforcingDummyDate);
   }
 
   @override
@@ -475,11 +499,14 @@ class _$_finishedScoring implements _finishedScoring {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function(List<PlayerScore> playerScores)? scoring,
-    TResult? Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult? Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
   }) {
-    return finishedScoring?.call(playerScores, scoreTiebreakersSet, hasTies);
+    return finishedScoring?.call(
+        playerScores, scoreTiebreakersSet, uniqnessEnforcingDummyDate);
   }
 
   @override
@@ -487,13 +514,16 @@ class _$_finishedScoring implements _finishedScoring {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function(List<PlayerScore> playerScores)? scoring,
-    TResult Function(List<PlayerScore> playerScores,
-            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
+    TResult Function(
+            List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+            DateTime uniqnessEnforcingDummyDate)?
         finishedScoring,
     required TResult orElse(),
   }) {
     if (finishedScoring != null) {
-      return finishedScoring(playerScores, scoreTiebreakersSet, hasTies);
+      return finishedScoring(
+          playerScores, scoreTiebreakersSet, uniqnessEnforcingDummyDate);
     }
     return orElse();
   }
@@ -537,11 +567,11 @@ abstract class _finishedScoring implements PlaythroughScoresVisualState {
   const factory _finishedScoring(
       {required final List<PlayerScore> playerScores,
       required final Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
-      required final bool hasTies}) = _$_finishedScoring;
+      required final DateTime uniqnessEnforcingDummyDate}) = _$_finishedScoring;
 
   List<PlayerScore> get playerScores;
   Map<String, ScoreTiebreakerType> get scoreTiebreakersSet;
-  bool get hasTies;
+  DateTime get uniqnessEnforcingDummyDate;
   @JsonKey(ignore: true)
   _$$_finishedScoringCopyWith<_$_finishedScoring> get copyWith =>
       throw _privateConstructorUsedError;

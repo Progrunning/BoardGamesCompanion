@@ -649,10 +649,8 @@ mixin _$ScoreBoardGameStatistics {
   int get averagePlaytimeInSeconds => throw _privateConstructorUsedError;
   set averagePlaytimeInSeconds(int value) => throw _privateConstructorUsedError;
   int get averageScorePrecision => throw _privateConstructorUsedError;
-  set averageScorePrecision(int value) =>
-      throw _privateConstructorUsedError; // TODO Update logic on the plays history to reflect multiple winners
-  List<PlayerScore>? get lastGameWinners =>
-      throw _privateConstructorUsedError; // TODO Update logic on the plays history to reflect multiple winners
+  set averageScorePrecision(int value) => throw _privateConstructorUsedError;
+  List<PlayerScore>? get lastGameWinners => throw _privateConstructorUsedError;
   set lastGameWinners(List<PlayerScore>? value) =>
       throw _privateConstructorUsedError;
   num? get bestScore => throw _privateConstructorUsedError;
@@ -942,7 +940,6 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
   int averagePlaytimeInSeconds;
   @override
   int averageScorePrecision;
-// TODO Update logic on the plays history to reflect multiple winners
   @override
   List<PlayerScore>? lastGameWinners;
   @override
@@ -1012,9 +1009,8 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   @override
   int get averageScorePrecision;
   set averageScorePrecision(int value);
-  @override // TODO Update logic on the plays history to reflect multiple winners
-  List<PlayerScore>?
-      get lastGameWinners; // TODO Update logic on the plays history to reflect multiple winners
+  @override
+  List<PlayerScore>? get lastGameWinners;
   set lastGameWinners(List<PlayerScore>? value);
   @override
   num? get bestScore;
