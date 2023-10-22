@@ -1,6 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:async';
+
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
+import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -77,10 +80,11 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   Future<PlaythroughDetails?> createPlaythrough() async {
     return playersState.maybeWhen(
       playersSelected: (selectedPlayers, selectedPlayerScores) async {
+        final updatedPlayerScores = _assignPlayerPlaces(selectedPlayerScores);
         final PlaythroughDetails? newPlaythrough = await _gamePlaythroughsStore.createPlaythrough(
           boardGameId,
           selectedPlayers,
-          selectedPlayerScores,
+          updatedPlayerScores,
           playthroughTimeline.when(now: () => DateTime.now(), inThePast: () => playthroughDate),
           playthroughTimeline.when(now: () => null, inThePast: () => playthroughDuration),
           notes: notesState.maybeWhen(
@@ -89,7 +93,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
           ),
         );
 
-        await _analyticsService.logEvent(
+        unawaited(_analyticsService.logEvent(
           name: Analytics.logPlaythrough,
           parameters: <String, String>{
             Analytics.boardGameIdParameter: boardGameId,
@@ -100,7 +104,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
             ),
             Analytics.logPlaythroughDuration: playthroughDuration.toString(),
           },
-        );
+        ));
 
         // MK Reset the log screen
         playthroughDate = DateTime.now();
@@ -161,7 +165,8 @@ abstract class _PlaythroughsLogGameViewModel with Store {
         }
 
         final updatedPlayerScore = playerScoreToUpdate.copyWith(
-            score: playerScoreToUpdate.score.copyWith(value: newScore.toString()));
+          score: _updateScore(playerScoreToUpdate.score, newScore: newScore),
+        );
         updatedPlayerScores[playerScore.player!.id] = updatedPlayerScore;
 
         playersState = PlaythroughsLogGamePlayers.playersSelected(
@@ -256,7 +261,6 @@ abstract class _PlaythroughsLogGameViewModel with Store {
   @action
   void setPlaythroughTimeline(PlaythroughTimeline playthroughTimeline) =>
       this.playthroughTimeline = playthroughTimeline;
-
   Future<void> _loadPlayers() async {
     playersState = const PlaythroughsLogGamePlayers.loading();
 
@@ -268,5 +272,35 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     }
 
     playersState = const PlaythroughsLogGamePlayers.noPlayersSelected();
+  }
+
+  Map<String, PlayerScore> _assignPlayerPlaces(Map<String, PlayerScore> playerScoresMap) {
+    final updatedPlayerScores = Map<String, PlayerScore>.from(playerScoresMap);
+    if (gameFamily == GameFamily.Cooperative) {
+      return updatedPlayerScores;
+    }
+
+    final orderedPlayerScores = updatedPlayerScores.values.toList().sortByScore(
+          gameFamily,
+          ignorePlaces: true,
+        );
+
+    for (var i = 0; i < orderedPlayerScores.length; i++) {
+      updatedPlayerScores[orderedPlayerScores[i].id!] = orderedPlayerScores[i].copyWith(
+        score: _updateScore(orderedPlayerScores[i].score, place: i + 1),
+      );
+    }
+
+    return updatedPlayerScores;
+  }
+
+  Score _updateScore(Score score, {double? newScore, int? place}) {
+    final scoreGameResult = score.scoreGameResult ?? const ScoreGameResult();
+    return score.copyWith(
+      scoreGameResult: scoreGameResult.copyWith(
+        points: newScore ?? scoreGameResult.points,
+        place: place,
+      ),
+    );
   }
 }

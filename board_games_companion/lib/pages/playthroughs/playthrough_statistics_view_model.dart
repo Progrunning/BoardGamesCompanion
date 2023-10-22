@@ -265,6 +265,9 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
     final lastPlaythroughBestScores =
         playthroughScoresByPlaythroughId[lastPlaythrough.id].winners();
+    if (lastPlaythroughBestScores.isEmpty) {
+      return;
+    }
 
     scoreBoardGameStatistics.lastGameWinners = lastPlaythroughBestScores
         .map((Score score) => PlayerScore(

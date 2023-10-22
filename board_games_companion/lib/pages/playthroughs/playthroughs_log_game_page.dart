@@ -953,7 +953,7 @@ class _PlayerScoreScoreGameFamily extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(
-          playerScore.score.value ?? '-',
+          playerScore.score.scoreFormatted ?? '-',
           style: AppStyles.playerScoreTextStyle,
         ),
         const SizedBox(height: Dimensions.halfStandardSpacing),

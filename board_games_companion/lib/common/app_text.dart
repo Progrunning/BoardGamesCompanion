@@ -219,7 +219,7 @@ class AppText {
   static const editPlaythroughPageCannotReorderNotTiedScore =
       "Sorry, you can't reorder not tied score";
   static const editPlaythroughPageCannotReorderSharedPlaceScore =
-      "Sorry, you can't reorder shared place tie";
+      "Sorry, you can't reorder shared place score";
   static const editPlaythroughPageTieBreakerInstruction =
       'Resolve ties by dragging up or down tied player score(s) '
       'or check the box if players share the place';

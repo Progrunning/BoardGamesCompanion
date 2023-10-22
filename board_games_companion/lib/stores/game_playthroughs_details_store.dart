@@ -206,17 +206,18 @@ abstract class _GamePlaythroughsDetailsStore with Store {
   /// An adhoc way of specifying player's score and place after replacing value property
   /// with the scoreGameResult as way of persiting player's score details
   Score _migratePlayerScore(Score score, int index) {
-    if ((gameGameFamily == GameFamily.HighestScore || gameGameFamily == GameFamily.LowestScore) &&
-        score.scoreGameResult == null) {
-      score = score.copyWith(
-        scoreGameResult: ScoreGameResult(
-          points: score.score,
-          // If the player had a score (i.e. value) saved previously,
-          // we want to reflect that by speifying their place
-          place: score.hasScore ? index + 1 : null,
-        ),
-      );
+    if ((gameGameFamily != GameFamily.HighestScore && gameGameFamily != GameFamily.LowestScore) ||
+        score.scoreGameResult != null) {
+      return score;
     }
-    return score;
+
+    return score.copyWith(
+      scoreGameResult: ScoreGameResult(
+        points: score.score,
+        // If the player had a score (i.e. value) saved previously,
+        // we want to reflect that by speifying their place
+        place: score.hasScore ? index + 1 : null,
+      ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../models/player_score.dart';
@@ -51,9 +52,7 @@ abstract class _EnterScoreViewModel with Store {
   }
 
   @action
-  void scoreZero() {
-    _updatePlayerScore(0);
-  }
+  void scoreZero() => _updatePlayerScore(0);
 
   @action
   void undo() {
@@ -68,9 +67,10 @@ abstract class _EnterScoreViewModel with Store {
   }
 
   void _updatePlayerScore(double? score) {
+    final scoreGameResult = _playerScore.score.scoreGameResult ?? const ScoreGameResult();
     _playerScore = _playerScore.copyWith(
       score: _playerScore.score.copyWith(
-        scoreGameResult: _playerScore.score.scoreGameResult!.copyWith(points: score),
+        scoreGameResult: scoreGameResult.copyWith(points: score),
       ),
     );
   }

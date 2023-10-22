@@ -379,6 +379,8 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
   late double _number;
   late final double _degreesPerNumber;
 
+  String get _numberFormatted => _number.toStringAsFixed(0);
+
   @override
   void initState() {
     super.initState();
@@ -411,7 +413,7 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
                 opacity: _numberOpacity,
                 onEnd: () => _resetPickedNumber(),
                 child: Text(
-                  _number > 0 ? '+$_number' : '$_number',
+                  _number > 0 ? '+$_numberFormatted' : _numberFormatted,
                   style: AppTheme.theme.textTheme.displayLarge?.copyWith(fontSize: 56),
                 ),
               ),
