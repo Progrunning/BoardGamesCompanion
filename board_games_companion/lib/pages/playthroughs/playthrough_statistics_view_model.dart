@@ -188,7 +188,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       averageScorePrecision: _gamePlaythroughsStore.averageScorePrecision,
     );
 
-    _updateLastWinner(
+    _updateLastGameWinners(
       finishedPlaythroughs,
       scoreBoardGameStatistics,
       playthroughScoresByPlaythroughId,
@@ -251,7 +251,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     return BoardGameStatistics.score(boardGameStatistics: scoreBoardGameStatistics);
   }
 
-  void _updateLastWinner(
+  void _updateLastGameWinners(
     List<Playthrough> finishedPlaythroughs,
     ScoreBoardGameStatistics scoreBoardGameStatistics,
     Map<String, List<Score>> playthroughScoresByPlaythroughId,
@@ -263,24 +263,15 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       return;
     }
 
-    final lastPlaythroughScores = playthroughScoresByPlaythroughId[lastPlaythrough.id]
-        .onlyScoresWithValue()
-        .sortByScore(gameFamily);
+    final lastPlaythroughBestScores =
+        playthroughScoresByPlaythroughId[lastPlaythrough.id].winners();
 
-    if (lastPlaythroughScores?.isEmpty ?? true) {
-      scoreBoardGameStatistics.lastWinner = null;
-      return;
-    }
-
-    final lastPlaythroughBestScore = lastPlaythroughScores!.first;
-    if (!playersById.containsKey(lastPlaythroughBestScore.playerId)) {
-      return;
-    }
-
-    scoreBoardGameStatistics.lastWinner = PlayerScore(
-      player: playersById[lastPlaythroughBestScore.playerId],
-      score: lastPlaythroughBestScore,
-    );
+    scoreBoardGameStatistics.lastGameWinners = lastPlaythroughBestScores
+        .map((Score score) => PlayerScore(
+              player: playersById[score.playerId],
+              score: score,
+            ))
+        .toList();
   }
 
   List<PlayerCountStatistics> _retrievePlayerCountPercentage(

@@ -14,6 +14,8 @@ extension ScoreExtesions on Score {
 extension ScoresExtesions on Iterable<Score>? {
   List<Score> onlyScoresWithValue() => this?.where((s) => s.hasScore).toList() ?? <Score>[];
 
+  List<Score> winners() => this?.where((s) => s.hasScore && s.isWinner).toList() ?? <Score>[];
+
   List<Score> onlyCooperativeGames() {
     return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??
         <Score>[];
@@ -61,7 +63,8 @@ extension ScoresExtesions on Iterable<Score>? {
       0;
 }
 
-int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
+int compareScores(Score score, Score otherScore, GameFamily gameFamily,
+    [bool ignorePlaces = false]) {
   switch (gameFamily) {
     case GameFamily.LowestScore:
       // MK Swap scores around
@@ -77,13 +80,13 @@ int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
   }
 
   if (score.scoreGameResult != null || otherScore.scoreGameResult != null) {
-    return _compareScores(score, otherScore);
+    return _compareScores(score, otherScore, ignorePlaces);
   }
 
   return _compareScoresUsingDeprecatedValue(score, otherScore);
 }
 
-int _compareScores(Score score, Score otherScore) {
+int _compareScores(Score score, Score otherScore, [bool ignorePlaces = false]) {
   if (score.scoreGameResult != null && otherScore.scoreGameResult == null) {
     return Constants.moveAbove;
   }
@@ -92,7 +95,9 @@ int _compareScores(Score score, Score otherScore) {
     return Constants.moveBelow;
   }
 
-  if (score.scoreGameResult!.place != null && otherScore.scoreGameResult!.place != null) {
+  if (!ignorePlaces &&
+      score.scoreGameResult!.place != null &&
+      otherScore.scoreGameResult!.place != null) {
     return score.scoreGameResult!.place!.compareTo(otherScore.scoreGameResult!.place!);
   }
 

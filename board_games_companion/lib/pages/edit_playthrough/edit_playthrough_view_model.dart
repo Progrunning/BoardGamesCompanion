@@ -118,9 +118,6 @@ abstract class _EditPlaythoughViewModel with Store {
     playerScores.addAll(_playthroughDetailsWorkingCopy!.playerScores);
     _updateEditPlaythroughPageVisualState();
     _updatePlaythroughScoresVisualState();
-
-    // TODO work out how the ordering should be done when there's shared place
-    // _setPlayerPlacesBasedOnScore();
   }
 
   @action
@@ -198,7 +195,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
   void _setPlayerPlacesBasedOnScore() {
     final orderedPlayerScores =
-        playerScores.sortByScore(_gamePlaythroughsDetailsStore.gameGameFamily);
+        playerScores.sortByScore(_gamePlaythroughsDetailsStore.gameGameFamily, ignorePlaces: true);
 
     for (var i = 0; i < orderedPlayerScores.length; i++) {
       orderedPlayerScores[i] = _updatePlayerScorePlace(orderedPlayerScores[i], i + 1);

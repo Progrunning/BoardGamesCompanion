@@ -51,4 +51,6 @@ class Score with _$Score {
       noScoreGameResult?.cooperativeGameResult != null;
 
   bool get isTied => scoreGameResult?.tiebreakerType != null;
+
+  bool get isWinner => scoreGameResult?.place == 1;
 }
