@@ -9,13 +9,15 @@ part of 'edit_playthrough_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
-  Computed<Set<String>>? _$tiedPlayerScoresIdsComputed;
+  Computed<Map<String, ScoreTiebreakerType>>? _$scoreTiebreakersSetComputed;
 
   @override
-  Set<String> get tiedPlayerScoresIds => (_$tiedPlayerScoresIdsComputed ??=
-          Computed<Set<String>>(() => super.tiedPlayerScoresIds,
-              name: '_EditPlaythoughViewModel.tiedPlayerScoresIds'))
-      .value;
+  Map<String, ScoreTiebreakerType> get scoreTiebreakersSet =>
+      (_$scoreTiebreakersSetComputed ??=
+              Computed<Map<String, ScoreTiebreakerType>>(
+                  () => super.scoreTiebreakersSet,
+                  name: '_EditPlaythoughViewModel.scoreTiebreakersSet'))
+          .value;
   Computed<PlaythroughDetails?>? _$playthroughDetailsComputed;
 
   @override
@@ -247,6 +249,17 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
   }
 
   @override
+  void toggleSharedPlaceTiebreaker(PlayerScore playerScore, bool sharePlace) {
+    final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
+        name: '_EditPlaythoughViewModel.toggleSharedPlaceTiebreaker');
+    try {
+      return super.toggleSharedPlaceTiebreaker(playerScore, sharePlace);
+    } finally {
+      _$_EditPlaythoughViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void updateCooperativeGameResult(
       CooperativeGameResult cooperativeGameResult) {
     final _$actionInfo = _$_EditPlaythoughViewModelActionController.startAction(
@@ -297,7 +310,7 @@ mixin _$EditPlaythoughViewModel on _EditPlaythoughViewModel, Store {
 playthroughScoresVisualState: ${playthroughScoresVisualState},
 editPlaythroughPageVisualState: ${editPlaythroughPageVisualState},
 playerScores: ${playerScores},
-tiedPlayerScoresIds: ${tiedPlayerScoresIds},
+scoreTiebreakersSet: ${scoreTiebreakersSet},
 playthroughDetails: ${playthroughDetails},
 playthrough: ${playthrough},
 players: ${players},

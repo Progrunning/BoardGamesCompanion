@@ -218,8 +218,10 @@ class AppText {
   static const editPlaythroughPageUnsavedChangesActionButtonText = 'Navigate away';
   static const editPlaythroughPageCannotReorderNotTiedScore =
       "Sorry, you can't reorder not tied score";
-  static const editPlaythroughPageTieBreakerInstruction = 'Some players have tied scores. '
-      'In order to break the tie(s) drag up or down tied player scores '
+  static const editPlaythroughPageCannotReorderSharedPlaceScore =
+      "Sorry, you can't reorder shared place tie";
+  static const editPlaythroughPageTieBreakerInstruction =
+      'Resolve ties by dragging up or down tied player score(s) '
       'or check the box if players share the place';
 
   static const playthroughNotePageTitle = 'Game Note';

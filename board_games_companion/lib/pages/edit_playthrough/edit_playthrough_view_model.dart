@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:math';
+
 import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:collection/collection.dart';
 import 'package:fimber/fimber.dart';
@@ -55,14 +57,15 @@ abstract class _EditPlaythoughViewModel with Store {
   ObservableList<PlayerScore> playerScores = <PlayerScore>[].asObservable();
 
   @computed
-  Set<String> get tiedPlayerScoresIds {
+  Map<String, ScoreTiebreakerType> get scoreTiebreakersSet {
     if (_playthroughDetailsWorkingCopy == null) {
       return {};
     }
 
-    return _playthroughDetailsWorkingCopy!.tiedPlayerScores
-        .map((playerScore) => playerScore.id!)
-        .toSet();
+    return {
+      for (final tiedPlayerScore in _playthroughDetailsWorkingCopy!.tiedPlayerScores)
+        tiedPlayerScore.id!: tiedPlayerScore.score.scoreGameResult!.tiebreakerType!
+    };
   }
 
   @computed
@@ -115,6 +118,9 @@ abstract class _EditPlaythoughViewModel with Store {
     playerScores.addAll(_playthroughDetailsWorkingCopy!.playerScores);
     _updateEditPlaythroughPageVisualState();
     _updatePlaythroughScoresVisualState();
+
+    // TODO work out how the ordering should be done when there's shared place
+    // _setPlayerPlacesBasedOnScore();
   }
 
   @action
@@ -136,9 +142,11 @@ abstract class _EditPlaythoughViewModel with Store {
 
   @action
   Future<void> saveChanges() async {
-    if (isDirty) {
-      await _gamePlaythroughsDetailsStore.updatePlaythrough(_playthroughDetailsWorkingCopy);
+    if (!isDirty) {
+      return;
     }
+
+    await _gamePlaythroughsDetailsStore.updatePlaythrough(_playthroughDetailsWorkingCopy);
   }
 
   @action
@@ -182,7 +190,8 @@ abstract class _EditPlaythoughViewModel with Store {
         _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
 
     if (_playthroughDetailsWorkingCopy?.finishedScoring ?? false) {
-      _updateTiebreakers();
+      _updatePlaceTiebreakers();
+      _setPlayerPlacesBasedOnScore();
     }
     _updatePlaythroughScoresVisualState();
   }
@@ -235,7 +244,12 @@ abstract class _EditPlaythoughViewModel with Store {
     // Making working copy of player scores to capture the list sort before reordering
     final playerScoresWorkingCopy = playerScores.toList();
 
-    Fimber.d('Reording dragged element from $currentIndex to $movingToIndex');
+    Fimber.d(
+      'Reording ${playerScoresWorkingCopy[currentIndex].player?.name} '
+      'from place ${playerScoresWorkingCopy[currentIndex].score.scoreGameResult?.place} [index $currentIndex] '
+      ', with ${playerScoresWorkingCopy[movingToIndex].player?.name} '
+      ', to place ${playerScoresWorkingCopy[movingToIndex].score.scoreGameResult?.place} [index $movingToIndex] ',
+    );
 
     playerScores[movingToIndex] =
         _updatePlayerScorePlace(playerScoresWorkingCopy[currentIndex], movingToIndex + 1);
@@ -250,6 +264,33 @@ abstract class _EditPlaythoughViewModel with Store {
 
     _playthroughDetailsWorkingCopy =
         _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
+    _updatePlaythroughScoresVisualState();
+  }
+
+  @action
+  void toggleSharedPlaceTiebreaker(PlayerScore playerScore, bool sharePlace) {
+    final tiedPlayerScores = playerScores
+        .where((ps) => ps.score.score != null && ps.score.score == playerScore.score.score)
+        .toList();
+    final bestPlaceForTiedScores = tiedPlayerScores.map((ps) => ps.place!).reduce(min);
+
+    Fimber.d(
+      'Toggling ${sharePlace ? 'on' : 'off'} shared place tiebreaker for the $bestPlaceForTiedScores place',
+    );
+
+    for (final tiedPlayerScore in tiedPlayerScores) {
+      final playerScoreIndex = playerScores.indexOf(tiedPlayerScore);
+      // Update the tiebreaker type and set place accordingly to the tiebreaker
+      playerScores[playerScoreIndex] = _updatePlayerScoreTiebreaker(
+        tiedPlayerScore,
+        sharePlace ? ScoreTiebreakerType.shared : ScoreTiebreakerType.place,
+        sharePlace ? bestPlaceForTiedScores : playerScoreIndex + 1,
+      );
+    }
+
+    _playthroughDetailsWorkingCopy =
+        _playthroughDetailsWorkingCopy!.copyWith(playerScores: playerScores);
+    _updatePlaythroughScoresVisualState();
   }
 
   @action
@@ -329,20 +370,22 @@ abstract class _EditPlaythoughViewModel with Store {
 
   void _updatePlaythroughScoresVisualState() {
     if (_playthroughDetailsWorkingCopy!.finishedScoring) {
-      _setPlayerPlacesBasedOnScore();
       playthroughScoresVisualState = PlaythroughScoresVisualState.finishedScoring(
-        tiedPlayerScoresSet: tiedPlayerScoresIds,
+        playerScores: playerScores,
+        scoreTiebreakersSet: scoreTiebreakersSet,
         hasTies: _playthroughDetailsWorkingCopy!.hasTies,
       );
     } else {
-      playthroughScoresVisualState = const PlaythroughScoresVisualState.scoring();
+      playthroughScoresVisualState = PlaythroughScoresVisualState.scoring(
+        playerScores: playerScores,
+      );
     }
   }
 
   /// Updates the [ScoreTiebreakerType] in the [ScoreGameResult] of the player's [Score]
   ///
   /// NOTE: Ensure this is called after player scores are assigned places
-  void _updateTiebreakers() {
+  void _updatePlaceTiebreakers() {
     final tiedPlayerScoresGroupedByScore = playerScores
         .toList()
         .where((ps) => ps.score.score != null)
@@ -351,7 +394,7 @@ abstract class _EditPlaythoughViewModel with Store {
       return;
     }
 
-    final existingTiesToRemove = tiedPlayerScoresIds;
+    final existingTiesToRemove = scoreTiebreakersSet;
     final tiedPlayerScoresCollections =
         tiedPlayerScoresGroupedByScore.values.where((ps) => ps.length > 1).toList();
     if (tiedPlayerScoresCollections.isNotEmpty) {
@@ -367,7 +410,7 @@ abstract class _EditPlaythoughViewModel with Store {
     // Remove existing tiebrekers, if player scores are no longer tied
     if (existingTiesToRemove.isNotEmpty) {
       for (var i = 0; i < playerScores.length; i++) {
-        if (existingTiesToRemove.contains(playerScores[i].id)) {
+        if (existingTiesToRemove[playerScores[i].id] != null) {
           playerScores[i] = _updatePlayerScoreTiebreaker(playerScores[i], null);
         }
       }
@@ -388,13 +431,15 @@ abstract class _EditPlaythoughViewModel with Store {
 
   PlayerScore _updatePlayerScoreTiebreaker(
     PlayerScore playerScore,
-    ScoreTiebreakerType? tiebreakerType,
-  ) {
+    ScoreTiebreakerType? tiebreakerType, [
+    int? place,
+  ]) {
     final scoreGameResult = playerScore.score.scoreGameResult ?? const ScoreGameResult();
     return playerScore.copyWith(
       score: playerScore.score.copyWith(
         scoreGameResult: scoreGameResult.copyWith(
           tiebreakerType: tiebreakerType,
+          place: place ?? scoreGameResult.place,
         ),
       ),
     );

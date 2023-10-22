@@ -27,7 +27,7 @@ extension ScoresExtesions on Iterable<Score>? {
   }
 
   num? toBestScore(GameFamily gameFamily) {
-    final scores = this?.onlyScoresWithValue().map((score) => num.parse(score.value!)) ?? [];
+    final scores = this?.onlyScoresWithValue().map((Score score) => score.score!) ?? [];
     switch (gameFamily) {
       case GameFamily.HighestScore:
         return scores.reduce(max);
@@ -41,10 +41,7 @@ extension ScoresExtesions on Iterable<Score>? {
   }
 
   double toAverageScore() {
-    final scores = this
-            ?.where((Score score) => score.value != null && num.tryParse(score.value!) != null)
-            .map((Score score) => num.parse(score.value!)) ??
-        [];
+    final scores = this?.onlyScoresWithValue().map((Score score) => score.score!) ?? [];
 
     return scores.reduce((a, b) => a + b) / scores.length;
   }
@@ -79,7 +76,7 @@ int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
       break;
   }
 
-  if (score.scoreGameResult != null && otherScore.scoreGameResult != null) {
+  if (score.scoreGameResult != null || otherScore.scoreGameResult != null) {
     return _compareScores(score, otherScore);
   }
 
@@ -87,6 +84,14 @@ int compareScores(Score score, Score otherScore, GameFamily gameFamily) {
 }
 
 int _compareScores(Score score, Score otherScore) {
+  if (score.scoreGameResult != null && otherScore.scoreGameResult == null) {
+    return Constants.moveAbove;
+  }
+
+  if (score.scoreGameResult == null && otherScore.scoreGameResult != null) {
+    return Constants.moveBelow;
+  }
+
   if (score.scoreGameResult!.place != null && otherScore.scoreGameResult!.place != null) {
     return score.scoreGameResult!.place!.compareTo(otherScore.scoreGameResult!.place!);
   }

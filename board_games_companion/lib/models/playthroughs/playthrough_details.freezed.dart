@@ -17,7 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PlaythroughDetails {
   Playthrough get playthrough => throw _privateConstructorUsedError;
-  List<PlayerScore> get playerScores => throw _privateConstructorUsedError;
+  List<PlayerScore> get playerScores =>
+      throw _privateConstructorUsedError; // TODO Perhaps this is not needed?
   List<ScoreTiebreaker>? get scoreTiebreakers =>
       throw _privateConstructorUsedError;
 
@@ -152,7 +153,9 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
     return EqualUnmodifiableListView(_playerScores);
   }
 
+// TODO Perhaps this is not needed?
   final List<ScoreTiebreaker>? _scoreTiebreakers;
+// TODO Perhaps this is not needed?
   @override
   List<ScoreTiebreaker>? get scoreTiebreakers {
     final value = _scoreTiebreakers;
@@ -207,7 +210,7 @@ abstract class _PlaythroughDetails extends PlaythroughDetails {
   Playthrough get playthrough;
   @override
   List<PlayerScore> get playerScores;
-  @override
+  @override // TODO Perhaps this is not needed?
   List<ScoreTiebreaker>? get scoreTiebreakers;
   @override
   @JsonKey(ignore: true)

@@ -19,24 +19,27 @@ mixin _$PlaythroughScoresVisualState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() init,
-    required TResult Function() scoring,
-    required TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)
+    required TResult Function(List<PlayerScore> playerScores) scoring,
+    required TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
         finishedScoring,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
-    TResult? Function()? scoring,
-    TResult? Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult? Function(List<PlayerScore> playerScores)? scoring,
+    TResult? Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
-    TResult Function()? scoring,
-    TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult Function(List<PlayerScore> playerScores)? scoring,
+    TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
     required TResult orElse(),
   }) =>
@@ -123,8 +126,9 @@ class _$_init implements _init {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() init,
-    required TResult Function() scoring,
-    required TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)
+    required TResult Function(List<PlayerScore> playerScores) scoring,
+    required TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
         finishedScoring,
   }) {
     return init();
@@ -134,8 +138,9 @@ class _$_init implements _init {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
-    TResult? Function()? scoring,
-    TResult? Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult? Function(List<PlayerScore> playerScores)? scoring,
+    TResult? Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
   }) {
     return init?.call();
@@ -145,8 +150,9 @@ class _$_init implements _init {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
-    TResult Function()? scoring,
-    TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult Function(List<PlayerScore> playerScores)? scoring,
+    TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
     required TResult orElse(),
   }) {
@@ -200,6 +206,8 @@ abstract class _$$_scoringCopyWith<$Res> {
   factory _$$_scoringCopyWith(
           _$_scoring value, $Res Function(_$_scoring) then) =
       __$$_scoringCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<PlayerScore> playerScores});
 }
 
 /// @nodoc
@@ -208,60 +216,95 @@ class __$$_scoringCopyWithImpl<$Res>
     implements _$$_scoringCopyWith<$Res> {
   __$$_scoringCopyWithImpl(_$_scoring _value, $Res Function(_$_scoring) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? playerScores = null,
+  }) {
+    return _then(_$_scoring(
+      playerScores: null == playerScores
+          ? _value._playerScores
+          : playerScores // ignore: cast_nullable_to_non_nullable
+              as List<PlayerScore>,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_scoring implements _scoring {
-  const _$_scoring();
+  const _$_scoring({required final List<PlayerScore> playerScores})
+      : _playerScores = playerScores;
+
+  final List<PlayerScore> _playerScores;
+  @override
+  List<PlayerScore> get playerScores {
+    if (_playerScores is EqualUnmodifiableListView) return _playerScores;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_playerScores);
+  }
 
   @override
   String toString() {
-    return 'PlaythroughScoresVisualState.scoring()';
+    return 'PlaythroughScoresVisualState.scoring(playerScores: $playerScores)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_scoring);
+        (other.runtimeType == runtimeType &&
+            other is _$_scoring &&
+            const DeepCollectionEquality()
+                .equals(other._playerScores, _playerScores));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_playerScores));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_scoringCopyWith<_$_scoring> get copyWith =>
+      __$$_scoringCopyWithImpl<_$_scoring>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() init,
-    required TResult Function() scoring,
-    required TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)
+    required TResult Function(List<PlayerScore> playerScores) scoring,
+    required TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
         finishedScoring,
   }) {
-    return scoring();
+    return scoring(playerScores);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
-    TResult? Function()? scoring,
-    TResult? Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult? Function(List<PlayerScore> playerScores)? scoring,
+    TResult? Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
   }) {
-    return scoring?.call();
+    return scoring?.call(playerScores);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
-    TResult Function()? scoring,
-    TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult Function(List<PlayerScore> playerScores)? scoring,
+    TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
     required TResult orElse(),
   }) {
     if (scoring != null) {
-      return scoring();
+      return scoring(playerScores);
     }
     return orElse();
   }
@@ -302,7 +345,13 @@ class _$_scoring implements _scoring {
 }
 
 abstract class _scoring implements PlaythroughScoresVisualState {
-  const factory _scoring() = _$_scoring;
+  const factory _scoring({required final List<PlayerScore> playerScores}) =
+      _$_scoring;
+
+  List<PlayerScore> get playerScores;
+  @JsonKey(ignore: true)
+  _$$_scoringCopyWith<_$_scoring> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -311,7 +360,10 @@ abstract class _$$_finishedScoringCopyWith<$Res> {
           _$_finishedScoring value, $Res Function(_$_finishedScoring) then) =
       __$$_finishedScoringCopyWithImpl<$Res>;
   @useResult
-  $Res call({Set<String> tiedPlayerScoresSet, bool hasTies});
+  $Res call(
+      {List<PlayerScore> playerScores,
+      Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+      bool hasTies});
 }
 
 /// @nodoc
@@ -325,14 +377,19 @@ class __$$_finishedScoringCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tiedPlayerScoresSet = null,
+    Object? playerScores = null,
+    Object? scoreTiebreakersSet = null,
     Object? hasTies = null,
   }) {
     return _then(_$_finishedScoring(
-      tiedPlayerScoresSet: null == tiedPlayerScoresSet
-          ? _value._tiedPlayerScoresSet
-          : tiedPlayerScoresSet // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
+      playerScores: null == playerScores
+          ? _value._playerScores
+          : playerScores // ignore: cast_nullable_to_non_nullable
+              as List<PlayerScore>,
+      scoreTiebreakersSet: null == scoreTiebreakersSet
+          ? _value._scoreTiebreakersSet
+          : scoreTiebreakersSet // ignore: cast_nullable_to_non_nullable
+              as Map<String, ScoreTiebreakerType>,
       hasTies: null == hasTies
           ? _value.hasTies
           : hasTies // ignore: cast_nullable_to_non_nullable
@@ -345,16 +402,27 @@ class __$$_finishedScoringCopyWithImpl<$Res>
 
 class _$_finishedScoring implements _finishedScoring {
   const _$_finishedScoring(
-      {required final Set<String> tiedPlayerScoresSet, required this.hasTies})
-      : _tiedPlayerScoresSet = tiedPlayerScoresSet;
+      {required final List<PlayerScore> playerScores,
+      required final Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+      required this.hasTies})
+      : _playerScores = playerScores,
+        _scoreTiebreakersSet = scoreTiebreakersSet;
 
-  final Set<String> _tiedPlayerScoresSet;
+  final List<PlayerScore> _playerScores;
   @override
-  Set<String> get tiedPlayerScoresSet {
-    if (_tiedPlayerScoresSet is EqualUnmodifiableSetView)
-      return _tiedPlayerScoresSet;
+  List<PlayerScore> get playerScores {
+    if (_playerScores is EqualUnmodifiableListView) return _playerScores;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableSetView(_tiedPlayerScoresSet);
+    return EqualUnmodifiableListView(_playerScores);
+  }
+
+  final Map<String, ScoreTiebreakerType> _scoreTiebreakersSet;
+  @override
+  Map<String, ScoreTiebreakerType> get scoreTiebreakersSet {
+    if (_scoreTiebreakersSet is EqualUnmodifiableMapView)
+      return _scoreTiebreakersSet;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_scoreTiebreakersSet);
   }
 
   @override
@@ -362,7 +430,7 @@ class _$_finishedScoring implements _finishedScoring {
 
   @override
   String toString() {
-    return 'PlaythroughScoresVisualState.finishedScoring(tiedPlayerScoresSet: $tiedPlayerScoresSet, hasTies: $hasTies)';
+    return 'PlaythroughScoresVisualState.finishedScoring(playerScores: $playerScores, scoreTiebreakersSet: $scoreTiebreakersSet, hasTies: $hasTies)';
   }
 
   @override
@@ -371,13 +439,18 @@ class _$_finishedScoring implements _finishedScoring {
         (other.runtimeType == runtimeType &&
             other is _$_finishedScoring &&
             const DeepCollectionEquality()
-                .equals(other._tiedPlayerScoresSet, _tiedPlayerScoresSet) &&
+                .equals(other._playerScores, _playerScores) &&
+            const DeepCollectionEquality()
+                .equals(other._scoreTiebreakersSet, _scoreTiebreakersSet) &&
             (identical(other.hasTies, hasTies) || other.hasTies == hasTies));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_tiedPlayerScoresSet), hasTies);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_playerScores),
+      const DeepCollectionEquality().hash(_scoreTiebreakersSet),
+      hasTies);
 
   @JsonKey(ignore: true)
   @override
@@ -389,35 +462,38 @@ class _$_finishedScoring implements _finishedScoring {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() init,
-    required TResult Function() scoring,
-    required TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)
+    required TResult Function(List<PlayerScore> playerScores) scoring,
+    required TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)
         finishedScoring,
   }) {
-    return finishedScoring(tiedPlayerScoresSet, hasTies);
+    return finishedScoring(playerScores, scoreTiebreakersSet, hasTies);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
-    TResult? Function()? scoring,
-    TResult? Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult? Function(List<PlayerScore> playerScores)? scoring,
+    TResult? Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
   }) {
-    return finishedScoring?.call(tiedPlayerScoresSet, hasTies);
+    return finishedScoring?.call(playerScores, scoreTiebreakersSet, hasTies);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
-    TResult Function()? scoring,
-    TResult Function(Set<String> tiedPlayerScoresSet, bool hasTies)?
+    TResult Function(List<PlayerScore> playerScores)? scoring,
+    TResult Function(List<PlayerScore> playerScores,
+            Map<String, ScoreTiebreakerType> scoreTiebreakersSet, bool hasTies)?
         finishedScoring,
     required TResult orElse(),
   }) {
     if (finishedScoring != null) {
-      return finishedScoring(tiedPlayerScoresSet, hasTies);
+      return finishedScoring(playerScores, scoreTiebreakersSet, hasTies);
     }
     return orElse();
   }
@@ -459,10 +535,12 @@ class _$_finishedScoring implements _finishedScoring {
 
 abstract class _finishedScoring implements PlaythroughScoresVisualState {
   const factory _finishedScoring(
-      {required final Set<String> tiedPlayerScoresSet,
+      {required final List<PlayerScore> playerScores,
+      required final Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
       required final bool hasTies}) = _$_finishedScoring;
 
-  Set<String> get tiedPlayerScoresSet;
+  List<PlayerScore> get playerScores;
+  Map<String, ScoreTiebreakerType> get scoreTiebreakersSet;
   bool get hasTies;
   @JsonKey(ignore: true)
   _$$_finishedScoringCopyWith<_$_finishedScoring> get copyWith =>

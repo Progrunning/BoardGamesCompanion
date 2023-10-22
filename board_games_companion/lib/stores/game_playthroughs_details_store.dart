@@ -191,18 +191,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
 
     final playerScores = orderedScores
         ?.mapIndexed((int index, Score score) {
-          // An adhoc way of specifying player's score and place after replacing value
-          // with scoreGameResult as way of persiting player's score details
-          if ((gameGameFamily == GameFamily.HighestScore ||
-                  gameGameFamily == GameFamily.LowestScore) &&
-              score.scoreGameResult == null) {
-            score = score.copyWith(
-              scoreGameResult: ScoreGameResult(
-                points: score.score,
-                place: index + 1,
-              ),
-            );
-          }
+          score = _migratePlayerScore(score, index);
 
           final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
           return PlayerScore(player: player, score: score);
@@ -212,5 +201,22 @@ abstract class _GamePlaythroughsDetailsStore with Store {
         .sortByScore(gameGameFamily);
 
     return PlaythroughDetails(playthrough: playthrough, playerScores: playerScores ?? []);
+  }
+
+  /// An adhoc way of specifying player's score and place after replacing value property
+  /// with the scoreGameResult as way of persiting player's score details
+  Score _migratePlayerScore(Score score, int index) {
+    if ((gameGameFamily == GameFamily.HighestScore || gameGameFamily == GameFamily.LowestScore) &&
+        score.scoreGameResult == null) {
+      score = score.copyWith(
+        scoreGameResult: ScoreGameResult(
+          points: score.score,
+          // If the player had a score (i.e. value) saved previously,
+          // we want to reflect that by speifying their place
+          place: score.hasScore ? index + 1 : null,
+        ),
+      );
+    }
+    return score;
   }
 }

@@ -4,7 +4,7 @@ import '../extensions/scores_extensions.dart';
 import '../models/player_score.dart';
 
 extension PlayerScoresExtesions on List<PlayerScore> {
-  List<PlayerScore> sortByScore(GameFamily gameFamily) {
+  List<PlayerScore> sortByScore(GameFamily gameFamily, [bool ignoreCurrentPlaces = false]) {
     return this
       ..sort((PlayerScore playerScore, PlayerScore otherPlayerScore) {
         return compareScores(playerScore.score, otherPlayerScore.score, gameFamily);
