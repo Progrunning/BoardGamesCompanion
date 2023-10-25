@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:board_games_companion/models/player_score.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -181,7 +182,10 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
         ),
       ),
       _SliverSectionWrapper(
-        child: _LastWinnerSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
+        child: _LastWinnerSection(
+          lastGameWinners: scoreBoardGameStatistics.lastGameWinners,
+          lastTimePlayed: scoreBoardGameStatistics.lastTimePlayed,
+        ),
       ),
       SliverPersistentHeader(
         delegate: BgcSliverTitleHeaderDelegate.title(
@@ -435,10 +439,12 @@ class _PlayerStatsDetails extends StatelessWidget {
 class _LastWinnerSection extends StatelessWidget {
   const _LastWinnerSection({
     Key? key,
-    required this.scoreBoardGameStatistics,
+    required this.lastGameWinners,
+    required this.lastTimePlayed,
   }) : super(key: key);
 
-  final ScoreBoardGameStatistics scoreBoardGameStatistics;
+  final List<PlayerScore>? lastGameWinners;
+  final DateTime lastTimePlayed;
 
   @override
   Widget build(BuildContext context) {
@@ -451,17 +457,15 @@ class _LastWinnerSection extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: <Widget>[
-              for (final player
-                  in scoreBoardGameStatistics.lastGameWinners?.map((ps) => ps.player) ??
-                      <Player?>[]) ...[
-                _LastWinnerAvatar(player: player),
+              for (final playerScore in lastGameWinners ?? <PlayerScore>[]) ...[
+                _LastWinnerAvatar(player: playerScore.player),
                 const SizedBox(width: Dimensions.standardSpacing),
               ],
               _LastWinnerPoints(
-                points: scoreBoardGameStatistics.lastGameWinners?.first.score.score,
+                points: lastGameWinners?.first.score.score,
               ),
               const SizedBox(width: Dimensions.standardSpacing),
-              _LastTimePlayed(scoreBoardGameStatistics: scoreBoardGameStatistics),
+              _LastTimePlayed(lastTimePlayed: lastTimePlayed),
             ],
           ),
         ),
@@ -730,20 +734,20 @@ class _LastWinnerAvatar extends StatelessWidget {
 
 class _LastTimePlayed extends StatelessWidget {
   const _LastTimePlayed({
-    required this.scoreBoardGameStatistics,
+    required this.lastTimePlayed,
     Key? key,
   }) : super(key: key);
 
-  final ScoreBoardGameStatistics scoreBoardGameStatistics;
+  final DateTime lastTimePlayed;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        CalendarCard(scoreBoardGameStatistics.lastTimePlayed),
+        CalendarCard(lastTimePlayed),
         const SizedBox(width: Dimensions.standardSpacing),
         Text(
-          scoreBoardGameStatistics.lastTimePlayed.toDaysAgo(),
+          lastTimePlayed.toDaysAgo(),
           style: const TextStyle(
             fontSize: Dimensions.smallFontSize,
             fontWeight: FontWeight.normal,
