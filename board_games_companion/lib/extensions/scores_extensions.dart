@@ -14,8 +14,23 @@ extension ScoreExtesions on Score {
 extension ScoresExtesions on Iterable<Score>? {
   List<Score> onlyScoresWithValue() => this?.where((s) => s.hasScore).toList() ?? <Score>[];
 
-  List<Score> winners() =>
-      this?.onlyScoresWithValue().where((s) => s.isWinner).toList() ?? <Score>[];
+  /// Returns winner(s)
+  ///
+  /// In case [Score]s are recorded using the "old" ways, grab the highest/lowest score
+  /// and treat as a winner.
+  List<Score> winners(GameFamily gameFamily) {
+    var winners = this?.onlyScoresWithValue().where((s) => s.isWinner).toList();
+
+    // Get the winner by ordering scores highest/lowest and taking the top one
+    if (winners?.isEmpty ?? true) {
+      final orderedScores = this?.onlyScoresWithValue().sortByScore(gameFamily);
+      if (orderedScores?.isNotEmpty ?? false) {
+        winners = [orderedScores!.first];
+      }
+    }
+
+    return winners ?? [];
+  }
 
   List<Score> onlyCooperativeGames() {
     return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??

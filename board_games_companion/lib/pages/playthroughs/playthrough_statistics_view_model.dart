@@ -264,7 +264,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     }
 
     final lastPlaythroughBestScores =
-        playthroughScoresByPlaythroughId[lastPlaythrough.id].winners();
+        playthroughScoresByPlaythroughId[lastPlaythrough.id].winners(gameFamily);
     if (lastPlaythroughBestScores.isEmpty) {
       return;
     }
