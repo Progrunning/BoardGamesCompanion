@@ -155,7 +155,7 @@ class _WebImage extends StatelessWidget {
           ),
         ),
         fit: BoxFit.fitWidth,
-        placeholder: (context, url) => BgcShimmer.box(
+        placeholder: (context, url) => BgcShimmer.fill(
           borderRadius: borderRadius,
         ),
         errorWidget: (context, url, dynamic error) => _NoImage(

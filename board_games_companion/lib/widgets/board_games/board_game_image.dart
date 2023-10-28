@@ -41,7 +41,7 @@ class BoardGameImage extends StatelessWidget {
                 ),
               ),
               fit: BoxFit.fitWidth,
-              placeholder: (_, __) => BgcShimmer.box(),
+              placeholder: (_, __) => BgcShimmer.fill(),
               errorWidget: (_, __, dynamic ___) {
                 return ConstrainedBox(
                   constraints: BoxConstraints(minHeight: minImageHeight),

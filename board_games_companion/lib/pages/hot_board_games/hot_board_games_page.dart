@@ -192,7 +192,7 @@ class _LoadingShimmer extends StatelessWidget {
                 Constants.boardGameDetailsImageHeight,
                 Constants.boardGameDetailsImageHeight,
               ),
-              child: BgcShimmer.box(
+              child: BgcShimmer.fill(
                 borderRadius: AppTheme.defaultBorderRadius,
                 elevation: AppStyles.defaultElevation,
               ),

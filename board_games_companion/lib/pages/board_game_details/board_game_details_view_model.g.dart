@@ -88,6 +88,22 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
               name: '_BoardGameDetailsViewModel.isCreatedByUser'))
           .value;
 
+  late final _$visualStateAtom =
+      Atom(name: '_BoardGameDetailsViewModel.visualState', context: context);
+
+  @override
+  BoardGameDetailsVisualState get visualState {
+    _$visualStateAtom.reportRead();
+    return super.visualState;
+  }
+
+  @override
+  set visualState(BoardGameDetailsVisualState value) {
+    _$visualStateAtom.reportWrite(value, super.visualState, () {
+      super.visualState = value;
+    });
+  }
+
   late final _$futureLoadBoardGameDetailsAtom = Atom(
       name: '_BoardGameDetailsViewModel.futureLoadBoardGameDetails',
       context: context);
@@ -133,6 +149,7 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
   @override
   String toString() {
     return '''
+visualState: ${visualState},
 futureLoadBoardGameDetails: ${futureLoadBoardGameDetails},
 boardGame: ${boardGame},
 name: ${name},

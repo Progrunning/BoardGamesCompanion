@@ -11,6 +11,7 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/hive/board_game_expansion.dart';
 import '../../services/analytics_service.dart';
 import '../../stores/board_games_store.dart';
+import 'board_game_details_visual_state.dart';
 
 part 'board_game_details_view_model.g.dart';
 
@@ -32,6 +33,9 @@ abstract class _BoardGameDetailsViewModel with Store {
   String get id => _boardGameId;
 
   String get imageHeroId => _boardGameImageHeroId;
+
+  @observable
+  BoardGameDetailsVisualState visualState = const BoardGameDetailsVisualState.loading();
 
   @computed
   BoardGameDetails get boardGame => _boardGamesStore.allBoardGamesMap[_boardGameId]!;
@@ -109,8 +113,13 @@ abstract class _BoardGameDetailsViewModel with Store {
         return;
       }
 
+      visualState = const BoardGameDetailsVisualState.loading();
+
       await _boardGamesStore.refreshBoardGameDetails(_boardGameId);
+
+      visualState = BoardGameDetailsVisualState.detailsLoaded(boardGameDetails: boardGame);
     } catch (e, stack) {
+      visualState = const BoardGameDetailsVisualState.loadingFailed();
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
   }
