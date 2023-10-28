@@ -187,16 +187,14 @@ class _LoadingShimmer extends StatelessWidget {
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
         children: [
           for (final _ in Iterable<int>.generate(21))
-            BgcShimmer(
-              child: SizedBox.fromSize(
-                size: const Size(
-                  Constants.boardGameDetailsImageHeight,
-                  Constants.boardGameDetailsImageHeight,
-                ),
-                child: const Material(
-                  elevation: AppStyles.defaultElevation,
-                  borderRadius: AppTheme.defaultBorderRadius,
-                ),
+            SizedBox.fromSize(
+              size: const Size(
+                Constants.boardGameDetailsImageHeight,
+                Constants.boardGameDetailsImageHeight,
+              ),
+              child: BgcShimmer.box(
+                borderRadius: AppTheme.defaultBorderRadius,
+                elevation: AppStyles.defaultElevation,
               ),
             ),
         ],

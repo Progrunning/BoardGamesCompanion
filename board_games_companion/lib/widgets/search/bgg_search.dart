@@ -209,7 +209,7 @@ class _SearchResultShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PanelContainer(
-      child: BgcShimmer(
+      child: BgcShimmer.custom(
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.standardSpacing),
           child: Row(

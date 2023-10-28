@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../../common/animation_tags.dart';
 import '../../extensions/string_extensions.dart';
 import '../animations/image_fade_in_animation.dart';
-import '../common/loading_indicator_widget.dart';
+import '../common/bgc_shimmer.dart';
 
 class BoardGameImage extends StatelessWidget {
   const BoardGameImage({
@@ -41,7 +41,7 @@ class BoardGameImage extends StatelessWidget {
                 ),
               ),
               fit: BoxFit.fitWidth,
-              placeholder: (_, __) => const LoadingIndicator(),
+              placeholder: (_, __) => BgcShimmer.box(),
               errorWidget: (_, __, dynamic ___) {
                 return ConstrainedBox(
                   constraints: BoxConstraints(minHeight: minImageHeight),

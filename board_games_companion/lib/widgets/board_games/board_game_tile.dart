@@ -155,13 +155,8 @@ class _WebImage extends StatelessWidget {
           ),
         ),
         fit: BoxFit.fitWidth,
-        placeholder: (context, url) => BgcShimmer(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: borderRadius,
-            ),
-          ),
+        placeholder: (context, url) => BgcShimmer.box(
+          borderRadius: borderRadius,
         ),
         errorWidget: (context, url, dynamic error) => _NoImage(
           borderRadius: borderRadius,
