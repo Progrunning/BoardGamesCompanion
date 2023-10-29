@@ -79,7 +79,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
             child: Observer(
               builder: (_) {
                 return widget.viewModel.visualState.when(
-                  loading: () => const _LoadingShimmer(),
+                  loading: () => const _LoadingShimmer(key: Key('loadingShimmer')),
                   detailsLoaded: (_) => _BoardGameDetails(
                     preferencesService: widget.preferencesService,
                     viewModel: widget.viewModel,
@@ -783,7 +783,9 @@ class _InfoPanel extends StatelessWidget {
 }
 
 class _LoadingShimmer extends StatelessWidget {
-  const _LoadingShimmer();
+  const _LoadingShimmer({
+    super.key,
+  });
 
   static const double _collectionsIconSize = 28;
 
