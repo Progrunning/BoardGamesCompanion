@@ -84,24 +84,25 @@ class _$BoardGameDetailsVisualStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_loadingCopyWith<$Res> {
-  factory _$$_loadingCopyWith(
-          _$_loading value, $Res Function(_$_loading) then) =
-      __$$_loadingCopyWithImpl<$Res>;
+abstract class _$$loadingImplCopyWith<$Res> {
+  factory _$$loadingImplCopyWith(
+          _$loadingImpl value, $Res Function(_$loadingImpl) then) =
+      __$$loadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_loadingCopyWithImpl<$Res>
-    extends _$BoardGameDetailsVisualStateCopyWithImpl<$Res, _$_loading>
-    implements _$$_loadingCopyWith<$Res> {
-  __$$_loadingCopyWithImpl(_$_loading _value, $Res Function(_$_loading) _then)
+class __$$loadingImplCopyWithImpl<$Res>
+    extends _$BoardGameDetailsVisualStateCopyWithImpl<$Res, _$loadingImpl>
+    implements _$$loadingImplCopyWith<$Res> {
+  __$$loadingImplCopyWithImpl(
+      _$loadingImpl _value, $Res Function(_$loadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_loading implements _loading {
-  const _$_loading();
+class _$loadingImpl implements _loading {
+  const _$loadingImpl();
 
   @override
   String toString() {
@@ -111,7 +112,7 @@ class _$_loading implements _loading {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_loading);
+        (other.runtimeType == runtimeType && other is _$loadingImpl);
   }
 
   @override
@@ -187,14 +188,14 @@ class _$_loading implements _loading {
 }
 
 abstract class _loading implements BoardGameDetailsVisualState {
-  const factory _loading() = _$_loading;
+  const factory _loading() = _$loadingImpl;
 }
 
 /// @nodoc
-abstract class _$$_detailsLoadedCopyWith<$Res> {
-  factory _$$_detailsLoadedCopyWith(
-          _$_detailsLoaded value, $Res Function(_$_detailsLoaded) then) =
-      __$$_detailsLoadedCopyWithImpl<$Res>;
+abstract class _$$detailsLoadedImplCopyWith<$Res> {
+  factory _$$detailsLoadedImplCopyWith(
+          _$detailsLoadedImpl value, $Res Function(_$detailsLoadedImpl) then) =
+      __$$detailsLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BoardGameDetails boardGameDetails});
 
@@ -202,11 +203,11 @@ abstract class _$$_detailsLoadedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_detailsLoadedCopyWithImpl<$Res>
-    extends _$BoardGameDetailsVisualStateCopyWithImpl<$Res, _$_detailsLoaded>
-    implements _$$_detailsLoadedCopyWith<$Res> {
-  __$$_detailsLoadedCopyWithImpl(
-      _$_detailsLoaded _value, $Res Function(_$_detailsLoaded) _then)
+class __$$detailsLoadedImplCopyWithImpl<$Res>
+    extends _$BoardGameDetailsVisualStateCopyWithImpl<$Res, _$detailsLoadedImpl>
+    implements _$$detailsLoadedImplCopyWith<$Res> {
+  __$$detailsLoadedImplCopyWithImpl(
+      _$detailsLoadedImpl _value, $Res Function(_$detailsLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -214,7 +215,7 @@ class __$$_detailsLoadedCopyWithImpl<$Res>
   $Res call({
     Object? boardGameDetails = null,
   }) {
-    return _then(_$_detailsLoaded(
+    return _then(_$detailsLoadedImpl(
       boardGameDetails: null == boardGameDetails
           ? _value.boardGameDetails
           : boardGameDetails // ignore: cast_nullable_to_non_nullable
@@ -233,8 +234,8 @@ class __$$_detailsLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_detailsLoaded implements _detailsLoaded {
-  const _$_detailsLoaded({required this.boardGameDetails});
+class _$detailsLoadedImpl implements _detailsLoaded {
+  const _$detailsLoadedImpl({required this.boardGameDetails});
 
   @override
   final BoardGameDetails boardGameDetails;
@@ -248,7 +249,7 @@ class _$_detailsLoaded implements _detailsLoaded {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_detailsLoaded &&
+            other is _$detailsLoadedImpl &&
             (identical(other.boardGameDetails, boardGameDetails) ||
                 other.boardGameDetails == boardGameDetails));
   }
@@ -259,8 +260,8 @@ class _$_detailsLoaded implements _detailsLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_detailsLoadedCopyWith<_$_detailsLoaded> get copyWith =>
-      __$$_detailsLoadedCopyWithImpl<_$_detailsLoaded>(this, _$identity);
+  _$$detailsLoadedImplCopyWith<_$detailsLoadedImpl> get copyWith =>
+      __$$detailsLoadedImplCopyWithImpl<_$detailsLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -333,34 +334,34 @@ class _$_detailsLoaded implements _detailsLoaded {
 
 abstract class _detailsLoaded implements BoardGameDetailsVisualState {
   const factory _detailsLoaded(
-      {required final BoardGameDetails boardGameDetails}) = _$_detailsLoaded;
+      {required final BoardGameDetails boardGameDetails}) = _$detailsLoadedImpl;
 
   BoardGameDetails get boardGameDetails;
   @JsonKey(ignore: true)
-  _$$_detailsLoadedCopyWith<_$_detailsLoaded> get copyWith =>
+  _$$detailsLoadedImplCopyWith<_$detailsLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_loadingFailedCopyWith<$Res> {
-  factory _$$_loadingFailedCopyWith(
-          _$_loadingFailed value, $Res Function(_$_loadingFailed) then) =
-      __$$_loadingFailedCopyWithImpl<$Res>;
+abstract class _$$loadingFailedImplCopyWith<$Res> {
+  factory _$$loadingFailedImplCopyWith(
+          _$loadingFailedImpl value, $Res Function(_$loadingFailedImpl) then) =
+      __$$loadingFailedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_loadingFailedCopyWithImpl<$Res>
-    extends _$BoardGameDetailsVisualStateCopyWithImpl<$Res, _$_loadingFailed>
-    implements _$$_loadingFailedCopyWith<$Res> {
-  __$$_loadingFailedCopyWithImpl(
-      _$_loadingFailed _value, $Res Function(_$_loadingFailed) _then)
+class __$$loadingFailedImplCopyWithImpl<$Res>
+    extends _$BoardGameDetailsVisualStateCopyWithImpl<$Res, _$loadingFailedImpl>
+    implements _$$loadingFailedImplCopyWith<$Res> {
+  __$$loadingFailedImplCopyWithImpl(
+      _$loadingFailedImpl _value, $Res Function(_$loadingFailedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_loadingFailed implements _loadingFailed {
-  const _$_loadingFailed();
+class _$loadingFailedImpl implements _loadingFailed {
+  const _$loadingFailedImpl();
 
   @override
   String toString() {
@@ -370,7 +371,7 @@ class _$_loadingFailed implements _loadingFailed {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_loadingFailed);
+        (other.runtimeType == runtimeType && other is _$loadingFailedImpl);
   }
 
   @override
@@ -446,5 +447,5 @@ class _$_loadingFailed implements _loadingFailed {
 }
 
 abstract class _loadingFailed implements BoardGameDetailsVisualState {
-  const factory _loadingFailed() = _$_loadingFailed;
+  const factory _loadingFailed() = _$loadingFailedImpl;
 }

@@ -75,12 +75,12 @@ class _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BoardGameDetailsPageArgumentsCopyWith<$Res>
+abstract class _$$BoardGameDetailsPageArgumentsImplCopyWith<$Res>
     implements $BoardGameDetailsPageArgumentsCopyWith<$Res> {
-  factory _$$_BoardGameDetailsPageArgumentsCopyWith(
-          _$_BoardGameDetailsPageArguments value,
-          $Res Function(_$_BoardGameDetailsPageArguments) then) =
-      __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>;
+  factory _$$BoardGameDetailsPageArgumentsImplCopyWith(
+          _$BoardGameDetailsPageArgumentsImpl value,
+          $Res Function(_$BoardGameDetailsPageArgumentsImpl) then) =
+      __$$BoardGameDetailsPageArgumentsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -90,13 +90,13 @@ abstract class _$$_BoardGameDetailsPageArgumentsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
+class __$$BoardGameDetailsPageArgumentsImplCopyWithImpl<$Res>
     extends _$BoardGameDetailsPageArgumentsCopyWithImpl<$Res,
-        _$_BoardGameDetailsPageArguments>
-    implements _$$_BoardGameDetailsPageArgumentsCopyWith<$Res> {
-  __$$_BoardGameDetailsPageArgumentsCopyWithImpl(
-      _$_BoardGameDetailsPageArguments _value,
-      $Res Function(_$_BoardGameDetailsPageArguments) _then)
+        _$BoardGameDetailsPageArgumentsImpl>
+    implements _$$BoardGameDetailsPageArgumentsImplCopyWith<$Res> {
+  __$$BoardGameDetailsPageArgumentsImplCopyWithImpl(
+      _$BoardGameDetailsPageArgumentsImpl _value,
+      $Res Function(_$BoardGameDetailsPageArgumentsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -106,7 +106,7 @@ class __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
     Object? navigatingFromType = null,
     Object? boardGameImageHeroId = null,
   }) {
-    return _then(_$_BoardGameDetailsPageArguments(
+    return _then(_$BoardGameDetailsPageArgumentsImpl(
       boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
@@ -125,9 +125,9 @@ class __$$_BoardGameDetailsPageArgumentsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BoardGameDetailsPageArguments
+class _$BoardGameDetailsPageArgumentsImpl
     implements _BoardGameDetailsPageArguments {
-  const _$_BoardGameDetailsPageArguments(
+  const _$BoardGameDetailsPageArgumentsImpl(
       {required this.boardGameId,
       required this.navigatingFromType,
       required this.boardGameImageHeroId});
@@ -148,7 +148,7 @@ class _$_BoardGameDetailsPageArguments
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BoardGameDetailsPageArguments &&
+            other is _$BoardGameDetailsPageArgumentsImpl &&
             (identical(other.boardGameId, boardGameId) ||
                 other.boardGameId == boardGameId) &&
             (identical(other.navigatingFromType, navigatingFromType) ||
@@ -164,9 +164,10 @@ class _$_BoardGameDetailsPageArguments
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGameDetailsPageArgumentsCopyWith<_$_BoardGameDetailsPageArguments>
-      get copyWith => __$$_BoardGameDetailsPageArgumentsCopyWithImpl<
-          _$_BoardGameDetailsPageArguments>(this, _$identity);
+  _$$BoardGameDetailsPageArgumentsImplCopyWith<
+          _$BoardGameDetailsPageArgumentsImpl>
+      get copyWith => __$$BoardGameDetailsPageArgumentsImplCopyWithImpl<
+          _$BoardGameDetailsPageArgumentsImpl>(this, _$identity);
 }
 
 abstract class _BoardGameDetailsPageArguments
@@ -175,7 +176,7 @@ abstract class _BoardGameDetailsPageArguments
           {required final String boardGameId,
           required final Type navigatingFromType,
           required final String boardGameImageHeroId}) =
-      _$_BoardGameDetailsPageArguments;
+      _$BoardGameDetailsPageArgumentsImpl;
 
   @override
   String get boardGameId;
@@ -185,6 +186,7 @@ abstract class _BoardGameDetailsPageArguments
   String get boardGameImageHeroId;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGameDetailsPageArgumentsCopyWith<_$_BoardGameDetailsPageArguments>
+  _$$BoardGameDetailsPageArgumentsImplCopyWith<
+          _$BoardGameDetailsPageArgumentsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

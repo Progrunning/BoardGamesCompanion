@@ -6,17 +6,17 @@ part of 'board_game_settings.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class BoardGameSettingsAdapter extends TypeAdapter<_$_BoardGameSettings> {
+class BoardGameSettingsAdapter extends TypeAdapter<_$BoardGameSettingsImpl> {
   @override
   final int typeId = 17;
 
   @override
-  _$_BoardGameSettings read(BinaryReader reader) {
+  _$BoardGameSettingsImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_BoardGameSettings(
+    return _$BoardGameSettingsImpl(
       gameFamily: fields[1] as GameFamily,
       averageScorePrecision: fields[2] == null ? 0 : fields[2] as int,
       gameClassification: fields[3] == null
@@ -26,7 +26,7 @@ class BoardGameSettingsAdapter extends TypeAdapter<_$_BoardGameSettings> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_BoardGameSettings obj) {
+  void write(BinaryWriter writer, _$BoardGameSettingsImpl obj) {
     writer
       ..writeByte(3)
       ..writeByte(1)

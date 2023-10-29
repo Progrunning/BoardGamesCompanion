@@ -73,11 +73,11 @@ class _$PlaythroughDetailsCopyWithImpl<$Res, $Val extends PlaythroughDetails>
 }
 
 /// @nodoc
-abstract class _$$_PlaythroughDetailsCopyWith<$Res>
+abstract class _$$PlaythroughDetailsImplCopyWith<$Res>
     implements $PlaythroughDetailsCopyWith<$Res> {
-  factory _$$_PlaythroughDetailsCopyWith(_$_PlaythroughDetails value,
-          $Res Function(_$_PlaythroughDetails) then) =
-      __$$_PlaythroughDetailsCopyWithImpl<$Res>;
+  factory _$$PlaythroughDetailsImplCopyWith(_$PlaythroughDetailsImpl value,
+          $Res Function(_$PlaythroughDetailsImpl) then) =
+      __$$PlaythroughDetailsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Playthrough playthrough, List<PlayerScore> playerScores});
@@ -87,11 +87,11 @@ abstract class _$$_PlaythroughDetailsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlaythroughDetailsCopyWithImpl<$Res>
-    extends _$PlaythroughDetailsCopyWithImpl<$Res, _$_PlaythroughDetails>
-    implements _$$_PlaythroughDetailsCopyWith<$Res> {
-  __$$_PlaythroughDetailsCopyWithImpl(
-      _$_PlaythroughDetails _value, $Res Function(_$_PlaythroughDetails) _then)
+class __$$PlaythroughDetailsImplCopyWithImpl<$Res>
+    extends _$PlaythroughDetailsCopyWithImpl<$Res, _$PlaythroughDetailsImpl>
+    implements _$$PlaythroughDetailsImplCopyWith<$Res> {
+  __$$PlaythroughDetailsImplCopyWithImpl(_$PlaythroughDetailsImpl _value,
+      $Res Function(_$PlaythroughDetailsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -100,7 +100,7 @@ class __$$_PlaythroughDetailsCopyWithImpl<$Res>
     Object? playthrough = null,
     Object? playerScores = null,
   }) {
-    return _then(_$_PlaythroughDetails(
+    return _then(_$PlaythroughDetailsImpl(
       playthrough: null == playthrough
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
@@ -115,8 +115,8 @@ class __$$_PlaythroughDetailsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PlaythroughDetails extends _PlaythroughDetails {
-  const _$_PlaythroughDetails(
+class _$PlaythroughDetailsImpl extends _PlaythroughDetails {
+  const _$PlaythroughDetailsImpl(
       {required this.playthrough,
       required final List<PlayerScore> playerScores})
       : _playerScores = playerScores,
@@ -141,7 +141,7 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlaythroughDetails &&
+            other is _$PlaythroughDetailsImpl &&
             (identical(other.playthrough, playthrough) ||
                 other.playthrough == playthrough) &&
             const DeepCollectionEquality()
@@ -155,15 +155,16 @@ class _$_PlaythroughDetails extends _PlaythroughDetails {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlaythroughDetailsCopyWith<_$_PlaythroughDetails> get copyWith =>
-      __$$_PlaythroughDetailsCopyWithImpl<_$_PlaythroughDetails>(
+  _$$PlaythroughDetailsImplCopyWith<_$PlaythroughDetailsImpl> get copyWith =>
+      __$$PlaythroughDetailsImplCopyWithImpl<_$PlaythroughDetailsImpl>(
           this, _$identity);
 }
 
 abstract class _PlaythroughDetails extends PlaythroughDetails {
   const factory _PlaythroughDetails(
-      {required final Playthrough playthrough,
-      required final List<PlayerScore> playerScores}) = _$_PlaythroughDetails;
+          {required final Playthrough playthrough,
+          required final List<PlayerScore> playerScores}) =
+      _$PlaythroughDetailsImpl;
   const _PlaythroughDetails._() : super._();
 
   @override
@@ -172,6 +173,6 @@ abstract class _PlaythroughDetails extends PlaythroughDetails {
   List<PlayerScore> get playerScores;
   @override
   @JsonKey(ignore: true)
-  _$$_PlaythroughDetailsCopyWith<_$_PlaythroughDetails> get copyWith =>
+  _$$PlaythroughDetailsImplCopyWith<_$PlaythroughDetailsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

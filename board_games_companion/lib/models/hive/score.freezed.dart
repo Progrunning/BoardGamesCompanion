@@ -134,9 +134,10 @@ class _$ScoreCopyWithImpl<$Res, $Val extends Score>
 }
 
 /// @nodoc
-abstract class _$$_ScoreCopyWith<$Res> implements $ScoreCopyWith<$Res> {
-  factory _$$_ScoreCopyWith(_$_Score value, $Res Function(_$_Score) then) =
-      __$$_ScoreCopyWithImpl<$Res>;
+abstract class _$$ScoreImplCopyWith<$Res> implements $ScoreCopyWith<$Res> {
+  factory _$$ScoreImplCopyWith(
+          _$ScoreImpl value, $Res Function(_$ScoreImpl) then) =
+      __$$ScoreImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -155,9 +156,11 @@ abstract class _$$_ScoreCopyWith<$Res> implements $ScoreCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ScoreCopyWithImpl<$Res> extends _$ScoreCopyWithImpl<$Res, _$_Score>
-    implements _$$_ScoreCopyWith<$Res> {
-  __$$_ScoreCopyWithImpl(_$_Score _value, $Res Function(_$_Score) _then)
+class __$$ScoreImplCopyWithImpl<$Res>
+    extends _$ScoreCopyWithImpl<$Res, _$ScoreImpl>
+    implements _$$ScoreImplCopyWith<$Res> {
+  __$$ScoreImplCopyWithImpl(
+      _$ScoreImpl _value, $Res Function(_$ScoreImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -171,7 +174,7 @@ class __$$_ScoreCopyWithImpl<$Res> extends _$ScoreCopyWithImpl<$Res, _$_Score>
     Object? noScoreGameResult = freezed,
     Object? scoreGameResult = freezed,
   }) {
-    return _then(_$_Score(
+    return _then(_$ScoreImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -207,8 +210,8 @@ class __$$_ScoreCopyWithImpl<$Res> extends _$ScoreCopyWithImpl<$Res, _$_Score>
 /// @nodoc
 
 @HiveType(typeId: HiveBoxes.scoreTypeId, adapterName: 'ScoreAdapter')
-class _$_Score extends _Score {
-  const _$_Score(
+class _$ScoreImpl extends _Score {
+  const _$ScoreImpl(
       {@HiveField(0) required this.id,
       @HiveField(2) required this.playerId,
       @HiveField(3) required this.boardGameId,
@@ -250,7 +253,7 @@ class _$_Score extends _Score {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Score &&
+            other is _$ScoreImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.playerId, playerId) ||
                 other.playerId == playerId) &&
@@ -272,27 +275,23 @@ class _$_Score extends _Score {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScoreCopyWith<_$_Score> get copyWith =>
-      __$$_ScoreCopyWithImpl<_$_Score>(this, _$identity);
+  _$$ScoreImplCopyWith<_$ScoreImpl> get copyWith =>
+      __$$ScoreImplCopyWithImpl<_$ScoreImpl>(this, _$identity);
 }
 
 abstract class _Score extends Score {
   const factory _Score(
-      {@HiveField(0)
-          required final String id,
-      @HiveField(2)
-          required final String playerId,
-      @HiveField(3)
-          required final String boardGameId,
+      {@HiveField(0) required final String id,
+      @HiveField(2) required final String playerId,
+      @HiveField(3) required final String boardGameId,
       @Deprecated('Use ScoreGameResult instead')
       @HiveField(4)
-          final String? value,
-      @HiveField(1)
-          final String? playthroughId,
+      final String? value,
+      @HiveField(1) final String? playthroughId,
       @HiveField(5, defaultValue: null)
-          final NoScoreGameResult? noScoreGameResult,
+      final NoScoreGameResult? noScoreGameResult,
       @HiveField(6, defaultValue: null)
-          final ScoreGameResult? scoreGameResult}) = _$_Score;
+      final ScoreGameResult? scoreGameResult}) = _$ScoreImpl;
   const _Score._() : super._();
 
   @override
@@ -319,6 +318,6 @@ abstract class _Score extends Score {
   ScoreGameResult? get scoreGameResult;
   @override
   @JsonKey(ignore: true)
-  _$$_ScoreCopyWith<_$_Score> get copyWith =>
+  _$$ScoreImplCopyWith<_$ScoreImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

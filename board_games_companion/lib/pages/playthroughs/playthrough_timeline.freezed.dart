@@ -75,23 +75,23 @@ class _$PlaythroughTimelineCopyWithImpl<$Res, $Val extends PlaythroughTimeline>
 }
 
 /// @nodoc
-abstract class _$$_nowCopyWith<$Res> {
-  factory _$$_nowCopyWith(_$_now value, $Res Function(_$_now) then) =
-      __$$_nowCopyWithImpl<$Res>;
+abstract class _$$nowImplCopyWith<$Res> {
+  factory _$$nowImplCopyWith(_$nowImpl value, $Res Function(_$nowImpl) then) =
+      __$$nowImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_nowCopyWithImpl<$Res>
-    extends _$PlaythroughTimelineCopyWithImpl<$Res, _$_now>
-    implements _$$_nowCopyWith<$Res> {
-  __$$_nowCopyWithImpl(_$_now _value, $Res Function(_$_now) _then)
+class __$$nowImplCopyWithImpl<$Res>
+    extends _$PlaythroughTimelineCopyWithImpl<$Res, _$nowImpl>
+    implements _$$nowImplCopyWith<$Res> {
+  __$$nowImplCopyWithImpl(_$nowImpl _value, $Res Function(_$nowImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_now implements _now {
-  const _$_now();
+class _$nowImpl implements _now {
+  const _$nowImpl();
 
   @override
   String toString() {
@@ -101,7 +101,7 @@ class _$_now implements _now {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_now);
+        (other.runtimeType == runtimeType && other is _$nowImpl);
   }
 
   @override
@@ -171,29 +171,29 @@ class _$_now implements _now {
 }
 
 abstract class _now implements PlaythroughTimeline {
-  const factory _now() = _$_now;
+  const factory _now() = _$nowImpl;
 }
 
 /// @nodoc
-abstract class _$$_inThePastCopyWith<$Res> {
-  factory _$$_inThePastCopyWith(
-          _$_inThePast value, $Res Function(_$_inThePast) then) =
-      __$$_inThePastCopyWithImpl<$Res>;
+abstract class _$$inThePastImplCopyWith<$Res> {
+  factory _$$inThePastImplCopyWith(
+          _$inThePastImpl value, $Res Function(_$inThePastImpl) then) =
+      __$$inThePastImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_inThePastCopyWithImpl<$Res>
-    extends _$PlaythroughTimelineCopyWithImpl<$Res, _$_inThePast>
-    implements _$$_inThePastCopyWith<$Res> {
-  __$$_inThePastCopyWithImpl(
-      _$_inThePast _value, $Res Function(_$_inThePast) _then)
+class __$$inThePastImplCopyWithImpl<$Res>
+    extends _$PlaythroughTimelineCopyWithImpl<$Res, _$inThePastImpl>
+    implements _$$inThePastImplCopyWith<$Res> {
+  __$$inThePastImplCopyWithImpl(
+      _$inThePastImpl _value, $Res Function(_$inThePastImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_inThePast implements _inThePast {
-  const _$_inThePast();
+class _$inThePastImpl implements _inThePast {
+  const _$inThePastImpl();
 
   @override
   String toString() {
@@ -203,7 +203,7 @@ class _$_inThePast implements _inThePast {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_inThePast);
+        (other.runtimeType == runtimeType && other is _$inThePastImpl);
   }
 
   @override
@@ -273,5 +273,5 @@ class _$_inThePast implements _inThePast {
 }
 
 abstract class _inThePast implements PlaythroughTimeline {
-  const factory _inThePast() = _$_inThePast;
+  const factory _inThePast() = _$inThePastImpl;
 }

@@ -72,12 +72,12 @@ class _$PlaythroughMigrationArgumentsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_PlaythroughMigrationArgumentsCopyWith<$Res>
+abstract class _$$PlaythroughMigrationArgumentsImplCopyWith<$Res>
     implements $PlaythroughMigrationArgumentsCopyWith<$Res> {
-  factory _$$_PlaythroughMigrationArgumentsCopyWith(
-          _$_PlaythroughMigrationArguments value,
-          $Res Function(_$_PlaythroughMigrationArguments) then) =
-      __$$_PlaythroughMigrationArgumentsCopyWithImpl<$Res>;
+  factory _$$PlaythroughMigrationArgumentsImplCopyWith(
+          _$PlaythroughMigrationArgumentsImpl value,
+          $Res Function(_$PlaythroughMigrationArgumentsImpl) then) =
+      __$$PlaythroughMigrationArgumentsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({PlaythroughMigration playthroughMigration});
@@ -87,13 +87,13 @@ abstract class _$$_PlaythroughMigrationArgumentsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlaythroughMigrationArgumentsCopyWithImpl<$Res>
+class __$$PlaythroughMigrationArgumentsImplCopyWithImpl<$Res>
     extends _$PlaythroughMigrationArgumentsCopyWithImpl<$Res,
-        _$_PlaythroughMigrationArguments>
-    implements _$$_PlaythroughMigrationArgumentsCopyWith<$Res> {
-  __$$_PlaythroughMigrationArgumentsCopyWithImpl(
-      _$_PlaythroughMigrationArguments _value,
-      $Res Function(_$_PlaythroughMigrationArguments) _then)
+        _$PlaythroughMigrationArgumentsImpl>
+    implements _$$PlaythroughMigrationArgumentsImplCopyWith<$Res> {
+  __$$PlaythroughMigrationArgumentsImplCopyWithImpl(
+      _$PlaythroughMigrationArgumentsImpl _value,
+      $Res Function(_$PlaythroughMigrationArgumentsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -101,7 +101,7 @@ class __$$_PlaythroughMigrationArgumentsCopyWithImpl<$Res>
   $Res call({
     Object? playthroughMigration = null,
   }) {
-    return _then(_$_PlaythroughMigrationArguments(
+    return _then(_$PlaythroughMigrationArgumentsImpl(
       playthroughMigration: null == playthroughMigration
           ? _value.playthroughMigration
           : playthroughMigration // ignore: cast_nullable_to_non_nullable
@@ -112,8 +112,10 @@ class __$$_PlaythroughMigrationArgumentsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PlaythroughMigrationArguments extends _PlaythroughMigrationArguments {
-  const _$_PlaythroughMigrationArguments({required this.playthroughMigration})
+class _$PlaythroughMigrationArgumentsImpl
+    extends _PlaythroughMigrationArguments {
+  const _$PlaythroughMigrationArgumentsImpl(
+      {required this.playthroughMigration})
       : super._();
 
   @override
@@ -128,7 +130,7 @@ class _$_PlaythroughMigrationArguments extends _PlaythroughMigrationArguments {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlaythroughMigrationArguments &&
+            other is _$PlaythroughMigrationArgumentsImpl &&
             (identical(other.playthroughMigration, playthroughMigration) ||
                 other.playthroughMigration == playthroughMigration));
   }
@@ -139,22 +141,24 @@ class _$_PlaythroughMigrationArguments extends _PlaythroughMigrationArguments {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlaythroughMigrationArgumentsCopyWith<_$_PlaythroughMigrationArguments>
-      get copyWith => __$$_PlaythroughMigrationArgumentsCopyWithImpl<
-          _$_PlaythroughMigrationArguments>(this, _$identity);
+  _$$PlaythroughMigrationArgumentsImplCopyWith<
+          _$PlaythroughMigrationArgumentsImpl>
+      get copyWith => __$$PlaythroughMigrationArgumentsImplCopyWithImpl<
+          _$PlaythroughMigrationArgumentsImpl>(this, _$identity);
 }
 
 abstract class _PlaythroughMigrationArguments
     extends PlaythroughMigrationArguments {
   const factory _PlaythroughMigrationArguments(
           {required final PlaythroughMigration playthroughMigration}) =
-      _$_PlaythroughMigrationArguments;
+      _$PlaythroughMigrationArgumentsImpl;
   const _PlaythroughMigrationArguments._() : super._();
 
   @override
   PlaythroughMigration get playthroughMigration;
   @override
   @JsonKey(ignore: true)
-  _$$_PlaythroughMigrationArgumentsCopyWith<_$_PlaythroughMigrationArguments>
+  _$$PlaythroughMigrationArgumentsImplCopyWith<
+          _$PlaythroughMigrationArgumentsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

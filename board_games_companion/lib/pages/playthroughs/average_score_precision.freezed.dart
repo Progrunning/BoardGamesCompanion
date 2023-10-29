@@ -76,23 +76,24 @@ class _$AverageScorePrecisionCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_noneCopyWith<$Res> {
-  factory _$$_noneCopyWith(_$_none value, $Res Function(_$_none) then) =
-      __$$_noneCopyWithImpl<$Res>;
+abstract class _$$noneImplCopyWith<$Res> {
+  factory _$$noneImplCopyWith(
+          _$noneImpl value, $Res Function(_$noneImpl) then) =
+      __$$noneImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_noneCopyWithImpl<$Res>
-    extends _$AverageScorePrecisionCopyWithImpl<$Res, _$_none>
-    implements _$$_noneCopyWith<$Res> {
-  __$$_noneCopyWithImpl(_$_none _value, $Res Function(_$_none) _then)
+class __$$noneImplCopyWithImpl<$Res>
+    extends _$AverageScorePrecisionCopyWithImpl<$Res, _$noneImpl>
+    implements _$$noneImplCopyWith<$Res> {
+  __$$noneImplCopyWithImpl(_$noneImpl _value, $Res Function(_$noneImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_none implements _none {
-  const _$_none();
+class _$noneImpl implements _none {
+  const _$noneImpl();
 
   @override
   String toString() {
@@ -102,7 +103,7 @@ class _$_none implements _none {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_none);
+        (other.runtimeType == runtimeType && other is _$noneImpl);
   }
 
   @override
@@ -172,24 +173,24 @@ class _$_none implements _none {
 }
 
 abstract class _none implements AverageScorePrecision {
-  const factory _none() = _$_none;
+  const factory _none() = _$noneImpl;
 }
 
 /// @nodoc
-abstract class _$$_precisionCopyWith<$Res> {
-  factory _$$_precisionCopyWith(
-          _$_precision value, $Res Function(_$_precision) then) =
-      __$$_precisionCopyWithImpl<$Res>;
+abstract class _$$precisionImplCopyWith<$Res> {
+  factory _$$precisionImplCopyWith(
+          _$precisionImpl value, $Res Function(_$precisionImpl) then) =
+      __$$precisionImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int value});
 }
 
 /// @nodoc
-class __$$_precisionCopyWithImpl<$Res>
-    extends _$AverageScorePrecisionCopyWithImpl<$Res, _$_precision>
-    implements _$$_precisionCopyWith<$Res> {
-  __$$_precisionCopyWithImpl(
-      _$_precision _value, $Res Function(_$_precision) _then)
+class __$$precisionImplCopyWithImpl<$Res>
+    extends _$AverageScorePrecisionCopyWithImpl<$Res, _$precisionImpl>
+    implements _$$precisionImplCopyWith<$Res> {
+  __$$precisionImplCopyWithImpl(
+      _$precisionImpl _value, $Res Function(_$precisionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -197,7 +198,7 @@ class __$$_precisionCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
   }) {
-    return _then(_$_precision(
+    return _then(_$precisionImpl(
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -208,8 +209,8 @@ class __$$_precisionCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_precision implements _precision {
-  const _$_precision({required this.value});
+class _$precisionImpl implements _precision {
+  const _$precisionImpl({required this.value});
 
   @override
   final int value;
@@ -223,7 +224,7 @@ class _$_precision implements _precision {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_precision &&
+            other is _$precisionImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -233,8 +234,8 @@ class _$_precision implements _precision {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_precisionCopyWith<_$_precision> get copyWith =>
-      __$$_precisionCopyWithImpl<_$_precision>(this, _$identity);
+  _$$precisionImplCopyWith<_$precisionImpl> get copyWith =>
+      __$$precisionImplCopyWithImpl<_$precisionImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -300,10 +301,10 @@ class _$_precision implements _precision {
 }
 
 abstract class _precision implements AverageScorePrecision {
-  const factory _precision({required final int value}) = _$_precision;
+  const factory _precision({required final int value}) = _$precisionImpl;
 
   int get value;
   @JsonKey(ignore: true)
-  _$$_precisionCopyWith<_$_precision> get copyWith =>
+  _$$precisionImplCopyWith<_$precisionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

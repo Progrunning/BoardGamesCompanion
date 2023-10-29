@@ -86,11 +86,11 @@ class _$BggPlayPlayerCopyWithImpl<$Res, $Val extends BggPlayPlayer>
 }
 
 /// @nodoc
-abstract class _$$_BggPlayPlayerCopyWith<$Res>
+abstract class _$$BggPlayPlayerImplCopyWith<$Res>
     implements $BggPlayPlayerCopyWith<$Res> {
-  factory _$$_BggPlayPlayerCopyWith(
-          _$_BggPlayPlayer value, $Res Function(_$_BggPlayPlayer) then) =
-      __$$_BggPlayPlayerCopyWithImpl<$Res>;
+  factory _$$BggPlayPlayerImplCopyWith(
+          _$BggPlayPlayerImpl value, $Res Function(_$BggPlayPlayerImpl) then) =
+      __$$BggPlayPlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -102,11 +102,11 @@ abstract class _$$_BggPlayPlayerCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_BggPlayPlayerCopyWithImpl<$Res>
-    extends _$BggPlayPlayerCopyWithImpl<$Res, _$_BggPlayPlayer>
-    implements _$$_BggPlayPlayerCopyWith<$Res> {
-  __$$_BggPlayPlayerCopyWithImpl(
-      _$_BggPlayPlayer _value, $Res Function(_$_BggPlayPlayer) _then)
+class __$$BggPlayPlayerImplCopyWithImpl<$Res>
+    extends _$BggPlayPlayerCopyWithImpl<$Res, _$BggPlayPlayerImpl>
+    implements _$$BggPlayPlayerImplCopyWith<$Res> {
+  __$$BggPlayPlayerImplCopyWithImpl(
+      _$BggPlayPlayerImpl _value, $Res Function(_$BggPlayPlayerImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -118,7 +118,7 @@ class __$$_BggPlayPlayerCopyWithImpl<$Res>
     Object? playerScore = freezed,
     Object? playerWin = freezed,
   }) {
-    return _then(_$_BggPlayPlayer(
+    return _then(_$BggPlayPlayerImpl(
       playerName: null == playerName
           ? _value.playerName
           : playerName // ignore: cast_nullable_to_non_nullable
@@ -145,8 +145,8 @@ class __$$_BggPlayPlayerCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BggPlayPlayer extends _BggPlayPlayer {
-  const _$_BggPlayPlayer(
+class _$BggPlayPlayerImpl extends _BggPlayPlayer {
+  const _$BggPlayPlayerImpl(
       {required this.playerName,
       required this.playerBggName,
       required this.playerBggUserId,
@@ -174,7 +174,7 @@ class _$_BggPlayPlayer extends _BggPlayPlayer {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BggPlayPlayer &&
+            other is _$BggPlayPlayerImpl &&
             (identical(other.playerName, playerName) ||
                 other.playerName == playerName) &&
             (identical(other.playerBggName, playerBggName) ||
@@ -194,8 +194,8 @@ class _$_BggPlayPlayer extends _BggPlayPlayer {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BggPlayPlayerCopyWith<_$_BggPlayPlayer> get copyWith =>
-      __$$_BggPlayPlayerCopyWithImpl<_$_BggPlayPlayer>(this, _$identity);
+  _$$BggPlayPlayerImplCopyWith<_$BggPlayPlayerImpl> get copyWith =>
+      __$$BggPlayPlayerImplCopyWithImpl<_$BggPlayPlayerImpl>(this, _$identity);
 }
 
 abstract class _BggPlayPlayer extends BggPlayPlayer {
@@ -204,7 +204,7 @@ abstract class _BggPlayPlayer extends BggPlayPlayer {
       required final String? playerBggName,
       required final int? playerBggUserId,
       final int? playerScore,
-      final bool? playerWin}) = _$_BggPlayPlayer;
+      final bool? playerWin}) = _$BggPlayPlayerImpl;
   const _BggPlayPlayer._() : super._();
 
   @override
@@ -219,6 +219,6 @@ abstract class _BggPlayPlayer extends BggPlayPlayer {
   bool? get playerWin;
   @override
   @JsonKey(ignore: true)
-  _$$_BggPlayPlayerCopyWith<_$_BggPlayPlayer> get copyWith =>
+  _$$BggPlayPlayerImplCopyWith<_$BggPlayPlayerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

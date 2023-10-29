@@ -75,11 +75,11 @@ class _$ScoreGameResultCopyWithImpl<$Res, $Val extends ScoreGameResult>
 }
 
 /// @nodoc
-abstract class _$$_ScoreGameResultCopyWith<$Res>
+abstract class _$$ScoreGameResultImplCopyWith<$Res>
     implements $ScoreGameResultCopyWith<$Res> {
-  factory _$$_ScoreGameResultCopyWith(
-          _$_ScoreGameResult value, $Res Function(_$_ScoreGameResult) then) =
-      __$$_ScoreGameResultCopyWithImpl<$Res>;
+  factory _$$ScoreGameResultImplCopyWith(_$ScoreGameResultImpl value,
+          $Res Function(_$ScoreGameResultImpl) then) =
+      __$$ScoreGameResultImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -89,11 +89,11 @@ abstract class _$$_ScoreGameResultCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScoreGameResultCopyWithImpl<$Res>
-    extends _$ScoreGameResultCopyWithImpl<$Res, _$_ScoreGameResult>
-    implements _$$_ScoreGameResultCopyWith<$Res> {
-  __$$_ScoreGameResultCopyWithImpl(
-      _$_ScoreGameResult _value, $Res Function(_$_ScoreGameResult) _then)
+class __$$ScoreGameResultImplCopyWithImpl<$Res>
+    extends _$ScoreGameResultCopyWithImpl<$Res, _$ScoreGameResultImpl>
+    implements _$$ScoreGameResultImplCopyWith<$Res> {
+  __$$ScoreGameResultImplCopyWithImpl(
+      _$ScoreGameResultImpl _value, $Res Function(_$ScoreGameResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -103,7 +103,7 @@ class __$$_ScoreGameResultCopyWithImpl<$Res>
     Object? place = freezed,
     Object? tiebreakerType = freezed,
   }) {
-    return _then(_$_ScoreGameResult(
+    return _then(_$ScoreGameResultImpl(
       points: freezed == points
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
@@ -125,8 +125,8 @@ class __$$_ScoreGameResultCopyWithImpl<$Res>
 @HiveType(
     typeId: HiveBoxes.scoreGameResultTypeId,
     adapterName: 'ScoreGameResultAdapter')
-class _$_ScoreGameResult extends _ScoreGameResult {
-  const _$_ScoreGameResult(
+class _$ScoreGameResultImpl extends _ScoreGameResult {
+  const _$ScoreGameResultImpl(
       {@HiveField(0) this.points,
       @HiveField(1) this.place,
       @HiveField(2) this.tiebreakerType})
@@ -151,7 +151,7 @@ class _$_ScoreGameResult extends _ScoreGameResult {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScoreGameResult &&
+            other is _$ScoreGameResultImpl &&
             (identical(other.points, points) || other.points == points) &&
             (identical(other.place, place) || other.place == place) &&
             (identical(other.tiebreakerType, tiebreakerType) ||
@@ -164,8 +164,9 @@ class _$_ScoreGameResult extends _ScoreGameResult {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScoreGameResultCopyWith<_$_ScoreGameResult> get copyWith =>
-      __$$_ScoreGameResultCopyWithImpl<_$_ScoreGameResult>(this, _$identity);
+  _$$ScoreGameResultImplCopyWith<_$ScoreGameResultImpl> get copyWith =>
+      __$$ScoreGameResultImplCopyWithImpl<_$ScoreGameResultImpl>(
+          this, _$identity);
 }
 
 abstract class _ScoreGameResult extends ScoreGameResult {
@@ -173,7 +174,7 @@ abstract class _ScoreGameResult extends ScoreGameResult {
           {@HiveField(0) final double? points,
           @HiveField(1) final int? place,
           @HiveField(2) final ScoreTiebreakerType? tiebreakerType}) =
-      _$_ScoreGameResult;
+      _$ScoreGameResultImpl;
   const _ScoreGameResult._() : super._();
 
   @override
@@ -187,6 +188,6 @@ abstract class _ScoreGameResult extends ScoreGameResult {
   ScoreTiebreakerType? get tiebreakerType;
   @override
   @JsonKey(ignore: true)
-  _$$_ScoreGameResultCopyWith<_$_ScoreGameResult> get copyWith =>
+  _$$ScoreGameResultImplCopyWith<_$ScoreGameResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

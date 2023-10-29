@@ -63,22 +63,22 @@ class _$SearchSuggestionCopyWithImpl<$Res, $Val extends SearchSuggestion>
 }
 
 /// @nodoc
-abstract class _$$_SearchSuggestionCopyWith<$Res>
+abstract class _$$SearchSuggestionImplCopyWith<$Res>
     implements $SearchSuggestionCopyWith<$Res> {
-  factory _$$_SearchSuggestionCopyWith(
-          _$_SearchSuggestion value, $Res Function(_$_SearchSuggestion) then) =
-      __$$_SearchSuggestionCopyWithImpl<$Res>;
+  factory _$$SearchSuggestionImplCopyWith(_$SearchSuggestionImpl value,
+          $Res Function(_$SearchSuggestionImpl) then) =
+      __$$SearchSuggestionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String suggestion, SuggestionType type});
 }
 
 /// @nodoc
-class __$$_SearchSuggestionCopyWithImpl<$Res>
-    extends _$SearchSuggestionCopyWithImpl<$Res, _$_SearchSuggestion>
-    implements _$$_SearchSuggestionCopyWith<$Res> {
-  __$$_SearchSuggestionCopyWithImpl(
-      _$_SearchSuggestion _value, $Res Function(_$_SearchSuggestion) _then)
+class __$$SearchSuggestionImplCopyWithImpl<$Res>
+    extends _$SearchSuggestionCopyWithImpl<$Res, _$SearchSuggestionImpl>
+    implements _$$SearchSuggestionImplCopyWith<$Res> {
+  __$$SearchSuggestionImplCopyWithImpl(_$SearchSuggestionImpl _value,
+      $Res Function(_$SearchSuggestionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +87,7 @@ class __$$_SearchSuggestionCopyWithImpl<$Res>
     Object? suggestion = null,
     Object? type = null,
   }) {
-    return _then(_$_SearchSuggestion(
+    return _then(_$SearchSuggestionImpl(
       suggestion: null == suggestion
           ? _value.suggestion
           : suggestion // ignore: cast_nullable_to_non_nullable
@@ -102,8 +102,8 @@ class __$$_SearchSuggestionCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SearchSuggestion implements _SearchSuggestion {
-  const _$_SearchSuggestion({required this.suggestion, required this.type});
+class _$SearchSuggestionImpl implements _SearchSuggestion {
+  const _$SearchSuggestionImpl({required this.suggestion, required this.type});
 
   @override
   final String suggestion;
@@ -119,7 +119,7 @@ class _$_SearchSuggestion implements _SearchSuggestion {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SearchSuggestion &&
+            other is _$SearchSuggestionImpl &&
             (identical(other.suggestion, suggestion) ||
                 other.suggestion == suggestion) &&
             (identical(other.type, type) || other.type == type));
@@ -131,14 +131,15 @@ class _$_SearchSuggestion implements _SearchSuggestion {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SearchSuggestionCopyWith<_$_SearchSuggestion> get copyWith =>
-      __$$_SearchSuggestionCopyWithImpl<_$_SearchSuggestion>(this, _$identity);
+  _$$SearchSuggestionImplCopyWith<_$SearchSuggestionImpl> get copyWith =>
+      __$$SearchSuggestionImplCopyWithImpl<_$SearchSuggestionImpl>(
+          this, _$identity);
 }
 
 abstract class _SearchSuggestion implements SearchSuggestion {
   const factory _SearchSuggestion(
       {required final String suggestion,
-      required final SuggestionType type}) = _$_SearchSuggestion;
+      required final SuggestionType type}) = _$SearchSuggestionImpl;
 
   @override
   String get suggestion;
@@ -146,6 +147,6 @@ abstract class _SearchSuggestion implements SearchSuggestion {
   SuggestionType get type;
   @override
   @JsonKey(ignore: true)
-  _$$_SearchSuggestionCopyWith<_$_SearchSuggestion> get copyWith =>
+  _$$SearchSuggestionImplCopyWith<_$SearchSuggestionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

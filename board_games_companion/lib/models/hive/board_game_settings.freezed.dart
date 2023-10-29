@@ -36,12 +36,10 @@ abstract class $BoardGameSettingsCopyWith<$Res> {
       _$BoardGameSettingsCopyWithImpl<$Res, BoardGameSettings>;
   @useResult
   $Res call(
-      {@HiveField(1)
-          GameFamily gameFamily,
-      @HiveField(2, defaultValue: 0)
-          int averageScorePrecision,
+      {@HiveField(1) GameFamily gameFamily,
+      @HiveField(2, defaultValue: 0) int averageScorePrecision,
       @HiveField(3, defaultValue: GameClassification.Score)
-          GameClassification gameClassification});
+      GameClassification gameClassification});
 }
 
 /// @nodoc
@@ -79,28 +77,26 @@ class _$BoardGameSettingsCopyWithImpl<$Res, $Val extends BoardGameSettings>
 }
 
 /// @nodoc
-abstract class _$$_BoardGameSettingsCopyWith<$Res>
+abstract class _$$BoardGameSettingsImplCopyWith<$Res>
     implements $BoardGameSettingsCopyWith<$Res> {
-  factory _$$_BoardGameSettingsCopyWith(_$_BoardGameSettings value,
-          $Res Function(_$_BoardGameSettings) then) =
-      __$$_BoardGameSettingsCopyWithImpl<$Res>;
+  factory _$$BoardGameSettingsImplCopyWith(_$BoardGameSettingsImpl value,
+          $Res Function(_$BoardGameSettingsImpl) then) =
+      __$$BoardGameSettingsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {@HiveField(1)
-          GameFamily gameFamily,
-      @HiveField(2, defaultValue: 0)
-          int averageScorePrecision,
+      {@HiveField(1) GameFamily gameFamily,
+      @HiveField(2, defaultValue: 0) int averageScorePrecision,
       @HiveField(3, defaultValue: GameClassification.Score)
-          GameClassification gameClassification});
+      GameClassification gameClassification});
 }
 
 /// @nodoc
-class __$$_BoardGameSettingsCopyWithImpl<$Res>
-    extends _$BoardGameSettingsCopyWithImpl<$Res, _$_BoardGameSettings>
-    implements _$$_BoardGameSettingsCopyWith<$Res> {
-  __$$_BoardGameSettingsCopyWithImpl(
-      _$_BoardGameSettings _value, $Res Function(_$_BoardGameSettings) _then)
+class __$$BoardGameSettingsImplCopyWithImpl<$Res>
+    extends _$BoardGameSettingsCopyWithImpl<$Res, _$BoardGameSettingsImpl>
+    implements _$$BoardGameSettingsImplCopyWith<$Res> {
+  __$$BoardGameSettingsImplCopyWithImpl(_$BoardGameSettingsImpl _value,
+      $Res Function(_$BoardGameSettingsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -110,7 +106,7 @@ class __$$_BoardGameSettingsCopyWithImpl<$Res>
     Object? averageScorePrecision = null,
     Object? gameClassification = null,
   }) {
-    return _then(_$_BoardGameSettings(
+    return _then(_$BoardGameSettingsImpl(
       gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
@@ -132,14 +128,12 @@ class __$$_BoardGameSettingsCopyWithImpl<$Res>
 @HiveType(
     typeId: HiveBoxes.boardGameSettingsTypeId,
     adapterName: 'BoardGameSettingsAdapter')
-class _$_BoardGameSettings implements _BoardGameSettings {
-  const _$_BoardGameSettings(
-      {@HiveField(1)
-          this.gameFamily = GameFamily.HighestScore,
-      @HiveField(2, defaultValue: 0)
-          this.averageScorePrecision = 0,
+class _$BoardGameSettingsImpl implements _BoardGameSettings {
+  const _$BoardGameSettingsImpl(
+      {@HiveField(1) this.gameFamily = GameFamily.HighestScore,
+      @HiveField(2, defaultValue: 0) this.averageScorePrecision = 0,
       @HiveField(3, defaultValue: GameClassification.Score)
-          this.gameClassification = GameClassification.Score});
+      this.gameClassification = GameClassification.Score});
 
   @override
   @JsonKey()
@@ -163,7 +157,7 @@ class _$_BoardGameSettings implements _BoardGameSettings {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BoardGameSettings &&
+            other is _$BoardGameSettingsImpl &&
             (identical(other.gameFamily, gameFamily) ||
                 other.gameFamily == gameFamily) &&
             (identical(other.averageScorePrecision, averageScorePrecision) ||
@@ -179,19 +173,17 @@ class _$_BoardGameSettings implements _BoardGameSettings {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGameSettingsCopyWith<_$_BoardGameSettings> get copyWith =>
-      __$$_BoardGameSettingsCopyWithImpl<_$_BoardGameSettings>(
+  _$$BoardGameSettingsImplCopyWith<_$BoardGameSettingsImpl> get copyWith =>
+      __$$BoardGameSettingsImplCopyWithImpl<_$BoardGameSettingsImpl>(
           this, _$identity);
 }
 
 abstract class _BoardGameSettings implements BoardGameSettings {
   const factory _BoardGameSettings(
-      {@HiveField(1)
-          final GameFamily gameFamily,
-      @HiveField(2, defaultValue: 0)
-          final int averageScorePrecision,
+      {@HiveField(1) final GameFamily gameFamily,
+      @HiveField(2, defaultValue: 0) final int averageScorePrecision,
       @HiveField(3, defaultValue: GameClassification.Score)
-          final GameClassification gameClassification}) = _$_BoardGameSettings;
+      final GameClassification gameClassification}) = _$BoardGameSettingsImpl;
 
   @override
   @HiveField(1)
@@ -204,6 +196,6 @@ abstract class _BoardGameSettings implements BoardGameSettings {
   GameClassification get gameClassification;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGameSettingsCopyWith<_$_BoardGameSettings> get copyWith =>
+  _$$BoardGameSettingsImplCopyWith<_$BoardGameSettingsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

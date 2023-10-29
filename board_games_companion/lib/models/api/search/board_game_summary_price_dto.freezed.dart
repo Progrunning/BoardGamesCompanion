@@ -86,12 +86,12 @@ class _$BoardGameSummaryPriceDtoCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BoardGameSummaryPriceDtoCopyWith<$Res>
+abstract class _$$BoardGameSummaryPriceDtoImplCopyWith<$Res>
     implements $BoardGameSummaryPriceDtoCopyWith<$Res> {
-  factory _$$_BoardGameSummaryPriceDtoCopyWith(
-          _$_BoardGameSummaryPriceDto value,
-          $Res Function(_$_BoardGameSummaryPriceDto) then) =
-      __$$_BoardGameSummaryPriceDtoCopyWithImpl<$Res>;
+  factory _$$BoardGameSummaryPriceDtoImplCopyWith(
+          _$BoardGameSummaryPriceDtoImpl value,
+          $Res Function(_$BoardGameSummaryPriceDtoImpl) then) =
+      __$$BoardGameSummaryPriceDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -102,12 +102,13 @@ abstract class _$$_BoardGameSummaryPriceDtoCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_BoardGameSummaryPriceDtoCopyWithImpl<$Res>
+class __$$BoardGameSummaryPriceDtoImplCopyWithImpl<$Res>
     extends _$BoardGameSummaryPriceDtoCopyWithImpl<$Res,
-        _$_BoardGameSummaryPriceDto>
-    implements _$$_BoardGameSummaryPriceDtoCopyWith<$Res> {
-  __$$_BoardGameSummaryPriceDtoCopyWithImpl(_$_BoardGameSummaryPriceDto _value,
-      $Res Function(_$_BoardGameSummaryPriceDto) _then)
+        _$BoardGameSummaryPriceDtoImpl>
+    implements _$$BoardGameSummaryPriceDtoImplCopyWith<$Res> {
+  __$$BoardGameSummaryPriceDtoImplCopyWithImpl(
+      _$BoardGameSummaryPriceDtoImpl _value,
+      $Res Function(_$BoardGameSummaryPriceDtoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -118,7 +119,7 @@ class __$$_BoardGameSummaryPriceDtoCopyWithImpl<$Res>
     Object? lowestPrice = freezed,
     Object? lowestPriceStoreName = freezed,
   }) {
-    return _then(_$_BoardGameSummaryPriceDto(
+    return _then(_$BoardGameSummaryPriceDtoImpl(
       region: null == region
           ? _value.region
           : region // ignore: cast_nullable_to_non_nullable
@@ -141,16 +142,16 @@ class __$$_BoardGameSummaryPriceDtoCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_BoardGameSummaryPriceDto extends _BoardGameSummaryPriceDto {
-  const _$_BoardGameSummaryPriceDto(
+class _$BoardGameSummaryPriceDtoImpl extends _BoardGameSummaryPriceDto {
+  const _$BoardGameSummaryPriceDtoImpl(
       {required this.region,
       required this.websiteUrl,
       this.lowestPrice,
       this.lowestPriceStoreName})
       : super._();
 
-  factory _$_BoardGameSummaryPriceDto.fromJson(Map<String, dynamic> json) =>
-      _$$_BoardGameSummaryPriceDtoFromJson(json);
+  factory _$BoardGameSummaryPriceDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BoardGameSummaryPriceDtoImplFromJson(json);
 
   @override
   final String region;
@@ -170,7 +171,7 @@ class _$_BoardGameSummaryPriceDto extends _BoardGameSummaryPriceDto {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BoardGameSummaryPriceDto &&
+            other is _$BoardGameSummaryPriceDtoImpl &&
             (identical(other.region, region) || other.region == region) &&
             (identical(other.websiteUrl, websiteUrl) ||
                 other.websiteUrl == websiteUrl) &&
@@ -188,13 +189,13 @@ class _$_BoardGameSummaryPriceDto extends _BoardGameSummaryPriceDto {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGameSummaryPriceDtoCopyWith<_$_BoardGameSummaryPriceDto>
-      get copyWith => __$$_BoardGameSummaryPriceDtoCopyWithImpl<
-          _$_BoardGameSummaryPriceDto>(this, _$identity);
+  _$$BoardGameSummaryPriceDtoImplCopyWith<_$BoardGameSummaryPriceDtoImpl>
+      get copyWith => __$$BoardGameSummaryPriceDtoImplCopyWithImpl<
+          _$BoardGameSummaryPriceDtoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_BoardGameSummaryPriceDtoToJson(
+    return _$$BoardGameSummaryPriceDtoImplToJson(
       this,
     );
   }
@@ -205,11 +206,11 @@ abstract class _BoardGameSummaryPriceDto extends BoardGameSummaryPriceDto {
       {required final String region,
       required final String websiteUrl,
       final double? lowestPrice,
-      final String? lowestPriceStoreName}) = _$_BoardGameSummaryPriceDto;
+      final String? lowestPriceStoreName}) = _$BoardGameSummaryPriceDtoImpl;
   const _BoardGameSummaryPriceDto._() : super._();
 
   factory _BoardGameSummaryPriceDto.fromJson(Map<String, dynamic> json) =
-      _$_BoardGameSummaryPriceDto.fromJson;
+      _$BoardGameSummaryPriceDtoImpl.fromJson;
 
   @override
   String get region;
@@ -221,6 +222,6 @@ abstract class _BoardGameSummaryPriceDto extends BoardGameSummaryPriceDto {
   String? get lowestPriceStoreName;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGameSummaryPriceDtoCopyWith<_$_BoardGameSummaryPriceDto>
+  _$$BoardGameSummaryPriceDtoImplCopyWith<_$BoardGameSummaryPriceDtoImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

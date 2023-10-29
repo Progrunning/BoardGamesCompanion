@@ -72,25 +72,25 @@ class _$EditPlaythroughPageArgumentsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_EditPlaythroughPageArgumentsCopyWith<$Res>
+abstract class _$$EditPlaythroughPageArgumentsImplCopyWith<$Res>
     implements $EditPlaythroughPageArgumentsCopyWith<$Res> {
-  factory _$$_EditPlaythroughPageArgumentsCopyWith(
-          _$_EditPlaythroughPageArguments value,
-          $Res Function(_$_EditPlaythroughPageArguments) then) =
-      __$$_EditPlaythroughPageArgumentsCopyWithImpl<$Res>;
+  factory _$$EditPlaythroughPageArgumentsImplCopyWith(
+          _$EditPlaythroughPageArgumentsImpl value,
+          $Res Function(_$EditPlaythroughPageArgumentsImpl) then) =
+      __$$EditPlaythroughPageArgumentsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String playthroughId, String boardGameId, String goBackPageRoute});
 }
 
 /// @nodoc
-class __$$_EditPlaythroughPageArgumentsCopyWithImpl<$Res>
+class __$$EditPlaythroughPageArgumentsImplCopyWithImpl<$Res>
     extends _$EditPlaythroughPageArgumentsCopyWithImpl<$Res,
-        _$_EditPlaythroughPageArguments>
-    implements _$$_EditPlaythroughPageArgumentsCopyWith<$Res> {
-  __$$_EditPlaythroughPageArgumentsCopyWithImpl(
-      _$_EditPlaythroughPageArguments _value,
-      $Res Function(_$_EditPlaythroughPageArguments) _then)
+        _$EditPlaythroughPageArgumentsImpl>
+    implements _$$EditPlaythroughPageArgumentsImplCopyWith<$Res> {
+  __$$EditPlaythroughPageArgumentsImplCopyWithImpl(
+      _$EditPlaythroughPageArgumentsImpl _value,
+      $Res Function(_$EditPlaythroughPageArgumentsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -100,7 +100,7 @@ class __$$_EditPlaythroughPageArgumentsCopyWithImpl<$Res>
     Object? boardGameId = null,
     Object? goBackPageRoute = null,
   }) {
-    return _then(_$_EditPlaythroughPageArguments(
+    return _then(_$EditPlaythroughPageArgumentsImpl(
       playthroughId: null == playthroughId
           ? _value.playthroughId
           : playthroughId // ignore: cast_nullable_to_non_nullable
@@ -119,8 +119,9 @@ class __$$_EditPlaythroughPageArgumentsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EditPlaythroughPageArguments implements _EditPlaythroughPageArguments {
-  const _$_EditPlaythroughPageArguments(
+class _$EditPlaythroughPageArgumentsImpl
+    implements _EditPlaythroughPageArguments {
+  const _$EditPlaythroughPageArgumentsImpl(
       {required this.playthroughId,
       required this.boardGameId,
       required this.goBackPageRoute});
@@ -141,7 +142,7 @@ class _$_EditPlaythroughPageArguments implements _EditPlaythroughPageArguments {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EditPlaythroughPageArguments &&
+            other is _$EditPlaythroughPageArgumentsImpl &&
             (identical(other.playthroughId, playthroughId) ||
                 other.playthroughId == playthroughId) &&
             (identical(other.boardGameId, boardGameId) ||
@@ -157,17 +158,19 @@ class _$_EditPlaythroughPageArguments implements _EditPlaythroughPageArguments {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EditPlaythroughPageArgumentsCopyWith<_$_EditPlaythroughPageArguments>
-      get copyWith => __$$_EditPlaythroughPageArgumentsCopyWithImpl<
-          _$_EditPlaythroughPageArguments>(this, _$identity);
+  _$$EditPlaythroughPageArgumentsImplCopyWith<
+          _$EditPlaythroughPageArgumentsImpl>
+      get copyWith => __$$EditPlaythroughPageArgumentsImplCopyWithImpl<
+          _$EditPlaythroughPageArgumentsImpl>(this, _$identity);
 }
 
 abstract class _EditPlaythroughPageArguments
     implements EditPlaythroughPageArguments {
   const factory _EditPlaythroughPageArguments(
-      {required final String playthroughId,
-      required final String boardGameId,
-      required final String goBackPageRoute}) = _$_EditPlaythroughPageArguments;
+          {required final String playthroughId,
+          required final String boardGameId,
+          required final String goBackPageRoute}) =
+      _$EditPlaythroughPageArgumentsImpl;
 
   @override
   String get playthroughId;
@@ -177,6 +180,7 @@ abstract class _EditPlaythroughPageArguments
   String get goBackPageRoute;
   @override
   @JsonKey(ignore: true)
-  _$$_EditPlaythroughPageArgumentsCopyWith<_$_EditPlaythroughPageArguments>
+  _$$EditPlaythroughPageArgumentsImplCopyWith<
+          _$EditPlaythroughPageArgumentsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

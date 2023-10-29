@@ -6,17 +6,17 @@ part of 'score.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ScoreAdapter extends TypeAdapter<_$_Score> {
+class ScoreAdapter extends TypeAdapter<_$ScoreImpl> {
   @override
   final int typeId = 4;
 
   @override
-  _$_Score read(BinaryReader reader) {
+  _$ScoreImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_Score(
+    return _$ScoreImpl(
       id: fields[0] as String,
       playerId: fields[2] as String,
       boardGameId: fields[3] as String,
@@ -28,7 +28,7 @@ class ScoreAdapter extends TypeAdapter<_$_Score> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_Score obj) {
+  void write(BinaryWriter writer, _$ScoreImpl obj) {
     writer
       ..writeByte(7)
       ..writeByte(0)

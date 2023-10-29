@@ -83,11 +83,11 @@ class _$PlaythroughNoteCopyWithImpl<$Res, $Val extends PlaythroughNote>
 }
 
 /// @nodoc
-abstract class _$$_PlaythroughNoteCopyWith<$Res>
+abstract class _$$PlaythroughNoteImplCopyWith<$Res>
     implements $PlaythroughNoteCopyWith<$Res> {
-  factory _$$_PlaythroughNoteCopyWith(
-          _$_PlaythroughNote value, $Res Function(_$_PlaythroughNote) then) =
-      __$$_PlaythroughNoteCopyWithImpl<$Res>;
+  factory _$$PlaythroughNoteImplCopyWith(_$PlaythroughNoteImpl value,
+          $Res Function(_$PlaythroughNoteImpl) then) =
+      __$$PlaythroughNoteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -98,11 +98,11 @@ abstract class _$$_PlaythroughNoteCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlaythroughNoteCopyWithImpl<$Res>
-    extends _$PlaythroughNoteCopyWithImpl<$Res, _$_PlaythroughNote>
-    implements _$$_PlaythroughNoteCopyWith<$Res> {
-  __$$_PlaythroughNoteCopyWithImpl(
-      _$_PlaythroughNote _value, $Res Function(_$_PlaythroughNote) _then)
+class __$$PlaythroughNoteImplCopyWithImpl<$Res>
+    extends _$PlaythroughNoteCopyWithImpl<$Res, _$PlaythroughNoteImpl>
+    implements _$$PlaythroughNoteImplCopyWith<$Res> {
+  __$$PlaythroughNoteImplCopyWithImpl(
+      _$PlaythroughNoteImpl _value, $Res Function(_$PlaythroughNoteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -113,7 +113,7 @@ class __$$_PlaythroughNoteCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? modifiedAt = freezed,
   }) {
-    return _then(_$_PlaythroughNote(
+    return _then(_$PlaythroughNoteImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -138,8 +138,8 @@ class __$$_PlaythroughNoteCopyWithImpl<$Res>
 
 @HiveType(
     typeId: HiveBoxes.playthroughNoteId, adapterName: 'PlaythroughNoteAdapter')
-class _$_PlaythroughNote implements _PlaythroughNote {
-  const _$_PlaythroughNote(
+class _$PlaythroughNoteImpl implements _PlaythroughNote {
+  const _$PlaythroughNoteImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) required this.text,
       @HiveField(2) required this.createdAt,
@@ -167,7 +167,7 @@ class _$_PlaythroughNote implements _PlaythroughNote {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlaythroughNote &&
+            other is _$PlaythroughNoteImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.createdAt, createdAt) ||
@@ -182,8 +182,9 @@ class _$_PlaythroughNote implements _PlaythroughNote {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlaythroughNoteCopyWith<_$_PlaythroughNote> get copyWith =>
-      __$$_PlaythroughNoteCopyWithImpl<_$_PlaythroughNote>(this, _$identity);
+  _$$PlaythroughNoteImplCopyWith<_$PlaythroughNoteImpl> get copyWith =>
+      __$$PlaythroughNoteImplCopyWithImpl<_$PlaythroughNoteImpl>(
+          this, _$identity);
 }
 
 abstract class _PlaythroughNote implements PlaythroughNote {
@@ -191,7 +192,7 @@ abstract class _PlaythroughNote implements PlaythroughNote {
       {@HiveField(0) required final String id,
       @HiveField(1) required final String text,
       @HiveField(2) required final DateTime createdAt,
-      @HiveField(3) final DateTime? modifiedAt}) = _$_PlaythroughNote;
+      @HiveField(3) final DateTime? modifiedAt}) = _$PlaythroughNoteImpl;
 
   @override
   @HiveField(0)
@@ -207,6 +208,6 @@ abstract class _PlaythroughNote implements PlaythroughNote {
   DateTime? get modifiedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_PlaythroughNoteCopyWith<_$_PlaythroughNote> get copyWith =>
+  _$$PlaythroughNoteImplCopyWith<_$PlaythroughNoteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

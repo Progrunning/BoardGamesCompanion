@@ -92,20 +92,20 @@ class _$GameCreationResultCopyWithImpl<$Res, $Val extends GameCreationResult>
 }
 
 /// @nodoc
-abstract class _$$_saveSuccessCopyWith<$Res> {
-  factory _$$_saveSuccessCopyWith(
-          _$_saveSuccess value, $Res Function(_$_saveSuccess) then) =
-      __$$_saveSuccessCopyWithImpl<$Res>;
+abstract class _$$saveSuccessImplCopyWith<$Res> {
+  factory _$$saveSuccessImplCopyWith(
+          _$saveSuccessImpl value, $Res Function(_$saveSuccessImpl) then) =
+      __$$saveSuccessImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String boardGameId, String boardGameName});
 }
 
 /// @nodoc
-class __$$_saveSuccessCopyWithImpl<$Res>
-    extends _$GameCreationResultCopyWithImpl<$Res, _$_saveSuccess>
-    implements _$$_saveSuccessCopyWith<$Res> {
-  __$$_saveSuccessCopyWithImpl(
-      _$_saveSuccess _value, $Res Function(_$_saveSuccess) _then)
+class __$$saveSuccessImplCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res, _$saveSuccessImpl>
+    implements _$$saveSuccessImplCopyWith<$Res> {
+  __$$saveSuccessImplCopyWithImpl(
+      _$saveSuccessImpl _value, $Res Function(_$saveSuccessImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -114,7 +114,7 @@ class __$$_saveSuccessCopyWithImpl<$Res>
     Object? boardGameId = null,
     Object? boardGameName = null,
   }) {
-    return _then(_$_saveSuccess(
+    return _then(_$saveSuccessImpl(
       boardGameId: null == boardGameId
           ? _value.boardGameId
           : boardGameId // ignore: cast_nullable_to_non_nullable
@@ -129,8 +129,8 @@ class __$$_saveSuccessCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_saveSuccess implements _saveSuccess {
-  const _$_saveSuccess(
+class _$saveSuccessImpl implements _saveSuccess {
+  const _$saveSuccessImpl(
       {required this.boardGameId, required this.boardGameName});
 
   @override
@@ -147,7 +147,7 @@ class _$_saveSuccess implements _saveSuccess {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_saveSuccess &&
+            other is _$saveSuccessImpl &&
             (identical(other.boardGameId, boardGameId) ||
                 other.boardGameId == boardGameId) &&
             (identical(other.boardGameName, boardGameName) ||
@@ -160,8 +160,8 @@ class _$_saveSuccess implements _saveSuccess {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_saveSuccessCopyWith<_$_saveSuccess> get copyWith =>
-      __$$_saveSuccessCopyWithImpl<_$_saveSuccess>(this, _$identity);
+  _$$saveSuccessImplCopyWith<_$saveSuccessImpl> get copyWith =>
+      __$$saveSuccessImplCopyWithImpl<_$saveSuccessImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -246,33 +246,33 @@ class _$_saveSuccess implements _saveSuccess {
 abstract class _saveSuccess implements GameCreationResult {
   const factory _saveSuccess(
       {required final String boardGameId,
-      required final String boardGameName}) = _$_saveSuccess;
+      required final String boardGameName}) = _$saveSuccessImpl;
 
   String get boardGameId;
   String get boardGameName;
   @JsonKey(ignore: true)
-  _$$_saveSuccessCopyWith<_$_saveSuccess> get copyWith =>
+  _$$saveSuccessImplCopyWith<_$saveSuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_removingFromCollectionsSucceededCopyWith<$Res> {
-  factory _$$_removingFromCollectionsSucceededCopyWith(
-          _$_removingFromCollectionsSucceeded value,
-          $Res Function(_$_removingFromCollectionsSucceeded) then) =
-      __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>;
+abstract class _$$removingFromCollectionsSucceededImplCopyWith<$Res> {
+  factory _$$removingFromCollectionsSucceededImplCopyWith(
+          _$removingFromCollectionsSucceededImpl value,
+          $Res Function(_$removingFromCollectionsSucceededImpl) then) =
+      __$$removingFromCollectionsSucceededImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String boardGameName});
 }
 
 /// @nodoc
-class __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>
+class __$$removingFromCollectionsSucceededImplCopyWithImpl<$Res>
     extends _$GameCreationResultCopyWithImpl<$Res,
-        _$_removingFromCollectionsSucceeded>
-    implements _$$_removingFromCollectionsSucceededCopyWith<$Res> {
-  __$$_removingFromCollectionsSucceededCopyWithImpl(
-      _$_removingFromCollectionsSucceeded _value,
-      $Res Function(_$_removingFromCollectionsSucceeded) _then)
+        _$removingFromCollectionsSucceededImpl>
+    implements _$$removingFromCollectionsSucceededImplCopyWith<$Res> {
+  __$$removingFromCollectionsSucceededImplCopyWithImpl(
+      _$removingFromCollectionsSucceededImpl _value,
+      $Res Function(_$removingFromCollectionsSucceededImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -280,7 +280,7 @@ class __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>
   $Res call({
     Object? boardGameName = null,
   }) {
-    return _then(_$_removingFromCollectionsSucceeded(
+    return _then(_$removingFromCollectionsSucceededImpl(
       boardGameName: null == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
@@ -291,9 +291,9 @@ class __$$_removingFromCollectionsSucceededCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_removingFromCollectionsSucceeded
+class _$removingFromCollectionsSucceededImpl
     implements _removingFromCollectionsSucceeded {
-  const _$_removingFromCollectionsSucceeded({required this.boardGameName});
+  const _$removingFromCollectionsSucceededImpl({required this.boardGameName});
 
   @override
   final String boardGameName;
@@ -307,7 +307,7 @@ class _$_removingFromCollectionsSucceeded
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_removingFromCollectionsSucceeded &&
+            other is _$removingFromCollectionsSucceededImpl &&
             (identical(other.boardGameName, boardGameName) ||
                 other.boardGameName == boardGameName));
   }
@@ -318,10 +318,10 @@ class _$_removingFromCollectionsSucceeded
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_removingFromCollectionsSucceededCopyWith<
-          _$_removingFromCollectionsSucceeded>
-      get copyWith => __$$_removingFromCollectionsSucceededCopyWithImpl<
-          _$_removingFromCollectionsSucceeded>(this, _$identity);
+  _$$removingFromCollectionsSucceededImplCopyWith<
+          _$removingFromCollectionsSucceededImpl>
+      get copyWith => __$$removingFromCollectionsSucceededImplCopyWithImpl<
+          _$removingFromCollectionsSucceededImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -406,35 +406,35 @@ class _$_removingFromCollectionsSucceeded
 abstract class _removingFromCollectionsSucceeded implements GameCreationResult {
   const factory _removingFromCollectionsSucceeded(
           {required final String boardGameName}) =
-      _$_removingFromCollectionsSucceeded;
+      _$removingFromCollectionsSucceededImpl;
 
   String get boardGameName;
   @JsonKey(ignore: true)
-  _$$_removingFromCollectionsSucceededCopyWith<
-          _$_removingFromCollectionsSucceeded>
+  _$$removingFromCollectionsSucceededImplCopyWith<
+          _$removingFromCollectionsSucceededImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_cancelledCopyWith<$Res> {
-  factory _$$_cancelledCopyWith(
-          _$_cancelled value, $Res Function(_$_cancelled) then) =
-      __$$_cancelledCopyWithImpl<$Res>;
+abstract class _$$cancelledImplCopyWith<$Res> {
+  factory _$$cancelledImplCopyWith(
+          _$cancelledImpl value, $Res Function(_$cancelledImpl) then) =
+      __$$cancelledImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_cancelledCopyWithImpl<$Res>
-    extends _$GameCreationResultCopyWithImpl<$Res, _$_cancelled>
-    implements _$$_cancelledCopyWith<$Res> {
-  __$$_cancelledCopyWithImpl(
-      _$_cancelled _value, $Res Function(_$_cancelled) _then)
+class __$$cancelledImplCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res, _$cancelledImpl>
+    implements _$$cancelledImplCopyWith<$Res> {
+  __$$cancelledImplCopyWithImpl(
+      _$cancelledImpl _value, $Res Function(_$cancelledImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_cancelled implements _cancelled {
-  const _$_cancelled();
+class _$cancelledImpl implements _cancelled {
+  const _$cancelledImpl();
 
   @override
   String toString() {
@@ -444,7 +444,7 @@ class _$_cancelled implements _cancelled {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_cancelled);
+        (other.runtimeType == runtimeType && other is _$cancelledImpl);
   }
 
   @override
@@ -531,28 +531,29 @@ class _$_cancelled implements _cancelled {
 }
 
 abstract class _cancelled implements GameCreationResult {
-  const factory _cancelled() = _$_cancelled;
+  const factory _cancelled() = _$cancelledImpl;
 }
 
 /// @nodoc
-abstract class _$$_failureCopyWith<$Res> {
-  factory _$$_failureCopyWith(
-          _$_failure value, $Res Function(_$_failure) then) =
-      __$$_failureCopyWithImpl<$Res>;
+abstract class _$$failureImplCopyWith<$Res> {
+  factory _$$failureImplCopyWith(
+          _$failureImpl value, $Res Function(_$failureImpl) then) =
+      __$$failureImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_failureCopyWithImpl<$Res>
-    extends _$GameCreationResultCopyWithImpl<$Res, _$_failure>
-    implements _$$_failureCopyWith<$Res> {
-  __$$_failureCopyWithImpl(_$_failure _value, $Res Function(_$_failure) _then)
+class __$$failureImplCopyWithImpl<$Res>
+    extends _$GameCreationResultCopyWithImpl<$Res, _$failureImpl>
+    implements _$$failureImplCopyWith<$Res> {
+  __$$failureImplCopyWithImpl(
+      _$failureImpl _value, $Res Function(_$failureImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_failure implements _failure {
-  const _$_failure();
+class _$failureImpl implements _failure {
+  const _$failureImpl();
 
   @override
   String toString() {
@@ -562,7 +563,7 @@ class _$_failure implements _failure {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_failure);
+        (other.runtimeType == runtimeType && other is _$failureImpl);
   }
 
   @override
@@ -649,5 +650,5 @@ class _$_failure implements _failure {
 }
 
 abstract class _failure implements GameCreationResult {
-  const factory _failure() = _$_failure;
+  const factory _failure() = _$failureImpl;
 }

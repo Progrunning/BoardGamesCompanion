@@ -71,11 +71,11 @@ class _$PlayerPageArgumentsCopyWithImpl<$Res, $Val extends PlayerPageArguments>
 }
 
 /// @nodoc
-abstract class _$$_PlayerPageArgumentsCopyWith<$Res>
+abstract class _$$PlayerPageArgumentsImplCopyWith<$Res>
     implements $PlayerPageArgumentsCopyWith<$Res> {
-  factory _$$_PlayerPageArgumentsCopyWith(_$_PlayerPageArguments value,
-          $Res Function(_$_PlayerPageArguments) then) =
-      __$$_PlayerPageArgumentsCopyWithImpl<$Res>;
+  factory _$$PlayerPageArgumentsImplCopyWith(_$PlayerPageArgumentsImpl value,
+          $Res Function(_$PlayerPageArgumentsImpl) then) =
+      __$$PlayerPageArgumentsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Player? player});
@@ -85,11 +85,11 @@ abstract class _$$_PlayerPageArgumentsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlayerPageArgumentsCopyWithImpl<$Res>
-    extends _$PlayerPageArgumentsCopyWithImpl<$Res, _$_PlayerPageArguments>
-    implements _$$_PlayerPageArgumentsCopyWith<$Res> {
-  __$$_PlayerPageArgumentsCopyWithImpl(_$_PlayerPageArguments _value,
-      $Res Function(_$_PlayerPageArguments) _then)
+class __$$PlayerPageArgumentsImplCopyWithImpl<$Res>
+    extends _$PlayerPageArgumentsCopyWithImpl<$Res, _$PlayerPageArgumentsImpl>
+    implements _$$PlayerPageArgumentsImplCopyWith<$Res> {
+  __$$PlayerPageArgumentsImplCopyWithImpl(_$PlayerPageArgumentsImpl _value,
+      $Res Function(_$PlayerPageArgumentsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -97,7 +97,7 @@ class __$$_PlayerPageArgumentsCopyWithImpl<$Res>
   $Res call({
     Object? player = freezed,
   }) {
-    return _then(_$_PlayerPageArguments(
+    return _then(_$PlayerPageArgumentsImpl(
       player: freezed == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -108,8 +108,8 @@ class __$$_PlayerPageArgumentsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PlayerPageArguments implements _PlayerPageArguments {
-  const _$_PlayerPageArguments({this.player});
+class _$PlayerPageArgumentsImpl implements _PlayerPageArguments {
+  const _$PlayerPageArgumentsImpl({this.player});
 
   @override
   final Player? player;
@@ -123,7 +123,7 @@ class _$_PlayerPageArguments implements _PlayerPageArguments {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlayerPageArguments &&
+            other is _$PlayerPageArgumentsImpl &&
             (identical(other.player, player) || other.player == player));
   }
 
@@ -133,19 +133,19 @@ class _$_PlayerPageArguments implements _PlayerPageArguments {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerPageArgumentsCopyWith<_$_PlayerPageArguments> get copyWith =>
-      __$$_PlayerPageArgumentsCopyWithImpl<_$_PlayerPageArguments>(
+  _$$PlayerPageArgumentsImplCopyWith<_$PlayerPageArgumentsImpl> get copyWith =>
+      __$$PlayerPageArgumentsImplCopyWithImpl<_$PlayerPageArgumentsImpl>(
           this, _$identity);
 }
 
 abstract class _PlayerPageArguments implements PlayerPageArguments {
   const factory _PlayerPageArguments({final Player? player}) =
-      _$_PlayerPageArguments;
+      _$PlayerPageArgumentsImpl;
 
   @override
   Player? get player;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerPageArgumentsCopyWith<_$_PlayerPageArguments> get copyWith =>
+  _$$PlayerPageArgumentsImplCopyWith<_$PlayerPageArgumentsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

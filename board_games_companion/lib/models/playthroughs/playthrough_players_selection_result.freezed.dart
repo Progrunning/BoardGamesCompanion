@@ -92,22 +92,22 @@ class _$PlaythroughPlayersSelectionResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_selectedPlayersCopyWith<$Res>
+abstract class _$$selectedPlayersImplCopyWith<$Res>
     implements $PlaythroughPlayersSelectionResultCopyWith<$Res> {
-  factory _$$_selectedPlayersCopyWith(
-          _$_selectedPlayers value, $Res Function(_$_selectedPlayers) then) =
-      __$$_selectedPlayersCopyWithImpl<$Res>;
+  factory _$$selectedPlayersImplCopyWith(_$selectedPlayersImpl value,
+          $Res Function(_$selectedPlayersImpl) then) =
+      __$$selectedPlayersImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Player> players});
 }
 
 /// @nodoc
-class __$$_selectedPlayersCopyWithImpl<$Res>
+class __$$selectedPlayersImplCopyWithImpl<$Res>
     extends _$PlaythroughPlayersSelectionResultCopyWithImpl<$Res,
-        _$_selectedPlayers> implements _$$_selectedPlayersCopyWith<$Res> {
-  __$$_selectedPlayersCopyWithImpl(
-      _$_selectedPlayers _value, $Res Function(_$_selectedPlayers) _then)
+        _$selectedPlayersImpl> implements _$$selectedPlayersImplCopyWith<$Res> {
+  __$$selectedPlayersImplCopyWithImpl(
+      _$selectedPlayersImpl _value, $Res Function(_$selectedPlayersImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -115,7 +115,7 @@ class __$$_selectedPlayersCopyWithImpl<$Res>
   $Res call({
     Object? players = null,
   }) {
-    return _then(_$_selectedPlayers(
+    return _then(_$selectedPlayersImpl(
       players: null == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
@@ -126,8 +126,8 @@ class __$$_selectedPlayersCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_selectedPlayers implements _selectedPlayers {
-  const _$_selectedPlayers({required final List<Player> players})
+class _$selectedPlayersImpl implements _selectedPlayers {
+  const _$selectedPlayersImpl({required final List<Player> players})
       : _players = players;
 
   final List<Player> _players;
@@ -147,7 +147,7 @@ class _$_selectedPlayers implements _selectedPlayers {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_selectedPlayers &&
+            other is _$selectedPlayersImpl &&
             const DeepCollectionEquality().equals(other._players, _players));
   }
 
@@ -158,8 +158,9 @@ class _$_selectedPlayers implements _selectedPlayers {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_selectedPlayersCopyWith<_$_selectedPlayers> get copyWith =>
-      __$$_selectedPlayersCopyWithImpl<_$_selectedPlayers>(this, _$identity);
+  _$$selectedPlayersImplCopyWith<_$selectedPlayersImpl> get copyWith =>
+      __$$selectedPlayersImplCopyWithImpl<_$selectedPlayersImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -220,12 +221,12 @@ class _$_selectedPlayers implements _selectedPlayers {
 
 abstract class _selectedPlayers implements PlaythroughPlayersSelectionResult {
   const factory _selectedPlayers({required final List<Player> players}) =
-      _$_selectedPlayers;
+      _$selectedPlayersImpl;
 
   @override
   List<Player> get players;
   @override
   @JsonKey(ignore: true)
-  _$$_selectedPlayersCopyWith<_$_selectedPlayers> get copyWith =>
+  _$$selectedPlayersImplCopyWith<_$selectedPlayersImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -95,24 +95,25 @@ class _$PlaythroughsLogGamePlayersCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_loadingCopyWith<$Res> {
-  factory _$$_loadingCopyWith(
-          _$_loading value, $Res Function(_$_loading) then) =
-      __$$_loadingCopyWithImpl<$Res>;
+abstract class _$$loadingImplCopyWith<$Res> {
+  factory _$$loadingImplCopyWith(
+          _$loadingImpl value, $Res Function(_$loadingImpl) then) =
+      __$$loadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_loadingCopyWithImpl<$Res>
-    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res, _$_loading>
-    implements _$$_loadingCopyWith<$Res> {
-  __$$_loadingCopyWithImpl(_$_loading _value, $Res Function(_$_loading) _then)
+class __$$loadingImplCopyWithImpl<$Res>
+    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res, _$loadingImpl>
+    implements _$$loadingImplCopyWith<$Res> {
+  __$$loadingImplCopyWithImpl(
+      _$loadingImpl _value, $Res Function(_$loadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_loading implements _loading {
-  const _$_loading();
+class _$loadingImpl implements _loading {
+  const _$loadingImpl();
 
   @override
   String toString() {
@@ -122,7 +123,7 @@ class _$_loading implements _loading {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_loading);
+        (other.runtimeType == runtimeType && other is _$loadingImpl);
   }
 
   @override
@@ -210,29 +211,29 @@ class _$_loading implements _loading {
 }
 
 abstract class _loading implements PlaythroughsLogGamePlayers {
-  const factory _loading() = _$_loading;
+  const factory _loading() = _$loadingImpl;
 }
 
 /// @nodoc
-abstract class _$$_noPlayersCopyWith<$Res> {
-  factory _$$_noPlayersCopyWith(
-          _$_noPlayers value, $Res Function(_$_noPlayers) then) =
-      __$$_noPlayersCopyWithImpl<$Res>;
+abstract class _$$noPlayersImplCopyWith<$Res> {
+  factory _$$noPlayersImplCopyWith(
+          _$noPlayersImpl value, $Res Function(_$noPlayersImpl) then) =
+      __$$noPlayersImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_noPlayersCopyWithImpl<$Res>
-    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res, _$_noPlayers>
-    implements _$$_noPlayersCopyWith<$Res> {
-  __$$_noPlayersCopyWithImpl(
-      _$_noPlayers _value, $Res Function(_$_noPlayers) _then)
+class __$$noPlayersImplCopyWithImpl<$Res>
+    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res, _$noPlayersImpl>
+    implements _$$noPlayersImplCopyWith<$Res> {
+  __$$noPlayersImplCopyWithImpl(
+      _$noPlayersImpl _value, $Res Function(_$noPlayersImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_noPlayers implements _noPlayers {
-  const _$_noPlayers();
+class _$noPlayersImpl implements _noPlayers {
+  const _$noPlayersImpl();
 
   @override
   String toString() {
@@ -242,7 +243,7 @@ class _$_noPlayers implements _noPlayers {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_noPlayers);
+        (other.runtimeType == runtimeType && other is _$noPlayersImpl);
   }
 
   @override
@@ -330,29 +331,30 @@ class _$_noPlayers implements _noPlayers {
 }
 
 abstract class _noPlayers implements PlaythroughsLogGamePlayers {
-  const factory _noPlayers() = _$_noPlayers;
+  const factory _noPlayers() = _$noPlayersImpl;
 }
 
 /// @nodoc
-abstract class _$$_noPlayersSelectedCopyWith<$Res> {
-  factory _$$_noPlayersSelectedCopyWith(_$_noPlayersSelected value,
-          $Res Function(_$_noPlayersSelected) then) =
-      __$$_noPlayersSelectedCopyWithImpl<$Res>;
+abstract class _$$noPlayersSelectedImplCopyWith<$Res> {
+  factory _$$noPlayersSelectedImplCopyWith(_$noPlayersSelectedImpl value,
+          $Res Function(_$noPlayersSelectedImpl) then) =
+      __$$noPlayersSelectedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_noPlayersSelectedCopyWithImpl<$Res>
-    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res, _$_noPlayersSelected>
-    implements _$$_noPlayersSelectedCopyWith<$Res> {
-  __$$_noPlayersSelectedCopyWithImpl(
-      _$_noPlayersSelected _value, $Res Function(_$_noPlayersSelected) _then)
+class __$$noPlayersSelectedImplCopyWithImpl<$Res>
+    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res,
+        _$noPlayersSelectedImpl>
+    implements _$$noPlayersSelectedImplCopyWith<$Res> {
+  __$$noPlayersSelectedImplCopyWithImpl(_$noPlayersSelectedImpl _value,
+      $Res Function(_$noPlayersSelectedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_noPlayersSelected implements _noPlayersSelected {
-  const _$_noPlayersSelected();
+class _$noPlayersSelectedImpl implements _noPlayersSelected {
+  const _$noPlayersSelectedImpl();
 
   @override
   String toString() {
@@ -362,7 +364,7 @@ class _$_noPlayersSelected implements _noPlayersSelected {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_noPlayersSelected);
+        (other.runtimeType == runtimeType && other is _$noPlayersSelectedImpl);
   }
 
   @override
@@ -450,24 +452,24 @@ class _$_noPlayersSelected implements _noPlayersSelected {
 }
 
 abstract class _noPlayersSelected implements PlaythroughsLogGamePlayers {
-  const factory _noPlayersSelected() = _$_noPlayersSelected;
+  const factory _noPlayersSelected() = _$noPlayersSelectedImpl;
 }
 
 /// @nodoc
-abstract class _$$_playersSelectedCopyWith<$Res> {
-  factory _$$_playersSelectedCopyWith(
-          _$_playersSelected value, $Res Function(_$_playersSelected) then) =
-      __$$_playersSelectedCopyWithImpl<$Res>;
+abstract class _$$playersSelectedImplCopyWith<$Res> {
+  factory _$$playersSelectedImplCopyWith(_$playersSelectedImpl value,
+          $Res Function(_$playersSelectedImpl) then) =
+      __$$playersSelectedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Player> players, Map<String, PlayerScore> playerScores});
 }
 
 /// @nodoc
-class __$$_playersSelectedCopyWithImpl<$Res>
-    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res, _$_playersSelected>
-    implements _$$_playersSelectedCopyWith<$Res> {
-  __$$_playersSelectedCopyWithImpl(
-      _$_playersSelected _value, $Res Function(_$_playersSelected) _then)
+class __$$playersSelectedImplCopyWithImpl<$Res>
+    extends _$PlaythroughsLogGamePlayersCopyWithImpl<$Res,
+        _$playersSelectedImpl> implements _$$playersSelectedImplCopyWith<$Res> {
+  __$$playersSelectedImplCopyWithImpl(
+      _$playersSelectedImpl _value, $Res Function(_$playersSelectedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -476,7 +478,7 @@ class __$$_playersSelectedCopyWithImpl<$Res>
     Object? players = null,
     Object? playerScores = null,
   }) {
-    return _then(_$_playersSelected(
+    return _then(_$playersSelectedImpl(
       players: null == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
@@ -491,8 +493,8 @@ class __$$_playersSelectedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_playersSelected implements _playersSelected {
-  const _$_playersSelected(
+class _$playersSelectedImpl implements _playersSelected {
+  const _$playersSelectedImpl(
       {required final List<Player> players,
       required final Map<String, PlayerScore> playerScores})
       : _players = players,
@@ -523,7 +525,7 @@ class _$_playersSelected implements _playersSelected {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_playersSelected &&
+            other is _$playersSelectedImpl &&
             const DeepCollectionEquality().equals(other._players, _players) &&
             const DeepCollectionEquality()
                 .equals(other._playerScores, _playerScores));
@@ -538,8 +540,9 @@ class _$_playersSelected implements _playersSelected {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_playersSelectedCopyWith<_$_playersSelected> get copyWith =>
-      __$$_playersSelectedCopyWithImpl<_$_playersSelected>(this, _$identity);
+  _$$playersSelectedImplCopyWith<_$playersSelectedImpl> get copyWith =>
+      __$$playersSelectedImplCopyWithImpl<_$playersSelectedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -626,11 +629,11 @@ abstract class _playersSelected implements PlaythroughsLogGamePlayers {
   const factory _playersSelected(
           {required final List<Player> players,
           required final Map<String, PlayerScore> playerScores}) =
-      _$_playersSelected;
+      _$playersSelectedImpl;
 
   List<Player> get players;
   Map<String, PlayerScore> get playerScores;
   @JsonKey(ignore: true)
-  _$$_playersSelectedCopyWith<_$_playersSelected> get copyWith =>
+  _$$playersSelectedImplCopyWith<_$playersSelectedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

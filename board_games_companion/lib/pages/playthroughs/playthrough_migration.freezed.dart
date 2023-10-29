@@ -83,23 +83,24 @@ class _$PlaythroughMigrationCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_initCopyWith<$Res> {
-  factory _$$_initCopyWith(_$_init value, $Res Function(_$_init) then) =
-      __$$_initCopyWithImpl<$Res>;
+abstract class _$$initImplCopyWith<$Res> {
+  factory _$$initImplCopyWith(
+          _$initImpl value, $Res Function(_$initImpl) then) =
+      __$$initImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_initCopyWithImpl<$Res>
-    extends _$PlaythroughMigrationCopyWithImpl<$Res, _$_init>
-    implements _$$_initCopyWith<$Res> {
-  __$$_initCopyWithImpl(_$_init _value, $Res Function(_$_init) _then)
+class __$$initImplCopyWithImpl<$Res>
+    extends _$PlaythroughMigrationCopyWithImpl<$Res, _$initImpl>
+    implements _$$initImplCopyWith<$Res> {
+  __$$initImplCopyWithImpl(_$initImpl _value, $Res Function(_$initImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_init implements _init {
-  const _$_init();
+class _$initImpl implements _init {
+  const _$initImpl();
 
   @override
   String toString() {
@@ -109,7 +110,7 @@ class _$_init implements _init {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_init);
+        (other.runtimeType == runtimeType && other is _$initImpl);
   }
 
   @override
@@ -186,14 +187,15 @@ class _$_init implements _init {
 }
 
 abstract class _init implements PlaythroughMigration {
-  const factory _init() = _$_init;
+  const factory _init() = _$initImpl;
 }
 
 /// @nodoc
-abstract class _$$_fromScoreToCooperativeCopyWith<$Res> {
-  factory _$$_fromScoreToCooperativeCopyWith(_$_fromScoreToCooperative value,
-          $Res Function(_$_fromScoreToCooperative) then) =
-      __$$_fromScoreToCooperativeCopyWithImpl<$Res>;
+abstract class _$$fromScoreToCooperativeImplCopyWith<$Res> {
+  factory _$$fromScoreToCooperativeImplCopyWith(
+          _$fromScoreToCooperativeImpl value,
+          $Res Function(_$fromScoreToCooperativeImpl) then) =
+      __$$fromScoreToCooperativeImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {PlaythroughDetails playthroughDetails,
@@ -203,11 +205,13 @@ abstract class _$$_fromScoreToCooperativeCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_fromScoreToCooperativeCopyWithImpl<$Res>
-    extends _$PlaythroughMigrationCopyWithImpl<$Res, _$_fromScoreToCooperative>
-    implements _$$_fromScoreToCooperativeCopyWith<$Res> {
-  __$$_fromScoreToCooperativeCopyWithImpl(_$_fromScoreToCooperative _value,
-      $Res Function(_$_fromScoreToCooperative) _then)
+class __$$fromScoreToCooperativeImplCopyWithImpl<$Res>
+    extends _$PlaythroughMigrationCopyWithImpl<$Res,
+        _$fromScoreToCooperativeImpl>
+    implements _$$fromScoreToCooperativeImplCopyWith<$Res> {
+  __$$fromScoreToCooperativeImplCopyWithImpl(
+      _$fromScoreToCooperativeImpl _value,
+      $Res Function(_$fromScoreToCooperativeImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -216,7 +220,7 @@ class __$$_fromScoreToCooperativeCopyWithImpl<$Res>
     Object? playthroughDetails = null,
     Object? cooperativeGameResult = freezed,
   }) {
-    return _then(_$_fromScoreToCooperative(
+    return _then(_$fromScoreToCooperativeImpl(
       playthroughDetails: null == playthroughDetails
           ? _value.playthroughDetails
           : playthroughDetails // ignore: cast_nullable_to_non_nullable
@@ -240,8 +244,8 @@ class __$$_fromScoreToCooperativeCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_fromScoreToCooperative implements _fromScoreToCooperative {
-  const _$_fromScoreToCooperative(
+class _$fromScoreToCooperativeImpl implements _fromScoreToCooperative {
+  const _$fromScoreToCooperativeImpl(
       {required this.playthroughDetails, this.cooperativeGameResult});
 
   @override
@@ -258,7 +262,7 @@ class _$_fromScoreToCooperative implements _fromScoreToCooperative {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_fromScoreToCooperative &&
+            other is _$fromScoreToCooperativeImpl &&
             (identical(other.playthroughDetails, playthroughDetails) ||
                 other.playthroughDetails == playthroughDetails) &&
             (identical(other.cooperativeGameResult, cooperativeGameResult) ||
@@ -272,9 +276,9 @@ class _$_fromScoreToCooperative implements _fromScoreToCooperative {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_fromScoreToCooperativeCopyWith<_$_fromScoreToCooperative> get copyWith =>
-      __$$_fromScoreToCooperativeCopyWithImpl<_$_fromScoreToCooperative>(
-          this, _$identity);
+  _$$fromScoreToCooperativeImplCopyWith<_$fromScoreToCooperativeImpl>
+      get copyWith => __$$fromScoreToCooperativeImplCopyWithImpl<
+          _$fromScoreToCooperativeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -351,11 +355,11 @@ abstract class _fromScoreToCooperative implements PlaythroughMigration {
   const factory _fromScoreToCooperative(
           {required final PlaythroughDetails playthroughDetails,
           final CooperativeGameResult? cooperativeGameResult}) =
-      _$_fromScoreToCooperative;
+      _$fromScoreToCooperativeImpl;
 
   PlaythroughDetails get playthroughDetails;
   CooperativeGameResult? get cooperativeGameResult;
   @JsonKey(ignore: true)
-  _$$_fromScoreToCooperativeCopyWith<_$_fromScoreToCooperative> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$fromScoreToCooperativeImplCopyWith<_$fromScoreToCooperativeImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

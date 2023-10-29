@@ -117,11 +117,11 @@ class _$HistoricalPlaythroughCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_withDateHeaderCopyWith<$Res>
+abstract class _$$withDateHeaderImplCopyWith<$Res>
     implements $HistoricalPlaythroughCopyWith<$Res> {
-  factory _$$_withDateHeaderCopyWith(
-          _$_withDateHeader value, $Res Function(_$_withDateHeader) then) =
-      __$$_withDateHeaderCopyWithImpl<$Res>;
+  factory _$$withDateHeaderImplCopyWith(_$withDateHeaderImpl value,
+          $Res Function(_$withDateHeaderImpl) then) =
+      __$$withDateHeaderImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({DateTime playedOn, BoardGamePlaythrough boardGamePlaythroughs});
@@ -131,11 +131,11 @@ abstract class _$$_withDateHeaderCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_withDateHeaderCopyWithImpl<$Res>
-    extends _$HistoricalPlaythroughCopyWithImpl<$Res, _$_withDateHeader>
-    implements _$$_withDateHeaderCopyWith<$Res> {
-  __$$_withDateHeaderCopyWithImpl(
-      _$_withDateHeader _value, $Res Function(_$_withDateHeader) _then)
+class __$$withDateHeaderImplCopyWithImpl<$Res>
+    extends _$HistoricalPlaythroughCopyWithImpl<$Res, _$withDateHeaderImpl>
+    implements _$$withDateHeaderImplCopyWith<$Res> {
+  __$$withDateHeaderImplCopyWithImpl(
+      _$withDateHeaderImpl _value, $Res Function(_$withDateHeaderImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -144,7 +144,7 @@ class __$$_withDateHeaderCopyWithImpl<$Res>
     Object? playedOn = null,
     Object? boardGamePlaythroughs = null,
   }) {
-    return _then(_$_withDateHeader(
+    return _then(_$withDateHeaderImpl(
       playedOn: null == playedOn
           ? _value.playedOn
           : playedOn // ignore: cast_nullable_to_non_nullable
@@ -159,8 +159,8 @@ class __$$_withDateHeaderCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_withDateHeader implements _withDateHeader {
-  const _$_withDateHeader(
+class _$withDateHeaderImpl implements _withDateHeader {
+  const _$withDateHeaderImpl(
       {required this.playedOn, required this.boardGamePlaythroughs});
 
   @override
@@ -177,7 +177,7 @@ class _$_withDateHeader implements _withDateHeader {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_withDateHeader &&
+            other is _$withDateHeaderImpl &&
             (identical(other.playedOn, playedOn) ||
                 other.playedOn == playedOn) &&
             (identical(other.boardGamePlaythroughs, boardGamePlaythroughs) ||
@@ -190,8 +190,9 @@ class _$_withDateHeader implements _withDateHeader {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_withDateHeaderCopyWith<_$_withDateHeader> get copyWith =>
-      __$$_withDateHeaderCopyWithImpl<_$_withDateHeader>(this, _$identity);
+  _$$withDateHeaderImplCopyWith<_$withDateHeaderImpl> get copyWith =>
+      __$$withDateHeaderImplCopyWithImpl<_$withDateHeaderImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -269,23 +270,23 @@ abstract class _withDateHeader implements HistoricalPlaythrough {
   const factory _withDateHeader(
           {required final DateTime playedOn,
           required final BoardGamePlaythrough boardGamePlaythroughs}) =
-      _$_withDateHeader;
+      _$withDateHeaderImpl;
 
   DateTime get playedOn;
   @override
   BoardGamePlaythrough get boardGamePlaythroughs;
   @override
   @JsonKey(ignore: true)
-  _$$_withDateHeaderCopyWith<_$_withDateHeader> get copyWith =>
+  _$$withDateHeaderImplCopyWith<_$withDateHeaderImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_withoutDateHeaderCopyWith<$Res>
+abstract class _$$withoutDateHeaderImplCopyWith<$Res>
     implements $HistoricalPlaythroughCopyWith<$Res> {
-  factory _$$_withoutDateHeaderCopyWith(_$_withoutDateHeader value,
-          $Res Function(_$_withoutDateHeader) then) =
-      __$$_withoutDateHeaderCopyWithImpl<$Res>;
+  factory _$$withoutDateHeaderImplCopyWith(_$withoutDateHeaderImpl value,
+          $Res Function(_$withoutDateHeaderImpl) then) =
+      __$$withoutDateHeaderImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({BoardGamePlaythrough boardGamePlaythroughs});
@@ -295,11 +296,11 @@ abstract class _$$_withoutDateHeaderCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_withoutDateHeaderCopyWithImpl<$Res>
-    extends _$HistoricalPlaythroughCopyWithImpl<$Res, _$_withoutDateHeader>
-    implements _$$_withoutDateHeaderCopyWith<$Res> {
-  __$$_withoutDateHeaderCopyWithImpl(
-      _$_withoutDateHeader _value, $Res Function(_$_withoutDateHeader) _then)
+class __$$withoutDateHeaderImplCopyWithImpl<$Res>
+    extends _$HistoricalPlaythroughCopyWithImpl<$Res, _$withoutDateHeaderImpl>
+    implements _$$withoutDateHeaderImplCopyWith<$Res> {
+  __$$withoutDateHeaderImplCopyWithImpl(_$withoutDateHeaderImpl _value,
+      $Res Function(_$withoutDateHeaderImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -307,7 +308,7 @@ class __$$_withoutDateHeaderCopyWithImpl<$Res>
   $Res call({
     Object? boardGamePlaythroughs = null,
   }) {
-    return _then(_$_withoutDateHeader(
+    return _then(_$withoutDateHeaderImpl(
       boardGamePlaythroughs: null == boardGamePlaythroughs
           ? _value.boardGamePlaythroughs
           : boardGamePlaythroughs // ignore: cast_nullable_to_non_nullable
@@ -318,8 +319,8 @@ class __$$_withoutDateHeaderCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_withoutDateHeader implements _withoutDateHeader {
-  const _$_withoutDateHeader({required this.boardGamePlaythroughs});
+class _$withoutDateHeaderImpl implements _withoutDateHeader {
+  const _$withoutDateHeaderImpl({required this.boardGamePlaythroughs});
 
   @override
   final BoardGamePlaythrough boardGamePlaythroughs;
@@ -333,7 +334,7 @@ class _$_withoutDateHeader implements _withoutDateHeader {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_withoutDateHeader &&
+            other is _$withoutDateHeaderImpl &&
             (identical(other.boardGamePlaythroughs, boardGamePlaythroughs) ||
                 other.boardGamePlaythroughs == boardGamePlaythroughs));
   }
@@ -344,8 +345,8 @@ class _$_withoutDateHeader implements _withoutDateHeader {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_withoutDateHeaderCopyWith<_$_withoutDateHeader> get copyWith =>
-      __$$_withoutDateHeaderCopyWithImpl<_$_withoutDateHeader>(
+  _$$withoutDateHeaderImplCopyWith<_$withoutDateHeaderImpl> get copyWith =>
+      __$$withoutDateHeaderImplCopyWithImpl<_$withoutDateHeaderImpl>(
           this, _$identity);
 
   @override
@@ -423,12 +424,12 @@ class _$_withoutDateHeader implements _withoutDateHeader {
 abstract class _withoutDateHeader implements HistoricalPlaythrough {
   const factory _withoutDateHeader(
           {required final BoardGamePlaythrough boardGamePlaythroughs}) =
-      _$_withoutDateHeader;
+      _$withoutDateHeaderImpl;
 
   @override
   BoardGamePlaythrough get boardGamePlaythroughs;
   @override
   @JsonKey(ignore: true)
-  _$$_withoutDateHeaderCopyWith<_$_withoutDateHeader> get copyWith =>
+  _$$withoutDateHeaderImplCopyWith<_$withoutDateHeaderImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

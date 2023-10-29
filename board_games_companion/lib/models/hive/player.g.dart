@@ -6,17 +6,17 @@ part of 'player.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PlayerAdapter extends TypeAdapter<_$_Player> {
+class PlayerAdapter extends TypeAdapter<_$PlayerImpl> {
   @override
   final int typeId = 2;
 
   @override
-  _$_Player read(BinaryReader reader) {
+  _$PlayerImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_Player(
+    return _$PlayerImpl(
       id: fields[0] as String,
       name: fields[1] as String?,
       isDeleted: fields[3] as bool?,
@@ -26,7 +26,7 @@ class PlayerAdapter extends TypeAdapter<_$_Player> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_Player obj) {
+  void write(BinaryWriter writer, _$PlayerImpl obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)

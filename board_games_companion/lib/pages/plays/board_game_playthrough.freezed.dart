@@ -84,11 +84,11 @@ class _$BoardGamePlaythroughCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BoardGamePlaythroughCopyWith<$Res>
+abstract class _$$BoardGamePlaythroughImplCopyWith<$Res>
     implements $BoardGamePlaythroughCopyWith<$Res> {
-  factory _$$_BoardGamePlaythroughCopyWith(_$_BoardGamePlaythrough value,
-          $Res Function(_$_BoardGamePlaythrough) then) =
-      __$$_BoardGamePlaythroughCopyWithImpl<$Res>;
+  factory _$$BoardGamePlaythroughImplCopyWith(_$BoardGamePlaythroughImpl value,
+          $Res Function(_$BoardGamePlaythroughImpl) then) =
+      __$$BoardGamePlaythroughImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -101,11 +101,11 @@ abstract class _$$_BoardGamePlaythroughCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_BoardGamePlaythroughCopyWithImpl<$Res>
-    extends _$BoardGamePlaythroughCopyWithImpl<$Res, _$_BoardGamePlaythrough>
-    implements _$$_BoardGamePlaythroughCopyWith<$Res> {
-  __$$_BoardGamePlaythroughCopyWithImpl(_$_BoardGamePlaythrough _value,
-      $Res Function(_$_BoardGamePlaythrough) _then)
+class __$$BoardGamePlaythroughImplCopyWithImpl<$Res>
+    extends _$BoardGamePlaythroughCopyWithImpl<$Res, _$BoardGamePlaythroughImpl>
+    implements _$$BoardGamePlaythroughImplCopyWith<$Res> {
+  __$$BoardGamePlaythroughImplCopyWithImpl(_$BoardGamePlaythroughImpl _value,
+      $Res Function(_$BoardGamePlaythroughImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -114,7 +114,7 @@ class __$$_BoardGamePlaythroughCopyWithImpl<$Res>
     Object? playthrough = null,
     Object? boardGameDetails = null,
   }) {
-    return _then(_$_BoardGamePlaythrough(
+    return _then(_$BoardGamePlaythroughImpl(
       playthrough: null == playthrough
           ? _value.playthrough
           : playthrough // ignore: cast_nullable_to_non_nullable
@@ -129,8 +129,8 @@ class __$$_BoardGamePlaythroughCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BoardGamePlaythrough extends _BoardGamePlaythrough {
-  const _$_BoardGamePlaythrough(
+class _$BoardGamePlaythroughImpl extends _BoardGamePlaythrough {
+  const _$BoardGamePlaythroughImpl(
       {required this.playthrough, required this.boardGameDetails})
       : super._();
 
@@ -148,7 +148,7 @@ class _$_BoardGamePlaythrough extends _BoardGamePlaythrough {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BoardGamePlaythrough &&
+            other is _$BoardGamePlaythroughImpl &&
             (identical(other.playthrough, playthrough) ||
                 other.playthrough == playthrough) &&
             (identical(other.boardGameDetails, boardGameDetails) ||
@@ -161,16 +161,17 @@ class _$_BoardGamePlaythrough extends _BoardGamePlaythrough {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGamePlaythroughCopyWith<_$_BoardGamePlaythrough> get copyWith =>
-      __$$_BoardGamePlaythroughCopyWithImpl<_$_BoardGamePlaythrough>(
-          this, _$identity);
+  _$$BoardGamePlaythroughImplCopyWith<_$BoardGamePlaythroughImpl>
+      get copyWith =>
+          __$$BoardGamePlaythroughImplCopyWithImpl<_$BoardGamePlaythroughImpl>(
+              this, _$identity);
 }
 
 abstract class _BoardGamePlaythrough extends BoardGamePlaythrough {
   const factory _BoardGamePlaythrough(
           {required final PlaythroughDetails playthrough,
           required final BoardGameDetails boardGameDetails}) =
-      _$_BoardGamePlaythrough;
+      _$BoardGamePlaythroughImpl;
   const _BoardGamePlaythrough._() : super._();
 
   @override
@@ -179,6 +180,6 @@ abstract class _BoardGamePlaythrough extends BoardGamePlaythrough {
   BoardGameDetails get boardGameDetails;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGamePlaythroughCopyWith<_$_BoardGamePlaythrough> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BoardGamePlaythroughImplCopyWith<_$BoardGamePlaythroughImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

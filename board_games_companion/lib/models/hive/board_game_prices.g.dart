@@ -6,17 +6,17 @@ part of 'board_game_prices.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class BoardGamePricesAdapter extends TypeAdapter<_$_BoardGamePrices> {
+class BoardGamePricesAdapter extends TypeAdapter<_$BoardGamePricesImpl> {
   @override
   final int typeId = 23;
 
   @override
-  _$_BoardGamePrices read(BinaryReader reader) {
+  _$BoardGamePricesImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_BoardGamePrices(
+    return _$BoardGamePricesImpl(
       region: fields[0] as String,
       websiteUrl: fields[1] as String,
       highest: fields[2] as double?,
@@ -34,7 +34,7 @@ class BoardGamePricesAdapter extends TypeAdapter<_$_BoardGamePrices> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_BoardGamePrices obj) {
+  void write(BinaryWriter writer, _$BoardGamePricesImpl obj) {
     writer
       ..writeByte(13)
       ..writeByte(0)

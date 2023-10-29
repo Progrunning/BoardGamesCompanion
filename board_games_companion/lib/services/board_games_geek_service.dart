@@ -3,15 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/utilities/caching_http_client.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
-import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:injectable/injectable.dart';
 import 'package:retry/retry.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:xml/xml.dart';
@@ -36,7 +34,6 @@ import '../models/hive/board_game_rank.dart';
 import '../models/import_result.dart';
 import '../models/parse_collection_xml_arguments.dart';
 import '../models/parse_plays_xml_arguments.dart';
-import '../utilities/custom_http_client_adapter.dart';
 
 const String _xmlErrorElementName = 'error';
 const String _xmlItemElementName = 'item';
@@ -87,39 +84,44 @@ const String _xmlLastModifiedAttributeTypeName = 'lastmodified';
 
 const int _playerWinIndicator = 1;
 
-@singleton
 class BoardGamesGeekService {
-  BoardGamesGeekService(this._httpClientAdapter) {
-    _dio
-      ..httpClientAdapter = _httpClientAdapter
-      ..interceptors.add(InterceptorsWrapper(
-        onRequest: (RequestOptions requestOptions, handler) async {
-          final String cacheKey = _dioCacheOptions.keyBuilder(requestOptions);
-          final CacheResponse? cachedResponse = await _dioCacheOptions.store?.get(cacheKey);
-          if (cachedResponse != null) {
-            // MK Hot board games cache expiration check
-            if (requestOptions.uri.toString().contains(_hotBoardGamesUrl) &&
-                DateTime.now().difference(cachedResponse.responseDate).inHours <
-                    _hotBoardGamesCacheExpirationInHours) {
-              Fimber.d('Getting hot board games from cache');
-              return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
-            }
+  BoardGamesGeekService({
+    required CachingHttpClient gameDetailsCachingHttpClient,
+    required CachingHttpClient hotGamesCachingHttpClient,
+  })  : _gameDetailsCachingHttpClient = gameDetailsCachingHttpClient,
+        _hotGamesCachingHttpClient = hotGamesCachingHttpClient;
 
-            // MK board game details cache expiration check
-            if (requestOptions.uri.toString().contains(_boardGamesDetailsUrl) &&
-                DateTime.now().difference(cachedResponse.responseDate).inHours <
-                    _boardGameDetailsCacheExpirationInHours) {
-              Fimber.d('Getting board game details from cache');
-              return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
-            }
-          }
+  // BoardGamesGeekService(this._httpClientAdapter) {
+  //   _dio
+  //     ..httpClientAdapter = _httpClientAdapter
+  //     ..interceptors.add(InterceptorsWrapper(
+  //       onRequest: (RequestOptions requestOptions, handler) async {
+  //         final String cacheKey = _dioCacheOptions.keyBuilder(requestOptions);
+  //         final CacheResponse? cachedResponse = await _dioCacheOptions.store?.get(cacheKey);
+  //         if (cachedResponse != null) {
+  //           // MK Hot board games cache expiration check
+  //           if (requestOptions.uri.toString().contains(_hotBoardGamesUrl) &&
+  //               DateTime.now().difference(cachedResponse.responseDate).inHours <
+  //                   _hotBoardGamesCacheExpirationInHours) {
+  //             Fimber.d('Getting hot board games from cache');
+  //             return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
+  //           }
 
-          return handler.next(requestOptions);
-        },
-      ))
-      ..interceptors.add(DioCacheInterceptor(options: _dioCacheOptions))
-      ..interceptors.add(LogInterceptor(responseBody: true));
-  }
+  //           // MK board game details cache expiration check
+  //           if (requestOptions.uri.toString().contains(_boardGamesDetailsUrl) &&
+  //               DateTime.now().difference(cachedResponse.responseDate).inHours <
+  //                   _boardGameDetailsCacheExpirationInHours) {
+  //             Fimber.d('Getting board game details from cache');
+  //             return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
+  //           }
+  //         }
+
+  //         return handler.next(requestOptions);
+  //       },
+  //     ))
+  //     ..interceptors.add(DioCacheInterceptor(options: _dioCacheOptions))
+  //     ..interceptors.add(LogInterceptor(responseBody: true));
+  // }
 
   static const String _bggApiBaseUrl = 'www.boardgamegeek.com';
   static const String _baseBoardGamesUrl = 'https://www.boardgamegeek.com/xmlapi2';
@@ -141,9 +143,6 @@ class BoardGamesGeekService {
   static const String _boardGameType = 'boardgame';
   static const String _boardGameExpansionType = 'boardgameexpansion';
 
-  static const int _hotBoardGamesCacheExpirationInHours = Duration.hoursPerDay;
-
-  static const int _boardGameDetailsCacheExpirationInHours = Duration.hoursPerDay * 7;
   static const int _bggRetryStatusCode = 202;
   static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;
@@ -152,7 +151,9 @@ class BoardGamesGeekService {
     store: HiveCacheStore(null, hiveBoxName: HiveBoxes.dioCache),
   );
 
-  final CustomHttpClientAdapter _httpClientAdapter;
+  final CachingHttpClient _gameDetailsCachingHttpClient;
+  final CachingHttpClient _hotGamesCachingHttpClient;
+  // final CustomHttpClientAdapter _httpClientAdapter;
   final Dio _dio = Dio();
 
   Future<List<BoardGameDetails>> getHot({int retryCount = 0}) async {
@@ -217,10 +218,6 @@ class BoardGamesGeekService {
       return null;
     }
 
-    // final retrievalOptions = _dioCacheOptions.toOptions();
-    // retrievalOptions.contentType = 'application/xml';
-    // retrievalOptions.responseType = ResponseType.plain;
-
     final url = Uri.https(
       _bggApiBaseUrl,
       'xmlapi2/thing',
@@ -229,7 +226,7 @@ class BoardGamesGeekService {
         _boardGameQueryParamterStats: '1',
       },
     );
-    final boardGameDetailsResponse = await http.get(url);
+    final boardGameDetailsResponse = await _gameDetailsCachingHttpClient.get(url);
 
     try {
       final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsResponse.body)!;

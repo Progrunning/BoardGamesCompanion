@@ -100,11 +100,11 @@ class _$GameSpinnerFiltersCopyWithImpl<$Res, $Val extends GameSpinnerFilters>
 }
 
 /// @nodoc
-abstract class _$$_GameSpinnerFiltersCopyWith<$Res>
+abstract class _$$GameSpinnerFiltersImplCopyWith<$Res>
     implements $GameSpinnerFiltersCopyWith<$Res> {
-  factory _$$_GameSpinnerFiltersCopyWith(_$_GameSpinnerFilters value,
-          $Res Function(_$_GameSpinnerFilters) then) =
-      __$$_GameSpinnerFiltersCopyWithImpl<$Res>;
+  factory _$$GameSpinnerFiltersImplCopyWith(_$GameSpinnerFiltersImpl value,
+          $Res Function(_$GameSpinnerFiltersImpl) then) =
+      __$$GameSpinnerFiltersImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -120,11 +120,11 @@ abstract class _$$_GameSpinnerFiltersCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
-    extends _$GameSpinnerFiltersCopyWithImpl<$Res, _$_GameSpinnerFilters>
-    implements _$$_GameSpinnerFiltersCopyWith<$Res> {
-  __$$_GameSpinnerFiltersCopyWithImpl(
-      _$_GameSpinnerFilters _value, $Res Function(_$_GameSpinnerFilters) _then)
+class __$$GameSpinnerFiltersImplCopyWithImpl<$Res>
+    extends _$GameSpinnerFiltersCopyWithImpl<$Res, _$GameSpinnerFiltersImpl>
+    implements _$$GameSpinnerFiltersImplCopyWith<$Res> {
+  __$$GameSpinnerFiltersImplCopyWithImpl(_$GameSpinnerFiltersImpl _value,
+      $Res Function(_$GameSpinnerFiltersImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -135,7 +135,7 @@ class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
     Object? numberOfPlayersFilter = null,
     Object? playtimeFilter = null,
   }) {
-    return _then(_$_GameSpinnerFilters(
+    return _then(_$GameSpinnerFiltersImpl(
       collections: null == collections
           ? _value._collections
           : collections // ignore: cast_nullable_to_non_nullable
@@ -158,8 +158,8 @@ class __$$_GameSpinnerFiltersCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_GameSpinnerFilters extends _GameSpinnerFilters {
-  const _$_GameSpinnerFilters(
+class _$GameSpinnerFiltersImpl extends _GameSpinnerFilters {
+  const _$GameSpinnerFiltersImpl(
       {required final Set<CollectionType> collections,
       required this.includeExpansions,
       this.numberOfPlayersFilter = const NumberOfPlayersFilter.any(),
@@ -193,7 +193,7 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_GameSpinnerFilters &&
+            other is _$GameSpinnerFiltersImpl &&
             const DeepCollectionEquality()
                 .equals(other._collections, _collections) &&
             (identical(other.includeExpansions, includeExpansions) ||
@@ -215,8 +215,8 @@ class _$_GameSpinnerFilters extends _GameSpinnerFilters {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_GameSpinnerFiltersCopyWith<_$_GameSpinnerFilters> get copyWith =>
-      __$$_GameSpinnerFiltersCopyWithImpl<_$_GameSpinnerFilters>(
+  _$$GameSpinnerFiltersImplCopyWith<_$GameSpinnerFiltersImpl> get copyWith =>
+      __$$GameSpinnerFiltersImplCopyWithImpl<_$GameSpinnerFiltersImpl>(
           this, _$identity);
 }
 
@@ -225,7 +225,7 @@ abstract class _GameSpinnerFilters extends GameSpinnerFilters {
       {required final Set<CollectionType> collections,
       required final bool includeExpansions,
       final NumberOfPlayersFilter numberOfPlayersFilter,
-      final PlaytimeFilter playtimeFilter}) = _$_GameSpinnerFilters;
+      final PlaytimeFilter playtimeFilter}) = _$GameSpinnerFiltersImpl;
   const _GameSpinnerFilters._() : super._();
 
   @override
@@ -238,7 +238,7 @@ abstract class _GameSpinnerFilters extends GameSpinnerFilters {
   PlaytimeFilter get playtimeFilter;
   @override
   @JsonKey(ignore: true)
-  _$$_GameSpinnerFiltersCopyWith<_$_GameSpinnerFilters> get copyWith =>
+  _$$GameSpinnerFiltersImplCopyWith<_$GameSpinnerFiltersImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -316,25 +316,25 @@ class _$NumberOfPlayersFilterCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_numberOfPlayersAnyCopyWith<$Res> {
-  factory _$$_numberOfPlayersAnyCopyWith(_$_numberOfPlayersAny value,
-          $Res Function(_$_numberOfPlayersAny) then) =
-      __$$_numberOfPlayersAnyCopyWithImpl<$Res>;
+abstract class _$$numberOfPlayersAnyImplCopyWith<$Res> {
+  factory _$$numberOfPlayersAnyImplCopyWith(_$numberOfPlayersAnyImpl value,
+          $Res Function(_$numberOfPlayersAnyImpl) then) =
+      __$$numberOfPlayersAnyImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_numberOfPlayersAnyCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_numberOfPlayersAny>
-    implements _$$_numberOfPlayersAnyCopyWith<$Res> {
-  __$$_numberOfPlayersAnyCopyWithImpl(
-      _$_numberOfPlayersAny _value, $Res Function(_$_numberOfPlayersAny) _then)
+class __$$numberOfPlayersAnyImplCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$numberOfPlayersAnyImpl>
+    implements _$$numberOfPlayersAnyImplCopyWith<$Res> {
+  __$$numberOfPlayersAnyImplCopyWithImpl(_$numberOfPlayersAnyImpl _value,
+      $Res Function(_$numberOfPlayersAnyImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_numberOfPlayersAny implements _numberOfPlayersAny {
-  const _$_numberOfPlayersAny();
+class _$numberOfPlayersAnyImpl implements _numberOfPlayersAny {
+  const _$numberOfPlayersAnyImpl();
 
   @override
   String toString() {
@@ -344,7 +344,7 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_numberOfPlayersAny);
+        (other.runtimeType == runtimeType && other is _$numberOfPlayersAnyImpl);
   }
 
   @override
@@ -426,27 +426,28 @@ class _$_numberOfPlayersAny implements _numberOfPlayersAny {
 }
 
 abstract class _numberOfPlayersAny implements NumberOfPlayersFilter {
-  const factory _numberOfPlayersAny() = _$_numberOfPlayersAny;
+  const factory _numberOfPlayersAny() = _$numberOfPlayersAnyImpl;
 }
 
 /// @nodoc
-abstract class _$$_soloCopyWith<$Res> {
-  factory _$$_soloCopyWith(_$_solo value, $Res Function(_$_solo) then) =
-      __$$_soloCopyWithImpl<$Res>;
+abstract class _$$soloImplCopyWith<$Res> {
+  factory _$$soloImplCopyWith(
+          _$soloImpl value, $Res Function(_$soloImpl) then) =
+      __$$soloImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_soloCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_solo>
-    implements _$$_soloCopyWith<$Res> {
-  __$$_soloCopyWithImpl(_$_solo _value, $Res Function(_$_solo) _then)
+class __$$soloImplCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$soloImpl>
+    implements _$$soloImplCopyWith<$Res> {
+  __$$soloImplCopyWithImpl(_$soloImpl _value, $Res Function(_$soloImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_solo implements _solo {
-  const _$_solo();
+class _$soloImpl implements _solo {
+  const _$soloImpl();
 
   @override
   String toString() {
@@ -456,7 +457,7 @@ class _$_solo implements _solo {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_solo);
+        (other.runtimeType == runtimeType && other is _$soloImpl);
   }
 
   @override
@@ -538,27 +539,29 @@ class _$_solo implements _solo {
 }
 
 abstract class _solo implements NumberOfPlayersFilter {
-  const factory _solo() = _$_solo;
+  const factory _solo() = _$soloImpl;
 }
 
 /// @nodoc
-abstract class _$$_coupleCopyWith<$Res> {
-  factory _$$_coupleCopyWith(_$_couple value, $Res Function(_$_couple) then) =
-      __$$_coupleCopyWithImpl<$Res>;
+abstract class _$$coupleImplCopyWith<$Res> {
+  factory _$$coupleImplCopyWith(
+          _$coupleImpl value, $Res Function(_$coupleImpl) then) =
+      __$$coupleImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_coupleCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_couple>
-    implements _$$_coupleCopyWith<$Res> {
-  __$$_coupleCopyWithImpl(_$_couple _value, $Res Function(_$_couple) _then)
+class __$$coupleImplCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$coupleImpl>
+    implements _$$coupleImplCopyWith<$Res> {
+  __$$coupleImplCopyWithImpl(
+      _$coupleImpl _value, $Res Function(_$coupleImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_couple implements _couple {
-  const _$_couple();
+class _$coupleImpl implements _couple {
+  const _$coupleImpl();
 
   @override
   String toString() {
@@ -568,7 +571,7 @@ class _$_couple implements _couple {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_couple);
+        (other.runtimeType == runtimeType && other is _$coupleImpl);
   }
 
   @override
@@ -650,24 +653,24 @@ class _$_couple implements _couple {
 }
 
 abstract class _couple implements NumberOfPlayersFilter {
-  const factory _couple() = _$_couple;
+  const factory _couple() = _$coupleImpl;
 }
 
 /// @nodoc
-abstract class _$$_moreOrEqualToCopyWith<$Res> {
-  factory _$$_moreOrEqualToCopyWith(
-          _$_moreOrEqualTo value, $Res Function(_$_moreOrEqualTo) then) =
-      __$$_moreOrEqualToCopyWithImpl<$Res>;
+abstract class _$$moreOrEqualToImplCopyWith<$Res> {
+  factory _$$moreOrEqualToImplCopyWith(
+          _$moreOrEqualToImpl value, $Res Function(_$moreOrEqualToImpl) then) =
+      __$$moreOrEqualToImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int numberOfPlayers});
 }
 
 /// @nodoc
-class __$$_moreOrEqualToCopyWithImpl<$Res>
-    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$_moreOrEqualTo>
-    implements _$$_moreOrEqualToCopyWith<$Res> {
-  __$$_moreOrEqualToCopyWithImpl(
-      _$_moreOrEqualTo _value, $Res Function(_$_moreOrEqualTo) _then)
+class __$$moreOrEqualToImplCopyWithImpl<$Res>
+    extends _$NumberOfPlayersFilterCopyWithImpl<$Res, _$moreOrEqualToImpl>
+    implements _$$moreOrEqualToImplCopyWith<$Res> {
+  __$$moreOrEqualToImplCopyWithImpl(
+      _$moreOrEqualToImpl _value, $Res Function(_$moreOrEqualToImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -675,7 +678,7 @@ class __$$_moreOrEqualToCopyWithImpl<$Res>
   $Res call({
     Object? numberOfPlayers = null,
   }) {
-    return _then(_$_moreOrEqualTo(
+    return _then(_$moreOrEqualToImpl(
       numberOfPlayers: null == numberOfPlayers
           ? _value.numberOfPlayers
           : numberOfPlayers // ignore: cast_nullable_to_non_nullable
@@ -686,8 +689,8 @@ class __$$_moreOrEqualToCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_moreOrEqualTo implements _moreOrEqualTo {
-  const _$_moreOrEqualTo({required this.numberOfPlayers});
+class _$moreOrEqualToImpl implements _moreOrEqualTo {
+  const _$moreOrEqualToImpl({required this.numberOfPlayers});
 
   @override
   final int numberOfPlayers;
@@ -701,7 +704,7 @@ class _$_moreOrEqualTo implements _moreOrEqualTo {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_moreOrEqualTo &&
+            other is _$moreOrEqualToImpl &&
             (identical(other.numberOfPlayers, numberOfPlayers) ||
                 other.numberOfPlayers == numberOfPlayers));
   }
@@ -712,8 +715,8 @@ class _$_moreOrEqualTo implements _moreOrEqualTo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_moreOrEqualToCopyWith<_$_moreOrEqualTo> get copyWith =>
-      __$$_moreOrEqualToCopyWithImpl<_$_moreOrEqualTo>(this, _$identity);
+  _$$moreOrEqualToImplCopyWith<_$moreOrEqualToImpl> get copyWith =>
+      __$$moreOrEqualToImplCopyWithImpl<_$moreOrEqualToImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -792,11 +795,11 @@ class _$_moreOrEqualTo implements _moreOrEqualTo {
 
 abstract class _moreOrEqualTo implements NumberOfPlayersFilter {
   const factory _moreOrEqualTo({required final int numberOfPlayers}) =
-      _$_moreOrEqualTo;
+      _$moreOrEqualToImpl;
 
   int get numberOfPlayers;
   @JsonKey(ignore: true)
-  _$$_moreOrEqualToCopyWith<_$_moreOrEqualTo> get copyWith =>
+  _$$moreOrEqualToImplCopyWith<_$moreOrEqualToImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -861,25 +864,25 @@ class _$PlaytimeFilterCopyWithImpl<$Res, $Val extends PlaytimeFilter>
 }
 
 /// @nodoc
-abstract class _$$_playtimeAnyCopyWith<$Res> {
-  factory _$$_playtimeAnyCopyWith(
-          _$_playtimeAny value, $Res Function(_$_playtimeAny) then) =
-      __$$_playtimeAnyCopyWithImpl<$Res>;
+abstract class _$$playtimeAnyImplCopyWith<$Res> {
+  factory _$$playtimeAnyImplCopyWith(
+          _$playtimeAnyImpl value, $Res Function(_$playtimeAnyImpl) then) =
+      __$$playtimeAnyImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_playtimeAnyCopyWithImpl<$Res>
-    extends _$PlaytimeFilterCopyWithImpl<$Res, _$_playtimeAny>
-    implements _$$_playtimeAnyCopyWith<$Res> {
-  __$$_playtimeAnyCopyWithImpl(
-      _$_playtimeAny _value, $Res Function(_$_playtimeAny) _then)
+class __$$playtimeAnyImplCopyWithImpl<$Res>
+    extends _$PlaytimeFilterCopyWithImpl<$Res, _$playtimeAnyImpl>
+    implements _$$playtimeAnyImplCopyWith<$Res> {
+  __$$playtimeAnyImplCopyWithImpl(
+      _$playtimeAnyImpl _value, $Res Function(_$playtimeAnyImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_playtimeAny implements _playtimeAny {
-  const _$_playtimeAny();
+class _$playtimeAnyImpl implements _playtimeAny {
+  const _$playtimeAnyImpl();
 
   @override
   String toString() {
@@ -889,7 +892,7 @@ class _$_playtimeAny implements _playtimeAny {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_playtimeAny);
+        (other.runtimeType == runtimeType && other is _$playtimeAnyImpl);
   }
 
   @override
@@ -959,24 +962,24 @@ class _$_playtimeAny implements _playtimeAny {
 }
 
 abstract class _playtimeAny implements PlaytimeFilter {
-  const factory _playtimeAny() = _$_playtimeAny;
+  const factory _playtimeAny() = _$playtimeAnyImpl;
 }
 
 /// @nodoc
-abstract class _$$_lessThanCopyWith<$Res> {
-  factory _$$_lessThanCopyWith(
-          _$_lessThan value, $Res Function(_$_lessThan) then) =
-      __$$_lessThanCopyWithImpl<$Res>;
+abstract class _$$lessThanImplCopyWith<$Res> {
+  factory _$$lessThanImplCopyWith(
+          _$lessThanImpl value, $Res Function(_$lessThanImpl) then) =
+      __$$lessThanImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int playtimeInMinutes});
 }
 
 /// @nodoc
-class __$$_lessThanCopyWithImpl<$Res>
-    extends _$PlaytimeFilterCopyWithImpl<$Res, _$_lessThan>
-    implements _$$_lessThanCopyWith<$Res> {
-  __$$_lessThanCopyWithImpl(
-      _$_lessThan _value, $Res Function(_$_lessThan) _then)
+class __$$lessThanImplCopyWithImpl<$Res>
+    extends _$PlaytimeFilterCopyWithImpl<$Res, _$lessThanImpl>
+    implements _$$lessThanImplCopyWith<$Res> {
+  __$$lessThanImplCopyWithImpl(
+      _$lessThanImpl _value, $Res Function(_$lessThanImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -984,7 +987,7 @@ class __$$_lessThanCopyWithImpl<$Res>
   $Res call({
     Object? playtimeInMinutes = null,
   }) {
-    return _then(_$_lessThan(
+    return _then(_$lessThanImpl(
       playtimeInMinutes: null == playtimeInMinutes
           ? _value.playtimeInMinutes
           : playtimeInMinutes // ignore: cast_nullable_to_non_nullable
@@ -995,8 +998,8 @@ class __$$_lessThanCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_lessThan implements _lessThan {
-  const _$_lessThan({required this.playtimeInMinutes});
+class _$lessThanImpl implements _lessThan {
+  const _$lessThanImpl({required this.playtimeInMinutes});
 
   @override
   final int playtimeInMinutes;
@@ -1010,7 +1013,7 @@ class _$_lessThan implements _lessThan {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_lessThan &&
+            other is _$lessThanImpl &&
             (identical(other.playtimeInMinutes, playtimeInMinutes) ||
                 other.playtimeInMinutes == playtimeInMinutes));
   }
@@ -1021,8 +1024,8 @@ class _$_lessThan implements _lessThan {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_lessThanCopyWith<_$_lessThan> get copyWith =>
-      __$$_lessThanCopyWithImpl<_$_lessThan>(this, _$identity);
+  _$$lessThanImplCopyWith<_$lessThanImpl> get copyWith =>
+      __$$lessThanImplCopyWithImpl<_$lessThanImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1088,10 +1091,11 @@ class _$_lessThan implements _lessThan {
 }
 
 abstract class _lessThan implements PlaytimeFilter {
-  const factory _lessThan({required final int playtimeInMinutes}) = _$_lessThan;
+  const factory _lessThan({required final int playtimeInMinutes}) =
+      _$lessThanImpl;
 
   int get playtimeInMinutes;
   @JsonKey(ignore: true)
-  _$$_lessThanCopyWith<_$_lessThan> get copyWith =>
+  _$$lessThanImplCopyWith<_$lessThanImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

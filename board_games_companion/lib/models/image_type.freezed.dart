@@ -80,22 +80,23 @@ class _$ImageTypeCopyWithImpl<$Res, $Val extends ImageType>
 }
 
 /// @nodoc
-abstract class _$$_webCopyWith<$Res> {
-  factory _$$_webCopyWith(_$_web value, $Res Function(_$_web) then) =
-      __$$_webCopyWithImpl<$Res>;
+abstract class _$$webImplCopyWith<$Res> {
+  factory _$$webImplCopyWith(_$webImpl value, $Res Function(_$webImpl) then) =
+      __$$webImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_webCopyWithImpl<$Res> extends _$ImageTypeCopyWithImpl<$Res, _$_web>
-    implements _$$_webCopyWith<$Res> {
-  __$$_webCopyWithImpl(_$_web _value, $Res Function(_$_web) _then)
+class __$$webImplCopyWithImpl<$Res>
+    extends _$ImageTypeCopyWithImpl<$Res, _$webImpl>
+    implements _$$webImplCopyWith<$Res> {
+  __$$webImplCopyWithImpl(_$webImpl _value, $Res Function(_$webImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_web implements _web {
-  const _$_web();
+class _$webImpl implements _web {
+  const _$webImpl();
 
   @override
   String toString() {
@@ -105,7 +106,7 @@ class _$_web implements _web {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_web);
+        (other.runtimeType == runtimeType && other is _$webImpl);
   }
 
   @override
@@ -181,26 +182,28 @@ class _$_web implements _web {
 }
 
 abstract class _web implements ImageType {
-  const factory _web() = _$_web;
+  const factory _web() = _$webImpl;
 }
 
 /// @nodoc
-abstract class _$$_fileCopyWith<$Res> {
-  factory _$$_fileCopyWith(_$_file value, $Res Function(_$_file) then) =
-      __$$_fileCopyWithImpl<$Res>;
+abstract class _$$fileImplCopyWith<$Res> {
+  factory _$$fileImplCopyWith(
+          _$fileImpl value, $Res Function(_$fileImpl) then) =
+      __$$fileImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_fileCopyWithImpl<$Res> extends _$ImageTypeCopyWithImpl<$Res, _$_file>
-    implements _$$_fileCopyWith<$Res> {
-  __$$_fileCopyWithImpl(_$_file _value, $Res Function(_$_file) _then)
+class __$$fileImplCopyWithImpl<$Res>
+    extends _$ImageTypeCopyWithImpl<$Res, _$fileImpl>
+    implements _$$fileImplCopyWith<$Res> {
+  __$$fileImplCopyWithImpl(_$fileImpl _value, $Res Function(_$fileImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_file implements _file {
-  const _$_file();
+class _$fileImpl implements _file {
+  const _$fileImpl();
 
   @override
   String toString() {
@@ -210,7 +213,7 @@ class _$_file implements _file {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_file);
+        (other.runtimeType == runtimeType && other is _$fileImpl);
   }
 
   @override
@@ -286,29 +289,29 @@ class _$_file implements _file {
 }
 
 abstract class _file implements ImageType {
-  const factory _file() = _$_file;
+  const factory _file() = _$fileImpl;
 }
 
 /// @nodoc
-abstract class _$$_undefinedCopyWith<$Res> {
-  factory _$$_undefinedCopyWith(
-          _$_undefined value, $Res Function(_$_undefined) then) =
-      __$$_undefinedCopyWithImpl<$Res>;
+abstract class _$$undefinedImplCopyWith<$Res> {
+  factory _$$undefinedImplCopyWith(
+          _$undefinedImpl value, $Res Function(_$undefinedImpl) then) =
+      __$$undefinedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_undefinedCopyWithImpl<$Res>
-    extends _$ImageTypeCopyWithImpl<$Res, _$_undefined>
-    implements _$$_undefinedCopyWith<$Res> {
-  __$$_undefinedCopyWithImpl(
-      _$_undefined _value, $Res Function(_$_undefined) _then)
+class __$$undefinedImplCopyWithImpl<$Res>
+    extends _$ImageTypeCopyWithImpl<$Res, _$undefinedImpl>
+    implements _$$undefinedImplCopyWith<$Res> {
+  __$$undefinedImplCopyWithImpl(
+      _$undefinedImpl _value, $Res Function(_$undefinedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_undefined implements _undefined {
-  const _$_undefined();
+class _$undefinedImpl implements _undefined {
+  const _$undefinedImpl();
 
   @override
   String toString() {
@@ -318,7 +321,7 @@ class _$_undefined implements _undefined {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_undefined);
+        (other.runtimeType == runtimeType && other is _$undefinedImpl);
   }
 
   @override
@@ -394,5 +397,5 @@ class _$_undefined implements _undefined {
 }
 
 abstract class _undefined implements ImageType {
-  const factory _undefined() = _$_undefined;
+  const factory _undefined() = _$undefinedImpl;
 }
