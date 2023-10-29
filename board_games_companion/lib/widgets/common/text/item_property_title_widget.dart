@@ -9,8 +9,8 @@ class ItemPropertyTitle extends StatelessWidget {
     this.title, {
     this.color = AppColors.secondaryTextColor,
     this.fontSize = Dimensions.extraSmallFontSize,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final Color color;

@@ -20,8 +20,8 @@ import 'collections_view_model.dart';
 class CollectionsFilterPanel extends StatefulWidget {
   const CollectionsFilterPanel({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final CollectionsViewModel viewModel;
 
@@ -101,10 +101,8 @@ class _BottomSheetHandle extends StatelessWidget {
 
 class _SortBySection extends StatelessWidget {
   const _SortBySection({
-    Key? key,
     required CollectionsViewModel gamesViewModel,
-  })  : _gamesViewModel = gamesViewModel,
-        super(key: key);
+  })  : _gamesViewModel = gamesViewModel;
 
   final CollectionsViewModel _gamesViewModel;
 
@@ -138,8 +136,7 @@ class _SortByChip extends StatelessWidget {
   const _SortByChip({
     required this.sortBy,
     required this.onSortByChange,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final SortBy sortBy;
   final ValueChanged<SortBy> onSortByChange;
@@ -186,8 +183,7 @@ class _SortByChip extends StatelessWidget {
 class _FiltersSection extends StatelessWidget {
   const _FiltersSection({
     required this.gamesViewModel,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final CollectionsViewModel gamesViewModel;
 
@@ -270,8 +266,7 @@ class _FiltersSection extends StatelessWidget {
 class _FilterNumberOfPlayersSlider extends StatelessWidget {
   const _FilterNumberOfPlayersSlider({
     required this.gamesViewModel,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final CollectionsViewModel gamesViewModel;
 
@@ -322,10 +317,9 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
 
 class _FilterRatingValue extends BgcSegmentedButton<double> {
   _FilterRatingValue.any({
-    required bool isSelected,
+    required super.isSelected,
     required Function(double?) onRatingSelected,
   }) : super(
-          isSelected: isSelected,
           onTapped: onRatingSelected,
           child: Center(
             child: Text(
@@ -339,11 +333,10 @@ class _FilterRatingValue extends BgcSegmentedButton<double> {
 
   _FilterRatingValue.rating({
     required double rating,
-    required bool isSelected,
+    required super.isSelected,
     required Function(double?) onRatingSelected,
   }) : super(
           value: rating,
-          isSelected: isSelected,
           onTapped: onRatingSelected,
           child: Center(
             child: BoardGameRatingHexagon(

@@ -28,8 +28,8 @@ import 'playthroughs_view_model.dart';
 class PlaythroughsPage extends StatefulWidget {
   const PlaythroughsPage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const String pageRoute = '/playthroughs';
 
@@ -116,7 +116,7 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           controller: tabController,
           backgroundColor: AppColors.bottomTabBackgroundColor,
           top: -Dimensions.bottomTabTopHeight,
-          items: const <TabItem>[
+          items: const <TabItem<BottomTabIcon>>[
             TabItem<BottomTabIcon>(
               title: AppText.playthroughPageStatsBottomTabTitle,
               icon: BottomTabIcon(iconData: Icons.query_stats),

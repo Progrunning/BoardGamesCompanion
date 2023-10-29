@@ -323,10 +323,9 @@ class _SearchFilters extends StatelessWidget {
 
 class _SearchResults extends StatelessWidget {
   const _SearchResults({
-    Key? key,
     required this.foundGames,
     required this.onResultAction,
-  }) : super(key: key);
+  });
 
   final List<BoardGameDetails> foundGames;
   final BoardGameResultAction onResultAction;
@@ -353,12 +352,11 @@ class _SearchResults extends StatelessWidget {
 
 class _SearchResultGame extends StatelessWidget {
   const _SearchResultGame({
-    Key? key,
     required this.boardGame,
     required this.isFirstItem,
     required this.isLastItem,
     required this.onResultAction,
-  }) : super(key: key);
+  });
 
   final BoardGameDetails boardGame;
   final bool isFirstItem;
@@ -367,7 +365,7 @@ class _SearchResultGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = WidgetsBinding.instance.window.locale;
+    final locale = View.of(context).platformDispatcher.locale;
     final countryCode = locale.countryCode?.toLowerCase();
     return Padding(
       padding: EdgeInsets.only(
@@ -515,8 +513,7 @@ class _SearchResultGamePrices extends StatelessWidget {
 class _SearchError extends StatelessWidget {
   const _SearchError({
     required this.error,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final BoardGameSearchError error;
 
@@ -552,10 +549,9 @@ class _SearchError extends StatelessWidget {
 
 class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({
-    Key? key,
     required this.query,
     required this.onCreateGame,
-  }) : super(key: key);
+  });
 
   final String query;
   final VoidCallback onCreateGame;

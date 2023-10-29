@@ -190,9 +190,8 @@ class _Header extends StatelessWidget {
 
 class _Body extends StatelessWidget {
   const _Body({
-    Key? key,
     required this.selectedBoardGame,
-  }) : super(key: key);
+  });
 
   static const double _gameStatIconSize = 24;
   static const double _gamePropertyIconSize = 28;

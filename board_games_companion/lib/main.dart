@@ -104,8 +104,8 @@ Future<void> main() async {
 class App extends StatelessWidget {
   const App({
     required this.preferencesService,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final PreferencesService preferencesService;
 

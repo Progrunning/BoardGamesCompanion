@@ -9,8 +9,8 @@ class LoadingOverlay extends StatelessWidget {
   const LoadingOverlay({
     required this.child,
     this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final String? title;

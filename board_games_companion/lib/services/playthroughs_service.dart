@@ -188,7 +188,7 @@ class PlaythroughService extends BaseHiveService<Playthrough, PlaythroughService
     }
 
     await storageBox.putAll(<String, Playthrough>{
-      for (Playthrough playthrough in playthroughs)
+      for (final Playthrough playthrough in playthroughs)
         playthrough.id: playthrough.copyWith(isDeleted: true)
     });
 

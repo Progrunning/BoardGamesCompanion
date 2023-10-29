@@ -12,8 +12,8 @@ class RippleEffect extends StatelessWidget {
     this.highlightColor = Colors.transparent,
     this.borderRadius,
     this.elevation,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final VoidCallback? onTap;
   final Widget? child;

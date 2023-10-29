@@ -23,8 +23,8 @@ import 'player_view_model.dart';
 class PlayerPage extends StatefulWidget {
   const PlayerPage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const String pageRoute = '/player';
 
@@ -294,8 +294,7 @@ class _PlayerAvatar extends StatelessWidget {
   const _PlayerAvatar({
     required this.playerWorkingCopy,
     required this.onPickImage,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Player playerWorkingCopy;
   final void Function(ImageSource) onPickImage;
@@ -346,8 +345,7 @@ class _ActionButtons extends StatelessWidget {
     required this.onCreate,
     required this.onUpdate,
     required this.onDelete,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final bool isEditMode;
   final Function(BuildContext) onCreate;

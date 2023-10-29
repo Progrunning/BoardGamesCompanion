@@ -27,8 +27,8 @@ import 'settings_view_model.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final SettingsViewModel viewModel;
 
@@ -90,8 +90,7 @@ class SettingsPageState extends State<SettingsPage> {
 class _UserDetailsPanel extends StatefulWidget {
   const _UserDetailsPanel({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final SettingsViewModel viewModel;
 
@@ -189,8 +188,8 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Column(
-            children: const <Widget>[
+          title: const Column(
+            children: <Widget>[
               Text('Are you sure you want to remove your BGG user connection?'),
             ],
           ),
@@ -224,8 +223,7 @@ class _UserDetailsPanelState extends State<_UserDetailsPanel> {
 class _BackupSection extends StatefulWidget {
   const _BackupSection({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final SettingsViewModel viewModel;
 
@@ -406,11 +404,10 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
 
 class _BackupFile extends StatelessWidget {
   const _BackupFile({
-    Key? key,
     required this.backupFile,
     required this.onDeleteBackup,
     required this.onShareBackup,
-  }) : super(key: key);
+  });
 
   final BackupFile backupFile;
   final Function(BackupFile) onDeleteBackup;

@@ -6,13 +6,12 @@ import '../../common/dimensions.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader._({
-    Key? key,
     required this.primaryWidget,
     this.secondaryWidget,
     this.height = Dimensions.sectionHeaderHeight,
     this.padding = const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   factory SectionHeader.title({
     required String title,

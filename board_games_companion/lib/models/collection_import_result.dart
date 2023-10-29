@@ -4,5 +4,5 @@ import 'import_result.dart';
 class CollectionImportResult extends ImportResult<List<BoardGameDetails>> {
   CollectionImportResult();
 
-  CollectionImportResult.failure(List<ImportError> errors) : super.failure(errors);
+  CollectionImportResult.failure(List<ImportError> super.errors) : super.failure();
 }

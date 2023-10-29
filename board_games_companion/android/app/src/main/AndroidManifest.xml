@@ -40,5 +40,6 @@
          If your app uses these SDKs as dependencies, the AD_ID permission from the SDK’s library manifest will be merged with your app’s main manifest by default, 
          even if you don’t explicitly declare the permission in your app’s main manifest." -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

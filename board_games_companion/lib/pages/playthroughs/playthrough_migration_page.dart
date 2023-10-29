@@ -276,9 +276,8 @@ class _PlayerScoreTile extends StatelessWidget {
 
 class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
-    Key? key,
     required this.score,
-  }) : super(key: key);
+  });
 
   final String score;
 
@@ -355,11 +354,11 @@ class _OverviewSection extends StatelessWidget {
               primaryTitle: AppText.playthroughMigrationPageMigrationOverviewHeader,
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(Dimensions.standardSpacing),
+              padding: EdgeInsets.all(Dimensions.standardSpacing),
               child: Column(
-                children: const [
+                children: [
                   Text(
                     AppText.playthroughMigrationPageMigrationOverviewContent,
                     style: AppTheme.defaultTextFieldStyle,

@@ -20,7 +20,7 @@ import 'board_game_name.dart';
 
 class BoardGameTile extends StatelessWidget {
   const BoardGameTile({
-    Key? key,
+    super.key,
     required this.id,
     required this.imageUrl,
     this.name,
@@ -31,7 +31,7 @@ class BoardGameTile extends StatelessWidget {
     this.elevation,
     this.borderRadius = AppTheme.defaultBorderRadius,
     this.minImageSize = Dimensions.boardGameItemCollectionImageWidth,
-  }) : super(key: key);
+  });
 
   final String id;
   final String imageUrl;
@@ -86,13 +86,12 @@ class BoardGameTile extends StatelessWidget {
 
 class _FileImage extends StatelessWidget {
   const _FileImage({
-    Key? key,
     required this.heroTag,
     required this.id,
     required this.imageUrl,
     required this.borderRadius,
     required this.minImageSize,
-  }) : super(key: key);
+  });
 
   final String heroTag;
   final String id;
@@ -130,12 +129,11 @@ class _FileImage extends StatelessWidget {
 
 class _WebImage extends StatelessWidget {
   const _WebImage({
-    Key? key,
     required this.heroTag,
     required this.id,
     required this.imageUrl,
     required this.borderRadius,
-  }) : super(key: key);
+  });
 
   final String heroTag;
   final String id;
@@ -168,9 +166,8 @@ class _WebImage extends StatelessWidget {
 
 class _NoImage extends StatelessWidget {
   const _NoImage({
-    Key? key,
     required this.borderRadius,
-  }) : super(key: key);
+  });
 
   final BorderRadiusGeometry borderRadius;
 

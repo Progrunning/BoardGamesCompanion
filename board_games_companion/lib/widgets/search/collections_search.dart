@@ -163,10 +163,9 @@ class CollectionsSearch extends SearchDelegate<BoardGameDetails?> {
 
 class _SearchResults extends StatelessWidget {
   const _SearchResults({
-    Key? key,
     required this.filteredGames,
     required this.onResultAction,
-  }) : super(key: key);
+  });
 
   final List<BoardGameDetails> filteredGames;
   final BoardGameResultAction onResultAction;
@@ -201,7 +200,6 @@ class _SearchResults extends StatelessWidget {
 
 class _SearchResultGame extends StatelessWidget {
   const _SearchResultGame({
-    Key? key,
     required this.boardGame,
     required this.expansions,
     required this.hasIncompleteDetails,
@@ -209,7 +207,7 @@ class _SearchResultGame extends StatelessWidget {
     required this.isLastItem,
     required this.onResultAction,
     required this.onRefresh,
-  }) : super(key: key);
+  });
 
   final BoardGameDetails boardGame;
   final List<BoardGameDetails>? expansions;
@@ -273,8 +271,7 @@ class _SearchResultGameExpansions extends StatelessWidget {
   const _SearchResultGameExpansions({
     required this.expansions,
     required this.onResultAction,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final List<BoardGameDetails> expansions;
   final BoardGameResultAction onResultAction;
@@ -327,8 +324,7 @@ class _SearchResultGameRefreshData extends StatefulWidget {
   const _SearchResultGameRefreshData({
     required this.boardGame,
     required this.onRefresh,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final BoardGameDetails boardGame;
   final VoidCallback onRefresh;
@@ -394,10 +390,9 @@ class _SearchResultGameRefreshDataState extends State<_SearchResultGameRefreshDa
 
 class _SearchResultGameActions extends StatelessWidget {
   const _SearchResultGameActions({
-    Key? key,
     required this.boardGame,
     required this.onResultAction,
-  }) : super(key: key);
+  });
 
   final BoardGameDetails boardGame;
   final BoardGameResultAction onResultAction;
@@ -422,10 +417,9 @@ class _SearchResultGameActions extends StatelessWidget {
 
 class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({
-    Key? key,
     required this.query,
     required this.onClear,
-  }) : super(key: key);
+  });
 
   final String query;
   final VoidCallback onClear;

@@ -10,10 +10,11 @@ import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_stor
 import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:retry/retry.dart';
-import 'package:xml/xml.dart';
 import 'package:xml/xml.dart' as xml;
+import 'package:xml/xml.dart';
 
 import '../common/enums/collection_type.dart';
 import '../common/enums/game_family.dart';
@@ -120,6 +121,7 @@ class BoardGamesGeekService {
       ..interceptors.add(LogInterceptor(responseBody: true));
   }
 
+  static const String _bggApiBaseUrl = 'www.boardgamegeek.com';
   static const String _baseBoardGamesUrl = 'https://www.boardgamegeek.com/xmlapi2';
   static const String _hotBoardGamesUrl = '$_baseBoardGamesUrl/hot';
   static const String _boardGamesDetailsUrl = '$_baseBoardGamesUrl/thing';
@@ -173,7 +175,8 @@ class BoardGamesGeekService {
     );
 
     try {
-      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml);
+      // TODO Use http client instead of dio
+      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml.data!);
       final hotBoardGameItems =
           hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName) ?? [];
       for (final hotBoardGameItem in hotBoardGameItems) {
@@ -214,21 +217,22 @@ class BoardGamesGeekService {
       return null;
     }
 
-    final retrievalOptions = _dioCacheOptions.toOptions();
-    retrievalOptions.contentType = 'application/xml';
-    retrievalOptions.responseType = ResponseType.plain;
+    // final retrievalOptions = _dioCacheOptions.toOptions();
+    // retrievalOptions.contentType = 'application/xml';
+    // retrievalOptions.responseType = ResponseType.plain;
 
-    final boardGameDetailsXml = await _dio.get<String>(
-      _boardGamesDetailsUrl,
-      queryParameters: <String, dynamic>{
+    final url = Uri.https(
+      _bggApiBaseUrl,
+      'xmlapi2/thing',
+      <String, dynamic>{
         _boardGameQueryParamterId: id,
-        _boardGameQueryParamterStats: 1,
+        _boardGameQueryParamterStats: '1',
       },
-      options: retrievalOptions,
     );
+    final boardGameDetailsResponse = await http.get(url);
 
     try {
-      final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsXml)!;
+      final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsResponse.body)!;
       final boardGameDetailsItem =
           boardGameDetailsXmlDocument.findAllElements(_xmlItemElementName).single;
 
@@ -250,6 +254,8 @@ class BoardGamesGeekService {
           boardGameDetailsItem.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
       final isExpansion = boardGameType == _boardGameExpansionType;
 
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       final description = boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
 
       final minPlayers = int.tryParse(boardGameDetailsItem
@@ -277,8 +283,12 @@ class BoardGamesGeekService {
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       final imageUrl = boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
 
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       final thumbnailUrl = boardGameDetailsItem.firstOrDefault(_xmlThumbnailElementName)?.text;
 
       final yearPublished = int.tryParse(boardGameDetailsItem
@@ -376,7 +386,8 @@ class BoardGamesGeekService {
     );
 
     final boardGames = <BoardGameDetails>[];
-    final xmlDocument = _retrieveXmlDocument(searchResultsXml);
+    // TODO Use http instead of dio
+    final xmlDocument = _retrieveXmlDocument(searchResultsXml.data!);
     if (xmlDocument == null) {
       return boardGames;
     }
@@ -618,7 +629,7 @@ CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments)
   for (final XmlElement collectionElement in collectionElements) {
     final String? boardGameId =
         collectionElement.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
-    final String? boardGameName = collectionElement.firstOrDefault(_xmlNameElementName)?.text;
+    final String? boardGameName = collectionElement.firstOrDefault(_xmlNameElementName)?.value;
 
     if ((boardGameId?.isEmpty ?? true) || (boardGameName?.isEmpty ?? true)) {
       continue;
@@ -632,8 +643,12 @@ CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments)
       id: boardGameId!,
       name: boardGameName!,
       yearPublished:
-          int.tryParse(collectionElement.firstOrDefault(_xmlYearPublishedElementName)?.text ?? ''),
+          int.tryParse(collectionElement.firstOrDefault(_xmlYearPublishedElementName)?.value ?? ''),
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       imageUrl: collectionElement.firstOrDefault(_xmlImageElementName)?.text,
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       thumbnailUrl: collectionElement.firstOrDefault(_xmlThumbnailElementName)?.text,
       lastModified: DateTime.tryParse(collectionElement.firstOrDefaultElementsAttribute(
               _xmlStatusElementName, _xmlLastModifiedAttributeTypeName) ??
@@ -669,9 +684,9 @@ CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments)
     ..data = boardGames;
 }
 
-XmlDocument? _retrieveXmlDocument(Response<String> httpResponse) {
+XmlDocument? _retrieveXmlDocument(String data) {
   try {
-    return XmlDocument.parse(httpResponse.data!);
+    return XmlDocument.parse(data);
   } catch (e, stack) {
     FirebaseCrashlytics.instance.recordError(e, stack);
   }

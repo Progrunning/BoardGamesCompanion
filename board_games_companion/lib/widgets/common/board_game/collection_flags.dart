@@ -11,8 +11,8 @@ class CollectionFlags extends StatelessWidget {
     required this.isOnWishlist,
     required this.isOnFriendsList,
     required this.onToggleCollection,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool isEditable;
   final bool isOwned;

@@ -8,8 +8,8 @@ class CollectionToggleButton extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.isSelected,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final IconData icon;
   final String title;

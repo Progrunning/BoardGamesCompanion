@@ -34,8 +34,8 @@ import 'playthrough_statistics_view_model.dart';
 class PlaythroughStatistcsPage extends StatefulWidget {
   const PlaythroughStatistcsPage({
     required this.boardGameImageHeroId,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String boardGameImageHeroId;
 
@@ -244,10 +244,9 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
 
 class _PlayersStatisticsSection extends StatelessWidget {
   const _PlayersStatisticsSection({
-    Key? key,
     required this.playersStatistics,
     this.averageScorePrecision = 0,
-  }) : super(key: key);
+  });
 
   final List<PlayerStatistics> playersStatistics;
   final int averageScorePrecision;
@@ -438,10 +437,9 @@ class _PlayerStatsDetails extends StatelessWidget {
 
 class _LastWinnerSection extends StatelessWidget {
   const _LastWinnerSection({
-    Key? key,
     required this.lastGameWinners,
     required this.lastTimePlayed,
-  }) : super(key: key);
+  });
 
   final List<PlayerScore>? lastGameWinners;
   final DateTime lastTimePlayed;
@@ -478,8 +476,7 @@ class _PlayerCharts extends StatefulWidget {
   const _PlayerCharts({
     required this.playerCountPercentage,
     this.playerWinsPercentage,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final List<PlayerCountStatistics> playerCountPercentage;
   final List<PlayerWinsStatistics>? playerWinsPercentage;
@@ -651,8 +648,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
 class _ChartLegendBox extends StatelessWidget {
   const _ChartLegendBox({
     required this.color,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Color color;
 
@@ -671,9 +667,8 @@ class _ChartLegendBox extends StatelessWidget {
 
 class _LastWinnerPoints extends StatelessWidget {
   const _LastWinnerPoints({
-    Key? key,
     required this.points,
-  }) : super(key: key);
+  });
 
   final double? points;
 
@@ -713,8 +708,7 @@ class _LastWinnerPoints extends StatelessWidget {
 class _LastWinnerAvatar extends StatelessWidget {
   const _LastWinnerAvatar({
     required this.player,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Player? player;
 
@@ -735,8 +729,7 @@ class _LastWinnerAvatar extends StatelessWidget {
 class _LastTimePlayed extends StatelessWidget {
   const _LastTimePlayed({
     required this.lastTimePlayed,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final DateTime lastTimePlayed;
 
@@ -761,8 +754,7 @@ class _LastTimePlayed extends StatelessWidget {
 class _OverallStatsScoreGameSection extends StatelessWidget {
   const _OverallStatsScoreGameSection({
     required this.scoreBoardGameStatistics,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final ScoreBoardGameStatistics? scoreBoardGameStatistics;
 
@@ -842,8 +834,7 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
 class _OverallStatsNoScoreGameSection extends StatelessWidget {
   const _OverallStatsNoScoreGameSection({
     required this.noScoreBoardGameStatistics,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final NoScoreBoardGameStatistics noScoreBoardGameStatistics;
 
@@ -917,8 +908,7 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
 class _TopScores extends StatelessWidget {
   const _TopScores({
     required this.scoreBoardGameStatistics,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final ScoreBoardGameStatistics scoreBoardGameStatistics;
 
@@ -945,14 +935,13 @@ class _TopScores extends StatelessWidget {
 
 class _StatisticsItem extends StatelessWidget {
   const _StatisticsItem({
-    Key? key,
     required this.icon,
     required this.value,
     required this.subtitle,
     this.iconColor,
     this.iconSize = 28,
     this.valueTextStyle = const TextStyle(fontSize: Dimensions.largeFontSize),
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final Color? iconColor;
@@ -992,8 +981,7 @@ class _StatisticsItem extends StatelessWidget {
 class _SliverSectionWrapper extends StatelessWidget {
   const _SliverSectionWrapper({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

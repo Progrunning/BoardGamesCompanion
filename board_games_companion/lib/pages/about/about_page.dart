@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_colors.dart';
@@ -17,7 +17,7 @@ import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../base_page_state.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
 
   static const String pageRoute = '/about';
 
@@ -109,9 +109,7 @@ class AboutPageState extends BasePageState<AboutPage> {
 }
 
 class _CommunitySection extends StatelessWidget {
-  const _CommunitySection({
-    Key? key,
-  }) : super(key: key);
+  const _CommunitySection();
 
   static const String discordInviteUrl = 'https://discord.gg/t9dTVXxnvC';
   static const String discordLogoUri = 'assets/discord-logo-blue.svg';
@@ -148,9 +146,7 @@ class _CommunitySection extends StatelessWidget {
 }
 
 class _ContentAndDataSection extends StatelessWidget {
-  const _ContentAndDataSection({
-    Key? key,
-  }) : super(key: key);
+  const _ContentAndDataSection();
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +172,7 @@ class _ContentAndDataSection extends StatelessWidget {
 }
 
 class _PluginsAndLibrariesSection extends StatelessWidget {
-  const _PluginsAndLibrariesSection({
-    Key? key,
-  }) : super(key: key);
+  const _PluginsAndLibrariesSection();
 
   @override
   Widget build(BuildContext context) {
@@ -328,9 +322,7 @@ class _PluginsAndLibrariesSection extends StatelessWidget {
 }
 
 class _PrivacyPolicyFooter extends StatelessWidget {
-  const _PrivacyPolicyFooter({
-    Key? key,
-  }) : super(key: key);
+  const _PrivacyPolicyFooter();
 
   static const String privactyPolicyUrl =
       'https://progrunning.net/board-games-companion-privacy-policy/';
@@ -341,13 +333,13 @@ class _PrivacyPolicyFooter extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         splashColor: AppColors.accentColor,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
+        child: const Padding(
+          padding: EdgeInsets.symmetric(
             vertical: Dimensions.doubleStandardSpacing,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.max,
-            children: const <Widget>[
+            children: <Widget>[
               Expanded(
                 child: Align(
                   alignment: Alignment.center,
@@ -367,9 +359,7 @@ class _PrivacyPolicyFooter extends StatelessWidget {
 }
 
 class _LicensePageDetailsItem extends StatelessWidget {
-  const _LicensePageDetailsItem({
-    Key? key,
-  }) : super(key: key);
+  const _LicensePageDetailsItem();
 
   @override
   Widget build(BuildContext context) {

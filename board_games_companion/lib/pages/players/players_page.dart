@@ -27,8 +27,8 @@ typedef PlayerSearchResultTapped = void Function(Player player);
 class PlayersPage extends StatefulWidget {
   const PlayersPage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final PlayersViewModel viewModel;
 
@@ -175,11 +175,10 @@ class PlayersPageState extends State<PlayersPage> {
 
 class _AppBar extends StatelessWidget {
   const _AppBar({
-    Key? key,
     required this.players,
     this.onSearchResultTap,
     this.onToggleEditModeTap,
-  }) : super(key: key);
+  });
 
   final List<Player> players;
   final PlayerSearchResultTapped? onSearchResultTap;
@@ -230,15 +229,15 @@ class _AppBar extends StatelessWidget {
 }
 
 class _NoPlayers extends StatelessWidget {
-  const _NoPlayers({Key? key}) : super(key: key);
+  const _NoPlayers();
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
+    return const SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+        padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
         child: Column(
-          children: const <Widget>[
+          children: <Widget>[
             SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
             Center(
               child: Text(
@@ -270,8 +269,7 @@ class _Players extends StatelessWidget {
     required this.players,
     required this.isEditMode,
     required this.onPlayerTap,
-    Key? key,
-  }) : super(key: key);
+  });
 
   static const int _numberOfPlayerColumns = 3;
 
@@ -292,7 +290,7 @@ class _Players extends StatelessWidget {
         crossAxisSpacing: Dimensions.standardSpacing,
         mainAxisSpacing: Dimensions.standardSpacing,
         children: [
-          for (var player in players)
+          for (final player in players)
             _Player(
               player: player,
               onPlayerTap: onPlayerTap,
@@ -307,12 +305,11 @@ class _Players extends StatelessWidget {
 
 class _Player extends StatefulWidget {
   const _Player({
-    Key? key,
     required this.player,
     required this.onPlayerTap,
     required this.isEditMode,
     required this.avatarImageSize,
-  }) : super(key: key);
+  });
 
   final Player player;
   final PlayerTapped onPlayerTap;
@@ -456,10 +453,9 @@ class _PlayersSerach extends SearchDelegate<Player?> {
 
 class _SearchResults extends StatelessWidget {
   const _SearchResults({
-    Key? key,
     required this.filteredPlayers,
     required this.onResultTap,
-  }) : super(key: key);
+  });
 
   final List<Player> filteredPlayers;
   final PlayerSearchResultTapped onResultTap;
@@ -534,10 +530,9 @@ class _SearchResults extends StatelessWidget {
 
 class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({
-    Key? key,
     required this.query,
     required this.onClear,
-  }) : super(key: key);
+  });
 
   final String query;
   final VoidCallback onClear;

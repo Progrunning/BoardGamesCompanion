@@ -21,8 +21,8 @@ import 'hot_board_games_view_model.dart';
 class HotBoardGamesPage extends StatefulWidget {
   const HotBoardGamesPage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final HotBoardGamesViewModel viewModel;
 
@@ -69,8 +69,7 @@ class HotBoardGamesPageState extends State<HotBoardGamesPage> {
 class _AppBar extends StatelessWidget {
   const _AppBar({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final HotBoardGamesViewModel viewModel;
 
@@ -90,8 +89,7 @@ class _HotBoardGames extends StatelessWidget {
   const _HotBoardGames({
     required this.viewModel,
     required this.onBoardGameTapped,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final HotBoardGamesViewModel viewModel;
   final void Function(BoardGameDetails) onBoardGameTapped;

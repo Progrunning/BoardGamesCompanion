@@ -10,10 +10,9 @@ class ImportCollectionsButton extends StatefulWidget {
   const ImportCollectionsButton({
     required String Function() usernameCallback,
     bool? triggerImport,
-    Key? key,
+    super.key,
   })  : _usernameCallback = usernameCallback,
-        _triggerImport = triggerImport,
-        super(key: key);
+        _triggerImport = triggerImport;
 
   final String Function() _usernameCallback;
   final bool? _triggerImport;
@@ -87,14 +86,13 @@ class AnimatedButton extends AnimatedWidget {
     required AnimationController sizeAnimationController,
     required AnimationController fadeInAnimationController,
     required Future<void> Function() onPressed,
-    Key? key,
+    super.key,
   })  : _text = text,
         _icon = icon,
         _sizeAnimationController = sizeAnimationController,
         _fadeInAnimationController = fadeInAnimationController,
         _onPressed = onPressed,
         super(
-          key: key,
           listenable: sizeAnimationController,
         );
 

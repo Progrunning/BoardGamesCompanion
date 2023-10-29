@@ -6,8 +6,8 @@ class ItemPropertyValue extends StatelessWidget {
   const ItemPropertyValue(
     this.value, {
     this.fontSize = Dimensions.mediumFontSize,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String? value;
   final double fontSize;

@@ -42,11 +42,11 @@ import 'board_game_details_view_model.dart';
 
 class BoardGamesDetailsPage extends StatefulWidget {
   const BoardGamesDetailsPage({
-    Key? key,
+    super.key,
     required this.viewModel,
     required this.navigatingFromType,
     required this.preferencesService,
-  }) : super(key: key);
+  });
 
   final BoardGameDetailsViewModel viewModel;
   final Type navigatingFromType;
@@ -236,14 +236,12 @@ class _Error extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   const _Header({
-    Key? key,
     required String boardGameImageHeroId,
     required String boardGameName,
     required String? boardGameImageUrl,
   })  : _boardGameImageHeroId = boardGameImageHeroId,
         _boardGameName = boardGameName,
-        _boardGameImageUrl = boardGameImageUrl,
-        super(key: key);
+        _boardGameImageUrl = boardGameImageUrl;
 
   final String _boardGameName;
   final String _boardGameImageHeroId;
@@ -266,10 +264,9 @@ class _Header extends StatelessWidget {
 
 class _Body extends StatelessWidget {
   const _Body({
-    Key? key,
     required this.viewModel,
     required this.preferencesService,
-  }) : super(key: key);
+  });
 
   final BoardGameDetailsViewModel viewModel;
   final PreferencesService preferencesService;
@@ -368,7 +365,7 @@ class _Categories extends StatelessWidget {
         spacing: Dimensions.standardSpacing,
         alignment: WrapAlignment.spaceEvenly,
         children: [
-          for (var category in categories)
+          for (final category in categories)
             Chip(
               padding: const EdgeInsets.all(Dimensions.standardSpacing),
               backgroundColor: AppColors.primaryColor.withAlpha(
@@ -420,10 +417,8 @@ class _General extends StatelessWidget {
 
 class _Links extends StatelessWidget {
   const _Links({
-    Key? key,
     required BoardGameDetailsViewModel boardGameDetailsStore,
-  })  : _boardGameDetailsStore = boardGameDetailsStore,
-        super(key: key);
+  }) : _boardGameDetailsStore = boardGameDetailsStore;
 
   final BoardGameDetailsViewModel _boardGameDetailsStore;
 
@@ -480,8 +475,7 @@ class _Link extends StatelessWidget {
     required this.icon,
     required this.boardGameDetailsStore,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final BoardGameDetailsViewModel boardGameDetailsStore;
   final String title;
@@ -519,8 +513,7 @@ class _Link extends StatelessWidget {
 class _Credits extends StatelessWidget {
   const _Credits({
     required this.boardGameDetails,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final BoardGameDetails? boardGameDetails;
 
@@ -557,8 +550,7 @@ class _CreditsItem extends StatelessWidget {
   const _CreditsItem({
     required this.title,
     required this.detail,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? detail;
@@ -585,9 +577,8 @@ class _CreditsItem extends StatelessWidget {
 
 class _GeneralAndCollections extends StatelessWidget {
   const _GeneralAndCollections({
-    Key? key,
     required this.viewModel,
-  }) : super(key: key);
+  });
 
   final BoardGameDetailsViewModel viewModel;
 
@@ -668,8 +659,7 @@ class _FirstRowGeneralInfoPanels extends StatelessWidget {
   const _FirstRowGeneralInfoPanels({
     required this.playersFormatted,
     required this.playtimeFormatted,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final String playersFormatted;
   final String playtimeFormatted;
@@ -707,8 +697,7 @@ class _SecondRowGeneralInfoPanels extends StatelessWidget {
   const _SecondRowGeneralInfoPanels({
     required this.minAge,
     required this.avgWeight,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final int? minAge;
   final num? avgWeight;
@@ -749,8 +738,7 @@ class _InfoPanel extends StatelessWidget {
   const _InfoPanel({
     required this.title,
     this.icon,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget? icon;
@@ -796,6 +784,7 @@ class _LoadingShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
+        const SliverAppBar(),
         SliverList(
           delegate: SliverChildListDelegate.fixed(
             [
@@ -813,9 +802,9 @@ class _LoadingShimmer extends StatelessWidget {
                 children: [
                   BgcShimmer.custom(child: const RatingHexagon()),
                   const SizedBox(width: Dimensions.standardSpacing),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       _BoardGamePropertyShimmer(textWidth: 40),
                       SizedBox(height: Dimensions.standardSpacing),
                       _BoardGamePropertyShimmer(textWidth: 100),

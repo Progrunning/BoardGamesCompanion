@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
@@ -13,7 +13,7 @@ import '../about/about_page.dart';
 import '../settings/settings_page.dart';
 
 class HomePageDrawer extends StatelessWidget {
-  const HomePageDrawer({Key? key}) : super(key: key);
+  const HomePageDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +23,15 @@ class HomePageDrawer extends StatelessWidget {
         children: <Widget>[
           Container(
             color: AppColors.primaryColor,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
                 horizontal: Dimensions.doubleStandardSpacing,
                 vertical: Dimensions.doubleStandardSpacing * 2,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   SizedBox(
                     height: 60,
                     width: 60,
@@ -84,8 +84,7 @@ class _MenuItem extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final String title;
@@ -105,16 +104,16 @@ class _MenuItem extends StatelessWidget {
 }
 
 class _Footer extends StatelessWidget {
-  const _Footer({Key? key}) : super(key: key);
+  const _Footer();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => LauncherHelper.launchUri(context, Constants.appReleaseNotesUrl),
-      child: Padding(
-        padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: const Padding(
+        padding: EdgeInsets.all(Dimensions.standardSpacing),
         child: Column(
-          children: const [
+          children: [
             _VersionNumber(),
             SizedBox(height: Dimensions.halfStandardSpacing),
             Text(AppText.drawerReleaseNotes),
@@ -126,9 +125,7 @@ class _Footer extends StatelessWidget {
 }
 
 class _VersionNumber extends StatelessWidget {
-  const _VersionNumber({
-    Key? key,
-  }) : super(key: key);
+  const _VersionNumber();
 
   @override
   Widget build(BuildContext context) {

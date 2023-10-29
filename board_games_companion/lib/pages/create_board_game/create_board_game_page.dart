@@ -228,12 +228,11 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
 
 class _Form extends StatelessWidget {
   const _Form({
-    Key? key,
     required this.viewModel,
     required this.boardGameNameController,
     required this.onToggleCollection,
     required this.onPickImage,
-  }) : super(key: key);
+  });
 
   final CreateBoardGameViewModel viewModel;
   final TextEditingController boardGameNameController;
@@ -316,8 +315,7 @@ class _Form extends StatelessWidget {
 class _ImageSection extends StatelessWidget {
   const _ImageSection({
     required this.onPickImage,
-    Key? key,
-  }) : super(key: key);
+  });
 
   static const double _iconSize = 32;
 
@@ -349,10 +347,9 @@ class _ImageSection extends StatelessWidget {
 
 class _RatingSection extends StatelessWidget {
   const _RatingSection({
-    Key? key,
     required this.rating,
     required this.onRatingChanged,
-  }) : super(key: key);
+  });
 
   static const double _minValue = 0;
   static const double _maxValue = 100;
@@ -400,11 +397,10 @@ class _RatingSection extends StatelessWidget {
 
 class _PlayersSection extends StatelessWidget {
   const _PlayersSection({
-    Key? key,
     required this.minPlayers,
     required this.maxPlayers,
     required this.onNumberOfPlayersChanged,
-  }) : super(key: key);
+  });
 
   static const double _minValue = 1;
   static const double _maxValue = 20;
@@ -448,11 +444,10 @@ class _PlayersSection extends StatelessWidget {
 
 class _PlaytimeSection extends StatelessWidget {
   const _PlaytimeSection({
-    Key? key,
     required this.minPlaytime,
     required this.maxPlaytime,
     required this.onPlaytimeChanged,
-  }) : super(key: key);
+  });
 
   static const double _minValueInMinutes = 5;
   static const double _maxValueInMinutes = 240;
@@ -496,10 +491,9 @@ class _PlaytimeSection extends StatelessWidget {
 
 class _AgeSection extends StatelessWidget {
   const _AgeSection({
-    Key? key,
     required this.minAge,
     required this.onMinAgeChanged,
-  }) : super(key: key);
+  });
 
   static const double _minValue = 0;
   static const double _maxValue = 50;
@@ -547,11 +541,10 @@ class _AgeSection extends StatelessWidget {
 
 class _NameAndCollectionsSection extends StatelessWidget {
   const _NameAndCollectionsSection({
-    Key? key,
     required this.boardGameNameController,
     required this.boardGame,
     required this.onToggleCollection,
-  }) : super(key: key);
+  });
 
   final TextEditingController boardGameNameController;
   final BoardGameDetails boardGame;
@@ -593,11 +586,10 @@ class _NameAndCollectionsSection extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   const _Header({
-    Key? key,
     required this.boardGameName,
     required this.boardGameImageUri,
     required this.onPop,
-  }) : super(key: key);
+  });
 
   final String boardGameName;
   final String? boardGameImageUri;

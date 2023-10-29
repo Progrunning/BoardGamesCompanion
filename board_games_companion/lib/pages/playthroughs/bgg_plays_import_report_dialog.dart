@@ -20,8 +20,8 @@ class BggPlaysImportReportDialog extends StatelessWidget {
     required this.username,
     required this.boardGameId,
     required this.report,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final BggPlaysImportRaport report;
   final String username;
@@ -89,7 +89,7 @@ class BggPlaysImportReportDialog extends StatelessWidget {
                             const SizedBox(height: Dimensions.halfStandardSpacing),
                             Column(
                               children: [
-                                for (var error in report.errors) Text(error.description!),
+                                for (final error in report.errors) Text(error.description!),
                               ],
                             )
                           ],
@@ -123,9 +123,8 @@ class BggPlaysImportReportDialog extends StatelessWidget {
 
 class _ImportedPlays extends StatelessWidget {
   const _ImportedPlays({
-    Key? key,
     required this.report,
-  }) : super(key: key);
+  });
 
   final BggPlaysImportRaport report;
 
@@ -149,8 +148,7 @@ class _ImportedPlays extends StatelessWidget {
 class _ImportedPlayers extends StatelessWidget {
   const _ImportedPlayers({
     required this.players,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final List<String> players;
 
@@ -163,7 +161,7 @@ class _ImportedPlayers extends StatelessWidget {
         spacing: Dimensions.standardSpacing,
         alignment: WrapAlignment.spaceEvenly,
         children: [
-          for (var player in players)
+          for (final player in players)
             Chip(
               padding: const EdgeInsets.all(Dimensions.standardSpacing),
               backgroundColor: AppColors.primaryColor.withAlpha(
@@ -184,8 +182,7 @@ class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
     required this.onSend,
     required this.onOk,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onSend;
   final VoidCallback onOk;

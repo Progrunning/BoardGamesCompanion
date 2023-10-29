@@ -6,8 +6,8 @@ class BottomTabIcon extends StatelessWidget {
   const BottomTabIcon({
     required this.iconData,
     this.isActive = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final IconData iconData;
   final bool isActive;

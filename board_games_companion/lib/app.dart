@@ -41,8 +41,8 @@ import 'utilities/analytics_route_observer.dart';
 
 class BoardGamesCompanionApp extends StatefulWidget {
   const BoardGamesCompanionApp({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   BoardGamesCompanionAppState createState() => BoardGamesCompanionAppState();

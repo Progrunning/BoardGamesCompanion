@@ -12,9 +12,9 @@ import '../rating_hexagon.dart';
 
 class SearchResultGameDetails extends StatelessWidget {
   const SearchResultGameDetails({
-    Key? key,
+    super.key,
     required this.boardGame,
-  }) : super(key: key);
+  });
 
   final BoardGameDetails boardGame;
 

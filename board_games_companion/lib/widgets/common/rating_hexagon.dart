@@ -12,13 +12,12 @@ class RatingHexagon extends StatelessWidget {
     double height = Dimensions.boardGameDetailsHexagonSize,
     Color hexColor = AppColors.accentColor,
     int hexColorOpacity = AppStyles.opacity90Percent,
-    Key? key,
+    super.key,
   })  : _child = child,
         _width = width,
         _height = height,
         _hexColor = hexColor,
-        _hexColorOpacity = hexColorOpacity,
-        super(key: key);
+        _hexColorOpacity = hexColorOpacity;
 
   final Widget? _child;
   final double _width;

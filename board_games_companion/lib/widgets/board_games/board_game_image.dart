@@ -15,10 +15,9 @@ class BoardGameImage extends StatelessWidget {
     String? id,
     this.minImageHeight = 300,
     this.heroTag = AnimationTags.boardGameHeroTag,
-    Key? key,
+    super.key,
   })  : _id = id,
-        _url = url,
-        super(key: key);
+        _url = url;
 
   final double minImageHeight;
   final String heroTag;

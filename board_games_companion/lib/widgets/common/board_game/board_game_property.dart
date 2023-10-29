@@ -6,12 +6,12 @@ import '../../../common/dimensions.dart';
 
 class BoardGameProperty extends StatelessWidget {
   const BoardGameProperty({
-    Key? key,
+    super.key,
     required this.icon,
     required this.iconWidth,
     required this.propertyName,
     this.fontSize = Dimensions.standardFontSize,
-  }) : super(key: key);
+  });
 
   final Widget icon;
   final String propertyName;

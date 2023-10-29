@@ -43,8 +43,8 @@ class CollectionsPage extends StatefulWidget {
     this.boardGamesFiltersStore,
     this.analyticsService,
     this.rateAndReviewService, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final CollectionsViewModel viewModel;
   final BoardGamesFiltersStore boardGamesFiltersStore;
@@ -135,8 +135,7 @@ class _Collection extends StatelessWidget {
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final CollectionsViewModel viewModel;
   final bool isCollectionEmpty;
@@ -182,7 +181,7 @@ class _Collection extends StatelessWidget {
             _Grid(boardGamesDetails: mainGames, analyticsService: analyticsService),
           ],
           if (hasExpansions) ...[
-            for (var expansionsMapEntry in expansionsMap.entries) ...[
+            for (final expansionsMapEntry in expansionsMap.entries) ...[
               SliverPersistentHeader(
                 delegate: BgcSliverTitleHeaderDelegate.title(
                   primaryTitle: sprintf(
@@ -210,8 +209,7 @@ class _AppBar extends StatefulWidget {
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final CollectionsViewModel viewModel;
   final TabController topTabController;
@@ -305,10 +303,9 @@ class _AppBarState extends State<_AppBar> {
 
 class _Grid extends StatelessWidget {
   const _Grid({
-    Key? key,
     required this.boardGamesDetails,
     required this.analyticsService,
-  }) : super(key: key);
+  });
 
   final List<BoardGameDetails> boardGamesDetails;
   final AnalyticsService analyticsService;
@@ -322,7 +319,7 @@ class _Grid extends StatelessWidget {
         mainAxisSpacing: Dimensions.standardSpacing,
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
         children: [
-          for (var boardGameDetails in boardGamesDetails)
+          for (final boardGameDetails in boardGamesDetails)
             BoardGameTile(
               id: boardGameDetails.id,
               name: boardGameDetails.name,
@@ -346,19 +343,19 @@ class _Grid extends StatelessWidget {
 }
 
 class _Empty extends StatelessWidget {
-  const _Empty({Key? key}) : super(key: key);
+  const _Empty();
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
+    return const CustomScrollView(
       slivers: [
-        const SliverAppBar(pinned: true, floating: true, foregroundColor: AppColors.accentColor),
+        SliverAppBar(pinned: true, floating: true, foregroundColor: AppColors.accentColor),
         SliverPadding(
-          padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+          padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
           sliver: SliverToBoxAdapter(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
+              children: <Widget>[
                 SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
                 Center(
                   child: Text(
@@ -407,7 +404,7 @@ class _Empty extends StatelessWidget {
 }
 
 class _ImportDataFromBggSection extends StatefulWidget {
-  const _ImportDataFromBggSection({Key? key}) : super(key: key);
+  const _ImportDataFromBggSection();
 
   @override
   State<_ImportDataFromBggSection> createState() => _ImportDataFromBggSectionState();
@@ -455,10 +452,9 @@ class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
 
 class _EmptyCollection extends StatelessWidget {
   const _EmptyCollection({
-    Key? key,
     required this.selectedTab,
     required this.userName,
-  }) : super(key: key);
+  });
 
   final GamesTab selectedTab;
   final String? userName;

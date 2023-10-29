@@ -35,10 +35,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(AppText.rateAndReview),
-          content: Column(
+          content: const Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const <Widget>[
+            children: <Widget>[
               Text(
                   "We apologise that we're interupting you but we would really appreciate your support.\n"),
               Text(
