@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fimber/fimber.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -16,48 +17,40 @@ class CachingHttpClient extends BaseClient {
   final Duration cacheDuration;
 
   @override
-  Future<StreamedResponse> send(BaseRequest request) async {
-    final cacheKey = request.url.toString();
+  Future<Response> get(Uri url, {Map<String, String>? headers}) async {
+    final cacheKey = url.toString();
 
-    Fimber.i('[HTTP] Retrieving data from $cacheKey.');
+    Fimber.i('[HTTP] Retrieving data from $url.');
 
-    final cachedResponseStream = await _getCachedResponseStream(cacheKey);
-    if (cachedResponseStream != null) {
+    final cachedResponseBody = await _getCachedResponse(cacheKey);
+    if (cachedResponseBody != null) {
       Fimber.i('[HTTP] Cached response found');
-      return StreamedResponse(cachedResponseStream, HttpStatus.ok);
+      return Response.bytes(cachedResponseBody, HttpStatus.ok);
     }
 
     Fimber.i('[HTTP] Sending request...');
-    final streamedResponse = await innerHttpClient.send(request);
-    Fimber.i('[HTTP] Response retrieved with status code ${streamedResponse.statusCode}');
+    final response = await super.get(url);
+    Fimber.i('[HTTP] Response retrieved with status code ${response.statusCode}');
 
-    if (streamedResponse.statusCode == HttpStatus.ok) {
+    if (response.statusCode == HttpStatus.ok) {
       Fimber.i(
         '[HTTP] Caching response until ${DateTime.now().add(cacheDuration).toIso8601String()}',
       );
-      await cacheManger.putFileStream(cacheKey, streamedResponse.stream);
+      await cacheManger.putFile(cacheKey, response.bodyBytes);
       Fimber.i('[HTTP] Response cached');
     }
 
-    // "Copying" of the [StreamedResponse] is done here because the [StreamedResponse.stream]
-    // can be only listend to once and we're doing it when caching the response.
-    // If we didn't create a new stream (like below from cache) we would ran into an exception.
-    // TODO Consider caching the data in the API service and make this only "cache" aware client
-    return StreamedResponse(
-      await _getCachedResponseStream(cacheKey) ?? const Stream.empty(),
-      streamedResponse.statusCode,
-      contentLength: streamedResponse.contentLength,
-      headers: streamedResponse.headers,
-      isRedirect: streamedResponse.isRedirect,
-      persistentConnection: streamedResponse.persistentConnection,
-      reasonPhrase: streamedResponse.reasonPhrase,
-      request: streamedResponse.request,
-    );
+    return response;
   }
 
-  Future<Stream<List<int>>?> _getCachedResponseStream(String cacheKey) async {
+  Future<Uint8List?> _getCachedResponse(String cacheKey) async {
     final cachedResponse = await cacheManger.getFileFromCache(cacheKey);
 
-    return cachedResponse?.file.openRead();
+    return await cachedResponse?.file.readAsBytes();
+  }
+
+  @override
+  Future<StreamedResponse> send(BaseRequest request) {
+    return innerHttpClient.send(request);
   }
 }
