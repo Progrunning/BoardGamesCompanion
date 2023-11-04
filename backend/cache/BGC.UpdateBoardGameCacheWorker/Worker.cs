@@ -33,7 +33,7 @@ public class Worker : BackgroundService
         await using var serviceBusProcessor = listenPolicyPermissionsClient.CreateProcessor(_cacheServiceBusSettings.QueueName, new ServiceBusProcessorOptions
         {
             AutoCompleteMessages = true,
-            // Using only 1 concurrent call to avoid issues with BGG rate limitation
+            // Using only 1 concurrent call to avoid issues with BGG rate limitation (429)
             // After a large amount of API calls in a short span of time BGG blocks the IP
             MaxConcurrentCalls = 1
         });
@@ -53,6 +53,9 @@ public class Worker : BackgroundService
     private async Task ProcessMessage(ProcessMessageEventArgs args)
     {
         await _updateBoardGameCache.ProcessUpdateCacheMessage(args.Message);
+
+        // Slow down the processing of messages to avoid hitting rate limit (429) from BGG API calls
+        await Task.Delay(5_000);
     }
 
     private Task ProcessError(ProcessErrorEventArgs args)
