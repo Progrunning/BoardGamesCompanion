@@ -20,7 +20,9 @@ Run the following command to create a DLL that will be suitable be run on an SBC
 
 ### Run on SBC
 
-Upon successful generation of DLLs for the project copy the files across to the SBC with the command `scp -r /publish-location/* pi@<ip_address>:/home/pi/deployment-location/`. For example:
+If there's a previous version of the app, you might want to consider stopping it and running `rm *` in the directory, to remove the old version of the app.
+
+Upon successful generation of executable for the project, copy the files across to the SBC with the command `scp -r /publish-location/* pi@<ip_address>:/home/pi/deployment-location/`. For example:
 
 ```
 scp -r D:\Dev\Projects\BoardGamesCompanion\backend\cache\BGC.UpdateBoardGameCacheWorker\bin\Debug\net7.0\linux-arm\publish\* pi@192.168.1.116:/home/pi/Dev/BGC/UpdateBoardGameCacheWorker
