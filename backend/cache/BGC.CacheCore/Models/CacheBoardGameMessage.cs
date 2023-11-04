@@ -1,4 +1,4 @@
-﻿namespace BGC.Functions.Models
+﻿namespace BGC.CacheCore.Models
 {
     public record CacheBoardGameMessage
     {

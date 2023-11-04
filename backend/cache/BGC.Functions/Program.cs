@@ -1,17 +1,10 @@
-using BGC.Core.Services.Interfaces;
-using BGC.Core.Services;
-
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BGC.Core;
+using BGC.Core.Extensions;
 using MongoDB.Bson.Serialization.Conventions;
-using BGC.Core.Models.Settings;
-using BGC.Core.Repositories.Interfaces;
-using BGC.Core.Repositories;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 using Microsoft.Extensions.Configuration;
 using Polly.Extensions.Http;
 using Polly;
@@ -37,35 +30,9 @@ var host = new HostBuilder()
     })
     .ConfigureServices(services =>
     {
-        services.AddOptions<MongoDbSettings>()
-                .Configure<IConfiguration>((settings, configuration) =>
-                {
-                    configuration.GetSection(nameof(MongoDbSettings))
-                                 .Bind(settings);
-                })
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
-
-        services.AddTransient<IBggService, BggService>();
-        services.AddHttpClient<IBggService, BggService>(client =>
-        {
-            client.BaseAddress = new Uri(Constants.BggApi.BaseXmlApiUrl);
-            client.Timeout = BGC.CacheQueueFunction.Constants.Configruration.Http.Timeout;
-        }).AddPolicyHandler(GetRetryPolicy());
-        services.AddHttpClient<IBoardGameOracleService, BoardGameOracelService>(client =>
-        {
-            client.BaseAddress = new Uri(Constants.BoardGameOracleApi.BaseUrl);
-            client.Timeout = BGC.CacheQueueFunction.Constants.Configruration.Http.Timeout;
-        }).AddPolicyHandler(GetRetryPolicy());
-        services.AddTransient<IMongoClient>((services) =>
-        {
-            var mongoDbSettings = services.GetService<IOptions<MongoDbSettings>>();
-            return new MongoClient(mongoDbSettings!.Value.ConnectionString);
-        });
-        services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();
+        services.AddUpdateBoardGameCacheWorkerConfiguration();
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-        services.AddHttpClient();
     })
     .ConfigureLogging(logging =>
     {
