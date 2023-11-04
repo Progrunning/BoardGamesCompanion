@@ -41,7 +41,7 @@ namespace BGC.Functions.UnitTests.Functions
         }
 
         [Fact]
-        public async Task ExecuteFunction_Emptymessage_ThrowsJsonException()
+        public async Task ExecuteFunction_EmptyMessage_ThrowsJsonException()
         {
             var mockMessage = ServiceBusModelFactory.ServiceBusReceivedMessage();
 

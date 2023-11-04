@@ -35,7 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BGC.Functions\BGC.Functions.csproj" />
+    <ProjectReference Include="..\..\cache\BGC.CacheCore\BGC.CacheCore.csproj" />
+    <ProjectReference Include="..\..\cache\BGC.Functions\BGC.Functions.csproj" />
     <ProjectReference Include="..\BGC.Core.UnitTests\BGC.Core.UnitTests.csproj" />
   </ItemGroup>
 
