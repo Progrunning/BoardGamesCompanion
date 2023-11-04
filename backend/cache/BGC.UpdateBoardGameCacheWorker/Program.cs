@@ -1,10 +1,11 @@
+using BGC.CacheCore.Helpers;
 using BGC.CacheCore.Interfaces;
 using BGC.Core.Extensions;
 using BGC.Core.Models.Settings;
 using BGC.UpdateBoardGameCacheWorker;
 using BGC.UpdateBoardGameCacheWorker.Services;
 
-IHost host = Host.CreateDefaultBuilder(args)
+var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((hostingContext, configBuilder) =>
     {
         configBuilder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false);
@@ -25,4 +26,6 @@ IHost host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
-host.Run();
+MongoDbHelpers.RegisterConventions();
+
+await host.RunAsync();

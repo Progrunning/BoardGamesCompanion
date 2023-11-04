@@ -65,7 +65,7 @@ public class SearchService : ISearchService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Search failed");
+            _logger.LogError(ex, $"Search failed with an error message: {ex.Message}");
 
             throw new BggException((int)HttpStatusCode.InternalServerError, "Search failed");
         }
