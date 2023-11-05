@@ -11,6 +11,11 @@ X-Api-Key: whatever
 
 ###
 
+GET https://{{hostname}}:{{port}}/api/search?query=smallworld
+X-Api-Key: whatever
+
+###
+
 GET https://{{hostname}}:{{port}}/api/search?query=My Little Scythe
 
 ###

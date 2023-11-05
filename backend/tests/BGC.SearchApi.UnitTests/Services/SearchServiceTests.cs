@@ -1,3 +1,4 @@
+using BGC.Core;
 using BGC.Core.Extensions;
 using BGC.Core.Models.Domain;
 using BGC.Core.Models.Dtos.BoardGameGeek;
@@ -112,6 +113,7 @@ public class SearchServiceTests
         var enrichedBoardGameDetails = new BoardGame()
         {
             Id = "1238",
+            Type = Constants.BggApi.BoardGameTypes.MainGame,
             ImageUrl = "https://fancy.image.net/funny.jpg",
             Prices = new[]
             {
@@ -131,6 +133,7 @@ public class SearchServiceTests
         searchResults.Should().HaveCount(bggSearchResposne.BoardGames.Length);
         searchResults.Should().ContainEquivalentOf(new BoardGameSummaryDto("1238", "Scythe", 1987)
         {
+            Type = Constants.Domain.BoardGameTypes.MainGame,
             ImageUrl = enrichedBoardGameDetails.ImageUrl,
             Prices = new BoardGameSummaryPriceDto[]
             {
