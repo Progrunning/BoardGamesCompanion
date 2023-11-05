@@ -530,7 +530,6 @@ CollectionImportResult _parseCollectionXml(ParseCollectionXmlArguments arguments
   for (final XmlElement collectionElement in collectionElements) {
     final String? boardGameId =
         collectionElement.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
-    final XmlElement? boardGameNameElement = collectionElement.firstOrDefault(_xmlNameElementName);
     final String? boardGameName = collectionElement.firstOrDefault(_xmlNameElementName)?.innerText;
 
     if ((boardGameId?.isEmpty ?? true) || (boardGameName?.isEmpty ?? true)) {
