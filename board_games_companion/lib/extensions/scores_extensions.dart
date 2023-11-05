@@ -85,6 +85,15 @@ int compareScores(
   GameFamily gameFamily, {
   bool ignorePlaces = false,
 }) {
+  // Regardless of the game gamily all the scores without a score goes to the bottom of the list
+  if (score.hasScore && !otherScore.hasScore) {
+    return Constants.moveAbove;
+  }
+
+  if (!score.hasScore && otherScore.hasScore) {
+    return Constants.moveBelow;
+  }
+
   switch (gameFamily) {
     case GameFamily.LowestScore:
       // MK Swap scores around

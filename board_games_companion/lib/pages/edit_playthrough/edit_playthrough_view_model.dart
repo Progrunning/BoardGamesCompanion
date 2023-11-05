@@ -174,10 +174,12 @@ abstract class _EditPlaythoughViewModel with Store {
       return;
     }
 
+    final scoreGameResult = playerScore.score.scoreGameResult ?? const ScoreGameResult();
+
     final playerScoreIndex = playerScores.indexOf(playerScore);
     final updatedPlayerScore = playerScore.copyWith(
       score: playerScore.score.copyWith(
-        scoreGameResult: playerScore.score.scoreGameResult!.copyWith(
+        scoreGameResult: scoreGameResult.copyWith(
           points: newScore.toDouble(),
         ),
       ),

@@ -45,10 +45,7 @@ class Score with _$Score {
 
   String? get scoreFormatted => score?.toStringAsFixed(0);
 
-  bool get hasScore =>
-      (value.isNotNullOrBlank && num.tryParse(value!) != null) ||
-      scoreGameResult?.points != null ||
-      noScoreGameResult?.cooperativeGameResult != null;
+  bool get hasScore => score != null || noScoreGameResult?.cooperativeGameResult != null;
 
   bool get isTied => scoreGameResult?.tiebreakerType != null;
 
