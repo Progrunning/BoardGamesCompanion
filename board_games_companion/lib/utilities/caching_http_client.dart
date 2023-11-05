@@ -5,22 +5,21 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart';
 
-class CachingHttpClient extends BaseClient {
+import 'base_http_client.dart';
+
+class CachingHttpClient extends BaseHttpClient {
   CachingHttpClient({
     required this.cacheManger,
-    required this.innerHttpClient,
+    required super.innerHttpClient,
     required this.cacheDuration,
   });
 
   final CacheManager cacheManger;
-  final Client innerHttpClient;
   final Duration cacheDuration;
 
   @override
   Future<Response> get(Uri url, {Map<String, String>? headers}) async {
     final cacheKey = url.toString();
-
-    Fimber.i('[HTTP] Retrieving data from $url.');
 
     final cachedResponseBody = await _getCachedResponse(cacheKey);
     if (cachedResponseBody != null) {
@@ -47,10 +46,5 @@ class CachingHttpClient extends BaseClient {
     final cachedResponse = await cacheManger.getFileFromCache(cacheKey);
 
     return await cachedResponse?.file.readAsBytes();
-  }
-
-  @override
-  Future<StreamedResponse> send(BaseRequest request) {
-    return innerHttpClient.send(request);
   }
 }

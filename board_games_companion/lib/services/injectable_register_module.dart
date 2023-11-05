@@ -1,4 +1,5 @@
 import 'package:board_games_companion/services/board_games_geek_service.dart';
+import 'package:board_games_companion/utilities/base_http_client.dart';
 import 'package:board_games_companion/utilities/caching_http_client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -58,5 +59,6 @@ abstract class RegisterModule {
           innerHttpClient: Client(),
           cacheDuration: _hotGamesCacheDuration,
         ),
+        baseHttpClient: BaseHttpClient(innerHttpClient: Client()),
       );
 }
