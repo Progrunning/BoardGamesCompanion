@@ -8,6 +8,105 @@ void main() {
 
   setUp(() {});
 
+  group('SortByScore', () {
+    test(
+        'GIVEN a collection of scores '
+        'WHEN sorting by highest score '
+        'AND comparing only old scores '
+        'THEN scores should be sorted correctly ', () {
+      final firstPlaceScore = emptyScore.copyWith(value: '10');
+      final lastPlaceScore = emptyScore.copyWith(value: '2');
+      final secondPlaceScore = emptyScore.copyWith(value: '7');
+      final scores = [
+        lastPlaceScore,
+        firstPlaceScore,
+        secondPlaceScore,
+      ];
+
+      final sortedScores = scores.sortByScore(GameFamily.HighestScore);
+
+      expect(sortedScores, [firstPlaceScore, secondPlaceScore, lastPlaceScore]);
+    });
+
+    test(
+        'GIVEN a collection of scores '
+        'WHEN sorting by highest score '
+        'AND comparing only old scores with null values '
+        'THEN scores should be sorted correctly ', () {
+      final firstPlaceScore = emptyScore.copyWith(value: '10');
+      final nullValueScore = emptyScore.copyWith(value: null);
+      final secondNullValueScore = emptyScore.copyWith(value: null);
+      final secondPlaceScore = emptyScore.copyWith(value: '7');
+      final scores = [
+        nullValueScore,
+        firstPlaceScore,
+        secondNullValueScore,
+        secondPlaceScore,
+      ];
+
+      final sortedScores = scores.sortByScore(GameFamily.HighestScore);
+
+      expect(sortedScores, [
+        firstPlaceScore,
+        secondPlaceScore,
+        nullValueScore,
+        secondNullValueScore,
+      ]);
+    });
+
+    test(
+        'GIVEN a collection of scores '
+        'WHEN sorting by lowest score '
+        'AND comparing mix of old and new scores '
+        'THEN scores should be sorted correctly ', () {
+      final firstPlaceScore =
+          emptyScore.copyWith(scoreGameResult: const ScoreGameResult(place: 1, points: 10));
+      final nullValueScore = emptyScore.copyWith(value: null);
+      final secondPlaceScore = emptyScore.copyWith(value: '7');
+      final scores = [
+        nullValueScore,
+        firstPlaceScore,
+        secondPlaceScore,
+      ];
+
+      final sortedScores = scores.sortByScore(GameFamily.LowestScore);
+
+      expect(sortedScores, [
+        secondPlaceScore,
+        firstPlaceScore,
+        nullValueScore,
+      ]);
+    });
+
+    test(
+        'GIVEN a collection of scores '
+        'WHEN sorting by lowest score '
+        'AND comparing mix of old and new scores '
+        'AND have a completely empty scores '
+        'THEN scores should be sorted correctly ', () {
+      final firstPlaceScore =
+          emptyScore.copyWith(scoreGameResult: const ScoreGameResult(place: 1, points: 10));
+      final nullValueScore = emptyScore.copyWith(value: null, scoreGameResult: null);
+      final secondNullValueScore = emptyScore.copyWith(value: null, scoreGameResult: null);
+      final secondPlaceScore = emptyScore.copyWith(value: '7');
+      final scores = [
+        secondNullValueScore,
+        secondPlaceScore,
+        nullValueScore,
+        firstPlaceScore,
+      ];
+
+      final sortedScores = scores.sortByScore(GameFamily.LowestScore);
+
+      expect(sortedScores, [
+        secondPlaceScore,
+        firstPlaceScore,
+        nullValueScore,
+        secondNullValueScore,
+      ]);
+    });
+  });
+
   test(
       'GIVEN a collection of scores '
       'WHEN a score has the result with the first place '
