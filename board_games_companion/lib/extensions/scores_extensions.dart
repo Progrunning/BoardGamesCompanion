@@ -105,7 +105,8 @@ int compareScores(
       // MK No swapping needed
       break;
     case GameFamily.Cooperative:
-      break;
+      // MK With cooperative games there's no need to s ort scores as all are win or lose
+      return Constants.leaveAsIs;
   }
 
   return _compareScores(score, otherScore, ignorePlaces);
