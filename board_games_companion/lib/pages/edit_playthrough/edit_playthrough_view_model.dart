@@ -169,14 +169,23 @@ abstract class _EditPlaythoughViewModel with Store {
   }
 
   @action
-  void updatePlayerScore(PlayerScore playerScore, double newScore) {
-    if (playerScore.score.hasScore && playerScore.score.score == newScore) {
+  void updatePlayerScore(String playerScoreId, double newScore) {
+    var playerScoreIndex = 0;
+    final playerScore = playerScores.firstWhereIndexedOrNull((index, ps) {
+      if (ps.id == playerScoreId) {
+        playerScoreIndex = index;
+        return true;
+      }
+
+      return false;
+    });
+
+    if (playerScore == null ||
+        (playerScore.score.hasScore && playerScore.score.score == newScore)) {
       return;
     }
 
     final scoreGameResult = playerScore.score.scoreGameResult ?? const ScoreGameResult();
-
-    final playerScoreIndex = playerScores.indexOf(playerScore);
     final updatedPlayerScore = playerScore.copyWith(
       score: playerScore.score.copyWith(
         scoreGameResult: scoreGameResult.copyWith(

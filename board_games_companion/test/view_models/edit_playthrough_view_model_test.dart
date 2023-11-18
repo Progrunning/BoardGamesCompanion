@@ -73,7 +73,7 @@ void main() {
         .firstWhereOrNull((element) => element.id == mockEmptyPlayerScoreId);
     const newScore = 10.0;
 
-    editPlaythrouhgViewModel.updatePlayerScore(playerScoreToUpdate!, newScore);
+    editPlaythrouhgViewModel.updatePlayerScore(playerScoreToUpdate!.id!, newScore);
 
     final updatedPlayerScore = editPlaythrouhgViewModel.playerScores
         .firstWhereOrNull((element) => element.id == playerScoreToUpdate.id);

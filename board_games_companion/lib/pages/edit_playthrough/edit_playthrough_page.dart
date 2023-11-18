@@ -159,7 +159,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   Future<double> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
     final viewModel = EnterScoreViewModel(playerScore);
     await showEnterScoreDialog(context, viewModel);
-    widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
+    widget.viewModel.updatePlayerScore(playerScore.id!, viewModel.score);
     return viewModel.score;
   }
 
