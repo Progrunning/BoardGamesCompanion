@@ -85,7 +85,7 @@ int compareScores(
   GameFamily gameFamily, {
   bool ignorePlaces = false,
 }) {
-  // Regardless of the game gamily all the scores without a score goes to the bottom of the list
+  // Regardless of the game family all the scores without a score go to the bottom of the list
   if (score.hasScore && !otherScore.hasScore) {
     return Constants.moveAbove;
   }
@@ -105,7 +105,11 @@ int compareScores(
       // MK No swapping needed
       break;
     case GameFamily.Cooperative:
-      break;
+      if (score.noScoreGameResult?.cooperativeGameResult == CooperativeGameResult.win) {
+        return Constants.moveAbove;
+      }
+
+      return Constants.moveBelow;
   }
 
   return _compareScores(score, otherScore, ignorePlaces);
