@@ -223,6 +223,8 @@ class AppText {
   static const editPlaythroughPageTieBreakerInstruction =
       'Resolve ties by dragging up or down tied player score(s) '
       'or check the box if players share the place';
+  static const editPlaythroughCannotUpdateScore =
+      "Sorry, we ran into a problem with this player's score. Please contact support at feedback@progrannung.net";
 
   static const playthroughNotePageTitle = 'Game Note';
   static const playthroughNotePageAddNoteButtonText = 'Add note';

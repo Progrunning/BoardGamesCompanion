@@ -1,4 +1,5 @@
 import 'package:board_games_companion/common/enums/game_family.dart';
+import 'package:board_games_companion/models/hive/no_score_game_result.dart';
 import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -104,6 +105,29 @@ void main() {
         nullValueScore,
         secondNullValueScore,
       ]);
+    });
+
+    test(
+        'GIVEN a cooperative game scores '
+        'WHEN sorting by score '
+        'THEN scores should be sorted correctly ', () {
+      final playerTwoWinScore = emptyScore.copyWith(
+        value: null,
+        noScoreGameResult: const NoScoreGameResult(
+          cooperativeGameResult: CooperativeGameResult.win,
+        ),
+      );
+      final playerOneWinScore = emptyScore.copyWith(
+        value: null,
+        noScoreGameResult: const NoScoreGameResult(
+          cooperativeGameResult: CooperativeGameResult.win,
+        ),
+      );
+      final scores = [playerTwoWinScore, playerOneWinScore];
+
+      final sortedScores = scores.sortByScore(GameFamily.Cooperative);
+
+      expect(sortedScores, [playerOneWinScore, playerTwoWinScore]);
     });
   });
 
