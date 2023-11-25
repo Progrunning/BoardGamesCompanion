@@ -85,7 +85,7 @@ int compareScores(
   GameFamily gameFamily, {
   bool ignorePlaces = false,
 }) {
-  // Regardless of the game gamily all the scores without a score goes to the bottom of the list
+  // Regardless of the game family all the scores without a score go to the bottom of the list
   if (score.hasScore && !otherScore.hasScore) {
     return Constants.moveAbove;
   }
@@ -105,7 +105,7 @@ int compareScores(
       // MK No swapping needed
       break;
     case GameFamily.Cooperative:
-      // MK With cooperative games there's no need to s ort scores as all are win or lose
+      // MK With cooperative games there's no need to sort scores as all are win or lose
       return Constants.leaveAsIs;
   }
 

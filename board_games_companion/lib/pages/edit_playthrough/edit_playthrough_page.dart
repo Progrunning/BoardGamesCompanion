@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:board_games_companion/pages/edit_playthrough/playthrough_scores_visual_state.dart';
 import 'package:board_games_companion/widgets/common/loading_indicator_widget.dart';
@@ -158,8 +159,23 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
 
   Future<double> _editPlayerScore(PlayerScore playerScore, BuildContext context) async {
     final viewModel = EnterScoreViewModel(playerScore);
+    if (playerScore.id.isNullOrBlank) {
+      // MK Unsure in which circumstances a player wouldn't have an id defined
+      final messenger = ScaffoldMessenger.of(context);
+      messenger.showSnackBar(
+        const SnackBar(
+          margin: Dimensions.snackbarMargin,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 10),
+          content: Text(AppText.editPlaythroughCannotUpdateScore),
+        ),
+      );
+
+      return viewModel.score;
+    }
+
     await showEnterScoreDialog(context, viewModel);
-    widget.viewModel.updatePlayerScore(playerScore, viewModel.score);
+    widget.viewModel.updatePlayerScore(playerScore.id!, viewModel.score);
     return viewModel.score;
   }
 
