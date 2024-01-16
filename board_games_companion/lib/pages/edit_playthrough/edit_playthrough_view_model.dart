@@ -395,25 +395,17 @@ abstract class _EditPlaythoughViewModel with Store {
   ///
   /// NOTE: Ensure this is called after player scores are assigned places
   void _updatePlaceTiebreakers() {
-    final tiedPlayerScoresGroupedByScore = playerScores
-        .toList()
-        .where((ps) => ps.score.score != null)
-        .groupListsBy((ps) => ps.score.score);
-    if (tiedPlayerScoresGroupedByScore.isEmpty) {
+    final tiedPlayerScores = playerScores.onlyTiedScores();
+    if (tiedPlayerScores.isEmpty) {
       return;
     }
 
     final existingTiesToRemove = scoreTiebreakersSet;
-    final tiedPlayerScoresCollections =
-        tiedPlayerScoresGroupedByScore.values.where((ps) => ps.length > 1).toList();
-    if (tiedPlayerScoresCollections.isNotEmpty) {
-      final tiedPlayerScores = tiedPlayerScoresCollections.reduce((a, b) => a..addAll(b));
-      for (final tiedPlayerScore in tiedPlayerScores) {
-        existingTiesToRemove.remove(tiedPlayerScore.id);
-        final playerScoreIndex = playerScores.indexOf(tiedPlayerScore);
-        playerScores[playerScoreIndex] =
-            _updatePlayerScoreTiebreaker(tiedPlayerScore, ScoreTiebreakerType.place);
-      }
+    for (final tiedPlayerScore in tiedPlayerScores) {
+      existingTiesToRemove.remove(tiedPlayerScore.id);
+      final playerScoreIndex = playerScores.indexOf(tiedPlayerScore);
+      playerScores[playerScoreIndex] =
+          _updatePlayerScoreTiebreaker(tiedPlayerScore, ScoreTiebreakerType.place);
     }
 
     // Remove existing tiebrekers, if player scores are no longer tied
