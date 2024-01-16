@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:board_games_companion/models/hive/score_game_results.dart';
+import 'package:clock/clock.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
@@ -85,7 +86,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
           boardGameId,
           selectedPlayers,
           updatedPlayerScores,
-          playthroughTimeline.when(now: () => DateTime.now(), inThePast: () => playthroughDate),
+          playthroughTimeline.when(now: () => clock.now(), inThePast: () => playthroughDate),
           playthroughTimeline.when(now: () => null, inThePast: () => playthroughDuration),
           notes: notesState.maybeWhen(
             notes: (playthroughNotes) => playthroughNotes,
@@ -107,7 +108,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
         ));
 
         // MK Reset the log screen
-        playthroughDate = DateTime.now();
+        playthroughDate = clock.now();
         playthroughDuration = const Duration();
         cooperativeGameResult = null;
         notesState = const PlaythroughNotesState.empty();
@@ -285,21 +286,30 @@ abstract class _PlaythroughsLogGameViewModel with Store {
           ignorePlaces: true,
         );
 
+    final tiedScoresSet = {
+      for (final tiedScore in orderedPlayerScores.onlyTiedScores()) tiedScore.id: tiedScore
+    };
+
     for (var i = 0; i < orderedPlayerScores.length; i++) {
       updatedPlayerScores[orderedPlayerScores[i].id!] = orderedPlayerScores[i].copyWith(
-        score: _updateScore(orderedPlayerScores[i].score, place: i + 1),
+        score: _updateScore(
+          orderedPlayerScores[i].score,
+          place: i + 1,
+          isTied: tiedScoresSet.containsKey(orderedPlayerScores[i].id),
+        ),
       );
     }
 
     return updatedPlayerScores;
   }
 
-  Score _updateScore(Score score, {double? newScore, int? place}) {
+  Score _updateScore(Score score, {double? newScore, int? place, bool isTied = false}) {
     final scoreGameResult = score.scoreGameResult ?? const ScoreGameResult();
     return score.copyWith(
       scoreGameResult: scoreGameResult.copyWith(
         points: newScore ?? scoreGameResult.points,
         place: place,
+        tiebreakerType: isTied ? ScoreTiebreakerType.place : null,
       ),
     );
   }
