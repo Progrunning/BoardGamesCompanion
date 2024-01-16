@@ -1,5 +1,6 @@
 import 'package:board_games_companion/models/hive/score.dart';
 import 'package:board_games_companion/models/hive/score_game_results.dart';
+import 'package:collection/collection.dart';
 
 import '../common/constants.dart';
 import '../common/enums/game_family.dart';
@@ -47,5 +48,24 @@ extension PlayerScoresExtesions on List<PlayerScore> {
         return playerScore.player!.name?.compareTo(otherPlayerScore.player!.name ?? '') ??
             Constants.moveBelow;
       });
+  }
+
+  List<PlayerScore> onlyTiedScores() {
+    final playerScoresGroupedByScore =
+        where((ps) => ps.score.score != null).groupListsBy((ps) => ps.score.score);
+
+    if (playerScoresGroupedByScore.isEmpty) {
+      return [];
+    }
+
+    final tiedPlayerScoresCollections =
+        playerScoresGroupedByScore.values.where((ps) => ps.length > 1).toList();
+
+    if (tiedPlayerScoresCollections.isEmpty) {
+      return [];
+    }
+
+    final allTiedPlayerScores = tiedPlayerScoresCollections.reduce((a, b) => a..addAll(b));
+    return allTiedPlayerScores;
   }
 }

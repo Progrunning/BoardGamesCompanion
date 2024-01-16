@@ -50,14 +50,10 @@ class EnterScoreDialog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Observer(
-                  builder: (_) {
-                    return _Score(playerName: viewModel.playerName, score: viewModel.score);
-                  },
+                  builder: (_) => _Score(playerName: viewModel.playerName, score: viewModel.score),
                 ),
                 Observer(
-                  builder: (_) {
-                    return _ScoreHistory(partialScores: viewModel.partialScores);
-                  },
+                  builder: (_) => _ScoreHistory(partialScores: viewModel.partialScores),
                 ),
                 const SizedBox(height: Dimensions.trippleStandardSpacing),
                 _CircularNumberPicker(
@@ -134,7 +130,7 @@ class _ScoreHistory extends StatelessWidget {
             Text(
               partialScores[i] > 0
                   ? '+${partialScores[i].toStringAsFixed(0)}'
-                  : '${partialScores[i]}',
+                  : partialScores[i].toStringAsFixed(0),
               style: AppTheme.theme.textTheme.bodyLarge,
             ),
             if (i != partialScores.length - 1) ...[
