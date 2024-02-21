@@ -95,6 +95,7 @@ Future<void> main() async {
 
     runApp(App(preferencesService: preferencesService));
   }, (error, stackTrace) {
+    Fimber.e('Error caught in the guard zone', ex: error, stacktrace: stackTrace);
     if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     }

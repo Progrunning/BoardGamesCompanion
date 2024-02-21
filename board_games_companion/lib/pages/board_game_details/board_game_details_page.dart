@@ -784,7 +784,6 @@ class _LoadingShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        const SliverAppBar(),
         SliverList(
           delegate: SliverChildListDelegate.fixed(
             [
