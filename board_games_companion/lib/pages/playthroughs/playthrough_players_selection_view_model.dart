@@ -19,7 +19,7 @@ abstract class _PlaythroughPlayersSelectionViewModel with Store {
 
   @computed
   ObservableList<Player> get players =>
-      [..._playersStore.players].sortAlphabetically().asObservable();
+      ([..._playersStore.activePlayers].sortAlphabetically()).asObservable();
 
   @computed
   Map<String, Player> get playersMap => {for (final player in players) player.id: player};
@@ -46,7 +46,5 @@ abstract class _PlaythroughPlayersSelectionViewModel with Store {
     selectedPlayersMap[player.id] = player;
   }
 
-  Future<void> _loadPlayers() async {
-    await _playersStore.loadPlayers();
-  }
+  Future<void> _loadPlayers() async => _playersStore.loadPlayers();
 }
