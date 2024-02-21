@@ -21,5 +21,7 @@ enum SortByOption {
   @HiveField(5)
   Playtime,
   @HiveField(6)
-  Rating
+  Rating,
+  @HiveField(7)
+  MostRecentlyPlayed
 }

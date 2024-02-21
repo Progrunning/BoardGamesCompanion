@@ -27,6 +27,8 @@ class SortByOptionAdapter extends TypeAdapter<SortByOption> {
         return SortByOption.Playtime;
       case 6:
         return SortByOption.Rating;
+      case 7:
+        return SortByOption.MostRecentlyPlayed;
       default:
         return SortByOption.Name;
     }
@@ -55,6 +57,9 @@ class SortByOptionAdapter extends TypeAdapter<SortByOption> {
         break;
       case SortByOption.Rating:
         writer.writeByte(6);
+        break;
+      case SortByOption.MostRecentlyPlayed:
+        writer.writeByte(7);
         break;
     }
   }

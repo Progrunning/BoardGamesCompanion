@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:board_games_companion/extensions/playthroughs_extensions.dart';
+
 import '../common/constants.dart';
 import '../common/enums/collection_type.dart';
 import '../common/enums/order_by.dart';
@@ -9,6 +11,7 @@ import '../extensions/double_extensions.dart';
 import '../extensions/int_extensions.dart';
 import '../extensions/string_extensions.dart';
 import '../models/hive/board_game_details.dart';
+import '../models/hive/playthrough.dart';
 import '../models/sort_by.dart';
 
 extension BoardGameDetailsExtensions on BoardGameDetails {
@@ -50,6 +53,43 @@ extension BoardGameDetailsCollectionExtensions on Iterable<BoardGameDetails> {
 }
 
 extension BoardGameDetailsListExtensions on List<BoardGameDetails> {
+  void sortByMostRecentPlays(List<Playthrough> finishedPlaythroughs, OrderBy orderBy) {
+    final mostRecentGamePlaysIndexes = <String, int>{};
+    var index = 1;
+    for (final playthrough in finishedPlaythroughs.sortedByStartDate) {
+      if (mostRecentGamePlaysIndexes.containsKey(playthrough.boardGameId)) {
+        continue;
+      }
+
+      mostRecentGamePlaysIndexes[playthrough.boardGameId] = index++;
+    }
+
+    sort((boardGame, otherBoardGame) {
+      if (orderBy == OrderBy.Ascending) {
+        final buffer = boardGame;
+        boardGame = otherBoardGame;
+        otherBoardGame = buffer;
+      }
+
+      final boardGameIndex = mostRecentGamePlaysIndexes[boardGame.id];
+      final otherBoardGameIndex = mostRecentGamePlaysIndexes[otherBoardGame.id];
+
+      if (boardGameIndex == null && otherBoardGameIndex != null) {
+        return Constants.moveBelow;
+      }
+
+      if (boardGameIndex != null && otherBoardGameIndex == null) {
+        return Constants.moveAbove;
+      }
+
+      if (boardGameIndex == null && otherBoardGameIndex == null) {
+        return Constants.leaveAsIs;
+      }
+
+      return boardGameIndex!.compareTo(otherBoardGameIndex!);
+    });
+  }
+
   void sortBy(SortBy? sortBy) {
     if (sortBy == null) {
       return;

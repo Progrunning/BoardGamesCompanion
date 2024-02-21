@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/enums/sort_by_option.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:injectable/injectable.dart';
@@ -97,7 +98,12 @@ abstract class _CollectionsViewModel with Store {
       return ObservableList.of(filteredBoardGames);
     }
 
-    filteredBoardGames.sortBy(sortBy);
+    if (sortBy.sortByOption == SortByOption.MostRecentlyPlayed) {
+      filteredBoardGames.sortByMostRecentPlays(
+          _playthroughsStore.finishedPlaythroughs, sortBy.orderBy);
+    } else {
+      filteredBoardGames.sortBy(sortBy);
+    }
 
     return ObservableList.of(filteredBoardGames);
   }

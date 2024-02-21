@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/extensions/playthroughs_extensions.dart';
 import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
@@ -82,10 +83,7 @@ abstract class _PlaysViewModel with Store {
   @computed
   List<HistoricalPlaythrough> get historicalPlaythroughs {
     final result = <HistoricalPlaythrough>[];
-    final playthroughsGrouped = groupBy(
-        finishedPlaythroughs
-          ..sort((playthroughA, playthroughB) =>
-              playthroughB.startDate.compareTo(playthroughA.startDate)),
+    final playthroughsGrouped = groupBy(finishedPlaythroughs.sortedByStartDate,
         (Playthrough playthrough) => historicalPlaythroughDateFormat.format(playthrough.startDate));
 
     for (final playthroughsEntry in playthroughsGrouped.entries) {
