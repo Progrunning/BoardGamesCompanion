@@ -29,7 +29,6 @@ class HiveBoxes {
   static const collectionFilters = 'collectionFilters';
   static const preferences = 'preferences';
   static const search = 'search';
-  static const dioCache = 'dioCache';
 
   static const boardGamesDetailsTypeId = 0;
   static const boardGamesCategoryTypeId = 1;

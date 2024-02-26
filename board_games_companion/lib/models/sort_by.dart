@@ -35,6 +35,8 @@ abstract class _SortBy with Store {
         return 'Playtime';
       case SortByOption.Rating:
         return 'Rating';
+      case SortByOption.MostRecentlyPlayed:
+        return 'Most recently played';
     }
   }
 

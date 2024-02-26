@@ -96,23 +96,24 @@ class _$PlaythroughScoresVisualStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_initCopyWith<$Res> {
-  factory _$$_initCopyWith(_$_init value, $Res Function(_$_init) then) =
-      __$$_initCopyWithImpl<$Res>;
+abstract class _$$initImplCopyWith<$Res> {
+  factory _$$initImplCopyWith(
+          _$initImpl value, $Res Function(_$initImpl) then) =
+      __$$initImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_initCopyWithImpl<$Res>
-    extends _$PlaythroughScoresVisualStateCopyWithImpl<$Res, _$_init>
-    implements _$$_initCopyWith<$Res> {
-  __$$_initCopyWithImpl(_$_init _value, $Res Function(_$_init) _then)
+class __$$initImplCopyWithImpl<$Res>
+    extends _$PlaythroughScoresVisualStateCopyWithImpl<$Res, _$initImpl>
+    implements _$$initImplCopyWith<$Res> {
+  __$$initImplCopyWithImpl(_$initImpl _value, $Res Function(_$initImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_init implements _init {
-  const _$_init();
+class _$initImpl implements _init {
+  const _$initImpl();
 
   @override
   String toString() {
@@ -122,7 +123,7 @@ class _$_init implements _init {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_init);
+        (other.runtimeType == runtimeType && other is _$initImpl);
   }
 
   @override
@@ -210,23 +211,24 @@ class _$_init implements _init {
 }
 
 abstract class _init implements PlaythroughScoresVisualState {
-  const factory _init() = _$_init;
+  const factory _init() = _$initImpl;
 }
 
 /// @nodoc
-abstract class _$$_scoringCopyWith<$Res> {
-  factory _$$_scoringCopyWith(
-          _$_scoring value, $Res Function(_$_scoring) then) =
-      __$$_scoringCopyWithImpl<$Res>;
+abstract class _$$scoringImplCopyWith<$Res> {
+  factory _$$scoringImplCopyWith(
+          _$scoringImpl value, $Res Function(_$scoringImpl) then) =
+      __$$scoringImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<PlayerScore> playerScores});
 }
 
 /// @nodoc
-class __$$_scoringCopyWithImpl<$Res>
-    extends _$PlaythroughScoresVisualStateCopyWithImpl<$Res, _$_scoring>
-    implements _$$_scoringCopyWith<$Res> {
-  __$$_scoringCopyWithImpl(_$_scoring _value, $Res Function(_$_scoring) _then)
+class __$$scoringImplCopyWithImpl<$Res>
+    extends _$PlaythroughScoresVisualStateCopyWithImpl<$Res, _$scoringImpl>
+    implements _$$scoringImplCopyWith<$Res> {
+  __$$scoringImplCopyWithImpl(
+      _$scoringImpl _value, $Res Function(_$scoringImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -234,7 +236,7 @@ class __$$_scoringCopyWithImpl<$Res>
   $Res call({
     Object? playerScores = null,
   }) {
-    return _then(_$_scoring(
+    return _then(_$scoringImpl(
       playerScores: null == playerScores
           ? _value._playerScores
           : playerScores // ignore: cast_nullable_to_non_nullable
@@ -245,8 +247,8 @@ class __$$_scoringCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_scoring implements _scoring {
-  const _$_scoring({required final List<PlayerScore> playerScores})
+class _$scoringImpl implements _scoring {
+  const _$scoringImpl({required final List<PlayerScore> playerScores})
       : _playerScores = playerScores;
 
   final List<PlayerScore> _playerScores;
@@ -266,7 +268,7 @@ class _$_scoring implements _scoring {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_scoring &&
+            other is _$scoringImpl &&
             const DeepCollectionEquality()
                 .equals(other._playerScores, _playerScores));
   }
@@ -278,8 +280,8 @@ class _$_scoring implements _scoring {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_scoringCopyWith<_$_scoring> get copyWith =>
-      __$$_scoringCopyWithImpl<_$_scoring>(this, _$identity);
+  _$$scoringImplCopyWith<_$scoringImpl> get copyWith =>
+      __$$scoringImplCopyWithImpl<_$scoringImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -364,19 +366,19 @@ class _$_scoring implements _scoring {
 
 abstract class _scoring implements PlaythroughScoresVisualState {
   const factory _scoring({required final List<PlayerScore> playerScores}) =
-      _$_scoring;
+      _$scoringImpl;
 
   List<PlayerScore> get playerScores;
   @JsonKey(ignore: true)
-  _$$_scoringCopyWith<_$_scoring> get copyWith =>
+  _$$scoringImplCopyWith<_$scoringImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_finishedScoringCopyWith<$Res> {
-  factory _$$_finishedScoringCopyWith(
-          _$_finishedScoring value, $Res Function(_$_finishedScoring) then) =
-      __$$_finishedScoringCopyWithImpl<$Res>;
+abstract class _$$finishedScoringImplCopyWith<$Res> {
+  factory _$$finishedScoringImplCopyWith(_$finishedScoringImpl value,
+          $Res Function(_$finishedScoringImpl) then) =
+      __$$finishedScoringImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {List<PlayerScore> playerScores,
@@ -385,11 +387,11 @@ abstract class _$$_finishedScoringCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_finishedScoringCopyWithImpl<$Res>
-    extends _$PlaythroughScoresVisualStateCopyWithImpl<$Res, _$_finishedScoring>
-    implements _$$_finishedScoringCopyWith<$Res> {
-  __$$_finishedScoringCopyWithImpl(
-      _$_finishedScoring _value, $Res Function(_$_finishedScoring) _then)
+class __$$finishedScoringImplCopyWithImpl<$Res>
+    extends _$PlaythroughScoresVisualStateCopyWithImpl<$Res,
+        _$finishedScoringImpl> implements _$$finishedScoringImplCopyWith<$Res> {
+  __$$finishedScoringImplCopyWithImpl(
+      _$finishedScoringImpl _value, $Res Function(_$finishedScoringImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -399,7 +401,7 @@ class __$$_finishedScoringCopyWithImpl<$Res>
     Object? scoreTiebreakersSet = null,
     Object? uniqnessEnforcingDummyDate = null,
   }) {
-    return _then(_$_finishedScoring(
+    return _then(_$finishedScoringImpl(
       playerScores: null == playerScores
           ? _value._playerScores
           : playerScores // ignore: cast_nullable_to_non_nullable
@@ -418,8 +420,8 @@ class __$$_finishedScoringCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_finishedScoring implements _finishedScoring {
-  const _$_finishedScoring(
+class _$finishedScoringImpl implements _finishedScoring {
+  const _$finishedScoringImpl(
       {required final List<PlayerScore> playerScores,
       required final Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
       required this.uniqnessEnforcingDummyDate})
@@ -455,7 +457,7 @@ class _$_finishedScoring implements _finishedScoring {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_finishedScoring &&
+            other is _$finishedScoringImpl &&
             const DeepCollectionEquality()
                 .equals(other._playerScores, _playerScores) &&
             const DeepCollectionEquality()
@@ -476,8 +478,9 @@ class _$_finishedScoring implements _finishedScoring {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_finishedScoringCopyWith<_$_finishedScoring> get copyWith =>
-      __$$_finishedScoringCopyWithImpl<_$_finishedScoring>(this, _$identity);
+  _$$finishedScoringImplCopyWith<_$finishedScoringImpl> get copyWith =>
+      __$$finishedScoringImplCopyWithImpl<_$finishedScoringImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -565,14 +568,15 @@ class _$_finishedScoring implements _finishedScoring {
 
 abstract class _finishedScoring implements PlaythroughScoresVisualState {
   const factory _finishedScoring(
-      {required final List<PlayerScore> playerScores,
-      required final Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
-      required final DateTime uniqnessEnforcingDummyDate}) = _$_finishedScoring;
+          {required final List<PlayerScore> playerScores,
+          required final Map<String, ScoreTiebreakerType> scoreTiebreakersSet,
+          required final DateTime uniqnessEnforcingDummyDate}) =
+      _$finishedScoringImpl;
 
   List<PlayerScore> get playerScores;
   Map<String, ScoreTiebreakerType> get scoreTiebreakersSet;
   DateTime get uniqnessEnforcingDummyDate;
   @JsonKey(ignore: true)
-  _$$_finishedScoringCopyWith<_$_finishedScoring> get copyWith =>
+  _$$finishedScoringImplCopyWith<_$finishedScoringImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -86,11 +86,11 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
 }
 
 /// @nodoc
-abstract class _$$_PlayerScoreCopyWith<$Res>
+abstract class _$$PlayerScoreImplCopyWith<$Res>
     implements $PlayerScoreCopyWith<$Res> {
-  factory _$$_PlayerScoreCopyWith(
-          _$_PlayerScore value, $Res Function(_$_PlayerScore) then) =
-      __$$_PlayerScoreCopyWithImpl<$Res>;
+  factory _$$PlayerScoreImplCopyWith(
+          _$PlayerScoreImpl value, $Res Function(_$PlayerScoreImpl) then) =
+      __$$PlayerScoreImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Player? player, Score score});
@@ -102,11 +102,11 @@ abstract class _$$_PlayerScoreCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlayerScoreCopyWithImpl<$Res>
-    extends _$PlayerScoreCopyWithImpl<$Res, _$_PlayerScore>
-    implements _$$_PlayerScoreCopyWith<$Res> {
-  __$$_PlayerScoreCopyWithImpl(
-      _$_PlayerScore _value, $Res Function(_$_PlayerScore) _then)
+class __$$PlayerScoreImplCopyWithImpl<$Res>
+    extends _$PlayerScoreCopyWithImpl<$Res, _$PlayerScoreImpl>
+    implements _$$PlayerScoreImplCopyWith<$Res> {
+  __$$PlayerScoreImplCopyWithImpl(
+      _$PlayerScoreImpl _value, $Res Function(_$PlayerScoreImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -115,7 +115,7 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
     Object? player = freezed,
     Object? score = null,
   }) {
-    return _then(_$_PlayerScore(
+    return _then(_$PlayerScoreImpl(
       player: freezed == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -130,8 +130,9 @@ class __$$_PlayerScoreCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PlayerScore extends _PlayerScore {
-  const _$_PlayerScore({required this.player, required this.score}) : super._();
+class _$PlayerScoreImpl extends _PlayerScore {
+  const _$PlayerScoreImpl({required this.player, required this.score})
+      : super._();
 
   @override
   final Player? player;
@@ -147,7 +148,7 @@ class _$_PlayerScore extends _PlayerScore {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlayerScore &&
+            other is _$PlayerScoreImpl &&
             (identical(other.player, player) || other.player == player) &&
             (identical(other.score, score) || other.score == score));
   }
@@ -158,14 +159,14 @@ class _$_PlayerScore extends _PlayerScore {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerScoreCopyWith<_$_PlayerScore> get copyWith =>
-      __$$_PlayerScoreCopyWithImpl<_$_PlayerScore>(this, _$identity);
+  _$$PlayerScoreImplCopyWith<_$PlayerScoreImpl> get copyWith =>
+      __$$PlayerScoreImplCopyWithImpl<_$PlayerScoreImpl>(this, _$identity);
 }
 
 abstract class _PlayerScore extends PlayerScore {
   const factory _PlayerScore(
       {required final Player? player,
-      required final Score score}) = _$_PlayerScore;
+      required final Score score}) = _$PlayerScoreImpl;
   const _PlayerScore._() : super._();
 
   @override
@@ -174,6 +175,6 @@ abstract class _PlayerScore extends PlayerScore {
   Score get score;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerScoreCopyWith<_$_PlayerScore> get copyWith =>
+  _$$PlayerScoreImplCopyWith<_$PlayerScoreImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

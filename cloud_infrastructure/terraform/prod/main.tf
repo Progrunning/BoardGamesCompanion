@@ -194,6 +194,8 @@ resource "azurerm_servicebus_namespace" "sbns" {
 resource "azurerm_servicebus_queue" "sbq" {
   name         = var.resources.cache_service_bus.queue.name
   namespace_id = azurerm_servicebus_namespace.sbns.id
+
+  default_message_ttl = "00:30:00"
 }
 
 resource "azurerm_servicebus_queue_authorization_rule" "sbq_send_policy" {

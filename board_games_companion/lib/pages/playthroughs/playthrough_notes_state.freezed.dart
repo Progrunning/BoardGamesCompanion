@@ -76,23 +76,25 @@ class _$PlaythroughNotesStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_emptyCopyWith<$Res> {
-  factory _$$_emptyCopyWith(_$_empty value, $Res Function(_$_empty) then) =
-      __$$_emptyCopyWithImpl<$Res>;
+abstract class _$$emptyImplCopyWith<$Res> {
+  factory _$$emptyImplCopyWith(
+          _$emptyImpl value, $Res Function(_$emptyImpl) then) =
+      __$$emptyImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_emptyCopyWithImpl<$Res>
-    extends _$PlaythroughNotesStateCopyWithImpl<$Res, _$_empty>
-    implements _$$_emptyCopyWith<$Res> {
-  __$$_emptyCopyWithImpl(_$_empty _value, $Res Function(_$_empty) _then)
+class __$$emptyImplCopyWithImpl<$Res>
+    extends _$PlaythroughNotesStateCopyWithImpl<$Res, _$emptyImpl>
+    implements _$$emptyImplCopyWith<$Res> {
+  __$$emptyImplCopyWithImpl(
+      _$emptyImpl _value, $Res Function(_$emptyImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_empty implements _empty {
-  const _$_empty();
+class _$emptyImpl implements _empty {
+  const _$emptyImpl();
 
   @override
   String toString() {
@@ -102,7 +104,7 @@ class _$_empty implements _empty {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_empty);
+        (other.runtimeType == runtimeType && other is _$emptyImpl);
   }
 
   @override
@@ -172,22 +174,24 @@ class _$_empty implements _empty {
 }
 
 abstract class _empty implements PlaythroughNotesState {
-  const factory _empty() = _$_empty;
+  const factory _empty() = _$emptyImpl;
 }
 
 /// @nodoc
-abstract class _$$_notesCopyWith<$Res> {
-  factory _$$_notesCopyWith(_$_notes value, $Res Function(_$_notes) then) =
-      __$$_notesCopyWithImpl<$Res>;
+abstract class _$$notesImplCopyWith<$Res> {
+  factory _$$notesImplCopyWith(
+          _$notesImpl value, $Res Function(_$notesImpl) then) =
+      __$$notesImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<PlaythroughNote> playthroughNotes});
 }
 
 /// @nodoc
-class __$$_notesCopyWithImpl<$Res>
-    extends _$PlaythroughNotesStateCopyWithImpl<$Res, _$_notes>
-    implements _$$_notesCopyWith<$Res> {
-  __$$_notesCopyWithImpl(_$_notes _value, $Res Function(_$_notes) _then)
+class __$$notesImplCopyWithImpl<$Res>
+    extends _$PlaythroughNotesStateCopyWithImpl<$Res, _$notesImpl>
+    implements _$$notesImplCopyWith<$Res> {
+  __$$notesImplCopyWithImpl(
+      _$notesImpl _value, $Res Function(_$notesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -195,7 +199,7 @@ class __$$_notesCopyWithImpl<$Res>
   $Res call({
     Object? playthroughNotes = null,
   }) {
-    return _then(_$_notes(
+    return _then(_$notesImpl(
       playthroughNotes: null == playthroughNotes
           ? _value._playthroughNotes
           : playthroughNotes // ignore: cast_nullable_to_non_nullable
@@ -206,8 +210,8 @@ class __$$_notesCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_notes implements _notes {
-  const _$_notes({required final List<PlaythroughNote> playthroughNotes})
+class _$notesImpl implements _notes {
+  const _$notesImpl({required final List<PlaythroughNote> playthroughNotes})
       : _playthroughNotes = playthroughNotes;
 
   final List<PlaythroughNote> _playthroughNotes;
@@ -228,7 +232,7 @@ class _$_notes implements _notes {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_notes &&
+            other is _$notesImpl &&
             const DeepCollectionEquality()
                 .equals(other._playthroughNotes, _playthroughNotes));
   }
@@ -240,8 +244,8 @@ class _$_notes implements _notes {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_notesCopyWith<_$_notes> get copyWith =>
-      __$$_notesCopyWithImpl<_$_notes>(this, _$identity);
+  _$$notesImplCopyWith<_$notesImpl> get copyWith =>
+      __$$notesImplCopyWithImpl<_$notesImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -308,10 +312,10 @@ class _$_notes implements _notes {
 
 abstract class _notes implements PlaythroughNotesState {
   const factory _notes(
-      {required final List<PlaythroughNote> playthroughNotes}) = _$_notes;
+      {required final List<PlaythroughNote> playthroughNotes}) = _$notesImpl;
 
   List<PlaythroughNote> get playthroughNotes;
   @JsonKey(ignore: true)
-  _$$_notesCopyWith<_$_notes> get copyWith =>
+  _$$notesImplCopyWith<_$notesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

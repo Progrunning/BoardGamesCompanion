@@ -82,24 +82,25 @@ class _$PlaysPageVisualStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_HistoryCopyWith<$Res> {
-  factory _$$_HistoryCopyWith(
-          _$_History value, $Res Function(_$_History) then) =
-      __$$_HistoryCopyWithImpl<$Res>;
+abstract class _$$HistoryImplCopyWith<$Res> {
+  factory _$$HistoryImplCopyWith(
+          _$HistoryImpl value, $Res Function(_$HistoryImpl) then) =
+      __$$HistoryImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_HistoryCopyWithImpl<$Res>
-    extends _$PlaysPageVisualStateCopyWithImpl<$Res, _$_History>
-    implements _$$_HistoryCopyWith<$Res> {
-  __$$_HistoryCopyWithImpl(_$_History _value, $Res Function(_$_History) _then)
+class __$$HistoryImplCopyWithImpl<$Res>
+    extends _$PlaysPageVisualStateCopyWithImpl<$Res, _$HistoryImpl>
+    implements _$$HistoryImplCopyWith<$Res> {
+  __$$HistoryImplCopyWithImpl(
+      _$HistoryImpl _value, $Res Function(_$HistoryImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_History implements _History {
-  const _$_History();
+class _$HistoryImpl implements _History {
+  const _$HistoryImpl();
 
   @override
   String toString() {
@@ -109,7 +110,7 @@ class _$_History implements _History {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_History);
+        (other.runtimeType == runtimeType && other is _$HistoryImpl);
   }
 
   @override
@@ -185,29 +186,29 @@ class _$_History implements _History {
 }
 
 abstract class _History implements PlaysPageVisualState {
-  const factory _History() = _$_History;
+  const factory _History() = _$HistoryImpl;
 }
 
 /// @nodoc
-abstract class _$$_StatisticsCopyWith<$Res> {
-  factory _$$_StatisticsCopyWith(
-          _$_Statistics value, $Res Function(_$_Statistics) then) =
-      __$$_StatisticsCopyWithImpl<$Res>;
+abstract class _$$StatisticsImplCopyWith<$Res> {
+  factory _$$StatisticsImplCopyWith(
+          _$StatisticsImpl value, $Res Function(_$StatisticsImpl) then) =
+      __$$StatisticsImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_StatisticsCopyWithImpl<$Res>
-    extends _$PlaysPageVisualStateCopyWithImpl<$Res, _$_Statistics>
-    implements _$$_StatisticsCopyWith<$Res> {
-  __$$_StatisticsCopyWithImpl(
-      _$_Statistics _value, $Res Function(_$_Statistics) _then)
+class __$$StatisticsImplCopyWithImpl<$Res>
+    extends _$PlaysPageVisualStateCopyWithImpl<$Res, _$StatisticsImpl>
+    implements _$$StatisticsImplCopyWith<$Res> {
+  __$$StatisticsImplCopyWithImpl(
+      _$StatisticsImpl _value, $Res Function(_$StatisticsImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_Statistics implements _Statistics {
-  const _$_Statistics();
+class _$StatisticsImpl implements _Statistics {
+  const _$StatisticsImpl();
 
   @override
   String toString() {
@@ -217,7 +218,7 @@ class _$_Statistics implements _Statistics {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Statistics);
+        (other.runtimeType == runtimeType && other is _$StatisticsImpl);
   }
 
   @override
@@ -293,29 +294,29 @@ class _$_Statistics implements _Statistics {
 }
 
 abstract class _Statistics implements PlaysPageVisualState {
-  const factory _Statistics() = _$_Statistics;
+  const factory _Statistics() = _$StatisticsImpl;
 }
 
 /// @nodoc
-abstract class _$$_SelectGameCopyWith<$Res> {
-  factory _$$_SelectGameCopyWith(
-          _$_SelectGame value, $Res Function(_$_SelectGame) then) =
-      __$$_SelectGameCopyWithImpl<$Res>;
+abstract class _$$SelectGameImplCopyWith<$Res> {
+  factory _$$SelectGameImplCopyWith(
+          _$SelectGameImpl value, $Res Function(_$SelectGameImpl) then) =
+      __$$SelectGameImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_SelectGameCopyWithImpl<$Res>
-    extends _$PlaysPageVisualStateCopyWithImpl<$Res, _$_SelectGame>
-    implements _$$_SelectGameCopyWith<$Res> {
-  __$$_SelectGameCopyWithImpl(
-      _$_SelectGame _value, $Res Function(_$_SelectGame) _then)
+class __$$SelectGameImplCopyWithImpl<$Res>
+    extends _$PlaysPageVisualStateCopyWithImpl<$Res, _$SelectGameImpl>
+    implements _$$SelectGameImplCopyWith<$Res> {
+  __$$SelectGameImplCopyWithImpl(
+      _$SelectGameImpl _value, $Res Function(_$SelectGameImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_SelectGame implements _SelectGame {
-  const _$_SelectGame();
+class _$SelectGameImpl implements _SelectGame {
+  const _$SelectGameImpl();
 
   @override
   String toString() {
@@ -325,7 +326,7 @@ class _$_SelectGame implements _SelectGame {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_SelectGame);
+        (other.runtimeType == runtimeType && other is _$SelectGameImpl);
   }
 
   @override
@@ -401,5 +402,5 @@ class _$_SelectGame implements _SelectGame {
 }
 
 abstract class _SelectGame implements PlaysPageVisualState {
-  const factory _SelectGame() = _$_SelectGame;
+  const factory _SelectGame() = _$SelectGameImpl;
 }

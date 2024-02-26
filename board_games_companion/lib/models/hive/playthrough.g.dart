@@ -6,17 +6,17 @@ part of 'playthrough.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PlaythroughAdapter extends TypeAdapter<_$_Playthrough> {
+class PlaythroughAdapter extends TypeAdapter<_$PlaythroughImpl> {
   @override
   final int typeId = 3;
 
   @override
-  _$_Playthrough read(BinaryReader reader) {
+  _$PlaythroughImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_Playthrough(
+    return _$PlaythroughImpl(
       id: fields[0] as String,
       boardGameId: fields[1] as String,
       playerIds: (fields[2] as List).cast<String>(),
@@ -31,7 +31,7 @@ class PlaythroughAdapter extends TypeAdapter<_$_Playthrough> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_Playthrough obj) {
+  void write(BinaryWriter writer, _$PlaythroughImpl obj) {
     writer
       ..writeByte(10)
       ..writeByte(0)

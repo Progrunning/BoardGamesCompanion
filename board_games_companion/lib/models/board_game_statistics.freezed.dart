@@ -89,23 +89,24 @@ class _$BoardGameStatisticsCopyWithImpl<$Res, $Val extends BoardGameStatistics>
 }
 
 /// @nodoc
-abstract class _$$_noneCopyWith<$Res> {
-  factory _$$_noneCopyWith(_$_none value, $Res Function(_$_none) then) =
-      __$$_noneCopyWithImpl<$Res>;
+abstract class _$$noneImplCopyWith<$Res> {
+  factory _$$noneImplCopyWith(
+          _$noneImpl value, $Res Function(_$noneImpl) then) =
+      __$$noneImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_noneCopyWithImpl<$Res>
-    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$_none>
-    implements _$$_noneCopyWith<$Res> {
-  __$$_noneCopyWithImpl(_$_none _value, $Res Function(_$_none) _then)
+class __$$noneImplCopyWithImpl<$Res>
+    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$noneImpl>
+    implements _$$noneImplCopyWith<$Res> {
+  __$$noneImplCopyWithImpl(_$noneImpl _value, $Res Function(_$noneImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_none implements _none {
-  const _$_none();
+class _$noneImpl implements _none {
+  const _$noneImpl();
 
   @override
   String toString() {
@@ -115,7 +116,7 @@ class _$_none implements _none {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_none);
+        (other.runtimeType == runtimeType && other is _$noneImpl);
   }
 
   @override
@@ -199,28 +200,29 @@ class _$_none implements _none {
 }
 
 abstract class _none implements BoardGameStatistics {
-  const factory _none() = _$_none;
+  const factory _none() = _$noneImpl;
 }
 
 /// @nodoc
-abstract class _$$_loadingCopyWith<$Res> {
-  factory _$$_loadingCopyWith(
-          _$_loading value, $Res Function(_$_loading) then) =
-      __$$_loadingCopyWithImpl<$Res>;
+abstract class _$$loadingImplCopyWith<$Res> {
+  factory _$$loadingImplCopyWith(
+          _$loadingImpl value, $Res Function(_$loadingImpl) then) =
+      __$$loadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_loadingCopyWithImpl<$Res>
-    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$_loading>
-    implements _$$_loadingCopyWith<$Res> {
-  __$$_loadingCopyWithImpl(_$_loading _value, $Res Function(_$_loading) _then)
+class __$$loadingImplCopyWithImpl<$Res>
+    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$loadingImpl>
+    implements _$$loadingImplCopyWith<$Res> {
+  __$$loadingImplCopyWithImpl(
+      _$loadingImpl _value, $Res Function(_$loadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_loading implements _loading {
-  const _$_loading();
+class _$loadingImpl implements _loading {
+  const _$loadingImpl();
 
   @override
   String toString() {
@@ -230,7 +232,7 @@ class _$_loading implements _loading {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_loading);
+        (other.runtimeType == runtimeType && other is _$loadingImpl);
   }
 
   @override
@@ -314,13 +316,14 @@ class _$_loading implements _loading {
 }
 
 abstract class _loading implements BoardGameStatistics {
-  const factory _loading() = _$_loading;
+  const factory _loading() = _$loadingImpl;
 }
 
 /// @nodoc
-abstract class _$$_scoreCopyWith<$Res> {
-  factory _$$_scoreCopyWith(_$_score value, $Res Function(_$_score) then) =
-      __$$_scoreCopyWithImpl<$Res>;
+abstract class _$$scoreImplCopyWith<$Res> {
+  factory _$$scoreImplCopyWith(
+          _$scoreImpl value, $Res Function(_$scoreImpl) then) =
+      __$$scoreImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ScoreBoardGameStatistics boardGameStatistics});
 
@@ -328,10 +331,11 @@ abstract class _$$_scoreCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_scoreCopyWithImpl<$Res>
-    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$_score>
-    implements _$$_scoreCopyWith<$Res> {
-  __$$_scoreCopyWithImpl(_$_score _value, $Res Function(_$_score) _then)
+class __$$scoreImplCopyWithImpl<$Res>
+    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$scoreImpl>
+    implements _$$scoreImplCopyWith<$Res> {
+  __$$scoreImplCopyWithImpl(
+      _$scoreImpl _value, $Res Function(_$scoreImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -339,7 +343,7 @@ class __$$_scoreCopyWithImpl<$Res>
   $Res call({
     Object? boardGameStatistics = null,
   }) {
-    return _then(_$_score(
+    return _then(_$scoreImpl(
       boardGameStatistics: null == boardGameStatistics
           ? _value.boardGameStatistics
           : boardGameStatistics // ignore: cast_nullable_to_non_nullable
@@ -359,8 +363,8 @@ class __$$_scoreCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_score implements _score {
-  const _$_score({required this.boardGameStatistics});
+class _$scoreImpl implements _score {
+  const _$scoreImpl({required this.boardGameStatistics});
 
   @override
   final ScoreBoardGameStatistics boardGameStatistics;
@@ -374,7 +378,7 @@ class _$_score implements _score {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_score &&
+            other is _$scoreImpl &&
             (identical(other.boardGameStatistics, boardGameStatistics) ||
                 other.boardGameStatistics == boardGameStatistics));
   }
@@ -385,8 +389,8 @@ class _$_score implements _score {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_scoreCopyWith<_$_score> get copyWith =>
-      __$$_scoreCopyWithImpl<_$_score>(this, _$identity);
+  _$$scoreImplCopyWith<_$scoreImpl> get copyWith =>
+      __$$scoreImplCopyWithImpl<_$scoreImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -467,19 +471,20 @@ class _$_score implements _score {
 
 abstract class _score implements BoardGameStatistics {
   const factory _score(
-      {required final ScoreBoardGameStatistics boardGameStatistics}) = _$_score;
+          {required final ScoreBoardGameStatistics boardGameStatistics}) =
+      _$scoreImpl;
 
   ScoreBoardGameStatistics get boardGameStatistics;
   @JsonKey(ignore: true)
-  _$$_scoreCopyWith<_$_score> get copyWith =>
+  _$$scoreImplCopyWith<_$scoreImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_noScoreCopyWith<$Res> {
-  factory _$$_noScoreCopyWith(
-          _$_noScore value, $Res Function(_$_noScore) then) =
-      __$$_noScoreCopyWithImpl<$Res>;
+abstract class _$$noScoreImplCopyWith<$Res> {
+  factory _$$noScoreImplCopyWith(
+          _$noScoreImpl value, $Res Function(_$noScoreImpl) then) =
+      __$$noScoreImplCopyWithImpl<$Res>;
   @useResult
   $Res call({NoScoreBoardGameStatistics boardGameStatistics});
 
@@ -487,10 +492,11 @@ abstract class _$$_noScoreCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_noScoreCopyWithImpl<$Res>
-    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$_noScore>
-    implements _$$_noScoreCopyWith<$Res> {
-  __$$_noScoreCopyWithImpl(_$_noScore _value, $Res Function(_$_noScore) _then)
+class __$$noScoreImplCopyWithImpl<$Res>
+    extends _$BoardGameStatisticsCopyWithImpl<$Res, _$noScoreImpl>
+    implements _$$noScoreImplCopyWith<$Res> {
+  __$$noScoreImplCopyWithImpl(
+      _$noScoreImpl _value, $Res Function(_$noScoreImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -498,7 +504,7 @@ class __$$_noScoreCopyWithImpl<$Res>
   $Res call({
     Object? boardGameStatistics = null,
   }) {
-    return _then(_$_noScore(
+    return _then(_$noScoreImpl(
       boardGameStatistics: null == boardGameStatistics
           ? _value.boardGameStatistics
           : boardGameStatistics // ignore: cast_nullable_to_non_nullable
@@ -518,8 +524,8 @@ class __$$_noScoreCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_noScore implements _noScore {
-  const _$_noScore({required this.boardGameStatistics});
+class _$noScoreImpl implements _noScore {
+  const _$noScoreImpl({required this.boardGameStatistics});
 
   @override
   final NoScoreBoardGameStatistics boardGameStatistics;
@@ -533,7 +539,7 @@ class _$_noScore implements _noScore {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_noScore &&
+            other is _$noScoreImpl &&
             (identical(other.boardGameStatistics, boardGameStatistics) ||
                 other.boardGameStatistics == boardGameStatistics));
   }
@@ -544,8 +550,8 @@ class _$_noScore implements _noScore {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_noScoreCopyWith<_$_noScore> get copyWith =>
-      __$$_noScoreCopyWithImpl<_$_noScore>(this, _$identity);
+  _$$noScoreImplCopyWith<_$noScoreImpl> get copyWith =>
+      __$$noScoreImplCopyWithImpl<_$noScoreImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -627,11 +633,11 @@ class _$_noScore implements _noScore {
 abstract class _noScore implements BoardGameStatistics {
   const factory _noScore(
           {required final NoScoreBoardGameStatistics boardGameStatistics}) =
-      _$_noScore;
+      _$noScoreImpl;
 
   NoScoreBoardGameStatistics get boardGameStatistics;
   @JsonKey(ignore: true)
-  _$$_noScoreCopyWith<_$_noScore> get copyWith =>
+  _$$noScoreImplCopyWith<_$noScoreImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -795,12 +801,12 @@ class _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_ScoreBoardGameStatisticsCopyWith<$Res>
+abstract class _$$ScoreBoardGameStatisticsImplCopyWith<$Res>
     implements $ScoreBoardGameStatisticsCopyWith<$Res> {
-  factory _$$_ScoreBoardGameStatisticsCopyWith(
-          _$_ScoreBoardGameStatistics value,
-          $Res Function(_$_ScoreBoardGameStatistics) then) =
-      __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>;
+  factory _$$ScoreBoardGameStatisticsImplCopyWith(
+          _$ScoreBoardGameStatisticsImpl value,
+          $Res Function(_$ScoreBoardGameStatisticsImpl) then) =
+      __$$ScoreBoardGameStatisticsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -821,12 +827,13 @@ abstract class _$$_ScoreBoardGameStatisticsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
+class __$$ScoreBoardGameStatisticsImplCopyWithImpl<$Res>
     extends _$ScoreBoardGameStatisticsCopyWithImpl<$Res,
-        _$_ScoreBoardGameStatistics>
-    implements _$$_ScoreBoardGameStatisticsCopyWith<$Res> {
-  __$$_ScoreBoardGameStatisticsCopyWithImpl(_$_ScoreBoardGameStatistics _value,
-      $Res Function(_$_ScoreBoardGameStatistics) _then)
+        _$ScoreBoardGameStatisticsImpl>
+    implements _$$ScoreBoardGameStatisticsImplCopyWith<$Res> {
+  __$$ScoreBoardGameStatisticsImplCopyWithImpl(
+      _$ScoreBoardGameStatisticsImpl _value,
+      $Res Function(_$ScoreBoardGameStatisticsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -847,7 +854,7 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
     Object? playerWinsPercentage = null,
     Object? playerWins = freezed,
   }) {
-    return _then(_$_ScoreBoardGameStatistics(
+    return _then(_$ScoreBoardGameStatisticsImpl(
       numberOfGamesPlayed: null == numberOfGamesPlayed
           ? _value.numberOfGamesPlayed
           : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
@@ -910,8 +917,8 @@ class __$$_ScoreBoardGameStatisticsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
-  _$_ScoreBoardGameStatistics(
+class _$ScoreBoardGameStatisticsImpl extends _ScoreBoardGameStatistics {
+  _$ScoreBoardGameStatisticsImpl(
       {required this.numberOfGamesPlayed,
       required this.averageNumberOfPlayers,
       required this.lastTimePlayed,
@@ -968,9 +975,9 @@ class _$_ScoreBoardGameStatistics extends _ScoreBoardGameStatistics {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScoreBoardGameStatisticsCopyWith<_$_ScoreBoardGameStatistics>
-      get copyWith => __$$_ScoreBoardGameStatisticsCopyWithImpl<
-          _$_ScoreBoardGameStatistics>(this, _$identity);
+  _$$ScoreBoardGameStatisticsImplCopyWith<_$ScoreBoardGameStatisticsImpl>
+      get copyWith => __$$ScoreBoardGameStatisticsImplCopyWithImpl<
+          _$ScoreBoardGameStatisticsImpl>(this, _$identity);
 }
 
 abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
@@ -988,7 +995,7 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
       List<PlayerStatistics> playersStatistics,
       List<PlayerCountStatistics> playerCountPercentage,
       List<PlayerWinsStatistics> playerWinsPercentage,
-      Map<Player, int>? playerWins}) = _$_ScoreBoardGameStatistics;
+      Map<Player, int>? playerWins}) = _$ScoreBoardGameStatisticsImpl;
   _ScoreBoardGameStatistics._() : super._();
 
   @override
@@ -1035,7 +1042,7 @@ abstract class _ScoreBoardGameStatistics extends ScoreBoardGameStatistics {
   set playerWins(Map<Player, int>? value);
   @override
   @JsonKey(ignore: true)
-  _$$_ScoreBoardGameStatisticsCopyWith<_$_ScoreBoardGameStatistics>
+  _$$ScoreBoardGameStatisticsImplCopyWith<_$ScoreBoardGameStatisticsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1155,12 +1162,12 @@ class _$NoScoreBoardGameStatisticsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_NoScoreBoardGameStatiticsCopyWith<$Res>
+abstract class _$$NoScoreBoardGameStatiticsImplCopyWith<$Res>
     implements $NoScoreBoardGameStatisticsCopyWith<$Res> {
-  factory _$$_NoScoreBoardGameStatiticsCopyWith(
-          _$_NoScoreBoardGameStatitics value,
-          $Res Function(_$_NoScoreBoardGameStatitics) then) =
-      __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>;
+  factory _$$NoScoreBoardGameStatiticsImplCopyWith(
+          _$NoScoreBoardGameStatiticsImpl value,
+          $Res Function(_$NoScoreBoardGameStatiticsImpl) then) =
+      __$$NoScoreBoardGameStatiticsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -1176,13 +1183,13 @@ abstract class _$$_NoScoreBoardGameStatiticsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>
+class __$$NoScoreBoardGameStatiticsImplCopyWithImpl<$Res>
     extends _$NoScoreBoardGameStatisticsCopyWithImpl<$Res,
-        _$_NoScoreBoardGameStatitics>
-    implements _$$_NoScoreBoardGameStatiticsCopyWith<$Res> {
-  __$$_NoScoreBoardGameStatiticsCopyWithImpl(
-      _$_NoScoreBoardGameStatitics _value,
-      $Res Function(_$_NoScoreBoardGameStatitics) _then)
+        _$NoScoreBoardGameStatiticsImpl>
+    implements _$$NoScoreBoardGameStatiticsImplCopyWith<$Res> {
+  __$$NoScoreBoardGameStatiticsImplCopyWithImpl(
+      _$NoScoreBoardGameStatiticsImpl _value,
+      $Res Function(_$NoScoreBoardGameStatiticsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1198,7 +1205,7 @@ class __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>
     Object? playersStatistics = null,
     Object? playerCountPercentage = null,
   }) {
-    return _then(_$_NoScoreBoardGameStatitics(
+    return _then(_$NoScoreBoardGameStatiticsImpl(
       numberOfGamesPlayed: null == numberOfGamesPlayed
           ? _value.numberOfGamesPlayed
           : numberOfGamesPlayed // ignore: cast_nullable_to_non_nullable
@@ -1241,8 +1248,8 @@ class __$$_NoScoreBoardGameStatiticsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_NoScoreBoardGameStatitics extends _NoScoreBoardGameStatitics {
-  _$_NoScoreBoardGameStatitics(
+class _$NoScoreBoardGameStatiticsImpl extends _NoScoreBoardGameStatitics {
+  _$NoScoreBoardGameStatiticsImpl(
       {required this.numberOfGamesPlayed,
       required this.averageNumberOfPlayers,
       required this.lastTimePlayed,
@@ -1283,9 +1290,9 @@ class _$_NoScoreBoardGameStatitics extends _NoScoreBoardGameStatitics {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NoScoreBoardGameStatiticsCopyWith<_$_NoScoreBoardGameStatitics>
-      get copyWith => __$$_NoScoreBoardGameStatiticsCopyWithImpl<
-          _$_NoScoreBoardGameStatitics>(this, _$identity);
+  _$$NoScoreBoardGameStatiticsImplCopyWith<_$NoScoreBoardGameStatiticsImpl>
+      get copyWith => __$$NoScoreBoardGameStatiticsImplCopyWithImpl<
+          _$NoScoreBoardGameStatiticsImpl>(this, _$identity);
 }
 
 abstract class _NoScoreBoardGameStatitics extends NoScoreBoardGameStatistics {
@@ -1299,7 +1306,7 @@ abstract class _NoScoreBoardGameStatitics extends NoScoreBoardGameStatistics {
           required int averagePlaytimeInSeconds,
           List<PlayerStatistics> playersStatistics,
           List<PlayerCountStatistics> playerCountPercentage}) =
-      _$_NoScoreBoardGameStatitics;
+      _$NoScoreBoardGameStatiticsImpl;
   _NoScoreBoardGameStatitics._() : super._();
 
   @override
@@ -1331,7 +1338,7 @@ abstract class _NoScoreBoardGameStatitics extends NoScoreBoardGameStatistics {
   set playerCountPercentage(List<PlayerCountStatistics> value);
   @override
   @JsonKey(ignore: true)
-  _$$_NoScoreBoardGameStatiticsCopyWith<_$_NoScoreBoardGameStatitics>
+  _$$NoScoreBoardGameStatiticsImplCopyWith<_$NoScoreBoardGameStatiticsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1401,11 +1408,11 @@ class _$PlayerWinsStatisticsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_PlayerWinsStatisticsCopyWith<$Res>
+abstract class _$$PlayerWinsStatisticsImplCopyWith<$Res>
     implements $PlayerWinsStatisticsCopyWith<$Res> {
-  factory _$$_PlayerWinsStatisticsCopyWith(_$_PlayerWinsStatistics value,
-          $Res Function(_$_PlayerWinsStatistics) then) =
-      __$$_PlayerWinsStatisticsCopyWithImpl<$Res>;
+  factory _$$PlayerWinsStatisticsImplCopyWith(_$PlayerWinsStatisticsImpl value,
+          $Res Function(_$PlayerWinsStatisticsImpl) then) =
+      __$$PlayerWinsStatisticsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Player player, int numberOfWins, double winsPercentage});
@@ -1415,11 +1422,11 @@ abstract class _$$_PlayerWinsStatisticsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlayerWinsStatisticsCopyWithImpl<$Res>
-    extends _$PlayerWinsStatisticsCopyWithImpl<$Res, _$_PlayerWinsStatistics>
-    implements _$$_PlayerWinsStatisticsCopyWith<$Res> {
-  __$$_PlayerWinsStatisticsCopyWithImpl(_$_PlayerWinsStatistics _value,
-      $Res Function(_$_PlayerWinsStatistics) _then)
+class __$$PlayerWinsStatisticsImplCopyWithImpl<$Res>
+    extends _$PlayerWinsStatisticsCopyWithImpl<$Res, _$PlayerWinsStatisticsImpl>
+    implements _$$PlayerWinsStatisticsImplCopyWith<$Res> {
+  __$$PlayerWinsStatisticsImplCopyWithImpl(_$PlayerWinsStatisticsImpl _value,
+      $Res Function(_$PlayerWinsStatisticsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1429,7 +1436,7 @@ class __$$_PlayerWinsStatisticsCopyWithImpl<$Res>
     Object? numberOfWins = null,
     Object? winsPercentage = null,
   }) {
-    return _then(_$_PlayerWinsStatistics(
+    return _then(_$PlayerWinsStatisticsImpl(
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -1448,8 +1455,8 @@ class __$$_PlayerWinsStatisticsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PlayerWinsStatistics implements _PlayerWinsStatistics {
-  const _$_PlayerWinsStatistics(
+class _$PlayerWinsStatisticsImpl implements _PlayerWinsStatistics {
+  const _$PlayerWinsStatisticsImpl(
       {required this.player,
       required this.numberOfWins,
       required this.winsPercentage});
@@ -1470,7 +1477,7 @@ class _$_PlayerWinsStatistics implements _PlayerWinsStatistics {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlayerWinsStatistics &&
+            other is _$PlayerWinsStatisticsImpl &&
             (identical(other.player, player) || other.player == player) &&
             (identical(other.numberOfWins, numberOfWins) ||
                 other.numberOfWins == numberOfWins) &&
@@ -1485,16 +1492,17 @@ class _$_PlayerWinsStatistics implements _PlayerWinsStatistics {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerWinsStatisticsCopyWith<_$_PlayerWinsStatistics> get copyWith =>
-      __$$_PlayerWinsStatisticsCopyWithImpl<_$_PlayerWinsStatistics>(
-          this, _$identity);
+  _$$PlayerWinsStatisticsImplCopyWith<_$PlayerWinsStatisticsImpl>
+      get copyWith =>
+          __$$PlayerWinsStatisticsImplCopyWithImpl<_$PlayerWinsStatisticsImpl>(
+              this, _$identity);
 }
 
 abstract class _PlayerWinsStatistics implements PlayerWinsStatistics {
   const factory _PlayerWinsStatistics(
       {required final Player player,
       required final int numberOfWins,
-      required final double winsPercentage}) = _$_PlayerWinsStatistics;
+      required final double winsPercentage}) = _$PlayerWinsStatisticsImpl;
 
   @override
   Player get player;
@@ -1504,8 +1512,8 @@ abstract class _PlayerWinsStatistics implements PlayerWinsStatistics {
   double get winsPercentage;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerWinsStatisticsCopyWith<_$_PlayerWinsStatistics> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$PlayerWinsStatisticsImplCopyWith<_$PlayerWinsStatisticsImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -1567,11 +1575,12 @@ class _$PlayerCountStatisticsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_PlayerCountStatisticsCopyWith<$Res>
+abstract class _$$PlayerCountStatisticsImplCopyWith<$Res>
     implements $PlayerCountStatisticsCopyWith<$Res> {
-  factory _$$_PlayerCountStatisticsCopyWith(_$_PlayerCountStatistics value,
-          $Res Function(_$_PlayerCountStatistics) then) =
-      __$$_PlayerCountStatisticsCopyWithImpl<$Res>;
+  factory _$$PlayerCountStatisticsImplCopyWith(
+          _$PlayerCountStatisticsImpl value,
+          $Res Function(_$PlayerCountStatisticsImpl) then) =
+      __$$PlayerCountStatisticsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -1581,11 +1590,12 @@ abstract class _$$_PlayerCountStatisticsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlayerCountStatisticsCopyWithImpl<$Res>
-    extends _$PlayerCountStatisticsCopyWithImpl<$Res, _$_PlayerCountStatistics>
-    implements _$$_PlayerCountStatisticsCopyWith<$Res> {
-  __$$_PlayerCountStatisticsCopyWithImpl(_$_PlayerCountStatistics _value,
-      $Res Function(_$_PlayerCountStatistics) _then)
+class __$$PlayerCountStatisticsImplCopyWithImpl<$Res>
+    extends _$PlayerCountStatisticsCopyWithImpl<$Res,
+        _$PlayerCountStatisticsImpl>
+    implements _$$PlayerCountStatisticsImplCopyWith<$Res> {
+  __$$PlayerCountStatisticsImplCopyWithImpl(_$PlayerCountStatisticsImpl _value,
+      $Res Function(_$PlayerCountStatisticsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1595,7 +1605,7 @@ class __$$_PlayerCountStatisticsCopyWithImpl<$Res>
     Object? numberOfGamesPlayed = null,
     Object? gamesPlayedPercentage = null,
   }) {
-    return _then(_$_PlayerCountStatistics(
+    return _then(_$PlayerCountStatisticsImpl(
       numberOfPlayers: null == numberOfPlayers
           ? _value.numberOfPlayers
           : numberOfPlayers // ignore: cast_nullable_to_non_nullable
@@ -1614,8 +1624,8 @@ class __$$_PlayerCountStatisticsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PlayerCountStatistics implements _PlayerCountStatistics {
-  const _$_PlayerCountStatistics(
+class _$PlayerCountStatisticsImpl implements _PlayerCountStatistics {
+  const _$PlayerCountStatisticsImpl(
       {required this.numberOfPlayers,
       required this.numberOfGamesPlayed,
       required this.gamesPlayedPercentage});
@@ -1636,7 +1646,7 @@ class _$_PlayerCountStatistics implements _PlayerCountStatistics {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PlayerCountStatistics &&
+            other is _$PlayerCountStatisticsImpl &&
             (identical(other.numberOfPlayers, numberOfPlayers) ||
                 other.numberOfPlayers == numberOfPlayers) &&
             (identical(other.numberOfGamesPlayed, numberOfGamesPlayed) ||
@@ -1652,16 +1662,17 @@ class _$_PlayerCountStatistics implements _PlayerCountStatistics {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerCountStatisticsCopyWith<_$_PlayerCountStatistics> get copyWith =>
-      __$$_PlayerCountStatisticsCopyWithImpl<_$_PlayerCountStatistics>(
-          this, _$identity);
+  _$$PlayerCountStatisticsImplCopyWith<_$PlayerCountStatisticsImpl>
+      get copyWith => __$$PlayerCountStatisticsImplCopyWithImpl<
+          _$PlayerCountStatisticsImpl>(this, _$identity);
 }
 
 abstract class _PlayerCountStatistics implements PlayerCountStatistics {
   const factory _PlayerCountStatistics(
-      {required final int numberOfPlayers,
-      required final int numberOfGamesPlayed,
-      required final double gamesPlayedPercentage}) = _$_PlayerCountStatistics;
+          {required final int numberOfPlayers,
+          required final int numberOfGamesPlayed,
+          required final double gamesPlayedPercentage}) =
+      _$PlayerCountStatisticsImpl;
 
   @override
   int get numberOfPlayers;
@@ -1671,6 +1682,6 @@ abstract class _PlayerCountStatistics implements PlayerCountStatistics {
   double get gamesPlayedPercentage;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerCountStatisticsCopyWith<_$_PlayerCountStatistics> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$PlayerCountStatisticsImplCopyWith<_$PlayerCountStatisticsImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

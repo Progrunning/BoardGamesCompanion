@@ -65,22 +65,22 @@ class _$SearchHistoryEntryCopyWithImpl<$Res, $Val extends SearchHistoryEntry>
 }
 
 /// @nodoc
-abstract class _$$_SearchHistoryEntryCopyWith<$Res>
+abstract class _$$SearchHistoryEntryImplCopyWith<$Res>
     implements $SearchHistoryEntryCopyWith<$Res> {
-  factory _$$_SearchHistoryEntryCopyWith(_$_SearchHistoryEntry value,
-          $Res Function(_$_SearchHistoryEntry) then) =
-      __$$_SearchHistoryEntryCopyWithImpl<$Res>;
+  factory _$$SearchHistoryEntryImplCopyWith(_$SearchHistoryEntryImpl value,
+          $Res Function(_$SearchHistoryEntryImpl) then) =
+      __$$SearchHistoryEntryImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({@HiveField(0) String query, @HiveField(1) DateTime dateTime});
 }
 
 /// @nodoc
-class __$$_SearchHistoryEntryCopyWithImpl<$Res>
-    extends _$SearchHistoryEntryCopyWithImpl<$Res, _$_SearchHistoryEntry>
-    implements _$$_SearchHistoryEntryCopyWith<$Res> {
-  __$$_SearchHistoryEntryCopyWithImpl(
-      _$_SearchHistoryEntry _value, $Res Function(_$_SearchHistoryEntry) _then)
+class __$$SearchHistoryEntryImplCopyWithImpl<$Res>
+    extends _$SearchHistoryEntryCopyWithImpl<$Res, _$SearchHistoryEntryImpl>
+    implements _$$SearchHistoryEntryImplCopyWith<$Res> {
+  __$$SearchHistoryEntryImplCopyWithImpl(_$SearchHistoryEntryImpl _value,
+      $Res Function(_$SearchHistoryEntryImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -89,7 +89,7 @@ class __$$_SearchHistoryEntryCopyWithImpl<$Res>
     Object? query = null,
     Object? dateTime = null,
   }) {
-    return _then(_$_SearchHistoryEntry(
+    return _then(_$SearchHistoryEntryImpl(
       query: null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
@@ -107,8 +107,8 @@ class __$$_SearchHistoryEntryCopyWithImpl<$Res>
 @HiveType(
     typeId: HiveBoxes.searchHistoryEntryId,
     adapterName: 'SearchHistoryEntryAdapter')
-class _$_SearchHistoryEntry implements _SearchHistoryEntry {
-  const _$_SearchHistoryEntry(
+class _$SearchHistoryEntryImpl implements _SearchHistoryEntry {
+  const _$SearchHistoryEntryImpl(
       {@HiveField(0) required this.query,
       @HiveField(1) required this.dateTime});
 
@@ -128,7 +128,7 @@ class _$_SearchHistoryEntry implements _SearchHistoryEntry {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SearchHistoryEntry &&
+            other is _$SearchHistoryEntryImpl &&
             (identical(other.query, query) || other.query == query) &&
             (identical(other.dateTime, dateTime) ||
                 other.dateTime == dateTime));
@@ -140,15 +140,16 @@ class _$_SearchHistoryEntry implements _SearchHistoryEntry {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SearchHistoryEntryCopyWith<_$_SearchHistoryEntry> get copyWith =>
-      __$$_SearchHistoryEntryCopyWithImpl<_$_SearchHistoryEntry>(
+  _$$SearchHistoryEntryImplCopyWith<_$SearchHistoryEntryImpl> get copyWith =>
+      __$$SearchHistoryEntryImplCopyWithImpl<_$SearchHistoryEntryImpl>(
           this, _$identity);
 }
 
 abstract class _SearchHistoryEntry implements SearchHistoryEntry {
   const factory _SearchHistoryEntry(
-      {@HiveField(0) required final String query,
-      @HiveField(1) required final DateTime dateTime}) = _$_SearchHistoryEntry;
+          {@HiveField(0) required final String query,
+          @HiveField(1) required final DateTime dateTime}) =
+      _$SearchHistoryEntryImpl;
 
   @override
   @HiveField(0)
@@ -158,6 +159,6 @@ abstract class _SearchHistoryEntry implements SearchHistoryEntry {
   DateTime get dateTime;
   @override
   @JsonKey(ignore: true)
-  _$$_SearchHistoryEntryCopyWith<_$_SearchHistoryEntry> get copyWith =>
+  _$$SearchHistoryEntryImplCopyWith<_$SearchHistoryEntryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

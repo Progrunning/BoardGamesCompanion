@@ -33,7 +33,7 @@ abstract class $NoScoreGameResultCopyWith<$Res> {
   @useResult
   $Res call(
       {@HiveField(0, defaultValue: null)
-          CooperativeGameResult? cooperativeGameResult});
+      CooperativeGameResult? cooperativeGameResult});
 }
 
 /// @nodoc
@@ -61,24 +61,24 @@ class _$NoScoreGameResultCopyWithImpl<$Res, $Val extends NoScoreGameResult>
 }
 
 /// @nodoc
-abstract class _$$_NoScoreGameResultCopyWith<$Res>
+abstract class _$$NoScoreGameResultImplCopyWith<$Res>
     implements $NoScoreGameResultCopyWith<$Res> {
-  factory _$$_NoScoreGameResultCopyWith(_$_NoScoreGameResult value,
-          $Res Function(_$_NoScoreGameResult) then) =
-      __$$_NoScoreGameResultCopyWithImpl<$Res>;
+  factory _$$NoScoreGameResultImplCopyWith(_$NoScoreGameResultImpl value,
+          $Res Function(_$NoScoreGameResultImpl) then) =
+      __$$NoScoreGameResultImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {@HiveField(0, defaultValue: null)
-          CooperativeGameResult? cooperativeGameResult});
+      CooperativeGameResult? cooperativeGameResult});
 }
 
 /// @nodoc
-class __$$_NoScoreGameResultCopyWithImpl<$Res>
-    extends _$NoScoreGameResultCopyWithImpl<$Res, _$_NoScoreGameResult>
-    implements _$$_NoScoreGameResultCopyWith<$Res> {
-  __$$_NoScoreGameResultCopyWithImpl(
-      _$_NoScoreGameResult _value, $Res Function(_$_NoScoreGameResult) _then)
+class __$$NoScoreGameResultImplCopyWithImpl<$Res>
+    extends _$NoScoreGameResultCopyWithImpl<$Res, _$NoScoreGameResultImpl>
+    implements _$$NoScoreGameResultImplCopyWith<$Res> {
+  __$$NoScoreGameResultImplCopyWithImpl(_$NoScoreGameResultImpl _value,
+      $Res Function(_$NoScoreGameResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -86,7 +86,7 @@ class __$$_NoScoreGameResultCopyWithImpl<$Res>
   $Res call({
     Object? cooperativeGameResult = freezed,
   }) {
-    return _then(_$_NoScoreGameResult(
+    return _then(_$NoScoreGameResultImpl(
       cooperativeGameResult: freezed == cooperativeGameResult
           ? _value.cooperativeGameResult
           : cooperativeGameResult // ignore: cast_nullable_to_non_nullable
@@ -100,8 +100,8 @@ class __$$_NoScoreGameResultCopyWithImpl<$Res>
 @HiveType(
     typeId: HiveBoxes.noScoreGameResultTypeId,
     adapterName: 'NoScoreGameResultAdapter')
-class _$_NoScoreGameResult extends _NoScoreGameResult {
-  const _$_NoScoreGameResult(
+class _$NoScoreGameResultImpl extends _NoScoreGameResult {
+  const _$NoScoreGameResultImpl(
       {@HiveField(0, defaultValue: null) this.cooperativeGameResult})
       : super._();
 
@@ -118,7 +118,7 @@ class _$_NoScoreGameResult extends _NoScoreGameResult {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NoScoreGameResult &&
+            other is _$NoScoreGameResultImpl &&
             (identical(other.cooperativeGameResult, cooperativeGameResult) ||
                 other.cooperativeGameResult == cooperativeGameResult));
   }
@@ -129,16 +129,16 @@ class _$_NoScoreGameResult extends _NoScoreGameResult {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NoScoreGameResultCopyWith<_$_NoScoreGameResult> get copyWith =>
-      __$$_NoScoreGameResultCopyWithImpl<_$_NoScoreGameResult>(
+  _$$NoScoreGameResultImplCopyWith<_$NoScoreGameResultImpl> get copyWith =>
+      __$$NoScoreGameResultImplCopyWithImpl<_$NoScoreGameResultImpl>(
           this, _$identity);
 }
 
 abstract class _NoScoreGameResult extends NoScoreGameResult {
   const factory _NoScoreGameResult(
           {@HiveField(0, defaultValue: null)
-              final CooperativeGameResult? cooperativeGameResult}) =
-      _$_NoScoreGameResult;
+          final CooperativeGameResult? cooperativeGameResult}) =
+      _$NoScoreGameResultImpl;
   const _NoScoreGameResult._() : super._();
 
   @override
@@ -146,6 +146,6 @@ abstract class _NoScoreGameResult extends NoScoreGameResult {
   CooperativeGameResult? get cooperativeGameResult;
   @override
   @JsonKey(ignore: true)
-  _$$_NoScoreGameResultCopyWith<_$_NoScoreGameResult> get copyWith =>
+  _$$NoScoreGameResultImplCopyWith<_$NoScoreGameResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

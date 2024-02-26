@@ -104,10 +104,11 @@ class _$BoardGameClassificationSettingsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_scoreCopyWith<$Res>
+abstract class _$$scoreImplCopyWith<$Res>
     implements $BoardGameClassificationSettingsCopyWith<$Res> {
-  factory _$$_scoreCopyWith(_$_score value, $Res Function(_$_score) then) =
-      __$$_scoreCopyWithImpl<$Res>;
+  factory _$$scoreImplCopyWith(
+          _$scoreImpl value, $Res Function(_$scoreImpl) then) =
+      __$$scoreImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -117,10 +118,11 @@ abstract class _$$_scoreCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_scoreCopyWithImpl<$Res>
-    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res, _$_score>
-    implements _$$_scoreCopyWith<$Res> {
-  __$$_scoreCopyWithImpl(_$_score _value, $Res Function(_$_score) _then)
+class __$$scoreImplCopyWithImpl<$Res>
+    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res, _$scoreImpl>
+    implements _$$scoreImplCopyWith<$Res> {
+  __$$scoreImplCopyWithImpl(
+      _$scoreImpl _value, $Res Function(_$scoreImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -129,7 +131,7 @@ class __$$_scoreCopyWithImpl<$Res>
     Object? gameFamily = null,
     Object? averageScorePrecision = null,
   }) {
-    return _then(_$_score(
+    return _then(_$scoreImpl(
       gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
@@ -153,8 +155,8 @@ class __$$_scoreCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_score implements _score {
-  const _$_score(
+class _$scoreImpl implements _score {
+  const _$scoreImpl(
       {required this.gameFamily, required this.averageScorePrecision});
 
   @override
@@ -171,7 +173,7 @@ class _$_score implements _score {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_score &&
+            other is _$scoreImpl &&
             (identical(other.gameFamily, gameFamily) ||
                 other.gameFamily == gameFamily) &&
             (identical(other.averageScorePrecision, averageScorePrecision) ||
@@ -185,8 +187,8 @@ class _$_score implements _score {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_scoreCopyWith<_$_score> get copyWith =>
-      __$$_scoreCopyWithImpl<_$_score>(this, _$identity);
+  _$$scoreImplCopyWith<_$scoreImpl> get copyWith =>
+      __$$scoreImplCopyWithImpl<_$scoreImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -259,34 +261,36 @@ class _$_score implements _score {
 
 abstract class _score implements BoardGameClassificationSettings {
   const factory _score(
-      {required final GameFamily gameFamily,
-      required final AverageScorePrecision averageScorePrecision}) = _$_score;
+          {required final GameFamily gameFamily,
+          required final AverageScorePrecision averageScorePrecision}) =
+      _$scoreImpl;
 
   @override
   GameFamily get gameFamily;
   AverageScorePrecision get averageScorePrecision;
   @override
   @JsonKey(ignore: true)
-  _$$_scoreCopyWith<_$_score> get copyWith =>
+  _$$scoreImplCopyWith<_$scoreImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_noScoreCopyWith<$Res>
+abstract class _$$noScoreImplCopyWith<$Res>
     implements $BoardGameClassificationSettingsCopyWith<$Res> {
-  factory _$$_noScoreCopyWith(
-          _$_noScore value, $Res Function(_$_noScore) then) =
-      __$$_noScoreCopyWithImpl<$Res>;
+  factory _$$noScoreImplCopyWith(
+          _$noScoreImpl value, $Res Function(_$noScoreImpl) then) =
+      __$$noScoreImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({GameFamily gameFamily});
 }
 
 /// @nodoc
-class __$$_noScoreCopyWithImpl<$Res>
-    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res, _$_noScore>
-    implements _$$_noScoreCopyWith<$Res> {
-  __$$_noScoreCopyWithImpl(_$_noScore _value, $Res Function(_$_noScore) _then)
+class __$$noScoreImplCopyWithImpl<$Res>
+    extends _$BoardGameClassificationSettingsCopyWithImpl<$Res, _$noScoreImpl>
+    implements _$$noScoreImplCopyWith<$Res> {
+  __$$noScoreImplCopyWithImpl(
+      _$noScoreImpl _value, $Res Function(_$noScoreImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -294,7 +298,7 @@ class __$$_noScoreCopyWithImpl<$Res>
   $Res call({
     Object? gameFamily = null,
   }) {
-    return _then(_$_noScore(
+    return _then(_$noScoreImpl(
       gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
@@ -305,8 +309,8 @@ class __$$_noScoreCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_noScore implements _noScore {
-  const _$_noScore({required this.gameFamily});
+class _$noScoreImpl implements _noScore {
+  const _$noScoreImpl({required this.gameFamily});
 
   @override
   final GameFamily gameFamily;
@@ -320,7 +324,7 @@ class _$_noScore implements _noScore {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_noScore &&
+            other is _$noScoreImpl &&
             (identical(other.gameFamily, gameFamily) ||
                 other.gameFamily == gameFamily));
   }
@@ -331,8 +335,8 @@ class _$_noScore implements _noScore {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_noScoreCopyWith<_$_noScore> get copyWith =>
-      __$$_noScoreCopyWithImpl<_$_noScore>(this, _$identity);
+  _$$noScoreImplCopyWith<_$noScoreImpl> get copyWith =>
+      __$$noScoreImplCopyWithImpl<_$noScoreImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -404,12 +408,13 @@ class _$_noScore implements _noScore {
 }
 
 abstract class _noScore implements BoardGameClassificationSettings {
-  const factory _noScore({required final GameFamily gameFamily}) = _$_noScore;
+  const factory _noScore({required final GameFamily gameFamily}) =
+      _$noScoreImpl;
 
   @override
   GameFamily get gameFamily;
   @override
   @JsonKey(ignore: true)
-  _$$_noScoreCopyWith<_$_noScore> get copyWith =>
+  _$$noScoreImplCopyWith<_$noScoreImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

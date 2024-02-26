@@ -477,4 +477,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # Ignore local settings files
-*/appsettings.Development.json
+**/appsettings.Development.json

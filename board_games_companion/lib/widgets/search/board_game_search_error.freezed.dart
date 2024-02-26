@@ -76,23 +76,25 @@ class _$BoardGameSearchErrorCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_timoutCopyWith<$Res> {
-  factory _$$_timoutCopyWith(_$_timout value, $Res Function(_$_timout) then) =
-      __$$_timoutCopyWithImpl<$Res>;
+abstract class _$$timoutImplCopyWith<$Res> {
+  factory _$$timoutImplCopyWith(
+          _$timoutImpl value, $Res Function(_$timoutImpl) then) =
+      __$$timoutImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_timoutCopyWithImpl<$Res>
-    extends _$BoardGameSearchErrorCopyWithImpl<$Res, _$_timout>
-    implements _$$_timoutCopyWith<$Res> {
-  __$$_timoutCopyWithImpl(_$_timout _value, $Res Function(_$_timout) _then)
+class __$$timoutImplCopyWithImpl<$Res>
+    extends _$BoardGameSearchErrorCopyWithImpl<$Res, _$timoutImpl>
+    implements _$$timoutImplCopyWith<$Res> {
+  __$$timoutImplCopyWithImpl(
+      _$timoutImpl _value, $Res Function(_$timoutImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_timout implements _timout {
-  const _$_timout();
+class _$timoutImpl implements _timout {
+  const _$timoutImpl();
 
   @override
   String toString() {
@@ -102,7 +104,7 @@ class _$_timout implements _timout {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_timout);
+        (other.runtimeType == runtimeType && other is _$timoutImpl);
   }
 
   @override
@@ -172,28 +174,29 @@ class _$_timout implements _timout {
 }
 
 abstract class _timout implements BoardGameSearchError {
-  const factory _timout() = _$_timout;
+  const factory _timout() = _$timoutImpl;
 }
 
 /// @nodoc
-abstract class _$$_genericCopyWith<$Res> {
-  factory _$$_genericCopyWith(
-          _$_generic value, $Res Function(_$_generic) then) =
-      __$$_genericCopyWithImpl<$Res>;
+abstract class _$$genericImplCopyWith<$Res> {
+  factory _$$genericImplCopyWith(
+          _$genericImpl value, $Res Function(_$genericImpl) then) =
+      __$$genericImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_genericCopyWithImpl<$Res>
-    extends _$BoardGameSearchErrorCopyWithImpl<$Res, _$_generic>
-    implements _$$_genericCopyWith<$Res> {
-  __$$_genericCopyWithImpl(_$_generic _value, $Res Function(_$_generic) _then)
+class __$$genericImplCopyWithImpl<$Res>
+    extends _$BoardGameSearchErrorCopyWithImpl<$Res, _$genericImpl>
+    implements _$$genericImplCopyWith<$Res> {
+  __$$genericImplCopyWithImpl(
+      _$genericImpl _value, $Res Function(_$genericImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_generic implements _generic {
-  const _$_generic();
+class _$genericImpl implements _generic {
+  const _$genericImpl();
 
   @override
   String toString() {
@@ -203,7 +206,7 @@ class _$_generic implements _generic {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_generic);
+        (other.runtimeType == runtimeType && other is _$genericImpl);
   }
 
   @override
@@ -273,5 +276,5 @@ class _$_generic implements _generic {
 }
 
 abstract class _generic implements BoardGameSearchError {
-  const factory _generic() = _$_generic;
+  const factory _generic() = _$genericImpl;
 }

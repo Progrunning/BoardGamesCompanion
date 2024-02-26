@@ -9,8 +9,8 @@ class AppBarBottomTab extends StatelessWidget {
     this.title,
     this.icon, {
     this.isSelected = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final IconData icon;

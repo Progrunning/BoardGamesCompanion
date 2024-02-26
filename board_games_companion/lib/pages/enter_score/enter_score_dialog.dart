@@ -17,8 +17,8 @@ import 'enter_score_view_model.dart';
 class EnterScoreDialog extends StatelessWidget {
   const EnterScoreDialog({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const double _minWidth = 340;
   static const double _maxWidth = 380;
@@ -107,8 +107,7 @@ class EnterScoreDialog extends StatelessWidget {
 class _ScoreHistory extends StatelessWidget {
   const _ScoreHistory({
     required this.partialScores,
-    Key? key,
-  }) : super(key: key);
+  });
 
   static const double _height = 20;
 
@@ -148,8 +147,7 @@ class _Score extends StatelessWidget {
   const _Score({
     required this.playerName,
     required this.score,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final String? playerName;
   final double score;
@@ -188,8 +186,7 @@ class _InstantScorePanel extends StatelessWidget {
     required this.operation,
     required this.onOperationChange,
     required this.onScoreChange,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final EnterScoreOperation operation;
   final ValueChanged<EnterScoreOperation> onOperationChange;
@@ -234,12 +231,11 @@ class _InstantScorePanel extends StatelessWidget {
 
 class _InstantScoreOperationTile extends StatelessWidget {
   const _InstantScoreOperationTile({
-    Key? key,
     required this.operation,
     required this.isActive,
     required this.symbol,
     required this.onOperationChange,
-  }) : super(key: key);
+  });
 
   final bool isActive;
   final String symbol;
@@ -269,8 +265,7 @@ class _InstantScoreTile extends StatelessWidget {
   const _InstantScoreTile({
     required this.text,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final VoidCallback onTap;
   final String text;
@@ -302,8 +297,7 @@ class _ActionButtons extends StatelessWidget {
     required this.canUndo,
     required this.onUndo,
     required this.onDone,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final bool canUndo;
   final VoidCallback onUndo;
@@ -333,11 +327,10 @@ class _ActionButtons extends StatelessWidget {
 
 class _CircularNumberPicker extends StatefulWidget {
   const _CircularNumberPicker({
-    Key? key,
     this.onEnded,
     this.strokeWidth = 30,
     this.thumbSize = 30,
-  }) : super(key: key);
+  });
 
   /// Called when drag ended.
   ///
@@ -450,14 +443,13 @@ class _CircularNumberPickerState extends State<_CircularNumberPicker>
 
 class _NumberPicker extends StatefulWidget {
   const _NumberPicker({
-    Key? key,
     required this.angle,
     required this.onChanged,
     required this.onEnded,
     required this.size,
     required this.strokeWidth,
     required this.thumbSize,
-  }) : super(key: key);
+  });
 
   final double angle;
   final void Function(double, int) onChanged;
@@ -688,10 +680,9 @@ class _CirclePickerPainter extends CustomPainter {
 
 class _Thumb extends StatelessWidget {
   const _Thumb({
-    Key? key,
     required this.size,
     required this.color,
-  }) : super(key: key);
+  });
 
   final double size;
 

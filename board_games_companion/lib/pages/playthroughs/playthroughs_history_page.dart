@@ -33,7 +33,7 @@ import 'playthroughs_history_view_model.dart';
 import 'playthroughs_page.dart';
 
 class PlaythroughsHistoryPage extends StatefulWidget {
-  const PlaythroughsHistoryPage({Key? key}) : super(key: key);
+  const PlaythroughsHistoryPage({super.key});
 
   @override
   PlaythroughsHistoryPageState createState() => PlaythroughsHistoryPageState();
@@ -101,8 +101,7 @@ class _Playthrough extends StatefulWidget {
     required this.isLast,
     required this.gameClassification,
     this.playthroughNumber,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final PlaythroughDetails playthroughDetails;
   final bool isLast;
@@ -166,11 +165,10 @@ class _PlaythroughState extends State<_Playthrough> {
 
 class _PlaythroughPlayersStats extends StatelessWidget {
   const _PlaythroughPlayersStats({
-    Key? key,
     required this.playthroughDetails,
     required this.gameClassification,
     required this.migrateToCooperativeResult,
-  }) : super(key: key);
+  });
 
   final PlaythroughDetails playthroughDetails;
   final GameClassification gameClassification;
@@ -253,8 +251,7 @@ class _PlaythroughPlayers extends StatelessWidget {
   const _PlaythroughPlayers({
     required this.playthroughDetails,
     required this.gameClassification,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final PlaythroughDetails playthroughDetails;
   final GameClassification gameClassification;
@@ -331,10 +328,9 @@ class _PlayerNoScoreAvatar extends StatelessWidget {
 
 class _PlaythroughGameStats extends StatelessWidget {
   const _PlaythroughGameStats({
-    Key? key,
     required this.playthroughDetails,
     required this.playthroughNumber,
-  }) : super(key: key);
+  });
 
   final PlaythroughDetails playthroughDetails;
   final int? playthroughNumber;
@@ -368,8 +364,7 @@ class _PlaythroughGameStats extends StatelessWidget {
 class _PlaythroughDuration extends StatefulWidget {
   const _PlaythroughDuration({
     required this.playthroughDetails,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final PlaythroughDetails playthroughDetails;
 
@@ -417,9 +412,7 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
 class _PlaythroughItemDetail extends StatelessWidget {
   const _PlaythroughItemDetail(
     this.title,
-    this.subtitle, {
-    Key? key,
-  }) : super(key: key);
+    this.subtitle);
 
   final String subtitle;
   final String? title;

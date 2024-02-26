@@ -12,14 +12,14 @@ import 'board_game_details_page.dart';
 
 class BoardGameDetailsExpansions extends StatefulWidget {
   const BoardGameDetailsExpansions({
-    Key? key,
+    super.key,
     required this.expansions,
     required this.ownedExpansionsById,
     required this.totalExpansionsOwned,
     required this.spacingBetweenSecions,
     // TODO MK Pass in requier preferences data (instead of entire service) and or handle the events outside of this widget
     required this.preferencesService,
-  }) : super(key: key);
+  });
 
   final List<BoardGameExpansion> expansions;
   final Map<String, BoardGameDetails> ownedExpansionsById;
@@ -54,13 +54,12 @@ class BoardGameDetailsExpansionsState extends State<BoardGameDetailsExpansions> 
 
 class _Expansions extends StatelessWidget {
   const _Expansions({
-    Key? key,
     required this.expansions,
     required this.ownedExpansionsById,
     required this.totalExpansionsOwned,
     required this.preferencesService,
     required this.initiallyExpanded,
-  }) : super(key: key);
+  });
 
   final List<BoardGameExpansion> expansions;
   final Map<String, BoardGameDetails> ownedExpansionsById;
@@ -106,12 +105,10 @@ class _Expansions extends StatelessWidget {
 
 class _Expansion extends StatelessWidget {
   const _Expansion({
-    Key? key,
     required BoardGameExpansion boardGamesExpansion,
     required bool ownsExpansion,
   })  : _boardGameExpansion = boardGamesExpansion,
-        _ownsExpansion = ownsExpansion,
-        super(key: key);
+        _ownsExpansion = ownsExpansion;
 
   final BoardGameExpansion _boardGameExpansion;
   final bool _ownsExpansion;

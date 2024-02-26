@@ -78,23 +78,23 @@ class _$PlaythroughNotePageVisualStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$AddCopyWith<$Res> {
-  factory _$$AddCopyWith(_$Add value, $Res Function(_$Add) then) =
-      __$$AddCopyWithImpl<$Res>;
+abstract class _$$AddImplCopyWith<$Res> {
+  factory _$$AddImplCopyWith(_$AddImpl value, $Res Function(_$AddImpl) then) =
+      __$$AddImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddCopyWithImpl<$Res>
-    extends _$PlaythroughNotePageVisualStateCopyWithImpl<$Res, _$Add>
-    implements _$$AddCopyWith<$Res> {
-  __$$AddCopyWithImpl(_$Add _value, $Res Function(_$Add) _then)
+class __$$AddImplCopyWithImpl<$Res>
+    extends _$PlaythroughNotePageVisualStateCopyWithImpl<$Res, _$AddImpl>
+    implements _$$AddImplCopyWith<$Res> {
+  __$$AddImplCopyWithImpl(_$AddImpl _value, $Res Function(_$AddImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Add implements Add {
-  const _$Add();
+class _$AddImpl implements Add {
+  const _$AddImpl();
 
   @override
   String toString() {
@@ -104,7 +104,7 @@ class _$Add implements Add {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Add);
+        (other.runtimeType == runtimeType && other is _$AddImpl);
   }
 
   @override
@@ -174,13 +174,14 @@ class _$Add implements Add {
 }
 
 abstract class Add implements PlaythroughNotePageVisualState {
-  const factory Add() = _$Add;
+  const factory Add() = _$AddImpl;
 }
 
 /// @nodoc
-abstract class _$$EditCopyWith<$Res> {
-  factory _$$EditCopyWith(_$Edit value, $Res Function(_$Edit) then) =
-      __$$EditCopyWithImpl<$Res>;
+abstract class _$$EditImplCopyWith<$Res> {
+  factory _$$EditImplCopyWith(
+          _$EditImpl value, $Res Function(_$EditImpl) then) =
+      __$$EditImplCopyWithImpl<$Res>;
   @useResult
   $Res call({PlaythroughNote note});
 
@@ -188,10 +189,10 @@ abstract class _$$EditCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$EditCopyWithImpl<$Res>
-    extends _$PlaythroughNotePageVisualStateCopyWithImpl<$Res, _$Edit>
-    implements _$$EditCopyWith<$Res> {
-  __$$EditCopyWithImpl(_$Edit _value, $Res Function(_$Edit) _then)
+class __$$EditImplCopyWithImpl<$Res>
+    extends _$PlaythroughNotePageVisualStateCopyWithImpl<$Res, _$EditImpl>
+    implements _$$EditImplCopyWith<$Res> {
+  __$$EditImplCopyWithImpl(_$EditImpl _value, $Res Function(_$EditImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -199,7 +200,7 @@ class __$$EditCopyWithImpl<$Res>
   $Res call({
     Object? note = null,
   }) {
-    return _then(_$Edit(
+    return _then(_$EditImpl(
       null == note
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -218,8 +219,8 @@ class __$$EditCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Edit implements Edit {
-  const _$Edit(this.note);
+class _$EditImpl implements Edit {
+  const _$EditImpl(this.note);
 
   @override
   final PlaythroughNote note;
@@ -233,7 +234,7 @@ class _$Edit implements Edit {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Edit &&
+            other is _$EditImpl &&
             (identical(other.note, note) || other.note == note));
   }
 
@@ -243,8 +244,8 @@ class _$Edit implements Edit {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$EditCopyWith<_$Edit> get copyWith =>
-      __$$EditCopyWithImpl<_$Edit>(this, _$identity);
+  _$$EditImplCopyWith<_$EditImpl> get copyWith =>
+      __$$EditImplCopyWithImpl<_$EditImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -310,9 +311,10 @@ class _$Edit implements Edit {
 }
 
 abstract class Edit implements PlaythroughNotePageVisualState {
-  const factory Edit(final PlaythroughNote note) = _$Edit;
+  const factory Edit(final PlaythroughNote note) = _$EditImpl;
 
   PlaythroughNote get note;
   @JsonKey(ignore: true)
-  _$$EditCopyWith<_$Edit> get copyWith => throw _privateConstructorUsedError;
+  _$$EditImplCopyWith<_$EditImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

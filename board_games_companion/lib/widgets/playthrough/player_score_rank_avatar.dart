@@ -12,8 +12,8 @@ class PlayerScoreRankAvatar extends StatelessWidget {
     this.rank,
     this.score,
     this.useHeroAnimation = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Player? player;
   final String playerHeroIdSuffix;

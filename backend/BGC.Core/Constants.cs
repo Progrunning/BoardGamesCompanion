@@ -42,11 +42,15 @@
                 public const string MainGame = "boardgame";
                 public const string Expansion = "boardgameexpansion";
             }
+
+            public static TimeSpan Timeout = TimeSpan.FromSeconds(5);
         }
 
         public static class BoardGameOracleApi
         {
             public const string BaseUrl = "https://api.boardgameoracle.com";
+
+            public static TimeSpan Timeout = TimeSpan.FromSeconds(5);
         }
     }
 }

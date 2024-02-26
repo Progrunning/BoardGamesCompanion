@@ -44,11 +44,10 @@ class CooperativeGameResultSegmentedButton extends StatelessWidget {
 class _NoScoreResultTile extends BgcSegmentedButton<bool> {
   _NoScoreResultTile.result({
     required String text,
-    required bool isSelected,
+    required super.isSelected,
     required Function(bool) onSelected,
   }) : super(
           value: isSelected,
-          isSelected: isSelected,
           onTapped: (_) => onSelected(isSelected),
           child: Center(
             child: Text(

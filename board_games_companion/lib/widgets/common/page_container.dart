@@ -6,8 +6,8 @@ class PageContainer extends StatelessWidget {
   const PageContainer({
     required this.child,
     this.borderRadius,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final BorderRadius? borderRadius;

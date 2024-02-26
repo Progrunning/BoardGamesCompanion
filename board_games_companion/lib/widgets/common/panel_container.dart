@@ -8,8 +8,8 @@ class PanelContainer extends StatelessWidget {
   const PanelContainer({
     required this.child,
     this.borderRadius = AppStyles.panelContainerCornerRadius,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final double borderRadius;

@@ -8,8 +8,8 @@ class ElevatedIconButton extends StatelessWidget {
     this.title,
     this.color = AppColors.accentColor,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const double rippleEffectOpacityFactor = 0.7;
 

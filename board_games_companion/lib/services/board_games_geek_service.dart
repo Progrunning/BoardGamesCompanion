@@ -3,22 +3,16 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/utilities/caching_http_client.dart';
 import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
-import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
-import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
-import 'package:fimber/fimber.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:injectable/injectable.dart';
 import 'package:retry/retry.dart';
 import 'package:xml/xml.dart';
-import 'package:xml/xml.dart' as xml;
 
 import '../common/enums/collection_type.dart';
 import '../common/enums/game_family.dart';
 import '../common/exceptions/bgg_retry_exception.dart';
-import '../common/hive_boxes.dart';
 import '../extensions/xml_element_extensions.dart';
 import '../models/bgg/bgg_import_plays.dart';
 import '../models/bgg/bgg_play.dart';
@@ -35,7 +29,7 @@ import '../models/hive/board_game_rank.dart';
 import '../models/import_result.dart';
 import '../models/parse_collection_xml_arguments.dart';
 import '../models/parse_plays_xml_arguments.dart';
-import '../utilities/custom_http_client_adapter.dart';
+import '../utilities/base_http_client.dart';
 
 const String _xmlErrorElementName = 'error';
 const String _xmlItemElementName = 'item';
@@ -86,72 +80,35 @@ const String _xmlLastModifiedAttributeTypeName = 'lastmodified';
 
 const int _playerWinIndicator = 1;
 
-@singleton
 class BoardGamesGeekService {
-  BoardGamesGeekService(this._httpClientAdapter) {
-    _dio
-      ..httpClientAdapter = _httpClientAdapter
-      ..interceptors.add(InterceptorsWrapper(
-        onRequest: (RequestOptions requestOptions, handler) async {
-          final String cacheKey = _dioCacheOptions.keyBuilder(requestOptions);
-          final CacheResponse? cachedResponse = await _dioCacheOptions.store?.get(cacheKey);
-          if (cachedResponse != null) {
-            // MK Hot board games cache expiration check
-            if (requestOptions.uri.toString().contains(_hotBoardGamesUrl) &&
-                DateTime.now().difference(cachedResponse.responseDate).inHours <
-                    _hotBoardGamesCacheExpirationInHours) {
-              Fimber.d('Getting hot board games from cache');
-              return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
-            }
+  BoardGamesGeekService({
+    required CachingHttpClient gameDetailsCachingHttpClient,
+    required CachingHttpClient hotGamesCachingHttpClient,
+    required BaseHttpClient baseHttpClient,
+  })  : _gameDetailsCachingHttpClient = gameDetailsCachingHttpClient,
+        _hotGamesCachingHttpClient = hotGamesCachingHttpClient,
+        _baseHttpClient = baseHttpClient;
 
-            // MK board game details cache expiration check
-            if (requestOptions.uri.toString().contains(_boardGamesDetailsUrl) &&
-                DateTime.now().difference(cachedResponse.responseDate).inHours <
-                    _boardGameDetailsCacheExpirationInHours) {
-              Fimber.d('Getting board game details from cache');
-              return handler.resolve(cachedResponse.toResponse(requestOptions, fromNetwork: false));
-            }
-          }
-
-          return handler.next(requestOptions);
-        },
-      ))
-      ..interceptors.add(DioCacheInterceptor(options: _dioCacheOptions))
-      ..interceptors.add(LogInterceptor(responseBody: true));
-  }
-
-  static const String _baseBoardGamesUrl = 'https://www.boardgamegeek.com/xmlapi2';
-  static const String _hotBoardGamesUrl = '$_baseBoardGamesUrl/hot';
-  static const String _boardGamesDetailsUrl = '$_baseBoardGamesUrl/thing';
-  static const String _searchBoardGamesUrl = '$_baseBoardGamesUrl/search';
-  static const String _collectionBoardGamesUrl = '$_baseBoardGamesUrl/collection';
-  static const String _playesBoardGamesUrl = '$_baseBoardGamesUrl/plays';
+  static const String _bggApiBaseUrl = 'boardgamegeek.com';
 
   static const String _boardGameQueryParamterType = 'type';
   static const String _boardGameQueryParamterUsername = 'username';
   static const String _boardGameQueryParamterOwn = 'own';
   static const String _boardGameQueryParamterWishlist = 'wishlist';
   static const String _boardGameQueryParamterWantToBuy = 'wanttobuy';
-  static const String _boardGameQueryParamterQuery = 'query';
   static const String _boardGameQueryParamterStats = 'stats';
   static const String _boardGameQueryParamterId = 'id';
   static const String _boardGameQueryParamterPageNumber = 'page';
   static const String _boardGameType = 'boardgame';
   static const String _boardGameExpansionType = 'boardgameexpansion';
 
-  static const int _hotBoardGamesCacheExpirationInHours = Duration.hoursPerDay;
-
-  static const int _boardGameDetailsCacheExpirationInHours = Duration.hoursPerDay * 7;
   static const int _bggRetryStatusCode = 202;
   static const Duration _bggRetryDelayFactor = Duration(milliseconds: 600);
   static const int _maxBackoffDurationInSeconts = 8;
 
-  final CacheOptions _dioCacheOptions = CacheOptions(
-    store: HiveCacheStore(null, hiveBoxName: HiveBoxes.dioCache),
-  );
-
-  final CustomHttpClientAdapter _httpClientAdapter;
-  final Dio _dio = Dio();
+  final CachingHttpClient _gameDetailsCachingHttpClient;
+  final CachingHttpClient _hotGamesCachingHttpClient;
+  final BaseHttpClient _baseHttpClient;
 
   Future<List<BoardGameDetails>> getHot({int retryCount = 0}) async {
     final hotBoardGames = <BoardGameDetails>[];
@@ -159,21 +116,19 @@ class BoardGamesGeekService {
     // MK Apply exponential backoff when retrying
     if (retryCount > 0) {
       await Future<void>.delayed(
-          Duration(seconds: min(pow(retryCount, 2), _maxBackoffDurationInSeconts) as int));
+        Duration(seconds: min(pow(retryCount, 2), _maxBackoffDurationInSeconts) as int),
+      );
     }
 
-    final retrievalOptions = _dioCacheOptions.toOptions();
-    retrievalOptions.contentType = 'application/xml';
-    retrievalOptions.responseType = ResponseType.plain;
-
-    final hotBoardGamesXml = await _dio.get<String>(
-      _hotBoardGamesUrl,
-      queryParameters: <String, dynamic>{_boardGameQueryParamterType: _boardGameType},
-      options: retrievalOptions,
+    final url = Uri.https(
+      _bggApiBaseUrl,
+      'xmlapi2/hot',
+      <String, dynamic>{_boardGameQueryParamterType: _boardGameType},
     );
+    final hotBoardGamesResponse = await _hotGamesCachingHttpClient.get(url);
 
     try {
-      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesXml);
+      final hotBoardGamesXmlDocument = _retrieveXmlDocument(hotBoardGamesResponse.body);
       final hotBoardGameItems =
           hotBoardGamesXmlDocument?.findAllElements(_xmlItemElementName) ?? [];
       for (final hotBoardGameItem in hotBoardGameItems) {
@@ -214,21 +169,18 @@ class BoardGamesGeekService {
       return null;
     }
 
-    final retrievalOptions = _dioCacheOptions.toOptions();
-    retrievalOptions.contentType = 'application/xml';
-    retrievalOptions.responseType = ResponseType.plain;
-
-    final boardGameDetailsXml = await _dio.get<String>(
-      _boardGamesDetailsUrl,
-      queryParameters: <String, dynamic>{
+    final url = Uri.https(
+      _bggApiBaseUrl,
+      'xmlapi2/thing',
+      <String, dynamic>{
         _boardGameQueryParamterId: id,
-        _boardGameQueryParamterStats: 1,
+        _boardGameQueryParamterStats: '1',
       },
-      options: retrievalOptions,
     );
+    final boardGameDetailsResponse = await _gameDetailsCachingHttpClient.get(url);
 
     try {
-      final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsXml)!;
+      final boardGameDetailsXmlDocument = _retrieveXmlDocument(boardGameDetailsResponse.body)!;
       final boardGameDetailsItem =
           boardGameDetailsXmlDocument.findAllElements(_xmlItemElementName).single;
 
@@ -250,6 +202,8 @@ class BoardGamesGeekService {
           boardGameDetailsItem.firstOrDefaultAttributeValue(_xmlTypeAttributeName);
       final isExpansion = boardGameType == _boardGameExpansionType;
 
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       final description = boardGameDetailsItem.firstOrDefault(_xmlDescriptionElementName)?.text;
 
       final minPlayers = int.tryParse(boardGameDetailsItem
@@ -277,8 +231,12 @@ class BoardGamesGeekService {
               ?.firstOrDefaultAttributeValue(_xmlValueAttributeName) ??
           '');
 
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       final imageUrl = boardGameDetailsItem.firstOrDefault(_xmlImageElementName)?.text;
 
+      // When using "value" as suggested in the deprecated instructions the string is alaways empty
+      // ignore: deprecated_member_use
       final thumbnailUrl = boardGameDetailsItem.firstOrDefault(_xmlThumbnailElementName)?.text;
 
       final yearPublished = int.tryParse(boardGameDetailsItem
@@ -362,47 +320,6 @@ class BoardGamesGeekService {
     return null;
   }
 
-  Future<List<BoardGameDetails>> search(String? searchPhrase) async {
-    if (searchPhrase?.isEmpty ?? true) {
-      return [];
-    }
-
-    final searchResultsXml = await _dio.get<String>(
-      _searchBoardGamesUrl,
-      queryParameters: <String, String?>{
-        _boardGameQueryParamterType: _boardGameType,
-        _boardGameQueryParamterQuery: searchPhrase,
-      },
-    );
-
-    final boardGames = <BoardGameDetails>[];
-    final xmlDocument = _retrieveXmlDocument(searchResultsXml);
-    if (xmlDocument == null) {
-      return boardGames;
-    }
-
-    final searchResultItems = xmlDocument.findAllElements(_xmlItemElementName);
-    for (final searchResult in searchResultItems) {
-      final boardGameId = searchResult.firstOrDefaultAttributeValue(_xmlIdAttributeName);
-      final boardGameName =
-          searchResult.firstOrDefaultElementsAttribute(_xmlNameElementName, _xmlValueAttributeName);
-      if (boardGameId == null || boardGameName == null) {
-        return boardGames;
-      }
-
-      final boardGameYearPublished = searchResult.firstOrDefaultElementsAttribute(
-          _xmlYearPublishedElementName, _xmlValueAttributeName);
-
-      boardGames.add(BoardGameDetails(
-        id: boardGameId,
-        name: boardGameName,
-        yearPublished: int.tryParse(boardGameYearPublished ?? ''),
-      ));
-    }
-
-    return boardGames;
-  }
-
   Future<CollectionImportResult> importCollections(String username) async {
     if (username.isEmpty) {
       return CollectionImportResult();
@@ -411,17 +328,17 @@ class BoardGamesGeekService {
     final ownGameImportResult = await _importCollection(
       username,
       CollectionType.owned,
-      <String, dynamic>{_boardGameQueryParamterOwn: 1},
+      <String, dynamic>{_boardGameQueryParamterOwn: '1'},
     );
     final wishlistGameImportResult = await _importCollection(
       username,
       CollectionType.wishlist,
-      <String, dynamic>{_boardGameQueryParamterWishlist: 1},
+      <String, dynamic>{_boardGameQueryParamterWishlist: '1'},
     );
     final wantToBuyGameImportResult = await _importCollection(
       username,
       CollectionType.wishlist,
-      <String, dynamic>{_boardGameQueryParamterWantToBuy: 1},
+      <String, dynamic>{_boardGameQueryParamterWantToBuy: '1'},
     );
 
     return CollectionImportResult()
@@ -448,16 +365,13 @@ class BoardGamesGeekService {
     final queryParamters = <String, dynamic>{
       _boardGameQueryParamterUsername: bggImportPlays.username,
       _boardGameQueryParamterId: bggImportPlays.boardGameId,
-      _boardGameQueryParamterPageNumber: bggImportPlays.pageNumber,
+      _boardGameQueryParamterPageNumber: '${bggImportPlays.pageNumber}',
     };
+    final url = Uri.https(_bggApiBaseUrl, 'xmlapi2/plays', queryParamters);
 
-    final playsResultXml = await retry(
+    final playsResponse = await retry(
       () async {
-        final response = await _dio.get<String>(
-          _playesBoardGamesUrl,
-          queryParameters: queryParamters,
-        );
-
+        final response = await _baseHttpClient.get(url);
         return response;
       },
       delayFactor: _bggRetryDelayFactor,
@@ -465,8 +379,8 @@ class BoardGamesGeekService {
     );
 
     return compute(
-      parsePlaysXml,
-      ParsePlaysXmlArguments(playsResultXml.data, bggImportPlays.gameFamily),
+      _parsePlaysXml,
+      ParsePlaysXmlArguments(playsResponse.body, bggImportPlays.gameFamily),
     );
   }
 
@@ -477,16 +391,14 @@ class BoardGamesGeekService {
   ) async {
     final queryParamters = <String, dynamic>{
       _boardGameQueryParamterUsername: username,
-      _boardGameQueryParamterStats: 1,
+      _boardGameQueryParamterStats: '1',
     };
     queryParamters.addAll(additionalQueryParameters);
+    final url = Uri.https(_bggApiBaseUrl, 'xmlapi2/collection', queryParamters);
 
-    final collectionResultsXml = await retry(
+    final collectionResponse = await retry(
       () async {
-        final response = await _dio.get<String>(
-          _collectionBoardGamesUrl,
-          queryParameters: queryParamters,
-        );
+        final response = await _baseHttpClient.get(url);
 
         if (response.statusCode == _bggRetryStatusCode) {
           throw BggRetryException();
@@ -499,16 +411,16 @@ class BoardGamesGeekService {
     );
 
     return compute(
-      parseCollectionXml,
-      ParseCollectionXmlArguments(collectionResultsXml.data, collectionType),
+      _parseCollectionXml,
+      ParseCollectionXmlArguments(collectionResponse.body, collectionType),
     );
   }
 }
 
-BggPlaysImportResult parsePlaysXml(ParsePlaysXmlArguments arguments) {
+BggPlaysImportResult _parsePlaysXml(ParsePlaysXmlArguments arguments) {
   XmlDocument? playsXmlDocument;
   try {
-    playsXmlDocument = xml.XmlDocument.parse(arguments.responseData!);
+    playsXmlDocument = XmlDocument.parse(arguments.responseData!);
   } catch (e, stack) {
     return BggPlaysImportResult.failure([ImportError.exception(e, stack)]);
   }
@@ -600,12 +512,12 @@ BggPlaysImportResult parsePlaysXml(ParsePlaysXmlArguments arguments) {
   return playsImportResult;
 }
 
-CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments) {
+CollectionImportResult _parseCollectionXml(ParseCollectionXmlArguments arguments) {
   final boardGames = <BoardGameDetails>[];
   XmlDocument xmlDocument;
 
   try {
-    xmlDocument = xml.XmlDocument.parse(arguments.responseData!);
+    xmlDocument = XmlDocument.parse(arguments.responseData!);
   } catch (e, stack) {
     return CollectionImportResult.failure([ImportError.exception(e, stack)]);
   }
@@ -618,7 +530,7 @@ CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments)
   for (final XmlElement collectionElement in collectionElements) {
     final String? boardGameId =
         collectionElement.firstOrDefaultAttributeValue(_xmlObjectIdAttributeTypeName);
-    final String? boardGameName = collectionElement.firstOrDefault(_xmlNameElementName)?.text;
+    final String? boardGameName = collectionElement.firstOrDefault(_xmlNameElementName)?.innerText;
 
     if ((boardGameId?.isEmpty ?? true) || (boardGameName?.isEmpty ?? true)) {
       continue;
@@ -631,10 +543,10 @@ CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments)
     final boardGameDetails = BoardGameDetails(
       id: boardGameId!,
       name: boardGameName!,
-      yearPublished:
-          int.tryParse(collectionElement.firstOrDefault(_xmlYearPublishedElementName)?.text ?? ''),
-      imageUrl: collectionElement.firstOrDefault(_xmlImageElementName)?.text,
-      thumbnailUrl: collectionElement.firstOrDefault(_xmlThumbnailElementName)?.text,
+      yearPublished: int.tryParse(
+          collectionElement.firstOrDefault(_xmlYearPublishedElementName)?.innerText ?? ''),
+      imageUrl: collectionElement.firstOrDefault(_xmlImageElementName)?.innerText,
+      thumbnailUrl: collectionElement.firstOrDefault(_xmlThumbnailElementName)?.innerText,
       lastModified: DateTime.tryParse(collectionElement.firstOrDefaultElementsAttribute(
               _xmlStatusElementName, _xmlLastModifiedAttributeTypeName) ??
           ''),
@@ -669,9 +581,9 @@ CollectionImportResult parseCollectionXml(ParseCollectionXmlArguments arguments)
     ..data = boardGames;
 }
 
-XmlDocument? _retrieveXmlDocument(Response<String> httpResponse) {
+XmlDocument? _retrieveXmlDocument(String data) {
   try {
-    return XmlDocument.parse(httpResponse.data!);
+    return XmlDocument.parse(data);
   } catch (e, stack) {
     FirebaseCrashlytics.instance.recordError(e, stack);
   }
@@ -679,7 +591,7 @@ XmlDocument? _retrieveXmlDocument(Response<String> httpResponse) {
   return null;
 }
 
-bool _hasErrors(xml.XmlDocument xmlDocument) {
+bool _hasErrors(XmlDocument xmlDocument) {
   final errorElements = xmlDocument.findAllElements(_xmlErrorElementName);
   if (errorElements.isEmpty) {
     return false;
@@ -689,7 +601,7 @@ bool _hasErrors(xml.XmlDocument xmlDocument) {
 }
 
 void _extractBoardGameLinks(
-  Iterable<xml.XmlElement> boardGameLinks,
+  Iterable<XmlElement> boardGameLinks,
   List<BoardGameCategory> categories,
   List<BoardGameDesigner> desingers,
   List<BoardGamePublisher> publishers,
@@ -730,7 +642,7 @@ void _extractBoardGameLinks(
   }
 }
 
-List<BoardGameRank> _extractBoardGameRanks(xml.XmlElement? boardGameDetailsRatings) {
+List<BoardGameRank> _extractBoardGameRanks(XmlElement? boardGameDetailsRatings) {
   final List<BoardGameRank> ranks = [];
   if (boardGameDetailsRatings == null) {
     return ranks;

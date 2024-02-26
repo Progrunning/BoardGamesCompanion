@@ -38,6 +38,7 @@ abstract class _BoardGamesFiltersStore with Store {
     SortBy(sortByOption: SortByOption.Rank),
     SortBy(sortByOption: SortByOption.Playtime),
     SortBy(sortByOption: SortByOption.Rating),
+    SortBy(sortByOption: SortByOption.MostRecentlyPlayed),
   ]);
 
   @computed

@@ -35,15 +35,15 @@ abstract class _BoardGamesStore with Store {
 
   @computed
   ObservableMap<String, BoardGameDetails> get allBoardGamesMap =>
-      ObservableMap.of({for (var boardGame in allBoardGames) boardGame.id: boardGame});
+      ObservableMap.of({for (final boardGame in allBoardGames) boardGame.id: boardGame});
 
   @computed
   List<BoardGameDetails> get allBoardGamesInCollections =>
       allBoardGames.where((BoardGameDetails boardGame) => boardGame.isInAnyCollection).toList();
 
   @computed
-  ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap =>
-      ObservableMap.of({for (var boardGame in allBoardGamesInCollections) boardGame.id: boardGame});
+  ObservableMap<String, BoardGameDetails> get allBoardGamesInCollectionsMap => ObservableMap.of(
+      {for (final boardGame in allBoardGamesInCollections) boardGame.id: boardGame});
 
   @action
   Future<void> loadBoardGames() async =>

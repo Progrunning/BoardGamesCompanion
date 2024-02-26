@@ -9,9 +9,8 @@ import '../../common/dimensions.dart';
 class RankRibbon extends StatelessWidget {
   const RankRibbon({
     required num rank,
-    Key? key,
-  })  : _rank = rank,
-        super(key: key);
+    super.key,
+  }) : _rank = rank;
 
   final num _rank;
 
@@ -23,7 +22,10 @@ class RankRibbon extends StatelessWidget {
           'assets/icons/rank_ribbon.svg',
           height: 34,
           width: 26,
-          color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
+          colorFilter: ColorFilter.mode(
+            AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
+            BlendMode.srcIn,
+          ),
         ),
         Positioned.fill(
           child: Center(

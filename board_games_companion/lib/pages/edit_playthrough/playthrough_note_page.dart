@@ -13,8 +13,8 @@ import 'playthrough_note_view_model.dart';
 class PlaythroughNotePage extends StatefulWidget {
   const PlaythroughNotePage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final PlaythroughNoteViewModel viewModel;
 

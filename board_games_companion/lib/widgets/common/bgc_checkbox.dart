@@ -4,11 +4,11 @@ import '../../common/app_colors.dart';
 
 class BgcCheckbox extends StatelessWidget {
   const BgcCheckbox({
-    Key? key,
+    super.key,
     required this.isChecked,
     required this.onChanged,
     this.borderColor = AppColors.primaryColorLight,
-  }) : super(key: key);
+  });
 
   static const double _checkboxSize = 34;
 

@@ -21,8 +21,8 @@ import 'hot_board_games_view_model.dart';
 class HotBoardGamesPage extends StatefulWidget {
   const HotBoardGamesPage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final HotBoardGamesViewModel viewModel;
 
@@ -69,8 +69,7 @@ class HotBoardGamesPageState extends State<HotBoardGamesPage> {
 class _AppBar extends StatelessWidget {
   const _AppBar({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final HotBoardGamesViewModel viewModel;
 
@@ -90,8 +89,7 @@ class _HotBoardGames extends StatelessWidget {
   const _HotBoardGames({
     required this.viewModel,
     required this.onBoardGameTapped,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final HotBoardGamesViewModel viewModel;
   final void Function(BoardGameDetails) onBoardGameTapped;
@@ -187,16 +185,14 @@ class _LoadingShimmer extends StatelessWidget {
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
         children: [
           for (final _ in Iterable<int>.generate(21))
-            BgcShimmer(
-              child: SizedBox.fromSize(
-                size: const Size(
-                  Constants.boardGameDetailsImageHeight,
-                  Constants.boardGameDetailsImageHeight,
-                ),
-                child: const Material(
-                  elevation: AppStyles.defaultElevation,
-                  borderRadius: AppTheme.defaultBorderRadius,
-                ),
+            SizedBox.fromSize(
+              size: const Size(
+                Constants.boardGameDetailsImageHeight,
+                Constants.boardGameDetailsImageHeight,
+              ),
+              child: BgcShimmer.fill(
+                borderRadius: AppTheme.defaultBorderRadius,
+                elevation: AppStyles.defaultElevation,
               ),
             ),
         ],

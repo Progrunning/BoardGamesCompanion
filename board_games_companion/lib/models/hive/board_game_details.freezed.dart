@@ -95,68 +95,38 @@ abstract class $BoardGameDetailsCopyWith<$Res> {
       _$BoardGameDetailsCopyWithImpl<$Res, BoardGameDetails>;
   @useResult
   $Res call(
-      {@HiveField(0)
-          String id,
-      @HiveField(1)
-          String name,
-      @HiveField(2)
-          String? thumbnailUrl,
-      @HiveField(3)
-          int? rank,
-      @HiveField(4)
-          int? yearPublished,
-      @HiveField(5)
-          String? imageUrl,
-      @HiveField(6)
-          String? description,
-      @HiveField(7)
-          List<BoardGameCategory>? categories,
-      @HiveField(8)
-          double? rating,
-      @HiveField(9)
-          int? votes,
-      @HiveField(10)
-          int? minPlayers,
-      @HiveField(11)
-          int? minPlaytime,
-      @HiveField(12)
-          int? maxPlayers,
-      @HiveField(13)
-          int? maxPlaytime,
-      @HiveField(14)
-          int? minAge,
-      @HiveField(15)
-          num? avgWeight,
-      @HiveField(16)
-          List<BoardGamePublisher> publishers,
-      @HiveField(17)
-          List<BoardGameArtist> artists,
-      @HiveField(18)
-          List<BoardGameDesigner> desingers,
-      @HiveField(19)
-          int? commentsNumber,
-      @HiveField(20)
-          List<BoardGameRank> ranks,
-      @HiveField(21)
-          DateTime? lastModified,
-      @HiveField(22)
-          List<BoardGameExpansion> expansions,
-      @HiveField(23)
-          bool? isExpansion,
-      @HiveField(24)
-          bool? isOwned,
-      @HiveField(25)
-          bool? isOnWishlist,
-      @HiveField(26)
-          bool? isFriends,
-      @HiveField(27)
-          bool? isBggSynced,
-      @HiveField(28)
-          BoardGameSettings? settings,
-      @HiveField(29, defaultValue: false)
-          bool isCreatedByUser,
+      {@HiveField(0) String id,
+      @HiveField(1) String name,
+      @HiveField(2) String? thumbnailUrl,
+      @HiveField(3) int? rank,
+      @HiveField(4) int? yearPublished,
+      @HiveField(5) String? imageUrl,
+      @HiveField(6) String? description,
+      @HiveField(7) List<BoardGameCategory>? categories,
+      @HiveField(8) double? rating,
+      @HiveField(9) int? votes,
+      @HiveField(10) int? minPlayers,
+      @HiveField(11) int? minPlaytime,
+      @HiveField(12) int? maxPlayers,
+      @HiveField(13) int? maxPlaytime,
+      @HiveField(14) int? minAge,
+      @HiveField(15) num? avgWeight,
+      @HiveField(16) List<BoardGamePublisher> publishers,
+      @HiveField(17) List<BoardGameArtist> artists,
+      @HiveField(18) List<BoardGameDesigner> desingers,
+      @HiveField(19) int? commentsNumber,
+      @HiveField(20) List<BoardGameRank> ranks,
+      @HiveField(21) DateTime? lastModified,
+      @HiveField(22) List<BoardGameExpansion> expansions,
+      @HiveField(23) bool? isExpansion,
+      @HiveField(24) bool? isOwned,
+      @HiveField(25) bool? isOnWishlist,
+      @HiveField(26) bool? isFriends,
+      @HiveField(27) bool? isBggSynced,
+      @HiveField(28) BoardGameSettings? settings,
+      @HiveField(29, defaultValue: false) bool isCreatedByUser,
       @HiveField(30, defaultValue: <BoardGamePrices>[])
-          List<BoardGamePrices> prices});
+      List<BoardGamePrices> prices});
 
   $BoardGameSettingsCopyWith<$Res>? get settings;
 }
@@ -348,87 +318,57 @@ class _$BoardGameDetailsCopyWithImpl<$Res, $Val extends BoardGameDetails>
 }
 
 /// @nodoc
-abstract class _$$_BoardGameDetailsCopyWith<$Res>
+abstract class _$$BoardGameDetailsImplCopyWith<$Res>
     implements $BoardGameDetailsCopyWith<$Res> {
-  factory _$$_BoardGameDetailsCopyWith(
-          _$_BoardGameDetails value, $Res Function(_$_BoardGameDetails) then) =
-      __$$_BoardGameDetailsCopyWithImpl<$Res>;
+  factory _$$BoardGameDetailsImplCopyWith(_$BoardGameDetailsImpl value,
+          $Res Function(_$BoardGameDetailsImpl) then) =
+      __$$BoardGameDetailsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {@HiveField(0)
-          String id,
-      @HiveField(1)
-          String name,
-      @HiveField(2)
-          String? thumbnailUrl,
-      @HiveField(3)
-          int? rank,
-      @HiveField(4)
-          int? yearPublished,
-      @HiveField(5)
-          String? imageUrl,
-      @HiveField(6)
-          String? description,
-      @HiveField(7)
-          List<BoardGameCategory>? categories,
-      @HiveField(8)
-          double? rating,
-      @HiveField(9)
-          int? votes,
-      @HiveField(10)
-          int? minPlayers,
-      @HiveField(11)
-          int? minPlaytime,
-      @HiveField(12)
-          int? maxPlayers,
-      @HiveField(13)
-          int? maxPlaytime,
-      @HiveField(14)
-          int? minAge,
-      @HiveField(15)
-          num? avgWeight,
-      @HiveField(16)
-          List<BoardGamePublisher> publishers,
-      @HiveField(17)
-          List<BoardGameArtist> artists,
-      @HiveField(18)
-          List<BoardGameDesigner> desingers,
-      @HiveField(19)
-          int? commentsNumber,
-      @HiveField(20)
-          List<BoardGameRank> ranks,
-      @HiveField(21)
-          DateTime? lastModified,
-      @HiveField(22)
-          List<BoardGameExpansion> expansions,
-      @HiveField(23)
-          bool? isExpansion,
-      @HiveField(24)
-          bool? isOwned,
-      @HiveField(25)
-          bool? isOnWishlist,
-      @HiveField(26)
-          bool? isFriends,
-      @HiveField(27)
-          bool? isBggSynced,
-      @HiveField(28)
-          BoardGameSettings? settings,
-      @HiveField(29, defaultValue: false)
-          bool isCreatedByUser,
+      {@HiveField(0) String id,
+      @HiveField(1) String name,
+      @HiveField(2) String? thumbnailUrl,
+      @HiveField(3) int? rank,
+      @HiveField(4) int? yearPublished,
+      @HiveField(5) String? imageUrl,
+      @HiveField(6) String? description,
+      @HiveField(7) List<BoardGameCategory>? categories,
+      @HiveField(8) double? rating,
+      @HiveField(9) int? votes,
+      @HiveField(10) int? minPlayers,
+      @HiveField(11) int? minPlaytime,
+      @HiveField(12) int? maxPlayers,
+      @HiveField(13) int? maxPlaytime,
+      @HiveField(14) int? minAge,
+      @HiveField(15) num? avgWeight,
+      @HiveField(16) List<BoardGamePublisher> publishers,
+      @HiveField(17) List<BoardGameArtist> artists,
+      @HiveField(18) List<BoardGameDesigner> desingers,
+      @HiveField(19) int? commentsNumber,
+      @HiveField(20) List<BoardGameRank> ranks,
+      @HiveField(21) DateTime? lastModified,
+      @HiveField(22) List<BoardGameExpansion> expansions,
+      @HiveField(23) bool? isExpansion,
+      @HiveField(24) bool? isOwned,
+      @HiveField(25) bool? isOnWishlist,
+      @HiveField(26) bool? isFriends,
+      @HiveField(27) bool? isBggSynced,
+      @HiveField(28) BoardGameSettings? settings,
+      @HiveField(29, defaultValue: false) bool isCreatedByUser,
       @HiveField(30, defaultValue: <BoardGamePrices>[])
-          List<BoardGamePrices> prices});
+      List<BoardGamePrices> prices});
 
   @override
   $BoardGameSettingsCopyWith<$Res>? get settings;
 }
 
 /// @nodoc
-class __$$_BoardGameDetailsCopyWithImpl<$Res>
-    extends _$BoardGameDetailsCopyWithImpl<$Res, _$_BoardGameDetails>
-    implements _$$_BoardGameDetailsCopyWith<$Res> {
-  __$$_BoardGameDetailsCopyWithImpl(
-      _$_BoardGameDetails _value, $Res Function(_$_BoardGameDetails) _then)
+class __$$BoardGameDetailsImplCopyWithImpl<$Res>
+    extends _$BoardGameDetailsCopyWithImpl<$Res, _$BoardGameDetailsImpl>
+    implements _$$BoardGameDetailsImplCopyWith<$Res> {
+  __$$BoardGameDetailsImplCopyWithImpl(_$BoardGameDetailsImpl _value,
+      $Res Function(_$BoardGameDetailsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -466,7 +406,7 @@ class __$$_BoardGameDetailsCopyWithImpl<$Res>
     Object? isCreatedByUser = null,
     Object? prices = null,
   }) {
-    return _then(_$_BoardGameDetails(
+    return _then(_$BoardGameDetailsImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -600,73 +540,45 @@ class __$$_BoardGameDetailsCopyWithImpl<$Res>
 @HiveType(
     typeId: HiveBoxes.boardGamesDetailsTypeId,
     adapterName: 'BoardGameDetailsAdapter')
-class _$_BoardGameDetails extends _BoardGameDetails {
-  const _$_BoardGameDetails(
-      {@HiveField(0)
-          required this.id,
-      @HiveField(1)
-          required this.name,
-      @HiveField(2)
-          this.thumbnailUrl,
-      @HiveField(3)
-          this.rank,
-      @HiveField(4)
-          this.yearPublished,
-      @HiveField(5)
-          this.imageUrl,
-      @HiveField(6)
-          this.description,
+class _$BoardGameDetailsImpl extends _BoardGameDetails {
+  const _$BoardGameDetailsImpl(
+      {@HiveField(0) required this.id,
+      @HiveField(1) required this.name,
+      @HiveField(2) this.thumbnailUrl,
+      @HiveField(3) this.rank,
+      @HiveField(4) this.yearPublished,
+      @HiveField(5) this.imageUrl,
+      @HiveField(6) this.description,
       @HiveField(7)
-          final List<BoardGameCategory>?
-              categories = const <BoardGameCategory>[],
-      @HiveField(8)
-          this.rating,
-      @HiveField(9)
-          this.votes,
-      @HiveField(10)
-          this.minPlayers,
-      @HiveField(11)
-          this.minPlaytime,
-      @HiveField(12)
-          this.maxPlayers,
-      @HiveField(13)
-          this.maxPlaytime,
-      @HiveField(14)
-          this.minAge,
-      @HiveField(15)
-          this.avgWeight,
+      final List<BoardGameCategory>? categories = const <BoardGameCategory>[],
+      @HiveField(8) this.rating,
+      @HiveField(9) this.votes,
+      @HiveField(10) this.minPlayers,
+      @HiveField(11) this.minPlaytime,
+      @HiveField(12) this.maxPlayers,
+      @HiveField(13) this.maxPlaytime,
+      @HiveField(14) this.minAge,
+      @HiveField(15) this.avgWeight,
       @HiveField(16)
-          final List<BoardGamePublisher>
-              publishers = const <BoardGamePublisher>[],
+      final List<BoardGamePublisher> publishers = const <BoardGamePublisher>[],
       @HiveField(17)
-          final List<BoardGameArtist> artists = const <BoardGameArtist>[],
+      final List<BoardGameArtist> artists = const <BoardGameArtist>[],
       @HiveField(18)
-          final List<BoardGameDesigner> desingers = const <BoardGameDesigner>[],
-      @HiveField(19)
-          this.commentsNumber,
-      @HiveField(20)
-          final List<BoardGameRank> ranks = const <BoardGameRank>[],
-      @HiveField(21)
-          this.lastModified,
+      final List<BoardGameDesigner> desingers = const <BoardGameDesigner>[],
+      @HiveField(19) this.commentsNumber,
+      @HiveField(20) final List<BoardGameRank> ranks = const <BoardGameRank>[],
+      @HiveField(21) this.lastModified,
       @HiveField(22)
-          final List<BoardGameExpansion>
-              expansions = const <BoardGameExpansion>[],
-      @HiveField(23)
-          this.isExpansion,
-      @HiveField(24)
-          this.isOwned,
-      @HiveField(25)
-          this.isOnWishlist,
-      @HiveField(26)
-          this.isFriends,
-      @HiveField(27)
-          this.isBggSynced,
-      @HiveField(28)
-          this.settings,
-      @HiveField(29, defaultValue: false)
-          this.isCreatedByUser = false,
+      final List<BoardGameExpansion> expansions = const <BoardGameExpansion>[],
+      @HiveField(23) this.isExpansion,
+      @HiveField(24) this.isOwned,
+      @HiveField(25) this.isOnWishlist,
+      @HiveField(26) this.isFriends,
+      @HiveField(27) this.isBggSynced,
+      @HiveField(28) this.settings,
+      @HiveField(29, defaultValue: false) this.isCreatedByUser = false,
       @HiveField(30, defaultValue: <BoardGamePrices>[])
-          final List<BoardGamePrices> prices = const <BoardGamePrices>[]})
+      final List<BoardGamePrices> prices = const <BoardGamePrices>[]})
       : _categories = categories,
         _publishers = publishers,
         _artists = artists,
@@ -834,7 +746,7 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BoardGameDetails &&
+            other is _$BoardGameDetailsImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.thumbnailUrl, thumbnailUrl) ||
@@ -928,74 +840,45 @@ class _$_BoardGameDetails extends _BoardGameDetails {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGameDetailsCopyWith<_$_BoardGameDetails> get copyWith =>
-      __$$_BoardGameDetailsCopyWithImpl<_$_BoardGameDetails>(this, _$identity);
+  _$$BoardGameDetailsImplCopyWith<_$BoardGameDetailsImpl> get copyWith =>
+      __$$BoardGameDetailsImplCopyWithImpl<_$BoardGameDetailsImpl>(
+          this, _$identity);
 }
 
 abstract class _BoardGameDetails extends BoardGameDetails {
   const factory _BoardGameDetails(
-      {@HiveField(0)
-          required final String id,
-      @HiveField(1)
-          required final String name,
-      @HiveField(2)
-          final String? thumbnailUrl,
-      @HiveField(3)
-          final int? rank,
-      @HiveField(4)
-          final int? yearPublished,
-      @HiveField(5)
-          final String? imageUrl,
-      @HiveField(6)
-          final String? description,
-      @HiveField(7)
-          final List<BoardGameCategory>? categories,
-      @HiveField(8)
-          final double? rating,
-      @HiveField(9)
-          final int? votes,
-      @HiveField(10)
-          final int? minPlayers,
-      @HiveField(11)
-          final int? minPlaytime,
-      @HiveField(12)
-          final int? maxPlayers,
-      @HiveField(13)
-          final int? maxPlaytime,
-      @HiveField(14)
-          final int? minAge,
-      @HiveField(15)
-          final num? avgWeight,
-      @HiveField(16)
-          final List<BoardGamePublisher> publishers,
-      @HiveField(17)
-          final List<BoardGameArtist> artists,
-      @HiveField(18)
-          final List<BoardGameDesigner> desingers,
-      @HiveField(19)
-          final int? commentsNumber,
-      @HiveField(20)
-          final List<BoardGameRank> ranks,
-      @HiveField(21)
-          final DateTime? lastModified,
-      @HiveField(22)
-          final List<BoardGameExpansion> expansions,
-      @HiveField(23)
-          final bool? isExpansion,
-      @HiveField(24)
-          final bool? isOwned,
-      @HiveField(25)
-          final bool? isOnWishlist,
-      @HiveField(26)
-          final bool? isFriends,
-      @HiveField(27)
-          final bool? isBggSynced,
-      @HiveField(28)
-          final BoardGameSettings? settings,
-      @HiveField(29, defaultValue: false)
-          final bool isCreatedByUser,
+      {@HiveField(0) required final String id,
+      @HiveField(1) required final String name,
+      @HiveField(2) final String? thumbnailUrl,
+      @HiveField(3) final int? rank,
+      @HiveField(4) final int? yearPublished,
+      @HiveField(5) final String? imageUrl,
+      @HiveField(6) final String? description,
+      @HiveField(7) final List<BoardGameCategory>? categories,
+      @HiveField(8) final double? rating,
+      @HiveField(9) final int? votes,
+      @HiveField(10) final int? minPlayers,
+      @HiveField(11) final int? minPlaytime,
+      @HiveField(12) final int? maxPlayers,
+      @HiveField(13) final int? maxPlaytime,
+      @HiveField(14) final int? minAge,
+      @HiveField(15) final num? avgWeight,
+      @HiveField(16) final List<BoardGamePublisher> publishers,
+      @HiveField(17) final List<BoardGameArtist> artists,
+      @HiveField(18) final List<BoardGameDesigner> desingers,
+      @HiveField(19) final int? commentsNumber,
+      @HiveField(20) final List<BoardGameRank> ranks,
+      @HiveField(21) final DateTime? lastModified,
+      @HiveField(22) final List<BoardGameExpansion> expansions,
+      @HiveField(23) final bool? isExpansion,
+      @HiveField(24) final bool? isOwned,
+      @HiveField(25) final bool? isOnWishlist,
+      @HiveField(26) final bool? isFriends,
+      @HiveField(27) final bool? isBggSynced,
+      @HiveField(28) final BoardGameSettings? settings,
+      @HiveField(29, defaultValue: false) final bool isCreatedByUser,
       @HiveField(30, defaultValue: <BoardGamePrices>[])
-          final List<BoardGamePrices> prices}) = _$_BoardGameDetails;
+      final List<BoardGamePrices> prices}) = _$BoardGameDetailsImpl;
   const _BoardGameDetails._() : super._();
 
   @override
@@ -1097,6 +980,6 @@ abstract class _BoardGameDetails extends BoardGameDetails {
   List<BoardGamePrices> get prices;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGameDetailsCopyWith<_$_BoardGameDetails> get copyWith =>
+  _$$BoardGameDetailsImplCopyWith<_$BoardGameDetailsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

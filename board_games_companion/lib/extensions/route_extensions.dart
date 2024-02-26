@@ -15,7 +15,7 @@ import '../pages/playthroughs/playthrough_players_selection_page.dart';
 import '../pages/playthroughs/playthroughs_page.dart';
 import '../pages/settings/settings_page.dart';
 
-extension RouteExtensions on Route {
+extension RouteExtensions on Route<dynamic> {
   String toScreenName() {
     switch (settings.name) {
       case AboutPage.pageRoute:

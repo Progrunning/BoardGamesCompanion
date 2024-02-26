@@ -6,9 +6,9 @@ part of 'board_game_search_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
+_$BoardGameSearchResultDtoImpl _$$BoardGameSearchResultDtoImplFromJson(
         Map<String, dynamic> json) =>
-    _$_BoardGameSearchResultDto(
+    _$BoardGameSearchResultDtoImpl(
       id: json['id'] as String,
       name: json['name'] as String,
       yearPublished: json['yearPublished'] as int?,
@@ -33,8 +33,8 @@ _$_BoardGameSearchResultDto _$$_BoardGameSearchResultDtoFromJson(
           .toList(),
     );
 
-Map<String, dynamic> _$$_BoardGameSearchResultDtoToJson(
-        _$_BoardGameSearchResultDto instance) =>
+Map<String, dynamic> _$$BoardGameSearchResultDtoImplToJson(
+        _$BoardGameSearchResultDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

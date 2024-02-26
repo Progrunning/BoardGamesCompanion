@@ -75,7 +75,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
       'Loading stats for a game ${_gamePlaythroughsStore.boardGameName} classified as ${gameClassification.toString()} [${_gamePlaythroughsStore.boardGameId}]',
     );
     final players = await _playerService.retrievePlayers(includeDeleted: true);
-    final playersById = <String, Player>{for (Player player in players) player.id: player};
+    final playersById = <String, Player>{for (final Player player in players) player.id: player};
 
     if (_gamePlaythroughsStore.playthroughs.isEmpty) {
       boardGameStatistics = const BoardGameStatistics.none();

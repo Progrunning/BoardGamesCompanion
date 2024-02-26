@@ -17,8 +17,8 @@ class DetailsItem extends StatelessWidget {
     this.onTap,
     this.uri,
     this.isSvg = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final String subtitle;

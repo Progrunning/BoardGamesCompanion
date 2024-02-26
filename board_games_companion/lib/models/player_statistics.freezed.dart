@@ -123,11 +123,11 @@ class _$PlayerStatisticsCopyWithImpl<$Res, $Val extends PlayerStatistics>
 }
 
 /// @nodoc
-abstract class _$$_scoreGamesCopyWith<$Res>
+abstract class _$$scoreGamesImplCopyWith<$Res>
     implements $PlayerStatisticsCopyWith<$Res> {
-  factory _$$_scoreGamesCopyWith(
-          _$_scoreGames value, $Res Function(_$_scoreGames) then) =
-      __$$_scoreGamesCopyWithImpl<$Res>;
+  factory _$$scoreGamesImplCopyWith(
+          _$scoreGamesImpl value, $Res Function(_$scoreGamesImpl) then) =
+      __$$scoreGamesImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -141,11 +141,11 @@ abstract class _$$_scoreGamesCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_scoreGamesCopyWithImpl<$Res>
-    extends _$PlayerStatisticsCopyWithImpl<$Res, _$_scoreGames>
-    implements _$$_scoreGamesCopyWith<$Res> {
-  __$$_scoreGamesCopyWithImpl(
-      _$_scoreGames _value, $Res Function(_$_scoreGames) _then)
+class __$$scoreGamesImplCopyWithImpl<$Res>
+    extends _$PlayerStatisticsCopyWithImpl<$Res, _$scoreGamesImpl>
+    implements _$$scoreGamesImplCopyWith<$Res> {
+  __$$scoreGamesImplCopyWithImpl(
+      _$scoreGamesImpl _value, $Res Function(_$scoreGamesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -156,7 +156,7 @@ class __$$_scoreGamesCopyWithImpl<$Res>
     Object? averageScore = null,
     Object? totalGamesPlayed = null,
   }) {
-    return _then(_$_scoreGames(
+    return _then(_$scoreGamesImpl(
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -179,8 +179,8 @@ class __$$_scoreGamesCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_scoreGames implements _scoreGames {
-  const _$_scoreGames(
+class _$scoreGamesImpl implements _scoreGames {
+  const _$scoreGamesImpl(
       {required this.player,
       required this.personalBestScore,
       required this.averageScore,
@@ -204,7 +204,7 @@ class _$_scoreGames implements _scoreGames {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_scoreGames &&
+            other is _$scoreGamesImpl &&
             (identical(other.player, player) || other.player == player) &&
             (identical(other.personalBestScore, personalBestScore) ||
                 other.personalBestScore == personalBestScore) &&
@@ -221,8 +221,8 @@ class _$_scoreGames implements _scoreGames {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_scoreGamesCopyWith<_$_scoreGames> get copyWith =>
-      __$$_scoreGamesCopyWithImpl<_$_scoreGames>(this, _$identity);
+  _$$scoreGamesImplCopyWith<_$scoreGamesImpl> get copyWith =>
+      __$$scoreGamesImplCopyWithImpl<_$scoreGamesImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -307,7 +307,7 @@ abstract class _scoreGames implements PlayerStatistics {
       {required final Player player,
       required final int personalBestScore,
       required final num averageScore,
-      required final int totalGamesPlayed}) = _$_scoreGames;
+      required final int totalGamesPlayed}) = _$scoreGamesImpl;
 
   @override
   Player get player;
@@ -317,16 +317,16 @@ abstract class _scoreGames implements PlayerStatistics {
   int get totalGamesPlayed;
   @override
   @JsonKey(ignore: true)
-  _$$_scoreGamesCopyWith<_$_scoreGames> get copyWith =>
+  _$$scoreGamesImplCopyWith<_$scoreGamesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_noScoreGamesCopyWith<$Res>
+abstract class _$$noScoreGamesImplCopyWith<$Res>
     implements $PlayerStatisticsCopyWith<$Res> {
-  factory _$$_noScoreGamesCopyWith(
-          _$_noScoreGames value, $Res Function(_$_noScoreGames) then) =
-      __$$_noScoreGamesCopyWithImpl<$Res>;
+  factory _$$noScoreGamesImplCopyWith(
+          _$noScoreGamesImpl value, $Res Function(_$noScoreGamesImpl) then) =
+      __$$noScoreGamesImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -337,11 +337,11 @@ abstract class _$$_noScoreGamesCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_noScoreGamesCopyWithImpl<$Res>
-    extends _$PlayerStatisticsCopyWithImpl<$Res, _$_noScoreGames>
-    implements _$$_noScoreGamesCopyWith<$Res> {
-  __$$_noScoreGamesCopyWithImpl(
-      _$_noScoreGames _value, $Res Function(_$_noScoreGames) _then)
+class __$$noScoreGamesImplCopyWithImpl<$Res>
+    extends _$PlayerStatisticsCopyWithImpl<$Res, _$noScoreGamesImpl>
+    implements _$$noScoreGamesImplCopyWith<$Res> {
+  __$$noScoreGamesImplCopyWithImpl(
+      _$noScoreGamesImpl _value, $Res Function(_$noScoreGamesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -352,7 +352,7 @@ class __$$_noScoreGamesCopyWithImpl<$Res>
     Object? totalWins = null,
     Object? totalLosses = null,
   }) {
-    return _then(_$_noScoreGames(
+    return _then(_$noScoreGamesImpl(
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -375,8 +375,8 @@ class __$$_noScoreGamesCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_noScoreGames implements _noScoreGames {
-  const _$_noScoreGames(
+class _$noScoreGamesImpl implements _noScoreGames {
+  const _$noScoreGamesImpl(
       {required this.player,
       required this.totalGamesPlayed,
       required this.totalWins,
@@ -400,7 +400,7 @@ class _$_noScoreGames implements _noScoreGames {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_noScoreGames &&
+            other is _$noScoreGamesImpl &&
             (identical(other.player, player) || other.player == player) &&
             (identical(other.totalGamesPlayed, totalGamesPlayed) ||
                 other.totalGamesPlayed == totalGamesPlayed) &&
@@ -417,8 +417,8 @@ class _$_noScoreGames implements _noScoreGames {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_noScoreGamesCopyWith<_$_noScoreGames> get copyWith =>
-      __$$_noScoreGamesCopyWithImpl<_$_noScoreGames>(this, _$identity);
+  _$$noScoreGamesImplCopyWith<_$noScoreGamesImpl> get copyWith =>
+      __$$noScoreGamesImplCopyWithImpl<_$noScoreGamesImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -500,7 +500,7 @@ abstract class _noScoreGames implements PlayerStatistics {
       {required final Player player,
       required final int totalGamesPlayed,
       required final int totalWins,
-      required final int totalLosses}) = _$_noScoreGames;
+      required final int totalLosses}) = _$noScoreGamesImpl;
 
   @override
   Player get player;
@@ -510,6 +510,6 @@ abstract class _noScoreGames implements PlayerStatistics {
   int get totalLosses;
   @override
   @JsonKey(ignore: true)
-  _$$_noScoreGamesCopyWith<_$_noScoreGames> get copyWith =>
+  _$$noScoreGamesImplCopyWith<_$noScoreGamesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

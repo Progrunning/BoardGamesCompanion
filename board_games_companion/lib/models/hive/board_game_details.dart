@@ -65,7 +65,7 @@ class BoardGameDetails with _$BoardGameDetails {
     @Default(false) @HiveField(29, defaultValue: false) bool isCreatedByUser,
     @Default(<BoardGamePrices>[])
     @HiveField(30, defaultValue: <BoardGamePrices>[])
-        List<BoardGamePrices> prices,
+    List<BoardGamePrices> prices,
   }) = _BoardGameDetails;
 
   const BoardGameDetails._();
@@ -201,7 +201,7 @@ class BoardGameDetails with _$BoardGameDetails {
       minPlayers != null || minPlaytime != null || minAge != null || avgWeight != null;
 
   Map<String, BoardGamePrices> get pricesByRegion =>
-      {for (var price in prices) price.region.toLowerCase(): price};
+      {for (final price in prices) price.region.toLowerCase(): price};
 
   bool hasPricesForRegion(String? countryCode) => pricesByRegion[countryCode] != null;
 

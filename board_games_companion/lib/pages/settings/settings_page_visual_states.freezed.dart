@@ -94,23 +94,25 @@ class _$SettingsPageVisualStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$InitialCopyWith<$Res> {
-  factory _$$InitialCopyWith(_$Initial value, $Res Function(_$Initial) then) =
-      __$$InitialCopyWithImpl<$Res>;
+abstract class _$$InitialImplCopyWith<$Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
+      __$$InitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$InitialCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$Initial>
-    implements _$$InitialCopyWith<$Res> {
-  __$$InitialCopyWithImpl(_$Initial _value, $Res Function(_$Initial) _then)
+class __$$InitialImplCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$InitialImpl>
+    implements _$$InitialImplCopyWith<$Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Initial implements Initial {
-  const _$Initial();
+class _$InitialImpl implements Initial {
+  const _$InitialImpl();
 
   @override
   String toString() {
@@ -120,7 +122,7 @@ class _$Initial implements Initial {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Initial);
+        (other.runtimeType == runtimeType && other is _$InitialImpl);
   }
 
   @override
@@ -208,29 +210,29 @@ class _$Initial implements Initial {
 }
 
 abstract class Initial implements SettingsPageVisualState {
-  const factory Initial() = _$Initial;
+  const factory Initial() = _$InitialImpl;
 }
 
 /// @nodoc
-abstract class _$$RestoringCopyWith<$Res> {
-  factory _$$RestoringCopyWith(
-          _$Restoring value, $Res Function(_$Restoring) then) =
-      __$$RestoringCopyWithImpl<$Res>;
+abstract class _$$RestoringImplCopyWith<$Res> {
+  factory _$$RestoringImplCopyWith(
+          _$RestoringImpl value, $Res Function(_$RestoringImpl) then) =
+      __$$RestoringImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RestoringCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$Restoring>
-    implements _$$RestoringCopyWith<$Res> {
-  __$$RestoringCopyWithImpl(
-      _$Restoring _value, $Res Function(_$Restoring) _then)
+class __$$RestoringImplCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringImpl>
+    implements _$$RestoringImplCopyWith<$Res> {
+  __$$RestoringImplCopyWithImpl(
+      _$RestoringImpl _value, $Res Function(_$RestoringImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Restoring implements Restoring {
-  const _$Restoring();
+class _$RestoringImpl implements Restoring {
+  const _$RestoringImpl();
 
   @override
   String toString() {
@@ -240,7 +242,7 @@ class _$Restoring implements Restoring {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Restoring);
+        (other.runtimeType == runtimeType && other is _$RestoringImpl);
   }
 
   @override
@@ -328,29 +330,30 @@ class _$Restoring implements Restoring {
 }
 
 abstract class Restoring implements SettingsPageVisualState {
-  const factory Restoring() = _$Restoring;
+  const factory Restoring() = _$RestoringImpl;
 }
 
 /// @nodoc
-abstract class _$$RestoringCancelledCopyWith<$Res> {
-  factory _$$RestoringCancelledCopyWith(_$RestoringCancelled value,
-          $Res Function(_$RestoringCancelled) then) =
-      __$$RestoringCancelledCopyWithImpl<$Res>;
+abstract class _$$RestoringCancelledImplCopyWith<$Res> {
+  factory _$$RestoringCancelledImplCopyWith(_$RestoringCancelledImpl value,
+          $Res Function(_$RestoringCancelledImpl) then) =
+      __$$RestoringCancelledImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RestoringCancelledCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringCancelled>
-    implements _$$RestoringCancelledCopyWith<$Res> {
-  __$$RestoringCancelledCopyWithImpl(
-      _$RestoringCancelled _value, $Res Function(_$RestoringCancelled) _then)
+class __$$RestoringCancelledImplCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res,
+        _$RestoringCancelledImpl>
+    implements _$$RestoringCancelledImplCopyWith<$Res> {
+  __$$RestoringCancelledImplCopyWithImpl(_$RestoringCancelledImpl _value,
+      $Res Function(_$RestoringCancelledImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$RestoringCancelled implements RestoringCancelled {
-  const _$RestoringCancelled();
+class _$RestoringCancelledImpl implements RestoringCancelled {
+  const _$RestoringCancelledImpl();
 
   @override
   String toString() {
@@ -360,7 +363,7 @@ class _$RestoringCancelled implements RestoringCancelled {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$RestoringCancelled);
+        (other.runtimeType == runtimeType && other is _$RestoringCancelledImpl);
   }
 
   @override
@@ -448,29 +451,30 @@ class _$RestoringCancelled implements RestoringCancelled {
 }
 
 abstract class RestoringCancelled implements SettingsPageVisualState {
-  const factory RestoringCancelled() = _$RestoringCancelled;
+  const factory RestoringCancelled() = _$RestoringCancelledImpl;
 }
 
 /// @nodoc
-abstract class _$$RestoringSucceededCopyWith<$Res> {
-  factory _$$RestoringSucceededCopyWith(_$RestoringSucceeded value,
-          $Res Function(_$RestoringSucceeded) then) =
-      __$$RestoringSucceededCopyWithImpl<$Res>;
+abstract class _$$RestoringSucceededImplCopyWith<$Res> {
+  factory _$$RestoringSucceededImplCopyWith(_$RestoringSucceededImpl value,
+          $Res Function(_$RestoringSucceededImpl) then) =
+      __$$RestoringSucceededImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RestoringSucceededCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringSucceeded>
-    implements _$$RestoringSucceededCopyWith<$Res> {
-  __$$RestoringSucceededCopyWithImpl(
-      _$RestoringSucceeded _value, $Res Function(_$RestoringSucceeded) _then)
+class __$$RestoringSucceededImplCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res,
+        _$RestoringSucceededImpl>
+    implements _$$RestoringSucceededImplCopyWith<$Res> {
+  __$$RestoringSucceededImplCopyWithImpl(_$RestoringSucceededImpl _value,
+      $Res Function(_$RestoringSucceededImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$RestoringSucceeded implements RestoringSucceeded {
-  const _$RestoringSucceeded();
+class _$RestoringSucceededImpl implements RestoringSucceeded {
+  const _$RestoringSucceededImpl();
 
   @override
   String toString() {
@@ -480,7 +484,7 @@ class _$RestoringSucceeded implements RestoringSucceeded {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$RestoringSucceeded);
+        (other.runtimeType == runtimeType && other is _$RestoringSucceededImpl);
   }
 
   @override
@@ -568,24 +572,24 @@ class _$RestoringSucceeded implements RestoringSucceeded {
 }
 
 abstract class RestoringSucceeded implements SettingsPageVisualState {
-  const factory RestoringSucceeded() = _$RestoringSucceeded;
+  const factory RestoringSucceeded() = _$RestoringSucceededImpl;
 }
 
 /// @nodoc
-abstract class _$$RestoringFailedCopyWith<$Res> {
-  factory _$$RestoringFailedCopyWith(
-          _$RestoringFailed value, $Res Function(_$RestoringFailed) then) =
-      __$$RestoringFailedCopyWithImpl<$Res>;
+abstract class _$$RestoringFailedImplCopyWith<$Res> {
+  factory _$$RestoringFailedImplCopyWith(_$RestoringFailedImpl value,
+          $Res Function(_$RestoringFailedImpl) then) =
+      __$$RestoringFailedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String? message});
 }
 
 /// @nodoc
-class __$$RestoringFailedCopyWithImpl<$Res>
-    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringFailed>
-    implements _$$RestoringFailedCopyWith<$Res> {
-  __$$RestoringFailedCopyWithImpl(
-      _$RestoringFailed _value, $Res Function(_$RestoringFailed) _then)
+class __$$RestoringFailedImplCopyWithImpl<$Res>
+    extends _$SettingsPageVisualStateCopyWithImpl<$Res, _$RestoringFailedImpl>
+    implements _$$RestoringFailedImplCopyWith<$Res> {
+  __$$RestoringFailedImplCopyWithImpl(
+      _$RestoringFailedImpl _value, $Res Function(_$RestoringFailedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -593,7 +597,7 @@ class __$$RestoringFailedCopyWithImpl<$Res>
   $Res call({
     Object? message = freezed,
   }) {
-    return _then(_$RestoringFailed(
+    return _then(_$RestoringFailedImpl(
       freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -604,8 +608,8 @@ class __$$RestoringFailedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RestoringFailed implements RestoringFailed {
-  const _$RestoringFailed([this.message]);
+class _$RestoringFailedImpl implements RestoringFailed {
+  const _$RestoringFailedImpl([this.message]);
 
   @override
   final String? message;
@@ -619,7 +623,7 @@ class _$RestoringFailed implements RestoringFailed {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RestoringFailed &&
+            other is _$RestoringFailedImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -629,8 +633,9 @@ class _$RestoringFailed implements RestoringFailed {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RestoringFailedCopyWith<_$RestoringFailed> get copyWith =>
-      __$$RestoringFailedCopyWithImpl<_$RestoringFailed>(this, _$identity);
+  _$$RestoringFailedImplCopyWith<_$RestoringFailedImpl> get copyWith =>
+      __$$RestoringFailedImplCopyWithImpl<_$RestoringFailedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -714,10 +719,11 @@ class _$RestoringFailed implements RestoringFailed {
 }
 
 abstract class RestoringFailed implements SettingsPageVisualState {
-  const factory RestoringFailed([final String? message]) = _$RestoringFailed;
+  const factory RestoringFailed([final String? message]) =
+      _$RestoringFailedImpl;
 
   String? get message;
   @JsonKey(ignore: true)
-  _$$RestoringFailedCopyWith<_$RestoringFailed> get copyWith =>
+  _$$RestoringFailedImplCopyWith<_$RestoringFailedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

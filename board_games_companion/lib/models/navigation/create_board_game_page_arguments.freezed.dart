@@ -66,25 +66,25 @@ class _$CreateBoardGamePageArgumentsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_CreateBoardGamePageArgumentsCopyWith<$Res>
+abstract class _$$CreateBoardGamePageArgumentsImplCopyWith<$Res>
     implements $CreateBoardGamePageArgumentsCopyWith<$Res> {
-  factory _$$_CreateBoardGamePageArgumentsCopyWith(
-          _$_CreateBoardGamePageArguments value,
-          $Res Function(_$_CreateBoardGamePageArguments) then) =
-      __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>;
+  factory _$$CreateBoardGamePageArgumentsImplCopyWith(
+          _$CreateBoardGamePageArgumentsImpl value,
+          $Res Function(_$CreateBoardGamePageArgumentsImpl) then) =
+      __$$CreateBoardGamePageArgumentsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? boardGameName, String? boardGameId});
 }
 
 /// @nodoc
-class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
+class __$$CreateBoardGamePageArgumentsImplCopyWithImpl<$Res>
     extends _$CreateBoardGamePageArgumentsCopyWithImpl<$Res,
-        _$_CreateBoardGamePageArguments>
-    implements _$$_CreateBoardGamePageArgumentsCopyWith<$Res> {
-  __$$_CreateBoardGamePageArgumentsCopyWithImpl(
-      _$_CreateBoardGamePageArguments _value,
-      $Res Function(_$_CreateBoardGamePageArguments) _then)
+        _$CreateBoardGamePageArgumentsImpl>
+    implements _$$CreateBoardGamePageArgumentsImplCopyWith<$Res> {
+  __$$CreateBoardGamePageArgumentsImplCopyWithImpl(
+      _$CreateBoardGamePageArgumentsImpl _value,
+      $Res Function(_$CreateBoardGamePageArgumentsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -93,7 +93,7 @@ class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
     Object? boardGameName = freezed,
     Object? boardGameId = freezed,
   }) {
-    return _then(_$_CreateBoardGamePageArguments(
+    return _then(_$CreateBoardGamePageArgumentsImpl(
       boardGameName: freezed == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
@@ -108,8 +108,9 @@ class __$$_CreateBoardGamePageArgumentsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
-  const _$_CreateBoardGamePageArguments({this.boardGameName, this.boardGameId})
+class _$CreateBoardGamePageArgumentsImpl extends _CreateBoardGamePageArguments {
+  const _$CreateBoardGamePageArgumentsImpl(
+      {this.boardGameName, this.boardGameId})
       : super._();
 
   @override
@@ -126,7 +127,7 @@ class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CreateBoardGamePageArguments &&
+            other is _$CreateBoardGamePageArgumentsImpl &&
             (identical(other.boardGameName, boardGameName) ||
                 other.boardGameName == boardGameName) &&
             (identical(other.boardGameId, boardGameId) ||
@@ -139,16 +140,17 @@ class _$_CreateBoardGamePageArguments extends _CreateBoardGamePageArguments {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CreateBoardGamePageArgumentsCopyWith<_$_CreateBoardGamePageArguments>
-      get copyWith => __$$_CreateBoardGamePageArgumentsCopyWithImpl<
-          _$_CreateBoardGamePageArguments>(this, _$identity);
+  _$$CreateBoardGamePageArgumentsImplCopyWith<
+          _$CreateBoardGamePageArgumentsImpl>
+      get copyWith => __$$CreateBoardGamePageArgumentsImplCopyWithImpl<
+          _$CreateBoardGamePageArgumentsImpl>(this, _$identity);
 }
 
 abstract class _CreateBoardGamePageArguments
     extends CreateBoardGamePageArguments {
   const factory _CreateBoardGamePageArguments(
       {final String? boardGameName,
-      final String? boardGameId}) = _$_CreateBoardGamePageArguments;
+      final String? boardGameId}) = _$CreateBoardGamePageArgumentsImpl;
   const _CreateBoardGamePageArguments._() : super._();
 
   @override
@@ -157,6 +159,7 @@ abstract class _CreateBoardGamePageArguments
   String? get boardGameId;
   @override
   @JsonKey(ignore: true)
-  _$$_CreateBoardGamePageArgumentsCopyWith<_$_CreateBoardGamePageArguments>
+  _$$CreateBoardGamePageArgumentsImplCopyWith<
+          _$CreateBoardGamePageArgumentsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

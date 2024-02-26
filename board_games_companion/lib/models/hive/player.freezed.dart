@@ -103,9 +103,10 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
 }
 
 /// @nodoc
-abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
-  factory _$$_PlayerCopyWith(_$_Player value, $Res Function(_$_Player) then) =
-      __$$_PlayerCopyWithImpl<$Res>;
+abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
+  factory _$$PlayerImplCopyWith(
+          _$PlayerImpl value, $Res Function(_$PlayerImpl) then) =
+      __$$PlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -119,10 +120,11 @@ abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_PlayerCopyWithImpl<$Res>
-    extends _$PlayerCopyWithImpl<$Res, _$_Player>
-    implements _$$_PlayerCopyWith<$Res> {
-  __$$_PlayerCopyWithImpl(_$_Player _value, $Res Function(_$_Player) _then)
+class __$$PlayerImplCopyWithImpl<$Res>
+    extends _$PlayerCopyWithImpl<$Res, _$PlayerImpl>
+    implements _$$PlayerImplCopyWith<$Res> {
+  __$$PlayerImplCopyWithImpl(
+      _$PlayerImpl _value, $Res Function(_$PlayerImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -136,7 +138,7 @@ class __$$_PlayerCopyWithImpl<$Res>
     Object? avatarImageUri = null,
     Object? avatarFileToSave = freezed,
   }) {
-    return _then(_$_Player(
+    return _then(_$PlayerImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -172,8 +174,8 @@ class __$$_PlayerCopyWithImpl<$Res>
 /// @nodoc
 
 @HiveType(typeId: HiveBoxes.playersTypeId, adapterName: 'PlayerAdapter')
-class _$_Player implements _Player {
-  const _$_Player(
+class _$PlayerImpl implements _Player {
+  const _$PlayerImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) this.name,
       @HiveField(3) this.isDeleted,
@@ -212,7 +214,7 @@ class _$_Player implements _Player {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Player &&
+            other is _$PlayerImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.isDeleted, isDeleted) ||
@@ -233,8 +235,8 @@ class _$_Player implements _Player {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerCopyWith<_$_Player> get copyWith =>
-      __$$_PlayerCopyWithImpl<_$_Player>(this, _$identity);
+  _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
+      __$$PlayerImplCopyWithImpl<_$PlayerImpl>(this, _$identity);
 }
 
 abstract class _Player implements Player {
@@ -245,7 +247,7 @@ abstract class _Player implements Player {
       @HiveField(4) final String? avatarFileName,
       @HiveField(5) final String? bggName,
       final String avatarImageUri,
-      final XFile? avatarFileToSave}) = _$_Player;
+      final XFile? avatarFileToSave}) = _$PlayerImpl;
 
   @override
   @HiveField(0)
@@ -268,6 +270,6 @@ abstract class _Player implements Player {
   XFile? get avatarFileToSave;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerCopyWith<_$_Player> get copyWith =>
+  _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

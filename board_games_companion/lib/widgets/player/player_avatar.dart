@@ -15,8 +15,8 @@ class PlayerAvatar extends StatelessWidget {
     this.onTap,
     this.useHeroAnimation = true,
     this.playerHeroIdSuffix = '',
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Player? player;
   final VoidCallback? onTap;

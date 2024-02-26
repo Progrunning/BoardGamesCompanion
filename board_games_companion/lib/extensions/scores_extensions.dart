@@ -105,11 +105,8 @@ int compareScores(
       // MK No swapping needed
       break;
     case GameFamily.Cooperative:
-      if (score.noScoreGameResult?.cooperativeGameResult == CooperativeGameResult.win) {
-        return Constants.moveAbove;
-      }
-
-      return Constants.moveBelow;
+      // MK With cooperative games there's no need to sort scores as all are win or lose
+      return Constants.leaveAsIs;
   }
 
   return _compareScores(score, otherScore, ignorePlaces);

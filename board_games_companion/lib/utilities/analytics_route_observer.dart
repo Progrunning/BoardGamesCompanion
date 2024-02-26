@@ -20,7 +20,7 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
   final AnalyticsService _analtyicsService;
 
   @override
-  void didPop(Route route, Route? previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
 
     // MK Manually logging a screen view as per https://firebase.google.com/docs/analytics/screenviews#dart
@@ -35,7 +35,7 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<Object>> {
   }
 
   @override
-  void didPush(Route route, Route? previousRoute) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
 
     final String? routeName = route.settings.name;

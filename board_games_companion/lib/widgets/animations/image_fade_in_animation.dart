@@ -4,8 +4,8 @@ class ImageFadeInAnimation extends StatelessWidget {
   const ImageFadeInAnimation({
     required this.frame,
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int? frame;
   final Widget child;

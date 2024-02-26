@@ -8,7 +8,7 @@ import '../common/rating_hexagon.dart';
 
 class BoardGameRatingHexagon extends StatelessWidget {
   const BoardGameRatingHexagon(
-      {Key? key,
+      {super.key,
       required double? rating,
       double width = Dimensions.boardGameDetailsHexagonSize,
       double height = Dimensions.boardGameDetailsHexagonSize,
@@ -22,8 +22,7 @@ class BoardGameRatingHexagon extends StatelessWidget {
         _fontSize = fontSize,
         _fontColor = fontColor,
         _hexColor = hexColor,
-        _hexColorOpacity = hexColorOpacity,
-        super(key: key);
+        _hexColorOpacity = hexColorOpacity;
 
   final double? _rating;
   final double _width;

@@ -17,7 +17,7 @@ import 'average_score_precision.dart';
 import 'playthroughs_game_settings_view_model.dart';
 
 class PlaythroughsGameSettingsPage extends StatefulWidget {
-  const PlaythroughsGameSettingsPage({Key? key}) : super(key: key);
+  const PlaythroughsGameSettingsPage({super.key});
 
   @override
   State<PlaythroughsGameSettingsPage> createState() => _PlaythroughsGameSettingsPageState();
@@ -179,12 +179,11 @@ class _ScoreSection extends StatelessWidget {
 
 class _AverageScorePrecisionTile extends BgcSegmentedButton<AverageScorePrecision> {
   _AverageScorePrecisionTile.precision({
-    required bool isSelected,
+    required super.isSelected,
     required AverageScorePrecision averageScorePrecision,
     required Function(AverageScorePrecision) onSelected,
   }) : super(
           value: averageScorePrecision,
-          isSelected: isSelected,
           onTapped: (_) => onSelected(averageScorePrecision),
           child: Center(
             child: Text(
@@ -199,8 +198,7 @@ class _GameClassificationSection extends StatefulWidget {
   const _GameClassificationSection({
     required this.gameClassification,
     required this.onGameClassificationChanged,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final GameClassification gameClassification;
   final Function(GameClassification?) onGameClassificationChanged;

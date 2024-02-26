@@ -7,8 +7,8 @@ class SectionTitle extends StatelessWidget {
   const SectionTitle({
     required this.title,
     this.padding = const EdgeInsets.only(left: Dimensions.standardSpacing),
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final EdgeInsets padding;

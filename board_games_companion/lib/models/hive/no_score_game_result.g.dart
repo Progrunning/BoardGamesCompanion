@@ -45,23 +45,23 @@ class CooperativeGameResultAdapter extends TypeAdapter<CooperativeGameResult> {
           typeId == other.typeId;
 }
 
-class NoScoreGameResultAdapter extends TypeAdapter<_$_NoScoreGameResult> {
+class NoScoreGameResultAdapter extends TypeAdapter<_$NoScoreGameResultImpl> {
   @override
   final int typeId = 21;
 
   @override
-  _$_NoScoreGameResult read(BinaryReader reader) {
+  _$NoScoreGameResultImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_NoScoreGameResult(
+    return _$NoScoreGameResultImpl(
       cooperativeGameResult: fields[0] as CooperativeGameResult?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, _$_NoScoreGameResult obj) {
+  void write(BinaryWriter writer, _$NoScoreGameResultImpl obj) {
     writer
       ..writeByte(1)
       ..writeByte(0)

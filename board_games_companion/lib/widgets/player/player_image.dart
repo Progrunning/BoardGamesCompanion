@@ -9,11 +9,11 @@ import '../animations/image_fade_in_animation.dart';
 
 class PlayerImage extends StatelessWidget {
   const PlayerImage({
-    Key? key,
+    super.key,
     this.place,
     this.imageUri,
     this.avatarImageSize,
-  }) : super(key: key);
+  });
 
   final String? imageUri;
   final int? place;
@@ -79,9 +79,7 @@ class PlayerImage extends StatelessWidget {
 }
 
 class _Placeholder extends StatelessWidget {
-  const _Placeholder({
-    Key? key,
-  }) : super(key: key);
+  const _Placeholder();
 
   @override
   Widget build(BuildContext context) {

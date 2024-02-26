@@ -7,10 +7,9 @@ class DefaultIcon extends StatelessWidget {
   const DefaultIcon(
     IconData icon, {
     Color color = AppColors.defaultTextColor,
-    Key? key,
+    super.key,
   })  : _icon = icon,
-        _color = color,
-        super(key: key);
+        _color = color;
 
   final IconData _icon;
   final Color _color;

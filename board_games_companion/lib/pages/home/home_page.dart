@@ -40,8 +40,8 @@ typedef BoardGameResultAction = void Function(
 class HomePage extends StatefulWidget {
   const HomePage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const String pageRoute = '/home';
 
@@ -111,7 +111,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             controller: tabController,
             backgroundColor: AppColors.bottomTabBackgroundColor,
             top: -Dimensions.bottomTabTopHeight,
-            items: const <TabItem>[
+            items: const <TabItem<BottomTabIcon>>[
               TabItem<BottomTabIcon>(
                 title: AppText.homePageCollectionsTabTitle,
                 icon: BottomTabIcon(iconData: Icons.grid_on),

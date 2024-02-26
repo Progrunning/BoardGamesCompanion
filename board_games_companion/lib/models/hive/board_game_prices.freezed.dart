@@ -155,11 +155,11 @@ class _$BoardGamePricesCopyWithImpl<$Res, $Val extends BoardGamePrices>
 }
 
 /// @nodoc
-abstract class _$$_BoardGamePricesCopyWith<$Res>
+abstract class _$$BoardGamePricesImplCopyWith<$Res>
     implements $BoardGamePricesCopyWith<$Res> {
-  factory _$$_BoardGamePricesCopyWith(
-          _$_BoardGamePrices value, $Res Function(_$_BoardGamePrices) then) =
-      __$$_BoardGamePricesCopyWithImpl<$Res>;
+  factory _$$BoardGamePricesImplCopyWith(_$BoardGamePricesImpl value,
+          $Res Function(_$BoardGamePricesImpl) then) =
+      __$$BoardGamePricesImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -179,11 +179,11 @@ abstract class _$$_BoardGamePricesCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_BoardGamePricesCopyWithImpl<$Res>
-    extends _$BoardGamePricesCopyWithImpl<$Res, _$_BoardGamePrices>
-    implements _$$_BoardGamePricesCopyWith<$Res> {
-  __$$_BoardGamePricesCopyWithImpl(
-      _$_BoardGamePrices _value, $Res Function(_$_BoardGamePrices) _then)
+class __$$BoardGamePricesImplCopyWithImpl<$Res>
+    extends _$BoardGamePricesCopyWithImpl<$Res, _$BoardGamePricesImpl>
+    implements _$$BoardGamePricesImplCopyWith<$Res> {
+  __$$BoardGamePricesImplCopyWithImpl(
+      _$BoardGamePricesImpl _value, $Res Function(_$BoardGamePricesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -203,7 +203,7 @@ class __$$_BoardGamePricesCopyWithImpl<$Res>
     Object? lowest52wStore = freezed,
     Object? lowest52wDate = freezed,
   }) {
-    return _then(_$_BoardGamePrices(
+    return _then(_$BoardGamePricesImpl(
       region: null == region
           ? _value.region
           : region // ignore: cast_nullable_to_non_nullable
@@ -264,8 +264,8 @@ class __$$_BoardGamePricesCopyWithImpl<$Res>
 
 @HiveType(
     typeId: HiveBoxes.boardGamePrices, adapterName: 'BoardGamePricesAdapter')
-class _$_BoardGamePrices extends _BoardGamePrices {
-  const _$_BoardGamePrices(
+class _$BoardGamePricesImpl extends _BoardGamePrices {
+  const _$BoardGamePricesImpl(
       {@HiveField(0) required this.region,
       @HiveField(1) required this.websiteUrl,
       @HiveField(2) this.highest,
@@ -330,7 +330,7 @@ class _$_BoardGamePrices extends _BoardGamePrices {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BoardGamePrices &&
+            other is _$BoardGamePricesImpl &&
             (identical(other.region, region) || other.region == region) &&
             (identical(other.websiteUrl, websiteUrl) ||
                 other.websiteUrl == websiteUrl) &&
@@ -374,8 +374,9 @@ class _$_BoardGamePrices extends _BoardGamePrices {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGamePricesCopyWith<_$_BoardGamePrices> get copyWith =>
-      __$$_BoardGamePricesCopyWithImpl<_$_BoardGamePrices>(this, _$identity);
+  _$$BoardGamePricesImplCopyWith<_$BoardGamePricesImpl> get copyWith =>
+      __$$BoardGamePricesImplCopyWithImpl<_$BoardGamePricesImpl>(
+          this, _$identity);
 }
 
 abstract class _BoardGamePrices extends BoardGamePrices {
@@ -392,7 +393,7 @@ abstract class _BoardGamePrices extends BoardGamePrices {
       @HiveField(9) final DateTime? lowest30dDate,
       @HiveField(10) final double? lowest52w,
       @HiveField(11) final String? lowest52wStore,
-      @HiveField(12) final DateTime? lowest52wDate}) = _$_BoardGamePrices;
+      @HiveField(12) final DateTime? lowest52wDate}) = _$BoardGamePricesImpl;
   const _BoardGamePrices._() : super._();
 
   @override
@@ -436,6 +437,6 @@ abstract class _BoardGamePrices extends BoardGamePrices {
   DateTime? get lowest52wDate;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGamePricesCopyWith<_$_BoardGamePrices> get copyWith =>
+  _$$BoardGamePricesImplCopyWith<_$BoardGamePricesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

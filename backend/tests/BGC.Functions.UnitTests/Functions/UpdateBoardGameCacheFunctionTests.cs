@@ -4,13 +4,13 @@ using AutoFixture;
 
 using Azure.Messaging.ServiceBus;
 
+using BGC.CacheCore.Models;
 using BGC.Core.Models.Domain;
 using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Models.Dtos.BoardGameOracle;
 using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
 using BGC.Functions.Functions;
-using BGC.Functions.Models;
 using BGC.Tests.Core.Extensions;
 
 namespace BGC.Functions.UnitTests.Functions
@@ -41,7 +41,7 @@ namespace BGC.Functions.UnitTests.Functions
         }
 
         [Fact]
-        public async Task ExecuteFunction_Emptymessage_ThrowsJsonException()
+        public async Task ExecuteFunction_EmptyMessage_ThrowsJsonException()
         {
             var mockMessage = ServiceBusModelFactory.ServiceBusReceivedMessage();
 

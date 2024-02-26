@@ -50,8 +50,8 @@ import 'plays_view_model.dart';
 class PlaysPage extends StatefulWidget {
   const PlaysPage({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final PlaysViewModel viewModel;
 
@@ -256,8 +256,7 @@ class _GameSpinnerFilters extends StatelessWidget {
     required this.onIncludeExpansionsToggled,
     required this.onNumberOfPlayersChanged,
     required this.onPlaytimeChanged,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final GameSpinnerFilters gameSpinnerFilters;
   final int maxNumberOfPlayers;
@@ -338,11 +337,10 @@ class _GameSpinnerFilters extends StatelessWidget {
 
 class _PlayersFilter extends StatelessWidget {
   const _PlayersFilter({
-    Key? key,
     required this.numberOfPlayersFilter,
     required this.maxNumberOfPlayers,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   static const double sliderAnyNumberValue = -1;
   static const double hasSoloModeValue = 0;
@@ -479,12 +477,11 @@ class _PlaytimeFilter extends StatelessWidget {
 
 class _GameSpinnerSliver extends StatefulWidget {
   const _GameSpinnerSliver({
-    Key? key,
     required this.scrollController,
     required this.shuffledBoardGames,
     required this.onSpin,
     required this.onGameSelected,
-  }) : super(key: key);
+  });
 
   static const double _gameSpinnerItemHeight = 80;
   static const double _gameSpinnerItemSqueeze = 1.2;
@@ -580,12 +577,12 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () => widget.onSpin(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                  child: const Padding(
+                    padding: EdgeInsets.all(Dimensions.standardSpacing),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         FaIcon(FontAwesomeIcons.arrowsSpin),
                         Text(AppText.playsPageGameSpinnerSpinButtonText),
                       ],
@@ -603,10 +600,9 @@ class _GameSpinnerSliverState extends State<_GameSpinnerSliver> {
 
 class _GameSpinnerItem extends StatelessWidget {
   const _GameSpinnerItem({
-    Key? key,
     required this.boardGameId,
     required this.boardGameImageUrl,
-  }) : super(key: key);
+  });
 
   final String boardGameId;
   final String boardGameImageUrl;
@@ -959,9 +955,8 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
 
 class _PlaythroughDetails extends StatelessWidget {
   const _PlaythroughDetails({
-    Key? key,
     required this.boardGamePlaythrough,
-  }) : super(key: key);
+  });
 
   static const double _playthroughStatsIconSize = 16;
   static const double _playthroughStatsFontAwesomeIconSize = _playthroughStatsIconSize - 4;
@@ -1002,10 +997,9 @@ class _PlaythroughDetails extends StatelessWidget {
 
 class _PlaythroughGeneralStats extends StatelessWidget {
   const _PlaythroughGeneralStats({
-    Key? key,
     required this.icon,
     required this.statistic,
-  }) : super(key: key);
+  });
 
   final Widget icon;
   final String statistic;
@@ -1032,10 +1026,9 @@ class _PlaythroughGeneralStats extends StatelessWidget {
 
 class _PlaythroughActions extends StatelessWidget {
   const _PlaythroughActions({
-    Key? key,
     required this.onTapBoardGameDetails,
     required this.onTapPlaythroughs,
-  }) : super(key: key);
+  });
 
   final VoidCallback onTapBoardGameDetails;
   final VoidCallback onTapPlaythroughs;
@@ -1059,15 +1052,15 @@ class _PlaythroughActions extends StatelessWidget {
 }
 
 class _NoPlaythroughsSliver extends StatelessWidget {
-  const _NoPlaythroughsSliver({Key? key}) : super(key: key);
+  const _NoPlaythroughsSliver();
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-        padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+  Widget build(BuildContext context) => const SliverPadding(
+        padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
         sliver: SliverToBoxAdapter(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const <Widget>[
+            children: <Widget>[
               SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
               Center(
                 child: Text(
@@ -1098,15 +1091,15 @@ class _NoPlaythroughsSliver extends StatelessWidget {
 }
 
 class _NoBoardGamesSliver extends StatelessWidget {
-  const _NoBoardGamesSliver({Key? key}) : super(key: key);
+  const _NoBoardGamesSliver();
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-        padding: const EdgeInsets.all(Dimensions.doubleStandardSpacing),
+  Widget build(BuildContext context) => const SliverPadding(
+        padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
         sliver: SliverToBoxAdapter(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const <Widget>[
+            children: <Widget>[
               SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
               Center(
                 child: Text(
@@ -1137,11 +1130,11 @@ class _NoBoardGamesSliver extends StatelessWidget {
 }
 
 class _NoBoardGamesToShuffleSliver extends StatelessWidget {
-  const _NoBoardGamesToShuffleSliver({Key? key}) : super(key: key);
+  const _NoBoardGamesToShuffleSliver();
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-        padding: const EdgeInsets.symmetric(
+  Widget build(BuildContext context) => const SliverPadding(
+        padding: EdgeInsets.symmetric(
           horizontal: Dimensions.doubleStandardSpacing,
           vertical: Dimensions.standardSpacing,
         ),
@@ -1151,7 +1144,7 @@ class _NoBoardGamesToShuffleSliver extends StatelessWidget {
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const <Widget>[
+                children: <Widget>[
                   Center(
                     child: Text(
                       AppText.playsPageSelectGameNoBoardGamesToShuffleTitle,
@@ -1187,8 +1180,7 @@ class _AppBar extends StatelessWidget {
     required this.tabVisualState,
     required this.tabController,
     required this.onTabSelected,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final PlaysPageVisualState? tabVisualState;
   final TabController tabController;
@@ -1256,12 +1248,11 @@ class _HistoryTab extends StatelessWidget {
 
 class _FilterPlaytime extends BgcSegmentedButton<PlaytimeFilter> {
   _FilterPlaytime.time({
-    required bool isSelected,
+    required super.isSelected,
     required PlaytimeFilter playtimeFilter,
     required Function(PlaytimeFilter) onSelected,
   }) : super(
           value: playtimeFilter,
-          isSelected: isSelected,
           onTapped: (_) => onSelected(playtimeFilter),
           child: Center(
             child: Text(

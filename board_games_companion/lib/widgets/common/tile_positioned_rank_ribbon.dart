@@ -7,8 +7,8 @@ import 'rank_ribbon.dart';
 class PositionedTileRankRibbon extends StatelessWidget {
   const PositionedTileRankRibbon({
     required this.rank,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final num rank;
 

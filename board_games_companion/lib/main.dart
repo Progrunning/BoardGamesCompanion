@@ -95,6 +95,7 @@ Future<void> main() async {
 
     runApp(App(preferencesService: preferencesService));
   }, (error, stackTrace) {
+    Fimber.e('Error caught in the guard zone', ex: error, stacktrace: stackTrace);
     if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     }
@@ -104,8 +105,8 @@ Future<void> main() async {
 class App extends StatelessWidget {
   const App({
     required this.preferencesService,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final PreferencesService preferencesService;
 

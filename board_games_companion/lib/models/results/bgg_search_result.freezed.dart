@@ -89,22 +89,22 @@ class _$BggSearchResultCopyWithImpl<$Res, $Val extends BggSearchResult>
 }
 
 /// @nodoc
-abstract class _$$_createGameCopyWith<$Res>
+abstract class _$$createGameImplCopyWith<$Res>
     implements $BggSearchResultCopyWith<$Res> {
-  factory _$$_createGameCopyWith(
-          _$_createGame value, $Res Function(_$_createGame) then) =
-      __$$_createGameCopyWithImpl<$Res>;
+  factory _$$createGameImplCopyWith(
+          _$createGameImpl value, $Res Function(_$createGameImpl) then) =
+      __$$createGameImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String boardGameName});
 }
 
 /// @nodoc
-class __$$_createGameCopyWithImpl<$Res>
-    extends _$BggSearchResultCopyWithImpl<$Res, _$_createGame>
-    implements _$$_createGameCopyWith<$Res> {
-  __$$_createGameCopyWithImpl(
-      _$_createGame _value, $Res Function(_$_createGame) _then)
+class __$$createGameImplCopyWithImpl<$Res>
+    extends _$BggSearchResultCopyWithImpl<$Res, _$createGameImpl>
+    implements _$$createGameImplCopyWith<$Res> {
+  __$$createGameImplCopyWithImpl(
+      _$createGameImpl _value, $Res Function(_$createGameImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -112,7 +112,7 @@ class __$$_createGameCopyWithImpl<$Res>
   $Res call({
     Object? boardGameName = null,
   }) {
-    return _then(_$_createGame(
+    return _then(_$createGameImpl(
       boardGameName: null == boardGameName
           ? _value.boardGameName
           : boardGameName // ignore: cast_nullable_to_non_nullable
@@ -123,8 +123,8 @@ class __$$_createGameCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_createGame implements _createGame {
-  const _$_createGame({required this.boardGameName});
+class _$createGameImpl implements _createGame {
+  const _$createGameImpl({required this.boardGameName});
 
   @override
   final String boardGameName;
@@ -138,7 +138,7 @@ class _$_createGame implements _createGame {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_createGame &&
+            other is _$createGameImpl &&
             (identical(other.boardGameName, boardGameName) ||
                 other.boardGameName == boardGameName));
   }
@@ -149,8 +149,8 @@ class _$_createGame implements _createGame {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_createGameCopyWith<_$_createGame> get copyWith =>
-      __$$_createGameCopyWithImpl<_$_createGame>(this, _$identity);
+  _$$createGameImplCopyWith<_$createGameImpl> get copyWith =>
+      __$$createGameImplCopyWithImpl<_$createGameImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -211,12 +211,12 @@ class _$_createGame implements _createGame {
 
 abstract class _createGame implements BggSearchResult {
   const factory _createGame({required final String boardGameName}) =
-      _$_createGame;
+      _$createGameImpl;
 
   @override
   String get boardGameName;
   @override
   @JsonKey(ignore: true)
-  _$$_createGameCopyWith<_$_createGame> get copyWith =>
+  _$$createGameImplCopyWith<_$createGameImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -51,8 +51,8 @@ import 'playthroughs_page.dart';
 class PlaythroughsLogGamePage extends StatefulWidget {
   const PlaythroughsLogGamePage({
     required this.parentPageTabController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final TabController parentPageTabController;
 
@@ -712,12 +712,11 @@ class _SelectPlayersButton extends StatelessWidget {
 
 class _PlaythroughTimelineSegmentedButton extends BgcSegmentedButton<PlaythroughTimeline> {
   _PlaythroughTimelineSegmentedButton.chronology({
-    required bool isSelected,
+    required super.isSelected,
     required PlaythroughTimeline playthroughTimeline,
     required Function(PlaythroughTimeline) onSelected,
   }) : super(
           value: playthroughTimeline,
-          isSelected: isSelected,
           onTapped: (_) => onSelected(playthroughTimeline),
           child: Center(
             child: Text(
@@ -734,8 +733,7 @@ class _SelectPlaythroughDate extends StatefulWidget {
   const _SelectPlaythroughDate({
     required this.playthroughDate,
     required this.onPlaythroughTimeChanged,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final DateTime playthroughDate;
   final Function(DateTime) onPlaythroughTimeChanged;
@@ -804,12 +802,11 @@ class _SelectPlaythroughDateState extends State<_SelectPlaythroughDate> {
 
 class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
   const _SelectedPlayersList({
-    Key? key,
     required this.selectedPlayers,
     required this.selectedPlayerScores,
     required this.onPlayerScoreUpdated,
     required this.gameFamily,
-  }) : super(key: key);
+  });
 
   final List<Player> selectedPlayers;
   final Map<String, PlayerScore> selectedPlayerScores;
@@ -849,9 +846,8 @@ class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
 
 class _SelectedPlayersGrid extends StatelessWidget {
   const _SelectedPlayersGrid({
-    Key? key,
     required this.selectedPlayers,
-  }) : super(key: key);
+  });
 
   static const int _numberOfPlayerColumns = 3;
 
@@ -882,9 +878,7 @@ class _SelectedPlayersGrid extends StatelessWidget {
 }
 
 class _NoPlayers extends StatelessWidget {
-  const _NoPlayers({
-    Key? key,
-  }) : super(key: key);
+  const _NoPlayers();
 
   @override
   Widget build(BuildContext context) {
@@ -904,11 +898,10 @@ class _NoPlayers extends StatelessWidget {
 
 class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
-    Key? key,
     required this.playerScore,
     required this.gameFamily,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final PlayerScore playerScore;
   final GameFamily gameFamily;

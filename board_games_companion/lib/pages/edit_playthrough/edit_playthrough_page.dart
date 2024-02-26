@@ -40,8 +40,8 @@ class EditPlaythroughPage extends StatefulWidget {
   const EditPlaythroughPage({
     required this.viewModel,
     required this.goBackPageRoute,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const String pageRoute = '/editPlaythrough';
 
@@ -301,13 +301,12 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
 
 class _ScoresSection extends StatelessWidget {
   const _ScoresSection({
-    Key? key,
     required this.playthroughScoresVisualState,
     required this.playthroughDetailsId,
     required this.onItemTapped,
     required this.onReorder,
     required this.onToggleSharedPlaceTiebreaker,
-  }) : super(key: key);
+  });
 
   final PlaythroughScoresVisualState playthroughScoresVisualState;
   final String? playthroughDetailsId;
@@ -580,7 +579,7 @@ class _NoScoreSection extends StatelessWidget {
                 mainAxisSpacing: Dimensions.standardSpacing,
                 maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
                 children: [
-                  for (var player in players)
+                  for (final player in players)
                     SizedBox(
                       height: Dimensions.smallPlayerAvatarSize.height,
                       width: Dimensions.smallPlayerAvatarSize.width,
@@ -605,8 +604,7 @@ class _NotesSection extends StatelessWidget {
     required this.notes,
     required this.onTap,
     required this.onDelete,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final List<PlaythroughNote> notes;
   final void Function(PlaythroughNote) onTap;
@@ -647,14 +645,14 @@ class _NotesSection extends StatelessWidget {
 
 class _PlayerScoreTile extends StatefulWidget {
   const _PlayerScoreTile({
-    Key? key,
+    super.key,
     required this.playerScore,
     required this.playthroughDetailsId,
     required this.hasFinishedScoring,
     required this.onItemTapped,
     this.onToggleSharedPlaceTiebreaker,
     this.reordableIndex,
-  }) : super(key: key);
+  });
 
   final PlayerScore playerScore;
   final String? playthroughDetailsId;
@@ -737,9 +735,8 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
 
 class _PlayerScore extends StatelessWidget {
   const _PlayerScore({
-    Key? key,
     required this.score,
-  }) : super(key: key);
+  });
 
   final double? score;
 
@@ -768,8 +765,7 @@ class _PlayerScore extends StatelessWidget {
 class _PlayDateTimeSection extends StatefulWidget {
   const _PlayDateTimeSection({
     required this.viewModel,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final EditPlaythoughViewModel viewModel;
 

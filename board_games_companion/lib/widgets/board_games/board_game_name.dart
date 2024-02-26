@@ -6,10 +6,10 @@ import '../../common/dimensions.dart';
 
 class BoardGameName extends StatelessWidget {
   const BoardGameName({
-    Key? key,
+    super.key,
     required this.name,
     this.fontSize = Dimensions.smallFontSize,
-  }) : super(key: key);
+  });
 
   final String name;
   final double fontSize;

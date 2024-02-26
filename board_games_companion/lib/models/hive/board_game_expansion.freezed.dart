@@ -65,22 +65,22 @@ class _$BoardGameExpansionCopyWithImpl<$Res, $Val extends BoardGameExpansion>
 }
 
 /// @nodoc
-abstract class _$$_BoardGameExpansionCopyWith<$Res>
+abstract class _$$BoardGameExpansionImplCopyWith<$Res>
     implements $BoardGameExpansionCopyWith<$Res> {
-  factory _$$_BoardGameExpansionCopyWith(_$_BoardGameExpansion value,
-          $Res Function(_$_BoardGameExpansion) then) =
-      __$$_BoardGameExpansionCopyWithImpl<$Res>;
+  factory _$$BoardGameExpansionImplCopyWith(_$BoardGameExpansionImpl value,
+          $Res Function(_$BoardGameExpansionImpl) then) =
+      __$$BoardGameExpansionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({@HiveField(0) String id, @HiveField(1) String name});
 }
 
 /// @nodoc
-class __$$_BoardGameExpansionCopyWithImpl<$Res>
-    extends _$BoardGameExpansionCopyWithImpl<$Res, _$_BoardGameExpansion>
-    implements _$$_BoardGameExpansionCopyWith<$Res> {
-  __$$_BoardGameExpansionCopyWithImpl(
-      _$_BoardGameExpansion _value, $Res Function(_$_BoardGameExpansion) _then)
+class __$$BoardGameExpansionImplCopyWithImpl<$Res>
+    extends _$BoardGameExpansionCopyWithImpl<$Res, _$BoardGameExpansionImpl>
+    implements _$$BoardGameExpansionImplCopyWith<$Res> {
+  __$$BoardGameExpansionImplCopyWithImpl(_$BoardGameExpansionImpl _value,
+      $Res Function(_$BoardGameExpansionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -89,7 +89,7 @@ class __$$_BoardGameExpansionCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
   }) {
-    return _then(_$_BoardGameExpansion(
+    return _then(_$BoardGameExpansionImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -107,8 +107,8 @@ class __$$_BoardGameExpansionCopyWithImpl<$Res>
 @HiveType(
     typeId: HiveBoxes.boardGamesExpansionId,
     adapterName: 'BoardGamesExpansionAdapter')
-class _$_BoardGameExpansion implements _BoardGameExpansion {
-  const _$_BoardGameExpansion(
+class _$BoardGameExpansionImpl implements _BoardGameExpansion {
+  const _$BoardGameExpansionImpl(
       {@HiveField(0) required this.id, @HiveField(1) required this.name});
 
   @override
@@ -127,7 +127,7 @@ class _$_BoardGameExpansion implements _BoardGameExpansion {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BoardGameExpansion &&
+            other is _$BoardGameExpansionImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name));
   }
@@ -138,15 +138,15 @@ class _$_BoardGameExpansion implements _BoardGameExpansion {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BoardGameExpansionCopyWith<_$_BoardGameExpansion> get copyWith =>
-      __$$_BoardGameExpansionCopyWithImpl<_$_BoardGameExpansion>(
+  _$$BoardGameExpansionImplCopyWith<_$BoardGameExpansionImpl> get copyWith =>
+      __$$BoardGameExpansionImplCopyWithImpl<_$BoardGameExpansionImpl>(
           this, _$identity);
 }
 
 abstract class _BoardGameExpansion implements BoardGameExpansion {
   const factory _BoardGameExpansion(
       {@HiveField(0) required final String id,
-      @HiveField(1) required final String name}) = _$_BoardGameExpansion;
+      @HiveField(1) required final String name}) = _$BoardGameExpansionImpl;
 
   @override
   @HiveField(0)
@@ -156,6 +156,6 @@ abstract class _BoardGameExpansion implements BoardGameExpansion {
   String get name;
   @override
   @JsonKey(ignore: true)
-  _$$_BoardGameExpansionCopyWith<_$_BoardGameExpansion> get copyWith =>
+  _$$BoardGameExpansionImplCopyWith<_$BoardGameExpansionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

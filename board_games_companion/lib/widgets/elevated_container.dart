@@ -13,8 +13,8 @@ class ElevatedContainer extends StatelessWidget {
     this.splashColor = AppColors.accentColor,
     this.elevation = 0,
     this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final double elevation;

@@ -8,8 +8,8 @@ class CustomIconButton extends StatelessWidget {
   const CustomIconButton(
     this.icon, {
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Icon icon;
   final GestureTapCallback onTap;

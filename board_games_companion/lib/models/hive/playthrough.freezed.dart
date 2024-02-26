@@ -131,11 +131,11 @@ class _$PlaythroughCopyWithImpl<$Res, $Val extends Playthrough>
 }
 
 /// @nodoc
-abstract class _$$_PlaythroughCopyWith<$Res>
+abstract class _$$PlaythroughImplCopyWith<$Res>
     implements $PlaythroughCopyWith<$Res> {
-  factory _$$_PlaythroughCopyWith(
-          _$_Playthrough value, $Res Function(_$_Playthrough) then) =
-      __$$_PlaythroughCopyWithImpl<$Res>;
+  factory _$$PlaythroughImplCopyWith(
+          _$PlaythroughImpl value, $Res Function(_$PlaythroughImpl) then) =
+      __$$PlaythroughImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -152,11 +152,11 @@ abstract class _$$_PlaythroughCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_PlaythroughCopyWithImpl<$Res>
-    extends _$PlaythroughCopyWithImpl<$Res, _$_Playthrough>
-    implements _$$_PlaythroughCopyWith<$Res> {
-  __$$_PlaythroughCopyWithImpl(
-      _$_Playthrough _value, $Res Function(_$_Playthrough) _then)
+class __$$PlaythroughImplCopyWithImpl<$Res>
+    extends _$PlaythroughCopyWithImpl<$Res, _$PlaythroughImpl>
+    implements _$$PlaythroughImplCopyWith<$Res> {
+  __$$PlaythroughImplCopyWithImpl(
+      _$PlaythroughImpl _value, $Res Function(_$PlaythroughImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -173,7 +173,7 @@ class __$$_PlaythroughCopyWithImpl<$Res>
     Object? bggPlayId = freezed,
     Object? notes = freezed,
   }) {
-    return _then(_$_Playthrough(
+    return _then(_$PlaythroughImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -222,8 +222,8 @@ class __$$_PlaythroughCopyWithImpl<$Res>
 
 @HiveType(
     typeId: HiveBoxes.playthroughTypeId, adapterName: 'PlaythroughAdapter')
-class _$_Playthrough implements _Playthrough {
-  const _$_Playthrough(
+class _$PlaythroughImpl implements _Playthrough {
+  const _$PlaythroughImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) required this.boardGameId,
       @HiveField(2) required final List<String> playerIds,
@@ -298,7 +298,7 @@ class _$_Playthrough implements _Playthrough {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Playthrough &&
+            other is _$PlaythroughImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.boardGameId, boardGameId) ||
                 other.boardGameId == boardGameId) &&
@@ -333,8 +333,8 @@ class _$_Playthrough implements _Playthrough {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlaythroughCopyWith<_$_Playthrough> get copyWith =>
-      __$$_PlaythroughCopyWithImpl<_$_Playthrough>(this, _$identity);
+  _$$PlaythroughImplCopyWith<_$PlaythroughImpl> get copyWith =>
+      __$$PlaythroughImplCopyWithImpl<_$PlaythroughImpl>(this, _$identity);
 }
 
 abstract class _Playthrough implements Playthrough {
@@ -348,7 +348,7 @@ abstract class _Playthrough implements Playthrough {
       @HiveField(6) final PlaythroughStatus? status,
       @HiveField(7) final bool? isDeleted,
       @HiveField(8) final int? bggPlayId,
-      @HiveField(9) final List<PlaythroughNote>? notes}) = _$_Playthrough;
+      @HiveField(9) final List<PlaythroughNote>? notes}) = _$PlaythroughImpl;
 
   @override
   @HiveField(0)
@@ -382,6 +382,6 @@ abstract class _Playthrough implements Playthrough {
   List<PlaythroughNote>? get notes;
   @override
   @JsonKey(ignore: true)
-  _$$_PlaythroughCopyWith<_$_Playthrough> get copyWith =>
+  _$$PlaythroughImplCopyWith<_$PlaythroughImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

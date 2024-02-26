@@ -6,7 +6,7 @@ import '../../elevated_container.dart';
 
 class BgcSegmentedButton<TValue> extends StatelessWidget {
   const BgcSegmentedButton({
-    Key? key,
+    super.key,
     required bool isSelected,
     required Function(TValue?) onTapped,
     required Widget child,
@@ -14,8 +14,7 @@ class BgcSegmentedButton<TValue> extends StatelessWidget {
   })  : _value = value,
         _isSelected = isSelected,
         _onTapped = onTapped,
-        _child = child,
-        super(key: key);
+        _child = child;
 
   final TValue? _value;
   final bool _isSelected;

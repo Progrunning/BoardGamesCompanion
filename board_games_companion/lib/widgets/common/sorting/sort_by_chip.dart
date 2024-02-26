@@ -10,8 +10,8 @@ class SortByChip extends StatelessWidget {
   const SortByChip({
     required this.sortBy,
     required this.onSortByChange,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final SortBy sortBy;
   final ValueChanged<SortBy> onSortByChange;

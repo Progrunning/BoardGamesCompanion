@@ -45,17 +45,17 @@ class ScoreTiebreakerTypeAdapter extends TypeAdapter<ScoreTiebreakerType> {
           typeId == other.typeId;
 }
 
-class ScoreGameResultAdapter extends TypeAdapter<_$_ScoreGameResult> {
+class ScoreGameResultAdapter extends TypeAdapter<_$ScoreGameResultImpl> {
   @override
   final int typeId = 24;
 
   @override
-  _$_ScoreGameResult read(BinaryReader reader) {
+  _$ScoreGameResultImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_ScoreGameResult(
+    return _$ScoreGameResultImpl(
       points: fields[0] as double?,
       place: fields[1] as int?,
       tiebreakerType: fields[2] as ScoreTiebreakerType?,
@@ -63,7 +63,7 @@ class ScoreGameResultAdapter extends TypeAdapter<_$_ScoreGameResult> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_ScoreGameResult obj) {
+  void write(BinaryWriter writer, _$ScoreGameResultImpl obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)

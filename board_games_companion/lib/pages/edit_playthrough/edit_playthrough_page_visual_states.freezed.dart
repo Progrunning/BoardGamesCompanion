@@ -84,23 +84,24 @@ class _$EditPlaythroughPageVisualStatesCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_initCopyWith<$Res> {
-  factory _$$_initCopyWith(_$_init value, $Res Function(_$_init) then) =
-      __$$_initCopyWithImpl<$Res>;
+abstract class _$$initImplCopyWith<$Res> {
+  factory _$$initImplCopyWith(
+          _$initImpl value, $Res Function(_$initImpl) then) =
+      __$$initImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_initCopyWithImpl<$Res>
-    extends _$EditPlaythroughPageVisualStatesCopyWithImpl<$Res, _$_init>
-    implements _$$_initCopyWith<$Res> {
-  __$$_initCopyWithImpl(_$_init _value, $Res Function(_$_init) _then)
+class __$$initImplCopyWithImpl<$Res>
+    extends _$EditPlaythroughPageVisualStatesCopyWithImpl<$Res, _$initImpl>
+    implements _$$initImplCopyWith<$Res> {
+  __$$initImplCopyWithImpl(_$initImpl _value, $Res Function(_$initImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_init implements _init {
-  const _$_init();
+class _$initImpl implements _init {
+  const _$initImpl();
 
   @override
   String toString() {
@@ -110,7 +111,7 @@ class _$_init implements _init {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_init);
+        (other.runtimeType == runtimeType && other is _$initImpl);
   }
 
   @override
@@ -186,24 +187,24 @@ class _$_init implements _init {
 }
 
 abstract class _init implements EditPlaythroughPageVisualStates {
-  const factory _init() = _$_init;
+  const factory _init() = _$initImpl;
 }
 
 /// @nodoc
-abstract class _$$_editScoreGameCopyWith<$Res> {
-  factory _$$_editScoreGameCopyWith(
-          _$_editScoreGame value, $Res Function(_$_editScoreGame) then) =
-      __$$_editScoreGameCopyWithImpl<$Res>;
+abstract class _$$editScoreGameImplCopyWith<$Res> {
+  factory _$$editScoreGameImplCopyWith(
+          _$editScoreGameImpl value, $Res Function(_$editScoreGameImpl) then) =
+      __$$editScoreGameImplCopyWithImpl<$Res>;
   @useResult
   $Res call({GameFamily gameFamily});
 }
 
 /// @nodoc
-class __$$_editScoreGameCopyWithImpl<$Res>
+class __$$editScoreGameImplCopyWithImpl<$Res>
     extends _$EditPlaythroughPageVisualStatesCopyWithImpl<$Res,
-        _$_editScoreGame> implements _$$_editScoreGameCopyWith<$Res> {
-  __$$_editScoreGameCopyWithImpl(
-      _$_editScoreGame _value, $Res Function(_$_editScoreGame) _then)
+        _$editScoreGameImpl> implements _$$editScoreGameImplCopyWith<$Res> {
+  __$$editScoreGameImplCopyWithImpl(
+      _$editScoreGameImpl _value, $Res Function(_$editScoreGameImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -211,7 +212,7 @@ class __$$_editScoreGameCopyWithImpl<$Res>
   $Res call({
     Object? gameFamily = null,
   }) {
-    return _then(_$_editScoreGame(
+    return _then(_$editScoreGameImpl(
       gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
@@ -222,8 +223,8 @@ class __$$_editScoreGameCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_editScoreGame implements _editScoreGame {
-  const _$_editScoreGame({required this.gameFamily});
+class _$editScoreGameImpl implements _editScoreGame {
+  const _$editScoreGameImpl({required this.gameFamily});
 
   @override
   final GameFamily gameFamily;
@@ -237,7 +238,7 @@ class _$_editScoreGame implements _editScoreGame {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_editScoreGame &&
+            other is _$editScoreGameImpl &&
             (identical(other.gameFamily, gameFamily) ||
                 other.gameFamily == gameFamily));
   }
@@ -248,8 +249,8 @@ class _$_editScoreGame implements _editScoreGame {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_editScoreGameCopyWith<_$_editScoreGame> get copyWith =>
-      __$$_editScoreGameCopyWithImpl<_$_editScoreGame>(this, _$identity);
+  _$$editScoreGameImplCopyWith<_$editScoreGameImpl> get copyWith =>
+      __$$editScoreGameImplCopyWithImpl<_$editScoreGameImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -322,29 +323,29 @@ class _$_editScoreGame implements _editScoreGame {
 
 abstract class _editScoreGame implements EditPlaythroughPageVisualStates {
   const factory _editScoreGame({required final GameFamily gameFamily}) =
-      _$_editScoreGame;
+      _$editScoreGameImpl;
 
   GameFamily get gameFamily;
   @JsonKey(ignore: true)
-  _$$_editScoreGameCopyWith<_$_editScoreGame> get copyWith =>
+  _$$editScoreGameImplCopyWith<_$editScoreGameImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_editNoScoreGameCopyWith<$Res> {
-  factory _$$_editNoScoreGameCopyWith(
-          _$_editNoScoreGame value, $Res Function(_$_editNoScoreGame) then) =
-      __$$_editNoScoreGameCopyWithImpl<$Res>;
+abstract class _$$editNoScoreGameImplCopyWith<$Res> {
+  factory _$$editNoScoreGameImplCopyWith(_$editNoScoreGameImpl value,
+          $Res Function(_$editNoScoreGameImpl) then) =
+      __$$editNoScoreGameImplCopyWithImpl<$Res>;
   @useResult
   $Res call({GameFamily gameFamily});
 }
 
 /// @nodoc
-class __$$_editNoScoreGameCopyWithImpl<$Res>
+class __$$editNoScoreGameImplCopyWithImpl<$Res>
     extends _$EditPlaythroughPageVisualStatesCopyWithImpl<$Res,
-        _$_editNoScoreGame> implements _$$_editNoScoreGameCopyWith<$Res> {
-  __$$_editNoScoreGameCopyWithImpl(
-      _$_editNoScoreGame _value, $Res Function(_$_editNoScoreGame) _then)
+        _$editNoScoreGameImpl> implements _$$editNoScoreGameImplCopyWith<$Res> {
+  __$$editNoScoreGameImplCopyWithImpl(
+      _$editNoScoreGameImpl _value, $Res Function(_$editNoScoreGameImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -352,7 +353,7 @@ class __$$_editNoScoreGameCopyWithImpl<$Res>
   $Res call({
     Object? gameFamily = null,
   }) {
-    return _then(_$_editNoScoreGame(
+    return _then(_$editNoScoreGameImpl(
       gameFamily: null == gameFamily
           ? _value.gameFamily
           : gameFamily // ignore: cast_nullable_to_non_nullable
@@ -363,8 +364,8 @@ class __$$_editNoScoreGameCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_editNoScoreGame implements _editNoScoreGame {
-  const _$_editNoScoreGame({required this.gameFamily});
+class _$editNoScoreGameImpl implements _editNoScoreGame {
+  const _$editNoScoreGameImpl({required this.gameFamily});
 
   @override
   final GameFamily gameFamily;
@@ -378,7 +379,7 @@ class _$_editNoScoreGame implements _editNoScoreGame {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_editNoScoreGame &&
+            other is _$editNoScoreGameImpl &&
             (identical(other.gameFamily, gameFamily) ||
                 other.gameFamily == gameFamily));
   }
@@ -389,8 +390,9 @@ class _$_editNoScoreGame implements _editNoScoreGame {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_editNoScoreGameCopyWith<_$_editNoScoreGame> get copyWith =>
-      __$$_editNoScoreGameCopyWithImpl<_$_editNoScoreGame>(this, _$identity);
+  _$$editNoScoreGameImplCopyWith<_$editNoScoreGameImpl> get copyWith =>
+      __$$editNoScoreGameImplCopyWithImpl<_$editNoScoreGameImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -463,10 +465,10 @@ class _$_editNoScoreGame implements _editNoScoreGame {
 
 abstract class _editNoScoreGame implements EditPlaythroughPageVisualStates {
   const factory _editNoScoreGame({required final GameFamily gameFamily}) =
-      _$_editNoScoreGame;
+      _$editNoScoreGameImpl;
 
   GameFamily get gameFamily;
   @JsonKey(ignore: true)
-  _$$_editNoScoreGameCopyWith<_$_editNoScoreGame> get copyWith =>
+  _$$editNoScoreGameImplCopyWith<_$editNoScoreGameImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

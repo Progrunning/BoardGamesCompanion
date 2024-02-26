@@ -84,24 +84,25 @@ class _$HotBoardGamesPageVisualStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_loadingCopyWith<$Res> {
-  factory _$$_loadingCopyWith(
-          _$_loading value, $Res Function(_$_loading) then) =
-      __$$_loadingCopyWithImpl<$Res>;
+abstract class _$$loadingImplCopyWith<$Res> {
+  factory _$$loadingImplCopyWith(
+          _$loadingImpl value, $Res Function(_$loadingImpl) then) =
+      __$$loadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_loadingCopyWithImpl<$Res>
-    extends _$HotBoardGamesPageVisualStateCopyWithImpl<$Res, _$_loading>
-    implements _$$_loadingCopyWith<$Res> {
-  __$$_loadingCopyWithImpl(_$_loading _value, $Res Function(_$_loading) _then)
+class __$$loadingImplCopyWithImpl<$Res>
+    extends _$HotBoardGamesPageVisualStateCopyWithImpl<$Res, _$loadingImpl>
+    implements _$$loadingImplCopyWith<$Res> {
+  __$$loadingImplCopyWithImpl(
+      _$loadingImpl _value, $Res Function(_$loadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_loading implements _loading {
-  const _$_loading();
+class _$loadingImpl implements _loading {
+  const _$loadingImpl();
 
   @override
   String toString() {
@@ -111,7 +112,7 @@ class _$_loading implements _loading {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_loading);
+        (other.runtimeType == runtimeType && other is _$loadingImpl);
   }
 
   @override
@@ -187,27 +188,29 @@ class _$_loading implements _loading {
 }
 
 abstract class _loading implements HotBoardGamesPageVisualState {
-  const factory _loading() = _$_loading;
+  const factory _loading() = _$loadingImpl;
 }
 
 /// @nodoc
-abstract class _$$_loadedCopyWith<$Res> {
-  factory _$$_loadedCopyWith(_$_loaded value, $Res Function(_$_loaded) then) =
-      __$$_loadedCopyWithImpl<$Res>;
+abstract class _$$loadedImplCopyWith<$Res> {
+  factory _$$loadedImplCopyWith(
+          _$loadedImpl value, $Res Function(_$loadedImpl) then) =
+      __$$loadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_loadedCopyWithImpl<$Res>
-    extends _$HotBoardGamesPageVisualStateCopyWithImpl<$Res, _$_loaded>
-    implements _$$_loadedCopyWith<$Res> {
-  __$$_loadedCopyWithImpl(_$_loaded _value, $Res Function(_$_loaded) _then)
+class __$$loadedImplCopyWithImpl<$Res>
+    extends _$HotBoardGamesPageVisualStateCopyWithImpl<$Res, _$loadedImpl>
+    implements _$$loadedImplCopyWith<$Res> {
+  __$$loadedImplCopyWithImpl(
+      _$loadedImpl _value, $Res Function(_$loadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_loaded implements _loaded {
-  const _$_loaded();
+class _$loadedImpl implements _loaded {
+  const _$loadedImpl();
 
   @override
   String toString() {
@@ -217,7 +220,7 @@ class _$_loaded implements _loaded {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_loaded);
+        (other.runtimeType == runtimeType && other is _$loadedImpl);
   }
 
   @override
@@ -293,29 +296,29 @@ class _$_loaded implements _loaded {
 }
 
 abstract class _loaded implements HotBoardGamesPageVisualState {
-  const factory _loaded() = _$_loaded;
+  const factory _loaded() = _$loadedImpl;
 }
 
 /// @nodoc
-abstract class _$$_failedLoadingCopyWith<$Res> {
-  factory _$$_failedLoadingCopyWith(
-          _$_failedLoading value, $Res Function(_$_failedLoading) then) =
-      __$$_failedLoadingCopyWithImpl<$Res>;
+abstract class _$$failedLoadingImplCopyWith<$Res> {
+  factory _$$failedLoadingImplCopyWith(
+          _$failedLoadingImpl value, $Res Function(_$failedLoadingImpl) then) =
+      __$$failedLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_failedLoadingCopyWithImpl<$Res>
-    extends _$HotBoardGamesPageVisualStateCopyWithImpl<$Res, _$_failedLoading>
-    implements _$$_failedLoadingCopyWith<$Res> {
-  __$$_failedLoadingCopyWithImpl(
-      _$_failedLoading _value, $Res Function(_$_failedLoading) _then)
+class __$$failedLoadingImplCopyWithImpl<$Res>
+    extends _$HotBoardGamesPageVisualStateCopyWithImpl<$Res,
+        _$failedLoadingImpl> implements _$$failedLoadingImplCopyWith<$Res> {
+  __$$failedLoadingImplCopyWithImpl(
+      _$failedLoadingImpl _value, $Res Function(_$failedLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_failedLoading implements _failedLoading {
-  const _$_failedLoading();
+class _$failedLoadingImpl implements _failedLoading {
+  const _$failedLoadingImpl();
 
   @override
   String toString() {
@@ -325,7 +328,7 @@ class _$_failedLoading implements _failedLoading {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_failedLoading);
+        (other.runtimeType == runtimeType && other is _$failedLoadingImpl);
   }
 
   @override
@@ -401,5 +404,5 @@ class _$_failedLoading implements _failedLoading {
 }
 
 abstract class _failedLoading implements HotBoardGamesPageVisualState {
-  const factory _failedLoading() = _$_failedLoading;
+  const factory _failedLoading() = _$failedLoadingImpl;
 }

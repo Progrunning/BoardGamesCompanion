@@ -96,23 +96,24 @@ class _$PlaythroughMigrationProgressCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_initCopyWith<$Res> {
-  factory _$$_initCopyWith(_$_init value, $Res Function(_$_init) then) =
-      __$$_initCopyWithImpl<$Res>;
+abstract class _$$initImplCopyWith<$Res> {
+  factory _$$initImplCopyWith(
+          _$initImpl value, $Res Function(_$initImpl) then) =
+      __$$initImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_initCopyWithImpl<$Res>
-    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$_init>
-    implements _$$_initCopyWith<$Res> {
-  __$$_initCopyWithImpl(_$_init _value, $Res Function(_$_init) _then)
+class __$$initImplCopyWithImpl<$Res>
+    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$initImpl>
+    implements _$$initImplCopyWith<$Res> {
+  __$$initImplCopyWithImpl(_$initImpl _value, $Res Function(_$initImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_init implements _init {
-  const _$_init();
+class _$initImpl implements _init {
+  const _$initImpl();
 
   @override
   String toString() {
@@ -122,7 +123,7 @@ class _$_init implements _init {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_init);
+        (other.runtimeType == runtimeType && other is _$initImpl);
   }
 
   @override
@@ -210,29 +211,29 @@ class _$_init implements _init {
 }
 
 abstract class _init implements PlaythroughMigrationProgress {
-  const factory _init() = _$_init;
+  const factory _init() = _$initImpl;
 }
 
 /// @nodoc
-abstract class _$$_inProgressCopyWith<$Res> {
-  factory _$$_inProgressCopyWith(
-          _$_inProgress value, $Res Function(_$_inProgress) then) =
-      __$$_inProgressCopyWithImpl<$Res>;
+abstract class _$$inProgressImplCopyWith<$Res> {
+  factory _$$inProgressImplCopyWith(
+          _$inProgressImpl value, $Res Function(_$inProgressImpl) then) =
+      __$$inProgressImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_inProgressCopyWithImpl<$Res>
-    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$_inProgress>
-    implements _$$_inProgressCopyWith<$Res> {
-  __$$_inProgressCopyWithImpl(
-      _$_inProgress _value, $Res Function(_$_inProgress) _then)
+class __$$inProgressImplCopyWithImpl<$Res>
+    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$inProgressImpl>
+    implements _$$inProgressImplCopyWith<$Res> {
+  __$$inProgressImplCopyWithImpl(
+      _$inProgressImpl _value, $Res Function(_$inProgressImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_inProgress implements _inProgress {
-  const _$_inProgress();
+class _$inProgressImpl implements _inProgress {
+  const _$inProgressImpl();
 
   @override
   String toString() {
@@ -242,7 +243,7 @@ class _$_inProgress implements _inProgress {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_inProgress);
+        (other.runtimeType == runtimeType && other is _$inProgressImpl);
   }
 
   @override
@@ -330,28 +331,29 @@ class _$_inProgress implements _inProgress {
 }
 
 abstract class _inProgress implements PlaythroughMigrationProgress {
-  const factory _inProgress() = _$_inProgress;
+  const factory _inProgress() = _$inProgressImpl;
 }
 
 /// @nodoc
-abstract class _$$_successCopyWith<$Res> {
-  factory _$$_successCopyWith(
-          _$_success value, $Res Function(_$_success) then) =
-      __$$_successCopyWithImpl<$Res>;
+abstract class _$$successImplCopyWith<$Res> {
+  factory _$$successImplCopyWith(
+          _$successImpl value, $Res Function(_$successImpl) then) =
+      __$$successImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_successCopyWithImpl<$Res>
-    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$_success>
-    implements _$$_successCopyWith<$Res> {
-  __$$_successCopyWithImpl(_$_success _value, $Res Function(_$_success) _then)
+class __$$successImplCopyWithImpl<$Res>
+    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$successImpl>
+    implements _$$successImplCopyWith<$Res> {
+  __$$successImplCopyWithImpl(
+      _$successImpl _value, $Res Function(_$successImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_success implements _success {
-  const _$_success();
+class _$successImpl implements _success {
+  const _$successImpl();
 
   @override
   String toString() {
@@ -361,7 +363,7 @@ class _$_success implements _success {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_success);
+        (other.runtimeType == runtimeType && other is _$successImpl);
   }
 
   @override
@@ -449,23 +451,24 @@ class _$_success implements _success {
 }
 
 abstract class _success implements PlaythroughMigrationProgress {
-  const factory _success() = _$_success;
+  const factory _success() = _$successImpl;
 }
 
 /// @nodoc
-abstract class _$$_invalidCopyWith<$Res> {
-  factory _$$_invalidCopyWith(
-          _$_invalid value, $Res Function(_$_invalid) then) =
-      __$$_invalidCopyWithImpl<$Res>;
+abstract class _$$invalidImplCopyWith<$Res> {
+  factory _$$invalidImplCopyWith(
+          _$invalidImpl value, $Res Function(_$invalidImpl) then) =
+      __$$invalidImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String validationErrorMessage});
 }
 
 /// @nodoc
-class __$$_invalidCopyWithImpl<$Res>
-    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$_invalid>
-    implements _$$_invalidCopyWith<$Res> {
-  __$$_invalidCopyWithImpl(_$_invalid _value, $Res Function(_$_invalid) _then)
+class __$$invalidImplCopyWithImpl<$Res>
+    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$invalidImpl>
+    implements _$$invalidImplCopyWith<$Res> {
+  __$$invalidImplCopyWithImpl(
+      _$invalidImpl _value, $Res Function(_$invalidImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -473,7 +476,7 @@ class __$$_invalidCopyWithImpl<$Res>
   $Res call({
     Object? validationErrorMessage = null,
   }) {
-    return _then(_$_invalid(
+    return _then(_$invalidImpl(
       validationErrorMessage: null == validationErrorMessage
           ? _value.validationErrorMessage
           : validationErrorMessage // ignore: cast_nullable_to_non_nullable
@@ -484,8 +487,8 @@ class __$$_invalidCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_invalid implements _invalid {
-  const _$_invalid({required this.validationErrorMessage});
+class _$invalidImpl implements _invalid {
+  const _$invalidImpl({required this.validationErrorMessage});
 
   @override
   final String validationErrorMessage;
@@ -499,7 +502,7 @@ class _$_invalid implements _invalid {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_invalid &&
+            other is _$invalidImpl &&
             (identical(other.validationErrorMessage, validationErrorMessage) ||
                 other.validationErrorMessage == validationErrorMessage));
   }
@@ -510,8 +513,8 @@ class _$_invalid implements _invalid {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_invalidCopyWith<_$_invalid> get copyWith =>
-      __$$_invalidCopyWithImpl<_$_invalid>(this, _$identity);
+  _$$invalidImplCopyWith<_$invalidImpl> get copyWith =>
+      __$$invalidImplCopyWithImpl<_$invalidImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -596,33 +599,34 @@ class _$_invalid implements _invalid {
 
 abstract class _invalid implements PlaythroughMigrationProgress {
   const factory _invalid({required final String validationErrorMessage}) =
-      _$_invalid;
+      _$invalidImpl;
 
   String get validationErrorMessage;
   @JsonKey(ignore: true)
-  _$$_invalidCopyWith<_$_invalid> get copyWith =>
+  _$$invalidImplCopyWith<_$invalidImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_failureCopyWith<$Res> {
-  factory _$$_failureCopyWith(
-          _$_failure value, $Res Function(_$_failure) then) =
-      __$$_failureCopyWithImpl<$Res>;
+abstract class _$$failureImplCopyWith<$Res> {
+  factory _$$failureImplCopyWith(
+          _$failureImpl value, $Res Function(_$failureImpl) then) =
+      __$$failureImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_failureCopyWithImpl<$Res>
-    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$_failure>
-    implements _$$_failureCopyWith<$Res> {
-  __$$_failureCopyWithImpl(_$_failure _value, $Res Function(_$_failure) _then)
+class __$$failureImplCopyWithImpl<$Res>
+    extends _$PlaythroughMigrationProgressCopyWithImpl<$Res, _$failureImpl>
+    implements _$$failureImplCopyWith<$Res> {
+  __$$failureImplCopyWithImpl(
+      _$failureImpl _value, $Res Function(_$failureImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_failure implements _failure {
-  const _$_failure();
+class _$failureImpl implements _failure {
+  const _$failureImpl();
 
   @override
   String toString() {
@@ -632,7 +636,7 @@ class _$_failure implements _failure {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_failure);
+        (other.runtimeType == runtimeType && other is _$failureImpl);
   }
 
   @override
@@ -720,5 +724,5 @@ class _$_failure implements _failure {
 }
 
 abstract class _failure implements PlaythroughMigrationProgress {
-  const factory _failure() = _$_failure;
+  const factory _failure() = _$failureImpl;
 }

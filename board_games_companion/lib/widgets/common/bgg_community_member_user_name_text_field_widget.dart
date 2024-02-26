@@ -4,12 +4,11 @@ import '../../common/app_theme.dart';
 
 class BggCommunityMemberUserNameTextField extends StatelessWidget {
   const BggCommunityMemberUserNameTextField({
-    Key? key,
+    super.key,
     required TextEditingController controller,
     required Function() onSubmit,
   })  : _controller = controller,
-        _onSubmit = onSubmit,
-        super(key: key);
+        _onSubmit = onSubmit;
 
   final TextEditingController _controller;
   final Function _onSubmit;

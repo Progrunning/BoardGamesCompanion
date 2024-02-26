@@ -1,28 +1,29 @@
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 using Azure.Messaging.ServiceBus;
+
+using BGC.CacheCore.Common;
+using BGC.CacheCore.Interfaces;
+using BGC.CacheCore.Models;
+using BGC.Core.Models.Dtos.BoardGameOracle;
 using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
 using BGC.Core.Extensions;
 
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using BGC.Core.Models.Dtos.BoardGameOracle;
-using BGC.CacheQueueFunction;
-using BGC.Functions.Models;
-using BGC.Functions.Models.Exceptions;
 
-namespace BGC.Functions.Functions
+namespace BGC.CacheCore
 {
-    public class UpdateBoardGameCacheFunction
+    public abstract class BaseUpdateBoardGameCacheService<T> : IUpdateBoardGameCacheService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<T> _logger;
         private readonly IBggService _bggService;
         private readonly IBoardGamesRepository _boardGamesRepository;
         private readonly IBoardGameOracleService _boardGameOracleService;
 
-        public UpdateBoardGameCacheFunction(
-            ILogger<UpdateBoardGameCacheFunction> logger,
+        public BaseUpdateBoardGameCacheService(
+            ILogger<T> logger, 
             IBggService bggService,
             IBoardGamesRepository boardGamesRepository,
             IBoardGameOracleService boardGameOracleService)
@@ -33,9 +34,7 @@ namespace BGC.Functions.Functions
             _boardGameOracleService = boardGameOracleService;
         }
 
-        [Function(nameof(UpdateBoardGameCacheFunction))]
-        public async Task Run([ServiceBusTrigger(Constants.Configruration.Names.CacheQueueName, Connection = Constants.Configruration.Names.CacheQueueConnectionString)]
-            ServiceBusReceivedMessage queueMessage)
+        public async Task ProcessUpdateCacheMessage(ServiceBusReceivedMessage queueMessage)
         {
             try
             {
@@ -47,15 +46,17 @@ namespace BGC.Functions.Functions
 
                 _logger.LogInformation($"Updating cache of a board game {boardGameToCache.BoardGameId}...");
                 _logger.LogInformation($"Retrieveing board game {boardGameToCache.BoardGameId} details.");
-                var boardGameDetailsDto = await _bggService.GetDetails(boardGameToCache.BoardGameId, CancellationToken.None);                
+                var boardGameDetailsDto = await _bggService.GetDetails(boardGameToCache.BoardGameId, CancellationToken.None);
 
-                _logger.LogInformation($"Converting board game dto to domain model.");
+                _logger.LogInformation($"Retrieve game prices");
                 var regionalPriceStatistics = await RetrieveRegionalPriceStatistics(boardGameToCache, CancellationToken.None);
 
+                _logger.LogInformation($"Converting board game dto to domain model.");
                 var boardGame = boardGameDetailsDto!.ToDomain(regionalPriceStatistics);
 
-                _logger.LogInformation($"Upserting board game details {boardGame}");
-                await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);                               
+                _logger.LogInformation($"Upserting board game details");
+                _logger.LogDebug($"{boardGame}");
+                await _boardGamesRepository.UpsertBoardGame(boardGame, CancellationToken.None);
             }
             catch (Exception ex)
             {

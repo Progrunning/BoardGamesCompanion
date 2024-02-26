@@ -78,23 +78,25 @@ class _$SettingsPageUserVisualStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$NoUserCopyWith<$Res> {
-  factory _$$NoUserCopyWith(_$NoUser value, $Res Function(_$NoUser) then) =
-      __$$NoUserCopyWithImpl<$Res>;
+abstract class _$$NoUserImplCopyWith<$Res> {
+  factory _$$NoUserImplCopyWith(
+          _$NoUserImpl value, $Res Function(_$NoUserImpl) then) =
+      __$$NoUserImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$NoUserCopyWithImpl<$Res>
-    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res, _$NoUser>
-    implements _$$NoUserCopyWith<$Res> {
-  __$$NoUserCopyWithImpl(_$NoUser _value, $Res Function(_$NoUser) _then)
+class __$$NoUserImplCopyWithImpl<$Res>
+    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res, _$NoUserImpl>
+    implements _$$NoUserImplCopyWith<$Res> {
+  __$$NoUserImplCopyWithImpl(
+      _$NoUserImpl _value, $Res Function(_$NoUserImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$NoUser implements NoUser {
-  const _$NoUser();
+class _$NoUserImpl implements NoUser {
+  const _$NoUserImpl();
 
   @override
   String toString() {
@@ -104,7 +106,7 @@ class _$NoUser implements NoUser {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$NoUser);
+        (other.runtimeType == runtimeType && other is _$NoUserImpl);
   }
 
   @override
@@ -174,27 +176,28 @@ class _$NoUser implements NoUser {
 }
 
 abstract class NoUser implements SettingsPageUserVisualState {
-  const factory NoUser() = _$NoUser;
+  const factory NoUser() = _$NoUserImpl;
 }
 
 /// @nodoc
-abstract class _$$UserCopyWith<$Res> {
-  factory _$$UserCopyWith(_$User value, $Res Function(_$User) then) =
-      __$$UserCopyWithImpl<$Res>;
+abstract class _$$UserImplCopyWith<$Res> {
+  factory _$$UserImplCopyWith(
+          _$UserImpl value, $Res Function(_$UserImpl) then) =
+      __$$UserImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$UserCopyWithImpl<$Res>
-    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res, _$User>
-    implements _$$UserCopyWith<$Res> {
-  __$$UserCopyWithImpl(_$User _value, $Res Function(_$User) _then)
+class __$$UserImplCopyWithImpl<$Res>
+    extends _$SettingsPageUserVisualStateCopyWithImpl<$Res, _$UserImpl>
+    implements _$$UserImplCopyWith<$Res> {
+  __$$UserImplCopyWithImpl(_$UserImpl _value, $Res Function(_$UserImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$User implements User {
-  const _$User();
+class _$UserImpl implements User {
+  const _$UserImpl();
 
   @override
   String toString() {
@@ -204,7 +207,7 @@ class _$User implements User {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$User);
+        (other.runtimeType == runtimeType && other is _$UserImpl);
   }
 
   @override
@@ -274,5 +277,5 @@ class _$User implements User {
 }
 
 abstract class User implements SettingsPageUserVisualState {
-  const factory User() = _$User;
+  const factory User() = _$UserImpl;
 }
