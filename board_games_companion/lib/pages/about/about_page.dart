@@ -216,11 +216,6 @@ class _PluginsAndLibrariesSection extends StatelessWidget {
             uri: 'https://pub.dev/packages/convex_bottom_bar',
           ),
           DetailsItem(
-            title: 'Dio',
-            subtitle: 'Http client',
-            uri: 'https://pub.dev/packages/dio',
-          ),
-          DetailsItem(
             title: 'File picker',
             subtitle: 'Native file explorer to pick files',
             uri: 'https://pub.dev/packages/file_picker',
