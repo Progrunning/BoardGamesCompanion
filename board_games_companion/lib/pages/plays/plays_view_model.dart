@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/extensions/playthroughs_extensions.dart';
 import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
+import 'package:board_games_companion/pages/plays/most_played_game.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -43,8 +44,9 @@ abstract class _PlaysViewModel with Store {
   );
 
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
-    1: Tuple2<String, String>('History', 'PlaysHistoryPage'),
-    0: Tuple2<String, String>('SelectGame', 'PlaysSelectGamePage'),
+    0: Tuple2<String, String>('History', 'PlaysHistoryPage'),
+    1: Tuple2<String, String>('Statistics', 'PlaysStatisticsPage'),
+    2: Tuple2<String, String>('SelectGame', 'PlaysSelectGamePage'),
   };
 
   static const int _numberOfTimesSpinnerCanTurn = 3;
@@ -62,7 +64,7 @@ abstract class _PlaysViewModel with Store {
   ObservableFuture<void>? futureLoadGamesPlaythroughs;
 
   @observable
-  PlaysPageVisualState? visualState;
+  PlaysPageVisualState visualState = const PlaysPageVisualState.history();
 
   @observable
   GameSpinnerFilters gameSpinnerFilters = const GameSpinnerFilters(
@@ -163,6 +165,23 @@ abstract class _PlaysViewModel with Store {
   @computed
   int get randomItemIndex =>
       Random().nextInt(shuffledBoardGames.length * _numberOfTimesSpinnerCanTurn);
+
+  @computed
+  List<MostPlayedGame> get mostPlayedGames {
+    // TODO filter playthroughs from the past x amount of days and
+    return [
+      MostPlayedGame(
+        boardGameDetails: _boardGamesStore.allBoardGamesInCollections[0],
+        totalNumberOfPlays: 120,
+        totalTimePlayedInMinutes: 2381,
+      ),
+      MostPlayedGame(
+        boardGameDetails: _boardGamesStore.allBoardGamesInCollections[1],
+        totalNumberOfPlays: 32,
+        totalTimePlayedInMinutes: 12983,
+      ),
+    ];
+  }
 
   @action
   void loadGamesPlaythroughs() =>

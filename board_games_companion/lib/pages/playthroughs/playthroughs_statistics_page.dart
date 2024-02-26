@@ -24,6 +24,7 @@ import '../../models/player_statistics.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
+import '../../widgets/common/slivers/bgc_sliver_section_wrapper.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/player/player_avatar.dart';
@@ -132,7 +133,7 @@ class _NoScoreBoardGameStatistics extends StatelessWidget {
             primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
           ),
         ),
-        _SliverSectionWrapper(
+        SliverSectionWrapper(
           child: _OverallStatsNoScoreGameSection(
             noScoreBoardGameStatistics: noScoreBoardGameStatistics,
           ),
@@ -144,7 +145,7 @@ class _NoScoreBoardGameStatistics extends StatelessWidget {
                   AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
             ),
           ),
-          _SliverSectionWrapper(
+          SliverSectionWrapper(
             child: _PlayerCharts(
               playerCountPercentage: noScoreBoardGameStatistics.playerCountPercentage,
             ),
@@ -175,70 +176,72 @@ class _ScoreBoardGameStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(children: [
-      SliverPersistentHeader(
-        delegate: BgcSliverTitleHeaderDelegate.title(
-          primaryTitle: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
-        ),
-      ),
-      _SliverSectionWrapper(
-        child: _LastWinnerSection(
-          lastGameWinners: scoreBoardGameStatistics.lastGameWinners,
-          lastTimePlayed: scoreBoardGameStatistics.lastTimePlayed,
-        ),
-      ),
-      SliverPersistentHeader(
-        delegate: BgcSliverTitleHeaderDelegate.title(
-          primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
-        ),
-      ),
-      _SliverSectionWrapper(
-        child: _OverallStatsScoreGameSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
-      ),
-      if (scoreBoardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
+    return MultiSliver(
+      children: [
         SliverPersistentHeader(
           delegate: BgcSliverTitleHeaderDelegate.title(
-            primaryTitle: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
+            primaryTitle: AppText.playthroughsStatisticsPageLastWinnerSectionTitle,
           ),
         ),
-        _SliverSectionWrapper(
-          child: _TopScores(scoreBoardGameStatistics: scoreBoardGameStatistics),
-        ),
-      ],
-      if (scoreBoardGameStatistics.playerCountPercentage.isNotEmpty &&
-          scoreBoardGameStatistics.playerWinsPercentage.isNotEmpty) ...[
-        SliverPersistentHeader(
-          delegate: BgcSliverTitleHeaderDelegate.titles(
-            primaryTitle:
-                AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
-            secondaryTitle:
-                AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle,
+        SliverSectionWrapper(
+          child: _LastWinnerSection(
+            lastGameWinners: scoreBoardGameStatistics.lastGameWinners,
+            lastTimePlayed: scoreBoardGameStatistics.lastTimePlayed,
           ),
         ),
-        _SliverSectionWrapper(
-          child: _PlayerCharts(
-            playerCountPercentage: scoreBoardGameStatistics.playerCountPercentage,
-            playerWinsPercentage: scoreBoardGameStatistics.playerWinsPercentage,
-          ),
-        ),
-      ],
-      if (scoreBoardGameStatistics.playersStatistics.isNotEmpty) ...[
         SliverPersistentHeader(
           delegate: BgcSliverTitleHeaderDelegate.title(
-            primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
+            primaryTitle: AppText.playthroughsStatisticsPageOverallStatsSectionTitle,
           ),
         ),
-        _PlayersStatisticsSection(
-          playersStatistics: scoreBoardGameStatistics.playersStatistics,
-          averageScorePrecision: scoreBoardGameStatistics.averageScorePrecision,
+        SliverSectionWrapper(
+          child: _OverallStatsScoreGameSection(scoreBoardGameStatistics: scoreBoardGameStatistics),
+        ),
+        if (scoreBoardGameStatistics.topScoreres?.isNotEmpty ?? false) ...[
+          SliverPersistentHeader(
+            delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.playthroughsStatisticsPageTopFiveSectionTitle,
+            ),
+          ),
+          SliverSectionWrapper(
+            child: _TopScores(scoreBoardGameStatistics: scoreBoardGameStatistics),
+          ),
+        ],
+        if (scoreBoardGameStatistics.playerCountPercentage.isNotEmpty &&
+            scoreBoardGameStatistics.playerWinsPercentage.isNotEmpty) ...[
+          SliverPersistentHeader(
+            delegate: BgcSliverTitleHeaderDelegate.titles(
+              primaryTitle:
+                  AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionPrimaryTitle,
+              secondaryTitle:
+                  AppText.playthroughsStatisticsPageGamesPlayedAndWonChartsSectionSecondaryTitle,
+            ),
+          ),
+          SliverSectionWrapper(
+            child: _PlayerCharts(
+              playerCountPercentage: scoreBoardGameStatistics.playerCountPercentage,
+              playerWinsPercentage: scoreBoardGameStatistics.playerWinsPercentage,
+            ),
+          ),
+        ],
+        if (scoreBoardGameStatistics.playersStatistics.isNotEmpty) ...[
+          SliverPersistentHeader(
+            delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.playthroughsStatisticsPagePlayersStatsSectionTitle,
+            ),
+          ),
+          _PlayersStatisticsSection(
+            playersStatistics: scoreBoardGameStatistics.playersStatistics,
+            averageScorePrecision: scoreBoardGameStatistics.averageScorePrecision,
+          ),
+        ],
+        const SliverPadding(
+          padding: EdgeInsets.only(
+            bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
+          ),
         ),
       ],
-      const SliverPadding(
-        padding: EdgeInsets.only(
-          bottom: Dimensions.standardSpacing + Dimensions.bottomTabTopHeight,
-        ),
-      ),
-    ]);
+    );
   }
 }
 
@@ -918,9 +921,7 @@ class _TopScores extends StatelessWidget {
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           itemCount: scoreBoardGameStatistics.topScoreres!.length,
-          separatorBuilder: (context, index) {
-            return const SizedBox(width: Dimensions.standardSpacing);
-          },
+          separatorBuilder: (context, index) => const SizedBox(width: Dimensions.standardSpacing),
           itemBuilder: (context, index) {
             return PlayerScoreRankAvatar(
               player: scoreBoardGameStatistics.topScoreres![index].item1,
@@ -974,27 +975,6 @@ class _StatisticsItem extends StatelessWidget {
           fontSize: Dimensions.smallFontSize,
         ),
       ],
-    );
-  }
-}
-
-class _SliverSectionWrapper extends StatelessWidget {
-  const _SliverSectionWrapper({
-    required this.child,
-  });
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.only(
-        left: Dimensions.standardSpacing,
-        top: Dimensions.standardSpacing,
-        right: Dimensions.standardSpacing,
-        bottom: Dimensions.doubleStandardSpacing,
-      ),
-      sliver: SliverToBoxAdapter(child: child),
     );
   }
 }

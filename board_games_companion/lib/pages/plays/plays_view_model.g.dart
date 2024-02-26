@@ -77,6 +77,13 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
       (_$randomItemIndexComputed ??= Computed<int>(() => super.randomItemIndex,
               name: '_PlaysViewModel.randomItemIndex'))
           .value;
+  Computed<List<MostPlayedGame>>? _$mostPlayedGamesComputed;
+
+  @override
+  List<MostPlayedGame> get mostPlayedGames => (_$mostPlayedGamesComputed ??=
+          Computed<List<MostPlayedGame>>(() => super.mostPlayedGames,
+              name: '_PlaysViewModel.mostPlayedGames'))
+      .value;
 
   late final _$_shuffledBoardGamesAtom =
       Atom(name: '_PlaysViewModel._shuffledBoardGames', context: context);
@@ -115,13 +122,13 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
       Atom(name: '_PlaysViewModel.visualState', context: context);
 
   @override
-  PlaysPageVisualState? get visualState {
+  PlaysPageVisualState get visualState {
     _$visualStateAtom.reportRead();
     return super.visualState;
   }
 
   @override
-  set visualState(PlaysPageVisualState? value) {
+  set visualState(PlaysPageVisualState value) {
     _$visualStateAtom.reportWrite(value, super.visualState, () {
       super.visualState = value;
     });
@@ -226,7 +233,8 @@ hasAnyBoardGames: ${hasAnyBoardGames},
 hasAnyBoardGamesToShuffle: ${hasAnyBoardGamesToShuffle},
 maxNumberOfPlayers: ${maxNumberOfPlayers},
 shuffledBoardGames: ${shuffledBoardGames},
-randomItemIndex: ${randomItemIndex}
+randomItemIndex: ${randomItemIndex},
+mostPlayedGames: ${mostPlayedGames}
     ''';
   }
 }

@@ -313,6 +313,10 @@ class AppText {
   static const playsPageGameSpinnerPlaytimeFilterAny = 'Any';
   static const playsPageGameSpinnerPlaytimeFilterInMinutesFormat = '<%s%s';
 
+  static const playsPageOverallStatsMostPlayedGameSectionTitle = 'Most played games';
+  static const playsPageOverallStatsTotalPlayedGamesFormat = '%i';
+  static const playsPageOverallStatsTotalPlayedTimeFormat = '%s%s';
+
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';
   static const drawerAppWiki = 'Wiki';
