@@ -75,7 +75,11 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
     _tabController = TabController(
       length: 3,
       vsync: this,
-      initialIndex: 0,
+      initialIndex: widget.viewModel.visualState.when(
+        history: () => 0,
+        statistics: () => 1,
+        selectGame: () => 2,
+      ),
     );
     _tabController
         .addListener(() => widget.viewModel.setSelectTab(_tabController.index.toPlaysTab()));

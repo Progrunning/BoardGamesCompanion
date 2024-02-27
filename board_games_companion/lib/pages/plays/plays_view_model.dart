@@ -284,7 +284,6 @@ abstract class _PlaysViewModel with Store {
         .toList()
       ..shuffle();
     _setupGameSpinnerFilters();
-    visualState = const PlaysPageVisualState.history();
   }
 
   void _setupGameSpinnerFilters() {
