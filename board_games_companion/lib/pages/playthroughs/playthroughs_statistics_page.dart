@@ -26,7 +26,7 @@ import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/slivers/bgc_sliver_section_wrapper.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
-import '../../widgets/common/text/item_property_title_widget.dart';
+import '../../widgets/common/stats/vertical_statistics_item.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/player_score_rank_avatar.dart';
@@ -369,9 +369,9 @@ class _PlayerStatsDetails extends StatelessWidget {
           const Spacer(),
           if (personalBestScore != null) ...<Widget>[
             Center(
-              child: _StatisticsItem(
-                value: personalBestScore.toString(),
-                valueTextStyle: _statsItemTextStyle,
+              child: VerticalStatisticsItem(
+                text: personalBestScore.toString(),
+                textStyle: _statsItemTextStyle,
                 icon: Icons.show_chart,
                 iconColor: AppColors.highscoreStatColor,
                 iconSize: _statsItemIconSize,
@@ -382,9 +382,9 @@ class _PlayerStatsDetails extends StatelessWidget {
           ],
           if (averageScore != null) ...<Widget>[
             Center(
-              child: _StatisticsItem(
-                value: averageScore!.toStringAsFixed(averageScorePrecision!),
-                valueTextStyle: _statsItemTextStyle,
+              child: VerticalStatisticsItem(
+                text: averageScore!.toStringAsFixed(averageScorePrecision!),
+                textStyle: _statsItemTextStyle,
                 icon: Icons.calculate,
                 iconColor: AppColors.averageScoreStatColor,
                 iconSize: _statsItemIconSize,
@@ -395,9 +395,9 @@ class _PlayerStatsDetails extends StatelessWidget {
           ],
           if (totalWins != null) ...<Widget>[
             Center(
-              child: _StatisticsItem(
-                value: totalWins.toString(),
-                valueTextStyle: _statsItemTextStyle,
+              child: VerticalStatisticsItem(
+                text: totalWins.toString(),
+                textStyle: _statsItemTextStyle,
                 icon: FontAwesomeIcons.trophy,
                 iconColor: AppColors.totalWinsStatColor,
                 iconSize: _fontAwesomeStatsItemIconSize,
@@ -408,9 +408,9 @@ class _PlayerStatsDetails extends StatelessWidget {
           ],
           if (totalLosses != null) ...<Widget>[
             Center(
-              child: _StatisticsItem(
-                value: totalLosses.toString(),
-                valueTextStyle: _statsItemTextStyle,
+              child: VerticalStatisticsItem(
+                text: totalLosses.toString(),
+                textStyle: _statsItemTextStyle,
                 icon: Icons.thumb_down_alt,
                 iconColor: AppColors.totalLossesStatColor,
                 iconSize: _fontAwesomeStatsItemIconSize,
@@ -421,9 +421,9 @@ class _PlayerStatsDetails extends StatelessWidget {
           ],
           if (totalGamesPlayed != null) ...<Widget>[
             Center(
-              child: _StatisticsItem(
-                value: totalGamesPlayed.toString(),
-                valueTextStyle: _statsItemTextStyle,
+              child: VerticalStatisticsItem(
+                text: totalGamesPlayed.toString(),
+                textStyle: _statsItemTextStyle,
                 icon: Icons.casino,
                 iconColor: AppColors.playedGamesStatColor,
                 iconSize: _statsItemIconSize,
@@ -770,15 +770,15 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                _StatisticsItem(
-                  value: scoreBoardGameStatistics?.numberOfGamesPlayed.toString() ?? '-',
+                VerticalStatisticsItem(
+                  text: scoreBoardGameStatistics?.numberOfGamesPlayed.toString() ?? '-',
                   icon: Icons.casino,
                   iconColor: AppColors.playedGamesStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                _StatisticsItem(
-                  value: scoreBoardGameStatistics?.bestScore?.toStringAsFixed(0) ?? '-',
+                VerticalStatisticsItem(
+                  text: scoreBoardGameStatistics?.bestScore?.toStringAsFixed(0) ?? '-',
                   icon: Icons.show_chart,
                   iconColor: AppColors.highscoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsBestScore,
@@ -788,15 +788,15 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
             const Spacer(),
             Column(
               children: <Widget>[
-                _StatisticsItem(
-                  value: scoreBoardGameStatistics?.averageNumberOfPlayers.toStringAsFixed(0) ?? '-',
+                VerticalStatisticsItem(
+                  text: scoreBoardGameStatistics?.averageNumberOfPlayers.toStringAsFixed(0) ?? '-',
                   icon: Icons.person,
                   iconColor: AppColors.averagePlayerCountStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                _StatisticsItem(
-                  value: scoreBoardGameStatistics?.averageScore
+                VerticalStatisticsItem(
+                  text: scoreBoardGameStatistics?.averageScore
                           ?.toStringAsFixed(scoreBoardGameStatistics!.averageScorePrecision) ??
                       '-',
                   icon: Icons.calculate,
@@ -808,8 +808,8 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
             const Spacer(),
             Column(
               children: <Widget>[
-                _StatisticsItem(
-                  value: scoreBoardGameStatistics?.averagePlaytimeInSeconds
+                VerticalStatisticsItem(
+                  text: scoreBoardGameStatistics?.averagePlaytimeInSeconds
                           .toPlaytimeDuration(fallbackValue: '-') ??
                       '-',
                   icon: Icons.av_timer,
@@ -817,8 +817,8 @@ class _OverallStatsScoreGameSection extends StatelessWidget {
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                _StatisticsItem(
-                  value: scoreBoardGameStatistics?.totalPlaytimeInSeconds
+                VerticalStatisticsItem(
+                  text: scoreBoardGameStatistics?.totalPlaytimeInSeconds
                           .toPlaytimeDuration(fallbackValue: '-') ??
                       '-',
                   icon: Icons.timelapse,
@@ -850,15 +850,15 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                _StatisticsItem(
-                  value: noScoreBoardGameStatistics.numberOfGamesPlayed.toString(),
+                VerticalStatisticsItem(
+                  text: noScoreBoardGameStatistics.numberOfGamesPlayed.toString(),
                   icon: Icons.casino,
                   iconColor: AppColors.playedGamesStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayedGames,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                _StatisticsItem(
-                  value: noScoreBoardGameStatistics.totalWins.toString(),
+                VerticalStatisticsItem(
+                  text: noScoreBoardGameStatistics.totalWins.toString(),
                   icon: FontAwesomeIcons.trophy,
                   iconColor: AppColors.highscoreStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalWins,
@@ -868,15 +868,15 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
             const Spacer(),
             Column(
               children: <Widget>[
-                _StatisticsItem(
-                  value: noScoreBoardGameStatistics.averageNumberOfPlayers.toStringAsFixed(0),
+                VerticalStatisticsItem(
+                  text: noScoreBoardGameStatistics.averageNumberOfPlayers.toStringAsFixed(0),
                   icon: Icons.person,
                   iconColor: AppColors.averagePlayerCountStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlayerCount,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                _StatisticsItem(
-                  value: noScoreBoardGameStatistics.totalLosses.toString(),
+                VerticalStatisticsItem(
+                  text: noScoreBoardGameStatistics.totalLosses.toString(),
                   icon: Icons.thumb_down_alt,
                   iconColor: AppColors.totalLossesStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalLosses,
@@ -886,15 +886,15 @@ class _OverallStatsNoScoreGameSection extends StatelessWidget {
             const Spacer(),
             Column(
               children: <Widget>[
-                _StatisticsItem(
-                  value: noScoreBoardGameStatistics.averagePlaytimeInSeconds.toPlaytimeDuration(),
+                VerticalStatisticsItem(
+                  text: noScoreBoardGameStatistics.averagePlaytimeInSeconds.toPlaytimeDuration(),
                   icon: Icons.av_timer,
                   iconColor: AppColors.averagePlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsAvgPlaytime,
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
-                _StatisticsItem(
-                  value: noScoreBoardGameStatistics.totalPlaytimeInSeconds.toPlaytimeDuration(),
+                VerticalStatisticsItem(
+                  text: noScoreBoardGameStatistics.totalPlaytimeInSeconds.toPlaytimeDuration(),
                   icon: Icons.timelapse,
                   iconColor: AppColors.totalPlaytimeStatColor,
                   subtitle: AppText.playthroughsStatisticsPageOverallStatsTotalPlaytime,
@@ -932,49 +932,4 @@ class _TopScores extends StatelessWidget {
           },
         ),
       );
-}
-
-class _StatisticsItem extends StatelessWidget {
-  const _StatisticsItem({
-    required this.icon,
-    required this.value,
-    required this.subtitle,
-    this.iconColor,
-    this.iconSize = 28,
-    this.valueTextStyle = const TextStyle(fontSize: Dimensions.largeFontSize),
-  });
-
-  final IconData icon;
-  final Color? iconColor;
-  final double iconSize;
-  final String value;
-  final String subtitle;
-  final TextStyle valueTextStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            FaIcon(
-              icon,
-              color: iconColor ?? IconTheme.of(context).color,
-              size: iconSize,
-            ),
-            const SizedBox(width: Dimensions.quarterStandardSpacing),
-            Text(value, style: valueTextStyle),
-          ],
-        ),
-        const SizedBox(height: Dimensions.quarterStandardSpacing),
-        ItemPropertyTitle(
-          subtitle,
-          color: AppColors.defaultTextColor,
-          fontSize: Dimensions.smallFontSize,
-        ),
-      ],
-    );
-  }
 }

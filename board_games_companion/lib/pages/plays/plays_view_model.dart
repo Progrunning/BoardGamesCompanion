@@ -173,15 +173,33 @@ abstract class _PlaysViewModel with Store {
       MostPlayedGame(
         boardGameDetails: _boardGamesStore.allBoardGamesInCollections[0],
         totalNumberOfPlays: 120,
-        totalTimePlayedInMinutes: 2381,
+        totalTimePlayedInSeconds: 2381,
       ),
       MostPlayedGame(
         boardGameDetails: _boardGamesStore.allBoardGamesInCollections[1],
         totalNumberOfPlays: 32,
-        totalTimePlayedInMinutes: 12983,
+        totalTimePlayedInSeconds: 12983,
       ),
     ];
   }
+
+  @computed
+  int get totalGamesLogged => 120;
+
+  @computed
+  int get totalGamesPlayed => 13;
+
+  @computed
+  int get totalPlaytimeInSeconds => 1303;
+
+  @computed
+  int get totalSoloGamesLogged => 4;
+
+  @computed
+  int get totalTwoPlayerGamesLogged => 12;
+
+  @computed
+  int get totalMultiPlayerGamesLogged => 9;
 
   @action
   void loadGamesPlaythroughs() =>

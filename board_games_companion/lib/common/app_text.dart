@@ -314,8 +314,15 @@ class AppText {
   static const playsPageGameSpinnerPlaytimeFilterInMinutesFormat = '<%s%s';
 
   static const playsPageOverallStatsMostPlayedGameSectionTitle = 'Most played games';
+  static const playsPageOverallStatsOveralStatsSctionTitle = 'Totals';
   static const playsPageOverallStatsTotalPlayedGamesFormat = '%i';
   static const playsPageOverallStatsTotalPlayedTimeFormat = '%s%s';
+  static const playsPageOverallStatsTotalGamesLogged = 'logged games';
+  static const playsPageOverallStatsTotalPlayedGames = 'played games';
+  static const playsPageOverallStatsTotalPlaytime = 'playtime';
+  static const playsPageOverallStatsTotalSoloGames = 'solo games';
+  static const playsPageOverallStatsTotalCoupleGames = '2 player games';
+  static const playsPageOverallStatsTotalMultiplePlayerGames = 'multi-player games';
 
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';

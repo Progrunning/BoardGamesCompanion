@@ -84,6 +84,49 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
           Computed<List<MostPlayedGame>>(() => super.mostPlayedGames,
               name: '_PlaysViewModel.mostPlayedGames'))
       .value;
+  Computed<int>? _$totalGamesLoggedComputed;
+
+  @override
+  int get totalGamesLogged => (_$totalGamesLoggedComputed ??= Computed<int>(
+          () => super.totalGamesLogged,
+          name: '_PlaysViewModel.totalGamesLogged'))
+      .value;
+  Computed<int>? _$totalGamesPlayedComputed;
+
+  @override
+  int get totalGamesPlayed => (_$totalGamesPlayedComputed ??= Computed<int>(
+          () => super.totalGamesPlayed,
+          name: '_PlaysViewModel.totalGamesPlayed'))
+      .value;
+  Computed<int>? _$totalPlaytimeInSecondsComputed;
+
+  @override
+  int get totalPlaytimeInSeconds => (_$totalPlaytimeInSecondsComputed ??=
+          Computed<int>(() => super.totalPlaytimeInSeconds,
+              name: '_PlaysViewModel.totalPlaytimeInSeconds'))
+      .value;
+  Computed<int>? _$totalSoloGamesLoggedComputed;
+
+  @override
+  int get totalSoloGamesLogged => (_$totalSoloGamesLoggedComputed ??=
+          Computed<int>(() => super.totalSoloGamesLogged,
+              name: '_PlaysViewModel.totalSoloGamesLogged'))
+      .value;
+  Computed<int>? _$totalTwoPlayerGamesLoggedComputed;
+
+  @override
+  int get totalTwoPlayerGamesLogged => (_$totalTwoPlayerGamesLoggedComputed ??=
+          Computed<int>(() => super.totalTwoPlayerGamesLogged,
+              name: '_PlaysViewModel.totalTwoPlayerGamesLogged'))
+      .value;
+  Computed<int>? _$totalMultiPlayerGamesLoggedComputed;
+
+  @override
+  int get totalMultiPlayerGamesLogged =>
+      (_$totalMultiPlayerGamesLoggedComputed ??= Computed<int>(
+              () => super.totalMultiPlayerGamesLogged,
+              name: '_PlaysViewModel.totalMultiPlayerGamesLogged'))
+          .value;
 
   late final _$_shuffledBoardGamesAtom =
       Atom(name: '_PlaysViewModel._shuffledBoardGames', context: context);
@@ -234,7 +277,13 @@ hasAnyBoardGamesToShuffle: ${hasAnyBoardGamesToShuffle},
 maxNumberOfPlayers: ${maxNumberOfPlayers},
 shuffledBoardGames: ${shuffledBoardGames},
 randomItemIndex: ${randomItemIndex},
-mostPlayedGames: ${mostPlayedGames}
+mostPlayedGames: ${mostPlayedGames},
+totalGamesLogged: ${totalGamesLogged},
+totalGamesPlayed: ${totalGamesPlayed},
+totalPlaytimeInSeconds: ${totalPlaytimeInSeconds},
+totalSoloGamesLogged: ${totalSoloGamesLogged},
+totalTwoPlayerGamesLogged: ${totalTwoPlayerGamesLogged},
+totalMultiPlayerGamesLogged: ${totalMultiPlayerGamesLogged}
     ''';
   }
 }

@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MostPlayedGame {
   BoardGameDetails get boardGameDetails => throw _privateConstructorUsedError;
   int get totalNumberOfPlays => throw _privateConstructorUsedError;
-  int get totalTimePlayedInMinutes => throw _privateConstructorUsedError;
+  int get totalTimePlayedInSeconds => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MostPlayedGameCopyWith<MostPlayedGame> get copyWith =>
@@ -34,7 +34,7 @@ abstract class $MostPlayedGameCopyWith<$Res> {
   $Res call(
       {BoardGameDetails boardGameDetails,
       int totalNumberOfPlays,
-      int totalTimePlayedInMinutes});
+      int totalTimePlayedInSeconds});
 
   $BoardGameDetailsCopyWith<$Res> get boardGameDetails;
 }
@@ -54,7 +54,7 @@ class _$MostPlayedGameCopyWithImpl<$Res, $Val extends MostPlayedGame>
   $Res call({
     Object? boardGameDetails = null,
     Object? totalNumberOfPlays = null,
-    Object? totalTimePlayedInMinutes = null,
+    Object? totalTimePlayedInSeconds = null,
   }) {
     return _then(_value.copyWith(
       boardGameDetails: null == boardGameDetails
@@ -65,9 +65,9 @@ class _$MostPlayedGameCopyWithImpl<$Res, $Val extends MostPlayedGame>
           ? _value.totalNumberOfPlays
           : totalNumberOfPlays // ignore: cast_nullable_to_non_nullable
               as int,
-      totalTimePlayedInMinutes: null == totalTimePlayedInMinutes
-          ? _value.totalTimePlayedInMinutes
-          : totalTimePlayedInMinutes // ignore: cast_nullable_to_non_nullable
+      totalTimePlayedInSeconds: null == totalTimePlayedInSeconds
+          ? _value.totalTimePlayedInSeconds
+          : totalTimePlayedInSeconds // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -92,7 +92,7 @@ abstract class _$$MostPlayedGameImplCopyWith<$Res>
   $Res call(
       {BoardGameDetails boardGameDetails,
       int totalNumberOfPlays,
-      int totalTimePlayedInMinutes});
+      int totalTimePlayedInSeconds});
 
   @override
   $BoardGameDetailsCopyWith<$Res> get boardGameDetails;
@@ -111,7 +111,7 @@ class __$$MostPlayedGameImplCopyWithImpl<$Res>
   $Res call({
     Object? boardGameDetails = null,
     Object? totalNumberOfPlays = null,
-    Object? totalTimePlayedInMinutes = null,
+    Object? totalTimePlayedInSeconds = null,
   }) {
     return _then(_$MostPlayedGameImpl(
       boardGameDetails: null == boardGameDetails
@@ -122,9 +122,9 @@ class __$$MostPlayedGameImplCopyWithImpl<$Res>
           ? _value.totalNumberOfPlays
           : totalNumberOfPlays // ignore: cast_nullable_to_non_nullable
               as int,
-      totalTimePlayedInMinutes: null == totalTimePlayedInMinutes
-          ? _value.totalTimePlayedInMinutes
-          : totalTimePlayedInMinutes // ignore: cast_nullable_to_non_nullable
+      totalTimePlayedInSeconds: null == totalTimePlayedInSeconds
+          ? _value.totalTimePlayedInSeconds
+          : totalTimePlayedInSeconds // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -136,7 +136,7 @@ class _$MostPlayedGameImpl extends _MostPlayedGame {
   const _$MostPlayedGameImpl(
       {required this.boardGameDetails,
       required this.totalNumberOfPlays,
-      required this.totalTimePlayedInMinutes})
+      required this.totalTimePlayedInSeconds})
       : super._();
 
   @override
@@ -144,11 +144,11 @@ class _$MostPlayedGameImpl extends _MostPlayedGame {
   @override
   final int totalNumberOfPlays;
   @override
-  final int totalTimePlayedInMinutes;
+  final int totalTimePlayedInSeconds;
 
   @override
   String toString() {
-    return 'MostPlayedGame(boardGameDetails: $boardGameDetails, totalNumberOfPlays: $totalNumberOfPlays, totalTimePlayedInMinutes: $totalTimePlayedInMinutes)';
+    return 'MostPlayedGame(boardGameDetails: $boardGameDetails, totalNumberOfPlays: $totalNumberOfPlays, totalTimePlayedInSeconds: $totalTimePlayedInSeconds)';
   }
 
   @override
@@ -161,13 +161,13 @@ class _$MostPlayedGameImpl extends _MostPlayedGame {
             (identical(other.totalNumberOfPlays, totalNumberOfPlays) ||
                 other.totalNumberOfPlays == totalNumberOfPlays) &&
             (identical(
-                    other.totalTimePlayedInMinutes, totalTimePlayedInMinutes) ||
-                other.totalTimePlayedInMinutes == totalTimePlayedInMinutes));
+                    other.totalTimePlayedInSeconds, totalTimePlayedInSeconds) ||
+                other.totalTimePlayedInSeconds == totalTimePlayedInSeconds));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, boardGameDetails,
-      totalNumberOfPlays, totalTimePlayedInMinutes);
+      totalNumberOfPlays, totalTimePlayedInSeconds);
 
   @JsonKey(ignore: true)
   @override
@@ -181,7 +181,7 @@ abstract class _MostPlayedGame extends MostPlayedGame {
   const factory _MostPlayedGame(
       {required final BoardGameDetails boardGameDetails,
       required final int totalNumberOfPlays,
-      required final int totalTimePlayedInMinutes}) = _$MostPlayedGameImpl;
+      required final int totalTimePlayedInSeconds}) = _$MostPlayedGameImpl;
   const _MostPlayedGame._() : super._();
 
   @override
@@ -189,7 +189,7 @@ abstract class _MostPlayedGame extends MostPlayedGame {
   @override
   int get totalNumberOfPlays;
   @override
-  int get totalTimePlayedInMinutes;
+  int get totalTimePlayedInSeconds;
   @override
   @JsonKey(ignore: true)
   _$$MostPlayedGameImplCopyWith<_$MostPlayedGameImpl> get copyWith =>

@@ -39,6 +39,7 @@ import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
+import '../../widgets/common/stats/vertical_statistics_item.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
 import '../home/home_page.dart';
@@ -230,6 +231,25 @@ class _StatisticsTab extends StatelessWidget {
             },
           ),
         ),
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playsPageOverallStatsOveralStatsSctionTitle,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Observer(
+            builder: (_) {
+              return _OverallStatsSection(
+                totalGamesLogged: viewModel.totalGamesLogged,
+                totalGamesPlayed: viewModel.totalGamesPlayed,
+                totalPlaytimeInSeconds: viewModel.totalPlaytimeInSeconds,
+                totalSoloGamesLogged: viewModel.totalSoloGamesLogged,
+                totalTwoPlayerGamesLogged: viewModel.totalTwoPlayerGamesLogged,
+                totalMultiPlayerGamesLogged: viewModel.totalMultiPlayerGamesLogged,
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -240,13 +260,15 @@ class _MostPlayedGamesSection extends StatelessWidget {
     required this.mostPlayedGames,
   });
 
+  static const double _iconSize = 20;
+  static const TextStyle _textStyle = TextStyle(fontSize: Dimensions.standardFontSize);
+
   final List<MostPlayedGame> mostPlayedGames;
 
-  // TODO Continue with the most played section
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Dimensions.boardGameItemCollectionImageHeight + Dimensions.standardSpacing * 2,
+      height: Dimensions.mostPlayedGamesImageHeight + Dimensions.standardSpacing * 2,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (_, int index) {
@@ -261,7 +283,7 @@ class _MostPlayedGamesSection extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  width: Dimensions.boardGameItemCollectionImageWidth,
+                  width: Dimensions.mostPlayedGamesImageHeight,
                   child: BoardGameTile(
                     id: mostPlayedGame.id,
                     name: mostPlayedGame.name,
@@ -269,41 +291,27 @@ class _MostPlayedGamesSection extends StatelessWidget {
                     rank: index + 1,
                   ),
                 ),
+                const SizedBox(width: Dimensions.halfStandardSpacing),
                 Column(
-                  children: [
-                    // TODO Refactor this item and consider moving it into a separate widget
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        FaIcon(
-                          Icons.casino,
-                          color: AppColors.playedGamesStatColor,
-                          size: 28,
-                        ),
-                        const SizedBox(width: Dimensions.quarterStandardSpacing),
-                        Text(
-                          sprintf(
-                            AppText.playsPageOverallStatsTotalPlayedGamesFormat,
-                            [mostPlayedGames[index].totalNumberOfPlays],
-                          ),
-                          style: const TextStyle(fontSize: Dimensions.standardFontSize),
-                        ),
-                      ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    VerticalStatisticsItem(
+                      text: sprintf(
+                        AppText.playsPageOverallStatsTotalPlayedGamesFormat,
+                        [mostPlayedGames[index].totalNumberOfPlays],
+                      ),
+                      textStyle: _textStyle,
+                      icon: Icons.casino,
+                      iconSize: _iconSize,
+                      iconColor: AppColors.playedGamesStatColor,
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        FaIcon(
-                          Icons.timelapse,
-                          color: AppColors.playedGamesStatColor,
-                          size: 28,
-                        ),
-                        const SizedBox(width: Dimensions.quarterStandardSpacing),
-                        Text(
-                          mostPlayedGames[index].totalTimePlayedFormatted,
-                          style: const TextStyle(fontSize: Dimensions.standardFontSize),
-                        ),
-                      ],
+                    const SizedBox(height: Dimensions.halfStandardSpacing),
+                    VerticalStatisticsItem(
+                      text: mostPlayedGames[index].totalTimePlayedInSeconds.toPlaytimeDuration(),
+                      textStyle: _textStyle,
+                      icon: Icons.timelapse,
+                      iconSize: _iconSize,
+                      iconColor: AppColors.highscoreStatColor,
                     ),
                   ],
                 ),
@@ -312,8 +320,90 @@ class _MostPlayedGamesSection extends StatelessWidget {
           );
         },
         separatorBuilder: (BuildContext context, int index) =>
-            const SizedBox(width: Dimensions.standardSpacing),
+            const SizedBox(width: Dimensions.doubleStandardSpacing),
         itemCount: mostPlayedGames.length,
+      ),
+    );
+  }
+}
+
+class _OverallStatsSection extends StatelessWidget {
+  const _OverallStatsSection({
+    required this.totalGamesLogged,
+    required this.totalGamesPlayed,
+    required this.totalPlaytimeInSeconds,
+    required this.totalSoloGamesLogged,
+    required this.totalTwoPlayerGamesLogged,
+    required this.totalMultiPlayerGamesLogged,
+  });
+
+  final int totalGamesLogged;
+  final int totalGamesPlayed;
+  final int totalPlaytimeInSeconds;
+  final int totalSoloGamesLogged;
+  final int totalTwoPlayerGamesLogged;
+  final int totalMultiPlayerGamesLogged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              VerticalStatisticsItem(
+                text: totalGamesLogged.toString(),
+                icon: Icons.casino,
+                iconColor: AppColors.playedGamesStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalGamesLogged,
+              ),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              VerticalStatisticsItem(
+                text: totalPlaytimeInSeconds.toPlaytimeDuration(),
+                icon: Icons.timelapse,
+                iconColor: AppColors.highscoreStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalPlaytime,
+              ),
+            ],
+          ),
+          const Spacer(),
+          Column(
+            children: <Widget>[
+              VerticalStatisticsItem(
+                text: totalGamesPlayed.toString(),
+                icon: FontAwesomeIcons.snowflake,
+                iconColor: AppColors.averagePlayerCountStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalPlayedGames,
+              ),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              VerticalStatisticsItem(
+                text: totalSoloGamesLogged.toString(),
+                icon: Icons.person,
+                iconColor: AppColors.totalLossesStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalSoloGames,
+              ),
+            ],
+          ),
+          const Spacer(),
+          Column(
+            children: <Widget>[
+              VerticalStatisticsItem(
+                text: totalTwoPlayerGamesLogged.toString(),
+                icon: Icons.people,
+                iconColor: AppColors.averagePlaytimeStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalCoupleGames,
+              ),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              VerticalStatisticsItem(
+                text: totalMultiPlayerGamesLogged.toString(),
+                icon: Icons.person_add_alt_1,
+                iconColor: AppColors.totalPlaytimeStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalMultiplePlayerGames,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
