@@ -112,12 +112,12 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
           Computed<int>(() => super.totalSoloGamesLogged,
               name: '_PlaysViewModel.totalSoloGamesLogged'))
       .value;
-  Computed<int>? _$totalTwoPlayerGamesLoggedComputed;
+  Computed<int>? _$totalDuelGamesLoggedComputed;
 
   @override
-  int get totalTwoPlayerGamesLogged => (_$totalTwoPlayerGamesLoggedComputed ??=
-          Computed<int>(() => super.totalTwoPlayerGamesLogged,
-              name: '_PlaysViewModel.totalTwoPlayerGamesLogged'))
+  int get totalDuelGamesLogged => (_$totalDuelGamesLoggedComputed ??=
+          Computed<int>(() => super.totalDuelGamesLogged,
+              name: '_PlaysViewModel.totalDuelGamesLogged'))
       .value;
   Computed<int>? _$totalMultiPlayerGamesLoggedComputed;
 
@@ -144,20 +144,19 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
     });
   }
 
-  late final _$futureLoadGamesPlaythroughsAtom = Atom(
-      name: '_PlaysViewModel.futureLoadGamesPlaythroughs', context: context);
+  late final _$futureLoadDataAtom =
+      Atom(name: '_PlaysViewModel.futureLoadData', context: context);
 
   @override
-  ObservableFuture<void>? get futureLoadGamesPlaythroughs {
-    _$futureLoadGamesPlaythroughsAtom.reportRead();
-    return super.futureLoadGamesPlaythroughs;
+  ObservableFuture<void>? get futureLoadData {
+    _$futureLoadDataAtom.reportRead();
+    return super.futureLoadData;
   }
 
   @override
-  set futureLoadGamesPlaythroughs(ObservableFuture<void>? value) {
-    _$futureLoadGamesPlaythroughsAtom
-        .reportWrite(value, super.futureLoadGamesPlaythroughs, () {
-      super.futureLoadGamesPlaythroughs = value;
+  set futureLoadData(ObservableFuture<void>? value) {
+    _$futureLoadDataAtom.reportWrite(value, super.futureLoadData, () {
+      super.futureLoadData = value;
     });
   }
 
@@ -197,11 +196,11 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
       ActionController(name: '_PlaysViewModel', context: context);
 
   @override
-  void loadGamesPlaythroughs() {
+  void loadData() {
     final _$actionInfo = _$_PlaysViewModelActionController.startAction(
-        name: '_PlaysViewModel.loadGamesPlaythroughs');
+        name: '_PlaysViewModel.loadData');
     try {
-      return super.loadGamesPlaythroughs();
+      return super.loadData();
     } finally {
       _$_PlaysViewModelActionController.endAction(_$actionInfo);
     }
@@ -266,7 +265,7 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   @override
   String toString() {
     return '''
-futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
+futureLoadData: ${futureLoadData},
 visualState: ${visualState},
 gameSpinnerFilters: ${gameSpinnerFilters},
 finishedPlaythroughs: ${finishedPlaythroughs},
@@ -282,7 +281,7 @@ totalGamesLogged: ${totalGamesLogged},
 totalGamesPlayed: ${totalGamesPlayed},
 totalPlaytimeInSeconds: ${totalPlaytimeInSeconds},
 totalSoloGamesLogged: ${totalSoloGamesLogged},
-totalTwoPlayerGamesLogged: ${totalTwoPlayerGamesLogged},
+totalDuelGamesLogged: ${totalDuelGamesLogged},
 totalMultiPlayerGamesLogged: ${totalMultiPlayerGamesLogged}
     ''';
   }

@@ -61,7 +61,7 @@ abstract class _PlaysViewModel with Store {
   List<BoardGameDetails> _shuffledBoardGames = [];
 
   @observable
-  ObservableFuture<void>? futureLoadGamesPlaythroughs;
+  ObservableFuture<void>? futureLoadData;
 
   @observable
   PlaysPageVisualState visualState = const PlaysPageVisualState.history();
@@ -196,14 +196,13 @@ abstract class _PlaysViewModel with Store {
   int get totalSoloGamesLogged => 4;
 
   @computed
-  int get totalTwoPlayerGamesLogged => 12;
+  int get totalDuelGamesLogged => 12;
 
   @computed
   int get totalMultiPlayerGamesLogged => 9;
 
   @action
-  void loadGamesPlaythroughs() =>
-      futureLoadGamesPlaythroughs = ObservableFuture<void>(_loadGamesPlaythroughs());
+  void loadData() => futureLoadData = ObservableFuture<void>(_loadData());
 
   @action
   void setSelectTab(PlaysTab selectedTab) {
@@ -274,7 +273,7 @@ abstract class _PlaysViewModel with Store {
   Future<void> trackGameSelected() async =>
       _analyticsService.logEvent(name: Analytics.selectRandomGame);
 
-  Future<void> _loadGamesPlaythroughs() async {
+  Future<void> _loadData() async {
     await _scoreStore.loadScores();
     await _playersStore.loadPlayers();
     await _playthroughsStore.loadPlaythroughs();

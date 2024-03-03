@@ -26,6 +26,7 @@ import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/slivers/bgc_sliver_section_wrapper.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
+import '../../widgets/common/stats/pie_chart_legend_box.dart';
 import '../../widgets/common/stats/vertical_statistics_item.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
@@ -577,8 +578,9 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
                     child: Row(
                       children: <Widget>[
-                        _ChartLegendBox(
-                            color: playerCountChartColors[playeCountStatistics.numberOfPlayers]!),
+                        ChartLegendBox(
+                          color: playerCountChartColors[playeCountStatistics.numberOfPlayers]!,
+                        ),
                         const SizedBox(width: Dimensions.halfStandardSpacing),
                         RichText(
                           text: TextSpan(
@@ -634,7 +636,7 @@ class _PlayerChartsState extends State<_PlayerCharts> {
                             ),
                           ),
                           const SizedBox(width: Dimensions.halfStandardSpacing),
-                          _ChartLegendBox(
+                          ChartLegendBox(
                               color: playerWinsChartColors[playerWinsStatistics.player]!),
                         ],
                       ),
@@ -644,26 +646,6 @@ class _PlayerChartsState extends State<_PlayerCharts> {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _ChartLegendBox extends StatelessWidget {
-  const _ChartLegendBox({
-    required this.color,
-  });
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 16,
-      height: 16,
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: color,
-      ),
     );
   }
 }

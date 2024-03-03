@@ -86,7 +86,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
 
     _scrollController = FixedExtentScrollController();
 
-    widget.viewModel.loadGamesPlaythroughs();
+    widget.viewModel.loadData();
   }
 
   @override
@@ -99,7 +99,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) => Observer(
         builder: (_) {
-          switch (widget.viewModel.futureLoadGamesPlaythroughs?.status ?? FutureStatus.pending) {
+          switch (widget.viewModel.futureLoadData?.status ?? FutureStatus.pending) {
             case FutureStatus.pending:
             case FutureStatus.rejected:
               return CustomScrollView(
@@ -210,6 +210,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
   }
 }
 
+// TODO Ensure empty state is handled (i.e. no games played in certain period)
 class _StatisticsTab extends StatelessWidget {
   const _StatisticsTab({
     required this.viewModel,
@@ -237,7 +238,7 @@ class _StatisticsTab extends StatelessWidget {
         ),
         SliverPersistentHeader(
           delegate: BgcSliverTitleHeaderDelegate.title(
-            primaryTitle: AppText.playsPageOverallStatsOveralStatsSctionTitle,
+            primaryTitle: AppText.playsPageOverallStatsTotalsSectionTitle,
           ),
         ),
         SliverToBoxAdapter(
@@ -248,12 +249,25 @@ class _StatisticsTab extends StatelessWidget {
                 totalGamesPlayed: viewModel.totalGamesPlayed,
                 totalPlaytimeInSeconds: viewModel.totalPlaytimeInSeconds,
                 totalSoloGamesLogged: viewModel.totalSoloGamesLogged,
-                totalTwoPlayerGamesLogged: viewModel.totalTwoPlayerGamesLogged,
+                totalDuelGamesLogged: viewModel.totalDuelGamesLogged,
                 totalMultiPlayerGamesLogged: viewModel.totalMultiPlayerGamesLogged,
               );
             },
           ),
         ),
+        // TODO Add games distribution section in later iterations
+        // SliverPersistentHeader(
+        //   delegate: BgcSliverTitleHeaderDelegate.title(
+        //     primaryTitle: AppText.playsPageOverallStatsGamesPlayedDistributionSctionTitle,
+        //   ),
+        // ),
+        // SliverToBoxAdapter(
+        //   child: Observer(
+        //     builder: (_) {
+        //       return const _GamesPlayedDistributionSection();
+        //     },
+        //   ),
+        // ),
       ],
     );
   }
@@ -264,7 +278,7 @@ class _MostPlayedGamesSection extends StatelessWidget {
     required this.mostPlayedGames,
   });
 
-  static const double _iconSize = 20;
+  static const double _iconSize = 24;
   static const TextStyle _textStyle = TextStyle(fontSize: Dimensions.standardFontSize);
 
   final List<MostPlayedGame> mostPlayedGames;
@@ -337,7 +351,7 @@ class _OverallStatsSection extends StatelessWidget {
     required this.totalGamesPlayed,
     required this.totalPlaytimeInSeconds,
     required this.totalSoloGamesLogged,
-    required this.totalTwoPlayerGamesLogged,
+    required this.totalDuelGamesLogged,
     required this.totalMultiPlayerGamesLogged,
   });
 
@@ -345,7 +359,7 @@ class _OverallStatsSection extends StatelessWidget {
   final int totalGamesPlayed;
   final int totalPlaytimeInSeconds;
   final int totalSoloGamesLogged;
-  final int totalTwoPlayerGamesLogged;
+  final int totalDuelGamesLogged;
   final int totalMultiPlayerGamesLogged;
 
   @override
@@ -393,10 +407,10 @@ class _OverallStatsSection extends StatelessWidget {
           Column(
             children: <Widget>[
               VerticalStatisticsItem(
-                text: totalTwoPlayerGamesLogged.toString(),
+                text: totalDuelGamesLogged.toString(),
                 icon: Icons.people,
                 iconColor: AppColors.averagePlaytimeStatColor,
-                subtitle: AppText.playsPageOverallStatsTotalCoupleGames,
+                subtitle: AppText.playsPageOverallStatsTotalDuels,
               ),
               const SizedBox(height: Dimensions.doubleStandardSpacing),
               VerticalStatisticsItem(
@@ -412,6 +426,188 @@ class _OverallStatsSection extends StatelessWidget {
     );
   }
 }
+
+// class _GamesPlayedDistributionSection extends StatelessWidget {
+//   const _GamesPlayedDistributionSection();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
+// class _PlayerCharts extends StatefulWidget {
+//   const _PlayerCharts({
+//     required this.playerCountPercentage,
+//   });
+
+//   final List<PlayerCountStatistics> playerCountPercentage;
+//   final List<PlayerWinsStatistics>? playerWinsPercentage;
+
+//   @override
+//   State<_PlayerCharts> createState() => _PlayerChartsState();
+// }
+
+// class _PlayerChartsState extends State<_PlayerCharts> {
+//   late Map<int, Color> playerCountChartColors;
+//   late Map<Player, Color> playerWinsChartColors;
+
+//   static const double _chartSize = 160;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO MK Probalby not best to calculate this with every build
+//     //         Need a better state control strategy (mobx?)
+//     playerCountChartColors = {};
+//     playerWinsChartColors = {};
+//     int i = 0;
+//     for (final PlayerCountStatistics playeCountStatistics in widget.playerCountPercentage) {
+//       playerCountChartColors[playeCountStatistics.numberOfPlayers] =
+//           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
+//     }
+//     if (widget.playerWinsPercentage != null) {
+//       i = 0;
+//       for (final PlayerWinsStatistics playerWinsStatistics in widget.playerWinsPercentage!) {
+//         playerWinsChartColors[playerWinsStatistics.player] =
+//             AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
+//       }
+//     }
+
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         const SizedBox(height: Dimensions.halfStandardSpacing),
+//         Row(
+//           children: <Widget>[
+//             SizedBox(
+//               height: _chartSize,
+//               width: _chartSize,
+//               child: PieChart(
+//                 PieChartData(
+//                   sections: <PieChartSectionData>[
+//                     for (final PlayerCountStatistics playeCountStatistics
+//                         in widget.playerCountPercentage)
+//                       PieChartSectionData(
+//                         value: playeCountStatistics.gamesPlayedPercentage,
+//                         title: '${playeCountStatistics.numberOfGamesPlayed}',
+//                         color: playerCountChartColors[playeCountStatistics.numberOfPlayers],
+//                       ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             const Spacer(),
+//             if (widget.playerWinsPercentage != null)
+//               SizedBox(
+//                 height: _chartSize,
+//                 width: _chartSize,
+//                 child: PieChart(
+//                   PieChartData(
+//                     sections: <PieChartSectionData>[
+//                       for (final PlayerWinsStatistics playeWinsStatistics
+//                           in widget.playerWinsPercentage!)
+//                         PieChartSectionData(
+//                           value: playeWinsStatistics.winsPercentage,
+//                           title: '${playeWinsStatistics.numberOfWins}',
+//                           color: playerWinsChartColors[playeWinsStatistics.player],
+//                         ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//           ],
+//         ),
+//         const SizedBox(height: Dimensions.halfStandardSpacing),
+//         Row(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: <Widget>[
+//             Column(
+//               mainAxisSize: MainAxisSize.max,
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: <Widget>[
+//                 for (final PlayerCountStatistics playeCountStatistics
+//                     in widget.playerCountPercentage)
+//                   Padding(
+//                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
+//                     child: Row(
+//                       children: <Widget>[
+//                         ChartLegendBox(
+//                             color: playerCountChartColors[playeCountStatistics.numberOfPlayers]!),
+//                         const SizedBox(width: Dimensions.halfStandardSpacing),
+//                         RichText(
+//                           text: TextSpan(
+//                             children: [
+//                               TextSpan(
+//                                 text: sprintf(
+//                                   playeCountStatistics.numberOfPlayers > 1
+//                                       ? AppText
+//                                           .playthroughsStatisticsPagePlayerCountChartLegendFormatPlural
+//                                       : AppText
+//                                           .playthroughsStatisticsPagePlayerCountChartLegendFormatSingular,
+//                                   [
+//                                     playeCountStatistics.numberOfPlayers,
+//                                   ],
+//                                 ),
+//                               ),
+//                               TextSpan(
+//                                 text:
+//                                     ' [${(playeCountStatistics.gamesPlayedPercentage * 100).toStringAsFixed(0)}%]',
+//                                 style: AppTheme.theme.textTheme.titleMedium,
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//               ],
+//             ),
+//             const Spacer(),
+//             if (widget.playerWinsPercentage != null)
+//               Column(
+//                 mainAxisSize: MainAxisSize.max,
+//                 mainAxisAlignment: MainAxisAlignment.start,
+//                 crossAxisAlignment: CrossAxisAlignment.end,
+//                 children: <Widget>[
+//                   for (final PlayerWinsStatistics playerWinsStatistics
+//                       in widget.playerWinsPercentage!)
+//                     Padding(
+//                       padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
+//                       child: Row(
+//                         children: <Widget>[
+//                           RichText(
+//                             text: TextSpan(
+//                               children: [
+//                                 TextSpan(text: '${playerWinsStatistics.player.name} '),
+//                                 TextSpan(
+//                                   text:
+//                                       '[${(playerWinsStatistics.winsPercentage * 100).toStringAsFixed(0)}%]',
+//                                   style: AppTheme.theme.textTheme.titleMedium,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           const SizedBox(width: Dimensions.halfStandardSpacing),
+//                           ChartLegendBox(
+//                             color: playerWinsChartColors[playerWinsStatistics.player]!,
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                 ],
+//               ),
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class _HistoricalPlaythroughSliverList extends StatelessWidget {
   const _HistoricalPlaythroughSliverList({
@@ -1293,7 +1489,7 @@ class _AppBar extends StatelessWidget {
             ),
             AppBarBottomTab(
               AppText.playsPageStatisticsTabTitle,
-              Icons.multiline_chart,
+              Icons.query_stats,
               isSelected: tabVisualState == const PlaysPageVisualState.statistics(),
             ),
             AppBarBottomTab(

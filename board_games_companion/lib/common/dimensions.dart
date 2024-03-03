@@ -33,8 +33,8 @@ class Dimensions {
   static const double collectionSearchResultExpansionsImageHeight = 80;
   static const double collectionSearchResultExpansionsImageWidth = 80;
 
-  static const double mostPlayedGamesImageHeight = 120;
-  static const double mostPlayedGamesImageWidght = 120;
+  static const double mostPlayedGamesImageHeight = 110;
+  static const double mostPlayedGamesImageWidght = 110;
 
   static const double boardGameRemoveIconSize = 40;
 
