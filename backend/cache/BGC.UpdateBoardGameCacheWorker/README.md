@@ -7,6 +7,27 @@ and causes the cost of running the service to increase significantly there was a
 
 # Deploying and running
 
+## Docker
+
+### Build
+
+Open termin in the `D:\Dev\Projects\BoardGamesCompanion\backend` directory and run the below command.
+
+`docker build -t bgc-cache-worker -f cache\BGC.UpdateBoardGameCacheWorker\Dockerfile .`
+
+### Publish
+
+The image should be pushed to the public docker repository https://hub.docker.com/repository/docker/mkieres/bgccacheworker/general. Do the following to upload a new image.
+
+1. `docker login`
+> NOTE: Use `CTRL + SHIFT + V` to paste in the password in the termin
+
+2. `docker tag bgc-cache-worker mkieres/bgccacheworker:1`
+3. `docker push mkieres/bgccacheworker:1`
+> NOTE: Increase the tagname with each manual push
+
+## Self-contained
+
 This worker should be run on a machine that is always on. One of the approaches is to have it running on a ARM single-board computer (SBC) (e.g. Rasperry PI).
 
 For more details on the build and deployment process go to https://learn.microsoft.com/en-us/dotnet/iot/deployment#deploying-a-self-contained-app

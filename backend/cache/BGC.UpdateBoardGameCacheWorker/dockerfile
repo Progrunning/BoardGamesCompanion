@@ -8,6 +8,7 @@ COPY BGC.Core/*.csproj ./BGC.Core/
 WORKDIR /source/cache/BGC.UpdateBoardGameCacheWorker
 RUN dotnet restore
 
+# TODO Remove this, to avoid including all of the files (especially the app settings)
 COPY . ./
 RUN dotnet publish cache/BGC.UpdateBoardGameCacheWorker/BGC.UpdateBoardGameCacheWorker.csproj --self-contained false -o /app
 
