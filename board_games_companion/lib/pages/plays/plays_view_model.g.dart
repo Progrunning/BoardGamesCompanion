@@ -77,56 +77,6 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
       (_$randomItemIndexComputed ??= Computed<int>(() => super.randomItemIndex,
               name: '_PlaysViewModel.randomItemIndex'))
           .value;
-  Computed<List<MostPlayedGame>>? _$mostPlayedGamesComputed;
-
-  @override
-  List<MostPlayedGame> get mostPlayedGames => (_$mostPlayedGamesComputed ??=
-          Computed<List<MostPlayedGame>>(() => super.mostPlayedGames,
-              name: '_PlaysViewModel.mostPlayedGames'))
-      .value;
-  Computed<int>? _$totalGamesLoggedComputed;
-
-  @override
-  int get totalGamesLogged => (_$totalGamesLoggedComputed ??= Computed<int>(
-          () => super.totalGamesLogged,
-          name: '_PlaysViewModel.totalGamesLogged'))
-      .value;
-  Computed<int>? _$totalGamesPlayedComputed;
-
-  @override
-  int get totalGamesPlayed => (_$totalGamesPlayedComputed ??= Computed<int>(
-          () => super.totalGamesPlayed,
-          name: '_PlaysViewModel.totalGamesPlayed'))
-      .value;
-  Computed<int>? _$totalPlaytimeInSecondsComputed;
-
-  @override
-  int get totalPlaytimeInSeconds => (_$totalPlaytimeInSecondsComputed ??=
-          Computed<int>(() => super.totalPlaytimeInSeconds,
-              name: '_PlaysViewModel.totalPlaytimeInSeconds'))
-      .value;
-  Computed<int>? _$totalSoloGamesLoggedComputed;
-
-  @override
-  int get totalSoloGamesLogged => (_$totalSoloGamesLoggedComputed ??=
-          Computed<int>(() => super.totalSoloGamesLogged,
-              name: '_PlaysViewModel.totalSoloGamesLogged'))
-      .value;
-  Computed<int>? _$totalDuelGamesLoggedComputed;
-
-  @override
-  int get totalDuelGamesLogged => (_$totalDuelGamesLoggedComputed ??=
-          Computed<int>(() => super.totalDuelGamesLogged,
-              name: '_PlaysViewModel.totalDuelGamesLogged'))
-      .value;
-  Computed<int>? _$totalMultiPlayerGamesLoggedComputed;
-
-  @override
-  int get totalMultiPlayerGamesLogged =>
-      (_$totalMultiPlayerGamesLoggedComputed ??= Computed<int>(
-              () => super.totalMultiPlayerGamesLogged,
-              name: '_PlaysViewModel.totalMultiPlayerGamesLogged'))
-          .value;
 
   late final _$_shuffledBoardGamesAtom =
       Atom(name: '_PlaysViewModel._shuffledBoardGames', context: context);
@@ -189,6 +139,23 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   set gameSpinnerFilters(GameSpinnerFilters value) {
     _$gameSpinnerFiltersAtom.reportWrite(value, super.gameSpinnerFilters, () {
       super.gameSpinnerFilters = value;
+    });
+  }
+
+  late final _$playsStatsVisualStateAtom =
+      Atom(name: '_PlaysViewModel.playsStatsVisualState', context: context);
+
+  @override
+  PlaysStatsVisualState get playsStatsVisualState {
+    _$playsStatsVisualStateAtom.reportRead();
+    return super.playsStatsVisualState;
+  }
+
+  @override
+  set playsStatsVisualState(PlaysStatsVisualState value) {
+    _$playsStatsVisualStateAtom.reportWrite(value, super.playsStatsVisualState,
+        () {
+      super.playsStatsVisualState = value;
     });
   }
 
@@ -268,6 +235,7 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
 futureLoadData: ${futureLoadData},
 visualState: ${visualState},
 gameSpinnerFilters: ${gameSpinnerFilters},
+playsStatsVisualState: ${playsStatsVisualState},
 finishedPlaythroughs: ${finishedPlaythroughs},
 historicalPlaythroughs: ${historicalPlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},
@@ -275,14 +243,7 @@ hasAnyBoardGames: ${hasAnyBoardGames},
 hasAnyBoardGamesToShuffle: ${hasAnyBoardGamesToShuffle},
 maxNumberOfPlayers: ${maxNumberOfPlayers},
 shuffledBoardGames: ${shuffledBoardGames},
-randomItemIndex: ${randomItemIndex},
-mostPlayedGames: ${mostPlayedGames},
-totalGamesLogged: ${totalGamesLogged},
-totalGamesPlayed: ${totalGamesPlayed},
-totalPlaytimeInSeconds: ${totalPlaytimeInSeconds},
-totalSoloGamesLogged: ${totalSoloGamesLogged},
-totalDuelGamesLogged: ${totalDuelGamesLogged},
-totalMultiPlayerGamesLogged: ${totalMultiPlayerGamesLogged}
+randomItemIndex: ${randomItemIndex}
     ''';
   }
 }

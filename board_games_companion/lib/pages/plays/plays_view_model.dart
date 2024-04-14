@@ -6,6 +6,7 @@ import 'package:basics/basics.dart';
 import 'package:board_games_companion/extensions/playthroughs_extensions.dart';
 import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
 import 'package:board_games_companion/pages/plays/most_played_game.dart';
+import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -166,40 +167,8 @@ abstract class _PlaysViewModel with Store {
   int get randomItemIndex =>
       Random().nextInt(shuffledBoardGames.length * _numberOfTimesSpinnerCanTurn);
 
-  @computed
-  List<MostPlayedGame> get mostPlayedGames {
-    // TODO filter playthroughs from the past x amount of days and
-    return [
-      MostPlayedGame(
-        boardGameDetails: _boardGamesStore.allBoardGamesInCollections[0],
-        totalNumberOfPlays: 120,
-        totalTimePlayedInSeconds: 2381,
-      ),
-      MostPlayedGame(
-        boardGameDetails: _boardGamesStore.allBoardGamesInCollections[1],
-        totalNumberOfPlays: 32,
-        totalTimePlayedInSeconds: 12983,
-      ),
-    ];
-  }
-
-  @computed
-  int get totalGamesLogged => 120;
-
-  @computed
-  int get totalGamesPlayed => 13;
-
-  @computed
-  int get totalPlaytimeInSeconds => 1303;
-
-  @computed
-  int get totalSoloGamesLogged => 4;
-
-  @computed
-  int get totalDuelGamesLogged => 12;
-
-  @computed
-  int get totalMultiPlayerGamesLogged => 9;
+  @observable
+  PlaysStatsVisualState playsStatsVisualState = const PlaysStatsVisualState.init();
 
   @action
   void loadData() => futureLoadData = ObservableFuture<void>(_loadData());
@@ -213,6 +182,7 @@ abstract class _PlaysViewModel with Store {
 
       case PlaysTab.statistics:
         visualState = const PlaysPageVisualState.statistics();
+        _loadStats();
         break;
 
       case PlaysTab.selectGame:
@@ -283,6 +253,55 @@ abstract class _PlaysViewModel with Store {
         .toList()
       ..shuffle();
     _setupGameSpinnerFilters();
+  }
+
+  Future<void> _loadStats() async {
+    playsStatsVisualState = const PlaysStatsVisualState.loading();
+    // TODO Select a time range (e.g. last week, last month, last year)
+    final weekAgo = DateTime.now().toUtc().subtract(const Duration(days: 320));
+    final boardGamePlaythroughsInPeriod = historicalPlaythroughs
+        .where((hp) => hp.boardGamePlaythroughs.playthrough.endDate! >= weekAgo)
+        .map((hp) => hp.boardGamePlaythroughs)
+        .toList();
+    if (boardGamePlaythroughsInPeriod.isEmpty) {
+      playsStatsVisualState = const PlaysStatsVisualState.empty();
+      return;
+    }
+
+    final playthroughsGroupedByGame = groupBy(
+        boardGamePlaythroughsInPeriod, (BoardGamePlaythrough bgp) => bgp.boardGameDetails.id);
+    final mostPlayedGames = <MostPlayedGame>[];
+    for (final playthroughsGrouped in playthroughsGroupedByGame.entries) {
+      final boardGameDetails =
+          _boardGamesStore.allBoardGamesInCollectionsMap[playthroughsGrouped.key];
+      if (boardGameDetails == null) {
+        continue;
+      }
+
+      mostPlayedGames.add(MostPlayedGame(
+        boardGameDetails: boardGameDetails,
+        totalNumberOfPlays: playthroughsGrouped.value.length,
+        totalTimePlayedInSeconds: playthroughsGrouped.value
+            .map((e) => e.playthrough.duration.inSeconds)
+            .reduce((a, b) => a + b),
+      ));
+    }
+
+    playsStatsVisualState = PlaysStatsVisualState.stats(
+      mostPlayedGames: mostPlayedGames
+        ..sort((mostPlayedGame, otherMostPlayedGame) =>
+            otherMostPlayedGame.totalNumberOfPlays.compareTo(mostPlayedGame.totalNumberOfPlays)),
+      totalGamesLogged: boardGamePlaythroughsInPeriod.length,
+      totalGamesPlayed: playthroughsGroupedByGame.length,
+      totalPlaytimeInSeconds: boardGamePlaythroughsInPeriod
+          .map((bgp) => bgp.playthrough.duration.inSeconds)
+          .reduce((a, b) => a + b),
+      totalDuelGamesLogged:
+          boardGamePlaythroughsInPeriod.where((element) => element.playthrough.isDuel).length,
+      totalMultiPlayerGamesLogged: boardGamePlaythroughsInPeriod
+          .where((element) => element.playthrough.isMultiPlayerGame)
+          .length,
+    );
   }
 
   void _setupGameSpinnerFilters() {

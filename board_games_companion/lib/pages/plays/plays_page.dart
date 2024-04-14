@@ -5,6 +5,7 @@ import 'package:basics/basics.dart';
 import 'package:board_games_companion/extensions/date_time_extensions.dart';
 import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
 import 'package:board_games_companion/pages/plays/most_played_game.dart';
+import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
 import 'package:board_games_companion/widgets/common/section_header.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/collection_toggle_button.dart';
+import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
@@ -136,7 +138,8 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                             historicalPlaythroughs: widget.viewModel.historicalPlaythroughs,
                           ),
                         ),
-                        statistics: () => _StatisticsTab(viewModel: widget.viewModel),
+                        statistics: () =>
+                            _StatisticsTab(visualState: widget.viewModel.playsStatsVisualState),
                         selectGame: () {
                           if (!widget.viewModel.hasAnyBoardGames) {
                             return const _NoBoardGamesSliver();
@@ -210,13 +213,55 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
   }
 }
 
-// TODO Ensure empty state is handled (i.e. no games played in certain period)
 class _StatisticsTab extends StatelessWidget {
   const _StatisticsTab({
-    required this.viewModel,
+    required this.visualState,
   });
 
-  final PlaysViewModel viewModel;
+  final PlaysStatsVisualState visualState;
+
+  @override
+  Widget build(BuildContext context) {
+    return visualState.when(
+      empty: () => const _NoPlaysStatsSliver(),
+      init: () => const _LoadingPlaysStatsSliver(),
+      loading: () => const _LoadingPlaysStatsSliver(),
+      stats: (
+        List<MostPlayedGame> mostPlayedGames,
+        int totalGamesLogged,
+        int totalGamesPlayed,
+        int totalPlaytimeInSeconds,
+        int totalDuelGamesLogged,
+        int totalMultiPlayerGamesLogged,
+      ) =>
+          _PlaysStats(
+        mostPlayedGames: mostPlayedGames,
+        totalDuelGamesLogged: totalDuelGamesLogged,
+        totalGamesLogged: totalGamesLogged,
+        totalGamesPlayed: totalGamesPlayed,
+        totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
+        totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+      ),
+    );
+  }
+}
+
+class _PlaysStats extends StatelessWidget {
+  const _PlaysStats({
+    required this.mostPlayedGames,
+    required this.totalGamesLogged,
+    required this.totalGamesPlayed,
+    required this.totalPlaytimeInSeconds,
+    required this.totalDuelGamesLogged,
+    required this.totalMultiPlayerGamesLogged,
+  });
+
+  final List<MostPlayedGame> mostPlayedGames;
+  final int totalGamesLogged;
+  final int totalGamesPlayed;
+  final int totalPlaytimeInSeconds;
+  final int totalDuelGamesLogged;
+  final int totalMultiPlayerGamesLogged;
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +276,7 @@ class _StatisticsTab extends StatelessWidget {
           child: Observer(
             builder: (_) {
               return _MostPlayedGamesSection(
-                mostPlayedGames: viewModel.mostPlayedGames,
+                mostPlayedGames: mostPlayedGames,
               );
             },
           ),
@@ -245,12 +290,11 @@ class _StatisticsTab extends StatelessWidget {
           child: Observer(
             builder: (_) {
               return _OverallStatsSection(
-                totalGamesLogged: viewModel.totalGamesLogged,
-                totalGamesPlayed: viewModel.totalGamesPlayed,
-                totalPlaytimeInSeconds: viewModel.totalPlaytimeInSeconds,
-                totalSoloGamesLogged: viewModel.totalSoloGamesLogged,
-                totalDuelGamesLogged: viewModel.totalDuelGamesLogged,
-                totalMultiPlayerGamesLogged: viewModel.totalMultiPlayerGamesLogged,
+                totalGamesLogged: totalGamesLogged,
+                totalGamesPlayed: totalGamesPlayed,
+                totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+                totalDuelGamesLogged: totalDuelGamesLogged,
+                totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
               );
             },
           ),
@@ -270,6 +314,47 @@ class _StatisticsTab extends StatelessWidget {
         // ),
       ],
     );
+  }
+}
+
+class _NoPlaysStatsSliver extends StatelessWidget {
+  const _NoPlaysStatsSliver();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverPadding(
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.standardSpacing,
+        horizontal: Dimensions.doubleStandardSpacing,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+            EmptyPageInformationPanel(
+              title: AppText.playsPageOverallStatsNoPlayesTitle,
+              icon: Icon(
+                FontAwesomeIcons.dice,
+                size: Dimensions.emptyPageTitleIconSize,
+                color: AppColors.primaryColor,
+              ),
+              subtitle: AppText.playsPageOverallStatsNoPlayesSubtitle,
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoadingPlaysStatsSliver extends StatelessWidget {
+  const _LoadingPlaysStatsSliver();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverFillRemaining(child: LoadingIndicator());
   }
 }
 
@@ -350,7 +435,6 @@ class _OverallStatsSection extends StatelessWidget {
     required this.totalGamesLogged,
     required this.totalGamesPlayed,
     required this.totalPlaytimeInSeconds,
-    required this.totalSoloGamesLogged,
     required this.totalDuelGamesLogged,
     required this.totalMultiPlayerGamesLogged,
   });
@@ -358,7 +442,6 @@ class _OverallStatsSection extends StatelessWidget {
   final int totalGamesLogged;
   final int totalGamesPlayed;
   final int totalPlaytimeInSeconds;
-  final int totalSoloGamesLogged;
   final int totalDuelGamesLogged;
   final int totalMultiPlayerGamesLogged;
 
@@ -393,13 +476,6 @@ class _OverallStatsSection extends StatelessWidget {
                 icon: FontAwesomeIcons.snowflake,
                 iconColor: AppColors.averagePlayerCountStatColor,
                 subtitle: AppText.playsPageOverallStatsTotalPlayedGames,
-              ),
-              const SizedBox(height: Dimensions.doubleStandardSpacing),
-              VerticalStatisticsItem(
-                text: totalSoloGamesLogged.toString(),
-                icon: Icons.person,
-                iconColor: AppColors.totalLossesStatColor,
-                subtitle: AppText.playsPageOverallStatsTotalSoloGames,
               ),
             ],
           ),

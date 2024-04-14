@@ -69,4 +69,8 @@ class PlaythroughDetails with _$PlaythroughDetails {
   bool get hasAnyScores => scoresWithValue.isNotEmpty;
 
   bool get finishedScoring => scoresWithValue.length == playerScores.length;
+
+  bool get isDuel => playerScores.length == 2;
+
+  bool get isMultiPlayerGame => playerScores.length > 2;
 }
