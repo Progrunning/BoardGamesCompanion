@@ -396,7 +396,7 @@ abstract class _EditPlaythoughViewModel with Store {
   /// NOTE: Ensure this is called after player scores are assigned places
   void _updatePlaceTiebreakers() {
     final tiedPlayerScores = playerScores.onlyTiedScores();
-    if (tiedPlayerScores.isEmpty) {
+    if (tiedPlayerScores.isEmpty && scoreTiebreakersSet.isEmpty) {
       return;
     }
 

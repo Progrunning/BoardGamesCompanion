@@ -3,6 +3,7 @@ import 'package:board_games_companion/common/enums/game_family.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/playthrough.dart';
 import 'package:board_games_companion/models/hive/score.dart';
+import 'package:board_games_companion/models/hive/score_game_results.dart';
 import 'package:board_games_companion/models/player_score.dart';
 import 'package:board_games_companion/models/playthroughs/playthrough_details.dart';
 import 'package:board_games_companion/pages/edit_playthrough/edit_playthrough_view_model.dart';
@@ -19,13 +20,14 @@ void main() {
 
   const String mockPlaythroughId = '1';
   const String mockEmptyPlayerScoreId = '1';
+  const Score emptyScore = Score(
+    boardGameId: '',
+    id: '',
+    playerId: '',
+  );
   const PlayerScore emptyPlayerScore = PlayerScore(
     player: Player(id: mockEmptyPlayerScoreId),
-    score: Score(
-      boardGameId: '',
-      id: '',
-      playerId: '',
-    ),
+    score: emptyScore,
   );
   final mockPlaythroughDetails = PlaythroughDetails(
     playerScores: [emptyPlayerScore],
@@ -79,5 +81,52 @@ void main() {
         .firstWhereOrNull((element) => element.id == playerScoreToUpdate.id);
 
     expect(updatedPlayerScore!.score.scoreGameResult!.points, newScore);
+  });
+
+  test(
+      'GIVEN players are tied for a place '
+      "WHEN updating player's score "
+      "AND player's score are no longer tied "
+      'THEN their tiebraker type should be null ', () {
+    const firstPlayerId = '1';
+    when(() => mockGamePlaythroughsDetailsStore.playthroughsDetails).thenReturn(
+      ObservableList.of(
+        [
+          mockPlaythroughDetails.copyWith(
+            playerScores: [
+              emptyPlayerScore.copyWith(
+                player: const Player(id: firstPlayerId),
+                score: emptyScore.copyWith(
+                  scoreGameResult: const ScoreGameResult(
+                    points: 10,
+                    tiebreakerType: ScoreTiebreakerType.place,
+                  ),
+                ),
+              ),
+              emptyPlayerScore.copyWith(
+                player: const Player(id: '2'),
+                score: emptyScore.copyWith(
+                  scoreGameResult: const ScoreGameResult(
+                    points: 10,
+                    tiebreakerType: ScoreTiebreakerType.place,
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+
+    final playerScoreToUpdate = mockPlaythroughDetails.playerScores
+        .firstWhereOrNull((playerScore) => playerScore.player!.id == firstPlayerId);
+    const newScore = 20.0;
+
+    editPlaythrouhgViewModel.updatePlayerScore(playerScoreToUpdate!.id!, newScore);
+
+    for (final playerScore in editPlaythrouhgViewModel.playerScores) {
+      expect(playerScore.score.isTied, isFalse);
+      expect(playerScore.score.scoreGameResult!.tiebreakerType, isNull);
+    }
   });
 }
