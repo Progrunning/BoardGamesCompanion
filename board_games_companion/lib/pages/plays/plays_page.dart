@@ -398,23 +398,23 @@ class _MostPlayedGamesSection extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    VerticalStatisticsItem(
+                    VerticalStatisticsItem.withMaterialIcon(
                       text: sprintf(
                         AppText.playsPageOverallStatsTotalPlayedGamesFormat,
                         [mostPlayedGames[index].totalNumberOfPlays],
                       ),
                       textStyle: _textStyle,
                       icon: Icons.casino,
-                      iconSize: _iconSize,
                       iconColor: AppColors.playedGamesStatColor,
+                      iconSize: _iconSize,
                     ),
                     const SizedBox(height: Dimensions.halfStandardSpacing),
-                    VerticalStatisticsItem(
+                    VerticalStatisticsItem.withMaterialIcon(
+                      icon: Icons.timelapse,
+                      iconColor: AppColors.highscoreStatColor,
+                      iconSize: _iconSize,
                       text: mostPlayedGames[index].totalTimePlayedInSeconds.toPlaytimeDuration(),
                       textStyle: _textStyle,
-                      icon: Icons.timelapse,
-                      iconSize: _iconSize,
-                      iconColor: AppColors.highscoreStatColor,
                     ),
                   ],
                 ),
@@ -448,19 +448,30 @@ class _OverallStatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
       child: Row(
         children: <Widget>[
           Column(
             children: <Widget>[
-              VerticalStatisticsItem(
+              VerticalStatisticsItem.withMaterialIcon(
                 text: totalGamesLogged.toString(),
                 icon: Icons.casino,
                 iconColor: AppColors.playedGamesStatColor,
                 subtitle: AppText.playsPageOverallStatsTotalGamesLogged,
               ),
               const SizedBox(height: Dimensions.doubleStandardSpacing),
-              VerticalStatisticsItem(
+              VerticalStatisticsItem.withFontAwesomeIcon(
+                text: totalGamesPlayed.toString(),
+                icon: FontAwesomeIcons.chessBoard,
+                iconColor: AppColors.averagePlayerCountStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalPlayedGames,
+              ),
+            ],
+          ),
+          const Spacer(),
+          Column(
+            children: <Widget>[
+              VerticalStatisticsItem.withMaterialIcon(
                 text: totalPlaytimeInSeconds.toPlaytimeDuration(),
                 icon: Icons.timelapse,
                 iconColor: AppColors.highscoreStatColor,
@@ -471,27 +482,16 @@ class _OverallStatsSection extends StatelessWidget {
           const Spacer(),
           Column(
             children: <Widget>[
-              VerticalStatisticsItem(
-                text: totalGamesPlayed.toString(),
-                icon: FontAwesomeIcons.snowflake,
-                iconColor: AppColors.averagePlayerCountStatColor,
-                subtitle: AppText.playsPageOverallStatsTotalPlayedGames,
-              ),
-            ],
-          ),
-          const Spacer(),
-          Column(
-            children: <Widget>[
-              VerticalStatisticsItem(
+              VerticalStatisticsItem.withMaterialIcon(
                 text: totalDuelGamesLogged.toString(),
                 icon: Icons.people,
                 iconColor: AppColors.averagePlaytimeStatColor,
                 subtitle: AppText.playsPageOverallStatsTotalDuels,
               ),
               const SizedBox(height: Dimensions.doubleStandardSpacing),
-              VerticalStatisticsItem(
+              VerticalStatisticsItem.withFontAwesomeIcon(
                 text: totalMultiPlayerGamesLogged.toString(),
-                icon: Icons.person_add_alt_1,
+                icon: FontAwesomeIcons.users,
                 iconColor: AppColors.totalPlaytimeStatColor,
                 subtitle: AppText.playsPageOverallStatsTotalMultiplePlayerGames,
               ),

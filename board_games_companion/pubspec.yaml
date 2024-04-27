@@ -39,7 +39,7 @@ dependencies:
   flutter_slidable: ^3.0.0
   flutter_speed_dial: ^7.0.0
   flutter_svg: ^2.0.8
-  font_awesome_flutter: ^10.3.0
+  font_awesome_flutter: ^10.7.0
   freezed: ^2.3.2
   freezed_annotation: ^2.2.0
   google_fonts: ^6.1.0

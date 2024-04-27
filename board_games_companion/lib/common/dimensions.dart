@@ -59,6 +59,9 @@ class Dimensions {
   static const double largeIconSize = 36;
   static const double defaultCheckboxSize = 24;
 
+  static const double defaultStatsIconSize = 28;
+  static const double defaultFontAwesomeStatsIconSize = 24;
+
   static const double floatingActionButtonBottomSpacing = 72;
   static const double halfFloatingActionButtonBottomSpacing = floatingActionButtonBottomSpacing / 2;
 

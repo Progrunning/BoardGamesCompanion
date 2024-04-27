@@ -7,17 +7,56 @@ import '../../../common/dimensions.dart';
 import '../text/item_property_title_widget.dart';
 
 class VerticalStatisticsItem extends StatelessWidget {
-  const VerticalStatisticsItem({
-    super.key,
+  factory VerticalStatisticsItem.withMaterialIcon({
+    required IconData icon,
+    required String text,
+    String? subtitle,
+    Color? iconColor,
+    double iconSize = Dimensions.defaultStatsIconSize,
+    TextStyle textStyle = const TextStyle(fontSize: Dimensions.largeFontSize),
+    double spacing = Dimensions.quarterStandardSpacing,
+  }) =>
+      VerticalStatisticsItem._(
+        icon: Icon(icon, color: iconColor, size: iconSize),
+        text: text,
+        iconColor: iconColor,
+        iconSize: iconSize,
+        spacing: spacing,
+        subtitle: subtitle,
+        textStyle: textStyle,
+      );
+
+  factory VerticalStatisticsItem.withFontAwesomeIcon({
+    required IconData icon,
+    required String text,
+    String? subtitle,
+    Color? iconColor,
+    double iconSize = Dimensions.defaultFontAwesomeStatsIconSize,
+    TextStyle textStyle = const TextStyle(fontSize: Dimensions.largeFontSize),
+    double spacing = Dimensions.halfStandardSpacing,
+  }) =>
+      VerticalStatisticsItem._(
+        icon: FaIcon(icon, color: iconColor, size: iconSize),
+        text: text,
+        iconColor: iconColor,
+        iconSize: iconSize,
+        spacing: spacing,
+        subtitle: subtitle,
+        textStyle: textStyle,
+      );
+
+  const VerticalStatisticsItem._({
     required this.icon,
     required this.text,
     this.subtitle,
     this.iconColor,
     this.iconSize = 28,
     this.textStyle = const TextStyle(fontSize: Dimensions.largeFontSize),
+    this.spacing = Dimensions.quarterStandardSpacing,
   });
 
-  final IconData icon;
+  final Widget icon;
+  final double spacing;
   final double iconSize;
   final Color? iconColor;
 
@@ -34,16 +73,18 @@ class VerticalStatisticsItem extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            FaIcon(
-              icon,
-              color: iconColor ?? IconTheme.of(context).color,
-              size: iconSize,
-            ),
-            const SizedBox(width: Dimensions.quarterStandardSpacing),
+            icon,
+            // FaIcon(
+            //   icon,
+            //   color: iconColor ?? IconTheme.of(context).color,
+            //   size: iconSize,
+            // ),
+            // const SizedBox(width: Dimensions.quarterStandardSpacing),
+            SizedBox(width: spacing),
             Text(text, style: textStyle),
           ],
         ),
-        const SizedBox(height: Dimensions.quarterStandardSpacing),
+        SizedBox(height: spacing),
         if (subtitle.isNotNullOrBlank)
           ItemPropertyTitle(
             subtitle!,
