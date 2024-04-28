@@ -3,10 +3,13 @@
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/enums/plays_stats_preset_time_period.dart';
+import 'package:board_games_companion/common/helpers/date_time_helpers.dart';
 import 'package:board_games_companion/extensions/playthroughs_extensions.dart';
 import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
 import 'package:board_games_companion/pages/plays/most_played_game.dart';
 import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
+import 'package:board_games_companion/pages/plays/time_period.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -182,7 +185,7 @@ abstract class _PlaysViewModel with Store {
 
       case PlaysTab.statistics:
         visualState = const PlaysPageVisualState.statistics();
-        _loadStats();
+        _loadStats(PlayStatsPresetTimePeriod.LastWeek);
         break;
 
       case PlaysTab.selectGame:
@@ -233,6 +236,16 @@ abstract class _PlaysViewModel with Store {
     visualState = const PlaysPageVisualState.selectGame();
   }
 
+  @action
+  Future<void> updatePlaysPresetTimePeriod(
+      PlayStatsPresetTimePeriod? playStatsPresetTimePeriod) async {
+    if (playStatsPresetTimePeriod == null) {
+      return;
+    }
+
+    await _loadStats(playStatsPresetTimePeriod);
+  }
+
   Future<void> trackTabChange(int tabIndex) async {
     await _analyticsService.logScreenView(
       screenName: _screenViewByTabIndex[tabIndex]!.item1,
@@ -255,16 +268,28 @@ abstract class _PlaysViewModel with Store {
     _setupGameSpinnerFilters();
   }
 
-  Future<void> _loadStats() async {
+  Future<void> _loadStats(PlayStatsPresetTimePeriod presetTimePeriod) async {
     playsStatsVisualState = const PlaysStatsVisualState.loading();
-    // TODO Select a time range (e.g. last week, last month, last year)
-    final weekAgo = DateTime.now().toUtc().subtract(const Duration(days: 320));
+    if (historicalPlaythroughs.isEmpty) {
+      playsStatsVisualState = const PlaysStatsVisualState.empty();
+      return;
+    }
+
+    final showStatsTimePeriod = _calculatePresetTimePeriod(presetTimePeriod);
     final boardGamePlaythroughsInPeriod = historicalPlaythroughs
-        .where((hp) => hp.boardGamePlaythroughs.playthrough.endDate! >= weekAgo)
+        .where((hp) => hp.boardGamePlaythroughs.playthrough.endDate! >= showStatsTimePeriod.from)
         .map((hp) => hp.boardGamePlaythroughs)
         .toList();
     if (boardGamePlaythroughsInPeriod.isEmpty) {
-      playsStatsVisualState = const PlaysStatsVisualState.empty();
+      playsStatsVisualState = PlaysStatsVisualState.noStatsInPeriod(
+        timePeriod: TimePeriod(
+          presetTimePeriod: presetTimePeriod,
+          earliestPlaythrough:
+              historicalPlaythroughs.last.boardGamePlaythroughs.playthrough.endDate!,
+          from: showStatsTimePeriod.from,
+          to: showStatsTimePeriod.to,
+        ),
+      );
       return;
     }
 
@@ -288,6 +313,12 @@ abstract class _PlaysViewModel with Store {
     }
 
     playsStatsVisualState = PlaysStatsVisualState.stats(
+      timePeriod: TimePeriod(
+        presetTimePeriod: presetTimePeriod,
+        earliestPlaythrough: historicalPlaythroughs.last.boardGamePlaythroughs.playthrough.endDate!,
+        from: showStatsTimePeriod.from,
+        to: showStatsTimePeriod.to,
+      ),
       mostPlayedGames: mostPlayedGames
         ..sort((mostPlayedGame, otherMostPlayedGame) =>
             otherMostPlayedGame.totalNumberOfPlays.compareTo(mostPlayedGame.totalNumberOfPlays)),
@@ -336,5 +367,32 @@ abstract class _PlaysViewModel with Store {
       ),
       boardGameDetails: _boardGamesStore.allBoardGamesMap[playthrough.boardGameId]!,
     );
+  }
+
+  /// Calculates the [from] and [to] dates for the given [PlayStatsPresetTimePeriod].
+  ///
+  /// NOTE: [PlayStatsPresetTimePeriod.Custom] will result in the same calculations as
+  /// [PlayStatsPresetTimePeriod.LastWeek] as a "default" option. This is an arbitrary decision
+  /// of how this method should handle [PlayStatsPresetTimePeriod.Custom] option, which is not
+  /// a preset value.
+  ({DateTime from, DateTime to}) _calculatePresetTimePeriod(
+      PlayStatsPresetTimePeriod presetTimePeriod) {
+    final now = DateTime.now();
+    switch (presetTimePeriod) {
+      case PlayStatsPresetTimePeriod.Custom:
+      case PlayStatsPresetTimePeriod.LastWeek:
+        final lastSunday = mostRecentWeekday(now, 0);
+        return (from: lastSunday, to: lastSunday.subtract(const Duration(days: 7)));
+      case PlayStatsPresetTimePeriod.LastMonth:
+        final firstDayOfThisMonth = DateTime(now.year, now.month, 1);
+        final lastDayOfPreviousMonth = firstDayOfThisMonth.subtract(const Duration(days: 1));
+        final firstDayOfPreviousMonth = DateTime(now.year, now.month - 1, 1);
+        return (from: firstDayOfPreviousMonth, to: lastDayOfPreviousMonth);
+      case PlayStatsPresetTimePeriod.LastYear:
+        final firstDayOfThisYear = DateTime(now.year, 1, 1);
+        final lastDayOfPreviousYear = firstDayOfThisYear.subtract(const Duration(days: 1));
+        final firstDayOfPreviousYear = DateTime(now.year - 1, 1, 1);
+        return (from: firstDayOfPreviousYear, to: lastDayOfPreviousYear);
+    }
   }
 }

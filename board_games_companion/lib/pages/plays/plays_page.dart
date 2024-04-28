@@ -11,6 +11,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:sprintf/sprintf.dart';
@@ -22,6 +23,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../common/enums/plays_stats_preset_time_period.dart';
 import '../../common/enums/plays_tab.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/string_extensions.dart';
@@ -51,6 +53,7 @@ import 'game_spinner_filters.dart';
 import 'game_spinner_game_selected_dialog.dart';
 import 'plays_page_visual_states.dart';
 import 'plays_view_model.dart';
+import 'time_period.dart';
 
 class PlaysPage extends StatefulWidget {
   const PlaysPage({
@@ -138,8 +141,11 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                             historicalPlaythroughs: widget.viewModel.historicalPlaythroughs,
                           ),
                         ),
-                        statistics: () =>
-                            _StatisticsTab(visualState: widget.viewModel.playsStatsVisualState),
+                        statistics: () => _StatisticsTab(
+                          visualState: widget.viewModel.playsStatsVisualState,
+                          onPresetTimePeriodChanged: (presetTimePeriod) =>
+                              widget.viewModel.updatePlaysPresetTimePeriod(presetTimePeriod),
+                        ),
                         selectGame: () {
                           if (!widget.viewModel.hasAnyBoardGames) {
                             return const _NoBoardGamesSliver();
@@ -216,9 +222,11 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
 class _StatisticsTab extends StatelessWidget {
   const _StatisticsTab({
     required this.visualState,
+    required this.onPresetTimePeriodChanged,
   });
 
   final PlaysStatsVisualState visualState;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -227,6 +235,7 @@ class _StatisticsTab extends StatelessWidget {
       init: () => const _LoadingPlaysStatsSliver(),
       loading: () => const _LoadingPlaysStatsSliver(),
       stats: (
+        TimePeriod timePeriod,
         List<MostPlayedGame> mostPlayedGames,
         int totalGamesLogged,
         int totalGamesPlayed,
@@ -235,12 +244,19 @@ class _StatisticsTab extends StatelessWidget {
         int totalMultiPlayerGamesLogged,
       ) =>
           _PlaysStats(
+        timePeriod: timePeriod,
         mostPlayedGames: mostPlayedGames,
         totalDuelGamesLogged: totalDuelGamesLogged,
         totalGamesLogged: totalGamesLogged,
         totalGamesPlayed: totalGamesPlayed,
         totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
         totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+        onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+      ),
+      noStatsInPeriod: (TimePeriod timePeriod) => _NoStatsInPeriodSliver(
+        timePeriod: timePeriod,
+        onPresetTimePeriodChanged: (presetTimePeriod) =>
+            onPresetTimePeriodChanged(presetTimePeriod),
       ),
     );
   }
@@ -248,20 +264,24 @@ class _StatisticsTab extends StatelessWidget {
 
 class _PlaysStats extends StatelessWidget {
   const _PlaysStats({
+    required this.timePeriod,
     required this.mostPlayedGames,
     required this.totalGamesLogged,
     required this.totalGamesPlayed,
     required this.totalPlaytimeInSeconds,
     required this.totalDuelGamesLogged,
     required this.totalMultiPlayerGamesLogged,
+    required this.onPresetTimePeriodChanged,
   });
 
+  final TimePeriod timePeriod;
   final List<MostPlayedGame> mostPlayedGames;
   final int totalGamesLogged;
   final int totalGamesPlayed;
   final int totalPlaytimeInSeconds;
   final int totalDuelGamesLogged;
   final int totalMultiPlayerGamesLogged;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -269,16 +289,28 @@ class _PlaysStats extends StatelessWidget {
       children: [
         SliverPersistentHeader(
           delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playsPageOverallStatsTimePeriodSectionTitle,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Observer(
+            builder: (_) => _TimePeriodSection(
+              timePeriod: timePeriod,
+              onPresetTimePeriodChanged: (presetTimePeriod) =>
+                  onPresetTimePeriodChanged(presetTimePeriod),
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
             primaryTitle: AppText.playsPageOverallStatsMostPlayedGameSectionTitle,
           ),
         ),
         SliverToBoxAdapter(
           child: Observer(
-            builder: (_) {
-              return _MostPlayedGamesSection(
-                mostPlayedGames: mostPlayedGames,
-              );
-            },
+            builder: (_) => _MostPlayedGamesSection(
+              mostPlayedGames: mostPlayedGames,
+            ),
           ),
         ),
         SliverPersistentHeader(
@@ -288,15 +320,13 @@ class _PlaysStats extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: Observer(
-            builder: (_) {
-              return _OverallStatsSection(
-                totalGamesLogged: totalGamesLogged,
-                totalGamesPlayed: totalGamesPlayed,
-                totalPlaytimeInSeconds: totalPlaytimeInSeconds,
-                totalDuelGamesLogged: totalDuelGamesLogged,
-                totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
-              );
-            },
+            builder: (_) => _OverallStatsSection(
+              totalGamesLogged: totalGamesLogged,
+              totalGamesPlayed: totalGamesPlayed,
+              totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+              totalDuelGamesLogged: totalDuelGamesLogged,
+              totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
+            ),
           ),
         ),
         // TODO Add games distribution section in later iterations
@@ -312,6 +342,37 @@ class _PlaysStats extends StatelessWidget {
         //     },
         //   ),
         // ),
+      ],
+    );
+  }
+}
+
+class _NoStatsInPeriodSliver extends StatelessWidget {
+  const _NoStatsInPeriodSliver({
+    required this.timePeriod,
+    required this.onPresetTimePeriodChanged,
+  });
+
+  final TimePeriod timePeriod;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playsPageOverallStatsTimePeriodSectionTitle,
+          ),
+        ),
+        _TimePeriodSection(
+          onPresetTimePeriodChanged: (presetTimePeriod) =>
+              onPresetTimePeriodChanged(presetTimePeriod),
+          timePeriod: timePeriod,
+        ),
+        // TODO Update this to show a better / nicer infor panel that there's no games in selected period
+        // Consider using fill up space sliver
+        const _NoPlaysStatsSliver()
       ],
     );
   }
@@ -356,6 +417,123 @@ class _LoadingPlaysStatsSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SliverFillRemaining(child: LoadingIndicator());
   }
+}
+
+class _TimePeriodSection extends StatelessWidget {
+  const _TimePeriodSection({
+    required this.timePeriod,
+    required this.onPresetTimePeriodChanged,
+  });
+
+  final TimePeriod timePeriod;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+
+  static final DateFormat _timePeriodDateFormat = DateFormat.yMMMd();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButton<PlayStatsPresetTimePeriod>(
+              iconEnabledColor: AppColors.accentColor,
+              iconSize: 42,
+              value: timePeriod.presetTimePeriod,
+              underline: const SizedBox.shrink(),
+              isExpanded: true,
+              items: [
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.LastWeek,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodLastWeek,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.LastMonth,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodLastMonth,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.LastYear,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodLastYear,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+                // TODO Upon picking this one date range picker should show up
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.Custom,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodCustom,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+              ],
+              onChanged: (PlayStatsPresetTimePeriod? value) => onPresetTimePeriodChanged(value),
+            ),
+          ),
+          const SizedBox(width: Dimensions.doubleStandardSpacing),
+          Column(
+            children: [
+              IconButton(
+                onPressed: () {
+                  // TODO Finish this up
+                  showDateRangePicker(
+                    context: context,
+                    firstDate: timePeriod.earliestPlaythrough,
+                    lastDate: DateTime.now(),
+                  );
+                },
+                icon: const Icon(Icons.calendar_month, size: 32),
+              ),
+              Row(
+                children: [
+                  Text(_timePeriodDateFormat.format(timePeriod.from)),
+                  const Text(' - '),
+                  Text(_timePeriodDateFormat.format(timePeriod.to)),
+                ],
+              ),
+              // TODO use sprintf
+              Text('(${timePeriod.daysInPeriod.toString()} days)'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Future<void> _pickFromDate(BuildContext context) async {
+  //   final DateTime now = DateTime.now();
+  //   final DateTime? newStartDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: widget.viewModel.playthroughStartTime,
+  //     firstDate: now.add(const Duration(days: -Constants.daysInTenYears)),
+  //     lastDate: now,
+  //     currentDate: now,
+  //     helpText: 'Pick a playthrough date',
+  //     builder: (_, Widget? child) {
+  //       return Theme(
+  //         data: Theme.of(context).copyWith(
+  //           colorScheme: Theme.of(context).colorScheme.copyWith(
+  //                 primary: AppColors.accentColor,
+  //               ),
+  //         ),
+  //         child: child!,
+  //       );
+  //     },
+  //   );
+
+  //   if (newStartDate == null) {
+  //     return;
+  //   }
+
+  //   widget.viewModel.updateStartDate(newStartDate);
+  // }
 }
 
 class _MostPlayedGamesSection extends StatelessWidget {

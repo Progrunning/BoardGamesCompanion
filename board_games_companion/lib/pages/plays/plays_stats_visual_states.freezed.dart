@@ -20,7 +20,9 @@ mixin _$PlaysStatsVisualState {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function(TimePeriod timePeriod) noStatsInPeriod,
     required TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -35,7 +37,9 @@ mixin _$PlaysStatsVisualState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
+    TResult? Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult? Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -50,7 +54,9 @@ mixin _$PlaysStatsVisualState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -66,6 +72,7 @@ mixin _$PlaysStatsVisualState {
   TResult map<TResult extends Object?>({
     required TResult Function(_init value) init,
     required TResult Function(_loading value) loading,
+    required TResult Function(_noStatsInPeriod value) noStatsInPeriod,
     required TResult Function(_stats value) stats,
     required TResult Function(_empty value) empty,
   }) =>
@@ -74,6 +81,7 @@ mixin _$PlaysStatsVisualState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_init value)? init,
     TResult? Function(_loading value)? loading,
+    TResult? Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult? Function(_stats value)? stats,
     TResult? Function(_empty value)? empty,
   }) =>
@@ -82,6 +90,7 @@ mixin _$PlaysStatsVisualState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init value)? init,
     TResult Function(_loading value)? loading,
+    TResult Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult Function(_stats value)? stats,
     TResult Function(_empty value)? empty,
     required TResult orElse(),
@@ -147,7 +156,9 @@ class _$initImpl implements _init {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function(TimePeriod timePeriod) noStatsInPeriod,
     required TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -165,7 +176,9 @@ class _$initImpl implements _init {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
+    TResult? Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult? Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -183,7 +196,9 @@ class _$initImpl implements _init {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -205,6 +220,7 @@ class _$initImpl implements _init {
   TResult map<TResult extends Object?>({
     required TResult Function(_init value) init,
     required TResult Function(_loading value) loading,
+    required TResult Function(_noStatsInPeriod value) noStatsInPeriod,
     required TResult Function(_stats value) stats,
     required TResult Function(_empty value) empty,
   }) {
@@ -216,6 +232,7 @@ class _$initImpl implements _init {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_init value)? init,
     TResult? Function(_loading value)? loading,
+    TResult? Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult? Function(_stats value)? stats,
     TResult? Function(_empty value)? empty,
   }) {
@@ -227,6 +244,7 @@ class _$initImpl implements _init {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init value)? init,
     TResult Function(_loading value)? loading,
+    TResult Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult Function(_stats value)? stats,
     TResult Function(_empty value)? empty,
     required TResult orElse(),
@@ -282,7 +300,9 @@ class _$loadingImpl implements _loading {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function(TimePeriod timePeriod) noStatsInPeriod,
     required TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -300,7 +320,9 @@ class _$loadingImpl implements _loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
+    TResult? Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult? Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -318,7 +340,9 @@ class _$loadingImpl implements _loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -340,6 +364,7 @@ class _$loadingImpl implements _loading {
   TResult map<TResult extends Object?>({
     required TResult Function(_init value) init,
     required TResult Function(_loading value) loading,
+    required TResult Function(_noStatsInPeriod value) noStatsInPeriod,
     required TResult Function(_stats value) stats,
     required TResult Function(_empty value) empty,
   }) {
@@ -351,6 +376,7 @@ class _$loadingImpl implements _loading {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_init value)? init,
     TResult? Function(_loading value)? loading,
+    TResult? Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult? Function(_stats value)? stats,
     TResult? Function(_empty value)? empty,
   }) {
@@ -362,6 +388,7 @@ class _$loadingImpl implements _loading {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init value)? init,
     TResult Function(_loading value)? loading,
+    TResult Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult Function(_stats value)? stats,
     TResult Function(_empty value)? empty,
     required TResult orElse(),
@@ -378,18 +405,209 @@ abstract class _loading implements PlaysStatsVisualState {
 }
 
 /// @nodoc
+abstract class _$$noStatsInPeriodImplCopyWith<$Res> {
+  factory _$$noStatsInPeriodImplCopyWith(_$noStatsInPeriodImpl value,
+          $Res Function(_$noStatsInPeriodImpl) then) =
+      __$$noStatsInPeriodImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({TimePeriod timePeriod});
+
+  $TimePeriodCopyWith<$Res> get timePeriod;
+}
+
+/// @nodoc
+class __$$noStatsInPeriodImplCopyWithImpl<$Res>
+    extends _$PlaysStatsVisualStateCopyWithImpl<$Res, _$noStatsInPeriodImpl>
+    implements _$$noStatsInPeriodImplCopyWith<$Res> {
+  __$$noStatsInPeriodImplCopyWithImpl(
+      _$noStatsInPeriodImpl _value, $Res Function(_$noStatsInPeriodImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? timePeriod = null,
+  }) {
+    return _then(_$noStatsInPeriodImpl(
+      timePeriod: null == timePeriod
+          ? _value.timePeriod
+          : timePeriod // ignore: cast_nullable_to_non_nullable
+              as TimePeriod,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TimePeriodCopyWith<$Res> get timePeriod {
+    return $TimePeriodCopyWith<$Res>(_value.timePeriod, (value) {
+      return _then(_value.copyWith(timePeriod: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$noStatsInPeriodImpl implements _noStatsInPeriod {
+  const _$noStatsInPeriodImpl({required this.timePeriod});
+
+  @override
+  final TimePeriod timePeriod;
+
+  @override
+  String toString() {
+    return 'PlaysStatsVisualState.noStatsInPeriod(timePeriod: $timePeriod)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$noStatsInPeriodImpl &&
+            (identical(other.timePeriod, timePeriod) ||
+                other.timePeriod == timePeriod));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, timePeriod);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$noStatsInPeriodImplCopyWith<_$noStatsInPeriodImpl> get copyWith =>
+      __$$noStatsInPeriodImplCopyWithImpl<_$noStatsInPeriodImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() init,
+    required TResult Function() loading,
+    required TResult Function(TimePeriod timePeriod) noStatsInPeriod,
+    required TResult Function(
+            TimePeriod timePeriod,
+            List<MostPlayedGame> mostPlayedGames,
+            int totalGamesLogged,
+            int totalGamesPlayed,
+            int totalPlaytimeInSeconds,
+            int totalDuelGamesLogged,
+            int totalMultiPlayerGamesLogged)
+        stats,
+    required TResult Function() empty,
+  }) {
+    return noStatsInPeriod(timePeriod);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? init,
+    TResult? Function()? loading,
+    TResult? Function(TimePeriod timePeriod)? noStatsInPeriod,
+    TResult? Function(
+            TimePeriod timePeriod,
+            List<MostPlayedGame> mostPlayedGames,
+            int totalGamesLogged,
+            int totalGamesPlayed,
+            int totalPlaytimeInSeconds,
+            int totalDuelGamesLogged,
+            int totalMultiPlayerGamesLogged)?
+        stats,
+    TResult? Function()? empty,
+  }) {
+    return noStatsInPeriod?.call(timePeriod);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? init,
+    TResult Function()? loading,
+    TResult Function(TimePeriod timePeriod)? noStatsInPeriod,
+    TResult Function(
+            TimePeriod timePeriod,
+            List<MostPlayedGame> mostPlayedGames,
+            int totalGamesLogged,
+            int totalGamesPlayed,
+            int totalPlaytimeInSeconds,
+            int totalDuelGamesLogged,
+            int totalMultiPlayerGamesLogged)?
+        stats,
+    TResult Function()? empty,
+    required TResult orElse(),
+  }) {
+    if (noStatsInPeriod != null) {
+      return noStatsInPeriod(timePeriod);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_init value) init,
+    required TResult Function(_loading value) loading,
+    required TResult Function(_noStatsInPeriod value) noStatsInPeriod,
+    required TResult Function(_stats value) stats,
+    required TResult Function(_empty value) empty,
+  }) {
+    return noStatsInPeriod(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_init value)? init,
+    TResult? Function(_loading value)? loading,
+    TResult? Function(_noStatsInPeriod value)? noStatsInPeriod,
+    TResult? Function(_stats value)? stats,
+    TResult? Function(_empty value)? empty,
+  }) {
+    return noStatsInPeriod?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_init value)? init,
+    TResult Function(_loading value)? loading,
+    TResult Function(_noStatsInPeriod value)? noStatsInPeriod,
+    TResult Function(_stats value)? stats,
+    TResult Function(_empty value)? empty,
+    required TResult orElse(),
+  }) {
+    if (noStatsInPeriod != null) {
+      return noStatsInPeriod(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _noStatsInPeriod implements PlaysStatsVisualState {
+  const factory _noStatsInPeriod({required final TimePeriod timePeriod}) =
+      _$noStatsInPeriodImpl;
+
+  TimePeriod get timePeriod;
+  @JsonKey(ignore: true)
+  _$$noStatsInPeriodImplCopyWith<_$noStatsInPeriodImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 abstract class _$$statsImplCopyWith<$Res> {
   factory _$$statsImplCopyWith(
           _$statsImpl value, $Res Function(_$statsImpl) then) =
       __$$statsImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
-      {List<MostPlayedGame> mostPlayedGames,
+      {TimePeriod timePeriod,
+      List<MostPlayedGame> mostPlayedGames,
       int totalGamesLogged,
       int totalGamesPlayed,
       int totalPlaytimeInSeconds,
       int totalDuelGamesLogged,
       int totalMultiPlayerGamesLogged});
+
+  $TimePeriodCopyWith<$Res> get timePeriod;
 }
 
 /// @nodoc
@@ -403,6 +621,7 @@ class __$$statsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? timePeriod = null,
     Object? mostPlayedGames = null,
     Object? totalGamesLogged = null,
     Object? totalGamesPlayed = null,
@@ -411,6 +630,10 @@ class __$$statsImplCopyWithImpl<$Res>
     Object? totalMultiPlayerGamesLogged = null,
   }) {
     return _then(_$statsImpl(
+      timePeriod: null == timePeriod
+          ? _value.timePeriod
+          : timePeriod // ignore: cast_nullable_to_non_nullable
+              as TimePeriod,
       mostPlayedGames: null == mostPlayedGames
           ? _value._mostPlayedGames
           : mostPlayedGames // ignore: cast_nullable_to_non_nullable
@@ -437,13 +660,22 @@ class __$$statsImplCopyWithImpl<$Res>
               as int,
     ));
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TimePeriodCopyWith<$Res> get timePeriod {
+    return $TimePeriodCopyWith<$Res>(_value.timePeriod, (value) {
+      return _then(_value.copyWith(timePeriod: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$statsImpl implements _stats {
   const _$statsImpl(
-      {required final List<MostPlayedGame> mostPlayedGames,
+      {required this.timePeriod,
+      required final List<MostPlayedGame> mostPlayedGames,
       required this.totalGamesLogged,
       required this.totalGamesPlayed,
       required this.totalPlaytimeInSeconds,
@@ -451,6 +683,8 @@ class _$statsImpl implements _stats {
       required this.totalMultiPlayerGamesLogged})
       : _mostPlayedGames = mostPlayedGames;
 
+  @override
+  final TimePeriod timePeriod;
   final List<MostPlayedGame> _mostPlayedGames;
   @override
   List<MostPlayedGame> get mostPlayedGames {
@@ -472,7 +706,7 @@ class _$statsImpl implements _stats {
 
   @override
   String toString() {
-    return 'PlaysStatsVisualState.stats(mostPlayedGames: $mostPlayedGames, totalGamesLogged: $totalGamesLogged, totalGamesPlayed: $totalGamesPlayed, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, totalDuelGamesLogged: $totalDuelGamesLogged, totalMultiPlayerGamesLogged: $totalMultiPlayerGamesLogged)';
+    return 'PlaysStatsVisualState.stats(timePeriod: $timePeriod, mostPlayedGames: $mostPlayedGames, totalGamesLogged: $totalGamesLogged, totalGamesPlayed: $totalGamesPlayed, totalPlaytimeInSeconds: $totalPlaytimeInSeconds, totalDuelGamesLogged: $totalDuelGamesLogged, totalMultiPlayerGamesLogged: $totalMultiPlayerGamesLogged)';
   }
 
   @override
@@ -480,6 +714,8 @@ class _$statsImpl implements _stats {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$statsImpl &&
+            (identical(other.timePeriod, timePeriod) ||
+                other.timePeriod == timePeriod) &&
             const DeepCollectionEquality()
                 .equals(other._mostPlayedGames, _mostPlayedGames) &&
             (identical(other.totalGamesLogged, totalGamesLogged) ||
@@ -499,6 +735,7 @@ class _$statsImpl implements _stats {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      timePeriod,
       const DeepCollectionEquality().hash(_mostPlayedGames),
       totalGamesLogged,
       totalGamesPlayed,
@@ -517,7 +754,9 @@ class _$statsImpl implements _stats {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function(TimePeriod timePeriod) noStatsInPeriod,
     required TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -528,6 +767,7 @@ class _$statsImpl implements _stats {
     required TResult Function() empty,
   }) {
     return stats(
+        timePeriod,
         mostPlayedGames,
         totalGamesLogged,
         totalGamesPlayed,
@@ -541,7 +781,9 @@ class _$statsImpl implements _stats {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
+    TResult? Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult? Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -552,6 +794,7 @@ class _$statsImpl implements _stats {
     TResult? Function()? empty,
   }) {
     return stats?.call(
+        timePeriod,
         mostPlayedGames,
         totalGamesLogged,
         totalGamesPlayed,
@@ -565,7 +808,9 @@ class _$statsImpl implements _stats {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -578,6 +823,7 @@ class _$statsImpl implements _stats {
   }) {
     if (stats != null) {
       return stats(
+          timePeriod,
           mostPlayedGames,
           totalGamesLogged,
           totalGamesPlayed,
@@ -593,6 +839,7 @@ class _$statsImpl implements _stats {
   TResult map<TResult extends Object?>({
     required TResult Function(_init value) init,
     required TResult Function(_loading value) loading,
+    required TResult Function(_noStatsInPeriod value) noStatsInPeriod,
     required TResult Function(_stats value) stats,
     required TResult Function(_empty value) empty,
   }) {
@@ -604,6 +851,7 @@ class _$statsImpl implements _stats {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_init value)? init,
     TResult? Function(_loading value)? loading,
+    TResult? Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult? Function(_stats value)? stats,
     TResult? Function(_empty value)? empty,
   }) {
@@ -615,6 +863,7 @@ class _$statsImpl implements _stats {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init value)? init,
     TResult Function(_loading value)? loading,
+    TResult Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult Function(_stats value)? stats,
     TResult Function(_empty value)? empty,
     required TResult orElse(),
@@ -628,13 +877,15 @@ class _$statsImpl implements _stats {
 
 abstract class _stats implements PlaysStatsVisualState {
   const factory _stats(
-      {required final List<MostPlayedGame> mostPlayedGames,
+      {required final TimePeriod timePeriod,
+      required final List<MostPlayedGame> mostPlayedGames,
       required final int totalGamesLogged,
       required final int totalGamesPlayed,
       required final int totalPlaytimeInSeconds,
       required final int totalDuelGamesLogged,
       required final int totalMultiPlayerGamesLogged}) = _$statsImpl;
 
+  TimePeriod get timePeriod;
   List<MostPlayedGame> get mostPlayedGames;
   int get totalGamesLogged;
   int get totalGamesPlayed;
@@ -686,7 +937,9 @@ class _$emptyImpl implements _empty {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function(TimePeriod timePeriod) noStatsInPeriod,
     required TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -704,7 +957,9 @@ class _$emptyImpl implements _empty {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? init,
     TResult? Function()? loading,
+    TResult? Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult? Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -722,7 +977,9 @@ class _$emptyImpl implements _empty {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function(TimePeriod timePeriod)? noStatsInPeriod,
     TResult Function(
+            TimePeriod timePeriod,
             List<MostPlayedGame> mostPlayedGames,
             int totalGamesLogged,
             int totalGamesPlayed,
@@ -744,6 +1001,7 @@ class _$emptyImpl implements _empty {
   TResult map<TResult extends Object?>({
     required TResult Function(_init value) init,
     required TResult Function(_loading value) loading,
+    required TResult Function(_noStatsInPeriod value) noStatsInPeriod,
     required TResult Function(_stats value) stats,
     required TResult Function(_empty value) empty,
   }) {
@@ -755,6 +1013,7 @@ class _$emptyImpl implements _empty {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_init value)? init,
     TResult? Function(_loading value)? loading,
+    TResult? Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult? Function(_stats value)? stats,
     TResult? Function(_empty value)? empty,
   }) {
@@ -766,6 +1025,7 @@ class _$emptyImpl implements _empty {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init value)? init,
     TResult Function(_loading value)? loading,
+    TResult Function(_noStatsInPeriod value)? noStatsInPeriod,
     TResult Function(_stats value)? stats,
     TResult Function(_empty value)? empty,
     required TResult orElse(),
