@@ -106,8 +106,8 @@ abstract class _EditPlaythoughViewModel with Store {
   }
 
   @computed
-  CooperativeGameResult? get cooperativeGameResult =>
-      playerScores.first.score.noScoreGameResult?.cooperativeGameResult;
+  CooperativeGameResult? get cooperativeGameResult => _playthroughDetailsWorkingCopy
+      ?.playerScores.first.score.noScoreGameResult?.cooperativeGameResult;
 
   bool get isDirty => _playthroughDetailsWorkingCopy != playthroughDetails;
 
@@ -363,7 +363,11 @@ abstract class _EditPlaythoughViewModel with Store {
   }
 
   void _updateEditPlaythroughPageVisualState() {
-    switch (_playthroughDetailsWorkingCopy!.playerScoreBasedGameClassification) {
+    final gameClassificaition =
+        _playthroughDetailsWorkingCopy!.playerScoreBasedGameClassification ??
+            _gamePlaythroughsDetailsStore.gameClassification;
+
+    switch (gameClassificaition) {
       case GameClassification.Score:
         editPlaythroughPageVisualState = EditPlaythroughPageVisualStates.editScoreGame(
           gameFamily: _gamePlaythroughsDetailsStore.gameGameFamily,
