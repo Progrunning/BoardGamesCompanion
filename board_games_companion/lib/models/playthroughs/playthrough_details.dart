@@ -53,7 +53,11 @@ class PlaythroughDetails with _$PlaythroughDetails {
   List<PlayerScore> get tiedPlayerScores =>
       playerScores.where((playerScore) => playerScore.id != null && playerScore.isTied).toList();
 
-  GameClassification get playerScoreBasedGameClassification {
+  GameClassification? get playerScoreBasedGameClassification {
+    if (!playerScores.any((playerScore) => playerScore.score.hasScore)) {
+      return null;
+    }
+
     if (playerScores.any((playerScore) => playerScore.score.noScoreGameResult != null)) {
       return GameClassification.NoScore;
     }
