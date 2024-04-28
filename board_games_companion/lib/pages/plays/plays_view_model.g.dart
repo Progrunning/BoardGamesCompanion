@@ -159,6 +159,27 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
     });
   }
 
+  late final _$updatePlaysPresetTimePeriodAsyncAction = AsyncAction(
+      '_PlaysViewModel.updatePlaysPresetTimePeriod',
+      context: context);
+
+  @override
+  Future<void> updatePlaysPresetTimePeriod(
+      PlayStatsPresetTimePeriod? presetTimePeriod) {
+    return _$updatePlaysPresetTimePeriodAsyncAction
+        .run(() => super.updatePlaysPresetTimePeriod(presetTimePeriod));
+  }
+
+  late final _$updatePlaysCustomTimePeriodAsyncAction = AsyncAction(
+      '_PlaysViewModel.updatePlaysCustomTimePeriod',
+      context: context);
+
+  @override
+  Future<void> updatePlaysCustomTimePeriod(DateTimeRange dateTimeRange) {
+    return _$updatePlaysCustomTimePeriodAsyncAction
+        .run(() => super.updatePlaysCustomTimePeriod(dateTimeRange));
+  }
+
   late final _$_PlaysViewModelActionController =
       ActionController(name: '_PlaysViewModel', context: context);
 

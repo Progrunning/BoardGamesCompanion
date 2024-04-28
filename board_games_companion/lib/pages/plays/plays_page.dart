@@ -145,6 +145,8 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                           visualState: widget.viewModel.playsStatsVisualState,
                           onPresetTimePeriodChanged: (presetTimePeriod) =>
                               widget.viewModel.updatePlaysPresetTimePeriod(presetTimePeriod),
+                          onCustomTimePeriodChanged: (DateTimeRange timePeriodDateTimeRange) =>
+                              widget.viewModel.updatePlaysCustomTimePeriod(timePeriodDateTimeRange),
                         ),
                         selectGame: () {
                           if (!widget.viewModel.hasAnyBoardGames) {
@@ -223,10 +225,12 @@ class _StatisticsTab extends StatelessWidget {
   const _StatisticsTab({
     required this.visualState,
     required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
   });
 
   final PlaysStatsVisualState visualState;
   final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -252,11 +256,14 @@ class _StatisticsTab extends StatelessWidget {
         totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
         totalPlaytimeInSeconds: totalPlaytimeInSeconds,
         onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+        onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+            onCustomTimePeriodChanged(timePeriodDateTimeRange),
       ),
       noStatsInPeriod: (TimePeriod timePeriod) => _NoStatsInPeriodSliver(
         timePeriod: timePeriod,
-        onPresetTimePeriodChanged: (presetTimePeriod) =>
-            onPresetTimePeriodChanged(presetTimePeriod),
+        onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+        onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+            onCustomTimePeriodChanged(timePeriodDateTimeRange),
       ),
     );
   }
@@ -272,6 +279,7 @@ class _PlaysStats extends StatelessWidget {
     required this.totalDuelGamesLogged,
     required this.totalMultiPlayerGamesLogged,
     required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
   });
 
   final TimePeriod timePeriod;
@@ -282,6 +290,7 @@ class _PlaysStats extends StatelessWidget {
   final int totalDuelGamesLogged;
   final int totalMultiPlayerGamesLogged;
   final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -298,6 +307,8 @@ class _PlaysStats extends StatelessWidget {
               timePeriod: timePeriod,
               onPresetTimePeriodChanged: (presetTimePeriod) =>
                   onPresetTimePeriodChanged(presetTimePeriod),
+              onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+                  onCustomTimePeriodChanged(timePeriodDateTimeRange),
             ),
           ),
         ),
@@ -351,10 +362,12 @@ class _NoStatsInPeriodSliver extends StatelessWidget {
   const _NoStatsInPeriodSliver({
     required this.timePeriod,
     required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
   });
 
   final TimePeriod timePeriod;
   final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -366,13 +379,13 @@ class _NoStatsInPeriodSliver extends StatelessWidget {
           ),
         ),
         _TimePeriodSection(
-          onPresetTimePeriodChanged: (presetTimePeriod) =>
-              onPresetTimePeriodChanged(presetTimePeriod),
           timePeriod: timePeriod,
+          onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+          onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+              onCustomTimePeriodChanged(timePeriodDateTimeRange),
         ),
-        // TODO Update this to show a better / nicer infor panel that there's no games in selected period
         // Consider using fill up space sliver
-        const _NoPlaysStatsSliver()
+        const _NoPlaysInPeriodEmptyPageSliver()
       ],
     );
   }
@@ -410,6 +423,38 @@ class _NoPlaysStatsSliver extends StatelessWidget {
   }
 }
 
+class _NoPlaysInPeriodEmptyPageSliver extends StatelessWidget {
+  const _NoPlaysInPeriodEmptyPageSliver();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverPadding(
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.standardSpacing,
+        horizontal: Dimensions.doubleStandardSpacing,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+            EmptyPageInformationPanel(
+              title: AppText.playsPageOverallStatsTimePeriodTitle,
+              icon: Icon(
+                Icons.query_stats,
+                size: Dimensions.emptyPageTitleIconSize,
+                color: AppColors.primaryColor,
+              ),
+              subtitle: AppText.playsPageOverallStatsTimePeriodSubtitle,
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _LoadingPlaysStatsSliver extends StatelessWidget {
   const _LoadingPlaysStatsSliver();
 
@@ -423,10 +468,12 @@ class _TimePeriodSection extends StatelessWidget {
   const _TimePeriodSection({
     required this.timePeriod,
     required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
   });
 
   final TimePeriod timePeriod;
   final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
 
   static final DateFormat _timePeriodDateFormat = DateFormat.yMMMd();
 
@@ -481,30 +528,56 @@ class _TimePeriodSection extends StatelessWidget {
           Column(
             children: [
               IconButton(
-                onPressed: () {
-                  // TODO Finish this up
-                  showDateRangePicker(
-                    context: context,
-                    firstDate: timePeriod.earliestPlaythrough,
-                    lastDate: DateTime.now(),
-                  );
-                },
+                onPressed: () => _pickCustomTimePeriodRange(context),
                 icon: const Icon(Icons.calendar_month, size: 32),
               ),
-              Row(
-                children: [
-                  Text(_timePeriodDateFormat.format(timePeriod.from)),
-                  const Text(' - '),
-                  Text(_timePeriodDateFormat.format(timePeriod.to)),
-                ],
+              Text(
+                sprintf(
+                  AppText.playsPageOverallStatsTimePeriodDatesFormat,
+                  [
+                    _timePeriodDateFormat.format(timePeriod.from),
+                    _timePeriodDateFormat.format(timePeriod.to)
+                  ],
+                ),
               ),
-              // TODO use sprintf
-              Text('(${timePeriod.daysInPeriod.toString()} days)'),
+              Text(
+                sprintf(
+                  AppText.playsPageOverallStatsTimePeriodInDaysFormat,
+                  [timePeriod.daysInPeriod],
+                ),
+              ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _pickCustomTimePeriodRange(BuildContext context) async {
+    final pickedDateRange = await showDateRangePicker(
+      context: context,
+      firstDate: timePeriod.earliestPlaythrough,
+      lastDate: DateTime.now(),
+      initialDateRange: DateTimeRange(start: timePeriod.from, end: timePeriod.to),
+      currentDate: timePeriod.from,
+      helpText: AppText.playsPageOverallStatsTimePeriodPickerHelpText,
+      builder: (_, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: AppColors.accentColor,
+                ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDateRange == null) {
+      return;
+    }
+
+    onCustomTimePeriodChanged(pickedDateRange);
   }
 
   // Future<void> _pickFromDate(BuildContext context) async {

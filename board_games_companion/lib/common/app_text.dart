@@ -316,12 +316,19 @@ class AppText {
   static const playsPageOverallStatsNoPlayesTitle = "You haven't played any games";
   static const playsPageOverallStatsNoPlayesSubtitle =
       'Start recording your plays in the app and this screen will automatically populate with statistics of your playthroughs.';
+
+  static const playsPageOverallStatsTimePeriodTitle = 'No games played in selected period';
+  static const playsPageOverallStatsTimePeriodSubtitle =
+      'Select a broader or different time period to see your logged games statistics';
   static const playsPageOverallStatsTimePeriodFrom = 'From';
   static const playsPageOverallStatsTimePeriodTo = 'To';
   static const playsPageOverallStatsTimePeriodLastWeek = 'Last week';
   static const playsPageOverallStatsTimePeriodLastMonth = 'Last month';
   static const playsPageOverallStatsTimePeriodLastYear = 'Last year';
   static const playsPageOverallStatsTimePeriodCustom = 'Custom';
+  static const playsPageOverallStatsTimePeriodDatesFormat = '%s - %s';
+  static const playsPageOverallStatsTimePeriodInDaysFormat = '%i days';
+  static const playsPageOverallStatsTimePeriodPickerHelpText = 'Pick a time period';
 
   static const playsPageOverallStatsTimePeriodSectionTitle = 'Time period';
   static const playsPageOverallStatsMostPlayedGameSectionTitle = 'Most played games';

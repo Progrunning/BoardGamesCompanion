@@ -11,6 +11,7 @@ import 'package:board_games_companion/pages/plays/most_played_game.dart';
 import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
 import 'package:board_games_companion/pages/plays/time_period.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
@@ -185,7 +186,7 @@ abstract class _PlaysViewModel with Store {
 
       case PlaysTab.statistics:
         visualState = const PlaysPageVisualState.statistics();
-        _loadStats(PlayStatsPresetTimePeriod.LastWeek);
+        updatePlaysPresetTimePeriod(PlayStatsPresetTimePeriod.LastWeek);
         break;
 
       case PlaysTab.selectGame:
@@ -237,14 +238,18 @@ abstract class _PlaysViewModel with Store {
   }
 
   @action
-  Future<void> updatePlaysPresetTimePeriod(
-      PlayStatsPresetTimePeriod? playStatsPresetTimePeriod) async {
-    if (playStatsPresetTimePeriod == null) {
+  Future<void> updatePlaysPresetTimePeriod(PlayStatsPresetTimePeriod? presetTimePeriod) async {
+    if (presetTimePeriod == null) {
       return;
     }
 
-    await _loadStats(playStatsPresetTimePeriod);
+    final showStatsTimePeriod = _calculatePresetTimePeriod(presetTimePeriod);
+    await _loadStats(showStatsTimePeriod.from, showStatsTimePeriod.to, presetTimePeriod);
   }
+
+  @action
+  Future<void> updatePlaysCustomTimePeriod(DateTimeRange dateTimeRange) async =>
+      _loadStats(dateTimeRange.start, dateTimeRange.end, PlayStatsPresetTimePeriod.Custom);
 
   Future<void> trackTabChange(int tabIndex) async {
     await _analyticsService.logScreenView(
@@ -268,16 +273,19 @@ abstract class _PlaysViewModel with Store {
     _setupGameSpinnerFilters();
   }
 
-  Future<void> _loadStats(PlayStatsPresetTimePeriod presetTimePeriod) async {
+  Future<void> _loadStats(
+    DateTime timePeriodFrom,
+    DateTime timePeriodTo,
+    PlayStatsPresetTimePeriod presetTimePeriod,
+  ) async {
     playsStatsVisualState = const PlaysStatsVisualState.loading();
     if (historicalPlaythroughs.isEmpty) {
       playsStatsVisualState = const PlaysStatsVisualState.empty();
       return;
     }
 
-    final showStatsTimePeriod = _calculatePresetTimePeriod(presetTimePeriod);
     final boardGamePlaythroughsInPeriod = historicalPlaythroughs
-        .where((hp) => hp.boardGamePlaythroughs.playthrough.endDate! >= showStatsTimePeriod.from)
+        .where((hp) => hp.boardGamePlaythroughs.playthrough.endDate! >= timePeriodFrom)
         .map((hp) => hp.boardGamePlaythroughs)
         .toList();
     if (boardGamePlaythroughsInPeriod.isEmpty) {
@@ -286,8 +294,8 @@ abstract class _PlaysViewModel with Store {
           presetTimePeriod: presetTimePeriod,
           earliestPlaythrough:
               historicalPlaythroughs.last.boardGamePlaythroughs.playthrough.endDate!,
-          from: showStatsTimePeriod.from,
-          to: showStatsTimePeriod.to,
+          from: timePeriodFrom,
+          to: timePeriodTo,
         ),
       );
       return;
@@ -316,8 +324,8 @@ abstract class _PlaysViewModel with Store {
       timePeriod: TimePeriod(
         presetTimePeriod: presetTimePeriod,
         earliestPlaythrough: historicalPlaythroughs.last.boardGamePlaythroughs.playthrough.endDate!,
-        from: showStatsTimePeriod.from,
-        to: showStatsTimePeriod.to,
+        from: timePeriodFrom,
+        to: timePeriodTo,
       ),
       mostPlayedGames: mostPlayedGames
         ..sort((mostPlayedGame, otherMostPlayedGame) =>
@@ -382,7 +390,7 @@ abstract class _PlaysViewModel with Store {
       case PlayStatsPresetTimePeriod.Custom:
       case PlayStatsPresetTimePeriod.LastWeek:
         final lastSunday = mostRecentWeekday(now, 0);
-        return (from: lastSunday, to: lastSunday.subtract(const Duration(days: 7)));
+        return (from: lastSunday.subtract(const Duration(days: 7)), to: lastSunday);
       case PlayStatsPresetTimePeriod.LastMonth:
         final firstDayOfThisMonth = DateTime(now.year, now.month, 1);
         final lastDayOfPreviousMonth = firstDayOfThisMonth.subtract(const Duration(days: 1));
