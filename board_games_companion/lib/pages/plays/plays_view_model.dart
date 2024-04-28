@@ -3,9 +3,15 @@
 import 'dart:math';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/enums/plays_stats_preset_time_period.dart';
+import 'package:board_games_companion/common/helpers/date_time_helpers.dart';
 import 'package:board_games_companion/extensions/playthroughs_extensions.dart';
 import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
+import 'package:board_games_companion/pages/plays/most_played_game.dart';
+import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
+import 'package:board_games_companion/pages/plays/time_period.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:tuple/tuple.dart';
@@ -43,8 +49,9 @@ abstract class _PlaysViewModel with Store {
   );
 
   static const Map<int, Tuple2<String, String>> _screenViewByTabIndex = {
-    1: Tuple2<String, String>('History', 'PlaysHistoryPage'),
-    0: Tuple2<String, String>('SelectGame', 'PlaysSelectGamePage'),
+    0: Tuple2<String, String>('History', 'PlaysHistoryPage'),
+    1: Tuple2<String, String>('Statistics', 'PlaysStatisticsPage'),
+    2: Tuple2<String, String>('SelectGame', 'PlaysSelectGamePage'),
   };
 
   static const int _numberOfTimesSpinnerCanTurn = 3;
@@ -59,10 +66,10 @@ abstract class _PlaysViewModel with Store {
   List<BoardGameDetails> _shuffledBoardGames = [];
 
   @observable
-  ObservableFuture<void>? futureLoadGamesPlaythroughs;
+  ObservableFuture<void>? futureLoadData;
 
   @observable
-  PlaysPageVisualState? visualState;
+  PlaysPageVisualState visualState = const PlaysPageVisualState.history();
 
   @observable
   GameSpinnerFilters gameSpinnerFilters = const GameSpinnerFilters(
@@ -164,9 +171,11 @@ abstract class _PlaysViewModel with Store {
   int get randomItemIndex =>
       Random().nextInt(shuffledBoardGames.length * _numberOfTimesSpinnerCanTurn);
 
+  @observable
+  PlaysStatsVisualState playsStatsVisualState = const PlaysStatsVisualState.init();
+
   @action
-  void loadGamesPlaythroughs() =>
-      futureLoadGamesPlaythroughs = ObservableFuture<void>(_loadGamesPlaythroughs());
+  void loadData() => futureLoadData = ObservableFuture<void>(_loadData());
 
   @action
   void setSelectTab(PlaysTab selectedTab) {
@@ -177,6 +186,7 @@ abstract class _PlaysViewModel with Store {
 
       case PlaysTab.statistics:
         visualState = const PlaysPageVisualState.statistics();
+        updatePlaysPresetTimePeriod(PlayStatsPresetTimePeriod.LastWeek);
         break;
 
       case PlaysTab.selectGame:
@@ -227,6 +237,20 @@ abstract class _PlaysViewModel with Store {
     visualState = const PlaysPageVisualState.selectGame();
   }
 
+  @action
+  Future<void> updatePlaysPresetTimePeriod(PlayStatsPresetTimePeriod? presetTimePeriod) async {
+    if (presetTimePeriod == null) {
+      return;
+    }
+
+    final showStatsTimePeriod = _calculatePresetTimePeriod(presetTimePeriod);
+    await _loadStats(showStatsTimePeriod.from, showStatsTimePeriod.to, presetTimePeriod);
+  }
+
+  @action
+  Future<void> updatePlaysCustomTimePeriod(DateTimeRange dateTimeRange) async =>
+      _loadStats(dateTimeRange.start, dateTimeRange.end, PlayStatsPresetTimePeriod.Custom);
+
   Future<void> trackTabChange(int tabIndex) async {
     await _analyticsService.logScreenView(
       screenName: _screenViewByTabIndex[tabIndex]!.item1,
@@ -237,7 +261,7 @@ abstract class _PlaysViewModel with Store {
   Future<void> trackGameSelected() async =>
       _analyticsService.logEvent(name: Analytics.selectRandomGame);
 
-  Future<void> _loadGamesPlaythroughs() async {
+  Future<void> _loadData() async {
     await _scoreStore.loadScores();
     await _playersStore.loadPlayers();
     await _playthroughsStore.loadPlaythroughs();
@@ -247,7 +271,76 @@ abstract class _PlaysViewModel with Store {
         .toList()
       ..shuffle();
     _setupGameSpinnerFilters();
-    visualState = const PlaysPageVisualState.history();
+  }
+
+  Future<void> _loadStats(
+    DateTime timePeriodFrom,
+    DateTime timePeriodTo,
+    PlayStatsPresetTimePeriod presetTimePeriod,
+  ) async {
+    playsStatsVisualState = const PlaysStatsVisualState.loading();
+    if (historicalPlaythroughs.isEmpty) {
+      playsStatsVisualState = const PlaysStatsVisualState.empty();
+      return;
+    }
+
+    final boardGamePlaythroughsInPeriod = historicalPlaythroughs
+        .where((hp) => hp.boardGamePlaythroughs.playthrough.endDate! >= timePeriodFrom)
+        .map((hp) => hp.boardGamePlaythroughs)
+        .toList();
+    if (boardGamePlaythroughsInPeriod.isEmpty) {
+      playsStatsVisualState = PlaysStatsVisualState.noStatsInPeriod(
+        timePeriod: TimePeriod(
+          presetTimePeriod: presetTimePeriod,
+          earliestPlaythrough:
+              historicalPlaythroughs.last.boardGamePlaythroughs.playthrough.endDate!,
+          from: timePeriodFrom,
+          to: timePeriodTo,
+        ),
+      );
+      return;
+    }
+
+    final playthroughsGroupedByGame = groupBy(
+        boardGamePlaythroughsInPeriod, (BoardGamePlaythrough bgp) => bgp.boardGameDetails.id);
+    final mostPlayedGames = <MostPlayedGame>[];
+    for (final playthroughsGrouped in playthroughsGroupedByGame.entries) {
+      final boardGameDetails =
+          _boardGamesStore.allBoardGamesInCollectionsMap[playthroughsGrouped.key];
+      if (boardGameDetails == null) {
+        continue;
+      }
+
+      mostPlayedGames.add(MostPlayedGame(
+        boardGameDetails: boardGameDetails,
+        totalNumberOfPlays: playthroughsGrouped.value.length,
+        totalTimePlayedInSeconds: playthroughsGrouped.value
+            .map((e) => e.playthrough.duration.inSeconds)
+            .reduce((a, b) => a + b),
+      ));
+    }
+
+    playsStatsVisualState = PlaysStatsVisualState.stats(
+      timePeriod: TimePeriod(
+        presetTimePeriod: presetTimePeriod,
+        earliestPlaythrough: historicalPlaythroughs.last.boardGamePlaythroughs.playthrough.endDate!,
+        from: timePeriodFrom,
+        to: timePeriodTo,
+      ),
+      mostPlayedGames: mostPlayedGames
+        ..sort((mostPlayedGame, otherMostPlayedGame) =>
+            otherMostPlayedGame.totalNumberOfPlays.compareTo(mostPlayedGame.totalNumberOfPlays)),
+      totalGamesLogged: boardGamePlaythroughsInPeriod.length,
+      totalGamesPlayed: playthroughsGroupedByGame.length,
+      totalPlaytimeInSeconds: boardGamePlaythroughsInPeriod
+          .map((bgp) => bgp.playthrough.duration.inSeconds)
+          .reduce((a, b) => a + b),
+      totalDuelGamesLogged:
+          boardGamePlaythroughsInPeriod.where((element) => element.playthrough.isDuel).length,
+      totalMultiPlayerGamesLogged: boardGamePlaythroughsInPeriod
+          .where((element) => element.playthrough.isMultiPlayerGame)
+          .length,
+    );
   }
 
   void _setupGameSpinnerFilters() {
@@ -282,5 +375,32 @@ abstract class _PlaysViewModel with Store {
       ),
       boardGameDetails: _boardGamesStore.allBoardGamesMap[playthrough.boardGameId]!,
     );
+  }
+
+  /// Calculates the [from] and [to] dates for the given [PlayStatsPresetTimePeriod].
+  ///
+  /// NOTE: [PlayStatsPresetTimePeriod.Custom] will result in the same calculations as
+  /// [PlayStatsPresetTimePeriod.LastWeek] as a "default" option. This is an arbitrary decision
+  /// of how this method should handle [PlayStatsPresetTimePeriod.Custom] option, which is not
+  /// a preset value.
+  ({DateTime from, DateTime to}) _calculatePresetTimePeriod(
+      PlayStatsPresetTimePeriod presetTimePeriod) {
+    final now = DateTime.now();
+    switch (presetTimePeriod) {
+      case PlayStatsPresetTimePeriod.Custom:
+      case PlayStatsPresetTimePeriod.LastWeek:
+        final lastSunday = mostRecentWeekday(now, 0);
+        return (from: lastSunday.subtract(const Duration(days: 7)), to: lastSunday);
+      case PlayStatsPresetTimePeriod.LastMonth:
+        final firstDayOfThisMonth = DateTime(now.year, now.month, 1);
+        final lastDayOfPreviousMonth = firstDayOfThisMonth.subtract(const Duration(days: 1));
+        final firstDayOfPreviousMonth = DateTime(now.year, now.month - 1, 1);
+        return (from: firstDayOfPreviousMonth, to: lastDayOfPreviousMonth);
+      case PlayStatsPresetTimePeriod.LastYear:
+        final firstDayOfThisYear = DateTime(now.year, 1, 1);
+        final lastDayOfPreviousYear = firstDayOfThisYear.subtract(const Duration(days: 1));
+        final firstDayOfPreviousYear = DateTime(now.year - 1, 1, 1);
+        return (from: firstDayOfPreviousYear, to: lastDayOfPreviousYear);
+    }
   }
 }

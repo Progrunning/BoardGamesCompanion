@@ -4,13 +4,17 @@ import 'dart:io';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/extensions/date_time_extensions.dart';
 import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
+import 'package:board_games_companion/pages/plays/most_played_game.dart';
+import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
 import 'package:board_games_companion/widgets/common/section_header.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
@@ -19,6 +23,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
+import '../../common/enums/plays_stats_preset_time_period.dart';
 import '../../common/enums/plays_tab.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/string_extensions.dart';
@@ -32,11 +37,13 @@ import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgc_checkbox.dart';
 import '../../widgets/common/collection_toggle_button.dart';
+import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/panel_container.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
+import '../../widgets/common/stats/vertical_statistics_item.dart';
 import '../board_game_details/board_game_details_page.dart';
 import '../edit_playthrough/edit_playthrough_page.dart';
 import '../home/home_page.dart';
@@ -46,6 +53,7 @@ import 'game_spinner_filters.dart';
 import 'game_spinner_game_selected_dialog.dart';
 import 'plays_page_visual_states.dart';
 import 'plays_view_model.dart';
+import 'time_period.dart';
 
 class PlaysPage extends StatefulWidget {
   const PlaysPage({
@@ -70,16 +78,20 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
     super.initState();
 
     _tabController = TabController(
-      length: 2,
+      length: 3,
       vsync: this,
-      initialIndex: 0,
+      initialIndex: widget.viewModel.visualState.when(
+        history: () => 0,
+        statistics: () => 1,
+        selectGame: () => 2,
+      ),
     );
     _tabController
         .addListener(() => widget.viewModel.setSelectTab(_tabController.index.toPlaysTab()));
 
     _scrollController = FixedExtentScrollController();
 
-    widget.viewModel.loadGamesPlaythroughs();
+    widget.viewModel.loadData();
   }
 
   @override
@@ -92,7 +104,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) => Observer(
         builder: (_) {
-          switch (widget.viewModel.futureLoadGamesPlaythroughs?.status ?? FutureStatus.pending) {
+          switch (widget.viewModel.futureLoadData?.status ?? FutureStatus.pending) {
             case FutureStatus.pending:
             case FutureStatus.rejected:
               return CustomScrollView(
@@ -122,59 +134,61 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
                     },
                   ),
                   Observer(
-                    builder: (_) {
-                      return widget.viewModel.visualState?.when(
-                            history: () => Observer(
-                              builder: (_) {
-                                return _HistoryTab(
-                                  historicalPlaythroughs: widget.viewModel.historicalPlaythroughs,
-                                );
-                              },
-                            ),
-                            statistics: () => const SliverToBoxAdapter(),
-                            selectGame: () {
-                              if (!widget.viewModel.hasAnyBoardGames) {
-                                return const _NoBoardGamesSliver();
-                              }
+                    builder: (BuildContext context) {
+                      return widget.viewModel.visualState.when(
+                        history: () => Observer(
+                          builder: (_) => _HistoryTab(
+                            historicalPlaythroughs: widget.viewModel.historicalPlaythroughs,
+                          ),
+                        ),
+                        statistics: () => _StatisticsTab(
+                          visualState: widget.viewModel.playsStatsVisualState,
+                          onPresetTimePeriodChanged: (presetTimePeriod) =>
+                              widget.viewModel.updatePlaysPresetTimePeriod(presetTimePeriod),
+                          onCustomTimePeriodChanged: (DateTimeRange timePeriodDateTimeRange) =>
+                              widget.viewModel.updatePlaysCustomTimePeriod(timePeriodDateTimeRange),
+                        ),
+                        selectGame: () {
+                          if (!widget.viewModel.hasAnyBoardGames) {
+                            return const _NoBoardGamesSliver();
+                          }
 
-                              return MultiSliver(
-                                children: [
-                                  if (!widget.viewModel.hasAnyBoardGamesToShuffle)
-                                    const _NoBoardGamesToShuffleSliver(),
-                                  if (widget.viewModel.hasAnyBoardGamesToShuffle)
-                                    _GameSpinnerSliver(
-                                      scrollController: _scrollController,
-                                      shuffledBoardGames: widget.viewModel.shuffledBoardGames,
-                                      onSpin: () => _spin(),
-                                      onGameSelected: () => _selectGame(),
-                                    ),
-                                  SliverPersistentHeader(
-                                    delegate: BgcSliverTitleHeaderDelegate.title(
-                                      primaryTitle: AppText.playsPageGameSpinnerFilterSectionTitle,
-                                    ),
-                                  ),
-                                  Observer(
-                                    builder: (_) {
-                                      return _GameSpinnerFilters(
-                                        gameSpinnerFilters: widget.viewModel.gameSpinnerFilters,
-                                        maxNumberOfPlayers: widget.viewModel.maxNumberOfPlayers,
-                                        onCollectionToggled: (collectionTyp) => widget.viewModel
-                                            .toggleGameSpinnerCollectionFilter(collectionTyp),
-                                        onIncludeExpansionsToggled: (isChecked) => widget.viewModel
-                                            .toggleIncludeExpansionsFilter(isChecked),
-                                        onNumberOfPlayersChanged: (numberOfPlayers) => widget
-                                            .viewModel
-                                            .updateNumberOfPlayersNumberFilter(numberOfPlayers),
-                                        onPlaytimeChanged: (playtime) =>
-                                            widget.viewModel.updatePlaytimeFilter(playtime),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          ) ??
-                          const SliverToBoxAdapter();
+                          return MultiSliver(
+                            children: [
+                              if (!widget.viewModel.hasAnyBoardGamesToShuffle)
+                                const _NoBoardGamesToShuffleSliver(),
+                              if (widget.viewModel.hasAnyBoardGamesToShuffle)
+                                _GameSpinnerSliver(
+                                  scrollController: _scrollController,
+                                  shuffledBoardGames: widget.viewModel.shuffledBoardGames,
+                                  onSpin: () => _spin(),
+                                  onGameSelected: () => _selectGame(context),
+                                ),
+                              SliverPersistentHeader(
+                                delegate: BgcSliverTitleHeaderDelegate.title(
+                                  primaryTitle: AppText.playsPageGameSpinnerFilterSectionTitle,
+                                ),
+                              ),
+                              Observer(
+                                builder: (_) {
+                                  return _GameSpinnerFilters(
+                                    gameSpinnerFilters: widget.viewModel.gameSpinnerFilters,
+                                    maxNumberOfPlayers: widget.viewModel.maxNumberOfPlayers,
+                                    onCollectionToggled: (collectionTyp) => widget.viewModel
+                                        .toggleGameSpinnerCollectionFilter(collectionTyp),
+                                    onIncludeExpansionsToggled: (isChecked) =>
+                                        widget.viewModel.toggleIncludeExpansionsFilter(isChecked),
+                                    onNumberOfPlayersChanged: (numberOfPlayers) => widget.viewModel
+                                        .updateNumberOfPlayersNumberFilter(numberOfPlayers),
+                                    onPlaytimeChanged: (playtime) =>
+                                        widget.viewModel.updatePlaytimeFilter(playtime),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                 ],
@@ -191,7 +205,7 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
     );
   }
 
-  Future<void> _selectGame() async {
+  Future<void> _selectGame(BuildContext context) async {
     unawaited(widget.viewModel.trackGameSelected());
     final selectedBoardGame = widget.viewModel.shuffledBoardGames[
         _scrollController.selectedItem % widget.viewModel.shuffledBoardGames.length];
@@ -206,6 +220,721 @@ class _PlaysPageState extends State<PlaysPage> with SingleTickerProviderStateMix
     );
   }
 }
+
+class _StatisticsTab extends StatelessWidget {
+  const _StatisticsTab({
+    required this.visualState,
+    required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
+  });
+
+  final PlaysStatsVisualState visualState;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return visualState.when(
+      empty: () => const _NoPlaysStatsSliver(),
+      init: () => const _LoadingPlaysStatsSliver(),
+      loading: () => const _LoadingPlaysStatsSliver(),
+      stats: (
+        TimePeriod timePeriod,
+        List<MostPlayedGame> mostPlayedGames,
+        int totalGamesLogged,
+        int totalGamesPlayed,
+        int totalPlaytimeInSeconds,
+        int totalDuelGamesLogged,
+        int totalMultiPlayerGamesLogged,
+      ) =>
+          _PlaysStats(
+        timePeriod: timePeriod,
+        mostPlayedGames: mostPlayedGames,
+        totalDuelGamesLogged: totalDuelGamesLogged,
+        totalGamesLogged: totalGamesLogged,
+        totalGamesPlayed: totalGamesPlayed,
+        totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
+        totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+        onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+        onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+            onCustomTimePeriodChanged(timePeriodDateTimeRange),
+      ),
+      noStatsInPeriod: (TimePeriod timePeriod) => _NoStatsInPeriodSliver(
+        timePeriod: timePeriod,
+        onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+        onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+            onCustomTimePeriodChanged(timePeriodDateTimeRange),
+      ),
+    );
+  }
+}
+
+class _PlaysStats extends StatelessWidget {
+  const _PlaysStats({
+    required this.timePeriod,
+    required this.mostPlayedGames,
+    required this.totalGamesLogged,
+    required this.totalGamesPlayed,
+    required this.totalPlaytimeInSeconds,
+    required this.totalDuelGamesLogged,
+    required this.totalMultiPlayerGamesLogged,
+    required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
+  });
+
+  final TimePeriod timePeriod;
+  final List<MostPlayedGame> mostPlayedGames;
+  final int totalGamesLogged;
+  final int totalGamesPlayed;
+  final int totalPlaytimeInSeconds;
+  final int totalDuelGamesLogged;
+  final int totalMultiPlayerGamesLogged;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playsPageOverallStatsTimePeriodSectionTitle,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Observer(
+            builder: (_) => _TimePeriodSection(
+              timePeriod: timePeriod,
+              onPresetTimePeriodChanged: (presetTimePeriod) =>
+                  onPresetTimePeriodChanged(presetTimePeriod),
+              onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+                  onCustomTimePeriodChanged(timePeriodDateTimeRange),
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playsPageOverallStatsMostPlayedGameSectionTitle,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Observer(
+            builder: (_) => _MostPlayedGamesSection(
+              mostPlayedGames: mostPlayedGames,
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playsPageOverallStatsTotalsSectionTitle,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Observer(
+            builder: (_) => _OverallStatsSection(
+              totalGamesLogged: totalGamesLogged,
+              totalGamesPlayed: totalGamesPlayed,
+              totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+              totalDuelGamesLogged: totalDuelGamesLogged,
+              totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
+            ),
+          ),
+        ),
+        // TODO Add games distribution section in later iterations
+        // SliverPersistentHeader(
+        //   delegate: BgcSliverTitleHeaderDelegate.title(
+        //     primaryTitle: AppText.playsPageOverallStatsGamesPlayedDistributionSctionTitle,
+        //   ),
+        // ),
+        // SliverToBoxAdapter(
+        //   child: Observer(
+        //     builder: (_) {
+        //       return const _GamesPlayedDistributionSection();
+        //     },
+        //   ),
+        // ),
+      ],
+    );
+  }
+}
+
+class _NoStatsInPeriodSliver extends StatelessWidget {
+  const _NoStatsInPeriodSliver({
+    required this.timePeriod,
+    required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
+  });
+
+  final TimePeriod timePeriod;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playsPageOverallStatsTimePeriodSectionTitle,
+          ),
+        ),
+        _TimePeriodSection(
+          timePeriod: timePeriod,
+          onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+          onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+              onCustomTimePeriodChanged(timePeriodDateTimeRange),
+        ),
+        // Consider using fill up space sliver
+        const _NoPlaysInPeriodEmptyPageSliver()
+      ],
+    );
+  }
+}
+
+class _NoPlaysStatsSliver extends StatelessWidget {
+  const _NoPlaysStatsSliver();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverPadding(
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.standardSpacing,
+        horizontal: Dimensions.doubleStandardSpacing,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+            EmptyPageInformationPanel(
+              title: AppText.playsPageOverallStatsNoPlayesTitle,
+              icon: Icon(
+                FontAwesomeIcons.dice,
+                size: Dimensions.emptyPageTitleIconSize,
+                color: AppColors.primaryColor,
+              ),
+              subtitle: AppText.playsPageOverallStatsNoPlayesSubtitle,
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NoPlaysInPeriodEmptyPageSliver extends StatelessWidget {
+  const _NoPlaysInPeriodEmptyPageSliver();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverPadding(
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.standardSpacing,
+        horizontal: Dimensions.doubleStandardSpacing,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: Dimensions.emptyPageTitleTopSpacing),
+            EmptyPageInformationPanel(
+              title: AppText.playsPageOverallStatsTimePeriodTitle,
+              icon: Icon(
+                Icons.query_stats,
+                size: Dimensions.emptyPageTitleIconSize,
+                color: AppColors.primaryColor,
+              ),
+              subtitle: AppText.playsPageOverallStatsTimePeriodSubtitle,
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoadingPlaysStatsSliver extends StatelessWidget {
+  const _LoadingPlaysStatsSliver();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverFillRemaining(child: LoadingIndicator());
+  }
+}
+
+class _TimePeriodSection extends StatelessWidget {
+  const _TimePeriodSection({
+    required this.timePeriod,
+    required this.onPresetTimePeriodChanged,
+    required this.onCustomTimePeriodChanged,
+  });
+
+  final TimePeriod timePeriod;
+  final void Function(PlayStatsPresetTimePeriod? presetTimePeriod) onPresetTimePeriodChanged;
+  final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
+
+  static final DateFormat _timePeriodDateFormat = DateFormat.yMMMd();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButton<PlayStatsPresetTimePeriod>(
+              iconEnabledColor: AppColors.accentColor,
+              iconSize: 42,
+              value: timePeriod.presetTimePeriod,
+              underline: const SizedBox.shrink(),
+              isExpanded: true,
+              items: [
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.LastWeek,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodLastWeek,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.LastMonth,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodLastMonth,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.LastYear,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodLastYear,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+                // TODO Upon picking this one date range picker should show up
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.Custom,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodCustom,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+              ],
+              onChanged: (PlayStatsPresetTimePeriod? value) => onPresetTimePeriodChanged(value),
+            ),
+          ),
+          const SizedBox(width: Dimensions.doubleStandardSpacing),
+          Column(
+            children: [
+              IconButton(
+                onPressed: () => _pickCustomTimePeriodRange(context),
+                icon: const Icon(Icons.calendar_month, size: 32),
+              ),
+              Text(
+                sprintf(
+                  AppText.playsPageOverallStatsTimePeriodDatesFormat,
+                  [
+                    _timePeriodDateFormat.format(timePeriod.from),
+                    _timePeriodDateFormat.format(timePeriod.to)
+                  ],
+                ),
+              ),
+              Text(
+                sprintf(
+                  AppText.playsPageOverallStatsTimePeriodInDaysFormat,
+                  [timePeriod.daysInPeriod],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickCustomTimePeriodRange(BuildContext context) async {
+    final pickedDateRange = await showDateRangePicker(
+      context: context,
+      firstDate: timePeriod.earliestPlaythrough,
+      lastDate: DateTime.now(),
+      initialDateRange: DateTimeRange(start: timePeriod.from, end: timePeriod.to),
+      currentDate: timePeriod.from,
+      helpText: AppText.playsPageOverallStatsTimePeriodPickerHelpText,
+      builder: (_, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: AppColors.accentColor,
+                ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDateRange == null) {
+      return;
+    }
+
+    onCustomTimePeriodChanged(pickedDateRange);
+  }
+
+  // Future<void> _pickFromDate(BuildContext context) async {
+  //   final DateTime now = DateTime.now();
+  //   final DateTime? newStartDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: widget.viewModel.playthroughStartTime,
+  //     firstDate: now.add(const Duration(days: -Constants.daysInTenYears)),
+  //     lastDate: now,
+  //     currentDate: now,
+  //     helpText: 'Pick a playthrough date',
+  //     builder: (_, Widget? child) {
+  //       return Theme(
+  //         data: Theme.of(context).copyWith(
+  //           colorScheme: Theme.of(context).colorScheme.copyWith(
+  //                 primary: AppColors.accentColor,
+  //               ),
+  //         ),
+  //         child: child!,
+  //       );
+  //     },
+  //   );
+
+  //   if (newStartDate == null) {
+  //     return;
+  //   }
+
+  //   widget.viewModel.updateStartDate(newStartDate);
+  // }
+}
+
+class _MostPlayedGamesSection extends StatelessWidget {
+  const _MostPlayedGamesSection({
+    required this.mostPlayedGames,
+  });
+
+  static const double _iconSize = 24;
+  static const TextStyle _textStyle = TextStyle(fontSize: Dimensions.standardFontSize);
+
+  final List<MostPlayedGame> mostPlayedGames;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: Dimensions.mostPlayedGamesImageHeight + Dimensions.standardSpacing * 2,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (_, int index) {
+          final mostPlayedGame = mostPlayedGames[index].boardGameDetails;
+          return Padding(
+            padding: EdgeInsets.only(
+              left: index == 0 ? Dimensions.standardSpacing : 0,
+              top: Dimensions.standardSpacing,
+              bottom: Dimensions.standardSpacing,
+              right: index == mostPlayedGames.length - 1 ? Dimensions.standardSpacing : 0,
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: Dimensions.mostPlayedGamesImageHeight,
+                  child: BoardGameTile(
+                    id: mostPlayedGame.id,
+                    name: mostPlayedGame.name,
+                    imageUrl: mostPlayedGame.imageUrl ?? '',
+                    rank: index + 1,
+                  ),
+                ),
+                const SizedBox(width: Dimensions.halfStandardSpacing),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    VerticalStatisticsItem.withMaterialIcon(
+                      text: sprintf(
+                        AppText.playsPageOverallStatsTotalPlayedGamesFormat,
+                        [mostPlayedGames[index].totalNumberOfPlays],
+                      ),
+                      textStyle: _textStyle,
+                      icon: Icons.casino,
+                      iconColor: AppColors.playedGamesStatColor,
+                      iconSize: _iconSize,
+                    ),
+                    const SizedBox(height: Dimensions.halfStandardSpacing),
+                    VerticalStatisticsItem.withMaterialIcon(
+                      icon: Icons.timelapse,
+                      iconColor: AppColors.highscoreStatColor,
+                      iconSize: _iconSize,
+                      text: mostPlayedGames[index].totalTimePlayedInSeconds.toPlaytimeDuration(),
+                      textStyle: _textStyle,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) =>
+            const SizedBox(width: Dimensions.doubleStandardSpacing),
+        itemCount: mostPlayedGames.length,
+      ),
+    );
+  }
+}
+
+class _OverallStatsSection extends StatelessWidget {
+  const _OverallStatsSection({
+    required this.totalGamesLogged,
+    required this.totalGamesPlayed,
+    required this.totalPlaytimeInSeconds,
+    required this.totalDuelGamesLogged,
+    required this.totalMultiPlayerGamesLogged,
+  });
+
+  final int totalGamesLogged;
+  final int totalGamesPlayed;
+  final int totalPlaytimeInSeconds;
+  final int totalDuelGamesLogged;
+  final int totalMultiPlayerGamesLogged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+      child: Row(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              VerticalStatisticsItem.withMaterialIcon(
+                text: totalGamesLogged.toString(),
+                icon: Icons.casino,
+                iconColor: AppColors.playedGamesStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalGamesLogged,
+              ),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              VerticalStatisticsItem.withFontAwesomeIcon(
+                text: totalGamesPlayed.toString(),
+                icon: FontAwesomeIcons.chessBoard,
+                iconColor: AppColors.averagePlayerCountStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalPlayedGames,
+              ),
+            ],
+          ),
+          const Spacer(),
+          Column(
+            children: <Widget>[
+              VerticalStatisticsItem.withMaterialIcon(
+                text: totalPlaytimeInSeconds.toPlaytimeDuration(),
+                icon: Icons.timelapse,
+                iconColor: AppColors.highscoreStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalPlaytime,
+              ),
+            ],
+          ),
+          const Spacer(),
+          Column(
+            children: <Widget>[
+              VerticalStatisticsItem.withMaterialIcon(
+                text: totalDuelGamesLogged.toString(),
+                icon: Icons.people,
+                iconColor: AppColors.averagePlaytimeStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalDuels,
+              ),
+              const SizedBox(height: Dimensions.doubleStandardSpacing),
+              VerticalStatisticsItem.withFontAwesomeIcon(
+                text: totalMultiPlayerGamesLogged.toString(),
+                icon: FontAwesomeIcons.users,
+                iconColor: AppColors.totalPlaytimeStatColor,
+                subtitle: AppText.playsPageOverallStatsTotalMultiplePlayerGames,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// class _GamesPlayedDistributionSection extends StatelessWidget {
+//   const _GamesPlayedDistributionSection();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
+
+// class _PlayerCharts extends StatefulWidget {
+//   const _PlayerCharts({
+//     required this.playerCountPercentage,
+//   });
+
+//   final List<PlayerCountStatistics> playerCountPercentage;
+//   final List<PlayerWinsStatistics>? playerWinsPercentage;
+
+//   @override
+//   State<_PlayerCharts> createState() => _PlayerChartsState();
+// }
+
+// class _PlayerChartsState extends State<_PlayerCharts> {
+//   late Map<int, Color> playerCountChartColors;
+//   late Map<Player, Color> playerWinsChartColors;
+
+//   static const double _chartSize = 160;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO MK Probalby not best to calculate this with every build
+//     //         Need a better state control strategy (mobx?)
+//     playerCountChartColors = {};
+//     playerWinsChartColors = {};
+//     int i = 0;
+//     for (final PlayerCountStatistics playeCountStatistics in widget.playerCountPercentage) {
+//       playerCountChartColors[playeCountStatistics.numberOfPlayers] =
+//           AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
+//     }
+//     if (widget.playerWinsPercentage != null) {
+//       i = 0;
+//       for (final PlayerWinsStatistics playerWinsStatistics in widget.playerWinsPercentage!) {
+//         playerWinsChartColors[playerWinsStatistics.player] =
+//             AppColors.chartColorPallete[i++ % AppColors.chartColorPallete.length];
+//       }
+//     }
+
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         const SizedBox(height: Dimensions.halfStandardSpacing),
+//         Row(
+//           children: <Widget>[
+//             SizedBox(
+//               height: _chartSize,
+//               width: _chartSize,
+//               child: PieChart(
+//                 PieChartData(
+//                   sections: <PieChartSectionData>[
+//                     for (final PlayerCountStatistics playeCountStatistics
+//                         in widget.playerCountPercentage)
+//                       PieChartSectionData(
+//                         value: playeCountStatistics.gamesPlayedPercentage,
+//                         title: '${playeCountStatistics.numberOfGamesPlayed}',
+//                         color: playerCountChartColors[playeCountStatistics.numberOfPlayers],
+//                       ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             const Spacer(),
+//             if (widget.playerWinsPercentage != null)
+//               SizedBox(
+//                 height: _chartSize,
+//                 width: _chartSize,
+//                 child: PieChart(
+//                   PieChartData(
+//                     sections: <PieChartSectionData>[
+//                       for (final PlayerWinsStatistics playeWinsStatistics
+//                           in widget.playerWinsPercentage!)
+//                         PieChartSectionData(
+//                           value: playeWinsStatistics.winsPercentage,
+//                           title: '${playeWinsStatistics.numberOfWins}',
+//                           color: playerWinsChartColors[playeWinsStatistics.player],
+//                         ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//           ],
+//         ),
+//         const SizedBox(height: Dimensions.halfStandardSpacing),
+//         Row(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: <Widget>[
+//             Column(
+//               mainAxisSize: MainAxisSize.max,
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: <Widget>[
+//                 for (final PlayerCountStatistics playeCountStatistics
+//                     in widget.playerCountPercentage)
+//                   Padding(
+//                     padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
+//                     child: Row(
+//                       children: <Widget>[
+//                         ChartLegendBox(
+//                             color: playerCountChartColors[playeCountStatistics.numberOfPlayers]!),
+//                         const SizedBox(width: Dimensions.halfStandardSpacing),
+//                         RichText(
+//                           text: TextSpan(
+//                             children: [
+//                               TextSpan(
+//                                 text: sprintf(
+//                                   playeCountStatistics.numberOfPlayers > 1
+//                                       ? AppText
+//                                           .playthroughsStatisticsPagePlayerCountChartLegendFormatPlural
+//                                       : AppText
+//                                           .playthroughsStatisticsPagePlayerCountChartLegendFormatSingular,
+//                                   [
+//                                     playeCountStatistics.numberOfPlayers,
+//                                   ],
+//                                 ),
+//                               ),
+//                               TextSpan(
+//                                 text:
+//                                     ' [${(playeCountStatistics.gamesPlayedPercentage * 100).toStringAsFixed(0)}%]',
+//                                 style: AppTheme.theme.textTheme.titleMedium,
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//               ],
+//             ),
+//             const Spacer(),
+//             if (widget.playerWinsPercentage != null)
+//               Column(
+//                 mainAxisSize: MainAxisSize.max,
+//                 mainAxisAlignment: MainAxisAlignment.start,
+//                 crossAxisAlignment: CrossAxisAlignment.end,
+//                 children: <Widget>[
+//                   for (final PlayerWinsStatistics playerWinsStatistics
+//                       in widget.playerWinsPercentage!)
+//                     Padding(
+//                       padding: const EdgeInsets.only(bottom: Dimensions.standardSpacing),
+//                       child: Row(
+//                         children: <Widget>[
+//                           RichText(
+//                             text: TextSpan(
+//                               children: [
+//                                 TextSpan(text: '${playerWinsStatistics.player.name} '),
+//                                 TextSpan(
+//                                   text:
+//                                       '[${(playerWinsStatistics.winsPercentage * 100).toStringAsFixed(0)}%]',
+//                                   style: AppTheme.theme.textTheme.titleMedium,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           const SizedBox(width: Dimensions.halfStandardSpacing),
+//                           ChartLegendBox(
+//                             color: playerWinsChartColors[playerWinsStatistics.player]!,
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                 ],
+//               ),
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class _HistoricalPlaythroughSliverList extends StatelessWidget {
   const _HistoricalPlaythroughSliverList({
@@ -831,128 +1560,6 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
   }
 }
 
-// class _PlaythroughGroupListSliver extends StatelessWidget {
-//   const _PlaythroughGroupListSliver({
-//     Key? key,
-//     required this.groupedBoardGamePlaythroughs,
-//   }) : super(key: key);
-
-//   final GroupedBoardGamePlaythroughs groupedBoardGamePlaythroughs;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SliverList(
-//       delegate: SliverChildBuilderDelegate(
-//         (_, index) {
-//           final boardGamePlaythrough = groupedBoardGamePlaythroughs.boardGamePlaythroughs[index];
-//           final isFirst = index == 0;
-//           return Padding(
-//             padding: EdgeInsets.only(
-//               top: isFirst ? Dimensions.standardSpacing : 0,
-//               bottom: Dimensions.standardSpacing,
-//               left: Dimensions.standardSpacing,
-//               right: Dimensions.standardSpacing,
-//             ),
-//             child: PanelContainer(
-//               child: Material(
-//                 color: Colors.transparent,
-//                 child: InkWell(
-//                   borderRadius: BorderRadius.circular(AppStyles.panelContainerCornerRadius),
-//                   onTap: () => _navigateToEditPlaythrough(
-//                     context,
-//                     boardGamePlaythrough.boardGameDetails.id,
-//                     boardGamePlaythrough.playthrough.id,
-//                   ),
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(Dimensions.standardSpacing),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         IntrinsicHeight(
-//                           child: Row(
-//                             children: [
-//                               SizedBox(
-//                                 height: Dimensions.collectionSearchResultBoardGameImageHeight,
-//                                 width: Dimensions.collectionSearchResultBoardGameImageWidth,
-//                                 child: BoardGameTile(
-//                                   id: boardGamePlaythrough.id,
-//                                   imageUrl:
-//                                       boardGamePlaythrough.boardGameDetails.thumbnailUrl ?? '',
-//                                 ),
-//                               ),
-//                               const SizedBox(width: Dimensions.standardSpacing),
-//                               Expanded(
-//                                 child: _PlaythroughDetails(
-//                                   boardGamePlaythrough: boardGamePlaythrough,
-//                                 ),
-//                               ),
-//                               _PlaythroughActions(
-//                                 onTapBoardGameDetails: () =>
-//                                     _navigateToBoardGameDetails(context, boardGamePlaythrough),
-//                                 onTapPlaythroughs: () =>
-//                                     _navigateToPlaythrough(context, boardGamePlaythrough),
-//                               ),
-//                             ],
-//                           ),
-//                         )
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//         childCount: groupedBoardGamePlaythroughs.boardGamePlaythroughs.length,
-//       ),
-//     );
-//   }
-
-//   Future<void> _navigateToPlaythrough(
-//     BuildContext context,
-//     BoardGamePlaythrough boardGamePlaythrough,
-//   ) =>
-//       Navigator.pushNamed(
-//         context,
-//         PlaythroughsPage.pageRoute,
-//         arguments: PlaythroughsPageArguments(
-//           boardGameDetails: boardGamePlaythrough.boardGameDetails,
-//           boardGameImageHeroId: boardGamePlaythrough.id,
-//         ),
-//       );
-
-//   void _navigateToBoardGameDetails(
-//     BuildContext context,
-//     BoardGamePlaythrough boardGamePlaythrough,
-//   ) {
-//     Navigator.pushNamed(
-//       context,
-//       BoardGamesDetailsPage.pageRoute,
-//       arguments: BoardGameDetailsPageArguments(
-//         boardGameId: boardGamePlaythrough.boardGameDetails.id,
-//         boardGameImageHeroId: boardGamePlaythrough.id,
-//         navigatingFromType: PlaysPage,
-//       ),
-//     );
-//   }
-
-//   void _navigateToEditPlaythrough(
-//     BuildContext context,
-//     String boardGameId,
-//     String playthroughId,
-//   ) {
-//     Navigator.pushNamed(
-//       context,
-//       EditPlaythroughPage.pageRoute,
-//       arguments: EditPlaythroughPageArguments(
-//         boardGameId: boardGameId,
-//         playthroughId: playthroughId,
-//         goBackPageRoute: HomePage.pageRoute,
-//       ),
-//     );
-//   }
-// }
-
 class _PlaythroughDetails extends StatelessWidget {
   const _PlaythroughDetails({
     required this.boardGamePlaythrough,
@@ -1207,12 +1814,11 @@ class _AppBar extends StatelessWidget {
               Icons.history,
               isSelected: tabVisualState == const PlaysPageVisualState.history(),
             ),
-            // TODO Add stats page
-            // AppBarBottomTab(
-            //   AppText.playsPageStatisticsTabTitle,
-            //   Icons.multiline_chart,
-            //   isSelected: tabVisualState?.playsTab == PlaysTab.statistics,
-            // ),
+            AppBarBottomTab(
+              AppText.playsPageStatisticsTabTitle,
+              Icons.query_stats,
+              isSelected: tabVisualState == const PlaysPageVisualState.statistics(),
+            ),
             AppBarBottomTab(
               AppText.playsPageSelectGameTabTitle,
               Icons.shuffle,

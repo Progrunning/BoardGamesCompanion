@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   animations: ^2.0.1
@@ -39,7 +39,7 @@ dependencies:
   flutter_slidable: ^3.0.0
   flutter_speed_dial: ^7.0.0
   flutter_svg: ^2.0.8
-  font_awesome_flutter: ^10.3.0
+  font_awesome_flutter: ^10.7.0
   freezed: ^2.3.2
   freezed_annotation: ^2.2.0
   google_fonts: ^6.1.0
@@ -86,6 +86,15 @@ dev_dependencies:
   injectable_generator: ^2.1.4
   json_serializable: ^6.6.2
   mobx_codegen: ^2.0.7
+
+# Run `dart run flutter_launcher_icons` to iOS update icons
+flutter_launcher_icons:
+  # Use Android Studio to generate icons
+  # https://developer.android.com/studio/write/create-app-icons#access
+  # https://developer.android.com/studio/write/create-app-icons#preview-themed-app-icons
+  android: false
+  ios: true
+  image_path: "assets/icon/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -94,20 +94,19 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
     });
   }
 
-  late final _$futureLoadGamesPlaythroughsAtom = Atom(
-      name: '_PlaysViewModel.futureLoadGamesPlaythroughs', context: context);
+  late final _$futureLoadDataAtom =
+      Atom(name: '_PlaysViewModel.futureLoadData', context: context);
 
   @override
-  ObservableFuture<void>? get futureLoadGamesPlaythroughs {
-    _$futureLoadGamesPlaythroughsAtom.reportRead();
-    return super.futureLoadGamesPlaythroughs;
+  ObservableFuture<void>? get futureLoadData {
+    _$futureLoadDataAtom.reportRead();
+    return super.futureLoadData;
   }
 
   @override
-  set futureLoadGamesPlaythroughs(ObservableFuture<void>? value) {
-    _$futureLoadGamesPlaythroughsAtom
-        .reportWrite(value, super.futureLoadGamesPlaythroughs, () {
-      super.futureLoadGamesPlaythroughs = value;
+  set futureLoadData(ObservableFuture<void>? value) {
+    _$futureLoadDataAtom.reportWrite(value, super.futureLoadData, () {
+      super.futureLoadData = value;
     });
   }
 
@@ -115,13 +114,13 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
       Atom(name: '_PlaysViewModel.visualState', context: context);
 
   @override
-  PlaysPageVisualState? get visualState {
+  PlaysPageVisualState get visualState {
     _$visualStateAtom.reportRead();
     return super.visualState;
   }
 
   @override
-  set visualState(PlaysPageVisualState? value) {
+  set visualState(PlaysPageVisualState value) {
     _$visualStateAtom.reportWrite(value, super.visualState, () {
       super.visualState = value;
     });
@@ -143,15 +142,53 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
     });
   }
 
+  late final _$playsStatsVisualStateAtom =
+      Atom(name: '_PlaysViewModel.playsStatsVisualState', context: context);
+
+  @override
+  PlaysStatsVisualState get playsStatsVisualState {
+    _$playsStatsVisualStateAtom.reportRead();
+    return super.playsStatsVisualState;
+  }
+
+  @override
+  set playsStatsVisualState(PlaysStatsVisualState value) {
+    _$playsStatsVisualStateAtom.reportWrite(value, super.playsStatsVisualState,
+        () {
+      super.playsStatsVisualState = value;
+    });
+  }
+
+  late final _$updatePlaysPresetTimePeriodAsyncAction = AsyncAction(
+      '_PlaysViewModel.updatePlaysPresetTimePeriod',
+      context: context);
+
+  @override
+  Future<void> updatePlaysPresetTimePeriod(
+      PlayStatsPresetTimePeriod? presetTimePeriod) {
+    return _$updatePlaysPresetTimePeriodAsyncAction
+        .run(() => super.updatePlaysPresetTimePeriod(presetTimePeriod));
+  }
+
+  late final _$updatePlaysCustomTimePeriodAsyncAction = AsyncAction(
+      '_PlaysViewModel.updatePlaysCustomTimePeriod',
+      context: context);
+
+  @override
+  Future<void> updatePlaysCustomTimePeriod(DateTimeRange dateTimeRange) {
+    return _$updatePlaysCustomTimePeriodAsyncAction
+        .run(() => super.updatePlaysCustomTimePeriod(dateTimeRange));
+  }
+
   late final _$_PlaysViewModelActionController =
       ActionController(name: '_PlaysViewModel', context: context);
 
   @override
-  void loadGamesPlaythroughs() {
+  void loadData() {
     final _$actionInfo = _$_PlaysViewModelActionController.startAction(
-        name: '_PlaysViewModel.loadGamesPlaythroughs');
+        name: '_PlaysViewModel.loadData');
     try {
-      return super.loadGamesPlaythroughs();
+      return super.loadData();
     } finally {
       _$_PlaysViewModelActionController.endAction(_$actionInfo);
     }
@@ -216,9 +253,10 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
   @override
   String toString() {
     return '''
-futureLoadGamesPlaythroughs: ${futureLoadGamesPlaythroughs},
+futureLoadData: ${futureLoadData},
 visualState: ${visualState},
 gameSpinnerFilters: ${gameSpinnerFilters},
+playsStatsVisualState: ${playsStatsVisualState},
 finishedPlaythroughs: ${finishedPlaythroughs},
 historicalPlaythroughs: ${historicalPlaythroughs},
 hasAnyFinishedPlaythroughs: ${hasAnyFinishedPlaythroughs},

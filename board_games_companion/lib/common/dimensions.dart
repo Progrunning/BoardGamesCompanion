@@ -33,6 +33,9 @@ class Dimensions {
   static const double collectionSearchResultExpansionsImageHeight = 80;
   static const double collectionSearchResultExpansionsImageWidth = 80;
 
+  static const double mostPlayedGamesImageHeight = 110;
+  static const double mostPlayedGamesImageWidght = 110;
+
   static const double boardGameRemoveIconSize = 40;
 
   static const double boardGameDetailsLinkIconSize = 40;
@@ -55,6 +58,9 @@ class Dimensions {
   static const double defaultButtonIconSize = 20;
   static const double largeIconSize = 36;
   static const double defaultCheckboxSize = 24;
+
+  static const double defaultStatsIconSize = 28;
+  static const double defaultFontAwesomeStatsIconSize = 24;
 
   static const double floatingActionButtonBottomSpacing = 72;
   static const double halfFloatingActionButtonBottomSpacing = floatingActionButtonBottomSpacing / 2;

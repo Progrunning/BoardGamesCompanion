@@ -31,52 +31,50 @@ class CollectionsFilterPanel extends StatefulWidget {
 
 class CollectionsFilterPanelState extends State<CollectionsFilterPanel> {
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          bottom: Dimensions.doubleStandardSpacing,
-        ),
-        child: PageContainer(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
-            topRight: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
+  Widget build(BuildContext context) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            bottom: Dimensions.doubleStandardSpacing,
           ),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
-              const _BottomSheetHandle(),
-              const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
-              _SortBySection(gamesViewModel: widget.viewModel),
-              const SizedBox(height: Dimensions.standardSpacing),
-              _FiltersSection(gamesViewModel: widget.viewModel),
-              const SizedBox(height: Dimensions.standardSpacing),
-              Observer(
-                builder: (_) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: Dimensions.standardSpacing),
-                        child: ElevatedIconButton(
-                          icon: const Icon(Icons.clear),
-                          title: AppText.filterGamesPanelClearFiltersButtonText,
-                          color: AppColors.accentColor,
-                          onPressed: widget.viewModel.anyFiltersApplied
-                              ? () => widget.viewModel.clearFilters()
-                              : null,
+          child: PageContainer(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
+              topRight: Radius.circular(AppStyles.defaultBottomSheetCornerRadius),
+            ),
+            child: Column(
+              children: <Widget>[
+                const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
+                const _BottomSheetHandle(),
+                const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
+                _SortBySection(gamesViewModel: widget.viewModel),
+                const SizedBox(height: Dimensions.standardSpacing),
+                _FiltersSection(gamesViewModel: widget.viewModel),
+                const SizedBox(height: Dimensions.standardSpacing),
+                Observer(
+                  builder: (_) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: Dimensions.standardSpacing),
+                          child: ElevatedIconButton(
+                            icon: const Icon(Icons.clear),
+                            title: AppText.filterGamesPanelClearFiltersButtonText,
+                            color: AppColors.accentColor,
+                            onPressed: widget.viewModel.anyFiltersApplied
+                                ? () => widget.viewModel.clearFilters()
+                                : null,
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _BottomSheetHandle extends StatelessWidget {
@@ -102,34 +100,32 @@ class _BottomSheetHandle extends StatelessWidget {
 class _SortBySection extends StatelessWidget {
   const _SortBySection({
     required CollectionsViewModel gamesViewModel,
-  })  : _gamesViewModel = gamesViewModel;
+  }) : _gamesViewModel = gamesViewModel;
 
   final CollectionsViewModel _gamesViewModel;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SectionHeader.titleWithIcon(
-          title: 'Sort by',
-          icon: const Icon(Icons.sort),
-        ),
-        const SizedBox(height: Dimensions.standardSpacing),
-        Wrap(
-          spacing: Dimensions.standardSpacing,
-          children: [
-            for (final sortByOption in _gamesViewModel.sortByOptions)
-              _SortByChip(
-                sortBy: sortByOption,
-                onSortByChange: (SortBy selctedSortBy) =>
-                    _gamesViewModel.updateSortBySelection(selctedSortBy),
-              )
-          ],
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SectionHeader.titleWithIcon(
+            title: 'Sort by',
+            icon: const Icon(Icons.sort),
+          ),
+          const SizedBox(height: Dimensions.standardSpacing),
+          Wrap(
+            spacing: Dimensions.standardSpacing,
+            children: [
+              for (final sortByOption in _gamesViewModel.sortByOptions)
+                _SortByChip(
+                  sortBy: sortByOption,
+                  onSortByChange: (SortBy selctedSortBy) =>
+                      _gamesViewModel.updateSortBySelection(selctedSortBy),
+                )
+            ],
+          ),
+        ],
+      );
 }
 
 class _SortByChip extends StatelessWidget {

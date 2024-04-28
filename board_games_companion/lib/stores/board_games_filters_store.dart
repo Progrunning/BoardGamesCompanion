@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:collection/collection.dart';
+import 'package:fimber/fimber.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
@@ -143,8 +144,10 @@ abstract class _BoardGamesFiltersStore with Store {
         sortByOptions.firstWhereOrNull((sb) => sb.name == _collectionFilters?.sortBy?.name);
 
     if (selectedSortBy != null) {
+      Fimber.d(
+          'Sort by option ${_collectionFilters!.sortBy!.name} is selected [${_collectionFilters!.sortBy!.selected}] and orderd by ${_collectionFilters!.sortBy!.orderBy.name}');
       selectedSortBy.orderBy = _collectionFilters!.sortBy!.orderBy;
-      selectedSortBy.selected = _collectionFilters!.sortBy!.selected;
+      selectedSortBy.selected = true;
     }
   }
 }
