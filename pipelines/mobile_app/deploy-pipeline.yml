@@ -156,7 +156,7 @@ stages:
         condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 30
         pool:
-          vmImage: "macOS-12"
+          vmImage: "macOS-13"
 
         steps:
           - task: FlutterInstall@0
