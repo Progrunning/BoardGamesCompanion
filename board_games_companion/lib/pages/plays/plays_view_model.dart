@@ -285,7 +285,9 @@ abstract class _PlaysViewModel with Store {
     }
 
     final boardGamePlaythroughsInPeriod = historicalPlaythroughs
-        .where((hp) => hp.boardGamePlaythroughs.playthrough.endDate! >= timePeriodFrom)
+        .where((hp) =>
+            hp.boardGamePlaythroughs.playthrough.endDate! >= timePeriodFrom &&
+            hp.boardGamePlaythroughs.playthrough.endDate! <= timePeriodTo)
         .map((hp) => hp.boardGamePlaythroughs)
         .toList();
     if (boardGamePlaythroughsInPeriod.isEmpty) {
