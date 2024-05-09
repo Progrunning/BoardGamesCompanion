@@ -12,7 +12,7 @@ part of 'create_board_game_visual_states.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CreateBoardGamePageVisualStates {
@@ -141,7 +141,7 @@ class _$createGameImpl implements _createGame {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$createGameImpl);
   }
@@ -280,7 +280,7 @@ class _$editGameImpl implements _editGame {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$editGameImpl);
   }
@@ -419,7 +419,7 @@ class _$savingImpl implements _saving {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$savingImpl);
   }
@@ -580,7 +580,7 @@ class _$removingFromCollectionsSucceededImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$removingFromCollectionsSucceededImpl &&
@@ -743,7 +743,7 @@ class _$removingFromCollectionsFailedImpl
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$removingFromCollectionsFailedImpl);
@@ -885,7 +885,7 @@ class _$saveSuccessImpl implements _saveSuccess {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$saveSuccessImpl);
   }
@@ -1024,7 +1024,7 @@ class _$saveFailureImpl implements _saveFailure {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$saveFailureImpl);
   }

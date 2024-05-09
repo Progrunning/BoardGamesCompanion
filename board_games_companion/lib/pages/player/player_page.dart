@@ -59,8 +59,8 @@ class PlayerPageState extends BasePageState<PlayerPage> {
   }
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        onWillPop: () async => _handleOnWillPop(context),
+  Widget build(BuildContext context) => PopScope(
+        onPopInvoked: (_) async => _handleOnWillPop(context),
         child: Scaffold(
           appBar: AppBar(
             title: Observer(
@@ -207,7 +207,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
     final playerUpdatedSuccess =
         await widget.viewModel.createOrUpdatePlayer(widget.viewModel.playerWorkingCopy!);
     if (playerUpdatedSuccess) {
-      if (!mounted) {
+      if (!context.mounted) {
         return;
       }
 
@@ -239,7 +239,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlayer();
-                if (!mounted) {
+                if (!context.mounted) {
                   return;
                 }
 

@@ -36,11 +36,11 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   flutter_mobx: ^2.0.6+1
   flutter_polygon: ^0.3.0+2
-  flutter_slidable: ^3.0.0
+  flutter_slidable: ^3.1.0
   flutter_speed_dial: ^7.0.0
   flutter_svg: ^2.0.8
   font_awesome_flutter: ^10.7.0
-  freezed: ^2.3.2
+  freezed: ^2.5.2
   freezed_annotation: ^2.2.0
   google_fonts: ^6.1.0
   get_it: ^7.2.0
@@ -48,12 +48,12 @@ dependencies:
   hive_flutter: ^1.1.0
   http: ^1.1.0
   html_unescape: ^2.0.0
-  in_app_review: ^2.0.3
+  in_app_review: ^2.0.9
   injectable: ^2.1.0
   intl: ^0.18.1
   image_picker: ^1.0.4
   logger: ^2.0.2+1
-  mobx: ^2.0.7+4
+  mobx: ^2.3.3+2
   mocktail: ^1.0.1
   numberpicker: ^2.1.1
   path: ^1.8.0

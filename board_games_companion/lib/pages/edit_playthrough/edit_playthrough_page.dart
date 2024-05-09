@@ -54,8 +54,8 @@ class EditPlaythroughPage extends StatefulWidget {
 
 class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScoreDialogMixin {
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        onWillPop: () async => _handleOnWillPop(context),
+  Widget build(BuildContext context) => PopScope(
+        onPopInvoked: (_) async => _handleOnWillPop(context),
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -218,7 +218,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
               onPressed: () async {
                 await widget.viewModel.deletePlaythrough();
-                if (!mounted) {
+                if (!context.mounted) {
                   return;
                 }
 

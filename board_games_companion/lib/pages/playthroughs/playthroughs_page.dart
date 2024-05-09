@@ -181,11 +181,11 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
         _showImportGamesLoadingIndicator = true;
       });
       await widget.viewModel.importPlays(widget.viewModel.userName!, widget.viewModel.boardGameId);
-      if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
-        if (!mounted) {
-          return;
-        }
+      if (!context.mounted) {
+        return;
+      }
 
+      if (widget.viewModel.bggPlaysImportRaport!.playsToImportTotal > 0) {
         await _showImportPlaysReportDialog(
           context,
           widget.viewModel.userName!,
@@ -193,14 +193,12 @@ class PlaythroughsPageState extends BasePageState<PlaythroughsPage>
           widget.viewModel.bggPlaysImportRaport!,
         );
       } else {
-        if (mounted) {
-          _showNoPlaysToImportDialog(context);
-        }
+        _showNoPlaysToImportDialog(context);
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     } finally {
-      if (mounted) {
+      if (context.mounted) {
         setState(() {
           _showImportGamesLoadingIndicator = false;
         });

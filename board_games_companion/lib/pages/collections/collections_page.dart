@@ -368,10 +368,10 @@ class _GridState extends State<_Grid> {
         continue;
       }
 
+      // download all of the game thumbnails pre-rendering them
+      // https://pub.dev/packages/flutter_cache_manager
       await DefaultCacheManager().downloadFile(boardGame.thumbnailUrl!);
     }
-    // download all of the game thumbnails pre-rendering them
-    // https://pub.dev/packages/flutter_cache_manager
 
     final boardGamesInRows = <List<BoardGameDetails>>[];
     const int chunkSize = 3;
@@ -395,27 +395,32 @@ class _GridState extends State<_Grid> {
     // https://stackoverflow.com/questions/30572261/using-data-from-context-providers-or-requesting-google-photos-read-permission/30909105#30909105
     // https://github.com/MertcanDinler/Flutter-Advanced-Share/issues/2
     final image = await _screenshotController.captureFromLongWidget(
-      Column(
-        children: [
-          for (final boardGamesInRow in boardGamesInRows)
-            Row(
-              children: [
-                for (final boardGame in boardGamesInRow)
-                  SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: BoardGameTile(
-                      id: boardGame.id,
-                      name: boardGame.name,
-                      imageUrl: boardGame.thumbnailUrl ?? '',
-                      rank: boardGame.rank,
-                      elevation: AppStyles.defaultElevation,
-                    ),
-                  )
-              ],
-            ),
-        ],
+      SizedBox(
+        width: 450,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final boardGamesInRow in boardGamesInRows)
+              Row(
+                children: [
+                  for (final boardGame in boardGamesInRow)
+                    SizedBox(
+                      width: 150,
+                      height: 150,
+                      child: BoardGameTile(
+                        id: boardGame.id,
+                        name: boardGame.name,
+                        imageUrl: boardGame.thumbnailUrl ?? '',
+                        rank: boardGame.rank,
+                        elevation: AppStyles.defaultElevation,
+                      ),
+                    )
+                ],
+              ),
+          ],
+        ),
       ),
+      // delay: const Duration(seconds: 3),
       // constraints: BoxConstraints(
       //   maxWidth: MediaQuery.of(context).size.width,
       //   maxHeight: MediaQuery.of(context).size.height,

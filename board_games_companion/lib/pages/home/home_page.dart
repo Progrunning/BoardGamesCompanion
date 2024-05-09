@@ -30,13 +30,6 @@ import '../playthroughs/playthroughs_page.dart';
 import 'home_page_drawer.dart';
 import 'home_view_model.dart';
 
-typedef SearchCallback = Future<List<BoardGameDetails>> Function(String query);
-
-typedef BoardGameResultAction = void Function(
-  BoardGameDetails boardGame,
-  BoardGameResultActionType actionType,
-);
-
 class HomePage extends StatefulWidget {
   const HomePage({
     required this.viewModel,
