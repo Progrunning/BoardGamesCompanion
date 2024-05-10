@@ -44,7 +44,7 @@ class AppTheme {
     final originalHeadlineSmall = originalTextTheme.headlineSmall!;
     final originalHeadlineMedium = originalTextTheme.displayMedium!;
     final originalSubtitleSmall = originalTextTheme.titleSmall!;
-    const originalColorScheme = ColorScheme(
+    const colorScheme = ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.primaryColor,
       onPrimary: AppColors.defaultTextColor,
@@ -227,11 +227,14 @@ class AppTheme {
             thickness: 0.5,
           ),
       iconTheme: iconTheme,
-      colorScheme: originalColorScheme,
+      colorScheme: colorScheme,
       navigationDrawerTheme: ThemeData.light().navigationDrawerTheme.copyWith(
             indicatorColor: AppColors.primaryColor.withOpacity(0.4),
             iconTheme: MaterialStatePropertyAll(iconTheme),
             labelTextStyle: MaterialStatePropertyAll(textTheme.bodyLarge),
+          ),
+      appBarTheme: ThemeData.light().appBarTheme.copyWith(
+            backgroundColor: AppColors.primaryColor,
           ),
     );
   }

@@ -260,6 +260,7 @@ class _AppBarState extends State<_AppBar> {
             return TabBar(
               onTap: (int index) => widget.viewModel.selectedTab = index.toCollectionsTab(),
               controller: widget.topTabController,
+              tabAlignment: TabAlignment.fill,
               tabs: <Widget>[
                 AppBarBottomTab(
                   'Owned',
