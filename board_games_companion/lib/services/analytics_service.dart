@@ -24,9 +24,9 @@ class AnalyticsService {
     required String screenName,
     required String screenClass,
   }) async {
-    await _firebaseAnalytics.setCurrentScreen(
+    await _firebaseAnalytics.logScreenView(
       screenName: screenName,
-      screenClassOverride: screenClass,
+      screenClass: screenClass,
     );
     await _rateAndReviewService.increaseNumberOfSignificantActions();
   }
