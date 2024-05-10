@@ -9,12 +9,12 @@ import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/order_by.dart';
 import '../../models/sort_by.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
+import '../../widgets/common/sorting/sort_by_chip.dart';
 import 'collections_view_model.dart';
 
 class CollectionsFilterPanel extends StatefulWidget {
@@ -117,7 +117,7 @@ class _SortBySection extends StatelessWidget {
             spacing: Dimensions.standardSpacing,
             children: [
               for (final sortByOption in _gamesViewModel.sortByOptions)
-                _SortByChip(
+                SortByChip(
                   sortBy: sortByOption,
                   onSortByChange: (SortBy selctedSortBy) =>
                       _gamesViewModel.updateSortBySelection(selctedSortBy),
@@ -126,55 +126,6 @@ class _SortBySection extends StatelessWidget {
           ),
         ],
       );
-}
-
-class _SortByChip extends StatelessWidget {
-  const _SortByChip({
-    required this.sortBy,
-    required this.onSortByChange,
-  });
-
-  final SortBy sortBy;
-  final ValueChanged<SortBy> onSortByChange;
-
-  @override
-  Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) {
-        Widget orderByIcon = Container();
-        final orderByIconColor =
-            sortBy.selected ? AppColors.defaultTextColor : AppColors.accentColor;
-        switch (sortBy.orderBy) {
-          case OrderBy.Ascending:
-            orderByIcon = Icon(Icons.arrow_drop_up, color: orderByIconColor);
-            break;
-          case OrderBy.Descending:
-            orderByIcon = Icon(Icons.arrow_drop_down, color: orderByIconColor);
-            break;
-        }
-
-        return ChoiceChip(
-          labelStyle: const TextStyle(color: AppColors.defaultTextColor),
-          label: Text(
-            sortBy.name,
-            style: TextStyle(
-              color: sortBy.selected ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
-            ),
-          ),
-          selected: sortBy.selected,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-          ),
-          selectedColor: AppColors.accentColor,
-          shadowColor: AppColors.shadowColor,
-          backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
-          avatar: orderByIcon,
-          showCheckmark: false,
-          onSelected: (isSelected) => onSortByChange(sortBy),
-        );
-      },
-    );
-  }
 }
 
 class _FiltersSection extends StatelessWidget {
