@@ -39,15 +39,31 @@ class AppTheme {
   // MK Material fonts https://miro.medium.com/max/1400/1*Jlt_w6Bs7KAae42rYkFlwg.png
   static ThemeData get theme {
     final originalTextTheme = GoogleFonts.latoTextTheme();
-    const originalColorScheme = ColorScheme.light();
-    final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
     final originalBodyLarge = originalTextTheme.bodyLarge!;
     final originalBodyMedium = originalTextTheme.bodyMedium!;
     final originalHeadlineSmall = originalTextTheme.headlineSmall!;
     final originalHeadlineMedium = originalTextTheme.displayMedium!;
     final originalSubtitleSmall = originalTextTheme.titleSmall!;
+    const originalColorScheme = ColorScheme(
+      brightness: Brightness.light,
+      primary: AppColors.primaryColor,
+      onPrimary: AppColors.defaultTextColor,
+      secondary: AppColors.accentColor,
+      onSecondary: AppColors.defaultTextColor,
+      tertiary: AppColors.secondaryColor,
+      error: AppColors.redColor,
+      onError: AppColors.defaultTextColor,
+      background: AppColors.primaryColorLight,
+      onBackground: AppColors.defaultTextColor,
+      surface: AppColors.primaryColorLight,
+      onSurface: AppColors.defaultTextColor,
+    );
+    final originalInputDecorationTheme = ThemeData.light().inputDecorationTheme;
+
     final originalBottomNavigationBarTheme = ThemeData.light().bottomNavigationBarTheme;
-    final originaltimePickerTheme = ThemeData.light().timePickerTheme;
+    final originalTimePickerTheme = ThemeData.light().timePickerTheme;
+
+    final iconTheme = ThemeData.light().iconTheme.copyWith(color: AppColors.accentColor);
 
     final subtitleMediumTextStyle = originalTextTheme.titleMedium!.copyWith(
       fontSize: Dimensions.smallFontSize,
@@ -81,6 +97,36 @@ class AppTheme {
       color: AppColors.defaultTextColor,
     );
 
+    final textTheme = originalTextTheme.copyWith(
+      bodyLarge: originalBodyLarge.copyWith(
+        decorationColor: Colors.transparent,
+        color: AppColors.defaultTextColor,
+        fontSize: Dimensions.mediumFontSize,
+      ),
+      bodyMedium: originalBodyMedium.copyWith(
+        decorationColor: Colors.transparent,
+        color: AppColors.defaultTextColor,
+        fontSize: Dimensions.standardFontSize,
+      ),
+      titleLarge: titleLargeTextStyle,
+      headlineSmall: originalHeadlineSmall.copyWith(
+        color: AppColors.defaultTextColor,
+      ),
+      headlineMedium: headlineMediumTextStyle,
+      displaySmall: displaySmallTextStyle,
+      displayMedium: originalHeadlineMedium.copyWith(
+        fontSize: Dimensions.largeFontSize,
+        fontWeight: FontWeight.bold,
+        color: AppColors.defaultTextColor,
+      ),
+      displayLarge: displayLargeTextStyle,
+      titleMedium: subtitleMediumTextStyle,
+      titleSmall: originalSubtitleSmall.copyWith(
+        fontSize: Dimensions.extraSmallFontSize,
+        color: AppColors.secondaryTextColor,
+      ),
+    );
+
     return ThemeData.light().copyWith(
       cardColor: AppColors.primaryColorLight, // LicensePage after loading
       scaffoldBackgroundColor: AppColors.primaryColorLight, // LicensePage when loading
@@ -95,7 +141,7 @@ class AppTheme {
               fontWeight: FontWeight.normal,
             ),
           ),
-      timePickerTheme: originaltimePickerTheme.copyWith(
+      timePickerTheme: originalTimePickerTheme.copyWith(
         backgroundColor: AppColors.primaryColorLight,
         dialBackgroundColor: AppColors.accentColor,
         dialTextColor: AppColors.invertedTextColor,
@@ -143,35 +189,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: AppColors.accentColor),
       ),
-      textTheme: originalTextTheme.copyWith(
-        bodyLarge: originalBodyLarge.copyWith(
-          decorationColor: Colors.transparent,
-          color: AppColors.defaultTextColor,
-          fontSize: Dimensions.mediumFontSize,
-        ),
-        bodyMedium: originalBodyMedium.copyWith(
-          decorationColor: Colors.transparent,
-          color: AppColors.defaultTextColor,
-          fontSize: Dimensions.standardFontSize,
-        ),
-        titleLarge: titleLargeTextStyle,
-        headlineSmall: originalHeadlineSmall.copyWith(
-          color: AppColors.defaultTextColor,
-        ),
-        headlineMedium: headlineMediumTextStyle,
-        displaySmall: displaySmallTextStyle,
-        displayMedium: originalHeadlineMedium.copyWith(
-          fontSize: Dimensions.largeFontSize,
-          fontWeight: FontWeight.bold,
-          color: AppColors.defaultTextColor,
-        ),
-        displayLarge: displayLargeTextStyle,
-        titleMedium: subtitleMediumTextStyle,
-        titleSmall: originalSubtitleSmall.copyWith(
-          fontSize: Dimensions.extraSmallFontSize,
-          color: AppColors.secondaryTextColor,
-        ),
-      ),
+      textTheme: textTheme,
       inputDecorationTheme: originalInputDecorationTheme.copyWith(
         focusColor: AppColors.accentColor,
         hintStyle: const TextStyle(
@@ -208,19 +226,13 @@ class AppTheme {
             space: 0.5,
             thickness: 0.5,
           ),
-      iconTheme: ThemeData.light().iconTheme.copyWith(color: AppColors.accentColor),
-      colorScheme: originalColorScheme
-          .copyWith(
-            primary: AppColors.primaryColor,
-            onPrimary: AppColors.defaultTextColor,
-            secondary: AppColors.accentColor,
-            onSecondary: AppColors.defaultTextColor,
-            surface: AppColors.primaryColorLight,
-            onSurface: AppColors.defaultTextColor,
-            background: AppColors.primaryColorLight,
-            onBackground: AppColors.defaultTextColor,
-          )
-          .copyWith(background: Colors.grey[800]),
+      iconTheme: iconTheme,
+      colorScheme: originalColorScheme,
+      navigationDrawerTheme: ThemeData.light().navigationDrawerTheme.copyWith(
+            indicatorColor: AppColors.primaryColor.withOpacity(0.4),
+            iconTheme: MaterialStatePropertyAll(iconTheme),
+            labelTextStyle: MaterialStatePropertyAll(textTheme.bodyLarge),
+          ),
     );
   }
 }

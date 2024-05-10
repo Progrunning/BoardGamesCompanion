@@ -81,7 +81,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
   Widget build(BuildContext context) => ScaffoldMessenger(
         key: HomePage.homePageGlobalKey,
         child: Scaffold(
-          drawer: const Drawer(child: HomePageDrawer()),
+          drawer: const HomePageDrawer(),
           body: SafeArea(
             child: PageContainer(
               child: TabBarView(

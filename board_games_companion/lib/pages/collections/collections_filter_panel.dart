@@ -169,6 +169,7 @@ class _SortByChip extends StatelessWidget {
           shadowColor: AppColors.shadowColor,
           backgroundColor: AppColors.primaryColor.withAlpha(AppStyles.opacity80Percent),
           avatar: orderByIcon,
+          showCheckmark: false,
           onSelected: (isSelected) => onSortByChange(sortBy),
         );
       },

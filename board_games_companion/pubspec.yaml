@@ -25,7 +25,7 @@ dependencies:
   clock: ^1.1.1
   collection: ^1.15.0
   confetti: ^0.7.0
-  convex_bottom_bar: ^3.0.0
+  convex_bottom_bar: ^3.2.0
   file_picker: ^6.0.0
   fimber: ^0.7.0
   firebase_core: ^2.8.0

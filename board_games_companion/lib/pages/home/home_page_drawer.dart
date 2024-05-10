@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../common/app_colors.dart';
@@ -17,65 +20,160 @@ class HomePageDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Container(
-            color: AppColors.primaryColor,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Dimensions.doubleStandardSpacing,
-                vertical: Dimensions.doubleStandardSpacing * 2,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 60,
-                    width: 60,
-                    child: Image(image: AssetImage('assets/icons/logo_transparent.png')),
-                  ),
-                  SizedBox(height: Dimensions.standardSpacing),
-                  Text(AppText.appTitle, style: AppTheme.titleTextStyle),
-                ],
+    // TODO Tried migrating to a new NavigationDrawer https://docs.flutter.dev/release/breaking-changes/material-3-migration#components
+    //      but it didn't allow for Expanded to push the version to the bottom therefore left  the original code
+    // return NavigationDrawer(
+    //   selectedIndex: null,
+    //   onDestinationSelected: (index) => {
+    //     // TODO Handle
+    //   },
+    //   children: [
+    //     DrawerHeader(
+    //       margin: EdgeInsets.zero,
+    //       padding: EdgeInsets.zero,
+    //       child: Container(
+    //         color: AppColors.primaryColor,
+    //         child: const Padding(
+    //           padding: EdgeInsets.symmetric(
+    //             horizontal: Dimensions.doubleStandardSpacing,
+    //             vertical: Dimensions.doubleStandardSpacing * 2,
+    //           ),
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.end,
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: <Widget>[
+    //               SizedBox(
+    //                 height: 60,
+    //                 width: 60,
+    //                 child: Image(image: AssetImage('assets/icons/logo_transparent.png')),
+    //               ),
+    //               SizedBox(height: Dimensions.standardSpacing),
+    //               Text(AppText.appTitle, style: AppTheme.titleTextStyle),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //     const SizedBox(height: Dimensions.standardSpacing),
+    //     const NavigationDrawerDestination(
+    //       icon: Icon(Icons.info),
+    //       label: Text(AppText.aboutPageTitle),
+    //     ),
+    //     const NavigationDrawerDestination(
+    //       icon: Icon(Icons.menu_book_sharp),
+    //       label: Text(AppText.drawerAppWiki),
+    //     ),
+    //     const SizedBox(height: Dimensions.standardSpacing),
+    //     const Divider(),
+    //     const SizedBox(height: Dimensions.standardSpacing),
+    //     const NavigationDrawerDestination(
+    //       icon: Icon(Icons.star),
+    //       label: Text(AppText.rateAndReview),
+    //     ),
+    //     const NavigationDrawerDestination(
+    //       icon: Icon(Icons.settings),
+    //       label: Text(AppText.settingsPageTitle),
+    //     ),
+    //     const NavigationDrawerDestination(
+    //       icon: Icon(Icons.share),
+    //       label: Text(AppText.drawerShareApp),
+    //     ),
+    //     const Expanded(child: SizedBox.shrink()),
+    //     const Divider(),
+    //     const _Footer()
+    //   ],
+    // );
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              color: AppColors.primaryColor,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.doubleStandardSpacing,
+                  vertical: Dimensions.doubleStandardSpacing * 2,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: Image(image: AssetImage('assets/icons/logo_transparent.png')),
+                    ),
+                    SizedBox(height: Dimensions.standardSpacing),
+                    Text(AppText.appTitle, style: AppTheme.titleTextStyle),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          _MenuItem(
-            icon: Icons.info,
-            title: AppText.aboutPageTitle,
-            onTap: () async => Navigator.pushNamed(context, AboutPage.pageRoute),
-          ),
-          _MenuItem(
-            icon: Icons.menu_book_sharp,
-            title: AppText.drawerAppWiki,
-            onTap: () async => LauncherHelper.launchUri(context, Constants.appWikiFeaturesUrl),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          const Divider(),
-          const SizedBox(height: Dimensions.standardSpacing),
-          _MenuItem(
-            icon: Icons.star,
-            title: AppText.rateAndReview,
-            onTap: () async => InAppReview.instance.openStoreListing(
-              appStoreId: Constants.appleAppId,
+            const SizedBox(height: Dimensions.standardSpacing),
+            _MenuItem(
+              icon: Icons.info,
+              title: AppText.aboutPageTitle,
+              onTap: () async => Navigator.pushNamed(context, AboutPage.pageRoute),
             ),
-          ),
-          const SizedBox(height: Dimensions.standardSpacing),
-          _MenuItem(
-            icon: Icons.settings,
-            title: AppText.settingsPageTitle,
-            onTap: () async => Navigator.pushNamed(context, SettingsPage.pageRoute),
-          ),
-          const Expanded(child: SizedBox.shrink()),
-          const Divider(),
-          const _Footer(),
-        ],
+            _MenuItem(
+              icon: Icons.menu_book_sharp,
+              title: AppText.drawerAppWiki,
+              onTap: () async => LauncherHelper.launchUri(context, Constants.appWikiFeaturesUrl),
+            ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            const Divider(),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _MenuItem(
+              icon: Icons.star,
+              title: AppText.rateAndReview,
+              onTap: () async => InAppReview.instance.openStoreListing(
+                appStoreId: Constants.appleAppId,
+              ),
+            ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _MenuItem(
+              icon: Icons.share,
+              title: AppText.drawerShareApp,
+              onTap: () async => _shareStoreLink(),
+            ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _MenuItem(
+              icon: Icons.settings,
+              title: AppText.settingsPageTitle,
+              onTap: () async => Navigator.pushNamed(context, SettingsPage.pageRoute),
+            ),
+            const Expanded(child: SizedBox.shrink()),
+            const Divider(),
+            const _Footer(),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _shareStoreLink() async {
+    Uri? storeUri;
+    if (Platform.isAndroid) {
+      storeUri = Uri.https(
+        'play.google.com',
+        'store/apps/details',
+        {'id': 'com.progrunning.boardgamescompanion'},
+      );
+    }
+    if (Platform.isIOS) {
+      // TODO Verify this works on iOS
+      storeUri = Uri.https(
+        'apps.apple.com',
+        'us/app/board-games-companion/id1506458832',
+      );
+    }
+
+    if (storeUri == null) {
+      return;
+    }
+
+    await Share.shareUri(storeUri);
   }
 }
 
