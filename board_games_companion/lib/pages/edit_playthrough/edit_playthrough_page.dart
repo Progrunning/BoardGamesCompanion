@@ -113,6 +113,8 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
           ),
           floatingActionButton: SpeedDial(
             icon: Icons.menu,
+            backgroundColor: AppColors.accentColor,
+            activeBackgroundColor: AppColors.redColor,
             overlayColor: AppColors.dialogBackgroundColor,
             activeIcon: Icons.close,
             openCloseDial: widget.viewModel.isSpeedDialContextMenuOpen,
@@ -125,6 +127,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 foregroundColor: Colors.white,
                 label: AppText.save,
                 labelBackgroundColor: AppColors.accentColor,
+                shape: const CircleBorder(),
                 onTap: () async => _save(),
               ),
               if (!widget.viewModel.playthoughEnded)
@@ -134,6 +137,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                   foregroundColor: Colors.white,
                   label: AppText.stop,
                   labelBackgroundColor: AppColors.blueColor,
+                  shape: const CircleBorder(),
                   onTap: () async => _stopPlaythrough(),
                 ),
               SpeedDialChild(
@@ -142,6 +146,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 foregroundColor: Colors.white,
                 label: AppText.editPlaythroughAddNote,
                 labelBackgroundColor: AppColors.greenColor,
+                shape: const CircleBorder(),
                 onTap: () async => _addNote(),
               ),
               SpeedDialChild(
@@ -150,6 +155,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
                 foregroundColor: Colors.white,
                 label: AppText.delete,
                 labelBackgroundColor: AppColors.redColor,
+                shape: const CircleBorder(),
                 onTap: () async => _showDeletePlaythroughDialog(context),
               ),
             ],

@@ -139,6 +139,8 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                   builder: (_) {
                     return SpeedDial(
                       icon: Icons.search,
+                      backgroundColor: AppColors.accentColor,
+                      activeBackgroundColor: AppColors.redColor,
                       overlayColor: AppColors.dialogBackgroundColor,
                       activeIcon: Icons.close,
                       openCloseDial: widget.viewModel.isSearchDialContextMenuOpen,
@@ -152,6 +154,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                             foregroundColor: Colors.white,
                             label: AppText.homePageSearchCollectionsDialOptionText,
                             labelBackgroundColor: AppColors.accentColor,
+                            shape: const CircleBorder(),
                             onTap: () => _searchCollections(),
                           ),
                         SpeedDialChild(
@@ -160,6 +163,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                           foregroundColor: Colors.white,
                           label: AppText.homePageSearchOnlineDialOptionText,
                           labelBackgroundColor: AppColors.greenColor,
+                          shape: const CircleBorder(),
                           onTap: () => _searchBgg(),
                         )
                       ],
