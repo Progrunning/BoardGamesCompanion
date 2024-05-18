@@ -288,6 +288,7 @@ class AppText {
   static const playPageHistoryTabEmptySubtitle =
       'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
   static const playPageHistoryTabScoreGameResultFormat = '%s (%s points)';
+  static const playPageHistoryTabScoreGameResultNoWinnersYet = 'No winners yet';
   static const playPageHistoryTabCooperativeGameResultWin = 'Win';
   static const playPageHistoryTabCooperativeGameResultLoss = 'Loss';
 
