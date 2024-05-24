@@ -7,30 +7,27 @@ import '../../common/dimensions.dart';
 class CustomIconButton extends StatelessWidget {
   const CustomIconButton(
     this.icon, {
-    required this.onTap,
+    this.onTap,
     super.key,
   });
 
   final Icon icon;
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(AppStyles.defaultCornerRadius),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(
+          Radius.circular(AppStyles.defaultCornerRadius),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
+          decoration: BoxDecoration(
+            color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
           ),
-          child: Container(
-            padding: const EdgeInsets.all(Dimensions.halfStandardSpacing),
-            decoration: BoxDecoration(
-              color: AppColors.accentColor.withAlpha(AppStyles.opacity70Percent),
-            ),
-            child: icon,
-          ),
+          child: icon,
         ),
       ),
     );

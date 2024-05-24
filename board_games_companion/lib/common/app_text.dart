@@ -234,6 +234,8 @@ class AppText {
 
   static const playerPagePlayerNameTitle = 'Name';
   static const playerPagePlayerBggNameTitle = 'BGG Username';
+  static const playerPageTakePhoto = 'Take a photo';
+  static const playerPagePickPhoto = 'Pick a photo';
 
   static const playersPageTitle = 'Players';
   static const playersPageCreatePlayerButtonText = 'Create Player';

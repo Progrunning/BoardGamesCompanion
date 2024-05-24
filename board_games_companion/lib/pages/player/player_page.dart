@@ -14,6 +14,7 @@ import '../../widgets/common/custom_icon_button.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
+import '../../widgets/common/ripple_effect.dart';
 import '../../widgets/elevated_container.dart';
 import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
@@ -300,41 +301,61 @@ class _PlayerAvatar extends StatelessWidget {
   final void Function(ImageSource) onPickImage;
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: SizedBox(
-          height: 220,
-          width: 190,
-          child: ElevatedContainer(
-            elevation: AppStyles.defaultElevation,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-              child: Stack(
-                children: <Widget>[
-                  Hero(
+  Widget build(BuildContext context) => SizedBox(
+        height: 220,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 190,
+              child: ElevatedContainer(
+                elevation: AppStyles.defaultElevation,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+                  child: Hero(
                     tag: '${AnimationTags.playerImageHeroTag}${playerWorkingCopy.id}',
                     child: PlayerImage(imageUri: playerWorkingCopy.avatarImageUri),
                   ),
-                  Positioned(
-                    bottom: Dimensions.halfStandardSpacing,
-                    right: Dimensions.halfStandardSpacing,
-                    child: Row(
-                      children: <Widget>[
+                ),
+              ),
+            ),
+            const SizedBox(width: Dimensions.standardSpacing),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RippleEffect(
+                    onTap: () => onPickImage(ImageSource.gallery),
+                    child: const Row(
+                      children: [
                         CustomIconButton(
-                          const Icon(Icons.filter, color: AppColors.defaultTextColor),
-                          onTap: () => onPickImage(ImageSource.gallery),
+                          Icon(
+                            Icons.filter,
+                            color: AppColors.defaultTextColor,
+                          ),
                         ),
-                        const Divider(indent: Dimensions.halfStandardSpacing),
-                        CustomIconButton(
-                          const Icon(Icons.camera, color: AppColors.defaultTextColor),
-                          onTap: () => onPickImage(ImageSource.camera),
-                        ),
+                        SizedBox(width: Dimensions.standardSpacing),
+                        Text(AppText.playerPagePickPhoto),
                       ],
                     ),
-                  )
+                  ),
+                  const SizedBox(height: Dimensions.doubleStandardSpacing),
+                  RippleEffect(
+                    onTap: () => onPickImage(ImageSource.camera),
+                    child: const Row(
+                      children: [
+                        CustomIconButton(
+                          Icon(Icons.camera, color: AppColors.defaultTextColor),
+                        ),
+                        SizedBox(width: Dimensions.standardSpacing),
+                        Text(AppText.playerPageTakePhoto),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
       );
 }
