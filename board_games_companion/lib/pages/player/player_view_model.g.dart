@@ -37,6 +37,13 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
       (_$isEditModeComputed ??= Computed<bool>(() => super.isEditMode,
               name: '_PlayerViewModel.isEditMode'))
           .value;
+  Computed<bool>? _$isDeletedComputed;
+
+  @override
+  bool get isDeleted =>
+      (_$isDeletedComputed ??= Computed<bool>(() => super.isDeleted,
+              name: '_PlayerViewModel.isDeleted'))
+          .value;
   Computed<bool>? _$hasUnsavedChangesComputed;
 
   @override
@@ -127,6 +134,7 @@ playerName: ${playerName},
 playerAvatarImageUri: ${playerAvatarImageUri},
 playerHasName: ${playerHasName},
 isEditMode: ${isEditMode},
+isDeleted: ${isDeleted},
 hasUnsavedChanges: ${hasUnsavedChanges}
     ''';
   }
