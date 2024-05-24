@@ -62,9 +62,12 @@ class PlayersPageState extends State<PlayersPage> {
               children: [
                 CustomScrollView(
                   slivers: [
-                    if (widget.viewModel.players.isNotEmpty) ...[
+                    if (widget.viewModel.activePlayers.isNotEmpty) ...[
                       _AppBar(
-                        players: widget.viewModel.players,
+                        players: [
+                          ...widget.viewModel.activePlayers,
+                          ...widget.viewModel.deletedPlayers
+                        ],
                         onSearchResultTap: (Player player) =>
                             _navigateToPlayerPage(context, player),
                         onToggleEditModeTap: () => widget.viewModel.toggleEditMode(),
@@ -72,7 +75,7 @@ class PlayersPageState extends State<PlayersPage> {
                       Observer(
                         builder: (_) {
                           return _Players(
-                            players: widget.viewModel.players,
+                            players: widget.viewModel.activePlayers,
                             isEditMode: widget.viewModel.isEditMode,
                             onPlayerTap: (Player player, bool isChecked) =>
                                 _playerTapped(widget.viewModel, player, isChecked),
@@ -213,15 +216,13 @@ class _AppBar extends StatelessWidget {
           ),
           onPressed: onSearchResultTap == null
               ? null
-              : () async {
-                  await showSearch(
+              : () => showSearch(
                     context: context,
                     delegate: _PlayersSerach(
                       players: players,
                       onResultTap: (player) => onSearchResultTap?.call(player),
                     ),
-                  );
-                },
+                  ),
         ),
       ],
     );
@@ -431,7 +432,14 @@ class _PlayersSerach extends SearchDelegate<Player?> {
         final player = filteredPlayers[index];
         return ListTile(
           title: Text(player.name!),
+          titleAlignment: ListTileTitleAlignment.center,
           subtitle: player.bggName != null ? Text(player.bggName!) : const SizedBox.shrink(),
+          trailing: (player.isDeleted ?? false)
+              ? const Icon(
+                  Icons.delete_outline_sharp,
+                  color: AppColors.redColor,
+                )
+              : null,
           onTap: () {
             query = player.name!;
             showResults(context);

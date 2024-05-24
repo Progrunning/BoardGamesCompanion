@@ -9,13 +9,20 @@ part of 'players_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlayersViewModel on _PlayersViewModel, Store {
-  Computed<List<Player>>? _$playersComputed;
+  Computed<List<Player>>? _$activePlayersComputed;
 
   @override
-  List<Player> get players =>
-      (_$playersComputed ??= Computed<List<Player>>(() => super.players,
-              name: '_PlayersViewModel.players'))
-          .value;
+  List<Player> get activePlayers => (_$activePlayersComputed ??=
+          Computed<List<Player>>(() => super.activePlayers,
+              name: '_PlayersViewModel.activePlayers'))
+      .value;
+  Computed<List<Player>>? _$deletedPlayersComputed;
+
+  @override
+  List<Player> get deletedPlayers => (_$deletedPlayersComputed ??=
+          Computed<List<Player>>(() => super.deletedPlayers,
+              name: '_PlayersViewModel.deletedPlayers'))
+      .value;
   Computed<bool>? _$hasAnyPlayersComputed;
 
   @override
@@ -86,7 +93,8 @@ mixin _$PlayersViewModel on _PlayersViewModel, Store {
     return '''
 futureLoadPlayers: ${futureLoadPlayers},
 isEditMode: ${isEditMode},
-players: ${players},
+activePlayers: ${activePlayers},
+deletedPlayers: ${deletedPlayers},
 hasAnyPlayers: ${hasAnyPlayers}
     ''';
   }

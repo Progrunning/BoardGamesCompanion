@@ -26,10 +26,13 @@ abstract class _PlayersViewModel with Store {
   bool isEditMode = false;
 
   @computed
-  List<Player> get players => _playersStore.activePlayers;
+  List<Player> get activePlayers => _playersStore.activePlayers;
 
   @computed
-  bool get hasAnyPlayers => players.isNotEmpty;
+  List<Player> get deletedPlayers => _playersStore.deletedPlayers;
+
+  @computed
+  bool get hasAnyPlayers => activePlayers.isNotEmpty;
 
   String? searchPhrase;
 

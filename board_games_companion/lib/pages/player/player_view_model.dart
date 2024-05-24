@@ -38,6 +38,9 @@ abstract class _PlayerViewModel with Store {
   bool get isEditMode => _player?.name?.isNotNullOrBlank ?? false;
 
   @computed
+  bool get isDeleted => _player?.isDeleted ?? false;
+
+  @computed
   bool get hasUnsavedChanges =>
       playerAvatarImageUri != _player?.avatarImageUri || playerName != _player?.name;
 

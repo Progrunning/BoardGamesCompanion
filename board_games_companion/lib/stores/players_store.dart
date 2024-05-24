@@ -25,6 +25,9 @@ abstract class _PlayersStore with Store {
       players.where((player) => !(player.isDeleted ?? false)).toList();
 
   @computed
+  List<Player> get deletedPlayers => players.where((player) => player.isDeleted ?? false).toList();
+
+  @computed
   Map<String, Player> get playersById => {for (final player in players) player.id: player};
 
   @action

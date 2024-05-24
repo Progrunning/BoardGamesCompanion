@@ -11,6 +11,7 @@ class AppText {
   static const stop = 'Stop';
   static const save = 'Save';
   static const delete = 'Delete';
+  static const restore = 'Restore';
   static const remove = 'Remove';
   static const edit = 'Edit';
   static const migrate = 'Migrate';

@@ -16,6 +16,13 @@ mixin _$PlayersStore on _PlayersStore, Store {
           Computed<List<Player>>(() => super.activePlayers,
               name: '_PlayersStore.activePlayers'))
       .value;
+  Computed<List<Player>>? _$deletedPlayersComputed;
+
+  @override
+  List<Player> get deletedPlayers => (_$deletedPlayersComputed ??=
+          Computed<List<Player>>(() => super.deletedPlayers,
+              name: '_PlayersStore.deletedPlayers'))
+      .value;
   Computed<Map<String, Player>>? _$playersByIdComputed;
 
   @override
@@ -70,6 +77,7 @@ mixin _$PlayersStore on _PlayersStore, Store {
     return '''
 players: ${players},
 activePlayers: ${activePlayers},
+deletedPlayers: ${deletedPlayers},
 playersById: ${playersById}
     ''';
   }

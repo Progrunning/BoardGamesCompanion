@@ -77,65 +77,89 @@ class PlayerPageState extends BasePageState<PlayerPage> {
           ),
           body: SafeArea(
             child: PageContainer(
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.standardSpacing),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Observer(
-                        builder: (_) {
-                          return _PlayerAvatar(
-                            playerWorkingCopy: widget.viewModel.playerWorkingCopy!,
-                            onPickImage: (imageSource) async =>
-                                _handlePickingAndSavingAvatar(imageSource),
-                          );
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: AppText.playerPagePlayerNameTitle,
-                          labelStyle: AppTheme.defaultTextFieldLabelStyle,
-                        ),
-                        style: AppTheme.defaultTextFieldStyle,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Player needs to have a name';
-                          }
-
-                          return null;
-                        },
-                        controller: nameController,
-                        focusNode: nameFocusNode,
-                      ),
-                      if (widget.viewModel.playerWorkingCopy!.bggName.isNotNullOrBlank) ...[
-                        const SizedBox(height: Dimensions.doubleStandardSpacing),
-                        Text(
-                          AppText.playerPagePlayerBggNameTitle,
-                          style: AppTheme.defaultTextFieldLabelStyle.copyWith(
-                            fontSize: Dimensions.extraSmallFontSize,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (widget.viewModel.isDeleted)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 40,
+                              child: Container(
+                                color: AppColors.redColor,
+                                child: const Center(child: Text('This player is deleted')),
+                              ),
+                            ),
                           ),
-                        ),
-                        Text(
-                          widget.viewModel.playerWorkingCopy!.bggName!,
-                          style: AppTheme.defaultTextFieldStyle,
-                        ),
-                      ],
-                      const Expanded(child: SizedBox.shrink()),
-                      Observer(
+                        ],
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                      child: Column(
+                        children: [
+                          Observer(
+                            builder: (_) {
+                              return _PlayerAvatar(
+                                playerWorkingCopy: widget.viewModel.playerWorkingCopy!,
+                                onPickImage: (imageSource) async =>
+                                    _handlePickingAndSavingAvatar(imageSource),
+                              );
+                            },
+                          ),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: AppText.playerPagePlayerNameTitle,
+                              labelStyle: AppTheme.defaultTextFieldLabelStyle,
+                            ),
+                            style: AppTheme.defaultTextFieldStyle,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Player needs to have a name';
+                              }
+
+                              return null;
+                            },
+                            controller: nameController,
+                            focusNode: nameFocusNode,
+                          ),
+                          if (widget.viewModel.playerWorkingCopy!.bggName.isNotNullOrBlank) ...[
+                            const SizedBox(height: Dimensions.doubleStandardSpacing),
+                            Text(
+                              AppText.playerPagePlayerBggNameTitle,
+                              style: AppTheme.defaultTextFieldLabelStyle.copyWith(
+                                fontSize: Dimensions.extraSmallFontSize,
+                              ),
+                            ),
+                            Text(
+                              widget.viewModel.playerWorkingCopy!.bggName!,
+                              style: AppTheme.defaultTextFieldStyle,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    const Expanded(child: SizedBox.shrink()),
+                    Padding(
+                      padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                      child: Observer(
                         builder: (_) {
+                          // TODO Move the restore out of the action buttons
                           return _ActionButtons(
                             isEditMode: widget.viewModel.isEditMode,
+                            isDeleted: widget.viewModel.isDeleted,
                             onCreate: (BuildContext context) => _createOrUpdatePlayer(context),
                             onUpdate: (BuildContext context) => _createOrUpdatePlayer(context),
                             onDelete: (BuildContext context) => _showDeletePlayerDialog(context),
+                            onRestore: (BuildContext context) => _restorePlayer(),
                           );
                         },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -289,6 +313,11 @@ class PlayerPageState extends BasePageState<PlayerPage> {
           ),
         ),
       );
+
+  void _restorePlayer() {
+    // TODO Implement
+    // TODO Disable updating of the player until it's restored
+  }
 }
 
 class _PlayerAvatar extends StatelessWidget {
@@ -360,29 +389,43 @@ class _PlayerAvatar extends StatelessWidget {
       );
 }
 
+// TODO This needs to be refactored
 class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
     required this.isEditMode,
+    required this.isDeleted,
     required this.onCreate,
     required this.onUpdate,
     required this.onDelete,
+    this.onRestore,
   });
 
   final bool isEditMode;
+  final bool isDeleted;
   final Function(BuildContext) onCreate;
   final Function(BuildContext) onUpdate;
   final Function(BuildContext) onDelete;
+  final Function(BuildContext)? onRestore;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (isEditMode) ...[
+        if (isEditMode && isDeleted && onRestore != null) ...[
+          ElevatedIconButton(
+            title: AppText.restore,
+            icon: const DefaultIcon(Icons.restore_from_trash),
+            color: AppColors.greenColor,
+            onPressed: () => onRestore!(context),
+          ),
+          const SizedBox(width: Dimensions.standardSpacing),
+        ],
+        if (isEditMode && !isDeleted) ...[
           ElevatedIconButton(
             title: AppText.delete,
             icon: const DefaultIcon(Icons.delete),
-            color: Colors.redAccent,
+            color: AppColors.redColor,
             onPressed: () => onDelete(context),
           ),
           const SizedBox(width: Dimensions.standardSpacing),
