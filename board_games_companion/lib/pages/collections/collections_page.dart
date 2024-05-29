@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:basics/basics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:tuple/tuple.dart';
@@ -20,10 +16,13 @@ import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../common/enums/games_tab.dart';
+import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
+import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
+import '../../utilities/games_screenshot_generator.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
@@ -32,6 +31,7 @@ import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
+import '../playthroughs/playthroughs_page.dart';
 import 'collections_filter_panel.dart';
 import 'collections_view_model.dart';
 
@@ -61,10 +61,27 @@ class CollectionsPage extends StatefulWidget {
 class CollectionsPageState extends State<CollectionsPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _topTabController;
+  late final GamesScreenshotGenerator _gamesScreenshotGenerator;
+  late final ReactionDisposer _gamesScreenshotGeneratorReacitonDisposer;
 
   @override
   void initState() {
     super.initState();
+
+    _gamesScreenshotGenerator = getIt<GamesScreenshotGenerator>();
+    _gamesScreenshotGeneratorReacitonDisposer =
+        reaction((_) => _gamesScreenshotGenerator.gamesScreenshotGeneratorState, (generatorState) {
+      generatorState.maybeWhen(
+        generated: (screenshotFile) async {
+          await Share.shareXFiles(
+            [
+              XFile(screenshotFile.path, mimeType: 'application/png'),
+            ],
+          );
+        },
+        orElse: () {},
+      );
+    });
 
     _topTabController = TabController(
       length: 3,
@@ -104,6 +121,7 @@ class CollectionsPageState extends State<CollectionsPage>
                   topTabController: _topTabController,
                   analyticsService: widget.analyticsService,
                   rateAndReviewService: widget.rateAndReviewService,
+                  gamesScreenshotGenerator: _gamesScreenshotGenerator,
                 );
               },
             );
@@ -121,6 +139,7 @@ class CollectionsPageState extends State<CollectionsPage>
   @override
   void dispose() {
     _topTabController.dispose();
+    _gamesScreenshotGeneratorReacitonDisposer();
     super.dispose();
   }
 }
@@ -138,6 +157,7 @@ class _Collection extends StatelessWidget {
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
+    required this.gamesScreenshotGenerator,
   });
 
   final CollectionsViewModel viewModel;
@@ -151,6 +171,7 @@ class _Collection extends StatelessWidget {
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
+  final GamesScreenshotGenerator gamesScreenshotGenerator;
 
   @override
   Widget build(BuildContext context) {
@@ -174,10 +195,14 @@ class _Collection extends StatelessWidget {
         if (!isCollectionEmpty) ...[
           if (hasMainGames) ...[
             SliverPersistentHeader(
-              delegate: BgcSliverTitleHeaderDelegate.title(
+              delegate: BgcSliverTitleHeaderDelegate.action(
                 primaryTitle: sprintf(
                   AppText.gamesPageMainGamesSliverSectionTitleFormat,
                   [totalMainGames],
+                ),
+                action: IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: () => gamesScreenshotGenerator.generateScreenshot(mainGames),
                 ),
               ),
             ),
@@ -305,7 +330,7 @@ class _AppBarState extends State<_AppBar> {
   }
 }
 
-class _Grid extends StatefulWidget {
+class _Grid extends StatelessWidget {
   const _Grid({
     required this.boardGamesDetails,
     required this.analyticsService,
@@ -313,19 +338,6 @@ class _Grid extends StatefulWidget {
 
   final List<BoardGameDetails> boardGamesDetails;
   final AnalyticsService analyticsService;
-
-  @override
-  State<_Grid> createState() => _GridState();
-}
-
-class _GridState extends State<_Grid> {
-  late ScreenshotController _screenshotController;
-
-  @override
-  void initState() {
-    _screenshotController = ScreenshotController();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -336,7 +348,7 @@ class _GridState extends State<_Grid> {
         mainAxisSpacing: Dimensions.standardSpacing,
         maxCrossAxisExtent: Dimensions.boardGameItemCollectionImageWidth,
         children: [
-          for (final boardGameDetails in widget.boardGamesDetails)
+          for (final boardGameDetails in boardGamesDetails)
             BoardGameTile(
               id: boardGameDetails.id,
               name: boardGameDetails.name,
@@ -344,103 +356,20 @@ class _GridState extends State<_Grid> {
               rank: boardGameDetails.rank,
               elevation: AppStyles.defaultElevation,
               onTap: () async {
-                await _shareGames(context, widget.boardGamesDetails);
-                // return Navigator.pushNamed(
-                // context,
-                // PlaythroughsPage.pageRoute,
-                // arguments: PlaythroughsPageArguments(
-                //   boardGameDetails: boardGameDetails,
-                //   boardGameImageHeroId: boardGameDetails.id,
-                // ),
-                // )
+                await Navigator.pushNamed(
+                  context,
+                  PlaythroughsPage.pageRoute,
+                  arguments: PlaythroughsPageArguments(
+                    boardGameDetails: boardGameDetails,
+                    boardGameImageHeroId: boardGameDetails.id,
+                  ),
+                );
               },
               heroTag: AnimationTags.boardGameHeroTag,
             )
         ],
       ),
     );
-  }
-
-  // TODO Make a more accessible method/widget, to share between
-  //      screens
-  Future<void> _shareGames(BuildContext context, List<BoardGameDetails> boardGames) async {
-    for (final boardGame in boardGames) {
-      if (boardGame.thumbnailUrl.isNullOrBlank) {
-        continue;
-      }
-
-      // download all of the game thumbnails pre-rendering them
-      // https://pub.dev/packages/flutter_cache_manager
-      await DefaultCacheManager().downloadFile(boardGame.thumbnailUrl!);
-    }
-
-    final boardGamesInRows = <List<BoardGameDetails>>[];
-    const int chunkSize = 3;
-    for (var i = 0; i < boardGames.length; i += chunkSize) {
-      boardGamesInRows.add(
-        boardGames.sublist(
-          i,
-          i + chunkSize > boardGames.length ? boardGames.length : i + chunkSize,
-        ),
-      );
-    }
-
-    if (!context.mounted) {
-      return;
-    }
-
-    // TODO
-    // E/DatabaseUtils(19745): java.lang.SecurityException: Permission Denial: writing dev.fluttercommunity.plus.share.ShareFileProvider uri content://com.progrunning.boardgamescompanion.flutter.share_provider/cache/image.png from pid=21055, uid=10161 requires the provider be exported, or grantUriPermission()
-
-    // The image would need to be save prior to sharing, in order to manipulate it in a different activity (e.g. google photos edit)
-    // https://stackoverflow.com/questions/30572261/using-data-from-context-providers-or-requesting-google-photos-read-permission/30909105#30909105
-    // https://github.com/MertcanDinler/Flutter-Advanced-Share/issues/2
-    final image = await _screenshotController.captureFromLongWidget(
-      SizedBox(
-        width: 450,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (final boardGamesInRow in boardGamesInRows)
-              Row(
-                children: [
-                  for (final boardGame in boardGamesInRow)
-                    SizedBox(
-                      width: 150,
-                      height: 150,
-                      child: BoardGameTile(
-                        id: boardGame.id,
-                        name: boardGame.name,
-                        imageUrl: boardGame.thumbnailUrl ?? '',
-                        rank: boardGame.rank,
-                        elevation: AppStyles.defaultElevation,
-                      ),
-                    )
-                ],
-              ),
-          ],
-        ),
-      ),
-      // delay: const Duration(seconds: 3),
-      // constraints: BoxConstraints(
-      //   maxWidth: MediaQuery.of(context).size.width,
-      //   maxHeight: MediaQuery.of(context).size.height,
-      // ),
-      context: context,
-    );
-
-    if (image != null) {
-      final directory = await getApplicationDocumentsDirectory();
-      final imagePath = await File('${directory.path}/image.png').create();
-      await imagePath.writeAsBytes(image);
-
-      /// Share Plugin
-      await Share.shareXFiles(
-        [
-          XFile(imagePath.path, mimeType: 'application/zip'),
-        ],
-      );
-    }
   }
 }
 

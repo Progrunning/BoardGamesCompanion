@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:screenshot/screenshot.dart';
 
 import 'app.dart';
 import 'common/enums/game_classification.dart';
@@ -76,6 +77,8 @@ Future<void> main() async {
       ..registerAdapter(ScoreTiebreakerTypeAdapter())
       ..registerAdapter(CooperativeGameResultAdapter())
       ..registerAdapter(BoardGamePricesAdapter());
+
+    getIt.registerSingleton<ScreenshotController>(ScreenshotController());
 
     configureDependencies();
 
