@@ -218,6 +218,7 @@ class AppTheme {
             elevation: Dimensions.defaultElevation,
           ),
       snackBarTheme: ThemeData.light().snackBarTheme.copyWith(
+            contentTextStyle: const TextStyle(color: AppColors.defaultTextColor),
             backgroundColor: AppColors.primaryColorLight,
             actionTextColor: AppColors.accentColor,
           ),
