@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'games_screenshot_generator_state.dart';
+part of 'screenshot_generator_visual_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$GamesScreenshotGeneratorState {
+mixin _$ScreenshotGeneratorVisualState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() init,
@@ -75,19 +75,19 @@ mixin _$GamesScreenshotGeneratorState {
 }
 
 /// @nodoc
-abstract class $GamesScreenshotGeneratorStateCopyWith<$Res> {
-  factory $GamesScreenshotGeneratorStateCopyWith(
-          GamesScreenshotGeneratorState value,
-          $Res Function(GamesScreenshotGeneratorState) then) =
-      _$GamesScreenshotGeneratorStateCopyWithImpl<$Res,
-          GamesScreenshotGeneratorState>;
+abstract class $ScreenshotGeneratorVisualStateCopyWith<$Res> {
+  factory $ScreenshotGeneratorVisualStateCopyWith(
+          ScreenshotGeneratorVisualState value,
+          $Res Function(ScreenshotGeneratorVisualState) then) =
+      _$ScreenshotGeneratorVisualStateCopyWithImpl<$Res,
+          ScreenshotGeneratorVisualState>;
 }
 
 /// @nodoc
-class _$GamesScreenshotGeneratorStateCopyWithImpl<$Res,
-        $Val extends GamesScreenshotGeneratorState>
-    implements $GamesScreenshotGeneratorStateCopyWith<$Res> {
-  _$GamesScreenshotGeneratorStateCopyWithImpl(this._value, this._then);
+class _$ScreenshotGeneratorVisualStateCopyWithImpl<$Res,
+        $Val extends ScreenshotGeneratorVisualState>
+    implements $ScreenshotGeneratorVisualStateCopyWith<$Res> {
+  _$ScreenshotGeneratorVisualStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -104,7 +104,7 @@ abstract class _$$InitImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitImplCopyWithImpl<$Res>
-    extends _$GamesScreenshotGeneratorStateCopyWithImpl<$Res, _$InitImpl>
+    extends _$ScreenshotGeneratorVisualStateCopyWithImpl<$Res, _$InitImpl>
     implements _$$InitImplCopyWith<$Res> {
   __$$InitImplCopyWithImpl(_$InitImpl _value, $Res Function(_$InitImpl) _then)
       : super(_value, _then);
@@ -117,7 +117,7 @@ class _$InitImpl implements _Init {
 
   @override
   String toString() {
-    return 'GamesScreenshotGeneratorState.init()';
+    return 'ScreenshotGeneratorVisualState.init()';
   }
 
   @override
@@ -210,7 +210,7 @@ class _$InitImpl implements _Init {
   }
 }
 
-abstract class _Init implements GamesScreenshotGeneratorState {
+abstract class _Init implements ScreenshotGeneratorVisualState {
   const factory _Init() = _$InitImpl;
 }
 
@@ -225,7 +225,7 @@ abstract class _$$DownloadingImagesImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$DownloadingImagesImplCopyWithImpl<$Res>
-    extends _$GamesScreenshotGeneratorStateCopyWithImpl<$Res,
+    extends _$ScreenshotGeneratorVisualStateCopyWithImpl<$Res,
         _$DownloadingImagesImpl>
     implements _$$DownloadingImagesImplCopyWith<$Res> {
   __$$DownloadingImagesImplCopyWithImpl(_$DownloadingImagesImpl _value,
@@ -256,7 +256,7 @@ class _$DownloadingImagesImpl implements _DownloadingImages {
 
   @override
   String toString() {
-    return 'GamesScreenshotGeneratorState.downloadingImages(progressPercentage: $progressPercentage)';
+    return 'ScreenshotGeneratorVisualState.downloadingImages(progressPercentage: $progressPercentage)';
   }
 
   @override
@@ -359,7 +359,7 @@ class _$DownloadingImagesImpl implements _DownloadingImages {
   }
 }
 
-abstract class _DownloadingImages implements GamesScreenshotGeneratorState {
+abstract class _DownloadingImages implements ScreenshotGeneratorVisualState {
   const factory _DownloadingImages({required final int progressPercentage}) =
       _$DownloadingImagesImpl;
 
@@ -378,7 +378,7 @@ abstract class _$$GeneratingScreenshotImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GeneratingScreenshotImplCopyWithImpl<$Res>
-    extends _$GamesScreenshotGeneratorStateCopyWithImpl<$Res,
+    extends _$ScreenshotGeneratorVisualStateCopyWithImpl<$Res,
         _$GeneratingScreenshotImpl>
     implements _$$GeneratingScreenshotImplCopyWith<$Res> {
   __$$GeneratingScreenshotImplCopyWithImpl(_$GeneratingScreenshotImpl _value,
@@ -393,7 +393,7 @@ class _$GeneratingScreenshotImpl implements _GeneratingScreenshot {
 
   @override
   String toString() {
-    return 'GamesScreenshotGeneratorState.generatingScreenshot()';
+    return 'ScreenshotGeneratorVisualState.generatingScreenshot()';
   }
 
   @override
@@ -487,7 +487,7 @@ class _$GeneratingScreenshotImpl implements _GeneratingScreenshot {
   }
 }
 
-abstract class _GeneratingScreenshot implements GamesScreenshotGeneratorState {
+abstract class _GeneratingScreenshot implements ScreenshotGeneratorVisualState {
   const factory _GeneratingScreenshot() = _$GeneratingScreenshotImpl;
 }
 
@@ -502,7 +502,7 @@ abstract class _$$GeneratedImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GeneratedImplCopyWithImpl<$Res>
-    extends _$GamesScreenshotGeneratorStateCopyWithImpl<$Res, _$GeneratedImpl>
+    extends _$ScreenshotGeneratorVisualStateCopyWithImpl<$Res, _$GeneratedImpl>
     implements _$$GeneratedImplCopyWith<$Res> {
   __$$GeneratedImplCopyWithImpl(
       _$GeneratedImpl _value, $Res Function(_$GeneratedImpl) _then)
@@ -532,7 +532,7 @@ class _$GeneratedImpl implements _Generated {
 
   @override
   String toString() {
-    return 'GamesScreenshotGeneratorState.generated(screenshotFile: $screenshotFile)';
+    return 'ScreenshotGeneratorVisualState.generated(screenshotFile: $screenshotFile)';
   }
 
   @override
@@ -634,7 +634,7 @@ class _$GeneratedImpl implements _Generated {
   }
 }
 
-abstract class _Generated implements GamesScreenshotGeneratorState {
+abstract class _Generated implements ScreenshotGeneratorVisualState {
   const factory _Generated({required final File screenshotFile}) =
       _$GeneratedImpl;
 
@@ -653,7 +653,7 @@ abstract class _$$GenerationFailureImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GenerationFailureImplCopyWithImpl<$Res>
-    extends _$GamesScreenshotGeneratorStateCopyWithImpl<$Res,
+    extends _$ScreenshotGeneratorVisualStateCopyWithImpl<$Res,
         _$GenerationFailureImpl>
     implements _$$GenerationFailureImplCopyWith<$Res> {
   __$$GenerationFailureImplCopyWithImpl(_$GenerationFailureImpl _value,
@@ -668,7 +668,7 @@ class _$GenerationFailureImpl implements _GenerationFailure {
 
   @override
   String toString() {
-    return 'GamesScreenshotGeneratorState.generationFailure()';
+    return 'ScreenshotGeneratorVisualState.generationFailure()';
   }
 
   @override
@@ -761,6 +761,6 @@ class _$GenerationFailureImpl implements _GenerationFailure {
   }
 }
 
-abstract class _GenerationFailure implements GamesScreenshotGeneratorState {
+abstract class _GenerationFailure implements ScreenshotGeneratorVisualState {
   const factory _GenerationFailure() = _$GenerationFailureImpl;
 }

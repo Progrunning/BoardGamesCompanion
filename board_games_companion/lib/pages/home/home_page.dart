@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:board_games_companion/injectable.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -15,7 +16,9 @@ import '../../models/navigation/board_game_details_page_arguments.dart';
 import '../../models/navigation/create_board_game_page_arguments.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../models/results/board_game_creation_result.dart';
+import '../../utilities/screenshot_generator.dart';
 import '../../widgets/bottom_tab_icon.dart';
+import '../../widgets/common/loading_overlay.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/search/bgg_search.dart';
 import '../../widgets/search/collections_search.dart';
@@ -48,7 +51,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends BasePageState<HomePage> with SingleTickerProviderStateMixin {
-  late final TabController tabController;
+  late final TabController _tabController;
+  late final ScreenshotGenerator _screenshotGenerator;
 
   static const int _numberOfTabs = 4;
   static const int _collectionsTabIndex = 0;
@@ -58,12 +62,13 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
   void initState() {
     super.initState();
 
-    tabController = TabController(
+    _screenshotGenerator = getIt<ScreenshotGenerator>();
+    _tabController = TabController(
       initialIndex: _initialTabIndex,
       length: _numberOfTabs,
       vsync: this,
     );
-    tabController.addListener(() {
+    _tabController.addListener(() {
       // MK Force redraw to update FOB
       setState(() {});
     });
@@ -73,105 +78,124 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
 
   @override
   void dispose() {
-    tabController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => ScaffoldMessenger(
-        key: HomePage.homePageGlobalKey,
-        child: Scaffold(
-          drawer: const HomePageDrawer(),
-          body: SafeArea(
-            child: PageContainer(
-              child: TabBarView(
-                controller: tabController,
-                children: <Widget>[
-                  CollectionsPage(
-                    widget.viewModel.collectionsViewModel,
-                    widget.viewModel.boardGamesFiltersStore,
-                    widget.viewModel.analyticsService,
-                    widget.viewModel.rateAndReviewService,
+  Widget build(BuildContext context) => Stack(
+        children: [
+          ScaffoldMessenger(
+            key: HomePage.homePageGlobalKey,
+            child: Scaffold(
+              drawer: const HomePageDrawer(),
+              body: SafeArea(
+                child: PageContainer(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: <Widget>[
+                      CollectionsPage(
+                        widget.viewModel.collectionsViewModel,
+                        widget.viewModel.boardGamesFiltersStore,
+                        widget.viewModel.analyticsService,
+                        widget.viewModel.rateAndReviewService,
+                      ),
+                      PlaysPage(viewModel: widget.viewModel.playsViewModel),
+                      PlayersPage(viewModel: widget.viewModel.playersViewModel),
+                      HotBoardGamesPage(viewModel: widget.viewModel.hotBoardGamesViewModel),
+                    ],
                   ),
-                  PlaysPage(viewModel: widget.viewModel.playsViewModel),
-                  PlayersPage(viewModel: widget.viewModel.playersViewModel),
-                  HotBoardGamesPage(viewModel: widget.viewModel.hotBoardGamesViewModel),
-                ],
-              ),
-            ),
-          ),
-          bottomNavigationBar: ConvexAppBar(
-            controller: tabController,
-            backgroundColor: AppColors.bottomTabBackgroundColor,
-            top: -Dimensions.bottomTabTopHeight,
-            items: const <TabItem<BottomTabIcon>>[
-              TabItem<BottomTabIcon>(
-                title: AppText.homePageCollectionsTabTitle,
-                icon: BottomTabIcon(iconData: Icons.grid_on),
-                activeIcon: BottomTabIcon(iconData: Icons.grid_on, isActive: true),
-              ),
-              TabItem<BottomTabIcon>(
-                title: AppText.homePagePlaysTabTitle,
-                icon: BottomTabIcon(iconData: Icons.video_library),
-                activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
-              ),
-              TabItem<BottomTabIcon>(
-                title: AppText.homePageGamesPlayersTabTitle,
-                icon: BottomTabIcon(iconData: Icons.group),
-                activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
-              ),
-              TabItem<BottomTabIcon>(
-                title: AppText.homePageHotBoardGamesTabTitle,
-                icon: BottomTabIcon(iconData: FontAwesomeIcons.fireFlameCurved),
-                activeIcon: BottomTabIcon(
-                  iconData: FontAwesomeIcons.fireFlameCurved,
-                  isActive: true,
                 ),
               ),
-            ],
-            initialActiveIndex: _initialTabIndex,
-            activeColor: AppColors.accentColor,
-            color: AppColors.inactiveBottomTabColor,
-            onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
+              bottomNavigationBar: ConvexAppBar(
+                controller: _tabController,
+                backgroundColor: AppColors.bottomTabBackgroundColor,
+                top: -Dimensions.bottomTabTopHeight,
+                items: const <TabItem<BottomTabIcon>>[
+                  TabItem<BottomTabIcon>(
+                    title: AppText.homePageCollectionsTabTitle,
+                    icon: BottomTabIcon(iconData: Icons.grid_on),
+                    activeIcon: BottomTabIcon(iconData: Icons.grid_on, isActive: true),
+                  ),
+                  TabItem<BottomTabIcon>(
+                    title: AppText.homePagePlaysTabTitle,
+                    icon: BottomTabIcon(iconData: Icons.video_library),
+                    activeIcon: BottomTabIcon(iconData: Icons.video_library, isActive: true),
+                  ),
+                  TabItem<BottomTabIcon>(
+                    title: AppText.homePageGamesPlayersTabTitle,
+                    icon: BottomTabIcon(iconData: Icons.group),
+                    activeIcon: BottomTabIcon(iconData: Icons.group, isActive: true),
+                  ),
+                  TabItem<BottomTabIcon>(
+                    title: AppText.homePageHotBoardGamesTabTitle,
+                    icon: BottomTabIcon(iconData: FontAwesomeIcons.fireFlameCurved),
+                    activeIcon: BottomTabIcon(
+                      iconData: FontAwesomeIcons.fireFlameCurved,
+                      isActive: true,
+                    ),
+                  ),
+                ],
+                initialActiveIndex: _initialTabIndex,
+                activeColor: AppColors.accentColor,
+                color: AppColors.inactiveBottomTabColor,
+                onTap: (int tabIndex) => widget.viewModel.trackTabChange(tabIndex),
+              ),
+              floatingActionButton: _tabController.index == _collectionsTabIndex
+                  ? Observer(
+                      builder: (_) {
+                        return SpeedDial(
+                          icon: Icons.search,
+                          backgroundColor: AppColors.accentColor,
+                          activeBackgroundColor: AppColors.redColor,
+                          overlayColor: AppColors.dialogBackgroundColor,
+                          activeIcon: Icons.close,
+                          openCloseDial: widget.viewModel.isSearchDialContextMenuOpen,
+                          onPress: () => widget.viewModel.isSearchDialContextMenuOpen.value =
+                              !widget.viewModel.isSearchDialContextMenuOpen.value,
+                          children: [
+                            if (widget.viewModel.anyBoardGamesInCollections)
+                              SpeedDialChild(
+                                child: const Icon(Icons.grid_on),
+                                backgroundColor: AppColors.accentColor,
+                                foregroundColor: Colors.white,
+                                label: AppText.homePageSearchCollectionsDialOptionText,
+                                labelBackgroundColor: AppColors.accentColor,
+                                shape: const CircleBorder(),
+                                onTap: () => _searchCollections(),
+                              ),
+                            SpeedDialChild(
+                              child: const FaIcon(FontAwesomeIcons.globe),
+                              backgroundColor: AppColors.greenColor,
+                              foregroundColor: Colors.white,
+                              label: AppText.homePageSearchOnlineDialOptionText,
+                              labelBackgroundColor: AppColors.greenColor,
+                              shape: const CircleBorder(),
+                              onTap: () => _searchBgg(),
+                            )
+                          ],
+                        );
+                      },
+                    )
+                  : null,
+            ),
           ),
-          floatingActionButton: tabController.index == _collectionsTabIndex
-              ? Observer(
-                  builder: (_) {
-                    return SpeedDial(
-                      icon: Icons.search,
-                      backgroundColor: AppColors.accentColor,
-                      activeBackgroundColor: AppColors.redColor,
-                      overlayColor: AppColors.dialogBackgroundColor,
-                      activeIcon: Icons.close,
-                      openCloseDial: widget.viewModel.isSearchDialContextMenuOpen,
-                      onPress: () => widget.viewModel.isSearchDialContextMenuOpen.value =
-                          !widget.viewModel.isSearchDialContextMenuOpen.value,
-                      children: [
-                        if (widget.viewModel.anyBoardGamesInCollections)
-                          SpeedDialChild(
-                            child: const Icon(Icons.grid_on),
-                            backgroundColor: AppColors.accentColor,
-                            foregroundColor: Colors.white,
-                            label: AppText.homePageSearchCollectionsDialOptionText,
-                            labelBackgroundColor: AppColors.accentColor,
-                            shape: const CircleBorder(),
-                            onTap: () => _searchCollections(),
-                          ),
-                        SpeedDialChild(
-                          child: const FaIcon(FontAwesomeIcons.globe),
-                          backgroundColor: AppColors.greenColor,
-                          foregroundColor: Colors.white,
-                          label: AppText.homePageSearchOnlineDialOptionText,
-                          labelBackgroundColor: AppColors.greenColor,
-                          shape: const CircleBorder(),
-                          onTap: () => _searchBgg(),
-                        )
-                      ],
-                    );
-                  },
-                )
-              : null,
-        ),
+          Observer(
+            builder: (_) {
+              return _screenshotGenerator.visualState.maybeWhen(
+                downloadingImages: (progressPercentage) => LoadingOverlay(
+                  title: 'Downloading images $progressPercentage%...',
+                  child: const SizedBox.shrink(),
+                ),
+                generatingScreenshot: () => const LoadingOverlay(
+                  title: 'Genrating collection screenshot...',
+                  child: SizedBox.shrink(),
+                ),
+                orElse: () => const SizedBox.shrink(),
+              );
+            },
+          ),
+        ],
       );
 
   Future<void> _searchBgg() async {

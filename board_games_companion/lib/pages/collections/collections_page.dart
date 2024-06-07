@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/extensions/build_context_extensions.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -22,7 +24,7 @@ import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
-import '../../utilities/games_screenshot_generator.dart';
+import '../../utilities/screenshot_generator.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
@@ -61,23 +63,25 @@ class CollectionsPage extends StatefulWidget {
 class CollectionsPageState extends State<CollectionsPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _topTabController;
-  late final GamesScreenshotGenerator _gamesScreenshotGenerator;
-  late final ReactionDisposer _gamesScreenshotGeneratorReacitonDisposer;
+  late final ScreenshotGenerator _screenshotGenerator;
+  late final ReactionDisposer _screenshotGeneratorReacitonDisposer;
 
   @override
   void initState() {
     super.initState();
 
-    _gamesScreenshotGenerator = getIt<GamesScreenshotGenerator>();
-    _gamesScreenshotGeneratorReacitonDisposer =
-        reaction((_) => _gamesScreenshotGenerator.gamesScreenshotGeneratorState, (generatorState) {
+    _screenshotGenerator = getIt<ScreenshotGenerator>();
+    _screenshotGeneratorReacitonDisposer =
+        reaction((_) => _screenshotGenerator.visualState, (generatorState) {
       generatorState.maybeWhen(
         generated: (screenshotFile) async {
-          await Share.shareXFiles(
+          final shareResult = await Share.shareXFiles(
             [
-              XFile(screenshotFile.path, mimeType: 'application/png'),
+              XFile(screenshotFile.path, mimeType: 'image/png'),
             ],
+            sharePositionOrigin: context.iPadsShareRectangle,
           );
+          Fimber.i('Screenshot sharing finished with status ${shareResult.status}');
         },
         orElse: () {},
       );
@@ -121,7 +125,7 @@ class CollectionsPageState extends State<CollectionsPage>
                   topTabController: _topTabController,
                   analyticsService: widget.analyticsService,
                   rateAndReviewService: widget.rateAndReviewService,
-                  gamesScreenshotGenerator: _gamesScreenshotGenerator,
+                  screenshotGenerator: _screenshotGenerator,
                 );
               },
             );
@@ -139,7 +143,7 @@ class CollectionsPageState extends State<CollectionsPage>
   @override
   void dispose() {
     _topTabController.dispose();
-    _gamesScreenshotGeneratorReacitonDisposer();
+    _screenshotGeneratorReacitonDisposer();
     super.dispose();
   }
 }
@@ -157,7 +161,7 @@ class _Collection extends StatelessWidget {
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
-    required this.gamesScreenshotGenerator,
+    required this.screenshotGenerator,
   });
 
   final CollectionsViewModel viewModel;
@@ -171,7 +175,7 @@ class _Collection extends StatelessWidget {
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
-  final GamesScreenshotGenerator gamesScreenshotGenerator;
+  final ScreenshotGenerator screenshotGenerator;
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +206,14 @@ class _Collection extends StatelessWidget {
                 ),
                 action: IconButton(
                   icon: const Icon(Icons.share),
-                  onPressed: () => gamesScreenshotGenerator.generateScreenshot(mainGames),
+                  onPressed: () async {
+                    // await Permission.storage.request();
+                    // await Permission.accessMediaLocation.request();
+                    // await Permission.mediaLibrary.request();
+                    // await Permission.manageExternalStorage.request();
+
+                    // await screenshotGenerator.generateCollectionScreenshot(mainGames);
+                  },
                 ),
               ),
             ),
