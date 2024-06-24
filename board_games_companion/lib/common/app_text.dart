@@ -294,6 +294,8 @@ class AppText {
   static const playPageHistoryTabScoreGameResultNoWinnersYet = 'No winners yet';
   static const playPageHistoryTabCooperativeGameResultWin = 'Win';
   static const playPageHistoryTabCooperativeGameResultLoss = 'Loss';
+  static const playPageHistoryTabPlaythroughNoteFormat = '%s note';
+  static const playPageHistoryTabPlaythroughNotesFormat = '%s notes';
 
   static const playsPageSelectGameTabEmptyTitle = 'Your collections are empty';
   static const playsPageSelectGameTabEmptySubtitle =

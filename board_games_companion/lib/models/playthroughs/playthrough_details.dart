@@ -48,6 +48,8 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   bool get hasNotes => notes?.isNotEmpty ?? false;
 
+  int get notesTotal => notes?.length ?? 0;
+
   bool get hasTies => tiedPlayerScores.isNotEmpty;
 
   List<PlayerScore> get tiedPlayerScores =>

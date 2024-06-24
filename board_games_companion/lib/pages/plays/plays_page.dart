@@ -1439,7 +1439,7 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
         playedOn: playedOn,
       );
 
-  static const double _playthroughContainerHeight = 110;
+  static const double _playthroughContainerHeight = 112;
 
   final BoardGamePlaythrough boardGamePlaythrough;
   final DateTime? playedOn;
@@ -1483,6 +1483,8 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
                         Expanded(
                           child: _PlaythroughDetails(
                             boardGamePlaythrough: boardGamePlaythrough,
+                            hasNotes: boardGamePlaythrough.playthrough.hasNotes,
+                            notesTotal: boardGamePlaythrough.playthrough.notesTotal,
                           ),
                         ),
                         _PlaythroughActions(
@@ -1563,12 +1565,16 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
 class _PlaythroughDetails extends StatelessWidget {
   const _PlaythroughDetails({
     required this.boardGamePlaythrough,
+    required this.hasNotes,
+    required this.notesTotal,
   });
 
   static const double _playthroughStatsIconSize = 16;
   static const double _playthroughStatsFontAwesomeIconSize = _playthroughStatsIconSize - 4;
 
   final BoardGamePlaythrough boardGamePlaythrough;
+  final bool hasNotes;
+  final int notesTotal;
 
   @override
   Widget build(BuildContext context) {
@@ -1597,6 +1603,15 @@ class _PlaythroughDetails extends StatelessWidget {
           statistic: boardGamePlaythrough.playthrough.duration.inSeconds
               .toPlaytimeDuration(showSeconds: false),
         ),
+        if (hasNotes)
+          _PlaythroughGeneralStats(
+            icon: const Icon(Icons.note, size: _playthroughStatsIconSize),
+            statistic: sprintf(
+                notesTotal > 1
+                    ? AppText.playPageHistoryTabPlaythroughNotesFormat
+                    : AppText.playPageHistoryTabPlaythroughNoteFormat,
+                [notesTotal]),
+          ),
       ],
     );
   }
