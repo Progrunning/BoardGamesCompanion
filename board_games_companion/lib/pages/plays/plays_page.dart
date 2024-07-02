@@ -8,6 +8,7 @@ import 'package:board_games_companion/pages/plays/most_played_game.dart';
 import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
 import 'package:board_games_companion/widgets/common/section_header.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -557,7 +558,10 @@ class _TimePeriodSection extends StatelessWidget {
     final pickedDateRange = await showDateRangePicker(
       context: context,
       firstDate: timePeriod.earliestPlaythrough,
-      lastDate: DateTime.now(),
+      lastDate: clock.now(),
+      // Specifying Great Britains locale to enforce Monday as the first day
+      // as that's how the periods are being calculated (Monday - Sunday)
+      locale: const Locale('en', 'GB'),
       initialDateRange: DateTimeRange(start: timePeriod.from, end: timePeriod.to),
       currentDate: timePeriod.from,
       helpText: AppText.playsPageOverallStatsTimePeriodPickerHelpText,

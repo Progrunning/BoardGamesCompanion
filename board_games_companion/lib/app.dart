@@ -3,6 +3,7 @@ import 'package:basics/basics.dart';
 import 'package:board_games_companion/models/hive/playthrough_note.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'common/app_theme.dart';
 import 'injectable.dart';
@@ -65,6 +66,14 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
       title: 'Board Games Companion',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        // Added to support Monday as the first day of week in pickers
+        Locale('en', 'GB'),
+      ],
       navigatorObservers: [_analyticsObserver, _analyticsRouteObserver],
       initialRoute: HomePage.pageRoute,
       onGenerateRoute: (RouteSettings routeSettings) {

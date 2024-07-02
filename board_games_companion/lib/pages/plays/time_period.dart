@@ -15,5 +15,9 @@ class TimePeriod with _$TimePeriod {
 
   const TimePeriod._();
 
-  int get daysInPeriod => to.difference(from).inDays;
+  /// Returns the difference in days between [to] and [from] in the period.
+  ///
+  /// NOTE: Adding +1 day to the difference because the time period is between
+  /// 00:00 and 23:59:59, which makes the calculation always short by a day
+  int get daysInPeriod => to.difference(from).inDays + 1;
 }
