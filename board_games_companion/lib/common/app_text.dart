@@ -410,4 +410,6 @@ class AppText {
   static const playthroughMigrationPageMigrationNotFinishedDialogContent =
       'Are you sure you want to navigate away?';
   static const playthroughMigrationPageMigrationNotFinishedActionButtonText = 'Navigate away';
+
+  static const collectionsPageShareCollectionSuccessMessage = 'Collection shared successfully!';
 }

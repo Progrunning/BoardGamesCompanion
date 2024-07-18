@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/extensions/build_context_extensions.dart';
@@ -74,15 +75,7 @@ class CollectionsPageState extends State<CollectionsPage>
     _screenshotGeneratorReacitonDisposer =
         reaction((_) => _screenshotGenerator.visualState, (generatorState) {
       generatorState.maybeWhen(
-        generated: (screenshotFile) async {
-          final shareResult = await Share.shareXFiles(
-            [
-              XFile(screenshotFile.path, mimeType: 'image/png'),
-            ],
-            sharePositionOrigin: context.iPadsShareRectangle,
-          );
-          Fimber.i('Screenshot sharing finished with status ${shareResult.status}');
-        },
+        generated: (screenshotFile) async => _shareScreenshot(context, screenshotFile),
         orElse: () {},
       );
     });
@@ -93,6 +86,40 @@ class CollectionsPageState extends State<CollectionsPage>
       initialIndex: widget.viewModel.selectedTab.index,
     );
     widget.viewModel.loadBoardGames();
+  }
+
+  Future<void> _shareScreenshot(BuildContext context, File screenshotFile) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final shareResult = await Share.shareXFiles(
+      [
+        XFile(screenshotFile.path, mimeType: 'image/png'),
+      ],
+      sharePositionOrigin: context.iPadsShareRectangle,
+    );
+
+    Fimber.i('Screenshot sharing finished with status ${shareResult.status}');
+
+    switch (shareResult.status) {
+      case ShareResultStatus.success:
+      case ShareResultStatus.unavailable:
+        if (!mounted) {
+          break;
+        }
+
+        messenger.showSnackBar(
+          const SnackBar(
+            margin: Dimensions.snackbarMargin,
+            behavior: SnackBarBehavior.floating,
+            content: Text(AppText.collectionsPageShareCollectionSuccessMessage),
+            backgroundColor: AppColors.greenColor,
+          ),
+        );
+
+        break;
+      case ShareResultStatus.dismissed:
+        // MK Don't do anything, user cancelled/dismissed
+        break;
+    }
   }
 
   @override
@@ -206,14 +233,8 @@ class _Collection extends StatelessWidget {
                 ),
                 action: IconButton(
                   icon: const Icon(Icons.share),
-                  onPressed: () async {
-                    // await Permission.storage.request();
-                    // await Permission.accessMediaLocation.request();
-                    // await Permission.mediaLibrary.request();
-                    // await Permission.manageExternalStorage.request();
-
-                    // await screenshotGenerator.generateCollectionScreenshot(mainGames);
-                  },
+                  onPressed: () async =>
+                      screenshotGenerator.generateCollectionScreenshot(mainGames),
                 ),
               ),
             ),

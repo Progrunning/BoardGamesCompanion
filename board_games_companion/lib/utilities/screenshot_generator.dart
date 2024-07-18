@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/common/analytics.dart';
 import 'package:board_games_companion/common/app_colors.dart';
+import 'package:board_games_companion/common/app_text.dart';
+import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/services/analytics_service.dart';
 import 'package:board_games_companion/services/rate_and_review_service.dart';
 import 'package:fimber/fimber.dart';
@@ -16,6 +18,7 @@ import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:retry/retry.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:uuid/uuid.dart';
 
 import '../common/app_styles.dart';
 import '../common/dimensions.dart';
@@ -29,13 +32,6 @@ part 'screenshot_generator.g.dart';
 class ScreenshotGenerator = _ScreenshotGenerator with _$ScreenshotGenerator;
 
 abstract class _ScreenshotGenerator with Store {
-// TODO
-  // E/DatabaseUtils(19745): java.lang.SecurityException: Permission Denial: writing dev.fluttercommunity.plus.share.ShareFileProvider uri content://com.progrunning.boardgamescompanion.flutter.share_provider/cache/image.png from pid=21055, uid=10161 requires the provider be exported, or grantUriPermission()
-
-  // The image would need to be save prior to sharing, in order to manipulate it in a different activity (e.g. google photos edit)
-  // https://stackoverflow.com/questions/30572261/using-data-from-context-providers-or-requesting-google-photos-read-permission/30909105#30909105
-  // https://github.com/MertcanDinler/Flutter-Advanced-Share/issues/2
-
   _ScreenshotGenerator({
     required ScreenshotController screenshotController,
     required RateAndReviewService rateAndReviewService,
@@ -110,8 +106,9 @@ abstract class _ScreenshotGenerator with Store {
         try {
           final screenshot = await _screenshotController.captureFromLongWidget(screenshotWidget);
 
-          final directory = await getApplicationDocumentsDirectory();
-          final screenshotFile = await File('${directory.path}/image.png').create();
+          final directory = await getApplicationSupportDirectory();
+          final screenshotFile =
+              await File('${directory.path}/collection-${const Uuid().v4()}.png').create();
           await screenshotFile.writeAsBytes(screenshot);
           return screenshotFile;
         } catch (e, stacktrace) {
@@ -158,48 +155,78 @@ class _GamesCollection extends StatelessWidget {
   final List<List<BoardGameDetails>> boardGamesInRows;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.primaryColorLight,
-      child: SizedBox(
-        width: gamesWidth,
-        child: Padding(
-          padding: const EdgeInsets.all(Dimensions.standardSpacing),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (final boardGamesInRow in boardGamesInRows)
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom:
-                        boardGamesInRows.last == boardGamesInRow ? 0 : Dimensions.standardSpacing,
-                  ),
-                  child: Row(
-                    children: [
-                      for (final boardGame in boardGamesInRow)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right:
-                                boardGamesInRow.last == boardGame ? 0 : Dimensions.standardSpacing,
-                          ),
-                          child: SizedBox(
-                            width: Dimensions.boardGameItemCollectionImageWidth,
-                            height: Dimensions.boardGameItemCollectionImageHeight,
-                            child: BoardGameTile(
-                              id: boardGame.id,
-                              name: boardGame.name,
-                              imageUrl: boardGame.thumbnailUrl ?? '',
-                              rank: boardGame.rank,
-                              elevation: AppStyles.defaultElevation,
+  Widget build(BuildContext context) => Container(
+        color: AppColors.primaryColorLight,
+        child: SizedBox(
+          width: gamesWidth,
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.standardSpacing),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final boardGamesInRow in boardGamesInRows)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom:
+                          boardGamesInRows.last == boardGamesInRow ? 0 : Dimensions.standardSpacing,
+                    ),
+                    child: Row(
+                      children: [
+                        for (final boardGame in boardGamesInRow)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: boardGamesInRow.last == boardGame
+                                  ? 0
+                                  : Dimensions.standardSpacing,
                             ),
-                          ),
-                        )
-                    ],
+                            child: SizedBox(
+                              width: Dimensions.boardGameItemCollectionImageWidth,
+                              height: Dimensions.boardGameItemCollectionImageHeight,
+                              child: BoardGameTile(
+                                id: boardGame.id,
+                                name: boardGame.name,
+                                imageUrl: boardGame.thumbnailUrl ?? '',
+                                rank: boardGame.rank,
+                                elevation: AppStyles.defaultElevation,
+                              ),
+                            ),
+                          )
+                      ],
+                    ),
                   ),
-                ),
-            ],
+                const _Logo(),
+              ],
+            ),
           ),
         ),
+      );
+}
+
+class _Logo extends StatelessWidget {
+  const _Logo();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(
+        top: Dimensions.doubleStandardSpacing,
+        // MK Bottom is reduced because the entire container has padding
+        //    which sums up to [Dimensions.doubleStandardSpacing]
+        bottom: Dimensions.standardSpacing,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          // TODO Replace this with SVG cause it's pixelated
+          SizedBox(
+            height: 40,
+            width: 40,
+            child: Image(image: AssetImage('assets/icons/adaptive_icon_foreground.png')),
+          ),
+          SizedBox(width: Dimensions.standardSpacing),
+          Text(AppText.appTitle, style: AppTheme.titleTextStyle),
+        ],
       ),
     );
   }

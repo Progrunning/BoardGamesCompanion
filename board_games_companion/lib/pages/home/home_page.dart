@@ -188,7 +188,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                   child: const SizedBox.shrink(),
                 ),
                 generatingScreenshot: () => const LoadingOverlay(
-                  title: 'Genrating collection screenshot...',
+                  title: 'Generating collection screenshot...',
                   child: SizedBox.shrink(),
                 ),
                 orElse: () => const SizedBox.shrink(),
