@@ -35,6 +35,8 @@ class AppText {
   static const homePageGamesPlayersTabTitle = 'Players';
   static const homePageSearchCollectionsDialOptionText = 'Search collections';
   static const homePageSearchOnlineDialOptionText = 'Search online';
+  static const homePageCollectionScreenshotGenerationTitle = 'Generating collection screenshot...';
+  static const homePageCollectionScreenshotGenerationProgressFormat = 'Downloading images %s...';
 
   static const onlineSearchGamePublishYearFormat = 'Published in %i';
   static const onlineSearchSortingSectionTitle = 'Sort';
@@ -196,7 +198,7 @@ class AppText {
   static const editPlaythroughPlayerScored = 'scored';
   static const editPlaythroughAddNote = 'Add note';
 
-  static const editPlaythroughPageTitle = 'Edit Playthrough';
+  static const editPlaythroughPageTitle = 'Edit playthrough';
   static const editPlaythroughDateHeaderTitle = 'Date';
   static const editPlaythroughDurationHeaderTitle = 'Duration';
   static const editPlaythroughScoresHeaderTitle = 'Scores';
@@ -227,7 +229,7 @@ class AppText {
   static const editPlaythroughCannotUpdateScore =
       "Sorry, we ran into a problem with this player's score. Please contact support at feedback@progrannung.net";
 
-  static const playthroughNotePageTitle = 'Game Note';
+  static const playthroughNotePageTitle = 'Game note';
   static const playthroughNotePageAddNoteButtonText = 'Add note';
   static const playthroughNotePageUpdateNoteButtonText = 'Update note';
   static const playthroughNoteTextBoxLabel = 'Note';
@@ -250,8 +252,9 @@ class AppText {
   static const playerPagePlayerRestoreFailure = 'Failed to restore deleted player';
 
   static const playersPageTitle = 'Players';
-  static const playersPageCreatePlayerButtonText = 'Create Player';
-  static const playersPageDeletePlayersButtonText = 'Delete Players';
+  static const playersPageCreatePlayerButtonText = 'Create';
+  static const playersPageSearchPlayerButtonText = 'Search';
+  static const playersPageDeletePlayersButtonText = 'Delete players';
   static const playersPageNoPlayersTitle = "You don't have any players";
   static const playersPageNoPlayersInstructions =
       "Create players to log games you've played with your family or friends";
@@ -259,6 +262,8 @@ class AppText {
   static const playersPageConfirmationDialogDeletePlayersButtonText = 'Delete';
   static const playersPageConfirmationDialogContent =
       'Are you sure you want to delete selected players?';
+  static const playersPageDeletedPlayersSectionTitle = 'Deleted players';
+  static const playersPageActivePlayersSectionTitle = 'Active players';
 
   static const playerPageSearchClearSaerch = 'Clear search';
   static const playerPageSearchNoSearchResults =

@@ -13,6 +13,7 @@ class PlayerAvatar extends StatelessWidget {
     required this.player,
     required this.avatarImageSize,
     this.onTap,
+    this.onLongPress,
     this.useHeroAnimation = true,
     this.playerHeroIdSuffix = '',
     super.key,
@@ -20,6 +21,7 @@ class PlayerAvatar extends StatelessWidget {
 
   final Player? player;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final bool useHeroAnimation;
   final String playerHeroIdSuffix;
 
@@ -46,9 +48,12 @@ class PlayerAvatar extends StatelessWidget {
             ),
           if (player?.name?.isNotEmpty ?? false) PlayerAvatarSubtitle(player: player!),
           Positioned.fill(
-            child: RippleEffect(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+            child: GestureDetector(
+              onLongPress: onLongPress,
+              child: RippleEffect(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+              ),
             ),
           ),
         ],

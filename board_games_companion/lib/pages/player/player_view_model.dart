@@ -77,7 +77,10 @@ abstract class _PlayerViewModel with Store {
   @action
   Future<void> deletePlayer() async {
     try {
-      await _playersStore.deletePlayer(_player!.id);
+      final result = await _playersStore.deletePlayer(_player!.id);
+      if (result.isSuccess) {
+        setPlayer(result.data);
+      }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -85,22 +88,23 @@ abstract class _PlayerViewModel with Store {
 
   @action
   Future<bool> restorePlayer() async {
-    final operationSucceeded = await _playersStore.restorePlayer(_player!.id);
-    if (operationSucceeded) {
+    final result = await _playersStore.restorePlayer(_player!.id);
+    if (result.isSuccess) {
       visualState = const PlayerVisualState.restored();
+      setPlayer(result.data);
     }
 
-    return operationSucceeded;
+    return result.isSuccess;
   }
 
   Future<bool> _createOrUpdatePlayer(Player player) async {
     try {
-      final operationSucceeded = await _playersStore.createOrUpdatePlayer(player);
-      if (operationSucceeded) {
-        _player = player;
+      final result = await _playersStore.createOrUpdatePlayer(player);
+      if (result.isSuccess) {
+        setPlayer(result.data);
       }
 
-      return operationSucceeded;
+      return result.isSuccess;
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

@@ -107,16 +107,20 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                               },
                             ),
                           ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: AppText.playerPagePlayerNameTitle,
-                              labelStyle: AppTheme.defaultTextFieldLabelStyle,
-                            ),
-                            style: AppTheme.defaultTextFieldStyle,
-                            validator: (value) => _validatePlayerName(value),
-                            controller: nameController,
-                            focusNode: nameFocusNode,
-                            readOnly: widget.viewModel.visualState.isDeleted,
+                          Observer(
+                            builder: (_) {
+                              return TextFormField(
+                                decoration: const InputDecoration(
+                                  labelText: AppText.playerPagePlayerNameTitle,
+                                  labelStyle: AppTheme.defaultTextFieldLabelStyle,
+                                ),
+                                style: AppTheme.defaultTextFieldStyle,
+                                validator: (value) => _validatePlayerName(value),
+                                controller: nameController,
+                                focusNode: nameFocusNode,
+                                readOnly: widget.viewModel.visualState.isDeleted,
+                              );
+                            },
                           ),
                           if (widget.viewModel.isBggUser) ...[
                             const SizedBox(height: Dimensions.doubleStandardSpacing),

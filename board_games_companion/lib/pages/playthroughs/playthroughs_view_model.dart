@@ -149,7 +149,8 @@ abstract class _PlaythroughsViewModel with Store {
           bggName: bggPlayer.playerBggName,
         );
 
-        if (await _playersStore.createOrUpdatePlayer(player)) {
+        final updatedPlayer = await _playersStore.createOrUpdatePlayer(player);
+        if (updatedPlayer != null) {
           if (!isExistingPlayer &&
               ((player.name?.isBlank ?? false) || (player.bggName?.isBlank ?? false))) {
             bggPlaysImportRaport!.createdPlayers.add(player.name ?? player.bggName ?? '');

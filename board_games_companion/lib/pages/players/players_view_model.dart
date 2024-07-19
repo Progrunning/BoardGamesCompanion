@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../models/hive/player.dart';
 import '../../stores/players_store.dart';
+import 'players_visual_state.dart';
 
 part 'players_view_model.g.dart';
 
@@ -13,7 +14,22 @@ part 'players_view_model.g.dart';
 class PlayersViewModel = _PlayersViewModel with _$PlayersViewModel;
 
 abstract class _PlayersViewModel with Store {
-  _PlayersViewModel(this._playersStore);
+  _PlayersViewModel(this._playersStore) {
+    // MK React to any updates on the players collection (e.g. delete or restore)
+    _playersReactionDisposer = reaction((_) => _playersStore.players, (_) {
+      switch (visualState) {
+        case ActivePlayers():
+          visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
+        case AllPlayers():
+          visualState = PlayersVisualState.allPlayersPlayers(
+            activePlayers: activePlayers,
+            deletedPlayers: deletedPlayers,
+          );
+      }
+    });
+  }
+
+  late final ReactionDisposer _playersReactionDisposer;
 
   final PlayersStore _playersStore;
 
@@ -23,16 +39,22 @@ abstract class _PlayersViewModel with Store {
   ObservableFuture<void>? futureLoadPlayers;
 
   @observable
-  bool isEditMode = false;
+  PlayersVisualState visualState = const PlayersVisualState.loadingPlayers();
 
   @computed
-  List<Player> get activePlayers => _playersStore.activePlayers;
+  List<Player> get activePlayers => _playersStore.activePlayers.sortAlphabetically();
 
   @computed
-  List<Player> get deletedPlayers => _playersStore.deletedPlayers;
+  List<Player> get deletedPlayers => _playersStore.deletedPlayers.sortAlphabetically();
 
   @computed
-  bool get hasAnyPlayers => activePlayers.isNotEmpty;
+  bool get hasAnyActivePlayers => activePlayers.isNotEmpty;
+
+  @computed
+  bool get hasAnyDeletedPlayers => activePlayers.isNotEmpty;
+
+  @computed
+  bool get hasAnyPlayers => activePlayers.isNotEmpty && deletedPlayers.isNotEmpty;
 
   String? searchPhrase;
 
@@ -43,37 +65,58 @@ abstract class _PlayersViewModel with Store {
   void loadPlayers() => futureLoadPlayers = ObservableFuture<void>(_loadPlayers());
 
   @action
-  void toggleEditMode() => isEditMode = !isEditMode;
+  void toggleDeletePlayersMode() {
+    switch (visualState) {
+      case DeletePlayers():
+        visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
+        _selectedPlayers.clear();
+      case _:
+        visualState = PlayersVisualState.deletePlayers(activePlayers: activePlayers);
+    }
+  }
 
-  Future<void> deletePlayers(List<String> playerIds) async {
+  @action
+  void toggleShowDeletePlayers() {
+    switch (visualState) {
+      case AllPlayers():
+        visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
+      case _:
+        visualState = PlayersVisualState.allPlayersPlayers(
+          activePlayers: activePlayers,
+          deletedPlayers: deletedPlayers,
+        );
+    }
+  }
+
+  @action
+  Future<void> deleteSelectedPlayers() async {
     try {
-      for (final playerId in playerIds) {
+      final playerIdsToDelete = _selectedPlayers.map((Player player) => player.id).toList();
+      for (final playerId in playerIdsToDelete) {
         await _playersStore.deletePlayer(playerId);
       }
+
+      toggleDeletePlayersMode();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
   }
 
-  void selectPlayer(Player player) {
-    _selectedPlayers.add(player);
-  }
+  void selectPlayer(Player player) => _selectedPlayers.add(player);
 
-  void deselectPlayer(Player player) {
-    _selectedPlayers.remove(player);
-  }
-
-  Future<void> deleteSelectedPlayers() async {
-    await deletePlayers(_selectedPlayers.map((Player player) => player.id).toList());
-    _selectedPlayers.clear();
-    isEditMode = false;
-  }
+  void deselectPlayer(Player player) => _selectedPlayers.remove(player);
 
   Future<void> _loadPlayers() async {
     try {
+      visualState = const PlayersVisualState.loadingPlayers();
       await _playersStore.loadPlayers();
+      visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
+  }
+
+  void dispose() {
+    _playersReactionDisposer();
   }
 }

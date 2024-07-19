@@ -88,40 +88,6 @@ class CollectionsPageState extends State<CollectionsPage>
     widget.viewModel.loadBoardGames();
   }
 
-  Future<void> _shareScreenshot(BuildContext context, File screenshotFile) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final shareResult = await Share.shareXFiles(
-      [
-        XFile(screenshotFile.path, mimeType: 'image/png'),
-      ],
-      sharePositionOrigin: context.iPadsShareRectangle,
-    );
-
-    Fimber.i('Screenshot sharing finished with status ${shareResult.status}');
-
-    switch (shareResult.status) {
-      case ShareResultStatus.success:
-      case ShareResultStatus.unavailable:
-        if (!mounted) {
-          break;
-        }
-
-        messenger.showSnackBar(
-          const SnackBar(
-            margin: Dimensions.snackbarMargin,
-            behavior: SnackBarBehavior.floating,
-            content: Text(AppText.collectionsPageShareCollectionSuccessMessage),
-            backgroundColor: AppColors.greenColor,
-          ),
-        );
-
-        break;
-      case ShareResultStatus.dismissed:
-        // MK Don't do anything, user cancelled/dismissed
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -172,6 +138,40 @@ class CollectionsPageState extends State<CollectionsPage>
     _topTabController.dispose();
     _screenshotGeneratorReacitonDisposer();
     super.dispose();
+  }
+
+  Future<void> _shareScreenshot(BuildContext context, File screenshotFile) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final shareResult = await Share.shareXFiles(
+      [
+        XFile(screenshotFile.path, mimeType: 'image/png'),
+      ],
+      sharePositionOrigin: context.iPadsShareRectangle,
+    );
+
+    Fimber.i('Screenshot sharing finished with status ${shareResult.status}');
+
+    switch (shareResult.status) {
+      case ShareResultStatus.success:
+      case ShareResultStatus.unavailable:
+        if (!mounted) {
+          break;
+        }
+
+        messenger.showSnackBar(
+          const SnackBar(
+            margin: Dimensions.snackbarMargin,
+            behavior: SnackBarBehavior.floating,
+            content: Text(AppText.collectionsPageShareCollectionSuccessMessage),
+            backgroundColor: AppColors.greenColor,
+          ),
+        );
+
+        break;
+      case ShareResultStatus.dismissed:
+        // MK Don't do anything, user cancelled/dismissed
+        break;
+    }
   }
 }
 

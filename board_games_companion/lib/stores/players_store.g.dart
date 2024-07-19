@@ -59,7 +59,7 @@ mixin _$PlayersStore on _PlayersStore, Store {
       AsyncAction('_PlayersStore.createOrUpdatePlayer', context: context);
 
   @override
-  Future<bool> createOrUpdatePlayer(Player player) {
+  Future<Result<Player?>> createOrUpdatePlayer(Player player) {
     return _$createOrUpdatePlayerAsyncAction
         .run(() => super.createOrUpdatePlayer(player));
   }
@@ -68,7 +68,7 @@ mixin _$PlayersStore on _PlayersStore, Store {
       AsyncAction('_PlayersStore.deletePlayer', context: context);
 
   @override
-  Future<bool> deletePlayer(String playerId) {
+  Future<Result<Player?>> deletePlayer(String playerId) {
     return _$deletePlayerAsyncAction.run(() => super.deletePlayer(playerId));
   }
 
@@ -76,7 +76,7 @@ mixin _$PlayersStore on _PlayersStore, Store {
       AsyncAction('_PlayersStore.restorePlayer', context: context);
 
   @override
-  Future<bool> restorePlayer(String playerId) {
+  Future<Result<Player?>> restorePlayer(String playerId) {
     return _$restorePlayerAsyncAction.run(() => super.restorePlayer(playerId));
   }
 

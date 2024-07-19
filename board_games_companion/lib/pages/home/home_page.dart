@@ -184,11 +184,14 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
             builder: (_) {
               return _screenshotGenerator.visualState.maybeWhen(
                 downloadingImages: (progressPercentage) => LoadingOverlay(
-                  title: 'Downloading images $progressPercentage%...',
+                  title: sprintf(
+                    AppText.homePageCollectionScreenshotGenerationProgressFormat,
+                    [progressPercentage],
+                  ),
                   child: const SizedBox.shrink(),
                 ),
                 generatingScreenshot: () => const LoadingOverlay(
-                  title: 'Generating collection screenshot...',
+                  title: AppText.homePageCollectionScreenshotGenerationTitle,
                   child: SizedBox.shrink(),
                 ),
                 orElse: () => const SizedBox.shrink(),
