@@ -87,6 +87,25 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
     return true;
   }
 
+  Future<bool> restorePlayer(String playerId) async {
+    if (playerId.isEmpty) {
+      return false;
+    }
+
+    if (!await ensureBoxOpen()) {
+      return false;
+    }
+
+    final playerToRestore = storageBox.get(playerId);
+    if (playerToRestore == null || playerToRestore.isDeleted == false) {
+      return false;
+    }
+
+    await storageBox.put(playerId, playerToRestore.copyWith(isDeleted: false));
+
+    return true;
+  }
+
   Future<Player> _saveAvatar(Player player) async {
     if (player.avatarFileToSave == null) {
       return player;

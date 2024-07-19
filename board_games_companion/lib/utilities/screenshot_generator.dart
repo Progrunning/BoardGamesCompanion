@@ -49,10 +49,10 @@ abstract class _ScreenshotGenerator with Store {
 
   @action
   Future<void> generateCollectionScreenshot(
-    List<BoardGameDetails> boardGames, [
+    List<BoardGameDetails> baseBoardGames, [
     int numberOfColumns = 5,
   ]) async {
-    if (boardGames.isEmpty) {
+    if (baseBoardGames.isEmpty) {
       Fimber.i('Cannot generate a screenshot from an empty list of board games');
       return;
     }
@@ -61,14 +61,16 @@ abstract class _ScreenshotGenerator with Store {
     unawaited(_analyticsService.logEvent(name: Analytics.shareCollectionScreenshot));
 
     try {
-      await _downloadGameThumbnails(boardGames);
+      await _downloadGameThumbnails(baseBoardGames);
 
       final boardGamesInRows = <List<BoardGameDetails>>[];
-      for (var i = 0; i < boardGames.length; i += numberOfColumns) {
+      for (var i = 0; i < baseBoardGames.length; i += numberOfColumns) {
         boardGamesInRows.add(
-          boardGames.sublist(
+          baseBoardGames.sublist(
             i,
-            i + numberOfColumns > boardGames.length ? boardGames.length : i + numberOfColumns,
+            i + numberOfColumns > baseBoardGames.length
+                ? baseBoardGames.length
+                : i + numberOfColumns,
           ),
         );
       }

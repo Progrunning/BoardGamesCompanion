@@ -30,10 +30,11 @@ mixin _$ScreenshotGenerator on _ScreenshotGenerator, Store {
       context: context);
 
   @override
-  Future<void> generateCollectionScreenshot(List<BoardGameDetails> boardGames,
+  Future<void> generateCollectionScreenshot(
+      List<BoardGameDetails> baseBoardGames,
       [int numberOfColumns = 5]) {
-    return _$generateCollectionScreenshotAsyncAction.run(
-        () => super.generateCollectionScreenshot(boardGames, numberOfColumns));
+    return _$generateCollectionScreenshotAsyncAction.run(() =>
+        super.generateCollectionScreenshot(baseBoardGames, numberOfColumns));
   }
 
   @override

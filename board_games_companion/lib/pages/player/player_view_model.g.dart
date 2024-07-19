@@ -16,6 +16,13 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
       (_$playerNameComputed ??= Computed<String?>(() => super.playerName,
               name: '_PlayerViewModel.playerName'))
           .value;
+  Computed<bool>? _$isBggUserComputed;
+
+  @override
+  bool get isBggUser =>
+      (_$isBggUserComputed ??= Computed<bool>(() => super.isBggUser,
+              name: '_PlayerViewModel.isBggUser'))
+          .value;
   Computed<String?>? _$playerAvatarImageUriComputed;
 
   @override
@@ -23,27 +30,6 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
           Computed<String?>(() => super.playerAvatarImageUri,
               name: '_PlayerViewModel.playerAvatarImageUri'))
       .value;
-  Computed<bool>? _$playerHasNameComputed;
-
-  @override
-  bool get playerHasName =>
-      (_$playerHasNameComputed ??= Computed<bool>(() => super.playerHasName,
-              name: '_PlayerViewModel.playerHasName'))
-          .value;
-  Computed<bool>? _$isEditModeComputed;
-
-  @override
-  bool get isEditMode =>
-      (_$isEditModeComputed ??= Computed<bool>(() => super.isEditMode,
-              name: '_PlayerViewModel.isEditMode'))
-          .value;
-  Computed<bool>? _$isDeletedComputed;
-
-  @override
-  bool get isDeleted =>
-      (_$isDeletedComputed ??= Computed<bool>(() => super.isDeleted,
-              name: '_PlayerViewModel.isDeleted'))
-          .value;
   Computed<bool>? _$hasUnsavedChangesComputed;
 
   @override
@@ -51,6 +37,22 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
           () => super.hasUnsavedChanges,
           name: '_PlayerViewModel.hasUnsavedChanges'))
       .value;
+
+  late final _$visualStateAtom =
+      Atom(name: '_PlayerViewModel.visualState', context: context);
+
+  @override
+  PlayerVisualState get visualState {
+    _$visualStateAtom.reportRead();
+    return super.visualState;
+  }
+
+  @override
+  set visualState(PlayerVisualState value) {
+    _$visualStateAtom.reportWrite(value, super.visualState, () {
+      super.visualState = value;
+    });
+  }
 
   late final _$_playerAtom =
       Atom(name: '_PlayerViewModel._player', context: context);
@@ -84,13 +86,20 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
     });
   }
 
-  late final _$createOrUpdatePlayerAsyncAction =
-      AsyncAction('_PlayerViewModel.createOrUpdatePlayer', context: context);
+  late final _$createPlayerAsyncAction =
+      AsyncAction('_PlayerViewModel.createPlayer', context: context);
 
   @override
-  Future<bool> createOrUpdatePlayer(Player playerToCreateOrUpdate) {
-    return _$createOrUpdatePlayerAsyncAction
-        .run(() => super.createOrUpdatePlayer(playerToCreateOrUpdate));
+  Future<bool> createPlayer(Player player) {
+    return _$createPlayerAsyncAction.run(() => super.createPlayer(player));
+  }
+
+  late final _$updatePlayerAsyncAction =
+      AsyncAction('_PlayerViewModel.updatePlayer', context: context);
+
+  @override
+  Future<bool> updatePlayer(Player player) {
+    return _$updatePlayerAsyncAction.run(() => super.updatePlayer(player));
   }
 
   late final _$deletePlayerAsyncAction =
@@ -99,6 +108,14 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
   @override
   Future<void> deletePlayer() {
     return _$deletePlayerAsyncAction.run(() => super.deletePlayer());
+  }
+
+  late final _$restorePlayerAsyncAction =
+      AsyncAction('_PlayerViewModel.restorePlayer', context: context);
+
+  @override
+  Future<bool> restorePlayer() {
+    return _$restorePlayerAsyncAction.run(() => super.restorePlayer());
   }
 
   late final _$_PlayerViewModelActionController =
@@ -129,12 +146,11 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
   @override
   String toString() {
     return '''
+visualState: ${visualState},
 playerWorkingCopy: ${playerWorkingCopy},
 playerName: ${playerName},
+isBggUser: ${isBggUser},
 playerAvatarImageUri: ${playerAvatarImageUri},
-playerHasName: ${playerHasName},
-isEditMode: ${isEditMode},
-isDeleted: ${isDeleted},
 hasUnsavedChanges: ${hasUnsavedChanges}
     ''';
   }

@@ -237,6 +237,17 @@ class AppText {
   static const playerPagePlayerBggNameTitle = 'BGG Username';
   static const playerPageTakePhoto = 'Take a photo';
   static const playerPagePickPhoto = 'Pick a photo';
+  static const playerPagePlayerDeletedBanner = 'This player has been deleted';
+  static const playerPageCreatePlayerButtonText = 'Create';
+  static const playerPageUpdatePlayerButtonText = 'Update';
+  static const playerPageDeleteConfirmationContent = 'Are you sure you want to delete this player?';
+  static const playerPageDeleteConfirmationTitleFormat = 'Delete %s';
+  static const playerPageGoBackUnsavedChangesTitle = "You didn't save your changes.";
+  static const playerPageGoBackUnsavedChangesContent = 'Are you sure you want to navigate away?';
+  static const playerPageNameValidationError = 'Player needs to have a name';
+  static const playerPageNavigateAway = 'Navigate away';
+  static const playerPagePlayerRestoreSuccessfully = 'Player restored successfully';
+  static const playerPagePlayerRestoreFailure = 'Failed to restore deleted player';
 
   static const playersPageTitle = 'Players';
   static const playersPageCreatePlayerButtonText = 'Create Player';

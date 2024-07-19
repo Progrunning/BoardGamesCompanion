@@ -67,12 +67,18 @@ abstract class _PlayersStore with Store {
   @action
   Future<bool> deletePlayer(String playerId) async {
     try {
-      final deleteSucceeded = await _playerService.deletePlayer(playerId);
-      if (deleteSucceeded) {
-        players.removeWhere((p) => p.id == playerId);
-      }
+      return await _playerService.deletePlayer(playerId);
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
 
-      return deleteSucceeded;
+    return false;
+  }
+
+  @action
+  Future<bool> restorePlayer(String playerId) async {
+    try {
+      return await _playerService.restorePlayer(playerId);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }

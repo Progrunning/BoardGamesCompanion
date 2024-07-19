@@ -1,7 +1,8 @@
-import 'package:basics/basics.dart';
+import 'package:board_games_companion/pages/player/player_visual_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
@@ -83,32 +84,28 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    if (widget.viewModel.isDeleted)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 40,
-                              child: Container(
-                                color: AppColors.redColor,
-                                child: const Center(child: Text('This player is deleted')),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    Observer(
+                      builder: (_) {
+                        return switch (widget.viewModel.visualState) {
+                          Deleted() => const _DeletedPlayerBanner(),
+                          _ => const SizedBox.shrink()
+                        };
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(Dimensions.standardSpacing),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Observer(
-                            builder: (_) {
-                              return _PlayerAvatar(
-                                playerWorkingCopy: widget.viewModel.playerWorkingCopy!,
-                                onPickImage: (imageSource) async =>
+                            builder: (_) => _PlayerAvatar(
+                              playerWorkingCopy: widget.viewModel.playerWorkingCopy!,
+                              onPickImage: switch (widget.viewModel.visualState) {
+                                Deleted() => null,
+                                _ => (imageSource) async =>
                                     _handlePickingAndSavingAvatar(imageSource),
-                              );
-                            },
+                              },
+                            ),
                           ),
                           TextFormField(
                             decoration: const InputDecoration(
@@ -116,17 +113,12 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                               labelStyle: AppTheme.defaultTextFieldLabelStyle,
                             ),
                             style: AppTheme.defaultTextFieldStyle,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Player needs to have a name';
-                              }
-
-                              return null;
-                            },
+                            validator: (value) => _validatePlayerName(value),
                             controller: nameController,
                             focusNode: nameFocusNode,
+                            readOnly: widget.viewModel.visualState.isDeleted,
                           ),
-                          if (widget.viewModel.playerWorkingCopy!.bggName.isNotNullOrBlank) ...[
+                          if (widget.viewModel.isBggUser) ...[
                             const SizedBox(height: Dimensions.doubleStandardSpacing),
                             Text(
                               AppText.playerPagePlayerBggNameTitle,
@@ -147,15 +139,42 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                       padding: const EdgeInsets.all(Dimensions.standardSpacing),
                       child: Observer(
                         builder: (_) {
-                          // TODO Move the restore out of the action buttons
-                          return _ActionButtons(
-                            isEditMode: widget.viewModel.isEditMode,
-                            isDeleted: widget.viewModel.isDeleted,
-                            onCreate: (BuildContext context) => _createOrUpdatePlayer(context),
-                            onUpdate: (BuildContext context) => _createOrUpdatePlayer(context),
-                            onDelete: (BuildContext context) => _showDeletePlayerDialog(context),
-                            onRestore: (BuildContext context) => _restorePlayer(),
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              switch (widget.viewModel.visualState) {
+                                Create() => ElevatedIconButton(
+                                    title: AppText.playerPageCreatePlayerButtonText,
+                                    icon: const DefaultIcon(Icons.create),
+                                    onPressed: () => _createOrUpdatePlayer(context),
+                                  ),
+                                Edit() || Restored() => Row(
+                                    children: [
+                                      ElevatedIconButton(
+                                        title: AppText.delete,
+                                        icon: const DefaultIcon(Icons.delete),
+                                        color: AppColors.redColor,
+                                        onPressed: () => _showDeletePlayerDialog(context),
+                                      ),
+                                      const SizedBox(width: Dimensions.standardSpacing),
+                                      ElevatedIconButton(
+                                        title: AppText.playerPageUpdatePlayerButtonText,
+                                        icon: const DefaultIcon(Icons.create),
+                                        onPressed: () => _createOrUpdatePlayer(context),
+                                      ),
+                                    ],
+                                  ),
+                                Deleted() => ElevatedIconButton(
+                                    title: AppText.restore,
+                                    icon: const DefaultIcon(Icons.restore_from_trash),
+                                    color: AppColors.greenColor,
+                                    onPressed: () => _restorePlayer(context),
+                                  ),
+                                _ => const SizedBox.shrink()
+                              },
+                            ],
                           );
+                          // // TODO Move the restore out of the action button
                         },
                       ),
                     ),
@@ -166,6 +185,14 @@ class PlayerPageState extends BasePageState<PlayerPage> {
           ),
         ),
       );
+
+  String? _validatePlayerName(String? value) {
+    if (value!.isEmpty) {
+      return AppText.playerPageNavigateAway;
+    }
+
+    return null;
+  }
 
   Future<void> _handlePickingAndSavingAvatar(ImageSource imageSource) async {
     final avatarFile = await imagePicker.pickImage(source: imageSource);
@@ -183,42 +210,43 @@ class PlayerPageState extends BasePageState<PlayerPage> {
   }
 
   Future<bool> _handleOnWillPop(BuildContext context) async {
-    if (widget.viewModel.hasUnsavedChanges) {
-      await showDialog<AlertDialog>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text("You didn't save your changes."),
-              content: const Text('Are you sure you want to navigate away?'),
-              elevation: Dimensions.defaultElevation,
-              actions: <Widget>[
-                TextButton(
-                  child: const Text(AppText.cancel),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
-                  onPressed: () {
-                    // MK Pop the dialog
-                    Navigator.of(context).pop();
-                    // MK Go back
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Navigate away',
-                    style: TextStyle(color: AppColors.defaultTextColor),
-                  ),
-                ),
-              ],
-            );
-          });
-
-      return false;
+    if (!widget.viewModel.hasUnsavedChanges) {
+      return true;
     }
 
-    return true;
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(AppText.playerPageGoBackUnsavedChangesTitle),
+          content: const Text(AppText.playerPageNavigateAway),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppText.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
+              onPressed: () {
+                // MK Pop the dialog
+                Navigator.of(context).pop();
+                // MK Go back
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                AppText.playerPageNavigateAway,
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return false;
   }
 
   Future<void> _createOrUpdatePlayer(BuildContext context) async {
@@ -229,20 +257,18 @@ class PlayerPageState extends BasePageState<PlayerPage> {
     widget.viewModel.playerWorkingCopy =
         widget.viewModel.playerWorkingCopy!.copyWith(name: nameController.text);
 
-    final playerUpdatedSuccess =
-        await widget.viewModel.createOrUpdatePlayer(widget.viewModel.playerWorkingCopy!);
-    if (playerUpdatedSuccess) {
-      if (!context.mounted) {
-        return;
-      }
-
-      _showPlayerUpdatedSnackbar(
-        context,
-        widget.viewModel.playerWorkingCopy!,
-        isEditMode: widget.viewModel.isEditMode,
-      );
-      nameFocusNode.unfocus();
+    final operationSucceeded =
+        await widget.viewModel.createPlayer(widget.viewModel.playerWorkingCopy!);
+    if (!operationSucceeded || !context.mounted) {
+      return;
     }
+
+    _showPlayerUpdatedSnackbar(
+      context,
+      widget.viewModel.playerWorkingCopy!,
+      isEditMode: widget.viewModel.visualState.isEditMode,
+    );
+    nameFocusNode.unfocus();
   }
 
   Future<void> _showDeletePlayerDialog(BuildContext context) async {
@@ -250,8 +276,13 @@ class PlayerPageState extends BasePageState<PlayerPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Delete ${widget.viewModel.playerWorkingCopy!.name}'),
-          content: const Text('Are you sure you want to delete this player?'),
+          title: Text(
+            sprintf(
+              AppText.playerPageGoBackUnsavedChangesTitle,
+              [widget.viewModel.playerWorkingCopy!.name],
+            ),
+          ),
+          content: const Text(AppText.playerPageDeleteConfirmationContent),
           elevation: Dimensions.defaultElevation,
           actions: <Widget>[
             TextButton(
@@ -314,10 +345,46 @@ class PlayerPageState extends BasePageState<PlayerPage> {
         ),
       );
 
-  void _restorePlayer() {
-    // TODO Implement
-    // TODO Disable updating of the player until it's restored
+  Future<void> _restorePlayer(BuildContext context) async {
+    final operationSucceeded = await widget.viewModel.restorePlayer();
+    if (!context.mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin: Dimensions.snackbarMargin,
+        behavior: SnackBarBehavior.floating,
+        content: Text(
+          operationSucceeded
+              ? AppText.playerPagePlayerRestoreSuccessfully
+              : AppText.playerPagePlayerRestoreFailure,
+        ),
+        backgroundColor: operationSucceeded ? AppColors.greenColor : AppColors.redColor,
+      ),
+    );
   }
+}
+
+class _DeletedPlayerBanner extends StatelessWidget {
+  const _DeletedPlayerBanner();
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 40,
+              child: Container(
+                color: AppColors.redColor,
+                child: const Center(
+                  child: Text(AppText.playerPagePlayerDeletedBanner),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
 }
 
 class _PlayerAvatar extends StatelessWidget {
@@ -327,7 +394,7 @@ class _PlayerAvatar extends StatelessWidget {
   });
 
   final Player playerWorkingCopy;
-  final void Function(ImageSource) onPickImage;
+  final void Function(ImageSource imageSource)? onPickImage;
 
   @override
   Widget build(BuildContext context) => SizedBox(
@@ -348,37 +415,44 @@ class _PlayerAvatar extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: Dimensions.standardSpacing),
+            const SizedBox(width: Dimensions.halfStandardSpacing),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // TODO RippleEffect needs to be replaced by a proper button, to allow for disabled state
                   RippleEffect(
-                    onTap: () => onPickImage(ImageSource.gallery),
-                    child: const Row(
-                      children: [
-                        CustomIconButton(
-                          Icon(
-                            Icons.filter,
-                            color: AppColors.defaultTextColor,
+                    onTap: () => onPickImage != null ? onPickImage!(ImageSource.gallery) : null,
+                    child: const Padding(
+                      padding: EdgeInsets.all(Dimensions.halfStandardSpacing),
+                      child: Row(
+                        children: [
+                          CustomIconButton(
+                            Icon(
+                              Icons.filter,
+                              color: AppColors.defaultTextColor,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: Dimensions.standardSpacing),
-                        Text(AppText.playerPagePickPhoto),
-                      ],
+                          SizedBox(width: Dimensions.standardSpacing),
+                          Text(AppText.playerPagePickPhoto),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: Dimensions.doubleStandardSpacing),
+                  const SizedBox(height: Dimensions.standardSpacing),
                   RippleEffect(
-                    onTap: () => onPickImage(ImageSource.camera),
-                    child: const Row(
-                      children: [
-                        CustomIconButton(
-                          Icon(Icons.camera, color: AppColors.defaultTextColor),
-                        ),
-                        SizedBox(width: Dimensions.standardSpacing),
-                        Text(AppText.playerPageTakePhoto),
-                      ],
+                    onTap: () => onPickImage != null ? onPickImage!(ImageSource.camera) : null,
+                    child: const Padding(
+                      padding: EdgeInsets.all(Dimensions.halfStandardSpacing),
+                      child: Row(
+                        children: [
+                          CustomIconButton(
+                            Icon(Icons.camera, color: AppColors.defaultTextColor),
+                          ),
+                          SizedBox(width: Dimensions.standardSpacing),
+                          Text(AppText.playerPageTakePhoto),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -387,55 +461,4 @@ class _PlayerAvatar extends StatelessWidget {
           ],
         ),
       );
-}
-
-// TODO This needs to be refactored
-class _ActionButtons extends StatelessWidget {
-  const _ActionButtons({
-    required this.isEditMode,
-    required this.isDeleted,
-    required this.onCreate,
-    required this.onUpdate,
-    required this.onDelete,
-    this.onRestore,
-  });
-
-  final bool isEditMode;
-  final bool isDeleted;
-  final Function(BuildContext) onCreate;
-  final Function(BuildContext) onUpdate;
-  final Function(BuildContext) onDelete;
-  final Function(BuildContext)? onRestore;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        if (isEditMode && isDeleted && onRestore != null) ...[
-          ElevatedIconButton(
-            title: AppText.restore,
-            icon: const DefaultIcon(Icons.restore_from_trash),
-            color: AppColors.greenColor,
-            onPressed: () => onRestore!(context),
-          ),
-          const SizedBox(width: Dimensions.standardSpacing),
-        ],
-        if (isEditMode && !isDeleted) ...[
-          ElevatedIconButton(
-            title: AppText.delete,
-            icon: const DefaultIcon(Icons.delete),
-            color: AppColors.redColor,
-            onPressed: () => onDelete(context),
-          ),
-          const SizedBox(width: Dimensions.standardSpacing),
-        ],
-        ElevatedIconButton(
-          title: isEditMode ? 'Update' : 'Create',
-          icon: const DefaultIcon(Icons.create),
-          onPressed: () => isEditMode ? onUpdate(context) : onCreate(context),
-        ),
-      ],
-    );
-  }
 }
