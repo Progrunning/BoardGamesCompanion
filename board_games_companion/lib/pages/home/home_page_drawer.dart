@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -153,27 +151,8 @@ class HomePageDrawer extends StatelessWidget {
   }
 
   Future<void> _shareStoreLink() async {
-    Uri? storeUri;
-    if (Platform.isAndroid) {
-      storeUri = Uri.https(
-        'play.google.com',
-        'store/apps/details',
-        {'id': 'com.progrunning.boardgamescompanion'},
-      );
-    }
-    if (Platform.isIOS) {
-      // TODO Verify this works on iOS
-      storeUri = Uri.https(
-        'apps.apple.com',
-        'us/app/board-games-companion/id1506458832',
-      );
-    }
-
-    if (storeUri == null) {
-      return;
-    }
-
-    await Share.shareUri(storeUri);
+    final websiteUrl = Uri.https('progrunning.net', 'board-games-companion');
+    await Share.shareUri(websiteUrl);
   }
 }
 
