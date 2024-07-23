@@ -12,7 +12,7 @@ part of 'game_spinner_filters.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$GameSpinnerFilters {
@@ -190,7 +190,7 @@ class _$GameSpinnerFiltersImpl extends _GameSpinnerFilters {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GameSpinnerFiltersImpl &&
@@ -342,7 +342,7 @@ class _$numberOfPlayersAnyImpl implements _numberOfPlayersAny {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$numberOfPlayersAnyImpl);
   }
@@ -455,7 +455,7 @@ class _$soloImpl implements _solo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$soloImpl);
   }
@@ -569,7 +569,7 @@ class _$coupleImpl implements _couple {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$coupleImpl);
   }
@@ -701,7 +701,7 @@ class _$moreOrEqualToImpl implements _moreOrEqualTo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$moreOrEqualToImpl &&
@@ -890,7 +890,7 @@ class _$playtimeAnyImpl implements _playtimeAny {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$playtimeAnyImpl);
   }
@@ -1010,7 +1010,7 @@ class _$lessThanImpl implements _lessThan {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$lessThanImpl &&

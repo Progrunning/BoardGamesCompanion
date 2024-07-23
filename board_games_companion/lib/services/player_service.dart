@@ -32,12 +32,7 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
         .toList();
 
     for (var i = 0; i < players.length; i++) {
-      final hasAvatarFileName = players[i].avatarFileName?.isNotEmpty ?? false;
-      if (hasAvatarFileName) {
-        final avatarImageUri =
-            await fileService.createDocumentsFilePath(players[i].avatarFileName!);
-        players[i] = players[i].copyWith(avatarImageUri: avatarImageUri);
-      }
+      players[i] = await _enrichPlayerWithAvatar(players[i]);
     }
 
     return players;
@@ -68,23 +63,44 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
     return true;
   }
 
-  Future<bool> deletePlayer(String playerId) async {
+  Future<Player?> deletePlayer(String playerId) async {
     if (playerId.isEmpty) {
-      return false;
+      return null;
     }
 
     if (!await ensureBoxOpen()) {
-      return false;
+      return null;
     }
 
     final playerToDelete = storageBox.get(playerId);
     if (playerToDelete == null || (playerToDelete.isDeleted ?? false)) {
-      return false;
+      return null;
     }
 
-    await storageBox.put(playerId, playerToDelete.copyWith(isDeleted: true));
+    final deletedPlayer = playerToDelete.copyWith(isDeleted: true);
+    await storageBox.put(playerId, deletedPlayer);
 
-    return true;
+    return _enrichPlayerWithAvatar(deletedPlayer);
+  }
+
+  Future<Player?> restorePlayer(String playerId) async {
+    if (playerId.isEmpty) {
+      return null;
+    }
+
+    if (!await ensureBoxOpen()) {
+      return null;
+    }
+
+    final playerToRestore = storageBox.get(playerId);
+    if (playerToRestore == null || playerToRestore.isDeleted == false) {
+      return null;
+    }
+
+    final restoredPlayer = playerToRestore.copyWith(isDeleted: false);
+    await storageBox.put(playerId, restoredPlayer);
+
+    return _enrichPlayerWithAvatar(restoredPlayer);
   }
 
   Future<Player> _saveAvatar(Player player) async {
@@ -115,5 +131,15 @@ class PlayerService extends BaseHiveService<Player, PlayerService> {
 
   Future<bool> _deleteAvatar(String avatarFileName) async {
     return fileService.deleteFileFromDocumentsDirectory(avatarFileName);
+  }
+
+  Future<Player> _enrichPlayerWithAvatar(Player player) async {
+    final hasAvatarFileName = player.avatarFileName?.isNotEmpty ?? false;
+    if (hasAvatarFileName) {
+      final avatarImageUri = await fileService.createDocumentsFilePath(player.avatarFileName!);
+      return player.copyWith(avatarImageUri: avatarImageUri);
+    }
+
+    return player;
   }
 }

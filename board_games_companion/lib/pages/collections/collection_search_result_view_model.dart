@@ -25,11 +25,11 @@ abstract class _CollectionSearchResultViewModel with Store {
   bool get isExpansion => boardGame?.isExpansion ?? false;
 
   @computed
-  bool get isMainGame => boardGame?.isMainGame ?? false;
+  bool get isBaseGame => boardGame?.isBaseGame ?? false;
 
   @computed
   List<BoardGameDetails> get expansions {
-    if (!isMainGame) {
+    if (!isBaseGame) {
       return [];
     }
 

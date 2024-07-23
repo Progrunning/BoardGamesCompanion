@@ -51,7 +51,7 @@ class Dimensions {
 
   static const double defaultPlayerAvatarSize = 150;
   static const Size smallPlayerAvatarSize = Size(100, 100);
-  static const double smallPlayerAvatarWithScoreSize = 140;
+  static const double smallPlayerAvatarWithScoreSize = 145;
   static const double searchResultsPlayerAvatarSize = 80;
 
   static const double smallButtonIconSize = 16;

@@ -29,12 +29,12 @@ mixin _$BoardGameDetailsViewModel on _BoardGameDetailsViewModel, Store {
       (_$imageUrlComputed ??= Computed<String?>(() => super.imageUrl,
               name: '_BoardGameDetailsViewModel.imageUrl'))
           .value;
-  Computed<bool>? _$isMainGameComputed;
+  Computed<bool>? _$isBaseGameComputed;
 
   @override
-  bool get isMainGame =>
-      (_$isMainGameComputed ??= Computed<bool>(() => super.isMainGame,
-              name: '_BoardGameDetailsViewModel.isMainGame'))
+  bool get isBaseGame =>
+      (_$isBaseGameComputed ??= Computed<bool>(() => super.isBaseGame,
+              name: '_BoardGameDetailsViewModel.isBaseGame'))
           .value;
   Computed<bool>? _$isExpansionComputed;
 
@@ -154,7 +154,7 @@ futureLoadBoardGameDetails: ${futureLoadBoardGameDetails},
 boardGame: ${boardGame},
 name: ${name},
 imageUrl: ${imageUrl},
-isMainGame: ${isMainGame},
+isBaseGame: ${isBaseGame},
 isExpansion: ${isExpansion},
 expansions: ${expansions},
 expansionsOwnedById: ${expansionsOwnedById},

@@ -9,13 +9,34 @@ part of 'players_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlayersViewModel on _PlayersViewModel, Store {
-  Computed<List<Player>>? _$playersComputed;
+  Computed<List<Player>>? _$activePlayersComputed;
 
   @override
-  List<Player> get players =>
-      (_$playersComputed ??= Computed<List<Player>>(() => super.players,
-              name: '_PlayersViewModel.players'))
-          .value;
+  List<Player> get activePlayers => (_$activePlayersComputed ??=
+          Computed<List<Player>>(() => super.activePlayers,
+              name: '_PlayersViewModel.activePlayers'))
+      .value;
+  Computed<List<Player>>? _$deletedPlayersComputed;
+
+  @override
+  List<Player> get deletedPlayers => (_$deletedPlayersComputed ??=
+          Computed<List<Player>>(() => super.deletedPlayers,
+              name: '_PlayersViewModel.deletedPlayers'))
+      .value;
+  Computed<bool>? _$hasAnyActivePlayersComputed;
+
+  @override
+  bool get hasAnyActivePlayers => (_$hasAnyActivePlayersComputed ??=
+          Computed<bool>(() => super.hasAnyActivePlayers,
+              name: '_PlayersViewModel.hasAnyActivePlayers'))
+      .value;
+  Computed<bool>? _$hasAnyDeletedPlayersComputed;
+
+  @override
+  bool get hasAnyDeletedPlayers => (_$hasAnyDeletedPlayersComputed ??=
+          Computed<bool>(() => super.hasAnyDeletedPlayers,
+              name: '_PlayersViewModel.hasAnyDeletedPlayers'))
+      .value;
   Computed<bool>? _$hasAnyPlayersComputed;
 
   @override
@@ -40,20 +61,29 @@ mixin _$PlayersViewModel on _PlayersViewModel, Store {
     });
   }
 
-  late final _$isEditModeAtom =
-      Atom(name: '_PlayersViewModel.isEditMode', context: context);
+  late final _$visualStateAtom =
+      Atom(name: '_PlayersViewModel.visualState', context: context);
 
   @override
-  bool get isEditMode {
-    _$isEditModeAtom.reportRead();
-    return super.isEditMode;
+  PlayersVisualState get visualState {
+    _$visualStateAtom.reportRead();
+    return super.visualState;
   }
 
   @override
-  set isEditMode(bool value) {
-    _$isEditModeAtom.reportWrite(value, super.isEditMode, () {
-      super.isEditMode = value;
+  set visualState(PlayersVisualState value) {
+    _$visualStateAtom.reportWrite(value, super.visualState, () {
+      super.visualState = value;
     });
+  }
+
+  late final _$deleteSelectedPlayersAsyncAction =
+      AsyncAction('_PlayersViewModel.deleteSelectedPlayers', context: context);
+
+  @override
+  Future<void> deleteSelectedPlayers() {
+    return _$deleteSelectedPlayersAsyncAction
+        .run(() => super.deleteSelectedPlayers());
   }
 
   late final _$_PlayersViewModelActionController =
@@ -71,11 +101,22 @@ mixin _$PlayersViewModel on _PlayersViewModel, Store {
   }
 
   @override
-  void toggleEditMode() {
+  void toggleDeletePlayersMode() {
     final _$actionInfo = _$_PlayersViewModelActionController.startAction(
-        name: '_PlayersViewModel.toggleEditMode');
+        name: '_PlayersViewModel.toggleDeletePlayersMode');
     try {
-      return super.toggleEditMode();
+      return super.toggleDeletePlayersMode();
+    } finally {
+      _$_PlayersViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleShowDeletePlayers() {
+    final _$actionInfo = _$_PlayersViewModelActionController.startAction(
+        name: '_PlayersViewModel.toggleShowDeletePlayers');
+    try {
+      return super.toggleShowDeletePlayers();
     } finally {
       _$_PlayersViewModelActionController.endAction(_$actionInfo);
     }
@@ -85,8 +126,11 @@ mixin _$PlayersViewModel on _PlayersViewModel, Store {
   String toString() {
     return '''
 futureLoadPlayers: ${futureLoadPlayers},
-isEditMode: ${isEditMode},
-players: ${players},
+visualState: ${visualState},
+activePlayers: ${activePlayers},
+deletedPlayers: ${deletedPlayers},
+hasAnyActivePlayers: ${hasAnyActivePlayers},
+hasAnyDeletedPlayers: ${hasAnyDeletedPlayers},
 hasAnyPlayers: ${hasAnyPlayers}
     ''';
   }

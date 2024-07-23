@@ -8,6 +8,7 @@ import 'package:board_games_companion/pages/plays/most_played_game.dart';
 import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
 import 'package:board_games_companion/widgets/common/section_header.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -557,7 +558,10 @@ class _TimePeriodSection extends StatelessWidget {
     final pickedDateRange = await showDateRangePicker(
       context: context,
       firstDate: timePeriod.earliestPlaythrough,
-      lastDate: DateTime.now(),
+      lastDate: clock.now(),
+      // Specifying Great Britains locale to enforce Monday as the first day
+      // as that's how the periods are being calculated (Monday - Sunday)
+      locale: const Locale('en', 'GB'),
       initialDateRange: DateTimeRange(start: timePeriod.from, end: timePeriod.to),
       currentDate: timePeriod.from,
       helpText: AppText.playsPageOverallStatsTimePeriodPickerHelpText,
@@ -1439,7 +1443,7 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
         playedOn: playedOn,
       );
 
-  static const double _playthroughContainerHeight = 110;
+  static const double _playthroughContainerHeight = 112;
 
   final BoardGamePlaythrough boardGamePlaythrough;
   final DateTime? playedOn;
@@ -1483,6 +1487,8 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
                         Expanded(
                           child: _PlaythroughDetails(
                             boardGamePlaythrough: boardGamePlaythrough,
+                            hasNotes: boardGamePlaythrough.playthrough.hasNotes,
+                            notesTotal: boardGamePlaythrough.playthrough.notesTotal,
                           ),
                         ),
                         _PlaythroughActions(
@@ -1563,12 +1569,16 @@ class _HistoricalPlaythroughItem extends StatelessWidget {
 class _PlaythroughDetails extends StatelessWidget {
   const _PlaythroughDetails({
     required this.boardGamePlaythrough,
+    required this.hasNotes,
+    required this.notesTotal,
   });
 
   static const double _playthroughStatsIconSize = 16;
   static const double _playthroughStatsFontAwesomeIconSize = _playthroughStatsIconSize - 4;
 
   final BoardGamePlaythrough boardGamePlaythrough;
+  final bool hasNotes;
+  final int notesTotal;
 
   @override
   Widget build(BuildContext context) {
@@ -1587,6 +1597,7 @@ class _PlaythroughDetails extends StatelessWidget {
             size: _playthroughStatsFontAwesomeIconSize,
           ),
           statistic: boardGamePlaythrough.gameResultTextFormatted,
+          overflow: TextOverflow.ellipsis,
         ),
         _PlaythroughGeneralStats(
           icon: const Icon(Icons.people, size: _playthroughStatsIconSize),
@@ -1597,6 +1608,15 @@ class _PlaythroughDetails extends StatelessWidget {
           statistic: boardGamePlaythrough.playthrough.duration.inSeconds
               .toPlaytimeDuration(showSeconds: false),
         ),
+        if (hasNotes)
+          _PlaythroughGeneralStats(
+            icon: const Icon(Icons.note, size: _playthroughStatsIconSize),
+            statistic: sprintf(
+                notesTotal > 1
+                    ? AppText.playPageHistoryTabPlaythroughNotesFormat
+                    : AppText.playPageHistoryTabPlaythroughNoteFormat,
+                [notesTotal]),
+          ),
       ],
     );
   }
@@ -1606,10 +1626,12 @@ class _PlaythroughGeneralStats extends StatelessWidget {
   const _PlaythroughGeneralStats({
     required this.icon,
     required this.statistic,
+    this.overflow,
   });
 
   final Widget icon;
   final String statistic;
+  final TextOverflow? overflow;
 
   static const double _uniformedIconSize = 20;
 
@@ -1623,6 +1645,7 @@ class _PlaythroughGeneralStats extends StatelessWidget {
         Expanded(
           child: Text(
             statistic,
+            overflow: overflow,
             style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
           ),
         ),

@@ -129,13 +129,13 @@ mixin _$CollectionsViewModel on _CollectionsViewModel, Store {
           () => super.isCollectionEmpty,
           name: '_CollectionsViewModel.isCollectionEmpty'))
       .value;
-  Computed<List<BoardGameDetails>>? _$mainGamesInCollectionComputed;
+  Computed<List<BoardGameDetails>>? _$baseGamesInCollectionComputed;
 
   @override
-  List<BoardGameDetails> get mainGamesInCollection =>
-      (_$mainGamesInCollectionComputed ??= Computed<List<BoardGameDetails>>(
-              () => super.mainGamesInCollection,
-              name: '_CollectionsViewModel.mainGamesInCollection'))
+  List<BoardGameDetails> get baseGamesInCollection =>
+      (_$baseGamesInCollectionComputed ??= Computed<List<BoardGameDetails>>(
+              () => super.baseGamesInCollection,
+              name: '_CollectionsViewModel.baseGamesInCollection'))
           .value;
   Computed<List<BoardGameDetails>>? _$expansionsInCollectionComputed;
 
@@ -145,28 +145,28 @@ mixin _$CollectionsViewModel on _CollectionsViewModel, Store {
               () => super.expansionsInCollection,
               name: '_CollectionsViewModel.expansionsInCollection'))
           .value;
-  Computed<bool>? _$anyMainGamesInCollectionComputed;
+  Computed<bool>? _$anyBaseGamesInCollectionComputed;
 
   @override
-  bool get anyMainGamesInCollection => (_$anyMainGamesInCollectionComputed ??=
-          Computed<bool>(() => super.anyMainGamesInCollection,
-              name: '_CollectionsViewModel.anyMainGamesInCollection'))
+  bool get anyBaseGamesInCollection => (_$anyBaseGamesInCollectionComputed ??=
+          Computed<bool>(() => super.anyBaseGamesInCollection,
+              name: '_CollectionsViewModel.anyBaseGamesInCollection'))
       .value;
-  Computed<int>? _$totalMainGamesInCollectionComputed;
+  Computed<int>? _$baseGamesInCollectionTotalComputed;
 
   @override
-  int get totalMainGamesInCollection =>
-      (_$totalMainGamesInCollectionComputed ??= Computed<int>(
-              () => super.totalMainGamesInCollection,
-              name: '_CollectionsViewModel.totalMainGamesInCollection'))
+  int get baseGamesInCollectionTotal =>
+      (_$baseGamesInCollectionTotalComputed ??= Computed<int>(
+              () => super.baseGamesInCollectionTotal,
+              name: '_CollectionsViewModel.baseGamesInCollectionTotal'))
           .value;
-  Computed<int>? _$totalExpansionsInCollectionComputed;
+  Computed<int>? _$expansionsInCollectionTotalComputed;
 
   @override
-  int get totalExpansionsInCollection =>
-      (_$totalExpansionsInCollectionComputed ??= Computed<int>(
-              () => super.totalExpansionsInCollection,
-              name: '_CollectionsViewModel.totalExpansionsInCollection'))
+  int get expansionsInCollectionTotal =>
+      (_$expansionsInCollectionTotalComputed ??= Computed<int>(
+              () => super.expansionsInCollectionTotal,
+              name: '_CollectionsViewModel.expansionsInCollectionTotal'))
           .value;
   Computed<bool>? _$anyExpansionsInCollectionComputed;
 
@@ -340,11 +340,11 @@ maxNumberOfPlayers: ${maxNumberOfPlayers},
 allBoardGames: ${allBoardGames},
 boardGamesInCollection: ${boardGamesInCollection},
 isCollectionEmpty: ${isCollectionEmpty},
-mainGamesInCollection: ${mainGamesInCollection},
+baseGamesInCollection: ${baseGamesInCollection},
 expansionsInCollection: ${expansionsInCollection},
-anyMainGamesInCollection: ${anyMainGamesInCollection},
-totalMainGamesInCollection: ${totalMainGamesInCollection},
-totalExpansionsInCollection: ${totalExpansionsInCollection},
+anyBaseGamesInCollection: ${anyBaseGamesInCollection},
+baseGamesInCollectionTotal: ${baseGamesInCollectionTotal},
+expansionsInCollectionTotal: ${expansionsInCollectionTotal},
 anyExpansionsInCollection: ${anyExpansionsInCollection},
 expansionsInCollectionMap: ${expansionsInCollectionMap},
 userName: ${userName},

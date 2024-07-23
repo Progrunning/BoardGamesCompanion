@@ -21,6 +21,10 @@ class BoardGamePlaythrough with _$BoardGamePlaythrough {
   const BoardGamePlaythrough._();
 
   List<PlayerScore> get winners {
+    if (!playthrough.hasAnyScores) {
+      return [];
+    }
+
     var bestPlayerScores = playthrough.playerScores.where((ps) => ps.score.isWinner).toList();
     // The below condition is to ensure old score records are still showing winners
     if (bestPlayerScores.isEmpty) {
@@ -43,14 +47,18 @@ class BoardGamePlaythrough with _$BoardGamePlaythrough {
     switch (gameFamily) {
       case GameFamily.HighestScore:
       case GameFamily.LowestScore:
+        if (winners.isEmpty) {
+          return AppText.playPageHistoryTabScoreGameResultNoWinnersYet;
+        }
+
         return sprintf(
           AppText.playPageHistoryTabScoreGameResultFormat,
           [
             winners
-                .where((element) => element.player?.name.isNotNullOrBlank ?? false)
-                .map((e) => e.player!.name)
+                .where((playerScore) => playerScore.player?.name.isNotNullOrBlank ?? false)
+                .map((playerScore) => playerScore.player!.name)
                 .join(', '),
-            winners.first.score.score?.toStringAsFixed(0),
+            winners.first.score.score?.toStringAsFixed(0) ?? '-',
           ],
         );
 

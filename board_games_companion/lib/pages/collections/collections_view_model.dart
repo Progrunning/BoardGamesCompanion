@@ -51,7 +51,7 @@ abstract class _CollectionsViewModel with Store {
 
   @computed
   List<BoardGameDetails> get allMainGames =>
-      allBoardGames.where((BoardGameDetails boardGame) => boardGame.isMainGame).toList();
+      allBoardGames.where((BoardGameDetails boardGame) => boardGame.isBaseGame).toList();
 
   @computed
   ObservableMap<String, BoardGameDetails> get _mainBoardGameByExpansionId {
@@ -148,21 +148,21 @@ abstract class _CollectionsViewModel with Store {
   bool get isCollectionEmpty => boardGamesInCollection.isEmpty;
 
   @computed
-  List<BoardGameDetails> get mainGamesInCollection =>
-      boardGamesInCollection.where((boardGame) => boardGame.isMainGame).toList();
+  List<BoardGameDetails> get baseGamesInCollection =>
+      boardGamesInCollection.where((boardGame) => boardGame.isBaseGame).toList();
 
   @computed
   List<BoardGameDetails> get expansionsInCollection =>
       boardGamesInCollection.where((boardGame) => boardGame.isExpansion ?? false).toList();
 
   @computed
-  bool get anyMainGamesInCollection => mainGamesInCollection.isNotEmpty;
+  bool get anyBaseGamesInCollection => baseGamesInCollection.isNotEmpty;
 
   @computed
-  int get totalMainGamesInCollection => mainGamesInCollection.length;
+  int get baseGamesInCollectionTotal => baseGamesInCollection.length;
 
   @computed
-  int get totalExpansionsInCollection => expansionsInCollection.length;
+  int get expansionsInCollectionTotal => expansionsInCollection.length;
 
   @computed
   bool get anyExpansionsInCollection => expansionsInCollection.isNotEmpty;

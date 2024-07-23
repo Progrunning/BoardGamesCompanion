@@ -11,6 +11,7 @@ class AppText {
   static const stop = 'Stop';
   static const save = 'Save';
   static const delete = 'Delete';
+  static const restore = 'Restore';
   static const remove = 'Remove';
   static const edit = 'Edit';
   static const migrate = 'Migrate';
@@ -34,6 +35,8 @@ class AppText {
   static const homePageGamesPlayersTabTitle = 'Players';
   static const homePageSearchCollectionsDialOptionText = 'Search collections';
   static const homePageSearchOnlineDialOptionText = 'Search online';
+  static const homePageCollectionScreenshotGenerationTitle = 'Generating collection screenshot...';
+  static const homePageCollectionScreenshotGenerationProgressFormat = 'Downloading images %s%%...';
 
   static const onlineSearchGamePublishYearFormat = 'Published in %i';
   static const onlineSearchSortingSectionTitle = 'Sort';
@@ -130,7 +133,7 @@ class AppText {
       'Unfortunately our services timed out. Please try searching again.';
   static const searchBoardGamesGenericError = 'Check your internet connectivity and try again.';
 
-  static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
+  static const gamesPageBaseGamesSliverSectionTitleFormat = 'Base games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
 
   static const playtimeDurationHoursFormat = '%ih %imin';
@@ -195,7 +198,7 @@ class AppText {
   static const editPlaythroughPlayerScored = 'scored';
   static const editPlaythroughAddNote = 'Add note';
 
-  static const editPlaythroughPageTitle = 'Edit Playthrough';
+  static const editPlaythroughPageTitle = 'Edit playthrough';
   static const editPlaythroughDateHeaderTitle = 'Date';
   static const editPlaythroughDurationHeaderTitle = 'Duration';
   static const editPlaythroughScoresHeaderTitle = 'Scores';
@@ -226,7 +229,7 @@ class AppText {
   static const editPlaythroughCannotUpdateScore =
       "Sorry, we ran into a problem with this player's score. Please contact support at feedback@progrannung.net";
 
-  static const playthroughNotePageTitle = 'Game Note';
+  static const playthroughNotePageTitle = 'Game note';
   static const playthroughNotePageAddNoteButtonText = 'Add note';
   static const playthroughNotePageUpdateNoteButtonText = 'Update note';
   static const playthroughNoteTextBoxLabel = 'Note';
@@ -234,10 +237,24 @@ class AppText {
 
   static const playerPagePlayerNameTitle = 'Name';
   static const playerPagePlayerBggNameTitle = 'BGG Username';
+  static const playerPageTakePhoto = 'Take a photo';
+  static const playerPagePickPhoto = 'Pick a photo';
+  static const playerPagePlayerDeletedBanner = 'This player has been deleted';
+  static const playerPageCreatePlayerButtonText = 'Create';
+  static const playerPageUpdatePlayerButtonText = 'Update';
+  static const playerPageDeleteConfirmationContent = 'Are you sure you want to delete this player?';
+  static const playerPageDeleteConfirmationTitleFormat = 'Delete %s';
+  static const playerPageGoBackUnsavedChangesTitle = "You didn't save your changes.";
+  static const playerPageGoBackUnsavedChangesContent = 'Are you sure you want to navigate away?';
+  static const playerPageNameValidationError = 'Player needs to have a name';
+  static const playerPageNavigateAway = 'Navigate away';
+  static const playerPagePlayerRestoreSuccessfully = 'Player restored successfully';
+  static const playerPagePlayerRestoreFailure = 'Failed to restore deleted player';
 
   static const playersPageTitle = 'Players';
-  static const playersPageCreatePlayerButtonText = 'Create Player';
-  static const playersPageDeletePlayersButtonText = 'Delete Players';
+  static const playersPageCreatePlayerButtonText = 'Create';
+  static const playersPageSearchPlayerButtonText = 'Search';
+  static const playersPageDeletePlayersButtonText = 'Delete players';
   static const playersPageNoPlayersTitle = "You don't have any players";
   static const playersPageNoPlayersInstructions =
       "Create players to log games you've played with your family or friends";
@@ -245,6 +262,8 @@ class AppText {
   static const playersPageConfirmationDialogDeletePlayersButtonText = 'Delete';
   static const playersPageConfirmationDialogContent =
       'Are you sure you want to delete selected players?';
+  static const playersPageDeletedPlayersSectionTitle = 'Deleted players';
+  static const playersPageActivePlayersSectionTitle = 'Active players';
 
   static const playerPageSearchClearSaerch = 'Clear search';
   static const playerPageSearchNoSearchResults =
@@ -288,8 +307,11 @@ class AppText {
   static const playPageHistoryTabEmptySubtitle =
       'Start recording your plays in the app and this screen will automatically populate with a history of your playthroughs.';
   static const playPageHistoryTabScoreGameResultFormat = '%s (%s points)';
+  static const playPageHistoryTabScoreGameResultNoWinnersYet = 'No winners yet';
   static const playPageHistoryTabCooperativeGameResultWin = 'Win';
   static const playPageHistoryTabCooperativeGameResultLoss = 'Loss';
+  static const playPageHistoryTabPlaythroughNoteFormat = '%s note';
+  static const playPageHistoryTabPlaythroughNotesFormat = '%s notes';
 
   static const playsPageSelectGameTabEmptyTitle = 'Your collections are empty';
   static const playsPageSelectGameTabEmptySubtitle =
@@ -347,7 +369,7 @@ class AppText {
   static const drawerVersionFormat = 'Version %s';
   static const drawerReleaseNotes = 'Release notes';
   static const drawerAppWiki = 'Wiki';
-  static const drawerBuyMeACoffe = 'Buy Me a Coffee';
+  static const drawerShareApp = 'Share';
 
   static const createNewGamePageTitle = 'Create new game';
   static const createNewGameBoardGameName = 'Name';
@@ -404,4 +426,8 @@ class AppText {
   static const playthroughMigrationPageMigrationNotFinishedDialogContent =
       'Are you sure you want to navigate away?';
   static const playthroughMigrationPageMigrationNotFinishedActionButtonText = 'Navigate away';
+
+  static const collectionsPageShareCollectionSuccessMessage = 'Collection shared successfully!';
+  static const collectionsPageShareBaseGamesSectionTitleFormat = 'Base games (%s)';
+  static const collectionsPageShareGameExpansionsSectionTitleFormat = 'Expansions (%s)';
 }

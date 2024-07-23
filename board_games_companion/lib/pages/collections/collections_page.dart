@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/extensions/build_context_extensions.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:tuple/tuple.dart';
 
@@ -15,11 +19,13 @@ import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../common/enums/games_tab.dart';
+import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
 import '../../services/rate_and_review_service.dart';
 import '../../stores/board_games_filters_store.dart';
+import '../../utilities/screenshot_generator.dart';
 import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
@@ -58,10 +64,21 @@ class CollectionsPage extends StatefulWidget {
 class CollectionsPageState extends State<CollectionsPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _topTabController;
+  late final ScreenshotGenerator _screenshotGenerator;
+  late final ReactionDisposer _screenshotGeneratorReacitonDisposer;
 
   @override
   void initState() {
     super.initState();
+
+    _screenshotGenerator = getIt<ScreenshotGenerator>();
+    _screenshotGeneratorReacitonDisposer =
+        reaction((_) => _screenshotGenerator.visualState, (generatorState) {
+      generatorState.maybeWhen(
+        generated: (screenshotFile) async => _shareScreenshot(context, screenshotFile),
+        orElse: () {},
+      );
+    });
 
     _topTabController = TabController(
       length: 3,
@@ -92,15 +109,16 @@ class CollectionsPageState extends State<CollectionsPage>
                 return _Collection(
                   viewModel: widget.viewModel,
                   isCollectionEmpty: widget.viewModel.isCollectionEmpty,
-                  hasMainGames: widget.viewModel.anyMainGamesInCollection,
-                  mainGames: widget.viewModel.mainGamesInCollection,
-                  totalMainGames: widget.viewModel.totalMainGamesInCollection,
+                  hasBaseGames: widget.viewModel.anyBaseGamesInCollection,
+                  baseGames: widget.viewModel.baseGamesInCollection,
+                  baseGamesTotal: widget.viewModel.baseGamesInCollectionTotal,
                   hasExpansions: widget.viewModel.anyExpansionsInCollection,
                   expansionsMap: widget.viewModel.expansionsInCollectionMap,
                   selectedTab: widget.viewModel.selectedTab,
                   topTabController: _topTabController,
                   analyticsService: widget.analyticsService,
                   rateAndReviewService: widget.rateAndReviewService,
+                  screenshotGenerator: _screenshotGenerator,
                 );
               },
             );
@@ -118,7 +136,42 @@ class CollectionsPageState extends State<CollectionsPage>
   @override
   void dispose() {
     _topTabController.dispose();
+    _screenshotGeneratorReacitonDisposer();
     super.dispose();
+  }
+
+  Future<void> _shareScreenshot(BuildContext context, File screenshotFile) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final shareResult = await Share.shareXFiles(
+      [
+        XFile(screenshotFile.path, mimeType: 'image/png'),
+      ],
+      sharePositionOrigin: context.iPadsShareRectangle,
+    );
+
+    Fimber.i('Screenshot sharing finished with status ${shareResult.status}');
+
+    switch (shareResult.status) {
+      case ShareResultStatus.success:
+      case ShareResultStatus.unavailable:
+        if (!mounted) {
+          break;
+        }
+
+        messenger.showSnackBar(
+          const SnackBar(
+            margin: Dimensions.snackbarMargin,
+            behavior: SnackBarBehavior.floating,
+            content: Text(AppText.collectionsPageShareCollectionSuccessMessage),
+            backgroundColor: AppColors.greenColor,
+          ),
+        );
+
+        break;
+      case ShareResultStatus.dismissed:
+        // MK Don't do anything, user cancelled/dismissed
+        break;
+    }
   }
 }
 
@@ -126,28 +179,30 @@ class _Collection extends StatelessWidget {
   const _Collection({
     required this.viewModel,
     required this.isCollectionEmpty,
-    required this.hasMainGames,
-    required this.mainGames,
-    required this.totalMainGames,
+    required this.hasBaseGames,
+    required this.baseGames,
+    required this.baseGamesTotal,
     required this.hasExpansions,
     required this.expansionsMap,
     required this.selectedTab,
     required this.topTabController,
     required this.analyticsService,
     required this.rateAndReviewService,
+    required this.screenshotGenerator,
   });
 
   final CollectionsViewModel viewModel;
   final bool isCollectionEmpty;
-  final bool hasMainGames;
-  final List<BoardGameDetails> mainGames;
-  final int totalMainGames;
+  final bool hasBaseGames;
+  final List<BoardGameDetails> baseGames;
+  final int baseGamesTotal;
   final bool hasExpansions;
   final Map<Tuple2<String, String>, List<BoardGameDetails>> expansionsMap;
   final GamesTab selectedTab;
   final TabController topTabController;
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
+  final ScreenshotGenerator screenshotGenerator;
 
   @override
   Widget build(BuildContext context) {
@@ -169,16 +224,23 @@ class _Collection extends StatelessWidget {
             },
           ),
         if (!isCollectionEmpty) ...[
-          if (hasMainGames) ...[
+          if (hasBaseGames) ...[
             SliverPersistentHeader(
-              delegate: BgcSliverTitleHeaderDelegate.title(
+              delegate: BgcSliverTitleHeaderDelegate.action(
                 primaryTitle: sprintf(
-                  AppText.gamesPageMainGamesSliverSectionTitleFormat,
-                  [totalMainGames],
+                  AppText.gamesPageBaseGamesSliverSectionTitleFormat,
+                  [baseGamesTotal],
+                ),
+                action: _ShareCollectionIconButton(
+                  screenshotGenerator: screenshotGenerator,
+                  boardGames: [
+                    ...baseGames,
+                    ...expansionsMap.values.expand((expansion) => expansion)
+                  ],
                 ),
               ),
             ),
-            _Grid(boardGamesDetails: mainGames, analyticsService: analyticsService),
+            _Grid(boardGamesDetails: baseGames, analyticsService: analyticsService),
           ],
           if (hasExpansions) ...[
             for (final expansionsMapEntry in expansionsMap.entries) ...[
@@ -199,6 +261,24 @@ class _Collection extends StatelessWidget {
         ],
         const SliverPadding(padding: EdgeInsets.all(8.0)),
       ],
+    );
+  }
+}
+
+class _ShareCollectionIconButton extends StatelessWidget {
+  const _ShareCollectionIconButton({
+    required this.screenshotGenerator,
+    required this.boardGames,
+  });
+
+  final ScreenshotGenerator screenshotGenerator;
+  final List<BoardGameDetails> boardGames;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.share),
+      onPressed: () async => screenshotGenerator.generateCollectionScreenshot(boardGames),
     );
   }
 }
@@ -257,6 +337,7 @@ class _AppBarState extends State<_AppBar> {
             return TabBar(
               onTap: (int index) => widget.viewModel.selectedTab = index.toCollectionsTab(),
               controller: widget.topTabController,
+              tabAlignment: TabAlignment.fill,
               tabs: <Widget>[
                 AppBarBottomTab(
                   'Owned',
@@ -326,14 +407,16 @@ class _Grid extends StatelessWidget {
               imageUrl: boardGameDetails.thumbnailUrl ?? '',
               rank: boardGameDetails.rank,
               elevation: AppStyles.defaultElevation,
-              onTap: () => Navigator.pushNamed(
-                context,
-                PlaythroughsPage.pageRoute,
-                arguments: PlaythroughsPageArguments(
-                  boardGameDetails: boardGameDetails,
-                  boardGameImageHeroId: boardGameDetails.id,
-                ),
-              ),
+              onTap: () async {
+                await Navigator.pushNamed(
+                  context,
+                  PlaythroughsPage.pageRoute,
+                  arguments: PlaythroughsPageArguments(
+                    boardGameDetails: boardGameDetails,
+                    boardGameImageHeroId: boardGameDetails.id,
+                  ),
+                );
+              },
               heroTag: AnimationTags.boardGameHeroTag,
             )
         ],
@@ -411,19 +494,19 @@ class _ImportDataFromBggSection extends StatefulWidget {
 }
 
 class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
-  late TextEditingController _bggUserNameController;
+  late TextEditingController bggUserNameController;
 
-  bool? _triggerImport;
+  bool? triggerImport;
 
   @override
   void initState() {
     super.initState();
-    _bggUserNameController = TextEditingController();
+    bggUserNameController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _bggUserNameController.dispose();
+    bggUserNameController.dispose();
     super.dispose();
   }
 
@@ -432,17 +515,17 @@ class _ImportDataFromBggSectionState extends State<_ImportDataFromBggSection> {
     return Column(
       children: [
         BggCommunityMemberUserNameTextField(
-          controller: _bggUserNameController,
+          controller: bggUserNameController,
           onSubmit: () => setState(() {
-            _triggerImport = true;
+            triggerImport = true;
           }),
         ),
         const SizedBox(height: Dimensions.standardSpacing),
         Align(
           alignment: Alignment.centerRight,
           child: ImportCollectionsButton(
-            usernameCallback: () => _bggUserNameController.text,
-            triggerImport: _triggerImport ?? false,
+            usernameCallback: () => bggUserNameController.text,
+            triggerImport: triggerImport ?? false,
           ),
         ),
       ],

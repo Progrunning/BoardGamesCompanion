@@ -71,8 +71,8 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
       statusBarColor: AppColors.primaryColor,
     ));
 
-    return WillPopScope(
-      onWillPop: () async => _handleOnWillPop(context),
+    return PopScope(
+      onPopInvoked: (_) async => _handleOnWillPop(context),
       child: Scaffold(
         body: SafeArea(
           child: PageContainer(
@@ -315,7 +315,7 @@ class _Body extends StatelessWidget {
                 title: AppText.boardGameDetailsPageCategoriesTitle,
               ),
               _Categories(categories: viewModel.boardGame.categories!),
-              if (viewModel.isMainGame && viewModel.hasExpansions) ...[
+              if (viewModel.isBaseGame && viewModel.hasExpansions) ...[
                 Observer(
                   builder: (_) {
                     return BoardGameDetailsExpansions(

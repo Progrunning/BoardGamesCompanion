@@ -1,5 +1,4 @@
-import 'dart:io' show Platform;
-
+import 'package:board_games_companion/extensions/build_context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -361,18 +360,9 @@ class _BackupSectionState extends State<_BackupSection> with TickerProviderState
   }
 
   Future<void> _shareBackup(BuildContext context, BackupFile backupFile) async {
-    Rect? sharePositionOrigin;
-    if (Platform.isIOS) {
-      // MK https://pub.dev/packages/share_plus#known-issues
-      final box = context.findRenderObject() as RenderBox?;
-      if (box != null) {
-        sharePositionOrigin = box.localToGlobal(Offset.zero) & box.size;
-      }
-    }
-
     await widget.viewModel.shareBackupFile(
       backupFile,
-      sharePositionOrigin: sharePositionOrigin,
+      sharePositionOrigin: context.iPadsShareRectangle,
     );
   }
 

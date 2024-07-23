@@ -11,19 +11,19 @@ _$BoardGameSearchResultDtoImpl _$$BoardGameSearchResultDtoImplFromJson(
     _$BoardGameSearchResultDtoImpl(
       id: json['id'] as String,
       name: json['name'] as String,
-      yearPublished: json['yearPublished'] as int?,
+      yearPublished: (json['yearPublished'] as num?)?.toInt(),
       type: $enumDecodeNullable(_$BoardGameTypeEnumMap, json['type'],
               unknownValue: BoardGameType.boardGame) ??
           BoardGameType.boardGame,
       imageUrl: json['imageUrl'] as String?,
       thumbnailUrl: json['thumbnailUrl'] as String?,
       description: json['description'] as String?,
-      minNumberOfPlayers: json['minNumberOfPlayers'] as int?,
-      maxNumberOfPlayers: json['maxNumberOfPlayers'] as int?,
-      minPlaytimeInMinutes: json['minPlaytimeInMinutes'] as int?,
-      maxPlaytimeInMinutes: json['maxPlaytimeInMinutes'] as int?,
+      minNumberOfPlayers: (json['minNumberOfPlayers'] as num?)?.toInt(),
+      maxNumberOfPlayers: (json['maxNumberOfPlayers'] as num?)?.toInt(),
+      minPlaytimeInMinutes: (json['minPlaytimeInMinutes'] as num?)?.toInt(),
+      maxPlaytimeInMinutes: (json['maxPlaytimeInMinutes'] as num?)?.toInt(),
       complexity: (json['complexity'] as num?)?.toDouble(),
-      rank: json['rank'] as int?,
+      rank: (json['rank'] as num?)?.toInt(),
       lastUpdated: json['lastUpdated'] == null
           ? null
           : DateTime.parse(json['lastUpdated'] as String),

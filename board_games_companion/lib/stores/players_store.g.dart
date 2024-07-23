@@ -16,6 +16,13 @@ mixin _$PlayersStore on _PlayersStore, Store {
           Computed<List<Player>>(() => super.activePlayers,
               name: '_PlayersStore.activePlayers'))
       .value;
+  Computed<List<Player>>? _$deletedPlayersComputed;
+
+  @override
+  List<Player> get deletedPlayers => (_$deletedPlayersComputed ??=
+          Computed<List<Player>>(() => super.deletedPlayers,
+              name: '_PlayersStore.deletedPlayers'))
+      .value;
   Computed<Map<String, Player>>? _$playersByIdComputed;
 
   @override
@@ -52,7 +59,7 @@ mixin _$PlayersStore on _PlayersStore, Store {
       AsyncAction('_PlayersStore.createOrUpdatePlayer', context: context);
 
   @override
-  Future<bool> createOrUpdatePlayer(Player player) {
+  Future<Result<Player?>> createOrUpdatePlayer(Player player) {
     return _$createOrUpdatePlayerAsyncAction
         .run(() => super.createOrUpdatePlayer(player));
   }
@@ -61,8 +68,16 @@ mixin _$PlayersStore on _PlayersStore, Store {
       AsyncAction('_PlayersStore.deletePlayer', context: context);
 
   @override
-  Future<bool> deletePlayer(String playerId) {
+  Future<Result<Player?>> deletePlayer(String playerId) {
     return _$deletePlayerAsyncAction.run(() => super.deletePlayer(playerId));
+  }
+
+  late final _$restorePlayerAsyncAction =
+      AsyncAction('_PlayersStore.restorePlayer', context: context);
+
+  @override
+  Future<Result<Player?>> restorePlayer(String playerId) {
+    return _$restorePlayerAsyncAction.run(() => super.restorePlayer(playerId));
   }
 
   @override
@@ -70,6 +85,7 @@ mixin _$PlayersStore on _PlayersStore, Store {
     return '''
 players: ${players},
 activePlayers: ${activePlayers},
+deletedPlayers: ${deletedPlayers},
 playersById: ${playersById}
     ''';
   }

@@ -10,6 +10,7 @@ import 'package:board_games_companion/pages/plays/historical_playthrough.dart';
 import 'package:board_games_companion/pages/plays/most_played_game.dart';
 import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart';
 import 'package:board_games_companion/pages/plays/time_period.dart';
+import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -55,6 +56,12 @@ abstract class _PlaysViewModel with Store {
   };
 
   static const int _numberOfTimesSpinnerCanTurn = 3;
+
+  Duration get _endOfday => const Duration(
+        hours: Duration.hoursPerDay - 1,
+        minutes: Duration.minutesPerHour - 1,
+        seconds: Duration.secondsPerMinute - 1,
+      );
 
   final PlaythroughsStore _playthroughsStore;
   final BoardGamesStore _boardGamesStore;
@@ -248,8 +255,11 @@ abstract class _PlaysViewModel with Store {
   }
 
   @action
-  Future<void> updatePlaysCustomTimePeriod(DateTimeRange dateTimeRange) async =>
-      _loadStats(dateTimeRange.start, dateTimeRange.end, PlayStatsPresetTimePeriod.Custom);
+  Future<void> updatePlaysCustomTimePeriod(DateTimeRange dateTimeRange) async => _loadStats(
+        dateTimeRange.start,
+        dateTimeRange.end.add(_endOfday),
+        PlayStatsPresetTimePeriod.Custom,
+      );
 
   Future<void> trackTabChange(int tabIndex) async {
     await _analyticsService.logScreenView(
@@ -387,20 +397,22 @@ abstract class _PlaysViewModel with Store {
   /// a preset value.
   ({DateTime from, DateTime to}) _calculatePresetTimePeriod(
       PlayStatsPresetTimePeriod presetTimePeriod) {
-    final now = DateTime.now();
+    final now = clock.now();
     switch (presetTimePeriod) {
       case PlayStatsPresetTimePeriod.Custom:
       case PlayStatsPresetTimePeriod.LastWeek:
-        final lastSunday = mostRecentWeekday(now, 0);
-        return (from: lastSunday.subtract(const Duration(days: 7)), to: lastSunday);
+        final endOfLastSunday = mostRecentWeekday(now, 0).add(_endOfday);
+        final beginningOfMonday =
+            endOfLastSunday.subtract(const Duration(days: 7)).add(const Duration(seconds: 1));
+        return (from: beginningOfMonday, to: endOfLastSunday);
       case PlayStatsPresetTimePeriod.LastMonth:
         final firstDayOfThisMonth = DateTime(now.year, now.month, 1);
-        final lastDayOfPreviousMonth = firstDayOfThisMonth.subtract(const Duration(days: 1));
+        final lastDayOfPreviousMonth = firstDayOfThisMonth.subtract(const Duration(seconds: 1));
         final firstDayOfPreviousMonth = DateTime(now.year, now.month - 1, 1);
         return (from: firstDayOfPreviousMonth, to: lastDayOfPreviousMonth);
       case PlayStatsPresetTimePeriod.LastYear:
         final firstDayOfThisYear = DateTime(now.year, 1, 1);
-        final lastDayOfPreviousYear = firstDayOfThisYear.subtract(const Duration(days: 1));
+        final lastDayOfPreviousYear = firstDayOfThisYear.subtract(const Duration(seconds: 1));
         final firstDayOfPreviousYear = DateTime(now.year - 1, 1, 1);
         return (from: firstDayOfPreviousYear, to: lastDayOfPreviousYear);
     }

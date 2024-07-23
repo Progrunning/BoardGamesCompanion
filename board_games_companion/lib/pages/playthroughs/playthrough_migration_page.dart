@@ -62,8 +62,8 @@ class _PlaythroughMigrationPageState extends State<PlaythroughMigrationPage> {
   }
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        onWillPop: () async => _handleOnWillPop(context),
+  Widget build(BuildContext context) => PopScope(
+        onPopInvoked: (_) async => _handleOnWillPop(context),
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
