@@ -27,7 +27,7 @@ abstract class _BoardGamesStore with Store {
 
   @computed
   List<BoardGameDetails> get expansions =>
-      allBoardGames.where((boardGame) => !boardGame.isMainGame).toList();
+      allBoardGames.where((boardGame) => !boardGame.isBaseGame).toList();
 
   @computed
   List<BoardGameDetails> get ownedExpansions =>
@@ -77,7 +77,7 @@ abstract class _BoardGamesStore with Store {
       }
 
       // MK Add/Update expansions to the board games library
-      if (boardGameDetails.isMainGame) {
+      if (boardGameDetails.isBaseGame) {
         for (final boardGameExpansion in boardGameDetails.expansions) {
           final existingBoardGameExpansionDetails = _retrieveBoardGame(boardGameExpansion.id);
           if (existingBoardGameExpansionDetails == null) {

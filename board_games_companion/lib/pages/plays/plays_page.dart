@@ -1597,6 +1597,7 @@ class _PlaythroughDetails extends StatelessWidget {
             size: _playthroughStatsFontAwesomeIconSize,
           ),
           statistic: boardGamePlaythrough.gameResultTextFormatted,
+          overflow: TextOverflow.ellipsis,
         ),
         _PlaythroughGeneralStats(
           icon: const Icon(Icons.people, size: _playthroughStatsIconSize),
@@ -1625,10 +1626,12 @@ class _PlaythroughGeneralStats extends StatelessWidget {
   const _PlaythroughGeneralStats({
     required this.icon,
     required this.statistic,
+    this.overflow,
   });
 
   final Widget icon;
   final String statistic;
+  final TextOverflow? overflow;
 
   static const double _uniformedIconSize = 20;
 
@@ -1642,6 +1645,7 @@ class _PlaythroughGeneralStats extends StatelessWidget {
         Expanded(
           child: Text(
             statistic,
+            overflow: overflow,
             style: AppTheme.subTitleTextStyle.copyWith(color: AppColors.whiteColor),
           ),
         ),

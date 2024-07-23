@@ -47,7 +47,7 @@ abstract class _BoardGameDetailsViewModel with Store {
   String? get imageUrl => boardGame.imageUrl;
 
   @computed
-  bool get isMainGame => boardGame.isMainGame;
+  bool get isMainGame => boardGame.isBaseGame;
 
   @computed
   bool get isExpansion => boardGame.isExpansion ?? false;
@@ -67,7 +67,7 @@ abstract class _BoardGameDetailsViewModel with Store {
     final expansionIds = expansions.map((expansion) => expansion.id);
     return _boardGamesStore.allBoardGames
         .where((boardGame) =>
-            !boardGame.isMainGame &&
+            !boardGame.isBaseGame &&
             expansionIds.contains(boardGame.id) &&
             (boardGame.isOwned ?? false))
         .length;

@@ -36,4 +36,5 @@ class Analytics {
   static const String playthroughTimelineInThePast = 'inThePast';
 
   static const String shareCollectionScreenshot = 'share_collection_screenshot';
+  static const String shareCollectionSize = 'collection_size';
 }

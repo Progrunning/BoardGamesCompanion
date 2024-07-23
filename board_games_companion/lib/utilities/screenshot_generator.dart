@@ -18,12 +18,14 @@ import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:retry/retry.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:sprintf/sprintf.dart';
 import 'package:uuid/uuid.dart';
 
 import '../common/app_styles.dart';
 import '../common/dimensions.dart';
 import '../models/hive/board_game_details.dart';
 import '../widgets/board_games/board_game_tile.dart';
+import '../widgets/common/section_header.dart';
 import 'screenshot_generator_visual_state.dart';
 
 part 'screenshot_generator.g.dart';
@@ -44,47 +46,58 @@ abstract class _ScreenshotGenerator with Store {
   final RateAndReviewService _rateAndReviewService;
   final AnalyticsService _analyticsService;
 
+  // MK An arbitrary number to avoid colosal amount of HTTP request
+  //    if user's collections are massive
+  static const int _maxNumberOfGames = 200;
+
   @observable
   ScreenshotGeneratorVisualState visualState = const ScreenshotGeneratorVisualState.init();
 
   @action
   Future<void> generateCollectionScreenshot(
-    List<BoardGameDetails> baseBoardGames, [
+    List<BoardGameDetails> boardGames, [
     int numberOfColumns = 5,
   ]) async {
-    if (baseBoardGames.isEmpty) {
+    if (boardGames.isEmpty) {
       Fimber.i('Cannot generate a screenshot from an empty list of board games');
       return;
     }
 
     unawaited(_rateAndReviewService.increaseNumberOfSignificantActions());
-    unawaited(_analyticsService.logEvent(name: Analytics.shareCollectionScreenshot));
+    unawaited(_analyticsService.logEvent(
+      name: Analytics.shareCollectionScreenshot,
+      parameters: <String, String>{
+        Analytics.shareCollectionSize: boardGames.length.toString(),
+      },
+    ));
 
     try {
-      await _downloadGameThumbnails(baseBoardGames);
+      await _downloadGameThumbnails(boardGames.take(_maxNumberOfGames).toList());
 
-      final boardGamesInRows = <List<BoardGameDetails>>[];
-      for (var i = 0; i < baseBoardGames.length; i += numberOfColumns) {
-        boardGamesInRows.add(
-          baseBoardGames.sublist(
-            i,
-            i + numberOfColumns > baseBoardGames.length
-                ? baseBoardGames.length
-                : i + numberOfColumns,
-          ),
-        );
-      }
+      final baseBoardGames = boardGames.where((game) => game.isBaseGame).toList();
+      final gameExpansions = boardGames.where((game) => game.isExpansion ?? false).toList();
+      final gameExpansionsInRows = _separateGamesIntoRows(
+        gameExpansions,
+        numberOfColumns,
+      );
+      final baseBoardGamesInRows = _separateGamesIntoRows(
+        baseBoardGames,
+        numberOfColumns,
+      );
 
       visualState = const ScreenshotGeneratorVisualState.generatingScreenshot();
 
       final gamesSpacingWidth = (numberOfColumns + 1) * Dimensions.standardSpacing;
-      final gamesWidth =
+      final collectionWidth =
           Dimensions.boardGameItemCollectionImageWidth * numberOfColumns + gamesSpacingWidth;
 
       final screenshotFile = await _generateScreenshot(
-        _GamesCollection(
-          gamesWidth: gamesWidth,
-          boardGamesInRows: boardGamesInRows,
+        _GamesCollections(
+          width: collectionWidth,
+          baseBoardGamesInRows: baseBoardGamesInRows,
+          totalBaseBoardGames: baseBoardGames.length,
+          gameExpansionsInRows: gameExpansionsInRows,
+          totalGameExpansions: gameExpansions.length,
         ),
       );
       if (screenshotFile != null) {
@@ -97,6 +110,23 @@ abstract class _ScreenshotGenerator with Store {
     }
 
     visualState = const ScreenshotGeneratorVisualState.generationFailure();
+  }
+
+  List<List<BoardGameDetails>> _separateGamesIntoRows(
+    List<BoardGameDetails> boardGames,
+    int numberOfColumns,
+  ) {
+    final boardGamesInRows = <List<BoardGameDetails>>[];
+    for (var i = 0; i < boardGames.length; i += numberOfColumns) {
+      boardGamesInRows.add(
+        boardGames.sublist(
+          i,
+          i + numberOfColumns > boardGames.length ? boardGames.length : i + numberOfColumns,
+        ),
+      );
+    }
+
+    return boardGamesInRows;
   }
 
   Future<File?> _generateScreenshot(
@@ -147,61 +177,113 @@ abstract class _ScreenshotGenerator with Store {
   }
 }
 
-class _GamesCollection extends StatelessWidget {
-  const _GamesCollection({
-    required this.gamesWidth,
-    required this.boardGamesInRows,
+class _GamesCollections extends StatelessWidget {
+  const _GamesCollections({
+    required this.width,
+    required this.baseBoardGamesInRows,
+    required this.totalBaseBoardGames,
+    required this.gameExpansionsInRows,
+    required this.totalGameExpansions,
   });
 
-  final double gamesWidth;
-  final List<List<BoardGameDetails>> boardGamesInRows;
+  final double width;
+  final List<List<BoardGameDetails>> baseBoardGamesInRows;
+  final int totalBaseBoardGames;
+  final List<List<BoardGameDetails>> gameExpansionsInRows;
+  final int totalGameExpansions;
 
   @override
-  Widget build(BuildContext context) => Container(
-        color: AppColors.primaryColorLight,
-        child: SizedBox(
-          width: gamesWidth,
-          child: Padding(
-            padding: const EdgeInsets.all(Dimensions.standardSpacing),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final boardGamesInRow in boardGamesInRows)
-                  Padding(
-                    padding: EdgeInsets.only(
-                      bottom:
-                          boardGamesInRows.last == boardGamesInRow ? 0 : Dimensions.standardSpacing,
-                    ),
-                    child: Row(
-                      children: [
-                        for (final boardGame in boardGamesInRow)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: boardGamesInRow.last == boardGame
-                                  ? 0
-                                  : Dimensions.standardSpacing,
-                            ),
-                            child: SizedBox(
-                              width: Dimensions.boardGameItemCollectionImageWidth,
-                              height: Dimensions.boardGameItemCollectionImageHeight,
-                              child: BoardGameTile(
-                                id: boardGame.id,
-                                name: boardGame.name,
-                                imageUrl: boardGame.thumbnailUrl ?? '',
-                                rank: boardGame.rank,
-                                elevation: AppStyles.defaultElevation,
-                              ),
-                            ),
-                          )
-                      ],
-                    ),
+  Widget build(BuildContext context) {
+    final hasExpansions = totalGameExpansions > 0;
+    final hasBaseGames = totalBaseBoardGames > 0;
+    return Container(
+      color: AppColors.primaryColorLight,
+      child: SizedBox(
+        width: width,
+        child: Column(
+          children: [
+            if (hasBaseGames)
+              _GameCollection(
+                boardGamesInRows: baseBoardGamesInRows,
+                totalBoardGames: totalBaseBoardGames,
+                sectionHeaderTitle: sprintf(
+                  AppText.collectionsPageShareBaseGamesSectionTitleFormat,
+                  [totalBaseBoardGames],
+                ),
+              ),
+            if (hasExpansions)
+              _GameCollection(
+                boardGamesInRows: gameExpansionsInRows,
+                totalBoardGames: totalGameExpansions,
+                sectionHeaderTitle: sprintf(
+                  AppText.collectionsPageShareGameExpansionsSectionTitleFormat,
+                  [totalGameExpansions],
+                ),
+              ),
+            const _Logo(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GameCollection extends StatelessWidget {
+  const _GameCollection({
+    required this.boardGamesInRows,
+    required this.totalBoardGames,
+    required this.sectionHeaderTitle,
+  });
+
+  final List<List<BoardGameDetails>> boardGamesInRows;
+  final int totalBoardGames;
+  final String sectionHeaderTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SectionHeader.title(title: sectionHeaderTitle),
+        Padding(
+          padding: const EdgeInsets.all(Dimensions.standardSpacing),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final boardGamesInRow in boardGamesInRows)
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom:
+                        boardGamesInRows.last == boardGamesInRow ? 0 : Dimensions.standardSpacing,
                   ),
-                const _Logo(),
-              ],
-            ),
+                  child: Row(
+                    children: [
+                      for (final boardGame in boardGamesInRow)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right:
+                                boardGamesInRow.last == boardGame ? 0 : Dimensions.standardSpacing,
+                          ),
+                          child: SizedBox(
+                            width: Dimensions.boardGameItemCollectionImageWidth,
+                            height: Dimensions.boardGameItemCollectionImageHeight,
+                            child: BoardGameTile(
+                              id: boardGame.id,
+                              name: boardGame.name,
+                              imageUrl: boardGame.thumbnailUrl ?? '',
+                              rank: boardGame.rank,
+                              elevation: AppStyles.defaultElevation,
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                ),
+            ],
           ),
         ),
-      );
+      ],
+    );
+  }
 }
 
 class _Logo extends StatelessWidget {

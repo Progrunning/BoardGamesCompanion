@@ -36,7 +36,7 @@ class AppText {
   static const homePageSearchCollectionsDialOptionText = 'Search collections';
   static const homePageSearchOnlineDialOptionText = 'Search online';
   static const homePageCollectionScreenshotGenerationTitle = 'Generating collection screenshot...';
-  static const homePageCollectionScreenshotGenerationProgressFormat = 'Downloading images %s...';
+  static const homePageCollectionScreenshotGenerationProgressFormat = 'Downloading images %s%%...';
 
   static const onlineSearchGamePublishYearFormat = 'Published in %i';
   static const onlineSearchSortingSectionTitle = 'Sort';
@@ -133,7 +133,7 @@ class AppText {
       'Unfortunately our services timed out. Please try searching again.';
   static const searchBoardGamesGenericError = 'Check your internet connectivity and try again.';
 
-  static const gamesPageMainGamesSliverSectionTitleFormat = 'Main Games (%s)';
+  static const gamesPageBaseGamesSliverSectionTitleFormat = 'Base games (%s)';
   static const gamesPageExpansionsSliverSectionTitleFormat = '%s Expansions (%s)';
 
   static const playtimeDurationHoursFormat = '%ih %imin';
@@ -428,4 +428,6 @@ class AppText {
   static const playthroughMigrationPageMigrationNotFinishedActionButtonText = 'Navigate away';
 
   static const collectionsPageShareCollectionSuccessMessage = 'Collection shared successfully!';
+  static const collectionsPageShareBaseGamesSectionTitleFormat = 'Base games (%s)';
+  static const collectionsPageShareGameExpansionsSectionTitleFormat = 'Expansions (%s)';
 }

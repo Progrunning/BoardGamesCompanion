@@ -109,9 +109,9 @@ class CollectionsPageState extends State<CollectionsPage>
                 return _Collection(
                   viewModel: widget.viewModel,
                   isCollectionEmpty: widget.viewModel.isCollectionEmpty,
-                  hasMainGames: widget.viewModel.anyMainGamesInCollection,
-                  mainGames: widget.viewModel.mainGamesInCollection,
-                  totalMainGames: widget.viewModel.totalMainGamesInCollection,
+                  hasBaseGames: widget.viewModel.anyBaseGamesInCollection,
+                  baseGames: widget.viewModel.baseGamesInCollection,
+                  totalBaseGames: widget.viewModel.totalBaseGamesInCollection,
                   hasExpansions: widget.viewModel.anyExpansionsInCollection,
                   expansionsMap: widget.viewModel.expansionsInCollectionMap,
                   selectedTab: widget.viewModel.selectedTab,
@@ -179,9 +179,9 @@ class _Collection extends StatelessWidget {
   const _Collection({
     required this.viewModel,
     required this.isCollectionEmpty,
-    required this.hasMainGames,
-    required this.mainGames,
-    required this.totalMainGames,
+    required this.hasBaseGames,
+    required this.baseGames,
+    required this.totalBaseGames,
     required this.hasExpansions,
     required this.expansionsMap,
     required this.selectedTab,
@@ -193,9 +193,9 @@ class _Collection extends StatelessWidget {
 
   final CollectionsViewModel viewModel;
   final bool isCollectionEmpty;
-  final bool hasMainGames;
-  final List<BoardGameDetails> mainGames;
-  final int totalMainGames;
+  final bool hasBaseGames;
+  final List<BoardGameDetails> baseGames;
+  final int totalBaseGames;
   final bool hasExpansions;
   final Map<Tuple2<String, String>, List<BoardGameDetails>> expansionsMap;
   final GamesTab selectedTab;
@@ -224,21 +224,23 @@ class _Collection extends StatelessWidget {
             },
           ),
         if (!isCollectionEmpty) ...[
-          if (hasMainGames) ...[
+          if (hasBaseGames) ...[
             SliverPersistentHeader(
               delegate: BgcSliverTitleHeaderDelegate.action(
                 primaryTitle: sprintf(
-                  AppText.gamesPageMainGamesSliverSectionTitleFormat,
-                  [totalMainGames],
+                  AppText.gamesPageBaseGamesSliverSectionTitleFormat,
+                  [totalBaseGames],
                 ),
-                action: IconButton(
-                  icon: const Icon(Icons.share),
-                  onPressed: () async =>
-                      screenshotGenerator.generateCollectionScreenshot(mainGames),
+                action: _ShareCollectionIconButton(
+                  screenshotGenerator: screenshotGenerator,
+                  boardGames: [
+                    ...baseGames,
+                    ...expansionsMap.values.expand((expansion) => expansion)
+                  ],
                 ),
               ),
             ),
-            _Grid(boardGamesDetails: mainGames, analyticsService: analyticsService),
+            _Grid(boardGamesDetails: baseGames, analyticsService: analyticsService),
           ],
           if (hasExpansions) ...[
             for (final expansionsMapEntry in expansionsMap.entries) ...[
@@ -259,6 +261,24 @@ class _Collection extends StatelessWidget {
         ],
         const SliverPadding(padding: EdgeInsets.all(8.0)),
       ],
+    );
+  }
+}
+
+class _ShareCollectionIconButton extends StatelessWidget {
+  const _ShareCollectionIconButton({
+    required this.screenshotGenerator,
+    required this.boardGames,
+  });
+
+  final ScreenshotGenerator screenshotGenerator;
+  final List<BoardGameDetails> boardGames;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.share),
+      onPressed: () async => screenshotGenerator.generateCollectionScreenshot(boardGames),
     );
   }
 }

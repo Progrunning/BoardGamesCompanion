@@ -115,7 +115,7 @@ class BoardGameDetails with _$BoardGameDetails {
     'up',
   };
 
-  bool get isMainGame => !(isExpansion ?? false);
+  bool get isBaseGame => !(isExpansion ?? false);
 
   bool get isInAnyCollection =>
       (isOwned ?? false) || (isFriends ?? false) || (isOnWishlist ?? false);

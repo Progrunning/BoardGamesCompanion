@@ -25,7 +25,7 @@ abstract class _CollectionSearchResultViewModel with Store {
   bool get isExpansion => boardGame?.isExpansion ?? false;
 
   @computed
-  bool get isMainGame => boardGame?.isMainGame ?? false;
+  bool get isMainGame => boardGame?.isBaseGame ?? false;
 
   @computed
   List<BoardGameDetails> get expansions {
