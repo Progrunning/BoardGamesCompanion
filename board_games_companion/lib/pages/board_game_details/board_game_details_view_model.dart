@@ -47,7 +47,7 @@ abstract class _BoardGameDetailsViewModel with Store {
   String? get imageUrl => boardGame.imageUrl;
 
   @computed
-  bool get isMainGame => boardGame.isBaseGame;
+  bool get isBaseGame => boardGame.isBaseGame;
 
   @computed
   bool get isExpansion => boardGame.isExpansion ?? false;

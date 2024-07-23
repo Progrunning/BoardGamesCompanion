@@ -95,9 +95,9 @@ abstract class _ScreenshotGenerator with Store {
         _GamesCollections(
           width: collectionWidth,
           baseBoardGamesInRows: baseBoardGamesInRows,
-          totalBaseBoardGames: baseBoardGames.length,
+          baseBoardGamesTotal: baseBoardGames.length,
           gameExpansionsInRows: gameExpansionsInRows,
-          totalGameExpansions: gameExpansions.length,
+          gameExpansionsTotal: gameExpansions.length,
         ),
       );
       if (screenshotFile != null) {
@@ -181,21 +181,21 @@ class _GamesCollections extends StatelessWidget {
   const _GamesCollections({
     required this.width,
     required this.baseBoardGamesInRows,
-    required this.totalBaseBoardGames,
+    required this.baseBoardGamesTotal,
     required this.gameExpansionsInRows,
-    required this.totalGameExpansions,
+    required this.gameExpansionsTotal,
   });
 
   final double width;
   final List<List<BoardGameDetails>> baseBoardGamesInRows;
-  final int totalBaseBoardGames;
+  final int baseBoardGamesTotal;
   final List<List<BoardGameDetails>> gameExpansionsInRows;
-  final int totalGameExpansions;
+  final int gameExpansionsTotal;
 
   @override
   Widget build(BuildContext context) {
-    final hasExpansions = totalGameExpansions > 0;
-    final hasBaseGames = totalBaseBoardGames > 0;
+    final hasExpansions = gameExpansionsTotal > 0;
+    final hasBaseGames = baseBoardGamesTotal > 0;
     return Container(
       color: AppColors.primaryColorLight,
       child: SizedBox(
@@ -205,19 +205,19 @@ class _GamesCollections extends StatelessWidget {
             if (hasBaseGames)
               _GameCollection(
                 boardGamesInRows: baseBoardGamesInRows,
-                totalBoardGames: totalBaseBoardGames,
+                totalBoardGames: baseBoardGamesTotal,
                 sectionHeaderTitle: sprintf(
                   AppText.collectionsPageShareBaseGamesSectionTitleFormat,
-                  [totalBaseBoardGames],
+                  [baseBoardGamesTotal],
                 ),
               ),
             if (hasExpansions)
               _GameCollection(
                 boardGamesInRows: gameExpansionsInRows,
-                totalBoardGames: totalGameExpansions,
+                totalBoardGames: gameExpansionsTotal,
                 sectionHeaderTitle: sprintf(
                   AppText.collectionsPageShareGameExpansionsSectionTitleFormat,
-                  [totalGameExpansions],
+                  [gameExpansionsTotal],
                 ),
               ),
             const _Logo(),

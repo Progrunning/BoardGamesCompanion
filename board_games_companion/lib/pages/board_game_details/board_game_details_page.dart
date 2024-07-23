@@ -315,7 +315,7 @@ class _Body extends StatelessWidget {
                 title: AppText.boardGameDetailsPageCategoriesTitle,
               ),
               _Categories(categories: viewModel.boardGame.categories!),
-              if (viewModel.isMainGame && viewModel.hasExpansions) ...[
+              if (viewModel.isBaseGame && viewModel.hasExpansions) ...[
                 Observer(
                   builder: (_) {
                     return BoardGameDetailsExpansions(

@@ -111,7 +111,7 @@ class CollectionsPageState extends State<CollectionsPage>
                   isCollectionEmpty: widget.viewModel.isCollectionEmpty,
                   hasBaseGames: widget.viewModel.anyBaseGamesInCollection,
                   baseGames: widget.viewModel.baseGamesInCollection,
-                  totalBaseGames: widget.viewModel.totalBaseGamesInCollection,
+                  baseGamesTotal: widget.viewModel.baseGamesInCollectionTotal,
                   hasExpansions: widget.viewModel.anyExpansionsInCollection,
                   expansionsMap: widget.viewModel.expansionsInCollectionMap,
                   selectedTab: widget.viewModel.selectedTab,
@@ -181,7 +181,7 @@ class _Collection extends StatelessWidget {
     required this.isCollectionEmpty,
     required this.hasBaseGames,
     required this.baseGames,
-    required this.totalBaseGames,
+    required this.baseGamesTotal,
     required this.hasExpansions,
     required this.expansionsMap,
     required this.selectedTab,
@@ -195,7 +195,7 @@ class _Collection extends StatelessWidget {
   final bool isCollectionEmpty;
   final bool hasBaseGames;
   final List<BoardGameDetails> baseGames;
-  final int totalBaseGames;
+  final int baseGamesTotal;
   final bool hasExpansions;
   final Map<Tuple2<String, String>, List<BoardGameDetails>> expansionsMap;
   final GamesTab selectedTab;
@@ -229,7 +229,7 @@ class _Collection extends StatelessWidget {
               delegate: BgcSliverTitleHeaderDelegate.action(
                 primaryTitle: sprintf(
                   AppText.gamesPageBaseGamesSliverSectionTitleFormat,
-                  [totalBaseGames],
+                  [baseGamesTotal],
                 ),
                 action: _ShareCollectionIconButton(
                   screenshotGenerator: screenshotGenerator,

@@ -159,10 +159,10 @@ abstract class _CollectionsViewModel with Store {
   bool get anyBaseGamesInCollection => baseGamesInCollection.isNotEmpty;
 
   @computed
-  int get totalBaseGamesInCollection => baseGamesInCollection.length;
+  int get baseGamesInCollectionTotal => baseGamesInCollection.length;
 
   @computed
-  int get totalExpansionsInCollection => expansionsInCollection.length;
+  int get expansionsInCollectionTotal => expansionsInCollection.length;
 
   @computed
   bool get anyExpansionsInCollection => expansionsInCollection.isNotEmpty;

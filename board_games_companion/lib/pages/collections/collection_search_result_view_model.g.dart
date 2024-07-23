@@ -24,12 +24,12 @@ mixin _$CollectionSearchResultViewModel
       (_$isExpansionComputed ??= Computed<bool>(() => super.isExpansion,
               name: '_CollectionSearchResultViewModel.isExpansion'))
           .value;
-  Computed<bool>? _$isMainGameComputed;
+  Computed<bool>? _$isBaseGameComputed;
 
   @override
-  bool get isMainGame =>
-      (_$isMainGameComputed ??= Computed<bool>(() => super.isMainGame,
-              name: '_CollectionSearchResultViewModel.isMainGame'))
+  bool get isBaseGame =>
+      (_$isBaseGameComputed ??= Computed<bool>(() => super.isBaseGame,
+              name: '_CollectionSearchResultViewModel.isBaseGame'))
           .value;
   Computed<List<BoardGameDetails>>? _$expansionsComputed;
 
@@ -70,7 +70,7 @@ mixin _$CollectionSearchResultViewModel
     return '''
 boardGame: ${boardGame},
 isExpansion: ${isExpansion},
-isMainGame: ${isMainGame},
+isBaseGame: ${isBaseGame},
 expansions: ${expansions}
     ''';
   }

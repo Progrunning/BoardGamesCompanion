@@ -152,21 +152,21 @@ mixin _$CollectionsViewModel on _CollectionsViewModel, Store {
           Computed<bool>(() => super.anyBaseGamesInCollection,
               name: '_CollectionsViewModel.anyBaseGamesInCollection'))
       .value;
-  Computed<int>? _$totalBaseGamesInCollectionComputed;
+  Computed<int>? _$baseGamesInCollectionTotalComputed;
 
   @override
-  int get totalBaseGamesInCollection =>
-      (_$totalBaseGamesInCollectionComputed ??= Computed<int>(
-              () => super.totalBaseGamesInCollection,
-              name: '_CollectionsViewModel.totalBaseGamesInCollection'))
+  int get baseGamesInCollectionTotal =>
+      (_$baseGamesInCollectionTotalComputed ??= Computed<int>(
+              () => super.baseGamesInCollectionTotal,
+              name: '_CollectionsViewModel.baseGamesInCollectionTotal'))
           .value;
-  Computed<int>? _$totalExpansionsInCollectionComputed;
+  Computed<int>? _$expansionsInCollectionTotalComputed;
 
   @override
-  int get totalExpansionsInCollection =>
-      (_$totalExpansionsInCollectionComputed ??= Computed<int>(
-              () => super.totalExpansionsInCollection,
-              name: '_CollectionsViewModel.totalExpansionsInCollection'))
+  int get expansionsInCollectionTotal =>
+      (_$expansionsInCollectionTotalComputed ??= Computed<int>(
+              () => super.expansionsInCollectionTotal,
+              name: '_CollectionsViewModel.expansionsInCollectionTotal'))
           .value;
   Computed<bool>? _$anyExpansionsInCollectionComputed;
 
@@ -343,8 +343,8 @@ isCollectionEmpty: ${isCollectionEmpty},
 baseGamesInCollection: ${baseGamesInCollection},
 expansionsInCollection: ${expansionsInCollection},
 anyBaseGamesInCollection: ${anyBaseGamesInCollection},
-totalBaseGamesInCollection: ${totalBaseGamesInCollection},
-totalExpansionsInCollection: ${totalExpansionsInCollection},
+baseGamesInCollectionTotal: ${baseGamesInCollectionTotal},
+expansionsInCollectionTotal: ${expansionsInCollectionTotal},
 anyExpansionsInCollection: ${anyExpansionsInCollection},
 expansionsInCollectionMap: ${expansionsInCollectionMap},
 userName: ${userName},
