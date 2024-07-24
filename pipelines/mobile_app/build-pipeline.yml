@@ -28,6 +28,10 @@ parameters:
     displayName: Build Android
     type: boolean
     default: true
+  - name: javaVersion
+    displayName: Jave version
+    type: number
+    default: 17
 
 jobs:
   - job: Test
@@ -79,7 +83,7 @@ jobs:
       - task: JavaToolInstaller@0
         displayName: Java Installer
         inputs:
-          versionSpec: "11"
+          versionSpec: ${{ parameters.javaVersion }}
           jdkArchitectureOption: x64
           jdkSourceOption: PreInstalled
 
