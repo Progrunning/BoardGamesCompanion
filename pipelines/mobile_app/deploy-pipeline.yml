@@ -23,7 +23,7 @@ parameters:
     type: boolean
     default: true
   - name: javaVersion
-    displayName: Jave version
+    displayName: Java version
     type: number
     default: 17
 
