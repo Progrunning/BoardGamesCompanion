@@ -22,6 +22,10 @@ parameters:
     displayName: Publish to Apple Store
     type: boolean
     default: true
+  - name: javaVersion
+    displayName: Jave version
+    type: number
+    default: 17
 
 variables:
   - name: appVersion
@@ -47,9 +51,9 @@ stages:
 
         steps:
           - task: JavaToolInstaller@0
-            displayName: "Install Java 11"
+            displayName: "Install Java ${{ parameters.javaVersion }}"
             inputs:
-              versionSpec: "11"
+              versionSpec: ${{ parameters.javaVersion }}
               jdkArchitectureOption: x64
               jdkSourceOption: PreInstalled
 

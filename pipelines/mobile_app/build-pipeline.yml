@@ -81,7 +81,7 @@ jobs:
 
     steps:
       - task: JavaToolInstaller@0
-        displayName: Java Installer
+        displayName: "Install Java ${{ parameters.javaVersion }}"
         inputs:
           versionSpec: ${{ parameters.javaVersion }}
           jdkArchitectureOption: x64
