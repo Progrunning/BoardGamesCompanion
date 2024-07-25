@@ -294,9 +294,7 @@ class _Logo extends StatelessWidget {
     return const Padding(
       padding: EdgeInsets.only(
         top: Dimensions.doubleStandardSpacing,
-        // MK Bottom is reduced because the entire container has padding
-        //    which sums up to [Dimensions.doubleStandardSpacing]
-        bottom: Dimensions.standardSpacing,
+        bottom: Dimensions.doubleStandardSpacing,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
