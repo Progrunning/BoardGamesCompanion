@@ -261,6 +261,7 @@ class _AppBar extends StatelessWidget {
       elevation: Dimensions.defaultElevation,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppColors.accentColor,
+      centerTitle: false,
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: [
         if (hasAnyDeletedPlayers)

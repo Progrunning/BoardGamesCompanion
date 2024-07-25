@@ -312,6 +312,7 @@ class _AppBarState extends State<_AppBar> {
         elevation: Dimensions.defaultElevation,
         titleSpacing: Dimensions.standardSpacing,
         foregroundColor: AppColors.accentColor,
+        centerTitle: false,
         title: const Text(
           AppText.collectionsPageTitle,
           style: AppTheme.titleTextStyle,

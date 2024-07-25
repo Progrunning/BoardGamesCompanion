@@ -71,7 +71,7 @@ class AppText {
   static const boardGameDetailsPaboutGameNoComments = 'No comments';
   static const boardGameDetailsPaboutGameCommentsFormat = '%s comments';
 
-  static const hotBoardGamesPageTitle = 'Hot Board Games';
+  static const hotBoardGamesPageTitle = 'Hot board games';
 
   static const playthroughsStatisticsPageNoStatsTitle = "You haven't logged any games yet";
   static const playthroughsStatisticsPageNoStatsSubtitle =

@@ -80,7 +80,11 @@ class _AppBar extends StatelessWidget {
       forceElevated: true,
       elevation: Dimensions.defaultElevation,
       foregroundColor: AppColors.accentColor,
-      title: Text(AppText.hotBoardGamesPageTitle, style: AppTheme.titleTextStyle),
+      centerTitle: false,
+      title: Text(
+        AppText.hotBoardGamesPageTitle,
+        style: AppTheme.titleTextStyle,
+      ),
     );
   }
 }
