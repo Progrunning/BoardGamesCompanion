@@ -16,6 +16,7 @@ import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
+import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../common/enums/collection_type.dart';
 import '../../common/enums/games_tab.dart';
@@ -259,7 +260,9 @@ class _Collection extends StatelessWidget {
             ]
           ]
         ],
-        const SliverPadding(padding: EdgeInsets.all(8.0)),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: Dimensions.floatingActionButtonBottomSpacing),
+        ),
       ],
     );
   }
@@ -311,7 +314,7 @@ class _AppBarState extends State<_AppBar> {
         foregroundColor: AppColors.accentColor,
         title: const Text(
           AppText.collectionsPageTitle,
-          style: TextStyle(color: AppColors.whiteColor),
+          style: AppTheme.titleTextStyle,
         ),
         actions: <Widget>[
           Observer(
@@ -481,6 +484,9 @@ class _Empty extends StatelessWidget {
             ),
           ),
         ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: Dimensions.floatingActionButtonBottomSpacing),
+        ),
       ],
     );
   }
@@ -544,7 +550,7 @@ class _EmptyCollection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
+    return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
         child: Column(

@@ -43,8 +43,12 @@ class SettingsPageState extends State<SettingsPage> {
     return Observer(
       builder: (_) {
         final scaffold = Scaffold(
-          appBar:
-              AppBar(title: const Text(AppText.settingsPageTitle, style: AppTheme.titleTextStyle)),
+          appBar: AppBar(
+            title: const Text(
+              AppText.settingsPageTitle,
+              style: AppTheme.titleTextStyle,
+            ),
+          ),
           body: SafeArea(
             child: PageContainer(
               child: Column(
