@@ -110,6 +110,7 @@ abstract class _BoardGameDetailsViewModel with Store {
   Future<void> _loadBoardGameDetails() async {
     try {
       if (isCreatedByUser) {
+        visualState = BoardGameDetailsVisualState.detailsLoaded(boardGameDetails: boardGame);
         return;
       }
 

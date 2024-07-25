@@ -62,7 +62,8 @@ class PlayerPageState extends BasePageState<PlayerPage> {
 
   @override
   Widget build(BuildContext context) => PopScope(
-        onPopInvoked: (_) async => _handleOnWillPop(context),
+        canPop: false,
+        onPopInvoked: (didPop) async => _handleWillPop(context, didPop: didPop),
         child: Scaffold(
           appBar: AppBar(
             title: Observer(
@@ -213,9 +214,14 @@ class PlayerPageState extends BasePageState<PlayerPage> {
     );
   }
 
-  Future<bool> _handleOnWillPop(BuildContext context) async {
+  Future<void> _handleWillPop(BuildContext context, {required bool didPop}) async {
+    if (didPop) {
+      return;
+    }
+
     if (!widget.viewModel.hasUnsavedChanges) {
-      return true;
+      Navigator.of(context).pop();
+      return;
     }
 
     await showDialog<AlertDialog>(
@@ -234,12 +240,9 @@ class PlayerPageState extends BasePageState<PlayerPage> {
             ),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
-              onPressed: () {
-                // MK Pop the dialog
-                Navigator.of(context).pop();
-                // MK Go back
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).popUntil(
+                ModalRoute.withName(HomePage.pageRoute),
+              ),
               child: const Text(
                 AppText.playerPageNavigateAway,
                 style: TextStyle(color: AppColors.defaultTextColor),
@@ -249,8 +252,6 @@ class PlayerPageState extends BasePageState<PlayerPage> {
         );
       },
     );
-
-    return false;
   }
 
   Future<void> _createOrUpdatePlayer(BuildContext context) async {

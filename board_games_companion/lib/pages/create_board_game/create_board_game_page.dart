@@ -81,7 +81,8 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
 
   @override
   Widget build(BuildContext context) => PopScope(
-        onPopInvoked: (_) => _handleOnWillPop(),
+        canPop: false,
+        onPopInvoked: (didPop) => _handleOnPop(context, didPop),
         child: Scaffold(
           body: SafeArea(
             child: PageContainer(
@@ -127,37 +128,44 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
         ),
       );
 
-  Future<bool> _handleOnWillPop() async {
-    if (widget.viewModel.hasUnsavedChanges) {
-      final shouldNavigateAway = await showDialog<bool>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text(AppText.createNewGameUnsavedChangesDialogTitle),
-            content: const Text(AppText.createNewGameUnsavedChangesDialogContent),
-            elevation: Dimensions.defaultElevation,
-            actions: <Widget>[
-              TextButton(
-                child: const Text(AppText.cancel),
-                onPressed: () => Navigator.of(context).pop(false),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text(
-                  AppText.navigateAway,
-                  style: TextStyle(color: AppColors.defaultTextColor),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-
-      return shouldNavigateAway ?? true;
+  Future<void> _handleOnPop(BuildContext context, bool didPop) async {
+    if (didPop) {
+      return;
     }
 
-    return true;
+    if (!widget.viewModel.hasUnsavedChanges) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    final shouldNavigateAway = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(AppText.createNewGameUnsavedChangesDialogTitle),
+          content: const Text(AppText.createNewGameUnsavedChangesDialogContent),
+          elevation: Dimensions.defaultElevation,
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppText.cancel),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: AppColors.redColor),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text(
+                AppText.navigateAway,
+                style: TextStyle(color: AppColors.defaultTextColor),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (context.mounted && (shouldNavigateAway ?? false)) {
+      Navigator.of(context).pop();
+    }
   }
 
   Future<void> _handlePickingAndSavingBoardGameImage(ImageSource imageSource) async {

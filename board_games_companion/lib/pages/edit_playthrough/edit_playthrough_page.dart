@@ -55,14 +55,18 @@ class EditPlaythroughPage extends StatefulWidget {
 class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScoreDialogMixin {
   @override
   Widget build(BuildContext context) => PopScope(
-        onPopInvoked: (_) async => _handleOnWillPop(context),
+        canPop: false,
+        onPopInvoked: (didPop) async => _handleOnPop(context, didPop: didPop),
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
             centerTitle: true,
             title: const Text(AppText.editPlaythroughPageTitle),
             actions: [
-              IconButton(icon: const Icon(Icons.close), onPressed: () => _close(context)),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => _close(context),
+              ),
             ],
           ),
           body: SafeArea(
@@ -200,12 +204,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _close(BuildContext context) async {
-    // ignore: use_build_context_synchronously
-    if (await _handleOnWillPop(context)) {
-      if (context.mounted) {
-        Navigator.pop(context);
-      }
-    }
+    _handleOnPop(context, didPop: false);
   }
 
   Future<void> _showDeletePlaythroughDialog(BuildContext context) async {
@@ -239,9 +238,14 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
     );
   }
 
-  Future<bool> _handleOnWillPop(BuildContext context) async {
+  Future<void> _handleOnPop(BuildContext context, {required bool didPop}) async {
+    if (didPop) {
+      return;
+    }
+
     if (!widget.viewModel.isDirty) {
-      return true;
+      Navigator.of(context).pop();
+      return;
     }
 
     await showDialog<AlertDialog>(
@@ -270,8 +274,6 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
         );
       },
     );
-
-    return false;
   }
 
   Future<void> _addNote() async {
