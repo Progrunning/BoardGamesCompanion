@@ -63,7 +63,8 @@ class _PlaythroughMigrationPageState extends State<PlaythroughMigrationPage> {
 
   @override
   Widget build(BuildContext context) => PopScope(
-        onPopInvoked: (_) async => _handleOnWillPop(context),
+        canPop: false,
+        onPopInvoked: (didPop) async => _handleOnWillPop(context, didPop: didPop),
         child: Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -140,9 +141,14 @@ class _PlaythroughMigrationPageState extends State<PlaythroughMigrationPage> {
     );
   }
 
-  Future<bool> _handleOnWillPop(BuildContext context) async {
+  Future<void> _handleOnWillPop(BuildContext context, {required bool didPop}) async {
+    if (didPop) {
+      return;
+    }
+
     if (!widget.viewModel.isDirty) {
-      return true;
+      Navigator.of(context).pop();
+      return;
     }
 
     await showDialog<AlertDialog>(
@@ -170,8 +176,6 @@ class _PlaythroughMigrationPageState extends State<PlaythroughMigrationPage> {
         );
       },
     );
-
-    return false;
   }
 }
 

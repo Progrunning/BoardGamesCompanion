@@ -53,12 +53,15 @@ abstract class _HomeViewModelBase with Store {
     searchResultsStream =
         ObservableStream<List<BoardGameDetails>>(_searchResultsStreamController.stream);
     // MK When restoring a backup, reload all of the data
-    reaction((_) => _appStore.backupRestored, (bool? backupRestored) {
+    _backupRestoredReactionDisposer =
+        reaction((_) => _appStore.backupRestored, (bool? backupRestored) {
       if (backupRestored ?? false) {
         loadData();
       }
     });
   }
+
+  late final ReactionDisposer _backupRestoredReactionDisposer;
 
   final AnalyticsService analyticsService;
   final RateAndReviewService rateAndReviewService;
@@ -230,5 +233,10 @@ abstract class _HomeViewModelBase with Store {
         dateTime: DateTime.now().toUtc(),
       ),
     );
+  }
+
+  void dispose() {
+    _backupRestoredReactionDisposer();
+    playersViewModel.dispose();
   }
 }

@@ -19,6 +19,9 @@ mixin _$PlayersVisualState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
     required TResult Function(List<Player> activePlayers) activePlayers,
     required TResult Function(
             List<Player> activePlayers, List<Player> deletedPlayers)
@@ -29,6 +32,9 @@ mixin _$PlayersVisualState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
     TResult? Function(List<Player> activePlayers)? activePlayers,
     TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -38,6 +44,9 @@ mixin _$PlayersVisualState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
     TResult Function(List<Player> activePlayers)? activePlayers,
     TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -48,6 +57,9 @@ mixin _$PlayersVisualState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
     required TResult Function(ActivePlayers value) activePlayers,
     required TResult Function(AllPlayers value) allPlayersPlayers,
     required TResult Function(DeletePlayers value) deletePlayers,
@@ -56,6 +68,9 @@ mixin _$PlayersVisualState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
     TResult? Function(ActivePlayers value)? activePlayers,
     TResult? Function(AllPlayers value)? allPlayersPlayers,
     TResult? Function(DeletePlayers value)? deletePlayers,
@@ -64,6 +79,9 @@ mixin _$PlayersVisualState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
     TResult Function(ActivePlayers value)? activePlayers,
     TResult Function(AllPlayers value)? allPlayersPlayers,
     TResult Function(DeletePlayers value)? deletePlayers,
@@ -129,6 +147,9 @@ class _$LoadingPlayersImpl extends LoadingPlayers {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
     required TResult Function(List<Player> activePlayers) activePlayers,
     required TResult Function(
             List<Player> activePlayers, List<Player> deletedPlayers)
@@ -142,6 +163,9 @@ class _$LoadingPlayersImpl extends LoadingPlayers {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
     TResult? Function(List<Player> activePlayers)? activePlayers,
     TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -154,6 +178,9 @@ class _$LoadingPlayersImpl extends LoadingPlayers {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
     TResult Function(List<Player> activePlayers)? activePlayers,
     TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -170,6 +197,9 @@ class _$LoadingPlayersImpl extends LoadingPlayers {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
     required TResult Function(ActivePlayers value) activePlayers,
     required TResult Function(AllPlayers value) allPlayersPlayers,
     required TResult Function(DeletePlayers value) deletePlayers,
@@ -181,6 +211,9 @@ class _$LoadingPlayersImpl extends LoadingPlayers {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
     TResult? Function(ActivePlayers value)? activePlayers,
     TResult? Function(AllPlayers value)? allPlayersPlayers,
     TResult? Function(DeletePlayers value)? deletePlayers,
@@ -192,6 +225,9 @@ class _$LoadingPlayersImpl extends LoadingPlayers {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
     TResult Function(ActivePlayers value)? activePlayers,
     TResult Function(AllPlayers value)? allPlayersPlayers,
     TResult Function(DeletePlayers value)? deletePlayers,
@@ -207,6 +243,417 @@ class _$LoadingPlayersImpl extends LoadingPlayers {
 abstract class LoadingPlayers extends PlayersVisualState {
   const factory LoadingPlayers() = _$LoadingPlayersImpl;
   const LoadingPlayers._() : super._();
+}
+
+/// @nodoc
+abstract class _$$LoadingFailedImplCopyWith<$Res> {
+  factory _$$LoadingFailedImplCopyWith(
+          _$LoadingFailedImpl value, $Res Function(_$LoadingFailedImpl) then) =
+      __$$LoadingFailedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingFailedImplCopyWithImpl<$Res>
+    extends _$PlayersVisualStateCopyWithImpl<$Res, _$LoadingFailedImpl>
+    implements _$$LoadingFailedImplCopyWith<$Res> {
+  __$$LoadingFailedImplCopyWithImpl(
+      _$LoadingFailedImpl _value, $Res Function(_$LoadingFailedImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$LoadingFailedImpl extends LoadingFailed {
+  const _$LoadingFailedImpl() : super._();
+
+  @override
+  String toString() {
+    return 'PlayersVisualState.loadingFailed()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingFailedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
+    required TResult Function(List<Player> activePlayers) activePlayers,
+    required TResult Function(
+            List<Player> activePlayers, List<Player> deletedPlayers)
+        allPlayersPlayers,
+    required TResult Function(List<Player> activePlayers) deletePlayers,
+  }) {
+    return loadingFailed();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
+    TResult? Function(List<Player> activePlayers)? activePlayers,
+    TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
+        allPlayersPlayers,
+    TResult? Function(List<Player> activePlayers)? deletePlayers,
+  }) {
+    return loadingFailed?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
+    TResult Function(List<Player> activePlayers)? activePlayers,
+    TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
+        allPlayersPlayers,
+    TResult Function(List<Player> activePlayers)? deletePlayers,
+    required TResult orElse(),
+  }) {
+    if (loadingFailed != null) {
+      return loadingFailed();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
+    required TResult Function(ActivePlayers value) activePlayers,
+    required TResult Function(AllPlayers value) allPlayersPlayers,
+    required TResult Function(DeletePlayers value) deletePlayers,
+  }) {
+    return loadingFailed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
+    TResult? Function(ActivePlayers value)? activePlayers,
+    TResult? Function(AllPlayers value)? allPlayersPlayers,
+    TResult? Function(DeletePlayers value)? deletePlayers,
+  }) {
+    return loadingFailed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
+    TResult Function(ActivePlayers value)? activePlayers,
+    TResult Function(AllPlayers value)? allPlayersPlayers,
+    TResult Function(DeletePlayers value)? deletePlayers,
+    required TResult orElse(),
+  }) {
+    if (loadingFailed != null) {
+      return loadingFailed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadingFailed extends PlayersVisualState {
+  const factory LoadingFailed() = _$LoadingFailedImpl;
+  const LoadingFailed._() : super._();
+}
+
+/// @nodoc
+abstract class _$$NoPlayersImplCopyWith<$Res> {
+  factory _$$NoPlayersImplCopyWith(
+          _$NoPlayersImpl value, $Res Function(_$NoPlayersImpl) then) =
+      __$$NoPlayersImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NoPlayersImplCopyWithImpl<$Res>
+    extends _$PlayersVisualStateCopyWithImpl<$Res, _$NoPlayersImpl>
+    implements _$$NoPlayersImplCopyWith<$Res> {
+  __$$NoPlayersImplCopyWithImpl(
+      _$NoPlayersImpl _value, $Res Function(_$NoPlayersImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$NoPlayersImpl extends NoPlayers {
+  const _$NoPlayersImpl() : super._();
+
+  @override
+  String toString() {
+    return 'PlayersVisualState.noPlayers()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$NoPlayersImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
+    required TResult Function(List<Player> activePlayers) activePlayers,
+    required TResult Function(
+            List<Player> activePlayers, List<Player> deletedPlayers)
+        allPlayersPlayers,
+    required TResult Function(List<Player> activePlayers) deletePlayers,
+  }) {
+    return noPlayers();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
+    TResult? Function(List<Player> activePlayers)? activePlayers,
+    TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
+        allPlayersPlayers,
+    TResult? Function(List<Player> activePlayers)? deletePlayers,
+  }) {
+    return noPlayers?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
+    TResult Function(List<Player> activePlayers)? activePlayers,
+    TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
+        allPlayersPlayers,
+    TResult Function(List<Player> activePlayers)? deletePlayers,
+    required TResult orElse(),
+  }) {
+    if (noPlayers != null) {
+      return noPlayers();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
+    required TResult Function(ActivePlayers value) activePlayers,
+    required TResult Function(AllPlayers value) allPlayersPlayers,
+    required TResult Function(DeletePlayers value) deletePlayers,
+  }) {
+    return noPlayers(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
+    TResult? Function(ActivePlayers value)? activePlayers,
+    TResult? Function(AllPlayers value)? allPlayersPlayers,
+    TResult? Function(DeletePlayers value)? deletePlayers,
+  }) {
+    return noPlayers?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
+    TResult Function(ActivePlayers value)? activePlayers,
+    TResult Function(AllPlayers value)? allPlayersPlayers,
+    TResult Function(DeletePlayers value)? deletePlayers,
+    required TResult orElse(),
+  }) {
+    if (noPlayers != null) {
+      return noPlayers(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NoPlayers extends PlayersVisualState {
+  const factory NoPlayers() = _$NoPlayersImpl;
+  const NoPlayers._() : super._();
+}
+
+/// @nodoc
+abstract class _$$NoActivePlayersImplCopyWith<$Res> {
+  factory _$$NoActivePlayersImplCopyWith(_$NoActivePlayersImpl value,
+          $Res Function(_$NoActivePlayersImpl) then) =
+      __$$NoActivePlayersImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$NoActivePlayersImplCopyWithImpl<$Res>
+    extends _$PlayersVisualStateCopyWithImpl<$Res, _$NoActivePlayersImpl>
+    implements _$$NoActivePlayersImplCopyWith<$Res> {
+  __$$NoActivePlayersImplCopyWithImpl(
+      _$NoActivePlayersImpl _value, $Res Function(_$NoActivePlayersImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$NoActivePlayersImpl extends NoActivePlayers {
+  const _$NoActivePlayersImpl() : super._();
+
+  @override
+  String toString() {
+    return 'PlayersVisualState.noActivePlayers()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$NoActivePlayersImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
+    required TResult Function(List<Player> activePlayers) activePlayers,
+    required TResult Function(
+            List<Player> activePlayers, List<Player> deletedPlayers)
+        allPlayersPlayers,
+    required TResult Function(List<Player> activePlayers) deletePlayers,
+  }) {
+    return noActivePlayers();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
+    TResult? Function(List<Player> activePlayers)? activePlayers,
+    TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
+        allPlayersPlayers,
+    TResult? Function(List<Player> activePlayers)? deletePlayers,
+  }) {
+    return noActivePlayers?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
+    TResult Function(List<Player> activePlayers)? activePlayers,
+    TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
+        allPlayersPlayers,
+    TResult Function(List<Player> activePlayers)? deletePlayers,
+    required TResult orElse(),
+  }) {
+    if (noActivePlayers != null) {
+      return noActivePlayers();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
+    required TResult Function(ActivePlayers value) activePlayers,
+    required TResult Function(AllPlayers value) allPlayersPlayers,
+    required TResult Function(DeletePlayers value) deletePlayers,
+  }) {
+    return noActivePlayers(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
+    TResult? Function(ActivePlayers value)? activePlayers,
+    TResult? Function(AllPlayers value)? allPlayersPlayers,
+    TResult? Function(DeletePlayers value)? deletePlayers,
+  }) {
+    return noActivePlayers?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
+    TResult Function(ActivePlayers value)? activePlayers,
+    TResult Function(AllPlayers value)? allPlayersPlayers,
+    TResult Function(DeletePlayers value)? deletePlayers,
+    required TResult orElse(),
+  }) {
+    if (noActivePlayers != null) {
+      return noActivePlayers(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NoActivePlayers extends PlayersVisualState {
+  const factory NoActivePlayers() = _$NoActivePlayersImpl;
+  const NoActivePlayers._() : super._();
 }
 
 /// @nodoc
@@ -283,6 +730,9 @@ class _$ActivePlayersImpl extends ActivePlayers {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
     required TResult Function(List<Player> activePlayers) activePlayers,
     required TResult Function(
             List<Player> activePlayers, List<Player> deletedPlayers)
@@ -296,6 +746,9 @@ class _$ActivePlayersImpl extends ActivePlayers {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
     TResult? Function(List<Player> activePlayers)? activePlayers,
     TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -308,6 +761,9 @@ class _$ActivePlayersImpl extends ActivePlayers {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
     TResult Function(List<Player> activePlayers)? activePlayers,
     TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -324,6 +780,9 @@ class _$ActivePlayersImpl extends ActivePlayers {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
     required TResult Function(ActivePlayers value) activePlayers,
     required TResult Function(AllPlayers value) allPlayersPlayers,
     required TResult Function(DeletePlayers value) deletePlayers,
@@ -335,6 +794,9 @@ class _$ActivePlayersImpl extends ActivePlayers {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
     TResult? Function(ActivePlayers value)? activePlayers,
     TResult? Function(AllPlayers value)? allPlayersPlayers,
     TResult? Function(DeletePlayers value)? deletePlayers,
@@ -346,6 +808,9 @@ class _$ActivePlayersImpl extends ActivePlayers {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
     TResult Function(ActivePlayers value)? activePlayers,
     TResult Function(AllPlayers value)? allPlayersPlayers,
     TResult Function(DeletePlayers value)? deletePlayers,
@@ -463,6 +928,9 @@ class _$AllPlayersImpl extends AllPlayers {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
     required TResult Function(List<Player> activePlayers) activePlayers,
     required TResult Function(
             List<Player> activePlayers, List<Player> deletedPlayers)
@@ -476,6 +944,9 @@ class _$AllPlayersImpl extends AllPlayers {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
     TResult? Function(List<Player> activePlayers)? activePlayers,
     TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -488,6 +959,9 @@ class _$AllPlayersImpl extends AllPlayers {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
     TResult Function(List<Player> activePlayers)? activePlayers,
     TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -504,6 +978,9 @@ class _$AllPlayersImpl extends AllPlayers {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
     required TResult Function(ActivePlayers value) activePlayers,
     required TResult Function(AllPlayers value) allPlayersPlayers,
     required TResult Function(DeletePlayers value) deletePlayers,
@@ -515,6 +992,9 @@ class _$AllPlayersImpl extends AllPlayers {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
     TResult? Function(ActivePlayers value)? activePlayers,
     TResult? Function(AllPlayers value)? allPlayersPlayers,
     TResult? Function(DeletePlayers value)? deletePlayers,
@@ -526,6 +1006,9 @@ class _$AllPlayersImpl extends AllPlayers {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
     TResult Function(ActivePlayers value)? activePlayers,
     TResult Function(AllPlayers value)? allPlayersPlayers,
     TResult Function(DeletePlayers value)? deletePlayers,
@@ -625,6 +1108,9 @@ class _$DeletePlayersImpl extends DeletePlayers {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loadingPlayers,
+    required TResult Function() loadingFailed,
+    required TResult Function() noPlayers,
+    required TResult Function() noActivePlayers,
     required TResult Function(List<Player> activePlayers) activePlayers,
     required TResult Function(
             List<Player> activePlayers, List<Player> deletedPlayers)
@@ -638,6 +1124,9 @@ class _$DeletePlayersImpl extends DeletePlayers {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loadingPlayers,
+    TResult? Function()? loadingFailed,
+    TResult? Function()? noPlayers,
+    TResult? Function()? noActivePlayers,
     TResult? Function(List<Player> activePlayers)? activePlayers,
     TResult? Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -650,6 +1139,9 @@ class _$DeletePlayersImpl extends DeletePlayers {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loadingPlayers,
+    TResult Function()? loadingFailed,
+    TResult Function()? noPlayers,
+    TResult Function()? noActivePlayers,
     TResult Function(List<Player> activePlayers)? activePlayers,
     TResult Function(List<Player> activePlayers, List<Player> deletedPlayers)?
         allPlayersPlayers,
@@ -666,6 +1158,9 @@ class _$DeletePlayersImpl extends DeletePlayers {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LoadingPlayers value) loadingPlayers,
+    required TResult Function(LoadingFailed value) loadingFailed,
+    required TResult Function(NoPlayers value) noPlayers,
+    required TResult Function(NoActivePlayers value) noActivePlayers,
     required TResult Function(ActivePlayers value) activePlayers,
     required TResult Function(AllPlayers value) allPlayersPlayers,
     required TResult Function(DeletePlayers value) deletePlayers,
@@ -677,6 +1172,9 @@ class _$DeletePlayersImpl extends DeletePlayers {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LoadingPlayers value)? loadingPlayers,
+    TResult? Function(LoadingFailed value)? loadingFailed,
+    TResult? Function(NoPlayers value)? noPlayers,
+    TResult? Function(NoActivePlayers value)? noActivePlayers,
     TResult? Function(ActivePlayers value)? activePlayers,
     TResult? Function(AllPlayers value)? allPlayersPlayers,
     TResult? Function(DeletePlayers value)? deletePlayers,
@@ -688,6 +1186,9 @@ class _$DeletePlayersImpl extends DeletePlayers {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LoadingPlayers value)? loadingPlayers,
+    TResult Function(LoadingFailed value)? loadingFailed,
+    TResult Function(NoPlayers value)? noPlayers,
+    TResult Function(NoActivePlayers value)? noActivePlayers,
     TResult Function(ActivePlayers value)? activePlayers,
     TResult Function(AllPlayers value)? allPlayersPlayers,
     TResult Function(DeletePlayers value)? deletePlayers,

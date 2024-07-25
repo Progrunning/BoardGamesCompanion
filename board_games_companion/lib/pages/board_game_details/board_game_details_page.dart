@@ -72,7 +72,8 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
     ));
 
     return PopScope(
-      onPopInvoked: (_) async => _handleOnWillPop(context),
+      canPop: false,
+      onPopInvoked: (didPop) async => _handleOnPop(context, didPop),
       child: Scaffold(
         body: SafeArea(
           child: PageContainer(
@@ -102,15 +103,19 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
     );
   }
 
-  Future<bool> _handleOnWillPop(BuildContext context) async {
+  Future<void> _handleOnPop(BuildContext context, bool didPop) async {
+    if (didPop) {
+      return;
+    }
+
     final boardGamesStore = getIt<BoardGamesStore>();
     if (!boardGamesStore.allBoardGamesInCollectionsMap.containsKey(widget.viewModel.boardGame.id) &&
         widget.navigatingFromType == PlaythroughsPage) {
       Navigator.popUntil(context, ModalRoute.withName(HomePage.pageRoute));
-      return false;
+      return;
     }
 
-    return true;
+    Navigator.of(context).pop();
   }
 
   Future<void> _navigateToCreateBoardGamePage() async {

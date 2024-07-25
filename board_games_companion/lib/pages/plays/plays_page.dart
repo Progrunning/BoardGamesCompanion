@@ -1825,6 +1825,7 @@ class _AppBar extends StatelessWidget {
       elevation: Dimensions.defaultElevation,
       titleSpacing: Dimensions.standardSpacing,
       foregroundColor: AppColors.accentColor,
+      centerTitle: false,
       title: const Text(AppText.playsPageTitle, style: AppTheme.titleTextStyle),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(74),

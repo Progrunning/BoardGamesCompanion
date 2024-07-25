@@ -112,11 +112,11 @@ mixin _$PlayersViewModel on _PlayersViewModel, Store {
   }
 
   @override
-  void toggleShowDeletePlayers() {
+  void toggleShowDeletedPlayers() {
     final _$actionInfo = _$_PlayersViewModelActionController.startAction(
-        name: '_PlayersViewModel.toggleShowDeletePlayers');
+        name: '_PlayersViewModel.toggleShowDeletedPlayers');
     try {
-      return super.toggleShowDeletePlayers();
+      return super.toggleShowDeletedPlayers();
     } finally {
       _$_PlayersViewModelActionController.endAction(_$actionInfo);
     }

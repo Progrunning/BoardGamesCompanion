@@ -79,6 +79,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
   @override
   void dispose() {
     _tabController.dispose();
+    widget.viewModel.dispose();
     super.dispose();
   }
 
