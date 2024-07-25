@@ -1,9 +1,9 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/pages/players/players_visual_state.dart';
 import 'package:board_games_companion/widgets/common/slivers/bgc_sliver_title_header_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:mobx/mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../common/animation_tags.dart';
@@ -16,6 +16,7 @@ import '../../models/hive/player.dart';
 import '../../models/navigation/player_page_arguments.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
+import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
 import '../../widgets/elevated_container.dart';
@@ -49,137 +50,99 @@ class PlayersPageState extends State<PlayersPage> {
   }
 
   @override
-  void dispose() {
-    widget.viewModel.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => Observer(
-        builder: (context) {
-          switch (widget.viewModel.futureLoadPlayers?.status ?? FutureStatus.pending) {
-            case FutureStatus.pending:
-            case FutureStatus.rejected:
-              return CustomScrollView(
-                slivers: [
-                  _AppBar(
-                    hasAnyDeletedPlayers: widget.viewModel.hasAnyDeletedPlayers,
-                    onToggleShowDeletedPlayers: () => widget.viewModel.toggleShowDeletePlayers(),
-                    isShowingAllPlayers: widget.viewModel.visualState.isShowingAllPlayers,
-                  ),
-                  const SliverFillRemaining(child: LoadingIndicator()),
-                ],
-              );
-            case FutureStatus.fulfilled:
-              return Stack(
-                children: [
-                  CustomScrollView(
+  Widget build(BuildContext context) => Stack(
+        children: [
+          Observer(
+            builder: (context) {
+              return switch (widget.viewModel.visualState) {
+                LoadingPlayers() => CustomScrollView(
                     slivers: [
-                      if (widget.viewModel.hasAnyActivePlayers) ...[
-                        _AppBar(
-                          hasAnyDeletedPlayers: widget.viewModel.hasAnyDeletedPlayers,
-                          onToggleShowDeletedPlayers: () =>
-                              widget.viewModel.toggleShowDeletePlayers(),
-                          isShowingAllPlayers: widget.viewModel.visualState.isShowingAllPlayers,
-                        ),
-                        Observer(
-                          builder: (_) {
-                            return widget.viewModel.visualState.maybeWhen(
-                              activePlayers: (activePlayers) => _Players(
-                                players: activePlayers,
-                                isDeletePlayersMode: false,
-                                onPlayerTap: (player, isChecked) =>
-                                    _playerTapped(widget.viewModel, player, isChecked),
-                                onPlayerLongPress: (player) =>
-                                    widget.viewModel.toggleDeletePlayersMode(),
-                              ),
-                              deletePlayers: (activePlayers) => _Players(
-                                players: activePlayers,
-                                isDeletePlayersMode: true,
-                                onPlayerTap: (player, isChecked) =>
-                                    _playerTapped(widget.viewModel, player, isChecked),
-                                onPlayerLongPress: (player) =>
-                                    widget.viewModel.toggleDeletePlayersMode(),
-                              ),
-                              allPlayersPlayers: (activePlayers, deletedPlayers) => _AllPlayers(
-                                activePlayers: activePlayers,
-                                deletedPlayers: deletedPlayers,
-                                onPlayerTap: (player, isChecked) =>
-                                    _playerTapped(widget.viewModel, player, isChecked),
-                              ),
-                              orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-                            );
-                          },
-                        ),
-                      ] else ...[
-                        _AppBar(
-                          hasAnyDeletedPlayers: widget.viewModel.hasAnyDeletedPlayers,
-                          onToggleShowDeletedPlayers: () =>
-                              widget.viewModel.toggleShowDeletePlayers(),
-                          isShowingAllPlayers: widget.viewModel.visualState.isShowingAllPlayers,
-                        ),
-                        const _NoPlayers(),
-                      ]
+                      _AppBar(
+                        onToggleShowDeletedPlayers: () =>
+                            widget.viewModel.toggleShowDeletedPlayers(),
+                      ),
+                      const SliverFillRemaining(child: LoadingIndicator()),
                     ],
                   ),
-                  Positioned(
-                    bottom: Dimensions.bottomTabTopHeight,
-                    right: Dimensions.standardSpacing,
-                    child: widget.viewModel.visualState.isDeletePlayersMode
-                        ? ElevatedIconButton(
-                            title: AppText.playersPageDeletePlayersButtonText,
-                            icon: const DefaultIcon(Icons.delete),
-                            color: AppColors.redColor,
-                            onPressed: () async {
-                              if (await _showDeletePlayersDialog(context) ?? false) {
-                                setState(() {});
-                              }
-                            },
-                          )
-                        : SpeedDial(
-                            icon: Icons.menu,
-                            backgroundColor: AppColors.accentColor,
-                            activeBackgroundColor: AppColors.redColor,
-                            overlayColor: AppColors.dialogBackgroundColor,
-                            activeIcon: Icons.close,
-                            children: [
-                              SpeedDialChild(
-                                child: const Icon(Icons.create),
-                                backgroundColor: AppColors.accentColor,
-                                foregroundColor: Colors.white,
-                                label: AppText.playersPageCreatePlayerButtonText,
-                                labelBackgroundColor: AppColors.accentColor,
-                                shape: const CircleBorder(),
-                                onTap: () async => Navigator.pushNamed(
-                                  context,
-                                  PlayerPage.pageRoute,
-                                  arguments: const PlayerPageArguments(player: null),
-                                ),
-                              ),
-                              if (widget.viewModel.hasAnyActivePlayers)
-                                SpeedDialChild(
-                                  child: const Icon(Icons.search),
-                                  backgroundColor: AppColors.greenColor,
-                                  foregroundColor: Colors.white,
-                                  label: AppText.playersPageSearchPlayerButtonText,
-                                  labelBackgroundColor: AppColors.greenColor,
-                                  shape: const CircleBorder(),
-                                  onTap: () async => showSearch<Player?>(
-                                    context: context,
-                                    delegate: _PlayersSerach(
-                                      players: widget.viewModel.activePlayers,
-                                      onResultTap: (player) =>
-                                          _navigateToPlayerPage(context, player),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
+                LoadingFailed() => const CustomScrollView(
+                    slivers: [
+                      SliverFillRemaining(
+                        child: Padding(
+                          padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
+                          child: Center(child: GenericErrorMessage()),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              );
-          }
-        },
+                NoPlayers() => CustomScrollView(
+                    slivers: [
+                      _AppBar(
+                        onToggleShowDeletedPlayers: () =>
+                            widget.viewModel.toggleShowDeletedPlayers(),
+                      ),
+                      const _NoPlayers(),
+                    ],
+                  ),
+                NoActivePlayers() => CustomScrollView(
+                    slivers: [
+                      _AppBar(
+                        onToggleShowDeletedPlayers: () =>
+                            widget.viewModel.toggleShowDeletedPlayers(),
+                      ),
+                      const _NoPlayers(),
+                    ],
+                  ),
+                _ => CustomScrollView(
+                    slivers: [
+                      _AppBar(
+                        onToggleShowDeletedPlayers: () =>
+                            widget.viewModel.toggleShowDeletedPlayers(),
+                      ),
+                      Observer(
+                        builder: (_) {
+                          return widget.viewModel.visualState.maybeWhen(
+                            activePlayers: (activePlayers) => _Players(
+                              players: activePlayers,
+                              isDeletePlayersMode: false,
+                              onPlayerTap: (player, isChecked) =>
+                                  _playerTapped(widget.viewModel, player, isChecked),
+                              onPlayerLongPress: (player) =>
+                                  widget.viewModel.toggleDeletePlayersMode(),
+                            ),
+                            deletePlayers: (activePlayers) => _Players(
+                              players: activePlayers,
+                              isDeletePlayersMode: true,
+                              onPlayerTap: (player, isChecked) =>
+                                  _playerTapped(widget.viewModel, player, isChecked),
+                              onPlayerLongPress: (player) =>
+                                  widget.viewModel.toggleDeletePlayersMode(),
+                            ),
+                            allPlayersPlayers: (activePlayers, deletedPlayers) => _AllPlayers(
+                              activePlayers: activePlayers,
+                              deletedPlayers: deletedPlayers,
+                              onPlayerTap: (player, isChecked) =>
+                                  _playerTapped(widget.viewModel, player, isChecked),
+                            ),
+                            orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+                          );
+                        },
+                      ),
+                    ],
+                  )
+              };
+            },
+          ),
+          Observer(
+            builder: (context) => _FloatingActionButton(
+              isDeletePlayersMode: widget.viewModel.visualState.isDeletePlayersMode,
+              confirmDeletePlayersCallback: () async =>
+                  await _showDeletePlayersDialog(context) ?? false,
+              hasAnyActivePlayers: widget.viewModel.hasAnyActivePlayers,
+              activePlayers: widget.viewModel.activePlayers,
+              onSearchResultTapped: (player) => _navigateToPlayerPage(context, player),
+            ),
+          ),
+        ],
       );
 
   Future<void> _navigateToPlayerPage(BuildContext context, Player player) async {
@@ -243,14 +206,10 @@ class PlayersPageState extends State<PlayersPage> {
 
 class _AppBar extends StatelessWidget {
   const _AppBar({
-    required this.hasAnyDeletedPlayers,
     required this.onToggleShowDeletedPlayers,
-    required this.isShowingAllPlayers,
   });
 
-  final bool hasAnyDeletedPlayers;
   final VoidCallback onToggleShowDeletedPlayers;
-  final bool isShowingAllPlayers;
 
   @override
   Widget build(BuildContext context) {
@@ -264,14 +223,10 @@ class _AppBar extends StatelessWidget {
       centerTitle: false,
       title: const Text(AppText.playersPageTitle, style: AppTheme.titleTextStyle),
       actions: [
-        if (hasAnyDeletedPlayers)
-          IconButton(
-            icon: Icon(Icons.delete_sweep,
-                color: isShowingAllPlayers
-                    ? AppColors.enabledIconIconColor
-                    : AppColors.disabledIconIconColor),
-            onPressed: onToggleShowDeletedPlayers,
-          ),
+        IconButton(
+          icon: const Icon(Icons.delete_sweep, color: AppColors.enabledIconIconColor),
+          onPressed: onToggleShowDeletedPlayers,
+        ),
       ],
     );
   }
@@ -313,6 +268,35 @@ class _NoPlayers extends StatelessWidget {
   }
 }
 
+class _NoDeletedPlayers extends StatelessWidget {
+  const _NoDeletedPlayers();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.all(Dimensions.doubleStandardSpacing),
+        child: Column(
+          children: <Widget>[
+            Center(
+              child: Text(
+                AppText.playersPageNoDeletedPlayersTitle,
+                style: TextStyle(fontSize: Dimensions.extraLargeFontSize),
+              ),
+            ),
+            SizedBox(height: Dimensions.doubleStandardSpacing),
+            Icon(
+              Icons.delete_sweep,
+              size: Dimensions.emptyPageTitleIconSize,
+              color: AppColors.primaryColor,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _AllPlayers extends StatelessWidget {
   const _AllPlayers({
     required this.activePlayers,
@@ -326,26 +310,34 @@ class _AllPlayers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(children: [
-      SliverPersistentHeader(
-        delegate: BgcSliverTitleHeaderDelegate.title(
-          primaryTitle: AppText.playersPageDeletedPlayersSectionTitle,
+    return MultiSliver(
+      children: [
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playersPageDeletedPlayersSectionTitle,
+          ),
         ),
-      ),
-      _Players(
-        players: deletedPlayers,
-        onPlayerTap: onPlayerTap,
-      ),
-      SliverPersistentHeader(
-        delegate: BgcSliverTitleHeaderDelegate.title(
-          primaryTitle: AppText.playersPageActivePlayersSectionTitle,
+        if (deletedPlayers.isEmpty)
+          const _NoDeletedPlayers()
+        else
+          _Players(
+            players: deletedPlayers,
+            onPlayerTap: onPlayerTap,
+          ),
+        SliverPersistentHeader(
+          delegate: BgcSliverTitleHeaderDelegate.title(
+            primaryTitle: AppText.playersPageActivePlayersSectionTitle,
+          ),
         ),
-      ),
-      _Players(
-        players: activePlayers,
-        onPlayerTap: onPlayerTap,
-      )
-    ]);
+        if (activePlayers.isEmpty)
+          const _NoPlayers()
+        else
+          _Players(
+            players: activePlayers,
+            onPlayerTap: onPlayerTap,
+          )
+      ],
+    );
   }
 }
 
@@ -659,6 +651,85 @@ class _NoSearchResults extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _FloatingActionButton extends StatefulWidget {
+  const _FloatingActionButton({
+    required this.isDeletePlayersMode,
+    required this.hasAnyActivePlayers,
+    required this.activePlayers,
+    required this.confirmDeletePlayersCallback,
+    required this.onSearchResultTapped,
+  });
+
+  final bool isDeletePlayersMode;
+  final bool hasAnyActivePlayers;
+  final List<Player> activePlayers;
+  final Future<bool> Function() confirmDeletePlayersCallback;
+  final void Function(Player) onSearchResultTapped;
+
+  @override
+  State<_FloatingActionButton> createState() => _FloatingActionButtonState();
+}
+
+class _FloatingActionButtonState extends State<_FloatingActionButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: Dimensions.bottomTabTopHeight,
+      right: Dimensions.standardSpacing,
+      child: widget.isDeletePlayersMode
+          ? ElevatedIconButton(
+              title: AppText.playersPageDeletePlayersButtonText,
+              icon: const DefaultIcon(Icons.delete),
+              color: AppColors.redColor,
+              onPressed: () async {
+                final deleteConfirmed = await widget.confirmDeletePlayersCallback();
+                if (deleteConfirmed) {
+                  setState(() {});
+                }
+              },
+            )
+          : SpeedDial(
+              icon: Icons.menu,
+              backgroundColor: AppColors.accentColor,
+              activeBackgroundColor: AppColors.redColor,
+              overlayColor: AppColors.dialogBackgroundColor,
+              activeIcon: Icons.close,
+              children: [
+                SpeedDialChild(
+                  child: const Icon(Icons.create),
+                  backgroundColor: AppColors.accentColor,
+                  foregroundColor: Colors.white,
+                  label: AppText.playersPageCreatePlayerButtonText,
+                  labelBackgroundColor: AppColors.accentColor,
+                  shape: const CircleBorder(),
+                  onTap: () async => Navigator.pushNamed(
+                    context,
+                    PlayerPage.pageRoute,
+                    arguments: const PlayerPageArguments(player: null),
+                  ),
+                ),
+                if (widget.hasAnyActivePlayers)
+                  SpeedDialChild(
+                    child: const Icon(Icons.search),
+                    backgroundColor: AppColors.greenColor,
+                    foregroundColor: Colors.white,
+                    label: AppText.playersPageSearchPlayerButtonText,
+                    labelBackgroundColor: AppColors.greenColor,
+                    shape: const CircleBorder(),
+                    onTap: () async => showSearch<Player?>(
+                      context: context,
+                      delegate: _PlayersSerach(
+                        players: widget.activePlayers,
+                        onResultTap: (player) => widget.onSearchResultTapped(player),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
     );
   }
 }

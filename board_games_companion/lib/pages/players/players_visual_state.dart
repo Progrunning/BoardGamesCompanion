@@ -7,6 +7,13 @@ part 'players_visual_state.freezed.dart';
 @freezed
 class PlayersVisualState with _$PlayersVisualState {
   const factory PlayersVisualState.loadingPlayers() = LoadingPlayers;
+  const factory PlayersVisualState.loadingFailed() = LoadingFailed;
+
+  /// No players
+  const factory PlayersVisualState.noPlayers() = NoPlayers;
+
+  /// No active players
+  const factory PlayersVisualState.noActivePlayers() = NoActivePlayers;
 
   /// Show [activePlayers] only
   const factory PlayersVisualState.activePlayers({
@@ -19,7 +26,7 @@ class PlayersVisualState with _$PlayersVisualState {
     required List<Player> deletedPlayers,
   }) = AllPlayers;
 
-  /// A mode in which users can check players on the screen and delete
+  /// A mode in which users can players on the screen and delete
   /// selected
   const factory PlayersVisualState.deletePlayers({
     required List<Player> activePlayers,

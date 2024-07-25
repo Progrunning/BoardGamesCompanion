@@ -256,14 +256,15 @@ class AppText {
   static const playersPageSearchPlayerButtonText = 'Search';
   static const playersPageDeletePlayersButtonText = 'Delete players';
   static const playersPageNoPlayersTitle = "You don't have any players";
+  static const playersPageNoDeletedPlayersTitle = "You don't have any deleted players";
   static const playersPageNoPlayersInstructions =
       "Create players to log games you've played with your family or friends";
   static const playersPageConfirmationTitle = 'Delete players';
   static const playersPageConfirmationDialogDeletePlayersButtonText = 'Delete';
   static const playersPageConfirmationDialogContent =
       'Are you sure you want to delete selected players?';
-  static const playersPageDeletedPlayersSectionTitle = 'Deleted players';
-  static const playersPageActivePlayersSectionTitle = 'Active players';
+  static const playersPageDeletedPlayersSectionTitle = 'Deleted';
+  static const playersPageActivePlayersSectionTitle = 'Active';
 
   static const playerPageSearchClearSaerch = 'Clear search';
   static const playerPageSearchNoSearchResults =

@@ -17,14 +17,22 @@ abstract class _PlayersViewModel with Store {
   _PlayersViewModel(this._playersStore) {
     // MK React to any updates on the players collection (e.g. delete or restore)
     _playersReactionDisposer = reaction((_) => _playersStore.players, (_) {
+      // MK If user is in [ActivePlayers] or [AllPlayers] state, update it.
+      //    If it's any other, update it based on the players collection (i.e. [_updatePlayersViauslState])
       switch (visualState) {
         case ActivePlayers():
-          visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
+          if (!hasAnyActivePlayers) {
+            visualState = const PlayersVisualState.noPlayers();
+          } else {
+            visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
+          }
         case AllPlayers():
           visualState = PlayersVisualState.allPlayersPlayers(
             activePlayers: activePlayers,
             deletedPlayers: deletedPlayers,
           );
+        default:
+          _updatePlayersVisualState();
       }
     });
   }
@@ -51,10 +59,10 @@ abstract class _PlayersViewModel with Store {
   bool get hasAnyActivePlayers => activePlayers.isNotEmpty;
 
   @computed
-  bool get hasAnyDeletedPlayers => activePlayers.isNotEmpty;
+  bool get hasAnyDeletedPlayers => deletedPlayers.isNotEmpty;
 
   @computed
-  bool get hasAnyPlayers => activePlayers.isNotEmpty && deletedPlayers.isNotEmpty;
+  bool get hasAnyPlayers => hasAnyActivePlayers || hasAnyDeletedPlayers;
 
   String? searchPhrase;
 
@@ -76,7 +84,7 @@ abstract class _PlayersViewModel with Store {
   }
 
   @action
-  void toggleShowDeletePlayers() {
+  void toggleShowDeletedPlayers() {
     switch (visualState) {
       case AllPlayers():
         visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
@@ -96,7 +104,7 @@ abstract class _PlayersViewModel with Store {
         await _playersStore.deletePlayer(playerId);
       }
 
-      toggleDeletePlayersMode();
+      _selectedPlayers.clear();
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
@@ -110,9 +118,20 @@ abstract class _PlayersViewModel with Store {
     try {
       visualState = const PlayersVisualState.loadingPlayers();
       await _playersStore.loadPlayers();
-      visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
+      _updatePlayersVisualState();
     } catch (e, stack) {
+      visualState = const PlayersVisualState.loadingFailed();
       FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+  }
+
+  void _updatePlayersVisualState() {
+    if (!hasAnyPlayers) {
+      visualState = const PlayersVisualState.noPlayers();
+    } else if (!hasAnyActivePlayers) {
+      visualState = const PlayersVisualState.noActivePlayers();
+    } else {
+      visualState = PlayersVisualState.activePlayers(activePlayers: activePlayers);
     }
   }
 
