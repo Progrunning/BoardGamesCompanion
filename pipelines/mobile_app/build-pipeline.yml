@@ -70,22 +70,22 @@ jobs:
       # PublishCodeCoverageResults@2 has a bug in which it doesn't allow to drill down into
       # the files/lines. Try replacing with @2 once this is fixed.
       # https://github.com/microsoft/azure-pipelines-tasks/issues/19939
-      - task: PublishCodeCoverageResults@1
-        displayName: Publish code coverage
-        inputs:
-          codeCoverageTool: Cobertura
-          summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
-          reportDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/"
-          # MK With this line you can't drill down into the files https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/results?buildId=1388&view=codecoverage-tab
-          #    without it you can drill down but there's no info https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/results?buildId=1387&view=codecoverage-tab
-          pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)/"
-          failIfCoverageEmpty: true
-
-      # - task: PublishCodeCoverageResults@2
-      #   displayName: "Publish code coverage results"
+      # - task: PublishCodeCoverageResults@1
+      #   displayName: Publish code coverage
       #   inputs:
+      #     codeCoverageTool: Cobertura
       #     summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
-      #     pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)"
+      #     reportDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/"
+      #     # MK With this line you can't drill down into the files https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/results?buildId=1388&view=codecoverage-tab
+      #     #    without it you can drill down but there's no info https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/results?buildId=1387&view=codecoverage-tab
+      #     pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)/"
+      #     failIfCoverageEmpty: true
+
+      - task: PublishCodeCoverageResults@2
+        displayName: "Publish code coverage results"
+        inputs:
+          summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
+          pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)/"
 
   - job: BuildDroid
     dependsOn: Test
