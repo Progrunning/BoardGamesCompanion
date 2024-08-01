@@ -73,6 +73,7 @@ jobs:
           codeCoverageTool: Cobertura
           summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
           reportDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/"
+          pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)"
           failIfCoverageEmpty: true
 
       # - task: PublishCodeCoverageResults@2
