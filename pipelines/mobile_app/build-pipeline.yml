@@ -61,8 +61,8 @@ jobs:
           reports: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/lcov.info"
           targetdir: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/"
           sourcedirs: "$(Build.SourcesDirectory)/$(appDirectoryName)"
-          # reporttypes: "HtmlInline_AzurePipelines;Cobertura"
-          reporttypes: "Cobertura;Badges"
+          reporttypes: "HtmlInline_AzurePipelines;Cobertura"
+          # reporttypes: "Cobertura;Badges"
           # Exclude all generated files from the code coverage
           filefilters: "-lib/**/*.g.dart"
           tag: "$(app.version).$(Build.BuildID)"
