@@ -67,19 +67,19 @@ jobs:
           filefilters: "-lib/**/*.g.dart"
           tag: "$(app.version).$(Build.BuildID)"
 
-      # - task: PublishCodeCoverageResults@1
-      #   displayName: Publish code coverage
-      #   inputs:
-      #     codeCoverageTool: Cobertura
-      #     summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
-      #     reportDirectory: "${{ parameters.testsAndCoverageOutputDirectory }}/reports"
-      #     failIfCoverageEmpty: true
-
-      - task: PublishCodeCoverageResults@2
-        displayName: "Publish code coverage results"
+      - task: PublishCodeCoverageResults@1
+        displayName: Publish code coverage
         inputs:
+          codeCoverageTool: Cobertura
           summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
-          pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)"
+          reportDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/"
+          failIfCoverageEmpty: true
+
+      # - task: PublishCodeCoverageResults@2
+      #   displayName: "Publish code coverage results"
+      #   inputs:
+      #     summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
+      #     pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)"
 
   - job: BuildDroid
     dependsOn: Test
