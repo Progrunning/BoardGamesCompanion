@@ -66,6 +66,7 @@ jobs:
           # Exclude all generated files from the code coverage
           filefilters: "-lib/**/*.g.dart"
           tag: "$(app.version).$(Build.BuildID)"
+          publishCodeCoverageResults: true
 
       # PublishCodeCoverageResults@2 has a bug in which it doesn't allow to drill down into
       # the files/lines. Try replacing with @2 once this is fixed.
@@ -81,11 +82,11 @@ jobs:
       #     pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)/"
       #     failIfCoverageEmpty: true
 
-      - task: PublishCodeCoverageResults@2
-        displayName: "Publish code coverage results"
-        inputs:
-          summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
-          pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)/"
+      # - task: PublishCodeCoverageResults@2
+      #   displayName: "Publish code coverage results"
+      #   inputs:
+      #     summaryFileLocation: "$(Build.SourcesDirectory)/$(appDirectoryName)/coverage/Cobertura.xml"
+      #     pathToSources: "$(Build.SourcesDirectory)/$(appDirectoryName)/"
 
   - job: BuildDroid
     dependsOn: Test
