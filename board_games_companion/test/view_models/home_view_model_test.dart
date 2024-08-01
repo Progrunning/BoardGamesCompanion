@@ -10,7 +10,7 @@ import '../mocks/board_games_store_mock.dart';
 import '../mocks/collections_view_model_mock.dart';
 import '../mocks/hot_board_games_view_model_mock.dart';
 import '../mocks/players_view_model_mock.dart';
-import '../mocks/plays_view_model_test.dart';
+import '../mocks/plays_view_model_mock.dart';
 import '../mocks/rate_and_review_service_mock.dart';
 import '../mocks/search_store_mock.dart';
 
