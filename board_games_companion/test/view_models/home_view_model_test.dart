@@ -12,7 +12,7 @@ import '../mocks/hot_board_games_view_model_mock.dart';
 import '../mocks/players_view_model_mock.dart';
 import '../mocks/plays_view_model_test.dart';
 import '../mocks/rate_and_review_service_mock.dart';
-import '../mocks/search_store_test.dart';
+import '../mocks/search_store_mock.dart';
 
 void main() {
   late final MockAnalyticsService mockAnalyticsService = MockAnalyticsService();
