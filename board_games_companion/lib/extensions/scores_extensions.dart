@@ -85,6 +85,14 @@ int compareScores(
   GameFamily gameFamily, {
   bool ignorePlaces = false,
 }) {
+  // Technically this shouldn't happen as we shouldn't be comparing scores from
+  // different game families. However, there is a bug in the app or a behaviour in which
+  // this does happen therefore this needs to be handled.
+  if ((gameFamily == GameFamily.HighestScore || gameFamily == GameFamily.LowestScore) &&
+      (score.noScoreGameResult != null || otherScore.noScoreGameResult != null)) {
+    return Constants.leaveAsIs;
+  }
+
   // Regardless of the game family all the scores without a score go to the bottom of the list
   if (score.hasScore && !otherScore.hasScore) {
     return Constants.moveAbove;
