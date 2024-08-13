@@ -50,49 +50,47 @@ class PlaythroughsHistoryPageState extends State<PlaythroughsHistoryPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) {
-        switch (viewModel.futureloadPlaythroughs?.status ?? FutureStatus.pending) {
-          case FutureStatus.pending:
-            return const LoadingIndicator();
-          case FutureStatus.fulfilled:
-            if (!viewModel.hasAnyPlaythroughs) {
-              return const EmptyPageInformationPanel(
-                title: AppText.playthroughsHistoryPageNoGamesTitle,
-                subtitle: AppText.playthroughsHistoryPageNoGamesSubtitle,
-                icon: Icon(
-                  Icons.history,
-                  size: Dimensions.emptyPageTitleIconSize,
-                  color: AppColors.primaryColor,
+  Widget build(BuildContext context) => Observer(
+        builder: (_) {
+          switch (viewModel.futureloadPlaythroughs?.status ?? FutureStatus.pending) {
+            case FutureStatus.pending:
+              return const LoadingIndicator();
+            case FutureStatus.fulfilled:
+              if (!viewModel.hasAnyPlaythroughs) {
+                return const EmptyPageInformationPanel(
+                  title: AppText.playthroughsHistoryPageNoGamesTitle,
+                  subtitle: AppText.playthroughsHistoryPageNoGamesSubtitle,
+                  icon: Icon(
+                    Icons.history,
+                    size: Dimensions.emptyPageTitleIconSize,
+                    color: AppColors.primaryColor,
+                  ),
+                  padding: EdgeInsets.only(
+                    left: Dimensions.doubleStandardSpacing,
+                    top: Dimensions.emptyPageTitleTopSpacing,
+                    right: Dimensions.doubleStandardSpacing,
+                  ),
+                );
+              }
+
+              return ListView.separated(
+                padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
+                itemBuilder: (_, index) => _Playthrough(
+                  playthroughDetails: viewModel.playthroughs[index],
+                  playthroughNumber: viewModel.playthroughs.length - index,
+                  gameClassification: viewModel.gameClassification,
+                  isLast: index == viewModel.playthroughs.length - 1,
                 ),
-                padding: EdgeInsets.only(
-                  left: Dimensions.doubleStandardSpacing,
-                  top: Dimensions.emptyPageTitleTopSpacing,
-                  right: Dimensions.doubleStandardSpacing,
-                ),
+                separatorBuilder: (_, index) =>
+                    const SizedBox(height: Dimensions.doubleStandardSpacing),
+                itemCount: viewModel.playthroughs.length,
               );
-            }
 
-            return ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: Dimensions.standardSpacing),
-              itemBuilder: (_, index) => _Playthrough(
-                playthroughDetails: viewModel.playthroughs[index],
-                playthroughNumber: viewModel.playthroughs.length - index,
-                gameClassification: viewModel.gameClassification,
-                isLast: index == viewModel.playthroughs.length - 1,
-              ),
-              separatorBuilder: (_, index) =>
-                  const SizedBox(height: Dimensions.doubleStandardSpacing),
-              itemCount: viewModel.playthroughs.length,
-            );
-
-          default:
-            return const SizedBox.shrink();
-        }
-      },
-    );
-  }
+            default:
+              return const SizedBox.shrink();
+          }
+        },
+      );
 }
 
 class _Playthrough extends StatefulWidget {
@@ -410,9 +408,7 @@ class _PlaythroughDurationState extends State<_PlaythroughDuration> {
 }
 
 class _PlaythroughItemDetail extends StatelessWidget {
-  const _PlaythroughItemDetail(
-    this.title,
-    this.subtitle);
+  const _PlaythroughItemDetail(this.title, this.subtitle);
 
   final String subtitle;
   final String? title;

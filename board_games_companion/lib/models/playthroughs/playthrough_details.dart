@@ -56,7 +56,7 @@ class PlaythroughDetails with _$PlaythroughDetails {
       playerScores.where((playerScore) => playerScore.id != null && playerScore.isTied).toList();
 
   GameClassification? get playerScoreBasedGameClassification {
-    if (!playerScores.any((playerScore) => playerScore.score.hasScore)) {
+    if (!playerScores.any((playerScore) => playerScore.score.hasNumericalScore)) {
       return null;
     }
 
@@ -69,12 +69,12 @@ class PlaythroughDetails with _$PlaythroughDetails {
 
   PlaythroughNote? get latestNote => notes?.sortedBy((note) => note.createdAt).last;
 
-  List<Score> get scoresWithValue =>
-      playerScores.map((playerScore) => playerScore.score).onlyScoresWithValue();
+  List<Score> get numericalScores =>
+      playerScores.map((playerScore) => playerScore.score).onlyNumericalScores();
 
-  bool get hasAnyScores => scoresWithValue.isNotEmpty;
+  bool get hasAnyScores => numericalScores.isNotEmpty;
 
-  bool get finishedScoring => scoresWithValue.length == playerScores.length;
+  bool get finishedScoring => numericalScores.length == playerScores.length;
 
   bool get isDuel => playerScores.length == 2;
 

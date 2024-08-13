@@ -212,4 +212,28 @@ void main() {
     expect(winners.length, 1);
     expect(winners, [lowestScore]);
   });
+
+  group('GIVEN a collection of different type of scores ', () {
+    void validateOrderingEmptyScored(GameFamily gameFamily) {
+      test(
+          'WHEN sorting by $gameFamily '
+          'THEN sorting should not throw exception ', () {
+        final noPointsScore = emptyScore.copyWith(
+            noScoreGameResult: const NoScoreGameResult(
+          cooperativeGameResult: CooperativeGameResult.loss,
+        ));
+        final pointsScore = emptyScore.copyWith(scoreGameResult: const ScoreGameResult(points: 10));
+        final List<Score> scores = [
+          pointsScore,
+          noPointsScore,
+        ];
+
+        scores.sortByScore(gameFamily);
+      });
+    }
+
+    validateOrderingEmptyScored(GameFamily.LowestScore);
+    validateOrderingEmptyScored(GameFamily.HighestScore);
+    validateOrderingEmptyScored(GameFamily.Cooperative);
+  });
 }

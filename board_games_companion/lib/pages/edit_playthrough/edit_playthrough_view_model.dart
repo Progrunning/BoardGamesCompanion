@@ -181,7 +181,7 @@ abstract class _EditPlaythoughViewModel with Store {
     });
 
     if (playerScore == null ||
-        (playerScore.score.hasScore && playerScore.score.score == newScore)) {
+        (playerScore.score.hasResult && playerScore.score.score == newScore)) {
       return;
     }
 

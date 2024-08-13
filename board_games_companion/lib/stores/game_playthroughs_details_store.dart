@@ -216,7 +216,7 @@ abstract class _GamePlaythroughsDetailsStore with Store {
         points: score.score,
         // If the player had a score (i.e. value) saved previously,
         // we want to reflect that by speifying their place
-        place: score.hasScore ? index + 1 : null,
+        place: score.hasResult ? index + 1 : null,
       ),
     );
   }

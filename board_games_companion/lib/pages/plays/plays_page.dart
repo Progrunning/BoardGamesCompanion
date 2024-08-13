@@ -948,37 +948,35 @@ class _HistoricalPlaythroughSliverList extends StatelessWidget {
   final List<HistoricalPlaythrough> historicalPlaythroughs;
 
   @override
-  Widget build(BuildContext context) {
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-      (context, index) {
-        final isLast = index == historicalPlaythroughs.length - 1;
-        final historicalPlaythrough = historicalPlaythroughs[index].when(
-          withDateHeader: (playedOn, boardGamePlaythroughs) =>
-              _HistoricalPlaythroughItem.withDateHeader(
-            boardGamePlaythrough: boardGamePlaythroughs,
-            playedOn: playedOn,
-          ),
-          withoutDateHeader: (boardGamePlaythroughs) =>
-              _HistoricalPlaythroughItem.withoutDateHeader(
-            boardGamePlaythrough: boardGamePlaythroughs,
-          ),
-        );
-
-        if (isLast) {
-          return Column(
-            children: [
-              historicalPlaythrough,
-              const SizedBox(height: Dimensions.bottomTabTopHeight)
-            ],
+  Widget build(BuildContext context) => SliverList(
+          delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final isLast = index == historicalPlaythroughs.length - 1;
+          final historicalPlaythrough = historicalPlaythroughs[index].when(
+            withDateHeader: (playedOn, boardGamePlaythroughs) =>
+                _HistoricalPlaythroughItem.withDateHeader(
+              boardGamePlaythrough: boardGamePlaythroughs,
+              playedOn: playedOn,
+            ),
+            withoutDateHeader: (boardGamePlaythroughs) =>
+                _HistoricalPlaythroughItem.withoutDateHeader(
+              boardGamePlaythrough: boardGamePlaythroughs,
+            ),
           );
-        }
 
-        return historicalPlaythrough;
-      },
-      childCount: historicalPlaythroughs.length,
-    ));
-  }
+          if (isLast) {
+            return Column(
+              children: [
+                historicalPlaythrough,
+                const SizedBox(height: Dimensions.bottomTabTopHeight)
+              ],
+            );
+          }
+
+          return historicalPlaythrough;
+        },
+        childCount: historicalPlaythroughs.length,
+      ));
 }
 
 class _GameSpinnerFilters extends StatelessWidget {

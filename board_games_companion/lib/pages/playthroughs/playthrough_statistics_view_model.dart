@@ -142,7 +142,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
 
     final List<PlayerStatistics> playersStatistics = [];
     final List<Score> playerScoresCollection =
-        playthroughScoresByBoardGameId[boardGameId].onlyCooperativeGames();
+        playthroughScoresByBoardGameId[boardGameId].onlyCooperativeScores();
     if (playerScoresCollection.isNotEmpty) {
       final Map<String, List<Score>> playerScoresGrouped =
           groupBy(playerScoresCollection, (Score score) => score.playerId);
@@ -201,7 +201,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     }
 
     final List<Score> playerScoresCollection =
-        playthroughScoresByBoardGameId[boardGameId].onlyScoresWithValue();
+        playthroughScoresByBoardGameId[boardGameId].onlyNumericalScores();
     if (playerScoresCollection.isNotEmpty) {
       final Map<String, List<Score>> playerScoresGrouped =
           groupBy(playerScoresCollection, (Score score) => score.playerId);
@@ -310,7 +310,7 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
       final playthroughScores = playthroughScoresByPlaythroughId[finishedPlaythrough.id]
-              .onlyScoresWithValue()
+              .onlyNumericalScores()
               .sortByScore(gameFamily) ??
           [];
       if (playthroughScores.isEmpty) {
