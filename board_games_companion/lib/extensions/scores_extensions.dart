@@ -12,18 +12,21 @@ extension ScoreExtesions on Score {
 }
 
 extension ScoresExtesions on Iterable<Score>? {
-  List<Score> onlyScoresWithValue() => this?.where((s) => s.hasScore).toList() ?? <Score>[];
+  List<Score> onlyNumericalScores() =>
+      this?.where((s) => s.hasNumericalScore).toList() ?? <Score>[];
 
   /// Returns winner(s)
   ///
   /// In case [Score]s are recorded using the "old" ways, grab the highest/lowest score
   /// and treat as a winner.
+  ///
+  /// NOTE: Use only for [GameFamily.HighestScore] & [GameFamily.LowestScore]
   List<Score> winners(GameFamily gameFamily) {
-    var winners = this?.onlyScoresWithValue().where((s) => s.isWinner).toList();
+    var winners = this?.onlyNumericalScores().where((s) => s.isWinner).toList();
 
     // Get the winner by ordering scores highest/lowest and taking the top one
     if (winners?.isEmpty ?? true) {
-      final orderedScores = this?.onlyScoresWithValue().sortByScore(gameFamily);
+      final orderedScores = this?.onlyNumericalScores().sortByScore(gameFamily);
       if (orderedScores?.isNotEmpty ?? false) {
         winners = [orderedScores!.first];
       }
@@ -32,7 +35,7 @@ extension ScoresExtesions on Iterable<Score>? {
     return winners ?? [];
   }
 
-  List<Score> onlyCooperativeGames() {
+  List<Score> onlyCooperativeScores() {
     return this?.where((s) => s.noScoreGameResult?.cooperativeGameResult != null).toList() ??
         <Score>[];
   }
@@ -45,7 +48,7 @@ extension ScoresExtesions on Iterable<Score>? {
   }
 
   num? toBestScore(GameFamily gameFamily) {
-    final scores = this?.onlyScoresWithValue().map((Score score) => score.score!) ?? [];
+    final scores = this?.onlyNumericalScores().map((Score score) => score.score!) ?? [];
     switch (gameFamily) {
       case GameFamily.HighestScore:
         return scores.reduce(max);
@@ -59,7 +62,7 @@ extension ScoresExtesions on Iterable<Score>? {
   }
 
   double toAverageScore() {
-    final scores = this?.onlyScoresWithValue().map((Score score) => score.score!) ?? [];
+    final scores = this?.onlyNumericalScores().map((Score score) => score.score!) ?? [];
 
     return scores.reduce((a, b) => a + b) / scores.length;
   }
@@ -94,11 +97,11 @@ int compareScores(
   }
 
   // Regardless of the game family all the scores without a score go to the bottom of the list
-  if (score.hasScore && !otherScore.hasScore) {
+  if (score.hasResult && !otherScore.hasResult) {
     return Constants.moveAbove;
   }
 
-  if (!score.hasScore && otherScore.hasScore) {
+  if (!score.hasResult && otherScore.hasResult) {
     return Constants.moveBelow;
   }
 
@@ -127,15 +130,15 @@ int _compareScores(Score score, Score otherScore, [bool ignorePlaces = false]) {
     return score.scoreGameResult!.place!.compareTo(otherScore.scoreGameResult!.place!);
   }
 
-  if (!score.hasScore && !otherScore.hasScore) {
+  if (!score.hasResult && !otherScore.hasResult) {
     return Constants.leaveAsIs;
   }
 
-  if (!score.hasScore) {
+  if (!score.hasResult) {
     return Constants.moveBelow;
   }
 
-  if (!otherScore.hasScore) {
+  if (!otherScore.hasResult) {
     return Constants.moveAbove;
   }
 

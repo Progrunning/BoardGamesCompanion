@@ -30,6 +30,10 @@ class Score with _$Score {
 
   const Score._();
 
+  /// Gets a numerical results of a [Score]
+  /// - [value] converted to a [double]
+  /// NOTE: Used only in case it's an "old" score before migrating to using [ScoreGameResult]
+  /// - [scoreGameResult]
   double? get score {
     if (scoreGameResult?.points != null) {
       return scoreGameResult!.points;
@@ -45,9 +49,14 @@ class Score with _$Score {
 
   String? get scoreFormatted => score?.toStringAsFixed(0);
 
-  bool get hasScore => score != null || noScoreGameResult?.cooperativeGameResult != null;
+  /// Indicats if [Score] has a numerical score ([value] or [scoreGameResult])
+  bool get hasNumericalScore => score != null;
+
+  /// Indicats if [Score] has a score ([value] or [scoreGameResult])
+  /// or non score result [noScoreGameResult]
+  bool get hasResult => hasNumericalScore || noScoreGameResult?.cooperativeGameResult != null;
 
   bool get isTied => scoreGameResult?.tiebreakerType != null;
 
-  bool get isWinner => hasScore && scoreGameResult?.place == 1;
+  bool get isWinner => hasNumericalScore && scoreGameResult?.place == 1;
 }
