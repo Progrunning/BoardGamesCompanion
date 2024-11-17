@@ -143,6 +143,7 @@ class AppText {
   static const enterScoreDialogDoneButtonText = 'Done';
 
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
+  static const filterGamesPanelGameFamilySectionHeader = 'Game family';
 
   static const playthroughsLogGamePageHeader = 'Log a game';
   static const playthroughsLogGameplayTimelineTitle = 'Gameplay timeline';

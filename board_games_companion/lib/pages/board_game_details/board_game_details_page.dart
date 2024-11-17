@@ -372,6 +372,7 @@ class _Categories extends StatelessWidget {
         children: [
           for (final category in categories)
             Chip(
+              side: BorderSide.none,
               padding: const EdgeInsets.all(Dimensions.standardSpacing),
               backgroundColor: AppColors.primaryColor.withAlpha(
                 AppStyles.opacity80Percent,

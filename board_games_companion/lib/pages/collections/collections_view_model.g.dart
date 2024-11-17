@@ -206,6 +206,25 @@ mixin _$CollectionsViewModel on _CollectionsViewModel, Store {
       (_$isUserNameEmptyComputed ??= Computed<bool>(() => super.isUserNameEmpty,
               name: '_CollectionsViewModel.isUserNameEmpty'))
           .value;
+  Computed<List<BoardGameCategory>>? _$boardGamesInCollectionCategoriesComputed;
+
+  @override
+  List<BoardGameCategory> get boardGamesInCollectionCategories =>
+      (_$boardGamesInCollectionCategoriesComputed ??=
+              Computed<List<BoardGameCategory>>(
+                  () => super.boardGamesInCollectionCategories,
+                  name:
+                      '_CollectionsViewModel.boardGamesInCollectionCategories'))
+          .value;
+  Computed<bool>? _$hasAnyboardGamesInCollectionCategoriesComputed;
+
+  @override
+  bool get hasAnyboardGamesInCollectionCategories =>
+      (_$hasAnyboardGamesInCollectionCategoriesComputed ??= Computed<bool>(
+              () => super.hasAnyboardGamesInCollectionCategories,
+              name:
+                  '_CollectionsViewModel.hasAnyboardGamesInCollectionCategories'))
+          .value;
 
   late final _$selectedTabAtom =
       Atom(name: '_CollectionsViewModel.selectedTab', context: context);
@@ -348,7 +367,9 @@ expansionsInCollectionTotal: ${expansionsInCollectionTotal},
 anyExpansionsInCollection: ${anyExpansionsInCollection},
 expansionsInCollectionMap: ${expansionsInCollectionMap},
 userName: ${userName},
-isUserNameEmpty: ${isUserNameEmpty}
+isUserNameEmpty: ${isUserNameEmpty},
+boardGamesInCollectionCategories: ${boardGamesInCollectionCategories},
+hasAnyboardGamesInCollectionCategories: ${hasAnyboardGamesInCollectionCategories}
     ''';
   }
 }

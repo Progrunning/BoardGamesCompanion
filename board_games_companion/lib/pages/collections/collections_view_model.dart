@@ -12,6 +12,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../common/enums/games_tab.dart';
 import '../../extensions/int_extensions.dart';
+import '../../models/hive/board_game_category.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/sort_by.dart';
 import '../../stores/board_games_filters_store.dart';
@@ -192,6 +193,27 @@ abstract class _CollectionsViewModel with Store {
 
   @computed
   bool get isUserNameEmpty => userName.isNullOrBlank;
+
+  @computed
+  List<BoardGameCategory> get boardGamesInCollectionCategories {
+    final distinctBoardGameCategories = <String, BoardGameCategory>{};
+    for (final boardGame in boardGamesInCollection) {
+      if (boardGame.categories?.isEmpty ?? true) {
+        continue;
+      }
+
+      for (final category in boardGame.categories!) {
+        if (!distinctBoardGameCategories.containsKey(category.id)) {
+          distinctBoardGameCategories[category.id] = category;
+        }
+      }
+    }
+
+    return distinctBoardGameCategories.values.toList();
+  }
+
+  @computed
+  bool get hasAnyboardGamesInCollectionCategories => boardGamesInCollection.isNotEmpty;
 
   @action
   void setSelectedTab(GamesTab newlySelectedTab) => selectedTab = newlySelectedTab;

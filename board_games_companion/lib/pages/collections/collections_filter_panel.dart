@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:board_games_companion/models/hive/board_game_category.dart';
 import 'package:board_games_companion/widgets/common/page_container.dart';
 import 'package:board_games_companion/widgets/common/section_header.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class CollectionsFilterPanelState extends State<CollectionsFilterPanel> {
                 const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
                 _SortBySection(gamesViewModel: widget.viewModel),
                 const SizedBox(height: Dimensions.standardSpacing),
-                _FiltersSection(gamesViewModel: widget.viewModel),
+                _FiltersSection(collectionsViewModel: widget.viewModel),
                 const SizedBox(height: Dimensions.standardSpacing),
                 Observer(
                   builder: (_) {
@@ -130,10 +131,10 @@ class _SortBySection extends StatelessWidget {
 
 class _FiltersSection extends StatelessWidget {
   const _FiltersSection({
-    required this.gamesViewModel,
+    required this.collectionsViewModel,
   });
 
-  final CollectionsViewModel gamesViewModel;
+  final CollectionsViewModel collectionsViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -156,28 +157,28 @@ class _FiltersSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     _FilterRatingValue.any(
-                      isSelected: gamesViewModel.filterByRating == null,
+                      isSelected: collectionsViewModel.filterByRating == null,
                       onRatingSelected: (double? rating) => updateFilterRating(rating),
                     ),
                     _FilterRatingValue.rating(
                       rating: 6.5,
                       onRatingSelected: (double? rating) => updateFilterRating(rating),
-                      isSelected: gamesViewModel.filterByRating == 6.5,
+                      isSelected: collectionsViewModel.filterByRating == 6.5,
                     ),
                     _FilterRatingValue.rating(
                       rating: 7.5,
                       onRatingSelected: (double? rating) => updateFilterRating(rating),
-                      isSelected: gamesViewModel.filterByRating == 7.5,
+                      isSelected: collectionsViewModel.filterByRating == 7.5,
                     ),
                     _FilterRatingValue.rating(
                       rating: 8.0,
                       onRatingSelected: (double? rating) => updateFilterRating(rating),
-                      isSelected: gamesViewModel.filterByRating == 8.0,
+                      isSelected: collectionsViewModel.filterByRating == 8.0,
                     ),
                     _FilterRatingValue.rating(
                       rating: 8.5,
                       onRatingSelected: (double? rating) => updateFilterRating(rating),
-                      isSelected: gamesViewModel.filterByRating == 8.5,
+                      isSelected: collectionsViewModel.filterByRating == 8.5,
                     ),
                   ],
                 );
@@ -186,37 +187,99 @@ class _FiltersSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: Dimensions.doubleStandardSpacing),
-        SectionHeader.titleWithIcon(
-          title: 'Number of players',
-          icon: const Icon(Icons.filter_alt_outlined),
-        ),
-        Observer(
-          builder: (_) {
-            if (gamesViewModel.anyBoardGames) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                child: _FilterNumberOfPlayersSlider(gamesViewModel: gamesViewModel),
-              );
-            }
-
-            return const SizedBox.shrink();
-          },
-        ),
+        _NumberOfPlayersFilterSection(collectionsViewModel: collectionsViewModel),
+        if (collectionsViewModel.hasAnyboardGamesInCollectionCategories)
+          _GameFamilyFilterSection(
+            categories: collectionsViewModel.boardGamesInCollectionCategories,
+          ),
       ],
     );
   }
 
   void updateFilterRating(double? rating) {
-    gamesViewModel.updateFilterByRating(rating);
+    collectionsViewModel.updateFilterByRating(rating);
+  }
+}
+
+class _NumberOfPlayersFilterSection extends StatelessWidget {
+  const _NumberOfPlayersFilterSection({
+    required this.collectionsViewModel,
+  });
+
+  final CollectionsViewModel collectionsViewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SectionHeader.titleWithIcon(
+          title: 'Number of players',
+          icon: const Icon(Icons.filter_alt_outlined),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+          child: _FilterNumberOfPlayersSlider(collectionsViewModel: collectionsViewModel),
+        ),
+      ],
+    );
+  }
+}
+
+// TODO When syncing games via the BGG import the games don't have categories
+//      A call to the BGGs API or own API should be done to retrieve all the details
+//      This is a bigger task and for now we will only show the categories that are available
+class _GameFamilyFilterSection extends StatelessWidget {
+  const _GameFamilyFilterSection({
+    required this.categories,
+  });
+
+  final List<BoardGameCategory> categories;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: Dimensions.doubleStandardSpacing),
+        SectionHeader.titleWithIcon(
+          title: AppText.filterGamesPanelGameFamilySectionHeader,
+          icon: const Icon(Icons.filter_alt_outlined),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+          child: Wrap(
+            direction: Axis.horizontal,
+            spacing: Dimensions.standardSpacing,
+            alignment: WrapAlignment.spaceEvenly,
+            children: [
+              for (final category in categories)
+                FilterChip(
+                  side: BorderSide.none,
+                  padding: const EdgeInsets.all(Dimensions.standardSpacing),
+                  backgroundColor: AppColors.primaryColor.withAlpha(
+                    AppStyles.opacity80Percent,
+                  ),
+                  label: Text(
+                    category.name,
+                    style: const TextStyle(color: AppColors.defaultTextColor),
+                  ),
+                  // TODO Toggle filter on/off
+                  selected: true,
+                  onSelected: (bool value) {},
+                )
+            ],
+          ),
+        )
+      ],
+    );
   }
 }
 
 class _FilterNumberOfPlayersSlider extends StatelessWidget {
   const _FilterNumberOfPlayersSlider({
-    required this.gamesViewModel,
+    required this.collectionsViewModel,
   });
 
-  final CollectionsViewModel gamesViewModel;
+  final CollectionsViewModel collectionsViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -236,15 +299,15 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
               child: Observer(
                 builder: (_) {
                   return Slider(
-                    value: min(gamesViewModel.filterByNumberOfPlayers?.toDouble() ?? 0,
-                        gamesViewModel.maxNumberOfPlayers),
-                    divisions: gamesViewModel.maxNumberOfPlayers.toInt(),
-                    min: gamesViewModel.minNumberOfPlayers - 1,
-                    max: gamesViewModel.maxNumberOfPlayers,
-                    label: gamesViewModel.numberOfPlayersSliderValue,
-                    onChanged: (value) =>
-                        gamesViewModel.changeNumberOfPlayers(value != 0 ? value.round() : null),
-                    onChangeEnd: (value) => gamesViewModel.updateNumberOfPlayersFilter(),
+                    value: min(collectionsViewModel.filterByNumberOfPlayers?.toDouble() ?? 0,
+                        collectionsViewModel.maxNumberOfPlayers),
+                    divisions: collectionsViewModel.maxNumberOfPlayers.toInt(),
+                    min: collectionsViewModel.minNumberOfPlayers - 1,
+                    max: collectionsViewModel.maxNumberOfPlayers,
+                    label: collectionsViewModel.numberOfPlayersSliderValue,
+                    onChanged: (value) => collectionsViewModel
+                        .changeNumberOfPlayers(value != 0 ? value.round() : null),
+                    onChangeEnd: (value) => collectionsViewModel.updateNumberOfPlayersFilter(),
                     activeColor: AppColors.accentColor,
                   );
                 },
@@ -252,7 +315,7 @@ class _FilterNumberOfPlayersSlider extends StatelessWidget {
             ),
             Observer(
               builder: (_) => Text(
-                gamesViewModel.maxNumberOfPlayers.toStringAsFixed(0),
+                collectionsViewModel.maxNumberOfPlayers.toStringAsFixed(0),
                 style: const TextStyle(fontSize: Dimensions.smallFontSize),
               ),
             ),
