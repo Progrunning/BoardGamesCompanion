@@ -103,7 +103,7 @@ app.UseStatusCodePages(async statusCodeContext =>
 app.MapHealthChecks("api/search/health");
 
 app.MapGet("api/search", [Authorize] ([FromQuery] string query, ISearchService searchService) => searchService.Search(query, CancellationToken.None))
-    .WithOpenApi();
+   .WithOpenApi();
 
 app.MapGet("api/error", (IErrorService errorService, HttpContext context) =>
 {

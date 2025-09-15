@@ -20,11 +20,7 @@ var host = new HostBuilder()
 #if DEBUG
         configBuilder.AddJsonFile("local.settings.json", optional: true, reloadOnChange: false);
 #endif
-    })
-    .ConfigureFunctionsWorkerDefaults(builder => { }, options =>
-    {
-        options.EnableUserCodeException = true;
-    })
+    })    
     .ConfigureServices(services =>
     {
         services.AddUpdateBoardGameCacheWorkerConfiguration();

@@ -13,7 +13,6 @@ namespace BGC.SearchApi.Services
     /// <inheritdoc />
     public class CacheService : ICacheService
     {
-
         private const string OperationTypePropertyName = "operationType";
 
         private const string AppOperationName = "add";
