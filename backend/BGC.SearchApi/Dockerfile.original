@@ -1,0 +1,15 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
+WORKDIR /source
+COPY BGC.SearchApi/*.csproj ./
+COPY BGC.Core/*.csproj ./BGC.Core/
+
+RUN dotnet restore
+
+COPY . ./
+RUN dotnet publish BGC.SearchApi/BGC.SearchApi.csproj --self-contained false -o /app
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "BGC.SearchApi.dll"]

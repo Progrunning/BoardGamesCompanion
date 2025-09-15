@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Search API": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "bgc.searchapi": "StartDebugging"
+      }
+    }
+  }
+}

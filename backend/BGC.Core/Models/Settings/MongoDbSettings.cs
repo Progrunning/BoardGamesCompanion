@@ -9,7 +9,7 @@ namespace BGC.Core.Models.Settings
         /// <summary>
         /// Gets connection string.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "MongoDb connection string missing from the app settings config")]
         public string ConnectionString { get; init; } = null!;
     }
 }

@@ -1,0 +1,6 @@
+services:
+  bgc.searchapi:
+    image: ${DOCKER_REGISTRY-}bgcsearchapi
+    build:
+      context: .
+      dockerfile: BGC.SearchApi/Dockerfile

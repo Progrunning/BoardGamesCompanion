@@ -1,24 +1,34 @@
 @hostname=localhost
-@port=7226
+@port=53427
+
+@ApiKey=must_match_with_whats_in_settings
+
+### root
+
+GET https://{{hostname}}:{{port}}/api/search?query=root
+X-Api-Key: {{ApiKey}}
+
+### Splendor
 
 GET https://{{hostname}}:{{port}}/api/search?query=splendor
-X-Api-Key: whatever
+X-Api-Key: {{ApiKey}}
 
-###
+### Heat
 
 GET https://{{hostname}}:{{port}}/api/search?query=heat
-X-Api-Key: whatever
+X-Api-Key: {{ApiKey}}
 
-###
+### Smallworld
 
 GET https://{{hostname}}:{{port}}/api/search?query=smallworld
-X-Api-Key: whatever
+X-Api-Key: {{ApiKey}}
 
-###
+### My Little Scythe
 
-GET https://{{hostname}}:{{port}}/api/search?query=My Little Scythe
+GET https://{{hostname}}:{{port}}/api/search?query=My%20Little%20Scythe
+X-Api-Key: {{ApiKey}}
 
-###
+### 
 
 GET https://bgc-search-service-dev-ca.graytree-d4bbc196.eastus.azurecontainerapps.io/api/search?query=scythe
 Ocp-Apim-Subscription-Key: <key>
