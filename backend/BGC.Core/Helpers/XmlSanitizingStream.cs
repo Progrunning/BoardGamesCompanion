@@ -72,7 +72,7 @@ namespace BGC.Core.Helpers
         /// </summary>
         public static bool IsLegalXmlChar(int character)
         {
-            return XmlSanitizingStream.IsLegalXmlChar("1.0", character);
+            return XmlSanitizingStream.IsLegalXmlChar("1.1", character);
         }
 
         public override int Read()
