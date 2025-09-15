@@ -30,5 +30,5 @@ X-Api-Key: {{ApiKey}}
 
 ### 
 
-GET https://bgc-shared-apim.azure-api.net/dev/api/search?query=wingspan
-Ocp-Apim-Subscription-Key: 0f79da9492614aa6a76829cdc122306c
+GET https://bgc-shared-apim.azure-api.net/dev/api/search?query=root
+Ocp-Apim-Subscription-Key: <subscription_key_get_from_APIM>
