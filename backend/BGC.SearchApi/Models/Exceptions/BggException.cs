@@ -2,7 +2,8 @@
 {
     public class BggException : Exception
     {
-        public BggException(int httpStatus, string message) : base(message)
+        public BggException(int httpStatus, string message)
+            : base(message)
         {
             HttpStatus = httpStatus;
         }

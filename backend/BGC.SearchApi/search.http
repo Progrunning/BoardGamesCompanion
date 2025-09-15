@@ -1,5 +1,5 @@
 @hostname=localhost
-@port=53427
+@port=55383
 
 @ApiKey=must_match_with_whats_in_settings
 
@@ -30,5 +30,5 @@ X-Api-Key: {{ApiKey}}
 
 ### 
 
-GET https://bgc-search-service-dev-ca.graytree-d4bbc196.eastus.azurecontainerapps.io/api/search?query=scythe
-Ocp-Apim-Subscription-Key: <key>
+GET https://bgc-shared-apim.azure-api.net/dev/api/search?query=wingspan
+Ocp-Apim-Subscription-Key: 0f79da9492614aa6a76829cdc122306c
