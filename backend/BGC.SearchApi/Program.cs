@@ -28,6 +28,9 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .WriteTo.Console()
+#if !DEBUG
+    .WriteTo.ApplicationInsights(builder.Configuration["ApplicationInsights:ConnectionString"], TelemetryConverter.Traces)
+#endif
     .CreateLogger();
 
 builder.Host.UseSerilog();
@@ -41,7 +44,6 @@ if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsInteg
             new DefaultAzureCredential());
 #endif
 }
-
 
 var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));
 builder.Services.AddOptions<CacheSettings>()
