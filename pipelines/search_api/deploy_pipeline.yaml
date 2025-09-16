@@ -83,7 +83,7 @@ stages:
                        -n $(azureContainerAppNameDev) \
                        -g $(resourceGroupNameDev) \
                        --server registry.hub.docker.com \
-                       --username  $(registryUsername) \
+                       --username $(registryUsername) \
                        --password $(registryPassword)
                       az containerapp update \
                        -n $(azureContainerAppNameDev) \
@@ -126,16 +126,16 @@ stages:
                        -n $(azureContainerAppNameProd) \
                        -g $(resourceGroupNameProd) \
                        --server registry.hub.docker.com \
-                       --username  $(registryUsername) \
+                       --username $(registryUsername) \
                        --password $(registryPassword)
-                      az containerapp update \ 
-                      -n $(azureContainerAppNameProd) \
-                      -g $(resourceGroupNameProd) \
-                      --image $(registryName)/$(registryRepositoryName):$(deployTagId) \
-                      --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection \ 
-                                     AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key \
-                                     ApplicationInsights__ConnectionString=secretref:appi-con-string \
-                                     KeyVaultName=$(keyVaultName)
+                      az containerapp update \
+                       -n $(azureContainerAppNameProd) \
+                       -g $(resourceGroupNameProd) \
+                       --image $(registryName)/$(registryRepositoryName):$(deployTagId) \
+                       --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection \
+                                      AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key \
+                                      ApplicationInsights__ConnectionString=secretref:appi-con-string \
+                                      KeyVaultName=$(keyVaultName)
 
                 - task: git-tag-on-release-task@9
                   displayName: Tag Artifacts
