@@ -91,6 +91,9 @@ builder.Services.AddTransient<IDateTimeService, DateTimeService>();
 builder.Services.AddHttpClient<IBggService, BggService>(client =>
 {
     client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseXmlApiUrl);
+}).ConfigurePrimaryHttpMessageHandler(config => new HttpClientHandler
+{
+    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
 });
 
 var app = builder.Build();
