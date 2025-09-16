@@ -21,7 +21,16 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
 {
@@ -32,6 +41,7 @@ if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsInteg
             new DefaultAzureCredential());
 #endif
 }
+
 
 var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));
 builder.Services.AddOptions<CacheSettings>()
