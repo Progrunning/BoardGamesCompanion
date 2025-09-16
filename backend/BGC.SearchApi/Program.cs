@@ -21,7 +21,19 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.Console()
+#if !DEBUG
+    .WriteTo.ApplicationInsights(builder.Configuration["ApplicationInsights:ConnectionString"], TelemetryConverter.Traces)
+#endif
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
 {
@@ -79,6 +91,9 @@ builder.Services.AddTransient<IDateTimeService, DateTimeService>();
 builder.Services.AddHttpClient<IBggService, BggService>(client =>
 {
     client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseXmlApiUrl);
+}).ConfigurePrimaryHttpMessageHandler(config => new HttpClientHandler
+{
+    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
 });
 
 var app = builder.Build();

@@ -79,8 +79,20 @@ stages:
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
-                      az containerapp registry set -n $(azureContainerAppNameDev) -g $(resourceGroupNameDev) --server registry.hub.docker.com --username  $(registryUsername) --password $(registryPassword)
-                      az containerapp update -n $(azureContainerAppNameDev) -g $(resourceGroupNameDev) --image $(registryName)/$(registryRepositoryName):$(deployTagId) --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
+                      az containerapp registry set \
+                       -n $(azureContainerAppNameDev) \
+                       -g $(resourceGroupNameDev) \
+                       --server registry.hub.docker.com \
+                       --username  $(registryUsername) \
+                       --password $(registryPassword)
+                      az containerapp update \
+                       -n $(azureContainerAppNameDev) \
+                       -g $(resourceGroupNameDev) \
+                       --image $(registryName)/$(registryRepositoryName):$(deployTagId) \
+                       --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection \
+                                      AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key \
+                                      ApplicationInsights__ConnectionString=secretref:appi-con-string \
+                                      KeyVaultName=$(keyVaultName)
 
   - stage: PROD
     dependsOn: DEV
@@ -110,8 +122,20 @@ stages:
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
-                      az containerapp registry set -n $(azureContainerAppNameProd) -g $(resourceGroupNameProd) --server registry.hub.docker.com --username  $(registryUsername) --password $(registryPassword)
-                      az containerapp update -n $(azureContainerAppNameProd) -g $(resourceGroupNameProd) --image $(registryName)/$(registryRepositoryName):$(deployTagId) --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key KeyVaultName=$(keyVaultName)
+                      az containerapp registry set \
+                       -n $(azureContainerAppNameProd) \
+                       -g $(resourceGroupNameProd) \
+                       --server registry.hub.docker.com \
+                       --username  $(registryUsername) \
+                       --password $(registryPassword)
+                      az containerapp update \ 
+                      -n $(azureContainerAppNameProd) \
+                      -g $(resourceGroupNameProd) \
+                      --image $(registryName)/$(registryRepositoryName):$(deployTagId) \
+                      --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection \ 
+                                     AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key \
+                                     ApplicationInsights__ConnectionString=secretref:appi-con-string \
+                                     KeyVaultName=$(keyVaultName)
 
                 - task: git-tag-on-release-task@9
                   displayName: Tag Artifacts

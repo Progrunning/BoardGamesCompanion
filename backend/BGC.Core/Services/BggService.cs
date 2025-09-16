@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 
-using BGC.Core.Helpers;
 using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Models.Exceptions;
 using BGC.Core.Services.Interfaces;
@@ -39,11 +38,19 @@ public class BggService : IBggService
         }
 
         var requestUri = new Uri($"{_httpClient.BaseAddress}/search?query={query}&type={SearchResultBoardGameType}");
-        using var searchResponseStream = await _httpClient.GetStreamAsync(requestUri);
-        using var xmlSanitizer = new XmlSanitizingStream(searchResponseStream);
+        using var searchResponseStream = await _httpClient.GetStreamAsync(requestUri, cancellationToken);
+
+        using var searchResponseMemoryStream = new MemoryStream();
+        await searchResponseStream.CopyToAsync(searchResponseMemoryStream, cancellationToken);
+
+        using var reader = new StreamReader(searchResponseMemoryStream);
+        var searchResponseString = await reader.ReadToEndAsync();
+        _logger.LogDebug(searchResponseString);
+
+        searchResponseMemoryStream.Position = 0;
 
         var serializer = new XmlSerializer(typeof(BoardGameSearchResponseDto));
-        var boardGamesDetailsResponse = (BoardGameSearchResponseDto?)serializer.Deserialize(xmlSanitizer);
+        var boardGamesDetailsResponse = (BoardGameSearchResponseDto?)serializer.Deserialize(searchResponseMemoryStream);
         if (boardGamesDetailsResponse is null)
         {
             throw new XmlParsingException($"Faield to parse search results for query {query}");

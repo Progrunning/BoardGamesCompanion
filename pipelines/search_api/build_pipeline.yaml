@@ -29,9 +29,9 @@ jobs:
     steps:
       - task: UseDotNet@2
         condition: eq('${{ parameters.checkTestCoverage }}', true)
-        displayName: "Install .NET 7.x SDK"
+        displayName: "Install .NET 9.x SDK"
         inputs:
-          version: 7.x
+          version: 9.x
 
       - task: DotNetCoreCLI@2
         condition: eq('${{ parameters.checkTestCoverage }}', true)
