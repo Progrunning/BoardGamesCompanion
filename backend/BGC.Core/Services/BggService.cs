@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 
-using BGC.Core.Helpers;
 using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Models.Exceptions;
 using BGC.Core.Services.Interfaces;
