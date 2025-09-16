@@ -49,10 +49,9 @@ public class BggService : IBggService
         _logger.LogDebug(searchResponseString);
 
         searchResponseMemoryStream.Position = 0;
-        using var xmlSanitizer = new XmlSanitizingStream(searchResponseMemoryStream);
 
         var serializer = new XmlSerializer(typeof(BoardGameSearchResponseDto));
-        var boardGamesDetailsResponse = (BoardGameSearchResponseDto?)serializer.Deserialize(xmlSanitizer);
+        var boardGamesDetailsResponse = (BoardGameSearchResponseDto?)serializer.Deserialize(searchResponseMemoryStream);
         if (boardGamesDetailsResponse is null)
         {
             throw new XmlParsingException($"Faield to parse search results for query {query}");
