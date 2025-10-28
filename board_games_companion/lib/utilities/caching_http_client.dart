@@ -12,6 +12,7 @@ class CachingHttpClient extends BaseHttpClient {
     required this.cacheManger,
     required super.innerHttpClient,
     required this.cacheDuration,
+    super.headers = const {},
   });
 
   final CacheManager cacheManger;
