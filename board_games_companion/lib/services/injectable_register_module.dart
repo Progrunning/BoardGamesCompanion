@@ -37,7 +37,7 @@ abstract class RegisterModule {
   @singleton
   BoardGamesGeekService get boardGameGeekService {
     final headers = <String, String>{
-      'Authorization': 'Bearer ${environmentService.boardGamesGeekBearerToken}',
+      'Authorization': 'Bearer ${environmentService.boardGamesGeekAuthToken}',
     };
     return BoardGamesGeekService(
       gameDetailsCachingHttpClient: CachingHttpClient(
