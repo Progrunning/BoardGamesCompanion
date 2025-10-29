@@ -72,6 +72,7 @@ builder.Services.Configure<TelemetryConfiguration>(config =>
 #endif
 });
 
+builder.Services.AddMemoryCache();
 builder.Services.AddAuthentication()
                 .AddScheme<ApiKeyAuthenticationSettings, ApiKeyAuthenticationHandler>(Constants.AuthenticationSchemes.ApiKey, null);
 builder.Services.AddAuthorization();
@@ -94,10 +95,10 @@ builder.Services.AddTransient<IDateTimeService, DateTimeService>();
 
 builder.Services.AddHttpClient<IBggService, BggService>((services, client) =>
 {
-    var mongoDbSettings = services.GetService<IOptions<BggSettings>>();
+    var bggSettings = services.GetService<IOptions<BggSettings>>();
 
     client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseXmlApiUrl);
-    client.DefaultRequestHeaders.Add("Authorization", "Bearer ");
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bggSettings!.Value.ApiKey}");
 }).ConfigurePrimaryHttpMessageHandler(config => new HttpClientHandler
 {
     AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,

@@ -1,5 +1,12 @@
-﻿using BGC.Core.Services;
+﻿using AutoFixture;
+
+using BGC.Core.Models.Dtos.BoardGameGeek;
+using BGC.Core.Services;
 using BGC.Tests.Core.Helpers;
+
+using Moq.Protected;
+
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BGC.Core.UnitTests.Services
 {
@@ -10,7 +17,10 @@ namespace BGC.Core.UnitTests.Services
         private readonly Uri mockBaseAddress = new Uri("https://whatever");
 
         private readonly Mock<ILogger<BggService>> _mockLogger;
+        private readonly Mock<IMemoryCache> _mockMemoryCache;
         private readonly Mock<HttpMessageHandler> _mockMessageHandler;
+
+        private readonly Fixture fixture = new Fixture();
 
         private BggService bggService;
 
@@ -18,11 +28,15 @@ namespace BGC.Core.UnitTests.Services
         {
             _mockLogger = new Mock<ILogger<BggService>>();
             _mockMessageHandler = new Mock<HttpMessageHandler>();
+            _mockMemoryCache = new Mock<IMemoryCache>();
 
-            bggService = new BggService(_mockLogger.Object, new HttpClient(_mockMessageHandler.Object)
-            {
-                BaseAddress = mockBaseAddress,
-            });
+            bggService = new BggService(
+                _mockLogger.Object,
+                new HttpClient(_mockMessageHandler.Object)
+                {
+                    BaseAddress = mockBaseAddress,
+                },
+                _mockMemoryCache.Object);
         }
 
         [Fact]
@@ -42,11 +56,28 @@ namespace BGC.Core.UnitTests.Services
             var searchQuery = "Scythe";
             var httpClient = HttpClientHelpers.CreateExceptionThrowingClient(new Exception("Boom!"));
             httpClient.BaseAddress = mockBaseAddress;
-            bggService = new BggService(_mockLogger.Object, httpClient);
+            bggService = new BggService(_mockLogger.Object, httpClient, _mockMemoryCache.Object);
 
             var searchFunc = async () => await bggService.Search(searchQuery, CancellationToken.None);
 
             await searchFunc.Should().ThrowAsync<Exception>();
+        }
+
+        [Fact]
+        public async Task Search_CachedSearchResults_ReturnsCachedResponse()
+        {
+            var searchQuery = "Scythe";
+            var cachedResponse = fixture.Create<BoardGameSearchResponseDto>();
+            object? cachedResponseObj = cachedResponse;
+
+            _mockMemoryCache
+                .Setup(mc => mc.TryGetValue(It.IsAny<object>(), out cachedResponseObj))
+                .Returns(true);
+
+            var searchResponse = await bggService.Search(searchQuery, CancellationToken.None);
+
+            searchResponse.Should().Be(cachedResponse);
+            _mockMessageHandler.Protected().Verify("SendAsync", Times.Never(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
         }
 
         // TODO Write tests for the parsing logic (grab BGG response and use as a sample)
@@ -65,12 +96,14 @@ namespace BGC.Core.UnitTests.Services
             var boardGameId = 169786;
             var httpClient = HttpClientHelpers.CreateClientReturningContent(new StringContent(MockBoardGameDetails));
             httpClient.BaseAddress = mockBaseAddress;
-            bggService = new BggService(_mockLogger.Object, httpClient);
+            bggService = new BggService(_mockLogger.Object, httpClient, _mockMemoryCache.Object);
 
             var boardGameDetails = await bggService.GetDetails(boardGameId.ToString(), CancellationToken.None);
 
             boardGameDetails.Should().NotBeNull();
             boardGameDetails.Id.Should().Be(boardGameId);
         }
+
+
     }
 }

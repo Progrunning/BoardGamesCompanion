@@ -2,7 +2,6 @@ using System.Net;
 
 using BGC.Core;
 using BGC.Core.Models.Domain;
-using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Models.Dtos;
@@ -62,6 +61,15 @@ public class SearchService : ISearchService
 #pragma warning restore CS4014 // Intentionally not awaiting this call, as it should be done in the background
 
             return boardGameSummaries;
+        }
+        catch (HttpRequestException requestException)
+        {
+            if (requestException.StatusCode == HttpStatusCode.TooManyRequests)
+            {
+                _logger.LogWarning($"Search query {query} failed due to rate limiting");
+            }
+
+            throw new BggException((int)(requestException.StatusCode ?? HttpStatusCode.InternalServerError), "Search failed");
         }
         catch (Exception ex)
         {

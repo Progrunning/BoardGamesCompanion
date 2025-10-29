@@ -10,6 +10,6 @@ namespace BGC.Core.Models.Settings
         /// Gets authorization token.
         /// </summary>
         [Required(ErrorMessage = "BGG authorization token is required to call XML APIs")]
-        public string AuthToken { get; init; } = null!;
+        public string ApiKey { get; init; } = null!;        
     }
 }

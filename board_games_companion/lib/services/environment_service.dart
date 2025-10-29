@@ -3,5 +3,5 @@ class EnvironmentService {
       const String.fromEnvironment('searchBoardGamesApiBaseUrl');
   String get searchBoardGamesApiSubscriptionKey =>
       const String.fromEnvironment('searchBoardGamesApiSubscriptionKey');
-  String get boardGamesGeekAuthToken => const String.fromEnvironment('boardGamesGeekAuthToken');
+  String get bggApiKey => const String.fromEnvironment('bggApiKey');
 }
