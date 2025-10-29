@@ -58,6 +58,10 @@ builder.Services.AddOptions<ApiKeyAuthenticationSettings>()
                 .Bind(appSettingsConfigurationSection.GetSection(nameof(ApiKeyAuthenticationSettings)))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
+builder.Services.AddOptions<BggSettings>()
+                .Bind(appSettingsConfigurationSection.GetSection(nameof(BggSettings)))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
 builder.Services.AddHealthChecks();
 builder.Services.AddApplicationInsightsTelemetry();
@@ -68,6 +72,7 @@ builder.Services.Configure<TelemetryConfiguration>(config =>
 #endif
 });
 
+builder.Services.AddMemoryCache();
 builder.Services.AddAuthentication()
                 .AddScheme<ApiKeyAuthenticationSettings, ApiKeyAuthenticationHandler>(Constants.AuthenticationSchemes.ApiKey, null);
 builder.Services.AddAuthorization();
@@ -88,9 +93,12 @@ builder.Services.AddTransient<IBggService, BggService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
 builder.Services.AddTransient<IDateTimeService, DateTimeService>();
 
-builder.Services.AddHttpClient<IBggService, BggService>(client =>
+builder.Services.AddHttpClient<IBggService, BggService>((services, client) =>
 {
+    var bggSettings = services.GetService<IOptions<BggSettings>>();
+
     client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseXmlApiUrl);
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bggSettings!.Value.ApiKey}");
 }).ConfigurePrimaryHttpMessageHandler(config => new HttpClientHandler
 {
     AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
