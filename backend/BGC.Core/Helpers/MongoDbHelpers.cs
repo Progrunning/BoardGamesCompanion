@@ -1,8 +1,6 @@
-﻿using BGC.Core;
+﻿using MongoDB.Bson.Serialization.Conventions;
 
-using MongoDB.Bson.Serialization.Conventions;
-
-namespace BGC.CacheCore.Helpers
+namespace BGC.Core.Helpers
 {
     public static class MongoDbHelpers
     {

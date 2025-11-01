@@ -1,5 +1,5 @@
-@hostname=localhost
-@port=52183
+﻿@hostname=localhost
+@port=58036
 
 @ApiKey=must_match_with_whats_in_settings
 
@@ -13,7 +13,7 @@ X-Api-Key: {{ApiKey}}
 GET https://{{hostname}}:{{port}}/api/search?query=splendor
 X-Api-Key: {{ApiKey}}
 
-### Heat
+### Heatś
 
 GET https://{{hostname}}:{{port}}/api/search?query=heat
 X-Api-Key: {{ApiKey}}

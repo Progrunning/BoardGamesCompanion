@@ -51,7 +51,7 @@ public class Worker : BackgroundService
         await _updateBoardGameCache.ProcessUpdateCacheMessage(args.Message);
 
         // Slow down the processing of messages to avoid hitting rate limit (429) from BGG API calls
-        await Task.Delay(5_000);
+        await Task.Delay(Random.Shared.Next(5_000, 30_000));
     }
 
     private Task ProcessError(ProcessErrorEventArgs args)
