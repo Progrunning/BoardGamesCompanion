@@ -1,6 +1,6 @@
-using BGC.CacheCore.Helpers;
 using BGC.CacheCore.Interfaces;
 using BGC.Core.Extensions;
+using BGC.Core.Helpers;
 using BGC.Core.Models.Settings;
 using BGC.UpdateBoardGameCacheWorker;
 using BGC.UpdateBoardGameCacheWorker.Services;
@@ -11,8 +11,8 @@ var host = Host.CreateDefaultBuilder(args)
         configBuilder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false);
     })
     .ConfigureServices(services =>
-    {        
-        services.AddUpdateBoardGameCacheWorkerConfiguration();
+    {
+        services.AddCoreServices();
         services.AddOptions<CacheServiceBusSettings>()
                 .Configure<IConfiguration>((settings, configuration) =>
                 {

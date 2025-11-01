@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BGC.Core.Extensions;
 using Microsoft.Extensions.Configuration;
-using BGC.CacheCore.Helpers;
+using BGC.Core.Helpers;
 
 // TODO Use Azure App Configuration https://learn.microsoft.com/en-us/azure/azure-app-configuration/enable-dynamic-configuration-azure-functions-csharp?tabs=isolated-process
 
@@ -20,10 +20,10 @@ var host = new HostBuilder()
 #if DEBUG
         configBuilder.AddJsonFile("local.settings.json", optional: true, reloadOnChange: false);
 #endif
-    })    
+    })
     .ConfigureServices(services =>
     {
-        services.AddUpdateBoardGameCacheWorkerConfiguration();
+        services.AddCoreServices();
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
     })

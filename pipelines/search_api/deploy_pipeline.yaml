@@ -133,9 +133,9 @@ stages:
                        -n $(azureContainerAppNameProd) \
                        -g $(resourceGroupNameProd) \
                        --image $(registryName)/$(registryRepositoryName):$(deployTagId) \
-                       --set-env-vars AppSettings__MongoDbSettings__ConnectionString=secretref:mongodb-connection \
-                                      AppSettings__ApiKeyAuthenticationSettings__ApiKey=secretref:api-key \
-                                      AppSettings__BggSettings__ApiKey=secretref:bgg-api-key \
+                       --set-env-vars MongoDbSettings__ConnectionString=secretref:mongodb-connection \
+                                      ApiKeyAuthenticationSettings__ApiKey=secretref:api-key \
+                                      BggSettings__ApiKey=secretref:bgg-api-key \
                                       ApplicationInsights__ConnectionString=secretref:appi-con-string \
                                       KeyVaultName=$(keyVaultName)
 

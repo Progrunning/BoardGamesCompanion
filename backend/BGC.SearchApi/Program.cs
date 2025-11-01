@@ -1,8 +1,8 @@
 using Azure.Identity;
 
+using BGC.Core.Extensions;
+using BGC.Core.Helpers;
 using BGC.Core.Models.Settings;
-using BGC.Core.Repositories;
-using BGC.Core.Repositories.Interfaces;
 using BGC.Core.Services;
 using BGC.Core.Services.Interfaces;
 using BGC.SearchApi.Common;
@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
 using Serilog;
@@ -45,21 +44,12 @@ if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsInteg
 #endif
 }
 
-var appSettingsConfigurationSection = builder.Configuration.GetSection(nameof(AppSettings));
 builder.Services.AddOptions<CacheSettings>()
-                .Bind(appSettingsConfigurationSection.GetSection(nameof(CacheSettings)))
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
-builder.Services.AddOptions<MongoDbSettings>()
-                .Bind(appSettingsConfigurationSection.GetSection(nameof(MongoDbSettings)))
+                .Bind(builder.Configuration.GetSection(nameof(CacheSettings)))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 builder.Services.AddOptions<ApiKeyAuthenticationSettings>()
-                .Bind(appSettingsConfigurationSection.GetSection(nameof(ApiKeyAuthenticationSettings)))
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
-builder.Services.AddOptions<BggSettings>()
-                .Bind(appSettingsConfigurationSection.GetSection(nameof(BggSettings)))
+                .Bind(builder.Configuration.GetSection(nameof(ApiKeyAuthenticationSettings)))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
 
@@ -72,7 +62,6 @@ builder.Services.Configure<TelemetryConfiguration>(config =>
 #endif
 });
 
-builder.Services.AddMemoryCache();
 builder.Services.AddAuthentication()
                 .AddScheme<ApiKeyAuthenticationSettings, ApiKeyAuthenticationHandler>(Constants.AuthenticationSchemes.ApiKey, null);
 builder.Services.AddAuthorization();
@@ -86,23 +75,11 @@ builder.Services.AddTransient<IMongoClient>((services) =>
 
     return new MongoClient(mongoDbSettings!.Value.ConnectionString);
 });
+builder.Services.AddCoreServices();
 builder.Services.AddSingleton<ICacheService, CacheService>();
-builder.Services.AddTransient<IBoardGamesRepository, BoardGamesRepository>();
 builder.Services.AddTransient<IErrorService, ErrorService>();
-builder.Services.AddTransient<IBggService, BggService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
 builder.Services.AddTransient<IDateTimeService, DateTimeService>();
-
-builder.Services.AddHttpClient<IBggService, BggService>((services, client) =>
-{
-    var bggSettings = services.GetService<IOptions<BggSettings>>();
-
-    client.BaseAddress = new Uri(BGC.Core.Constants.BggApi.BaseXmlApiUrl);
-    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bggSettings!.Value.ApiKey}");
-}).ConfigurePrimaryHttpMessageHandler(config => new HttpClientHandler
-{
-    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
-});
 
 var app = builder.Build();
 
@@ -134,11 +111,7 @@ app.MapGet("api/error", (IErrorService errorService, HttpContext context) =>
     return errorService.HandleError(exceptionHandlerFeature.Error);
 }).ExcludeFromDescription();
 
-var mongoDbConventionPack = new ConventionPack
-{
-    new CamelCaseElementNameConvention(),
-};
-ConventionRegistry.Register(BGC.Core.Constants.MongoDb.ConventionNames.CamelCase, mongoDbConventionPack, type => true);
+MongoDbHelpers.RegisterConventions();
 
 app.Run();
 

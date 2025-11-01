@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
 WORKDIR /source
 COPY cache/BGC.UpdateBoardGameCacheWorker/*.csproj ./cache/BGC.UpdateBoardGameCacheWorker/
@@ -12,7 +12,7 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish cache/BGC.UpdateBoardGameCacheWorker/BGC.UpdateBoardGameCacheWorker.csproj --self-contained false -o /app
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app .
 ENTRYPOINT ["dotnet", "BGC.UpdateBoardGameCacheWorker.dll"]

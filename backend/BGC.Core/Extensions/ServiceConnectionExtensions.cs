@@ -16,7 +16,7 @@ namespace BGC.Core.Extensions
 {
     public static class ServiceConnectionExtensions
     {
-        public static void AddUpdateBoardGameCacheWorkerConfiguration(this IServiceCollection services)
+        public static void AddCoreServices(this IServiceCollection services)
         {
             services.AddOptions<MongoDbSettings>()
                 .Configure<IConfiguration>((settings, configuration) =>
@@ -26,13 +26,29 @@ namespace BGC.Core.Extensions
                 })
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
+            services.AddOptions<BggSettings>()
+                .Configure<IConfiguration>((settings, configuration) =>
+                {
+                    configuration.GetSection(nameof(BggSettings))
+                                 .Bind(settings);
+                })
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
+            services.AddMemoryCache();
             services.AddTransient<IBggService, BggService>();
-            services.AddHttpClient<IBggService, BggService>(client =>
+            services.AddHttpClient<IBggService, BggService>((services, client) =>
             {
+                var bggSettings = services.GetService<IOptions<BggSettings>>();
+
                 client.BaseAddress = new Uri(Constants.BggApi.BaseXmlApiUrl);
                 client.Timeout = Constants.BggApi.Timeout;
-            }).AddPolicyHandler(GetRetryPolicy());
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {bggSettings!.Value.ApiKey}");
+            }).AddPolicyHandler(GetRetryPolicy())
+              .ConfigurePrimaryHttpMessageHandler(config => new HttpClientHandler
+              {
+                  AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate,
+              });
             services.AddHttpClient<IBoardGameOracleService, BoardGameOracelService>(client =>
             {
                 client.BaseAddress = new Uri(Constants.BoardGameOracleApi.BaseUrl);
