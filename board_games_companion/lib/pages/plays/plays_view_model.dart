@@ -199,8 +199,6 @@ abstract class _PlaysViewModel with Store {
       case PlaysTab.selectGame:
         visualState = const PlaysPageVisualState.selectGame();
         break;
-
-      default:
     }
   }
 
