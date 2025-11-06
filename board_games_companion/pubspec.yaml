@@ -49,9 +49,10 @@ dependencies:
   http: ^1.1.0
   html_unescape: ^2.0.0
   in_app_review: ^2.0.9
-  injectable: ^2.1.0
+  injectable: ^2.5.2
   intl: ^0.20.2
   image_picker: ^1.2.0
+  json_annotation: ^4.9.0
   logger: ^2.0.2+1
   mobx: ^2.3.3+2
   mocktail: ^1.0.1
