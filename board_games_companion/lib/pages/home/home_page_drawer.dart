@@ -152,7 +152,9 @@ class HomePageDrawer extends StatelessWidget {
 
   Future<void> _shareStoreLink() async {
     final websiteUrl = Uri.https('progrunning.net', 'board-games-companion');
-    await Share.shareUri(websiteUrl);
+    await SharePlus.instance.share(
+      ShareParams(uri: websiteUrl),
+    );
   }
 }
 

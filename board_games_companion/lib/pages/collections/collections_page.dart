@@ -143,11 +143,13 @@ class CollectionsPageState extends State<CollectionsPage>
 
   Future<void> _shareScreenshot(BuildContext context, File screenshotFile) async {
     final messenger = ScaffoldMessenger.of(context);
-    final shareResult = await Share.shareXFiles(
-      [
-        XFile(screenshotFile.path, mimeType: 'image/png'),
-      ],
-      sharePositionOrigin: context.iPadsShareRectangle,
+    final shareResult = await SharePlus.instance.share(
+      ShareParams(
+        files: [
+          XFile(screenshotFile.path, mimeType: 'image/png'),
+        ],
+        sharePositionOrigin: context.iPadsShareRectangle,
+      ),
     );
 
     Fimber.i('Screenshot sharing finished with status ${shareResult.status}');
