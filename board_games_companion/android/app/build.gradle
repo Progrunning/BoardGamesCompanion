@@ -31,6 +31,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    namespace = "com.progrunning.boardgamescompanion"
     compileSdkVersion flutter.compileSdkVersion
 
     sourceSets {
@@ -40,6 +41,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11         
         targetCompatibility JavaVersion.VERSION_11         
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     defaultConfig {
@@ -81,6 +86,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '6.8.3'
-}
+//task wrapper(type: Wrapper) {
+//    gradleVersion = '6.8.3'
+//}
