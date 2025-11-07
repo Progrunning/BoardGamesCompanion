@@ -148,23 +148,38 @@ class _CommunitySection extends StatelessWidget {
 class _ContentAndDataSection extends StatelessWidget {
   const _ContentAndDataSection();
 
+  static const String bggLogUri = 'assets/bgg-logo.png';
+
   @override
   Widget build(BuildContext context) {
-    return const SliverList(
+    return SliverList(
       delegate: SliverChildListDelegate.fixed(
         [
-          SectionText(text: AppText.aboutPageContentAndDataBggXmlApiTitle),
-          SectionText(text: AppText.aboutPageContentAndDataBggXmlApiSubtitle),
-          DetailsItem(
-              title: 'BGG', subtitle: 'boardgamegeek.com', uri: Constants.boardGameGeekBaseApiUrl),
-          DetailsItem(
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => LauncherHelper.launchUri(
+                context,
+                Constants.boardGameGeekBaseApiUrl,
+                launchMode: LaunchMode.externalApplication,
+              ),
+              child: Image.asset(
+                bggLogUri,
+                height: Dimensions.detailsItemHeight,
+                alignment: Alignment.topLeft,
+              ),
+            ),
+          ),
+          const SectionText(text: AppText.aboutPageContentAndDataBggXmlApiTitle),
+          const SectionText(text: AppText.aboutPageContentAndDataBggXmlApiSubtitle),
+          const DetailsItem(
               title: 'XML API',
               subtitle: 'boardgamegeek.com/wiki/page/BGG_XML_API2',
               uri: 'https://boardgamegeek.com/wiki/page/BGG_XML_API2'),
-          DetailsItem(
-              title: 'Terms of Service',
-              subtitle: 'boardgamegeek.com/terms',
-              uri: 'https://www.boardgamegeek.com/terms'),
+          const DetailsItem(
+              title: 'Using XML API',
+              subtitle: 'boardgamegeek.com/using_the_xml_api',
+              uri: 'https://boardgamegeek.com/using_the_xml_api'),
         ],
       ),
     );
