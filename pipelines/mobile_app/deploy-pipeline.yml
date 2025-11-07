@@ -96,7 +96,7 @@ stages:
               projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
               buildName: "$(appVersion)"
-              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey)
+              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey) bggApiKey=$(bggApiKey)
 
           - task: DeleteFiles@1
             displayName: Deleting key.properties file
@@ -192,7 +192,7 @@ stages:
               projectDirectory: "$(Build.SourcesDirectory)/$(appDirectoryName)"
               buildNumber: "$(Build.BuildID)"
               buildName: "$(appVersion)"
-              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey)
+              dartDefineMulti: searchBoardGamesApiBaseUrl=$(searchApiBaseUrl) searchBoardGamesApiSubscriptionKey=$(searchApiSubscriptionKey) bggApiKey=$(bggApiKey)
 
           - task: Xcode@5
             inputs:
