@@ -233,6 +233,13 @@ class AppTheme {
           ),
       appBarTheme: ThemeData.light().appBarTheme.copyWith(
             backgroundColor: AppColors.primaryColor,
+            // foregroundColor: Colors.black,
+          ),
+      tabBarTheme: ThemeData.light().tabBarTheme.copyWith(
+            dividerHeight: 0,
+            indicatorColor: AppColors.accentColor,
+            indicatorSize: TabBarIndicatorSize.label,
+            tabAlignment: TabAlignment.fill,
           ),
     );
   }

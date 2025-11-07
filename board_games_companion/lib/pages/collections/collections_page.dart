@@ -343,7 +343,6 @@ class _AppBarState extends State<_AppBar> {
             return TabBar(
               onTap: (int index) => widget.viewModel.selectedTab = index.toCollectionsTab(),
               controller: widget.topTabController,
-              tabAlignment: TabAlignment.fill,
               tabs: <Widget>[
                 AppBarBottomTab(
                   'Owned',
@@ -361,7 +360,6 @@ class _AppBarState extends State<_AppBar> {
                   isSelected: widget.viewModel.selectedTab == GamesTab.wishlist,
                 ),
               ],
-              indicatorColor: AppColors.accentColor,
             );
           }),
         ),

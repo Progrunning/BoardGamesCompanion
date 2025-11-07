@@ -234,40 +234,38 @@ class _StatisticsTab extends StatelessWidget {
   final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
 
   @override
-  Widget build(BuildContext context) {
-    return visualState.when(
-      empty: () => const _NoPlaysStatsSliver(),
-      init: () => const _LoadingPlaysStatsSliver(),
-      loading: () => const _LoadingPlaysStatsSliver(),
-      stats: (
-        TimePeriod timePeriod,
-        List<MostPlayedGame> mostPlayedGames,
-        int totalGamesLogged,
-        int totalGamesPlayed,
-        int totalPlaytimeInSeconds,
-        int totalDuelGamesLogged,
-        int totalMultiPlayerGamesLogged,
-      ) =>
-          _PlaysStats(
-        timePeriod: timePeriod,
-        mostPlayedGames: mostPlayedGames,
-        totalDuelGamesLogged: totalDuelGamesLogged,
-        totalGamesLogged: totalGamesLogged,
-        totalGamesPlayed: totalGamesPlayed,
-        totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
-        totalPlaytimeInSeconds: totalPlaytimeInSeconds,
-        onPresetTimePeriodChanged: onPresetTimePeriodChanged,
-        onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
-            onCustomTimePeriodChanged(timePeriodDateTimeRange),
-      ),
-      noStatsInPeriod: (TimePeriod timePeriod) => _NoStatsInPeriodSliver(
-        timePeriod: timePeriod,
-        onPresetTimePeriodChanged: onPresetTimePeriodChanged,
-        onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
-            onCustomTimePeriodChanged(timePeriodDateTimeRange),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => visualState.when(
+        empty: () => const _NoPlaysStatsSliver(),
+        init: () => const _LoadingPlaysStatsSliver(),
+        loading: () => const _LoadingPlaysStatsSliver(),
+        stats: (
+          TimePeriod timePeriod,
+          List<MostPlayedGame> mostPlayedGames,
+          int totalGamesLogged,
+          int totalGamesPlayed,
+          int totalPlaytimeInSeconds,
+          int totalDuelGamesLogged,
+          int totalMultiPlayerGamesLogged,
+        ) =>
+            _PlaysStats(
+          timePeriod: timePeriod,
+          mostPlayedGames: mostPlayedGames,
+          totalDuelGamesLogged: totalDuelGamesLogged,
+          totalGamesLogged: totalGamesLogged,
+          totalGamesPlayed: totalGamesPlayed,
+          totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
+          totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+          onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+          onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+              onCustomTimePeriodChanged(timePeriodDateTimeRange),
+        ),
+        noStatsInPeriod: (TimePeriod timePeriod) => _NoStatsInPeriodSliver(
+          timePeriod: timePeriod,
+          onPresetTimePeriodChanged: onPresetTimePeriodChanged,
+          onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+              onCustomTimePeriodChanged(timePeriodDateTimeRange),
+        ),
+      );
 }
 
 class _PlaysStats extends StatelessWidget {
@@ -294,69 +292,67 @@ class _PlaysStats extends StatelessWidget {
   final void Function(DateTimeRange timePeriodDateTimeRange) onCustomTimePeriodChanged;
 
   @override
-  Widget build(BuildContext context) {
-    return MultiSliver(
-      children: [
-        SliverPersistentHeader(
-          delegate: BgcSliverTitleHeaderDelegate.title(
-            primaryTitle: AppText.playsPageOverallStatsTimePeriodSectionTitle,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Observer(
-            builder: (_) => _TimePeriodSection(
-              timePeriod: timePeriod,
-              onPresetTimePeriodChanged: (presetTimePeriod) =>
-                  onPresetTimePeriodChanged(presetTimePeriod),
-              onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
-                  onCustomTimePeriodChanged(timePeriodDateTimeRange),
+  Widget build(BuildContext context) => MultiSliver(
+        children: [
+          SliverPersistentHeader(
+            delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.playsPageOverallStatsTimePeriodSectionTitle,
             ),
           ),
-        ),
-        SliverPersistentHeader(
-          delegate: BgcSliverTitleHeaderDelegate.title(
-            primaryTitle: AppText.playsPageOverallStatsMostPlayedGameSectionTitle,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Observer(
-            builder: (_) => _MostPlayedGamesSection(
-              mostPlayedGames: mostPlayedGames,
+          SliverToBoxAdapter(
+            child: Observer(
+              builder: (_) => _TimePeriodSection(
+                timePeriod: timePeriod,
+                onPresetTimePeriodChanged: (presetTimePeriod) =>
+                    onPresetTimePeriodChanged(presetTimePeriod),
+                onCustomTimePeriodChanged: (timePeriodDateTimeRange) =>
+                    onCustomTimePeriodChanged(timePeriodDateTimeRange),
+              ),
             ),
           ),
-        ),
-        SliverPersistentHeader(
-          delegate: BgcSliverTitleHeaderDelegate.title(
-            primaryTitle: AppText.playsPageOverallStatsTotalsSectionTitle,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Observer(
-            builder: (_) => _OverallStatsSection(
-              totalGamesLogged: totalGamesLogged,
-              totalGamesPlayed: totalGamesPlayed,
-              totalPlaytimeInSeconds: totalPlaytimeInSeconds,
-              totalDuelGamesLogged: totalDuelGamesLogged,
-              totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
+          SliverPersistentHeader(
+            delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.playsPageOverallStatsMostPlayedGameSectionTitle,
             ),
           ),
-        ),
-        // TODO Add games distribution section in later iterations
-        // SliverPersistentHeader(
-        //   delegate: BgcSliverTitleHeaderDelegate.title(
-        //     primaryTitle: AppText.playsPageOverallStatsGamesPlayedDistributionSctionTitle,
-        //   ),
-        // ),
-        // SliverToBoxAdapter(
-        //   child: Observer(
-        //     builder: (_) {
-        //       return const _GamesPlayedDistributionSection();
-        //     },
-        //   ),
-        // ),
-      ],
-    );
-  }
+          SliverToBoxAdapter(
+            child: Observer(
+              builder: (_) => _MostPlayedGamesSection(
+                mostPlayedGames: mostPlayedGames,
+              ),
+            ),
+          ),
+          SliverPersistentHeader(
+            delegate: BgcSliverTitleHeaderDelegate.title(
+              primaryTitle: AppText.playsPageOverallStatsTotalsSectionTitle,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Observer(
+              builder: (_) => _OverallStatsSection(
+                totalGamesLogged: totalGamesLogged,
+                totalGamesPlayed: totalGamesPlayed,
+                totalPlaytimeInSeconds: totalPlaytimeInSeconds,
+                totalDuelGamesLogged: totalDuelGamesLogged,
+                totalMultiPlayerGamesLogged: totalMultiPlayerGamesLogged,
+              ),
+            ),
+          ),
+          // TODO Add games distribution section in later iterations
+          // SliverPersistentHeader(
+          //   delegate: BgcSliverTitleHeaderDelegate.title(
+          //     primaryTitle: AppText.playsPageOverallStatsGamesPlayedDistributionSctionTitle,
+          //   ),
+          // ),
+          // SliverToBoxAdapter(
+          //   child: Observer(
+          //     builder: (_) {
+          //       return const _GamesPlayedDistributionSection();
+          //     },
+          //   ),
+          // ),
+        ],
+      );
 }
 
 class _NoStatsInPeriodSliver extends StatelessWidget {
@@ -1860,7 +1856,6 @@ class _AppBar extends StatelessWidget {
               isSelected: tabVisualState == const PlaysPageVisualState.selectGame(),
             ),
           ],
-          indicatorColor: AppColors.accentColor,
           onTap: (int tabIndex) => onTabSelected(tabIndex),
         ),
       ),
