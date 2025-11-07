@@ -493,6 +493,13 @@ class _TimePeriodSection extends StatelessWidget {
               isExpanded: true,
               items: [
                 DropdownMenuItem<PlayStatsPresetTimePeriod>(
+                  value: PlayStatsPresetTimePeriod.ThisWeek,
+                  child: Text(
+                    AppText.playsPageOverallStatsTimePeriodThisWeek,
+                    style: AppTheme.theme.textTheme.bodyLarge!,
+                  ),
+                ),
+                DropdownMenuItem<PlayStatsPresetTimePeriod>(
                   value: PlayStatsPresetTimePeriod.LastWeek,
                   child: Text(
                     AppText.playsPageOverallStatsTimePeriodLastWeek,
@@ -555,14 +562,20 @@ class _TimePeriodSection extends StatelessWidget {
   }
 
   Future<void> _pickCustomTimePeriodRange(BuildContext context) async {
+    final DateTime now = clock.now();
     final pickedDateRange = await showDateRangePicker(
       context: context,
-      firstDate: timePeriod.earliestPlaythrough,
-      lastDate: clock.now(),
+      firstDate: timePeriod.earliestPlaythrough.isAfter(timePeriod.from)
+          ? timePeriod.from
+          : timePeriod.earliestPlaythrough,
+      lastDate: now,
       // Specifying Great Britains locale to enforce Monday as the first day
       // as that's how the periods are being calculated (Monday - Sunday)
       locale: const Locale('en', 'GB'),
-      initialDateRange: DateTimeRange(start: timePeriod.from, end: timePeriod.to),
+      initialDateRange: DateTimeRange(
+        start: timePeriod.from,
+        end: timePeriod.to.isAfter(now) ? now : timePeriod.to,
+      ),
       currentDate: timePeriod.from,
       helpText: AppText.playsPageOverallStatsTimePeriodPickerHelpText,
       builder: (_, Widget? child) {

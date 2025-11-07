@@ -345,6 +345,7 @@ class AppText {
       'Select a broader or different time period to see your logged games statistics';
   static const playsPageOverallStatsTimePeriodFrom = 'From';
   static const playsPageOverallStatsTimePeriodTo = 'To';
+  static const playsPageOverallStatsTimePeriodThisWeek = 'This week';
   static const playsPageOverallStatsTimePeriodLastWeek = 'Last week';
   static const playsPageOverallStatsTimePeriodLastMonth = 'Last month';
   static const playsPageOverallStatsTimePeriodLastYear = 'Last year';

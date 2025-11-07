@@ -193,7 +193,7 @@ abstract class _PlaysViewModel with Store {
 
       case PlaysTab.statistics:
         visualState = const PlaysPageVisualState.statistics();
-        updatePlaysPresetTimePeriod(PlayStatsPresetTimePeriod.LastWeek);
+        updatePlaysPresetTimePeriod(PlayStatsPresetTimePeriod.ThisWeek);
         break;
 
       case PlaysTab.selectGame:
@@ -398,6 +398,11 @@ abstract class _PlaysViewModel with Store {
     final now = clock.now();
     switch (presetTimePeriod) {
       case PlayStatsPresetTimePeriod.Custom:
+      case PlayStatsPresetTimePeriod.ThisWeek:
+        // For "This Week", we consider the week starting from Monday to Sunday.
+        final beginningOfMonday = mostRecentWeekday(now, 1);
+        final endOfSunday = beginningOfMonday.add(const Duration(days: 6)).add(_endOfday);
+        return (from: beginningOfMonday, to: endOfSunday);
       case PlayStatsPresetTimePeriod.LastWeek:
         final endOfLastSunday = mostRecentWeekday(now, 0).add(_endOfday);
         final beginningOfMonday =
