@@ -384,13 +384,13 @@ abstract class _EditPlaythoughViewModel with Store {
   void _updatePlaythroughScoresVisualState() {
     if (_playthroughDetailsWorkingCopy!.finishedScoring) {
       playthroughScoresVisualState = PlaythroughScoresVisualState.finishedScoring(
-        playerScores: playerScores,
+        playerScores: [...playerScores],
         scoreTiebreakersSet: scoreTiebreakersSet,
         uniqnessEnforcingDummyDate: clock.now(),
       );
     } else {
       playthroughScoresVisualState = PlaythroughScoresVisualState.scoring(
-        playerScores: playerScores,
+        playerScores: [...playerScores],
       );
     }
   }
