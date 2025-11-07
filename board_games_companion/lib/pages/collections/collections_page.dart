@@ -18,7 +18,6 @@ import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
-import '../../common/enums/collection_type.dart';
 import '../../common/enums/games_tab.dart';
 import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
@@ -31,6 +30,7 @@ import '../../widgets/board_games/board_game_tile.dart';
 import '../../widgets/common/app_bar/app_bar_bottom_tab.dart';
 import '../../widgets/common/bgg_community_member_text_widget.dart';
 import '../../widgets/common/bgg_community_member_user_name_text_field_widget.dart';
+import '../../widgets/common/empty_page_information_panel.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/import_collections_button.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
@@ -553,62 +553,34 @@ class _EmptyCollection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
+    return SliverFillRemaining(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Dimensions.doubleStandardSpacing),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Observer(
-              builder: (_) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: "It looks like you don't have any board games in your ",
-                          ),
-                          TextSpan(
-                            text: selectedTab.toCollectionType().toHumandReadableText(),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const TextSpan(text: ' collection yet.'),
-                          if (selectedTab == GamesTab.wishlist && (userName.isNotNullOrBlank)) ...[
-                            const TextSpan(text: "\n\nIf you want to see board games from BGG's  "),
-                            const TextSpan(
-                              text: 'Wishlist ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const TextSpan(text: 'or '),
-                            const TextSpan(
-                              text: 'Want to Buy ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const TextSpan(text: 'collections then tap the below  '),
-                            const TextSpan(
-                              text: '${AppText.importCollectionsButtonText} ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const TextSpan(text: 'button.'),
-                          ]
-                        ],
-                      ),
-                      textAlign: TextAlign.justify,
-                    ),
-                    if (selectedTab == GamesTab.wishlist && (userName.isNotNullOrBlank)) ...[
-                      const SizedBox(height: Dimensions.doubleStandardSpacing),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: ImportCollectionsButton(usernameCallback: () => userName!),
-                      ),
-                    ]
-                  ],
-                );
-              },
-            ),
-          ],
+        child: Observer(
+          builder: (_) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const EmptyPageInformationPanel(
+                  title: AppText.collectionsPageNoGamesInCollectionTitle,
+                  icon: Icon(
+                    Icons.apps_outage,
+                    size: Dimensions.emptyPageTitleIconSize,
+                    color: AppColors.primaryColor,
+                  ),
+                  subtitle: AppText.collectionsPageNoGamesInCollectionSubtitle,
+                ),
+                if (selectedTab == GamesTab.wishlist && (userName.isNotNullOrBlank)) ...[
+                  const SizedBox(height: Dimensions.doubleStandardSpacing),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ImportCollectionsButton(usernameCallback: () => userName!),
+                  ),
+                ]
+              ],
+            );
+          },
         ),
       ),
     );

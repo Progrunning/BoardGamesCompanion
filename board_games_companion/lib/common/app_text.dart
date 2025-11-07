@@ -431,4 +431,8 @@ class AppText {
   static const collectionsPageShareCollectionSuccessMessage = 'Collection shared successfully!';
   static const collectionsPageShareBaseGamesSectionTitleFormat = 'Base games (%s)';
   static const collectionsPageShareGameExpansionsSectionTitleFormat = 'Expansions (%s)';
+
+  static const collectionsPageNoGamesInCollectionTitle = 'No games in collection';
+  static const collectionsPageNoGamesInCollectionSubtitle =
+      'Add games to your collection to see them listed here.';
 }
