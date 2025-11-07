@@ -82,7 +82,7 @@ class _CreateBoardGamePageState extends State<CreateBoardGamePage> {
   @override
   Widget build(BuildContext context) => PopScope(
         canPop: false,
-        onPopInvoked: (didPop) => _handleOnPop(context, didPop),
+        onPopInvokedWithResult: (didPop, _) => _handleOnPop(context, didPop),
         child: Scaffold(
           body: SafeArea(
             child: PageContainer(

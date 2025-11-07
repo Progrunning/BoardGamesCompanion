@@ -227,7 +227,7 @@ class AppTheme {
       iconTheme: iconTheme,
       colorScheme: colorScheme,
       navigationDrawerTheme: ThemeData.light().navigationDrawerTheme.copyWith(
-            indicatorColor: AppColors.primaryColor.withOpacity(0.4),
+            indicatorColor: AppColors.primaryColor.withValues(alpha: .4),
             iconTheme: WidgetStatePropertyAll(iconTheme),
             labelTextStyle: WidgetStatePropertyAll(textTheme.bodyLarge),
           ),

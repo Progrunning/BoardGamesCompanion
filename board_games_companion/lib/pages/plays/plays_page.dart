@@ -1828,7 +1828,7 @@ class _AppBar extends StatelessWidget {
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(74),
         child: TabBar(
-          overlayColor: MaterialStateColor.resolveWith((states) => AppColors.accentColor),
+          overlayColor: WidgetStateColor.resolveWith((states) => AppColors.accentColor),
           controller: tabController,
           tabs: <Widget>[
             AppBarBottomTab(

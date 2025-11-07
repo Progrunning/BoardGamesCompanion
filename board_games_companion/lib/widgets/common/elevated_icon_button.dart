@@ -28,7 +28,7 @@ class ElevatedIconButton extends StatelessWidget {
         backgroundColor: WidgetStateProperty.resolveWith<Color?>(
           (Set<WidgetState> states) {
             if (states.contains(WidgetState.pressed)) {
-              return color.withOpacity(0.5);
+              return color.withValues(alpha: .5);
             }
 
             return color;
@@ -38,7 +38,7 @@ class ElevatedIconButton extends StatelessWidget {
         foregroundColor: WidgetStateProperty.resolveWith<Color?>(
           (Set<WidgetState> states) {
             if (states.contains(WidgetState.disabled)) {
-              return AppColors.darkGreyColor.withOpacity(0.4);
+              return AppColors.darkGreyColor.withValues(alpha: .4);
             }
 
             return AppColors.defaultTextColor;

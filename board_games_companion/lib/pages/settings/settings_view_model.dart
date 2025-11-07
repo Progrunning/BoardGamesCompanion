@@ -76,11 +76,13 @@ abstract class _SettingsViewModel with Store {
   void loadBackups() => futureLoadBackups = ObservableFuture(_loadBackups());
 
   Future<void> shareBackupFile(BackupFile backupFile, {Rect? sharePositionOrigin}) async =>
-      Share.shareXFiles(
-        [
-          XFile(backupFile.path, mimeType: 'application/zip'),
-        ],
-        sharePositionOrigin: sharePositionOrigin,
+      SharePlus.instance.share(
+        ShareParams(
+          files: [
+            XFile(backupFile.path, mimeType: 'application/zip'),
+          ],
+          sharePositionOrigin: sharePositionOrigin,
+        ),
       );
 
   @action

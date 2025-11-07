@@ -21,7 +21,7 @@ class LoadingOverlay extends StatelessWidget {
       children: [
         child,
         Container(
-          color: AppColors.blackColor.withOpacity(0.7),
+          color: AppColors.blackColor.withValues(alpha: .7),
           // TODO Add fade-in & out animation
           child: Column(
             children: [
