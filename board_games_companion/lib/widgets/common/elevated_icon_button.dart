@@ -25,27 +25,30 @@ class ElevatedIconButton extends StatelessWidget {
       icon: icon,
       label: title?.isNotEmpty ?? false ? Text(title!) : const SizedBox.shrink(),
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.pressed)) {
-              return color.withOpacity(0.5);
+        backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.pressed)) {
+              return color.withValues(alpha: .5);
             }
 
             return color;
           },
         ),
-        shape: MaterialStateProperty.all(const StadiumBorder()),
-        foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
-              return AppColors.darkGreyColor.withOpacity(0.4);
+        shape: WidgetStateProperty.all(const StadiumBorder()),
+        foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) {
+              return AppColors.darkGreyColor.withValues(alpha: .4);
             }
 
             return AppColors.defaultTextColor;
           },
         ),
-        textStyle: MaterialStateProperty.all(
-          const TextStyle(color: AppColors.defaultTextColor, fontWeight: FontWeight.bold),
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(
+            color: AppColors.defaultTextColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       onPressed: onPressed,

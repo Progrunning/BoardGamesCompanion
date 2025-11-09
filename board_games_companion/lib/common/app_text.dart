@@ -345,6 +345,7 @@ class AppText {
       'Select a broader or different time period to see your logged games statistics';
   static const playsPageOverallStatsTimePeriodFrom = 'From';
   static const playsPageOverallStatsTimePeriodTo = 'To';
+  static const playsPageOverallStatsTimePeriodThisWeek = 'This week';
   static const playsPageOverallStatsTimePeriodLastWeek = 'Last week';
   static const playsPageOverallStatsTimePeriodLastMonth = 'Last month';
   static const playsPageOverallStatsTimePeriodLastYear = 'Last year';
@@ -431,4 +432,8 @@ class AppText {
   static const collectionsPageShareCollectionSuccessMessage = 'Collection shared successfully!';
   static const collectionsPageShareBaseGamesSectionTitleFormat = 'Base games (%s)';
   static const collectionsPageShareGameExpansionsSectionTitleFormat = 'Expansions (%s)';
+
+  static const collectionsPageNoGamesInCollectionTitle = 'No games in collection';
+  static const collectionsPageNoGamesInCollectionSubtitle =
+      'Add games to your collection to see them listed here.';
 }

@@ -1,4 +1,4 @@
-package com.example.board_games_companion
+package com.progrunning.boardgamescompanion
 
 import io.flutter.embedding.android.FlutterActivity;
 

@@ -175,7 +175,8 @@ mixin _$PlaysViewModel on _PlaysViewModel, Store {
       context: context);
 
   @override
-  Future<void> updatePlaysCustomTimePeriod(DateTimeRange dateTimeRange) {
+  Future<void> updatePlaysCustomTimePeriod(
+      DateTimeRange<DateTime> dateTimeRange) {
     return _$updatePlaysCustomTimePeriodAsyncAction
         .run(() => super.updatePlaysCustomTimePeriod(dateTimeRange));
   }

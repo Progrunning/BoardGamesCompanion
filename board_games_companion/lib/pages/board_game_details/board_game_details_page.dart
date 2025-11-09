@@ -73,7 +73,7 @@ class BoardGamesDetailsPageState extends BasePageState<BoardGamesDetailsPage> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async => _handleOnPop(context, didPop),
+      onPopInvokedWithResult: (didPop, _) async => _handleOnPop(context, didPop),
       child: Scaffold(
         body: SafeArea(
           child: PageContainer(

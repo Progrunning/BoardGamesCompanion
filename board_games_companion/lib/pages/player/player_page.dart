@@ -63,7 +63,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
   @override
   Widget build(BuildContext context) => PopScope(
         canPop: false,
-        onPopInvoked: (didPop) async => _handleWillPop(context, didPop: didPop),
+        onPopInvokedWithResult: (didPop, _) async => _handleWillPop(context, didPop: didPop),
         child: Scaffold(
           appBar: AppBar(
             title: Observer(

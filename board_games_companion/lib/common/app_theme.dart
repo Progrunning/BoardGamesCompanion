@@ -53,8 +53,6 @@ class AppTheme {
       tertiary: AppColors.secondaryColor,
       error: AppColors.redColor,
       onError: AppColors.defaultTextColor,
-      background: AppColors.primaryColorLight,
-      onBackground: AppColors.defaultTextColor,
       surface: AppColors.primaryColorLight,
       onSurface: AppColors.defaultTextColor,
     );
@@ -133,7 +131,6 @@ class AppTheme {
       primaryColor: AppColors.primaryColor,
       primaryColorLight: AppColors.primaryColorLight,
       highlightColor: AppColors.accentColor,
-      dialogBackgroundColor: AppColors.primaryColorLight,
       dialogTheme: ThemeData.light().dialogTheme.copyWith(
             backgroundColor: AppColors.primaryColorLight,
             titleTextStyle: displayMediumTextStyle,
@@ -162,7 +159,7 @@ class AppTheme {
             tickMarkShape: const RoundSliderTickMarkShape(),
             valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
             valueIndicatorTextStyle: const TextStyle(fontSize: Dimensions.smallFontSize),
-            showValueIndicator: ShowValueIndicator.always,
+            showValueIndicator: ShowValueIndicator.onDrag,
             rangeValueIndicatorShape: const PaddleRangeSliderValueIndicatorShape(),
           ),
       toggleButtonsTheme: ThemeData.light().toggleButtonsTheme.copyWith(
@@ -175,9 +172,9 @@ class AppTheme {
             borderColor: Colors.transparent,
             textStyle: TextStyle(
               fontSize: Dimensions.smallFontSize,
-              color: MaterialStateColor.resolveWith(
+              color: WidgetStateColor.resolveWith(
                 (states) {
-                  if (states.contains(MaterialState.selected)) {
+                  if (states.contains(WidgetState.selected)) {
                     return AppColors.accentColor;
                   }
 
@@ -230,12 +227,19 @@ class AppTheme {
       iconTheme: iconTheme,
       colorScheme: colorScheme,
       navigationDrawerTheme: ThemeData.light().navigationDrawerTheme.copyWith(
-            indicatorColor: AppColors.primaryColor.withOpacity(0.4),
-            iconTheme: MaterialStatePropertyAll(iconTheme),
-            labelTextStyle: MaterialStatePropertyAll(textTheme.bodyLarge),
+            indicatorColor: AppColors.primaryColor.withValues(alpha: .4),
+            iconTheme: WidgetStatePropertyAll(iconTheme),
+            labelTextStyle: WidgetStatePropertyAll(textTheme.bodyLarge),
           ),
       appBarTheme: ThemeData.light().appBarTheme.copyWith(
             backgroundColor: AppColors.primaryColor,
+            // foregroundColor: Colors.black,
+          ),
+      tabBarTheme: ThemeData.light().tabBarTheme.copyWith(
+            dividerHeight: 0,
+            indicatorColor: AppColors.accentColor,
+            indicatorSize: TabBarIndicatorSize.label,
+            tabAlignment: TabAlignment.fill,
           ),
     );
   }

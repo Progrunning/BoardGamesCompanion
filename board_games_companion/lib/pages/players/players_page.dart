@@ -422,7 +422,7 @@ class _PlayerState extends State<_Player> {
               width: 34,
               child: Checkbox(
                 checkColor: AppColors.accentColor,
-                activeColor: AppColors.primaryColor.withOpacity(0.7),
+                activeColor: AppColors.primaryColor.withValues(alpha: .7),
                 value: isChecked,
                 onChanged: (_) => _onTap(),
               ),

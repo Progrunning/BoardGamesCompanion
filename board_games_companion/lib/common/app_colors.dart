@@ -49,8 +49,6 @@ class AppColors {
   static const Color inactiveGameFamilyIcon = greyColor;
   static const Color activeGameFamilyIcon = accentColor;
 
-  static Color alternativeSplashColor = primaryColorLight.withOpacity(0.7);
-
   static Color playedGamesStatColor = chartColorPallete[0];
   static Color highscoreStatColor = chartColorPallete[1];
   static Color totalWinsStatColor = highscoreStatColor;

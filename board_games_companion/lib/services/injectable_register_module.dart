@@ -3,11 +3,6 @@ import 'package:board_games_companion/utilities/base_http_client.dart';
 import 'package:board_games_companion/utilities/caching_http_client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-// TODO This type needs to be exported from the package
-//      Monitor releases to get the latest and fix  this
-//      https://github.com/Baseflow/flutter_cache_manager/issues/238
-// ignore: implementation_imports
-import 'package:flutter_cache_manager/src/storage/file_system/file_system_io.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';

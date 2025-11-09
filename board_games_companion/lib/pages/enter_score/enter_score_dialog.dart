@@ -670,7 +670,7 @@ class _CirclePickerPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth
-        ..color = AppColors.primaryColor.withOpacity(0.3),
+        ..color = AppColors.primaryColor.withValues(alpha: 3),
     );
   }
 

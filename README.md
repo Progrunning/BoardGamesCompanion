@@ -92,7 +92,7 @@ A "default" package manager "to rule them all", which comes handy if you need to
 > REQUIRED: To install RubyGems and other stuff
 
 2. RubyGems
-RubyGems is (you guess it) another package manager and is required to get CocoaPods. MacOS comes with a pre-installed version of it but it is recommended to update it, which can be done by executing the following:
+RubyGems is (you guessed it) another package manager and is required to get CocoaPods. MacOS comes with a pre-installed version of it but it is recommended to update it, which can be done by executing the following:
 
 `sudo gem update --system`
 
@@ -118,7 +118,6 @@ Download CocoaPods using RubyGems by executing the following
 To install all of the dependencies/packages execute `pod install` command.
 
 #### Flutter upgrade
-s
 Whenever flutter version gets updated there might be a problem with plugin dependencies. This might require updating `pods`. In order to update pods you need to:
 
 1. Run Terminal

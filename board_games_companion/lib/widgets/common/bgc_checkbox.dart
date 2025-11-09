@@ -25,9 +25,9 @@ class BgcCheckbox extends StatelessWidget {
         color: Colors.transparent,
         child: Checkbox(
           checkColor: AppColors.accentColor,
-          activeColor: AppColors.primaryColor.withOpacity(0.7),
-          overlayColor: MaterialStateProperty.all(AppColors.accentColor.withOpacity(0.6)),
-          side: MaterialStateBorderSide.resolveWith(
+          activeColor: AppColors.primaryColor.withValues(alpha: .7),
+          overlayColor: WidgetStateProperty.all(AppColors.accentColor.withValues(alpha: .6)),
+          side: WidgetStateBorderSide.resolveWith(
             (states) => BorderSide(
               width: 2,
               color: borderColor,

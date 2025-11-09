@@ -35,7 +35,7 @@ parameters:
 
 jobs:
   - job: Test
-    timeoutInMinutes: 10
+    timeoutInMinutes: 15
     condition: eq('${{ parameters.runTests }}', 'true')
     pool:
       vmImage: "macOS-latest"
@@ -75,7 +75,7 @@ jobs:
   - job: BuildDroid
     dependsOn: Test
     condition: eq('${{ parameters.buildAndroid }}', 'true')
-    timeoutInMinutes: 10
+    timeoutInMinutes: 20
     pool:
       vmImage: "macOS-latest"
 
@@ -107,7 +107,7 @@ jobs:
   - job: BuildIOS
     dependsOn: Test
     condition: eq('${{ parameters.buildIOS }}', 'true')
-    timeoutInMinutes: 10
+    timeoutInMinutes: 20
     pool:
       vmImage: "macOS-latest"
 

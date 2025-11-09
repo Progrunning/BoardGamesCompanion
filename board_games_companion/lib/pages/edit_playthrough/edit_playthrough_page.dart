@@ -56,7 +56,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   @override
   Widget build(BuildContext context) => PopScope(
         canPop: false,
-        onPopInvoked: (didPop) async => _handleOnPop(context, didPop: didPop),
+        onPopInvokedWithResult: (didPop, _) async => _handleOnPop(context, didPop: didPop),
         child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,

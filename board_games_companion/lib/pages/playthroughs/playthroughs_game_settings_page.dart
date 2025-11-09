@@ -80,18 +80,24 @@ class _PlaythroughsGameSettingsPageState extends State<PlaythroughsGameSettingsP
               ),
               noScore: (gameFamily) => MultiSliver(
                 children: [
-                  RadioListTile<GameFamily>(
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
-                    activeColor: AppColors.accentColor,
-                    title: const Text(
-                      AppText.playthroughsGameSettingsGameFamilyCoop,
-                      style: AppTheme.defaultTextFieldStyle,
-                    ),
-                    value: GameFamily.Cooperative,
+                  RadioGroup(
                     groupValue: gameFamily,
                     onChanged: (GameFamily? selectedGameFamily) =>
                         _handleGameFamilyChange(selectedGameFamily),
+                    child: const Column(
+                      children: [
+                        RadioListTile<GameFamily>(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),
+                          activeColor: AppColors.accentColor,
+                          title: Text(
+                            AppText.playthroughsGameSettingsGameFamilyCoop,
+                            style: AppTheme.defaultTextFieldStyle,
+                          ),
+                          value: GameFamily.Cooperative,
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -263,40 +269,35 @@ class _ScoreGameFamilySectionState extends State<_ScoreGameFamilySection> {
   late GameFamily? _gameFamily = widget.gameFamily;
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          RadioListTile<GameFamily>(
-            contentPadding: EdgeInsets.zero,
-            activeColor: AppColors.accentColor,
-            title: const Text(
-              AppText.playthroughsGameSettingsGameFamilyHighestScore,
-              style: AppTheme.defaultTextFieldStyle,
+  Widget build(BuildContext context) => RadioGroup(
+        groupValue: _gameFamily,
+        onChanged: (GameFamily? value) {
+          setState(() {
+            _gameFamily = value;
+            widget.onChanged(_gameFamily);
+          });
+        },
+        child: const Column(
+          children: [
+            RadioListTile<GameFamily>(
+              contentPadding: EdgeInsets.zero,
+              activeColor: AppColors.accentColor,
+              title: Text(
+                AppText.playthroughsGameSettingsGameFamilyHighestScore,
+                style: AppTheme.defaultTextFieldStyle,
+              ),
+              value: GameFamily.HighestScore,
             ),
-            value: GameFamily.HighestScore,
-            groupValue: _gameFamily,
-            onChanged: (GameFamily? value) {
-              setState(() {
-                _gameFamily = value;
-                widget.onChanged(_gameFamily);
-              });
-            },
-          ),
-          RadioListTile<GameFamily>(
-            contentPadding: EdgeInsets.zero,
-            activeColor: AppColors.accentColor,
-            title: const Text(
-              AppText.playthroughsGameSettingsGameFamilyLowestScore,
-              style: AppTheme.defaultTextFieldStyle,
+            RadioListTile<GameFamily>(
+              contentPadding: EdgeInsets.zero,
+              activeColor: AppColors.accentColor,
+              title: Text(
+                AppText.playthroughsGameSettingsGameFamilyLowestScore,
+                style: AppTheme.defaultTextFieldStyle,
+              ),
+              value: GameFamily.LowestScore,
             ),
-            value: GameFamily.LowestScore,
-            groupValue: _gameFamily,
-            onChanged: (GameFamily? value) {
-              setState(() {
-                _gameFamily = value;
-                widget.onChanged(_gameFamily);
-              });
-            },
-          ),
-        ],
+          ],
+        ),
       );
 }

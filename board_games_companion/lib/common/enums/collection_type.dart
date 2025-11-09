@@ -19,8 +19,6 @@ extension ToInt on CollectionType {
         return 2;
       case CollectionType.wishlist:
         return 3;
-      default:
-        return 0;
     }
   }
 }
