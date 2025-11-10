@@ -160,6 +160,14 @@ The command to build will look like this `flutter build appbundle --build-name=1
 
 Grab the `.aab` from the output directory and manually upload to the Google Play Store
 
+### iOS
+
+Open the project in Xcode (in VS Code right click on `iOS` folder and select open with Xcode). In the directory explorer (left hand side), select Runner. In the middle section select `Signing & Capabilities`, then select `Release` tab. Ensure that the Provisioning Profile has a distrubution profile selected. If the provisioning profile is not there or is outdated, generate a new one in the apple's cert web dashboard.
+
+Click `Product` in the Xcode's main menu (at the top) and select Archive. Once the build succeeds, go to `Window` and then `Organize`, select `Archives` and from there should be an option to distribute.
+
+> NOTE: I have not checked how to provide `dart-define` paramters with this approach.
+
 ## Pipelines
 
 CI and CD pipelines are defined in the Microsft Azure DevOps environment. 
