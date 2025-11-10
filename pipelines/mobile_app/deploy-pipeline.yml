@@ -53,12 +53,12 @@ stages:
           - checkout: self
             fetchDepth: 1
 
-          # - task: JavaToolInstaller@0
-          #   displayName: "Install Java ${{ parameters.javaVersion }}"
-          #   inputs:
-          #     versionSpec: ${{ parameters.javaVersion }}
-          #     jdkArchitectureOption: x64
-          #     jdkSourceOption: PreInstalled
+          - task: JavaToolInstaller@0
+            displayName: "Install Java ${{ parameters.javaVersion }}"
+            inputs:
+              versionSpec: ${{ parameters.javaVersion }}
+              jdkArchitectureOption: x64
+              jdkSourceOption: PreInstalled
 
           - task: FlutterInstall@0
             displayName: "Install Flutter v$(flutter.version)"
