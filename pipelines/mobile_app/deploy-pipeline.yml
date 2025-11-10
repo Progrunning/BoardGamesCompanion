@@ -47,7 +47,7 @@ stages:
         condition: or(eq('${{ parameters.publishAndroid }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 60
         pool:
-          vmImage: "ubuntu-22.04"
+          vmImage: "macOS-15"
 
         steps:
           - checkout: self
