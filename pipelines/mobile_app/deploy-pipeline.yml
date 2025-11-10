@@ -50,6 +50,9 @@ stages:
           vmImage: "ubuntu-22.04"
 
         steps:
+          - checkout: self
+            fetchDepth: 1
+
           - task: JavaToolInstaller@0
             displayName: "Install Java ${{ parameters.javaVersion }}"
             inputs:
@@ -163,6 +166,9 @@ stages:
           vmImage: "macOS-13"
 
         steps:
+          - checkout: self
+            fetchDepth: 1
+
           - task: FlutterInstall@0
             displayName: "Install Flutter"
             inputs:
