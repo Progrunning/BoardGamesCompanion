@@ -53,12 +53,12 @@ stages:
           - checkout: self
             fetchDepth: 1
 
-          - task: JavaToolInstaller@0
-            displayName: "Install Java ${{ parameters.javaVersion }}"
-            inputs:
-              versionSpec: ${{ parameters.javaVersion }}
-              jdkArchitectureOption: x64
-              jdkSourceOption: PreInstalled
+          # - task: JavaToolInstaller@0
+          #   displayName: "Install Java ${{ parameters.javaVersion }}"
+          #   inputs:
+          #     versionSpec: ${{ parameters.javaVersion }}
+          #     jdkArchitectureOption: x64
+          #     jdkSourceOption: PreInstalled
 
           - task: FlutterInstall@0
             displayName: "Install Flutter v$(flutter.version)"
@@ -163,7 +163,7 @@ stages:
         condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 60
         pool:
-          vmImage: "macOS-13"
+          vmImage: "macOS-15"
 
         steps:
           - checkout: self
@@ -235,7 +235,7 @@ stages:
         condition: eq(stageDependencies.CdBuildiOS.BuildiOS.result, 'Succeeded')
         timeoutInMinutes: 30
         pool:
-          vmImage: "macOS-12"
+          vmImage: "macOS-15"
 
         steps:
           - task: DownloadPipelineArtifact@2

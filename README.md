@@ -147,26 +147,39 @@ Generally speaking try using **homebrew** to manage cocoapods. The command `brew
 
 > NOTE: In case an FFI requires updating try executing this command `sudo arch -arm64 gem install ffi`
 
-# Pipelines
+
+# Building aab & ipa
+
+## Manual build and push
+
+### Android
+
+In order to build `aab` file locally, you will need the `.keystore` file in the `/android/app` directory and the `key.properties` file in `/android` directory. Both of these files can be found in a secure storage.
+
+The command to build will look like this `flutter build appbundle --build-name=1.15.2 --build-number=1476 --dart-define=searchBoardGamesApiBaseUrl=https://bgc-shared-apim.azure-api.net --dart-define=searchBoardGamesApiSubscriptionKey=<sub_key> --dart-define=bggApiKey=<api_key>`
+
+Grab the `.aab` from the output directory and manually upload to the Google Play Store
+
+## Pipelines
 
 CI and CD pipelines are defined in the Microsft Azure DevOps environment. 
 
-## CI
+### CI
 
 **C**ontinuous **I**ntegration pipeline is triggered everytime a PR is created that targets `release` branch. This assures that code that is prepared for a release is veriefied and working.
 
 [![Build Status](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/CI?branchName=main)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/latest?definitionId=20&branchName=main)
 
-## CD
+### CD
 
 **C**ontinuous **D**eployment pipeline is associated with the `release` pipeline. After a successful merge of changes into this branch a version of a new app will be created. 
 
 [![Build Status](https://progrunning.visualstudio.com/Board%20Games%20Companion/_apis/build/status/CD?branchName=main)](https://progrunning.visualstudio.com/Board%20Games%20Companion/_build/latest?definitionId=19&branchName=main)
-### iOS
+#### iOS
 
 New app version will be pushed into the *TestFlight*.
 
-### Android
+#### Android
 
 New app version will be pushed into the *Google Play Store*.
 
