@@ -45,7 +45,7 @@ stages:
     jobs:
       - job: BuildAndroid
         condition: or(eq('${{ parameters.publishAndroid }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
-        timeoutInMinutes: 20
+        timeoutInMinutes: 60
         pool:
           vmImage: "ubuntu-22.04"
 
@@ -125,7 +125,7 @@ stages:
     jobs:
       - job: PublishAndroid
         condition: eq(stageDependencies.CdBuildAndroid.BuildAndroid.result, 'Succeeded')
-        timeoutInMinutes: 5
+        timeoutInMinutes: 15
         pool:
           vmImage: "ubuntu-22.04"
 
@@ -158,7 +158,7 @@ stages:
     jobs:
       - job: BuildiOS
         condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
-        timeoutInMinutes: 30
+        timeoutInMinutes: 60
         pool:
           vmImage: "macOS-13"
 
@@ -227,7 +227,7 @@ stages:
     jobs:
       - job: PublishiOS
         condition: eq(stageDependencies.CdBuildiOS.BuildiOS.result, 'Succeeded')
-        timeoutInMinutes: 20
+        timeoutInMinutes: 30
         pool:
           vmImage: "macOS-12"
 
