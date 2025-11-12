@@ -47,9 +47,12 @@ stages:
         condition: or(eq('${{ parameters.publishAndroid }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 60
         pool:
-          vmImage: "ubuntu-22.04"
+          vmImage: "macOS-15"
 
         steps:
+          - checkout: self
+            fetchDepth: 1
+
           - task: JavaToolInstaller@0
             displayName: "Install Java ${{ parameters.javaVersion }}"
             inputs:
@@ -160,9 +163,12 @@ stages:
         condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 60
         pool:
-          vmImage: "macOS-13"
+          vmImage: "macOS-15"
 
         steps:
+          - checkout: self
+            fetchDepth: 1
+
           - task: FlutterInstall@0
             displayName: "Install Flutter"
             inputs:
@@ -229,7 +235,7 @@ stages:
         condition: eq(stageDependencies.CdBuildiOS.BuildiOS.result, 'Succeeded')
         timeoutInMinutes: 30
         pool:
-          vmImage: "macOS-12"
+          vmImage: "macOS-15"
 
         steps:
           - task: DownloadPipelineArtifact@2
