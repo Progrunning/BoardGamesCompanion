@@ -86,6 +86,7 @@ class PlayerInitials extends StatelessWidget {
       child: Center(
         child: Text(
           initials,
+          // TODO Use a predefined text style
           style: const TextStyle(fontSize: 24, color: AppColors.defaultTextColor),
         ),
       ),
