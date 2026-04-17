@@ -174,7 +174,7 @@ class __$$PlayerImplCopyWithImpl<$Res>
 /// @nodoc
 
 @HiveType(typeId: HiveBoxes.playersTypeId, adapterName: 'PlayerAdapter')
-class _$PlayerImpl implements _Player {
+class _$PlayerImpl extends _Player {
   const _$PlayerImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) this.name,
@@ -182,7 +182,8 @@ class _$PlayerImpl implements _Player {
       @HiveField(4) this.avatarFileName,
       @HiveField(5) this.bggName,
       this.avatarImageUri = Constants.defaultAvatartAssetsPath,
-      this.avatarFileToSave});
+      this.avatarFileToSave})
+      : super._();
 
   @override
   @HiveField(0)
@@ -239,7 +240,7 @@ class _$PlayerImpl implements _Player {
       __$$PlayerImplCopyWithImpl<_$PlayerImpl>(this, _$identity);
 }
 
-abstract class _Player implements Player {
+abstract class _Player extends Player {
   const factory _Player(
       {@HiveField(0) required final String id,
       @HiveField(1) final String? name,
@@ -248,6 +249,7 @@ abstract class _Player implements Player {
       @HiveField(5) final String? bggName,
       final String avatarImageUri,
       final XFile? avatarFileToSave}) = _$PlayerImpl;
+  const _Player._() : super._();
 
   @override
   @HiveField(0)

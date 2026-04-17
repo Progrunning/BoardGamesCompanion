@@ -82,12 +82,10 @@ class _Placeholder extends StatelessWidget {
   const _Placeholder();
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.primaryColor,
-        borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+        ),
+      );
 }

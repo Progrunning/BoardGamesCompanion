@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../models/hive/player.dart';
 import '../common/ripple_effect.dart';
@@ -36,9 +37,13 @@ class PlayerAvatar extends StatelessWidget {
           if (useHeroAnimation)
             Hero(
               tag: '${AnimationTags.playerImageHeroTag}${player?.id}$playerHeroIdSuffix',
-              child: PlayerImage(
-                imageUri: player?.avatarImageUri,
-                avatarImageSize: avatarImageSize,
+              child: Positioned.fill(
+                child: player?.hasAvatarImage == true
+                    ? PlayerImage(
+                        imageUri: player?.avatarImageUri,
+                        avatarImageSize: avatarImageSize,
+                      )
+                    : PlayerInitials(initials: player?.initials ?? ''),
               ),
             )
           else
@@ -46,7 +51,7 @@ class PlayerAvatar extends StatelessWidget {
               imageUri: player?.avatarImageUri,
               avatarImageSize: avatarImageSize,
             ),
-          if (player?.name?.isNotEmpty ?? false) PlayerAvatarSubtitle(player: player!),
+          if (player?.hasName ?? false) PlayerAvatarSubtitle(player: player!),
           Positioned.fill(
             child: GestureDetector(
               onLongPress: onLongPress,
@@ -57,6 +62,32 @@ class PlayerAvatar extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class PlayerInitials extends StatelessWidget {
+  const PlayerInitials({
+    super.key,
+    required this.initials,
+  });
+
+  final String initials;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      // TODO pick color at the moment of creating player and save it in the player object
+      // TODO add color picker to player edit screen and allow changing it there, also add option to remove color (i.e. set it to null) and in that case show default avatar image instead of initials
+      // TODO for users without color use default avatar image (i.e. make color nullable and if it's null show default avatar image instead of initials)
+      color: Colors.blue,
+      borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+      child: Center(
+        child: Text(
+          initials,
+          style: const TextStyle(fontSize: 24, color: AppColors.defaultTextColor),
+        ),
       ),
     );
   }
