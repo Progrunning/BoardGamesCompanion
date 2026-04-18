@@ -24,8 +24,13 @@ class PlayerImage extends StatelessWidget {
         //
         // NOTE 1: Multiplying the size of the image to ensure there's no pixelation effect.
         // NOTE 2: Using only one dimension (longer one) to let the caching logic work out the aspect ratio of the image
-        final imageCacheHeight = (constraints.maxHeight * 1.5).toInt();
-        final imageCacheWidth = (constraints.maxWidth * 1.5).toInt();
+        int? imageCacheWidth;
+        int? imageCacheHeight;
+        if (constraints.maxHeight > constraints.maxWidth) {
+          imageCacheHeight = (constraints.maxHeight * 1.5).toInt();
+        } else {
+          imageCacheWidth = (constraints.maxWidth * 1.5).toInt();
+        }
 
         return ClipRRect(
           borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
