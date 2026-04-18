@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../common/animation_tags.dart';
+import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../models/hive/player.dart';
 import '../common/ripple_effect.dart';
@@ -35,7 +36,9 @@ class PlayerAvatar extends StatelessWidget {
               child: player.hasAvatarImage == true
                   ? PlayerImage(imageUri: player.avatarImageUri!)
                   : Material(
-                      color: Color(player.avatarColor),
+                      color: Color(
+                        player.avatarColor ?? AppColors.defaultPlayerAvatarColorHexidecimal,
+                      ),
                       borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
                       child: PlayerInitials(initials: player.initials ?? ''),
                     ),

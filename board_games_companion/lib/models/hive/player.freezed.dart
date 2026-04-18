@@ -27,7 +27,7 @@ mixin _$Player {
   @HiveField(5)
   String? get bggName => throw _privateConstructorUsedError;
   @HiveField(6)
-  int get avatarColor => throw _privateConstructorUsedError;
+  int? get avatarColor => throw _privateConstructorUsedError;
   String? get avatarImageUri => throw _privateConstructorUsedError;
   XFile? get avatarFileToSave => throw _privateConstructorUsedError;
 
@@ -46,7 +46,7 @@ abstract class $PlayerCopyWith<$Res> {
       @HiveField(3) bool? isDeleted,
       @HiveField(4) String? avatarFileName,
       @HiveField(5) String? bggName,
-      @HiveField(6) int avatarColor,
+      @HiveField(6) int? avatarColor,
       String? avatarImageUri,
       XFile? avatarFileToSave});
 }
@@ -69,7 +69,7 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
     Object? isDeleted = freezed,
     Object? avatarFileName = freezed,
     Object? bggName = freezed,
-    Object? avatarColor = null,
+    Object? avatarColor = freezed,
     Object? avatarImageUri = freezed,
     Object? avatarFileToSave = freezed,
   }) {
@@ -94,10 +94,10 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
           ? _value.bggName
           : bggName // ignore: cast_nullable_to_non_nullable
               as String?,
-      avatarColor: null == avatarColor
+      avatarColor: freezed == avatarColor
           ? _value.avatarColor
           : avatarColor // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       avatarImageUri: freezed == avatarImageUri
           ? _value.avatarImageUri
           : avatarImageUri // ignore: cast_nullable_to_non_nullable
@@ -123,7 +123,7 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       @HiveField(3) bool? isDeleted,
       @HiveField(4) String? avatarFileName,
       @HiveField(5) String? bggName,
-      @HiveField(6) int avatarColor,
+      @HiveField(6) int? avatarColor,
       String? avatarImageUri,
       XFile? avatarFileToSave});
 }
@@ -144,7 +144,7 @@ class __$$PlayerImplCopyWithImpl<$Res>
     Object? isDeleted = freezed,
     Object? avatarFileName = freezed,
     Object? bggName = freezed,
-    Object? avatarColor = null,
+    Object? avatarColor = freezed,
     Object? avatarImageUri = freezed,
     Object? avatarFileToSave = freezed,
   }) {
@@ -169,10 +169,10 @@ class __$$PlayerImplCopyWithImpl<$Res>
           ? _value.bggName
           : bggName // ignore: cast_nullable_to_non_nullable
               as String?,
-      avatarColor: null == avatarColor
+      avatarColor: freezed == avatarColor
           ? _value.avatarColor
           : avatarColor // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       avatarImageUri: freezed == avatarImageUri
           ? _value.avatarImageUri
           : avatarImageUri // ignore: cast_nullable_to_non_nullable
@@ -219,7 +219,7 @@ class _$PlayerImpl extends _Player {
   @override
   @JsonKey()
   @HiveField(6)
-  final int avatarColor;
+  final int? avatarColor;
   @override
   final String? avatarImageUri;
   @override
@@ -268,7 +268,7 @@ abstract class _Player extends Player {
       @HiveField(3) final bool? isDeleted,
       @HiveField(4) final String? avatarFileName,
       @HiveField(5) final String? bggName,
-      @HiveField(6) final int avatarColor,
+      @HiveField(6) final int? avatarColor,
       final String? avatarImageUri,
       final XFile? avatarFileToSave}) = _$PlayerImpl;
   const _Player._() : super._();
@@ -290,7 +290,7 @@ abstract class _Player extends Player {
   String? get bggName;
   @override
   @HiveField(6)
-  int get avatarColor;
+  int? get avatarColor;
   @override
   String? get avatarImageUri;
   @override

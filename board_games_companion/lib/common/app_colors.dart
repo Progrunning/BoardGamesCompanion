@@ -76,8 +76,7 @@ class AppColors {
     Color(0xFFffa600),
   ];
 
-  static const int defaultPlayerAvatarColorHexidecimal = 0xFF3366FF;
-  static const Color defaultPlayerAvatarColor = Color(defaultPlayerAvatarColorHexidecimal);
+  static const int defaultPlayerAvatarColorHexidecimal = 0xFF006666;
   static const List<Color> playerAvatarColors = [
     Color(0xFF3366FF), // Bright Blue
     Color(0xFF0099CC), // Cyan
@@ -99,7 +98,7 @@ class AppColors {
     Color(0xFF1A1A4D), // Very Dark Blue
     Color(0xFF9966FF), // Light Purple
     Color(0xFF994400), // Burnt Orange
-    Color(0xFF006666), // Teal
+    Color(defaultPlayerAvatarColorHexidecimal), // Teal
     Color(0xFF990099), // Magenta
     Color(0xFF336633), // Dark Green
     Color(0xFF444444), // Charcoal Grey

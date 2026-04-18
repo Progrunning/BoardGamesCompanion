@@ -490,13 +490,12 @@ class _PlayerAvatarColorPicker extends StatelessWidget {
   final void Function(int color) onPickColor;
 
   static const double tileSize = 40;
-  static const double spacing = 10;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: spacing,
-      runSpacing: spacing,
+      spacing: Dimensions.standardSpacing,
+      runSpacing: Dimensions.standardSpacing,
       children: [
         for (final color in AppColors.playerAvatarColors)
           Material(
@@ -505,10 +504,10 @@ class _PlayerAvatarColorPicker extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
               onTap: () => onPickColor(color.toARGB32()),
-              child: SizedBox(
+              child: const SizedBox(
                 height: tileSize,
                 width: tileSize,
-                child: PlayerInitials(initials: playerWorkingCopy.initials ?? ''),
+                child: PlayerInitials(initials: ''),
               ),
             ),
           ),

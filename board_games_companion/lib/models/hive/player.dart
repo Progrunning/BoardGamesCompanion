@@ -1,9 +1,9 @@
 import 'package:basics/basics.dart';
+import 'package:board_games_companion/common/app_colors.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../common/app_colors.dart';
 import '../../common/hive_boxes.dart';
 
 export '../../extensions/players_extensions.dart';
@@ -20,7 +20,7 @@ class Player with _$Player {
     @HiveField(3) bool? isDeleted,
     @HiveField(4) String? avatarFileName,
     @HiveField(5) String? bggName,
-    @Default(AppColors.defaultPlayerAvatarColorHexidecimal) @HiveField(6) int avatarColor,
+    @HiveField(6) int? avatarColor,
     String? avatarImageUri,
     XFile? avatarFileToSave,
   }) = _Player;
@@ -29,7 +29,7 @@ class Player with _$Player {
 
   bool get hasName => (name != null && name!.isNotEmpty) || isBggUser;
 
-  bool get hasAvatarImage => avatarImageUri != null;
+  bool get hasAvatarImage => avatarImageUri.isNotNullOrBlank;
 
   bool get isBggUser => bggName.isNotNullOrBlank;
 

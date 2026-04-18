@@ -22,7 +22,7 @@ class PlayerAdapter extends TypeAdapter<_$PlayerImpl> {
       isDeleted: fields[3] as bool?,
       avatarFileName: fields[4] as String?,
       bggName: fields[5] as String?,
-      avatarColor: fields[6] as int,
+      avatarColor: fields[6] as int?,
     );
   }
 
