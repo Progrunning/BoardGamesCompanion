@@ -506,7 +506,8 @@ class _PlayerAvatarColorPicker extends StatelessWidget {
               child: SizedBox(
                 height: tileSize,
                 width: tileSize,
-                child: playerWorkingCopy.avatarColor == color.toARGB32()
+                child: !playerWorkingCopy.hasAvatarImage &&
+                        playerWorkingCopy.avatarColor == color.toARGB32()
                     ? Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
