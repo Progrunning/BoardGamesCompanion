@@ -1,8 +1,9 @@
+import 'package:basics/basics.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../common/constants.dart';
+import '../../common/app_colors.dart';
 import '../../common/hive_boxes.dart';
 
 export '../../extensions/players_extensions.dart';
@@ -19,7 +20,8 @@ class Player with _$Player {
     @HiveField(3) bool? isDeleted,
     @HiveField(4) String? avatarFileName,
     @HiveField(5) String? bggName,
-    @Default(Constants.defaultAvatartAssetsPath) String avatarImageUri,
+    @Default(AppColors.defaultPlayerAvatarColorHexidecimal) @HiveField(6) int avatarColor,
+    String? avatarImageUri,
     XFile? avatarFileToSave,
   }) = _Player;
 
@@ -27,10 +29,9 @@ class Player with _$Player {
 
   bool get hasName => (name != null && name!.isNotEmpty) || isBggUser;
 
-  bool get hasAvatarImage =>
-      avatarImageUri != null && avatarImageUri != Constants.defaultAvatartAssetsPath;
+  bool get hasAvatarImage => avatarImageUri != null;
 
-  bool get isBggUser => bggName != null && bggName!.isNotEmpty;
+  bool get isBggUser => bggName.isNotNullOrBlank;
 
   String? get initials {
     if (hasName) {
@@ -46,7 +47,7 @@ class Player with _$Player {
 
   String? _getInitials(String text) {
     final nameParts = text.split(' ');
-    if (nameParts.length == 1) {
+    if (nameParts.length == 1 || nameParts[1].isEmpty) {
       return nameParts[0][0].toUpperCase();
     }
 

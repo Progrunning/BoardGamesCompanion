@@ -4,76 +4,53 @@ import 'package:flutter/material.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
-import '../../common/constants.dart';
 import '../animations/image_fade_in_animation.dart';
 
 class PlayerImage extends StatelessWidget {
   const PlayerImage({
     super.key,
+    required this.imageUri,
     this.place,
-    this.imageUri,
-    this.avatarImageSize,
   });
 
-  final String? imageUri;
+  final String imageUri;
   final int? place;
-
-  final Size? avatarImageSize;
 
   @override
   Widget build(BuildContext context) {
-    // MK Reducing used memory when caching player avatar images.
-    //
-    // NOTE 1: Multiplying the size of the image to ensure there's no pixelation effect.
-    // NOTE 2: Using only one dimension (longer one) to let the caching logic work out the aspect ratio of the image
-    int? avatarImageCacheWidth;
-    int? avatarImageCacheHeight;
-    if (avatarImageSize != null) {
-      if (avatarImageSize!.height > avatarImageSize!.width) {
-        avatarImageCacheHeight = (avatarImageSize!.height * 1.5).toInt();
-      } else {
-        avatarImageCacheWidth = (avatarImageSize!.width * 1.5).toInt();
-      }
-    }
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        // MK Reducing used memory when caching player avatar images.
+        //
+        // NOTE 1: Multiplying the size of the image to ensure there's no pixelation effect.
+        // NOTE 2: Using only one dimension (longer one) to let the caching logic work out the aspect ratio of the image
+        final imageCacheHeight = (constraints.maxHeight * 1.5).toInt();
+        final imageCacheWidth = (constraints.maxWidth * 1.5).toInt();
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-      child: Stack(
-        children: [
-          const _Placeholder(),
-          if ((imageUri?.isEmpty ?? true) || imageUri == Constants.defaultAvatartAssetsPath)
-            Positioned.fill(
-              child: Image.asset(
-                Constants.defaultAvatartAssetsPath,
-                fit: BoxFit.cover,
-                frameBuilder:
-                    (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+          child: Stack(
+            children: [
+              const _Placeholder(),
+              Positioned.fill(
+                child: Image.file(
+                  File(imageUri),
+                  fit: BoxFit.cover,
+                  cacheHeight: imageCacheHeight,
+                  cacheWidth: imageCacheWidth,
+                  frameBuilder: (_, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                    if (wasSynchronouslyLoaded) {
+                      return child;
+                    }
 
-                  return ImageFadeInAnimation(frame: frame, child: child);
-                },
+                    return ImageFadeInAnimation(frame: frame, child: child);
+                  },
+                ),
               ),
-            )
-          else
-            Positioned.fill(
-              child: Image.file(
-                File(imageUri!),
-                fit: BoxFit.cover,
-                cacheHeight: avatarImageCacheHeight,
-                cacheWidth: avatarImageCacheWidth,
-                frameBuilder: (_, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
-
-                  return ImageFadeInAnimation(frame: frame, child: child);
-                },
-              ),
-            ),
-        ],
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

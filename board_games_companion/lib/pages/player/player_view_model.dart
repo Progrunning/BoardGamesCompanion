@@ -33,7 +33,10 @@ abstract class _PlayerViewModel with Store {
   String? get playerName => playerWorkingCopy?.name;
 
   @computed
-  bool get isBggUser => playerWorkingCopy?.bggName.isNotNullOrBlank ?? false;
+  bool get isBggUser => playerWorkingCopy?.isBggUser ?? false;
+
+  @computed
+  String? get bggName => playerWorkingCopy?.bggName;
 
   @computed
   String? get playerAvatarImageUri => playerWorkingCopy?.avatarImageUri;

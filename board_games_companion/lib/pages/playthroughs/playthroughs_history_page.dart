@@ -292,7 +292,7 @@ class _PlayerNoScoreAvatar extends StatelessWidget {
     this.noScoreGameResult,
   });
 
-  final Player? player;
+  final Player player;
   final String playerHeroIdSuffix;
   final NoScoreGameResult? noScoreGameResult;
 
@@ -306,7 +306,6 @@ class _PlayerNoScoreAvatar extends StatelessWidget {
           width: Dimensions.smallPlayerAvatarSize.width,
           child: PlayerAvatar(
             player: player,
-            avatarImageSize: Dimensions.smallPlayerAvatarSize,
             playerHeroIdSuffix: playerHeroIdSuffix,
           ),
         ),

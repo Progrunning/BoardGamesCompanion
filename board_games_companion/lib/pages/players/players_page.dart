@@ -6,7 +6,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
@@ -19,9 +18,7 @@ import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
 import '../../widgets/common/loading_indicator_widget.dart';
 import '../../widgets/common/text/item_property_title_widget.dart';
-import '../../widgets/elevated_container.dart';
 import '../../widgets/player/player_avatar.dart';
-import '../../widgets/player/player_image.dart';
 import '../player/player_page.dart';
 import 'players_view_model.dart';
 
@@ -408,11 +405,14 @@ class _PlayerState extends State<_Player> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        PlayerAvatar(
-          player: widget.player,
-          avatarImageSize: widget.avatarImageSize,
-          onTap: () => _onTap(),
-          onLongPress: () => widget.onPlayerLongPress?.call(widget.player),
+        SizedBox(
+          height: widget.avatarImageSize.height,
+          width: widget.avatarImageSize.width,
+          child: PlayerAvatar(
+            player: widget.player,
+            onTap: () => _onTap(),
+            onLongPress: () => widget.onPlayerLongPress?.call(widget.player),
+          ),
         ),
         if (widget.isDeletePlayersMode)
           Align(
@@ -573,15 +573,9 @@ class _SearchResults extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: Dimensions.searchResultsPlayerAvatarSize,
-                  width: Dimensions.searchResultsPlayerAvatarSize,
-                  child: ElevatedContainer(
-                    elevation: AppStyles.defaultElevation,
-                    child: Hero(
-                      tag: '${AnimationTags.playerImageHeroTag}${player.id}',
-                      child: PlayerImage(imageUri: player.avatarImageUri),
-                    ),
-                  ),
+                  height: Dimensions.searchResultsPlayerAvatarSize.height,
+                  width: Dimensions.searchResultsPlayerAvatarSize.width,
+                  child: PlayerAvatar(player: player),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Dimensions.standardSpacing),

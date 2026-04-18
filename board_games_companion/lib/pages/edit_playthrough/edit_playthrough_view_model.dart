@@ -65,7 +65,7 @@ abstract class _EditPlaythoughViewModel with Store {
 
     return {
       for (final tiedPlayerScore in _playthroughDetailsWorkingCopy!.tiedPlayerScores)
-        tiedPlayerScore.id!: tiedPlayerScore.score.scoreGameResult!.tiebreakerType!
+        tiedPlayerScore.id: tiedPlayerScore.score.scoreGameResult!.tiebreakerType!
     };
   }
 
@@ -79,7 +79,7 @@ abstract class _EditPlaythoughViewModel with Store {
   @computed
   ObservableList<Player> get players => _playthroughDetailsWorkingCopy!.playerScores
       .where((playerScore) => playerScore.player != null)
-      .map((playerScore) => playerScore.player!)
+      .map((playerScore) => playerScore.player)
       .toList()
       .asObservable();
 
@@ -254,9 +254,9 @@ abstract class _EditPlaythoughViewModel with Store {
     final playerScoresWorkingCopy = playerScores.toList();
 
     Fimber.d(
-      'Reording ${playerScoresWorkingCopy[currentIndex].player?.name} '
+      'Reording ${playerScoresWorkingCopy[currentIndex].player.name} '
       'from place ${playerScoresWorkingCopy[currentIndex].score.scoreGameResult?.place} [index $currentIndex] '
-      ', with ${playerScoresWorkingCopy[movingToIndex].player?.name} '
+      ', with ${playerScoresWorkingCopy[movingToIndex].player.name} '
       ', to place ${playerScoresWorkingCopy[movingToIndex].score.scoreGameResult?.place} [index $movingToIndex] ',
     );
 

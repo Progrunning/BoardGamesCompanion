@@ -55,8 +55,8 @@ class BoardGamePlaythrough with _$BoardGamePlaythrough {
           AppText.playPageHistoryTabScoreGameResultFormat,
           [
             winners
-                .where((playerScore) => playerScore.player?.name.isNotNullOrBlank ?? false)
-                .map((playerScore) => playerScore.player!.name)
+                .where((playerScore) => playerScore.player.name.isNotNullOrBlank)
+                .map((playerScore) => playerScore.player.name)
                 .join(', '),
             winners.first.score.score?.toStringAsFixed(0) ?? '-',
           ],

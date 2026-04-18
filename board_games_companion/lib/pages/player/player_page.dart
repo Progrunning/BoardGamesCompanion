@@ -1,10 +1,11 @@
 import 'package:board_games_companion/pages/player/player_visual_state.dart';
+import 'package:board_games_companion/widgets/player/player_avatar.dart';
+import 'package:board_games_companion/widgets/player/player_initials.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sprintf/sprintf.dart';
 
-import '../../common/animation_tags.dart';
 import '../../common/app_colors.dart';
 import '../../common/app_styles.dart';
 import '../../common/app_text.dart';
@@ -16,8 +17,6 @@ import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/common/ripple_effect.dart';
-import '../../widgets/elevated_container.dart';
-import '../../widgets/player/player_image.dart';
 import '../base_page_state.dart';
 import '../home/home_page.dart';
 import 'player_view_model.dart';
@@ -99,7 +98,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Observer(
-                            builder: (_) => _PlayerAvatar(
+                            builder: (_) => _PlayerImagePicker(
                               playerWorkingCopy: widget.viewModel.playerWorkingCopy!,
                               onPickImage: switch (widget.viewModel.visualState) {
                                 Deleted() => null,
@@ -123,19 +122,40 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                               );
                             },
                           ),
-                          if (widget.viewModel.isBggUser) ...[
+                          if (widget.viewModel.isBggUser == true) ...[
                             const SizedBox(height: Dimensions.doubleStandardSpacing),
-                            Text(
+                            const Text(
                               AppText.playerPagePlayerBggNameTitle,
-                              style: AppTheme.defaultTextFieldLabelStyle.copyWith(
-                                fontSize: Dimensions.extraSmallFontSize,
-                              ),
+                              style: AppTheme.defaultTextFieldLabelStyle,
                             ),
                             Text(
-                              widget.viewModel.playerWorkingCopy!.bggName!,
+                              widget.viewModel.bggName!,
                               style: AppTheme.defaultTextFieldStyle,
                             ),
                           ],
+                          const SizedBox(height: Dimensions.doubleStandardSpacing),
+                          const Text(
+                            AppText.playerPageAvatarColorsTitle,
+                            style: AppTheme.defaultTextFieldLabelStyle,
+                          ),
+                          Observer(
+                            builder: (context) {
+                              return _PlayerAvatarColorPicker(
+                                playerWorkingCopy: widget.viewModel.playerWorkingCopy!,
+                                onPickColor: switch (widget.viewModel.visualState) {
+                                  Deleted() => (_) {},
+                                  _ => (color) => widget.viewModel.updatePlayerWorkingCopy(
+                                        widget.viewModel.playerWorkingCopy!.copyWith(
+                                          avatarColor: color,
+                                          avatarImageUri: null,
+                                          avatarFileToSave: null,
+                                          avatarFileName: null,
+                                        ),
+                                      ),
+                                },
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -392,8 +412,8 @@ class _DeletedPlayerBanner extends StatelessWidget {
       );
 }
 
-class _PlayerAvatar extends StatelessWidget {
-  const _PlayerAvatar({
+class _PlayerImagePicker extends StatelessWidget {
+  const _PlayerImagePicker({
     required this.playerWorkingCopy,
     required this.onPickImage,
   });
@@ -408,17 +428,9 @@ class _PlayerAvatar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 190,
-              child: ElevatedContainer(
-                elevation: AppStyles.defaultElevation,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-                  child: Hero(
-                    tag: '${AnimationTags.playerImageHeroTag}${playerWorkingCopy.id}',
-                    child: PlayerImage(imageUri: playerWorkingCopy.avatarImageUri),
-                  ),
-                ),
-              ),
+              height: Dimensions.largePlayerAvatarSize.height,
+              width: Dimensions.largePlayerAvatarSize.width,
+              child: PlayerAvatar(player: playerWorkingCopy),
             ),
             const SizedBox(width: Dimensions.halfStandardSpacing),
             Expanded(
@@ -466,4 +478,41 @@ class _PlayerAvatar extends StatelessWidget {
           ],
         ),
       );
+}
+
+class _PlayerAvatarColorPicker extends StatelessWidget {
+  const _PlayerAvatarColorPicker({
+    required this.playerWorkingCopy,
+    required this.onPickColor,
+  });
+
+  final Player playerWorkingCopy;
+  final void Function(int color) onPickColor;
+
+  static const double tileSize = 40;
+  static const double spacing = 10;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: spacing,
+      runSpacing: spacing,
+      children: [
+        for (final color in AppColors.playerAvatarColors)
+          Material(
+            color: color,
+            borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+              onTap: () => onPickColor(color.toARGB32()),
+              child: SizedBox(
+                height: tileSize,
+                width: tileSize,
+                child: PlayerInitials(initials: playerWorkingCopy.initials ?? ''),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
 }
