@@ -1,6 +1,5 @@
 import 'package:board_games_companion/pages/player/player_visual_state.dart';
 import 'package:board_games_companion/widgets/player/player_avatar.dart';
-import 'package:board_games_companion/widgets/player/player_initials.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -504,10 +503,20 @@ class _PlayerAvatarColorPicker extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
               onTap: () => onPickColor(color.toARGB32()),
-              child: const SizedBox(
+              child: SizedBox(
                 height: tileSize,
                 width: tileSize,
-                child: PlayerInitials(initials: ''),
+                child: playerWorkingCopy.avatarColor == color.toARGB32()
+                    ? Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
+                          border: Border.all(
+                            color: AppColors.accentColor,
+                            width: Dimensions.defaultBorderWidth,
+                          ),
+                        ),
+                      )
+                    : null,
               ),
             ),
           ),
