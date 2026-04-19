@@ -30,10 +30,10 @@ class PlayerAvatar extends StatelessWidget {
       elevation: AppStyles.defaultElevation,
       child: Stack(
         children: <Widget>[
-          Hero(
-            tag: '${AnimationTags.playerImageHeroTag}${player.id}$playerHeroIdSuffix',
-            child: Positioned.fill(
-              child: player.hasAvatarImage == true
+          Positioned.fill(
+            child: Hero(
+              tag: '${AnimationTags.playerImageHeroTag}${player.id}$playerHeroIdSuffix',
+              child: player.hasAvatarImage
                   ? PlayerImage(imageUri: player.avatarImageUri!)
                   : Material(
                       color: Color(
