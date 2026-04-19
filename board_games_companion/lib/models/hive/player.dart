@@ -27,14 +27,14 @@ class Player with _$Player {
 
   const Player._();
 
-  bool get hasName => (name != null && name!.isNotEmpty) || isBggUser;
+  bool get hasName => name.isNotNullOrBlank || isBggUser;
 
   bool get hasAvatarImage => avatarImageUri.isNotNullOrBlank;
 
   bool get isBggUser => bggName.isNotNullOrBlank;
 
   String? get initials {
-    if (hasName) {
+    if (name.isNotNullOrBlank) {
       return _getInitials(name!);
     }
 
