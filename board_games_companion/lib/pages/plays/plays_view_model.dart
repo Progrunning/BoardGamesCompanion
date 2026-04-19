@@ -372,9 +372,8 @@ abstract class _PlaysViewModel with Store {
     for (final playerId in playthrough.playerIds) {
       final player = _playersStore.playersById[playerId];
       if (player == null) {
-        FirebaseCrashlytics.instance.recordError(
+        FirebaseCrashlytics.instance.log(
           'Player with id $playerId not found for playthrough ${playthrough.id}',
-          StackTrace.current,
         );
         continue;
       }

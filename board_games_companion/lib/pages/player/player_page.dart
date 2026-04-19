@@ -121,7 +121,7 @@ class PlayerPageState extends BasePageState<PlayerPage> {
                               );
                             },
                           ),
-                          if (widget.viewModel.isBggUser == true) ...[
+                          if (widget.viewModel.isBggUser) ...[
                             const SizedBox(height: Dimensions.doubleStandardSpacing),
                             const Text(
                               AppText.playerPagePlayerBggNameTitle,
