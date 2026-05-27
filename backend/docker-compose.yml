@@ -19,13 +19,13 @@ services:
       - ~/.aspnet/https:/https:ro
     depends_on:
       mongo:
-        condition: service_healthy
+        condition: service_healthy  
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/healthz"]
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/healthz"]
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 30s
+      start_period: 20s
 
   mongo:
     image: mongo:latest

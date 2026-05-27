@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "docker-compose: start services",
             "postDebugTask": "open-api-start-page",
-            "program": "${workspaceFolder}/backend/BGC.SearchApi/bin/Debug/net8.0/BGC.SearchApi.dll",
+            "program": "${workspaceFolder}/backend/BGC.SearchApi/bin/Debug/net9.0/BGC.SearchApi.dll",
             "args": [],
             "cwd": "${workspaceFolder}/backend/BGC.SearchApi",
             "stopAtEntry": false,

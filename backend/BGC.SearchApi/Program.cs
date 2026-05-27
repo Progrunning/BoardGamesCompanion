@@ -34,16 +34,6 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-if (!bool.TryParse(builder.Configuration[Constants.ConfigurationKeyNames.IsIntegrationTest], out var isIntegrationTest) || !isIntegrationTest)
-{
-#if !DEBUG
-    // MK Might require adding Access Policies to the user signed into Azure
-    builder.Configuration.AddAzureKeyVault(
-            new Uri($"https://{builder.Configuration[Constants.ConfigurationKeyNames.KeyVault]}.vault.azure.net/"),
-            new DefaultAzureCredential());
-#endif
-}
-
 builder.Services.AddOptions<CacheSettings>()
                 .Bind(builder.Configuration.GetSection(nameof(CacheSettings)))
                 .ValidateDataAnnotations()
@@ -100,7 +90,8 @@ app.UseStatusCodePages(async statusCodeContext =>
     await Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
                  .ExecuteAsync(statusCodeContext.HttpContext);
 });
-app.MapHealthChecks("api/search/health");
+app.MapHealthChecks("/healthz")
+   .ShortCircuit();
 
 app.MapGet("api/search", [Authorize] ([FromQuery] string query, ISearchService searchService) => searchService.Search(query, CancellationToken.None))
    .WithOpenApi();
