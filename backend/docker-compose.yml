@@ -1,6 +1,6 @@
 services:
-  bgc.searchapi:    
-    container_name: bgc.searchapi
+  bgc_searchapi:    
+    container_name: bgc_searchapi
     build:
       context: .
       dockerfile: BGC.SearchApi/dockerfile      
@@ -9,11 +9,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:8080
+      - VSDBG_WAIT_FOR_DEBUGGER=1
     env_file:
       - .env
     ports:
-      - 8080
-      - 443
+      - 5164:8080
+      - 7226:443
+      - 4711:4711
     volumes:
       - ${ASPNETCORE_USER_SECRETS_PATH}:/root/.microsoft/usersecrets:ro
       - ~/.aspnet/https:/https:ro

@@ -21,21 +21,21 @@
             "isBackground": false
         },
         {
-            "label": "open-api-start-page",
+            "label": "Start Docker & Open API",
             "type": "shell",
-            "command": "start",
-            "args": [
-                "http://localhost"
-            ],
+            "command": "docker-compose up -d --build --wait && start https://localhost:7226/swagger",
             "windows": {
                 "command": "cmd",
                 "args": [
                     "/c",
-                    "start http://localhost"
+                    "docker-compose up -d --build --wait && start https://localhost:7226/swagger"
                 ]
             },
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
             "presentation": {
-                "reveal": "silent",
+                "reveal": "always",
                 "panel": "shared"
             },
             "isBackground": false

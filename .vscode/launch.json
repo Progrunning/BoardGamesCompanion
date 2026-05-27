@@ -7,19 +7,32 @@
         {
             "name": "BGC.SearchApi (Docker Compose)",
             "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "docker-compose: start services",
-            "postDebugTask": "open-api-start-page",
-            "program": "${workspaceFolder}/backend/BGC.SearchApi/bin/Debug/net9.0/BGC.SearchApi.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/backend/BGC.SearchApi",
-            "stopAtEntry": false,
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+            "request": "attach",
+            "preLaunchTask": "Start Docker & Open API",
+            "processName": "dotnet",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceFolder}",
+                "pipeProgram": "docker",
+                "pipeArgs": [
+                    "exec",
+                    "-i",
+                    "bgc_searchapi",
+                    "sh",
+                    "-c"
+                ],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "windows": {
+                    "pipeProgram": "docker",
+                    "pipeArgs": [
+                        "exec",
+                        "-i",
+                        "bgc_searchapi",
+                        "sh",
+                        "-c"
+                    ]
+                }
             },
-            "sourceFileMap": {
-                "/app": "${workspaceFolder}/backend"
-            },
+            "justMyCode": false,
             "presentation": {
                 "hidden": false,
                 "group": "",

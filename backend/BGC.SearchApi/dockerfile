@@ -6,8 +6,10 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 443
 
-# Install curl for health checks in docker-compose
-RUN apt-get update && apt-get install -y curl
+# Install curl for health checks and vsdbg for debugging
+RUN apt-get update && apt-get install -y curl && \
+    apt-get install -y unzip && \
+    curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /vsdbg
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -29,4 +31,6 @@ RUN dotnet publish "./BGC.SearchApi.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# Copy source code for debugging
+COPY --from=build /src /src
 ENTRYPOINT ["dotnet", "BGC.SearchApi.dll"]
