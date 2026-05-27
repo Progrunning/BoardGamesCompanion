@@ -1,6 +1,48 @@
 services:
-  bgc.searchapi:
-    image: ${DOCKER_REGISTRY-}bgcsearchapi
+  bgc.searchapi:    
+    container_name: bgc.searchapi
     build:
       context: .
-      dockerfile: BGC.SearchApi/Dockerfile
+      dockerfile: BGC.SearchApi/dockerfile      
+      args:
+        - BUILD_CONFIGURATION=Debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:8080
+    env_file:
+      - .env
+    ports:
+      - 8080
+      - 443
+    volumes:
+      - ${ASPNETCORE_USER_SECRETS_PATH}:/root/.microsoft/usersecrets:ro
+      - ~/.aspnet/https:/https:ro
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo_data:

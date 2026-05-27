@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "docker-compose: start services",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": [
+                "up",
+                "-d",
+                "--build",
+                "--wait"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "isBackground": false
+        },
+        {
+            "label": "open-api-start-page",
+            "type": "shell",
+            "command": "start",
+            "args": [
+                "http://localhost"
+            ],
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "start http://localhost"
+                ]
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "isBackground": false
+        }
+    ]
+}

@@ -478,3 +478,6 @@ $RECYCLE.BIN/
 
 # Ignore local settings files
 **/appsettings.Development.json
+
+# Docker
+.env

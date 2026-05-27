@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "BGC.SearchApi (Docker Compose)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "docker-compose: start services",
+            "postDebugTask": "open-api-start-page",
+            "program": "${workspaceFolder}/backend/BGC.SearchApi/bin/Debug/net8.0/BGC.SearchApi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/backend/BGC.SearchApi",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/app": "${workspaceFolder}/backend"
+            },
+            "presentation": {
+                "hidden": false,
+                "group": "",
+                "order": 1
+            }
+        }
+    ]
+}
