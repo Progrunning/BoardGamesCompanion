@@ -2,23 +2,24 @@ services:
   bgc_searchapi:    
     container_name: bgc_searchapi
     build:
-      context: .
+      context: .  
       dockerfile: BGC.SearchApi/dockerfile      
+      target: debug
       args:
         - BUILD_CONFIGURATION=Debug
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:8080
-      - VSDBG_WAIT_FOR_DEBUGGER=1
+      - ASPNETCORE_URLS=https://+:443;http://+:8080      
     env_file:
       - .env
     ports:
       - 5164:8080
-      - 7226:443
-      - 4711:4711
+      - 7226:443      
     volumes:
       - ${ASPNETCORE_USER_SECRETS_PATH}:/root/.microsoft/usersecrets:ro
       - ~/.aspnet/https:/https:ro
+      # - ./BGC.SearchApi:/app:ro
+      # - ./BGC.Core:/app/BGC.Core:ro      
     depends_on:
       mongo:
         condition: service_healthy  

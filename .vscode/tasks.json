@@ -2,43 +2,29 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "docker-compose: start services",
-            "type": "shell",
-            "command": "docker-compose",
-            "args": [
-                "up",
-                "-d",
-                "--build",
-                "--wait"
-            ],
+            "label": "Api - docker compose up",
+            "type": "docker-compose",
             "options": {
                 "cwd": "${workspaceFolder}/backend"
             },
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "isBackground": false
-        },
-        {
-            "label": "Start Docker & Open API",
-            "type": "shell",
-            "command": "docker-compose up -d --build --wait && start https://localhost:7226/swagger",
-            "windows": {
-                "command": "cmd",
-                "args": [
-                    "/c",
-                    "docker-compose up -d --build --wait && start https://localhost:7226/swagger"
-                ]
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/backend"
+            "dockerCompose": {
+                "up": {
+                    "detached": true,
+                    "build": true,
+                    "services": [
+                        "bgc_searchapi"
+                    ]
+                }
             },
             "presentation": {
+                "group": "debug",
+                "echo": true,
                 "reveal": "always",
-                "panel": "shared"
-            },
-            "isBackground": false
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
         }
     ]
 }

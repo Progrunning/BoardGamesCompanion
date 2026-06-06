@@ -3,11 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <DockerTargetOS>Linux</DockerTargetOS>
-    <UserSecretsId>495d1e9c-fe6c-46e3-8723-b99354f34ef1</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <ImplicitUsings>enable</ImplicitUsings>    
+    <UserSecretsId>495d1e9c-fe6c-46e3-8723-b99354f34ef1</UserSecretsId>    
   </PropertyGroup>
 
   <ItemGroup>
