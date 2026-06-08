@@ -20,4 +20,21 @@ public static class Constants
     {
         public const string ApiKey = nameof(ApiKey);
     }
+
+    public static class Telemetry
+    {
+        public static class Config
+        {
+            public const string OtlpEndpoint = "OTEL_EXPORTER_OTLP_ENDPOINT";
+        }
+
+        public static class Attributes
+        {
+            public const string ServiceName = "service.name";
+            public const string BoardGameId = "boardgame.id";
+            public const string BoardGameName = "boardgame.name";
+        }
+
+        public const string ServiceName = "BGC.SearchApi";
+    }
 }

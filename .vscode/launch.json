@@ -23,8 +23,8 @@
             "internalConsoleOptions": "openOnSessionStart",
             "dockerServerReadyAction": {
                 "action": "openExternally",
-                "uriFormat": "http://localhost:7226/swagger/index.html",
-                "containerName": "Listening on: https://\\[::\\]:443"
+                "uriFormat": "http://localhost:5164/swagger/index.html",
+                "pattern": "Now listening on: https://\\[::\\]:443"
             }
         }
     ]
