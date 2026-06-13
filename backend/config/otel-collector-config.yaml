@@ -10,23 +10,27 @@ processors:
   batch:
 
 exporters:
-  # Route everything to the self-hosted Grafana LGTM all-in-one container
-  otlp:
-    endpoint: "otel-lgtm:4317"
+  otlphttp:
+    endpoint: http://loki:3100/otlp
     tls:
       insecure: true
+  # Route everything to the self-hosted Grafana LGTM all-in-one container
+  # otlp:
+  #   endpoint: "otel-lgtm:4317"
+  #   tls:
+  #     insecure: true
 
 service:
   pipelines:
-    traces:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp]
-    metrics:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp]
+    # traces:
+    #   receivers: [otlp]
+    #   processors: [batch]
+    #   exporters: [otlp]
+    # metrics:
+    #   receivers: [otlp]
+    #   processors: [batch]
+    #   exporters: [otlp]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlphttp]
