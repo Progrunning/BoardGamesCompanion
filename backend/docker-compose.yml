@@ -8,13 +8,14 @@
 services:
   bgc_searchapi:    
     container_name: bgc_searchapi
-    entrypoint: ["tail", "-f", "/dev/null"]
+    # entrypoint: ["tail", "-f", "/dev/null"]
     build:
       context: .  
       dockerfile: BGC.SearchApi/dockerfile      
       target: debug
       args:
         - BUILD_CONFIGURATION=Debug
+      no_cache: true
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:8080
@@ -23,7 +24,7 @@ services:
       - .env
     ports:
       - 5164:8080
-      - 7226:443      
+      - 7226:443
     volumes:
       - ${ASPNETCORE_USER_SECRETS_PATH}:/root/.microsoft/usersecrets:ro
       - ~/.aspnet/https:/https:ro

@@ -6,9 +6,9 @@
     "configurations": [
         {
             "name": "Api (Docker Compose)",
-            "preLaunchTask": "Api - docker compose up",
             "type": "docker",
             "request": "launch",
+            "preLaunchTask": "Api - docker compose up",
             "containerName": "bgc_searchapi",
             "netCore": {
                 "appProject": "${workspaceFolder}/backend/BGC.SearchApi/BGC.SearchApi.csproj",

@@ -141,7 +141,7 @@ static void ConfigureOpenTelemetry(WebApplicationBuilder builder, IConfiguration
         .ConfigureResource(resource => resource.AddService(Constants.Telemetry.ServiceName))
         .WithTracing(tracing => tracing
             .AddAspNetCoreInstrumentation() // Captures incoming HTTP request traces
-            .AddHttpClientInstrumentation() // Captures outgoing HTTP client traces
+            .AddHttpClientInstrumentation() // Captures outgoing HTTP client traces            
             .AddOtlpExporter(options => options.Endpoint = new Uri(otlpEndpoint)))
         .WithMetrics(metrics => metrics
             .AddAspNetCoreInstrumentation() // Captures request rates and durations

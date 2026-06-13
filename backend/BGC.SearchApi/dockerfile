@@ -21,17 +21,19 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION
 RUN dotnet publish "./BGC.SearchApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM base AS debug
+# TODO There's an issue where if the entrypoint is defined in docker-compose as "entrypoint: ["tail", "-f", "/dev/null"]"
+#      then the logs are not output in the container's console and therefore are not picked by open telemetry.
+# Install the vsdbg debugger for remote debugging because for some reason is not copied across by vs code automatically
+# RUN apt-get update && \
+#     apt-get install -y curl unzip && \
+#     curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /remote_debugger
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BGC.SearchApi.dll"]
 
-FROM base AS debug
-# Install the vsdbg debugger for remote debugging because for some reason is not copied across by vs code automatically
-RUN apt-get update && \
-    apt-get install -y curl unzip && \
-    curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /remote_debugger
-
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BGC.SearchApi.dll"]

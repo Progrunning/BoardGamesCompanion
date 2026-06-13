@@ -138,9 +138,10 @@ public class SearchService : ISearchService
     private async Task CacheBoardGames(IReadOnlyCollection<BoardGameSummaryDto> boardGameSummaries, Dictionary<string, BoardGame> boardGamesDetailsDict)
     {
         var cachedBoardGameIds = boardGamesDetailsDict.Values.Select(boardGame => boardGame.Id);
-        var newBoardGameIds = boardGameSummaries.Select(boardGame => boardGame.Id).Except(cachedBoardGameIds);
+        var newBoardGameIds = boardGameSummaries.Select(boardGame => boardGame.Id)
+                                                .Except(cachedBoardGameIds);
 
-        _logger.LogInformation($"Adding {newBoardGameIds} to cache.");
+        _logger.LogInformation($"Adding {string.Join(", ", newBoardGameIds)} to cache.");
 
         await _cacheService.Add(newBoardGameIds);
 
@@ -149,7 +150,7 @@ public class SearchService : ISearchService
                                                                                          boardGamesDetailsDict[existingBoardGameId].LastUpdated?.AddMinutes(_cacheService.CacheExpirationInMinutes) <= _dateTimeService.UtcOffsetNow)
                                                            .ToArray();
 
-        _logger.LogInformation($"Updating {cacheExpiredBoardGameIds} in cache.");
+        _logger.LogInformation($"Updating {string.Join(", ", cacheExpiredBoardGameIds)} in cache.");
 
         await _cacheService.Update(cacheExpiredBoardGameIds);
     }
