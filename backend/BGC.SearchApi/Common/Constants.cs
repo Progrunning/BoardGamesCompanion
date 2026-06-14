@@ -7,7 +7,6 @@ public static class Constants
 {
     public static class ConfigurationKeyNames
     {
-        public const string IsIntegrationTest = "IntegrationTest";
         public const string KeyVault = "KeyVaultName";
     }
 
