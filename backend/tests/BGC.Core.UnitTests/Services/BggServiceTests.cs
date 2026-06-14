@@ -1,10 +1,6 @@
-﻿using AutoFixture;
-
-using BGC.Core.Models.Dtos.BoardGameGeek;
+﻿using BGC.Core.Models.Dtos.BoardGameGeek;
 using BGC.Core.Services;
 using BGC.Tests.Core.Helpers;
-
-using Moq.Protected;
 
 using Microsoft.Extensions.Caching.Memory;
 

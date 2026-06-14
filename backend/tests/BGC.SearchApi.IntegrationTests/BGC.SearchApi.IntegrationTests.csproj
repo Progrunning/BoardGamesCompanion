@@ -1,13 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" />    
-    <PackageReference Include="Azure.Messaging.ServiceBus" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="coverlet.msbuild" >
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,10 +25,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  
 
   <ItemGroup>
     <ProjectReference Include="..\..\BGC.SearchApi\BGC.SearchApi.csproj" />
-    <ProjectReference Include="..\BGC.Tests.Core\BGC.Tests.Core.csproj" />
+    <ProjectReference Include="..\BGC.Core.UnitTests\BGC.Core.UnitTests.csproj" />
   </ItemGroup>
 
 </Project>
