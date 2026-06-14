@@ -28,13 +28,11 @@ jobs:
     displayName: CI
     steps:
       - task: UseDotNet@2
-        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Install .NET 9.x SDK"
         inputs:
           version: 9.x
 
       - task: DotNetCoreCLI@2
-        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Build Search API"
         inputs:
           projects: "**/BGC.SearchApi.csproj"
