@@ -28,6 +28,7 @@ services:
     volumes:
       - ${ASPNETCORE_USER_SECRETS_PATH}:/root/.microsoft/usersecrets:ro
       - ~/.aspnet/https:/https:ro
+      - ${VS_CODE_LOCAL_DEBUGGER_PATH}:/root/.vsdbg:ro
     depends_on:
       mongo:
         condition: service_healthy

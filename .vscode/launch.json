@@ -13,7 +13,7 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/backend/BGC.SearchApi/BGC.SearchApi.csproj",
                 "appOutput": "BGC.SearchApi.dll",
-                "debuggerPath": "/remote_debugger/vsdbg",
+                // "debuggerPath": "/remote_debugger/vsdbg",
                 "enableDebugging": true,
                 "configureSsl": true
             },
