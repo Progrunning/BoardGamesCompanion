@@ -1,30 +1,80 @@
 name: Claude Issue Agent
 
 # Adding the `ready-for-agent` label to an eligible issue triggers an AFK agent
-# run that implements the ticket and opens a pull request. See issue #290 for the
-# full spec and docs/agents/triage-labels.md for the label semantics.
+# run that implements the ticket and opens a pull request. Closing an issue
+# advances the frontier: any ticket it was blocking that is now fully unblocked
+# is dispatched automatically. See issue #290 for the full spec and
+# docs/agents/triage-labels.md for the label semantics.
+#
+# Credential note: for the frontier dispatch (and for the PR-review workflow to
+# chain onto the agent's PR) GitHub's recursion guard requires a workflow-
+# triggering token — set repository secret AGENT_PAT to a PAT (or GitHub App
+# token) with `actions: write` + `issues: read`. Without it the dispatch is a
+# silent no-op and the frontier will not advance.
 
 on:
   issues:
-    types: [labeled]
+    types: [labeled, closed]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Issue number for the agent to work"
+        required: true
 
-# Serialize runs per issue (re-labelling queues behind an in-flight run), while
-# distinct issues run in parallel.
+# Serialize runs per issue (re-triggering queues behind an in-flight run), while
+# distinct issues run in parallel. Keyed by the issue number resolved from
+# whichever event fired.
 concurrency:
-  group: agent-issue-${{ github.event.issue.number }}
+  group: agent-issue-${{ github.event.issue.number || inputs.issue_number }}
   cancel-in-progress: false
 
 jobs:
+  # Frontier auto-advance. On issue close, dispatch a run for each ticket the
+  # closed issue was blocking that is now open, `ready-for-agent`, not `spec`,
+  # and has zero open blockers.
+  advance:
+    if: github.event_name == 'issues' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      actions: write
+    steps:
+      - name: Dispatch newly-unblocked dependents
+        env:
+          GH_TOKEN: ${{ secrets.AGENT_PAT || github.token }}
+        run: |
+          set -euo pipefail
+          closed="${{ github.event.issue.number }}"
+          repo="${{ github.repository }}"
+          for d in $(gh api "repos/$repo/issues/$closed/dependencies/blocking" --jq '.[].number'); do
+            info=$(gh api "repos/$repo/issues/$d" \
+              --jq '{state, labels: [.labels[].name], blocked: (.issue_dependencies_summary.blocked_by // 0)}')
+            state=$(jq -r '.state' <<<"$info")
+            blocked=$(jq -r '.blocked' <<<"$info")
+            has_rfa=$(jq -r '(.labels | index("ready-for-agent")) != null' <<<"$info")
+            is_spec=$(jq -r '(.labels | index("spec")) != null' <<<"$info")
+            if [ "$state" = open ] && [ "$has_rfa" = true ] && [ "$is_spec" = false ] && [ "$blocked" -eq 0 ]; then
+              echo "::notice::#$closed closed — dispatching now-unblocked #$d"
+              gh workflow run claude-issue-agent.yml -f issue_number="$d"
+            else
+              echo "Skipping #$d (state=$state ready-for-agent=$has_rfa spec=$is_spec open-blockers=$blocked)"
+            fi
+          done
+
   implement:
-    # Only when the `ready-for-agent` label was just added, the issue is open, and
-    # the issue is not a spec (PRD) issue. The open-blocker check is done in the
-    # gate step below, since it needs the issue dependencies API.
+    # Fire on a `ready-for-agent` label add to an open, non-spec issue, or on a
+    # frontier dispatch. The open-blocker check is the gate step below.
     if: >-
-      github.event.label.name == 'ready-for-agent' &&
-      github.event.issue.state == 'open' &&
-      !contains(github.event.issue.labels.*.name, 'spec')
+      (github.event_name == 'issues' &&
+       github.event.action == 'labeled' &&
+       github.event.label.name == 'ready-for-agent' &&
+       github.event.issue.state == 'open' &&
+       !contains(github.event.issue.labels.*.name, 'spec'))
+      || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      ISSUE: ${{ github.event.issue.number || inputs.issue_number }}
     permissions:
       contents: write
       pull-requests: write
@@ -32,18 +82,18 @@ jobs:
       id-token: write
     steps:
       # Skip tickets that still have open blockers (GitHub native issue
-      # dependencies). A blocked ticket is skipped silently with its label intact;
-      # the frontier workflow starts it once its last blocker closes.
+      # dependencies). A blocked ticket is skipped silently with its label
+      # intact; the frontier job starts it once its last blocker closes.
       - name: Check for open blockers
         id: gate
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          count=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.issue.number }}" \
+          count=$(gh api "repos/${{ github.repository }}/issues/$ISSUE" \
             --jq '.issue_dependencies_summary.blocked_by // 0')
           echo "open_blockers=$count" >> "$GITHUB_OUTPUT"
           if [ "$count" -gt 0 ]; then
-            echo "::notice::Issue #${{ github.event.issue.number }} has $count open blocker(s); skipping agent run."
+            echo "::notice::Issue #$ISSUE has $count open blocker(s); skipping agent run."
           fi
 
       - uses: actions/checkout@v6
@@ -72,19 +122,19 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             REPO: ${{ github.repository }}
-            ISSUE NUMBER: ${{ github.event.issue.number }}
+            ISSUE NUMBER: ${{ env.ISSUE }}
 
-            An issue in this repository has just been labelled `ready-for-agent`,
-            meaning it is a fully-specified, unblocked implementation ticket for you
-            to build autonomously (AFK). No human is watching — work to completion
-            and never ask for confirmation.
+            An issue in this repository has been marked `ready-for-agent`, meaning
+            it is a fully-specified, unblocked implementation ticket for you to
+            build autonomously (AFK). No human is watching — work to completion and
+            never ask for confirmation.
 
             1. Read the ticket in full, including its comments:
-               `gh issue view ${{ github.event.issue.number }} --comments`
+               `gh issue view ${{ env.ISSUE }} --comments`
             2. Follow this repo's conventions: read CLAUDE.md, docs/agents/, and
                docs/coding-conventions.md, and use the project's domain vocabulary.
             3. Create a new branch off the default branch named
-               `agent/issue-${{ github.event.issue.number }}`.
+               `agent/issue-${{ env.ISSUE }}`.
             4. Implement the ticket by invoking the repo's `/implement` skill, which
                works test-first at the ticket's stated seams. SKIP its final
                `/code-review` step — the separate PR-review workflow reviews the PR
@@ -98,18 +148,18 @@ jobs:
                     `dart run build_runner build --delete-conflicting-outputs` first.
                Run only the suite for the area you touched.
             6. Open a NON-draft pull request whose body starts with
-               `Fixes #${{ github.event.issue.number }}` and summarises what you did
-               and how you verified it. Base the PR on the default branch. Then remove
-               the trigger label:
-               `gh issue edit ${{ github.event.issue.number }} --remove-label ready-for-agent`
+               `Fixes #${{ env.ISSUE }}` and summarises what you did and how you
+               verified it. Base the PR on the default branch. Then remove the
+               trigger label:
+               `gh issue edit ${{ env.ISSUE }} --remove-label ready-for-agent`
 
             Failure path — if you CANNOT deliver a PR (the ticket is underspecified,
             a test suite fails and you cannot fix it, or there is no sensible
             implementation), do NOT open a pull request. Instead:
               - Comment on the issue explaining the specific blocker:
-                `gh issue comment ${{ github.event.issue.number }} --body "..."`
+                `gh issue comment ${{ env.ISSUE }} --body "..."`
               - Route it back to the human lane:
-                `gh issue edit ${{ github.event.issue.number }} --remove-label ready-for-agent --add-label needs-info`
+                `gh issue edit ${{ env.ISSUE }} --remove-label ready-for-agent --add-label needs-info`
 
             Communicate only through the branch, commits, the pull request, and issue
             comments — do not rely on chat output.
