@@ -1,0 +1,68 @@
+name: Claude Issue Agent
+
+# Adding the `ready-for-agent` label to an eligible issue triggers an AFK agent
+# run that implements the ticket and opens a pull request. See issue #290 for the
+# full spec and docs/agents/triage-labels.md for the label semantics.
+
+on:
+  issues:
+    types: [labeled]
+
+# Serialize runs per issue (re-labelling queues behind an in-flight run), while
+# distinct issues run in parallel.
+concurrency:
+  group: agent-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  implement:
+    # Only when the `ready-for-agent` label was just added, the issue is open, and
+    # the issue is not a spec (PRD) issue.
+    if: >-
+      github.event.label.name == 'ready-for-agent' &&
+      github.event.issue.state == 'open' &&
+      !contains(github.event.issue.labels.*.name, 'spec')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            ISSUE NUMBER: ${{ github.event.issue.number }}
+
+            An issue in this repository has just been labelled `ready-for-agent`,
+            meaning it is a fully-specified implementation ticket for you to build
+            autonomously (AFK). No human is watching — work to completion and never
+            ask for confirmation.
+
+            Do the following:
+            1. Read the ticket in full, including its comments:
+               `gh issue view ${{ github.event.issue.number }} --comments`
+            2. Follow this repo's conventions: read CLAUDE.md, docs/agents/, and
+               docs/coding-conventions.md, and use the project's domain vocabulary.
+            3. Create a new branch off the default branch named
+               `agent/issue-${{ github.event.issue.number }}`.
+            4. Implement exactly what the ticket asks — no more, no less — in focused
+               commits.
+            5. Push the branch and open a NON-draft pull request whose body starts with
+               `Fixes #${{ github.event.issue.number }}` and summarises what you did and
+               how you verified it. Base the PR on the default branch.
+            6. Once the PR is open, remove the trigger label from the issue:
+               `gh issue edit ${{ github.event.issue.number }} --remove-label ready-for-agent`
+
+            Communicate only through the branch, commits, the pull request, and (if
+            needed) issue comments — do not rely on chat output.
+
+          claude_args: |
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(git:*),Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh pr create:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(mkdir:*),Bash(ls:*),Bash(cat:*)"
