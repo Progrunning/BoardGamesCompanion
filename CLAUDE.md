@@ -1,5 +1,9 @@
 # CLAUDE.md
 
+## Coding conventions
+
+Architecture, naming, DI, and testing conventions for the backend (.NET/C#) and the Flutter app — patterns not already covered by each codebase's lint config. See `docs/coding-conventions.md`.
+
 ## Agent skills
 
 ### Issue tracker
