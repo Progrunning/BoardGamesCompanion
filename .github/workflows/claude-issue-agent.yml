@@ -17,7 +17,8 @@ concurrency:
 jobs:
   implement:
     # Only when the `ready-for-agent` label was just added, the issue is open, and
-    # the issue is not a spec (PRD) issue.
+    # the issue is not a spec (PRD) issue. The open-blocker check is done in the
+    # gate step below, since it needs the issue dependencies API.
     if: >-
       github.event.label.name == 'ready-for-agent' &&
       github.event.issue.state == 'open' &&
@@ -30,11 +31,43 @@ jobs:
       issues: write
       id-token: write
     steps:
+      # Skip tickets that still have open blockers (GitHub native issue
+      # dependencies). A blocked ticket is skipped silently with its label intact;
+      # the frontier workflow starts it once its last blocker closes.
+      - name: Check for open blockers
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          count=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.issue.number }}" \
+            --jq '.issue_dependencies_summary.blocked_by // 0')
+          echo "open_blockers=$count" >> "$GITHUB_OUTPUT"
+          if [ "$count" -gt 0 ]; then
+            echo "::notice::Issue #${{ github.event.issue.number }} has $count open blocker(s); skipping agent run."
+          fi
+
       - uses: actions/checkout@v6
+        if: steps.gate.outputs.open_blockers == '0'
         with:
           fetch-depth: 0
 
+      # Toolchains for the verification bar. Both are set up (with caching) so the
+      # agent can run whichever suite it touched; it runs only the relevant one.
+      - name: Set up .NET
+        if: steps.gate.outputs.open_blockers == '0'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Set up Flutter
+        if: steps.gate.outputs.open_blockers == '0'
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
       - uses: anthropics/claude-code-action@v1
+        if: steps.gate.outputs.open_blockers == '0'
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
@@ -42,27 +75,44 @@ jobs:
             ISSUE NUMBER: ${{ github.event.issue.number }}
 
             An issue in this repository has just been labelled `ready-for-agent`,
-            meaning it is a fully-specified implementation ticket for you to build
-            autonomously (AFK). No human is watching — work to completion and never
-            ask for confirmation.
+            meaning it is a fully-specified, unblocked implementation ticket for you
+            to build autonomously (AFK). No human is watching — work to completion
+            and never ask for confirmation.
 
-            Do the following:
             1. Read the ticket in full, including its comments:
                `gh issue view ${{ github.event.issue.number }} --comments`
             2. Follow this repo's conventions: read CLAUDE.md, docs/agents/, and
                docs/coding-conventions.md, and use the project's domain vocabulary.
             3. Create a new branch off the default branch named
                `agent/issue-${{ github.event.issue.number }}`.
-            4. Implement exactly what the ticket asks — no more, no less — in focused
-               commits.
-            5. Push the branch and open a NON-draft pull request whose body starts with
-               `Fixes #${{ github.event.issue.number }}` and summarises what you did and
-               how you verified it. Base the PR on the default branch.
-            6. Once the PR is open, remove the trigger label from the issue:
+            4. Implement the ticket by invoking the repo's `/implement` skill, which
+               works test-first at the ticket's stated seams. SKIP its final
+               `/code-review` step — the separate PR-review workflow reviews the PR
+               you open, so running review here would only duplicate it.
+            5. Verification bar — before opening a PR, run the tests for the area you
+               changed and make them pass:
+                  - Backend (`backend/`): `dotnet test` on the relevant BGC test
+                    projects.
+                  - Flutter app (`board_games_companion/`): `flutter pub get`, then
+                    `flutter test`. If you changed annotated classes, regenerate with
+                    `dart run build_runner build --delete-conflicting-outputs` first.
+               Run only the suite for the area you touched.
+            6. Open a NON-draft pull request whose body starts with
+               `Fixes #${{ github.event.issue.number }}` and summarises what you did
+               and how you verified it. Base the PR on the default branch. Then remove
+               the trigger label:
                `gh issue edit ${{ github.event.issue.number }} --remove-label ready-for-agent`
 
-            Communicate only through the branch, commits, the pull request, and (if
-            needed) issue comments — do not rely on chat output.
+            Failure path — if you CANNOT deliver a PR (the ticket is underspecified,
+            a test suite fails and you cannot fix it, or there is no sensible
+            implementation), do NOT open a pull request. Instead:
+              - Comment on the issue explaining the specific blocker:
+                `gh issue comment ${{ github.event.issue.number }} --body "..."`
+              - Route it back to the human lane:
+                `gh issue edit ${{ github.event.issue.number }} --remove-label ready-for-agent --add-label needs-info`
+
+            Communicate only through the branch, commits, the pull request, and issue
+            comments — do not rely on chat output.
 
           claude_args: |
-            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(git:*),Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh pr create:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(mkdir:*),Bash(ls:*),Bash(cat:*)"
+            --allowedTools "Read,Edit,Write,Glob,Grep,Skill,Bash(git:*),Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh pr create:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(dotnet:*),Bash(flutter:*),Bash(dart:*),Bash(mkdir:*),Bash(ls:*),Bash(cat:*)"
