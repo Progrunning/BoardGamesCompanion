@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BGC App Theming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2D103F;
+    --primary-light: #5B217F;
+    --accent: #FF9800;
+    --secondary: #010055;
+    --secondary-light: #2747A5;
+    --text: #FFFFFF;
+    --text-secondary: #9E9E9E;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: linear-gradient(160deg, var(--primary-light) 20%, var(--primary) 90%);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 2.5rem clamp(1rem, 5vw, 4rem) 4rem;
+  }
+  header { margin-bottom: 2.5rem; }
+  header h1 { font-size: 2rem; }
+  header p { color: var(--text-secondary); margin-top: .4rem; max-width: 60ch; }
+  header code { color: var(--accent); font-size: .9em; }
+  section { margin-bottom: 3rem; }
+  h2 {
+    font-size: .9rem; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--accent); border-bottom: 1px solid var(--accent);
+    padding-bottom: .4rem; margin-bottom: 1.2rem;
+  }
+  h3 { font-size: 1rem; color: var(--text-secondary); margin: 1.4rem 0 .8rem; font-weight: 400; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .8rem; }
+  .swatch {
+    border-radius: 8px; overflow: hidden;
+    background: rgba(0,0,0,.25); box-shadow: 0 2px 6px rgba(0,0,0,.4);
+  }
+  .swatch .chip { height: 64px; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .swatch .meta { padding: .5rem .6rem .6rem; }
+  .swatch .name { font-size: .78rem; word-break: break-all; }
+  .swatch .hex { font-size: .72rem; color: var(--text-secondary); font-family: monospace; }
+  .mini .chip { height: 36px; }
+  .type-row { display: flex; align-items: baseline; gap: 1.2rem; padding: .55rem 0; border-bottom: 1px solid rgba(255,255,255,.08); flex-wrap: wrap; }
+  .type-row .slot { width: 10.5rem; font-family: monospace; font-size: .78rem; color: var(--accent); flex-shrink: 0; }
+  .type-row .spec { width: 9rem; font-size: .72rem; color: var(--text-secondary); flex-shrink: 0; }
+  .bar-row { display: flex; align-items: center; gap: 1rem; padding: .3rem 0; }
+  .bar-row .label { width: 15rem; font-family: monospace; font-size: .78rem; flex-shrink: 0; }
+  .bar-row .val { width: 3rem; font-size: .75rem; color: var(--text-secondary); }
+  .bar { background: var(--accent); height: 14px; border-radius: 2px; }
+  .shapes { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .shape {
+    width: 130px; height: 90px; background: var(--secondary-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; text-align: center; padding: .5rem;
+    box-shadow: 2.5px 2.5px 5px rgba(0,0,0,.5);
+  }
+  .opacities { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .op { width: 64px; text-align: center; font-size: .72rem; color: var(--text-secondary); }
+  .op .chip { height: 40px; background: #FF9800; border-radius: 4px; margin-bottom: .3rem; }
+  footer { color: var(--text-secondary); font-size: .78rem; border-top: 1px solid rgba(255,255,255,.15); padding-top: 1rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Board Games Companion — App Theme</h1>
+  <p>Visual companion to <code>docs/app-theming.md</code>. Values mirror the Dart sources in
+  <code>board_games_companion/lib/common/</code> (<code>app_colors.dart</code>, <code>app_theme.dart</code>,
+  <code>app_styles.dart</code>, <code>dimensions.dart</code>) — on any conflict, the Dart files win.
+  Rendered in Lato on the app's page-background gradient.</p>
+</header>
+
+<section>
+  <h2>Core palette</h2>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#2D103F"></div><div class="meta"><div class="name">primaryColor</div><div class="hex">#2D103F</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#5B217F"></div><div class="meta"><div class="name">primaryColorLight</div><div class="hex">#5B217F</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#FF9800"></div><div class="meta"><div class="name">accentColor</div><div class="hex">#FF9800</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#010055"></div><div class="meta"><div class="name">secondaryColor</div><div class="hex">#010055</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#2747A5"></div><div class="meta"><div class="name">secondaryLightColor</div><div class="hex">#2747A5</div></div></div>
+  </div>
+
+  <h3>Text</h3>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#FFFFFF"></div><div class="meta"><div class="name">defaultTextColor</div><div class="hex">white</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#9E9E9E"></div><div class="meta"><div class="name">secondaryTextColor</div><div class="hex">grey</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#000000"></div><div class="meta"><div class="name">invertedTextColor</div><div class="hex">black</div></div></div>
+  </div>
+
+  <h3>Semantic roles</h3>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#FF9800"></div><div class="meta"><div class="name">selectedTabIconColor / enabledIconIconColor</div><div class="hex">accent</div></div></div>
+    <div class="swatch"><div class="chip" style="background:rgba(255,255,255,.27)"></div><div class="meta"><div class="name">deselectedTabIconColor / disabledIconIconColor</div><div class="hex">#46FFFFFF</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#5B217F"></div><div class="meta"><div class="name">bottomTabBackgroundColor</div><div class="hex">primaryColorLight</div></div></div>
+    <div class="swatch"><div class="chip" style="background:rgba(0,0,0,.5)"></div><div class="meta"><div class="name">dialogBackgroundColor</div><div class="hex">#80000000</div></div></div>
+    <div class="swatch"><div class="chip" style="background:linear-gradient(135deg,#5B217F,#2D103F)"></div><div class="meta"><div class="name">page background gradient</div><div class="hex">primaryColorLight → primaryColor</div></div></div>
+    <div class="swatch"><div class="chip" style="background:linear-gradient(135deg,#2747A5,#010055)"></div><div class="meta"><div class="name">page element gradient</div><div class="hex">secondaryLightColor → secondaryColor</div></div></div>
+  </div>
+
+  <h3>Chart palette (chartColorPallete)</h3>
+  <div class="swatches mini">
+    <div class="swatch"><div class="chip" style="background:#1784A4"></div><div class="meta"><div class="hex">#1784A4 · played games</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#C84634"></div><div class="meta"><div class="hex">#C84634 · highscore / wins</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#9ED86B"></div><div class="meta"><div class="hex">#9ED86B · avg playtime</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#F5C766"></div><div class="meta"><div class="hex">#F5C766 · avg score / losses</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#6F4E7B"></div><div class="meta"><div class="hex">#6F4E7B</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#8FDDD0"></div><div class="meta"><div class="hex">#8FDDD0 · avg player count</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#FD9F5C"></div><div class="meta"><div class="hex">#FD9F5C · total playtime</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#003f5c"></div><div class="meta"><div class="hex">#003F5C</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#2f4b7c"></div><div class="meta"><div class="hex">#2F4B7C</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#665191"></div><div class="meta"><div class="hex">#665191</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#a05195"></div><div class="meta"><div class="hex">#A05195</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#d45087"></div><div class="meta"><div class="hex">#D45087</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#f95d6a"></div><div class="meta"><div class="hex">#F95D6A</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#ff7c43"></div><div class="meta"><div class="hex">#FF7C43</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#ffa600"></div><div class="meta"><div class="hex">#FFA600</div></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Typography — Lato, textTheme slots</h2>
+  <div class="type-row"><span class="slot">displayLarge</span><span class="spec">20 · bold · white</span><span style="font-size:20px;font-weight:700">Biggest titles &amp; dialog numerals</span></div>
+  <div class="type-row"><span class="slot">displayMedium</span><span class="spec">18 · bold · white</span><span style="font-size:18px;font-weight:700">Section &amp; dialog titles</span></div>
+  <div class="type-row"><span class="slot">displaySmall</span><span class="spec">16 · bold · white</span><span style="font-size:16px;font-weight:700">Emphasized body / dialog content</span></div>
+  <div class="type-row"><span class="slot">titleLarge</span><span class="spec">22 · white</span><span style="font-size:22px">Screen titles</span></div>
+  <div class="type-row"><span class="slot">headlineSmall</span><span class="spec">24 · white</span><span style="font-size:24px">Rarely used</span></div>
+  <div class="type-row"><span class="slot">bodyLarge</span><span class="spec">16 · white</span><span style="font-size:16px">Primary body text</span></div>
+  <div class="type-row"><span class="slot">bodyMedium</span><span class="spec">14 · white</span><span style="font-size:14px">Standard body text</span></div>
+  <div class="type-row"><span class="slot">headlineMedium</span><span class="spec">14 · white</span><span style="font-size:14px">Secondary body text</span></div>
+  <div class="type-row"><span class="slot">titleMedium</span><span class="spec">12 · grey</span><span style="font-size:12px;color:var(--text-secondary)">Subtitles &amp; captions</span></div>
+  <div class="type-row"><span class="slot">titleSmall</span><span class="spec">10 · grey</span><span style="font-size:10px;color:var(--text-secondary)">Smallest captions</span></div>
+</section>
+
+<section>
+  <h2>Spacing scale — Dimensions (base 8)</h2>
+  <div class="bar-row"><span class="label">quarterStandardSpacing</span><span class="val">2</span><div class="bar" style="width:8px"></div></div>
+  <div class="bar-row"><span class="label">halfStandardSpacing</span><span class="val">4</span><div class="bar" style="width:16px"></div></div>
+  <div class="bar-row"><span class="label">standardSpacing</span><span class="val">8</span><div class="bar" style="width:32px"></div></div>
+  <div class="bar-row"><span class="label">oneAndHalfStandardSpacing</span><span class="val">12</span><div class="bar" style="width:48px"></div></div>
+  <div class="bar-row"><span class="label">doubleStandardSpacing</span><span class="val">16</span><div class="bar" style="width:64px"></div></div>
+  <div class="bar-row"><span class="label">trippleStandardSpacing</span><span class="val">24</span><div class="bar" style="width:96px"></div></div>
+
+  <h3>Font-size scale</h3>
+  <div class="bar-row"><span class="label">extraSmallFontSize</span><span class="val">10</span><span style="font-size:10px">Board Games Companion</span></div>
+  <div class="bar-row"><span class="label">smallFontSize</span><span class="val">12</span><span style="font-size:12px">Board Games Companion</span></div>
+  <div class="bar-row"><span class="label">standardFontSize</span><span class="val">14</span><span style="font-size:14px">Board Games Companion</span></div>
+  <div class="bar-row"><span class="label">mediumFontSize</span><span class="val">16</span><span style="font-size:16px">Board Games Companion</span></div>
+  <div class="bar-row"><span class="label">largeFontSize</span><span class="val">18</span><span style="font-size:18px">Board Games Companion</span></div>
+  <div class="bar-row"><span class="label">extraLargeFontSize</span><span class="val">20</span><span style="font-size:20px">Board Games Companion</span></div>
+  <div class="bar-row"><span class="label">doubleExtraLargeFontSize</span><span class="val">26</span><span style="font-size:26px">Board Games Companion</span></div>
+</section>
+
+<section>
+  <h2>Shape, elevation &amp; opacity — AppStyles</h2>
+  <div class="shapes">
+    <div class="shape" style="border-radius:5px">defaultCornerRadius<br>5</div>
+    <div class="shape" style="border-radius:15px">boardGameTileImage<br>CircularRadius 15</div>
+    <div class="shape" style="border-radius:15px 15px 0 0">panelContainer<br>CornerRadius 15</div>
+    <div class="shape" style="border-radius:30px 30px 0 0">defaultBottomSheet<br>CornerRadius 30</div>
+  </div>
+  <h3>Opacity steps (opacity10Percent … opacity90Percent, used with withAlpha)</h3>
+  <div class="opacities">
+    <div class="op"><div class="chip" style="opacity:.1"></div>10%</div>
+    <div class="op"><div class="chip" style="opacity:.2"></div>20%</div>
+    <div class="op"><div class="chip" style="opacity:.3"></div>30%</div>
+    <div class="op"><div class="chip" style="opacity:.4"></div>40%</div>
+    <div class="op"><div class="chip" style="opacity:.5"></div>50%</div>
+    <div class="op"><div class="chip" style="opacity:.6"></div>60%</div>
+    <div class="op"><div class="chip" style="opacity:.7"></div>70%</div>
+    <div class="op"><div class="chip" style="opacity:.8"></div>80%</div>
+    <div class="op"><div class="chip" style="opacity:.9"></div>90%</div>
+  </div>
+</section>
+
+<footer>
+  Hand-maintained snapshot (July 2026). On any conflict, the Dart sources in
+  <code>board_games_companion/lib/common/</code> are the source of truth.
+</footer>
+</body>
+</html>
