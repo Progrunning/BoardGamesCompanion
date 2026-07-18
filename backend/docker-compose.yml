@@ -1,6 +1,208 @@
+#  Entrypoint overrides explained:
+#
+# `tail -f /dev/null` keeps the container running indefinitely without executing the default application entrypoint, 
+# allowing you to exec into the container and run commands interactively for debugging.
+#
+# This keeps the container running without starting the actual application, which is useful for development and debugging purposes.
+
 services:
-  bgc.searchapi:
-    image: ${DOCKER_REGISTRY-}bgcsearchapi
+  bgc_searchapi:
+    container_name: bgc_searchapi
+    # entrypoint: ["tail", "-f", "/dev/null"]
     build:
       context: .
-      dockerfile: BGC.SearchApi/Dockerfile
+      dockerfile: BGC.SearchApi/dockerfile
+      target: debug
+      args:
+        - BUILD_CONFIGURATION=Debug
+      no_cache: true
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:8080
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    env_file:
+      - .env
+    ports:
+      - 5164:8080
+      - 7226:443
+    volumes:
+      - ${ASPNETCORE_USER_SECRETS_PATH}:/root/.microsoft/usersecrets:ro
+      - ~/.aspnet/https:/https:ro
+      - ${VS_CODE_LOCAL_DEBUGGER_PATH}:/root/.vsdbg:ro
+    depends_on:
+      mongo:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://0.0.0.0:8080/healthz" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - monitoring
+      - backend
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - backend
+
+  # OpenTelemetry Collector
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    volumes:
+      - ./config/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP HTTP receiver
+    depends_on:
+      # - otel-lgtm
+      - grafana
+    networks:
+      - monitoring
+  
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro    
+    networks:
+      - monitoring
+    depends_on:
+      # - prometheus
+      - loki
+      # - tempo
+    
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+      - "9096:9096"
+    networks:
+      - monitoring
+    volumes:
+      - loki_data:/tmp/loki
+      - ./config/loki-config.yaml:/etc/loki/local-config.yaml
+    user: root
+
+  # All-In-One Grafana Backend (Loki, Grafana, Tempo, Mimir)
+  # otel-lgtm:
+  #   image: grafana/otel-lgtm:latest
+  #   container_name: otel-lgtm
+  #   ports:
+  #     - "3000:3000" # Grafana UI Dashboard
+  #     - "9090:9090" # Prometheus metrics endpoint    
+
+networks:
+  backend:
+  monitoring:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  grafana_data:
+  loki_data:
+
+    # TODO split the telemetry stack into separate containers for better modularity and scalability in production, but this all-in-one is great for local development and testing of OTel integration without needing to manage multiple services.
+    # version: "3.8"
+
+    # networks:
+    #   monitoring:
+    #     driver: bridge
+
+    # volumes:
+    #   prometheus_data:
+    #   loki_data:
+    #   tempo_data:
+    #   grafana_data:
+
+    # services:
+    #   # 1. OpenTelemetry Collector
+    #   otel-collector:
+    #     image: otel/opentelemetry-collector-contrib:0.110.0
+    #     container_name: otel-collector
+    #     command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    #     volumes:
+    #       - ./otel-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    #     ports:
+    #       - "4317:4317" # OTLP gRPC receiver
+    #       - "4318:4318" # OTLP HTTP receiver
+    #     networks:
+    #       - monitoring
+    #     depends_on:
+    #       - prometheus
+    #       - loki
+    #       - tempo
+
+    #   # 2. Prometheus (Metrics)
+    #   prometheus:
+    #     image: prom/prometheus:v3.0.0
+    #     container_name: prometheus
+    #     command:
+    #       - "--config.file=/etc/prometheus/prometheus.yml"
+    #       - "--storage.tsdb.path=/prometheus"
+    #       - "--enable-feature=otlp-write-receiver" # Allows direct OTLP ingest from OTel
+    #     volumes:
+    #       - ./prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+    #       - prometheus_data:/prometheus
+    #     networks:
+    #       - monitoring
+
+    #   # 3. Grafana Loki (Logs)
+    #   loki:
+    #     image: grafana/loki:3.0.0
+    #     container_name: loki
+    #     command: -config.file=/etc/loki/local-config.yaml
+    #     volumes:
+    #       - loki_data:/tmp/loki
+    #     networks:
+    #       - monitoring
+
+    #   # 4. Grafana Tempo (Traces)
+    #   tempo:
+    #     image: grafana/tempo:2.6.0
+    #     container_name: tempo
+    #     command: [ "-config.file=/etc/tempo.yaml" ]
+    #     volumes:
+    #       - ./otel-config.yaml:/etc/tempo.yaml:ro # Reusing config for basic local storage schema
+    #       - tempo_data:/var/tempo
+    #     networks:
+    #       - monitoring
+
+    #   # 5. Grafana (Visualisation Dashboard)
+    #   grafana:
+    #     image: grafana/grafana:11.0.0
+    #     container_name: grafana
+    #     ports:
+    #       - "3000:3000"
+    #     volumes:
+    #       - grafana_data:/var/lib/grafana
+    #       - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+    #     networks:
+    #       - monitoring
+    #     depends_on:
+    #       - prometheus
+    #       - loki
+    #       - tempo

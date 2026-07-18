@@ -1,5 +1,5 @@
 ﻿@hostname=localhost
-@port=58036
+@port=7226
 
 @ApiKey=must_match_with_whats_in_settings
 

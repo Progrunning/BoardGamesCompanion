@@ -28,19 +28,17 @@ jobs:
     displayName: CI
     steps:
       - task: UseDotNet@2
-        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Install .NET 9.x SDK"
         inputs:
           version: 9.x
 
       - task: DotNetCoreCLI@2
-        condition: eq('${{ parameters.checkTestCoverage }}', true)
         displayName: "Build Search API"
         inputs:
           projects: "**/BGC.SearchApi.csproj"
           arguments: "--output publish_output --configuration Release"
 
-      - ${{ if eq('${{ parameters.checkTestCoverage }}', true) }}:
+      - ${{ if eq(parameters.checkTestCoverage, true) }}:
           - template: ${{ variables['System.DefaultWorkingDirectory'] }}/pipelines/templates/test_and_coverage.yaml
             parameters:
               pathToProjects: "**/BGC.@(Core|SearchApi).UnitTests.csproj"
@@ -63,4 +61,5 @@ jobs:
           tags: "$(Build.BuildId)"
           buildContext: backend/
           dockerfile: backend/BGC.SearchApi/dockerfile
+          arguments: "--build-arg BUILD_CONFIGURATION=Release --target final"
           addPipelineData: true

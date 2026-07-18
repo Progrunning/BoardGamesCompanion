@@ -7,25 +7,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.SearchApi", "BGC.Search
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.SearchApi.UnitTests", "tests\BGC.SearchApi.UnitTests\BGC.SearchApi.UnitTests.csproj", "{BDB8947C-6470-4C43-962F-C3721CF95100}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Functions", "cache\BGC.Functions\BGC.Functions.csproj", "{6CE61FDA-735C-432E-960C-9BBDE6BD6133}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DC1D220B-9094-4C67-88CD-0827282B79FE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Core", "BGC.Core\BGC.Core.csproj", "{1E8C3561-44E6-42EF-A9D7-6666AC7FD687}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Core.UnitTests", "tests\BGC.Core.UnitTests\BGC.Core.UnitTests.csproj", "{733E3343-AE18-400C-BEE5-0AD419D1C3C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Tests.Core", "tests\BGC.Tests.Core\BGC.Tests.Core.csproj", "{87C05BA5-6A04-45E3-828B-3F7B12CC1A9F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.Functions.UnitTests", "tests\BGC.Functions.UnitTests\BGC.Functions.UnitTests.csproj", "{1CE899FC-C431-4A14-AEBE-3DCDBDA37F2A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cache", "cache", "{ECA37B73-593D-49B1-A050-EACC66235EDC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.UpdateBoardGameCacheWorker", "cache\BGC.UpdateBoardGameCacheWorker\BGC.UpdateBoardGameCacheWorker.csproj", "{B1971DFB-ED95-4EB8-ABAB-98D224BBC1D3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGC.CacheCore", "cache\BGC.CacheCore\BGC.CacheCore.csproj", "{31E892DF-1257-4D9E-A400-67E5E57C905B}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{86C5F5AA-052C-412B-8BBC-174E8F95138E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FBE2125C-7DB0-4658-B4A0-10308FDAB785}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGC.UpdateBoardGameCacheWorker.UnitTests", "tests\BGC.UpdateBoardGameCacheWorker.UnitTests\BGC.UpdateBoardGameCacheWorker.UnitTests.csproj", "{87D1C0F5-0471-4631-8C3D-5BCE2689D59A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGC.SearchApi.IntegrationTests", "tests\BGC.SearchApi.IntegrationTests\BGC.SearchApi.IntegrationTests.csproj", "{EE8F230D-1942-4A0D-BBD9-F75DB3A7D581}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,20 +69,23 @@ Global
 		{86C5F5AA-052C-412B-8BBC-174E8F95138E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86C5F5AA-052C-412B-8BBC-174E8F95138E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86C5F5AA-052C-412B-8BBC-174E8F95138E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D1C0F5-0471-4631-8C3D-5BCE2689D59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D1C0F5-0471-4631-8C3D-5BCE2689D59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D1C0F5-0471-4631-8C3D-5BCE2689D59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D1C0F5-0471-4631-8C3D-5BCE2689D59A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE8F230D-1942-4A0D-BBD9-F75DB3A7D581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE8F230D-1942-4A0D-BBD9-F75DB3A7D581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE8F230D-1942-4A0D-BBD9-F75DB3A7D581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE8F230D-1942-4A0D-BBD9-F75DB3A7D581}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{BDB8947C-6470-4C43-962F-C3721CF95100} = {DC1D220B-9094-4C67-88CD-0827282B79FE}
-		{6CE61FDA-735C-432E-960C-9BBDE6BD6133} = {ECA37B73-593D-49B1-A050-EACC66235EDC}
-		{733E3343-AE18-400C-BEE5-0AD419D1C3C4} = {DC1D220B-9094-4C67-88CD-0827282B79FE}
-		{87C05BA5-6A04-45E3-828B-3F7B12CC1A9F} = {DC1D220B-9094-4C67-88CD-0827282B79FE}
-		{1CE899FC-C431-4A14-AEBE-3DCDBDA37F2A} = {DC1D220B-9094-4C67-88CD-0827282B79FE}
-		{B1971DFB-ED95-4EB8-ABAB-98D224BBC1D3} = {ECA37B73-593D-49B1-A050-EACC66235EDC}
-		{31E892DF-1257-4D9E-A400-67E5E57C905B} = {ECA37B73-593D-49B1-A050-EACC66235EDC}
-	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DE80E511-B023-4552-9BB4-B9CD8F2AE2FE}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{87D1C0F5-0471-4631-8C3D-5BCE2689D59A} = {FBE2125C-7DB0-4658-B4A0-10308FDAB785}
+		{EE8F230D-1942-4A0D-BBD9-F75DB3A7D581} = {FBE2125C-7DB0-4658-B4A0-10308FDAB785}
 	EndGlobalSection
 EndGlobal

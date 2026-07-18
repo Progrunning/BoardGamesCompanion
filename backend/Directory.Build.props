@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Target only test projects by filtering on project names containing 'Test' -->
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+    <Using Include="AutoFixture" />
+    <Using Include="Xunit" />
+    <Using Include="Moq" />
+    <Using Include="Moq.Protected" />
+    <Using Include="MongoDB.Driver" />
+    <Using Include="FluentAssertions" />    
+    <Using Include="Microsoft.Extensions.Logging" />    
+  </ItemGroup>
+</Project>
