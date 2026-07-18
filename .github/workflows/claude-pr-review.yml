@@ -19,6 +19,12 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Run in tag mode with a tracking comment. This is what starts the
+          # github_inline_comment MCP server; without it the
+          # mcp__github_inline_comment__create_inline_comment tool referenced in
+          # claude_args/prompt below does not exist, and the run ends with
+          # is_error:true when Claude tries to post inline review comments.
+          track_progress: true
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
