@@ -10,6 +10,7 @@ The Search API used to build on Azure DevOps and deploy to Azure Container Apps 
 - **Runtime secrets come from 1Password**, injected at compose-up via `op run` under a service account scoped to the bgc vault. GitHub holds only the SSH deploy key — a GitHub compromise can trigger deploys but cannot read app secrets.
 - **Telemetry is self-hosted.** The app requires an OTLP endpoint at startup; a shared otel-collector + Loki + Grafana stack on the server (RemoteServer-owned) receives it. No Application Insights.
 - **MongoDB stays managed for now.** Migrating it onto the Hetzner box is deliberately deferred (TODO), so the API makes an off-box round-trip per query.
+- **Azure is not fully vacated.** App builds bake the Search API URL in at compile time, so installs already in the wild cannot be repointed. APIM survives as a legacy-client shim until a forced-update mechanism ships — see ADR-0002.
 
 ## Considered options
 

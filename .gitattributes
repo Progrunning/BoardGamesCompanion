@@ -1,0 +1,28 @@
+# Normalise line endings so the repo behaves identically from Windows git,
+# WSL git, and CI, regardless of each client's core.autocrlf setting.
+# Text files are stored as LF in git and checked out per the platform.
+* text=auto
+
+# Scripts that must keep their line endings whatever the host does.
+gradlew text eol=lf
+*.sh text eol=lf
+gradlew.bat text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Never touch these, even if the content sniffer thinks they're text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.jks binary
+*.keystore binary
+*.pfx binary
+*.snk binary
