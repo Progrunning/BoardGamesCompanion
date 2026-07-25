@@ -23,3 +23,19 @@ _Avoid_: Swap, switch-over, flip (in docs; "flip" is fine in conversation)
 
 **Rollback**:
 Deploying a previously released image tag through the normal deploy path. A rollback is an ordinary deploy pointed at an old release, not a special mechanism.
+
+**Legacy client**:
+An install of the app built before the Hetzner migration, whose Search API base URL is baked in at compile time and can never be repointed.
+_Avoid_: Old app, stale client, legacy user
+
+**Legacy shim**:
+The retained APIM instance that authenticates legacy clients and forwards their search requests to the Search API. Its only job is keeping legacy clients alive; it is not a general-purpose gateway.
+_Avoid_: Proxy, gateway, APIM
+
+**Legacy key**:
+The named entry in the Search API's key map used exclusively by the legacy shim. Revoking it retires the shim.
+_Avoid_: Old key, APIM key
+
+**Frozen contract**:
+The guarantee that a search result keeps its `id` and `name`, for as long as the legacy key exists. Additive changes are unrestricted.
+_Avoid_: Contract freeze, v1 contract
