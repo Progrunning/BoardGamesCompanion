@@ -39,3 +39,21 @@ _Avoid_: Old key, APIM key
 **Frozen contract**:
 The guarantee that a search result keeps its `id` and `name`, for as long as the legacy key exists. Additive changes are unrestricted.
 _Avoid_: Contract freeze, v1 contract
+
+### Storage
+
+**Collection entry**:
+The user's relationship to a board game — owned, wishlist, friends, and the settings governing how they score it. Distinct from the game itself: a game can be known without the user having any relationship to it. Survives every refresh from BGG.
+_Avoid_: Owned game, library entry, collection item
+
+**Catalogue data**:
+Board game facts sourced from BGG — name, description, rating, ranks, categories, publishers, designers, artists, expansions, prices. Replaced wholesale on refresh and always re-fetchable, therefore never irreplaceable.
+_Avoid_: Game data, BGG data, game details
+
+**User-authored data**:
+Playthroughs, scores, players, notes, and collection entries. Recorded by the user and reconstructible from nothing — the only data in the app whose loss is permanent.
+_Avoid_: Local data, app data, user data
+
+**Legacy store**:
+The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
+_Avoid_: Old database, Hive box, legacy database
