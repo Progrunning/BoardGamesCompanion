@@ -1,5 +1,29 @@
 name: Claude Issue Agent
 
+# DISABLED as of 2026-08-01. Both jobs below are gated with `if: false`.
+#
+# Root cause: every dispatched run failed near-instantly with
+# `stop_reason: is_error, terminal_reason: api_error, api_error_status: 400,
+# result: "Credit balance is too low"` — the ANTHROPIC_API_KEY secret draws on
+# pay-as-you-go API credits, which were exhausted. Rotating the key did not
+# help, confirming it's a billing/credits issue, not an invalid-key issue.
+#
+# We considered authenticating via a Claude Pro subscription OAuth token
+# (`CLAUDE_CODE_OAUTH_TOKEN`, which claude-code-action also accepts) instead of
+# the metered API key, to avoid further per-token billing. Holding off:
+# Pro/Max subscriptions are priced and documented for individual, interactive
+# use of Claude.ai / Claude Code — using that credential to authenticate an
+# unattended, automatically-triggered CI workflow is a different usage pattern,
+# and we don't have confirmation that Anthropic's consumer subscription terms
+# permit that for automated CI. Re-enable by flipping the `if: false` guards
+# once one of these is resolved:
+#   - Top up ANTHROPIC_API_KEY with pay-as-you-go credits (billed only for
+#     actual usage — cheapest path for occasional runs), or
+#   - Confirm the OAuth-token path is permitted for unattended CI use and
+#     switch the `anthropic_api_key` input to `claude_code_oauth_token`.
+#
+# --- Original spec, retained below ---
+#
 # Adding the `ready-for-agent` label to an eligible issue triggers an AFK agent
 # run that implements the ticket and opens a pull request. Closing an issue
 # advances the frontier: any ticket it was blocking that is now fully unblocked
@@ -33,7 +57,8 @@ jobs:
   # closed issue was blocking that is now open, `ready-for-agent`, not `spec`,
   # and has zero open blockers.
   advance:
-    if: github.event_name == 'issues' && github.event.action == 'closed'
+    # DISABLED — see the header comment. Was: github.event_name == 'issues' && github.event.action == 'closed'
+    if: false
     runs-on: ubuntu-latest
     permissions:
       issues: read
@@ -62,15 +87,16 @@ jobs:
           done
 
   implement:
-    # Fire on a `ready-for-agent` label add to an open, non-spec issue, or on a
-    # frontier dispatch. The open-blocker check is the gate step below.
-    if: >-
-      (github.event_name == 'issues' &&
-       github.event.action == 'labeled' &&
-       github.event.label.name == 'ready-for-agent' &&
-       github.event.issue.state == 'open' &&
-       !contains(github.event.issue.labels.*.name, 'spec'))
-      || github.event_name == 'workflow_dispatch'
+    # DISABLED — see the header comment. Original condition retained below,
+    # commented out, for when this is re-enabled:
+    # if: >-
+    #   (github.event_name == 'issues' &&
+    #    github.event.action == 'labeled' &&
+    #    github.event.label.name == 'ready-for-agent' &&
+    #    github.event.issue.state == 'open' &&
+    #    !contains(github.event.issue.labels.*.name, 'spec'))
+    #   || github.event_name == 'workflow_dispatch'
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:

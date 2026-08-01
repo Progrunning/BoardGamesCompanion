@@ -1,19 +1,39 @@
 name: Claude PR Review
 
+# Trigger: a maintainer (OWNER, MEMBER, or COLLABORATOR) comments `/claude review`
+# on a pull request. Automatic triggers on open/sync have been removed so that
+# reviews only run on explicit request.
 on:
-  pull_request:
-    types: [opened, synchronize]
+  issue_comment:
+    types: [created]
 
 jobs:
   review:
+    # Guard: comment must be on a PR, contain the trigger phrase, and come from
+    # someone with write access (author_association OWNER/MEMBER/COLLABORATOR).
+    if: |
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/claude review') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
       id-token: write
     steps:
+      - name: Resolve PR head branch
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch=$(gh pr view ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --json headRefName -q .headRefName)
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
       - uses: actions/checkout@v6
         with:
+          ref: ${{ steps.pr.outputs.branch }}
           fetch-depth: 1
 
       - uses: anthropics/claude-code-action@v1
@@ -27,7 +47,7 @@ jobs:
           track_progress: true
           prompt: |
             REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
+            PR NUMBER: ${{ github.event.issue.number }}
 
             Please review this pull request. Follow any repo conventions in CLAUDE.md
             and docs/agents/, and focus on:
