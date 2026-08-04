@@ -194,9 +194,18 @@ jobs:
           ssh-keyscan -H "${{ secrets.HETZNER_SSH_HOST }}" >> ~/.ssh/known_hosts
 
       - name: Copy deploy assets to server
+        # sites/bgc.caddy carries live cutover state on the server (deploy.sh
+        # rewrites it in place to record the Active Color - see its CUTOVER
+        # CONTRACT comment). It is bootstrapped from the repo only if the
+        # server doesn't have one yet; overwriting it on every deploy would
+        # reset the recorded Active Color back to the repo's placeholder and
+        # break Color detection on the next run. The compose file and script
+        # are stateless and always synced fresh.
         run: |
-          ssh "${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }}" "mkdir -p /opt/bgc"
-          scp -r deploy "${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }}:/opt/bgc/"
+          target="${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }}"
+          ssh "$target" "mkdir -p /opt/bgc/deploy /opt/bgc/sites"
+          scp deploy/docker-compose.prod.yml deploy/deploy.sh "$target:/opt/bgc/deploy/"
+          ssh "$target" "test -f /opt/bgc/sites/bgc.caddy" || scp deploy/sites/bgc.caddy "$target:/opt/bgc/sites/bgc.caddy"
 
       - name: Run deploy script on server
         run: |
