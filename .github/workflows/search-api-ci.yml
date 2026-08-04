@@ -1,0 +1,93 @@
+name: Search API CI
+
+# Trigger: pull requests touching the Search API, its shared Core library, or
+# either unit test project. Scoped so unrelated backend subprojects (cache
+# worker, apim policies) and the Flutter app / docs don't trigger a run.
+on:
+  pull_request:
+    paths:
+      - "backend/BGC.SearchApi/**"
+      - "backend/BGC.Core/**"
+      - "backend/tests/BGC.SearchApi.UnitTests/**"
+      - "backend/tests/BGC.Core.UnitTests/**"
+      - "backend/tests/BGC.Tests.Core/**"
+      - "backend/BGC.SearchApi.sln"
+      - ".github/workflows/search-api-ci.yml"
+
+env:
+  MIN_CODE_COVERAGE_PERCENTAGE: 70
+  COVERAGE_RESULTS_DIRECTORY: ${{ github.workspace }}/coverage
+  COVERAGE_REPORT_DIRECTORY: ${{ github.workspace }}/coverage/report
+
+jobs:
+  build-test:
+    name: Build, test and coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install .NET 9.x SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Build Search API
+        run: dotnet build backend/BGC.SearchApi/BGC.SearchApi.csproj -c Release
+
+      - name: Run BGC.Core.UnitTests and collect coverage
+        run: >
+          dotnet test backend/tests/BGC.Core.UnitTests/BGC.Core.UnitTests.csproj -c Release
+          --results-directory "${{ env.COVERAGE_RESULTS_DIRECTORY }}"
+          --collect:"XPlat Code Coverage"
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*]BGC.Core.Models.*"
+
+      - name: Run BGC.SearchApi.UnitTests and collect coverage
+        run: >
+          dotnet test backend/tests/BGC.SearchApi.UnitTests/BGC.SearchApi.UnitTests.csproj -c Release
+          --results-directory "${{ env.COVERAGE_RESULTS_DIRECTORY }}"
+          --collect:"XPlat Code Coverage"
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*]BGC.Core.Models.*"
+
+      - name: Generate coverage report
+        uses: danielpalme/ReportGenerator-GitHub-Action@5
+        with:
+          reports: "${{ env.COVERAGE_RESULTS_DIRECTORY }}/**/coverage.cobertura.xml"
+          targetdir: "${{ env.COVERAGE_REPORT_DIRECTORY }}"
+          reporttypes: "Cobertura;Badges;MarkdownSummary"
+
+      - name: Check code coverage threshold
+        run: |
+          line_rate=$(python3 -c "
+          import xml.etree.ElementTree as ET
+          root = ET.parse('${{ env.COVERAGE_REPORT_DIRECTORY }}/Cobertura.xml').getroot()
+          print(float(root.attrib['line-rate']) * 100)
+          ")
+          line_rate_display=$(printf '%.2f' "$line_rate")
+          min="${{ env.MIN_CODE_COVERAGE_PERCENTAGE }}"
+
+          {
+            echo "### Code coverage"
+            echo
+            echo "Line coverage: **${line_rate_display}%** (minimum required: ${min}%)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if (( $(echo "$line_rate < $min" | bc -l) )); then
+            echo "Line coverage ${line_rate_display}% is below the required minimum of ${min}%."
+            echo "**Result: FAILED**" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          echo "Line coverage ${line_rate_display}% satisfies the minimum of ${min}%."
+          echo "**Result: PASSED**" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-api-coverage-report
+          path: ${{ env.COVERAGE_REPORT_DIRECTORY }}
+          if-no-files-found: warn
