@@ -1,5 +1,3 @@
-using Azure.Identity;
-
 using BGC.Core.Extensions;
 using BGC.Core.Helpers;
 using BGC.Core.Models.Settings;
