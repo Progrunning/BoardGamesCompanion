@@ -61,8 +61,8 @@ COMPOSE_FILE="${COMPOSE_FILE:?Set COMPOSE_FILE to the docker-compose file to ver
 # configuration section names change.
 EXPECTED_KEYS=(
   "MongoDbSettings__ConnectionString"
-  "ApiKeyAuthenticationSettings__ApiKeys"
-  "BggSettings__ApiKey" # confirm this is the real key name during implementation
+  "ApiKeyAuthenticationSettings__ApiKey"
+  "BggSettings__ApiKey"
 )
 
 if [[ ! -f "$OP_TOKEN_FILE" ]]; then
