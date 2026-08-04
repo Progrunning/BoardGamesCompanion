@@ -1,0 +1,53 @@
+# Production blue-green compose file for the Search API (see ADR-0001, CONTEXT.md
+# for Release/Color/Active-color vocabulary).
+#
+# GHCR image path (ticket #325's workflow must build/push to this exact
+# reference): ghcr.io/progrunning/board-games-companion-search-api:<short-sha>
+#
+# Two Colors of the same image, started/stopped independently by
+# deploy/deploy.sh via `docker compose -f deploy/docker-compose.prod.yml up -d
+# <service>` / `... stop <service>`. Only one Color receives traffic at a
+# time; that decision lives in deploy/sites/bgc.caddy, not here.
+#
+# No host port publishing: Caddy and otel-collector reach both Colors over the
+# shared `bgc` docker network. No TLS/cert config or volumes — Caddy
+# terminates TLS in front; the app serves plain HTTP on 8080 internally.
+#
+# Runtime env vars are the final set from #323 (confirmed against the actual
+# C# settings classes). Secret-valued vars are supplied by `op run --env-file`
+# wrapping the `docker compose up` invocation (see deploy/deploy.sh and
+# docs/adr/0004-1password-service-account-deploy-secrets.md) — only op://
+# references ever touch disk, never resolved values.
+
+x-searchapi-common: &searchapi-common
+  image: ghcr.io/progrunning/board-games-companion-search-api:${IMAGE_TAG}
+  environment:
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=http://+:8080
+    - MongoDbSettings__ConnectionString
+    - ApiKeyAuthenticationSettings__ApiKey
+    - BggSettings__ApiKey
+    - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/healthz"]
+    interval: 10s
+    timeout: 5s
+    retries: 3
+    start_period: 20s
+  networks:
+    - bgc
+  restart: unless-stopped
+
+services:
+  bgc_searchapi_blue:
+    <<: *searchapi-common
+    container_name: bgc_searchapi_blue
+
+  bgc_searchapi_green:
+    <<: *searchapi-common
+    container_name: bgc_searchapi_green
+
+networks:
+  bgc:
+    external: true
+    name: bgc

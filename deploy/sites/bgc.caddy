@@ -1,0 +1,21 @@
+# Repo-owned Caddy site snippet for the Search API (see ADR-0001).
+#
+# Imported by the RemoteServer-owned main Caddyfile, e.g.:
+#   bgc.example.com {
+#       import /opt/bgc/sites/bgc.caddy
+#   }
+# The main Caddyfile owns the domain/TLS block; this snippet owns only the
+# reverse_proxy target, so it stays a same-shape drop-in regardless of what
+# domain fronts it.
+#
+# CUTOVER CONTRACT (deploy/deploy.sh depends on this exact shape — do not
+# reformat):
+#   - Exactly one line matching `reverse_proxy bgc_searchapi_<color>:8080`.
+#   - "Active Color" = the <color> captured from that line.
+#   - deploy.sh detects it with:
+#       grep -oP 'reverse_proxy bgc_searchapi_\K(blue|green)(?=:8080)' bgc.caddy
+#   - Cutover = deploy.sh does an in-place substitution of blue<->green on
+#     that line, then `caddy reload`. No other line in this file may match
+#     the `reverse_proxy bgc_searchapi_(blue|green):8080` pattern.
+
+reverse_proxy bgc_searchapi_blue:8080
