@@ -1,0 +1,213 @@
+name: Search API CI
+
+# Trigger: pull requests touching the Search API, its shared Core library, or
+# either unit test project. Scoped so unrelated backend subprojects (cache
+# worker, apim policies) and the Flutter app / docs don't trigger a run.
+#
+# A push to main over the same paths is the release act (#325): build-test
+# runs again as the release gate, then publish + deploy. workflow_dispatch
+# with an optional image_tag is the rollback path: it skips build-test and
+# publish entirely and just redeploys an already-published tag via
+# deploy/deploy.sh.
+on:
+  pull_request:
+    paths:
+      - "backend/BGC.SearchApi/**"
+      - "backend/BGC.Core/**"
+      - "backend/tests/BGC.SearchApi.UnitTests/**"
+      - "backend/tests/BGC.Core.UnitTests/**"
+      - "backend/tests/BGC.Tests.Core/**"
+      - "backend/BGC.SearchApi.sln"
+      - ".github/workflows/search-api-ci.yml"
+  push:
+    branches: [main]
+    # keep in sync with the pull_request paths above
+    paths:
+      - "backend/BGC.SearchApi/**"
+      - "backend/BGC.Core/**"
+      - "backend/tests/BGC.SearchApi.UnitTests/**"
+      - "backend/tests/BGC.Core.UnitTests/**"
+      - "backend/tests/BGC.Tests.Core/**"
+      - "backend/BGC.SearchApi.sln"
+      - ".github/workflows/search-api-ci.yml"
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag (short SHA) to redeploy, e.g. for rollback. Leave empty on push-to-main runs."
+        required: false
+        type: string
+
+env:
+  MIN_CODE_COVERAGE_PERCENTAGE: 70
+  COVERAGE_RESULTS_DIRECTORY: ${{ github.workspace }}/coverage
+  COVERAGE_REPORT_DIRECTORY: ${{ github.workspace }}/coverage/report
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-test:
+    name: Build, test and coverage
+    runs-on: ubuntu-latest
+    # Rollback dispatch just redeploys an already-published tag - no rebuild/retest.
+    if: github.event_name != 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install .NET 9.x SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Build Search API
+        run: dotnet build backend/BGC.SearchApi/BGC.SearchApi.csproj -c Release
+
+      - name: Run BGC.Core.UnitTests and collect coverage
+        run: >
+          dotnet test backend/tests/BGC.Core.UnitTests/BGC.Core.UnitTests.csproj -c Release
+          --results-directory "${{ env.COVERAGE_RESULTS_DIRECTORY }}"
+          --collect:"XPlat Code Coverage"
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*]BGC.Core.Models.*"
+
+      - name: Run BGC.SearchApi.UnitTests and collect coverage
+        run: >
+          dotnet test backend/tests/BGC.SearchApi.UnitTests/BGC.SearchApi.UnitTests.csproj -c Release
+          --results-directory "${{ env.COVERAGE_RESULTS_DIRECTORY }}"
+          --collect:"XPlat Code Coverage"
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*]BGC.Core.Models.*"
+
+      - name: Generate coverage report
+        uses: danielpalme/ReportGenerator-GitHub-Action@5
+        with:
+          reports: "${{ env.COVERAGE_RESULTS_DIRECTORY }}/**/coverage.cobertura.xml"
+          targetdir: "${{ env.COVERAGE_REPORT_DIRECTORY }}"
+          reporttypes: "Cobertura;Badges;MarkdownSummary"
+
+      - name: Check code coverage threshold
+        run: |
+          line_rate=$(python3 -c "
+          import xml.etree.ElementTree as ET
+          root = ET.parse('${{ env.COVERAGE_REPORT_DIRECTORY }}/Cobertura.xml').getroot()
+          print(float(root.attrib['line-rate']) * 100)
+          ")
+          line_rate_display=$(printf '%.2f' "$line_rate")
+          min="${{ env.MIN_CODE_COVERAGE_PERCENTAGE }}"
+
+          {
+            echo "### Code coverage"
+            echo
+            echo "Line coverage: **${line_rate_display}%** (minimum required: ${min}%)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if (( $(echo "$line_rate < $min" | bc -l) )); then
+            echo "Line coverage ${line_rate_display}% is below the required minimum of ${min}%."
+            echo "**Result: FAILED**" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          echo "Line coverage ${line_rate_display}% satisfies the minimum of ${min}%."
+          echo "**Result: PASSED**" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-api-coverage-report
+          path: ${{ env.COVERAGE_REPORT_DIRECTORY }}
+          if-no-files-found: warn
+
+  publish:
+    name: Build and publish image
+    needs: build-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      short_sha: ${{ steps.sha.outputs.short_sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve short SHA
+        id: sha
+        run: echo "short_sha=$(git rev-parse --short=7 HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # One-time manual step (not repeatable/idempotent from a workflow step):
+      # after the first successful push below, a human must go to
+      # Settings -> Packages -> board-games-companion-search-api -> Package
+      # settings -> Change visibility -> Public. This is what lets the
+      # server pull with no registry auth, per ADR-0001.
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          file: backend/BGC.SearchApi/dockerfile
+          target: final
+          build-args: |
+            BUILD_CONFIGURATION=Release
+          push: true
+          tags: ghcr.io/progrunning/board-games-companion-search-api:${{ steps.sha.outputs.short_sha }}
+
+  deploy:
+    name: Deploy to Hetzner
+    needs: [build-test, publish]
+    # Two entry points: push-to-main (needs publish to have succeeded) or
+    # workflow_dispatch (rollback - no publish dependency at all, just the
+    # image_tag input). needs.publish.outputs.short_sha is empty when publish
+    # was skipped (dispatch path), so the || fallback below picks up
+    # image_tag instead.
+    if: always() && !cancelled() && (github.event_name == 'workflow_dispatch' || needs.publish.result == 'success')
+    runs-on: ubuntu-latest
+    # Cross-run queuing (not just per-run): two quick merges queue their
+    # deploy jobs instead of one cancelling/interleaving with the other.
+    concurrency:
+      group: search-api-deploy
+      cancel-in-progress: false
+    env:
+      IMAGE_TAG: ${{ github.event.inputs.image_tag || needs.publish.outputs.short_sha }}
+      # Required repo secrets (must be created by a human before this job can
+      # run for real): HETZNER_DEPLOY_SSH_KEY, HETZNER_SSH_HOST, HETZNER_SSH_USER.
+      # This is the only credential GitHub holds for deploys - no application
+      # secret (Mongo/API keys/BGG key) appears here; those are injected on
+      # the server from 1Password by deploy.sh itself (ADR-0004).
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.HETZNER_DEPLOY_SSH_KEY }}
+
+      - name: Trust server host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.HETZNER_SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Copy deploy assets to server
+        # sites/bgc.caddy carries live cutover state on the server (deploy.sh
+        # rewrites it in place to record the Active Color - see its CUTOVER
+        # CONTRACT comment). It is bootstrapped from the repo only if the
+        # server doesn't have one yet; overwriting it on every deploy would
+        # reset the recorded Active Color back to the repo's placeholder and
+        # break Color detection on the next run. The compose file and script
+        # are stateless and always synced fresh.
+        run: |
+          target="${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }}"
+          ssh "$target" "mkdir -p /opt/bgc/deploy /opt/bgc/sites"
+          scp deploy/docker-compose.prod.yml deploy/deploy.sh "$target:/opt/bgc/deploy/"
+          ssh "$target" "test -f /opt/bgc/sites/bgc.caddy" || scp deploy/sites/bgc.caddy "$target:/opt/bgc/sites/bgc.caddy"
+
+      - name: Run deploy script on server
+        run: |
+          ssh "${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }}" \
+            "CADDY_SNIPPET_PATH=/opt/bgc/sites/bgc.caddy /opt/bgc/deploy/deploy.sh '${{ env.IMAGE_TAG }}'"
