@@ -14,6 +14,7 @@ import '../pages/playthroughs/playthrough_migration_page.dart';
 import '../pages/playthroughs/playthrough_players_selection_page.dart';
 import '../pages/playthroughs/playthroughs_page.dart';
 import '../pages/settings/settings_page.dart';
+import '../pages/tip/tip_page.dart';
 
 extension RouteExtensions on Route<dynamic> {
   String toScreenName() {
@@ -34,6 +35,8 @@ extension RouteExtensions on Route<dynamic> {
         return 'Player';
       case SettingsPage.pageRoute:
         return 'Settings';
+      case TipPage.pageRoute:
+        return 'Tip';
       case CreateBoardGamePage.pageRoute:
         return 'Create Board Game';
       case PlaythroughMigrationPage.pageRoute:
@@ -69,6 +72,8 @@ extension RouteExtensions on Route<dynamic> {
         return 'PlayerPage';
       case SettingsPage.pageRoute:
         return 'SettingsPage';
+      case TipPage.pageRoute:
+        return 'TipPage';
       case CreateBoardGamePage.pageRoute:
         return 'CreateBoardGamePage';
       case PlaythroughMigrationPage.pageRoute:

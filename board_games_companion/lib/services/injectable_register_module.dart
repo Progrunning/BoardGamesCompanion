@@ -8,6 +8,7 @@ import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
 
 import 'environment_service.dart';
+import 'revenue_cat_client.dart';
 
 @module
 abstract class RegisterModule {
@@ -28,6 +29,9 @@ abstract class RegisterModule {
 
   @singleton
   EnvironmentService get environmentService => EnvironmentService();
+
+  @singleton
+  RevenueCatClient get revenueCatClient => RevenueCatClientImpl();
 
   @singleton
   BoardGamesGeekService get boardGameGeekService {

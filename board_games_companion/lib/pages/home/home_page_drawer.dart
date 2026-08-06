@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
@@ -9,12 +10,19 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
+import '../../injectable.dart';
+import '../../services/purchase_service.dart';
 import '../../utilities/launcher_helper.dart';
+import '../../widgets/common/supporter_badge.dart';
 import '../about/about_page.dart';
 import '../settings/settings_page.dart';
+import '../tip/tip_page.dart';
 
 class HomePageDrawer extends StatelessWidget {
-  const HomePageDrawer({super.key});
+  HomePageDrawer({super.key, PurchaseService? purchaseService})
+      : purchaseService = purchaseService ?? getIt<PurchaseService>();
+
+  final PurchaseService purchaseService;
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +139,13 @@ class HomePageDrawer extends StatelessWidget {
             ),
             const SizedBox(height: Dimensions.standardSpacing),
             _MenuItem(
+              icon: Icons.favorite,
+              title: AppText.tipScreenDrawerEntry,
+              trailing: _SupporterDrawerBadge(purchaseService: purchaseService),
+              onTap: () async => Navigator.pushNamed(context, TipPage.pageRoute),
+            ),
+            const SizedBox(height: Dimensions.standardSpacing),
+            _MenuItem(
               icon: Icons.share,
               title: AppText.drawerShareApp,
               onTap: () async => _shareStoreLink(),
@@ -163,11 +178,13 @@ class _MenuItem extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
+    this.trailing,
   });
 
   final IconData icon;
   final String title;
   final VoidCallback onTap;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +194,26 @@ class _MenuItem extends StatelessWidget {
         title,
         style: AppTheme.theme.textTheme.bodyLarge!,
       ),
+      trailing: trailing,
       onTap: onTap,
+    );
+  }
+}
+
+/// A small [SupporterBadge] shown next to the "Enjoying the app?" drawer
+/// entry once the current user is a Supporter — a second surface (besides
+/// the tip screen) where Supporter status is recognized.
+class _SupporterDrawerBadge extends StatelessWidget {
+  const _SupporterDrawerBadge({required this.purchaseService});
+
+  final PurchaseService purchaseService;
+
+  @override
+  Widget build(BuildContext context) {
+    return Observer(
+      builder: (_) => purchaseService.supporterStatus == SupporterStatus.supporter
+          ? const SupporterBadge()
+          : const SizedBox.shrink(),
     );
   }
 }
