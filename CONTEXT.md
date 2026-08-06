@@ -57,3 +57,11 @@ _Avoid_: Local data, app data, user data
 **Legacy store**:
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
+
+**Catalogue proxy**:
+A backend endpoint that fetches catalogue data from BGG on behalf of the client and caches the result server-side, shared across all users. `/hot` and game `/thing` details are catalogue proxies.
+_Avoid_: BGG proxy, cache endpoint
+
+**Pass-through proxy**:
+A backend endpoint that fetches BGG-username-scoped data on behalf of the client but does not persist it server-side — each request is re-fetched from BGG, just with the backend absorbing BGG's own retry/queuing behaviour instead of the client. Collection and plays import are pass-through proxies, not catalogue proxies, because the result is scoped to one BGG username rather than shared catalogue data.
+_Avoid_: BGG proxy, forwarding endpoint
