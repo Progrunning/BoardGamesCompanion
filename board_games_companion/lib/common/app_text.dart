@@ -7,6 +7,42 @@ class AppText {
   static const askMeLater = 'Ask me later';
   static const aontAskAgain = "Don't ask again";
 
+  static const tipScreenDrawerEntry = 'Enjoying the app?';
+  static const tipScreenTitle = 'Support Board Games Companion';
+  static const tipScreenIntro = 'Board Games Companion is free, with every feature free for '
+      'everyone — whether you tip or not.';
+  static const tipScreenWhatItFunds = 'A tip goes towards the running costs (servers, developer '
+      'fees) that keep the app alive.';
+  static const tipScreenThankYouBlurb = "As a thank-you you'll become a Supporter and unlock "
+      "cosmetic perks — a badge, alternate app icons, an exclusive theme, and an invite to the "
+      "supporters' Discord.";
+  static const tipScreenAlreadySupporterBanner =
+      "You're a supporter — thank you! You're welcome to tip another tier too.";
+  static const tipScreenPendingBanner = 'Your tip is being processed (this can happen if it '
+      'needs approval) — thanks for your patience!';
+  static const tipScreenRestorePurchasesButtonText = 'Restore purchases';
+  static const tipScreenLoadingErrorMessage =
+      "Couldn't reach the store. Check your connection and try again.";
+  static const tipScreenRetryButtonText = 'Try again';
+  static const tipScreenPurchaseErrorMessage =
+      'Something went wrong with that purchase. Please try again.';
+  static const tipScreenThankYouDialogTitle = 'Thank you!';
+  static const tipScreenThankYouDialogMessage = 'Your tip means a lot — it helps keep Board '
+      'Games Companion running. Enjoy your supporter perks!';
+  static const tipScreenPurchasingMessage = 'Talking to the store...';
+  static const tipScreenNoTiersAvailable = 'No tip tiers are available right now.';
+  static const tipScreenJoinDiscordButtonText = "Join the supporters' Discord";
+
+  static const supportPromptTitle = 'Enjoying Board Games Companion?';
+  static const supportPromptMessage = "We apologise that we're interrupting you, but if the app "
+      "has been useful, would you consider supporting its running costs with a tip?\n";
+  static const supportPromptTip = 'Tip';
+
+  static const supporterBadgeLabel = 'Supporter';
+  static const tipScreenAppIconPickerTitle = 'Choose your app icon';
+  static const tipScreenAppIconDefaultLabel = 'Default';
+  static const tipScreenAppIconSupporterLabel = 'Supporter';
+
   static const cancel = 'Cancel';
   static const stop = 'Stop';
   static const save = 'Save';

@@ -55,5 +55,26 @@
 	<false/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Supporter cosmetic-perk alternate app icon (issue #331). AppIconSupporter
+	     is a placeholder that reuses the default launcher artwork duplicated
+	     under a new asset-catalog name, pending real alternate-icon artwork.
+	     Applied natively via UIApplication.setAlternateIconName in
+	     AppDelegate.swift, behind the AppIconService platform channel. -->
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+		</dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>AppIconSupporter</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>AppIconSupporter</string>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>
