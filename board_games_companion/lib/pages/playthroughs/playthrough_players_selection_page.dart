@@ -119,10 +119,13 @@ class _Players extends StatelessWidget {
         for (final player in players)
           Stack(
             children: <Widget>[
-              PlayerAvatar(
-                player: player,
-                avatarImageSize: Size(playerAvatarSize, playerAvatarSize),
-                onTap: () => togglePlayerSelection(player),
+              SizedBox(
+                height: playerAvatarSize,
+                width: playerAvatarSize,
+                child: PlayerAvatar(
+                  player: player,
+                  onTap: () => togglePlayerSelection(player),
+                ),
               ),
               Align(
                 alignment: Alignment.topRight,

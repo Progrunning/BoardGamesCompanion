@@ -19,7 +19,6 @@ class Constants {
   static const moveBelow = 1;
   static const moveAbove = -1;
 
-  static const defaultAvatartAssetsPath = 'assets/default_avatar.png';
   static const jpgFileExtension = 'jpg';
 
   static const filterByAny = 'any';

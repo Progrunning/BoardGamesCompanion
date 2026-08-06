@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:math';
+
 import 'package:basics/basics.dart';
 import 'package:board_games_companion/pages/player/player_visual_state.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,6 +9,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../common/app_colors.dart';
 import '../../models/hive/player.dart';
 import '../../stores/players_store.dart';
 
@@ -17,6 +20,10 @@ class PlayerViewModel = _PlayerViewModel with _$PlayerViewModel;
 
 abstract class _PlayerViewModel with Store {
   _PlayerViewModel(this._playersStore);
+
+  final Random random = Random();
+  final List<int> avatarColors =
+      AppColors.playerAvatarColors.map((color) => color.toARGB32()).toList();
 
   final PlayersStore _playersStore;
 
@@ -33,21 +40,33 @@ abstract class _PlayerViewModel with Store {
   String? get playerName => playerWorkingCopy?.name;
 
   @computed
-  bool get isBggUser => playerWorkingCopy?.bggName.isNotNullOrBlank ?? false;
+  bool get isBggUser => playerWorkingCopy?.isBggUser ?? false;
+
+  @computed
+  String? get bggName => playerWorkingCopy?.bggName;
 
   @computed
   String? get playerAvatarImageUri => playerWorkingCopy?.avatarImageUri;
+
+  @computed
+  int? get playerAvatarColor => playerWorkingCopy?.avatarColor;
 
   bool get playerHasName => playerName.isNotNullOrBlank;
 
   @computed
   bool get hasUnsavedChanges =>
-      playerAvatarImageUri != _player?.avatarImageUri || playerName != _player?.name;
+      playerAvatarImageUri != _player?.avatarImageUri ||
+      playerName != _player?.name ||
+      playerAvatarColor != _player?.avatarColor;
 
   @action
   void setPlayer(Player? player) {
+    final isNewPlayer = player == null;
     _player = player ?? Player(id: const Uuid().v4());
-    playerWorkingCopy = _player!.copyWith();
+    playerWorkingCopy = _player!.copyWith(
+      avatarColor:
+          isNewPlayer ? avatarColors[random.nextInt(avatarColors.length)] : _player!.avatarColor,
+    );
 
     if (_player!.isDeleted ?? false) {
       visualState = const PlayerVisualState.deleted();

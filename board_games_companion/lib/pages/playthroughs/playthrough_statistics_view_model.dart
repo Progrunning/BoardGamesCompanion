@@ -270,8 +270,9 @@ abstract class _PlaythroughStatisticsViewModel with Store {
     }
 
     scoreBoardGameStatistics.lastGameWinners = lastPlaythroughBestScores
+        .where((Score score) => playersById[score.playerId] != null)
         .map((Score score) => PlayerScore(
-              player: playersById[score.playerId],
+              player: playersById[score.playerId]!,
               score: score,
             ))
         .toList();

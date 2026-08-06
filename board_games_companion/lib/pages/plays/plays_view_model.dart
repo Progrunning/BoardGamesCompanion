@@ -12,6 +12,7 @@ import 'package:board_games_companion/pages/plays/plays_stats_visual_states.dart
 import 'package:board_games_companion/pages/plays/time_period.dart';
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
@@ -367,21 +368,33 @@ abstract class _PlaysViewModel with Store {
   }
 
   BoardGamePlaythrough _mapToBoardGamePlaythrough(Playthrough playthrough) {
+    final playerScores = <PlayerScore>[];
+    for (final playerId in playthrough.playerIds) {
+      final player = _playersStore.playersById[playerId];
+      if (player == null) {
+        FirebaseCrashlytics.instance.log(
+          'Player with id $playerId not found for playthrough ${playthrough.id}',
+        );
+        continue;
+      }
+
+      playerScores.add(
+        PlayerScore(
+          player: player,
+          score: _scores['${playthrough.id}$playerId'] ??
+              Score(
+                id: '',
+                playerId: playerId,
+                boardGameId: playthrough.boardGameId,
+              ),
+        ),
+      );
+    }
+
     return BoardGamePlaythrough(
       playthrough: PlaythroughDetails(
         playthrough: playthrough,
-        playerScores: [
-          for (final playerId in playthrough.playerIds)
-            PlayerScore(
-              player: _playersStore.playersById[playerId],
-              score: _scores['${playthrough.id}$playerId'] ??
-                  Score(
-                    id: '',
-                    playerId: playerId,
-                    boardGameId: playthrough.boardGameId,
-                  ),
-            )
-        ],
+        playerScores: playerScores,
       ),
       boardGameDetails: _boardGamesStore.allBoardGamesMap[playthrough.boardGameId]!,
     );

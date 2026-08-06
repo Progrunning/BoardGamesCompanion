@@ -78,7 +78,7 @@ void main() {
     const newScore = 10.0;
 
     editPlaythrouhgViewModel.setPlaythroughId(mockPlaythroughId);
-    editPlaythrouhgViewModel.updatePlayerScore(playerScoreToUpdate!.id!, newScore);
+    editPlaythrouhgViewModel.updatePlayerScore(playerScoreToUpdate!.id, newScore);
 
     final updatedPlayerScore = editPlaythrouhgViewModel.playerScores
         .firstWhereOrNull((element) => element.id == playerScoreToUpdate.id);
@@ -122,11 +122,11 @@ void main() {
     );
 
     final playerScoreToUpdate = mockPlaythroughDetails.playerScores
-        .firstWhereOrNull((playerScore) => playerScore.player!.id == firstPlayerId);
+        .firstWhereOrNull((playerScore) => playerScore.player.id == firstPlayerId);
     const newScore = 20.0;
 
     editPlaythrouhgViewModel.setPlaythroughId(mockPlaythroughId);
-    editPlaythrouhgViewModel.updatePlayerScore(playerScoreToUpdate!.id!, newScore);
+    editPlaythrouhgViewModel.updatePlayerScore(playerScoreToUpdate!.id, newScore);
 
     for (final playerScore in editPlaythrouhgViewModel.playerScores) {
       expect(playerScore.score.isTied, isFalse);

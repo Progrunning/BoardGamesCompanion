@@ -22,13 +22,14 @@ class PlayerAdapter extends TypeAdapter<_$PlayerImpl> {
       isDeleted: fields[3] as bool?,
       avatarFileName: fields[4] as String?,
       bggName: fields[5] as String?,
+      avatarColor: fields[6] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$PlayerImpl obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class PlayerAdapter extends TypeAdapter<_$PlayerImpl> {
       ..writeByte(4)
       ..write(obj.avatarFileName)
       ..writeByte(5)
-      ..write(obj.bggName);
+      ..write(obj.bggName)
+      ..writeByte(6)
+      ..write(obj.avatarColor);
   }
 
   @override
