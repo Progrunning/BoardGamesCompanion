@@ -309,19 +309,15 @@ abstract class _PlaythroughStatisticsViewModel with Store {
   ) {
     final Map<Player, int> playerWins = {};
     for (final Playthrough finishedPlaythrough in finishedPlaythroughs) {
-      final playthroughScores = playthroughScoresByPlaythroughId[finishedPlaythrough.id]
-              .onlyNumericalScores()
-              .sortByScore(gameFamily) ??
-          [];
-      if (playthroughScores.isEmpty) {
-        continue;
+      final playthroughWinnerScores =
+          playthroughScoresByPlaythroughId[finishedPlaythrough.id].winners(gameFamily);
+      for (final Score winnerScore in playthroughWinnerScores) {
+        final Player? winner = playersById[winnerScore.playerId];
+        if (winner == null) {
+          continue;
+        }
+        playerWins[winner] = (playerWins[winner] ?? 0) + 1;
       }
-
-      final Player? winner = playersById[playthroughScores.first.playerId];
-      if (winner == null) {
-        break;
-      }
-      playerWins[winner] = (playerWins[winner] ?? 0) + 1;
     }
 
     final playerWinsPercentage = <PlayerWinsStatistics>[];
