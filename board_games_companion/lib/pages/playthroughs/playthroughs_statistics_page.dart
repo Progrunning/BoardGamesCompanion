@@ -20,6 +20,7 @@ import '../../extensions/int_extensions.dart';
 import '../../injectable.dart';
 import '../../models/board_game_statistics.dart';
 import '../../models/hive/player.dart';
+import '../../models/navigation/player_statistics_page_arguments.dart';
 import '../../models/player_statistics.dart';
 import '../../widgets/board_games/board_game_image.dart';
 import '../../widgets/common/empty_page_information_panel.dart';
@@ -31,6 +32,7 @@ import '../../widgets/common/stats/vertical_statistics_item.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/playthrough/calendar_card.dart';
 import '../../widgets/playthrough/player_score_rank_avatar.dart';
+import '../player_statistics/player_statistics_page.dart';
 import 'playthrough_statistics_view_model.dart';
 
 class PlaythroughStatistcsPage extends StatefulWidget {
@@ -364,6 +366,11 @@ class _PlayerStatsDetails extends StatelessWidget {
               player: player,
               useHeroAnimation: false,
               avatarImageSize: Dimensions.smallPlayerAvatarSize,
+              onTap: () => Navigator.pushNamed(
+                context,
+                PlayerStatisticsPage.pageRoute,
+                arguments: PlayerStatisticsPageArguments(player: player),
+              ),
             ),
           ),
           const Spacer(),

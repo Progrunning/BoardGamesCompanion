@@ -213,6 +213,67 @@ void main() {
     expect(winners, [lowestScore]);
   });
 
+  test(
+      'GIVEN a collection of scores '
+      'WHEN scores are imported plays with points but no place '
+      'AND the top score is tied between two players '
+      'THEN both tied top scorers should be winners ', () {
+    final firstTiedWinner = emptyScore.copyWith(
+      playerId: '1',
+      scoreGameResult: const ScoreGameResult(points: 10),
+    );
+    final secondTiedWinner = emptyScore.copyWith(
+      playerId: '2',
+      scoreGameResult: const ScoreGameResult(points: 10),
+    );
+    final scores = [
+      emptyScore.copyWith(playerId: '3', scoreGameResult: const ScoreGameResult(points: 7)),
+      firstTiedWinner,
+      secondTiedWinner,
+    ];
+
+    final winners = scores.winners(GameFamily.HighestScore);
+
+    expect(winners.length, 2);
+    expect(winners, [firstTiedWinner, secondTiedWinner]);
+  });
+
+  test(
+      'GIVEN a collection of scores '
+      'WHEN scores are imported plays with points but no place '
+      'AND there is a single distinct top score '
+      'THEN only that single score should be a winner ', () {
+    final highestScore = emptyScore.copyWith(
+      playerId: '1',
+      scoreGameResult: const ScoreGameResult(points: 20),
+    );
+    final scores = [
+      emptyScore.copyWith(playerId: '2', scoreGameResult: const ScoreGameResult(points: 10)),
+      highestScore,
+      emptyScore.copyWith(playerId: '3', scoreGameResult: const ScoreGameResult(points: 3)),
+    ];
+
+    final highestWinners = scores.winners(GameFamily.HighestScore);
+
+    expect(highestWinners.length, 1);
+    expect(highestWinners, [highestScore]);
+
+    final lowestScore = emptyScore.copyWith(
+      playerId: '1',
+      scoreGameResult: const ScoreGameResult(points: 3),
+    );
+    final lowestScores = [
+      emptyScore.copyWith(playerId: '2', scoreGameResult: const ScoreGameResult(points: 20)),
+      lowestScore,
+      emptyScore.copyWith(playerId: '3', scoreGameResult: const ScoreGameResult(points: 10)),
+    ];
+
+    final lowestWinners = lowestScores.winners(GameFamily.LowestScore);
+
+    expect(lowestWinners.length, 1);
+    expect(lowestWinners, [lowestScore]);
+  });
+
   group('GIVEN a collection of different type of scores ', () {
     void validateOrderingEmptyScored(GameFamily gameFamily) {
       test(

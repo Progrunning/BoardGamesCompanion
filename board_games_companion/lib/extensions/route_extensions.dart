@@ -8,6 +8,7 @@ import '../pages/edit_playthrough/edit_playthrough_page.dart';
 import '../pages/edit_playthrough/playthrough_note_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/player/player_page.dart';
+import '../pages/player_statistics/player_statistics_page.dart';
 import '../pages/plays/game_spinner_game_selected_dialog.dart';
 import '../pages/playthroughs/bgg_plays_import_report_dialog.dart';
 import '../pages/playthroughs/playthrough_migration_page.dart';
@@ -32,6 +33,8 @@ extension RouteExtensions on Route<dynamic> {
         return 'Playthrough Note';
       case PlayerPage.pageRoute:
         return 'Player';
+      case PlayerStatisticsPage.pageRoute:
+        return 'Player Statistics';
       case SettingsPage.pageRoute:
         return 'Settings';
       case CreateBoardGamePage.pageRoute:
@@ -67,6 +70,8 @@ extension RouteExtensions on Route<dynamic> {
         return 'PlaythroughNotePage';
       case PlayerPage.pageRoute:
         return 'PlayerPage';
+      case PlayerStatisticsPage.pageRoute:
+        return 'PlayerStatisticsPage';
       case SettingsPage.pageRoute:
         return 'SettingsPage';
       case CreateBoardGamePage.pageRoute:

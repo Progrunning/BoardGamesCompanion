@@ -11,6 +11,7 @@ import 'models/navigation/board_game_details_page_arguments.dart';
 import 'models/navigation/create_board_game_page_arguments.dart';
 import 'models/navigation/edit_playthrough_page_arguments.dart';
 import 'models/navigation/player_page_arguments.dart';
+import 'models/navigation/player_statistics_page_arguments.dart';
 import 'models/navigation/playthough_note_page_arguments.dart';
 import 'models/navigation/playthrough_migration_page_arguments.dart';
 import 'models/navigation/playthroughs_page_arguments.dart';
@@ -29,6 +30,8 @@ import 'pages/home/home_page.dart';
 import 'pages/home/home_view_model.dart';
 import 'pages/player/player_page.dart';
 import 'pages/player/player_view_model.dart';
+import 'pages/player_statistics/player_statistics_page.dart';
+import 'pages/player_statistics/player_statistics_view_model.dart';
 import 'pages/playthroughs/playthrough_migration_page.dart';
 import 'pages/playthroughs/playthrough_migration_view_model.dart';
 import 'pages/playthroughs/playthrough_players_selection_page.dart';
@@ -112,6 +115,16 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
             return MaterialPageRoute<dynamic>(
               settings: routeSettings,
               builder: (BuildContext context) => PlayerPage(viewModel: playersViewModel),
+            );
+
+          case PlayerStatisticsPage.pageRoute:
+            final arguments = routeSettings.arguments as PlayerStatisticsPageArguments;
+            final viewModel = getIt<PlayerStatisticsViewModel>();
+            viewModel.setPlayer(arguments.player);
+
+            return MaterialPageRoute<dynamic>(
+              settings: routeSettings,
+              builder: (BuildContext context) => PlayerStatisticsPage(viewModel: viewModel),
             );
 
           case PlaythroughsPage.pageRoute:

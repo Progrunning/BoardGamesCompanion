@@ -24,11 +24,13 @@ extension ScoresExtesions on Iterable<Score>? {
   List<Score> winners(GameFamily gameFamily) {
     var winners = this?.onlyNumericalScores().where((s) => s.isWinner).toList();
 
-    // Get the winner by ordering scores highest/lowest and taking the top one
+    // Get the winner(s) by ordering scores highest/lowest and taking all scores tied
+    // for the top spot
     if (winners?.isEmpty ?? true) {
       final orderedScores = this?.onlyNumericalScores().sortByScore(gameFamily);
       if (orderedScores?.isNotEmpty ?? false) {
-        winners = [orderedScores!.first];
+        final bestScore = orderedScores!.first.score;
+        winners = orderedScores.where((s) => s.score == bestScore).toList();
       }
     }
 

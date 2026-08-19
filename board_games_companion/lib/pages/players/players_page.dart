@@ -14,6 +14,7 @@ import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../models/hive/player.dart';
 import '../../models/navigation/player_page_arguments.dart';
+import '../../models/navigation/player_statistics_page_arguments.dart';
 import '../../widgets/common/default_icon.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/generic_error_message_widget.dart';
@@ -23,6 +24,7 @@ import '../../widgets/elevated_container.dart';
 import '../../widgets/player/player_avatar.dart';
 import '../../widgets/player/player_image.dart';
 import '../player/player_page.dart';
+import '../player_statistics/player_statistics_page.dart';
 import 'players_view_model.dart';
 
 typedef PlayerTapped = void Function(Player player, bool isChecked);
@@ -148,8 +150,8 @@ class PlayersPageState extends State<PlayersPage> {
   Future<void> _navigateToPlayerPage(BuildContext context, Player player) async {
     await Navigator.pushNamed(
       context,
-      PlayerPage.pageRoute,
-      arguments: PlayerPageArguments(player: player),
+      PlayerStatisticsPage.pageRoute,
+      arguments: PlayerStatisticsPageArguments(player: player),
     );
   }
 

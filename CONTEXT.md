@@ -57,3 +57,41 @@ _Avoid_: Local data, app data, user data
 **Legacy store**:
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
+
+### Statistics
+
+**Competitive play**:
+A finished, non-deleted playthrough of a game whose settings classify it as scored (not cooperative). The scores establish an ordering, so one player can be said to finish above another.
+_Avoid_: Versus game, scored game, ranked play
+
+**Co-op play**:
+A finished, non-deleted playthrough of a game whose settings classify it as cooperative. The result — win or loss — belongs to the whole table, not to any one player.
+_Avoid_: Cooperative game, team play, no-score play
+
+**Solo play**:
+A play with a single participant. Counted in a player's total plays, but excluded from their competitive win rate because there is no opposition to beat.
+_Avoid_: Single-player game, one-player play
+
+**Competitive win rate**:
+The fraction of a player's multiplayer competitive plays that they won, ties for first counting as a win. Reported separately and never blended with the co-op win rate.
+_Avoid_: Win rate, win percentage, win ratio
+
+**Co-op win rate**:
+The fraction of a player's co-op plays the table won. A whole-table outcome, kept apart from the competitive win rate so a run of hard co-op games does not drag a strong competitive record down.
+_Avoid_: Win rate, cooperative percentage
+
+**Head-to-head record**:
+Between two players, how many competitive plays one finished above the other and how many below, shown as a wins–losses pair. Beating someone means finishing above them, not only winning the play.
+_Avoid_: Matchup, score line, record
+
+**Rival**:
+The opponent a player has beaten most across their shared competitive plays, considered only once the two have met in at least three competitive plays. A player's rival rarely has that player as their own rival — the relation is directional.
+_Avoid_: Best matchup, favourite opponent
+
+**Nemesis**:
+The opponent a player has lost to most across their shared competitive plays, subject to the same three-play floor as the rival.
+_Avoid_: Arch-enemy, worst matchup
+
+**Buddy**:
+Someone a player has shared the most playthroughs with, co-op and competitive alike. The five buddies with the highest shared-play counts are shown.
+_Avoid_: Friend, teammate, frequent player

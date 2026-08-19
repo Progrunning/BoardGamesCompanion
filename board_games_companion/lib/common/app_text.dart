@@ -251,6 +251,19 @@ class AppText {
   static const playerPagePlayerRestoreSuccessfully = 'Player restored successfully';
   static const playerPagePlayerRestoreFailure = 'Failed to restore deleted player';
 
+  static const playerStatisticsPageNoPlaysTitle = "This player hasn't logged any plays yet";
+  static const playerStatisticsPageTotalPlays = 'Plays';
+  static const playerStatisticsPageTotalWins = 'Wins';
+  static const playerStatisticsPageCompetitiveWinRate = 'Competitive win rate';
+  static const playerStatisticsPageCoopWinRate = 'Co-op win rate';
+  static const playerStatisticsPageGamesSectionTitle = 'Games';
+  static const playerStatisticsPageGamesShowMore = 'Show more';
+  static const playerStatisticsPageGamesShowLess = 'Show less';
+  static const playerStatisticsPageRivalSectionTitle = 'Rival';
+  static const playerStatisticsPageNemesisSectionTitle = 'Nemesis';
+  static const playerStatisticsPageBuddiesSectionTitle = 'Buddies';
+  static const playerStatisticsPageBuddiesSharedPlays = 'Shared plays';
+
   static const playersPageTitle = 'Players';
   static const playersPageCreatePlayerButtonText = 'Create';
   static const playersPageSearchPlayerButtonText = 'Search';
