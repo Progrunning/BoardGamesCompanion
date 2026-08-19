@@ -57,3 +57,40 @@ _Avoid_: Local data, app data, user data
 **Legacy store**:
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
+
+### Statistics
+
+**Competitive play**:
+A playthrough of a game whose players are ranked against each other, so exactly one place is first. The only kind of play that can say anything about one player relative to another.
+_Avoid_: Versus game, PvP, scored game
+
+**Co-op play**:
+A playthrough whose players share a single outcome — the whole table wins or the whole table loses. Nobody beats anybody.
+_Avoid_: Cooperative game, team game, no-score game
+
+**Recorded result**:
+A player's outcome in a playthrough that is definite enough to count towards their statistics — a place in a competitive play, a shared outcome in a co-op play. A play in progress or missing outcomes has no recorded result and is invisible to every statistic.
+_Avoid_: Finished score, valid score, complete play
+
+**Competitive win rate**:
+The share of a player's competitive plays they finished first in, ties included. Kept apart from co-op because a co-op outcome belongs to the table rather than the player, and blending the two produces a number that cannot be compared between players.
+_Avoid_: Win %, win ratio
+
+**Co-op win rate**:
+The share of a player's co-op plays the table won. A property of the groups a player plays with as much as of the player.
+
+**Head-to-head record**:
+Two players' wins and losses against each other, counted a pair at a time within the competitive plays they shared. Finishing above someone is a win against them regardless of who else was at the table.
+_Avoid_: Matchup, H2H, record
+
+**Rival**:
+The player someone has beaten most across their head-to-head records. Rivalry is not symmetric — your rival's rival is rarely you.
+_Avoid_: Favourite victim, best matchup
+
+**Nemesis**:
+The player someone has lost to most across their head-to-head records.
+_Avoid_: Worst matchup, bogey player
+
+**Buddy**:
+A player someone has shared the most playthroughs with, of any kind. Measures company kept, not results, so co-op plays count exactly as much as competitive ones.
+_Avoid_: Frequent player, teammate, partner
