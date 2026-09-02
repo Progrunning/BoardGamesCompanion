@@ -180,8 +180,10 @@ abstract class _EditPlaythoughViewModel with Store {
       return false;
     });
 
-    if (playerScore == null ||
-        (playerScore.score.hasResult && playerScore.score.score == newScore)) {
+    // Only skip when the resolved numerical result is already the requested score. Guarding on
+    // `hasResult` (rather than the resolved points) used to swallow legitimate updates - e.g. a
+    // score still stored in the deprecated `value` format never got migrated to a ScoreGameResult.
+    if (playerScore == null || playerScore.score.scoreGameResult?.points == newScore) {
       return;
     }
 
