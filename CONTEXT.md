@@ -94,3 +94,25 @@ _Avoid_: Worst matchup, bogey player
 **Buddy**:
 A player someone has shared the most playthroughs with, of any kind. Measures company kept, not results, so co-op plays count exactly as much as competitive ones.
 _Avoid_: Frequent player, teammate, partner
+
+### Ratings
+
+**In-app review**:
+The platform's own review prompt, shown by the OS on top of the app so the user can rate without leaving it. Best-effort and quota-limited — the OS decides whether to show it and never reports back — so it is asked for silently at an engagement checkpoint, never behind a button.
+_Avoid_: Rate dialog, review popup, rating prompt
+
+**Engagement criteria**:
+The conditions that make a user eligible for an in-app review — installed 14 days, launched at least 30 seconds ago, and at least 300 significant actions. Meeting them makes an attempt due; it does not guarantee a prompt is shown.
+_Avoid_: Rating threshold, trigger conditions
+
+**Significant action**:
+A user action meaningful enough to count towards the engagement criteria, such as logging a play or editing a collection entry. Counted up to the criteria's ceiling and no further.
+_Avoid_: Interaction, event, tap
+
+**Review request**:
+A single silent attempt to surface the in-app review. Its timestamp is recorded whether or not a prompt actually appears, because the OS never says. Attempts are capped at three a year and spaced roughly a third of a year apart.
+_Avoid_: Review shown, rating impression, prompt
+
+**Store listing**:
+The app's full page on the App Store or Google Play, opened directly in response to a deliberate "rate us" action (the home drawer's Rate & Review item). Distinct from an in-app review, which the OS overlays without leaving the app.
+_Avoid_: Store page, app page, product page
