@@ -5,6 +5,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:injectable/injectable.dart';
 
 import 'environment_service.dart';
@@ -21,6 +22,9 @@ abstract class RegisterModule {
 
   @injectable
   HiveInterface get hive => Hive;
+
+  @singleton
+  InAppReview get inAppReview => InAppReview.instance;
 
   @singleton
   FirebaseAnalyticsObserver get firebaseAnalyticsObserver =>
