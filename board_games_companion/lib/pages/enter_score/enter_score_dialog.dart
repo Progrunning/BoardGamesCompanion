@@ -56,10 +56,24 @@ class EnterScoreDialog extends StatelessWidget {
                   builder: (_) => _ScoreHistory(partialScores: viewModel.partialScores),
                 ),
                 const SizedBox(height: Dimensions.trippleStandardSpacing),
-                _CircularNumberPicker(
-                  strokeWidth: 50,
-                  thumbSize: 50,
-                  onEnded: (double partialScore) => viewModel.updateScore(partialScore),
+                Observer(
+                  builder: (_) {
+                    if (viewModel.isKeypadOpen) {
+                      return _Keypad(
+                        digits: viewModel.keypadDigits,
+                        canCommit: viewModel.canCommitKeypad,
+                        onDigit: (digit) => viewModel.keypadAppendDigit(digit),
+                        onBackspace: () => viewModel.keypadBackspace(),
+                        onCancel: () => viewModel.keypadCancel(),
+                        onCommit: () => viewModel.keypadCommit(),
+                      );
+                    }
+                    return _CircularNumberPicker(
+                      strokeWidth: 50,
+                      thumbSize: 50,
+                      onEnded: (double partialScore) => viewModel.updateScore(partialScore),
+                    );
+                  },
                 ),
                 const SizedBox(height: Dimensions.doubleStandardSpacing),
                 Observer(
@@ -75,6 +89,7 @@ class EnterScoreDialog extends StatelessWidget {
 
                         viewModel.updateScore(partialScore);
                       },
+                      onKeypadTap: () => viewModel.openKeypad(),
                     );
                   },
                 ),
@@ -85,6 +100,10 @@ class EnterScoreDialog extends StatelessWidget {
                       canUndo: viewModel.canUndo,
                       onUndo: () => viewModel.undo(),
                       onDone: () {
+                        if (viewModel.canCommitKeypad) {
+                          viewModel.keypadCommit();
+                        }
+
                         // MK In case score was not entered assume 0 was the score
                         if (viewModel.score == 0) {
                           viewModel.scoreZero();
@@ -186,11 +205,13 @@ class _InstantScorePanel extends StatelessWidget {
     required this.operation,
     required this.onOperationChange,
     required this.onScoreChange,
+    required this.onKeypadTap,
   });
 
   final EnterScoreOperation operation;
   final ValueChanged<EnterScoreOperation> onOperationChange;
   final ValueChanged<double> onScoreChange;
+  final VoidCallback onKeypadTap;
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +244,23 @@ class _InstantScorePanel extends StatelessWidget {
         const Expanded(child: SizedBox.shrink()),
         _InstantScoreTile(text: '10', onTap: () => onScoreChange(10)),
         const Expanded(child: SizedBox.shrink()),
-        _InstantScoreTile(text: '50', onTap: () => onScoreChange(50)),
+        SizedBox(
+          width: 52,
+          height: 52,
+          child: ElevatedContainer(
+            backgroundColor: AppColors.accentColor,
+            elevation: AppStyles.defaultElevation,
+            splashColor: AppColors.primaryColor,
+            onTap: onKeypadTap,
+            child: const Center(
+              child: Icon(
+                Icons.dialpad,
+                color: AppColors.defaultTextColor,
+                size: Dimensions.extraLargeFontSize,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -321,6 +358,154 @@ class _ActionButtons extends StatelessWidget {
           onPressed: onDone,
         ),
       ],
+    );
+  }
+}
+
+class _Keypad extends StatelessWidget {
+  const _Keypad({
+    required this.digits,
+    required this.canCommit,
+    required this.onDigit,
+    required this.onBackspace,
+    required this.onCancel,
+    required this.onCommit,
+  });
+
+  final String digits;
+  final bool canCommit;
+  final ValueChanged<String> onDigit;
+  final VoidCallback onBackspace;
+  final VoidCallback onCancel;
+  final VoidCallback onCommit;
+
+  static const double _buttonSize = 56;
+  static const double _buttonSpacing = 6.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 280,
+      height: 280,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 36,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      digits.isEmpty ? '0' : digits,
+                      style: AppTheme.theme.textTheme.displayLarge?.copyWith(
+                        fontSize: 32,
+                        color: digits.isEmpty ? AppColors.greyColor : AppColors.defaultTextColor,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: ElevatedContainer(
+                    backgroundColor: Colors.transparent,
+                    splashColor: AppColors.accentColor,
+                    onTap: onCancel,
+                    child: const Center(
+                      child: Icon(Icons.close, color: AppColors.greyColor, size: 20),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: _buttonSpacing),
+          for (final row in const [
+            ['1', '2', '3'],
+            ['4', '5', '6'],
+            ['7', '8', '9'],
+          ]) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < row.length; i++) ...[
+                  if (i > 0) const SizedBox(width: _buttonSpacing),
+                  _KeypadButton(
+                    label: row[i],
+                    size: _buttonSize,
+                    onTap: () => onDigit(row[i]),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: _buttonSpacing),
+          ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: _buttonSize,
+                height: _buttonSize,
+                child: ElevatedContainer(
+                  backgroundColor: AppColors.primaryColor,
+                  elevation: AppStyles.defaultElevation,
+                  splashColor: AppColors.accentColor,
+                  onTap: onBackspace,
+                  child: const Center(
+                    child: Icon(Icons.backspace_outlined, color: AppColors.whiteColor, size: 22),
+                  ),
+                ),
+              ),
+              const SizedBox(width: _buttonSpacing),
+              _KeypadButton(label: '0', size: _buttonSize, onTap: () => onDigit('0')),
+              const SizedBox(width: _buttonSpacing),
+              SizedBox(
+                width: _buttonSize,
+                height: _buttonSize,
+                child: ElevatedContainer(
+                  backgroundColor: canCommit ? AppColors.accentColor : AppColors.greyColor,
+                  elevation: AppStyles.defaultElevation,
+                  splashColor: AppColors.primaryColor,
+                  onTap: canCommit ? onCommit : null,
+                  child: const Center(
+                    child: Icon(Icons.check, color: AppColors.whiteColor, size: 22),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _KeypadButton extends StatelessWidget {
+  const _KeypadButton({
+    required this.label,
+    required this.size,
+    required this.onTap,
+  });
+
+  final String label;
+  final double size;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ElevatedContainer(
+        backgroundColor: AppColors.primaryColor,
+        elevation: AppStyles.defaultElevation,
+        splashColor: AppColors.accentColor,
+        onTap: onTap,
+        child: Center(
+          child: Text(label, style: AppTheme.theme.textTheme.displayLarge),
+        ),
+      ),
     );
   }
 }

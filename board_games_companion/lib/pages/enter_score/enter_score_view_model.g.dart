@@ -35,6 +35,13 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
           () => super.hasUnsavedChanged,
           name: '_EnterScoreViewModel.hasUnsavedChanged'))
       .value;
+  Computed<bool>? _$canCommitKeypadComputed;
+
+  @override
+  bool get canCommitKeypad =>
+      (_$canCommitKeypadComputed ??= Computed<bool>(() => super.canCommitKeypad,
+              name: '_EnterScoreViewModel.canCommitKeypad'))
+          .value;
 
   late final _$_playerScoreAtom =
       Atom(name: '_EnterScoreViewModel._playerScore', context: context);
@@ -81,6 +88,38 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   set partialScores(ObservableList<double> value) {
     _$partialScoresAtom.reportWrite(value, super.partialScores, () {
       super.partialScores = value;
+    });
+  }
+
+  late final _$isKeypadOpenAtom =
+      Atom(name: '_EnterScoreViewModel.isKeypadOpen', context: context);
+
+  @override
+  bool get isKeypadOpen {
+    _$isKeypadOpenAtom.reportRead();
+    return super.isKeypadOpen;
+  }
+
+  @override
+  set isKeypadOpen(bool value) {
+    _$isKeypadOpenAtom.reportWrite(value, super.isKeypadOpen, () {
+      super.isKeypadOpen = value;
+    });
+  }
+
+  late final _$keypadDigitsAtom =
+      Atom(name: '_EnterScoreViewModel.keypadDigits', context: context);
+
+  @override
+  String get keypadDigits {
+    _$keypadDigitsAtom.reportRead();
+    return super.keypadDigits;
+  }
+
+  @override
+  set keypadDigits(String value) {
+    _$keypadDigitsAtom.reportWrite(value, super.keypadDigits, () {
+      super.keypadDigits = value;
     });
   }
 
@@ -132,14 +171,72 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   }
 
   @override
+  void openKeypad() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.openKeypad');
+    try {
+      return super.openKeypad();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void keypadAppendDigit(String digit) {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.keypadAppendDigit');
+    try {
+      return super.keypadAppendDigit(digit);
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void keypadBackspace() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.keypadBackspace');
+    try {
+      return super.keypadBackspace();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void keypadCancel() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.keypadCancel');
+    try {
+      return super.keypadCancel();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void keypadCommit() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.keypadCommit');
+    try {
+      return super.keypadCommit();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 operation: ${operation},
 partialScores: ${partialScores},
+isKeypadOpen: ${isKeypadOpen},
+keypadDigits: ${keypadDigits},
 score: ${score},
 playerName: ${playerName},
 canUndo: ${canUndo},
-hasUnsavedChanged: ${hasUnsavedChanged}
+hasUnsavedChanged: ${hasUnsavedChanged},
+canCommitKeypad: ${canCommitKeypad}
     ''';
   }
 }
