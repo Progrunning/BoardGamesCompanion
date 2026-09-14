@@ -58,6 +58,24 @@ _Avoid_: Local data, app data, user data
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
 
+### Publishing
+
+**Published collection**:
+The copy of a user's collection held on the server that a share link resolves to. A snapshot taken at the moment of publishing — the collection in the app can be ahead of it, never behind. Exists only while the user keeps it published.
+_Avoid_: Public collection, synced collection, profile, cloud collection
+
+**Publish key**:
+The opaque secret held by the app that identifies and authorises writes to a published collection. It is not an account: there is no login, and whoever holds the key owns the published collection. Travels with the user's backup so a reinstall keeps the same share link.
+_Avoid_: Token, API key, user id, device id
+
+**Share link**:
+The public URL at which a published collection can be viewed. Unlisted — reachable only by those it is given to; never discoverable through search or a directory. Carries a public id, never the publish key.
+_Avoid_: Profile URL, collection URL, permalink
+
+**Statistics snapshot**:
+The statistics the app computed and sent along with a published collection, shown on the web exactly as received. Derived, never authoritative: the server stores it, it never recomputes it, and each publish replaces it wholesale.
+_Avoid_: Server stats, cached stats, web statistics
+
 ### Statistics
 
 **Competitive play**:
