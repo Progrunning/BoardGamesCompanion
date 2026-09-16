@@ -8,9 +8,8 @@ class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
 
   static const String _firstTimeAppLaunchDateKey = 'firstTimeLaunchDate';
   static const String _appLaunchDateKey = 'applaunchDate';
-  static const String _remindMeLaterDateKey = 'remindMeLater';
   static const String _numberOfSignificantActionsKey = 'numberOfSignificantActions';
-  static const String _rateAndReviewDialogSeenKey = 'rateAndReviewDialogSeen';
+  static const String _lastReviewRequestDateKey = 'lastReviewRequestDate';
   static const String _expansionsPanelExpandedStateKey = 'expansionsPanelExpandedState';
 
   Future<void> initialize() async {
@@ -24,10 +23,6 @@ class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
     }
 
     await _setValue(_appLaunchDateKey, nowUtc);
-  }
-
-  Future<void> setRemindMeLaterDate(DateTime remindMeLaterDate) async {
-    await _setValue(_remindMeLaterDateKey, remindMeLaterDate);
   }
 
   DateTime? getFirstTimeLaunchDate() {
@@ -44,25 +39,15 @@ class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
     );
   }
 
-  DateTime? getRemindMeLaterDate() {
+  DateTime? getLastReviewRequestDate() {
     return _getValue(
-      _remindMeLaterDateKey,
+      _lastReviewRequestDateKey,
       defaultValue: null,
     );
   }
 
-  bool getRateAndReviewDialogSeen() {
-    return _getValue(
-      _rateAndReviewDialogSeenKey,
-      defaultValue: false,
-    )!;
-  }
-
-  Future<void> setRateAndReviewDialogSeen() async {
-    await _setValue(
-      _rateAndReviewDialogSeenKey,
-      true,
-    );
+  Future<void> setLastReviewRequestDate(DateTime lastReviewRequestDate) async {
+    await _setValue(_lastReviewRequestDateKey, lastReviewRequestDate);
   }
 
   int getNumberOfSignificantActions() {

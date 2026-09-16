@@ -3,9 +3,6 @@ class AppText {
   static const appTitle = 'Board Games Companion';
 
   static const rateAndReview = 'Rate & Review';
-  static const rate = 'Rate';
-  static const askMeLater = 'Ask me later';
-  static const aontAskAgain = "Don't ask again";
 
   static const cancel = 'Cancel';
   static const stop = 'Stop';
