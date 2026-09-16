@@ -360,11 +360,7 @@ class _PlayerStatsDetails extends StatelessWidget {
           SizedBox(
             height: Dimensions.smallPlayerAvatarSize.height,
             width: Dimensions.smallPlayerAvatarSize.width,
-            child: PlayerAvatar(
-              player: player,
-              useHeroAnimation: false,
-              avatarImageSize: Dimensions.smallPlayerAvatarSize,
-            ),
+            child: PlayerAvatar(player: player),
           ),
           const Spacer(),
           if (personalBestScore != null) ...<Widget>[
@@ -694,18 +690,14 @@ class _LastWinnerAvatar extends StatelessWidget {
     required this.player,
   });
 
-  final Player? player;
+  final Player player;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: Dimensions.smallPlayerAvatarSize.height,
       width: Dimensions.smallPlayerAvatarSize.width,
-      child: PlayerAvatar(
-        player: player,
-        avatarImageSize: Dimensions.smallPlayerAvatarSize,
-        useHeroAnimation: false,
-      ),
+      child: PlayerAvatar(player: player),
     );
   }
 }

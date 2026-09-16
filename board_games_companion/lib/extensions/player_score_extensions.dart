@@ -45,7 +45,7 @@ extension PlayerScoresExtesions on List<PlayerScore> {
           return Constants.moveAbove;
         }
 
-        return playerScore.player!.name?.compareTo(otherPlayerScore.player!.name ?? '') ??
+        return playerScore.player.name?.compareTo(otherPlayerScore.player.name ?? '') ??
             Constants.moveBelow;
       });
   }

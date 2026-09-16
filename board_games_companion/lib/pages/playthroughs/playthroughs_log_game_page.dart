@@ -865,9 +865,10 @@ class _SelectedPlayersGrid extends StatelessWidget {
           for (final player in selectedPlayers)
             Stack(
               children: <Widget>[
-                PlayerAvatar(
-                  player: player,
-                  avatarImageSize: Dimensions.smallPlayerAvatarSize,
+                SizedBox(
+                  height: Dimensions.smallPlayerAvatarSize.height,
+                  width: Dimensions.smallPlayerAvatarSize.width,
+                  child: PlayerAvatar(player: player),
                 ),
               ],
             ),
@@ -916,10 +917,7 @@ class _PlayerScore extends StatelessWidget {
           SizedBox(
             height: Dimensions.smallPlayerAvatarSize.height,
             width: Dimensions.smallPlayerAvatarSize.width,
-            child: PlayerAvatar(
-              player: playerScore.player,
-              avatarImageSize: Dimensions.smallPlayerAvatarSize,
-            ),
+            child: PlayerAvatar(player: playerScore.player),
           ),
           const SizedBox(width: Dimensions.doubleStandardSpacing),
           if (gameFamily == GameFamily.LowestScore || gameFamily == GameFamily.HighestScore)

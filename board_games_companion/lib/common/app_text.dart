@@ -237,6 +237,7 @@ class AppText {
 
   static const playerPagePlayerNameTitle = 'Name';
   static const playerPagePlayerBggNameTitle = 'BGG Username';
+  static const playerPageAvatarColorsTitle = 'Avatar colors';
   static const playerPageTakePhoto = 'Take a photo';
   static const playerPagePickPhoto = 'Pick a photo';
   static const playerPagePlayerDeletedBanner = 'This player has been deleted';

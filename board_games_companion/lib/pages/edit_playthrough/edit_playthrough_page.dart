@@ -185,7 +185,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
     }
 
     await showEnterScoreDialog(context, viewModel);
-    widget.viewModel.updatePlayerScore(playerScore.id!, viewModel.score);
+    widget.viewModel.updatePlayerScore(playerScore.id, viewModel.score);
     return viewModel.score;
   }
 
@@ -594,7 +594,6 @@ class _NoScoreSection extends StatelessWidget {
                       child: PlayerAvatar(
                         player: player,
                         playerHeroIdSuffix: playthroughId,
-                        avatarImageSize: Dimensions.smallPlayerAvatarSize,
                       ),
                     ),
                 ],
@@ -706,7 +705,6 @@ class _PlayerScoreTileState extends State<_PlayerScoreTile> {
                   child: Stack(children: [
                     PlayerAvatar(
                       player: widget.playerScore.player,
-                      avatarImageSize: Dimensions.smallPlayerAvatarSize,
                       playerHeroIdSuffix: widget.playthroughDetailsId ?? '',
                     ),
                     if (widget.hasFinishedScoring)

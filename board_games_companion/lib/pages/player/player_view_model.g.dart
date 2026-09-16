@@ -23,6 +23,13 @@ mixin _$PlayerViewModel on _PlayerViewModel, Store {
       (_$isBggUserComputed ??= Computed<bool>(() => super.isBggUser,
               name: '_PlayerViewModel.isBggUser'))
           .value;
+  Computed<String?>? _$bggNameComputed;
+
+  @override
+  String? get bggName =>
+      (_$bggNameComputed ??= Computed<String?>(() => super.bggName,
+              name: '_PlayerViewModel.bggName'))
+          .value;
   Computed<String?>? _$playerAvatarImageUriComputed;
 
   @override
@@ -150,6 +157,7 @@ visualState: ${visualState},
 playerWorkingCopy: ${playerWorkingCopy},
 playerName: ${playerName},
 isBggUser: ${isBggUser},
+bggName: ${bggName},
 playerAvatarImageUri: ${playerAvatarImageUri},
 hasUnsavedChanges: ${hasUnsavedChanges}
     ''';

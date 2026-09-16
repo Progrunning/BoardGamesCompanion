@@ -15,7 +15,7 @@ class PlayerScoreRankAvatar extends StatelessWidget {
     super.key,
   });
 
-  final Player? player;
+  final Player player;
   final String playerHeroIdSuffix;
   final num? rank;
   final double? score;
@@ -32,9 +32,7 @@ class PlayerScoreRankAvatar extends StatelessWidget {
               children: [
                 PlayerAvatar(
                   player: player,
-                  avatarImageSize: Dimensions.smallPlayerAvatarSize,
                   playerHeroIdSuffix: playerHeroIdSuffix,
-                  useHeroAnimation: useHeroAnimation,
                 ),
                 if (rank != null) PositionedTileRankRibbon(rank: rank!),
               ],

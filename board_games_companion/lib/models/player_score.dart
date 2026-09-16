@@ -11,13 +11,13 @@ part 'player_score.freezed.dart';
 @freezed
 class PlayerScore with _$PlayerScore {
   const factory PlayerScore({
-    required Player? player,
+    required Player player,
     required Score score,
   }) = _PlayerScore;
 
   const PlayerScore._();
 
-  String? get id => player?.id;
+  String get id => player.id;
 
   bool get isTied => score.isTied;
 

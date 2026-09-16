@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PlayerScore {
-  Player? get player => throw _privateConstructorUsedError;
+  Player get player => throw _privateConstructorUsedError;
   Score get score => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,9 +30,9 @@ abstract class $PlayerScoreCopyWith<$Res> {
           PlayerScore value, $Res Function(PlayerScore) then) =
       _$PlayerScoreCopyWithImpl<$Res, PlayerScore>;
   @useResult
-  $Res call({Player? player, Score score});
+  $Res call({Player player, Score score});
 
-  $PlayerCopyWith<$Res>? get player;
+  $PlayerCopyWith<$Res> get player;
   $ScoreCopyWith<$Res> get score;
 }
 
@@ -49,14 +49,14 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? player = freezed,
+    Object? player = null,
     Object? score = null,
   }) {
     return _then(_value.copyWith(
-      player: freezed == player
+      player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
-              as Player?,
+              as Player,
       score: null == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
@@ -66,12 +66,8 @@ class _$PlayerScoreCopyWithImpl<$Res, $Val extends PlayerScore>
 
   @override
   @pragma('vm:prefer-inline')
-  $PlayerCopyWith<$Res>? get player {
-    if (_value.player == null) {
-      return null;
-    }
-
-    return $PlayerCopyWith<$Res>(_value.player!, (value) {
+  $PlayerCopyWith<$Res> get player {
+    return $PlayerCopyWith<$Res>(_value.player, (value) {
       return _then(_value.copyWith(player: value) as $Val);
     });
   }
@@ -93,10 +89,10 @@ abstract class _$$PlayerScoreImplCopyWith<$Res>
       __$$PlayerScoreImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Player? player, Score score});
+  $Res call({Player player, Score score});
 
   @override
-  $PlayerCopyWith<$Res>? get player;
+  $PlayerCopyWith<$Res> get player;
   @override
   $ScoreCopyWith<$Res> get score;
 }
@@ -112,14 +108,14 @@ class __$$PlayerScoreImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? player = freezed,
+    Object? player = null,
     Object? score = null,
   }) {
     return _then(_$PlayerScoreImpl(
-      player: freezed == player
+      player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
-              as Player?,
+              as Player,
       score: null == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
@@ -135,7 +131,7 @@ class _$PlayerScoreImpl extends _PlayerScore {
       : super._();
 
   @override
-  final Player? player;
+  final Player player;
   @override
   final Score score;
 
@@ -165,12 +161,12 @@ class _$PlayerScoreImpl extends _PlayerScore {
 
 abstract class _PlayerScore extends PlayerScore {
   const factory _PlayerScore(
-      {required final Player? player,
+      {required final Player player,
       required final Score score}) = _$PlayerScoreImpl;
   const _PlayerScore._() : super._();
 
   @override
-  Player? get player;
+  Player get player;
   @override
   Score get score;
   @override

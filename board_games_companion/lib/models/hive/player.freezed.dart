@@ -26,7 +26,9 @@ mixin _$Player {
   String? get avatarFileName => throw _privateConstructorUsedError;
   @HiveField(5)
   String? get bggName => throw _privateConstructorUsedError;
-  String get avatarImageUri => throw _privateConstructorUsedError;
+  @HiveField(6)
+  int? get avatarColor => throw _privateConstructorUsedError;
+  String? get avatarImageUri => throw _privateConstructorUsedError;
   XFile? get avatarFileToSave => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -44,7 +46,8 @@ abstract class $PlayerCopyWith<$Res> {
       @HiveField(3) bool? isDeleted,
       @HiveField(4) String? avatarFileName,
       @HiveField(5) String? bggName,
-      String avatarImageUri,
+      @HiveField(6) int? avatarColor,
+      String? avatarImageUri,
       XFile? avatarFileToSave});
 }
 
@@ -66,7 +69,8 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
     Object? isDeleted = freezed,
     Object? avatarFileName = freezed,
     Object? bggName = freezed,
-    Object? avatarImageUri = null,
+    Object? avatarColor = freezed,
+    Object? avatarImageUri = freezed,
     Object? avatarFileToSave = freezed,
   }) {
     return _then(_value.copyWith(
@@ -90,10 +94,14 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
           ? _value.bggName
           : bggName // ignore: cast_nullable_to_non_nullable
               as String?,
-      avatarImageUri: null == avatarImageUri
+      avatarColor: freezed == avatarColor
+          ? _value.avatarColor
+          : avatarColor // ignore: cast_nullable_to_non_nullable
+              as int?,
+      avatarImageUri: freezed == avatarImageUri
           ? _value.avatarImageUri
           : avatarImageUri // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       avatarFileToSave: freezed == avatarFileToSave
           ? _value.avatarFileToSave
           : avatarFileToSave // ignore: cast_nullable_to_non_nullable
@@ -115,7 +123,8 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       @HiveField(3) bool? isDeleted,
       @HiveField(4) String? avatarFileName,
       @HiveField(5) String? bggName,
-      String avatarImageUri,
+      @HiveField(6) int? avatarColor,
+      String? avatarImageUri,
       XFile? avatarFileToSave});
 }
 
@@ -135,7 +144,8 @@ class __$$PlayerImplCopyWithImpl<$Res>
     Object? isDeleted = freezed,
     Object? avatarFileName = freezed,
     Object? bggName = freezed,
-    Object? avatarImageUri = null,
+    Object? avatarColor = freezed,
+    Object? avatarImageUri = freezed,
     Object? avatarFileToSave = freezed,
   }) {
     return _then(_$PlayerImpl(
@@ -159,10 +169,14 @@ class __$$PlayerImplCopyWithImpl<$Res>
           ? _value.bggName
           : bggName // ignore: cast_nullable_to_non_nullable
               as String?,
-      avatarImageUri: null == avatarImageUri
+      avatarColor: freezed == avatarColor
+          ? _value.avatarColor
+          : avatarColor // ignore: cast_nullable_to_non_nullable
+              as int?,
+      avatarImageUri: freezed == avatarImageUri
           ? _value.avatarImageUri
           : avatarImageUri // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       avatarFileToSave: freezed == avatarFileToSave
           ? _value.avatarFileToSave
           : avatarFileToSave // ignore: cast_nullable_to_non_nullable
@@ -174,15 +188,18 @@ class __$$PlayerImplCopyWithImpl<$Res>
 /// @nodoc
 
 @HiveType(typeId: HiveBoxes.playersTypeId, adapterName: 'PlayerAdapter')
-class _$PlayerImpl implements _Player {
+class _$PlayerImpl extends _Player {
   const _$PlayerImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) this.name,
       @HiveField(3) this.isDeleted,
       @HiveField(4) this.avatarFileName,
       @HiveField(5) this.bggName,
-      this.avatarImageUri = Constants.defaultAvatartAssetsPath,
-      this.avatarFileToSave});
+      @HiveField(6)
+      this.avatarColor = AppColors.defaultPlayerAvatarColorHexidecimal,
+      this.avatarImageUri,
+      this.avatarFileToSave})
+      : super._();
 
   @override
   @HiveField(0)
@@ -201,13 +218,16 @@ class _$PlayerImpl implements _Player {
   final String? bggName;
   @override
   @JsonKey()
-  final String avatarImageUri;
+  @HiveField(6)
+  final int? avatarColor;
+  @override
+  final String? avatarImageUri;
   @override
   final XFile? avatarFileToSave;
 
   @override
   String toString() {
-    return 'Player(id: $id, name: $name, isDeleted: $isDeleted, avatarFileName: $avatarFileName, bggName: $bggName, avatarImageUri: $avatarImageUri, avatarFileToSave: $avatarFileToSave)';
+    return 'Player(id: $id, name: $name, isDeleted: $isDeleted, avatarFileName: $avatarFileName, bggName: $bggName, avatarColor: $avatarColor, avatarImageUri: $avatarImageUri, avatarFileToSave: $avatarFileToSave)';
   }
 
   @override
@@ -222,6 +242,8 @@ class _$PlayerImpl implements _Player {
             (identical(other.avatarFileName, avatarFileName) ||
                 other.avatarFileName == avatarFileName) &&
             (identical(other.bggName, bggName) || other.bggName == bggName) &&
+            (identical(other.avatarColor, avatarColor) ||
+                other.avatarColor == avatarColor) &&
             (identical(other.avatarImageUri, avatarImageUri) ||
                 other.avatarImageUri == avatarImageUri) &&
             (identical(other.avatarFileToSave, avatarFileToSave) ||
@@ -230,7 +252,7 @@ class _$PlayerImpl implements _Player {
 
   @override
   int get hashCode => Object.hash(runtimeType, id, name, isDeleted,
-      avatarFileName, bggName, avatarImageUri, avatarFileToSave);
+      avatarFileName, bggName, avatarColor, avatarImageUri, avatarFileToSave);
 
   @JsonKey(ignore: true)
   @override
@@ -239,15 +261,17 @@ class _$PlayerImpl implements _Player {
       __$$PlayerImplCopyWithImpl<_$PlayerImpl>(this, _$identity);
 }
 
-abstract class _Player implements Player {
+abstract class _Player extends Player {
   const factory _Player(
       {@HiveField(0) required final String id,
       @HiveField(1) final String? name,
       @HiveField(3) final bool? isDeleted,
       @HiveField(4) final String? avatarFileName,
       @HiveField(5) final String? bggName,
-      final String avatarImageUri,
+      @HiveField(6) final int? avatarColor,
+      final String? avatarImageUri,
       final XFile? avatarFileToSave}) = _$PlayerImpl;
+  const _Player._() : super._();
 
   @override
   @HiveField(0)
@@ -265,7 +289,10 @@ abstract class _Player implements Player {
   @HiveField(5)
   String? get bggName;
   @override
-  String get avatarImageUri;
+  @HiveField(6)
+  int? get avatarColor;
+  @override
+  String? get avatarImageUri;
   @override
   XFile? get avatarFileToSave;
   @override

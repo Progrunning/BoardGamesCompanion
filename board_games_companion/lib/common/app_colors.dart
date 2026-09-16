@@ -75,4 +75,38 @@ class AppColors {
     Color(0xFFff7c43),
     Color(0xFFffa600),
   ];
+
+  static const int defaultPlayerAvatarColorHexidecimal = 0xFF006666;
+  static const List<Color> playerAvatarColors = [
+    Color(0xFF3366FF), // Bright Blue
+    Color(0xFF0099CC), // Cyan
+    Color(0xFF663344), // Dark Brown
+    Color(0xFF990033), // Maroon
+    Color(0xFF9933FF), // Purple
+    Color(0xFFCC8800), // Dark Orange
+    Color(0xFFFF3399), // Hot Pink
+    Color(0xFF0066CC), // Royal Blue
+    Color(0xFF330066), // Deep Purple
+    Color(0xFF660000), // Dark Red
+    Color(0xFF333333), // Dark Grey
+    Color(0xFF555555), // Medium Grey
+    Color(0xFF777777), // Light Grey
+    Color(0xFF996633), // Brown
+    Color(0xFF003333), // Dark Teal
+    Color(0xFF006633), // Forest Green
+    Color(0xFF4D0033), // Deep Maroon
+    Color(0xFF1A1A4D), // Very Dark Blue
+    Color(0xFF9966FF), // Light Purple
+    Color(0xFF994400), // Burnt Orange
+    Color(defaultPlayerAvatarColorHexidecimal), // Teal
+    Color(0xFF990099), // Magenta
+    Color(0xFF336633), // Dark Green
+    Color(0xFF444444), // Charcoal Grey
+    Color(0xFFCC0099), // Hot Magenta
+    Color(0xFFCC3333), // Coral Red
+    Color(0xFF004D66), // Dark Cyan
+    Color(0xFF666666), // Slate Grey
+    Color(0xFF330033), // Deep Plum
+    Color(0xFF1A3366), // Dark Slate Blue
+  ];
 }

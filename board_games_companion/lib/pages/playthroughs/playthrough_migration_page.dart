@@ -262,10 +262,7 @@ class _PlayerScoreTile extends StatelessWidget {
             SizedBox(
               height: Dimensions.smallPlayerAvatarSize.height,
               width: Dimensions.smallPlayerAvatarSize.width,
-              child: PlayerAvatar(
-                player: playerScore.player,
-                avatarImageSize: Dimensions.smallPlayerAvatarSize,
-              ),
+              child: PlayerAvatar(player: playerScore.player),
             ),
             const SizedBox(width: Dimensions.standardSpacing),
             Expanded(

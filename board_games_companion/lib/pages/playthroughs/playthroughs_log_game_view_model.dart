@@ -168,7 +168,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
         final updatedPlayerScore = playerScoreToUpdate.copyWith(
           score: _updateScore(playerScoreToUpdate.score, newScore: newScore),
         );
-        updatedPlayerScores[playerScore.player!.id] = updatedPlayerScore;
+        updatedPlayerScores[playerScore.player.id] = updatedPlayerScore;
 
         playersState = PlaythroughsLogGamePlayers.playersSelected(
           players: selectedPlayers,
@@ -191,7 +191,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
             continue;
           }
 
-          updatedPlayerScores[playerScore.player!.id] = playerScore.copyWith(
+          updatedPlayerScores[playerScore.player.id] = playerScore.copyWith(
             score: playerScore.score.copyWith(
               noScoreGameResult: NoScoreGameResult(
                 cooperativeGameResult: cooperativeGameResult,
@@ -291,7 +291,7 @@ abstract class _PlaythroughsLogGameViewModel with Store {
     };
 
     for (var i = 0; i < orderedPlayerScores.length; i++) {
-      updatedPlayerScores[orderedPlayerScores[i].id!] = orderedPlayerScores[i].copyWith(
+      updatedPlayerScores[orderedPlayerScores[i].id] = orderedPlayerScores[i].copyWith(
         score: _updateScore(
           orderedPlayerScores[i].score,
           place: i + 1,

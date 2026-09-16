@@ -190,10 +190,12 @@ abstract class _GamePlaythroughsDetailsStore with Store {
         _playerStore.players.where((player) => playthrough.playerIds.contains(player.id)).toList();
 
     final playerScores = orderedScores
-        ?.mapIndexed((int index, Score score) {
+        ?.where(
+            (Score score) => players.firstWhereOrNull((Player p) => score.playerId == p.id) != null)
+        .mapIndexed((int index, Score score) {
           score = _migratePlayerScore(score, index);
 
-          final player = players.firstWhereOrNull((Player p) => score.playerId == p.id);
+          final player = players.firstWhere((Player p) => score.playerId == p.id);
           return PlayerScore(player: player, score: score);
         })
         .toList()

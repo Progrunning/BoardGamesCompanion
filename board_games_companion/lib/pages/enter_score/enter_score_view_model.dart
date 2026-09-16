@@ -32,7 +32,7 @@ abstract class _EnterScoreViewModel with Store {
   double get score => _playerScore.score.score ?? 0;
 
   @computed
-  String? get playerName => _playerScore.player?.name;
+  String? get playerName => _playerScore.player.name;
 
   @computed
   bool get canUndo => partialScores.isNotEmpty;
