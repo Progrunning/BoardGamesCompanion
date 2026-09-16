@@ -17,6 +17,8 @@ class EnterScoreViewModel = _EnterScoreViewModel with _$EnterScoreViewModel;
 abstract class _EnterScoreViewModel with Store {
   _EnterScoreViewModel(this._playerScore) : _initialScore = _playerScore.score.score ?? 0;
 
+  static const int maxKeypadDigits = 6;
+
   final double _initialScore;
 
   @observable
@@ -27,6 +29,12 @@ abstract class _EnterScoreViewModel with Store {
 
   @observable
   ObservableList<double> partialScores = <double>[].asObservable();
+
+  @observable
+  bool isKeypadOpen = false;
+
+  @observable
+  String keypadDigits = '';
 
   @computed
   double get score => _playerScore.score.score ?? 0;
@@ -40,6 +48,9 @@ abstract class _EnterScoreViewModel with Store {
   @computed
   bool get hasUnsavedChanged => partialScores.isNotEmpty;
 
+  @computed
+  bool get canCommitKeypad => keypadDigits.isNotEmpty && keypadDigits != '0';
+
   @action
   void updateOperation(EnterScoreOperation operation) => this.operation = operation;
 
@@ -51,8 +62,23 @@ abstract class _EnterScoreViewModel with Store {
     _updatePlayerScore(newScore);
   }
 
+  /// Adds or subtracts [value] depending on the selected [operation].
+  @action
+  void addInstantScore(double value) =>
+      updateScore(operation == EnterScoreOperation.subtract ? -value : value);
+
   @action
   void scoreZero() => _updatePlayerScore(0);
+
+  @action
+  void done() {
+    keypadCancel();
+
+    // MK In case score was not entered assume 0 was the score
+    if (score == 0) {
+      scoreZero();
+    }
+  }
 
   @action
   void undo() {
@@ -64,6 +90,53 @@ abstract class _EnterScoreViewModel with Store {
 
     final newScore = _initialScore + _partialScoresSum;
     _updatePlayerScore(newScore);
+  }
+
+  @action
+  void openKeypad() {
+    if (isKeypadOpen) {
+      return;
+    }
+    keypadDigits = '';
+    isKeypadOpen = true;
+  }
+
+  @action
+  void keypadAppendDigit(String digit) {
+    if (keypadDigits.length >= maxKeypadDigits) {
+      return;
+    }
+    if (keypadDigits == '0') {
+      keypadDigits = digit;
+      return;
+    }
+    keypadDigits = keypadDigits + digit;
+  }
+
+  @action
+  void keypadBackspace() {
+    if (keypadDigits.isEmpty) {
+      return;
+    }
+    keypadDigits = keypadDigits.substring(0, keypadDigits.length - 1);
+  }
+
+  @action
+  void keypadCancel() {
+    keypadDigits = '';
+    isKeypadOpen = false;
+  }
+
+  @action
+  void keypadCommit() {
+    if (!canCommitKeypad) {
+      return;
+    }
+
+    addInstantScore(double.parse(keypadDigits));
+
+    keypadDigits = '';
+    isKeypadOpen = false;
   }
 
   void _updatePlayerScore(double? score) {
