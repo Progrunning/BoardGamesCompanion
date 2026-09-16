@@ -58,6 +58,20 @@ _Avoid_: Local data, app data, user data
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
 
+### Score entry
+
+**Partial score**:
+One increment appended to a player's total while recording a score. A total is always exactly the sum of its partial scores, which is what makes undoing the last one meaningful — remove a partial and the total follows. A typed number is a single partial score, no different from a tapped one.
+_Avoid_: Increment, step, delta, sub-score
+
+**Instant score**:
+A fixed-value partial score committed in one tap, without typing. Exists for the increments common enough to be worth a dedicated key.
+_Avoid_: Preset, quick score, tile, shortcut
+
+**Score entry**:
+Digits that have been typed but not yet committed as a partial score. It is not part of the total until committed, and it is what backspace edits — as opposed to undo, which removes a partial score that already counted.
+_Avoid_: Input, draft score, pending score, buffer
+
 ### Statistics
 
 **Competitive play**:
