@@ -49,7 +49,7 @@ abstract class _EnterScoreViewModel with Store {
   bool get hasUnsavedChanged => partialScores.isNotEmpty;
 
   @computed
-  bool get canCommitKeypad => keypadDigits.isNotEmpty;
+  bool get canCommitKeypad => keypadDigits.isNotEmpty && keypadDigits != '0';
 
   @action
   void updateOperation(EnterScoreOperation operation) => this.operation = operation;
@@ -62,8 +62,23 @@ abstract class _EnterScoreViewModel with Store {
     _updatePlayerScore(newScore);
   }
 
+  /// Adds or subtracts [value] depending on the selected [operation].
+  @action
+  void addInstantScore(double value) =>
+      updateScore(operation == EnterScoreOperation.subtract ? -value : value);
+
   @action
   void scoreZero() => _updatePlayerScore(0);
+
+  @action
+  void done() {
+    keypadCancel();
+
+    // MK In case score was not entered assume 0 was the score
+    if (score == 0) {
+      scoreZero();
+    }
+  }
 
   @action
   void undo() {
@@ -114,13 +129,11 @@ abstract class _EnterScoreViewModel with Store {
 
   @action
   void keypadCommit() {
-    if (keypadDigits.isEmpty) {
+    if (!canCommitKeypad) {
       return;
     }
 
-    final value = double.parse(keypadDigits);
-    final partialScore = operation == EnterScoreOperation.subtract ? -value : value;
-    updateScore(partialScore);
+    addInstantScore(double.parse(keypadDigits));
 
     keypadDigits = '';
     isKeypadOpen = false;

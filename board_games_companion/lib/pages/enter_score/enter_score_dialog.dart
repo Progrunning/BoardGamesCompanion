@@ -82,13 +82,8 @@ class EnterScoreDialog extends StatelessWidget {
                       operation: viewModel.operation,
                       onOperationChange: (EnterScoreOperation operation) =>
                           viewModel.updateOperation(operation),
-                      onScoreChange: (double partialScore) {
-                        if (viewModel.operation == EnterScoreOperation.subtract) {
-                          partialScore = -partialScore;
-                        }
-
-                        viewModel.updateScore(partialScore);
-                      },
+                      onScoreChange: (double partialScore) =>
+                          viewModel.addInstantScore(partialScore),
                       onKeypadTap: () => viewModel.openKeypad(),
                     );
                   },
@@ -100,15 +95,7 @@ class EnterScoreDialog extends StatelessWidget {
                       canUndo: viewModel.canUndo,
                       onUndo: () => viewModel.undo(),
                       onDone: () {
-                        if (viewModel.canCommitKeypad) {
-                          viewModel.keypadCommit();
-                        }
-
-                        // MK In case score was not entered assume 0 was the score
-                        if (viewModel.score == 0) {
-                          viewModel.scoreZero();
-                        }
-
+                        viewModel.done();
                         Navigator.pop(context);
                       },
                     );
@@ -238,27 +225,18 @@ class _InstantScorePanel extends StatelessWidget {
           ),
         ),
         const Expanded(child: SizedBox.shrink()),
-        _InstantScoreTile(text: '1', onTap: () => onScoreChange(1)),
+        _InstantScoreTile.text(text: '1', onTap: () => onScoreChange(1)),
         const Expanded(child: SizedBox.shrink()),
-        _InstantScoreTile(text: '5', onTap: () => onScoreChange(5)),
+        _InstantScoreTile.text(text: '5', onTap: () => onScoreChange(5)),
         const Expanded(child: SizedBox.shrink()),
-        _InstantScoreTile(text: '10', onTap: () => onScoreChange(10)),
+        _InstantScoreTile.text(text: '10', onTap: () => onScoreChange(10)),
         const Expanded(child: SizedBox.shrink()),
-        SizedBox(
-          width: 52,
-          height: 52,
-          child: ElevatedContainer(
-            backgroundColor: AppColors.accentColor,
-            elevation: AppStyles.defaultElevation,
-            splashColor: AppColors.primaryColor,
-            onTap: onKeypadTap,
-            child: const Center(
-              child: Icon(
-                Icons.dialpad,
-                color: AppColors.defaultTextColor,
-                size: Dimensions.extraLargeFontSize,
-              ),
-            ),
+        _InstantScoreTile(
+          onTap: onKeypadTap,
+          child: const Icon(
+            Icons.dialpad,
+            color: AppColors.defaultTextColor,
+            size: Dimensions.defaultButtonIconSize,
           ),
         ),
       ],
@@ -300,30 +278,65 @@ class _InstantScoreOperationTile extends StatelessWidget {
 
 class _InstantScoreTile extends StatelessWidget {
   const _InstantScoreTile({
-    required this.text,
     required this.onTap,
+    required this.child,
   });
 
-  final VoidCallback onTap;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 52,
-      height: 52,
-      child: ElevatedContainer(
-        backgroundColor: AppColors.accentColor,
-        elevation: AppStyles.defaultElevation,
-        splashColor: AppColors.primaryColor,
-        onTap: onTap,
-        child: Center(
+  _InstantScoreTile.text({
+    required String text,
+    required VoidCallback onTap,
+  }) : this(
+          onTap: onTap,
           child: Text(
             text,
             style: AppTheme.theme.textTheme.displaySmall!,
             textAlign: TextAlign.center,
           ),
-        ),
+        );
+
+  final VoidCallback onTap;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return _SquareTile(
+      size: 52,
+      backgroundColor: AppColors.accentColor,
+      splashColor: AppColors.primaryColor,
+      onTap: onTap,
+      child: child,
+    );
+  }
+}
+
+class _SquareTile extends StatelessWidget {
+  const _SquareTile({
+    required this.size,
+    required this.backgroundColor,
+    required this.splashColor,
+    required this.onTap,
+    required this.child,
+    this.elevation = AppStyles.defaultElevation,
+  });
+
+  final double size;
+  final Color backgroundColor;
+  final Color splashColor;
+  final VoidCallback? onTap;
+  final Widget child;
+  final double elevation;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ElevatedContainer(
+        backgroundColor: backgroundColor,
+        elevation: elevation,
+        splashColor: splashColor,
+        onTap: onTap,
+        child: Center(child: child),
       ),
     );
   }
@@ -379,18 +392,19 @@ class _Keypad extends StatelessWidget {
   final VoidCallback onCancel;
   final VoidCallback onCommit;
 
-  static const double _buttonSize = 56;
-  static const double _buttonSpacing = 6.0;
+  static const double _size = 280;
+  static const double _headerHeight = 36;
+  static const double _buttonSpacing = Dimensions.halfStandardSpacing;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 280,
-      height: 280,
+      width: _size,
+      height: _size,
       child: Column(
         children: [
           SizedBox(
-            height: 36,
+            height: _headerHeight,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -399,22 +413,24 @@ class _Keypad extends StatelessWidget {
                     child: Text(
                       digits.isEmpty ? '0' : digits,
                       style: AppTheme.theme.textTheme.displayLarge?.copyWith(
-                        fontSize: 32,
-                        color: digits.isEmpty ? AppColors.greyColor : AppColors.defaultTextColor,
+                        fontSize: Dimensions.doubleExtraLargeFontSize,
+                        color: digits.isEmpty
+                            ? AppColors.secondaryTextColor
+                            : AppColors.defaultTextColor,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 36,
-                  height: 36,
-                  child: ElevatedContainer(
-                    backgroundColor: Colors.transparent,
-                    splashColor: AppColors.accentColor,
-                    onTap: onCancel,
-                    child: const Center(
-                      child: Icon(Icons.close, color: AppColors.greyColor, size: 20),
-                    ),
+                _SquareTile(
+                  size: _headerHeight,
+                  backgroundColor: Colors.transparent,
+                  splashColor: AppColors.accentColor,
+                  elevation: 0,
+                  onTap: onCancel,
+                  child: const Icon(
+                    Icons.close,
+                    color: AppColors.secondaryTextColor,
+                    size: Dimensions.defaultButtonIconSize,
                   ),
                 ),
               ],
@@ -431,11 +447,7 @@ class _Keypad extends StatelessWidget {
               children: [
                 for (var i = 0; i < row.length; i++) ...[
                   if (i > 0) const SizedBox(width: _buttonSpacing),
-                  _KeypadButton(
-                    label: row[i],
-                    size: _buttonSize,
-                    onTap: () => onDigit(row[i]),
-                  ),
+                  _KeypadButton(onTap: () => onDigit(row[i]), label: row[i]),
                 ],
               ],
             ),
@@ -444,33 +456,27 @@ class _Keypad extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: _buttonSize,
-                height: _buttonSize,
-                child: ElevatedContainer(
-                  backgroundColor: AppColors.primaryColor,
-                  elevation: AppStyles.defaultElevation,
-                  splashColor: AppColors.accentColor,
-                  onTap: onBackspace,
-                  child: const Center(
-                    child: Icon(Icons.backspace_outlined, color: AppColors.whiteColor, size: 22),
-                  ),
+              _KeypadButton(
+                onTap: onBackspace,
+                child: const Icon(
+                  Icons.backspace_outlined,
+                  color: AppColors.defaultTextColor,
+                  size: Dimensions.defaultButtonIconSize,
                 ),
               ),
               const SizedBox(width: _buttonSpacing),
-              _KeypadButton(label: '0', size: _buttonSize, onTap: () => onDigit('0')),
+              _KeypadButton(onTap: () => onDigit('0'), label: '0'),
               const SizedBox(width: _buttonSpacing),
-              SizedBox(
-                width: _buttonSize,
-                height: _buttonSize,
-                child: ElevatedContainer(
-                  backgroundColor: canCommit ? AppColors.accentColor : AppColors.greyColor,
-                  elevation: AppStyles.defaultElevation,
-                  splashColor: AppColors.primaryColor,
-                  onTap: canCommit ? onCommit : null,
-                  child: const Center(
-                    child: Icon(Icons.check, color: AppColors.whiteColor, size: 22),
-                  ),
+              _SquareTile(
+                size: _KeypadButton.size,
+                backgroundColor:
+                    canCommit ? AppColors.accentColor : AppColors.disabledFloatinActionButtonColor,
+                splashColor: AppColors.primaryColor,
+                onTap: canCommit ? onCommit : null,
+                child: const Icon(
+                  Icons.check,
+                  color: AppColors.defaultTextColor,
+                  size: Dimensions.defaultButtonIconSize,
                 ),
               ),
             ],
@@ -483,29 +489,25 @@ class _Keypad extends StatelessWidget {
 
 class _KeypadButton extends StatelessWidget {
   const _KeypadButton({
-    required this.label,
-    required this.size,
     required this.onTap,
-  });
+    this.label,
+    this.child,
+  }) : assert((label == null) != (child == null), 'Provide either a label or a child');
 
-  final String label;
-  final double size;
+  static const double size = 56;
+
   final VoidCallback onTap;
+  final String? label;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: ElevatedContainer(
-        backgroundColor: AppColors.primaryColor,
-        elevation: AppStyles.defaultElevation,
-        splashColor: AppColors.accentColor,
-        onTap: onTap,
-        child: Center(
-          child: Text(label, style: AppTheme.theme.textTheme.displayLarge),
-        ),
-      ),
+    return _SquareTile(
+      size: size,
+      backgroundColor: AppColors.primaryColor,
+      splashColor: AppColors.accentColor,
+      onTap: onTap,
+      child: child ?? Text(label!, style: AppTheme.theme.textTheme.displayLarge),
     );
   }
 }

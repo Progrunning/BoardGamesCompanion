@@ -149,11 +149,33 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   }
 
   @override
+  void addInstantScore(double value) {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.addInstantScore');
+    try {
+      return super.addInstantScore(value);
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void scoreZero() {
     final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
         name: '_EnterScoreViewModel.scoreZero');
     try {
       return super.scoreZero();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void done() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.done');
+    try {
+      return super.done();
     } finally {
       _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
     }

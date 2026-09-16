@@ -39,7 +39,7 @@ void main() {
         viewModel.openKeypad();
       });
 
-      test('THEN isKeypadOpen is true and digits are empty', () {
+      test('WHEN nothing is typed THEN isKeypadOpen is true and digits are empty', () {
         expect(viewModel.isKeypadOpen, true);
         expect(viewModel.keypadDigits, '');
         expect(viewModel.canCommitKeypad, false);
@@ -54,8 +54,7 @@ void main() {
         expect(viewModel.canCommitKeypad, true);
       });
 
-      test('WHEN committed THEN score equals the typed value and keypad closes',
-          () {
+      test('WHEN committed THEN score equals the typed value and keypad closes', () {
         viewModel.keypadAppendDigit('1');
         viewModel.keypadAppendDigit('3');
         viewModel.keypadAppendDigit('5');
@@ -85,9 +84,7 @@ void main() {
       test(
           'WHEN 6 digits are typed and a 7th is attempted '
           'THEN the 7th digit is rejected', () {
-        for (final d in ['9', '9', '9', '9', '9', '9']) {
-          viewModel.keypadAppendDigit(d);
-        }
+        ['9', '9', '9', '9', '9', '9'].forEach(viewModel.keypadAppendDigit);
         expect(viewModel.keypadDigits, '999999');
 
         viewModel.keypadAppendDigit('1');
@@ -111,6 +108,19 @@ void main() {
         expect(viewModel.keypadDigits, '0');
         viewModel.keypadAppendDigit('5');
         expect(viewModel.keypadDigits, '5');
+      });
+
+      test(
+          'WHEN only 0 is typed and committed '
+          'THEN it cannot be committed and nothing is added', () {
+        viewModel.keypadAppendDigit('0');
+        expect(viewModel.canCommitKeypad, false);
+
+        viewModel.keypadCommit();
+
+        expect(viewModel.isKeypadOpen, true);
+        expect(viewModel.score, 0);
+        expect(viewModel.partialScores, isEmpty);
       });
 
       test(
@@ -180,6 +190,20 @@ void main() {
       expect(viewModel.score, 100);
       expect(viewModel.canUndo, false);
     });
+
+    test(
+        'WHEN digits are typed on the keypad but not committed and done '
+        'THEN the typed digits are discarded', () {
+      viewModel.openKeypad();
+      viewModel.keypadAppendDigit('5');
+      viewModel.keypadAppendDigit('0');
+      viewModel.done();
+
+      expect(viewModel.score, 100);
+      expect(viewModel.partialScores, isEmpty);
+      expect(viewModel.keypadDigits, '');
+      expect(viewModel.isKeypadOpen, false);
+    });
   });
 
   group('GIVEN existing tile-based scoring still works', () {
@@ -188,11 +212,36 @@ void main() {
     });
 
     test('WHEN +1, +5, +10 tiles are tapped THEN score accumulates', () {
-      viewModel.updateScore(1);
-      viewModel.updateScore(5);
-      viewModel.updateScore(10);
+      viewModel.addInstantScore(1);
+      viewModel.addInstantScore(5);
+      viewModel.addInstantScore(10);
       expect(viewModel.score, 16);
       expect(viewModel.partialScores.length, 3);
+    });
+
+    test('WHEN operation is subtract and the 5 tile is tapped THEN 5 is subtracted', () {
+      viewModel.updateOperation(EnterScoreOperation.subtract);
+      viewModel.addInstantScore(5);
+      expect(viewModel.score, -5);
+      expect(viewModel.partialScores, [-5]);
+    });
+
+    test('WHEN the dial is spun back to -3 THEN the score goes down by 3', () {
+      viewModel.updateScore(-3);
+      expect(viewModel.score, -3);
+      expect(viewModel.partialScores, [-3]);
+    });
+
+    test('WHEN a keypad value is committed into the empty score THEN it can be undone', () {
+      viewModel.openKeypad();
+      viewModel.keypadAppendDigit('7');
+      viewModel.keypadCommit();
+      expect(viewModel.score, 7);
+      expect(viewModel.canUndo, true);
+
+      viewModel.undo();
+      expect(viewModel.score, 0);
+      expect(viewModel.canUndo, false);
     });
 
     test('WHEN undo is called THEN last partial is removed', () {
@@ -202,9 +251,10 @@ void main() {
       expect(viewModel.score, 5);
     });
 
-    test('WHEN scoreZero on empty THEN Done still works', () {
-      viewModel.scoreZero();
+    test('WHEN done with nothing entered THEN score is 0', () {
+      viewModel.done();
       expect(viewModel.score, 0);
+      expect(viewModel.partialScores, isEmpty);
     });
 
     test(
