@@ -16,7 +16,7 @@
 # Runtime env vars are the final set from #323 (confirmed against the actual
 # C# settings classes). Secret-valued vars are supplied by `op run --env-file`
 # wrapping the `docker compose up` invocation (see deploy/deploy.sh and
-# docs/adr/0004-1password-service-account-deploy-secrets.md) — only op://
+# docs/adr/0007-1password-service-account-deploy-secrets.md) — only op://
 # references ever touch disk, never resolved values.
 
 x-searchapi-common: &searchapi-common

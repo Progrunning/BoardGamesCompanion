@@ -9,7 +9,7 @@
 # Run manually over SSH with nothing but the image tag:
 #   ./deploy/deploy.sh <image-tag>
 #
-# Prerequisites on the server (see docs/adr/0004-1password-service-account-deploy-secrets.md
+# Prerequisites on the server (see docs/adr/0007-1password-service-account-deploy-secrets.md
 # and deploy/1password/verify-op-run.sh for the exact idiom this reuses):
 #   - `op` (1Password CLI), `docker`, `docker compose`, `curl` on PATH.
 #   - OP_SERVICE_ACCOUNT_TOKEN readable from an owner-read-only file
@@ -30,6 +30,14 @@ set -euo pipefail
 # ---- Configuration (overridable via env, sensible defaults for a checkout) ----
 
 IMAGE_TAG="${1:?Usage: deploy.sh <image-tag>}"
+# Exported so every `docker compose` call (start and stop) interpolates it.
+export IMAGE_TAG
+
+# The one place the cutover line's shape is defined. Must match the
+# CUTOVER CONTRACT comment in sites/bgc.caddy and the compose service names.
+CONTAINER_PREFIX="bgc_searchapi_"
+APP_PORT="8080"
+CUTOVER_LINE_DESC="reverse_proxy ${CONTAINER_PREFIX}(blue|green):${APP_PORT}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMPOSE_FILE="${COMPOSE_FILE:-$SCRIPT_DIR/docker-compose.prod.yml}"
@@ -100,10 +108,10 @@ detect_active_color() {
   fi
 
   local color
-  color="$(grep -oP 'reverse_proxy bgc_searchapi_\K(blue|green)(?=:8080)' "$CADDY_SNIPPET_PATH" || true)"
+  color="$(grep -oP "reverse_proxy ${CONTAINER_PREFIX}\K(blue|green)(?=:${APP_PORT})" "$CADDY_SNIPPET_PATH" || true)"
 
   if [[ "$color" != "blue" && "$color" != "green" ]]; then
-    err "Could not detect Active Color from $CADDY_SNIPPET_PATH (expected a line matching 'reverse_proxy bgc_searchapi_(blue|green):8080')."
+    err "Could not detect Active Color from $CADDY_SNIPPET_PATH (expected a line matching '${CUTOVER_LINE_DESC}')."
     exit 1
   fi
 
@@ -119,14 +127,14 @@ inactive_color_of() {
 start_color() {
   local color="$1"
   log "Starting inactive Color '$color' with IMAGE_TAG=$IMAGE_TAG ..."
-  IMAGE_TAG="$IMAGE_TAG" op run --env-file "$OP_ENV_FILE" -- \
-    docker compose -f "$COMPOSE_FILE" up -d "bgc_searchapi_${color}"
+  op run --env-file "$OP_ENV_FILE" -- \
+    docker compose -f "$COMPOSE_FILE" up -d "${CONTAINER_PREFIX}${color}"
 }
 
 stop_color() {
   local color="$1"
   log "Stopping Color '$color' (stop, not down/rm — keeps rollback possible)..."
-  docker compose -f "$COMPOSE_FILE" stop "bgc_searchapi_${color}"
+  docker compose -f "$COMPOSE_FILE" stop "${CONTAINER_PREFIX}${color}"
 }
 
 # ---- 4. Health poll ----
@@ -138,7 +146,7 @@ stop_color() {
 
 wait_for_healthy() {
   local color="$1"
-  local container="bgc_searchapi_${color}"
+  local container="${CONTAINER_PREFIX}${color}"
   local attempt
 
   for ((attempt = 1; attempt <= HEALTH_CHECK_ATTEMPTS; attempt++)); do
@@ -164,7 +172,7 @@ cutover_to_color() {
   local old_color="$2"
 
   log "Cutting over: rewriting $CADDY_SNIPPET_PATH to point at '$new_color'..."
-  sed -i -E "s/(reverse_proxy bgc_searchapi_)(blue|green)(:8080)/\1${new_color}\3/" "$CADDY_SNIPPET_PATH"
+  sed -i -E "s/(reverse_proxy ${CONTAINER_PREFIX})(blue|green)(:${APP_PORT})/\1${new_color}\3/" "$CADDY_SNIPPET_PATH"
 
   log "Reloading Caddy..."
   eval "$CADDY_RELOAD_CMD"

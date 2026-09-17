@@ -21,7 +21,7 @@ that earlier tickets in this migration flagged as out of their scope:
       (`OP_TOKEN_FILE`, default `/opt/bgc/secrets/op-service-account-token`), and the
       real `op://` env-file exists at `OP_ENV_FILE`'s path (default
       `/opt/bgc/secrets/search-api.op-env`) — see
-      `docs/adr/0004-1password-service-account-deploy-secrets.md` for the exact
+      `docs/adr/0007-1password-service-account-deploy-secrets.md` for the exact
       verification steps (issue #322), which still need to be run for real.
 - [ ] Caddy is running on the server and its main Caddyfile `import`s
       `/opt/bgc/sites/bgc.caddy` (the RemoteServer-owned prerequisite the spec

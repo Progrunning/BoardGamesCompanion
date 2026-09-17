@@ -63,23 +63,19 @@ jobs:
       - name: Build Search API
         run: dotnet build backend/BGC.SearchApi/BGC.SearchApi.csproj -c Release
 
-      - name: Run BGC.Core.UnitTests and collect coverage
-        run: >
-          dotnet test backend/tests/BGC.Core.UnitTests/BGC.Core.UnitTests.csproj -c Release
-          --results-directory "${{ env.COVERAGE_RESULTS_DIRECTORY }}"
-          --collect:"XPlat Code Coverage"
-          --
-          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*]BGC.Core.Models.*"
-
-      - name: Run BGC.SearchApi.UnitTests and collect coverage
-        run: >
-          dotnet test backend/tests/BGC.SearchApi.UnitTests/BGC.SearchApi.UnitTests.csproj -c Release
-          --results-directory "${{ env.COVERAGE_RESULTS_DIRECTORY }}"
-          --collect:"XPlat Code Coverage"
-          --
-          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*]BGC.Core.Models.*"
+      - name: Run unit test suites and collect coverage
+        run: |
+          for project in \
+            backend/tests/BGC.Core.UnitTests/BGC.Core.UnitTests.csproj \
+            backend/tests/BGC.SearchApi.UnitTests/BGC.SearchApi.UnitTests.csproj
+          do
+            dotnet test "$project" -c Release \
+              --results-directory "${{ env.COVERAGE_RESULTS_DIRECTORY }}" \
+              --collect:"XPlat Code Coverage" \
+              -- \
+              DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura \
+              DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*]BGC.Core.Models.*"
+          done
 
       - name: Generate coverage report
         uses: danielpalme/ReportGenerator-GitHub-Action@5
@@ -179,8 +175,17 @@ jobs:
       # run for real): HETZNER_DEPLOY_SSH_KEY, HETZNER_SSH_HOST, HETZNER_SSH_USER.
       # This is the only credential GitHub holds for deploys - no application
       # secret (Mongo/API keys/BGG key) appears here; those are injected on
-      # the server from 1Password by deploy.sh itself (ADR-0004).
+      # the server from 1Password by deploy.sh itself (ADR-0007).
     steps:
+      # A rollback dispatch with an empty image_tag would otherwise SSH in and
+      # fail with deploy.sh's usage error; fail fast here instead.
+      - name: Validate image tag
+        run: |
+          if [ -z "${{ env.IMAGE_TAG }}" ]; then
+            echo "No image tag to deploy: workflow_dispatch requires the image_tag input (an already-published short SHA)." >&2
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
 
       - name: Set up SSH agent

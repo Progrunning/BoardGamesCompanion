@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# verify-op-run.sh — one-off verification for issue #322 / ADR-0004.
+# verify-op-run.sh — one-off verification for issue #322 / ADR-0007.
 #
 # Confirms that runtime secrets (Mongo connection string, API key, BGG API
 # key) can be resolved from 1Password into the Search API's Docker Compose
@@ -10,7 +10,7 @@
 #
 # This script has never been run against real 1Password infrastructure — it
 # was written by an agent with no service-account token and no server access
-# (see docs/adr/0004-1password-service-account-deploy-secrets.md). It is a
+# (see docs/adr/0007-1password-service-account-deploy-secrets.md). It is a
 # ready-to-run reference for a human who has both.
 #
 # Prerequisites (all one-time, done by a human, not by this script):
@@ -102,7 +102,7 @@ done
 unset OP_SERVICE_ACCOUNT_TOKEN
 
 if [[ "$missing" -ne 0 ]]; then
-  echo "One or more secrets failed to resolve. See docs/adr/0004-1password-service-account-deploy-secrets.md." >&2
+  echo "One or more secrets failed to resolve. See docs/adr/0007-1password-service-account-deploy-secrets.md." >&2
   exit 1
 fi
 
