@@ -86,6 +86,22 @@ mixin _$TipViewModel on _TipViewModel, Store {
     });
   }
 
+  late final _$restoreVisualStateAtom =
+      Atom(name: '_TipViewModel.restoreVisualState', context: context);
+
+  @override
+  TipRestoreVisualState get restoreVisualState {
+    _$restoreVisualStateAtom.reportRead();
+    return super.restoreVisualState;
+  }
+
+  @override
+  set restoreVisualState(TipRestoreVisualState value) {
+    _$restoreVisualStateAtom.reportWrite(value, super.restoreVisualState, () {
+      super.restoreVisualState = value;
+    });
+  }
+
   late final _$loadTipTiersAsyncAction =
       AsyncAction('_TipViewModel.loadTipTiers', context: context);
 
@@ -133,6 +149,17 @@ mixin _$TipViewModel on _TipViewModel, Store {
   }
 
   @override
+  void dismissRestoreResult() {
+    final _$actionInfo = _$_TipViewModelActionController.startAction(
+        name: '_TipViewModel.dismissRestoreResult');
+    try {
+      return super.dismissRestoreResult();
+    } finally {
+      _$_TipViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _applyPurchaseOutcome(TipTier tier, PurchaseOutcome outcome) {
     final _$actionInfo = _$_TipViewModelActionController.startAction(
         name: '_TipViewModel._applyPurchaseOutcome');
@@ -160,6 +187,7 @@ mixin _$TipViewModel on _TipViewModel, Store {
 tipTiers: ${tipTiers},
 visualState: ${visualState},
 purchaseVisualState: ${purchaseVisualState},
+restoreVisualState: ${restoreVisualState},
 hasAnyTipTiers: ${hasAnyTipTiers},
 supporterStatus: ${supporterStatus},
 isSupporter: ${isSupporter},

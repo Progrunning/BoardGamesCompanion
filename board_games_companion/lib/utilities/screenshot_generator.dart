@@ -9,7 +9,7 @@ import 'package:board_games_companion/common/app_colors.dart';
 import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/common/app_theme.dart';
 import 'package:board_games_companion/services/analytics_service.dart';
-import 'package:board_games_companion/services/rate_and_review_service.dart';
+import 'package:board_games_companion/services/engagement_prompts_service.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -36,14 +36,14 @@ class ScreenshotGenerator = _ScreenshotGenerator with _$ScreenshotGenerator;
 abstract class _ScreenshotGenerator with Store {
   _ScreenshotGenerator({
     required ScreenshotController screenshotController,
-    required RateAndReviewService rateAndReviewService,
+    required EngagementPromptsService engagementPromptsService,
     required AnalyticsService analyticsService,
   })  : _screenshotController = screenshotController,
-        _rateAndReviewService = rateAndReviewService,
+        _engagementPromptsService = engagementPromptsService,
         _analyticsService = analyticsService;
 
   final ScreenshotController _screenshotController;
-  final RateAndReviewService _rateAndReviewService;
+  final EngagementPromptsService _engagementPromptsService;
   final AnalyticsService _analyticsService;
 
   // MK An arbitrary number to avoid colosal amount of HTTP request
@@ -63,7 +63,7 @@ abstract class _ScreenshotGenerator with Store {
       return;
     }
 
-    unawaited(_rateAndReviewService.increaseNumberOfSignificantActions());
+    unawaited(_engagementPromptsService.increaseNumberOfSignificantActions());
     unawaited(_analyticsService.logEvent(
       name: Analytics.shareCollectionScreenshot,
       parameters: <String, String>{

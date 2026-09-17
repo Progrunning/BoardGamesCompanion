@@ -83,9 +83,15 @@ abstract class _RevenueCatPurchaseService with Store {
       final CustomerInfo customerInfo =
           await _revenueCatClient.purchasePackage(tier.package);
       _applyCustomerInfo(customerInfo);
-      return supporterStatus == SupporterStatus.supporter
-          ? PurchaseOutcome.completed
-          : PurchaseOutcome.pending;
+      if (supporterStatus == SupporterStatus.supporter) {
+        return PurchaseOutcome.completed;
+      }
+
+      // MK The store accepted the purchase but the entitlement isn't active
+      // yet (e.g. still propagating) - surface it as pending, not as
+      // not-a-supporter, so the UI shows the right banner.
+      _setSupporterStatus(SupporterStatus.pending);
+      return PurchaseOutcome.pending;
     } on PlatformException catch (e) {
       final PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
       if (errorCode == PurchasesErrorCode.purchaseCancelledError) {

@@ -23,7 +23,7 @@ import '../../injectable.dart';
 import '../../models/hive/board_game_details.dart';
 import '../../models/navigation/playthroughs_page_arguments.dart';
 import '../../services/analytics_service.dart';
-import '../../services/rate_and_review_service.dart';
+import '../../services/engagement_prompts_service.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../utilities/screenshot_generator.dart';
 import '../../widgets/board_games/board_game_tile.dart';
@@ -49,14 +49,14 @@ class CollectionsPage extends StatefulWidget {
     this.viewModel,
     this.boardGamesFiltersStore,
     this.analyticsService,
-    this.rateAndReviewService, {
+    this.engagementPromptsService, {
     super.key,
   });
 
   final CollectionsViewModel viewModel;
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final AnalyticsService analyticsService;
-  final RateAndReviewService rateAndReviewService;
+  final EngagementPromptsService engagementPromptsService;
 
   @override
   CollectionsPageState createState() => CollectionsPageState();
@@ -118,7 +118,7 @@ class CollectionsPageState extends State<CollectionsPage>
                   selectedTab: widget.viewModel.selectedTab,
                   topTabController: _topTabController,
                   analyticsService: widget.analyticsService,
-                  rateAndReviewService: widget.rateAndReviewService,
+                  engagementPromptsService: widget.engagementPromptsService,
                   screenshotGenerator: _screenshotGenerator,
                 );
               },
@@ -190,7 +190,7 @@ class _Collection extends StatelessWidget {
     required this.selectedTab,
     required this.topTabController,
     required this.analyticsService,
-    required this.rateAndReviewService,
+    required this.engagementPromptsService,
     required this.screenshotGenerator,
   });
 
@@ -204,7 +204,7 @@ class _Collection extends StatelessWidget {
   final GamesTab selectedTab;
   final TabController topTabController;
   final AnalyticsService analyticsService;
-  final RateAndReviewService rateAndReviewService;
+  final EngagementPromptsService engagementPromptsService;
   final ScreenshotGenerator screenshotGenerator;
 
   @override
@@ -215,7 +215,7 @@ class _Collection extends StatelessWidget {
           viewModel: viewModel,
           topTabController: topTabController,
           analyticsService: analyticsService,
-          rateAndReviewService: rateAndReviewService,
+          engagementPromptsService: engagementPromptsService,
         ),
         if (isCollectionEmpty)
           Observer(
@@ -293,13 +293,13 @@ class _AppBar extends StatefulWidget {
     required this.viewModel,
     required this.topTabController,
     required this.analyticsService,
-    required this.rateAndReviewService,
+    required this.engagementPromptsService,
   });
 
   final CollectionsViewModel viewModel;
   final TabController topTabController;
   final AnalyticsService analyticsService;
-  final RateAndReviewService rateAndReviewService;
+  final EngagementPromptsService engagementPromptsService;
 
   @override
   _AppBarState createState() => _AppBarState();
@@ -330,7 +330,7 @@ class _AppBarState extends State<_AppBar> {
                     ? () async {
                         await _openFiltersPanel(context);
                         await widget.analyticsService.logEvent(name: Analytics.filterCollection);
-                        await widget.rateAndReviewService.increaseNumberOfSignificantActions();
+                        await widget.engagementPromptsService.increaseNumberOfSignificantActions();
                       }
                     : null,
               );

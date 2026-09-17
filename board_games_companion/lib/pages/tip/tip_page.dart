@@ -22,6 +22,7 @@ import '../../widgets/common/supporter_badge.dart';
 import 'app_icon_picker_section.dart';
 import 'app_icon_picker_view_model.dart';
 import 'tip_purchase_visual_state.dart';
+import 'tip_restore_visual_state.dart';
 import 'tip_view_model.dart';
 
 class TipPage extends StatefulWidget {
@@ -42,6 +43,7 @@ class TipPage extends StatefulWidget {
 
 class TipPageState extends State<TipPage> {
   late final ReactionDisposer _purchaseVisualStateReactionDisposer;
+  late final ReactionDisposer _restoreVisualStateReactionDisposer;
 
   @override
   void initState() {
@@ -54,11 +56,16 @@ class TipPageState extends State<TipPage> {
       (_) => widget.viewModel.purchaseVisualState,
       _onPurchaseVisualStateChanged,
     );
+    _restoreVisualStateReactionDisposer = reaction<TipRestoreVisualState>(
+      (_) => widget.viewModel.restoreVisualState,
+      _onRestoreVisualStateChanged,
+    );
   }
 
   @override
   void dispose() {
     _purchaseVisualStateReactionDisposer();
+    _restoreVisualStateReactionDisposer();
     super.dispose();
   }
 
@@ -92,6 +99,32 @@ class TipPageState extends State<TipPage> {
     );
 
     widget.viewModel.dismissPurchaseResult();
+  }
+
+  void _onRestoreVisualStateChanged(TipRestoreVisualState restoreVisualState) {
+    restoreVisualState.when(
+      idle: () {},
+      restoring: () {},
+      restored: () => _showRestoreResultSnackbar(AppText.tipScreenRestoreSucceededMessage),
+      failed: () => _showRestoreResultSnackbar(AppText.tipScreenRestoreErrorMessage),
+    );
+  }
+
+  void _showRestoreResultSnackbar(String message) {
+    if (!mounted) {
+      return;
+    }
+
+    widget.viewModel.dismissRestoreResult();
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: Dimensions.snackbarMargin,
+          content: Text(message),
+        ),
+      );
   }
 
   void _showPurchaseFailedSnackbar() {
@@ -143,6 +176,14 @@ class TipPageState extends State<TipPage> {
                   const TipPurchaseVisualState.purchasing()) {
                 return LoadingOverlay(
                   title: AppText.tipScreenPurchasingMessage,
+                  child: body,
+                );
+              }
+
+              if (widget.viewModel.restoreVisualState ==
+                  const TipRestoreVisualState.restoring()) {
+                return LoadingOverlay(
+                  title: AppText.tipScreenRestoringMessage,
                   child: body,
                 );
               }
@@ -324,7 +365,7 @@ class _Banner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Dimensions.standardSpacing),
       decoration: BoxDecoration(
-        color: AppColors.accentColor.withValues(alpha: .15),
+        color: AppColors.accentColor.withAlpha(AppStyles.opacity20Percent),
         borderRadius: AppTheme.defaultBorderRadius,
         border: Border.all(color: AppColors.accentColor),
       ),

@@ -45,9 +45,11 @@ class SupportPromptService {
 
   Future<void> tip() async {
     showSupportPromptDialog = false;
-    // MK Tipping resolves the ask - don't keep nagging a user who already
-    // chose to support the app through this prompt.
-    await _preferencesService.setSupportPromptNeverAskAgain();
+    // MK Tapping Tip only opens the tip screen - the user may back out
+    // without purchasing, so snooze rather than silence forever. Actual
+    // supporters are excluded from eligibility separately.
+    await _preferencesService
+        .setSupportPromptRemindMeLaterDate(DateTime.now().toUtc().add(_remindMeLaterDuration));
   }
 
   Future<void> askMeLater() async {
@@ -72,6 +74,12 @@ class SupportPromptService {
         return;
       }
 
+      // MK Never ask users who already tipped - their status is cached
+      // locally by the purchase service.
+      if (_preferencesService.getIsSupporter()) {
+        return;
+      }
+
       // MK Eligible only once the rate-and-review prompt is resolved - that
       // service persists a single flag covering both "shown" and "dismissed
       // forever", so that's precisely what "resolved" means here.
@@ -82,11 +90,12 @@ class SupportPromptService {
 
       final DateTime nowUtc = DateTime.now().toUtc();
 
-      DateTime? rateAndReviewResolvedAt = _preferencesService.getRateAndReviewResolvedAt();
-      if (rateAndReviewResolvedAt == null) {
-        rateAndReviewResolvedAt = nowUtc;
-        await _preferencesService.setRateAndReviewResolvedAt(rateAndReviewResolvedAt);
-      }
+      // MK A missing timestamp means rate-and-review was resolved before
+      // resolution dates were recorded - long ago, so the cooldown has
+      // long since elapsed.
+      final DateTime? rateAndReviewResolvedAt = _preferencesService.getRateAndReviewResolvedAt();
+      final bool rateAndReviewCooldownElapsed = rateAndReviewResolvedAt == null ||
+          rateAndReviewResolvedAt.add(_requiredRateAndReviewResolvedForDuration).isBefore(nowUtc);
 
       final DateTime? firstTimeLaunchDate = _preferencesService.getFirstTimeLaunchDate();
       final DateTime? remindMeLaterDate = _preferencesService.getSupportPromptRemindMeLaterDate();
@@ -100,9 +109,7 @@ class SupportPromptService {
       showSupportPromptDialog =
           !_rateAndReviewService.showRateAndReviewDialog &&
               firstTimeLaunchDate.add(_requiredAppUsedForDuration).isBefore(nowUtc) &&
-              rateAndReviewResolvedAt
-                  .add(_requiredRateAndReviewResolvedForDuration)
-                  .isBefore(nowUtc) &&
+              rateAndReviewCooldownElapsed &&
               (remindMeLaterDate == null || remindMeLaterDate.isBefore(nowUtc)) &&
               numberOfSignificantActions >= _requiredNumberOfSignificantActions;
     } catch (e, stack) {

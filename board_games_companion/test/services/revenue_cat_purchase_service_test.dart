@@ -168,6 +168,18 @@ void main() {
       verify(() => mockPreferencesService.setIsSupporter(true)).called(1);
     });
 
+    test(
+        'WHEN the store accepts the purchase but the entitlement is not active yet '
+        'THEN it is reported as pending and the observable status reflects it', () async {
+      when(() => mockRevenueCatClient.purchasePackage(any()))
+          .thenAnswer((_) async => customerInfo(isSupporter: false));
+
+      final PurchaseOutcome outcome = await purchaseService.purchase(tipTier());
+
+      expect(outcome, PurchaseOutcome.pending);
+      expect(purchaseService.supporterStatus, SupporterStatus.pending);
+    });
+
     test('WHEN the user cancels the store purchase flow THEN it is reported as cancelled',
         () async {
       when(() => mockRevenueCatClient.purchasePackage(any())).thenThrow(

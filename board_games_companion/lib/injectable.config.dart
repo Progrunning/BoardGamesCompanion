@@ -42,6 +42,7 @@ import 'services/board_games_filters_service.dart' as _i212;
 import 'services/board_games_geek_service.dart' as _i667;
 import 'services/board_games_search_service.dart' as _i75;
 import 'services/board_games_service.dart' as _i927;
+import 'services/engagement_prompts_service.dart' as _i411;
 import 'services/environment_service.dart' as _i566;
 import 'services/file_service.dart' as _i207;
 import 'services/injectable_register_module.dart' as _i837;
@@ -80,9 +81,10 @@ _i174.GetIt $initGetIt(
     environmentFilter,
   );
   final registerModule = _$RegisterModule();
-  gh.factory<_i979.HiveInterface>(() => registerModule.hive);
   gh.factory<_i181.PlaythroughNoteViewModel>(
       () => _i181.PlaythroughNoteViewModel());
+  gh.factory<_i979.HiveInterface>(() => registerModule.hive);
+  gh.singleton<_i947.AppStore>(() => _i947.AppStore());
   gh.singleton<_i398.FirebaseAnalytics>(() => registerModule.firebaseAnalytics);
   gh.singleton<_i398.FirebaseAnalyticsObserver>(
       () => registerModule.firebaseAnalyticsObserver);
@@ -92,7 +94,6 @@ _i174.GetIt $initGetIt(
   gh.singleton<_i667.BoardGamesGeekService>(
       () => registerModule.boardGameGeekService);
   gh.singleton<_i207.FileService>(() => _i207.FileService());
-  gh.singleton<_i947.AppStore>(() => _i947.AppStore());
   gh.lazySingleton<_i1021.AppIconService>(
       () => _i1021.PlatformAppIconService());
   gh.singleton<_i927.BoardGamesService>(() => _i927.BoardGamesService(
@@ -107,14 +108,14 @@ _i174.GetIt $initGetIt(
       ));
   gh.singleton<_i75.BoardGamesSearchService>(
       () => _i75.BoardGamesSearchService(gh<_i566.EnvironmentService>()));
-  gh.singleton<_i701.PreferencesService>(
-      () => _i701.PreferencesService(gh<_i979.HiveInterface>()));
+  gh.singleton<_i153.SearchService>(
+      () => _i153.SearchService(gh<_i979.HiveInterface>()));
   gh.singleton<_i2.UserService>(
       () => _i2.UserService(gh<_i979.HiveInterface>()));
   gh.singleton<_i277.ScoreService>(
       () => _i277.ScoreService(gh<_i979.HiveInterface>()));
-  gh.singleton<_i153.SearchService>(
-      () => _i153.SearchService(gh<_i979.HiveInterface>()));
+  gh.singleton<_i701.PreferencesService>(
+      () => _i701.PreferencesService(gh<_i979.HiveInterface>()));
   gh.singleton<_i93.RateAndReviewService>(
       () => _i93.RateAndReviewService(gh<_i701.PreferencesService>()));
   gh.lazySingleton<_i389.PurchaseService>(() => _i788.RevenueCatPurchaseService(
@@ -135,16 +136,16 @@ _i174.GetIt $initGetIt(
   gh.singleton<_i78.UserStore>(() => _i78.UserStore(gh<_i2.UserService>()));
   gh.singleton<_i145.ScoresStore>(
       () => _i145.ScoresStore(gh<_i277.ScoreService>()));
+  gh.singleton<_i411.EngagementPromptsService>(
+      () => _i411.EngagementPromptsService(
+            gh<_i93.RateAndReviewService>(),
+            gh<_i421.SupportPromptService>(),
+          ));
   gh.singleton<_i566.SearchStore>(
       () => _i566.SearchStore(gh<_i153.SearchService>()));
   gh.singleton<_i85.PlaythroughsStore>(() => _i85.PlaythroughsStore(
         gh<_i934.PlaythroughService>(),
         gh<_i145.ScoresStore>(),
-      ));
-  gh.singleton<_i385.AnalyticsService>(() => _i385.AnalyticsService(
-        gh<_i398.FirebaseAnalytics>(),
-        gh<_i93.RateAndReviewService>(),
-        gh<_i421.SupportPromptService>(),
       ));
   gh.singleton<_i133.AppIconPickerViewModel>(() => _i133.AppIconPickerViewModel(
         gh<_i389.PurchaseService>(),
@@ -154,9 +155,9 @@ _i174.GetIt $initGetIt(
         gh<_i927.BoardGamesService>(),
         gh<_i934.PlaythroughService>(),
       ));
-  gh.singleton<_i183.TipViewModel>(() => _i183.TipViewModel(
-        gh<_i389.PurchaseService>(),
-        gh<_i385.AnalyticsService>(),
+  gh.singleton<_i385.AnalyticsService>(() => _i385.AnalyticsService(
+        gh<_i398.FirebaseAnalytics>(),
+        gh<_i411.EngagementPromptsService>(),
       ));
   gh.factory<_i877.PlaysViewModel>(() => _i877.PlaysViewModel(
         gh<_i85.PlaythroughsStore>(),
@@ -165,12 +166,12 @@ _i174.GetIt $initGetIt(
         gh<_i145.ScoresStore>(),
         gh<_i385.AnalyticsService>(),
       ));
-  gh.factory<_i316.PlayerViewModel>(
-      () => _i316.PlayerViewModel(gh<_i182.PlayersStore>()));
-  gh.factory<_i950.PlaythroughPlayersSelectionViewModel>(() =>
-      _i950.PlaythroughPlayersSelectionViewModel(gh<_i182.PlayersStore>()));
   gh.factory<_i441.PlayersViewModel>(
       () => _i441.PlayersViewModel(gh<_i182.PlayersStore>()));
+  gh.factory<_i950.PlaythroughPlayersSelectionViewModel>(() =>
+      _i950.PlaythroughPlayersSelectionViewModel(gh<_i182.PlayersStore>()));
+  gh.factory<_i316.PlayerViewModel>(
+      () => _i316.PlayerViewModel(gh<_i182.PlayersStore>()));
   gh.singleton<_i585.SettingsViewModel>(() => _i585.SettingsViewModel(
         gh<_i207.FileService>(),
         gh<_i927.BoardGamesService>(),
@@ -210,6 +211,11 @@ _i174.GetIt $initGetIt(
         gh<_i667.BoardGamesGeekService>(),
         gh<_i385.AnalyticsService>(),
       ));
+  gh.singleton<_i115.ScreenshotGenerator>(() => _i115.ScreenshotGenerator(
+        screenshotController: gh<_i592.ScreenshotController>(),
+        engagementPromptsService: gh<_i411.EngagementPromptsService>(),
+        analyticsService: gh<_i385.AnalyticsService>(),
+      ));
   gh.factory<_i554.PlaythroughsLogGameViewModel>(
       () => _i554.PlaythroughsLogGameViewModel(
             gh<_i182.PlayersStore>(),
@@ -240,11 +246,6 @@ _i174.GetIt $initGetIt(
         gh<_i85.PlaythroughsStore>(),
         gh<_i182.PlayersStore>(),
       ));
-  gh.singleton<_i115.ScreenshotGenerator>(() => _i115.ScreenshotGenerator(
-        screenshotController: gh<_i592.ScreenshotController>(),
-        rateAndReviewService: gh<_i93.RateAndReviewService>(),
-        analyticsService: gh<_i385.AnalyticsService>(),
-      ));
   gh.factory<_i368.EditPlaythoughViewModel>(() =>
       _i368.EditPlaythoughViewModel(gh<_i791.GamePlaythroughsDetailsStore>()));
   gh.singleton<_i730.PlaythroughStatisticsViewModel>(
@@ -253,9 +254,14 @@ _i174.GetIt $initGetIt(
             gh<_i145.ScoresStore>(),
             gh<_i791.GamePlaythroughsDetailsStore>(),
           ));
+  gh.singleton<_i183.TipViewModel>(() => _i183.TipViewModel(
+        gh<_i389.PurchaseService>(),
+        gh<_i385.AnalyticsService>(),
+      ));
   gh.factory<_i768.HomeViewModel>(() => _i768.HomeViewModel(
         gh<_i385.AnalyticsService>(),
-        gh<_i93.RateAndReviewService>(),
+        gh<_i411.EngagementPromptsService>(),
+        gh<_i389.PurchaseService>(),
         gh<_i441.PlayersViewModel>(),
         gh<_i981.BoardGamesFiltersStore>(),
         gh<_i130.CollectionsViewModel>(),
@@ -266,11 +272,11 @@ _i174.GetIt $initGetIt(
         gh<_i839.BoardGamesStore>(),
         gh<_i75.BoardGamesSearchService>(),
       ));
-  gh.factory<_i272.PlaythroughMigrationViewModel>(() =>
-      _i272.PlaythroughMigrationViewModel(
-          gh<_i791.GamePlaythroughsDetailsStore>()));
   gh.factory<_i416.PlaythroughsHistoryViewModel>(() =>
       _i416.PlaythroughsHistoryViewModel(
+          gh<_i791.GamePlaythroughsDetailsStore>()));
+  gh.factory<_i272.PlaythroughMigrationViewModel>(() =>
+      _i272.PlaythroughMigrationViewModel(
           gh<_i791.GamePlaythroughsDetailsStore>()));
   return getIt;
 }

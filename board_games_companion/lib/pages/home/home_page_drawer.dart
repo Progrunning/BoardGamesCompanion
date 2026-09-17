@@ -10,7 +10,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../injectable.dart';
 import '../../services/purchase_service.dart';
 import '../../utilities/launcher_helper.dart';
 import '../../widgets/common/supporter_badge.dart';
@@ -19,8 +18,7 @@ import '../settings/settings_page.dart';
 import '../tip/tip_page.dart';
 
 class HomePageDrawer extends StatelessWidget {
-  HomePageDrawer({super.key, PurchaseService? purchaseService})
-      : purchaseService = purchaseService ?? getIt<PurchaseService>();
+  const HomePageDrawer({required this.purchaseService, super.key});
 
   final PurchaseService purchaseService;
 

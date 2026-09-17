@@ -21,6 +21,11 @@ class AppText {
   static const tipScreenPendingBanner = 'Your tip is being processed (this can happen if it '
       'needs approval) — thanks for your patience!';
   static const tipScreenRestorePurchasesButtonText = 'Restore purchases';
+  static const tipScreenRestoringMessage = 'Restoring your purchases...';
+  static const tipScreenRestoreSucceededMessage =
+      'Restore finished — any previous tips have been applied.';
+  static const tipScreenRestoreErrorMessage =
+      "Restoring purchases didn't work. Please check your connection and try again.";
   static const tipScreenLoadingErrorMessage =
       "Couldn't reach the store. Check your connection and try again.";
   static const tipScreenRetryButtonText = 'Try again';

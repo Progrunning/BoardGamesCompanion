@@ -56,131 +56,107 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   }
 
   Future<void> _showRateAndReviewDialog(BuildContext context) async {
-    await showDialog<AlertDialog>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(AppText.rateAndReview),
-          content: const Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                  "We apologise that we're interupting you but we would really appreciate your support.\n"),
-              Text(
-                  "If you're enjoying ${AppText.appTitle} app, would you mind taking a moment to rate it? It shouldn't take more than a minute.\n"),
-              Text('Thank you.'),
-            ],
-          ),
-          elevation: Dimensions.defaultElevation,
-          actions: [
-            TextButton(
-              child: const Text(
-                AppText.aontAskAgain,
-                style: TextStyle(
-                  color: AppColors.accentColor,
-                ),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-
-                await rateAndReviewService.dontAskAgain();
-              },
-            ),
-            TextButton(
-              child: const Text(
-                AppText.askMeLater,
-                style: TextStyle(
-                  color: AppColors.accentColor,
-                ),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-
-                await rateAndReviewService.askMeLater();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(backgroundColor: AppColors.accentColor),
-              onPressed: () async {
-                Navigator.of(context).pop();
-
-                await rateAndReviewService.requestReview();
-              },
-              child: const Text(
-                AppText.rate,
-                style: TextStyle(
-                  color: AppColors.defaultTextColor,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+    await _showEngagementPromptDialog(
+      context,
+      title: AppText.rateAndReview,
+      content: const <Widget>[
+        Text("We apologise that we're interupting you but we would really appreciate your support.\n"),
+        Text(
+            "If you're enjoying ${AppText.appTitle} app, would you mind taking a moment to rate it? It shouldn't take more than a minute.\n"),
+        Text('Thank you.'),
+      ],
+      onDismissForever: () async => rateAndReviewService.dontAskAgain(),
+      onAskMeLater: () async => rateAndReviewService.askMeLater(),
+      positiveText: AppText.rate,
+      onPositive: () async => rateAndReviewService.requestReview(),
     );
   }
 
   Future<void> _showSupportPromptDialog(BuildContext context) async {
+    await _showEngagementPromptDialog(
+      context,
+      title: AppText.supportPromptTitle,
+      content: const <Widget>[
+        Text(AppText.supportPromptMessage),
+      ],
+      onDismissForever: () async {
+        await supportPromptService.dontAskAgain();
+        await analyticsService.logEvent(name: Analytics.supportPromptNeverAskAgain);
+      },
+      onAskMeLater: () async {
+        await supportPromptService.askMeLater();
+        await analyticsService.logEvent(name: Analytics.supportPromptRemindMeLater);
+      },
+      positiveText: AppText.supportPromptTip,
+      onPositive: () async {
+        await supportPromptService.tip();
+        await analyticsService.logEvent(name: Analytics.supportPromptTip);
+
+        if (!mounted) {
+          return;
+        }
+        await Navigator.of(this.context).pushNamed(TipPage.pageRoute);
+      },
+    );
+  }
+
+  /// The one shape every engagement prompt shares: a non-dismissible dialog
+  /// with "don't ask again" / "ask me later" text actions and a single
+  /// filled positive action.
+  Future<void> _showEngagementPromptDialog(
+    BuildContext context, {
+    required String title,
+    required List<Widget> content,
+    required Future<void> Function() onDismissForever,
+    required Future<void> Function() onAskMeLater,
+    required String positiveText,
+    required Future<void> Function() onPositive,
+  }) async {
     await showDialog<AlertDialog>(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text(AppText.supportPromptTitle),
-          content: const Column(
+          title: Text(title),
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(AppText.supportPromptMessage),
-            ],
+            children: content,
           ),
           elevation: Dimensions.defaultElevation,
           actions: [
             TextButton(
               child: const Text(
                 AppText.aontAskAgain,
-                style: TextStyle(
-                  color: AppColors.accentColor,
-                ),
+                style: TextStyle(color: AppColors.accentColor),
               ),
               onPressed: () async {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
 
-                await supportPromptService.dontAskAgain();
-                await analyticsService.logEvent(name: Analytics.supportPromptNeverAskAgain);
+                await onDismissForever();
               },
             ),
             TextButton(
               child: const Text(
                 AppText.askMeLater,
-                style: TextStyle(
-                  color: AppColors.accentColor,
-                ),
+                style: TextStyle(color: AppColors.accentColor),
               ),
               onPressed: () async {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
 
-                await supportPromptService.askMeLater();
-                await analyticsService.logEvent(name: Analytics.supportPromptRemindMeLater);
+                await onAskMeLater();
               },
             ),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: AppColors.accentColor),
               onPressed: () async {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
 
-                await supportPromptService.tip();
-                await analyticsService.logEvent(name: Analytics.supportPromptTip);
-
-                // ignore: use_build_context_synchronously
-                await Navigator.of(context).pushNamed(TipPage.pageRoute);
+                await onPositive();
               },
-              child: const Text(
-                AppText.supportPromptTip,
-                style: TextStyle(
-                  color: AppColors.defaultTextColor,
-                ),
+              child: Text(
+                positiveText,
+                style: const TextStyle(color: AppColors.defaultTextColor),
               ),
             ),
           ],

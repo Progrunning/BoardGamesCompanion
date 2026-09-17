@@ -11,6 +11,7 @@ import '../../services/analytics_service.dart';
 import '../../services/purchase_service.dart';
 import 'tip_page_visual_state.dart';
 import 'tip_purchase_visual_state.dart';
+import 'tip_restore_visual_state.dart';
 
 part 'tip_view_model.g.dart';
 
@@ -43,6 +44,9 @@ abstract class _TipViewModel with Store {
 
   @observable
   TipPurchaseVisualState purchaseVisualState = const TipPurchaseVisualState.idle();
+
+  @observable
+  TipRestoreVisualState restoreVisualState = const TipRestoreVisualState.idle();
 
   @computed
   bool get hasAnyTipTiers => tipTiers?.isNotEmpty ?? false;
@@ -84,20 +88,14 @@ abstract class _TipViewModel with Store {
     _lastAttemptedTier = tier;
     purchaseVisualState = const TipPurchaseVisualState.purchasing();
 
-    unawaited(_analyticsService.logEvent(
-      name: Analytics.startTipPurchase,
-      parameters: <String, String?>{Analytics.tipTierIdParameter: tier.identifier},
-    ));
+    _logTipEvent(Analytics.startTipPurchase, tier);
 
     try {
       final PurchaseOutcome outcome = await _purchaseService.purchase(tier);
       _applyPurchaseOutcome(tier, outcome);
     } catch (e, stack) {
       purchaseVisualState = const TipPurchaseVisualState.failed();
-      unawaited(_analyticsService.logEvent(
-        name: Analytics.failTipPurchase,
-        parameters: <String, String?>{Analytics.tipTierIdParameter: tier.identifier},
-      ));
+      _logTipEvent(Analytics.failTipPurchase, tier);
       _recordError(e, stack);
     }
   }
@@ -120,12 +118,21 @@ abstract class _TipViewModel with Store {
 
   @action
   Future<void> restorePurchases() async {
+    restoreVisualState = const TipRestoreVisualState.restoring();
+
     try {
       await _purchaseService.restorePurchases();
+      restoreVisualState = const TipRestoreVisualState.restored();
       unawaited(_analyticsService.logEvent(name: Analytics.restoreTipPurchases));
     } catch (e, stack) {
+      restoreVisualState = const TipRestoreVisualState.failed();
       _recordError(e, stack);
     }
+  }
+
+  @action
+  void dismissRestoreResult() {
+    restoreVisualState = const TipRestoreVisualState.idle();
   }
 
   @action
@@ -133,30 +140,28 @@ abstract class _TipViewModel with Store {
     switch (outcome) {
       case PurchaseOutcome.completed:
         purchaseVisualState = const TipPurchaseVisualState.completed();
-        unawaited(_analyticsService.logEvent(
-          name: Analytics.completeTipPurchase,
-          parameters: <String, String?>{Analytics.tipTierIdParameter: tier.identifier},
-        ));
+        _logTipEvent(Analytics.completeTipPurchase, tier);
       case PurchaseOutcome.pending:
         purchaseVisualState = const TipPurchaseVisualState.pending();
       case PurchaseOutcome.cancelled:
         // Return calmly to the tip screen — no error dialog/snackbar.
         purchaseVisualState = const TipPurchaseVisualState.idle();
-        unawaited(_analyticsService.logEvent(
-          name: Analytics.cancelTipPurchase,
-          parameters: <String, String?>{Analytics.tipTierIdParameter: tier.identifier},
-        ));
+        _logTipEvent(Analytics.cancelTipPurchase, tier);
       case PurchaseOutcome.error:
         purchaseVisualState = const TipPurchaseVisualState.failed();
-        unawaited(_analyticsService.logEvent(
-          name: Analytics.failTipPurchase,
-          parameters: <String, String?>{Analytics.tipTierIdParameter: tier.identifier},
-        ));
+        _logTipEvent(Analytics.failTipPurchase, tier);
         _recordError(
           'Tip purchase failed for tier ${tier.identifier}',
           StackTrace.current,
         );
     }
+  }
+
+  void _logTipEvent(String name, TipTier tier) {
+    unawaited(_analyticsService.logEvent(
+      name: name,
+      parameters: <String, String?>{Analytics.tipTierIdParameter: tier.identifier},
+    ));
   }
 
   /// Records an error via the app's crash-reporting path. Defensive against

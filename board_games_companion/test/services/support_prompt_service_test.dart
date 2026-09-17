@@ -21,7 +21,9 @@ void main() {
     DateTime? supportPromptRemindMeLaterDate,
     int numberOfSignificantActions = 0,
     bool rateAndReviewShowDialog = false,
+    bool isSupporter = false,
   }) {
+    when(() => mockPreferencesService.getIsSupporter()).thenReturn(isSupporter);
     when(() => mockPreferencesService.getRateAndReviewDialogSeen())
         .thenReturn(rateAndReviewDialogSeen);
     when(() => mockPreferencesService.getRateAndReviewResolvedAt())
@@ -162,9 +164,10 @@ void main() {
     });
   });
 
-  group('GIVEN the rate-and-review resolution date has never been observed before', () {
-    test('WHEN a significant action is recorded THEN it is stamped as resolved now, '
-        'and the support prompt is not yet eligible (cooldown has not elapsed)', () async {
+  group('GIVEN the rate-and-review prompt was resolved before resolution dates were recorded',
+      () {
+    test('WHEN a significant action is recorded THEN the cooldown is treated as elapsed '
+        'and the support prompt is eligible', () async {
       stubPreferences(
         rateAndReviewResolvedAt: null,
         numberOfSignificantActions: 150,
@@ -172,8 +175,8 @@ void main() {
 
       await supportPromptService.increaseNumberOfSignificantActions();
 
-      verify(() => mockPreferencesService.setRateAndReviewResolvedAt(any())).called(1);
-      expect(supportPromptService.showSupportPromptDialog, isFalse);
+      verifyNever(() => mockPreferencesService.setRateAndReviewResolvedAt(any()));
+      expect(supportPromptService.showSupportPromptDialog, isTrue);
     });
   });
 
@@ -279,13 +282,34 @@ void main() {
   });
 
   group('WHEN the user taps Tip on the prompt', () {
-    test('THEN the prompt is resolved permanently and the dialog flag is cleared', () async {
+    test('THEN the dialog flag is cleared and the prompt is snoozed, not silenced forever '
+        '(only an actual purchase or "never ask again" silences it permanently)', () async {
       supportPromptService.showSupportPromptDialog = true;
 
       await supportPromptService.tip();
 
       expect(supportPromptService.showSupportPromptDialog, isFalse);
-      verify(() => mockPreferencesService.setSupportPromptNeverAskAgain()).called(1);
+      verifyNever(() => mockPreferencesService.setSupportPromptNeverAskAgain());
+
+      final DateTime capturedDate = verify(
+        () => mockPreferencesService.setSupportPromptRemindMeLaterDate(captureAny()),
+      ).captured.single as DateTime;
+      expect(capturedDate.difference(DateTime.now().toUtc()).inDays, closeTo(10, 1));
+    });
+  });
+
+  group('GIVEN the user is already a supporter', () {
+    test('WHEN a significant action is recorded THEN the support prompt is never eligible',
+        () async {
+      stubPreferences(
+        rateAndReviewResolvedAt: nowUtc.subtract(const Duration(days: 30)),
+        numberOfSignificantActions: 150,
+        isSupporter: true,
+      );
+
+      await supportPromptService.increaseNumberOfSignificantActions();
+
+      expect(supportPromptService.showSupportPromptDialog, isFalse);
     });
   });
 

@@ -1,5 +1,6 @@
 import 'package:board_games_companion/pages/tip/tip_page_visual_state.dart';
 import 'package:board_games_companion/pages/tip/tip_purchase_visual_state.dart';
+import 'package:board_games_companion/pages/tip/tip_restore_visual_state.dart';
 import 'package:board_games_companion/pages/tip/tip_view_model.dart';
 import 'package:board_games_companion/services/purchase_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -183,13 +184,36 @@ void main() {
     });
 
     test(
+        'WHEN restoring purchases succeeds '
+        'THEN a restored state is shown so the user gets a confirmation ', () async {
+      when(() => mockPurchaseService.restorePurchases()).thenAnswer((_) async {});
+
+      await tipViewModel.restorePurchases();
+
+      expect(tipViewModel.restoreVisualState, const TipRestoreVisualState.restored());
+    });
+
+    test(
         'WHEN restoring purchases fails '
-        'THEN the view model does not throw and no purchase failure state is shown ', () async {
+        'THEN a failed-restore state is shown (a failed restore must not look like '
+        'the user never tipped) and no purchase failure state is shown ', () async {
       when(() => mockPurchaseService.restorePurchases()).thenThrow(Exception('offline'));
 
       await tipViewModel.restorePurchases();
 
+      expect(tipViewModel.restoreVisualState, const TipRestoreVisualState.failed());
       expect(tipViewModel.purchaseVisualState, const TipPurchaseVisualState.idle());
+    });
+
+    test(
+        'WHEN the restore outcome has been communicated '
+        'THEN dismissing it returns the restore state to idle ', () async {
+      when(() => mockPurchaseService.restorePurchases()).thenThrow(Exception('offline'));
+
+      await tipViewModel.restorePurchases();
+      tipViewModel.dismissRestoreResult();
+
+      expect(tipViewModel.restoreVisualState, const TipRestoreVisualState.idle());
     });
   });
 }
