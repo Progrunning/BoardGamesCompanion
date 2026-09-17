@@ -12,6 +12,20 @@ class Analytics {
   static const String openGamesPlaylist = 'open_games_playlist';
   static const String selectRandomGame = 'select_random_game';
 
+  static const String viewTipScreen = 'view_tip_screen';
+  static const String startTipPurchase = 'start_tip_purchase';
+  static const String completeTipPurchase = 'complete_tip_purchase';
+  static const String cancelTipPurchase = 'cancel_tip_purchase';
+  static const String failTipPurchase = 'fail_tip_purchase';
+  static const String restoreTipPurchases = 'restore_tip_purchases';
+
+  static const String tipTierIdParameter = 'tip_tier_id';
+
+  static const String viewSupportPrompt = 'view_support_prompt';
+  static const String supportPromptTip = 'support_prompt_tip';
+  static const String supportPromptRemindMeLater = 'support_prompt_remind_me_later';
+  static const String supportPromptNeverAskAgain = 'support_prompt_never_ask_again';
+
   static const String routeName = 'route_name';
 
   static const String boardGameIdParameter = 'board_game_id';

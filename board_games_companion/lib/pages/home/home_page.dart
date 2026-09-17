@@ -89,7 +89,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
           ScaffoldMessenger(
             key: HomePage.homePageGlobalKey,
             child: Scaffold(
-              drawer: const HomePageDrawer(),
+              drawer: HomePageDrawer(purchaseService: widget.viewModel.purchaseService),
               body: SafeArea(
                 child: PageContainer(
                   child: TabBarView(
@@ -99,7 +99,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
                         widget.viewModel.collectionsViewModel,
                         widget.viewModel.boardGamesFiltersStore,
                         widget.viewModel.analyticsService,
-                        widget.viewModel.rateAndReviewService,
+                        widget.viewModel.engagementPromptsService,
                       ),
                       PlaysPage(viewModel: widget.viewModel.playsViewModel),
                       PlayersPage(viewModel: widget.viewModel.playersViewModel),
@@ -204,7 +204,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
 
   Future<void> _searchBgg() async {
     final navigatorState = Navigator.of(context);
-    await widget.viewModel.rateAndReviewService.increaseNumberOfSignificantActions();
+    await widget.viewModel.engagementPromptsService.increaseNumberOfSignificantActions();
     if (!navigatorState.mounted) {
       return;
     }
@@ -232,7 +232,7 @@ class HomePageState extends BasePageState<HomePage> with SingleTickerProviderSta
 
   Future<void> _searchCollections() async {
     final navigatorState = Navigator.of(context);
-    await widget.viewModel.rateAndReviewService.increaseNumberOfSignificantActions();
+    await widget.viewModel.engagementPromptsService.increaseNumberOfSignificantActions();
     if (!navigatorState.mounted) {
       return;
     }

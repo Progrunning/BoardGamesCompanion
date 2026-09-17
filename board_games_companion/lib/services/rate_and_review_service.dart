@@ -37,7 +37,7 @@ class RateAndReviewService {
     }
 
     await InAppReview.instance.requestReview();
-    await _preferencesService.setRateAndReviewDialogSeen();
+    await _resolve();
   }
 
   Future<void> askMeLater() async {
@@ -48,7 +48,14 @@ class RateAndReviewService {
 
   Future<void> dontAskAgain() async {
     showRateAndReviewDialog = false;
+    await _resolve();
+  }
+
+  /// Marks the prompt as resolved and stamps when - the support prompt's
+  /// cooldown counts from this moment.
+  Future<void> _resolve() async {
     await _preferencesService.setRateAndReviewDialogSeen();
+    await _preferencesService.setRateAndReviewResolvedAt(DateTime.now().toUtc());
   }
 
   Future<void> _updateShowRateAndReviewDialogFlag() async {

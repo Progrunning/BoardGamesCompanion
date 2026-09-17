@@ -12,6 +12,18 @@ class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
   static const String _numberOfSignificantActionsKey = 'numberOfSignificantActions';
   static const String _rateAndReviewDialogSeenKey = 'rateAndReviewDialogSeen';
   static const String _expansionsPanelExpandedStateKey = 'expansionsPanelExpandedState';
+  static const String _isSupporterKey = 'isSupporter';
+
+  static const String _supportPromptSeenKey = 'supportPromptSeen';
+  static const String _supportPromptNeverAskAgainKey = 'supportPromptNeverAskAgain';
+  static const String _supportPromptRemindMeLaterDateKey = 'supportPromptRemindMeLaterDate';
+  static const String _numberOfSignificantActionsForSupportPromptKey =
+      'numberOfSignificantActionsForSupportPrompt';
+  // MK Not surfaced by RateAndReviewService itself (it only persists a single
+  // "seen" flag with no timestamp), so SupportPromptService lazily stamps this
+  // the first time it observes the rate-and-review prompt as resolved, and
+  // measures its own precedence cooldown from that point.
+  static const String _rateAndReviewResolvedAtKey = 'rateAndReviewResolvedAt';
 
   Future<void> initialize() async {
     await ensureBoxOpen();
@@ -91,6 +103,92 @@ class PreferencesService extends BaseHiveService<dynamic, PreferencesService> {
       _expansionsPanelExpandedStateKey,
       defaultValue: false,
     )!;
+  }
+
+  bool getIsSupporter() {
+    return _getValue(
+      _isSupporterKey,
+      defaultValue: false,
+    )!;
+  }
+
+  Future<void> setIsSupporter(bool isSupporter) async {
+    await _setValue(
+      _isSupporterKey,
+      isSupporter,
+    );
+  }
+
+  bool getSupportPromptSeen() {
+    return _getValue(
+      _supportPromptSeenKey,
+      defaultValue: false,
+    )!;
+  }
+
+  Future<void> setSupportPromptSeen() async {
+    await _setValue(
+      _supportPromptSeenKey,
+      true,
+    );
+  }
+
+  bool getSupportPromptNeverAskAgain() {
+    return _getValue(
+      _supportPromptNeverAskAgainKey,
+      defaultValue: false,
+    )!;
+  }
+
+  Future<void> setSupportPromptNeverAskAgain() async {
+    await _setValue(
+      _supportPromptNeverAskAgainKey,
+      true,
+    );
+  }
+
+  DateTime? getSupportPromptRemindMeLaterDate() {
+    return _getValue(
+      _supportPromptRemindMeLaterDateKey,
+      defaultValue: null,
+    );
+  }
+
+  Future<void> setSupportPromptRemindMeLaterDate(DateTime remindMeLaterDate) async {
+    await _setValue(
+      _supportPromptRemindMeLaterDateKey,
+      remindMeLaterDate,
+    );
+  }
+
+  int getNumberOfSignificantActionsForSupportPrompt() {
+    return _getValue(
+      _numberOfSignificantActionsForSupportPromptKey,
+      defaultValue: 0,
+    )!;
+  }
+
+  Future<void> setNumberOfSignificantActionsForSupportPrompt(
+    int numberOfSignificantActions,
+  ) async {
+    await _setValue(
+      _numberOfSignificantActionsForSupportPromptKey,
+      numberOfSignificantActions,
+    );
+  }
+
+  DateTime? getRateAndReviewResolvedAt() {
+    return _getValue(
+      _rateAndReviewResolvedAtKey,
+      defaultValue: null,
+    );
+  }
+
+  Future<void> setRateAndReviewResolvedAt(DateTime rateAndReviewResolvedAt) async {
+    await _setValue(
+      _rateAndReviewResolvedAtKey,
+      rateAndReviewResolvedAt,
+    );
   }
 
   T? _getValue<T>(dynamic key, {T? defaultValue}) =>

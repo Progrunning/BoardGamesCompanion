@@ -2,14 +2,17 @@ import 'package:fimber/fimber.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:injectable/injectable.dart';
 
-import 'rate_and_review_service.dart';
+import 'engagement_prompts_service.dart';
 
 @singleton
 class AnalyticsService {
-  AnalyticsService(this._firebaseAnalytics, this._rateAndReviewService);
+  AnalyticsService(
+    this._firebaseAnalytics,
+    this._engagementPromptsService,
+  );
 
   final FirebaseAnalytics _firebaseAnalytics;
-  final RateAndReviewService _rateAndReviewService;
+  final EngagementPromptsService _engagementPromptsService;
 
   Future<void> logEvent({
     required String name,
@@ -17,7 +20,7 @@ class AnalyticsService {
   }) async {
     Fimber.i('Captured an $name event with $parameters');
     await _firebaseAnalytics.logEvent(name: name, parameters: parameters);
-    await _rateAndReviewService.increaseNumberOfSignificantActions();
+    await _engagementPromptsService.increaseNumberOfSignificantActions();
   }
 
   Future<void> logScreenView({
@@ -28,6 +31,6 @@ class AnalyticsService {
       screenName: screenName,
       screenClass: screenClass,
     );
-    await _rateAndReviewService.increaseNumberOfSignificantActions();
+    await _engagementPromptsService.increaseNumberOfSignificantActions();
   }
 }

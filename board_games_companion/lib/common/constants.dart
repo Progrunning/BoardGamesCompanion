@@ -37,4 +37,10 @@ class Constants {
   static const appReleaseNotesUrl = 'https://github.com/Progrunning/BoardGamesCompanion/releases';
   static const appWikiFeaturesUrl =
       'https://github.com/Progrunning/BoardGamesCompanion/wiki/Features';
+
+  /// The unlisted invite link for the private supporters' Discord channel —
+  /// deliberately not fetched from any backend so it can be rotated (in
+  /// case of a leak) via an ordinary app release. Placeholder pending the
+  /// real invite being created.
+  static const supportersDiscordInviteUrl = 'https://discord.gg/REPLACE_ME';
 }

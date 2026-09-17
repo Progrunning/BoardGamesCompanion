@@ -20,7 +20,8 @@ import '../../models/hive/board_game_details.dart';
 import '../../models/hive/search_history_entry.dart';
 import '../../models/sort_by.dart';
 import '../../services/analytics_service.dart';
-import '../../services/rate_and_review_service.dart';
+import '../../services/engagement_prompts_service.dart';
+import '../../services/purchase_service.dart';
 import '../../stores/app_store.dart';
 import '../../stores/board_games_filters_store.dart';
 import '../../stores/board_games_store.dart';
@@ -38,7 +39,8 @@ class HomeViewModel = _HomeViewModelBase with _$HomeViewModel;
 abstract class _HomeViewModelBase with Store {
   _HomeViewModelBase(
     this.analyticsService,
-    this.rateAndReviewService,
+    this.engagementPromptsService,
+    this.purchaseService,
     this.playersViewModel,
     this.boardGamesFiltersStore,
     this.collectionsViewModel,
@@ -64,7 +66,8 @@ abstract class _HomeViewModelBase with Store {
   late final ReactionDisposer _backupRestoredReactionDisposer;
 
   final AnalyticsService analyticsService;
-  final RateAndReviewService rateAndReviewService;
+  final EngagementPromptsService engagementPromptsService;
+  final PurchaseService purchaseService;
   final PlayersViewModel playersViewModel;
   final BoardGamesFiltersStore boardGamesFiltersStore;
   final CollectionsViewModel collectionsViewModel;
