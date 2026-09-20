@@ -58,19 +58,23 @@ _Avoid_: Local data, app data, user data
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
 
-### Score entry
+### Publishing
 
-**Partial score**:
-One increment appended to a player's total while recording a score. A total is always exactly the sum of its partial scores, which is what makes undoing the last one meaningful — remove a partial and the total follows. A typed number is a single partial score, no different from a tapped one.
-_Avoid_: Increment, step, delta, sub-score
+**Published collection**:
+The copy of a user's collection held on the server that a share link resolves to. A snapshot taken at the moment of publishing — the collection in the app can be ahead of it, never behind. Exists only while the user keeps it published.
+_Avoid_: Public collection, synced collection, profile, cloud collection
 
-**Instant score**:
-A fixed-value partial score committed in one tap, without typing. Exists for the increments common enough to be worth a dedicated key.
-_Avoid_: Preset, quick score, tile, shortcut
+**Publish key**:
+The opaque secret held by the app that identifies and authorises writes to a published collection. It is not an account: there is no login, and whoever holds the key owns the published collection. Travels with the user's backup so a reinstall keeps the same share link.
+_Avoid_: Token, API key, user id, device id
 
-**Score entry**:
-Digits that have been typed but not yet committed as a partial score. It is not part of the total until committed, and it is what backspace edits — as opposed to undo, which removes a partial score that already counted.
-_Avoid_: Input, draft score, pending score, buffer
+**Share link**:
+The public URL at which a published collection can be viewed. Unlisted — reachable only by those it is given to; never discoverable through search or a directory. Carries a public id, never the publish key.
+_Avoid_: Profile URL, collection URL, permalink
+
+**Statistics snapshot**:
+The statistics the app computed and sent along with a published collection, shown on the web exactly as received. Derived, never authoritative: the server stores it, it never recomputes it, and each publish replaces it wholesale.
+_Avoid_: Server stats, cached stats, web statistics
 
 ### Statistics
 
@@ -108,3 +112,17 @@ _Avoid_: Worst matchup, bogey player
 **Buddy**:
 A player someone has shared the most playthroughs with, of any kind. Measures company kept, not results, so co-op plays count exactly as much as competitive ones.
 _Avoid_: Frequent player, teammate, partner
+
+### Score entry
+
+**Partial score**:
+One increment appended to a player's total while recording a score. A total is always exactly the sum of its partial scores, which is what makes undoing the last one meaningful — remove a partial and the total follows. A typed number is a single partial score, no different from a tapped one.
+_Avoid_: Increment, step, delta, sub-score
+
+**Instant score**:
+A fixed-value partial score committed in one tap, without typing. Exists for the increments common enough to be worth a dedicated key.
+_Avoid_: Preset, quick score, tile, shortcut
+
+**Score entry**:
+Digits that have been typed but not yet committed as a partial score. It is not part of the total until committed, and it is what backspace edits — as opposed to undo, which removes a partial score that already counted.
+_Avoid_: Input, draft score, pending score, buffer

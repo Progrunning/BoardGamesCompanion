@@ -26,36 +26,6 @@
                 "uriFormat": "http://localhost:5164/swagger/index.html",
                 "pattern": "Now listening on: https://\\[::\\]:443"
             }
-        },
-        {
-            "name": "BGC - NON-PROD",
-            "request": "launch",
-            "type": "dart",
-            "cwd": "${workspaceFolder}/board_games_companion",
-            "program": "lib/main.dart",
-            "toolArgs": [
-                "--dart-define",
-                "searchBoardGamesApiBaseUrl=https://bgc-shared-apim.azure-api.net/dev",
-                "--dart-define",
-                "searchBoardGamesApiSubscriptionKey=92595e7fc2144e37a1bc63409374add8",
-                "--dart-define",
-                "bggApiKey=2e178eb8-e092-44da-9ee3-4e6e4ffe2764"
-            ]
-        },
-        {
-            "name": "BGC - PROD",
-            "request": "launch",
-            "type": "dart",
-            "cwd": "${workspaceFolder}/board_games_companion",
-            "program": "lib/main.dart",
-            "toolArgs": [
-                "--dart-define",
-                "searchBoardGamesApiBaseUrl=https://bgc-shared-apim.azure-api.net",
-                "--dart-define",
-                "searchBoardGamesApiSubscriptionKey=3ce15c862d7f46488fefea141f4c21a1",
-                "--dart-define",
-                "bggApiKey=14a0fb63-217e-4280-9c66-1d0eb8f09bd8"
-            ]
         }
     ]
 }
