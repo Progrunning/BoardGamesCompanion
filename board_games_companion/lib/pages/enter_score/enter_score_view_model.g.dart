@@ -35,6 +35,20 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
           Computed<bool>(() => super.canCommitScoreEntry,
               name: '_EnterScoreViewModel.canCommitScoreEntry'))
       .value;
+  Computed<double>? _$previewScoreComputed;
+
+  @override
+  double get previewScore =>
+      (_$previewScoreComputed ??= Computed<double>(() => super.previewScore,
+              name: '_EnterScoreViewModel.previewScore'))
+          .value;
+  Computed<String>? _$scoreEquationComputed;
+
+  @override
+  String get scoreEquation =>
+      (_$scoreEquationComputed ??= Computed<String>(() => super.scoreEquation,
+              name: '_EnterScoreViewModel.scoreEquation'))
+          .value;
 
   late final _$_playerScoreAtom =
       Atom(name: '_EnterScoreViewModel._playerScore', context: context);
@@ -81,6 +95,22 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   set scoreEntry(String value) {
     _$scoreEntryAtom.reportWrite(value, super.scoreEntry, () {
       super.scoreEntry = value;
+    });
+  }
+
+  late final _$pendingOperatorAtom =
+      Atom(name: '_EnterScoreViewModel.pendingOperator', context: context);
+
+  @override
+  ScoreOperator? get pendingOperator {
+    _$pendingOperatorAtom.reportRead();
+    return super.pendingOperator;
+  }
+
+  @override
+  set pendingOperator(ScoreOperator? value) {
+    _$pendingOperatorAtom.reportWrite(value, super.pendingOperator, () {
+      super.pendingOperator = value;
     });
   }
 
@@ -180,10 +210,13 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
     return '''
 partialScores: ${partialScores},
 scoreEntry: ${scoreEntry},
+pendingOperator: ${pendingOperator},
 score: ${score},
 playerName: ${playerName},
 canUndo: ${canUndo},
-canCommitScoreEntry: ${canCommitScoreEntry}
+canCommitScoreEntry: ${canCommitScoreEntry},
+previewScore: ${previewScore},
+scoreEquation: ${scoreEquation}
     ''';
   }
 }

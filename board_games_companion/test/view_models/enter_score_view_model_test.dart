@@ -55,13 +55,52 @@ void main() {
       expect(viewModel.scoreEntry, '');
     });
 
-    test('WHEN a typed value is subtracted THEN the partial score is negative', () {
-      typeDigits(viewModel, '247');
+    test('WHEN subtract is pressed before a value is typed THEN the partial score is negative',
+        () {
       viewModel.commitSubtract();
+      typeDigits(viewModel, '247');
+      viewModel.commitAdd();
 
       expect(viewModel.score, -247);
       expect(viewModel.partialScores, [-247]);
       expect(viewModel.scoreEntry, '');
+    });
+
+    test('WHEN a sign key is pressed THEN it commits the pending value and signs the next one',
+        () {
+      typeDigits(viewModel, '10');
+      viewModel.commitSubtract();
+
+      expect(viewModel.partialScores, [10]);
+      expect(viewModel.pendingOperator, ScoreOperator.subtract);
+
+      typeDigits(viewModel, '4');
+      viewModel.commitAdd();
+
+      expect(viewModel.partialScores, [10, -4]);
+      expect(viewModel.pendingOperator, ScoreOperator.add);
+      expect(viewModel.score, 6);
+    });
+
+    test('WHEN a sign key is pressed on an empty entry THEN it only changes the pending sign', () {
+      viewModel.commitSubtract();
+      expect(viewModel.pendingOperator, ScoreOperator.subtract);
+      expect(viewModel.partialScores, isEmpty);
+
+      viewModel.commitAdd();
+
+      expect(viewModel.pendingOperator, ScoreOperator.add);
+      expect(viewModel.partialScores, isEmpty);
+    });
+
+    test('WHEN the pending sign is subtract and the sheet is closed THEN the entry is subtracted',
+        () {
+      viewModel.commitSubtract();
+      typeDigits(viewModel, '50');
+      viewModel.close();
+
+      expect(viewModel.score, -50);
+      expect(viewModel.partialScores, [-50]);
     });
 
     test('WHEN a seventh digit is typed THEN it is rejected', () {
@@ -113,8 +152,9 @@ void main() {
 
     test('WHEN more is subtracted than was scored THEN the total goes negative', () {
       viewModel.addInstantScore(10);
-      typeDigits(viewModel, '25');
       viewModel.commitSubtract();
+      typeDigits(viewModel, '25');
+      viewModel.close();
 
       expect(viewModel.score, -15);
       expect(viewModel.partialScores, [10, -25]);
@@ -209,6 +249,48 @@ void main() {
 
       expect(viewModel.score, 100);
       expect(viewModel.partialScores, isEmpty);
+    });
+  });
+
+  group('GIVEN the score equation', () {
+    setUp(() {
+      viewModel = EnterScoreViewModel(playerScoreWithPoints(100));
+    });
+
+    test('WHEN nothing has been pressed THEN the equation is empty', () {
+      expect(viewModel.scoreEquation, '');
+    });
+
+    test('WHEN a number is being typed THEN it reads as the trailing term', () {
+      typeDigits(viewModel, '12');
+
+      expect(viewModel.scoreEquation, '+ 12');
+    });
+
+    test('WHEN a sign key is waiting for its number THEN the equation ends on the operator', () {
+      typeDigits(viewModel, '12');
+      viewModel.commitSubtract();
+
+      expect(viewModel.scoreEquation, '+ 12 −');
+    });
+
+    test('WHEN terms accumulate THEN they read as one equation', () {
+      viewModel.addInstantScore(5);
+      viewModel.commitSubtract();
+      typeDigits(viewModel, '12');
+      viewModel.commitAdd();
+      typeDigits(viewModel, '40');
+
+      expect(viewModel.scoreEquation, '+ 5 − 12 + 40');
+    });
+
+    test('WHEN a term is undone THEN it leaves the equation', () {
+      viewModel.addInstantScore(5);
+      viewModel.addInstantScore(10);
+
+      viewModel.undo();
+
+      expect(viewModel.scoreEquation, '+ 5');
     });
   });
 }

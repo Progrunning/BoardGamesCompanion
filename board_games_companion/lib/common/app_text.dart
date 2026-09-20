@@ -139,10 +139,10 @@ class AppText {
   static const playtimeDurationHoursFormat = '%ih %imin';
   static const playtimeDurationDaysFormat = '%i day%s %ih';
 
+  static const enterScoreSheetPlayerScoredText = ' scored ';
   static const enterScoreSheetUndoButtonText = 'Undo';
   static const enterScoreSheetBackspaceButtonText = 'Backspace';
   static const enterScoreSheetDoneButtonText = 'Done';
-  static const enterScoreSheetEmptyScoreEntry = '0';
 
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 

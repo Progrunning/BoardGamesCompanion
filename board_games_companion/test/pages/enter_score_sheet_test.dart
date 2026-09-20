@@ -14,6 +14,7 @@ void main() {
   const Size phoneScreenSize = Size(390, 844);
   const String openSheetButtonText = 'Open';
   const String playerName = 'Alice';
+  final String subtractKey = ScoreOperator.subtract.symbol;
 
   const PlayerScore playerScore = PlayerScore(
     player: Player(id: '1', name: playerName),
@@ -58,8 +59,7 @@ void main() {
         (WidgetTester tester) async {
       await pumpEnterScoreSheet(tester);
 
-      expect(find.text(playerName), findsOneWidget);
-      expect(find.text('100'), findsOneWidget);
+      expect(find.text('$playerName scored 100', findRichText: true), findsOneWidget);
     });
 
     testWidgets('THEN the keypad and the instant scores are the surface',
@@ -115,6 +115,33 @@ void main() {
 
       expect(viewModel.score, 150);
       expect(viewModel.partialScores, [50]);
+    });
+
+    testWidgets('WHEN digits are typed THEN they preview as a term and in the total',
+        (WidgetTester tester) async {
+      await pumpEnterScoreSheet(tester);
+
+      await tester.tap(find.widgetWithText(InkWell, '1'));
+      await tester.tap(find.widgetWithText(InkWell, '2'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('$playerName scored 112', findRichText: true), findsOneWidget);
+      expect(find.text('+ 12'), findsOneWidget);
+      expect(viewModel.score, 100);
+      expect(viewModel.partialScores, isEmpty);
+    });
+
+    testWidgets('WHEN subtract is pressed first THEN the next number is subtracted',
+        (WidgetTester tester) async {
+      await pumpEnterScoreSheet(tester);
+
+      await tester.tap(find.widgetWithText(InkWell, subtractKey));
+      await tester.tap(find.widgetWithText(InkWell, '1'));
+      await tester.tap(find.widgetWithText(InkWell, '2'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('$playerName scored 88', findRichText: true), findsOneWidget);
+      expect(find.text('− 12'), findsOneWidget);
     });
   });
 

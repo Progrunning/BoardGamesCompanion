@@ -9,6 +9,21 @@ part 'enter_score_view_model.g.dart';
 
 class EnterScoreViewModel = _EnterScoreViewModel with _$EnterScoreViewModel;
 
+/// The sign a typed number carries. Calculator order: the operator is chosen before its number,
+/// not after it, so it also labels the key that chooses it.
+enum ScoreOperator {
+  add('+'),
+
+  /// U+2212, not an ASCII hyphen - the keypad key and the equation share this glyph.
+  subtract('−');
+
+  const ScoreOperator(this.symbol);
+
+  final String symbol;
+
+  int get sign => this == subtract ? -1 : 1;
+}
+
 abstract class _EnterScoreViewModel with Store {
   _EnterScoreViewModel(this._playerScore) : _initialScore = _playerScore.score.score ?? 0;
 
@@ -27,6 +42,13 @@ abstract class _EnterScoreViewModel with Store {
   @observable
   String scoreEntry = '';
 
+  /// The operator that signs the number being typed. A sign key commits whatever is pending and
+  /// then governs the next entry, so pressing one on an empty entry only chooses that sign.
+  /// Null means no sign key has been pressed yet, which keeps the equation from opening on a
+  /// dangling operator - an unsigned first number is an addition.
+  @observable
+  ScoreOperator? pendingOperator;
+
   @computed
   double get score => _playerScore.score.score ?? 0;
 
@@ -38,6 +60,30 @@ abstract class _EnterScoreViewModel with Store {
 
   @computed
   bool get canCommitScoreEntry => _scoreEntryValue != 0;
+
+  /// The score with the number being typed folded in, so the header previews where the pending
+  /// entry lands.
+  @computed
+  double get previewScore => score + _pendingTerm;
+
+  /// The calculator tape: every committed term followed by the number being typed, each carrying
+  /// the sign it was entered with. Neither the score walked in with nor the result appears - the
+  /// header carries the total. Empty until the player touches a key, and it ends on a trailing
+  /// operator while one is waiting for its number.
+  @computed
+  String get scoreEquation {
+    final terms = <String>[
+      for (final partialScore in partialScores)
+        '${_operatorFor(partialScore).symbol} ${partialScore.abs().toStringAsFixed(0)}',
+    ];
+
+    if (scoreEntry.isNotEmpty || pendingOperator != null) {
+      final operator = (pendingOperator ?? ScoreOperator.add).symbol;
+      terms.add(scoreEntry.isEmpty ? operator : '$operator $scoreEntry');
+    }
+
+    return terms.join(' ');
+  }
 
   @action
   void updateScore(double partialScore) {
@@ -69,10 +115,10 @@ abstract class _EnterScoreViewModel with Store {
   }
 
   @action
-  void commitAdd() => _commitScoreEntry(1);
+  void commitAdd() => _applyOperator(ScoreOperator.add);
 
   @action
-  void commitSubtract() => _commitScoreEntry(-1);
+  void commitSubtract() => _applyOperator(ScoreOperator.subtract);
 
   @action
   void undo() {
@@ -90,7 +136,7 @@ abstract class _EnterScoreViewModel with Store {
   /// on either route would lose the entry or leave the score unset.
   @action
   void close() {
-    commitAdd();
+    _commitScoreEntry();
 
     // MK In case score was not entered assume 0 was the score
     if (score == 0) {
@@ -98,17 +144,27 @@ abstract class _EnterScoreViewModel with Store {
     }
   }
 
-  void _commitScoreEntry(int sign) {
-    if (!canCommitScoreEntry) {
-      scoreEntry = '';
-      return;
+  void _applyOperator(ScoreOperator operator) {
+    _commitScoreEntry();
+
+    pendingOperator = operator;
+  }
+
+  void _commitScoreEntry() {
+    if (canCommitScoreEntry) {
+      updateScore(_pendingTerm);
     }
 
-    updateScore(sign * _scoreEntryValue);
     scoreEntry = '';
   }
 
+  /// The number being typed, signed by [pendingOperator]. Addition is the default.
+  double get _pendingTerm => (pendingOperator ?? ScoreOperator.add).sign * _scoreEntryValue;
+
   double get _scoreEntryValue => scoreEntry.isEmpty ? 0 : double.parse(scoreEntry);
+
+  ScoreOperator _operatorFor(double partialScore) =>
+      partialScore < 0 ? ScoreOperator.subtract : ScoreOperator.add;
 
   void _updatePlayerScore(double? score) {
     final scoreGameResult = _playerScore.score.scoreGameResult ?? const ScoreGameResult();

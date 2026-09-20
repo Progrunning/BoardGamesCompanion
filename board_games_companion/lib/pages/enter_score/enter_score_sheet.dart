@@ -47,12 +47,11 @@ class EnterScoreSheet extends StatelessWidget {
               Observer(
                 builder: (_) => _Header(
                   playerName: viewModel.playerName,
-                  score: viewModel.score,
-                  scoreEntry: viewModel.scoreEntry,
+                  score: viewModel.previewScore,
                 ),
               ),
               Observer(
-                builder: (_) => _ScoreHistory(partialScores: viewModel.partialScores),
+                builder: (_) => _ScoreEquation(equation: viewModel.scoreEquation),
               ),
               const SizedBox(height: Dimensions.standardSpacing),
               _InstantScoreRow(onScoreChange: viewModel.addInstantScore),
@@ -87,82 +86,54 @@ class _Header extends StatelessWidget {
   const _Header({
     required this.playerName,
     required this.score,
-    required this.scoreEntry,
   });
 
   final String? playerName;
   final double score;
-  final String scoreEntry;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          playerName ?? '',
-          style: AppTheme.theme.textTheme.displayLarge,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          score.toStringAsFixed(0),
-          style: AppTheme.theme.textTheme.displayLarge!.copyWith(
-            fontSize: Dimensions.doubleExtraLargeFontSize,
-            color: AppColors.accentColor,
+    return Text.rich(
+      TextSpan(
+        children: <InlineSpan>[
+          TextSpan(text: playerName ?? ''),
+          const TextSpan(text: AppText.enterScoreSheetPlayerScoredText),
+          TextSpan(
+            text: score.toStringAsFixed(0),
+            style: AppTheme.theme.textTheme.displayLarge!.copyWith(
+              fontSize: Dimensions.doubleExtraLargeFontSize,
+              color: AppColors.accentColor,
+            ),
           ),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          scoreEntry.isEmpty ? AppText.enterScoreSheetEmptyScoreEntry : scoreEntry,
-          style: AppTheme.theme.textTheme.displaySmall!.copyWith(
-            color: scoreEntry.isEmpty ? AppColors.secondaryTextColor : AppColors.defaultTextColor,
-          ),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+        ],
+      ),
+      style: AppTheme.theme.textTheme.displayLarge,
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
 
-class _ScoreHistory extends StatelessWidget {
-  const _ScoreHistory({
-    required this.partialScores,
+class _ScoreEquation extends StatelessWidget {
+  const _ScoreEquation({
+    required this.equation,
   });
 
+  /// Holds the gap between the header and the keypad open while the equation is still empty, so
+  /// the keys do not shift under the thumb once the first key is pressed.
   static const double _minHeight = 20;
 
-  final List<double> partialScores;
+  final String equation;
 
   @override
   Widget build(BuildContext context) {
-    if (partialScores.isEmpty) {
-      return const SizedBox(height: _minHeight);
-    }
-
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: _minHeight),
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        children: [
-          Text('(', style: AppTheme.theme.textTheme.bodyLarge),
-          for (var i = 0; i < partialScores.length; i++) ...[
-            Text(
-              partialScores[i] > 0
-                  ? '+${partialScores[i].toStringAsFixed(0)}'
-                  : partialScores[i].toStringAsFixed(0),
-              style: AppTheme.theme.textTheme.bodyLarge,
-            ),
-            if (i != partialScores.length - 1) ...[
-              Text(', ', style: AppTheme.theme.textTheme.bodyLarge),
-            ]
-          ],
-          Text(')', style: AppTheme.theme.textTheme.bodyLarge),
-        ],
+      child: Text(
+        equation,
+        style: AppTheme.theme.textTheme.bodyLarge,
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -220,8 +191,8 @@ class _Keypad extends StatelessWidget {
   Widget build(BuildContext context) {
     final rows = <({List<String> digits, Widget action})>[
       (digits: ['1', '2', '3'], action: _backspaceKey),
-      (digits: ['4', '5', '6'], action: _commitKey('−', onSubtract)),
-      (digits: ['7', '8', '9'], action: _commitKey('+', onAdd)),
+      (digits: ['4', '5', '6'], action: _commitKey(ScoreOperator.subtract.symbol, onSubtract)),
+      (digits: ['7', '8', '9'], action: _commitKey(ScoreOperator.add.symbol, onAdd)),
       (digits: ['', '0', ''], action: _undoKey),
     ];
 
@@ -274,7 +245,7 @@ class _Keypad extends StatelessWidget {
         onTap: canUndo ? onUndo : null,
         child: Icon(
           Icons.undo,
-          color: canUndo ? AppColors.defaultTextColor : AppColors.secondaryTextColor,
+          color: canUndo ? AppColors.defaultTextColor : AppColors.disabledIconIconColor,
           size: Dimensions.defaultButtonIconSize,
           semanticLabel: AppText.enterScoreSheetUndoButtonText,
         ),
@@ -302,10 +273,12 @@ class _Key extends StatelessWidget {
       width: size,
       height: size,
       child: ElevatedContainer(
+        // A disabled key fades rather than turning grey, so it still reads as the same key.
         backgroundColor: onTap == null
-            ? AppColors.disabledFloatinActionButtonColor
+            ? backgroundColor.withAlpha(AppStyles.opacity40Percent)
             : backgroundColor,
-        elevation: AppStyles.defaultElevation,
+        // The shadow would show through the faded surface, so it goes with the fade.
+        elevation: onTap == null ? 0 : AppStyles.defaultElevation,
         splashColor: splashColor,
         onTap: onTap,
         child: Center(
