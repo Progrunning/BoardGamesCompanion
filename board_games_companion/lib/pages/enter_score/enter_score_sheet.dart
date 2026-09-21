@@ -144,8 +144,7 @@ class _InstantScoreRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return _KeyRow(
       children: [
         for (final instantScore in _instantScores)
           _Key(
@@ -157,6 +156,29 @@ class _InstantScoreRow extends StatelessWidget {
               style: AppTheme.theme.textTheme.displaySmall,
             ),
           ),
+      ],
+    );
+  }
+}
+
+/// A row of keys that share the sheet's width evenly, separated by the same gap that separates
+/// the rows. The keys stretch rather than the gaps, so the pad fills the sheet instead of
+/// leaving margins either side.
+class _KeyRow extends StatelessWidget {
+  const _KeyRow({required this.children});
+
+  static const double spacing = Dimensions.standardSpacing;
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        for (var i = 0; i < children.length; i++) ...[
+          if (i > 0) const SizedBox(width: spacing),
+          Expanded(child: children[i]),
+        ],
       ],
     );
   }
@@ -174,9 +196,8 @@ class _Keypad extends StatelessWidget {
     required this.onConfirm,
   });
 
-  static const double _spacing = Dimensions.standardSpacing;
-
-  static const Widget _emptyKey = SizedBox(width: _Key.size, height: _Key.size);
+  /// Holds the column open so the keys below line up under the digits above.
+  static const Widget _emptyKey = SizedBox(height: _Key.size);
 
   final bool canUndo;
   final bool canConfirm;
@@ -209,11 +230,8 @@ class _Keypad extends StatelessWidget {
     return Column(
       children: [
         for (var i = 0; i < rows.length; i++) ...[
-          if (i > 0) const SizedBox(height: _spacing),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: rows[i],
-          ),
+          if (i > 0) const SizedBox(height: _KeyRow.spacing),
+          _KeyRow(children: rows[i]),
         ],
       ],
     );
@@ -274,6 +292,7 @@ class _Key extends StatelessWidget {
     this.splashColor = AppColors.accentColor,
   });
 
+  /// Height only - a key takes its width from the row, which splits the sheet between them.
   static const double size = 56;
 
   final VoidCallback? onTap;
@@ -284,7 +303,6 @@ class _Key extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size,
       height: size,
       child: ElevatedContainer(
         // A disabled key fades rather than turning grey, so it still reads as the same key.
