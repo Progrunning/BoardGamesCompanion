@@ -258,7 +258,9 @@ class _Key extends StatelessWidget {
   const _Key({
     required this.onTap,
     required this.child,
-    this.backgroundColor = AppColors.primaryColorLight,
+    // Not primaryColorLight: that is where the sheet's gradient starts, so keys in it dissolve
+    // into the background at the top of the pad.
+    this.backgroundColor = AppColors.primaryColorExtraLight,
     this.splashColor = AppColors.accentColor,
   });
 
@@ -276,9 +278,8 @@ class _Key extends StatelessWidget {
       height: size,
       child: ElevatedContainer(
         // A disabled key fades rather than turning grey, so it still reads as the same key.
-        backgroundColor: onTap == null
-            ? backgroundColor.withAlpha(AppStyles.opacity40Percent)
-            : backgroundColor,
+        backgroundColor:
+            onTap == null ? backgroundColor.withAlpha(AppStyles.opacity40Percent) : backgroundColor,
         // The shadow would show through the faded surface, so it goes with the fade.
         elevation: onTap == null ? 0 : AppStyles.defaultElevation,
         splashColor: splashColor,
