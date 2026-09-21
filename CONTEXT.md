@@ -112,3 +112,17 @@ _Avoid_: Worst matchup, bogey player
 **Buddy**:
 A player someone has shared the most playthroughs with, of any kind. Measures company kept, not results, so co-op plays count exactly as much as competitive ones.
 _Avoid_: Frequent player, teammate, partner
+
+### Score entry
+
+**Partial score**:
+One increment appended to a player's total while recording a score. A total is always exactly the sum of its partial scores, which is what makes undoing the last one meaningful — remove a partial and the total follows. A typed number is a single partial score, no different from a tapped one.
+_Avoid_: Increment, step, delta, sub-score
+
+**Instant score**:
+A fixed-value partial score committed in one tap, without typing. Exists for the increments common enough to be worth a dedicated key.
+_Avoid_: Preset, quick score, tile, shortcut
+
+**Score entry**:
+Digits that have been typed but not yet committed as a partial score. It is not part of the total until committed, and it is what backspace edits — as opposed to undo, which removes a partial score that already counted.
+_Avoid_: Input, draft score, pending score, buffer

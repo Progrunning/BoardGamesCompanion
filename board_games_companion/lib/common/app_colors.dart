@@ -14,6 +14,9 @@ class AppColors {
   static const Color greyColor = Colors.grey;
   static Color darkGreyColor = Colors.grey.shade800;
 
+  /// Sits above the page gradient's lightest stop, so a surface in this colour stays visible
+  /// wherever it lands on the gradient - [primaryColorLight] is itself the gradient's start.
+  static const Color primaryColorExtraLight = Color(0xFF6B2B93);
   static const Color primaryColorLight = Color(0xFF5B217F);
   static const Color primaryColor = Color(0xFF2D103F);
 

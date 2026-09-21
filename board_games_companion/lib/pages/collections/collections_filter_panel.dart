@@ -11,6 +11,7 @@ import '../../common/app_text.dart';
 import '../../common/dimensions.dart';
 import '../../models/sort_by.dart';
 import '../../widgets/board_games/board_game_rating_hexagon.dart';
+import '../../widgets/common/bottom_sheet_handle.dart';
 import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_button.dart';
 import '../../widgets/common/segmented_buttons/bgc_segmented_buttons_container.dart';
@@ -44,7 +45,7 @@ class CollectionsFilterPanelState extends State<CollectionsFilterPanel> {
             child: Column(
               children: <Widget>[
                 const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
-                const _BottomSheetHandle(),
+                const BottomSheetHandle(),
                 const SizedBox(height: Dimensions.oneAndHalfStandardSpacing),
                 _SortBySection(gamesViewModel: widget.viewModel),
                 const SizedBox(height: Dimensions.standardSpacing),
@@ -75,26 +76,6 @@ class CollectionsFilterPanelState extends State<CollectionsFilterPanel> {
           ),
         ),
       );
-}
-
-class _BottomSheetHandle extends StatelessWidget {
-  const _BottomSheetHandle();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.accentColor,
-          borderRadius: BorderRadius.circular(AppStyles.defaultCornerRadius),
-        ),
-        child: const SizedBox(
-          height: Dimensions.halfStandardSpacing,
-          width: Dimensions.trippleStandardSpacing,
-        ),
-      ),
-    );
-  }
 }
 
 class _SortBySection extends StatelessWidget {

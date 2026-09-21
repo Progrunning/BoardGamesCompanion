@@ -18,7 +18,7 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/constants.dart';
 import '../../common/dimensions.dart';
-import '../../mixins/enter_score_dialog.dart';
+import '../../mixins/enter_score_sheet.dart';
 import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
 import '../../models/hive/playthrough_note.dart';
@@ -52,7 +52,7 @@ class EditPlaythroughPage extends StatefulWidget {
   EditPlaythroughPageState createState() => EditPlaythroughPageState();
 }
 
-class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScoreDialogMixin {
+class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScoreSheetMixin {
   @override
   Widget build(BuildContext context) => PopScope(
         canPop: false,
@@ -184,7 +184,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
       return viewModel.score;
     }
 
-    await showEnterScoreDialog(context, viewModel);
+    await showEnterScoreSheet(context, viewModel);
     widget.viewModel.updatePlayerScore(playerScore.id!, viewModel.score);
     return viewModel.score;
   }
