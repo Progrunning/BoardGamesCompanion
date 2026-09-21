@@ -136,17 +136,6 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   }
 
   @override
-  void addInstantScore(double value) {
-    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
-        name: '_EnterScoreViewModel.addInstantScore');
-    try {
-      return super.addInstantScore(value);
-    } finally {
-      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void appendDigit(String digit) {
     final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
         name: '_EnterScoreViewModel.appendDigit');

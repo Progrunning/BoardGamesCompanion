@@ -53,8 +53,6 @@ class EnterScoreSheet extends StatelessWidget {
                 builder: (_) => _ScoreEquation(equation: viewModel.scoreEquation),
               ),
               const SizedBox(height: Dimensions.standardSpacing),
-              _InstantScoreRow(onScoreChange: viewModel.addInstantScore),
-              const SizedBox(height: Dimensions.standardSpacing),
               Observer(
                 builder: (_) => _Keypad(
                   canUndo: viewModel.canUndo,
@@ -129,34 +127,6 @@ class _ScoreEquation extends StatelessWidget {
         style: AppTheme.theme.textTheme.bodyLarge,
         textAlign: TextAlign.center,
       ),
-    );
-  }
-}
-
-class _InstantScoreRow extends StatelessWidget {
-  const _InstantScoreRow({
-    required this.onScoreChange,
-  });
-
-  static const List<double> _instantScores = [1, 5, 10, 50];
-
-  final ValueChanged<double> onScoreChange;
-
-  @override
-  Widget build(BuildContext context) {
-    return _KeyRow(
-      children: [
-        for (final instantScore in _instantScores)
-          _Key(
-            backgroundColor: AppColors.accentColor,
-            splashColor: AppColors.primaryColor,
-            onTap: () => onScoreChange(instantScore),
-            child: Text(
-              '+${instantScore.toStringAsFixed(0)}',
-              style: AppTheme.theme.textTheme.displaySmall,
-            ),
-          ),
-      ],
     );
   }
 }

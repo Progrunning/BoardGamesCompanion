@@ -140,18 +140,18 @@ void main() {
       expect(viewModel.partialScores, isEmpty);
     });
 
-    test('WHEN instant scores are tapped THEN each adds a partial score', () {
-      viewModel.addInstantScore(1);
-      viewModel.addInstantScore(5);
-      viewModel.addInstantScore(10);
-      viewModel.addInstantScore(50);
+    test('WHEN scores are added one after another THEN each lands as a partial score', () {
+      viewModel.updateScore(1);
+      viewModel.updateScore(5);
+      viewModel.updateScore(10);
+      viewModel.updateScore(50);
 
       expect(viewModel.score, 66);
       expect(viewModel.partialScores, [1, 5, 10, 50]);
     });
 
     test('WHEN more is subtracted than was scored THEN the total goes negative', () {
-      viewModel.addInstantScore(10);
+      viewModel.updateScore(10);
       viewModel.commitSubtract();
       typeDigits(viewModel, '25');
       viewModel.close();
@@ -182,7 +182,7 @@ void main() {
     });
 
     test('WHEN backspace is pressed THEN only the score entry changes', () {
-      viewModel.addInstantScore(5);
+      viewModel.updateScore(5);
       typeDigits(viewModel, '42');
 
       viewModel.backspace();
@@ -200,7 +200,7 @@ void main() {
     });
 
     test('WHEN undo is pressed THEN the last partial score is popped', () {
-      viewModel.addInstantScore(5);
+      viewModel.updateScore(5);
       typeDigits(viewModel, '50');
       viewModel.commitAdd();
       expect(viewModel.score, 155);
@@ -218,7 +218,7 @@ void main() {
     });
 
     test('WHEN undo is pressed THEN the score entry is left alone', () {
-      viewModel.addInstantScore(5);
+      viewModel.updateScore(5);
       typeDigits(viewModel, '42');
 
       viewModel.undo();
@@ -275,7 +275,7 @@ void main() {
     });
 
     test('WHEN terms accumulate THEN they read as one equation', () {
-      viewModel.addInstantScore(5);
+      viewModel.updateScore(5);
       viewModel.commitSubtract();
       typeDigits(viewModel, '12');
       viewModel.commitAdd();
@@ -285,8 +285,8 @@ void main() {
     });
 
     test('WHEN a term is undone THEN it leaves the equation', () {
-      viewModel.addInstantScore(5);
-      viewModel.addInstantScore(10);
+      viewModel.updateScore(5);
+      viewModel.updateScore(10);
 
       viewModel.undo();
 

@@ -62,15 +62,11 @@ void main() {
       expect(find.text('$playerName scored 100', findRichText: true), findsOneWidget);
     });
 
-    testWidgets('THEN the keypad and the instant scores are the surface',
-        (WidgetTester tester) async {
+    testWidgets('THEN the keypad is the surface', (WidgetTester tester) async {
       await pumpEnterScoreSheet(tester);
 
       for (final digit in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) {
         expect(find.widgetWithText(InkWell, digit), findsOneWidget);
-      }
-      for (final instantScore in ['+1', '+5', '+10', '+50']) {
-        expect(find.widgetWithText(InkWell, instantScore), findsOneWidget);
       }
     });
 

@@ -99,9 +99,6 @@ abstract class _EnterScoreViewModel with Store {
   }
 
   @action
-  void addInstantScore(double value) => updateScore(value);
-
-  @action
   void appendDigit(String digit) {
     if (scoreEntry.length >= maxScoreEntryDigits) {
       return;
