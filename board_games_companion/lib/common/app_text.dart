@@ -142,7 +142,7 @@ class AppText {
   static const enterScoreSheetPlayerScoredText = ' scored ';
   static const enterScoreSheetUndoButtonText = 'Undo';
   static const enterScoreSheetBackspaceButtonText = 'Backspace';
-  static const enterScoreSheetDoneButtonText = 'Done';
+  static const enterScoreSheetConfirmButtonText = 'Confirm';
 
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 

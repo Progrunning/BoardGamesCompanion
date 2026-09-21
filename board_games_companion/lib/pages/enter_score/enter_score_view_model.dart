@@ -61,6 +61,11 @@ abstract class _EnterScoreViewModel with Store {
   @computed
   bool get canCommitScoreEntry => _scoreEntryValue != 0;
 
+  /// Whether the score, pending entry included, differs from the one the sheet opened with.
+  /// Entries that cancel each other out leave nothing to confirm.
+  @computed
+  bool get hasScoreChanged => previewScore != _initialScore;
+
   /// The score with the number being typed folded in, so the header previews where the pending
   /// entry lands.
   @computed
@@ -132,7 +137,7 @@ abstract class _EnterScoreViewModel with Store {
   }
 
   /// Commits whatever is pending and settles the score, whether the sheet was dismissed with
-  /// Done or swiped away. Both call sites read [score] once the sheet closes, so skipping this
+  /// confirm or swiped away. Both call sites read [score] once the sheet closes, so skipping this
   /// on either route would lose the entry or leave the score unset.
   @action
   void close() {

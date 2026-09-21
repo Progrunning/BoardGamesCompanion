@@ -7,7 +7,6 @@ import '../../common/app_text.dart';
 import '../../common/app_theme.dart';
 import '../../common/dimensions.dart';
 import '../../widgets/common/bottom_sheet_handle.dart';
-import '../../widgets/common/elevated_icon_button.dart';
 import '../../widgets/common/page_container.dart';
 import '../../widgets/elevated_container.dart';
 import 'enter_score_view_model.dart';
@@ -34,7 +33,7 @@ class EnterScoreSheet extends StatelessWidget {
       child: SingleChildScrollView(
         child: Padding(
           // showModalBottomSheet's useSafeArea only guards the top, so the bottom intrusion
-          // (gesture navigation bar, home indicator) is ours to keep the Done button clear of.
+          // (gesture navigation bar, home indicator) is ours to keep the last keypad row clear of.
           padding: const EdgeInsets.all(Dimensions.standardSpacing).copyWith(
             bottom: Dimensions.standardSpacing + MediaQuery.viewPaddingOf(context).bottom,
           ),
@@ -59,19 +58,14 @@ class EnterScoreSheet extends StatelessWidget {
               Observer(
                 builder: (_) => _Keypad(
                   canUndo: viewModel.canUndo,
+                  canConfirm: viewModel.hasScoreChanged,
                   onDigit: viewModel.appendDigit,
                   onBackspace: viewModel.backspace,
                   onSubtract: viewModel.commitSubtract,
                   onAdd: viewModel.commitAdd,
                   onUndo: viewModel.undo,
+                  onConfirm: () => Navigator.pop(context),
                 ),
-              ),
-              const SizedBox(height: Dimensions.standardSpacing),
-              ElevatedIconButton(
-                title: AppText.enterScoreSheetDoneButtonText,
-                icon: const Icon(Icons.done),
-                color: AppColors.accentColor,
-                onPressed: () => Navigator.pop(context),
               ),
               const SizedBox(height: Dimensions.standardSpacing),
             ],
@@ -171,29 +165,45 @@ class _InstantScoreRow extends StatelessWidget {
 class _Keypad extends StatelessWidget {
   const _Keypad({
     required this.canUndo,
+    required this.canConfirm,
     required this.onDigit,
     required this.onBackspace,
     required this.onSubtract,
     required this.onAdd,
     required this.onUndo,
+    required this.onConfirm,
   });
 
   static const double _spacing = Dimensions.standardSpacing;
 
+  static const Widget _emptyKey = SizedBox(width: _Key.size, height: _Key.size);
+
   final bool canUndo;
+  final bool canConfirm;
   final ValueChanged<String> onDigit;
   final VoidCallback onBackspace;
   final VoidCallback onSubtract;
   final VoidCallback onAdd;
   final VoidCallback onUndo;
+  final VoidCallback onConfirm;
 
   @override
   Widget build(BuildContext context) {
-    final rows = <({List<String> digits, Widget action})>[
-      (digits: ['1', '2', '3'], action: _backspaceKey),
-      (digits: ['4', '5', '6'], action: _commitKey(ScoreOperator.subtract.symbol, onSubtract)),
-      (digits: ['7', '8', '9'], action: _commitKey(ScoreOperator.add.symbol, onAdd)),
-      (digits: ['', '0', ''], action: _undoKey),
+    final rows = <List<Widget>>[
+      [_digitKey('1'), _digitKey('2'), _digitKey('3'), _emptyKey],
+      [
+        _digitKey('4'),
+        _digitKey('5'),
+        _digitKey('6'),
+        _commitKey(ScoreOperator.subtract.symbol, onSubtract),
+      ],
+      [
+        _digitKey('7'),
+        _digitKey('8'),
+        _digitKey('9'),
+        _commitKey(ScoreOperator.add.symbol, onAdd),
+      ],
+      [_undoKey, _digitKey('0'), _backspaceKey, _confirmKey],
     ];
 
     return Column(
@@ -202,10 +212,7 @@ class _Keypad extends StatelessWidget {
           if (i > 0) const SizedBox(height: _spacing),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              for (final digit in rows[i].digits) _digitKey(digit),
-              rows[i].action,
-            ],
+            children: rows[i],
           ),
         ],
       ],
@@ -213,10 +220,6 @@ class _Keypad extends StatelessWidget {
   }
 
   Widget _digitKey(String digit) {
-    if (digit.isEmpty) {
-      return const SizedBox(width: _Key.size, height: _Key.size);
-    }
-
     return _Key(
       onTap: () => onDigit(digit),
       child: Text(digit, style: AppTheme.theme.textTheme.displayLarge),
@@ -248,6 +251,17 @@ class _Keypad extends StatelessWidget {
           color: canUndo ? AppColors.defaultTextColor : AppColors.disabledIconIconColor,
           size: Dimensions.defaultButtonIconSize,
           semanticLabel: AppText.enterScoreSheetUndoButtonText,
+        ),
+      );
+
+  Widget get _confirmKey => _Key(
+        backgroundColor: AppColors.greenColor,
+        onTap: canConfirm ? onConfirm : null,
+        child: Icon(
+          Icons.done,
+          color: canConfirm ? AppColors.defaultTextColor : AppColors.disabledIconIconColor,
+          size: Dimensions.defaultButtonIconSize,
+          semanticLabel: AppText.enterScoreSheetConfirmButtonText,
         ),
       );
 }

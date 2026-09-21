@@ -35,6 +35,13 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
           Computed<bool>(() => super.canCommitScoreEntry,
               name: '_EnterScoreViewModel.canCommitScoreEntry'))
       .value;
+  Computed<bool>? _$hasScoreChangedComputed;
+
+  @override
+  bool get hasScoreChanged =>
+      (_$hasScoreChangedComputed ??= Computed<bool>(() => super.hasScoreChanged,
+              name: '_EnterScoreViewModel.hasScoreChanged'))
+          .value;
   Computed<double>? _$previewScoreComputed;
 
   @override
@@ -215,6 +222,7 @@ score: ${score},
 playerName: ${playerName},
 canUndo: ${canUndo},
 canCommitScoreEntry: ${canCommitScoreEntry},
+hasScoreChanged: ${hasScoreChanged},
 previewScore: ${previewScore},
 scoreEquation: ${scoreEquation}
     ''';

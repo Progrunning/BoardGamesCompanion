@@ -1,4 +1,3 @@
-import 'package:board_games_companion/common/app_text.dart';
 import 'package:board_games_companion/mixins/enter_score_sheet.dart';
 import 'package:board_games_companion/models/hive/player.dart';
 import 'package:board_games_companion/models/hive/score.dart';
@@ -15,6 +14,7 @@ void main() {
   const String openSheetButtonText = 'Open';
   const String playerName = 'Alice';
   final String subtractKey = ScoreOperator.subtract.symbol;
+  final Finder confirmKey = find.widgetWithIcon(InkWell, Icons.done);
 
   const PlayerScore playerScore = PlayerScore(
     player: Player(id: '1', name: playerName),
@@ -89,18 +89,29 @@ void main() {
       expect(viewModel.partialScores, [250]);
     });
 
-    testWidgets('WHEN digits are typed and Done is tapped THEN they are committed',
+    testWidgets('WHEN digits are typed and confirm is tapped THEN they are committed',
         (WidgetTester tester) async {
       await pumpEnterScoreSheet(tester);
 
       await tester.tap(find.widgetWithText(InkWell, '5'));
       await tester.tap(find.widgetWithText(InkWell, '0'));
       await tester.pump();
-      await tester.tap(find.text(AppText.enterScoreSheetDoneButtonText));
+      await tester.tap(confirmKey);
       await tester.pumpAndSettle();
 
       expect(viewModel.score, 150);
       expect(viewModel.partialScores, [50]);
+    });
+
+    testWidgets('THEN confirm stays disabled until the score changes', (WidgetTester tester) async {
+      await pumpEnterScoreSheet(tester);
+
+      expect(tester.widget<InkWell>(confirmKey).onTap, isNull);
+
+      await tester.tap(find.widgetWithText(InkWell, '5'));
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<InkWell>(confirmKey).onTap, isNotNull);
     });
 
     testWidgets('WHEN digits are typed and the sheet is dismissed THEN they are still committed',
