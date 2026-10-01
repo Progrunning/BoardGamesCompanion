@@ -58,6 +58,24 @@ _Avoid_: Local data, app data, user data
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
 
+### Games and expansions
+
+**Playthrough**:
+A single session of one game by a set of players, together with their outcomes. Belongs to exactly one game, no matter how many expansions were on the table. **Play** is the accepted short form, in docs and in the UI alike.
+_Avoid_: Game, session, match
+
+**Base game**:
+A board game playable on its own, and the game a playthrough normally belongs to.
+_Avoid_: Main game, parent game, original game
+
+**Expansion**:
+A board game BGG publishes as an extension of a base game. A catalogue fact about the game, independent of whether the user owns it or has ever played with it. Some expansions are playable on their own, so an expansion can still be the game a playthrough belongs to.
+_Avoid_: Add-on, module, DLC
+
+**Expansion in play**:
+An expansion the user records as having been used in a playthrough of its base game. Descriptive only: a playthrough belongs to exactly one game, so using an expansion never produces a **recorded result** for that expansion, and never adds to its play count.
+_Avoid_: Played expansion, expansion play, play modifier
+
 ### Publishing
 
 **Published collection**:
