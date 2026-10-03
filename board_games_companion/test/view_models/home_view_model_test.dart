@@ -8,15 +8,18 @@ import '../mocks/board_games_filters_store_mock.dart';
 import '../mocks/board_games_search_service_mock.dart';
 import '../mocks/board_games_store_mock.dart';
 import '../mocks/collections_view_model_mock.dart';
+import '../mocks/engagement_prompts_service_mock.dart';
 import '../mocks/hot_board_games_view_model_mock.dart';
 import '../mocks/players_view_model_mock.dart';
 import '../mocks/plays_view_model_mock.dart';
-import '../mocks/rate_and_review_service_mock.dart';
+import '../mocks/purchase_service_mock.dart';
 import '../mocks/search_store_mock.dart';
 
 void main() {
   late final MockAnalyticsService mockAnalyticsService = MockAnalyticsService();
-  late final MockRateAndReviewService mockRateAndReviewService = MockRateAndReviewService();
+  late final MockEngagementPromptsService mockEngagementPromptsService =
+      MockEngagementPromptsService();
+  late final MockPurchaseService mockPurchaseService = MockPurchaseService();
   late final MockPlayersViewModel mockPlayerViewModel = MockPlayersViewModel();
   late final MockBoardGamesFiltersStore mockBoardGamesFiltersStore = MockBoardGamesFiltersStore();
   late final MockCollectionsViewModel mockCollectionsViewModel = MockCollectionsViewModel();
@@ -33,7 +36,8 @@ void main() {
   setUp(() {
     homeViewModel = HomeViewModel(
       mockAnalyticsService,
-      mockRateAndReviewService,
+      mockEngagementPromptsService,
+      mockPurchaseService,
       mockPlayerViewModel,
       mockBoardGamesFiltersStore,
       mockCollectionsViewModel,

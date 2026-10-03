@@ -37,6 +37,7 @@ import 'models/hive/search_history_entry.dart';
 import 'models/hive/user.dart';
 import 'models/sort_by.dart';
 import 'services/preferences_service.dart';
+import 'services/purchase_service.dart';
 
 Future<void> main() async {
   Fimber.plantTree(DebugTree(
@@ -84,6 +85,8 @@ Future<void> main() async {
 
     final preferencesService = getIt<PreferencesService>();
     await preferencesService.initialize();
+
+    await getIt<PurchaseService>().initialize();
 
     LicenseRegistry.addLicense(() async* {
       final license = await rootBundle.loadString('google_fonts/OFL.txt');

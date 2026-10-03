@@ -37,6 +37,9 @@ import 'pages/playthroughs/playthroughs_page.dart';
 import 'pages/playthroughs/playthroughs_view_model.dart';
 import 'pages/settings/settings_page.dart';
 import 'pages/settings/settings_view_model.dart';
+import 'pages/tip/app_icon_picker_view_model.dart';
+import 'pages/tip/tip_page.dart';
+import 'pages/tip/tip_view_model.dart';
 import 'services/preferences_service.dart';
 import 'utilities/analytics_route_observer.dart';
 
@@ -196,6 +199,18 @@ class BoardGamesCompanionAppState extends State<BoardGamesCompanionApp> {
               settings: routeSettings,
               builder: (BuildContext context) =>
                   PlahtyroughPlayersSelectionPage(viewModel: viewModel),
+            );
+
+          case TipPage.pageRoute:
+            final viewModel = getIt<TipViewModel>();
+            final appIconPickerViewModel = getIt<AppIconPickerViewModel>();
+
+            return MaterialPageRoute<dynamic>(
+              settings: routeSettings,
+              builder: (BuildContext context) => TipPage(
+                viewModel: viewModel,
+                appIconPickerViewModel: appIconPickerViewModel,
+              ),
             );
 
           case PlaythroughMigrationPage.pageRoute:
