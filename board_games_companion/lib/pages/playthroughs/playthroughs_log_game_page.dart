@@ -18,7 +18,7 @@ import '../../common/dimensions.dart';
 import '../../common/enums/game_family.dart';
 import '../../extensions/date_time_extensions.dart';
 import '../../injectable.dart';
-import '../../mixins/enter_score_dialog.dart';
+import '../../mixins/enter_score_sheet.dart';
 import '../../models/hive/no_score_game_result.dart';
 import '../../models/hive/player.dart';
 import '../../models/navigation/edit_playthrough_page_arguments.dart';
@@ -800,7 +800,7 @@ class _SelectPlaythroughDateState extends State<_SelectPlaythroughDate> {
   }
 }
 
-class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
+class _SelectedPlayersList extends StatelessWidget with EnterScoreSheetMixin {
   const _SelectedPlayersList({
     required this.selectedPlayers,
     required this.selectedPlayerScores,
@@ -829,7 +829,7 @@ class _SelectedPlayersList extends StatelessWidget with EnterScoreDialogMixin {
                 gameFamily: gameFamily,
                 onTap: () async {
                   final enterScoreViewModel = EnterScoreViewModel(playerScore);
-                  await showEnterScoreDialog(context, enterScoreViewModel);
+                  await showEnterScoreSheet(context, enterScoreViewModel);
                   onPlayerScoreUpdated(playerScore, enterScoreViewModel.score);
                 },
               );

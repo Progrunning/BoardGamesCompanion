@@ -4,7 +4,9 @@ The Enter Score dialog builds a total by **accumulating partial scores** — eac
 
 ## Status
 
-accepted
+superseded by [ADR-0007](0007-keypad-bottom-sheet-replaces-the-score-dial.md)
+
+The keypad itself survives; its surface does not. The Discord poll this ADR gated the dial on has since run, and the dial is removed — so the keypad became the entry surface in a bottom sheet rather than a mode swapped into a centred dialog, the sticky `+/−` toggle became calculator commit keys, and the `50` tile sacrificed below was restored. The rejected alternatives recorded here still stand.
 
 ## Considered options
 

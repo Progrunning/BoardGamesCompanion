@@ -1,0 +1,28 @@
+# The score dial is removed; a keypad bottom sheet becomes the score entry surface
+
+[ADR-0005](0005-keypad-entry-for-exact-scores.md) added a keypad to the Enter Score dialog but deliberately left two things open: it kept the circular **score dial** untouched, and it gated the dial's future on a Discord usage and sentiment poll. That poll has now run. The dial is barely used, and players say they would rather type a score than spin for it. So we take the answer the poll gave us: **the dial is deleted**, and the keypad stops being a mode you swap into and becomes the surface itself. The centred dialog becomes a **modal bottom sheet**, because a keypad wants the bottom of the screen and a dialog clamped to 340–380px was already the constraint that forced ADR-0005's compromises. Signs move onto the keypad as calculator-style `+` and `−` commit keys, replacing the sticky `+/−` mode, and the `50` **instant score** that ADR-0005 sacrificed for space comes back.
+
+## Status
+
+accepted — supersedes [ADR-0005](0005-keypad-entry-for-exact-scores.md)
+
+ADR-0005's rejected alternatives still stand and are not restated here: `100`/`1000` tiles, a `×10` multiplier, per-game increment sets, and the system numeric keyboard all remain rejected for the reasons recorded there. What changes is the surface, the dial, and the sign model.
+
+## Considered options
+
+- **Demote the dial behind a toggle** rather than delete it (rejected: it preserves `_CircularNumberPicker`, `_NumberPicker`, `_CircleTween`, `_CirclePickerPainter` and `_Thumb` — some 375 of the widget's 704 lines, with animation controllers and a custom painter — in order to keep an affordance the poll says nobody reaches for. A hidden control that is already unused when visible will not be found behind a toggle).
+- **Keep the centred dialog and grow it** to fit a keypad (rejected: the dialog's 340px minimum is exactly what forced ADR-0005 to drop the `50` tile, and a keypad plus instant scores plus a header does not fit a centred card on a small phone without becoming a full-screen dialog in all but name. A bottom sheet also puts the digits under the thumb, where a centred card puts them mid-screen).
+- **Keep the sticky `+/−` mode** and add a separate commit key (rejected: ADR-0005 had to pin the toggle above the keypad precisely so the user could see which way an invisible mode was set — a tell that the mode was a liability. Calculator keys cost one tap fewer per entry and carry their meaning on the key itself).
+- **Block dismissal of the sheet** (`isDismissible: false`), so Done is the only exit (rejected: it fights the swipe gesture every sheet teaches users to expect. Instead, dismissal commits — see below).
+- **Scroll the tapped player's row into view** behind the open sheet (rejected: neither call site has a `ScrollController`, list items carry `ObjectKey`s rather than `GlobalKey`s so `Scrollable.ensureVisible` has nothing to target, and the log-game page's list is slivers inside a `CustomScrollView` nested in a `TabBarView`. A sheet tall enough for a keypad covers the row anyway, so the plumbing would buy a line the sheet's own header already shows).
+
+## Consequences
+
+- **Closing the sheet commits, however you close it.** The view model mutates the score live and both call sites read `viewModel.score` after the await, with no revert path — so a swipe-away cannot mean "cancel" without redesigning that seam. The consequence to watch: the "assume 0 when nothing was entered" rule currently lives in the Done button's handler, and it must move onto the sheet's close path, or a swipe-away would leave a score unset where Done would have set it to 0.
+- **`EnterScoreOperation` is deleted**, along with its observable, `updateOperation()` and the operation tile. With calculator keys there is no mode to hold. The view model's surface becomes append-digit, backspace, commit-add, commit-subtract, undo.
+- **Backspace and Undo are different buttons and always have been different things.** Backspace edits the uncommitted **score entry**; Undo pops the last committed **partial score**. One button that switches meaning depending on invisible state is a button users stop trusting.
+- **The six-digit entry cap is kept, and it is a layout guard, not a validation rule.** `_Score` renders the score in a non-wrapping `Row` with no `Flexible` or ellipsis, so a long name plus a long number overflows. Note the cap is leaky by design — it bounds one entry, not the total, and two commits of `999999` already exceed what it protects. The durable fix is the two-line header below; the cap stays as cheap insurance against a stuck key.
+- **The header goes to two lines** — player name, then the score large beneath it — with the in-progress score entry on its own line below that. Both numbers must be visible at once for `+` to be predictable: you cannot decide what to add while the thing you are adding to is hidden. This retires the overflow class of bug by construction rather than patching it with a `FittedBox`.
+- **Totals may still go negative.** Penalty-heavy games legitimately end below zero, and clamping would silently discard input.
+- **Naming follows the surface.** `EnterScoreDialog`, `EnterScoreDialogMixin`, `showEnterScoreDialog()`, `lib/mixins/enter_score_dialog.dart` and the route `'/enterScoreDialog'` all become sheet-named. Analytics is unaffected: `route_extensions.dart` maps the route to the display name `'Enter Score'`, so changing both together leaves the reported screen name identical.
+- **`_BottomSheetHandle` gets extracted** from `collections_filter_panel.dart`, where it is currently private. This is the app's second bottom sheet, and two is where a duplicated widget sets.
