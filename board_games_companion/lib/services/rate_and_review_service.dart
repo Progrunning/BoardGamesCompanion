@@ -8,15 +8,23 @@ import 'preferences_service.dart';
 
 @singleton
 class RateAndReviewService {
-  RateAndReviewService(this._preferencesService);
+  RateAndReviewService(this._preferencesService, this._inAppReview);
 
   final PreferencesService _preferencesService;
+  final InAppReview _inAppReview;
+
   static const Duration _requiredAppUsedForDuration = Duration(days: 14);
-  static const Duration _remindMeLaterDuration = Duration(days: 7);
   static const Duration _requiredAppLaunchedForDuration = Duration(seconds: 30);
   static const int _requiredNumberOfSignificantActions = 300;
 
-  bool showRateAndReviewDialog = false;
+  // MK Both Apple and Google cap how often a review prompt is shown (Apple: at
+  // most 3 per app, per device, per 365-day period). We mirror that by only
+  // attempting a silent review at most 3 times a year, spacing attempts out
+  // evenly so we never waste one of the OS quota slots on a request that would
+  // be dropped anyway.
+  static const Duration _minDurationBetweenReviewRequests = Duration(days: 365 ~/ 3);
+
+  bool shouldRequestReview = false;
 
   Future<void> increaseNumberOfSignificantActions() async {
     int numberOfSignificantActions = _preferencesService.getNumberOfSignificantActions();
@@ -26,53 +34,44 @@ class RateAndReviewService {
       );
     }
 
-    await _updateShowRateAndReviewDialogFlag();
+    await _updateShouldRequestReviewFlag();
   }
 
+  /// Silently asks the platform to show its native in-app review prompt.
+  ///
+  /// Triggered at a natural checkpoint (never from a button), as both Apple and
+  /// Google require. The OS decides whether the prompt is actually shown, so
+  /// there is no user-facing dialog and no way to know if it appeared. For an
+  /// explicit "rate us" action, deep-link to the store listing instead.
   Future<void> requestReview() async {
-    showRateAndReviewDialog = false;
+    shouldRequestReview = false;
 
-    if (!await InAppReview.instance.isAvailable()) {
+    if (!await _inAppReview.isAvailable()) {
       return;
     }
 
-    await InAppReview.instance.requestReview();
-    await _preferencesService.setRateAndReviewDialogSeen();
+    await _inAppReview.requestReview();
+    await _preferencesService.setLastReviewRequestDate(DateTime.now().toUtc());
   }
 
-  Future<void> askMeLater() async {
-    showRateAndReviewDialog = false;
-    await _preferencesService
-        .setRemindMeLaterDate(DateTime.now().toUtc().add(_remindMeLaterDuration));
-  }
-
-  Future<void> dontAskAgain() async {
-    showRateAndReviewDialog = false;
-    await _preferencesService.setRateAndReviewDialogSeen();
-  }
-
-  Future<void> _updateShowRateAndReviewDialogFlag() async {
+  Future<void> _updateShouldRequestReviewFlag() async {
     try {
-      final bool rateAndReviewDialogSeen = _preferencesService.getRateAndReviewDialogSeen();
-      if (rateAndReviewDialogSeen) {
-        return;
-      }
-
       final DateTime nowUtc = DateTime.now().toUtc();
       final DateTime? firstTimeLaunchDate = _preferencesService.getFirstTimeLaunchDate();
       final DateTime? appLaunchDate = _preferencesService.getAppLaunchDate();
-      final DateTime? remindMeLaterDate = _preferencesService.getRemindMeLaterDate();
-      if (firstTimeLaunchDate == null || appLaunchDate == null || remindMeLaterDate == null) {
+      if (firstTimeLaunchDate == null || appLaunchDate == null) {
         return;
       }
 
+      final DateTime? lastReviewRequestDate = _preferencesService.getLastReviewRequestDate();
       final int numberOfSignificantActions = _preferencesService.getNumberOfSignificantActions();
 
-      showRateAndReviewDialog =
+      shouldRequestReview =
           firstTimeLaunchDate.add(_requiredAppUsedForDuration).isBefore(nowUtc) &&
               appLaunchDate.add(_requiredAppLaunchedForDuration).isBefore(nowUtc) &&
-              (remindMeLaterDate == null || remindMeLaterDate.isBefore(nowUtc)) &&
-              numberOfSignificantActions >= _requiredNumberOfSignificantActions;
+              numberOfSignificantActions >= _requiredNumberOfSignificantActions &&
+              (lastReviewRequestDate == null ||
+                  lastReviewRequestDate.add(_minDurationBetweenReviewRequests).isBefore(nowUtc));
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
