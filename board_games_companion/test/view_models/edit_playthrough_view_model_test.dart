@@ -17,6 +17,8 @@ import 'package:mocktail/mocktail.dart';
 
 import '../mocks/game_playthroughs_details_store_mock.dart';
 
+class _FakePlaythroughDetails extends Fake implements PlaythroughDetails {}
+
 void main() {
   final mockGamePlaythroughsDetailsStore = MockGamePlaythroughsDetailsStore();
 
@@ -43,6 +45,10 @@ void main() {
   );
 
   late EditPlaythoughViewModel editPlaythrouhgViewModel;
+
+  setUpAll(() {
+    registerFallbackValue(_FakePlaythroughDetails());
+  });
 
   setUp(() {
     when(() => mockGamePlaythroughsDetailsStore.playthroughsDetails).thenReturn(
@@ -257,5 +263,84 @@ void main() {
       expect(editPlaythrouhgViewModel.editPlaythroughPageVisualState,
           const EditPlaythroughPageVisualStates.editScoreGame(gameFamily: gameFamily));
     });
+  });
+
+  // SUSPECT B: the updatePlayerScore guard early-returns when `hasResult && score == newScore`.
+  // For a score still stored in the deprecated `value` format, re-entering the same number is
+  // swallowed and the score is never migrated to a ScoreGameResult. The narrowed guard should
+  // only skip when the fully resolved PlayerScore is unchanged.
+  test(
+      'GIVEN a player score stored in the deprecated value format '
+      'WHEN re-entering the same numeric score '
+      'THEN the score is migrated to a ScoreGameResult (guard must not swallow it) ', () {
+    const playerId = '1';
+    when(() => mockGamePlaythroughsDetailsStore.playthroughsDetails).thenReturn(
+      ObservableList.of(
+        [
+          mockPlaythroughDetails.copyWith(
+            playerScores: [
+              emptyPlayerScore.copyWith(
+                player: const Player(id: playerId),
+                // ignore: deprecated_member_use_from_same_package
+                score: emptyScore.copyWith(value: '10'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+
+    editPlaythrouhgViewModel.setPlaythroughId(mockPlaythroughId);
+    editPlaythrouhgViewModel.updatePlayerScore(playerId, 10.0);
+
+    final updatedPlayerScore = editPlaythrouhgViewModel.playerScores
+        .firstWhereOrNull((element) => element.id == playerId);
+    expect(updatedPlayerScore!.score.scoreGameResult?.points, 10.0);
+  });
+
+  // SUSPECT C: a score edit must mark the working copy dirty AND, on save, persist exactly
+  // once via the store. Regression guard for the "save silently no-ops" failure mode.
+  test(
+      'GIVEN a player score has been edited '
+      'WHEN saving changes '
+      'THEN the working copy is dirty and is persisted exactly once ', () async {
+    when(() => mockGamePlaythroughsDetailsStore.updatePlaythrough(any()))
+        .thenAnswer((_) async {});
+
+    editPlaythrouhgViewModel.setPlaythroughId(mockPlaythroughId);
+    editPlaythrouhgViewModel.updatePlayerScore(mockEmptyPlayerScoreId, 15.0);
+
+    expect(editPlaythrouhgViewModel.isDirty, isTrue);
+
+    await editPlaythrouhgViewModel.saveChanges();
+
+    verify(() => mockGamePlaythroughsDetailsStore.updatePlaythrough(any())).called(1);
+  });
+
+  // SUSPECT D: places are only recomputed when every player has a numerical score
+  // (finishedScoring). This test LOCKS the current behaviour for partially scored plays.
+  test(
+      'GIVEN not all players have a numerical score '
+      'WHEN updating a single player score '
+      'THEN no places are computed (current behaviour is locked) ', () {
+    when(() => mockGamePlaythroughsDetailsStore.playthroughsDetails).thenReturn(
+      ObservableList.of(
+        [
+          mockPlaythroughDetails.copyWith(
+            playerScores: [
+              emptyPlayerScore.copyWith(player: const Player(id: '1'), score: emptyScore),
+              emptyPlayerScore.copyWith(player: const Player(id: '2'), score: emptyScore),
+            ],
+          )
+        ],
+      ),
+    );
+
+    editPlaythrouhgViewModel.setPlaythroughId(mockPlaythroughId);
+    editPlaythrouhgViewModel.updatePlayerScore('1', 10.0);
+
+    for (final playerScore in editPlaythrouhgViewModel.playerScores) {
+      expect(playerScore.place, isNull);
+    }
   });
 }
