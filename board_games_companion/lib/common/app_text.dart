@@ -136,8 +136,10 @@ class AppText {
   static const playtimeDurationHoursFormat = '%ih %imin';
   static const playtimeDurationDaysFormat = '%i day%s %ih';
 
-  static const enterScoreDialogUndoButtonText = 'Undo';
-  static const enterScoreDialogDoneButtonText = 'Done';
+  static const enterScoreSheetPlayerScoredText = ' scored ';
+  static const enterScoreSheetUndoButtonText = 'Undo';
+  static const enterScoreSheetBackspaceButtonText = 'Backspace';
+  static const enterScoreSheetConfirmButtonText = 'Confirm';
 
   static const filterGamesPanelClearFiltersButtonText = 'Clear filters';
 
@@ -192,7 +194,6 @@ class AppText {
   static const playthroughPageGameSettingsLogGameBottomTabTitle = 'Settings';
 
   static const editPlaythroughScorePoints = 'points';
-  static const editPlaythroughPlayerScored = 'scored';
   static const editPlaythroughAddNote = 'Add note';
 
   static const editPlaythroughPageTitle = 'Edit playthrough';

@@ -28,13 +28,34 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   bool get canUndo => (_$canUndoComputed ??= Computed<bool>(() => super.canUndo,
           name: '_EnterScoreViewModel.canUndo'))
       .value;
-  Computed<bool>? _$hasUnsavedChangedComputed;
+  Computed<bool>? _$canCommitScoreEntryComputed;
 
   @override
-  bool get hasUnsavedChanged => (_$hasUnsavedChangedComputed ??= Computed<bool>(
-          () => super.hasUnsavedChanged,
-          name: '_EnterScoreViewModel.hasUnsavedChanged'))
+  bool get canCommitScoreEntry => (_$canCommitScoreEntryComputed ??=
+          Computed<bool>(() => super.canCommitScoreEntry,
+              name: '_EnterScoreViewModel.canCommitScoreEntry'))
       .value;
+  Computed<bool>? _$hasScoreChangedComputed;
+
+  @override
+  bool get hasScoreChanged =>
+      (_$hasScoreChangedComputed ??= Computed<bool>(() => super.hasScoreChanged,
+              name: '_EnterScoreViewModel.hasScoreChanged'))
+          .value;
+  Computed<double>? _$previewScoreComputed;
+
+  @override
+  double get previewScore =>
+      (_$previewScoreComputed ??= Computed<double>(() => super.previewScore,
+              name: '_EnterScoreViewModel.previewScore'))
+          .value;
+  Computed<String>? _$scoreEquationComputed;
+
+  @override
+  String get scoreEquation =>
+      (_$scoreEquationComputed ??= Computed<String>(() => super.scoreEquation,
+              name: '_EnterScoreViewModel.scoreEquation'))
+          .value;
 
   late final _$_playerScoreAtom =
       Atom(name: '_EnterScoreViewModel._playerScore', context: context);
@@ -49,22 +70,6 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   set _playerScore(PlayerScore value) {
     _$_playerScoreAtom.reportWrite(value, super._playerScore, () {
       super._playerScore = value;
-    });
-  }
-
-  late final _$operationAtom =
-      Atom(name: '_EnterScoreViewModel.operation', context: context);
-
-  @override
-  EnterScoreOperation get operation {
-    _$operationAtom.reportRead();
-    return super.operation;
-  }
-
-  @override
-  set operation(EnterScoreOperation value) {
-    _$operationAtom.reportWrite(value, super.operation, () {
-      super.operation = value;
     });
   }
 
@@ -84,19 +89,40 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
     });
   }
 
-  late final _$_EnterScoreViewModelActionController =
-      ActionController(name: '_EnterScoreViewModel', context: context);
+  late final _$scoreEntryAtom =
+      Atom(name: '_EnterScoreViewModel.scoreEntry', context: context);
 
   @override
-  void updateOperation(EnterScoreOperation operation) {
-    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
-        name: '_EnterScoreViewModel.updateOperation');
-    try {
-      return super.updateOperation(operation);
-    } finally {
-      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
-    }
+  String get scoreEntry {
+    _$scoreEntryAtom.reportRead();
+    return super.scoreEntry;
   }
+
+  @override
+  set scoreEntry(String value) {
+    _$scoreEntryAtom.reportWrite(value, super.scoreEntry, () {
+      super.scoreEntry = value;
+    });
+  }
+
+  late final _$pendingOperatorAtom =
+      Atom(name: '_EnterScoreViewModel.pendingOperator', context: context);
+
+  @override
+  ScoreOperator? get pendingOperator {
+    _$pendingOperatorAtom.reportRead();
+    return super.pendingOperator;
+  }
+
+  @override
+  set pendingOperator(ScoreOperator? value) {
+    _$pendingOperatorAtom.reportWrite(value, super.pendingOperator, () {
+      super.pendingOperator = value;
+    });
+  }
+
+  late final _$_EnterScoreViewModelActionController =
+      ActionController(name: '_EnterScoreViewModel', context: context);
 
   @override
   void updateScore(double partialScore) {
@@ -110,11 +136,44 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   }
 
   @override
-  void scoreZero() {
+  void appendDigit(String digit) {
     final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
-        name: '_EnterScoreViewModel.scoreZero');
+        name: '_EnterScoreViewModel.appendDigit');
     try {
-      return super.scoreZero();
+      return super.appendDigit(digit);
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void backspace() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.backspace');
+    try {
+      return super.backspace();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void commitAdd() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.commitAdd');
+    try {
+      return super.commitAdd();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void commitSubtract() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.commitSubtract');
+    try {
+      return super.commitSubtract();
     } finally {
       _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
     }
@@ -132,14 +191,29 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
   }
 
   @override
+  void close() {
+    final _$actionInfo = _$_EnterScoreViewModelActionController.startAction(
+        name: '_EnterScoreViewModel.close');
+    try {
+      return super.close();
+    } finally {
+      _$_EnterScoreViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-operation: ${operation},
 partialScores: ${partialScores},
+scoreEntry: ${scoreEntry},
+pendingOperator: ${pendingOperator},
 score: ${score},
 playerName: ${playerName},
 canUndo: ${canUndo},
-hasUnsavedChanged: ${hasUnsavedChanged}
+canCommitScoreEntry: ${canCommitScoreEntry},
+hasScoreChanged: ${hasScoreChanged},
+previewScore: ${previewScore},
+scoreEquation: ${scoreEquation}
     ''';
   }
 }
