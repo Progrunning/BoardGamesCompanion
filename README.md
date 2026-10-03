@@ -193,7 +193,7 @@ New app version will be pushed into the *Google Play Store*.
 
 # Code generation
 
-Use the following command to auto-generate files `flutter packages pub run build_runner build -v --delete-conflicting-outputs`. The below libraries rely on the auto generated files
+Use the following command to auto-generate files `dart run build_runner build --delete-conflicting-outputs`. The below libraries rely on the auto generated files
 
 - hive
 - injactable

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import '../common/constants.dart';
 
 extension NullableDoubleExtensions on double? {
@@ -17,19 +15,5 @@ extension NullableDoubleExtensions on double? {
     }
 
     return this!.compareTo(doubleToCompare!);
-  }
-}
-
-extension DoubleExtensions on double {
-  bool isBetween(double from, double to, {bool inclusive = false}) {
-    if (inclusive) {
-      return from <= this && this <= to;
-    }
-
-    return from < this && this < to;
-  }
-
-  double toRadians() {
-    return this * pi / 180;
   }
 }

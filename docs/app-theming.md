@@ -13,11 +13,11 @@ building new UI so it looks native to the app.
 
 All theming primitives are static-member classes in `board_games_companion/lib/common/`:
 
-| File | Class | Role |
-|---|---|---|
-| `app_colors.dart` | `AppColors` | The palette. Core brand colors, semantic aliases (text, tabs, icons, gradients), and the 15-color chart palette. |
-| `app_theme.dart` | `AppTheme` | Assembles the app's single `ThemeData` (`AppTheme.theme`) and a few standalone `TextStyle` constants. |
-| `app_styles.dart` | `AppStyles` | Shape & effect constants: corner radii, shadows, elevations, opacity steps, and the shared tile gradient `BoxDecoration`. |
+| File              | Class        | Role                                                                                                                                  |
+| ----------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `app_colors.dart` | `AppColors`  | The palette. Core brand colors, semantic aliases (text, tabs, icons, gradients), and the 15-color chart palette.                      |
+| `app_theme.dart`  | `AppTheme`   | Assembles the app's single `ThemeData` (`AppTheme.theme`) and a few standalone `TextStyle` constants.                                 |
+| `app_styles.dart` | `AppStyles`  | Shape & effect constants: corner radii, shadows, elevations, opacity steps, and the shared tile gradient `BoxDecoration`.             |
 | `dimensions.dart` | `Dimensions` | Sizing: the 8px-based spacing scale, the font-size scale, and many widget-specific sizes (image heights, icon sizes, hexagon sizes…). |
 
 (`app_text.dart` / `AppText` is UI copy strings, not theming.)
@@ -26,6 +26,7 @@ All theming primitives are static-member classes in `board_games_companion/lib/c
 
 - **Primary (dark purple)** `AppColors.primaryColor` = `#2D103F` — app bar, gradient end.
 - **Primary light (purple)** `AppColors.primaryColorLight` = `#5B217F` — scaffold, cards, dialogs, snackbars, gradient start.
+- **Primary extra light (purple)** `AppColors.primaryColorExtraLight` = `#6B2B93` — surfaces that sit *on* the page gradient, where `primaryColorLight` would blend into its start (the enter-score keypad).
 - **Accent (orange)** `AppColors.accentColor` = `#FF9800` — icons, selected states, dividers, text buttons, cursors, tab indicators.
 - **Secondary (blues)** `AppColors.secondaryColor` = `#010055`, `secondaryLightColor` = `#2747A5` — element background gradients; `secondaryColor` is `ColorScheme.tertiary`.
 - **Text** `defaultTextColor` = white, `secondaryTextColor` = grey, `invertedTextColor` = black.
@@ -48,18 +49,18 @@ It is registered once in `app.dart` via `MaterialApp(theme: AppTheme.theme)`.
 
 The Material `textTheme` slots are repurposed as follows (size in logical px, all Lato):
 
-| Slot | Size | Weight | Color | Typical use |
-|---|---|---|---|---|
-| `displayLarge` | 20 | bold | white | Biggest titles, dialog numerals |
-| `displayMedium` | 18 | bold | white | Section titles, dialog titles |
-| `displaySmall` | 16 | bold | white | Emphasized body, dialog content (weight often reset to normal via `copyWith`) |
-| `headlineSmall` | Lato default (24) | — | white | Rarely used |
-| `headlineMedium` | 14 | — | white | Secondary body text |
-| `titleLarge` | Lato default (22) | — | white | Screen titles |
-| `titleMedium` | 12 | — | grey | Subtitles, captions |
-| `titleSmall` | 10 | — | grey | Smallest captions |
-| `bodyLarge` | 16 | — | white | Primary body text |
-| `bodyMedium` | 14 | — | white | Standard body text |
+| Slot             | Size              | Weight | Color | Typical use                                                                   |
+| ---------------- | ----------------- | ------ | ----- | ----------------------------------------------------------------------------- |
+| `displayLarge`   | 20                | bold   | white | Biggest titles, dialog numerals                                               |
+| `displayMedium`  | 18                | bold   | white | Section titles, dialog titles                                                 |
+| `displaySmall`   | 16                | bold   | white | Emphasized body, dialog content (weight often reset to normal via `copyWith`) |
+| `headlineSmall`  | Lato default (24) | —      | white | Rarely used                                                                   |
+| `headlineMedium` | 14                | —      | white | Secondary body text                                                           |
+| `titleLarge`     | Lato default (22) | —      | white | Screen titles                                                                 |
+| `titleMedium`    | 12                | —      | grey  | Subtitles, captions                                                           |
+| `titleSmall`     | 10                | —      | grey  | Smallest captions                                                             |
+| `bodyLarge`      | 16                | —      | white | Primary body text                                                             |
+| `bodyMedium`     | 14                | —      | white | Standard body text                                                            |
 
 Font-size constants come from `Dimensions` (`extraSmallFontSize` 10 → `doubleExtraLargeFontSize` 26).
 

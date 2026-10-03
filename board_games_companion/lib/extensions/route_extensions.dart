@@ -1,4 +1,4 @@
-import 'package:board_games_companion/pages/enter_score/enter_score_dialog.dart';
+import 'package:board_games_companion/pages/enter_score/enter_score_sheet.dart';
 import 'package:flutter/widgets.dart';
 
 import '../pages/about/about_page.dart';
@@ -40,7 +40,7 @@ extension RouteExtensions on Route<dynamic> {
         return 'Playthrough Migration';
       case PlahtyroughPlayersSelectionPage.pageRoute:
         return 'Playthrough Player Selection';
-      case EnterScoreDialog.pageRoute:
+      case EnterScoreSheet.pageRoute:
         return 'Enter Score';
       case GameSpinnerGameSelectedDialog.pageRoute:
         return 'Game Spinner Selected Game';
