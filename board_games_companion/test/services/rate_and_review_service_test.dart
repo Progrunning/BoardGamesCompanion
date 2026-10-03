@@ -20,10 +20,8 @@ void main() {
   }) {
     when(() => mockPreferencesService.getFirstTimeLaunchDate())
         .thenReturn(firstTimeLaunchDate ?? daysAgo(30));
-    when(() => mockPreferencesService.getAppLaunchDate())
-        .thenReturn(appLaunchDate ?? daysAgo(1));
-    when(() => mockPreferencesService.getLastReviewRequestDate())
-        .thenReturn(lastReviewRequestDate);
+    when(() => mockPreferencesService.getAppLaunchDate()).thenReturn(appLaunchDate ?? daysAgo(1));
+    when(() => mockPreferencesService.getLastReviewRequestDate()).thenReturn(lastReviewRequestDate);
     when(() => mockPreferencesService.getNumberOfSignificantActions())
         .thenReturn(numberOfSignificantActions);
     when(() => mockPreferencesService.setNumberOfSignificantActions(any()))
@@ -44,20 +42,26 @@ void main() {
     rateAndReviewService = RateAndReviewService(mockPreferencesService, mockInAppReview);
   });
 
-  group('requestReview', () {
-    test('silently triggers the native in-app review when available', () async {
+  group('GIVEN requestReview is called', () {
+    test(
+        'WHEN in-app review is available '
+        'THEN it silently triggers the native in-app review', () async {
       await rateAndReviewService.requestReview();
 
       verify(() => mockInAppReview.requestReview()).called(1);
     });
 
-    test('records the attempt timestamp so future attempts can be rate limited', () async {
+    test(
+        'WHEN in-app review is available '
+        'THEN it records the attempt timestamp so future attempts can be rate limited', () async {
       await rateAndReviewService.requestReview();
 
       verify(() => mockPreferencesService.setLastReviewRequestDate(any())).called(1);
     });
 
-    test('does nothing and records no attempt when in-app review is unavailable', () async {
+    test(
+        'WHEN in-app review is unavailable '
+        'THEN it does nothing and records no attempt', () async {
       when(() => mockInAppReview.isAvailable()).thenAnswer((_) async => false);
 
       await rateAndReviewService.requestReview();
@@ -66,7 +70,9 @@ void main() {
       verifyNever(() => mockPreferencesService.setLastReviewRequestDate(any()));
     });
 
-    test('clears the should request review flag', () async {
+    test(
+        'WHEN it completes '
+        'THEN it clears the should request review flag', () async {
       rateAndReviewService.shouldRequestReview = true;
 
       await rateAndReviewService.requestReview();
@@ -75,8 +81,10 @@ void main() {
     });
   });
 
-  group('shouldRequestReview eligibility', () {
-    test('is true once all criteria are met and no attempt was ever made', () async {
+  group('GIVEN shouldRequestReview eligibility is evaluated', () {
+    test(
+        'WHEN all criteria are met and no attempt was ever made '
+        'THEN it is true', () async {
       stubEligible(lastReviewRequestDate: null);
 
       await rateAndReviewService.increaseNumberOfSignificantActions();
@@ -84,7 +92,9 @@ void main() {
       expect(rateAndReviewService.shouldRequestReview, isTrue);
     });
 
-    test('is false when the app has not been used long enough', () async {
+    test(
+        'WHEN the app has not been used long enough '
+        'THEN it is false', () async {
       stubEligible(firstTimeLaunchDate: daysAgo(2));
 
       await rateAndReviewService.increaseNumberOfSignificantActions();
@@ -92,7 +102,9 @@ void main() {
       expect(rateAndReviewService.shouldRequestReview, isFalse);
     });
 
-    test('is false when there are not enough significant actions', () async {
+    test(
+        'WHEN there are not enough significant actions '
+        'THEN it is false', () async {
       stubEligible(numberOfSignificantActions: 100);
 
       await rateAndReviewService.increaseNumberOfSignificantActions();
@@ -100,7 +112,9 @@ void main() {
       expect(rateAndReviewService.shouldRequestReview, isFalse);
     });
 
-    test('is false when an attempt was made recently (3 per year cap)', () async {
+    test(
+        'WHEN an attempt was made recently (3 per year cap) '
+        'THEN it is false', () async {
       stubEligible(lastReviewRequestDate: daysAgo(10));
 
       await rateAndReviewService.increaseNumberOfSignificantActions();
@@ -108,7 +122,9 @@ void main() {
       expect(rateAndReviewService.shouldRequestReview, isFalse);
     });
 
-    test('is true again once enough time has passed since the last attempt', () async {
+    test(
+        'WHEN enough time has passed since the last attempt '
+        'THEN it is true again', () async {
       stubEligible(lastReviewRequestDate: daysAgo(130));
 
       await rateAndReviewService.increaseNumberOfSignificantActions();
