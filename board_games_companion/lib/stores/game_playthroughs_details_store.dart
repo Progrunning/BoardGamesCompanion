@@ -145,18 +145,20 @@ abstract class _GamePlaythroughsDetailsStore with Store {
       final updateSuceeded =
           await _playthroughsStore.updatePlaythrough(playthroughDetails!.playthrough);
       if (updateSuceeded) {
-        // MK Update playthrough's player scores
-        for (final playerScoreId in originalPlaythrough.scoreIds) {
-          final playerScore = playthroughDetails.playerScores
-              .firstWhereOrNull((playerScore) => playerScore.score.id == playerScoreId);
-          // MK Delete if not present anymore
-          if (playerScore == null) {
-            await _scoresStore.deleteScore(playerScoreId);
-            continue;
-          }
-
-          // MK Add/Update extings ones
+        // MK Persist every current player score. Iterating the *current* scores (rather than the
+        //    original scoreIds) ensures newly added scores - and scores that don't yet carry a
+        //    persisted id - are saved instead of being silently dropped.
+        for (final playerScore in playthroughDetails.playerScores) {
           await _scoresStore.addOrUpdateScore(playerScore.score);
+        }
+
+        // MK Delete scores that belonged to the playthrough originally but are no longer present.
+        final currentScoreIds =
+            playthroughDetails.playerScores.map((playerScore) => playerScore.score.id).toSet();
+        for (final originalScoreId in originalPlaythrough.scoreIds) {
+          if (!currentScoreIds.contains(originalScoreId)) {
+            await _scoresStore.deleteScore(originalScoreId);
+          }
         }
 
         loadPlaythroughsDetails();

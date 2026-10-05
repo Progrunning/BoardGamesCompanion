@@ -57,3 +57,108 @@ _Avoid_: Local data, app data, user data
 **Legacy store**:
 The Hive files predating the SQLite migration. Read-only, imported once on launch, and retained indefinitely because old backups still contain them.
 _Avoid_: Old database, Hive box, legacy database
+
+### Games and expansions
+
+**Playthrough**:
+A single session of one game by a set of players, together with their outcomes. Belongs to exactly one game, no matter how many expansions were on the table. **Play** is the accepted short form, in docs and in the UI alike.
+_Avoid_: Game, session, match
+
+**Base game**:
+A board game playable on its own, and the game a playthrough normally belongs to.
+_Avoid_: Main game, parent game, original game
+
+**Expansion**:
+A board game BGG publishes as an extension of a base game. A catalogue fact about the game, independent of whether the user owns it or has ever played with it. Some expansions are playable on their own, so an expansion can still be the game a playthrough belongs to.
+_Avoid_: Add-on, module, DLC
+
+**Expansion in play**:
+An expansion the user records as having been used in a playthrough of its base game. Descriptive only: a playthrough belongs to exactly one game, so using an expansion never produces a **recorded result** for that expansion, and never adds to its play count.
+_Avoid_: Played expansion, expansion play, play modifier
+
+### Publishing
+
+**Published collection**:
+The copy of a user's collection held on the server that a share link resolves to. A snapshot taken at the moment of publishing — the collection in the app can be ahead of it, never behind. Exists only while the user keeps it published.
+_Avoid_: Public collection, synced collection, profile, cloud collection
+
+**Publish key**:
+The opaque secret held by the app that identifies and authorises writes to a published collection. It is not an account: there is no login, and whoever holds the key owns the published collection. Travels with the user's backup so a reinstall keeps the same share link.
+_Avoid_: Token, API key, user id, device id
+
+**Share link**:
+The public URL at which a published collection can be viewed. Unlisted — reachable only by those it is given to; never discoverable through search or a directory. Carries a public id, never the publish key.
+_Avoid_: Profile URL, collection URL, permalink
+
+**Statistics snapshot**:
+The statistics the app computed and sent along with a published collection, shown on the web exactly as received. Derived, never authoritative: the server stores it, it never recomputes it, and each publish replaces it wholesale.
+_Avoid_: Server stats, cached stats, web statistics
+
+### Statistics
+
+**Competitive play**:
+A playthrough of a game whose players are ranked against each other, so exactly one place is first. The only kind of play that can say anything about one player relative to another.
+_Avoid_: Versus game, PvP, scored game
+
+**Co-op play**:
+A playthrough whose players share a single outcome — the whole table wins or the whole table loses. Nobody beats anybody.
+_Avoid_: Cooperative game, team game, no-score game
+
+**Recorded result**:
+A player's outcome in a playthrough that is definite enough to count towards their statistics — a place in a competitive play, a shared outcome in a co-op play. A play in progress or missing outcomes has no recorded result and is invisible to every statistic.
+_Avoid_: Finished score, valid score, complete play
+
+**Competitive win rate**:
+The share of a player's competitive plays they finished first in, ties included. Kept apart from co-op because a co-op outcome belongs to the table rather than the player, and blending the two produces a number that cannot be compared between players.
+_Avoid_: Win %, win ratio
+
+**Co-op win rate**:
+The share of a player's co-op plays the table won. A property of the groups a player plays with as much as of the player.
+
+**Head-to-head record**:
+Two players' wins and losses against each other, counted a pair at a time within the competitive plays they shared. Finishing above someone is a win against them regardless of who else was at the table.
+_Avoid_: Matchup, H2H, record
+
+**Rival**:
+The player someone has beaten most across their head-to-head records. Rivalry is not symmetric — your rival's rival is rarely you.
+_Avoid_: Favourite victim, best matchup
+
+**Nemesis**:
+The player someone has lost to most across their head-to-head records.
+_Avoid_: Worst matchup, bogey player
+
+**Buddy**:
+A player someone has shared the most playthroughs with, of any kind. Measures company kept, not results, so co-op plays count exactly as much as competitive ones.
+_Avoid_: Frequent player, teammate, partner
+
+### Ratings
+
+**In-app review**:
+The platform's own review prompt, shown by the OS on top of the app so the user can rate without leaving it. Best-effort and quota-limited — the OS decides whether to show it and never reports back — so it is asked for silently at an engagement checkpoint, never behind a button.
+_Avoid_: Rate dialog, review popup, rating prompt
+
+**Engagement criteria**:
+The conditions that make a user eligible for an in-app review — installed 14 days, launched at least 30 seconds ago, and at least 300 significant actions. Meeting them makes an attempt due; it does not guarantee a prompt is shown.
+_Avoid_: Rating threshold, trigger conditions
+
+**Significant action**:
+A user action meaningful enough to count towards the engagement criteria, such as logging a play or editing a collection entry. Counted up to the criteria's ceiling and no further.
+_Avoid_: Interaction, event, tap
+
+**Review request**:
+A single silent attempt to surface the in-app review. Its timestamp is recorded whether or not a prompt actually appears, because the OS never says. Attempts are capped at three a year and spaced roughly a third of a year apart.
+_Avoid_: Review shown, rating impression, prompt
+
+**Store listing**:
+The app's full page on the App Store or Google Play, opened directly in response to a deliberate "rate us" action (the home drawer's Rate & Review item). Distinct from an in-app review, which the OS overlays without leaving the app.
+_Avoid_: Store page, app page, product page
+
+### Score entry
+
+**Partial score**:
+One increment appended to a player's total while recording a score. A total is always exactly the sum of its partial scores, which is what makes undoing the last one meaningful — remove a partial and the total follows. A typed number is a single partial score, no different from a tapped one.
+_Avoid_: Increment, step, delta, sub-score
+
+**Score entry**:
+Digits that have been typed but not yet committed as a partial score. It is not part of the total until committed, and it is what backspace edits — as opposed to undo, which removes a partial score that already counted.
+_Avoid_: Input, draft score, pending score, buffer

@@ -29,7 +29,7 @@ void main() {
   late final BoardGameDetailsViewModel viewModel;
 
   setUp(() {
-    when(() => mockRateAndReviewService.showRateAndReviewDialog).thenReturn(false);
+    when(() => mockRateAndReviewService.shouldRequestReview).thenReturn(false);
     when(() => mockBoardGamesStore.allBoardGamesMap).thenReturn(ObservableMap.of({
       mockBoardGameId: mockBoardGame,
     }));
