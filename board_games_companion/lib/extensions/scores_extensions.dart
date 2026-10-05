@@ -13,7 +13,7 @@ extension ScoreExtesions on Score {
 
 extension ScoresExtesions on Iterable<Score>? {
   List<Score> onlyNumericalScores() =>
-      this?.where((s) => s.hasNumericalScore).toList() ?? <Score>[];
+      this?.where((score) => score.hasNumericalScore).toList() ?? <Score>[];
 
   /// Returns winner(s)
   ///
@@ -22,7 +22,7 @@ extension ScoresExtesions on Iterable<Score>? {
   ///
   /// NOTE: Use only for [GameFamily.HighestScore] & [GameFamily.LowestScore]
   List<Score> winners(GameFamily gameFamily) {
-    var winners = this?.onlyNumericalScores().where((s) => s.isWinner).toList();
+    var winners = this?.onlyNumericalScores().where((score) => score.isWinner).toList();
 
     // Get the winner by ordering scores highest/lowest and taking the top one
     if (winners?.isEmpty ?? true) {
