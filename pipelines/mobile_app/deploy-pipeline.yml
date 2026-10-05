@@ -163,7 +163,7 @@ stages:
         condition: or(eq('${{ parameters.publishIOS }}', 'true'), in(variables['Build.Reason'], 'BatchedCI', 'IndividualCI'))
         timeoutInMinutes: 60
         pool:
-          vmImage: "macOS-15"
+          vmImage: "macOS-26"
 
         steps:
           - checkout: self
