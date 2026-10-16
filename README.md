@@ -187,6 +187,22 @@ CI and CD pipelines are defined in the Microsft Azure DevOps environment.
 
 New app version will be pushed into the *TestFlight*.
 
+##### Renewing the distribution certificate
+
+The `BuildiOS` job installs `Progrunning_Distribution_Cert.p12` (Azure DevOps → Pipelines → Library → Secure files) with `InstallAppleCertificate@2`, and signs with the `Board_Games_Companion_Distribution.mobileprovision` profile from the same place. The certificate expires yearly.
+
+1. In Keychain Access choose *Certificate Assistant → Request a Certificate from a Certificate Authority* and save the CSR to disk.
+2. In the [Apple Developer portal](https://developer.apple.com/account/resources/certificates/list) create a new **Apple Distribution** certificate with that CSR, download the `.cer` and double-click it to install.
+3. Edit the App Store provisioning profile, select the new certificate, download it and replace the `Board_Games_Companion_Distribution.mobileprovision` secure file.
+4. In Keychain Access (*login* keychain, *My Certificates*) expand the new "Apple Distribution: ..." certificate (the private key must be listed under it), right-click → *Export…* → *Personal Information Exchange (.p12)*.
+5. Convert the export (see below): `./pipelines/mobile_app/convert-p12.sh ~/Downloads/Certificates.p12 Progrunning_Distribution_Cert.p12`
+6. Replace the `Progrunning_Distribution_Cert.p12` secure file and update the secret `iOSProgrunningDistributionCert` variable with the new password.
+7. Delete both `.p12` files from your machine.
+
+**Why the conversion?** Keychain Access exports the certificate encrypted with RC2-40, which OpenSSL 3 (on the `macOS-26` agent) no longer reads by default. The task then fails with `Error parsing certificate. This might be caused by an unsupported algorithm...`. [convert-p12.sh](pipelines/mobile_app/convert-p12.sh) re-encrypts the file with 3DES/SHA-1, which both OpenSSL 3 and macOS `security import` accept (AES-256/SHA-256 is rejected by `security import` on some macOS versions), and verifies both.
+
+> Alternative: skip the conversion, upload the Keychain Access export as is and add `opensslPkcsArgs: "-legacy"` to the `InstallAppleCertificate@2` step.
+
 #### Android
 
 New app version will be pushed into the *Google Play Store*.
