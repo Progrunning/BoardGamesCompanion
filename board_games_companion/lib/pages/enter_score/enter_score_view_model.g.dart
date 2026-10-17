@@ -22,6 +22,13 @@ mixin _$EnterScoreViewModel on _EnterScoreViewModel, Store {
       (_$playerNameComputed ??= Computed<String?>(() => super.playerName,
               name: '_EnterScoreViewModel.playerName'))
           .value;
+  Computed<bool>? _$canBackspaceComputed;
+
+  @override
+  bool get canBackspace =>
+      (_$canBackspaceComputed ??= Computed<bool>(() => super.canBackspace,
+              name: '_EnterScoreViewModel.canBackspace'))
+          .value;
   Computed<bool>? _$canUndoComputed;
 
   @override
@@ -209,6 +216,7 @@ scoreEntry: ${scoreEntry},
 pendingOperator: ${pendingOperator},
 score: ${score},
 playerName: ${playerName},
+canBackspace: ${canBackspace},
 canUndo: ${canUndo},
 canCommitScoreEntry: ${canCommitScoreEntry},
 hasScoreChanged: ${hasScoreChanged},

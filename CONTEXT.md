@@ -160,5 +160,9 @@ One increment appended to a player's total while recording a score. A total is a
 _Avoid_: Increment, step, delta, sub-score
 
 **Score entry**:
-Digits that have been typed but not yet committed as a partial score. It is not part of the total until committed, and it is what backspace edits — as opposed to undo, which removes a partial score that already counted.
+The signed number being typed — a chosen sign, digits, or both — not yet committed as a partial score. It is not part of the total until committed, and it is what backspace edits: digits first, then the sign. Erasing the sign never takes back the partial score its key committed; that is undo's job, which removes a partial score that already counted. The two never apply at once — while anything uncommitted remains, there is nothing for undo to do.
 _Avoid_: Input, draft score, pending score, buffer
+
+**Backspace**:
+Removes the last character of the score entry. Only applies while there is a score entry to edit.
+_Avoid_: Erase, delete, clear

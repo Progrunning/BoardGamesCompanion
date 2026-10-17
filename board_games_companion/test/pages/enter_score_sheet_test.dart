@@ -15,6 +15,8 @@ void main() {
   const String playerName = 'Alice';
   final String subtractKey = ScoreOperator.subtract.symbol;
   final Finder confirmKey = find.widgetWithIcon(InkWell, Icons.done);
+  final Finder undoKey = find.widgetWithIcon(InkWell, Icons.undo);
+  final Finder backspaceKey = find.widgetWithIcon(InkWell, Icons.backspace_outlined);
 
   const PlayerScore playerScore = PlayerScore(
     player: Player(id: '1', name: playerName),
@@ -108,6 +110,45 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.widget<InkWell>(confirmKey).onTap, isNotNull);
+    });
+
+    testWidgets('THEN backspace stays disabled until there is something to erase',
+        (WidgetTester tester) async {
+      await pumpEnterScoreSheet(tester);
+
+      expect(tester.widget<InkWell>(backspaceKey).onTap, isNull);
+
+      await tester.tap(find.widgetWithText(InkWell, subtractKey));
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<InkWell>(backspaceKey).onTap, isNotNull);
+
+      await tester.tap(backspaceKey);
+      await tester.pumpAndSettle();
+
+      expect(find.text(subtractKey), findsOneWidget);
+      expect(tester.widget<InkWell>(backspaceKey).onTap, isNull);
+    });
+
+    testWidgets('WHEN a value is added THEN undo waits until the pending sign is erased',
+        (WidgetTester tester) async {
+      await pumpEnterScoreSheet(tester);
+
+      await tester.tap(find.widgetWithText(InkWell, '5'));
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<InkWell>(undoKey).onTap, isNull);
+
+      await tester.tap(find.widgetWithText(InkWell, '+'));
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<InkWell>(undoKey).onTap, isNull);
+
+      await tester.tap(backspaceKey);
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<InkWell>(undoKey).onTap, isNotNull);
+      expect(tester.widget<InkWell>(backspaceKey).onTap, isNull);
     });
 
     testWidgets('WHEN digits are typed and the sheet is dismissed THEN they are still committed',
