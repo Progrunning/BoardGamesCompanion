@@ -55,8 +55,14 @@ abstract class _EnterScoreViewModel with Store {
   @computed
   String? get playerName => _playerScore.player?.name;
 
+  /// Whether there is a score entry to edit - digits, or a sign still waiting for its number.
   @computed
-  bool get canUndo => partialScores.isNotEmpty;
+  bool get canBackspace => scoreEntry.isNotEmpty || pendingOperator != null;
+
+  /// Never alongside [canBackspace]: while anything uncommitted is on the tape, undo would pop a
+  /// partial score from under the number being typed.
+  @computed
+  bool get canUndo => partialScores.isNotEmpty && !canBackspace;
 
   @computed
   bool get canCommitScoreEntry => _scoreEntryValue != 0;
@@ -109,7 +115,14 @@ abstract class _EnterScoreViewModel with Store {
 
   @action
   void backspace() {
+    if (!canBackspace) {
+      return;
+    }
+
+    // Erasing the sign leaves the partial score its key committed in place - taking that back
+    // is undo's job.
     if (scoreEntry.isEmpty) {
+      pendingOperator = null;
       return;
     }
 

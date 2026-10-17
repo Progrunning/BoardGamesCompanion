@@ -56,6 +56,7 @@ class EnterScoreSheet extends StatelessWidget {
               Observer(
                 builder: (_) => _Keypad(
                   canUndo: viewModel.canUndo,
+                  canBackspace: viewModel.canBackspace,
                   canConfirm: viewModel.hasScoreChanged,
                   onDigit: (digit) => viewModel.appendDigit(digit),
                   onBackspace: () => viewModel.backspace(),
@@ -157,6 +158,7 @@ class _KeyRow extends StatelessWidget {
 class _Keypad extends StatelessWidget {
   const _Keypad({
     required this.canUndo,
+    required this.canBackspace,
     required this.canConfirm,
     required this.onDigit,
     required this.onBackspace,
@@ -170,6 +172,7 @@ class _Keypad extends StatelessWidget {
   static const Widget _emptyKey = SizedBox(height: _Key.size);
 
   final bool canUndo;
+  final bool canBackspace;
   final bool canConfirm;
   final ValueChanged<String> onDigit;
   final VoidCallback onBackspace;
@@ -215,10 +218,10 @@ class _Keypad extends StatelessWidget {
   }
 
   Widget get _backspaceKey => _Key(
-        onTap: onBackspace,
-        child: const Icon(
+        onTap: canBackspace ? onBackspace : null,
+        child: Icon(
           Icons.backspace_outlined,
-          color: AppColors.defaultTextColor,
+          color: canBackspace ? AppColors.defaultTextColor : AppColors.disabledIconIconColor,
           size: Dimensions.defaultButtonIconSize,
           semanticLabel: AppText.enterScoreSheetBackspaceButtonText,
         ),

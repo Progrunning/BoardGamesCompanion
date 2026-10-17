@@ -36,6 +36,7 @@ void main() {
       expect(viewModel.scoreEntry, '');
       expect(viewModel.canCommitScoreEntry, false);
       expect(viewModel.canUndo, false);
+      expect(viewModel.canBackspace, false);
     });
 
     test('WHEN digits are typed THEN the score entry accumulates them', () {
@@ -193,16 +194,46 @@ void main() {
     });
 
     test('WHEN backspace is pressed on an empty score entry THEN nothing happens', () {
+      expect(viewModel.canBackspace, false);
+
       viewModel.backspace();
 
       expect(viewModel.scoreEntry, '');
       expect(viewModel.score, 100);
     });
 
+    test('WHEN backspace is pressed past the digits THEN it erases the pending sign', () {
+      viewModel.commitSubtract();
+      typeDigits(viewModel, '1');
+
+      viewModel.backspace();
+
+      expect(viewModel.scoreEntry, '');
+      expect(viewModel.pendingOperator, ScoreOperator.subtract);
+      expect(viewModel.canBackspace, true);
+
+      viewModel.backspace();
+
+      expect(viewModel.pendingOperator, isNull);
+      expect(viewModel.canBackspace, false);
+      expect(viewModel.scoreEquation, '');
+    });
+
+    test('WHEN the pending sign is erased THEN the partial score its key committed stays', () {
+      typeDigits(viewModel, '10');
+      viewModel.commitSubtract();
+
+      viewModel.backspace();
+
+      expect(viewModel.partialScores, [10]);
+      expect(viewModel.score, 110);
+      expect(viewModel.scoreEquation, '+ 10');
+      expect(viewModel.canUndo, true);
+    });
+
     test('WHEN undo is pressed THEN the last partial score is popped', () {
       viewModel.updateScore(5);
-      typeDigits(viewModel, '50');
-      viewModel.commitAdd();
+      viewModel.updateScore(50);
       expect(viewModel.score, 155);
 
       viewModel.undo();
@@ -217,15 +248,62 @@ void main() {
       expect(viewModel.canUndo, false);
     });
 
-    test('WHEN undo is pressed THEN the score entry is left alone', () {
+    test('WHEN a score entry is being typed THEN undo is disabled and does nothing', () {
       viewModel.updateScore(5);
       typeDigits(viewModel, '42');
+
+      expect(viewModel.canUndo, false);
 
       viewModel.undo();
 
       expect(viewModel.scoreEntry, '42');
-      expect(viewModel.score, 100);
+      expect(viewModel.score, 105);
+      expect(viewModel.partialScores, [5]);
+    });
+
+    test('WHEN a sign is waiting for its number THEN undo is disabled until the sign is erased',
+        () {
+      typeDigits(viewModel, '5');
+      viewModel.commitAdd();
+
+      expect(viewModel.canUndo, false);
+
+      viewModel.undo();
+
+      expect(viewModel.partialScores, [5]);
+
+      viewModel.backspace();
+      viewModel.undo();
+
       expect(viewModel.partialScores, isEmpty);
+      expect(viewModel.score, 100);
+    });
+
+    test('WHEN only a zero is typed THEN it can be erased and undo is disabled', () {
+      viewModel.updateScore(5);
+      viewModel.appendDigit('0');
+
+      expect(viewModel.canBackspace, true);
+      expect(viewModel.canUndo, false);
+    });
+
+    test('WHEN keys are pressed THEN undo and backspace are never enabled together', () {
+      final steps = <void Function()>[
+        () => viewModel.updateScore(5),
+        () => typeDigits(viewModel, '12'),
+        viewModel.commitSubtract,
+        () => typeDigits(viewModel, '3'),
+        viewModel.backspace,
+        viewModel.backspace,
+        viewModel.undo,
+        viewModel.undo,
+      ];
+
+      for (final step in steps) {
+        step();
+
+        expect(viewModel.canUndo && viewModel.canBackspace, false);
+      }
     });
 
     test('WHEN undo is pressed with nothing to undo THEN nothing happens', () {
