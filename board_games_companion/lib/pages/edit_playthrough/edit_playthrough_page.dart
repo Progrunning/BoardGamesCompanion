@@ -239,8 +239,6 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
   }
 
   Future<void> _handleOnPop(BuildContext context, {required bool didPop}) async {
-    debugPrint('[DEBUG-DIALOG] _handleOnPop didPop=$didPop isDirty=${widget.viewModel.isDirty}\n'
-        '${StackTrace.current}');
     if (didPop) {
       return;
     }
@@ -250,8 +248,7 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
       return;
     }
 
-    debugPrint('[DEBUG-DIALOG] showing unsaved changes dialog');
-    final dialogFuture = showDialog<AlertDialog>(
+    await showDialog<AlertDialog>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -277,8 +274,6 @@ class EditPlaythroughPageState extends State<EditPlaythroughPage> with EnterScor
         );
       },
     );
-    await dialogFuture;
-    debugPrint('[DEBUG-DIALOG] unsaved changes dialog closed');
   }
 
   Future<void> _addNote() async {
