@@ -43,15 +43,23 @@ _Avoid_: Contract freeze, v1 contract
 ### Storage
 
 **Collection entry**:
-The user's relationship to a board game — owned, wishlist, friends, and the settings governing how they score it. Distinct from the game itself: a game can be known without the user having any relationship to it. Survives every refresh from BGG.
+The user's relationship to a board game — owned, wishlist, friends, and the settings governing how they score it. Distinct from the game itself: a game can be known without the user having any relationship to it. Survives every refresh from BGG. A **Personal rating**, unlike these settings, doesn't require a collection entry to exist.
 _Avoid_: Owned game, library entry, collection item
 
 **Catalogue data**:
-Board game facts sourced from BGG — name, description, rating, ranks, categories, publishers, designers, artists, expansions, prices. Replaced wholesale on refresh and always re-fetchable, therefore never irreplaceable.
+Board game facts sourced from BGG — name, description, rating, ranks, categories, publishers, designers, artists, expansions, prices. Replaced wholesale on refresh and always re-fetchable, therefore never irreplaceable. Its rating is BGG's community average, distinct from a **Personal rating**.
 _Avoid_: Game data, BGG data, game details
 
+**Personal rating**:
+A user's own 1–10 opinion of a game as a whole, set independently of BGG's community rating and unrelated to any playthrough's score. Applies to any game the user has encountered, whether or not it's in their collection or has been played.
+_Avoid_: User rating, my rating, score
+
+**Score**:
+The points (or win/lose result) a player recorded for one playthrough. Governed per collection entry by `BoardGameSettings`, and unrelated to a game's **Personal rating** or its BGG catalogue rating.
+_Avoid_: Rating, points (in glossary text — "points" is fine casually)
+
 **User-authored data**:
-Playthroughs, scores, players, notes, and collection entries. Recorded by the user and reconstructible from nothing — the only data in the app whose loss is permanent.
+Playthroughs, scores, personal ratings, players, notes, and collection entries. Recorded by the user and reconstructible from nothing — the only data in the app whose loss is permanent.
 _Avoid_: Local data, app data, user data
 
 **Legacy store**:
