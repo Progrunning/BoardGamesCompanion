@@ -1,12 +1,22 @@
 # Vendored skills
 
-These skills are committed into the repo (rather than living only in a developer's personal `~/.claude/skills/`) so that Claude Code running on a GitHub Actions runner can invoke them. The automated agent workflow (`.github/workflows/claude-issue-agent.yml`) relies on `/implement` being available on the runner.
+These skills are committed into the repo (rather than living only in a developer's personal `~/.claude/skills/`) so that Claude Code can invoke them anywhere the repo is checked out: cloud sessions on claude.ai, and the GitHub Actions runner. The automated agent workflow (`.github/workflows/claude-issue-agent.yml`) relies on `/implement` being available on the runner.
+
+## Source
+
+Every skill here is Matt Pocock's, copied verbatim from the `mattpocock-skills` plugin (`.claude-plugin/plugin.json`) at <https://github.com/mattpocock/skills>.
+
+- **Version:** plugin `1.3.2`, commit `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`
+- **License:** MIT, see `LICENSE-mattpocock-skills`
+- **Not copied:** each skill's `agents/openai.yaml` (Codex metadata, unused by Claude Code), and the upstream `in-progress/`, `misc/` and `deprecated/` skills, which aren't part of the published plugin.
+
+To update: re-clone the upstream repo, then copy each directory listed in its `.claude-plugin/plugin.json` `skills` array over the matching directory here, and bump the version and commit above.
 
 ## What's here
 
-- **`implement/`** — the standard implementation flow: work test-first at the ticket's stated seams (via `/tdd`), run typechecking and tests, then commit.
-- **`tdd/`** — test-driven development guidance and its supporting references.
+- **Engineering:** `ask-matt`, `code-review`, `codebase-design`, `diagnosing-bugs`, `domain-modeling`, `grill-with-docs`, `implement`, `implement-spec`, `improve-codebase-architecture`, `pr`, `prototype`, `research`, `retro`, `setup-matt-pocock-skills`, `tdd`, `to-spec`, `to-tickets`, `triage`, `wayfinder`, `wizard`
+- **Productivity:** `grill-me`, `grilling`, `handoff`, `teach`, `to-questionnaire`, `wait-what`, `writing-for-agents`
 
-## Intentionally NOT vendored: `/code-review`
+## The CI agent skips `/code-review`
 
-`/implement`'s final step is normally `/code-review`. We deliberately do **not** vendor `/code-review` here, and the CI agent skips that step, because review is already handled by the separate PR-review workflow (`.github/workflows/claude-pr-review.yml`) which fires on every pull request the agent opens. Developers working locally retain their own personal `/code-review`. Do not "fix" this apparent omission.
+`/implement`'s final step is `/code-review`. The CI agent's prompt tells it to skip that step, because the separate PR-review workflow (`.github/workflows/claude-pr-review.yml`) already reviews every pull request the agent opens. `/code-review` is vendored for interactive use only.
